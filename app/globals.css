@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #1a1a1a;
+  --background: #FAFAFA;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Focus styles */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid #4A7C59;
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: #c5e1a8;
+  color: #1a1a1a;
+}
+
+/* Mono text */
+.font-mono {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+}
+
+/* Section card */
+.section-card {
+  @apply bg-white border border-latent-border rounded-md p-6 mb-4;
+}
+
+.section-card-dark {
+  @apply bg-latent-fg text-white rounded-md p-6 mb-4;
+}
+
+/* Label style */
+.label {
+  @apply font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid mb-2 block;
+}
+
+/* Tag pill */
+.tag {
+  @apply inline-block font-mono text-xxs bg-latent-highlight border border-latent-highlight-border 
+         rounded px-2 py-1 mr-1 mb-1;
+}
+
+/* Editable field highlight */
+.editable-field {
+  @apply bg-latent-highlight border border-latent-highlight-border rounded px-2 py-1;
+}
+
+/* Button base */
+.btn {
+  @apply font-mono text-xs font-semibold tracking-wide uppercase px-4 py-3 rounded 
+         border transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-primary {
+  @apply bg-latent-fg text-white border-latent-fg hover:bg-latent-accent;
+}
+
+.btn-secondary {
+  @apply bg-white text-latent-fg border-latent-border hover:border-latent-fg;
+}
+
+/* Input base */
+.input {
+  @apply w-full px-3 py-2 font-mono text-sm border border-latent-border rounded 
+         focus:border-latent-accent-light focus:ring-1 focus:ring-latent-accent-light;
+}
+
+.textarea {
+  @apply w-full px-3 py-2 font-mono text-sm border border-latent-border rounded resize-y min-h-[100px]
+         focus:border-latent-accent-light focus:ring-1 focus:ring-latent-accent-light;
+}
+
+/* Coffee card in list */
+.coffee-card {
+  @apply bg-white border border-latent-border rounded p-4 cursor-pointer 
+         hover:border-latent-mid transition-colors;
+}
+
+/* Table styles */
+.data-table {
+  @apply w-full font-mono text-xs;
+}
+
+.data-table th {
+  @apply text-left p-2 font-medium text-latent-mid border-b border-latent-border;
+}
+
+.data-table td {
+  @apply p-2 border-b border-latent-border;
+}
+
+.data-table tr:hover {
+  @apply bg-latent-highlight/50;
+}
+
+.data-table tr.highlight {
+  @apply bg-latent-highlight;
+}
