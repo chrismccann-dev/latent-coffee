@@ -245,7 +245,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
         <div className="mb-6">
           <div className="label">KEY TAKEAWAYS</div>
           <ul className="list-disc list-inside space-y-2 font-sans text-sm">
-            {brew.key_takeaways.map((takeaway, i) => (
+            {brew.key_takeaways.map((takeaway: string, i: number) => (
               <li key={i}>{takeaway}</li>
             ))}
           </ul>
