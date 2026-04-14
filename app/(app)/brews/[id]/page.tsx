@@ -136,7 +136,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
             <>
               <div className="label mt-4">FLAVOR NOTES</div>
               <div>
-                {brew.flavor_notes.map(note => <Tag key={note}>{note}</Tag>)}
+                {brew.flavor_notes.map((note: string) => <Tag key={note}>{note}</Tag>)}
               </div>
             </>
           )}
