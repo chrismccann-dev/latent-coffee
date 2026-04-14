@@ -2,10 +2,18 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  // Don't run middleware on auth pages at all
+  const pathname = request.nextUrl.pathname
+  if (
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup') ||
+    pathname === '/'
+  ) {
+    return NextResponse.next()
+  }
+
   let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request: { headers: request.headers },
   })
 
   const supabase = createServerClient(
@@ -18,40 +26,22 @@ export async function middleware(request: NextRequest) {
         },
         set(name: string, value: string, options: CookieOptions) {
           request.cookies.set({ name, value, ...options })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
+          response = NextResponse.next({ request: { headers: request.headers } })
           response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
           request.cookies.set({ name, value: '', ...options })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
+          response = NextResponse.next({ request: { headers: request.headers } })
           response.cookies.set({ name, value: '', ...options })
         },
       },
     }
   )
 
-  // Refresh session if expired
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Protect routes - redirect to login if not authenticated
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || 
-                      request.nextUrl.pathname.startsWith('/signup')
-  
-  if (!user && !isAuthRoute && request.nextUrl.pathname !== '/') {
+  if (!user) {
     return NextResponse.redirect(new URL('/login', request.url))
-  }
-
-  // Redirect to app if already logged in and trying to access auth pages
-  if (user && isAuthRoute) {
-    return NextResponse.redirect(new URL('/brews', request.url))
   }
 
   return response
