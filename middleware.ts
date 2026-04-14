@@ -1,50 +1,28 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  // Don't run middleware on auth pages at all
   const pathname = request.nextUrl.pathname
+  
+  // Always allow these through with no checks
   if (
+    pathname === '/' ||
     pathname.startsWith('/login') ||
     pathname.startsWith('/signup') ||
-    pathname === '/'
+    pathname.startsWith('/auth')
   ) {
     return NextResponse.next()
   }
 
-  let response = NextResponse.next({
-    request: { headers: request.headers },
-  })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({ name, value, ...options })
-          response = NextResponse.next({ request: { headers: request.headers } })
-          response.cookies.set({ name, value, ...options })
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({ name, value: '', ...options })
-          response = NextResponse.next({ request: { headers: request.headers } })
-          response.cookies.set({ name, value: '', ...options })
-        },
-      },
-    }
+  // For all other routes, check cookie exists as a basic gate
+  const hasSession = request.cookies.getAll().some(c => 
+    c.name.includes('auth-token') || c.name.includes('supabase')
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
+  if (!hasSession) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = {
