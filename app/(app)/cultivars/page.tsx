@@ -1,24 +1,30 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
+const familyColors: Record<string, string> = {
+  'Ethiopian Landrace Families': '#4A7C59',
+  'Bourbon Family': '#3D3D3D',
+  'Modern Hybrids': '#3D3D3D',
+  'Typica × Bourbon Crosses': '#3D3D3D',
+  'Typica Family': '#3D3D3D',
+  'SL Selections': '#3D3D3D',
+}
+
+function getFamilyColor(family: string): string {
+  return familyColors[family] || '#555555'
+}
+
 export default async function CultivarsPage() {
   const supabase = createClient()
   
-  // Get cultivars with brew counts
   const { data: cultivars, error } = await supabase
     .from('cultivars')
-    .select(`
-      *,
-      brews(id)
-    `)
+    .select(`*, brews(id)`)
     .order('genetic_family', { ascending: true })
 
-  if (error) {
-    console.error('Error fetching cultivars:', error)
-  }
+  if (error) console.error('Error fetching cultivars:', error)
 
-  // Group by genetic_family -> lineage
-  const grouped: Record<string, typeof cultivars> = {}
+  const grouped: Record<string, any[]> = {}
   for (const cultivar of cultivars || []) {
     const key = cultivar.genetic_family || 'Unknown Family'
     if (!grouped[key]) grouped[key] = []
@@ -29,62 +35,60 @@ export default async function CultivarsPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-            CULTIVARS
-          </h1>
-        </div>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
+          CULTIVARS
+        </h1>
         <div className="font-mono text-xs text-latent-mid">
           {totalCultivars} {totalCultivars === 1 ? 'VARIETY' : 'VARIETIES'}
         </div>
       </div>
 
-      {/* Empty state */}
       {totalCultivars === 0 ? (
         <div className="text-center py-16">
-          <div className="w-16 h-16 bg-latent-accent rounded-lg mx-auto mb-6 flex items-center justify-center">
-            <span className="text-2xl">🧬</span>
-          </div>
-          <p className="font-mono text-sm text-latent-mid mb-4">
-            NO CULTIVARS YET
-          </p>
-          <p className="text-sm text-latent-mid max-w-sm mx-auto">
-            Cultivars are created automatically when you add brews. Start by adding a brew to build your cultivar knowledge base.
-          </p>
+          <p className="font-mono text-sm text-latent-mid">NO CULTIVARS YET</p>
         </div>
       ) : (
-        /* Grouped cultivar list */
         <div className="space-y-8">
           {Object.entries(grouped).map(([family, familyCultivars]) => (
             <div key={family}>
-              <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid mb-3">
-                {family}
-              </h2>
+              {/* Family header with swatch */}
+              <div className="flex items-center gap-2 mb-3">
+                <div
+                  className="w-4 h-4 rounded-sm flex-shrink-0"
+                  style={{ backgroundColor: getFamilyColor(family) }}
+                />
+                <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
+                  {family} ({familyCultivars.length})
+                </h2>
+              </div>
+
               <div className="space-y-0">
-                {familyCultivars?.map((cultivar: any) => {
+                {familyCultivars.map((cultivar: any) => {
                   const brewCount = cultivar.brews?.length || 0
                   return (
-                    <Link 
+                    <div
                       key={cultivar.id}
-                      href={`/cultivars/${cultivar.id}`}
-                      className="flex items-center justify-between py-4 border-b border-latent-border hover:bg-latent-highlight/30 transition-colors -mx-4 px-4"
+                      className="flex items-center gap-3 py-3 border-b border-latent-border"
                     >
-                      <div>
-                        <div className="font-sans text-sm font-medium">
-                          {cultivar.lineage} → <strong>{cultivar.cultivar_name}</strong>
+                      {/* Color swatch */}
+                      <div
+                        className="w-10 h-10 rounded flex-shrink-0"
+                        style={{ backgroundColor: getFamilyColor(family) }}
+                      />
+                      <div className="flex-1">
+                        <div className="font-sans text-sm font-semibold">
+                          {cultivar.lineage}
                         </div>
-                        {cultivar.species && (
-                          <div className="font-mono text-xxs text-latent-subtle mt-1">
-                            {cultivar.species}
-                          </div>
-                        )}
+                        <div className="font-sans text-xs text-latent-mid">
+                          {cultivar.cultivar_name}
+                          {cultivar.species ? `, ${cultivar.species}` : ''}
+                        </div>
                       </div>
                       <div className="font-mono text-xs text-latent-mid">
-                        {brewCount} {brewCount === 1 ? 'brew' : 'brews'}
+                        {brewCount} {brewCount === 1 ? 'coffee' : 'coffees'}
                       </div>
-                    </Link>
+                    </div>
                   )
                 })}
               </div>
