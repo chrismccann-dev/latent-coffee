@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Brew } from '@/lib/types'
+import { Brew, Terroir } from '@/lib/types'
+import TerroirSynthesis from './TerroirSynthesis'
 
 const countryColors: Record<string, string> = {
   'Brazil': '#4A3728',
@@ -39,7 +40,6 @@ function Tag({ children }: { children: React.ReactNode }) {
   return <span className="tag">{children}</span>
 }
 
-// Color helper for brew cards
 function getFlavorColor(brew: Brew): string {
   const process = brew.process?.toLowerCase() || ''
   const flavorText = (brew.flavor_notes || []).join(' ').toLowerCase()
@@ -55,9 +55,54 @@ function getFlavorColor(brew: Brew): string {
   return '#6B7B6B'
 }
 
+/**
+ * Merge terroir context fields across all terroirs in a macro terroir group.
+ * Uses first-non-null for scalar fields, combines meso terroirs, merges elevation ranges.
+ */
+function mergeMacroTerroirContext(terroirs: Terroir[]) {
+  const first = <T,>(fn: (t: Terroir) => T | null | undefined): T | null => {
+    for (const t of terroirs) {
+      const v = fn(t)
+      if (v) return v
+    }
+    return null
+  }
+
+  // Collect all unique meso terroirs
+  const mesoSet = new Set<string>()
+  for (const t of terroirs) {
+    if (t.meso_terroir) {
+      for (const meso of t.meso_terroir.split(',')) {
+        const trimmed = meso.trim()
+        if (trimmed) mesoSet.add(trimmed)
+      }
+    }
+  }
+
+  // Merge elevation ranges (min of mins, max of maxes)
+  let elevMin: number | null = null
+  let elevMax: number | null = null
+  for (const t of terroirs) {
+    if (t.elevation_min != null) elevMin = elevMin == null ? t.elevation_min : Math.min(elevMin, t.elevation_min)
+    if (t.elevation_max != null) elevMax = elevMax == null ? t.elevation_max : Math.max(elevMax, t.elevation_max)
+  }
+
+  return {
+    context: first(t => t.context),
+    soil: first(t => t.soil),
+    cup_profile: first(t => t.cup_profile),
+    why_it_stands_out: first(t => t.why_it_stands_out),
+    climate_stress: first(t => t.climate_stress),
+    mesoTerroirs: Array.from(mesoSet),
+    elevation_min: elevMin,
+    elevation_max: elevMax,
+  }
+}
+
 export default async function TerroirDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
 
+  // Load the clicked terroir to get its macro_terroir
   const { data: terroir, error } = await supabase
     .from('terroirs')
     .select('*')
@@ -66,14 +111,31 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   if (error || !terroir) notFound()
 
+  // Load ALL terroirs in this macro terroir group
+  const macroName = terroir.macro_terroir || terroir.admin_region
+  const { data: macroTerroirs } = terroir.macro_terroir
+    ? await supabase
+        .from('terroirs')
+        .select('*')
+        .eq('macro_terroir', terroir.macro_terroir)
+        .eq('country', terroir.country)
+    : { data: [terroir] }
+
+  const allTerroirs = (macroTerroirs || [terroir]) as Terroir[]
+  const terriorIds = allTerroirs.map(t => t.id)
+
+  // Fetch all brews matching ANY terroir in this macro group
   const { data: brews } = await supabase
     .from('brews')
-    .select(`*, terroir:terroirs(country, admin_region), cultivar:cultivars(cultivar_name, lineage)`)
-    .eq('terroir_id', params.id)
+    .select(`*, terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
+    .in('terroir_id', terriorIds)
     .order('created_at', { ascending: false })
 
   const brewList = (brews || []) as Brew[]
   const color = getCountryColor(terroir.country)
+
+  // Merge context across all terroirs in the macro group
+  const merged = mergeMacroTerroirContext(allTerroirs)
 
   // Aggregate flavor notes from all brews
   const flavorCounts: Record<string, number> = {}
@@ -94,9 +156,11 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   // Confidence level
   const brewCount = brewList.length
+  const nonProcessCount = brewList.filter(b => !b.is_process_dominant).length
   const confidence = brewCount >= 5 ? { emoji: '\uD83D\uDFE2', label: 'HIGH', desc: `${brewCount} coffees explored` }
-    : brewCount >= 2 ? { emoji: '\uD83D\uDFE1', label: 'MEDIUM', desc: `${brewCount} coffees explored` }
-    : { emoji: '\uD83D\uDD34', label: 'LOW', desc: `${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} explored` }
+    : brewCount >= 2 ? { emoji: '\uD83D\uDFE1', label: 'Medium', desc: `${nonProcessCount} non-process coffees` }
+    : brewCount >= 1 ? { emoji: '\uD83D\uDD34', label: 'LOW', desc: `${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} explored` }
+    : { emoji: '\uD83D\uDD34', label: 'LOW', desc: '0 coffees explored' }
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
@@ -116,17 +180,17 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
           />
           <div className="flex-1">
             <h1 className="font-sans text-2xl font-semibold mb-1">
-              {terroir.macro_terroir || terroir.admin_region}
+              {macroName}
             </h1>
             <p className="font-mono text-xs text-latent-mid">
               {terroir.country} &rarr; {terroir.admin_region}
             </p>
             <div className="font-mono text-xs text-latent-mid mt-2">
-              {terroir.elevation_min && terroir.elevation_max && (
-                <span>{terroir.elevation_min}&ndash;{terroir.elevation_max}m</span>
+              {merged.elevation_min && merged.elevation_max && (
+                <span>{merged.elevation_min}&ndash;{merged.elevation_max}m</span>
               )}
-              {terroir.climate_stress && (
-                <span> &middot; {terroir.climate_stress}</span>
+              {merged.climate_stress && (
+                <span> &middot; {merged.climate_stress}</span>
               )}
             </div>
           </div>
@@ -134,46 +198,57 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       </div>
 
       {/* Meso Terroirs */}
-      {terroir.meso_terroir && (
+      {merged.mesoTerroirs.length > 0 && (
         <Section title="MESO TERROIRS EXPLORED">
           <div className="flex flex-wrap gap-2">
-            {terroir.meso_terroir.split(',').map((meso: string) => (
-              <Tag key={meso.trim()}>{meso.trim()}</Tag>
+            {merged.mesoTerroirs.map((meso) => (
+              <Tag key={meso}>{meso}</Tag>
             ))}
           </div>
         </Section>
       )}
 
       {/* Terroir Context */}
-      {(terroir.context || terroir.soil || terroir.cup_profile || terroir.why_it_stands_out) && (
+      {(merged.context || merged.soil || merged.cup_profile || merged.why_it_stands_out) && (
         <Section title="TERROIR CONTEXT">
           <div className="space-y-3 font-sans text-sm">
-            {terroir.context && (
+            {merged.context && (
               <div>
                 <span className="font-mono text-xs text-latent-mid mr-2">Context:</span>
-                {terroir.context}
+                {merged.context}
               </div>
             )}
-            {terroir.soil && (
+            {merged.soil && (
               <div>
                 <span className="font-mono text-xs text-latent-mid mr-2">Soil:</span>
-                {terroir.soil}
+                {merged.soil}
               </div>
             )}
-            {terroir.cup_profile && (
+            {merged.cup_profile && (
               <div>
                 <span className="font-mono text-xs text-latent-mid mr-2">Cup Profile:</span>
-                {terroir.cup_profile}
+                {merged.cup_profile}
               </div>
             )}
-            {terroir.why_it_stands_out && (
+            {merged.why_it_stands_out && (
               <div>
                 <span className="font-mono text-xs text-latent-mid mr-2">Why It Stands Out:</span>
-                {terroir.why_it_stands_out}
+                {merged.why_it_stands_out}
               </div>
             )}
           </div>
         </Section>
+      )}
+
+      {/* AI Synthesis */}
+      {brewList.length > 0 && (
+        <TerroirSynthesis
+          terriorIds={terriorIds}
+          macroTerroirName={macroName || terroir.country}
+          existingSynthesis={terroir.synthesis}
+          existingBrewCount={terroir.synthesis_brew_count}
+          currentBrewCount={brewList.length}
+        />
       )}
 
       {/* Common Flavor Notes */}
@@ -213,22 +288,29 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
       {/* Coffee list */}
       {brewList.length > 0 && (
-        <Section title={`COFFEES FROM THIS TERROIR (${brewList.length})`}>
+        <div className="mb-4">
+          <div className="font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid mb-3">
+            COFFEES FROM {(macroName || terroir.country).toUpperCase()}
+          </div>
           <div className="space-y-0">
             {brewList.map((brew) => {
               const cardColor = getFlavorColor(brew)
+              const isProcessDominant = brew.is_process_dominant
               return (
                 <Link
                   key={brew.id}
                   href={`/brews/${brew.id}`}
-                  className="flex items-center gap-3 py-3 border-b border-latent-border last:border-b-0 hover:bg-latent-bg transition-colors group"
+                  className="flex items-center gap-3 py-3 border border-latent-border rounded-md mb-2 px-4 hover:bg-latent-bg transition-colors group"
                 >
-                  <div
-                    className="w-8 h-10 rounded flex-shrink-0"
-                    style={{ backgroundColor: cardColor }}
-                  />
                   <div className="flex-1">
-                    <div className="font-sans text-sm font-semibold">{brew.coffee_name}</div>
+                    <div className="font-sans text-sm font-semibold">
+                      {brew.coffee_name}
+                      {isProcessDominant && (
+                        <span className="inline-flex items-center gap-1 ml-2 text-[10px] font-mono bg-latent-bg px-2 py-0.5 rounded">
+                          PROCESS
+                        </span>
+                      )}
+                    </div>
                     <div className="font-mono text-[10px] text-latent-mid">
                       {[brew.variety, brew.process].filter(Boolean).join(' · ')}
                     </div>
@@ -238,17 +320,17 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
               )
             })}
           </div>
-        </Section>
+        </div>
       )}
 
       {/* Confidence */}
       <Section dark>
         <div className="font-mono text-xxs font-medium opacity-60 uppercase mb-3">CONFIDENCE</div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-end gap-3">
           <span className="text-xl">{confidence.emoji}</span>
           <div>
-            <div className="font-mono text-sm font-semibold">{confidence.label}</div>
-            <div className="font-mono text-xs opacity-60">{confidence.desc}</div>
+            <span className="font-mono text-sm font-semibold">{confidence.label}</span>
+            <span className="font-mono text-xs opacity-60 ml-2">&mdash; {confidence.desc}</span>
           </div>
         </div>
       </Section>
