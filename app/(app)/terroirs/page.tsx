@@ -48,15 +48,23 @@ export default async function TerroirsPage() {
   const allGreenBeans = (greenBeanResult.data || []) as any[]
 
   // DEBUG: surface data state in the UI (remove after fixing)
+  const sampleBrews = allBrews.slice(0, 5).map((b: any) => ({
+    coffee_name: b.coffee_name,
+    variety: b.variety,
+    terroir_id: b.terroir_id,
+    green_bean_id: b.green_bean_id,
+  }))
+  const sampleTerroirs = (terroirs || []).slice(0, 3).map((t: any) => ({
+    country: t.country,
+    admin_region: t.admin_region,
+    macro_terroir: t.macro_terroir,
+    meso_terroir: t.meso_terroir,
+  }))
   const debugInfo = {
-    terroirCount: terroirs?.length || 0,
     brewCount: allBrews.length,
     brewsWithTerroirId: allBrews.filter((b: any) => b.terroir_id).length,
-    brewsWithGreenBeanId: allBrews.filter((b: any) => b.green_bean_id).length,
-    greenBeansWithTerroirId: allGreenBeans.length,
-    brewErrors: brewResult.error?.message || null,
-    gbErrors: greenBeanResult.error?.message || null,
-    sampleBrew: allBrews[0] ? { terroir_id: allBrews[0].terroir_id, green_bean_id: allBrews[0].green_bean_id } : null,
+    sampleBrews,
+    sampleTerroirs,
   }
 
   // Map green_bean_id → terroir_id
