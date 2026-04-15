@@ -59,52 +59,41 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   if (error || !cultivar) notFound()
 
-  // Approach A: reverse join (same as list page)
-  const { data: revJoin, error: revErr } = await supabase
-    .from('cultivars')
-    .select('brews(id)')
-    .eq('id', params.id)
-    .single()
-
-  // Approach B: direct query on brews table
-  const { data: directBrews, error: directErr } = await supabase
-    .from('brews')
+  // Brews connect to cultivars through green_beans (brews.green_bean_id → green_beans.cultivar_id)
+  // First find green_beans for this cultivar, then find brews for those green_beans
+  const { data: greenBeans } = await supabase
+    .from('green_beans')
     .select('id')
     .eq('cultivar_id', params.id)
 
-  // Approach C: just count all brews that reference this cultivar
-  const { count: dbBrewCount, error: countErr } = await supabase
-    .from('brews')
-    .select('*', { count: 'exact', head: true })
-    .eq('cultivar_id', params.id)
+  const greenBeanIds = (greenBeans || []).map((gb: any) => gb.id)
 
-  const debugInfo = {
-    paramsId: params.id,
-    cultivarId: cultivar.id,
-    cultivarName: cultivar.cultivar_name,
-    approachA_reverseJoin: { count: (revJoin as any)?.brews?.length ?? 'null', error: revErr?.message ?? null },
-    approachB_directQuery: { count: directBrews?.length ?? 'null', error: directErr?.message ?? null },
-    approachC_countQuery: { count: dbBrewCount, error: countErr?.message ?? null },
-  }
-
-  // Use whichever approach returned data
-  const brewIds = (
-    ((revJoin as any)?.brews || []).map((b: any) => b.id) as string[]
-  ).concat(
-    (directBrews || []).map((b: any) => b.id)
-  )
-  // Deduplicate
-  const uniqueBrewIds = Array.from(new Set(brewIds))
-
+  // Also check brews with direct cultivar_id (for purchased coffees)
   let brewList: Brew[] = []
-  if (uniqueBrewIds.length > 0) {
+
+  if (greenBeanIds.length > 0) {
     const { data: brews } = await supabase
       .from('brews')
       .select('*, terroir:terroirs(country, admin_region, macro_terroir)')
-      .in('id', uniqueBrewIds)
+      .in('green_bean_id', greenBeanIds)
       .order('created_at', { ascending: false })
     brewList = (brews || []) as Brew[]
   }
+
+  // Also get any brews with direct cultivar_id link
+  const { data: directBrews } = await supabase
+    .from('brews')
+    .select('*, terroir:terroirs(country, admin_region, macro_terroir)')
+    .eq('cultivar_id', params.id)
+
+  if (directBrews && directBrews.length > 0) {
+    const existingIds = new Set(brewList.map(b => b.id))
+    for (const brew of directBrews) {
+      if (!existingIds.has(brew.id)) brewList.push(brew as Brew)
+    }
+  }
+
+  brewList.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
   // Attach cultivar info to each brew for display
   for (const brew of brewList) {
@@ -294,13 +283,6 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
           </div>
         </Section>
       )}
-
-      {/* Debug info — TEMPORARY */}
-      <Section title="DEBUG — QUERY DIAGNOSTICS">
-        <pre className="font-mono text-[10px] text-latent-mid whitespace-pre-wrap overflow-auto">
-          {JSON.stringify(debugInfo, null, 2)}
-        </pre>
-      </Section>
 
       {/* Confidence */}
       <Section dark>

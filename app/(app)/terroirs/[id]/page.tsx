@@ -66,29 +66,39 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   if (error || !terroir) notFound()
 
-  // Get brew IDs via reverse join (same pattern that works on list page)
-  const { data: terroirWithBrews, error: joinError } = await supabase
-    .from('terroirs')
-    .select('brews(id)')
-    .eq('id', params.id)
-    .single()
+  // Brews connect to terroirs through green_beans (brews.green_bean_id → green_beans.terroir_id)
+  const { data: greenBeans } = await supabase
+    .from('green_beans')
+    .select('id')
+    .eq('terroir_id', params.id)
 
-  if (joinError) console.error('Terroir reverse join error:', joinError)
-
-  const brewIds = ((terroirWithBrews as any)?.brews || []).map((b: any) => b.id)
-  console.log('Terroir detail - brew IDs from reverse join:', brewIds.length)
+  const greenBeanIds = (greenBeans || []).map((gb: any) => gb.id)
 
   let brewList: Brew[] = []
-  if (brewIds.length > 0) {
-    const { data: brews, error: brewsError } = await supabase
+
+  if (greenBeanIds.length > 0) {
+    const { data: brews } = await supabase
       .from('brews')
       .select('*, cultivar:cultivars(cultivar_name, lineage)')
-      .in('id', brewIds)
+      .in('green_bean_id', greenBeanIds)
       .order('created_at', { ascending: false })
-
-    if (brewsError) console.error('Brews fetch error:', brewsError)
     brewList = (brews || []) as Brew[]
   }
+
+  // Also get any brews with direct terroir_id link
+  const { data: directBrews } = await supabase
+    .from('brews')
+    .select('*, cultivar:cultivars(cultivar_name, lineage)')
+    .eq('terroir_id', params.id)
+
+  if (directBrews && directBrews.length > 0) {
+    const existingIds = new Set(brewList.map(b => b.id))
+    for (const brew of directBrews) {
+      if (!existingIds.has(brew.id)) brewList.push(brew as Brew)
+    }
+  }
+
+  brewList.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
   // Attach terroir info to each brew for display
   for (const brew of brewList) {
