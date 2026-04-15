@@ -59,41 +59,82 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   if (error || !cultivar) notFound()
 
-  // Brews connect to cultivars through green_beans (brews.green_bean_id → green_beans.cultivar_id)
-  // First find green_beans for this cultivar, then find brews for those green_beans
-  const { data: greenBeans } = await supabase
+  // === DIAGNOSTIC: understand actual data relationships ===
+
+  // 1. How many green_beans reference this cultivar?
+  const { data: greenBeans, error: gbErr } = await supabase
     .from('green_beans')
-    .select('id')
+    .select('id, cultivar_id')
     .eq('cultivar_id', params.id)
 
-  const greenBeanIds = (greenBeans || []).map((gb: any) => gb.id)
+  // 2. How many brews have cultivar_id set at all?
+  const { data: brewsWithCultivar } = await supabase
+    .from('brews')
+    .select('id, cultivar_id, green_bean_id, variety')
+    .not('cultivar_id', 'is', null)
+    .limit(5)
 
-  // Also check brews with direct cultivar_id (for purchased coffees)
-  let brewList: Brew[] = []
+  // 3. Sample brews that match by variety name
+  const { data: brewsByVariety } = await supabase
+    .from('brews')
+    .select('id, cultivar_id, green_bean_id, variety, coffee_name')
+    .ilike('variety', `%${cultivar.cultivar_name}%`)
+    .limit(5)
 
-  if (greenBeanIds.length > 0) {
-    const { data: brews } = await supabase
-      .from('brews')
-      .select('*, terroir:terroirs(country, admin_region, macro_terroir)')
-      .in('green_bean_id', greenBeanIds)
-      .order('created_at', { ascending: false })
-    brewList = (brews || []) as Brew[]
+  // 4. Reverse join like list page
+  const { data: revJoinData, error: revErr } = await supabase
+    .from('cultivars')
+    .select('brews(id)')
+    .eq('id', params.id)
+    .single()
+
+  // 5. Total cultivar count to verify we're reading the right table
+  const { count: totalCultivars } = await supabase
+    .from('cultivars')
+    .select('*', { count: 'exact', head: true })
+
+  const debugInfo = {
+    thisPage: {
+      paramsId: params.id,
+      cultivarName: cultivar.cultivar_name,
+      lineage: cultivar.lineage,
+    },
+    greenBeans: {
+      matchingCount: greenBeans?.length ?? 0,
+      error: gbErr?.message ?? null,
+    },
+    reverseJoin: {
+      brewCount: (revJoinData as any)?.brews?.length ?? 0,
+      error: revErr?.message ?? null,
+      rawKeys: revJoinData ? Object.keys(revJoinData) : [],
+    },
+    sampleBrewsWithAnyCultivar: (brewsWithCultivar || []).map((b: any) => ({
+      id: b.id?.slice(0, 8),
+      cultivar_id: b.cultivar_id?.slice(0, 8),
+      green_bean_id: b.green_bean_id?.slice(0, 8),
+      variety: b.variety,
+    })),
+    sampleBrewsByVarietyName: (brewsByVariety || []).map((b: any) => ({
+      id: b.id?.slice(0, 8),
+      cultivar_id: b.cultivar_id,
+      green_bean_id: b.green_bean_id?.slice(0, 8),
+      variety: b.variety,
+      name: b.coffee_name?.slice(0, 40),
+    })),
+    totalCultivarsInDB: totalCultivars,
   }
 
-  // Also get any brews with direct cultivar_id link
-  const { data: directBrews } = await supabase
+  // === END DIAGNOSTIC ===
+
+  // Use variety-based matching as a fallback since FK relationships are unclear
+  let brewList: Brew[] = []
+  const { data: allMatchingBrews } = await supabase
     .from('brews')
     .select('*, terroir:terroirs(country, admin_region, macro_terroir)')
-    .eq('cultivar_id', params.id)
+    .ilike('variety', `%${cultivar.cultivar_name}%`)
+    .order('created_at', { ascending: false })
 
-  if (directBrews && directBrews.length > 0) {
-    const existingIds = new Set(brewList.map(b => b.id))
-    for (const brew of directBrews) {
-      if (!existingIds.has(brew.id)) brewList.push(brew as Brew)
-    }
-  }
-
-  brewList.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+  brewList = (allMatchingBrews || []) as Brew[]
 
   // Attach cultivar info to each brew for display
   for (const brew of brewList) {
@@ -283,6 +324,13 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
           </div>
         </Section>
       )}
+
+      {/* Debug — TEMPORARY */}
+      <Section title="DEBUG — DATA RELATIONSHIPS">
+        <pre className="font-mono text-[10px] text-latent-mid whitespace-pre-wrap overflow-auto max-h-96">
+          {JSON.stringify(debugInfo, null, 2)}
+        </pre>
+      </Section>
 
       {/* Confidence */}
       <Section dark>
