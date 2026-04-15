@@ -36,7 +36,7 @@ export default async function TerroirsPage() {
   const [terroirResult, brewResult, greenBeanResult] = await Promise.all([
     supabase.from('terroirs').select('*').order('country', { ascending: true }),
     supabase.from('brews').select('id, coffee_name, green_bean_id'),
-    supabase.from('green_beans').select('id, origin, region')
+    supabase.from('green_beans').select('id, name, origin, region')
   ])
 
   if (terroirResult.error) console.error('Error fetching terroirs:', terroirResult.error)
@@ -120,6 +120,18 @@ export default async function TerroirsPage() {
     }
   }
 
+  // DEBUG: check green_bean data
+  const sampleGBs = allGreenBeans.slice(0, 5).map((gb: any) => ({
+    name: gb.name, origin: gb.origin, region: gb.region, id: gb.id
+  }))
+  const debugInfo = {
+    brewCount: allBrews.length,
+    greenBeanCount: allGreenBeans.length,
+    brewsWithGreenBeanId: allBrews.filter((b: any) => b.green_bean_id).length,
+    sampleGBs,
+    sampleBrews: allBrews.slice(0, 3).map((b: any) => ({ coffee_name: b.coffee_name, green_bean_id: b.green_bean_id })),
+  }
+
   const totalMacroTerroirs = Object.values(countryMap).reduce((sum, groups) => sum + groups.length, 0)
 
   return (
@@ -131,6 +143,12 @@ export default async function TerroirsPage() {
         <div className="font-mono text-xs text-latent-mid">
           {totalMacroTerroirs} {totalMacroTerroirs === 1 ? 'REGION' : 'REGIONS'}
         </div>
+      </div>
+
+      {/* DEBUG: remove after fixing */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded p-4 mb-6 font-mono text-xs">
+        <div className="font-bold mb-2">DEBUG</div>
+        <pre className="whitespace-pre-wrap">{JSON.stringify(debugInfo, null, 2)}</pre>
       </div>
 
       {totalMacroTerroirs === 0 ? (
