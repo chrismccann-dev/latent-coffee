@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { brewMatchesCultivar } from '@/lib/cultivar-matching'
 import { Cultivar } from '@/lib/types'
 
 const familyColors: Record<string, string> = {
@@ -28,7 +27,7 @@ export default async function CultivarsPage() {
 
   const [cultivarResult, brewResult] = await Promise.all([
     supabase.from('cultivars').select('*').order('genetic_family', { ascending: true }),
-    supabase.from('brews').select('id, variety')
+    supabase.from('brews').select('id, cultivar_id')
   ])
 
   if (cultivarResult.error) console.error('Error fetching cultivars:', cultivarResult.error)
@@ -58,16 +57,11 @@ export default async function CultivarsPage() {
     }
   }
 
-  // Count unique brews per lineage (a brew matching multiple subtypes counts once)
+  // Count unique brews per lineage via cultivar_id FK
   for (const groups of Object.values(familyMap)) {
     for (const group of groups) {
-      let count = 0
-      for (const brew of allBrews) {
-        if (group.cultivars.some(c => brewMatchesCultivar(brew.variety, c))) {
-          count++
-        }
-      }
-      group.brewCount = count
+      const cultivarIds = new Set(group.cultivars.map(c => c.id))
+      group.brewCount = allBrews.filter(b => b.cultivar_id && cultivarIds.has(b.cultivar_id)).length
     }
   }
 

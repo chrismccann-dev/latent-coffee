@@ -61,8 +61,9 @@ export async function POST(request: Request) {
     classification: brew.classification,
     brewer: brew.brewer,
     extraction_strategy: brew.extraction_strategy,
+    what_i_learned: brew.what_i_learned,
   })).filter(d =>
-    d.key_takeaways?.length || d.peak_expression || d.temperature_evolution || d.terroir_connection || d.flavor_notes?.length || d.classification
+    d.key_takeaways?.length || d.peak_expression || d.temperature_evolution || d.terroir_connection || d.flavor_notes?.length || d.classification || d.what_i_learned
   )
 
   if (learningData.length === 0) {

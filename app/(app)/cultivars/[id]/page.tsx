@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew, Cultivar } from '@/lib/types'
-import { getCultivarKeywords, brewMatchesCultivar } from '@/lib/cultivar-matching'
 import CultivarSynthesis from './CultivarSynthesis'
 
 const familyColors: Record<string, string> = {
@@ -115,31 +114,14 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
   const allCultivars = (lineageCultivars || [cultivar]) as Cultivar[]
   const cultivarIds = allCultivars.map(c => c.id)
 
-  // Fetch brews matching ANY cultivar in this lineage
-  const allKeywords = new Set<string>()
-  for (const c of allCultivars) {
-    for (const kw of getCultivarKeywords(c)) {
-      allKeywords.add(kw)
-    }
-  }
-
-  let brewQuery = supabase
+  // Fetch brews matching ANY cultivar in this lineage via FK
+  const { data: brews } = await supabase
     .from('brews')
     .select(`*, terroir:terroirs(country, admin_region, macro_terroir), cultivar:cultivars(cultivar_name, lineage)`)
+    .in('cultivar_id', cultivarIds)
     .order('created_at', { ascending: false })
 
-  const keywords = Array.from(allKeywords)
-  if (keywords.length > 0) {
-    const orFilters = keywords.map(kw => `variety.ilike.%${kw}%`).join(',')
-    brewQuery = brewQuery.or(orFilters)
-  }
-
-  const { data: brews } = await brewQuery
-
-  // Filter: brew matches ANY cultivar in the lineage
-  const brewList = ((brews || []) as Brew[]).filter(brew =>
-    allCultivars.some(c => brewMatchesCultivar(brew.variety, c))
-  )
+  const brewList = (brews || []) as Brew[]
 
   // Merge characteristics across all cultivars in the lineage
   const merged = mergeLineageCharacteristics(allCultivars)
