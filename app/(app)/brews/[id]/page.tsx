@@ -242,14 +242,13 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
 
       {/* Key Takeaways */}
       {brew.key_takeaways && brew.key_takeaways.length > 0 && (
-        <div className="mb-6">
-          <div className="label">KEY TAKEAWAYS</div>
+        <Section title="KEY TAKEAWAYS">
           <ul className="list-disc list-inside space-y-2 font-sans text-sm">
             {brew.key_takeaways.map((takeaway: string, i: number) => (
               <li key={i}>{takeaway}</li>
             ))}
           </ul>
-        </div>
+        </Section>
       )}
 
       {/* Classification */}

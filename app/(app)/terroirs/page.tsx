@@ -74,9 +74,10 @@ export default async function TerroirsPage() {
                 {countryTerroirs.map((terroir: any) => {
                   const brewCount = terroir.brews?.length || 0
                   return (
-                    <div
+                    <Link
                       key={terroir.id}
-                      className="flex items-center gap-3 py-3 border-b border-latent-border"
+                      href={`/terroirs/${terroir.id}`}
+                      className="flex items-center gap-3 py-3 border-b border-latent-border hover:bg-white transition-colors group"
                     >
                       {/* Color swatch */}
                       <div
@@ -93,10 +94,13 @@ export default async function TerroirsPage() {
                             .join(', ')}
                         </div>
                       </div>
-                      <div className="font-mono text-xs text-latent-mid">
-                        {brewCount} {brewCount === 1 ? 'coffee' : 'coffees'}
+                      <div className="flex items-center gap-2">
+                        <div className="font-mono text-xs text-latent-mid">
+                          {brewCount} {brewCount === 1 ? 'coffee' : 'coffees'}
+                        </div>
+                        <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                       </div>
-                    </div>
+                    </Link>
                   )
                 })}
               </div>

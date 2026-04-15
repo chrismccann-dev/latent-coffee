@@ -80,8 +80,7 @@ export default async function BrewsPage() {
             const subtitleParts = []
             if (brew.variety) subtitleParts.push(brew.variety)
             if (brew.process) subtitleParts.push(brew.process)
-            if (brew.source === 'purchased') subtitleParts.push('Purchased')
-            else if (brew.source === 'self-roasted') subtitleParts.push('Roasted')
+            if (brew.source === 'self-roasted') subtitleParts.push('Roasted')
 
             return (
               <Link
@@ -91,7 +90,7 @@ export default async function BrewsPage() {
               >
                 {/* Large card image */}
                 <div
-                  className="w-full aspect-[3/4] rounded mb-3 flex-shrink-0 flex flex-col justify-between p-3"
+                  className="w-full aspect-[3/4] rounded mb-3 flex-shrink-0 flex flex-col justify-between p-3 relative overflow-hidden transition-all duration-200 group-hover:-translate-y-1 group-hover:scale-[1.01] group-hover:shadow-lg"
                   style={{ backgroundColor: cardColor }}
                 >
                   <div className="font-mono text-[7px] font-semibold leading-tight uppercase text-white/90">
@@ -99,6 +98,28 @@ export default async function BrewsPage() {
                   </div>
                   <div className="font-mono text-[9px] font-bold tracking-widest opacity-20 text-white text-center">
                     LATENT
+                  </div>
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-3">
+                    <div className="space-y-1">
+                      {(brew as any).terroir?.country && (
+                        <div className="font-mono text-[8px] text-white/80">{(brew as any).terroir.country}{(brew as any).terroir.admin_region ? ` · ${(brew as any).terroir.admin_region}` : ''}</div>
+                      )}
+                      {brew.variety && (
+                        <div className="font-mono text-[8px] text-white/80">{brew.variety}</div>
+                      )}
+                      {brew.process && (
+                        <div className="font-mono text-[8px] text-white/80">{brew.process}</div>
+                      )}
+                      {brew.roaster && (
+                        <div className="font-mono text-[8px] text-white/60">{brew.roaster}</div>
+                      )}
+                      {brew.flavor_notes && brew.flavor_notes.length > 0 && (
+                        <div className="font-mono text-[7px] text-white/50 pt-1">
+                          {brew.flavor_notes.slice(0, 4).join(' · ')}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
