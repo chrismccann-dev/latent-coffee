@@ -32,12 +32,25 @@ interface MacroTerroirGroup {
 export default async function TerroirsPage() {
   const supabase = createClient()
 
-  const { data: terroirs, error } = await supabase
-    .from('terroirs')
-    .select(`*, brews(id)`)
-    .order('country', { ascending: true })
+  // Fetch terroirs with brew counts via both direct FK and green_bean chain
+  const [terroirResult, brewResult] = await Promise.all([
+    supabase.from('terroirs').select('*').order('country', { ascending: true }),
+    supabase.from('brews').select('id, terroir_id, green_bean_id, green_bean:green_beans(terroir_id)')
+  ])
 
-  if (error) console.error('Error fetching terroirs:', error)
+  if (terroirResult.error) console.error('Error fetching terroirs:', terroirResult.error)
+
+  const terroirs = terroirResult.data
+  const allBrews = (brewResult.data || []) as any[]
+
+  // Build a map of terroir_id → brew count (checking both direct FK and green_bean chain)
+  const terroirBrewCounts: Record<string, number> = {}
+  for (const brew of allBrews) {
+    const tid = brew.terroir_id || brew.green_bean?.terroir_id
+    if (tid) {
+      terroirBrewCounts[tid] = (terroirBrewCounts[tid] || 0) + 1
+    }
+  }
 
   // Group by country → macro_terroir
   const countryMap: Record<string, MacroTerroirGroup[]> = {}
@@ -52,7 +65,7 @@ export default async function TerroirsPage() {
     if (existing) {
       existing.terroirs.push(terroir)
       // Accumulate brew count
-      existing.brewCount += terroir.brews?.length || 0
+      existing.brewCount += terroirBrewCounts[terroir.id] || 0
       // Collect meso terroirs
       if (terroir.meso_terroir) {
         for (const meso of terroir.meso_terroir.split(',')) {
@@ -74,7 +87,7 @@ export default async function TerroirsPage() {
         macroTerroir: macroKey,
         terroirs: [terroir],
         mesoTerroirs,
-        brewCount: terroir.brews?.length || 0,
+        brewCount: terroirBrewCounts[terroir.id] || 0,
         representativeId: terroir.id,
       })
     }

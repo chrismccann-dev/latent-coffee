@@ -124,14 +124,29 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   const allTerroirs = (macroTerroirs || [terroir]) as Terroir[]
   const terriorIds = allTerroirs.map(t => t.id)
 
-  // Fetch all brews matching ANY terroir in this macro group
-  const { data: brews } = await supabase
-    .from('brews')
-    .select(`*, terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
-    .in('terroir_id', terriorIds)
-    .order('created_at', { ascending: false })
+  // Fetch brews via both direct terroir_id FK and green_bean chain
+  const [directBrews, greenBeanBrews] = await Promise.all([
+    supabase
+      .from('brews')
+      .select(`*, terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
+      .in('terroir_id', terriorIds)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('brews')
+      .select(`*, green_bean:green_beans!inner(terroir_id), terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
+      .in('green_bean.terroir_id', terriorIds)
+      .order('created_at', { ascending: false })
+  ])
 
-  const brewList = (brews || []) as Brew[]
+  // Merge and deduplicate brews (a brew might match both ways)
+  const brewMap = new Map<string, Brew>()
+  for (const brew of (directBrews.data || []) as Brew[]) brewMap.set(brew.id, brew)
+  for (const brew of (greenBeanBrews.data || []) as Brew[]) {
+    if (!brewMap.has(brew.id)) brewMap.set(brew.id, brew)
+  }
+  const brewList = Array.from(brewMap.values()).sort((a, b) =>
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )
   const color = getCountryColor(terroir.country)
 
   // Merge context across all terroirs in the macro group

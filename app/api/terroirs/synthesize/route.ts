@@ -29,14 +29,19 @@ export async function POST(request: Request) {
   const primary = allTerroirs[0]
   const macroName = primary.macro_terroir || primary.admin_region || primary.country
 
-  // Fetch brews linked to any terroir in the group (direct FK)
-  const { data: brews } = await supabase
-    .from('brews')
-    .select('*')
-    .in('terroir_id', terriorIds)
-    .order('created_at', { ascending: false })
+  // Fetch brews via both direct terroir_id FK and green_bean chain
+  const [directBrews, greenBeanBrews] = await Promise.all([
+    supabase.from('brews').select('*').in('terroir_id', terriorIds).order('created_at', { ascending: false }),
+    supabase.from('brews').select('*, green_bean:green_beans!inner(terroir_id)').in('green_bean.terroir_id', terriorIds).order('created_at', { ascending: false })
+  ])
 
-  const matchedBrews = brews || []
+  // Merge and deduplicate
+  const brewMap = new Map<string, any>()
+  for (const brew of directBrews.data || []) brewMap.set(brew.id, brew)
+  for (const brew of greenBeanBrews.data || []) {
+    if (!brewMap.has(brew.id)) brewMap.set(brew.id, brew)
+  }
+  const matchedBrews = Array.from(brewMap.values())
 
   if (matchedBrews.length === 0) {
     return NextResponse.json({
