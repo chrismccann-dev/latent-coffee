@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     brewer: brew.brewer,
     extraction_strategy: brew.extraction_strategy,
   })).filter(d =>
-    d.key_takeaways?.length || d.peak_expression || d.temperature_evolution || d.terroir_connection
+    d.key_takeaways?.length || d.peak_expression || d.temperature_evolution || d.terroir_connection || d.flavor_notes?.length || d.classification
   )
 
   if (learningData.length === 0) {
