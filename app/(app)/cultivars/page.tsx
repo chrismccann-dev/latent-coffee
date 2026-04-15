@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { brewMatchesCultivar } from '@/lib/cultivar-matching'
 
 const familyColors: Record<string, string> = {
   'Ethiopian Landrace Families': '#4A7C59',
@@ -17,15 +18,29 @@ function getFamilyColor(family: string): string {
 export default async function CultivarsPage() {
   const supabase = createClient()
   
-  const { data: cultivars, error } = await supabase
-    .from('cultivars')
-    .select(`*, brews(id)`)
-    .order('genetic_family', { ascending: true })
+  // Fetch cultivars and all brews in parallel
+  const [cultivarResult, brewResult] = await Promise.all([
+    supabase.from('cultivars').select('*').order('genetic_family', { ascending: true }),
+    supabase.from('brews').select('id, variety')
+  ])
 
-  if (error) console.error('Error fetching cultivars:', error)
+  if (cultivarResult.error) console.error('Error fetching cultivars:', cultivarResult.error)
+
+  const cultivars = cultivarResult.data || []
+  const allBrews = brewResult.data || []
+
+  // Count brews per cultivar using text-based matching
+  const brewCountMap = new Map<string, number>()
+  for (const cultivar of cultivars) {
+    let count = 0
+    for (const brew of allBrews) {
+      if (brewMatchesCultivar(brew.variety, cultivar)) count++
+    }
+    brewCountMap.set(cultivar.id, count)
+  }
 
   const grouped: Record<string, any[]> = {}
-  for (const cultivar of cultivars || []) {
+  for (const cultivar of cultivars) {
     const key = cultivar.genetic_family || 'Unknown Family'
     if (!grouped[key]) grouped[key] = []
     grouped[key].push(cultivar)
@@ -65,7 +80,7 @@ export default async function CultivarsPage() {
 
               <div className="space-y-0">
                 {familyCultivars.map((cultivar: any) => {
-                  const brewCount = cultivar.brews?.length || 0
+                  const brewCount = brewCountMap.get(cultivar.id) || 0
                   return (
                     <Link
                       key={cultivar.id}

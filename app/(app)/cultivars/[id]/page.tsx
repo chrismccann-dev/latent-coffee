@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
+import { getCultivarKeywords, brewMatchesCultivar } from '@/lib/cultivar-matching'
+import CultivarSynthesis from './CultivarSynthesis'
 
 const familyColors: Record<string, string> = {
   'Ethiopian Landrace Families': '#4A7C59',
@@ -20,7 +22,7 @@ function Section({ title, dark, children }: { title?: string, dark?: boolean, ch
   return (
     <div className={`rounded-md p-6 mb-4 ${dark ? 'bg-latent-fg text-white' : 'bg-white border border-latent-border'}`}>
       {title && (
-        <div className={`font-mono text-xxs font-semibold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-mid'}`}>
+        <div className={`font-mono text-xs font-bold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-fg'}`}>
           {title}
         </div>
       )}
@@ -59,13 +61,33 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   if (error || !cultivar) notFound()
 
-  const { data: brews } = await supabase
+  // Fetch brews using text-based matching on variety
+  const keywords = getCultivarKeywords(cultivar)
+  let brewQuery = supabase
     .from('brews')
     .select(`*, terroir:terroirs(country, admin_region, macro_terroir), cultivar:cultivars(cultivar_name, lineage)`)
-    .eq('cultivar_id', params.id)
     .order('created_at', { ascending: false })
 
-  const brewList = (brews || []) as Brew[]
+  // Build OR filter for text matching
+  if (keywords.length > 0) {
+    const orFilters = keywords.map(kw => `variety.ilike.%${kw}%`).join(',')
+    brewQuery = brewQuery.or(orFilters)
+  }
+
+  const { data: brews } = await brewQuery
+
+  // Filter in JS for more precise matching (handles edge cases like keyword-in-keyword)
+  const brewList = ((brews || []) as Brew[]).filter(brew =>
+    brewMatchesCultivar(brew.variety, cultivar)
+  )
+
+  // Fetch sibling cultivars in the same genetic family
+  const { data: siblingCultivars } = await supabase
+    .from('cultivars')
+    .select('id, cultivar_name, lineage')
+    .eq('genetic_family', cultivar.genetic_family || '')
+    .neq('id', cultivar.id)
+
   const color = getFamilyColor(cultivar.genetic_family || '')
 
   // Aggregate flavor notes
@@ -122,6 +144,11 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
               {cultivar.cultivar_raw && cultivar.cultivar_raw !== cultivar.cultivar_name && (
                 <Tag>{cultivar.cultivar_raw}</Tag>
               )}
+              {(siblingCultivars || []).map((sib: any) => (
+                <Link key={sib.id} href={`/cultivars/${sib.id}`}>
+                  <Tag>{sib.cultivar_name}</Tag>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -140,19 +167,19 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
           <div className="grid grid-cols-2 gap-x-8 gap-y-3 font-sans text-sm">
             {cultivar.acidity_style && (
               <div>
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Acidity Style</div>
+                <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-1">Acidity Style</div>
                 <div>{cultivar.acidity_style}</div>
               </div>
             )}
             {cultivar.body_style && (
               <div>
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Body Style</div>
+                <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-1">Body Style</div>
                 <div>{cultivar.body_style}</div>
               </div>
             )}
             {cultivar.aromatics && (
               <div className="col-span-2">
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Aromatics</div>
+                <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-1">Aromatics</div>
                 <div>{cultivar.aromatics}</div>
               </div>
             )}
@@ -166,24 +193,34 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
           <div className="space-y-3 font-sans text-sm">
             {cultivar.extraction_sensitivity && (
               <div>
-                <span className="font-mono text-xs text-latent-mid mr-2">Extraction Sensitivity:</span>
+                <span className="font-mono text-xs font-semibold text-latent-fg mr-2">Extraction Sensitivity:</span>
                 {cultivar.extraction_sensitivity}
               </div>
             )}
             {cultivar.roast_tolerance && (
               <div>
-                <span className="font-mono text-xs text-latent-mid mr-2">Roast Tolerance:</span>
+                <span className="font-mono text-xs font-semibold text-latent-fg mr-2">Roast Tolerance:</span>
                 {cultivar.roast_tolerance}
               </div>
             )}
             {cultivar.brewing_tendencies && (
               <div>
-                <span className="font-mono text-xs text-latent-mid mr-2">Brewing Tendencies:</span>
+                <span className="font-mono text-xs font-semibold text-latent-fg mr-2">Brewing Tendencies:</span>
                 {cultivar.brewing_tendencies}
               </div>
             )}
           </div>
         </Section>
+      )}
+
+      {/* AI Synthesis — What I've Learned */}
+      {brewList.length > 0 && (
+        <CultivarSynthesis
+          cultivarId={cultivar.id}
+          existingSynthesis={cultivar.synthesis}
+          existingBrewCount={cultivar.synthesis_brew_count}
+          currentBrewCount={brewList.length}
+        />
       )}
 
       {/* Common Flavor Notes */}
