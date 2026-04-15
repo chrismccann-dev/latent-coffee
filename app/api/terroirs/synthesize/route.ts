@@ -32,13 +32,13 @@ export async function POST(request: Request) {
   const macroName = primary.macro_terroir || primary.admin_region || primary.country
 
   // Fetch brews linked to any terroir in the group (via terroir_id FK)
-  const { data: fetchedBrews } = await supabase
+  const { data: brews } = await supabase
     .from('brews')
     .select('*')
     .in('terroir_id', terriorIds)
     .order('created_at', { ascending: false })
 
-  const matchedBrews = fetchedBrews || []
+  const matchedBrews = brews || []
 
   if (matchedBrews.length === 0) {
     return NextResponse.json({
