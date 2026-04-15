@@ -66,35 +66,58 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   if (error || !terroir) notFound()
 
-  // Brews connect to terroirs through green_beans (brews.green_bean_id → green_beans.terroir_id)
-  const { data: greenBeans } = await supabase
-    .from('green_beans')
-    .select('id')
-    .eq('terroir_id', params.id)
-
-  const greenBeanIds = (greenBeans || []).map((gb: any) => gb.id)
+  // FK relationships (terroir_id) aren't populated on brews or green_beans.
+  // Match brews through green_beans by origin/region text, and also try
+  // matching brews by coffee_name containing terroir identifiers.
+  const searchTerms: string[] = []
+  if (terroir.macro_terroir) searchTerms.push(terroir.macro_terroir)
+  if (terroir.meso_terroir) {
+    terroir.meso_terroir.split(',').forEach((m: string) => {
+      const trimmed = m.trim()
+      if (trimmed) searchTerms.push(trimmed)
+    })
+  }
+  if (terroir.admin_region) searchTerms.push(terroir.admin_region)
 
   let brewList: Brew[] = []
 
-  if (greenBeanIds.length > 0) {
-    const { data: brews } = await supabase
-      .from('brews')
-      .select('*, cultivar:cultivars(cultivar_name, lineage)')
-      .in('green_bean_id', greenBeanIds)
-      .order('created_at', { ascending: false })
-    brewList = (brews || []) as Brew[]
+  // Strategy 1: Find green_beans whose origin/region matches this terroir, then get their brews
+  if (searchTerms.length > 0) {
+    const gbOrFilter = searchTerms.flatMap(t => [
+      `origin.ilike.%${t}%`,
+      `region.ilike.%${t}%`,
+    ]).join(',')
+
+    const { data: matchingGBs } = await supabase
+      .from('green_beans')
+      .select('id')
+      .or(gbOrFilter)
+
+    const gbIds = (matchingGBs || []).map((gb: any) => gb.id)
+    if (gbIds.length > 0) {
+      const { data: brews } = await supabase
+        .from('brews')
+        .select('*')
+        .in('green_bean_id', gbIds)
+        .order('created_at', { ascending: false })
+      brewList = (brews || []) as Brew[]
+    }
   }
 
-  // Also get any brews with direct terroir_id link
-  const { data: directBrews } = await supabase
-    .from('brews')
-    .select('*, cultivar:cultivars(cultivar_name, lineage)')
-    .eq('terroir_id', params.id)
+  // Strategy 2: Also search brews by coffee_name containing terroir terms
+  if (searchTerms.length > 0) {
+    const brewOrFilter = searchTerms.map(t => `coffee_name.ilike.%${t}%`).join(',')
+    const { data: nameBrews } = await supabase
+      .from('brews')
+      .select('*')
+      .or(brewOrFilter)
+      .order('created_at', { ascending: false })
 
-  if (directBrews && directBrews.length > 0) {
-    const existingIds = new Set(brewList.map(b => b.id))
-    for (const brew of directBrews) {
-      if (!existingIds.has(brew.id)) brewList.push(brew as Brew)
+    if (nameBrews && nameBrews.length > 0) {
+      const existingIds = new Set(brewList.map(b => b.id))
+      for (const brew of nameBrews) {
+        if (!existingIds.has(brew.id)) brewList.push(brew as Brew)
+      }
     }
   }
 

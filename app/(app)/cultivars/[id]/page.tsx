@@ -59,82 +59,29 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   if (error || !cultivar) notFound()
 
-  // === DIAGNOSTIC: understand actual data relationships ===
-
-  // 1. How many green_beans reference this cultivar?
-  const { data: greenBeans, error: gbErr } = await supabase
-    .from('green_beans')
-    .select('id, cultivar_id')
-    .eq('cultivar_id', params.id)
-
-  // 2. How many brews have cultivar_id set at all?
-  const { data: brewsWithCultivar } = await supabase
-    .from('brews')
-    .select('id, cultivar_id, green_bean_id, variety')
-    .not('cultivar_id', 'is', null)
-    .limit(5)
-
-  // 3. Sample brews that match by variety name
-  const { data: brewsByVariety } = await supabase
-    .from('brews')
-    .select('id, cultivar_id, green_bean_id, variety, coffee_name')
-    .ilike('variety', `%${cultivar.cultivar_name}%`)
-    .limit(5)
-
-  // 4. Reverse join like list page
-  const { data: revJoinData, error: revErr } = await supabase
-    .from('cultivars')
-    .select('brews(id)')
-    .eq('id', params.id)
-    .single()
-
-  // 5. Total cultivar count to verify we're reading the right table
-  const { count: totalCultivars } = await supabase
-    .from('cultivars')
-    .select('*', { count: 'exact', head: true })
-
-  const debugInfo = {
-    thisPage: {
-      paramsId: params.id,
-      cultivarName: cultivar.cultivar_name,
-      lineage: cultivar.lineage,
-    },
-    greenBeans: {
-      matchingCount: greenBeans?.length ?? 0,
-      error: gbErr?.message ?? null,
-    },
-    reverseJoin: {
-      brewCount: (revJoinData as any)?.brews?.length ?? 0,
-      error: revErr?.message ?? null,
-      rawKeys: revJoinData ? Object.keys(revJoinData) : [],
-    },
-    sampleBrewsWithAnyCultivar: (brewsWithCultivar || []).map((b: any) => ({
-      id: b.id?.slice(0, 8),
-      cultivar_id: b.cultivar_id?.slice(0, 8),
-      green_bean_id: b.green_bean_id?.slice(0, 8),
-      variety: b.variety,
-    })),
-    sampleBrewsByVarietyName: (brewsByVariety || []).map((b: any) => ({
-      id: b.id?.slice(0, 8),
-      cultivar_id: b.cultivar_id,
-      green_bean_id: b.green_bean_id?.slice(0, 8),
-      variety: b.variety,
-      name: b.coffee_name?.slice(0, 40),
-    })),
-    totalCultivarsInDB: totalCultivars,
+  // Brews don't use FK relationships to cultivars — match by variety text
+  // Build search terms from cultivar data (e.g. "Gesha" from "Gesha lineage")
+  const searchTerms: string[] = []
+  if (cultivar.lineage) {
+    // Extract root name: "Gesha lineage" → "Gesha", "SL-28 lineage" → "SL-28"
+    const root = cultivar.lineage.replace(/\s*lineage\s*/i, '').trim()
+    if (root) searchTerms.push(root)
+  }
+  if (cultivar.cultivar_name && !searchTerms.some(t => cultivar.cultivar_name.toLowerCase().includes(t.toLowerCase()))) {
+    searchTerms.push(cultivar.cultivar_name)
   }
 
-  // === END DIAGNOSTIC ===
-
-  // Use variety-based matching as a fallback since FK relationships are unclear
   let brewList: Brew[] = []
-  const { data: allMatchingBrews } = await supabase
-    .from('brews')
-    .select('*, terroir:terroirs(country, admin_region, macro_terroir)')
-    .ilike('variety', `%${cultivar.cultivar_name}%`)
-    .order('created_at', { ascending: false })
-
-  brewList = (allMatchingBrews || []) as Brew[]
+  if (searchTerms.length > 0) {
+    // Build OR filter: variety ilike any of the search terms
+    const orFilter = searchTerms.map(t => `variety.ilike.%${t}%`).join(',')
+    const { data: matchingBrews } = await supabase
+      .from('brews')
+      .select('*, terroir:terroirs(country, admin_region, macro_terroir)')
+      .or(orFilter)
+      .order('created_at', { ascending: false })
+    brewList = (matchingBrews || []) as Brew[]
+  }
 
   // Attach cultivar info to each brew for display
   for (const brew of brewList) {
@@ -324,13 +271,6 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
           </div>
         </Section>
       )}
-
-      {/* Debug — TEMPORARY */}
-      <Section title="DEBUG — DATA RELATIONSHIPS">
-        <pre className="font-mono text-[10px] text-latent-mid whitespace-pre-wrap overflow-auto max-h-96">
-          {JSON.stringify(debugInfo, null, 2)}
-        </pre>
-      </Section>
 
       {/* Confidence */}
       <Section dark>
