@@ -35,13 +35,23 @@ export interface Cultivar {
   lineage: string | null
   cultivar_name: string
   cultivar_raw: string | null
+  cultivar_notes: string | null
+  cultivar_confidence: string | null
+  cultivar_source: string | null
   genetic_background: string | null
+  typical_origins: string[] | null
+  limiting_factors: string[] | null
+  altitude_sensitivity: string | null
+  terroir_transparency: string | null
+  common_processing_methods: string[] | null
+  typical_flavor_notes: string[] | null
   acidity_style: string | null
   body_style: string | null
   aromatics: string | null
   extraction_sensitivity: string | null
   roast_tolerance: string | null
   brewing_tendencies: string | null
+  common_pitfalls: string[] | null
   synthesis: string | null
   synthesis_brew_count: number | null
   created_at: string
