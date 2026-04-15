@@ -3,7 +3,9 @@ import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 import { Terroir } from '@/lib/types'
 
-const anthropic = new Anthropic()
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+})
 
 export async function POST(request: Request) {
   const body = await request.json()
