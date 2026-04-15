@@ -234,28 +234,26 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
         </Section>
       )}
 
-      {/* Terroirs + Processes grid */}
-      {(terroirSet.size > 0 || processSet.size > 0) && (
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          {terroirSet.size > 0 && (
-            <Section title="TERROIRS EXPLORED">
-              <div className="flex flex-wrap gap-2">
-                {Array.from(terroirSet.entries()).map(([name, country]) => (
-                  <Tag key={name}>{country} / {name}</Tag>
-                ))}
-              </div>
-            </Section>
-          )}
-          {processSet.size > 0 && (
-            <Section title="PROCESSES">
-              <div className="flex flex-wrap gap-2">
-                {Array.from(processSet).map((p) => (
-                  <Tag key={p}>{p}</Tag>
-                ))}
-              </div>
-            </Section>
-          )}
-        </div>
+      {/* Terroirs */}
+      {terroirSet.size > 0 && (
+        <Section title="TERROIRS EXPLORED">
+          <div className="flex flex-wrap gap-2">
+            {Array.from(terroirSet.entries()).map(([name, country]) => (
+              <Tag key={name}>{country} / {name}</Tag>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {/* Processes */}
+      {processSet.size > 0 && (
+        <Section title="PROCESSES">
+          <div className="flex flex-wrap gap-2">
+            {Array.from(processSet).map((p) => (
+              <Tag key={p}>{p}</Tag>
+            ))}
+          </div>
+        </Section>
       )}
 
       {/* Coffee list */}
