@@ -60,19 +60,19 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   const { data: terroir, error } = await supabase
     .from('terroirs')
-    .select('*')
+    .select(`*, brews(*, cultivar:cultivars(cultivar_name, lineage))`)
     .eq('id', params.id)
     .single()
 
   if (error || !terroir) notFound()
 
-  const { data: brews } = await supabase
-    .from('brews')
-    .select(`*, terroir:terroirs(country, admin_region), cultivar:cultivars(cultivar_name, lineage)`)
-    .eq('terroir_id', params.id)
-    .order('created_at', { ascending: false })
-
-  const brewList = (brews || []) as Brew[]
+  const brewList = ((terroir.brews || []) as Brew[]).sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )
+  // Attach terroir info to each brew for consistency
+  for (const brew of brewList) {
+    (brew as any).terroir = { country: terroir.country, admin_region: terroir.admin_region }
+  }
   const color = getCountryColor(terroir.country)
 
   // Aggregate flavor notes from all brews

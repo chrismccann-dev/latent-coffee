@@ -53,19 +53,19 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   const { data: cultivar, error } = await supabase
     .from('cultivars')
-    .select('*')
+    .select(`*, brews(*, terroir:terroirs(country, admin_region, macro_terroir))`)
     .eq('id', params.id)
     .single()
 
   if (error || !cultivar) notFound()
 
-  const { data: brews } = await supabase
-    .from('brews')
-    .select(`*, terroir:terroirs(country, admin_region, macro_terroir), cultivar:cultivars(cultivar_name, lineage)`)
-    .eq('cultivar_id', params.id)
-    .order('created_at', { ascending: false })
-
-  const brewList = (brews || []) as Brew[]
+  const brewList = ((cultivar.brews || []) as Brew[]).sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )
+  // Attach cultivar info to each brew for consistency
+  for (const brew of brewList) {
+    (brew as any).cultivar = { cultivar_name: cultivar.cultivar_name, lineage: cultivar.lineage }
+  }
   const color = getFamilyColor(cultivar.genetic_family || '')
 
   // Aggregate flavor notes
