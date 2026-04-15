@@ -46,7 +46,7 @@ export function getCultivarKeywords(cultivar: CultivarMatchInfo): string[] {
   }
 
   // Deduplicate
-  return [...new Set(keywords)]
+  return Array.from(new Set(keywords))
 }
 
 /**
