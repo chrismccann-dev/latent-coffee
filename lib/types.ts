@@ -42,6 +42,8 @@ export interface Cultivar {
   extraction_sensitivity: string | null
   roast_tolerance: string | null
   brewing_tendencies: string | null
+  synthesis: string | null
+  synthesis_brew_count: number | null
   created_at: string
   updated_at: string
 }
