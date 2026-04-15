@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 import { Terroir } from '@/lib/types'
-import { getTerroirKeywords } from '@/lib/terroir-matching'
 
 const anthropic = new Anthropic()
 
@@ -30,36 +29,14 @@ export async function POST(request: Request) {
   const primary = allTerroirs[0]
   const macroName = primary.macro_terroir || primary.admin_region || primary.country
 
-  // Text-based matching: find brews via green_bean origin/region and coffee_name
-  const allKeywords = allTerroirs.flatMap(t => getTerroirKeywords(t))
-  const uniqueKeywords = Array.from(new Set(allKeywords))
+  // Fetch brews linked to any terroir in the group (via terroir_id FK)
+  const { data: fetchedBrews } = await supabase
+    .from('brews')
+    .select('*')
+    .in('terroir_id', terriorIds)
+    .order('created_at', { ascending: false })
 
-  let matchedBrews: any[] = []
-  if (uniqueKeywords.length > 0) {
-    const gbOrFilter = uniqueKeywords.flatMap(kw => [
-      `origin.ilike.%${kw}%`,
-      `region.ilike.%${kw}%`,
-    ]).join(',')
-
-    const { data: matchingGBs } = await supabase
-      .from('green_beans')
-      .select('id')
-      .or(gbOrFilter)
-
-    const gbIds = (matchingGBs || []).map((gb: any) => gb.id)
-
-    const brewNameFilter = uniqueKeywords.map(kw => `coffee_name.ilike.%${kw}%`).join(',')
-    const orParts = [brewNameFilter]
-    if (gbIds.length > 0) orParts.push(`green_bean_id.in.(${gbIds.join(',')})`)
-    if (terriorIds.length > 0) orParts.push(`terroir_id.in.(${terriorIds.join(',')})`)
-
-    const { data: brews } = await supabase
-      .from('brews')
-      .select('*')
-      .or(orParts.join(','))
-      .order('created_at', { ascending: false })
-    matchedBrews = brews || []
-  }
+  const matchedBrews = fetchedBrews || []
 
   if (matchedBrews.length === 0) {
     return NextResponse.json({
