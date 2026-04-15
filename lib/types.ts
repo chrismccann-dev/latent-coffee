@@ -23,6 +23,11 @@ export interface Terroir {
   context: string | null
   cup_profile: string | null
   why_it_stands_out: string | null
+  acidity_character: string | null
+  body_character: string | null
+  farming_model: string | null
+  dominant_varieties: string[] | null
+  typical_processing: string[] | null
   synthesis: string | null
   synthesis_brew_count: number | null
   created_at: string
@@ -54,6 +59,9 @@ export interface Cultivar {
   roast_tolerance: string | null
   brewing_tendencies: string | null
   common_pitfalls: string[] | null
+  roast_behavior: string | null
+  resting_behavior: string | null
+  market_context: string | null
   synthesis: string | null
   synthesis_brew_count: number | null
   created_at: string
@@ -231,6 +239,7 @@ export interface Brew {
   is_process_dominant: boolean
   process_category: string | null
   process_details: string | null
+  what_i_learned: string | null
   created_at: string
   updated_at: string
   // Joined data

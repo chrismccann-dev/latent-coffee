@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { getCultivarKeywords, brewMatchesCultivar } from '@/lib/cultivar-matching'
 import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 import { Cultivar } from '@/lib/types'
@@ -30,31 +29,14 @@ export async function POST(request: Request) {
   const primary = allCultivars[0]
   const lineageName = primary.lineage || primary.cultivar_name
 
-  // Collect keywords from ALL cultivars in the lineage
-  const allKeywords = new Set<string>()
-  for (const c of allCultivars) {
-    for (const kw of getCultivarKeywords(c)) {
-      allKeywords.add(kw)
-    }
-  }
-
-  const keywords = Array.from(allKeywords)
-  let brewQuery = supabase
+  // Fetch brews matching ANY cultivar in this lineage via FK
+  const { data: brews } = await supabase
     .from('brews')
     .select('*')
+    .in('cultivar_id', cultivarIds)
     .order('created_at', { ascending: false })
 
-  if (keywords.length > 0) {
-    const orFilters = keywords.map(kw => `variety.ilike.%${kw}%`).join(',')
-    brewQuery = brewQuery.or(orFilters)
-  }
-
-  const { data: brews } = await brewQuery
-
-  // Filter: brew matches ANY cultivar in the lineage
-  const matchedBrews = (brews || []).filter(brew =>
-    allCultivars.some(c => brewMatchesCultivar(brew.variety, c))
-  )
+  const matchedBrews = brews || []
 
   if (matchedBrews.length === 0) {
     return NextResponse.json({
@@ -77,8 +59,9 @@ export async function POST(request: Request) {
     classification: brew.classification,
     brewer: brew.brewer,
     extraction_strategy: brew.extraction_strategy,
+    what_i_learned: brew.what_i_learned,
   })).filter(d =>
-    d.key_takeaways?.length || d.peak_expression || d.temperature_evolution || d.cultivar_connection
+    d.key_takeaways?.length || d.peak_expression || d.temperature_evolution || d.cultivar_connection || d.what_i_learned
   )
 
   if (learningData.length === 0) {

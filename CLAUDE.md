@@ -19,15 +19,16 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **green_beans** — raw coffee lots (self-roasted only, 4 records). Has roasts, experiments, cuppings.
 
 ### Relationship patterns (IMPORTANT)
-- **Brew → Terroir:** FK via `brews.terroir_id`. Backfilled in migration 005. New imports must set this.
-- **Brew → Cultivar:** NO FK. Text-based matching via `brews.variety` against cultivar keywords. See `lib/cultivar-matching.ts`.
-- **Brew → Green Bean:** `brews.green_bean_id` — only set for self-roasted coffees (4 of 55 brews).
-- **Green Bean → Terroir/Cultivar:** `green_beans.terroir_id` and `green_beans.cultivar_id` — mostly NULL.
+- **Brew → Terroir:** FK via `brews.terroir_id`. All 55 brews linked (backfilled in migrations 005-006).
+- **Brew → Cultivar:** FK via `brews.cultivar_id`. All 55 brews linked (backfilled in migration 006).
+- **Brew → Green Bean:** `brews.green_bean_id` — set for all 4 self-roasted brews (backfilled in migration 006).
+- **Green Bean → Terroir/Cultivar:** `green_beans.terroir_id` and `green_beans.cultivar_id` — all 4 populated.
+- **New brews must set `terroir_id` and `cultivar_id`** on insert. The add flow handles this for self-roasted; purchased brews need an import flow (not yet built).
 
-### Known data issues
-- Most brews are "purchased" with no green_bean record and no cultivar_id FK
-- `green_bean_id` is NULL on all 55 brews (even self-roasted ones didn't link)
-- Terroir-brew links only exist because of the migration 005 backfill — future imports need to maintain this
+### Canonical registries
+- **Macro Terroir names** must come from a predefined registry of ecological systems. See Chris's terroir ruleset doc.
+- **Cultivar names** must resolve to canonical names from the Cultivar Registry. Marketing/trade names are normalized.
+- **Genetic Families:** Ethiopian Landrace Families, Typica Family, Bourbon Family, Typica × Bourbon Crosses, Modern Hybrids
 
 ## Page structure
 
@@ -37,9 +38,9 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **Synthesis:** `/api/terroirs/synthesize` — accepts `terriorIds[]`, finds brews via `terroir_id` FK
 
 ### Cultivars (`app/(app)/cultivars/`)
-- **Index:** Groups by Genetic Family → Lineage, brew counts via text matching
+- **Index:** Groups by Genetic Family → Lineage, brew counts via `cultivar_id` FK join
 - **Detail:** Aggregates all cultivars sharing `lineage`. Merges characteristics. Shows synthesis, flavor notes, terroirs, processes, coffee list, confidence.
-- **Synthesis:** `/api/cultivars/synthesize` — accepts `cultivarIds[]`, finds brews via keyword text matching
+- **Synthesis:** `/api/cultivars/synthesize` — accepts `cultivarIds[]`, finds brews via `cultivar_id` FK join
 
 ### Brews (`app/(app)/brews/`)
 - List and detail views for individual tastings
