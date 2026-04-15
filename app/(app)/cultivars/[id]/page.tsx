@@ -81,12 +81,14 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
     brewMatchesCultivar(brew.variety, cultivar)
   )
 
-  // Fetch sibling cultivars in the same genetic family
-  const { data: siblingCultivars } = await supabase
-    .from('cultivars')
-    .select('id, cultivar_name, lineage')
-    .eq('genetic_family', cultivar.genetic_family || '')
-    .neq('id', cultivar.id)
+  // Fetch sibling cultivars in the same lineage (not just family)
+  const { data: siblingCultivars } = cultivar.lineage
+    ? await supabase
+        .from('cultivars')
+        .select('id, cultivar_name, lineage')
+        .eq('lineage', cultivar.lineage)
+        .neq('id', cultivar.id)
+    : { data: [] }
 
   const color = getFamilyColor(cultivar.genetic_family || '')
 
