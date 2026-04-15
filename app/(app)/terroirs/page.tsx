@@ -24,7 +24,6 @@ function getCountryColor(country: string): string {
 interface MacroTerroirGroup {
   macroTerroir: string
   terroirs: Terroir[]
-  mesoTerroirs: string[]
   brewCount: number
   representativeId: string
 }
@@ -51,29 +50,11 @@ export default async function TerroirsPage() {
     const existing = countryMap[country].find(g => g.macroTerroir === macroKey)
     if (existing) {
       existing.terroirs.push(terroir)
-      // Accumulate brew count
       existing.brewCount += terroir.brews?.length || 0
-      // Collect meso terroirs
-      if (terroir.meso_terroir) {
-        for (const meso of terroir.meso_terroir.split(',')) {
-          const trimmed = meso.trim()
-          if (trimmed && !existing.mesoTerroirs.includes(trimmed)) {
-            existing.mesoTerroirs.push(trimmed)
-          }
-        }
-      }
     } else {
-      const mesoTerroirs: string[] = []
-      if (terroir.meso_terroir) {
-        for (const meso of terroir.meso_terroir.split(',')) {
-          const trimmed = meso.trim()
-          if (trimmed) mesoTerroirs.push(trimmed)
-        }
-      }
       countryMap[country].push({
         macroTerroir: macroKey,
         terroirs: [terroir],
-        mesoTerroirs,
         brewCount: terroir.brews?.length || 0,
         representativeId: terroir.id,
       })

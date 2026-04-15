@@ -3,7 +3,9 @@ import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 import { Terroir } from '@/lib/types'
 
-const anthropic = new Anthropic()
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+})
 
 export async function POST(request: Request) {
   const body = await request.json()
@@ -29,7 +31,7 @@ export async function POST(request: Request) {
   const primary = allTerroirs[0]
   const macroName = primary.macro_terroir || primary.admin_region || primary.country
 
-  // Fetch brews linked to any terroir in the group (direct FK)
+  // Fetch brews linked to any terroir in the group (via terroir_id FK)
   const { data: brews } = await supabase
     .from('brews')
     .select('*')
@@ -60,7 +62,7 @@ export async function POST(request: Request) {
     brewer: brew.brewer,
     extraction_strategy: brew.extraction_strategy,
   })).filter(d =>
-    d.key_takeaways?.length || d.peak_expression || d.temperature_evolution || d.terroir_connection
+    d.key_takeaways?.length || d.peak_expression || d.temperature_evolution || d.terroir_connection || d.flavor_notes?.length || d.classification
   )
 
   if (learningData.length === 0) {

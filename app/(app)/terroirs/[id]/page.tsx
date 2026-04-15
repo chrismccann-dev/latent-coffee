@@ -27,7 +27,7 @@ function Section({ title, dark, children }: { title?: string, dark?: boolean, ch
   return (
     <div className={`rounded-md p-6 mb-4 ${dark ? 'bg-latent-fg text-white' : 'bg-white border border-latent-border'}`}>
       {title && (
-        <div className={`font-mono text-xxs font-semibold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-mid'}`}>
+        <div className={`font-mono text-xs font-bold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-fg'}`}>
           {title}
         </div>
       )}
@@ -124,7 +124,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   const allTerroirs = (macroTerroirs || [terroir]) as Terroir[]
   const terriorIds = allTerroirs.map(t => t.id)
 
-  // Fetch all brews matching ANY terroir in this macro group
+  // Fetch all brews matching ANY terroir in this macro group (via terroir_id FK)
   const { data: brews } = await supabase
     .from('brews')
     .select(`*, terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
@@ -214,25 +214,25 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
           <div className="space-y-3 font-sans text-sm">
             {merged.context && (
               <div>
-                <span className="font-mono text-xs text-latent-mid mr-2">Context:</span>
+                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Context:</span>
                 {merged.context}
               </div>
             )}
             {merged.soil && (
               <div>
-                <span className="font-mono text-xs text-latent-mid mr-2">Soil:</span>
+                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Soil:</span>
                 {merged.soil}
               </div>
             )}
             {merged.cup_profile && (
               <div>
-                <span className="font-mono text-xs text-latent-mid mr-2">Cup Profile:</span>
+                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Cup Profile:</span>
                 {merged.cup_profile}
               </div>
             )}
             {merged.why_it_stands_out && (
               <div>
-                <span className="font-mono text-xs text-latent-mid mr-2">Why It Stands Out:</span>
+                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Why It Stands Out:</span>
                 {merged.why_it_stands_out}
               </div>
             )}
@@ -262,28 +262,26 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
         </Section>
       )}
 
-      {/* Cultivars + Processes grid */}
-      {(cultivarSet.size > 0 || processSet.size > 0) && (
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          {cultivarSet.size > 0 && (
-            <Section title="CULTIVARS EXPLORED">
-              <div className="flex flex-wrap gap-2">
-                {Array.from(cultivarSet.entries()).map(([name, lineage]) => (
-                  <Tag key={name}>{lineage ? `${lineage} / ${name}` : name}</Tag>
-                ))}
-              </div>
-            </Section>
-          )}
-          {processSet.size > 0 && (
-            <Section title="PROCESSES">
-              <div className="flex flex-wrap gap-2">
-                {Array.from(processSet).map((p) => (
-                  <Tag key={p}>{p}</Tag>
-                ))}
-              </div>
-            </Section>
-          )}
-        </div>
+      {/* Cultivars Explored */}
+      {cultivarSet.size > 0 && (
+        <Section title="CULTIVARS EXPLORED">
+          <div className="flex flex-wrap gap-2">
+            {Array.from(cultivarSet.entries()).map(([name, lineage]) => (
+              <Tag key={name}>{lineage ? `${lineage} / ${name}` : name}</Tag>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {/* Processes */}
+      {processSet.size > 0 && (
+        <Section title="PROCESSES">
+          <div className="flex flex-wrap gap-2">
+            {Array.from(processSet).map((p) => (
+              <Tag key={p}>{p}</Tag>
+            ))}
+          </div>
+        </Section>
       )}
 
       {/* Coffee list */}
