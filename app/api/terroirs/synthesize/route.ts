@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 import { Terroir } from '@/lib/types'
+import { getTerroirKeywords } from '@/lib/terroir-matching'
 
 const anthropic = new Anthropic()
 
@@ -29,25 +30,33 @@ export async function POST(request: Request) {
   const primary = allTerroirs[0]
   const macroName = primary.macro_terroir || primary.admin_region || primary.country
 
-  // Find green_beans linked to these terroirs
-  const { data: linkedGreenBeans } = await supabase
-    .from('green_beans')
-    .select('id')
-    .in('terroir_id', terriorIds)
-
-  const greenBeanIds = (linkedGreenBeans || []).map((gb: any) => gb.id)
-
-  // Fetch brews via direct terroir_id OR via green_bean_id
-  const brewFilters = []
-  if (terriorIds.length > 0) brewFilters.push(`terroir_id.in.(${terriorIds.join(',')})`)
-  if (greenBeanIds.length > 0) brewFilters.push(`green_bean_id.in.(${greenBeanIds.join(',')})`)
+  // Text-based matching: find brews via green_bean origin/region and coffee_name
+  const allKeywords = allTerroirs.flatMap(t => getTerroirKeywords(t))
+  const uniqueKeywords = Array.from(new Set(allKeywords))
 
   let matchedBrews: any[] = []
-  if (brewFilters.length > 0) {
+  if (uniqueKeywords.length > 0) {
+    const gbOrFilter = uniqueKeywords.flatMap(kw => [
+      `origin.ilike.%${kw}%`,
+      `region.ilike.%${kw}%`,
+    ]).join(',')
+
+    const { data: matchingGBs } = await supabase
+      .from('green_beans')
+      .select('id')
+      .or(gbOrFilter)
+
+    const gbIds = (matchingGBs || []).map((gb: any) => gb.id)
+
+    const brewNameFilter = uniqueKeywords.map(kw => `coffee_name.ilike.%${kw}%`).join(',')
+    const orParts = [brewNameFilter]
+    if (gbIds.length > 0) orParts.push(`green_bean_id.in.(${gbIds.join(',')})`)
+    if (terriorIds.length > 0) orParts.push(`terroir_id.in.(${terriorIds.join(',')})`)
+
     const { data: brews } = await supabase
       .from('brews')
       .select('*')
-      .or(brewFilters.join(','))
+      .or(orParts.join(','))
       .order('created_at', { ascending: false })
     matchedBrews = brews || []
   }

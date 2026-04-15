@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Terroir } from '@/lib/types'
+import { getTerroirKeywords } from '@/lib/terroir-matching'
 
 const countryColors: Record<string, string> = {
   'Brazil': '#4A3728',
@@ -24,7 +25,6 @@ function getCountryColor(country: string): string {
 interface MacroTerroirGroup {
   macroTerroir: string
   terroirs: Terroir[]
-  mesoTerroirs: string[]
   brewCount: number
   representativeId: string
 }
@@ -32,60 +32,51 @@ interface MacroTerroirGroup {
 export default async function TerroirsPage() {
   const supabase = createClient()
 
-  // Fetch terroirs, brews, and green_beans separately to count via both paths
+  // Fetch terroirs, brews, and green_beans for text-based matching
   const [terroirResult, brewResult, greenBeanResult] = await Promise.all([
     supabase.from('terroirs').select('*').order('country', { ascending: true }),
-    supabase.from('brews').select('id, coffee_name, variety, terroir_id, green_bean_id'),
-    supabase.from('green_beans').select('id, terroir_id').not('terroir_id', 'is', null)
+    supabase.from('brews').select('id, coffee_name, green_bean_id'),
+    supabase.from('green_beans').select('id, origin, region')
   ])
 
   if (terroirResult.error) console.error('Error fetching terroirs:', terroirResult.error)
-  if (brewResult.error) console.error('Error fetching brews:', brewResult.error)
-  if (greenBeanResult.error) console.error('Error fetching green_beans:', greenBeanResult.error)
 
-  const terroirs = terroirResult.data
+  const terroirs = (terroirResult.data || []) as Terroir[]
   const allBrews = (brewResult.data || []) as any[]
   const allGreenBeans = (greenBeanResult.data || []) as any[]
 
-  // DEBUG: surface data state in the UI (remove after fixing)
-  const sampleBrews = allBrews.slice(0, 5).map((b: any) => ({
-    coffee_name: b.coffee_name,
-    variety: b.variety,
-    terroir_id: b.terroir_id,
-    green_bean_id: b.green_bean_id,
-  }))
-  const sampleTerroirs = (terroirs || []).slice(0, 3).map((t: any) => ({
-    country: t.country,
-    admin_region: t.admin_region,
-    macro_terroir: t.macro_terroir,
-    meso_terroir: t.meso_terroir,
-  }))
-  const debugInfo = {
-    brewCount: allBrews.length,
-    brewsWithTerroirId: allBrews.filter((b: any) => b.terroir_id).length,
-    sampleBrews,
-    sampleTerroirs,
-  }
-
-  // Map green_bean_id → terroir_id
-  const gbTerroirMap: Record<string, string> = {}
+  // Map green_bean_id → {origin, region}
+  const gbMap: Record<string, { origin: string | null, region: string | null }> = {}
   for (const gb of allGreenBeans) {
-    if (gb.terroir_id) gbTerroirMap[gb.id] = gb.terroir_id
+    gbMap[gb.id] = { origin: gb.origin, region: gb.region }
   }
 
-  // Build terroir_id → brew count (direct FK or via green_bean)
-  const terroirBrewCounts: Record<string, number> = {}
-  for (const brew of allBrews) {
-    const tid = brew.terroir_id || (brew.green_bean_id && gbTerroirMap[brew.green_bean_id])
-    if (tid) {
-      terroirBrewCounts[tid] = (terroirBrewCounts[tid] || 0) + 1
+  // For each terroir, count matching brews via text search
+  // A brew matches a terroir if the brew's coffee_name OR its green_bean's
+  // origin/region contains any of the terroir's location keywords
+  function countBrewsForTerroir(terroir: Terroir): number {
+    const keywords = getTerroirKeywords(terroir)
+    if (keywords.length === 0) return 0
+
+    let count = 0
+    for (const brew of allBrews) {
+      const coffeeName = (brew.coffee_name || '').toLowerCase()
+      const gb = brew.green_bean_id ? gbMap[brew.green_bean_id] : null
+      const gbOrigin = (gb?.origin || '').toLowerCase()
+      const gbRegion = (gb?.region || '').toLowerCase()
+
+      const matches = keywords.some(kw =>
+        coffeeName.includes(kw) || gbOrigin.includes(kw) || gbRegion.includes(kw)
+      )
+      if (matches) count++
     }
+    return count
   }
 
   // Group by country → macro_terroir
   const countryMap: Record<string, MacroTerroirGroup[]> = {}
 
-  for (const terroir of (terroirs || []) as any[]) {
+  for (const terroir of terroirs) {
     const country = terroir.country || 'Unknown'
     const macroKey = terroir.macro_terroir || terroir.admin_region || country
 
@@ -94,32 +85,38 @@ export default async function TerroirsPage() {
     const existing = countryMap[country].find(g => g.macroTerroir === macroKey)
     if (existing) {
       existing.terroirs.push(terroir)
-      // Accumulate brew count
-      existing.brewCount += terroirBrewCounts[terroir.id] || 0
-      // Collect meso terroirs
-      if (terroir.meso_terroir) {
-        for (const meso of terroir.meso_terroir.split(',')) {
-          const trimmed = meso.trim()
-          if (trimmed && !existing.mesoTerroirs.includes(trimmed)) {
-            existing.mesoTerroirs.push(trimmed)
-          }
-        }
-      }
+      existing.brewCount += countBrewsForTerroir(terroir)
     } else {
-      const mesoTerroirs: string[] = []
-      if (terroir.meso_terroir) {
-        for (const meso of terroir.meso_terroir.split(',')) {
-          const trimmed = meso.trim()
-          if (trimmed) mesoTerroirs.push(trimmed)
-        }
-      }
       countryMap[country].push({
         macroTerroir: macroKey,
         terroirs: [terroir],
-        mesoTerroirs,
-        brewCount: terroirBrewCounts[terroir.id] || 0,
+        brewCount: countBrewsForTerroir(terroir),
         representativeId: terroir.id,
       })
+    }
+  }
+
+  // Deduplicate brew counts per macro group (a brew might match multiple terroirs in the group)
+  for (const groups of Object.values(countryMap)) {
+    for (const group of groups) {
+      if (group.terroirs.length > 1) {
+        // Recount: a brew matching ANY terroir in the group counts once
+        const allKeywords = group.terroirs.flatMap(t => getTerroirKeywords(t))
+        const uniqueKeywords = Array.from(new Set(allKeywords))
+        let count = 0
+        for (const brew of allBrews) {
+          const coffeeName = (brew.coffee_name || '').toLowerCase()
+          const gb = brew.green_bean_id ? gbMap[brew.green_bean_id] : null
+          const gbOrigin = (gb?.origin || '').toLowerCase()
+          const gbRegion = (gb?.region || '').toLowerCase()
+
+          const matches = uniqueKeywords.some(kw =>
+            coffeeName.includes(kw) || gbOrigin.includes(kw) || gbRegion.includes(kw)
+          )
+          if (matches) count++
+        }
+        group.brewCount = count
+      }
     }
   }
 
@@ -134,12 +131,6 @@ export default async function TerroirsPage() {
         <div className="font-mono text-xs text-latent-mid">
           {totalMacroTerroirs} {totalMacroTerroirs === 1 ? 'REGION' : 'REGIONS'}
         </div>
-      </div>
-
-      {/* DEBUG: remove after fixing brew counts */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded p-4 mb-6 font-mono text-xs">
-        <div className="font-bold mb-2">DEBUG DATA STATE</div>
-        <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
       </div>
 
       {totalMacroTerroirs === 0 ? (

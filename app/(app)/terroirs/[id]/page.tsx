@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew, Terroir } from '@/lib/types'
+import { getTerroirKeywords } from '@/lib/terroir-matching'
 import TerroirSynthesis from './TerroirSynthesis'
 
 const countryColors: Record<string, string> = {
@@ -124,26 +125,40 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   const allTerroirs = (macroTerroirs || [terroir]) as Terroir[]
   const terriorIds = allTerroirs.map(t => t.id)
 
-  // Find green_beans linked to these terroirs, then find their brew IDs
-  const { data: linkedGreenBeans } = await supabase
-    .from('green_beans')
-    .select('id')
-    .in('terroir_id', terriorIds)
-
-  const greenBeanIds = (linkedGreenBeans || []).map((gb: any) => gb.id)
-
-  // Fetch brews via direct terroir_id OR via green_bean_id
-  const brewFilters = []
-  if (terriorIds.length > 0) brewFilters.push(`terroir_id.in.(${terriorIds.join(',')})`)
-  if (greenBeanIds.length > 0) brewFilters.push(`green_bean_id.in.(${greenBeanIds.join(',')})`)
+  // Text-based matching: find brews whose green_bean origin/region or
+  // coffee_name matches any terroir location keyword in this macro group
+  const allKeywords = allTerroirs.flatMap(t => getTerroirKeywords(t))
+  const uniqueKeywords = Array.from(new Set(allKeywords))
 
   let brewList: Brew[] = []
-  if (brewFilters.length > 0) {
+  if (uniqueKeywords.length > 0) {
+    // Strategy 1: Find green_beans matching terroir keywords by origin/region
+    const gbOrFilter = uniqueKeywords.flatMap(kw => [
+      `origin.ilike.%${kw}%`,
+      `region.ilike.%${kw}%`,
+    ]).join(',')
+
+    const { data: matchingGBs } = await supabase
+      .from('green_beans')
+      .select('id')
+      .or(gbOrFilter)
+
+    const gbIds = (matchingGBs || []).map((gb: any) => gb.id)
+
+    // Strategy 2: Find brews by coffee_name matching terroir keywords
+    const brewNameFilter = uniqueKeywords.map(kw => `coffee_name.ilike.%${kw}%`).join(',')
+
+    // Combine: brews matching via green_bean OR via coffee_name OR via direct terroir_id
+    const orParts = [brewNameFilter]
+    if (gbIds.length > 0) orParts.push(`green_bean_id.in.(${gbIds.join(',')})`)
+    if (terriorIds.length > 0) orParts.push(`terroir_id.in.(${terriorIds.join(',')})`)
+
     const { data: brews } = await supabase
       .from('brews')
       .select(`*, terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
-      .or(brewFilters.join(','))
+      .or(orParts.join(','))
       .order('created_at', { ascending: false })
+
     brewList = (brews || []) as Brew[]
   }
   const color = getCountryColor(terroir.country)
