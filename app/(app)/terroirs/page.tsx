@@ -40,10 +40,24 @@ export default async function TerroirsPage() {
   ])
 
   if (terroirResult.error) console.error('Error fetching terroirs:', terroirResult.error)
+  if (brewResult.error) console.error('Error fetching brews:', brewResult.error)
+  if (greenBeanResult.error) console.error('Error fetching green_beans:', greenBeanResult.error)
 
   const terroirs = terroirResult.data
   const allBrews = (brewResult.data || []) as any[]
   const allGreenBeans = (greenBeanResult.data || []) as any[]
+
+  // DEBUG: surface data state in the UI (remove after fixing)
+  const debugInfo = {
+    terroirCount: terroirs?.length || 0,
+    brewCount: allBrews.length,
+    brewsWithTerroirId: allBrews.filter((b: any) => b.terroir_id).length,
+    brewsWithGreenBeanId: allBrews.filter((b: any) => b.green_bean_id).length,
+    greenBeansWithTerroirId: allGreenBeans.length,
+    brewErrors: brewResult.error?.message || null,
+    gbErrors: greenBeanResult.error?.message || null,
+    sampleBrew: allBrews[0] ? { terroir_id: allBrews[0].terroir_id, green_bean_id: allBrews[0].green_bean_id } : null,
+  }
 
   // Map green_bean_id → terroir_id
   const gbTerroirMap: Record<string, string> = {}
@@ -112,6 +126,12 @@ export default async function TerroirsPage() {
         <div className="font-mono text-xs text-latent-mid">
           {totalMacroTerroirs} {totalMacroTerroirs === 1 ? 'REGION' : 'REGIONS'}
         </div>
+      </div>
+
+      {/* DEBUG: remove after fixing brew counts */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded p-4 mb-6 font-mono text-xs">
+        <div className="font-bold mb-2">DEBUG DATA STATE</div>
+        <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
       </div>
 
       {totalMacroTerroirs === 0 ? (
