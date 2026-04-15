@@ -2,28 +2,43 @@ import { createClient } from '@/lib/supabase/server'
 import { getCultivarKeywords, brewMatchesCultivar } from '@/lib/cultivar-matching'
 import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
+import { Cultivar } from '@/lib/types'
 
 const anthropic = new Anthropic()
 
-export async function POST(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const supabase = createClient()
+export async function POST(request: Request) {
+  const body = await request.json()
+  const { cultivarIds } = body as { cultivarIds: string[] }
 
-  // Fetch the cultivar
-  const { data: cultivar, error } = await supabase
-    .from('cultivars')
-    .select('*')
-    .eq('id', params.id)
-    .single()
-
-  if (error || !cultivar) {
-    return NextResponse.json({ error: 'Cultivar not found' }, { status: 404 })
+  if (!cultivarIds?.length) {
+    return NextResponse.json({ error: 'cultivarIds required' }, { status: 400 })
   }
 
-  // Fetch brews using text-based matching
-  const keywords = getCultivarKeywords(cultivar)
+  const supabase = createClient()
+
+  // Fetch all cultivars in this lineage
+  const { data: cultivars, error } = await supabase
+    .from('cultivars')
+    .select('*')
+    .in('id', cultivarIds)
+
+  if (error || !cultivars?.length) {
+    return NextResponse.json({ error: 'Cultivars not found' }, { status: 404 })
+  }
+
+  const allCultivars = cultivars as Cultivar[]
+  const primary = allCultivars[0]
+  const lineageName = primary.lineage || primary.cultivar_name
+
+  // Collect keywords from ALL cultivars in the lineage
+  const allKeywords = new Set<string>()
+  for (const c of allCultivars) {
+    for (const kw of getCultivarKeywords(c)) {
+      allKeywords.add(kw)
+    }
+  }
+
+  const keywords = Array.from(allKeywords)
   let brewQuery = supabase
     .from('brews')
     .select('*')
@@ -35,19 +50,21 @@ export async function POST(
   }
 
   const { data: brews } = await brewQuery
+
+  // Filter: brew matches ANY cultivar in the lineage
   const matchedBrews = (brews || []).filter(brew =>
-    brewMatchesCultivar(brew.variety, cultivar)
+    allCultivars.some(c => brewMatchesCultivar(brew.variety, c))
   )
 
   if (matchedBrews.length === 0) {
     return NextResponse.json({
       synthesis: null,
       brew_count: 0,
-      message: 'No brews found for this cultivar'
+      message: 'No brews found for this lineage'
     })
   }
 
-  // Collect all learning data from brews
+  // Collect learning data from all matched brews
   const learningData = matchedBrews.map(brew => ({
     coffee_name: brew.coffee_name,
     variety: brew.variety,
@@ -72,31 +89,30 @@ export async function POST(
     })
   }
 
-  // Build the prompt for Claude
-  const prompt = `You are a coffee research assistant helping synthesize brewing knowledge about the cultivar "${cultivar.lineage || cultivar.cultivar_name}" (${cultivar.species}, ${cultivar.genetic_family}).
+  const cultivarNames = allCultivars.map(c => c.cultivar_name).join(', ')
 
-Here is all the brewing data collected across ${matchedBrews.length} coffees with this cultivar:
+  const prompt = `You are a coffee research assistant helping synthesize brewing knowledge about the "${lineageName}" lineage (${primary.species}, ${primary.genetic_family}).
+
+This lineage includes the following cultivar subtypes: ${cultivarNames}.
+
+Here is all the brewing data collected across ${matchedBrews.length} coffees in this lineage:
 
 ${JSON.stringify(learningData, null, 2)}
 
-Write a concise synthesis (2-4 sentences, one paragraph) of the most important things learned about brewing this cultivar. Combine insights about:
-- What makes this cultivar distinctive in the cup
-- Key brewing/extraction patterns that matter
-- How temperature and process affect expression
-- Any reliable patterns or surprising discoveries
+Write a SHORT synthesis — strictly 2-4 sentences, one paragraph, no more than 80 words. Distill the single most important pattern about brewing this lineage, plus one actionable tip.
 
-Write in first person ("I've found that...") as if the researcher is summarizing their own findings. Be specific with temperatures, techniques, and flavor descriptors where the data supports it. Do NOT use bullet points — write flowing prose. Focus on actionable knowledge that would help brew this cultivar better next time.`
+Write in first person ("I've found that..."). Be specific with temperatures, techniques, and flavor descriptors where the data supports it. No bullet points, no headers — just flowing prose.`
 
   try {
     const message = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 400,
+      model: 'claude-sonnet-4-6',
+      max_tokens: 200,
       messages: [{ role: 'user', content: prompt }],
     })
 
     const synthesis = message.content[0].type === 'text' ? message.content[0].text : null
 
-    // Save synthesis to the cultivar record
+    // Save synthesis to all cultivars in the lineage
     if (synthesis) {
       await supabase
         .from('cultivars')
@@ -104,7 +120,7 @@ Write in first person ("I've found that...") as if the researcher is summarizing
           synthesis,
           synthesis_brew_count: matchedBrews.length,
         })
-        .eq('id', params.id)
+        .in('id', cultivarIds)
     }
 
     return NextResponse.json({
