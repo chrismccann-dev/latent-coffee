@@ -60,16 +60,37 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   const { data: terroir, error } = await supabase
     .from('terroirs')
-    .select(`*, brews(*, cultivar:cultivars(cultivar_name, lineage))`)
+    .select('*')
     .eq('id', params.id)
     .single()
 
   if (error || !terroir) notFound()
 
-  const brewList = ((terroir.brews || []) as Brew[]).sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  )
-  // Attach terroir info to each brew for consistency
+  // Get brew IDs via reverse join (same pattern that works on list page)
+  const { data: terroirWithBrews, error: joinError } = await supabase
+    .from('terroirs')
+    .select('brews(id)')
+    .eq('id', params.id)
+    .single()
+
+  if (joinError) console.error('Terroir reverse join error:', joinError)
+
+  const brewIds = ((terroirWithBrews as any)?.brews || []).map((b: any) => b.id)
+  console.log('Terroir detail - brew IDs from reverse join:', brewIds.length)
+
+  let brewList: Brew[] = []
+  if (brewIds.length > 0) {
+    const { data: brews, error: brewsError } = await supabase
+      .from('brews')
+      .select('*, cultivar:cultivars(cultivar_name, lineage)')
+      .in('id', brewIds)
+      .order('created_at', { ascending: false })
+
+    if (brewsError) console.error('Brews fetch error:', brewsError)
+    brewList = (brews || []) as Brew[]
+  }
+
+  // Attach terroir info to each brew for display
   for (const brew of brewList) {
     (brew as any).terroir = { country: terroir.country, admin_region: terroir.admin_region }
   }

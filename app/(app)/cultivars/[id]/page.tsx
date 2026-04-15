@@ -53,16 +53,37 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   const { data: cultivar, error } = await supabase
     .from('cultivars')
-    .select(`*, brews(*, terroir:terroirs(country, admin_region, macro_terroir))`)
+    .select('*')
     .eq('id', params.id)
     .single()
 
   if (error || !cultivar) notFound()
 
-  const brewList = ((cultivar.brews || []) as Brew[]).sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  )
-  // Attach cultivar info to each brew for consistency
+  // Get brew IDs via reverse join (same pattern that works on list page)
+  const { data: cultivarWithBrews, error: joinError } = await supabase
+    .from('cultivars')
+    .select('brews(id)')
+    .eq('id', params.id)
+    .single()
+
+  if (joinError) console.error('Cultivar reverse join error:', joinError)
+
+  const brewIds = ((cultivarWithBrews as any)?.brews || []).map((b: any) => b.id)
+  console.log('Cultivar detail - brew IDs from reverse join:', brewIds.length)
+
+  let brewList: Brew[] = []
+  if (brewIds.length > 0) {
+    const { data: brews, error: brewsError } = await supabase
+      .from('brews')
+      .select('*, terroir:terroirs(country, admin_region, macro_terroir)')
+      .in('id', brewIds)
+      .order('created_at', { ascending: false })
+
+    if (brewsError) console.error('Brews fetch error:', brewsError)
+    brewList = (brews || []) as Brew[]
+  }
+
+  // Attach cultivar info to each brew for display
   for (const brew of brewList) {
     (brew as any).cultivar = { cultivar_name: cultivar.cultivar_name, lineage: cultivar.lineage }
   }
