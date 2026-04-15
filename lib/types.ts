@@ -23,6 +23,8 @@ export interface Terroir {
   context: string | null
   cup_profile: string | null
   why_it_stands_out: string | null
+  synthesis: string | null
+  synthesis_brew_count: number | null
   created_at: string
   updated_at: string
 }

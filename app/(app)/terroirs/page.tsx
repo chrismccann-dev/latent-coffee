@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { Terroir } from '@/lib/types'
 
-// Country -> color swatch mapping matching local design
 const countryColors: Record<string, string> = {
   'Brazil': '#4A3728',
   'China': '#3D3D3D',
@@ -21,9 +21,17 @@ function getCountryColor(country: string): string {
   return countryColors[country] || '#555555'
 }
 
+interface MacroTerroirGroup {
+  macroTerroir: string
+  terroirs: Terroir[]
+  mesoTerroirs: string[]
+  brewCount: number
+  representativeId: string
+}
+
 export default async function TerroirsPage() {
   const supabase = createClient()
-  
+
   const { data: terroirs, error } = await supabase
     .from('terroirs')
     .select(`*, brews(id)`)
@@ -31,14 +39,48 @@ export default async function TerroirsPage() {
 
   if (error) console.error('Error fetching terroirs:', error)
 
-  const grouped: Record<string, any[]> = {}
-  for (const terroir of terroirs || []) {
-    const key = terroir.country || 'Unknown'
-    if (!grouped[key]) grouped[key] = []
-    grouped[key].push(terroir)
+  // Group by country → macro_terroir
+  const countryMap: Record<string, MacroTerroirGroup[]> = {}
+
+  for (const terroir of (terroirs || []) as any[]) {
+    const country = terroir.country || 'Unknown'
+    const macroKey = terroir.macro_terroir || terroir.admin_region || country
+
+    if (!countryMap[country]) countryMap[country] = []
+
+    const existing = countryMap[country].find(g => g.macroTerroir === macroKey)
+    if (existing) {
+      existing.terroirs.push(terroir)
+      // Accumulate brew count
+      existing.brewCount += terroir.brews?.length || 0
+      // Collect meso terroirs
+      if (terroir.meso_terroir) {
+        for (const meso of terroir.meso_terroir.split(',')) {
+          const trimmed = meso.trim()
+          if (trimmed && !existing.mesoTerroirs.includes(trimmed)) {
+            existing.mesoTerroirs.push(trimmed)
+          }
+        }
+      }
+    } else {
+      const mesoTerroirs: string[] = []
+      if (terroir.meso_terroir) {
+        for (const meso of terroir.meso_terroir.split(',')) {
+          const trimmed = meso.trim()
+          if (trimmed) mesoTerroirs.push(trimmed)
+        }
+      }
+      countryMap[country].push({
+        macroTerroir: macroKey,
+        terroirs: [terroir],
+        mesoTerroirs,
+        brewCount: terroir.brews?.length || 0,
+        representativeId: terroir.id,
+      })
+    }
   }
 
-  const totalTerroirs = terroirs?.length || 0
+  const totalMacroTerroirs = Object.values(countryMap).reduce((sum, groups) => sum + groups.length, 0)
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
@@ -47,17 +89,17 @@ export default async function TerroirsPage() {
           TERROIRS
         </h1>
         <div className="font-mono text-xs text-latent-mid">
-          {totalTerroirs} {totalTerroirs === 1 ? 'REGION' : 'REGIONS'}
+          {totalMacroTerroirs} {totalMacroTerroirs === 1 ? 'REGION' : 'REGIONS'}
         </div>
       </div>
 
-      {totalTerroirs === 0 ? (
+      {totalMacroTerroirs === 0 ? (
         <div className="text-center py-16">
           <p className="font-mono text-sm text-latent-mid">NO TERROIRS YET</p>
         </div>
       ) : (
         <div className="space-y-8">
-          {Object.entries(grouped).map(([country, countryTerroirs]) => (
+          {Object.entries(countryMap).map(([country, macroGroups]) => (
             <div key={country}>
               {/* Country header with swatch */}
               <div className="flex items-center gap-2 mb-3">
@@ -66,43 +108,35 @@ export default async function TerroirsPage() {
                   style={{ backgroundColor: getCountryColor(country) }}
                 />
                 <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-                  {country} ({countryTerroirs.length})
+                  {country} ({macroGroups.length})
                 </h2>
               </div>
 
               <div className="space-y-0">
-                {countryTerroirs.map((terroir: any) => {
-                  const brewCount = terroir.brews?.length || 0
-                  return (
-                    <Link
-                      key={terroir.id}
-                      href={`/terroirs/${terroir.id}`}
-                      className="flex items-center gap-3 py-3 border-b border-latent-border hover:bg-white transition-colors group"
-                    >
-                      {/* Color swatch */}
-                      <div
-                        className="w-10 h-10 rounded flex-shrink-0"
-                        style={{ backgroundColor: getCountryColor(country) }}
-                      />
-                      <div className="flex-1">
-                        <div className="font-sans text-sm font-semibold">
-                          {terroir.macro_terroir || terroir.admin_region}
-                        </div>
-                        <div className="font-sans text-xs text-latent-mid">
-                          {[terroir.meso_terroir, terroir.admin_region]
-                            .filter(Boolean)
-                            .join(', ')}
-                        </div>
+                {macroGroups.map((group) => (
+                  <Link
+                    key={group.macroTerroir}
+                    href={`/terroirs/${group.representativeId}`}
+                    className="flex items-center gap-3 py-3 border-b border-latent-border hover:bg-white transition-colors group"
+                  >
+                    {/* Color swatch */}
+                    <div
+                      className="w-10 h-10 rounded flex-shrink-0"
+                      style={{ backgroundColor: getCountryColor(country) }}
+                    />
+                    <div className="flex-1">
+                      <div className="font-sans text-sm font-semibold">
+                        {group.macroTerroir}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="font-mono text-xs text-latent-mid">
-                          {brewCount} {brewCount === 1 ? 'coffee' : 'coffees'}
-                        </div>
-                        <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="font-mono text-xs text-latent-mid">
+                        {group.brewCount} {group.brewCount === 1 ? 'coffee' : 'coffees'}
                       </div>
-                    </Link>
-                  )
-                })}
+                      <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </div>
           ))}
