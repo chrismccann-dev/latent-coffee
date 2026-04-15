@@ -20,14 +20,10 @@ export default async function AppLayout({
       <main className="flex-1">
         {children}
       </main>
-      <footer className="border-t border-latent-border py-4">
-        <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-          <div className="font-mono text-xxs text-latent-mid">
-            LATENT RESEARCH
-          </div>
-          <div className="font-mono text-xxs text-latent-subtle">
-            Personal Coffee Journal
-          </div>
+      <footer className="border-t border-latent-border py-4 mt-8">
+        <div className="max-w-[1200px] mx-auto px-6 flex justify-between items-center">
+          <div className="font-mono text-xxs text-latent-mid">LATENT RESEARCH</div>
+          <div className="font-mono text-xxs text-latent-subtle">Personal Coffee Journal</div>
         </div>
       </footer>
     </div>
