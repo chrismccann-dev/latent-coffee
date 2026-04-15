@@ -32,21 +32,29 @@ interface MacroTerroirGroup {
 export default async function TerroirsPage() {
   const supabase = createClient()
 
-  // Fetch terroirs with brew counts via both direct FK and green_bean chain
-  const [terroirResult, brewResult] = await Promise.all([
+  // Fetch terroirs, brews, and green_beans separately to count via both paths
+  const [terroirResult, brewResult, greenBeanResult] = await Promise.all([
     supabase.from('terroirs').select('*').order('country', { ascending: true }),
-    supabase.from('brews').select('id, terroir_id, green_bean_id, green_bean:green_beans(terroir_id)')
+    supabase.from('brews').select('id, terroir_id, green_bean_id'),
+    supabase.from('green_beans').select('id, terroir_id').not('terroir_id', 'is', null)
   ])
 
   if (terroirResult.error) console.error('Error fetching terroirs:', terroirResult.error)
 
   const terroirs = terroirResult.data
   const allBrews = (brewResult.data || []) as any[]
+  const allGreenBeans = (greenBeanResult.data || []) as any[]
 
-  // Build a map of terroir_id → brew count (checking both direct FK and green_bean chain)
+  // Map green_bean_id → terroir_id
+  const gbTerroirMap: Record<string, string> = {}
+  for (const gb of allGreenBeans) {
+    if (gb.terroir_id) gbTerroirMap[gb.id] = gb.terroir_id
+  }
+
+  // Build terroir_id → brew count (direct FK or via green_bean)
   const terroirBrewCounts: Record<string, number> = {}
   for (const brew of allBrews) {
-    const tid = brew.terroir_id || brew.green_bean?.terroir_id
+    const tid = brew.terroir_id || (brew.green_bean_id && gbTerroirMap[brew.green_bean_id])
     if (tid) {
       terroirBrewCounts[tid] = (terroirBrewCounts[tid] || 0) + 1
     }

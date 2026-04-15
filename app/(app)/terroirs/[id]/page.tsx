@@ -124,29 +124,28 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   const allTerroirs = (macroTerroirs || [terroir]) as Terroir[]
   const terriorIds = allTerroirs.map(t => t.id)
 
-  // Fetch brews via both direct terroir_id FK and green_bean chain
-  const [directBrews, greenBeanBrews] = await Promise.all([
-    supabase
+  // Find green_beans linked to these terroirs, then find their brew IDs
+  const { data: linkedGreenBeans } = await supabase
+    .from('green_beans')
+    .select('id')
+    .in('terroir_id', terriorIds)
+
+  const greenBeanIds = (linkedGreenBeans || []).map((gb: any) => gb.id)
+
+  // Fetch brews via direct terroir_id OR via green_bean_id
+  const brewFilters = []
+  if (terriorIds.length > 0) brewFilters.push(`terroir_id.in.(${terriorIds.join(',')})`)
+  if (greenBeanIds.length > 0) brewFilters.push(`green_bean_id.in.(${greenBeanIds.join(',')})`)
+
+  let brewList: Brew[] = []
+  if (brewFilters.length > 0) {
+    const { data: brews } = await supabase
       .from('brews')
       .select(`*, terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
-      .in('terroir_id', terriorIds)
-      .order('created_at', { ascending: false }),
-    supabase
-      .from('brews')
-      .select(`*, green_bean:green_beans!inner(terroir_id), terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
-      .in('green_bean.terroir_id', terriorIds)
+      .or(brewFilters.join(','))
       .order('created_at', { ascending: false })
-  ])
-
-  // Merge and deduplicate brews (a brew might match both ways)
-  const brewMap = new Map<string, Brew>()
-  for (const brew of (directBrews.data || []) as Brew[]) brewMap.set(brew.id, brew)
-  for (const brew of (greenBeanBrews.data || []) as Brew[]) {
-    if (!brewMap.has(brew.id)) brewMap.set(brew.id, brew)
+    brewList = (brews || []) as Brew[]
   }
-  const brewList = Array.from(brewMap.values()).sort((a, b) =>
-    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  )
   const color = getCountryColor(terroir.country)
 
   // Merge context across all terroirs in the macro group
