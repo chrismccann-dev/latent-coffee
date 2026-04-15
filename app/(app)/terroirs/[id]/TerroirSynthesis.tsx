@@ -19,6 +19,7 @@ export default function TerroirSynthesis({
 }: TerroirSynthesisProps) {
   const [synthesis, setSynthesis] = useState(existingSynthesis)
   const [loading, setLoading] = useState(false)
+  const [debugMsg, setDebugMsg] = useState<string | null>(null)
 
   const needsUpdate = currentBrewCount > 0 && (
     !existingSynthesis || existingBrewCount !== currentBrewCount
@@ -41,9 +42,11 @@ export default function TerroirSynthesis({
       const data = await res.json()
       if (data.synthesis) {
         setSynthesis(data.synthesis)
+      } else {
+        setDebugMsg(`API response: ${JSON.stringify(data)}`)
       }
-    } catch (err) {
-      console.error('Failed to generate terroir synthesis:', err)
+    } catch (err: any) {
+      setDebugMsg(`Fetch error: ${err?.message || err}`)
     } finally {
       setLoading(false)
     }
@@ -72,7 +75,10 @@ export default function TerroirSynthesis({
           </button>
         </div>
       ) : (
-        <p className="font-mono text-xs text-latent-mid">Not enough data to synthesize yet.</p>
+        <div>
+          <p className="font-mono text-xs text-latent-mid">Not enough data to synthesize yet.</p>
+          {debugMsg && <p className="font-mono text-[10px] text-red-500 mt-2">{debugMsg}</p>}
+        </div>
       )}
     </div>
   )
