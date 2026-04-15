@@ -59,27 +59,50 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   if (error || !cultivar) notFound()
 
-  // Get brew IDs via reverse join (same pattern that works on list page)
-  const { data: cultivarWithBrews, error: joinError } = await supabase
+  // Approach A: reverse join (same as list page)
+  const { data: revJoin, error: revErr } = await supabase
     .from('cultivars')
     .select('brews(id)')
     .eq('id', params.id)
     .single()
 
-  if (joinError) console.error('Cultivar reverse join error:', joinError)
+  // Approach B: direct query on brews table
+  const { data: directBrews, error: directErr } = await supabase
+    .from('brews')
+    .select('id')
+    .eq('cultivar_id', params.id)
 
-  const brewIds = ((cultivarWithBrews as any)?.brews || []).map((b: any) => b.id)
-  console.log('Cultivar detail - brew IDs from reverse join:', brewIds.length)
+  // Approach C: just count all brews that reference this cultivar
+  const { count: dbBrewCount, error: countErr } = await supabase
+    .from('brews')
+    .select('*', { count: 'exact', head: true })
+    .eq('cultivar_id', params.id)
+
+  const debugInfo = {
+    paramsId: params.id,
+    cultivarId: cultivar.id,
+    cultivarName: cultivar.cultivar_name,
+    approachA_reverseJoin: { count: (revJoin as any)?.brews?.length ?? 'null', error: revErr?.message ?? null },
+    approachB_directQuery: { count: directBrews?.length ?? 'null', error: directErr?.message ?? null },
+    approachC_countQuery: { count: dbBrewCount, error: countErr?.message ?? null },
+  }
+
+  // Use whichever approach returned data
+  const brewIds = (
+    ((revJoin as any)?.brews || []).map((b: any) => b.id) as string[]
+  ).concat(
+    (directBrews || []).map((b: any) => b.id)
+  )
+  // Deduplicate
+  const uniqueBrewIds = Array.from(new Set(brewIds))
 
   let brewList: Brew[] = []
-  if (brewIds.length > 0) {
-    const { data: brews, error: brewsError } = await supabase
+  if (uniqueBrewIds.length > 0) {
+    const { data: brews } = await supabase
       .from('brews')
       .select('*, terroir:terroirs(country, admin_region, macro_terroir)')
-      .in('id', brewIds)
+      .in('id', uniqueBrewIds)
       .order('created_at', { ascending: false })
-
-    if (brewsError) console.error('Brews fetch error:', brewsError)
     brewList = (brews || []) as Brew[]
   }
 
@@ -271,6 +294,13 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
           </div>
         </Section>
       )}
+
+      {/* Debug info — TEMPORARY */}
+      <Section title="DEBUG — QUERY DIAGNOSTICS">
+        <pre className="font-mono text-[10px] text-latent-mid whitespace-pre-wrap overflow-auto">
+          {JSON.stringify(debugInfo, null, 2)}
+        </pre>
+      </Section>
 
       {/* Confidence */}
       <Section dark>
