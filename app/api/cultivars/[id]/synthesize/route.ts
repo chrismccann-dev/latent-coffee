@@ -88,7 +88,7 @@ Write a concise synthesis (2-4 sentences, one paragraph) of the most important t
 Write in first person ("I've found that...") as if the researcher is summarizing their own findings. Be specific with temperatures, techniques, and flavor descriptors where the data supports it. Do NOT use bullet points — write flowing prose. Focus on actionable knowledge that would help brew this cultivar better next time.`
 
   const message = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-5-20241022',
     max_tokens: 400,
     messages: [{ role: 'user', content: prompt }],
   })
