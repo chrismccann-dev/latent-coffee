@@ -3,14 +3,16 @@
 import { useState, useEffect } from 'react'
 
 interface CultivarSynthesisProps {
-  cultivarId: string
+  cultivarIds: string[]
+  lineageName: string
   existingSynthesis: string | null
   existingBrewCount: number | null
   currentBrewCount: number
 }
 
 export default function CultivarSynthesis({
-  cultivarId,
+  cultivarIds,
+  lineageName,
   existingSynthesis,
   existingBrewCount,
   currentBrewCount,
@@ -26,13 +28,15 @@ export default function CultivarSynthesis({
     if (needsUpdate) {
       generateSynthesis()
     }
-  }, [cultivarId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [cultivarIds.join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function generateSynthesis() {
     setLoading(true)
     try {
-      const res = await fetch(`/api/cultivars/${cultivarId}/synthesize`, {
+      const res = await fetch('/api/cultivars/synthesize', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cultivarIds }),
       })
       const data = await res.json()
       if (data.synthesis) {
@@ -50,12 +54,12 @@ export default function CultivarSynthesis({
   return (
     <div className="rounded-md p-6 mb-4 bg-white border border-latent-border">
       <div className="font-mono text-xs font-bold tracking-wide uppercase mb-4 text-latent-fg">
-        WHAT I&apos;VE LEARNED ABOUT THIS CULTIVAR
+        WHAT I&apos;VE LEARNED ABOUT THIS LINEAGE
       </div>
       {loading ? (
         <div className="flex items-center gap-3">
           <div className="w-4 h-4 border-2 border-latent-mid border-t-latent-fg rounded-full animate-spin" />
-          <p className="font-mono text-xs text-latent-mid">Synthesizing knowledge from {currentBrewCount} coffees...</p>
+          <p className="font-mono text-xs text-latent-mid">Synthesizing knowledge from {currentBrewCount} coffees across {lineageName}...</p>
         </div>
       ) : synthesis ? (
         <div>
