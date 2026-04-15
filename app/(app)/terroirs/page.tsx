@@ -35,7 +35,7 @@ export default async function TerroirsPage() {
   // Fetch terroirs, brews, and green_beans separately to count via both paths
   const [terroirResult, brewResult, greenBeanResult] = await Promise.all([
     supabase.from('terroirs').select('*').order('country', { ascending: true }),
-    supabase.from('brews').select('id, terroir_id, green_bean_id'),
+    supabase.from('brews').select('id, coffee_name, variety, terroir_id, green_bean_id'),
     supabase.from('green_beans').select('id, terroir_id').not('terroir_id', 'is', null)
   ])
 
