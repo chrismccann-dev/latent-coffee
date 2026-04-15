@@ -16,13 +16,29 @@ function getFamilyColor(family: string): string {
 
 export default async function CultivarsPage() {
   const supabase = createClient()
-  
+
   const { data: cultivars, error } = await supabase
     .from('cultivars')
-    .select(`*, brews(id)`)
+    .select('*')
     .order('genetic_family', { ascending: true })
 
   if (error) console.error('Error fetching cultivars:', error)
+
+  // FK relationships aren't populated — count brews by variety text match
+  const { data: allBrews } = await supabase
+    .from('brews')
+    .select('variety')
+
+  // Build a map of lineage root → brew count
+  const brewCountByLineage: Record<string, number> = {}
+  for (const cultivar of cultivars || []) {
+    const root = (cultivar.lineage || '').replace(/\s*lineage\s*/i, '').trim().toLowerCase()
+    if (!root || brewCountByLineage[root] !== undefined) continue
+    const count = (allBrews || []).filter((b: any) =>
+      b.variety && b.variety.toLowerCase().includes(root)
+    ).length
+    brewCountByLineage[root] = count
+  }
 
   const grouped: Record<string, any[]> = {}
   for (const cultivar of cultivars || []) {
@@ -65,7 +81,8 @@ export default async function CultivarsPage() {
 
               <div className="space-y-0">
                 {familyCultivars.map((cultivar: any) => {
-                  const brewCount = cultivar.brews?.length || 0
+                  const root = (cultivar.lineage || '').replace(/\s*lineage\s*/i, '').trim().toLowerCase()
+                  const brewCount = brewCountByLineage[root] || 0
                   return (
                     <Link
                       key={cultivar.id}

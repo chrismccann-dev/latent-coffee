@@ -59,11 +59,17 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   if (error || !cultivar) notFound()
 
-  // Brews don't use FK relationships to cultivars — match by variety text
-  // Build search terms from cultivar data (e.g. "Gesha" from "Gesha lineage")
+  // Load ALL cultivars with the same lineage (sibling subtypes)
+  const { data: siblingCultivars } = await supabase
+    .from('cultivars')
+    .select('id, cultivar_name, lineage')
+    .eq('lineage', cultivar.lineage || '')
+
+  const allSubtypes = (siblingCultivars || []).map(c => c.cultivar_name)
+
+  // Match brews by variety text (FKs are not populated)
   const searchTerms: string[] = []
   if (cultivar.lineage) {
-    // Extract root name: "Gesha lineage" → "Gesha", "SL-28 lineage" → "SL-28"
     const root = cultivar.lineage.replace(/\s*lineage\s*/i, '').trim()
     if (root) searchTerms.push(root)
   }
@@ -73,7 +79,6 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
 
   let brewList: Brew[] = []
   if (searchTerms.length > 0) {
-    // Build OR filter: variety ilike any of the search terms
     const orFilter = searchTerms.map(t => `variety.ilike.%${t}%`).join(',')
     const { data: matchingBrews } = await supabase
       .from('brews')
@@ -83,20 +88,20 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
     brewList = (matchingBrews || []) as Brew[]
   }
 
-  // Attach cultivar info to each brew for display
+  // Attach cultivar info to each brew
   for (const brew of brewList) {
     (brew as any).cultivar = { cultivar_name: cultivar.cultivar_name, lineage: cultivar.lineage }
   }
   const color = getFamilyColor(cultivar.genetic_family || '')
 
-  // Aggregate flavor notes
+  // Aggregate flavor notes — top 15
   const flavorCounts: Record<string, number> = {}
   for (const brew of brewList) {
     for (const note of brew.flavor_notes || []) {
       flavorCounts[note] = (flavorCounts[note] || 0) + 1
     }
   }
-  const sortedFlavors = Object.entries(flavorCounts).sort((a, b) => b[1] - a[1])
+  const sortedFlavors = Object.entries(flavorCounts).sort((a, b) => b[1] - a[1]).slice(0, 15)
 
   // Aggregate terroirs and processes
   const terroirSet = new Map<string, string>()
@@ -107,6 +112,22 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
       terroirSet.set(key, brew.terroir.country)
     }
     if (brew.process) processSet.add(brew.process)
+  }
+
+  // Synthesize key takeaways across all brews
+  const allTakeaways: string[] = []
+  const allPeakExpressions: string[] = []
+  const allTempEvolutions: string[] = []
+  for (const brew of brewList) {
+    if (brew.key_takeaways) {
+      for (const t of brew.key_takeaways) allTakeaways.push(t)
+    }
+    if (brew.peak_expression) allPeakExpressions.push(brew.peak_expression)
+    if (brew.temperature_evolution) {
+      allTempEvolutions.push(
+        (brew.coffee_name ? `**${brew.coffee_name}**:  ` : '') + brew.temperature_evolution
+      )
+    }
   }
 
   // Confidence
@@ -139,10 +160,9 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
               {cultivar.species} &rarr; {cultivar.genetic_family}
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Tag>{cultivar.cultivar_name}</Tag>
-              {cultivar.cultivar_raw && cultivar.cultivar_raw !== cultivar.cultivar_name && (
-                <Tag>{cultivar.cultivar_raw}</Tag>
-              )}
+              {allSubtypes.map((name) => (
+                <Tag key={name}>{name}</Tag>
+              ))}
             </div>
           </div>
         </div>
@@ -207,7 +227,7 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
         </Section>
       )}
 
-      {/* Common Flavor Notes */}
+      {/* Common Flavor Notes — top 15 */}
       {sortedFlavors.length > 0 && (
         <Section title="COMMON FLAVOR NOTES">
           <div className="flex flex-wrap gap-2">
@@ -218,28 +238,59 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
         </Section>
       )}
 
-      {/* Terroirs + Processes grid */}
-      {(terroirSet.size > 0 || processSet.size > 0) && (
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          {terroirSet.size > 0 && (
-            <Section title="TERROIRS EXPLORED">
-              <div className="flex flex-wrap gap-2">
-                {Array.from(terroirSet.entries()).map(([name, country]) => (
-                  <Tag key={name}>{country} / {name}</Tag>
-                ))}
-              </div>
-            </Section>
-          )}
-          {processSet.size > 0 && (
-            <Section title="PROCESSES">
-              <div className="flex flex-wrap gap-2">
-                {Array.from(processSet).map((p) => (
-                  <Tag key={p}>{p}</Tag>
-                ))}
-              </div>
-            </Section>
-          )}
-        </div>
+      {/* Terroirs + Processes — full width each */}
+      {terroirSet.size > 0 && (
+        <Section title="TERROIRS EXPLORED">
+          <div className="flex flex-wrap gap-2">
+            {Array.from(terroirSet.entries()).map(([name, country]) => (
+              <Tag key={name}>{country} / {name}</Tag>
+            ))}
+          </div>
+        </Section>
+      )}
+      {processSet.size > 0 && (
+        <Section title="PROCESSES">
+          <div className="flex flex-wrap gap-2">
+            {Array.from(processSet).map((p) => (
+              <Tag key={p}>{p}</Tag>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {/* What I've Learned — synthesized takeaways */}
+      {allTakeaways.length > 0 && (
+        <Section title="WHAT I'VE LEARNED ABOUT THIS CULTIVAR">
+          <ul className="list-disc list-inside space-y-2 font-sans text-sm">
+            {allTakeaways.map((t, i) => (
+              <li key={i}>{t}</li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      {/* Peak Expression Patterns */}
+      {allPeakExpressions.length > 0 && (
+        <Section dark title="PEAK EXPRESSION PATTERNS">
+          <ul className="list-disc list-inside space-y-2 font-mono text-sm">
+            {allPeakExpressions.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      {/* Temperature Evolution Patterns */}
+      {allTempEvolutions.length > 0 && (
+        <Section title="TEMPERATURE EVOLUTION PATTERNS">
+          <div className="space-y-3 font-sans text-sm">
+            {allTempEvolutions.map((t, i) => (
+              <div key={i} className="border-b border-latent-border pb-3 last:border-b-0 last:pb-0"
+                dangerouslySetInnerHTML={{ __html: t.replace(/\*\*(.*?)\*\*/g, '<strong class="font-mono text-xs text-latent-mid">$1</strong>') }}
+              />
+            ))}
+          </div>
+        </Section>
       )}
 
       {/* Coffee list */}
