@@ -2,6 +2,8 @@
 
 Personal coffee research journal that compounds brewing knowledge over time. Built with Next.js 14, Supabase (Postgres + Auth + RLS), deployed on Vercel.
 
+> **See [PRODUCT.md](PRODUCT.md)** for the full product document — vision, workflows, data model, current state, and future directions.
+
 ## Architecture
 
 - **Framework:** Next.js 14 App Router, server components by default, client components only for interactivity (synthesis auto-generation)
