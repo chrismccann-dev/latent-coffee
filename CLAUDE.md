@@ -15,17 +15,17 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 ## Data Model
 
 ### Core entities
-- **brews** — individual coffee tastings (purchased or self-roasted). 55 records as of April 2026.
-- **terroirs** — geographic/ecological zones. Hierarchy: Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir
-- **cultivars** — coffee varieties. Hierarchy: Species → Genetic Family → Lineage → Cultivar subtype
-- **green_beans** — raw coffee lots (self-roasted only, 4 records). Has roasts, experiments, cuppings.
+- **brews** — individual coffee tastings (purchased or self-roasted). 56 records as of April 2026 (52 purchased, 4 self-roasted).
+- **terroirs** — geographic/ecological zones (22 records). Hierarchy: Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir
+- **cultivars** — coffee varieties (30 records). Hierarchy: Species → Genetic Family → Lineage → Cultivar subtype
+- **green_beans** — raw coffee lots (4 records, self-roasted only). Has roasts, experiments, cuppings.
 
 ### Relationship patterns (IMPORTANT)
-- **Brew → Terroir:** FK via `brews.terroir_id`. All 55 brews linked (backfilled in migrations 005-006).
-- **Brew → Cultivar:** FK via `brews.cultivar_id`. All 55 brews linked (backfilled in migration 006).
-- **Brew → Green Bean:** `brews.green_bean_id` — set for all 4 self-roasted brews (backfilled in migration 006).
-- **Green Bean → Terroir/Cultivar:** `green_beans.terroir_id` and `green_beans.cultivar_id` — all 4 populated.
-- **New brews must set `terroir_id` and `cultivar_id`** on insert. The add flow handles this for self-roasted; purchased brews need an import flow (not yet built).
+- **Brew → Terroir:** FK via `brews.terroir_id`. All brews linked.
+- **Brew → Cultivar:** FK via `brews.cultivar_id`. All brews linked.
+- **Brew → Green Bean:** `brews.green_bean_id` — set for all self-roasted brews.
+- **Green Bean → Terroir/Cultivar:** `green_beans.terroir_id` and `green_beans.cultivar_id` — all populated.
+- **New brews must set `terroir_id` and `cultivar_id`** on insert. Both the purchased import flow and the self-roasted wizard handle this.
 
 ### Canonical registries
 - **Macro Terroir names** must come from a predefined registry of ecological systems. See Chris's terroir ruleset doc.
@@ -50,13 +50,26 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 ### Green (`app/(app)/green/`)
 - Green bean management (self-roasted lots)
 
+### Add (`app/(app)/add/`)
+- Source picker → branches to self-roasted wizard or purchased wizard
+- **Purchased flow (6 steps):** source → 4 paste steps (Bean / Terroir / Cultivar / Best Brew tabs, matching Chris's archive spreadsheet structure) → Review & save
+  - Shared parse/validate/persist logic in [lib/brew-import.ts](lib/brew-import.ts)
+  - Review screen shows tri-state cards: green "MATCHED EXISTING" / amber "NEW — IN REGISTRY" / red "NEW — NOT IN REGISTRY"
+  - Drift detection: casing / cross-country / lineage-mismatch / family-mismatch with one-click "Auto-fix to canonical"
+  - Multi-row terroir match: `matchTerroir` fetches all rows matching `(user_id, country, macro_terroir)` and prefers the one whose `admin_region` matches (Colombia has two Western Andean Cordillera rows)
+- **Self-roasted flow (9 steps):** still uses original tab-delimited paste parser; untouched by the purchased rebuild
+- **Programmatic endpoints:**
+  - `POST /api/brews/import` — JSON payload, returns `200 { brewId, terroirId, cultivarId, createdTerroir, createdCultivar }`, `400` for validation, `409 { error: 'confirm_required', newTerroir, newCultivar }` when registry growth needs confirmation
+  - `POST /api/brews/parse` — accepts raw paste text, tries deterministic parser first, falls back to Claude Sonnet 4.6 if text is sparse. Returns `{ parsed, terroirMatch, cultivarMatch, drift, usedClaude }`
+
 ## Dev notes
 
 - `ANTHROPIC_API_KEY` must be explicitly passed to `new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })` — auto-detection fails in Vercel serverless
 - Country color swatches are hardcoded in terroir pages (12 countries mapped)
 - Cultivar family colors are hardcoded in cultivar pages
 - Migrations are in `supabase/migrations/` — run manually via Supabase SQL Editor
-- The `@anthropic-ai/sdk` package doesn't resolve in the worktree dev server (missing node_modules) but works in Vercel builds
+- Worktrees created under `.claude/worktrees/` start without `node_modules`; run `npm install` in the worktree before `npm run dev`
+- **TypeScript build gotcha:** Next.js production build (not dev) fails to narrow discriminated unions across `if (!result.ok)` branches on async function return types. Prefer single-interface shapes with optional fields over tagged unions for API response types. See [lib/brew-import.ts](lib/brew-import.ts) `PersistResult` / `TerroirMatch` / `CultivarMatch` for the pattern.
 
 ## Running locally
 

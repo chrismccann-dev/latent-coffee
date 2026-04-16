@@ -1,6 +1,6 @@
 # Latent Coffee Research — Product Document
 
-*Last updated: April 2026*
+*Last updated: April 16, 2026*
 
 ---
 
@@ -175,7 +175,9 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 | **/cultivars** | Built | Index grouped by Genetic Family → Lineage with brew counts (FK joins) |
 | **/cultivars/[id]** | Built | Lineage-level aggregation with synthesis, flavor notes, coffee list, confidence |
 | **/green** | Built | Green bean list and detail with roast logs, cuppings, experiments, learnings |
-| **/add** | Partial | Self-roasted flow works (9-step wizard). Purchased flow is stub ("coming soon") |
+| **/add** | Built | Purchased flow: 4-paste wizard matching the archive spreadsheet tabs (Bean / Terroir / Cultivar / Best Brew) with registry validation, drift detection, and one-click auto-fix. Self-roasted flow: original 9-step tab-delimited paste wizard. |
+| **POST /api/brews/import** | Built | Programmatic JSON endpoint for archiving a brew with the same validation/persist logic as the UI |
+| **POST /api/brews/parse** | Built | Parses pasted text, falls back to Claude Sonnet 4.6 when deterministic parser can't recover required fields. Returns match + drift annotations. |
 
 ### What Works Well
 
@@ -187,11 +189,10 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 
 ### What's Missing or Incomplete
 
-**Import flow for purchased coffees (Critical)**
-- The add wizard only handles self-roasted beans (9-step flow)
-- Purchased brews (52 of 56) were all imported via one-time SQL migrations
-- There is no UI to add a new purchased brew — this is the single biggest gap
-- This flow needs: coffee details → terroir classification → cultivar classification → brew recipe → sensory notes → learnings
+**Self-roasted add flow is still the original 9-step paste wizard**
+- Works for the 4 existing self-roasted brews but the UX is paste-heavy and doesn't share the registry-validation / drift-detection / three-state-review polish that the purchased flow now has
+- Doesn't use `lib/brew-import.ts` — duplicates terroir/cultivar lookup-or-create logic
+- Next natural unification: refactor self-roasted flow to mirror the 4-paste purchased wizard (Green Bean tab / Terroir / Cultivar / Roast Logs + Best Brew), calling the same shared `parseAndMerge` + `persistBrew` infrastructure
 
 **Fields not yet surfaced in UI**
 - `what_i_learned` — exists in DB (37/56 populated) but not displayed on brew detail page
@@ -267,10 +268,10 @@ These are ideas and patterns that have emerged from the data, not committed feat
 
 ### Near-term (data foundation)
 
-- **Import flow for purchased coffees** — the critical missing piece. Needs terroir/cultivar lookup-or-create, canonical name validation, and all the brew/sensory/learning fields.
+- **Self-roasted add flow refactor** — port the 4-paste wizard pattern to self-roasted. Steps would map to the roasting spreadsheet tabs: Green Bean / Terroir / Cultivar / Roasts (multi-row) + Best Brew. Reuse `lib/brew-import.ts` for terroir/cultivar resolution; add analogous helpers for roasts + experiments + cuppings + roast_learnings.
 - **Surface what_i_learned and extraction_strategy in UI** — these are the most valuable fields and they're invisible right now.
 - **Backfill remaining what_i_learned** — 19 brews still missing long-form learnings.
-- **Import experiment data** — the roasting spreadsheet has structured experiments that belong in the experiments table.
+- **Import experiment data** — the roasting spreadsheet has structured experiments that belong in the experiments table (0 records today).
 
 ### Medium-term (knowledge compounding)
 
@@ -302,3 +303,4 @@ These are ideas and patterns that have emerged from the data, not committed feat
 | 009 | Backfill extraction_strategy (part 1 — strategy-only updates) |
 | *SQL* | Backfill extraction_strategy + what_i_learned (parts 2-8, applied via execute_sql) |
 | *SQL* | Insert Alo Village Washed 74158 brew, update Yusuf Natural and Finca La Reserva Gesha with spreadsheet data |
+| PR #9 | Purchased coffee import flow — 4-paste wizard, shared validation/persist module, drift detection, multi-row terroir match fix |
