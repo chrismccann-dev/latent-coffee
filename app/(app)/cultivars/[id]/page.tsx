@@ -86,6 +86,9 @@ function mergeLineageCharacteristics(cultivars: Cultivar[]) {
     typical_flavor_notes: mergeArrays(c => c.typical_flavor_notes),
     common_pitfalls: mergeArrays(c => c.common_pitfalls),
     cultivar_notes: first(c => c.cultivar_notes),
+    roast_behavior: first(c => c.roast_behavior),
+    resting_behavior: first(c => c.resting_behavior),
+    market_context: first(c => c.market_context),
   }
 }
 
@@ -242,6 +245,33 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
               </div>
             )}
           </div>
+        </Section>
+      )}
+
+      {/* Roast & Rest Behavior */}
+      {(merged.roast_behavior || merged.resting_behavior) && (
+        <Section title="ROAST & REST BEHAVIOR">
+          <div className="space-y-3 font-sans text-sm">
+            {merged.roast_behavior && (
+              <div>
+                <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-1">Roast Behavior</div>
+                <div>{merged.roast_behavior}</div>
+              </div>
+            )}
+            {merged.resting_behavior && (
+              <div>
+                <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-1">Resting Behavior</div>
+                <div>{merged.resting_behavior}</div>
+              </div>
+            )}
+          </div>
+        </Section>
+      )}
+
+      {/* Market Context */}
+      {merged.market_context && (
+        <Section title="MARKET CONTEXT">
+          <p className="font-sans text-sm leading-relaxed">{merged.market_context}</p>
         </Section>
       )}
 

@@ -251,6 +251,15 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
         </Section>
       )}
 
+      {/* What I Learned */}
+      {brew.what_i_learned && (
+        <Section dark title="WHAT I LEARNED">
+          <p className="font-sans text-sm leading-relaxed whitespace-pre-line">
+            {brew.what_i_learned}
+          </p>
+        </Section>
+      )}
+
       {/* Classification */}
       {brew.classification && (
         <Section dark title="CLASSIFICATION">
