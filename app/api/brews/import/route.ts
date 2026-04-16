@@ -20,28 +20,28 @@ export async function POST(request: Request) {
     confirmNewCultivar: body.confirmNewCultivar,
   })
 
-  if (result.ok) {
-    return NextResponse.json({
-      brewId: result.brewId,
-      terroirId: result.terroirId,
-      cultivarId: result.cultivarId,
-      createdTerroir: result.createdTerroir,
-      createdCultivar: result.createdCultivar,
-    })
+  if (!result.ok) {
+    if (result.code === 'validation') {
+      return NextResponse.json({ error: 'validation', errors: result.errors ?? [] }, { status: 400 })
+    }
+    if (result.code === 'confirm_required') {
+      return NextResponse.json(
+        {
+          error: 'confirm_required',
+          newTerroir: result.newTerroir,
+          newCultivar: result.newCultivar,
+        },
+        { status: 409 }
+      )
+    }
+    return NextResponse.json({ error: result.message ?? 'unknown error' }, { status: 500 })
   }
 
-  if (result.code === 'validation') {
-    return NextResponse.json({ error: 'validation', errors: result.errors }, { status: 400 })
-  }
-  if (result.code === 'confirm_required') {
-    return NextResponse.json(
-      {
-        error: 'confirm_required',
-        newTerroir: result.newTerroir,
-        newCultivar: result.newCultivar,
-      },
-      { status: 409 }
-    )
-  }
-  return NextResponse.json({ error: result.message }, { status: 500 })
+  return NextResponse.json({
+    brewId: result.brewId,
+    terroirId: result.terroirId,
+    cultivarId: result.cultivarId,
+    createdTerroir: result.createdTerroir,
+    createdCultivar: result.createdCultivar,
+  })
 }

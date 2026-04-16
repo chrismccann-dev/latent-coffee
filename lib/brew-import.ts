@@ -188,9 +188,12 @@ export function cultivarInRegistry(cultivar_name: string | null | undefined): bo
 // DB match (uses supabase, scoped by user_id via RLS)
 // ---------------------------------------------------------------------------
 
-export type TerroirMatch =
-  | { isNew: false; id: string; inRegistry: boolean; terroir: TerroirCandidate }
-  | { isNew: true; inRegistry: boolean; terroir: TerroirCandidate }
+export interface TerroirMatch {
+  isNew: boolean
+  id?: string
+  inRegistry: boolean
+  terroir: TerroirCandidate
+}
 
 export async function matchTerroir(
   supabase: SupabaseClient,
@@ -228,9 +231,12 @@ export async function matchTerroir(
   return { isNew: true, inRegistry, terroir }
 }
 
-export type CultivarMatch =
-  | { isNew: false; id: string; inRegistry: boolean; cultivar: CultivarCandidate }
-  | { isNew: true; inRegistry: boolean; cultivar: CultivarCandidate }
+export interface CultivarMatch {
+  isNew: boolean
+  id?: string
+  inRegistry: boolean
+  cultivar: CultivarCandidate
+}
 
 export async function matchCultivar(
   supabase: SupabaseClient,
@@ -259,7 +265,10 @@ export async function matchCultivar(
 // Validation
 // ---------------------------------------------------------------------------
 
-export type ValidationResult = { ok: true } | { ok: false; errors: string[] }
+export interface ValidationResult {
+  ok: boolean
+  errors?: string[]
+}
 
 export function validateBrewPayload(payload: BrewPayload): ValidationResult {
   const errors: string[] = []
@@ -305,18 +314,21 @@ export interface PersistOptions {
   confirmNewCultivar?: boolean
 }
 
-export type PersistResult =
-  | {
-      ok: true
-      brewId: string
-      terroirId: string
-      cultivarId: string
-      createdTerroir: boolean
-      createdCultivar: boolean
-    }
-  | { ok: false; code: 'confirm_required'; newTerroir?: TerroirMatch; newCultivar?: CultivarMatch }
-  | { ok: false; code: 'validation'; errors: string[] }
-  | { ok: false; code: 'db_error'; message: string }
+export interface PersistResult {
+  ok: boolean
+  // success fields (present when ok === true)
+  brewId?: string
+  terroirId?: string
+  cultivarId?: string
+  createdTerroir?: boolean
+  createdCultivar?: boolean
+  // failure fields (present when ok === false)
+  code?: 'confirm_required' | 'validation' | 'db_error'
+  errors?: string[]
+  message?: string
+  newTerroir?: TerroirMatch
+  newCultivar?: CultivarMatch
+}
 
 export async function persistBrew(
   supabase: SupabaseClient,
@@ -326,7 +338,7 @@ export async function persistBrew(
 ): Promise<PersistResult> {
   const validation = validateBrewPayload(payload)
   if (!validation.ok) {
-    return { ok: false, code: 'validation', errors: validation.errors }
+    return { ok: false, code: 'validation', errors: validation.errors ?? [] }
   }
 
   const terroirMatch = await matchTerroir(supabase, userId, payload.terroir)
@@ -345,7 +357,7 @@ export async function persistBrew(
   let terroirId: string
   let createdTerroir = false
   if (!terroirMatch.isNew) {
-    terroirId = terroirMatch.id
+    terroirId = terroirMatch.id!
   } else {
     const t = payload.terroir
     const { data, error } = await supabase
@@ -371,7 +383,7 @@ export async function persistBrew(
   let cultivarId: string
   let createdCultivar = false
   if (!cultivarMatch.isNew) {
-    cultivarId = cultivarMatch.id
+    cultivarId = cultivarMatch.id!
   } else {
     const c = payload.cultivar
     const { data, error } = await supabase
