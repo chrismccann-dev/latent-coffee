@@ -31,6 +31,7 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **Macro Terroir names** must come from a predefined registry of ecological systems. See Chris's terroir ruleset doc.
 - **Cultivar names** must resolve to canonical names from the Cultivar Registry. Marketing/trade names are normalized.
 - **Genetic Families:** Ethiopian Landrace Families, Typica Family, Bourbon Family, Typica × Bourbon Crosses, Modern Hybrids
+- **Extraction strategies:** `Clarity-First`, `Balanced Intensity`, `Full Expression` (canonical list in [lib/brew-import.ts](lib/brew-import.ts)). All 55 brews populated. `extraction_confirmed` is optional free-text recorded only when the planned strategy diverged from what was tasted.
 
 ## Page structure
 
@@ -45,7 +46,10 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **Synthesis:** `/api/cultivars/synthesize` — accepts `cultivarIds[]`, finds brews via `cultivar_id` FK join
 
 ### Brews (`app/(app)/brews/`)
-- List and detail views for individual tastings
+- **Index:** Grid of book-cover cards. All card content sits on the cover (variety / process / producer / region stack top-left, extraction-strategy chip top-right, flavor notes bottom). No text below the card — everything is one tile. Strategy filter pills above the grid drive server-side filtering via `searchParams.strategy`.
+- **Detail:** Hero card with unified cover color (same `getCoverColor` as the list), coffee details, terroir, cultivar, recipe with extraction strategy. The "Tasted As (differs)" column only renders when `extraction_confirmed` diverges from `extraction_strategy`.
+- **Cover color helper:** [lib/brew-colors.ts](lib/brew-colors.ts) — single source of truth. Used by list, detail, terroir-detail, cultivar-detail. Do NOT re-implement per page.
+- **Extraction-strategy helper:** [lib/extraction-strategy.ts](lib/extraction-strategy.ts) — pill colors, canonical list, `truncateLearning` helper.
 
 ### Green (`app/(app)/green/`)
 - Green bean management (self-roasted lots)
@@ -57,6 +61,8 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - Cultivar family colors are hardcoded in cultivar pages
 - Migrations are in `supabase/migrations/` — run manually via Supabase SQL Editor
 - The `@anthropic-ai/sdk` package doesn't resolve in the worktree dev server (missing node_modules) but works in Vercel builds
+- **tsconfig has `strictNullChecks: true`** (under `strict: false`) — required so discriminated-union narrowing (`if (result.ok) return; result.code`) compiles under Next.js build. Do not turn it off without refactoring the `PersistResult` / `ValidationResult` / `TerroirMatch` / `CultivarMatch` usages in `lib/brew-import.ts` and the import/parse routes.
+- **Always run `npm run build` before pushing** if you touched API routes or `lib/brew-import.ts`. Vercel will fail the deploy on TS errors, and the worktree can't run the full build because it's missing `@anthropic-ai/sdk`. Use the main repo dir `/Users/chrismccann/latent-coffee` for `npx tsc --noEmit` as a cheap proxy.
 
 ## Running locally
 
@@ -69,3 +75,9 @@ Requires `.env.local` with:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `ANTHROPIC_API_KEY`
+
+## Design / UX conventions
+
+- **Desktop is the primary design target.** The current layout is not tested on mobile — any new feature sprint should add a mobile + tablet pass (viewport checks via `preview_resize`) before merging.
+- **Colors** — `lib/brew-colors.ts` is the single source of truth for brew-card covers. Current palette: forest green (Gesha variety), muted teal (floral flavor), burgundy (anaerobic/berry/wine), gold (honey), brown (natural), slate (neutral fallback — non-green so it doesn't compete with the variety/flavor greens). Adding a new color requires a thought pass on hue distinctness.
+- **Content on cards** — brew cards intentionally surface *all* content on the cover (no secondary text block below). Avoid "where does this data live" duplication: if a field belongs on the card, remove it from the surrounding chrome.

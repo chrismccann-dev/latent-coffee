@@ -1,6 +1,6 @@
 # Latent Coffee Research — Product Document
 
-*Last updated: April 2026*
+*Last updated: April 2026 (post-PR #10 / #11 / #12)*
 
 ---
 
@@ -189,32 +189,35 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 
 ### What's Missing or Incomplete
 
-**Import flow for purchased coffees (Critical)**
-- The add wizard only handles self-roasted beans (9-step flow)
-- Purchased brews (52 of 56) were all imported via one-time SQL migrations
-- There is no UI to add a new purchased brew — this is the single biggest gap
-- This flow needs: coffee details → terroir classification → cultivar classification → brew recipe → sensory notes → learnings
+**Mobile / responsive design not tested**
+- Current layout is desktop-first. Brew-card grid (2→5 columns), detail-page hero (3xl max-width), and nav bar haven't been validated on phone or tablet widths
+- A sprint should include viewport passes at 375px / 768px / 1280px
 
-**Fields not yet surfaced in UI**
-- `what_i_learned` — exists in DB (37/56 populated) but not displayed on brew detail page
-- `extraction_strategy` / `extraction_confirmed` — in DB (56/56) but not displayed
-- Terroir extended fields (acidity_character, body_character, farming_model, dominant_varieties, typical_processing) — columns exist, not populated, not shown
-- Cultivar extended fields (roast_behavior, resting_behavior, market_context) — columns exist, not populated, not shown
+**Terroir / cultivar extended fields**
+- Terroir extended fields (acidity_character, body_character, farming_model, dominant_varieties, typical_processing) — columns exist, not fully populated, not merged across a macro group with full confidence
+- Cultivar extended fields (roast_behavior, resting_behavior, market_context) — columns exist, not fully populated
 
 **Experiments table empty**
 - Schema supports structured A/B/C experiments with full hypothesis → outcome → insight flow
 - The roasting spreadsheet has experiment data (at least 2 sets) but they haven't been imported
 - The add wizard has an experiments step but it depends on the self-roasted flow
 
-**No search or filtering**
-- Brews list is chronological only
-- No way to filter by terroir, cultivar, process, extraction strategy
-- No way to search across what_i_learned narratives
+**Cross-dimensional search**
+- Brews list now filters by `extraction_strategy` (Clarity-First / Balanced Intensity / Full Expression) and every card surfaces its strategy via a colored chip
+- Still missing: filters for process / terroir / cultivar; full-text search across what_i_learned narratives; saved combined views (e.g. "Clarity-First × Gesha × Central Andean Cordillera")
 
 **No process-level aggregation**
 - Terroirs aggregate by geography, cultivars by genetics
 - No equivalent page for processes (Washed, Natural, Honey, Anaerobic, etc.)
 - The Brewing Master Reference has rich process-level patterns (Archive Patterns section) that aren't in the app
+
+### Recently completed (April 2026)
+
+- **Purchased-coffee import flow (PR #9)** — 4-step wizard with canonical registry validation, shared `lib/brew-import.ts` used by UI and API
+- **Surface what_i_learned + extraction_strategy (PR #10)** — strategy filter pills on `/brews`, strategy chip on every brew card, extraction pill on terroir/cultivar detail coffee rows, "Tasted As (differs)" only shown on brew detail when tasting diverged from plan
+- **Brew card redesign (PR #10)** — removed duplicate content below cards, consolidated four copies of the cover-color function into `lib/brew-colors.ts`, shifted floral sage to teal so the green palette reads as distinct hues (Gesha / floral / fallback)
+- **Build hygiene (PR #11)** — enabled `strictNullChecks` in tsconfig so discriminated-union narrowing in `lib/brew-import.ts` compiles under `next build`
+- **Producer column + backfill (PR #12, migration 011)** — added `brews.producer`, backfilled 55/55 from the Beans tab + direct fill, split the card and hero so producer and roaster render as distinct lines (no more roaster-as-producer mislabel). `lib/brew-import.ts` + Claude-parse schema now flow producer through.
 
 ---
 
@@ -269,11 +272,11 @@ These are ideas and patterns that have emerged from the data, not committed feat
 
 ### Near-term (data foundation)
 
-- **Import flow for purchased coffees** — the critical missing piece. Needs terroir/cultivar lookup-or-create, canonical name validation, and all the brew/sensory/learning fields.
-- **Surface what_i_learned and extraction_strategy in UI** — these are the most valuable fields and they're invisible right now.
-- **Backfill remaining what_i_learned** — 19 brews still missing long-form learnings.
-- **Producer registry** — producer is free-text today (56/56 populated). Canonical producer names + farm↔region mappings would let us aggregate learnings at the producer level and catch typos.
+- **Producer registry** — producer is free-text today (55/55 populated). Canonical producer names + farm↔region mappings would let us aggregate learnings at the producer level and catch typos.
+- **Mobile / tablet design pass** — validate brew-card grid, detail page, nav, and add wizard across 375 / 768 / 1280 viewports. Probably needs a larger tap target for filter pills and a vertical card stack on phone.
+- **Backfill remaining what_i_learned** — ~19 brews still missing long-form learnings.
 - **Import experiment data** — the roasting spreadsheet has structured experiments that belong in the experiments table.
+- **Second filter dimension on /brews** — add process filter next to the strategy pills; probably collapse into a small filter drawer if we keep adding dimensions.
 
 ### Medium-term (knowledge compounding)
 
@@ -287,6 +290,28 @@ These are ideas and patterns that have emerged from the data, not committed feat
 - **Claude project integration** — the iteration workspace (Claude projects) and the archive (this app) are currently disconnected. When a brew is finalized in a Claude project, there's a manual step to transcribe it into the spreadsheet and then into the app. Tighter integration could streamline this.
 - **Green bean sourcing intelligence** — when Chris sources a new green bean, the app could surface relevant prior learnings: "You've roasted 2 other Gesha 1931 lots. Development time was the primary lever. Start near Batch 25 parameters."
 - **Cross-dimensional queries** — "Show me all Clarity-First brews on Gesha from the Central Andean Cordillera" or "Which cultivars required Full Expression regardless of process?"
+
+---
+
+## Lessons Learned
+
+Running notes from past sprints — keep this section for future-you.
+
+**Design**
+- Desktop-first is fine for a personal tool, but mobile/tablet viewport checks need to be a standing part of any UI sprint. Assume nothing about how a new component looks on phone.
+- When putting multiple content items on a single surface (book-cover card), strip all duplicates from surrounding chrome. A 40-character coffee name rendered twice per card became very loud once the card itself carried the metadata.
+- Color palettes need hue separation, not just lightness separation. Two greens at different saturation still read as "the same color" — if a signal deserves its own color, shift hue (green → teal) rather than lighten. Apply this to any future color-coding work.
+- Consolidate color helpers. Duplicated `getFlavorColor` across four pages drifted into subtly different palettes and caused a visible mismatch between the list and detail views. One source of truth per visual system.
+
+**Data**
+- A field's UI label is a claim about its semantics. The `roaster` fallback into the producer slot broke this — the card read "producer: Hydrangea" but the underlying data said "roaster: Hydrangea". Either add the missing column or label the slot honestly; don't conflate.
+- The extraction_confirmed → extraction_strategy relationship is a "did plan match taste" audit trail, not a duplicate field. Show it only on divergence; a field that's identical to another 80% of the time reads as noise.
+- Before designing around a field, check population: `what_i_learned` was 56/56 but `extraction_confirmed` was 14/56 — that ratio changed the design choice (surface the former broadly, hide the latter conditionally).
+
+**Build / tooling**
+- `strict: false` with `strictNullChecks: true` is the current baseline. Discriminated-union narrowing depends on `strictNullChecks`. Do not turn it off without first refactoring `PersistResult` / `ValidationResult` / `TerroirMatch` / `CultivarMatch`.
+- The worktree can't run `npm run build` (missing `@anthropic-ai/sdk`). Use `npx tsc --noEmit` in the main repo dir as a build proxy before pushing. Relying on Vercel to catch type errors cost one failed deploy.
+- Keep PRs scoped. PR #9 shipped with type-narrowing issues that only surfaced when PR #10 triggered a fresh Vercel build. If `next build` had run locally as part of #9's checklist, we'd have caught it at the source.
 
 ---
 
