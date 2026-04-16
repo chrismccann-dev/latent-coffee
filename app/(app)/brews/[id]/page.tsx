@@ -2,26 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
-
-// Color helper
-function getFlavorColor(brew: Brew) {
-  const process = brew.process?.toLowerCase() || ''
-  const flavorText = (brew.flavor_notes || []).join(' ').toLowerCase()
-  
-  if (process.includes('natural') || process.includes('anaerobic')) {
-    return { bg: '#8B4513', text: '#FFF8DC' }
-  }
-  if (flavorText.includes('floral') || flavorText.includes('jasmine') || flavorText.includes('bergamot')) {
-    return { bg: '#6B8E7B', text: '#F0FFF0' }
-  }
-  if (flavorText.includes('berry') || flavorText.includes('wine')) {
-    return { bg: '#722F4B', text: '#FFE4E9' }
-  }
-  if (flavorText.includes('citrus') || flavorText.includes('lemon')) {
-    return { bg: '#CC8800', text: '#FFFEF0' }
-  }
-  return { bg: '#6B7B6B', text: '#F5F5F5' }
-}
+import { getCoverColor } from '@/lib/brew-colors'
 
 function Section({ title, dark, children }: { title?: string, dark?: boolean, children: React.ReactNode }) {
   return (
@@ -61,7 +42,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
     notFound()
   }
 
-  const colors = getFlavorColor(brew as Brew)
+  const coverColor = getCoverColor(brew as Brew)
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
@@ -77,11 +58,11 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
       <div className="section-card mb-6">
         <div className="flex gap-8 mb-6">
           {/* Book cover */}
-          <div 
-            className="w-28 h-40 rounded flex-shrink-0 flex flex-col justify-between p-3"
-            style={{ background: colors.bg, color: colors.text }}
+          <div
+            className="w-28 h-40 rounded flex-shrink-0 flex flex-col justify-between p-3 text-white"
+            style={{ background: coverColor }}
           >
-            <div className="font-mono text-[8px] font-semibold leading-tight uppercase">
+            <div className="font-mono text-[8px] font-semibold leading-tight uppercase opacity-90">
               {brew.coffee_name?.slice(0, 35)}
             </div>
             <div className="font-mono text-xs font-bold tracking-widest opacity-10 text-center">
@@ -193,20 +174,25 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
               <strong>Pour:</strong> {brew.pour_structure}
             </div>
           )}
-          {brew.extraction_strategy && (
-            <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-latent-border">
-              <div>
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Extraction Strategy</div>
-                <div className="font-sans text-sm">{brew.extraction_strategy}</div>
-              </div>
-              {brew.extraction_confirmed && (
+          {brew.extraction_strategy && (() => {
+            const planned = brew.extraction_strategy
+            const confirmed = brew.extraction_confirmed?.trim() || null
+            const diverged = !!confirmed && confirmed.toLowerCase() !== planned.trim().toLowerCase()
+            return (
+              <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-latent-border">
                 <div>
-                  <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Confirmed</div>
-                  <div className="font-sans text-sm">{brew.extraction_confirmed}</div>
+                  <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Extraction Strategy</div>
+                  <div className="font-sans text-sm">{planned}</div>
                 </div>
-              )}
-            </div>
-          )}
+                {diverged && (
+                  <div>
+                    <div className="font-mono text-xxs text-latent-accent-light uppercase mb-1">Tasted As (differs)</div>
+                    <div className="font-sans text-sm">{confirmed}</div>
+                  </div>
+                )}
+              </div>
+            )
+          })()}
         </Section>
       )}
 

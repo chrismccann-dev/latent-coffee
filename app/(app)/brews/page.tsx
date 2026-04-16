@@ -1,50 +1,36 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
+import { EXTRACTION_STRATEGIES, getStrategyStyle } from '@/lib/extraction-strategy'
+import { getCoverColor } from '@/lib/brew-colors'
 
-// Color helper matching original local design palette
-function getFlavorColor(brew: Brew): string {
-  const process = brew.process?.toLowerCase() || ''
-  const flavorText = (brew.flavor_notes || []).join(' ').toLowerCase()
-  const variety = brew.variety?.toLowerCase() || ''
-
-  if (process.includes('natural') && (process.includes('anaerobic') || process.includes('yeast'))) {
-    return '#722F4B'
-  }
-  if (process.includes('anaerobic') || process.includes('thermal shock') || process.includes('anoxic')) {
-    return '#722F4B'
-  }
-  if (process.includes('honey')) {
-    return '#8B6914'
-  }
-  if (process.includes('natural')) {
-    return '#8B4513'
-  }
-  if (variety.includes('gesha') || variety.includes('geisha')) {
-    if (process.includes('washed')) return '#4A7C59'
-    return '#5B7A6B'
-  }
-  if (flavorText.includes('berry') || flavorText.includes('wine') || flavorText.includes('grape')) {
-    return '#722F4B'
-  }
-  if (flavorText.includes('floral') || flavorText.includes('jasmine') || flavorText.includes('bergamot')) {
-    return '#6B8E7B'
-  }
-  return '#6B7B6B'
+interface BrewsPageProps {
+  searchParams: { strategy?: string }
 }
 
-export default async function BrewsPage() {
+export default async function BrewsPage({ searchParams }: BrewsPageProps) {
   const supabase = createClient()
-  
-  const { data: brews, error } = await supabase
+
+  const activeStrategy =
+    searchParams.strategy && (EXTRACTION_STRATEGIES as readonly string[]).includes(searchParams.strategy)
+      ? searchParams.strategy
+      : null
+
+  let query = supabase
     .from('brews')
     .select(`
       *,
-      green_bean:green_beans(name, lot_id),
+      green_bean:green_beans(name, lot_id, producer),
       terroir:terroirs(country, admin_region, macro_terroir),
       cultivar:cultivars(cultivar_name, lineage)
     `)
     .order('created_at', { ascending: false })
+
+  if (activeStrategy) {
+    query = query.eq('extraction_strategy', activeStrategy)
+  }
+
+  const { data: brews, error } = await query
 
   if (error) {
     console.error('Error fetching brews:', error)
@@ -64,72 +50,102 @@ export default async function BrewsPage() {
         </div>
       </div>
 
+      {/* Extraction-strategy filter pills */}
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <span className="font-mono text-xxs tracking-wide uppercase text-latent-mid mr-1">
+          Strategy
+        </span>
+        <Link
+          href="/brews"
+          className={`font-mono text-xxs font-semibold tracking-wide uppercase px-3 py-1.5 rounded border transition-colors ${
+            activeStrategy === null
+              ? 'bg-latent-fg text-white border-latent-fg'
+              : 'bg-white text-latent-mid border-latent-border hover:border-latent-fg'
+          }`}
+        >
+          All
+        </Link>
+        {EXTRACTION_STRATEGIES.map((s) => {
+          const style = getStrategyStyle(s)!
+          const active = activeStrategy === s
+          return (
+            <Link
+              key={s}
+              href={`/brews?strategy=${encodeURIComponent(s)}`}
+              className="font-mono text-xxs font-semibold tracking-wide uppercase px-3 py-1.5 rounded border transition-colors"
+              style={
+                active
+                  ? { backgroundColor: style.border, color: '#fff', borderColor: style.border }
+                  : { backgroundColor: style.bg, color: style.text, borderColor: style.border }
+              }
+            >
+              {s}
+            </Link>
+          )
+        })}
+      </div>
+
       {/* Empty state */}
       {brewList.length === 0 ? (
         <div className="text-center py-16">
           <div className="w-16 h-16 bg-latent-accent rounded-lg mx-auto mb-6 flex items-center justify-center">
             <span className="text-2xl">☕</span>
           </div>
-          <p className="font-mono text-sm text-latent-mid mb-6">NO BREWS YET</p>
+          <p className="font-mono text-sm text-latent-mid mb-6">
+            {activeStrategy ? `NO ${activeStrategy.toUpperCase()} BREWS YET` : 'NO BREWS YET'}
+          </p>
           <Link href="/add" className="btn btn-primary">+ ADD YOUR FIRST BREW</Link>
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-0 border-t border-l border-latent-border">
           {brewList.map((brew) => {
-            const cardColor = getFlavorColor(brew)
-            const subtitleParts = []
-            if (brew.variety) subtitleParts.push(brew.variety)
-            if (brew.process) subtitleParts.push(brew.process)
-            if (brew.source === 'self-roasted') subtitleParts.push('Roasted')
+            const cardColor = getCoverColor(brew)
+            const strategyStyle = getStrategyStyle(brew.extraction_strategy)
+            const producer = brew.green_bean?.producer || brew.roaster || null
+            const region =
+              brew.terroir?.macro_terroir ||
+              brew.terroir?.admin_region ||
+              brew.terroir?.country ||
+              null
+            const flavorLine = brew.flavor_notes && brew.flavor_notes.length > 0
+              ? brew.flavor_notes.slice(0, 4).join(' · ')
+              : null
 
             return (
               <Link
                 key={brew.id}
                 href={`/brews/${brew.id}`}
-                className="border-r border-b border-latent-border p-4 hover:bg-white transition-colors group flex flex-col"
+                className="border-r border-b border-latent-border p-4 hover:bg-white transition-colors group"
               >
-                {/* Large card image */}
                 <div
-                  className="w-full aspect-[3/4] rounded mb-3 flex-shrink-0 flex flex-col justify-between p-3 relative overflow-hidden transition-all duration-200 group-hover:-translate-y-1 group-hover:scale-[1.01] group-hover:shadow-lg"
+                  className="w-full aspect-[3/4] rounded flex flex-col justify-between p-4 relative overflow-hidden transition-all duration-200 group-hover:-translate-y-1 group-hover:scale-[1.01] group-hover:shadow-lg"
                   style={{ backgroundColor: cardColor }}
                 >
-                  <div className="font-mono text-[7px] font-semibold leading-tight uppercase text-white/90">
-                    {brew.coffee_name?.slice(0, 40)}
-                  </div>
-                  <div className="font-mono text-[9px] font-bold tracking-widest opacity-20 text-white text-center">
-                    LATENT
-                  </div>
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-3">
-                    <div className="space-y-1">
-                      {(brew as any).terroir?.country && (
-                        <div className="font-mono text-[8px] text-white/80">{(brew as any).terroir.country}{(brew as any).terroir.admin_region ? ` · ${(brew as any).terroir.admin_region}` : ''}</div>
-                      )}
-                      {brew.variety && (
-                        <div className="font-mono text-[8px] text-white/80">{brew.variety}</div>
-                      )}
-                      {brew.process && (
-                        <div className="font-mono text-[8px] text-white/80">{brew.process}</div>
-                      )}
-                      {brew.roaster && (
-                        <div className="font-mono text-[8px] text-white/60">{brew.roaster}</div>
-                      )}
-                      {brew.flavor_notes && brew.flavor_notes.length > 0 && (
-                        <div className="font-mono text-[7px] text-white/50 pt-1">
-                          {brew.flavor_notes.slice(0, 4).join(' · ')}
-                        </div>
-                      )}
+                  {/* Top row: metadata stack + strategy chip */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="font-mono text-[10px] leading-snug text-white/90 space-y-0.5 min-w-0">
+                      {brew.variety && <div className="font-semibold truncate">{brew.variety}</div>}
+                      {brew.process && <div className="text-white/75 truncate">{brew.process}</div>}
+                      {producer && <div className="text-white/75 truncate">{producer}</div>}
+                      {region && <div className="text-white/75 truncate">{region}</div>}
                     </div>
+                    {strategyStyle && (
+                      <span
+                        className="font-mono text-[8px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
+                        style={{ backgroundColor: strategyStyle.bg, color: strategyStyle.text }}
+                      >
+                        {strategyStyle.short}
+                      </span>
+                    )}
                   </div>
-                </div>
 
-                {/* Card text below */}
-                <h3 className="font-mono text-xs font-semibold leading-tight mb-1 group-hover:text-latent-accent-light transition-colors line-clamp-2">
-                  {brew.coffee_name}
-                </h3>
-                <p className="font-mono text-[10px] text-latent-mid leading-snug">
-                  {subtitleParts.join(' · ')}
-                </p>
+                  {/* Bottom: flavor notes */}
+                  {flavorLine && (
+                    <div className="font-mono text-[9px] leading-snug text-white/70">
+                      {flavorLine}
+                    </div>
+                  )}
+                </div>
               </Link>
             )
           })}

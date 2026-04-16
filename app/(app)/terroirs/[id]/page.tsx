@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew, Terroir } from '@/lib/types'
+import { getStrategyStyle } from '@/lib/extraction-strategy'
+import { getCoverColor } from '@/lib/brew-colors'
 import TerroirSynthesis from './TerroirSynthesis'
 
 const countryColors: Record<string, string> = {
@@ -38,21 +40,6 @@ function Section({ title, dark, children }: { title?: string, dark?: boolean, ch
 
 function Tag({ children }: { children: React.ReactNode }) {
   return <span className="tag">{children}</span>
-}
-
-function getFlavorColor(brew: Brew): string {
-  const process = brew.process?.toLowerCase() || ''
-  const flavorText = (brew.flavor_notes || []).join(' ').toLowerCase()
-  const variety = brew.variety?.toLowerCase() || ''
-
-  if (process.includes('natural') && (process.includes('anaerobic') || process.includes('yeast'))) return '#722F4B'
-  if (process.includes('anaerobic') || process.includes('thermal shock') || process.includes('anoxic')) return '#722F4B'
-  if (process.includes('honey')) return '#8B6914'
-  if (process.includes('natural')) return '#8B4513'
-  if (variety.includes('gesha') || variety.includes('geisha')) return process.includes('washed') ? '#4A7C59' : '#5B7A6B'
-  if (flavorText.includes('berry') || flavorText.includes('wine') || flavorText.includes('grape')) return '#722F4B'
-  if (flavorText.includes('floral') || flavorText.includes('jasmine') || flavorText.includes('bergamot')) return '#6B8E7B'
-  return '#6B7B6B'
 }
 
 /**
@@ -354,8 +341,9 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
           </div>
           <div className="space-y-0">
             {brewList.map((brew) => {
-              const cardColor = getFlavorColor(brew)
+              const cardColor = getCoverColor(brew)
               const isProcessDominant = brew.is_process_dominant
+              const strategyStyle = getStrategyStyle(brew.extraction_strategy)
               return (
                 <Link
                   key={brew.id}
@@ -363,11 +351,23 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
                   className="flex items-center gap-3 py-3 border border-latent-border rounded-md mb-2 px-4 hover:bg-latent-bg transition-colors group"
                 >
                   <div className="flex-1">
-                    <div className="font-sans text-sm font-semibold">
-                      {brew.coffee_name}
+                    <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
+                      <span>{brew.coffee_name}</span>
                       {isProcessDominant && (
-                        <span className="inline-flex items-center gap-1 ml-2 text-[10px] font-mono bg-latent-bg px-2 py-0.5 rounded">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-mono bg-latent-bg px-2 py-0.5 rounded">
                           PROCESS
+                        </span>
+                      )}
+                      {strategyStyle && (
+                        <span
+                          className="font-mono text-[9px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded border"
+                          style={{
+                            backgroundColor: strategyStyle.bg,
+                            color: strategyStyle.text,
+                            borderColor: strategyStyle.border,
+                          }}
+                        >
+                          {brew.extraction_strategy}
                         </span>
                       )}
                     </div>
