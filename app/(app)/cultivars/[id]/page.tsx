@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew, Cultivar } from '@/lib/types'
+import { getStrategyStyle } from '@/lib/extraction-strategy'
+import { getCoverColor } from '@/lib/brew-colors'
 import CultivarSynthesis from './CultivarSynthesis'
 
 const familyColors: Record<string, string> = {
@@ -32,21 +34,6 @@ function Section({ title, dark, children }: { title?: string, dark?: boolean, ch
 
 function Tag({ children }: { children: React.ReactNode }) {
   return <span className="tag">{children}</span>
-}
-
-function getFlavorColor(brew: Brew): string {
-  const process = brew.process?.toLowerCase() || ''
-  const flavorText = (brew.flavor_notes || []).join(' ').toLowerCase()
-  const variety = brew.variety?.toLowerCase() || ''
-
-  if (process.includes('natural') && (process.includes('anaerobic') || process.includes('yeast'))) return '#722F4B'
-  if (process.includes('anaerobic') || process.includes('thermal shock') || process.includes('anoxic')) return '#722F4B'
-  if (process.includes('honey')) return '#8B6914'
-  if (process.includes('natural')) return '#8B4513'
-  if (variety.includes('gesha') || variety.includes('geisha')) return process.includes('washed') ? '#4A7C59' : '#5B7A6B'
-  if (flavorText.includes('berry') || flavorText.includes('wine') || flavorText.includes('grape')) return '#722F4B'
-  if (flavorText.includes('floral') || flavorText.includes('jasmine') || flavorText.includes('bergamot')) return '#6B8E7B'
-  return '#6B7B6B'
 }
 
 /**
@@ -324,7 +311,8 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
         <Section title={`COFFEES IN THIS LINEAGE (${brewList.length})`}>
           <div className="space-y-0">
             {brewList.map((brew) => {
-              const cardColor = getFlavorColor(brew)
+              const cardColor = getCoverColor(brew)
+              const strategyStyle = getStrategyStyle(brew.extraction_strategy)
               return (
                 <Link
                   key={brew.id}
@@ -336,7 +324,21 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
                     style={{ backgroundColor: cardColor }}
                   />
                   <div className="flex-1">
-                    <div className="font-sans text-sm font-semibold">{brew.coffee_name}</div>
+                    <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
+                      <span>{brew.coffee_name}</span>
+                      {strategyStyle && (
+                        <span
+                          className="font-mono text-[9px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded border"
+                          style={{
+                            backgroundColor: strategyStyle.bg,
+                            color: strategyStyle.text,
+                            borderColor: strategyStyle.border,
+                          }}
+                        >
+                          {brew.extraction_strategy}
+                        </span>
+                      )}
+                    </div>
                     <div className="font-mono text-[10px] text-latent-mid">
                       {[brew.variety, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
                     </div>
