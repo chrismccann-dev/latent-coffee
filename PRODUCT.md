@@ -122,7 +122,7 @@ profiles (user)
 | coffee_name | text | Full name of the coffee | 56/56 |
 | source | enum | "purchased" or "self-roasted" | 56/56 |
 | extraction_strategy | text | Clarity-First / Balanced Intensity / Full Expression | 56/56 |
-| what_i_learned | text | Long-form narrative of key learnings from this coffee | 37/56 |
+| what_i_learned | text | Long-form narrative of key learnings from this coffee | 56/56 |
 | key_takeaways | text[] | Bullet-point learnings (from import) | 56/56 |
 | terroir_connection | text | How terroir expressed in the cup | ~16/56 |
 | cultivar_connection | text | How cultivar expressed in the cup | ~20/56 |
@@ -184,6 +184,8 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 - All FK relationships are solid — no broken links, no orphaned records
 - Green bean detail pages show the full roasting journey (logs → experiments → cuppings → learnings)
 - Data model supports both purchased and self-roasted workflows
+- All key fields now surfaced in UI: what_i_learned (brew detail), extraction_strategy/confirmed (brew detail recipe section), terroir character + typical production (terroir detail), roast/rest behavior + market context (cultivar detail)
+- Full data coverage: 56/56 brews have what_i_learned, 22/22 terroirs have character fields, 29/30 cultivars have behavior fields
 
 ### What's Missing or Incomplete
 
@@ -193,11 +195,10 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 - There is no UI to add a new purchased brew — this is the single biggest gap
 - This flow needs: coffee details → terroir classification → cultivar classification → brew recipe → sensory notes → learnings
 
-**Fields not yet surfaced in UI**
-- `what_i_learned` — exists in DB (37/56 populated) but not displayed on brew detail page
-- `extraction_strategy` / `extraction_confirmed` — in DB (56/56) but not displayed
-- Terroir extended fields (acidity_character, body_character, farming_model, dominant_varieties, typical_processing) — columns exist, not populated, not shown
-- Cultivar extended fields (roast_behavior, resting_behavior, market_context) — columns exist, not populated, not shown
+**Synthesis needs regeneration**
+- All terroir and cultivar synthesis was generated before the what_i_learned backfill
+- Should be re-triggered on all terroir and cultivar detail pages to incorporate the full narrative data
+- Synthesis is manual (button click per page) — no bulk re-synthesis feature exists yet
 
 **Experiments table empty**
 - Schema supports structured A/B/C experiments with full hypothesis → outcome → insight flow
@@ -268,8 +269,7 @@ These are ideas and patterns that have emerged from the data, not committed feat
 ### Near-term (data foundation)
 
 - **Import flow for purchased coffees** — the critical missing piece. Needs terroir/cultivar lookup-or-create, canonical name validation, and all the brew/sensory/learning fields.
-- **Surface what_i_learned and extraction_strategy in UI** — these are the most valuable fields and they're invisible right now.
-- **Backfill remaining what_i_learned** — 19 brews still missing long-form learnings.
+- **Re-synthesize all terroirs and cultivars** — synthesis was generated before what_i_learned was fully populated. All pages need re-synthesis to incorporate the complete narrative data. Consider adding a bulk re-synthesis feature.
 - **Import experiment data** — the roasting spreadsheet has structured experiments that belong in the experiments table.
 
 ### Medium-term (knowledge compounding)
@@ -299,6 +299,8 @@ These are ideas and patterns that have emerged from the data, not committed feat
 | 006 | Data integrity cleanup: FK backfills, deduplication, terroir/cultivar merges |
 | 007 | Align terroir and cultivar names to canonical registries |
 | 008 | Add missing schema fields (what_i_learned, terroir/cultivar extended), consolidate Huila |
-| 009 | Backfill extraction_strategy (part 1 — strategy-only updates) |
-| *SQL* | Backfill extraction_strategy + what_i_learned (parts 2-8, applied via execute_sql) |
-| *SQL* | Insert Alo Village Washed 74158 brew, update Yusuf Natural and Finca La Reserva Gesha with spreadsheet data |
+| 009 | Backfill terroir character fields (acidity, body, farming model, varieties, processing) — all 22 terroirs |
+| 010 | Backfill cultivar behavior fields (roast behavior, resting behavior, market context) — 29/30 cultivars |
+| 011 | Backfill what_i_learned part 1 (brews rows 2-14) — 13 new entries |
+| 012 | Backfill what_i_learned part 2 (brews rows 15-27) — 6 new + 7 updated entries |
+| *SQL* | Earlier backfills: extraction_strategy, what_i_learned (rows 28-56), Alo Village insert, misc updates |

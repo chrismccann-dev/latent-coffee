@@ -15,15 +15,15 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 ## Data Model
 
 ### Core entities
-- **brews** — individual coffee tastings (purchased or self-roasted). 55 records as of April 2026.
+- **brews** — individual coffee tastings (purchased or self-roasted). 56 records as of April 2026.
 - **terroirs** — geographic/ecological zones. Hierarchy: Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir
 - **cultivars** — coffee varieties. Hierarchy: Species → Genetic Family → Lineage → Cultivar subtype
 - **green_beans** — raw coffee lots (self-roasted only, 4 records). Has roasts, experiments, cuppings.
 
 ### Relationship patterns (IMPORTANT)
-- **Brew → Terroir:** FK via `brews.terroir_id`. All 55 brews linked (backfilled in migrations 005-006).
-- **Brew → Cultivar:** FK via `brews.cultivar_id`. All 55 brews linked (backfilled in migration 006).
-- **Brew → Green Bean:** `brews.green_bean_id` — set for all 4 self-roasted brews (backfilled in migration 006).
+- **Brew → Terroir:** FK via `brews.terroir_id`. All 56 brews linked.
+- **Brew → Cultivar:** FK via `brews.cultivar_id`. All 56 brews linked.
+- **Brew → Green Bean:** `brews.green_bean_id` — set for all 4 self-roasted brews.
 - **Green Bean → Terroir/Cultivar:** `green_beans.terroir_id` and `green_beans.cultivar_id` — all 4 populated.
 - **New brews must set `terroir_id` and `cultivar_id`** on insert. The add flow handles this for self-roasted; purchased brews need an import flow (not yet built).
 
@@ -36,16 +36,17 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 
 ### Terroirs (`app/(app)/terroirs/`)
 - **Index:** Groups by Country → Macro Terroir, brew counts via `select('*, brews(id)')` FK join
-- **Detail:** Aggregates all terroirs sharing `macro_terroir + country`. Merges context fields (first-non-null for scalars, union for meso terroirs, min/max for elevation). Shows synthesis, flavor notes, cultivars, processes, coffee list, confidence.
-- **Synthesis:** `/api/terroirs/synthesize` — accepts `terriorIds[]`, finds brews via `terroir_id` FK
+- **Detail:** Aggregates all terroirs sharing `macro_terroir + country`. Merges context fields (first-non-null for scalars, union for arrays, min/max for elevation). Shows terroir context, terroir character (acidity, body, farming model), typical production (dominant varieties, processing), synthesis, flavor notes, cultivars, processes, coffee list, confidence.
+- **Synthesis:** `/api/terroirs/synthesize` — accepts `terriorIds[]`, finds brews via `terroir_id` FK. Manual trigger (button on detail page).
 
 ### Cultivars (`app/(app)/cultivars/`)
 - **Index:** Groups by Genetic Family → Lineage, brew counts via `cultivar_id` FK join
-- **Detail:** Aggregates all cultivars sharing `lineage`. Merges characteristics. Shows synthesis, flavor notes, terroirs, processes, coffee list, confidence.
-- **Synthesis:** `/api/cultivars/synthesize` — accepts `cultivarIds[]`, finds brews via `cultivar_id` FK join
+- **Detail:** Aggregates all cultivars sharing `lineage`. Merges characteristics including roast/rest behavior and market context. Shows genetic background, cup characteristics, brewing & roasting, roast & rest behavior, market context, synthesis, flavor notes, terroirs, processes, coffee list, confidence.
+- **Synthesis:** `/api/cultivars/synthesize` — accepts `cultivarIds[]`, finds brews via `cultivar_id` FK join. Manual trigger (button on detail page).
 
 ### Brews (`app/(app)/brews/`)
 - List and detail views for individual tastings
+- Detail shows: hero card, terroir, cultivar, recipe (with extraction strategy), sensory notes, temperature evolution, peak expression, key takeaways, what I learned (dark card), classification
 
 ### Green (`app/(app)/green/`)
 - Green bean management (self-roasted lots)
@@ -55,8 +56,9 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - `ANTHROPIC_API_KEY` must be explicitly passed to `new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })` — auto-detection fails in Vercel serverless
 - Country color swatches are hardcoded in terroir pages (12 countries mapped)
 - Cultivar family colors are hardcoded in cultivar pages
-- Migrations are in `supabase/migrations/` — run manually via Supabase SQL Editor
+- Migrations are in `supabase/migrations/` — applied via Supabase MCP or SQL Editor
 - The `@anthropic-ai/sdk` package doesn't resolve in the worktree dev server (missing node_modules) but works in Vercel builds
+- AI synthesis is manual (button click on each detail page) — does NOT auto-regenerate when brew data changes. After backfilling data, re-synthesize affected terroirs/cultivars.
 
 ## Running locally
 
