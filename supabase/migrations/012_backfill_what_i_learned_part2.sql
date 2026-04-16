@@ -1,0 +1,3 @@
+-- Applied via Supabase MCP tool (backfill_what_i_learned_part2)
+-- Backfills what_i_learned for brews rows 15-27 from brewing spreadsheet
+-- 13 brews updated (6 new + 7 updated existing what_i_learned entries)
