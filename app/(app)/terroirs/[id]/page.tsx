@@ -87,12 +87,26 @@ function mergeMacroTerroirContext(terroirs: Terroir[]) {
     if (t.elevation_max != null) elevMax = elevMax == null ? t.elevation_max : Math.max(elevMax, t.elevation_max)
   }
 
+  // Merge array fields (union of all values)
+  const mergeArrays = (fn: (t: Terroir) => string[] | null | undefined): string[] => {
+    const set = new Set<string>()
+    for (const t of terroirs) {
+      for (const v of fn(t) || []) set.add(v)
+    }
+    return Array.from(set)
+  }
+
   return {
     context: first(t => t.context),
     soil: first(t => t.soil),
     cup_profile: first(t => t.cup_profile),
     why_it_stands_out: first(t => t.why_it_stands_out),
     climate_stress: first(t => t.climate_stress),
+    acidity_character: first(t => t.acidity_character),
+    body_character: first(t => t.body_character),
+    farming_model: first(t => t.farming_model),
+    dominant_varieties: mergeArrays(t => t.dominant_varieties),
+    typical_processing: mergeArrays(t => t.typical_processing),
     mesoTerroirs: Array.from(mesoSet),
     elevation_min: elevMin,
     elevation_max: elevMax,
@@ -237,6 +251,54 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
               </div>
             )}
           </div>
+        </Section>
+      )}
+
+      {/* Terroir Character */}
+      {(merged.acidity_character || merged.body_character || merged.farming_model) && (
+        <Section title="TERROIR CHARACTER">
+          <div className="space-y-3 font-sans text-sm">
+            {merged.acidity_character && (
+              <div>
+                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Acidity:</span>
+                {merged.acidity_character}
+              </div>
+            )}
+            {merged.body_character && (
+              <div>
+                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Body:</span>
+                {merged.body_character}
+              </div>
+            )}
+            {merged.farming_model && (
+              <div>
+                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Farming Model:</span>
+                {merged.farming_model}
+              </div>
+            )}
+          </div>
+        </Section>
+      )}
+
+      {/* Dominant Varieties & Typical Processing */}
+      {(merged.dominant_varieties.length > 0 || merged.typical_processing.length > 0) && (
+        <Section title="TYPICAL PRODUCTION">
+          {merged.dominant_varieties.length > 0 && (
+            <div className="mb-4">
+              <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-2">Dominant Varieties</div>
+              <div className="flex flex-wrap gap-2">
+                {merged.dominant_varieties.map((v) => <Tag key={v}>{v}</Tag>)}
+              </div>
+            </div>
+          )}
+          {merged.typical_processing.length > 0 && (
+            <div>
+              <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-2">Typical Processing</div>
+              <div className="flex flex-wrap gap-2">
+                {merged.typical_processing.map((p) => <Tag key={p}>{p}</Tag>)}
+              </div>
+            </div>
+          )}
         </Section>
       )}
 
