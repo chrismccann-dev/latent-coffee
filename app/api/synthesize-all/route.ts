@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         macroGroups.get(key)!.push(t)
       }
 
-      for (const [groupKey, terroirs] of macroGroups) {
+      for (const [groupKey, terroirs] of Array.from(macroGroups.entries())) {
         const terriorIds = terroirs.map(t => t.id)
         const primary = terroirs[0]
         const macroName = primary.macro_terroir || primary.admin_region || primary.country
@@ -140,7 +140,7 @@ Write in first person ("I've found that..."). Be specific with temperatures, tec
         lineageGroups.get(key)!.push(c)
       }
 
-      for (const [lineageName, cultivars] of lineageGroups) {
+      for (const [lineageName, cultivars] of Array.from(lineageGroups.entries())) {
         const cultivarIds = cultivars.map(c => c.id)
         const primary = cultivars[0]
 
