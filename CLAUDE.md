@@ -45,11 +45,19 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **Detail:** Aggregates all cultivars sharing `lineage`. Merges characteristics. Shows synthesis, flavor notes, terroirs, processes, coffee list, confidence.
 - **Synthesis:** `/api/cultivars/synthesize` — accepts `cultivarIds[]`, finds brews via `cultivar_id` FK join
 
+### Processes (`app/(app)/processes/`)
+- **Index:** Groups by Process Family → process, brew counts via direct `brews.process` equality (no FK).
+- **Detail:** URL = `/processes/${encodeURIComponent(processName)}`. Aggregates all brews with `process = processName`. Shows synthesis, flavor notes, cultivars, terroirs, coffee list, confidence.
+- **Synthesis:** `/api/processes/synthesize` — accepts `{ process: string }`, finds brews by `process` equality, caches into `process_syntheses` table keyed on (user_id, process).
+- **Family lookup:** [lib/process-families.ts](lib/process-families.ts) — single source of truth for process → family mapping + family colors. 5 families: Washed / Natural / Honey / Anaerobic / Experimental. Processes not in the lookup fall into "Other".
+- **Prompt framing:** synthesis prompt explicitly tells Claude Chris's palate has widened beyond clean-washed, and asks for "when this style delivers vs. when it goes off" rather than good/bad scoring. See `memory/user_taste_evolution.md`.
+
 ### Brews (`app/(app)/brews/`)
 - **Index:** Grid of book-cover cards. All card content sits on the cover (variety / process / producer / region stack top-left, extraction-strategy chip top-right, flavor notes bottom). No text below the card — everything is one tile. Strategy filter pills above the grid drive server-side filtering via `searchParams.strategy`.
 - **Detail:** Hero card with unified cover color (same `getCoverColor` as the list), coffee details, terroir, cultivar, recipe with extraction strategy. The "Tasted As (differs)" column only renders when `extraction_confirmed` diverges from `extraction_strategy`.
-- **Cover color helper:** [lib/brew-colors.ts](lib/brew-colors.ts) — single source of truth. Used by list, detail, terroir-detail, cultivar-detail. Do NOT re-implement per page.
+- **Cover color helper:** [lib/brew-colors.ts](lib/brew-colors.ts) — single source of truth. Used by list, detail, terroir-detail, cultivar-detail, processes-detail. Do NOT re-implement per page.
 - **Extraction-strategy helper:** [lib/extraction-strategy.ts](lib/extraction-strategy.ts) — pill colors, canonical list, `truncateLearning` helper.
+- **Strategy pill component:** [components/StrategyPill.tsx](components/StrategyPill.tsx) — two variants: `row` (bordered pill with full name, used in coffee-row lists on terroir/cultivar/processes detail) and `card` (borderless rounded-full abbreviation, used on brew covers in the list). Do NOT re-inline the span markup.
 
 ### Green (`app/(app)/green/`)
 - Green bean management (self-roasted lots)
@@ -90,6 +98,6 @@ Run these four checkpoints on every non-trivial sprint:
 
 2. **Preview every UI change.** Start the dev server (`preview_start`), take a screenshot after each change, and verify via `preview_eval` / `preview_screenshot` before committing. Don't rely on "it should work" — the mismatched Alo Village cover color would have been caught on the first screenshot.
 
-3. **Run `/simplify` before review or commit.** Claude over-engineers — duplicate JSX across pages, inline IIFEs, copy-pasted inline styles. Let the simplify skill catch it before it becomes tech debt. Run once per sprint, after implementation is done but before the commit step. Especially important when a sprint touched 2+ files that now share a rendering pattern (e.g. the strategy-pill span is currently copy-pasted across terroir-detail, cultivar-detail, and brews-list — that's a future `<StrategyPill>` component waiting to happen).
+3. **Run `/simplify` before review or commit.** Claude over-engineers — duplicate JSX across pages, inline IIFEs, copy-pasted inline styles. Let the simplify skill catch it before it becomes tech debt. Run once per sprint, after implementation is done but before the commit step. Especially important when a sprint touched 2+ files that now share a rendering pattern. Current pending candidates: the `Section` / `Tag` helpers are now triple-duplicated across terroir-detail, cultivar-detail, and processes-detail — next aggregation page (roasters?) should trigger an extract into `components/SectionCard.tsx` + `components/Tag.tsx` rather than a 4th copy.
 
 4. **Retro before docs.** Before updating PRODUCT.md / CLAUDE.md / memory files at the end of a sprint, explicitly pause and list: what we tried that didn't work, what surprised us, what we'd do differently next time. The doc updates then write themselves. Don't wait for Chris to ask — this is a standing part of every sprint.

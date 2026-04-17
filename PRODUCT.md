@@ -84,6 +84,7 @@ Key roasting principles (from Roasting Intent document):
 | **cuppings** | 17 | Cupping evaluations per roast |
 | **experiments** | 0 | Structured A/B/C roast experiments (schema exists, not yet imported) |
 | **roast_learnings** | 4 | Per-bean synthesis of what was learned from roasting |
+| **process_syntheses** | cache | AI synthesis keyed on (user_id, process), populated on-demand from /processes/[slug] pages |
 
 ### Relationship Map
 
@@ -100,6 +101,9 @@ profiles (user)
   │
   ├── cultivars ────────── Species → Genetic Family → Lineage → Cultivar Name
   │   └── synthesis (AI-generated per lineage)
+  │
+  ├── process_syntheses ── (user_id, process) PK — AI synthesis cached per process name
+  │                        (no FK; brews.process is free-text, families in lib/process-families.ts)
   │
   └── green_beans ──────── terroir_id, cultivar_id
       ├── roasts ─────────── (cascading delete)
@@ -176,6 +180,8 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 | **/terroirs/[id]** | Built | Macro-level aggregation with synthesis, flavor notes, coffee list, confidence |
 | **/cultivars** | Built | Index grouped by Genetic Family → Lineage with brew counts (FK joins) |
 | **/cultivars/[id]** | Built | Lineage-level aggregation with synthesis, flavor notes, coffee list, confidence |
+| **/processes** | Built | Index grouped by Family → process (Washed / Natural / Honey / Anaerobic / Experimental) with brew counts |
+| **/processes/[slug]** | Built | Process-level aggregation with synthesis, flavor notes, cultivars, terroirs, coffee list, confidence |
 | **/green** | Built | Green bean list and detail with roast logs, cuppings, experiments, learnings |
 | **/add** | Partial | Self-roasted flow works (9-step wizard). Purchased flow is stub ("coming soon") |
 
@@ -192,6 +198,7 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 **Mobile / responsive design not tested**
 - Current layout is desktop-first. Brew-card grid (2→5 columns), detail-page hero (3xl max-width), and nav bar haven't been validated on phone or tablet widths
 - A sprint should include viewport passes at 375px / 768px / 1280px
+- The top nav now has 5 items + logo + +ADD and visibly overflows at 375px — a mobile nav treatment (hamburger, scroll, or stacked row) is now overdue
 
 **Terroir / cultivar extended fields**
 - Terroir extended fields (acidity_character, body_character, farming_model, dominant_varieties, typical_processing) — columns exist, not fully populated, not merged across a macro group with full confidence
@@ -206,11 +213,6 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 - Brews list now filters by `extraction_strategy` (Clarity-First / Balanced Intensity / Full Expression) and every card surfaces its strategy via a colored chip
 - Still missing: filters for process / terroir / cultivar; full-text search across what_i_learned narratives; saved combined views (e.g. "Clarity-First × Gesha × Central Andean Cordillera")
 
-**No process-level aggregation**
-- Terroirs aggregate by geography, cultivars by genetics
-- No equivalent page for processes (Washed, Natural, Honey, Anaerobic, etc.)
-- The Brewing Master Reference has rich process-level patterns (Archive Patterns section) that aren't in the app
-
 ### Recently completed (April 2026)
 
 - **Purchased-coffee import flow (PR #9)** — 4-step wizard with canonical registry validation, shared `lib/brew-import.ts` used by UI and API
@@ -218,6 +220,7 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 - **Brew card redesign (PR #10)** — removed duplicate content below cards, consolidated four copies of the cover-color function into `lib/brew-colors.ts`, shifted floral sage to teal so the green palette reads as distinct hues (Gesha / floral / fallback)
 - **Build hygiene (PR #11)** — enabled `strictNullChecks` in tsconfig so discriminated-union narrowing in `lib/brew-import.ts` compiles under `next build`
 - **Producer column + backfill (PR #12, migration 011)** — added `brews.producer`, backfilled 55/55 from the Beans tab + direct fill, split the card and hero so producer and roaster render as distinct lines (no more roaster-as-producer mislabel). `lib/brew-import.ts` + Claude-parse schema now flow producer through.
+- **Processes aggregation (migration 012)** — third aggregation dimension alongside terroirs + cultivars. `/processes` index groups 20 distinct process values into 5 families (Washed / Natural / Honey / Anaerobic / Experimental) via `lib/process-families.ts`. Detail pages aggregate brews per process with palate-aware synthesis (explicitly primed that Chris's palate has widened beyond clean-washed — the prompt asks when each style *delivers vs. goes off*, not which is best). Migration normalizes casing + merges `Classic Natural` into `Natural`. Synthesis cached in new `process_syntheses` table. `<StrategyPill>` extracted to `components/StrategyPill.tsx` — consolidates 4 copies across brews-list, terroir-detail, cultivar-detail, processes-detail (2 variants: row + card).
 
 ---
 
@@ -280,7 +283,6 @@ These are ideas and patterns that have emerged from the data, not committed feat
 
 ### Medium-term (knowledge compounding)
 
-- **Process-level aggregation** — a third dimension alongside terroirs and cultivars. The Brewing Master Reference already has rich process patterns (e.g., "honey lots benefit from bed exposure between pours", "anoxic natural processing overrides variety signals"). These could be surfaced as process pages with synthesis.
 - **Extraction strategy patterns** — the three strategies (Clarity-First, Balanced Intensity, Full Expression) are a core part of the brewing framework. A view showing which coffees confirmed which strategy, organized by variety × process, would be directly useful for recipe design.
 - **Cooling behavior tracking** — many brews have critical evaluation temperature thresholds (e.g., "do not evaluate before 50°C", "rose character only emerges near 40°C"). This is scattered in temperature_evolution and what_i_learned but not structured or searchable.
 - **Roaster reference integration** — the Brewing Master Reference has cards for 30+ roasters with house style tags. These could live in the app and link to brews.
@@ -307,6 +309,10 @@ Running notes from past sprints — keep this section for future-you.
 - A field's UI label is a claim about its semantics. The `roaster` fallback into the producer slot broke this — the card read "producer: Hydrangea" but the underlying data said "roaster: Hydrangea". Either add the missing column or label the slot honestly; don't conflate.
 - The extraction_confirmed → extraction_strategy relationship is a "did plan match taste" audit trail, not a duplicate field. Show it only on divergence; a field that's identical to another 80% of the time reads as noise.
 - Before designing around a field, check population: `what_i_learned` was 56/56 but `extraction_confirmed` was 14/56 — that ratio changed the design choice (surface the former broadly, hide the latter conditionally).
+- Not every aggregation dimension needs an FK. `brews.process` is free-text with ~20 values; a `lib/<x>-families.ts` lookup gave us family grouping + colors without a migration or join. Only reach for a table when the dimension needs its own metadata (synthesis cache, which we did add).
+
+**AI synthesis framing**
+- A synthesis prompt is a stance, not a summary. Without explicit framing, Claude defaulted to "Chris prefers clean" — so the /processes prompt had to say "palate has widened, focus on when this style delivers vs. when it goes off." When the aggregation dimension is value-laden (process, roast style, anything with good/bad connotations), the prompt needs to declare that values are not the goal; mechanics are.
 
 **Build / tooling**
 - `strict: false` with `strictNullChecks: true` is the current baseline. Discriminated-union narrowing depends on `strictNullChecks`. Do not turn it off without first refactoring `PersistResult` / `ValidationResult` / `TerroirMatch` / `CultivarMatch`.
@@ -332,3 +338,4 @@ Running notes from past sprints — keep this section for future-you.
 | *SQL* | Insert Alo Village Washed 74158 brew, update Yusuf Natural and Finca La Reserva Gesha with spreadsheet data |
 | 010 | Backfill cultivar behavior fields (roast_behavior, resting_behavior, market_context) |
 | 011 | Add brews.producer column, backfill to 55/55; normalize roaster names (drop "Coffee Roasters" / "Cafe" suffixes); label self-roasted as "Latent"; dedupe Alo Coffee / MSW1 |
+| 012 | Normalize brews.process values (casing + merge "Classic Natural" → "Natural"); create process_syntheses cache table with RLS |
