@@ -4,25 +4,9 @@ import Link from 'next/link'
 import { Brew } from '@/lib/types'
 import { getCoverColor } from '@/lib/brew-colors'
 import { getProcessFamily, getFamilyColor } from '@/lib/process-families'
-import { StrategyPill } from '@/components/StrategyPill'
+import { SectionCard } from '@/components/SectionCard'
+import { Tag } from '@/components/Tag'
 import ProcessSynthesis from './ProcessSynthesis'
-
-function Section({ title, dark, children }: { title?: string, dark?: boolean, children: React.ReactNode }) {
-  return (
-    <div className={`rounded-md p-6 mb-4 ${dark ? 'bg-latent-fg text-white' : 'bg-white border border-latent-border'}`}>
-      {title && (
-        <div className={`font-mono text-xs font-bold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-fg'}`}>
-          {title}
-        </div>
-      )}
-      {children}
-    </div>
-  )
-}
-
-function Tag({ children }: { children: React.ReactNode }) {
-  return <span className="tag">{children}</span>
-}
 
 export default async function ProcessDetailPage({ params }: { params: { slug: string } }) {
   const supabase = createClient()
@@ -111,38 +95,38 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
 
       {/* Common Flavor Notes */}
       {sortedFlavors.length > 0 && (
-        <Section title="COMMON FLAVOR NOTES">
+        <SectionCard title="COMMON FLAVOR NOTES">
           <div className="flex flex-wrap gap-2">
             {sortedFlavors.map(([note, count]) => (
               <Tag key={note}>{note}{count > 1 ? ` (${count})` : ''}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Cultivars */}
       {cultivarSet.size > 0 && (
-        <Section title="CULTIVARS EXPLORED">
+        <SectionCard title="CULTIVARS EXPLORED">
           <div className="flex flex-wrap gap-2">
             {Array.from(cultivarSet).map((name) => (
               <Tag key={name}>{name}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Terroirs */}
       {terroirSet.size > 0 && (
-        <Section title="TERROIRS EXPLORED">
+        <SectionCard title="TERROIRS EXPLORED">
           <div className="flex flex-wrap gap-2">
             {Array.from(terroirSet.entries()).map(([name, country]) => (
               <Tag key={name}>{country} / {name}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
-      <Section title={`COFFEES WITH THIS PROCESS (${brewCount})`}>
+      <SectionCard title={`COFFEES WITH THIS PROCESS (${brewCount})`}>
         <div className="space-y-0">
           {brewList.map((brew) => (
             <Link
@@ -154,10 +138,9 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
                 className="w-8 h-10 rounded flex-shrink-0"
                 style={{ backgroundColor: getCoverColor(brew) }}
               />
-              <div className="flex-1">
-                <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
-                  <span>{brew.coffee_name}</span>
-                  <StrategyPill strategy={brew.extraction_strategy} />
+              <div className="flex-1 min-w-0">
+                <div className="font-sans text-sm font-semibold">
+                  {brew.coffee_name}
                 </div>
                 <div className="font-mono text-[10px] text-latent-mid">
                   {[brew.variety, brew.terroir?.country, brew.roaster].filter(Boolean).join(' · ')}
@@ -167,10 +150,10 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
             </Link>
           ))}
         </div>
-      </Section>
+      </SectionCard>
 
       {/* Confidence */}
-      <Section dark>
+      <SectionCard dark>
         <div className="font-mono text-xxs font-medium opacity-60 uppercase mb-3">CONFIDENCE</div>
         <div className="flex items-center gap-3">
           <span className="text-xl">{confidence.emoji}</span>
@@ -179,7 +162,7 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
             <div className="font-mono text-xs opacity-60">{confidence.desc}</div>
           </div>
         </div>
-      </Section>
+      </SectionCard>
     </div>
   )
 }

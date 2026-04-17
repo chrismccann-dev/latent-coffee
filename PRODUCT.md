@@ -195,10 +195,12 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 
 ### What's Missing or Incomplete
 
-**Mobile / responsive design not tested**
-- Current layout is desktop-first. Brew-card grid (2→5 columns), detail-page hero (3xl max-width), and nav bar haven't been validated on phone or tablet widths
-- A sprint should include viewport passes at 375px / 768px / 1280px
-- The top nav now has 5 items + logo + +ADD and visibly overflows at 375px — a mobile nav treatment (hamburger, scroll, or stacked row) is now overdue
+**Mobile / responsive design — partially addressed**
+- Nav: hamburger + sheet below `md:` breakpoint (PR #14). Sheet auto-closes on route change. Desktop nav untouched.
+- Remaining mobile debt, both visible and awaiting a dedicated sprint:
+  - `/brews` grid at 2-col / 375px: card text (coffee name, producer, region, roaster stack) truncates at 4-8 chars — barely readable. Needs either a 1-col stack on mobile or a simplified card layout.
+  - `/brews/[id]` hero: long coffee-name titles wrap word-by-word because the adjacent `PURCHASED` badge competes for horizontal space. Needs the hero flex layout redesigned for narrow widths.
+- The add wizard, 3 aggregation indices, and 3 aggregation detail pages all render cleanly at 375 / 768 / 1280.
 
 **Terroir / cultivar extended fields**
 - Terroir extended fields (acidity_character, body_character, farming_model, dominant_varieties, typical_processing) — columns exist, not fully populated, not merged across a macro group with full confidence
@@ -221,6 +223,7 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 - **Build hygiene (PR #11)** — enabled `strictNullChecks` in tsconfig so discriminated-union narrowing in `lib/brew-import.ts` compiles under `next build`
 - **Producer column + backfill (PR #12, migration 011)** — added `brews.producer`, backfilled 55/55 from the Beans tab + direct fill, split the card and hero so producer and roaster render as distinct lines (no more roaster-as-producer mislabel). `lib/brew-import.ts` + Claude-parse schema now flow producer through.
 - **Processes aggregation (migration 012)** — third aggregation dimension alongside terroirs + cultivars. `/processes` index groups 20 distinct process values into 5 families (Washed / Natural / Honey / Anaerobic / Experimental) via `lib/process-families.ts`. Detail pages aggregate brews per process with palate-aware synthesis (explicitly primed that Chris's palate has widened beyond clean-washed — the prompt asks when each style *delivers vs. goes off*, not which is best). Migration normalizes casing + merges `Classic Natural` into `Natural`. Synthesis cached in new `process_syntheses` table. `<StrategyPill>` extracted to `components/StrategyPill.tsx` — consolidates 4 copies across brews-list, terroir-detail, cultivar-detail, processes-detail (2 variants: row + card).
+- **Design polish + mobile pass (PR #14)** — mobile nav hamburger + sheet below `md:` breakpoint. `<SectionCard>` and `<Tag>` extracted to `components/` (were triple-duplicated across terroir / cultivar / process detail). `<StrategyPill>` removed from aggregation detail coffee rows (option A from the sprint plan) — strategy still surfaces on `/brews` cards and brew detail pages. `/brews` and `/brews/[id]` still have known mobile debt (see "What's Missing").
 
 ---
 
@@ -304,6 +307,8 @@ Running notes from past sprints — keep this section for future-you.
 - When putting multiple content items on a single surface (book-cover card), strip all duplicates from surrounding chrome. A 40-character coffee name rendered twice per card became very loud once the card itself carried the metadata.
 - Color palettes need hue separation, not just lightness separation. Two greens at different saturation still read as "the same color" — if a signal deserves its own color, shift hue (green → teal) rather than lighten. Apply this to any future color-coding work.
 - Consolidate color helpers. Duplicated `getFlavorColor` across four pages drifted into subtly different palettes and caused a visible mismatch between the list and detail views. One source of truth per visual system.
+- Per-row indicators orthogonal to a page's main dimension are noise. On aggregation detail pages (terroir / cultivar / process), a strategy pill per coffee didn't co-vary with the page's grouping — it became visual clutter faster than signal. The cleaner call was to drop it entirely; the strategy surface is one click away on brew detail and still actively used as a filter on `/brews`. Signal density earns its keep by co-varying with the view you're in.
+- A mobile pass that only fixes the most visible issue (nav overflow) is a partial fix, not a done fix. `/brews` cards at 2-col mobile and the brew detail hero both have real problems that need their own scoped sprint — flag explicitly in "What's Missing" so scope doesn't creep.
 
 **Data**
 - A field's UI label is a claim about its semantics. The `roaster` fallback into the producer slot broke this — the card read "producer: Hydrangea" but the underlying data said "roaster: Hydrangea". Either add the missing column or label the slot honestly; don't conflate.
