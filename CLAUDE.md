@@ -59,6 +59,16 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **Extraction-strategy helper:** [lib/extraction-strategy.ts](lib/extraction-strategy.ts) — pill colors, canonical list, `truncateLearning` helper.
 - **Strategy pill component:** [components/StrategyPill.tsx](components/StrategyPill.tsx) — two variants: `row` (bordered pill with full name) and `card` (borderless rounded-full abbreviation, used on brew covers in the list). As of PR #14 only the `card` variant is in use (on `/brews` cards); the `row` variant was removed from aggregation detail coffee rows because the per-row strategy signal was orthogonal to the page's grouping and read as noise. Keep the `row` variant available in case strategy becomes relevant on a future aggregation page.
 - **Section / Tag components:** [components/SectionCard.tsx](components/SectionCard.tsx) + [components/Tag.tsx](components/Tag.tsx) — used by all 3 aggregation detail pages (terroir / cultivar / processes). `SectionCard` supports optional `title` and `dark` variant. Do NOT re-declare inline.
+- **COMMON FLAVOR NOTES on aggregation pages:** rendered by [components/FlavorNotesByFamily.tsx](components/FlavorNotesByFamily.tsx) on all 3 aggregation detail pages. Accepts `[note, count][]` (produced by `aggregateFlavorNotes(brews)` from `lib/flavor-registry.ts`), groups into 8 families + Other, renders family label in family color. Do NOT re-implement per page.
+- **Edit brew:** `/brews/[id]/edit` → [EditBrewForm.tsx](app/(app)/brews/%5Bid%5D/edit/EditBrewForm.tsx), single-page (not stepped) form. PATCH handler [app/api/brews/[id]/route.ts](app/api/brews/%5Bid%5D/route.ts) uses a whitelist of editable fields + `.eq('user_id')` belt-and-suspenders over RLS. Terroirs and cultivars are pick-from-existing; creating new entities still goes through `/add`.
+
+### Flavor notes registry (`lib/flavor-registry.ts`)
+- Canonical tag list + family + hue-separated palette. Same shape as `lib/process-families.ts` but adds a **3-tier classifier**: exact → case-insensitive → **longest canonical substring**. The substring tier lets composite tags ("Floral sweetness", "Tea-like finish") route to their base family at render time without a migration to rewrite the data.
+- 8 families + Other: Citrus, Stone Fruit (absorbs pome), Berry, Tropical, Grape & Wine, Floral, Tea & Herbal, Sweet & Confection.
+- `aggregateFlavorNotes(brews)` → `[note, count][]` sorted desc. Use this over re-implementing the counting loop per page.
+- `FLAVOR_REGISTRY` exports the sorted canonical names for autocomplete datalists.
+- `findClosestFlavor(input)` returns a suggestion when the input isn't canonical — used in the edit form chip input.
+- Adding a new canonical tag = a deliberate decision, not drift. Same treatment as the macro-terroir + cultivar registries.
 
 ### Green (`app/(app)/green/`)
 - Green bean management (self-roasted lots)

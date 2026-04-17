@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { Brew, Terroir } from '@/lib/types'
 import { SectionCard } from '@/components/SectionCard'
 import { Tag } from '@/components/Tag'
+import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
+import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import TerroirSynthesis from './TerroirSynthesis'
 
 const countryColors: Record<string, string> = {
@@ -121,14 +123,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   // Merge context across all terroirs in the macro group
   const merged = mergeMacroTerroirContext(allTerroirs)
 
-  // Aggregate flavor notes from all brews
-  const flavorCounts: Record<string, number> = {}
-  for (const brew of brewList) {
-    for (const note of brew.flavor_notes || []) {
-      flavorCounts[note] = (flavorCounts[note] || 0) + 1
-    }
-  }
-  const sortedFlavors = Object.entries(flavorCounts).sort((a, b) => b[1] - a[1])
+  const sortedFlavors = aggregateFlavorNotes(brewList)
 
   // Aggregate cultivars and processes
   const cultivarSet = new Map<string, string>()
@@ -283,16 +278,9 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
         />
       )}
 
-      {/* Common Flavor Notes */}
-      {sortedFlavors.length > 0 && (
-        <SectionCard title="COMMON FLAVOR NOTES">
-          <div className="flex flex-wrap gap-2">
-            {sortedFlavors.map(([note, count]) => (
-              <Tag key={note}>{note}{count > 1 ? ` (${count})` : ''}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
+      {/* Common Flavor Notes (grouped by registry family) */}
+      <FlavorNotesByFamily notes={sortedFlavors} />
+
 
       {/* Cultivars Explored */}
       {cultivarSet.size > 0 && (

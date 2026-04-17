@@ -6,6 +6,8 @@ import { getCoverColor } from '@/lib/brew-colors'
 import { getProcessFamily, getFamilyColor } from '@/lib/process-families'
 import { SectionCard } from '@/components/SectionCard'
 import { Tag } from '@/components/Tag'
+import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
+import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import ProcessSynthesis from './ProcessSynthesis'
 
 export default async function ProcessDetailPage({ params }: { params: { slug: string } }) {
@@ -34,14 +36,7 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
   const family = getProcessFamily(processName)
   const color = getFamilyColor(family)
 
-  // Aggregate flavor notes across all brews
-  const flavorCounts: Record<string, number> = {}
-  for (const brew of brewList) {
-    for (const note of brew.flavor_notes || []) {
-      flavorCounts[note] = (flavorCounts[note] || 0) + 1
-    }
-  }
-  const sortedFlavors = Object.entries(flavorCounts).sort((a, b) => b[1] - a[1])
+  const sortedFlavors = aggregateFlavorNotes(brewList)
 
   // Aggregate terroirs and cultivars
   const terroirSet = new Map<string, string>()
@@ -93,16 +88,9 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
         currentBrewCount={brewCount}
       />
 
-      {/* Common Flavor Notes */}
-      {sortedFlavors.length > 0 && (
-        <SectionCard title="COMMON FLAVOR NOTES">
-          <div className="flex flex-wrap gap-2">
-            {sortedFlavors.map(([note, count]) => (
-              <Tag key={note}>{note}{count > 1 ? ` (${count})` : ''}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
+      {/* Common Flavor Notes (grouped by registry family) */}
+      <FlavorNotesByFamily notes={sortedFlavors} />
+
 
       {/* Cultivars */}
       {cultivarSet.size > 0 && (

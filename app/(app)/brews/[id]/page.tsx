@@ -77,15 +77,21 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
               <h1 className="font-sans text-2xl font-semibold">
                 {brew.coffee_name}
               </h1>
-              <span 
+              <span
                 className="font-mono text-[10px] font-semibold px-2 py-1 rounded"
-                style={{ 
+                style={{
                   background: brew.source === 'self-roasted' ? '#1a1a1a' : '#4A7C59',
                   color: '#fff'
                 }}
               >
                 {brew.source === 'self-roasted' ? 'ROASTED' : 'PURCHASED'}
               </span>
+              <Link
+                href={`/brews/${brew.id}/edit`}
+                className="ml-auto font-mono text-xs text-latent-mid hover:text-latent-fg border border-latent-border rounded px-2 py-1 hover:border-latent-fg"
+              >
+                Edit
+              </Link>
             </div>
             
             {brew.source === 'self-roasted' && brew.green_bean && (
