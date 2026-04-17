@@ -309,6 +309,7 @@ Running notes from past sprints — keep this section for future-you.
 - Consolidate color helpers. Duplicated `getFlavorColor` across four pages drifted into subtly different palettes and caused a visible mismatch between the list and detail views. One source of truth per visual system.
 - Per-row indicators orthogonal to a page's main dimension are noise. On aggregation detail pages (terroir / cultivar / process), a strategy pill per coffee didn't co-vary with the page's grouping — it became visual clutter faster than signal. The cleaner call was to drop it entirely; the strategy surface is one click away on brew detail and still actively used as a filter on `/brews`. Signal density earns its keep by co-varying with the view you're in.
 - A mobile pass that only fixes the most visible issue (nav overflow) is a partial fix, not a done fix. `/brews` cards at 2-col mobile and the brew detail hero both have real problems that need their own scoped sprint — flag explicitly in "What's Missing" so scope doesn't creep.
+- Subtraction can strengthen what's left. Dropping the strategy pill from aggregation coffee rows didn't just remove noise — the cover-color swatch on each row (which *does* encode variety/flavor, and therefore *does* co-vary with the aggregation dimension) became more legible once it was no longer competing for attention with a neighboring chip. Before adding a new indicator, check whether removing an adjacent one would do more than the addition would.
 
 **Data**
 - A field's UI label is a claim about its semantics. The `roaster` fallback into the producer slot broke this — the card read "producer: Hydrangea" but the underlying data said "roaster: Hydrangea". Either add the missing column or label the slot honestly; don't conflate.
@@ -323,6 +324,7 @@ Running notes from past sprints — keep this section for future-you.
 - `strict: false` with `strictNullChecks: true` is the current baseline. Discriminated-union narrowing depends on `strictNullChecks`. Do not turn it off without first refactoring `PersistResult` / `ValidationResult` / `TerroirMatch` / `CultivarMatch`.
 - The worktree can't run `npm run build` (missing `@anthropic-ai/sdk`). Use `npx tsc --noEmit` in the main repo dir as a build proxy before pushing. Relying on Vercel to catch type errors cost one failed deploy.
 - Keep PRs scoped. PR #9 shipped with type-narrowing issues that only surfaced when PR #10 triggered a fresh Vercel build. If `next build` had run locally as part of #9's checklist, we'd have caught it at the source.
+- `preview_resize` preset `"desktop"` means "reset to native viewport" — which in the sandbox browser is ~476×567, not 1280×800. To actually test a desktop width, pass `{ width: 1280, height: 800 }` explicitly. This caught me for one cycle on PR #14 where the first "desktop" screenshot showed the mobile hamburger.
 
 ---
 
