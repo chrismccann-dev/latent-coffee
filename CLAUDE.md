@@ -15,7 +15,7 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 ## Data Model
 
 ### Core entities
-- **brews** — individual coffee tastings (purchased or self-roasted). 55 records as of April 2026.
+- **brews** — individual coffee tastings (purchased or self-roasted). 55 records as of April 2026. Has distinct `roaster` and `producer` columns; don't conflate them. Self-roasted brews carry `roaster = 'Latent'`.
 - **terroirs** — geographic/ecological zones. Hierarchy: Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir
 - **cultivars** — coffee varieties. Hierarchy: Species → Genetic Family → Lineage → Cultivar subtype
 - **green_beans** — raw coffee lots (self-roasted only, 4 records). Has roasts, experiments, cuppings.

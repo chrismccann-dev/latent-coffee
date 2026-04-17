@@ -846,6 +846,7 @@ export default function AddPage() {
       if (step === 2 && payload) {
         summary.push(['Coffee', payload.coffee_name])
         summary.push(['Roaster', payload.roaster])
+        summary.push(['Producer', payload.producer])
         summary.push(['Variety', payload.variety])
         summary.push(['Process', payload.process])
         summary.push(['Flavor notes', payload.flavor_notes?.join(', ') || null])
@@ -1006,6 +1007,7 @@ export default function AddPage() {
                     coffee_name: data.parsed?.coffee_name || '',
                     source: 'purchased',
                     roaster: data.parsed?.roaster ?? null,
+                    producer: data.parsed?.producer ?? null,
                     variety: data.parsed?.variety ?? null,
                     process: data.parsed?.process ?? null,
                     roast_level: data.parsed?.roast_level ?? null,
@@ -1195,6 +1197,14 @@ export default function AddPage() {
                   className="input"
                   value={payload.roaster || ''}
                   onChange={(e) => updateField('roaster', e.target.value || null)}
+                />
+              </div>
+              <div>
+                <label className="label">Producer</label>
+                <input
+                  className="input"
+                  value={payload.producer || ''}
+                  onChange={(e) => updateField('producer', e.target.value || null)}
                 />
               </div>
               <div>

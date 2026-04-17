@@ -76,7 +76,7 @@ Key roasting principles (from Roasting Intent document):
 
 | Entity | Records | Description |
 |--------|---------|-------------|
-| **brews** | 56 | Best brew archives (52 purchased, 4 self-roasted) |
+| **brews** | 55 | Best brew archives (51 purchased, 4 self-roasted) |
 | **terroirs** | 22 | Geographic/ecological zones |
 | **cultivars** | 30 | Coffee varieties with genetic taxonomy |
 | **green_beans** | 4 | Raw coffee lots (self-roasted only) |
@@ -119,16 +119,18 @@ profiles (user)
 
 | Field | Type | Description | Coverage |
 |-------|------|-------------|----------|
-| coffee_name | text | Full name of the coffee | 56/56 |
-| source | enum | "purchased" or "self-roasted" | 56/56 |
-| extraction_strategy | text | Clarity-First / Balanced Intensity / Full Expression | 56/56 |
-| what_i_learned | text | Long-form narrative of key learnings from this coffee | 37/56 |
-| key_takeaways | text[] | Bullet-point learnings (from import) | 56/56 |
-| terroir_connection | text | How terroir expressed in the cup | ~16/56 |
-| cultivar_connection | text | How cultivar expressed in the cup | ~20/56 |
-| extraction_confirmed | text | Confirmed strategy tag | 13/56 |
-| Recipe fields | various | brewer, filter, dose_g, water_g, grind, temp_c, bloom, pour_structure, total_time | 56/56 |
-| Sensory fields | text | aroma, attack, mid_palate, body, finish, temperature_evolution, peak_expression | 56/56 |
+| coffee_name | text | Full name of the coffee | 55/55 |
+| source | enum | "purchased" or "self-roasted" | 55/55 |
+| roaster | text | Roaster who sold the coffee (self-roasted = "Latent") | 55/55 |
+| producer | text | Farm / washing station / estate that grew the coffee | 55/55 |
+| extraction_strategy | text | Clarity-First / Balanced Intensity / Full Expression | 55/55 |
+| what_i_learned | text | Long-form narrative of key learnings from this coffee | ~36/55 |
+| key_takeaways | text[] | Bullet-point learnings (from import) | 55/55 |
+| terroir_connection | text | How terroir expressed in the cup | ~16/55 |
+| cultivar_connection | text | How cultivar expressed in the cup | ~20/55 |
+| extraction_confirmed | text | Confirmed strategy tag | ~13/55 |
+| Recipe fields | various | brewer, filter, dose_g, water_g, grind, temp_c, bloom, pour_structure, total_time | 55/55 |
+| Sensory fields | text | aroma, attack, mid_palate, body, finish, temperature_evolution, peak_expression | 55/55 |
 
 ### Canonical Registries
 
@@ -270,6 +272,7 @@ These are ideas and patterns that have emerged from the data, not committed feat
 - **Import flow for purchased coffees** — the critical missing piece. Needs terroir/cultivar lookup-or-create, canonical name validation, and all the brew/sensory/learning fields.
 - **Surface what_i_learned and extraction_strategy in UI** — these are the most valuable fields and they're invisible right now.
 - **Backfill remaining what_i_learned** — 19 brews still missing long-form learnings.
+- **Producer registry** — producer is free-text today (56/56 populated). Canonical producer names + farm↔region mappings would let us aggregate learnings at the producer level and catch typos.
 - **Import experiment data** — the roasting spreadsheet has structured experiments that belong in the experiments table.
 
 ### Medium-term (knowledge compounding)
@@ -302,3 +305,5 @@ These are ideas and patterns that have emerged from the data, not committed feat
 | 009 | Backfill extraction_strategy (part 1 — strategy-only updates) |
 | *SQL* | Backfill extraction_strategy + what_i_learned (parts 2-8, applied via execute_sql) |
 | *SQL* | Insert Alo Village Washed 74158 brew, update Yusuf Natural and Finca La Reserva Gesha with spreadsheet data |
+| 010 | Backfill cultivar behavior fields (roast_behavior, resting_behavior, market_context) |
+| 011 | Add brews.producer column, backfill to 55/55; normalize roaster names (drop "Coffee Roasters" / "Cafe" suffixes); label self-roasted as "Latent"; dedupe Alo Coffee / MSW1 |

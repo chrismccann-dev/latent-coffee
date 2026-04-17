@@ -121,6 +121,7 @@ export interface BrewPayload {
   coffee_name: string
   source?: 'purchased' // always purchased in this flow; default applied below
   roaster?: string | null
+  producer?: string | null
   variety?: string | null
   process?: string | null
   roast_level?: string | null
@@ -406,6 +407,7 @@ export async function persistBrew(
     cultivar_id: cultivarId,
     coffee_name: payload.coffee_name.trim(),
     roaster: payload.roaster ?? null,
+    producer: payload.producer ?? null,
     variety: payload.variety ?? null,
     process: payload.process ?? null,
     roast_level: payload.roast_level ?? null,
@@ -828,6 +830,9 @@ function applyTabbedBlock(out: Partial<BrewPayload>, t: TerroirCandidate, c: Cul
       // --- Coffee ---
       case 'coffee.roaster':
         out.roaster = value
+        break
+      case 'coffee.producer':
+        out.producer = value
         break
       case 'coffee.coffee_name':
         // Only set from the Coffee block if Brew block didn't already set it
