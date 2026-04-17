@@ -2,7 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew, Terroir } from '@/lib/types'
-import { StrategyPill } from '@/components/StrategyPill'
+import { SectionCard } from '@/components/SectionCard'
+import { Tag } from '@/components/Tag'
 import TerroirSynthesis from './TerroirSynthesis'
 
 const countryColors: Record<string, string> = {
@@ -22,23 +23,6 @@ const countryColors: Record<string, string> = {
 
 function getCountryColor(country: string): string {
   return countryColors[country] || '#555555'
-}
-
-function Section({ title, dark, children }: { title?: string, dark?: boolean, children: React.ReactNode }) {
-  return (
-    <div className={`rounded-md p-6 mb-4 ${dark ? 'bg-latent-fg text-white' : 'bg-white border border-latent-border'}`}>
-      {title && (
-        <div className={`font-mono text-xs font-bold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-fg'}`}>
-          {title}
-        </div>
-      )}
-      {children}
-    </div>
-  )
-}
-
-function Tag({ children }: { children: React.ReactNode }) {
-  return <span className="tag">{children}</span>
 }
 
 /**
@@ -199,18 +183,18 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
       {/* Meso Terroirs */}
       {merged.mesoTerroirs.length > 0 && (
-        <Section title="MESO TERROIRS EXPLORED">
+        <SectionCard title="MESO TERROIRS EXPLORED">
           <div className="flex flex-wrap gap-2">
             {merged.mesoTerroirs.map((meso) => (
               <Tag key={meso}>{meso}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Terroir Context */}
       {(merged.context || merged.soil || merged.cup_profile || merged.why_it_stands_out) && (
-        <Section title="TERROIR CONTEXT">
+        <SectionCard title="TERROIR CONTEXT">
           <div className="space-y-3 font-sans text-sm">
             {merged.context && (
               <div>
@@ -237,12 +221,12 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
               </div>
             )}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Terroir Character */}
       {(merged.acidity_character || merged.body_character || merged.farming_model) && (
-        <Section title="TERROIR CHARACTER">
+        <SectionCard title="TERROIR CHARACTER">
           <div className="space-y-3 font-sans text-sm">
             {merged.acidity_character && (
               <div>
@@ -263,12 +247,12 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
               </div>
             )}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Dominant Varieties & Typical Processing */}
       {(merged.dominant_varieties.length > 0 || merged.typical_processing.length > 0) && (
-        <Section title="TYPICAL PRODUCTION">
+        <SectionCard title="TYPICAL PRODUCTION">
           {merged.dominant_varieties.length > 0 && (
             <div className="mb-4">
               <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-2">Dominant Varieties</div>
@@ -285,7 +269,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
               </div>
             </div>
           )}
-        </Section>
+        </SectionCard>
       )}
 
       {/* AI Synthesis */}
@@ -301,35 +285,35 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
       {/* Common Flavor Notes */}
       {sortedFlavors.length > 0 && (
-        <Section title="COMMON FLAVOR NOTES">
+        <SectionCard title="COMMON FLAVOR NOTES">
           <div className="flex flex-wrap gap-2">
             {sortedFlavors.map(([note, count]) => (
               <Tag key={note}>{note}{count > 1 ? ` (${count})` : ''}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Cultivars Explored */}
       {cultivarSet.size > 0 && (
-        <Section title="CULTIVARS EXPLORED">
+        <SectionCard title="CULTIVARS EXPLORED">
           <div className="flex flex-wrap gap-2">
             {Array.from(cultivarSet.entries()).map(([name, lineage]) => (
               <Tag key={name}>{lineage ? `${lineage} / ${name}` : name}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Processes */}
       {processSet.size > 0 && (
-        <Section title="PROCESSES">
+        <SectionCard title="PROCESSES">
           <div className="flex flex-wrap gap-2">
             {Array.from(processSet).map((p) => (
               <Tag key={p}>{p}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Coffee list */}
@@ -345,7 +329,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
                 href={`/brews/${brew.id}`}
                 className="flex items-center gap-3 py-3 border border-latent-border rounded-md mb-2 px-4 hover:bg-latent-bg transition-colors group"
               >
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
                     <span>{brew.coffee_name}</span>
                     {brew.is_process_dominant && (
@@ -353,7 +337,6 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
                         PROCESS
                       </span>
                     )}
-                    <StrategyPill strategy={brew.extraction_strategy} />
                   </div>
                   <div className="font-mono text-[10px] text-latent-mid">
                     {[brew.variety, brew.process].filter(Boolean).join(' · ')}
@@ -367,7 +350,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       )}
 
       {/* Confidence */}
-      <Section dark>
+      <SectionCard dark>
         <div className="font-mono text-xxs font-medium opacity-60 uppercase mb-3">CONFIDENCE</div>
         <div className="flex items-center justify-end gap-3">
           <span className="text-xl">{confidence.emoji}</span>
@@ -376,7 +359,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
             <span className="font-mono text-xs opacity-60 ml-2">&mdash; {confidence.desc}</span>
           </div>
         </div>
-      </Section>
+      </SectionCard>
     </div>
   )
 }

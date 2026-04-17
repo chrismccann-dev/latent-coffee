@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew, Cultivar } from '@/lib/types'
 import { getCoverColor } from '@/lib/brew-colors'
-import { StrategyPill } from '@/components/StrategyPill'
+import { SectionCard } from '@/components/SectionCard'
+import { Tag } from '@/components/Tag'
 import CultivarSynthesis from './CultivarSynthesis'
 
 const familyColors: Record<string, string> = {
@@ -17,23 +18,6 @@ const familyColors: Record<string, string> = {
 
 function getFamilyColor(family: string): string {
   return familyColors[family] || '#555555'
-}
-
-function Section({ title, dark, children }: { title?: string, dark?: boolean, children: React.ReactNode }) {
-  return (
-    <div className={`rounded-md p-6 mb-4 ${dark ? 'bg-latent-fg text-white' : 'bg-white border border-latent-border'}`}>
-      {title && (
-        <div className={`font-mono text-xs font-bold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-fg'}`}>
-          {title}
-        </div>
-      )}
-      {children}
-    </div>
-  )
-}
-
-function Tag({ children }: { children: React.ReactNode }) {
-  return <span className="tag">{children}</span>
 }
 
 /**
@@ -178,14 +162,14 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
 
       {/* Genetic Background */}
       {merged.genetic_background && (
-        <Section title="GENETIC BACKGROUND">
+        <SectionCard title="GENETIC BACKGROUND">
           <p className="font-sans text-sm leading-relaxed">{merged.genetic_background}</p>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Cup Characteristics */}
       {(merged.acidity_style || merged.body_style || merged.aromatics) && (
-        <Section title="CUP CHARACTERISTICS">
+        <SectionCard title="CUP CHARACTERISTICS">
           <div className="space-y-3 font-sans text-sm">
             {merged.acidity_style && (
               <div>
@@ -206,12 +190,12 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
               </div>
             )}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Brewing & Roasting */}
       {(merged.extraction_sensitivity || merged.roast_tolerance || merged.brewing_tendencies) && (
-        <Section title="BREWING & ROASTING">
+        <SectionCard title="BREWING & ROASTING">
           <div className="space-y-3 font-sans text-sm">
             {merged.extraction_sensitivity && (
               <div>
@@ -232,12 +216,12 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
               </div>
             )}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Roast & Rest Behavior */}
       {(merged.roast_behavior || merged.resting_behavior) && (
-        <Section title="ROAST & REST BEHAVIOR">
+        <SectionCard title="ROAST & REST BEHAVIOR">
           <div className="space-y-3 font-sans text-sm">
             {merged.roast_behavior && (
               <div>
@@ -252,14 +236,14 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
               </div>
             )}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Market Context */}
       {merged.market_context && (
-        <Section title="MARKET CONTEXT">
+        <SectionCard title="MARKET CONTEXT">
           <p className="font-sans text-sm leading-relaxed">{merged.market_context}</p>
-        </Section>
+        </SectionCard>
       )}
 
       {/* AI Synthesis — What I've Learned (lineage-level) */}
@@ -275,40 +259,40 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
 
       {/* Common Flavor Notes */}
       {sortedFlavors.length > 0 && (
-        <Section title="COMMON FLAVOR NOTES">
+        <SectionCard title="COMMON FLAVOR NOTES">
           <div className="flex flex-wrap gap-2">
             {sortedFlavors.map(([note, count]) => (
               <Tag key={note}>{note}{count > 1 ? ` (${count})` : ''}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Terroirs */}
       {terroirSet.size > 0 && (
-        <Section title="TERROIRS EXPLORED">
+        <SectionCard title="TERROIRS EXPLORED">
           <div className="flex flex-wrap gap-2">
             {Array.from(terroirSet.entries()).map(([name, country]) => (
               <Tag key={name}>{country} / {name}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Processes */}
       {processSet.size > 0 && (
-        <Section title="PROCESSES">
+        <SectionCard title="PROCESSES">
           <div className="flex flex-wrap gap-2">
             {Array.from(processSet).map((p) => (
               <Tag key={p}>{p}</Tag>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Coffee list */}
       {brewList.length > 0 && (
-        <Section title={`COFFEES IN THIS LINEAGE (${brewList.length})`}>
+        <SectionCard title={`COFFEES IN THIS LINEAGE (${brewList.length})`}>
           <div className="space-y-0">
             {brewList.map((brew) => (
               <Link
@@ -320,10 +304,9 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
                   className="w-8 h-10 rounded flex-shrink-0"
                   style={{ backgroundColor: getCoverColor(brew) }}
                 />
-                <div className="flex-1">
-                  <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
-                    <span>{brew.coffee_name}</span>
-                    <StrategyPill strategy={brew.extraction_strategy} />
+                <div className="flex-1 min-w-0">
+                  <div className="font-sans text-sm font-semibold">
+                    {brew.coffee_name}
                   </div>
                   <div className="font-mono text-[10px] text-latent-mid">
                     {[brew.variety, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
@@ -333,11 +316,11 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
               </Link>
             ))}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Confidence */}
-      <Section dark>
+      <SectionCard dark>
         <div className="font-mono text-xxs font-medium opacity-60 uppercase mb-3">CONFIDENCE</div>
         <div className="flex items-center gap-3">
           <span className="text-xl">{confidence.emoji}</span>
@@ -346,7 +329,7 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
             <div className="font-mono text-xs opacity-60">{confidence.desc}</div>
           </div>
         </div>
-      </Section>
+      </SectionCard>
     </div>
   )
 }
