@@ -81,3 +81,15 @@ Requires `.env.local` with:
 - **Desktop is the primary design target.** The current layout is not tested on mobile — any new feature sprint should add a mobile + tablet pass (viewport checks via `preview_resize`) before merging.
 - **Colors** — `lib/brew-colors.ts` is the single source of truth for brew-card covers. Current palette: forest green (Gesha variety), muted teal (floral flavor), burgundy (anaerobic/berry/wine), gold (honey), brown (natural), slate (neutral fallback — non-green so it doesn't compete with the variety/flavor greens). Adding a new color requires a thought pass on hue distinctness.
 - **Content on cards** — brew cards intentionally surface *all* content on the cover (no secondary text block below). Avoid "where does this data live" duplication: if a field belongs on the card, remove it from the surrounding chrome.
+
+## Sprint cadence (for Claude)
+
+Run these four checkpoints on every non-trivial sprint:
+
+1. **Plan before coding when scope is interpretive.** If the brief is a mockup, a redesign, or anything with "make it better" — enter plan mode (ExitPlanMode tool) and surface your interpretation *before* editing files. Skip only when the scope is fully concrete (specific file, specific line, specific fix). Silent interpretation calls are the #1 source of back-and-forth.
+
+2. **Preview every UI change.** Start the dev server (`preview_start`), take a screenshot after each change, and verify via `preview_eval` / `preview_screenshot` before committing. Don't rely on "it should work" — the mismatched Alo Village cover color would have been caught on the first screenshot.
+
+3. **Run `/simplify` before review or commit.** Claude over-engineers — duplicate JSX across pages, inline IIFEs, copy-pasted inline styles. Let the simplify skill catch it before it becomes tech debt. Run once per sprint, after implementation is done but before the commit step. Especially important when a sprint touched 2+ files that now share a rendering pattern (e.g. the strategy-pill span is currently copy-pasted across terroir-detail, cultivar-detail, and brews-list — that's a future `<StrategyPill>` component waiting to happen).
+
+4. **Retro before docs.** Before updating PRODUCT.md / CLAUDE.md / memory files at the end of a sprint, explicitly pause and list: what we tried that didn't work, what surprised us, what we'd do differently next time. The doc updates then write themselves. Don't wait for Chris to ask — this is a standing part of every sprint.
