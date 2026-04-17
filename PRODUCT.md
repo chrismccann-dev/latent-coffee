@@ -280,6 +280,7 @@ These are ideas and patterns that have emerged from the data, not committed feat
 - **Backfill remaining what_i_learned** — ~19 brews still missing long-form learnings.
 - **Import experiment data** — the roasting spreadsheet has structured experiments that belong in the experiments table.
 - **Second filter dimension on /brews** — add process filter next to the strategy pills; probably collapse into a small filter drawer if we keep adding dimensions.
+- **Aggregation detail-page visual cleanup** — strategy pills on every coffee row in the /processes, /cultivars, /terroirs detail coffee lists feel cluttered on dense pages (20-row Washed list is the worst case). A future design sprint should either drop them from the detail coffee list (strategy is already one click away on brew detail) or collapse to a tiny dot indicator. Not critical — a batch-size-5+ design pass when the mobile sprint lands is a natural home.
 
 ### Medium-term (knowledge compounding)
 
@@ -293,6 +294,17 @@ These are ideas and patterns that have emerged from the data, not committed feat
 - **Green bean sourcing intelligence** — when Chris sources a new green bean, the app could surface relevant prior learnings: "You've roasted 2 other Gesha 1931 lots. Development time was the primary lever. Start near Batch 25 parameters."
 - **Cross-dimensional queries** — "Show me all Clarity-First brews on Gesha from the Central Andean Cordillera" or "Which cultivars required Full Expression regardless of process?"
 
+### Taxonomy / canonical-reference expansion (idea cluster captured 2026-04-16)
+
+Motivation: the terroir registry and cultivar registry already work because they're canonical and curated. The same treatment applied to more dimensions would compound the knowledge base dramatically and keep Chris's archive grounded in defensible taxonomy rather than free-text drift.
+
+- **Processing methods taxonomy** — a canonical hierarchy of processing methods (wet / dry / semi-dry × ferment stage × thermal treatment × inoculation) that each free-text `brews.process` value slots into. Reference model: https://www.robertasami.com/processes. Would replace the current flat `lib/process-families.ts` lookup with a proper tree and let synthesis compare, e.g., "anoxic natural vs. yeast-inoculated natural" along a shared axis.
+- **Varieties taxonomy** — the cultivar registry is already close to this but lacks a published reference to cross-check against. Reference model: https://www.robertasami.com/varietals. Could drive cultivar-detail enrichment and catch taxonomy drift before it ships.
+- **Coffee-growing regions taxonomy** — canonical Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir list. The macro terroir registry exists in docs but isn't published as a browsable reference inside the app. Surfacing the full hierarchy (with ecological notes per level) would unblock meso/micro analysis and make "are these two coffees from the same valley?" answerable.
+- **Drippers / equipment taxonomy** — categorize Chris's brewer fleet (flat-bottom vs. conical, filter material, contact-time control) plus filters and grinders. Reference model: https://www.robertasami.com/drippers. Pair with grind-size analysis data (currently scattered) to get equipment-aware synthesis ("this coffee on Orea Glass + Sibarist FAST wants grind 6.4; on UFO Ceramic push to 6.2").
+- **Equipment + grind data consolidation** — merge all equipment lists (grinders, brewers, filters, water) plus the existing grind-size analysis into the knowledgebase instead of leaving them in spreadsheets / docs. Every brew already records brewer/filter/grind; surfacing the equipment side of that relationship is the unlock.
+- **Trusted external knowledge integration** — aggregate other people's curated knowledge (Robert Asami's taxonomies, roaster technical notes, specific cuppers' vocab) without diluting Chris's own voice. Open design question: how to mark external content so synthesis prompts can weight it appropriately — "primary=Chris's learnings, supporting=Robert's processes taxonomy" — rather than flattening everything into one corpus.
+
 ---
 
 ## Lessons Learned
@@ -304,6 +316,7 @@ Running notes from past sprints — keep this section for future-you.
 - When putting multiple content items on a single surface (book-cover card), strip all duplicates from surrounding chrome. A 40-character coffee name rendered twice per card became very loud once the card itself carried the metadata.
 - Color palettes need hue separation, not just lightness separation. Two greens at different saturation still read as "the same color" — if a signal deserves its own color, shift hue (green → teal) rather than lighten. Apply this to any future color-coding work.
 - Consolidate color helpers. Duplicated `getFlavorColor` across four pages drifted into subtly different palettes and caused a visible mismatch between the list and detail views. One source of truth per visual system.
+- Repetitive per-row indicators on long aggregation lists add clutter faster than they add signal. The strategy pill made sense on brew cards (single indicator, dense grid) and on brew detail (one focal point), but in a 20-row coffee list on /processes/Washed the pills stack into visual noise. Rule: if every row of a list has the same optional pill, it's probably safe to drop from that surface and keep only where it adds per-item decision value.
 
 **Data**
 - A field's UI label is a claim about its semantics. The `roaster` fallback into the producer slot broke this — the card read "producer: Hydrangea" but the underlying data said "roaster: Hydrangea". Either add the missing column or label the slot honestly; don't conflate.
