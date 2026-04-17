@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Brew } from '@/lib/types'
 import { EXTRACTION_STRATEGIES, getStrategyStyle } from '@/lib/extraction-strategy'
 import { getCoverColor } from '@/lib/brew-colors'
+import { StrategyPill } from '@/components/StrategyPill'
 
 interface BrewsPageProps {
   searchParams: { strategy?: string }
@@ -100,7 +101,6 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-0 border-t border-l border-latent-border">
           {brewList.map((brew) => {
             const cardColor = getCoverColor(brew)
-            const strategyStyle = getStrategyStyle(brew.extraction_strategy)
             const producer = brew.producer || brew.green_bean?.producer || null
             const roaster = brew.roaster || null
             const region =
@@ -131,14 +131,7 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
                       {region && <div className="text-white/75 truncate">{region}</div>}
                       {roaster && <div className="text-white/75 truncate">{roaster}</div>}
                     </div>
-                    {strategyStyle && (
-                      <span
-                        className="font-mono text-[8px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
-                        style={{ backgroundColor: strategyStyle.bg, color: strategyStyle.text }}
-                      >
-                        {strategyStyle.short}
-                      </span>
-                    )}
+                    <StrategyPill strategy={brew.extraction_strategy} variant="card" />
                   </div>
 
                   {/* Bottom: flavor notes */}

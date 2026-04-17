@@ -2,8 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew, Cultivar } from '@/lib/types'
-import { getStrategyStyle } from '@/lib/extraction-strategy'
 import { getCoverColor } from '@/lib/brew-colors'
+import { StrategyPill } from '@/components/StrategyPill'
 import CultivarSynthesis from './CultivarSynthesis'
 
 const familyColors: Record<string, string> = {
@@ -310,43 +310,28 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
       {brewList.length > 0 && (
         <Section title={`COFFEES IN THIS LINEAGE (${brewList.length})`}>
           <div className="space-y-0">
-            {brewList.map((brew) => {
-              const cardColor = getCoverColor(brew)
-              const strategyStyle = getStrategyStyle(brew.extraction_strategy)
-              return (
-                <Link
-                  key={brew.id}
-                  href={`/brews/${brew.id}`}
-                  className="flex items-center gap-3 py-3 border-b border-latent-border last:border-b-0 hover:bg-latent-bg transition-colors group"
-                >
-                  <div
-                    className="w-8 h-10 rounded flex-shrink-0"
-                    style={{ backgroundColor: cardColor }}
-                  />
-                  <div className="flex-1">
-                    <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
-                      <span>{brew.coffee_name}</span>
-                      {strategyStyle && (
-                        <span
-                          className="font-mono text-[9px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded border"
-                          style={{
-                            backgroundColor: strategyStyle.bg,
-                            color: strategyStyle.text,
-                            borderColor: strategyStyle.border,
-                          }}
-                        >
-                          {brew.extraction_strategy}
-                        </span>
-                      )}
-                    </div>
-                    <div className="font-mono text-[10px] text-latent-mid">
-                      {[brew.variety, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
-                    </div>
+            {brewList.map((brew) => (
+              <Link
+                key={brew.id}
+                href={`/brews/${brew.id}`}
+                className="flex items-center gap-3 py-3 border-b border-latent-border last:border-b-0 hover:bg-latent-bg transition-colors group"
+              >
+                <div
+                  className="w-8 h-10 rounded flex-shrink-0"
+                  style={{ backgroundColor: getCoverColor(brew) }}
+                />
+                <div className="flex-1">
+                  <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
+                    <span>{brew.coffee_name}</span>
+                    <StrategyPill strategy={brew.extraction_strategy} />
                   </div>
-                  <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>
-                </Link>
-              )
-            })}
+                  <div className="font-mono text-[10px] text-latent-mid">
+                    {[brew.variety, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
+                  </div>
+                </div>
+                <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>
+              </Link>
+            ))}
           </div>
         </Section>
       )}

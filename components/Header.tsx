@@ -8,6 +8,7 @@ const navItems = [
   { label: 'BREWS', href: '/brews' },
   { label: 'TERROIRS', href: '/terroirs' },
   { label: 'CULTIVARS', href: '/cultivars' },
+  { label: 'PROCESSES', href: '/processes' },
   { label: 'GREEN', href: '/green' },
 ]
 
