@@ -272,7 +272,7 @@ These are ideas and patterns that have emerged from the data, not committed feat
 - **Import flow for purchased coffees** — the critical missing piece. Needs terroir/cultivar lookup-or-create, canonical name validation, and all the brew/sensory/learning fields.
 - **Surface what_i_learned and extraction_strategy in UI** — these are the most valuable fields and they're invisible right now.
 - **Backfill remaining what_i_learned** — 19 brews still missing long-form learnings.
-- **Producer registry** — producer is free-text today (56/56 populated). Canonical producer names + farm↔region mappings would let us aggregate learnings at the producer level and catch typos.
+- **Canonical roaster and producer registries** — both fields are free-text today. Canonical names + aliases would let us aggregate learnings per roaster / per producer and catch typos (precondition for the Roasters and Producers pages below).
 - **Import experiment data** — the roasting spreadsheet has structured experiments that belong in the experiments table.
 
 ### Medium-term (knowledge compounding)
@@ -280,7 +280,8 @@ These are ideas and patterns that have emerged from the data, not committed feat
 - **Process-level aggregation** — a third dimension alongside terroirs and cultivars. The Brewing Master Reference already has rich process patterns (e.g., "honey lots benefit from bed exposure between pours", "anoxic natural processing overrides variety signals"). These could be surfaced as process pages with synthesis.
 - **Extraction strategy patterns** — the three strategies (Clarity-First, Balanced Intensity, Full Expression) are a core part of the brewing framework. A view showing which coffees confirmed which strategy, organized by variety × process, would be directly useful for recipe design.
 - **Cooling behavior tracking** — many brews have critical evaluation temperature thresholds (e.g., "do not evaluate before 50°C", "rose character only emerges near 40°C"). This is scattered in temperature_evolution and what_i_learned but not structured or searchable.
-- **Roaster reference integration** — the Brewing Master Reference has cards for 30+ roasters with house style tags. These could live in the app and link to brews.
+- **Roasters as a first-class page** — the Brewing Master Reference has cards for 30+ roasters with house style tags (roast development preferences, pour-over vs. espresso emphasis, sourcing patterns). A `/roasters` index + detail surface would be the natural home for that data: group brews by roaster, synthesize "how roaster X tends to express coffees" across the archive, and link each brew up to its roaster card. Needs the roaster registry first so names align.
+- **Producers as a first-class page** — a fourth dimension alongside terroirs / cultivars / roasters. A `/producers` index + detail page would let sourcing decisions draw on prior-brew data for a given farm (e.g. "you've cupped 4 lots from Finca Soledad — Pepe Jijon's washed lots read cleaner than the natural ones"). Producers also carry **importer** metadata (Adaura, Nordic Approach, etc.) — importer should live on the producer record as a multi-value field, since one farm can be sourced through several importers, and the importer affects the lot pipeline.
 
 ### Longer-term (workflow integration)
 
