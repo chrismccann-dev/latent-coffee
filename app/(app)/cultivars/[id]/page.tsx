@@ -5,6 +5,8 @@ import { Brew, Cultivar } from '@/lib/types'
 import { getCoverColor } from '@/lib/brew-colors'
 import { SectionCard } from '@/components/SectionCard'
 import { Tag } from '@/components/Tag'
+import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
+import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import CultivarSynthesis from './CultivarSynthesis'
 
 const familyColors: Record<string, string> = {
@@ -102,14 +104,7 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
 
   const color = getFamilyColor(cultivar.genetic_family || '')
 
-  // Aggregate flavor notes across all brews
-  const flavorCounts: Record<string, number> = {}
-  for (const brew of brewList) {
-    for (const note of brew.flavor_notes || []) {
-      flavorCounts[note] = (flavorCounts[note] || 0) + 1
-    }
-  }
-  const sortedFlavors = Object.entries(flavorCounts).sort((a, b) => b[1] - a[1])
+  const sortedFlavors = aggregateFlavorNotes(brewList)
 
   // Aggregate terroirs and processes
   const terroirSet = new Map<string, string>()
@@ -257,16 +252,9 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
         />
       )}
 
-      {/* Common Flavor Notes */}
-      {sortedFlavors.length > 0 && (
-        <SectionCard title="COMMON FLAVOR NOTES">
-          <div className="flex flex-wrap gap-2">
-            {sortedFlavors.map(([note, count]) => (
-              <Tag key={note}>{note}{count > 1 ? ` (${count})` : ''}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
+      {/* Common Flavor Notes (grouped by registry family) */}
+      <FlavorNotesByFamily notes={sortedFlavors} />
+
 
       {/* Terroirs */}
       {terroirSet.size > 0 && (
