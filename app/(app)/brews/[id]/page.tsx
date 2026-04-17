@@ -43,6 +43,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
   }
 
   const coverColor = getCoverColor(brew as Brew)
+  const producer = brew.producer || brew.green_bean?.producer || null
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
@@ -97,7 +98,12 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
                 {brew.roaster}
               </p>
             )}
-            
+            {producer && (
+              <p className="font-sans text-sm text-latent-mid mb-1">
+                {producer}
+              </p>
+            )}
+
             <p className="font-mono text-xs text-latent-mid">
               {brew.terroir?.country} · {brew.terroir?.admin_region} · {brew.terroir?.macro_terroir || brew.terroir?.meso_terroir}
             </p>

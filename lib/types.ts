@@ -208,6 +208,7 @@ export interface Brew {
   cultivar_id: string | null
   coffee_name: string
   roaster: string | null
+  producer: string | null
   variety: string | null
   process: string | null
   roast_level: string | null

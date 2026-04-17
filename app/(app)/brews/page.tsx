@@ -101,7 +101,8 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
           {brewList.map((brew) => {
             const cardColor = getCoverColor(brew)
             const strategyStyle = getStrategyStyle(brew.extraction_strategy)
-            const producer = brew.green_bean?.producer || brew.roaster || null
+            const producer = brew.producer || brew.green_bean?.producer || null
+            const roaster = brew.roaster || null
             const region =
               brew.terroir?.macro_terroir ||
               brew.terroir?.admin_region ||
@@ -128,6 +129,7 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
                       {brew.process && <div className="text-white/75 truncate">{brew.process}</div>}
                       {producer && <div className="text-white/75 truncate">{producer}</div>}
                       {region && <div className="text-white/75 truncate">{region}</div>}
+                      {roaster && <div className="text-white/75 truncate">{roaster}</div>}
                     </div>
                     {strategyStyle && (
                       <span

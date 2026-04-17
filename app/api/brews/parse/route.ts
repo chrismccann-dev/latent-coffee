@@ -15,6 +15,8 @@ import {
   type BrewPayload,
   type TerroirCandidate,
   type CultivarCandidate,
+  type TerroirMatch,
+  type CultivarMatch,
 } from '@/lib/brew-import'
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -26,6 +28,7 @@ Schema:
 {
   "coffee_name": string,
   "roaster": string | null,
+  "producer": string | null,
   "variety": string | null,
   "process": string | null,
   "roast_level": string | null,
@@ -159,8 +162,8 @@ export async function POST(request: Request) {
   }
 
   // Annotate terroir/cultivar with match info against user's DB
-  let terroirMatch = null
-  let cultivarMatch = null
+  let terroirMatch: TerroirMatch | null = null
+  let cultivarMatch: CultivarMatch | null = null
   if (payload.terroir?.country) {
     terroirMatch = await matchTerroir(supabase, user.id, payload.terroir as TerroirCandidate)
   }
