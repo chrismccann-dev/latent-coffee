@@ -293,6 +293,8 @@ These are ideas and patterns that have emerged from the data, not committed feat
 
 ### Longer-term (workflow integration)
 
+- **Canonical flavor database from roaster corpora** — `lib/flavor-registry.ts` today has ~100 tags derived from Chris's own 55-brew sample. Expand by scraping every flavor note across every coffee offered by every roaster Chris has bought from (Sey, Colibri, Cafe Imports, etc.), plus large public coffee databases (Coffee Review, Sprudge tasting notes). Goal: a registry of every flavor word a specialty coffee might carry, so when a new brew is added the autocomplete reaches for a real canonical match instead of letting the user free-type something close. Also feeds a "rare flavor" signal — if Chris adds a tag that only appears in 1% of offerings, that's a meaningful marker.
+
 - **Claude project integration** — the iteration workspace (Claude projects) and the archive (this app) are currently disconnected. When a brew is finalized in a Claude project, there's a manual step to transcribe it into the spreadsheet and then into the app. Tighter integration could streamline this.
 - **Green bean sourcing intelligence** — when Chris sources a new green bean, the app could surface relevant prior learnings: "You've roasted 2 other Gesha 1931 lots. Development time was the primary lever. Start near Batch 25 parameters."
 - **Cross-dimensional queries** — "Show me all Clarity-First brews on Gesha from the Central Andean Cordillera" or "Which cultivars required Full Expression regardless of process?"
