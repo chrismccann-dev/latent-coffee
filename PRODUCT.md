@@ -237,9 +237,16 @@ The Beans tab in the brewing spreadsheet has **93 entries** — all beans Chris 
 
 ## Taste Profile
 
-Chris's preferences center on a high-clarity, tea-structured profile:
+Chris's palate started narrow and has widened substantially through
+cupping, roasting, and iterating recipes. The starting profile below is
+a **historical baseline, not current state** — it reflects where Chris
+began when he first started drinking coffee seriously.
 
-| Category | Loves | Tolerates | Dislikes |
+### Starting profile (historical baseline)
+
+High-clarity, tea-structured, bright-acidic:
+
+| Category | Loved | Tolerated | Disliked |
 |----------|-------|-----------|----------|
 | Process | Washed, white honey, controlled natural (DRD), controlled mosto | Light honey, very light anaerobic if clean | Heavy anaerobic, uncontrolled natural, co-ferments |
 | Acidity | Malic/citric (juicy, crisp) | Tartaric if balanced | Lactic or acetic (fermented, boozy) |
@@ -248,7 +255,30 @@ Chris's preferences center on a high-clarity, tea-structured profile:
 | Finish | Quick, clean, bright | Gentle lingering fruit | Bitter, boozy, drying |
 | Flavors | Floral, fruit-tea, elegant citric | Sweet spice, oolong, mild savory | Nutty, winey, dark chocolate |
 
-This profile has widened over time to include controlled naturals and structured sweet-savory complexity, as long as clarity, acidity, and a clean finish remain intact.
+### Where the palate is now
+
+The profile has genuinely widened — not just "tolerating" more, but
+actively enjoying coffees that the starting profile would have put in
+the "dislikes" column.
+
+- **Natural and funky-processed coffees** have become a real preference,
+  not just a tolerance. At a Special Guests cupping that compared 10
+  washed coffees against 10 natural/funky coffees, Chris gravitated
+  toward the funky side — more interesting flavor profiles, unique
+  flavor combinations, surprising notes, complex pairings.
+- **Co-ferments** are a split verdict now: dislikes when heavily overdone
+  and perfume-like, but genuinely interesting when the fermentation is
+  controlled and the recipe does it justice.
+- **Red-wine-structured coffees** (e.g. the Mokkita variety) are a new
+  appreciation — body and fruit depth that would have read as "too heavy"
+  in the starting profile now reads as compelling.
+- Clarity, acidity, and a clean finish still matter, but they're no
+  longer prerequisites — complexity and surprise can earn their own
+  space.
+
+The research journal's job is to compound learnings about **what makes
+each style work** — including the funky side — rather than scoring
+process families as good or bad wholesale.
 
 ---
 
