@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Brew, Terroir } from '@/lib/types'
 import { SectionCard } from '@/components/SectionCard'
 import { Tag } from '@/components/Tag'
+import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import TerroirSynthesis from './TerroirSynthesis'
@@ -125,12 +126,13 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   const sortedFlavors = aggregateFlavorNotes(brewList)
 
-  // Aggregate cultivars and processes
   const cultivarSet = new Map<string, string>()
   const processSet = new Set<string>()
+  const roasterSet = new Set<string>()
   for (const brew of brewList) {
     if (brew.cultivar?.cultivar_name) cultivarSet.set(brew.cultivar.cultivar_name, brew.cultivar.lineage || '')
     if (brew.process) processSet.add(brew.process)
+    if (brew.roaster) roasterSet.add(brew.roaster)
   }
 
   // Confidence level
@@ -303,6 +305,13 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
           </div>
         </SectionCard>
       )}
+
+      <TagLinkList
+        title="ROASTERS EXPLORED"
+        items={Array.from(roasterSet).map((r) => ({
+          key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
+        }))}
+      />
 
       {/* Coffee list */}
       {brewList.length > 0 && (

@@ -10,6 +10,7 @@ const navItems = [
   { label: 'TERROIRS', href: '/terroirs' },
   { label: 'CULTIVARS', href: '/cultivars' },
   { label: 'PROCESSES', href: '/processes' },
+  { label: 'ROASTERS', href: '/roasters' },
   { label: 'GREEN', href: '/green' },
 ]
 
@@ -43,7 +44,7 @@ export function Header() {
         </Link>
 
         {/* Desktop navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-6">
           {navItems.map(({ label, href }) => (
             <Link
               key={href}

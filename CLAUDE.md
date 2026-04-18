@@ -47,10 +47,18 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 
 ### Processes (`app/(app)/processes/`)
 - **Index:** Groups by Process Family → process, brew counts via direct `brews.process` equality (no FK).
-- **Detail:** URL = `/processes/${encodeURIComponent(processName)}`. Aggregates all brews with `process = processName`. Shows synthesis, flavor notes, cultivars, terroirs, coffee list, confidence.
+- **Detail:** URL = `/processes/${encodeURIComponent(processName)}`. Aggregates all brews with `process = processName`. Shows synthesis, flavor notes, cultivars, terroirs, roasters, coffee list, confidence.
 - **Synthesis:** `/api/processes/synthesize` — accepts `{ process: string }`, finds brews by `process` equality, caches into `process_syntheses` table keyed on (user_id, process).
 - **Family lookup:** [lib/process-families.ts](lib/process-families.ts) — single source of truth for process → family mapping + family colors. 5 families: Washed / Natural / Honey / Anaerobic / Experimental. Processes not in the lookup fall into "Other".
 - **Prompt framing:** synthesis prompt explicitly tells Claude Chris's palate has widened beyond clean-washed, and asks for "when this style delivers vs. when it goes off" rather than good/bad scoring. See `memory/user_taste_evolution.md`.
+
+### Roasters (`app/(app)/roasters/`)
+- **Index:** Groups by Roaster Family → roaster, brew counts via direct `brews.roaster` equality (no FK). Same shape as `/processes`.
+- **Detail:** URL = `/roasters/${encodeURIComponent(roasterName)}`. Aggregates all brews with `roaster = roasterName`. Shows BMR-derived HOUSE STYLE block, palate-aware synthesis, flavor notes, cultivars, terroirs, processes, coffee list, confidence.
+- **Synthesis:** `/api/roasters/synthesize` — accepts `{ roaster: string }`, finds brews by `roaster` equality, caches into `roaster_syntheses` table keyed on (user_id, roaster).
+- **Family lookup:** [lib/roaster-registry.ts](lib/roaster-registry.ts) — canonical list of 21 roasters + family map + warm-neutral palette + per-roaster `ROASTER_METADATA` (location, URL, BMR strategy tag, BMR house-style blurb, prior notes). 5 families mirror the BMR's extraction-strategy tags: Clarity-First / Balanced / Extraction-Forward / Varies / Self-Roasted. New roasters not in the map fall into "Unknown" (rendered only when populated).
+- **Prompt framing:** synthesis prompt injects the roaster's BMR `bmrStrategy` + `bmrHouseStyle` as a *working hypothesis* — Claude is asked to confirm or push back on it from the brew corpus, not to recite it. Same palate-widened framing as `/processes`. For roasters with <3 brews, prompt explicitly flags "early data — patterns will firm up."
+- **Adding a new roaster:** edit `lib/roaster-registry.ts` — add to `ROASTER_MAP` with chosen family + add `ROASTER_METADATA` card (full name / location / URL / BMR strategy / 1-2 sentence house style / optional notes). Family placement is a deliberate decision, not drift.
 
 ### Brews (`app/(app)/brews/`)
 - **Index:** Grid of book-cover cards. All card content sits on the cover (variety / process / producer / region stack top-left, extraction-strategy chip top-right, flavor notes bottom). No text below the card — everything is one tile. Strategy filter pills above the grid drive server-side filtering via `searchParams.strategy`.
@@ -58,9 +66,14 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **Cover color helper:** [lib/brew-colors.ts](lib/brew-colors.ts) — single source of truth. Used by list, detail, terroir-detail, cultivar-detail, processes-detail. Do NOT re-implement per page.
 - **Extraction-strategy helper:** [lib/extraction-strategy.ts](lib/extraction-strategy.ts) — pill colors, canonical list, `truncateLearning` helper.
 - **Strategy pill component:** [components/StrategyPill.tsx](components/StrategyPill.tsx) — two variants: `row` (bordered pill with full name) and `card` (borderless rounded-full abbreviation, used on brew covers in the list). As of PR #14 only the `card` variant is in use (on `/brews` cards); the `row` variant was removed from aggregation detail coffee rows because the per-row strategy signal was orthogonal to the page's grouping and read as noise. Keep the `row` variant available in case strategy becomes relevant on a future aggregation page.
-- **Section / Tag components:** [components/SectionCard.tsx](components/SectionCard.tsx) + [components/Tag.tsx](components/Tag.tsx) — used by all 3 aggregation detail pages (terroir / cultivar / processes). `SectionCard` supports optional `title` and `dark` variant. Do NOT re-declare inline.
+- **Section / Tag components:** [components/SectionCard.tsx](components/SectionCard.tsx) + [components/Tag.tsx](components/Tag.tsx) — used by all 4 aggregation detail pages (terroir / cultivar / processes / roasters). `SectionCard` supports optional `title` and `dark` variant. Do NOT re-declare inline.
+- **Tag-link list component:** [components/TagLinkList.tsx](components/TagLinkList.tsx) — `SectionCard` + flex-wrap of `<Link><Tag>` triplet. Used wherever an aggregation detail page surfaces clickable cross-link tags (currently: ROASTERS EXPLORED on terroir / cultivar / processes detail; CULTIVARS / TERROIRS / PROCESSES EXPLORED on roasters detail). Accepts `{ title, items: { key, label, href }[] }` — empty `items` renders null. Use this for any new cross-link tag block; do NOT inline the SectionCard + Link + Tag triplet again.
 - **COMMON FLAVOR NOTES on aggregation pages:** rendered by [components/FlavorNotesByFamily.tsx](components/FlavorNotesByFamily.tsx) on all 3 aggregation detail pages. Accepts `[note, count][]` (produced by `aggregateFlavorNotes(brews)` from `lib/flavor-registry.ts`), groups into 8 families + Other, renders family label in family color. Do NOT re-implement per page.
 - **Edit brew:** `/brews/[id]/edit` → [EditBrewForm.tsx](app/(app)/brews/%5Bid%5D/edit/EditBrewForm.tsx), single-page (not stepped) form. PATCH handler [app/api/brews/[id]/route.ts](app/api/brews/%5Bid%5D/route.ts) uses a whitelist of editable fields + `.eq('user_id')` belt-and-suspenders over RLS. Terroirs and cultivars are pick-from-existing; creating new entities still goes through `/add`.
+
+### Header nav slot allocation (`components/Header.tsx`)
+- 6 desktop items + LATENT logo + ADD button. Sits at `gap-6` (24px) — fits cleanly to ~720px width before overflow risk. Below `md:` breakpoint a hamburger sheet appears (PR #14).
+- Adding a 7th item will require either dropping `gap-6` further (tight), abbreviating one label, or moving a non-primary item into a secondary nav. Don't silently add — make the trade-off visible.
 
 ### Flavor notes registry (`lib/flavor-registry.ts`)
 - Canonical tag list + family + hue-separated palette. Same shape as `lib/process-families.ts` but adds a **3-tier classifier**: exact → case-insensitive → **longest canonical substring**. The substring tier lets composite tags ("Floral sweetness", "Tea-like finish") route to their base family at render time without a migration to rewrite the data.
