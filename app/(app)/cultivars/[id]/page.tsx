@@ -82,7 +82,7 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
   // Fetch brews matching ANY cultivar in this lineage via FK
   const { data: brews } = await supabase
     .from('brews')
-    .select(`*, terroir:terroirs(country, admin_region, macro_terroir), cultivar:cultivars(cultivar_name, lineage)`)
+    .select(`*, terroir:terroirs(id, country, admin_region, macro_terroir), cultivar:cultivars(cultivar_name, lineage)`)
     .in('cultivar_id', cultivarIds)
     .order('created_at', { ascending: false })
 
@@ -95,13 +95,18 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
 
   const sortedFlavors = aggregateFlavorNotes(brewList)
 
-  const terroirSet = new Map<string, string>()
+  const terroirMap = new Map<string, { id: string; country: string }>()
   const processSet = new Set<string>()
   const roasterSet = new Set<string>()
   for (const brew of brewList) {
-    if (brew.terroir?.country) {
+    if (brew.terroir?.country && brew.terroir.id) {
       const key = brew.terroir.macro_terroir || brew.terroir.admin_region || brew.terroir.country
-      terroirSet.set(key, brew.terroir.country)
+      if (!terroirMap.has(key)) {
+        terroirMap.set(key, {
+          id: brew.terroir.id,
+          country: brew.terroir.country,
+        })
+      }
     }
     if (brew.process) processSet.add(brew.process)
     if (brew.roaster) roasterSet.add(brew.roaster)
@@ -245,28 +250,21 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
       {/* Common Flavor Notes (grouped by registry family) */}
       <FlavorNotesByFamily notes={sortedFlavors} />
 
+      <TagLinkList
+        title="TERROIRS EXPLORED"
+        items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
+          key: name,
+          label: `${country} / ${name}`,
+          href: `/terroirs/${id}`,
+        }))}
+      />
 
-      {/* Terroirs */}
-      {terroirSet.size > 0 && (
-        <SectionCard title="TERROIRS EXPLORED">
-          <div className="flex flex-wrap gap-2">
-            {Array.from(terroirSet.entries()).map(([name, country]) => (
-              <Tag key={name}>{country} / {name}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
-
-      {/* Processes */}
-      {processSet.size > 0 && (
-        <SectionCard title="PROCESSES">
-          <div className="flex flex-wrap gap-2">
-            {Array.from(processSet).map((p) => (
-              <Tag key={p}>{p}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
+      <TagLinkList
+        title="PROCESSES EXPLORED"
+        items={Array.from(processSet).map((p) => ({
+          key: p, label: p, href: `/processes/${encodeURIComponent(p)}`,
+        }))}
+      />
 
       <TagLinkList
         title="ROASTERS EXPLORED"

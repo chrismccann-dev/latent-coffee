@@ -96,7 +96,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   // Fetch all brews matching ANY terroir in this macro group (via terroir_id FK)
   const { data: brews } = await supabase
     .from('brews')
-    .select(`*, terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(cultivar_name, lineage)`)
+    .select(`*, terroir:terroirs(country, admin_region, macro_terroir, meso_terroir), cultivar:cultivars(id, cultivar_name, lineage)`)
     .in('terroir_id', terriorIds)
     .order('created_at', { ascending: false })
 
@@ -108,11 +108,16 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   const sortedFlavors = aggregateFlavorNotes(brewList)
 
-  const cultivarSet = new Map<string, string>()
+  const cultivarMap = new Map<string, { id: string; lineage: string }>()
   const processSet = new Set<string>()
   const roasterSet = new Set<string>()
   for (const brew of brewList) {
-    if (brew.cultivar?.cultivar_name) cultivarSet.set(brew.cultivar.cultivar_name, brew.cultivar.lineage || '')
+    if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
+      cultivarMap.set(brew.cultivar.cultivar_name, {
+        id: brew.cultivar.id,
+        lineage: brew.cultivar.lineage || '',
+      })
+    }
     if (brew.process) processSet.add(brew.process)
     if (brew.roaster) roasterSet.add(brew.roaster)
   }
@@ -265,28 +270,21 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       {/* Common Flavor Notes (grouped by registry family) */}
       <FlavorNotesByFamily notes={sortedFlavors} />
 
+      <TagLinkList
+        title="CULTIVARS EXPLORED"
+        items={Array.from(cultivarMap.entries()).map(([name, { id, lineage }]) => ({
+          key: name,
+          label: lineage ? `${lineage} / ${name}` : name,
+          href: `/cultivars/${id}`,
+        }))}
+      />
 
-      {/* Cultivars Explored */}
-      {cultivarSet.size > 0 && (
-        <SectionCard title="CULTIVARS EXPLORED">
-          <div className="flex flex-wrap gap-2">
-            {Array.from(cultivarSet.entries()).map(([name, lineage]) => (
-              <Tag key={name}>{lineage ? `${lineage} / ${name}` : name}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
-
-      {/* Processes */}
-      {processSet.size > 0 && (
-        <SectionCard title="PROCESSES">
-          <div className="flex flex-wrap gap-2">
-            {Array.from(processSet).map((p) => (
-              <Tag key={p}>{p}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
+      <TagLinkList
+        title="PROCESSES EXPLORED"
+        items={Array.from(processSet).map((p) => ({
+          key: p, label: p, href: `/processes/${encodeURIComponent(p)}`,
+        }))}
+      />
 
       <TagLinkList
         title="ROASTERS EXPLORED"
