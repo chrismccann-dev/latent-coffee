@@ -3,29 +3,32 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
 import { getCoverColor } from '@/lib/brew-colors'
-import { getProcessFamily, getFamilyColor } from '@/lib/process-families'
+import {
+  getRoasterFamily,
+  getFamilyColor,
+  getRoasterMetadata,
+} from '@/lib/roaster-registry'
 import { SectionCard } from '@/components/SectionCard'
-import { Tag } from '@/components/Tag'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
-import ProcessSynthesis from './ProcessSynthesis'
+import RoasterSynthesis from './RoasterSynthesis'
 
-export default async function ProcessDetailPage({ params }: { params: { slug: string } }) {
+export default async function RoasterDetailPage({ params }: { params: { slug: string } }) {
   const supabase = createClient()
 
-  const processName = decodeURIComponent(params.slug)
+  const roasterName = decodeURIComponent(params.slug)
 
   const [brewResult, cacheResult] = await Promise.all([
     supabase
       .from('brews')
-      .select(`*, terroir:terroirs(country, admin_region, macro_terroir), cultivar:cultivars(cultivar_name, lineage)`)
-      .eq('process', processName)
+      .select(`*, terroir:terroirs(id, country, admin_region, macro_terroir), cultivar:cultivars(id, cultivar_name, lineage)`)
+      .eq('roaster', roasterName)
       .order('created_at', { ascending: false }),
     supabase
-      .from('process_syntheses')
+      .from('roaster_syntheses')
       .select('synthesis, synthesis_brew_count')
-      .eq('process', processName)
+      .eq('roaster', roasterName)
       .maybeSingle(),
   ])
 
@@ -34,21 +37,29 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
 
   const cache = cacheResult.data
 
-  const family = getProcessFamily(processName)
+  const family = getRoasterFamily(roasterName)
   const color = getFamilyColor(family)
+  const meta = getRoasterMetadata(roasterName)
 
   const sortedFlavors = aggregateFlavorNotes(brewList)
 
-  const terroirSet = new Map<string, string>()
-  const cultivarSet = new Set<string>()
-  const roasterSet = new Set<string>()
+  const cultivarMap = new Map<string, string>()
+  const terroirMap = new Map<string, { id: string; country: string }>()
+  const processSet = new Set<string>()
   for (const brew of brewList) {
-    if (brew.terroir?.country) {
-      const key = brew.terroir.macro_terroir || brew.terroir.admin_region || brew.terroir.country
-      terroirSet.set(key, brew.terroir.country)
+    if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
+      cultivarMap.set(brew.cultivar.cultivar_name, brew.cultivar.id)
     }
-    if (brew.cultivar?.cultivar_name) cultivarSet.add(brew.cultivar.cultivar_name)
-    if (brew.roaster) roasterSet.add(brew.roaster)
+    if (brew.terroir?.country && brew.terroir.id) {
+      const key = brew.terroir.macro_terroir || brew.terroir.admin_region || brew.terroir.country
+      if (!terroirMap.has(key)) {
+        terroirMap.set(key, {
+          id: brew.terroir.id,
+          country: brew.terroir.country,
+        })
+      }
+    }
+    if (brew.process) processSet.add(brew.process)
   }
 
   const brewCount = brewList.length
@@ -59,12 +70,13 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
       <Link
-        href="/processes"
+        href="/roasters"
         className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
       >
-        &larr; Back to Processes
+        &larr; Back to Roasters
       </Link>
 
+      {/* Hero */}
       <div className="section-card mb-6">
         <div className="flex gap-6 items-start">
           <div
@@ -73,18 +85,51 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
           />
           <div className="flex-1">
             <h1 className="font-sans text-2xl font-semibold mb-1">
-              {processName}
+              {meta?.fullName || roasterName}
             </h1>
             <p className="font-mono text-xs text-latent-mid">
               {family} family &middot; {brewCount} {brewCount === 1 ? 'coffee' : 'coffees'}
+              {meta?.location && ` · ${meta.location}`}
             </p>
+            {(meta?.bmrStrategy || meta?.url) && (
+              <div className="flex flex-wrap items-center gap-3 mt-3">
+                {meta?.bmrStrategy && (
+                  <span
+                    className="font-mono text-[10px] font-semibold tracking-wide uppercase px-2 py-1 rounded"
+                    style={{ backgroundColor: color, color: 'white' }}
+                  >
+                    {meta.bmrStrategy}
+                  </span>
+                )}
+                {meta?.url && (
+                  <a
+                    href={meta.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="font-mono text-[10px] text-latent-mid hover:text-latent-fg underline"
+                  >
+                    {meta.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* AI Synthesis — What I've Learned (process-level) */}
-      <ProcessSynthesis
-        process={processName}
+      {/* House style (BMR-derived, surfaced as static context) */}
+      {meta?.bmrHouseStyle && (
+        <SectionCard title="HOUSE STYLE">
+          <p className="font-sans text-sm leading-relaxed">{meta.bmrHouseStyle}</p>
+          {meta.notes && (
+            <p className="font-sans text-sm leading-relaxed mt-3 text-latent-mid">{meta.notes}</p>
+          )}
+        </SectionCard>
+      )}
+
+      {/* AI Synthesis */}
+      <RoasterSynthesis
+        roaster={roasterName}
         existingSynthesis={cache?.synthesis ?? null}
         existingBrewCount={cache?.synthesis_brew_count ?? null}
         currentBrewCount={brewCount}
@@ -93,37 +138,29 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
       {/* Common Flavor Notes (grouped by registry family) */}
       <FlavorNotesByFamily notes={sortedFlavors} />
 
-
-      {/* Cultivars */}
-      {cultivarSet.size > 0 && (
-        <SectionCard title="CULTIVARS EXPLORED">
-          <div className="flex flex-wrap gap-2">
-            {Array.from(cultivarSet).map((name) => (
-              <Tag key={name}>{name}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
-
-      {/* Terroirs */}
-      {terroirSet.size > 0 && (
-        <SectionCard title="TERROIRS EXPLORED">
-          <div className="flex flex-wrap gap-2">
-            {Array.from(terroirSet.entries()).map(([name, country]) => (
-              <Tag key={name}>{country} / {name}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
-
       <TagLinkList
-        title="ROASTERS EXPLORED"
-        items={Array.from(roasterSet).map((r) => ({
-          key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
+        title="CULTIVARS EXPLORED"
+        items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
+          key: name, label: name, href: `/cultivars/${id}`,
         }))}
       />
 
-      <SectionCard title={`COFFEES WITH THIS PROCESS (${brewCount})`}>
+      <TagLinkList
+        title="TERROIRS EXPLORED"
+        items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
+          key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
+        }))}
+      />
+
+      <TagLinkList
+        title="PROCESSES EXPLORED"
+        items={Array.from(processSet).map((p) => ({
+          key: p, label: p, href: `/processes/${encodeURIComponent(p)}`,
+        }))}
+      />
+
+      {/* Coffee list */}
+      <SectionCard title={`COFFEES FROM THIS ROASTER (${brewCount})`}>
         <div className="space-y-0">
           {brewList.map((brew) => (
             <Link
@@ -140,7 +177,7 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
                   {brew.coffee_name}
                 </div>
                 <div className="font-mono text-[10px] text-latent-mid">
-                  {[brew.variety, brew.terroir?.country, brew.roaster].filter(Boolean).join(' · ')}
+                  {[brew.variety, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
                 </div>
               </div>
               <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>

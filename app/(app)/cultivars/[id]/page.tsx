@@ -5,6 +5,7 @@ import { Brew, Cultivar } from '@/lib/types'
 import { getCoverColor } from '@/lib/brew-colors'
 import { SectionCard } from '@/components/SectionCard'
 import { Tag } from '@/components/Tag'
+import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import CultivarSynthesis from './CultivarSynthesis'
@@ -106,15 +107,16 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
 
   const sortedFlavors = aggregateFlavorNotes(brewList)
 
-  // Aggregate terroirs and processes
   const terroirSet = new Map<string, string>()
   const processSet = new Set<string>()
+  const roasterSet = new Set<string>()
   for (const brew of brewList) {
     if (brew.terroir?.country) {
       const key = brew.terroir.macro_terroir || brew.terroir.admin_region || brew.terroir.country
       terroirSet.set(key, brew.terroir.country)
     }
     if (brew.process) processSet.add(brew.process)
+    if (brew.roaster) roasterSet.add(brew.roaster)
   }
 
   // Confidence based on total brew count across lineage
@@ -277,6 +279,13 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
           </div>
         </SectionCard>
       )}
+
+      <TagLinkList
+        title="ROASTERS EXPLORED"
+        items={Array.from(roasterSet).map((r) => ({
+          key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
+        }))}
+      />
 
       {/* Coffee list */}
       {brewList.length > 0 && (
