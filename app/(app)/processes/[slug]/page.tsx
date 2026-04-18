@@ -5,7 +5,6 @@ import { Brew } from '@/lib/types'
 import { getCoverColor } from '@/lib/brew-colors'
 import { getProcessFamily, getFamilyColor } from '@/lib/process-families'
 import { SectionCard } from '@/components/SectionCard'
-import { Tag } from '@/components/Tag'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
@@ -19,7 +18,7 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
   const [brewResult, cacheResult] = await Promise.all([
     supabase
       .from('brews')
-      .select(`*, terroir:terroirs(country, admin_region, macro_terroir), cultivar:cultivars(cultivar_name, lineage)`)
+      .select(`*, terroir:terroirs(id, country, admin_region, macro_terroir), cultivar:cultivars(id, cultivar_name, lineage)`)
       .eq('process', processName)
       .order('created_at', { ascending: false }),
     supabase
@@ -39,15 +38,22 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
 
   const sortedFlavors = aggregateFlavorNotes(brewList)
 
-  const terroirSet = new Map<string, string>()
-  const cultivarSet = new Set<string>()
+  const terroirMap = new Map<string, { id: string; country: string }>()
+  const cultivarMap = new Map<string, string>()
   const roasterSet = new Set<string>()
   for (const brew of brewList) {
-    if (brew.terroir?.country) {
+    if (brew.terroir?.country && brew.terroir.id) {
       const key = brew.terroir.macro_terroir || brew.terroir.admin_region || brew.terroir.country
-      terroirSet.set(key, brew.terroir.country)
+      if (!terroirMap.has(key)) {
+        terroirMap.set(key, {
+          id: brew.terroir.id,
+          country: brew.terroir.country,
+        })
+      }
     }
-    if (brew.cultivar?.cultivar_name) cultivarSet.add(brew.cultivar.cultivar_name)
+    if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
+      cultivarMap.set(brew.cultivar.cultivar_name, brew.cultivar.id)
+    }
     if (brew.roaster) roasterSet.add(brew.roaster)
   }
 
@@ -93,28 +99,21 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
       {/* Common Flavor Notes (grouped by registry family) */}
       <FlavorNotesByFamily notes={sortedFlavors} />
 
+      <TagLinkList
+        title="CULTIVARS EXPLORED"
+        items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
+          key: name, label: name, href: `/cultivars/${id}`,
+        }))}
+      />
 
-      {/* Cultivars */}
-      {cultivarSet.size > 0 && (
-        <SectionCard title="CULTIVARS EXPLORED">
-          <div className="flex flex-wrap gap-2">
-            {Array.from(cultivarSet).map((name) => (
-              <Tag key={name}>{name}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
-
-      {/* Terroirs */}
-      {terroirSet.size > 0 && (
-        <SectionCard title="TERROIRS EXPLORED">
-          <div className="flex flex-wrap gap-2">
-            {Array.from(terroirSet.entries()).map(([name, country]) => (
-              <Tag key={name}>{country} / {name}</Tag>
-            ))}
-          </div>
-        </SectionCard>
-      )}
+      <TagLinkList
+        title="TERROIRS EXPLORED"
+        items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
+          key: name,
+          label: `${country} / ${name}`,
+          href: `/terroirs/${id}`,
+        }))}
+      />
 
       <TagLinkList
         title="ROASTERS EXPLORED"
