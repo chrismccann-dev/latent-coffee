@@ -110,7 +110,9 @@ Requires `.env.local` with:
 
 ## Design / UX conventions
 
-**See [PRODUCT.md § Design System](PRODUCT.md#design-system) for the full token map, palette, type scale, and component primitive reference.** The rules below are the code-level enforcement points.
+**See [PRODUCT.md § Design System](PRODUCT.md#design-system) for the full token map, palette, type scale, and component primitive reference.** A 2026-04-19 snapshot of the Claude-Design skill workspace (README + `colors_and_type.css` + UI-kit prototypes) is archived at [`design-system/`](design-system/) — reference only; the Tailwind config is source of truth.
+
+The rules below are the code-level enforcement points.
 
 - **Desktop is the primary design target.** Tablet spot-check via `preview_resize` on every UI sprint; phone-scope lives in its own sprint.
 - **Tokens live in `tailwind.config.ts` + `app/globals.css`.** Adding a token = a deliberate decision, not drift. No arbitrary `text-[Npx]` / `p-[Npx]` in JSX for anything chrome-related — if a size isn't in the scale, add it to the theme (and document what it's for) or don't use it.

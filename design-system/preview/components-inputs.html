@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0;background:var(--bg1);}
+  .wrap{padding:22px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .grp{display:flex;flex-direction:column;gap:6px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="grp">
+    <label class="label">Email</label>
+    <input class="input" value="chris@latentcoffee.com" />
+  </div>
+  <div class="grp">
+    <label class="label">Dose</label>
+    <input class="input" value="14g" />
+  </div>
+  <div class="grp" style="grid-column:1 / -1;">
+    <label class="label">What I Learned</label>
+    <textarea class="textarea" style="min-height:80px;">Rose character only emerges near 40°C. Do not evaluate before 50°C.</textarea>
+  </div>
+</div>
+</body>
+</html>

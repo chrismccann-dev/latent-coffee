@@ -280,7 +280,7 @@ This profile has widened over time to include controlled naturals and structured
 
 ## Design System
 
-The brand voice is **quiet research notebook**: monospace labels, book-cover cards per brew, uppercase taxonomy, a restrained sage/dark palette that lets coffee metadata do the talking. Code-level source of truth is `tailwind.config.ts` + `app/globals.css`. The Dropbox folder `Latent Coffee Design System/` is the **Claude Design skill workspace** (UI-kit prototypes, preview HTML, the mirrored `colors_and_type.css` reference) — it is not mirrored into this repo; the Tailwind config wins whenever they disagree.
+The brand voice is **quiet research notebook**: monospace labels, book-cover cards per brew, uppercase taxonomy, a restrained sage/dark palette that lets coffee metadata do the talking. Code-level source of truth is `tailwind.config.ts` + `app/globals.css`. A **snapshot** of the Claude-Design skill workspace (README, `colors_and_type.css`, UI-kit prototypes, preview HTML) is archived in the repo at [`design-system/`](design-system/) as of 2026-04-19 — it's a reference, not a live authority; the Tailwind config wins whenever they disagree. The live workspace for prototyping / redesign iterations continues to live in the Dropbox folder (`Latent Coffee Design System/`).
 
 ### Voice & casing
 
@@ -369,7 +369,7 @@ If a future surface genuinely needs a line-icon (e.g. a settings gear), use Luci
 
 - **Adding a token = a deliberate decision.** Same energy as adding to the flavor-registry or roaster-registry. If a color / size / spacing isn't on the canonical list, it's drift, not creativity.
 - **Desktop is the primary design target.** Tablet spot-check on every UI sprint; phone-scope lives in its own sprint.
-- **When in doubt, match the document.** The Dropbox folder's `README.md` + `colors_and_type.css` are a high-fidelity mirror of the code. If the code disagrees with itself between two pages, the documented token wins.
+- **When in doubt, match the document.** The archived [`design-system/`](design-system/) folder's `README.md` + `colors_and_type.css` are a high-fidelity mirror of the code as of 2026-04-19. If the code disagrees with itself between two pages, the documented token wins.
 
 ---
 

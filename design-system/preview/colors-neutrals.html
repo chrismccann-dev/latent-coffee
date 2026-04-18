@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0;background:var(--bg1);}
+  .wrap{padding:22px 24px;}
+  .row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .sw{display:flex;flex-direction:column;gap:6px;}
+  .chip{height:56px;border-radius:6px;border:1px solid var(--border-1);}
+  .name{font-family:var(--font-mono);font-size:10.4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--fg1);}
+  .hex{font-family:var(--font-mono);font-size:10px;color:var(--fg2);}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="row">
+      <div class="sw"><div class="chip" style="background:#FAFAFA"></div><div class="name">BG / Paper</div><div class="hex">#FAFAFA</div></div>
+      <div class="sw"><div class="chip" style="background:#FFFFFF"></div><div class="name">Surface</div><div class="hex">#FFFFFF</div></div>
+      <div class="sw"><div class="chip" style="background:#1A1A1A"></div><div class="name">FG / Ink</div><div class="hex">#1A1A1A</div></div>
+      <div class="sw"><div class="chip" style="background:#888888"></div><div class="name">Mid</div><div class="hex">#888888</div></div>
+      <div class="sw"><div class="chip" style="background:#BBBBBB"></div><div class="name">Subtle</div><div class="hex">#BBBBBB</div></div>
+      <div class="sw"><div class="chip" style="background:#E5E5E5"></div><div class="name">Border</div><div class="hex">#E5E5E5</div></div>
+      <div class="sw"><div class="chip" style="background:#2C3E2D"></div><div class="name">Accent</div><div class="hex">#2C3E2D</div></div>
+      <div class="sw"><div class="chip" style="background:#4A7C59"></div><div class="name">Accent Lt</div><div class="hex">#4A7C59</div></div>
+    </div>
+  </div>
+</body>
+</html>

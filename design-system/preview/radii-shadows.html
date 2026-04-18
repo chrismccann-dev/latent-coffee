@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0;background:var(--bg1);}
+  .wrap{padding:22px 24px;display:flex;align-items:center;gap:22px;}
+  .item{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .chip{width:56px;height:56px;background:#fff;border:1px solid #E5E5E5;}
+  .chip.sm{border-radius:2px;}
+  .chip.md{border-radius:4px;}
+  .chip.lg{border-radius:6px;}
+  .chip.full{border-radius:9999px;}
+  .cap{font-family:var(--font-mono);font-size:10px;color:var(--fg2);text-transform:uppercase;letter-spacing:.08em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="item"><div class="chip sm"></div><div class="cap">SM · 2px</div></div>
+  <div class="item"><div class="chip md"></div><div class="cap">MD · 4px</div></div>
+  <div class="item"><div class="chip lg"></div><div class="cap">LG · 6px</div></div>
+  <div class="item"><div class="chip full"></div><div class="cap">FULL · pill</div></div>
+  <div class="item"><div class="chip md" style="box-shadow:0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);transform:translateY(-2px);"></div><div class="cap">CARD HOVER SHADOW</div></div>
+</div>
+</body>
+</html>

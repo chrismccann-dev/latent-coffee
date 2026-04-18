@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0;background:var(--bg1);}
+  .wrap{padding:24px;display:flex;gap:16px;}
+  .cover{aspect-ratio:3/4;width:170px;border-radius:4px;padding:14px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+  .meta{font-family:var(--font-mono);font-size:10px;line-height:1.4;opacity:.9;}
+  .meta .v{font-weight:600;}
+  .meta .d{opacity:.78;}
+  .watermark{font-family:var(--font-mono);font-weight:700;letter-spacing:.15em;opacity:.1;text-align:center;font-size:12px;}
+  .chip-wrap{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .flavor{font-family:var(--font-mono);font-size:9px;opacity:.7;line-height:1.4;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="cover" style="background:#4A7C59;">
+    <div class="chip-wrap">
+      <div class="meta">
+        <div class="v">Gesha</div><div class="d">Washed</div><div class="d">Ninety Plus</div><div class="d">Volcán Barú</div>
+      </div>
+      <span class="strategy-pill strategy-pill--clarity">CLARITY</span>
+    </div>
+    <div>
+      <div class="flavor">jasmine · bergamot · white peach</div>
+      <div class="watermark">LATENT</div>
+    </div>
+  </div>
+  <div class="cover" style="background:#722F4B;">
+    <div class="chip-wrap">
+      <div class="meta">
+        <div class="v">Pink Bourbon</div><div class="d">Anaerobic Natural</div><div class="d">Finca La Reserva</div><div class="d">Huila Highlands</div>
+      </div>
+      <span class="strategy-pill strategy-pill--full">FULL</span>
+    </div>
+    <div>
+      <div class="flavor">blackberry · wine · cocoa</div>
+      <div class="watermark">LATENT</div>
+    </div>
+  </div>
+  <div class="cover" style="background:#8B6914;">
+    <div class="chip-wrap">
+      <div class="meta">
+        <div class="v">SL28</div><div class="d">White Honey</div><div class="d">Hacienda Sonora</div><div class="d">Central Volcanic</div>
+      </div>
+      <span class="strategy-pill strategy-pill--balanced">BALANCED</span>
+    </div>
+    <div>
+      <div class="flavor">apricot · brown sugar · oolong</div>
+      <div class="watermark">LATENT</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

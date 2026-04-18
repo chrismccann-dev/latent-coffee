@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Latent Research — UI Kit</title>
+<link rel="stylesheet" href="styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="data.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="components/Chrome.jsx"></script>
+<script type="text/babel" src="components/Pages.jsx"></script>
+
+<script type="text/babel">
+  const { useState, useEffect } = React;
+
+  function App() {
+    const initial = (() => {
+      try {
+        const raw = localStorage.getItem('lc_route');
+        if (raw) return JSON.parse(raw);
+      } catch {}
+      return { name: 'brews' };
+    })();
+    const [authed, setAuthed] = useState(() => localStorage.getItem('lc_auth') === '1');
+    const [route, setRouteState] = useState(initial);
+
+    function setRoute(r) {
+      setRouteState(r);
+      try { localStorage.setItem('lc_route', JSON.stringify(r)); } catch {}
+    }
+
+    useEffect(() => {
+      document.title = 'Latent Research — ' + (route.name || 'brews');
+    }, [route]);
+
+    if (!authed) {
+      return <LoginPage onLogin={() => { localStorage.setItem('lc_auth','1'); setAuthed(true); }} />;
+    }
+
+    let content = null;
+    switch (route.name) {
+      case 'brews':          content = <BrewsPage setRoute={setRoute} />; break;
+      case 'brew':           content = <BrewDetailPage id={route.id} setRoute={setRoute} />; break;
+      case 'terroirs':       content = <TerroirsPage setRoute={setRoute} />; break;
+      case 'terroir':        content = <TerroirDetailPage id={route.id} setRoute={setRoute} />; break;
+      case 'cultivars':      content = <CultivarsPage setRoute={setRoute} />; break;
+      case 'green':          content = <GreenPage setRoute={setRoute} />; break;
+      case 'green-detail':   content = <GreenDetailPage id={route.id} setRoute={setRoute} />; break;
+      case 'add':            content = <AddWizardPage setRoute={setRoute} />; break;
+      default:               content = <BrewsPage setRoute={setRoute} />;
+    }
+
+    return (
+      <div className="app">
+        <Header route={route} setRoute={setRoute} />
+        <main className="main">{content}</main>
+        <Footer />
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
