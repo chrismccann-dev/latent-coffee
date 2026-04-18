@@ -16,8 +16,8 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 
 ### Core entities
 - **brews** — individual coffee tastings (purchased or self-roasted). 55 records as of April 2026. Has distinct `roaster` and `producer` columns; don't conflate them. Self-roasted brews carry `roaster = 'Latent'`.
-- **terroirs** — geographic/ecological zones. Hierarchy: Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir
-- **cultivars** — coffee varieties. Hierarchy: Species → Genetic Family → Lineage → Cultivar subtype
+- **terroirs** — geographic/ecological zones. Hierarchy: Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir. 23 rows across 21 canonical macro groups as of migration 015.
+- **cultivars** — coffee varieties. Hierarchy: Species → Genetic Family → Lineage → Cultivar subtype. 26 rows across 13 lineages and 5 genetic families as of migration 016 (Gesha is one canonical row, not 5).
 - **green_beans** — raw coffee lots (self-roasted only, 4 records). Has roasts, experiments, cuppings.
 
 ### Relationship patterns (IMPORTANT)
@@ -28,9 +28,11 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **New brews must set `terroir_id` and `cultivar_id`** on insert. The add flow handles this for self-roasted; purchased brews need an import flow (not yet built).
 
 ### Canonical registries
-- **Macro Terroir names** must come from a predefined registry of ecological systems. See Chris's terroir ruleset doc.
-- **Cultivar names** must resolve to canonical names from the Cultivar Registry. Marketing/trade names are normalized.
-- **Genetic Families:** Ethiopian Landrace Families, Typica Family, Bourbon Family, Typica × Bourbon Crosses, Modern Hybrids
+- **DB is source of truth.** The reference docs (terroir ruleset, cultivar ruleset) are pattern guides. When there's a conflict, trust the `terroirs.macro_terroir` / `cultivars.lineage` columns. Migration 015/016 codified this.
+- **Macro Terroir names** represent ecological systems (not administrative regions). New macros only when elevation band / climate regime / soil base / roast behavior clusters differently. 21 canonical macros including the post-015 additions (Huehuetenango Highlands, Acatenango Volcanic Highlands, Yunnan Monsoonal Highlands, Sierra Sur Highlands, Southern Andean Cordillera).
+- **Cultivar names** must resolve to canonical names from the Cultivar Registry. Marketing/trade names are normalized. **Gesha is one canonical cultivar** (post-016) — all selections (Panamanian / Colombian / Brazilian / 1931) collapsed into a single row. Blends stay separate from their component cultivars because blends can't transfer learnings (see `JARC blend lineage` vs `JARC selection lineage`).
+- **Genetic Families:** Ethiopian Landrace Families, Typica Family, Bourbon Family, Typica × Bourbon Crosses, Modern Hybrids. 13 lineages across these 5 families.
+- **Genetic cross notation:** Always use `×` (multiplication sign), never plain `x`, in lineage names (e.g. `Pacas × Maragogype lineage`, `Caturra × Timor Hybrid lineage`).
 - **Extraction strategies:** `Clarity-First`, `Balanced Intensity`, `Full Expression` (canonical list in [lib/brew-import.ts](lib/brew-import.ts)). All 55 brews populated. `extraction_confirmed` is optional free-text recorded only when the planned strategy diverged from what was tasted.
 
 ## Page structure
