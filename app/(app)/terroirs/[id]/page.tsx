@@ -8,25 +8,7 @@ import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import TerroirSynthesis from './TerroirSynthesis'
-
-const countryColors: Record<string, string> = {
-  'Brazil': '#4A3728',
-  'China': '#3D3D3D',
-  'Colombia': '#7A3B4B',
-  'Costa Rica': '#2D5E3A',
-  'Ecuador': '#4A6B3B',
-  'Ethiopia': '#6B7B3B',
-  'Guatemala': '#3B5B6B',
-  'Panama': '#4A7C59',
-  'Peru': '#5B4A6B',
-  'Burundi': '#6B4A3B',
-  'Kenya': '#8B3B2B',
-  'Rwanda': '#7B3B4B',
-}
-
-function getCountryColor(country: string): string {
-  return countryColors[country] || '#555555'
-}
+import { getCountryColor } from '@/lib/country-colors'
 
 /**
  * Merge terroir context fields across all terroirs in a macro terroir group.
@@ -330,12 +312,12 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
                   <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
                     <span>{brew.coffee_name}</span>
                     {brew.is_process_dominant && (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-mono bg-latent-bg px-2 py-0.5 rounded">
+                      <span className="inline-flex items-center gap-1 text-xxs font-mono bg-latent-bg px-2 py-0.5 rounded">
                         PROCESS
                       </span>
                     )}
                   </div>
-                  <div className="font-mono text-[10px] text-latent-mid">
+                  <div className="font-mono text-xxs text-latent-mid">
                     {[brew.variety, brew.process].filter(Boolean).join(' · ')}
                   </div>
                 </div>

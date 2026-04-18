@@ -124,7 +124,7 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
                 >
                   {/* Top row: metadata stack + strategy chip */}
                   <div className="flex items-start justify-between gap-2">
-                    <div className="font-mono text-[10px] leading-snug text-white/90 space-y-0.5 min-w-0">
+                    <div className="font-mono text-xxs leading-snug text-white/90 space-y-0.5 min-w-0">
                       {brew.variety && <div className="font-semibold truncate">{brew.variety}</div>}
                       {brew.process && <div className="text-white/75 truncate">{brew.process}</div>}
                       {producer && <div className="text-white/75 truncate">{producer}</div>}
@@ -136,7 +136,7 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
 
                   {/* Bottom: flavor notes */}
                   {flavorLine && (
-                    <div className="font-mono text-[9px] leading-snug text-white/70">
+                    <div className="font-mono text-micro leading-snug text-white/70">
                       {flavorLine}
                     </div>
                   )}

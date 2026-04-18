@@ -14,7 +14,7 @@ export function StrategyPill({ strategy, variant = 'row' }: StrategyPillProps) {
   if (variant === 'card') {
     return (
       <span
-        className="font-mono text-[8px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
+        className="font-mono text-chip font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
         style={{ backgroundColor: style.bg, color: style.text }}
       >
         {style.short}
@@ -24,7 +24,7 @@ export function StrategyPill({ strategy, variant = 'row' }: StrategyPillProps) {
 
   return (
     <span
-      className="font-mono text-[9px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded border"
+      className="font-mono text-micro font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded border"
       style={{
         backgroundColor: style.bg,
         color: style.text,

@@ -454,7 +454,7 @@ export default function AddPage() {
     <div className="mb-6">
       <div className="flex items-center gap-3 mb-2">
         {sourceType && (
-          <span className={`font-mono text-[10px] font-semibold px-2 py-1 rounded ${
+          <span className={`font-mono text-xxs font-semibold px-2 py-1 rounded ${
             sourceType === 'self-roasted' ? 'bg-latent-fg text-white' : 'bg-latent-accent-light text-white'
           }`}>
             {sourceType === 'self-roasted' ? 'ROASTED' : 'PURCHASED'}
@@ -1251,7 +1251,7 @@ export default function AddPage() {
           <div className={`border rounded-md p-6 mb-4 ${stateCardClass(terroirState)}`}>
             <div className="flex items-center justify-between mb-3">
               <div className="label !mb-0">Terroir</div>
-              <span className={`font-mono text-[10px] font-semibold px-2 py-1 rounded ${stateBadge(terroirState).class}`}>
+              <span className={`font-mono text-xxs font-semibold px-2 py-1 rounded ${stateBadge(terroirState).class}`}>
                 {stateBadge(terroirState).label}
               </span>
             </div>
@@ -1370,7 +1370,7 @@ export default function AddPage() {
           <div className={`border rounded-md p-6 mb-4 ${stateCardClass(cultivarState)}`}>
             <div className="flex items-center justify-between mb-3">
               <div className="label !mb-0">Cultivar</div>
-              <span className={`font-mono text-[10px] font-semibold px-2 py-1 rounded ${stateBadge(cultivarState).class}`}>
+              <span className={`font-mono text-xxs font-semibold px-2 py-1 rounded ${stateBadge(cultivarState).class}`}>
                 {stateBadge(cultivarState).label}
               </span>
             </div>

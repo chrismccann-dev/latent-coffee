@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { SectionCard } from '@/components/SectionCard'
 
 interface ProcessSynthesisProps {
   process: string
@@ -50,10 +51,7 @@ export default function ProcessSynthesis({
   if (!synthesis && !loading && currentBrewCount === 0) return null
 
   return (
-    <div className="rounded-md p-6 mb-4 bg-white border border-latent-border">
-      <div className="font-mono text-xs font-bold tracking-wide uppercase mb-4 text-latent-fg">
-        WHAT I&apos;VE LEARNED ABOUT THIS PROCESS
-      </div>
+    <SectionCard title="WHAT I'VE LEARNED ABOUT THIS PROCESS">
       {loading ? (
         <div className="flex items-center gap-3">
           <div className="w-4 h-4 border-2 border-latent-mid border-t-latent-fg rounded-full animate-spin" />
@@ -64,7 +62,7 @@ export default function ProcessSynthesis({
           <p className="font-sans text-sm leading-relaxed">{synthesis}</p>
           <button
             onClick={generateSynthesis}
-            className="font-mono text-[10px] text-latent-mid hover:text-latent-fg mt-3 transition-colors"
+            className="font-mono text-xxs text-latent-mid hover:text-latent-fg mt-3 transition-colors"
           >
             Regenerate
           </button>
@@ -72,6 +70,6 @@ export default function ProcessSynthesis({
       ) : (
         <p className="font-mono text-xs text-latent-mid">Not enough data to synthesize yet.</p>
       )}
-    </div>
+    </SectionCard>
   )
 }
