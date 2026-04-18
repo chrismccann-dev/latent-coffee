@@ -229,6 +229,7 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 - **Design polish + mobile pass (PR #14)** — mobile nav hamburger + sheet below `md:` breakpoint. `<SectionCard>` and `<Tag>` extracted to `components/` (were triple-duplicated across terroir / cultivar / process detail). `<StrategyPill>` removed from aggregation detail coffee rows (option A from the sprint plan) — strategy still surfaces on `/brews` cards and brew detail pages. `/brews` and `/brews/[id]` still have known mobile debt (see "What's Missing").
 - **Flavor-notes canonicalization + brew-edit UI (migration 013)** — `lib/flavor-registry.ts` ships with ~100 canonical flavor tags across 8 families (Citrus, Stone Fruit, Berry, Tropical, Grape & Wine, Floral, Tea & Herbal, Sweet & Confection) + Other, hue-separated palette, and a 3-tier classifier (exact → case-insensitive → longest canonical substring). Migration 013 collapsed 148 drifty raw tags to 132 canonical Title-Case tags in-place; composites ("Floral sweetness") and structure descriptors ("Bright", "Tea-like finish") stay in the data and route to their family at render time — no data lost. All 3 aggregation detail pages now render COMMON FLAVOR NOTES grouped by family (via shared `<FlavorNotesByFamily>`), and `aggregateFlavorNotes(brews)` hoisted the previously-triple-duplicated counting loop. First edit surface: `/brews/[id]/edit` — single-page form covering every editable field, chip-input flavor notes with registry autocomplete and "did you mean X?" warning for non-canonical entries. PATCH `/api/brews/[id]` uses a whitelist + RLS-scoped update; terroir/cultivar are pick-from-existing (create-new still routes through /add).
 - **Roasters aggregation (migration 014)** — fourth aggregation dimension alongside terroirs / cultivars / processes. `/roasters` index groups 21 distinct roaster names into 5 families (Clarity-First / Balanced / Extraction-Forward / Varies / Self-Roasted) via `lib/roaster-registry.ts`, mirroring the BMR's existing extraction-strategy tags. Detail pages aggregate brews per roaster with palate-aware synthesis primed with the BMR's documented house-style read for that roaster (when present) — Claude treats the BMR card as a working hypothesis to confirm or push back on against the brew corpus. Migration 014 normalizes "Luminous Coffee" → "Luminous" (1 row) and adds the `roaster_syntheses` cache table. `lib/roaster-registry.ts` ships with `ROASTER_METADATA` for all 21 roasters (13 sourced from the BMR doc, 7 from a mid-sprint research pass on previously-undocumented roasters, plus Latent for self-roasted). `<TagLinkList>` extracted to `components/TagLinkList.tsx` (consolidates the 6+ copies of `SectionCard` + `Tag` + `Link` triplet across the 4 aggregation detail pages). Header nav grows to 6 desktop items + ADD; `gap-8` → `gap-6` to absorb the new slot. All 4 aggregation detail pages now cross-link roasters bidirectionally (the older terroir↔cultivar↔process tag sections remain plain text — backfilling is a follow-up).
+- **Design-system standardization sprint** — formalized the chrome token system in `tailwind.config.ts` + `app/globals.css` as the canonical source of truth. Added `text-chip` (8px) and `text-micro` (9px) font-size tokens + `.btn-sm` button variant; removed every `text-[Npx]` arbitrary value from JSX; replaced the last inline `#hex` chrome color (source badge). Aligned `<SectionCard>` title to the `.label` pattern (mono 10.4px semibold `text-latent-mid`) so the section-label treatment is consistent across every card on every page. The 4 *Synthesis.tsx components and the last inline `Section`/`Tag` re-implementations on `/brews/[id]` now route through the canonical `<SectionCard>` + `<Tag>` primitives. `lib/country-colors.ts` + `lib/cultivar-family-colors.ts` dedupe two previously-duplicated palette constants; the family-colors file adopts the detail-page palette (distinct per family) as canonical — the previous index-page behavior of collapsing all non-Ethiopian families to gray was a drift, not a decision. See the new "Design System" section below for the full token map.
 
 ---
 
@@ -277,6 +278,101 @@ This profile has widened over time to include controlled naturals and structured
 
 ---
 
+## Design System
+
+The brand voice is **quiet research notebook**: monospace labels, book-cover cards per brew, uppercase taxonomy, a restrained sage/dark palette that lets coffee metadata do the talking. Code-level source of truth is `tailwind.config.ts` + `app/globals.css`. The Dropbox folder `Latent Coffee Design System/` is the **Claude Design skill workspace** (UI-kit prototypes, preview HTML, the mirrored `colors_and_type.css` reference) — it is not mirrored into this repo; the Tailwind config wins whenever they disagree.
+
+### Voice & casing
+
+- **First-person research notebook.** Chris speaks as *"I"* — "What I learned", "My taste profile". Never *"you"* or *"we"*. No marketing copy, no CTAs beyond `+ ADD`, no hero headlines.
+- **Taxonomic over marketing.** Coffees are classified, not sold. Numbers are labels, not features (`55 COFFEES`, never "55+ coffees tasted!").
+- **Uppercase mono** for every label, nav item, badge, pill, section header, count chrome. **Title-case sans** for coffee names, terroir/cultivar names. **Sentence case prose** for the narrative content inside cards.
+
+### Palette
+
+- **Chrome (monochrome + sage):** `latent-bg #FAFAFA` (page), `latent-fg #1A1A1A` (ink), `latent-mid #888` (secondary text), `latent-subtle #BBB` (tertiary), `latent-border #E5E5E5` (hairline), `latent-accent #2C3E2D` (dark sage, primary-button hover + dark-card flourish), `latent-accent-light #4A7C59` (focus ring, PURCHASED badge), `latent-highlight #F8FFF0` + `latent-highlight-border #C5E1A8` (tag/chip background).
+- **Semantic palettes (out of scope for chrome sprints):**
+  - Book-cover colors: `lib/brew-colors.ts` — process × flavor signals (sage for Gesha/washed, burgundy for anaerobic/wine, gold for honey, brown for natural, teal for floral, slate fallback).
+  - Extraction-strategy pills: `lib/extraction-strategy.ts` — Clarity-First (sage), Balanced (ochre), Full (burgundy).
+  - Process families: `lib/process-families.ts` — 5 families × per-family hue.
+  - Flavor families: `lib/flavor-registry.ts` — 8 families × per-family hue, hue-separated not lightness-separated.
+  - Roaster families: `lib/roaster-registry.ts` — 5 BMR-mirrored families + warm-neutral per-roaster swatches.
+  - Country swatches: `lib/country-colors.ts` — 12 earth-toned hues, one per producing country.
+  - Cultivar family swatches: `lib/cultivar-family-colors.ts` — 6 warm/cool hues, one per genetic family.
+- **Hue-separation rule** — two colors at different saturation still read as "the same color." If a signal deserves its own color, shift hue, not lightness.
+- **One helper per visual system.** Each semantic palette has exactly one source-of-truth file. Do not copy palette maps into pages.
+
+### Type scale
+
+- **Sans:** Inter (300/400/500/600/700) — coffee names, prose, headings.
+- **Mono:** JetBrains Mono (400/500/600/700) — labels, nav, tags, data, badges, buttons. This is the brand's signature voice.
+- **Scale** (defined in `tailwind.config.ts`):
+
+| Token | Size | Use |
+|---|---|---|
+| `text-chip` | 0.5rem (8px) | Strategy-pill short-form, hero cover meta |
+| `text-micro` | 0.5625rem (9px) | Strategy-pill row variant, brew-cover flavor line |
+| `text-xxs` | 0.65rem (10.4px) | Labels, tags, badges, section headers, metadata |
+| `text-xs` | 0.72rem (11.5px) | Nav links, buttons, small chrome |
+| `text-sm` | 0.875rem (14px) | Body prose, inputs |
+| `text-lg` | 1.125rem (18px) | Brand wordmark |
+| `text-xl` | 1.25rem (20px) | Wizard step titles |
+| `text-2xl` | 1.5rem (24px) | Detail-page title (largest in-product) |
+
+- **Quiet hierarchy.** The loudest sans text is a brew name at 24px semibold. There is no display/hero type. Page titles are 11.5px mono uppercase labels.
+- **Letter-spacing:** `tracking-wide` (0.1em) for most mono uppercase, `tracking-widest` (0.15em) for the brand lockup.
+
+### Spacing
+
+Tailwind defaults, used densely on a narrow set: **1 / 1.5 / 2 / 3 / 4 / 5 / 6 / 8 / 12 / 16**. Page shell is `max-w-3xl` (768px) for detail pages, `max-w-[1200px]` for the /brews grid and header. Horizontal padding `px-6`, vertical `py-8`. Header height fixed `h-14` (56px). No arbitrary `p-[17px]` anywhere — if a size isn't on the scale, it's drift.
+
+### Component primitives
+
+Chrome utilities (via `@apply` in `app/globals.css`):
+- **`.section-card`** / **`.section-card-dark`** — white/inverse 1px-border card, `rounded-md`, `p-6 mb-4`.
+- **`.label`** — mono xxs semibold uppercase `text-latent-mid`, `mb-2 block`. The canonical section-label treatment.
+- **`.tag`** — inline-block mono xxs, sage-highlight bg + border, `rounded`, `px-2 py-1`.
+- **`.btn` / `.btn-primary` / `.btn-secondary` / `.btn-sm`** — mono xs semibold uppercase, `px-4 py-3` (default) or `px-3 py-2` (`sm`), `rounded`.
+- **`.input` / `.textarea`** — mono sm, 1px latent-border, `px-3 py-2`, sage focus ring.
+- **`.editable-field`** — sage-highlight bg + border, signals "this value is editable."
+- **`.coffee-card`** — list-row card with hover border shift.
+- **`.data-table`** — mono xs table with hairline row dividers + highlight-on-hover.
+
+React components (in `components/`):
+- **`<SectionCard title? dark? children>`** — wraps the `.section-card` / `.section-card-dark` treatment with optional `.label`-style title. Every section-of-content on a detail page uses this; do not reimplement inline.
+- **`<Tag>`** — renders the `.tag` class.
+- **`<TagLinkList title items>`** — `SectionCard` + flex-wrap of `<Link><Tag>`. Used for every cross-link tag block on aggregation detail pages.
+- **`<StrategyPill strategy variant="row"|"card">`** — extraction-strategy badge; `card` on book covers, `row` reserved for future use.
+- **`<FlavorNotesByFamily>`** — renders `aggregateFlavorNotes(brews)` grouped into the 8 flavor families.
+- **`<FlavorNotesInput>`** — chip-input with registry autocomplete + closest-match suggestion.
+- **`<Header>`** — sticky brand + nav + ADD + mobile hamburger.
+
+### Iconography
+
+**Zero icon library.** No Lucide, no Heroicons, no SVG icon sprites. What's allowed:
+- Unicode glyphs as chrome: `+ ADD`, `← Back to Brews`, `→` for hover-revealed affordance, `·` as metadata separator.
+- Exactly four emoji used as category prefixes only: `🌍` (terroir), `🧬` (cultivar), `☕` (empty brew avatar), `🌱` (empty green-bean avatar). Never in buttons, never in badges, never decorating tags.
+- Color swatches as visual identifiers: country swatches on terroir pages, family swatches on cultivar pages, full book-cover tiles for brews.
+- The brand mark is typographic (`LATENT` + `RESEARCH` in bold mono / light mono) — not pictorial.
+
+If a future surface genuinely needs a line-icon (e.g. a settings gear), use Lucide at `stroke-width: 1.5`, 12–16px, `currentColor` — and flag the addition. Don't sneak one in.
+
+### Surfaces, motion, interaction
+
+- **Flat surfaces.** Page `#FAFAFA`, card `#FFF`, dark-accent card `#1A1A1A`. No gradients, no textures, no hero imagery, no photography.
+- **No shadows at rest.** The only shadow in the product is brew-card hover — `shadow-lg` + `-translate-y-1 scale-[1.01]`, the book-lifts-off-the-shelf moment. Focus ring is 2px sage `outline` + 2px offset.
+- **Restrained motion.** Every transition is `transition-colors` or `transition-all duration-150` (buttons) / `duration-200` (brew-card hover). Default CSS ease. No bounces, springs, skeleton shimmer, page-load fades, or scroll-linked effects.
+- **No transparency.** No frosted glass, no backdrop-blur. `text-white/75` on book covers (dimness hierarchy) and `hover:bg-latent-highlight/30` on list rows (pale sage wash) are the only opacity uses.
+- **Selection / scrollbars.** Selection: sage-highlight bg on black text. Scrollbars: 6px, `#CCC` thumb, transparent track.
+
+### Discipline
+
+- **Adding a token = a deliberate decision.** Same energy as adding to the flavor-registry or roaster-registry. If a color / size / spacing isn't on the canonical list, it's drift, not creativity.
+- **Desktop is the primary design target.** Tablet spot-check on every UI sprint; phone-scope lives in its own sprint.
+- **When in doubt, match the document.** The Dropbox folder's `README.md` + `colors_and_type.css` are a high-fidelity mirror of the code. If the code disagrees with itself between two pages, the documented token wins.
+
+---
+
 ## Future Directions
 
 These are ideas and patterns that have emerged from the data, not committed features.
@@ -319,6 +415,9 @@ Running notes from past sprints — keep this section for future-you.
 - **When the audit groups variants by `lower(btrim(note))`, the migration has to replace every non-canonical variant, not just the lowercase one.** First pass of migration 013 missed sentence-case forms ("Candied strawberry", "Passion fruit") because I wrote `array_replace` only for `lower → Canonical`. Had to apply a follow-up sweep catching sentence-case. Next data-canonicalization sprint: the audit query should emit every distinct variant per cluster, and the migration generates one UPDATE per variant.
 - **When an existing taxonomy is in scope, mirror it before inventing.** The roasters sprint started with a brainstormed family shape (Ethereal / Structured Sweet / Anaerobic-friendly) — but the BMR doc already groups every roaster by an extraction-strategy tag (CLARITY-FIRST / BALANCED / FULL EXPRESSION / VARIES). Mirroring that taxonomy directly was both more accurate (Sey is FULL EXPRESSION, not "Ethereal") and more useful (the family answers "what should I expect when a new bag arrives" — already Chris's mental model). When a sprint's interpretive call has a documented external source, default to mirroring instead of inventing.
 - **Pause-for-research is cheap when the cards are small and bounded.** The roasters sprint paused mid-execution for Chris to research 7 BMR-less roasters (~20 minutes of his time, structured request format with brew-anchors). Net result: full registry on first push instead of 7 placeholders + a follow-up edit pass. The trigger pattern: when a finite list of metadata is needed, the user has source access, and the alternative is shipping with `// TODO: fill in`, ask once and ship complete.
+- **A "design-system adoption" sprint for a reverse-engineered design system is a cleanup sprint.** The Claude-Design folder was documentation derived from the code, not a new aesthetic to adopt. The real scope was: standardize arbitrary sizes into named tokens (`text-chip` / `text-micro`), dedupe duplicated palette constants (country + family), route the last inline card/tag reimplementations through the canonical components, align the `SectionCard` title to the documented `.label` pattern. Net: -123 / +52 lines across 20 files, one new tailwind fontSize extension, two new `lib/*-colors.ts` files. When "applying a design system" that was reverse-engineered, the audit step is the whole sprint; the execution is mechanical.
+- **Tailwind `theme.extend` changes don't hot-reload in `next dev`.** Added `text-chip` + `text-micro` to `tailwind.config.ts`, verified in the browser, saw 16px (the browser default) on the strategy pill because the class simply wasn't generated. `preview_stop` + `preview_start` fixed it. The class existed in source but not in the compiled CSS, and the visual was misleading (pills looked "fine-ish" at default size). When adding a theme token mid-session, restart the dev server before trusting the preview. This is a notable exception to "HMR handles everything" in Next 14.
+- **/simplify catches dead-equivalent code that earlier sprints missed.** `brews/[id]/page.tsx` had a local `Section` and `Tag` defined inline — literal re-implementations of the canonical `SectionCard` + `Tag` components. Previous sprints migrated the 3 aggregation detail pages + the 4 synthesis components; this page got skipped because its inline dupes predated the canonical extraction. The visual regression risk was zero (identical chrome) but the drift risk was real. Whenever extracting a primitive, follow up with a grep for the inline shape — not just the sprint's touched files.
 
 **Refactor / reuse**
 - **Extract on the 2nd duplication, not the 4th.** `<TagLinkList>` (SectionCard + Tag + Link triplet) was duplicated 6+ times across 4 aggregation detail pages within the roasters sprint alone. /simplify caught it with high confidence and the extraction was a 30-line component. The pattern was visible from the 3rd copy; waiting for the 6th was scope drift. Apply the CLAUDE.md "factor on 2+ duplications" rule earlier next time.

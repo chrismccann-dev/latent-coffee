@@ -62,7 +62,7 @@ export function Header() {
 
         {/* Right cluster */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Link href="/add" className="btn btn-primary py-2 text-xs">
+          <Link href="/add" className="btn btn-primary btn-sm">
             + ADD
           </Link>
           <button

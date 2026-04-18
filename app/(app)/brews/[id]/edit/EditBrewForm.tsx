@@ -412,7 +412,7 @@ function KeyTakeawaysEditor({ value, onChange }: { value: string[]; onChange: (v
               <button
                 type="button"
                 onClick={() => onChange(value.filter((c) => c !== chip))}
-                className="font-mono text-[10px] opacity-60 hover:opacity-100"
+                className="font-mono text-xxs opacity-60 hover:opacity-100"
                 aria-label={`Remove ${chip}`}
               >
                 ✕

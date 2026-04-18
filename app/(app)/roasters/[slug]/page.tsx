@@ -95,7 +95,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
               <div className="flex flex-wrap items-center gap-3 mt-3">
                 {meta?.bmrStrategy && (
                   <span
-                    className="font-mono text-[10px] font-semibold tracking-wide uppercase px-2 py-1 rounded"
+                    className="font-mono text-xxs font-semibold tracking-wide uppercase px-2 py-1 rounded"
                     style={{ backgroundColor: color, color: 'white' }}
                   >
                     {meta.bmrStrategy}
@@ -106,7 +106,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
                     href={meta.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="font-mono text-[10px] text-latent-mid hover:text-latent-fg underline"
+                    className="font-mono text-xxs text-latent-mid hover:text-latent-fg underline"
                   >
                     {meta.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
                   </a>
@@ -176,7 +176,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
                 <div className="font-sans text-sm font-semibold">
                   {brew.coffee_name}
                 </div>
-                <div className="font-mono text-[10px] text-latent-mid">
+                <div className="font-mono text-xxs text-latent-mid">
                   {[brew.variety, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
                 </div>
               </div>

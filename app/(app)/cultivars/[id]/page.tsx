@@ -9,19 +9,7 @@ import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import CultivarSynthesis from './CultivarSynthesis'
-
-const familyColors: Record<string, string> = {
-  'Ethiopian Landrace Families': '#4A7C59',
-  'Bourbon Family': '#7A3B4B',
-  'Modern Hybrids': '#3B5B6B',
-  'Typica × Bourbon Crosses': '#6B4A3B',
-  'Typica Family': '#4A3728',
-  'SL Selections': '#8B3B2B',
-}
-
-function getFamilyColor(family: string): string {
-  return familyColors[family] || '#555555'
-}
+import { getFamilyColor } from '@/lib/cultivar-family-colors'
 
 /**
  * Merge characteristic fields from multiple cultivars in a lineage.
@@ -305,7 +293,7 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
                   <div className="font-sans text-sm font-semibold">
                     {brew.coffee_name}
                   </div>
-                  <div className="font-mono text-[10px] text-latent-mid">
+                  <div className="font-mono text-xxs text-latent-mid">
                     {[brew.variety, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
                   </div>
                 </div>

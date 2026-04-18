@@ -139,7 +139,7 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
                 <div className="font-sans text-sm font-semibold">
                   {brew.coffee_name}
                 </div>
-                <div className="font-mono text-[10px] text-latent-mid">
+                <div className="font-mono text-xxs text-latent-mid">
                   {[brew.variety, brew.terroir?.country, brew.roaster].filter(Boolean).join(' · ')}
                 </div>
               </div>

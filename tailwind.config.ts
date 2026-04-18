@@ -27,8 +27,10 @@ const config: Config = {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
       },
       fontSize: {
-        'xxs': '0.65rem',
-        'xs': '0.72rem',
+        'chip': ['0.5rem', { lineHeight: '1' }],        // 8px — strategy pill short-form, book-cover meta
+        'micro': ['0.5625rem', { lineHeight: '1.4' }],  // 9px — strategy pill row, brew-cover flavor line
+        'xxs': '0.65rem',                                // 10.4px — labels, tags, badges, footer
+        'xs': '0.72rem',                                 // 11.5px — nav, buttons, small chrome
       },
       letterSpacing: {
         'widest': '0.15em',

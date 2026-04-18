@@ -78,7 +78,7 @@ export function FlavorNotesInput({ value, onChange, label = 'Flavor notes' }: Fl
                 <button
                   type="button"
                   onClick={() => removeChip(chip)}
-                  className="font-mono text-[10px] opacity-60 hover:opacity-100"
+                  className="font-mono text-xxs opacity-60 hover:opacity-100"
                   aria-label={`Remove ${chip}`}
                 >
                   ✕

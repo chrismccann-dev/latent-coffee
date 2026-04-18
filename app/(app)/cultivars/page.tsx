@@ -1,19 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Cultivar } from '@/lib/types'
-
-const familyColors: Record<string, string> = {
-  'Ethiopian Landrace Families': '#4A7C59',
-  'Bourbon Family': '#3D3D3D',
-  'Modern Hybrids': '#3D3D3D',
-  'Typica × Bourbon Crosses': '#3D3D3D',
-  'Typica Family': '#3D3D3D',
-  'SL Selections': '#3D3D3D',
-}
-
-function getFamilyColor(family: string): string {
-  return familyColors[family] || '#555555'
-}
+import { getFamilyColor } from '@/lib/cultivar-family-colors'
 
 interface LineageGroup {
   lineage: string

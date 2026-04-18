@@ -3,25 +3,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
 import { getCoverColor } from '@/lib/brew-colors'
-
-function Section({ title, dark, children }: { title?: string, dark?: boolean, children: React.ReactNode }) {
-  return (
-    <div className={`rounded-md p-6 mb-4 ${dark ? 'bg-latent-fg text-white' : 'bg-white border border-latent-border'}`}>
-      {title && (
-        <div className={`font-mono text-xxs font-semibold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-mid'}`}>
-          {title}
-        </div>
-      )}
-      {children}
-    </div>
-  )
-}
-
-function Tag({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="tag">{children}</span>
-  )
-}
+import { SectionCard } from '@/components/SectionCard'
+import { Tag } from '@/components/Tag'
 
 export default async function BrewDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -63,7 +46,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
             className="w-28 h-40 rounded flex-shrink-0 flex flex-col justify-between p-3 text-white"
             style={{ background: coverColor }}
           >
-            <div className="font-mono text-[8px] font-semibold leading-tight uppercase opacity-90">
+            <div className="font-mono text-chip font-semibold leading-tight uppercase opacity-90">
               {brew.coffee_name?.slice(0, 35)}
             </div>
             <div className="font-mono text-xs font-bold tracking-widest opacity-10 text-center">
@@ -78,11 +61,9 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
                 {brew.coffee_name}
               </h1>
               <span
-                className="font-mono text-[10px] font-semibold px-2 py-1 rounded"
-                style={{
-                  background: brew.source === 'self-roasted' ? '#1a1a1a' : '#4A7C59',
-                  color: '#fff'
-                }}
+                className={`font-mono text-xxs font-semibold px-2 py-1 rounded text-white ${
+                  brew.source === 'self-roasted' ? 'bg-latent-fg' : 'bg-latent-accent-light'
+                }`}
               >
                 {brew.source === 'self-roasted' ? 'ROASTED' : 'PURCHASED'}
               </span>
@@ -138,7 +119,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
 
       {/* Terroir */}
       {brew.terroir && (
-        <Section title="🌍 TERROIR">
+        <SectionCard title="🌍 TERROIR">
           <div className="font-sans text-sm font-medium mb-2">
             <strong>{brew.terroir.country}</strong> → {brew.terroir.admin_region} → <strong>{brew.terroir.macro_terroir}</strong>
           </div>
@@ -150,24 +131,24 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
           <div className="font-mono text-xs text-latent-mid">
             Elevation: {brew.terroir.elevation_min}-{brew.terroir.elevation_max}m ({brew.terroir.climate_stress || 'temperate'})
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Cultivar */}
       {brew.cultivar && (
-        <Section title="🧬 CULTIVAR">
+        <SectionCard title="🧬 CULTIVAR">
           <div className="font-sans text-sm font-medium mb-2">
             <strong>{brew.cultivar.species}</strong> → {brew.cultivar.genetic_family} → <strong>{brew.cultivar.lineage}</strong>
           </div>
           <div className="font-sans text-sm text-latent-mid">
             Cultivar: {brew.cultivar.cultivar_name}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Recipe */}
       {brew.brewer && (
-        <Section title="BEST BREW RECIPE">
+        <SectionCard title="BEST BREW RECIPE">
           <div className="grid grid-cols-2 gap-x-8 gap-y-2 font-sans text-sm mb-4">
             <div><strong>Brewer:</strong> {brew.brewer}</div>
             <div><strong>Filter:</strong> {brew.filter}</div>
@@ -205,12 +186,12 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
               </div>
             )
           })()}
-        </Section>
+        </SectionCard>
       )}
 
       {/* Sensory Notes */}
       {(brew.aroma || brew.attack || brew.body) && (
-        <Section title="SENSORY NOTES">
+        <SectionCard title="SENSORY NOTES">
           <div className="space-y-2 font-sans text-sm">
             {brew.aroma && <div><span className="font-mono text-xs text-latent-mid mr-2">Aroma:</span>{brew.aroma}</div>}
             {brew.attack && <div><span className="font-mono text-xs text-latent-mid mr-2">Attack:</span>{brew.attack}</div>}
@@ -218,51 +199,51 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
             {brew.body && <div><span className="font-mono text-xs text-latent-mid mr-2">Body:</span>{brew.body}</div>}
             {brew.finish && <div><span className="font-mono text-xs text-latent-mid mr-2">Finish:</span>{brew.finish}</div>}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Temperature Evolution */}
       {brew.temperature_evolution && (
-        <Section title="TEMPERATURE EVOLUTION">
+        <SectionCard title="TEMPERATURE EVOLUTION">
           <p className="font-sans text-sm leading-relaxed">{brew.temperature_evolution}</p>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Peak Expression */}
       {brew.peak_expression && (
-        <Section dark>
+        <SectionCard dark>
           <div className="font-mono text-xxs font-medium opacity-60 uppercase mb-3">PEAK EXPRESSION</div>
           <p className="font-mono text-base font-semibold leading-relaxed">
             {brew.peak_expression}
           </p>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Key Takeaways */}
       {brew.key_takeaways && brew.key_takeaways.length > 0 && (
-        <Section title="KEY TAKEAWAYS">
+        <SectionCard title="KEY TAKEAWAYS">
           <ul className="list-disc list-inside space-y-2 font-sans text-sm">
             {brew.key_takeaways.map((takeaway: string, i: number) => (
               <li key={i}>{takeaway}</li>
             ))}
           </ul>
-        </Section>
+        </SectionCard>
       )}
 
       {/* What I Learned */}
       {brew.what_i_learned && (
-        <Section dark title="WHAT I LEARNED">
+        <SectionCard dark title="WHAT I LEARNED">
           <p className="font-sans text-sm leading-relaxed whitespace-pre-line">
             {brew.what_i_learned}
           </p>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Classification */}
       {brew.classification && (
-        <Section dark title="CLASSIFICATION">
+        <SectionCard dark title="CLASSIFICATION">
           <p className="font-sans text-sm leading-relaxed">{brew.classification}</p>
-        </Section>
+        </SectionCard>
       )}
     </div>
   )

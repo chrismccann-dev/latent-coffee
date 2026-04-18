@@ -110,9 +110,23 @@ Requires `.env.local` with:
 
 ## Design / UX conventions
 
-- **Desktop is the primary design target.** The current layout is not tested on mobile — any new feature sprint should add a mobile + tablet pass (viewport checks via `preview_resize`) before merging.
-- **Colors** — `lib/brew-colors.ts` is the single source of truth for brew-card covers. Current palette: forest green (Gesha variety), muted teal (floral flavor), burgundy (anaerobic/berry/wine), gold (honey), brown (natural), slate (neutral fallback — non-green so it doesn't compete with the variety/flavor greens). Adding a new color requires a thought pass on hue distinctness.
-- **Content on cards** — brew cards intentionally surface *all* content on the cover (no secondary text block below). Avoid "where does this data live" duplication: if a field belongs on the card, remove it from the surrounding chrome.
+**See [PRODUCT.md § Design System](PRODUCT.md#design-system) for the full token map, palette, type scale, and component primitive reference.** The rules below are the code-level enforcement points.
+
+- **Desktop is the primary design target.** Tablet spot-check via `preview_resize` on every UI sprint; phone-scope lives in its own sprint.
+- **Tokens live in `tailwind.config.ts` + `app/globals.css`.** Adding a token = a deliberate decision, not drift. No arbitrary `text-[Npx]` / `p-[Npx]` in JSX for anything chrome-related — if a size isn't in the scale, add it to the theme (and document what it's for) or don't use it.
+- **Typography scale:** `text-chip` (8px), `text-micro` (9px), `text-xxs` (10.4px), `text-xs` (11.5px), `text-sm` (14px), `text-lg` (18px), `text-xl` (20px), `text-2xl` (24px). The loudest in-product text is a brew name at `text-2xl font-semibold`. No display type.
+- **Chrome vs semantic colors:**
+  - Chrome: `latent-fg / bg / mid / subtle / border / accent / accent-light / highlight / highlight-border`. Use these via Tailwind utility classes; never hardcode hex for chrome.
+  - Semantic palettes live in `lib/brew-colors.ts`, `lib/extraction-strategy.ts`, `lib/process-families.ts`, `lib/flavor-registry.ts`, `lib/roaster-registry.ts`, `lib/country-colors.ts`, `lib/cultivar-family-colors.ts`. Each is the single source of truth for its signal; do not copy the constants into page files.
+  - Hue-separated colors — if a signal deserves its own color, shift hue, not lightness.
+- **Primitive components — use, don't reimplement:**
+  - `<SectionCard title? dark? children>` for every section on a detail page (imports from `@/components/SectionCard`). Do NOT inline `<div className="rounded-md p-6 mb-4 bg-white border border-latent-border">`.
+  - `<Tag>` (from `@/components/Tag`) for every pill/chip using the sage-highlight treatment.
+  - `<TagLinkList>` for every cross-link tag block on aggregation detail pages.
+  - `<StrategyPill>`, `<FlavorNotesByFamily>` are canonical — don't redraw them.
+  - `.btn` / `.btn-primary` / `.btn-secondary` / `.btn-sm` for every button-shaped element; `.input` / `.textarea` for every form field; `.label` for every mono-uppercase section header.
+- **Content on cards** — brew cards intentionally surface *all* content on the cover (no secondary text block below). Avoid "where does this data live" duplication.
+- **`next dev` does not hot-reload `tailwind.config.ts` theme-extend changes.** When adding a new token, restart the dev server before verifying in `preview_*`, or you'll see the browser default and not the token.
 
 ## Sprint cadence (for Claude)
 
