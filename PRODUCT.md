@@ -377,10 +377,12 @@ These are ideas and patterns that have emerged from the data, not committed feat
 
 ### Near-term (data foundation)
 
-- **Producer + roaster canonicalization** — both are free-text today (55/55 populated). Same drift risk as flavor_notes had pre-migration-013. A small canonical registry + edit-form typeahead (same pattern as `lib/flavor-registry.ts`) would let aggregation work at the producer/roaster level.
+**Committed sprint order (as of 2026-04-21):** producer + roaster canonicalization → experiments import → Claude-Design-led redesign. The redesign is queued behind Chris's in-progress Claude Design (claude.ai/design) output; substrate sprints continue in the meantime with the constraint that any new chrome be modular enough for the eventual redesign to re-skin.
+
+- **Producer + roaster canonicalization (next)** — both are free-text today (55/55 populated). Same drift risk as flavor_notes had pre-migration-013. A small canonical registry + edit-form typeahead (same pattern as `lib/flavor-registry.ts`) would let aggregation work at the producer/roaster level.
+- **Import experiment data (after canonicalization)** — the roasting spreadsheet has structured experiments that belong in the experiments table.
+- **Claude-Design-led redesign (queued)** — held until Chris's Claude Design output is ready. Substrate (tokens, mobile, 4 aggregation dims, filter bar) is otherwise ready.
 - **Backfill remaining what_i_learned** — ~19 brews still missing long-form learnings.
-- **Import experiment data** — the roasting spreadsheet has structured experiments that belong in the experiments table.
-- **Second filter dimension on /brews** — add process filter next to the strategy pills; probably collapse into a small filter drawer if we keep adding dimensions.
 
 ### Medium-term (knowledge compounding)
 
