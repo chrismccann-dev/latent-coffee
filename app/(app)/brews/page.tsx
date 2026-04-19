@@ -1,12 +1,26 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
-import { EXTRACTION_STRATEGIES, getStrategyStyle } from '@/lib/extraction-strategy'
+import { EXTRACTION_STRATEGIES } from '@/lib/extraction-strategy'
 import { getCoverColor } from '@/lib/brew-colors'
 import { StrategyPill } from '@/components/StrategyPill'
+import { BrewsFilterBar } from '@/components/BrewsFilterBar'
+import { PROCESS_FAMILIES, getProcessFamily } from '@/lib/process-families'
+import { ROASTER_FAMILIES, getRoasterFamily } from '@/lib/roaster-registry'
 
 interface BrewsPageProps {
-  searchParams: { strategy?: string }
+  searchParams: {
+    strategy?: string
+    processes?: string
+    lineages?: string
+    macros?: string
+    roasters?: string
+  }
+}
+
+function parseList(param: string | undefined): string[] {
+  if (!param) return []
+  return param.split(',').map((s) => s.trim()).filter(Boolean)
 }
 
 export default async function BrewsPage({ searchParams }: BrewsPageProps) {
@@ -16,8 +30,16 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
     searchParams.strategy && (EXTRACTION_STRATEGIES as readonly string[]).includes(searchParams.strategy)
       ? searchParams.strategy
       : null
+  const activeProcesses = parseList(searchParams.processes).filter((p) =>
+    (PROCESS_FAMILIES as readonly string[]).includes(p)
+  )
+  const activeRoasters = parseList(searchParams.roasters).filter((r) =>
+    (ROASTER_FAMILIES as readonly string[]).includes(r)
+  )
+  const activeLineages = parseList(searchParams.lineages)
+  const activeMacros = parseList(searchParams.macros)
 
-  let query = supabase
+  const { data: brews, error } = await supabase
     .from('brews')
     .select(`
       *,
@@ -27,17 +49,40 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
     `)
     .order('created_at', { ascending: false })
 
-  if (activeStrategy) {
-    query = query.eq('extraction_strategy', activeStrategy)
-  }
-
-  const { data: brews, error } = await query
-
   if (error) {
     console.error('Error fetching brews:', error)
   }
 
-  const brewList = (brews || []) as Brew[]
+  const allBrews = (brews || []) as Brew[]
+
+  const allLineages = Array.from(
+    new Set(allBrews.map((b) => b.cultivar?.lineage).filter((v): v is string => !!v))
+  ).sort()
+  const allMacros = Array.from(
+    new Set(allBrews.map((b) => b.terroir?.macro_terroir).filter((v): v is string => !!v))
+  ).sort()
+
+  const anyActive =
+    !!activeStrategy ||
+    activeProcesses.length > 0 ||
+    activeRoasters.length > 0 ||
+    activeLineages.length > 0 ||
+    activeMacros.length > 0
+
+  const brewList = !anyActive ? allBrews : allBrews.filter((b) => {
+    if (activeStrategy && b.extraction_strategy !== activeStrategy) return false
+    if (activeProcesses.length > 0 && !activeProcesses.includes(getProcessFamily(b.process))) return false
+    if (activeRoasters.length > 0 && !activeRoasters.includes(getRoasterFamily(b.roaster))) return false
+    if (activeLineages.length > 0) {
+      const lin = b.cultivar?.lineage
+      if (!lin || !activeLineages.includes(lin)) return false
+    }
+    if (activeMacros.length > 0) {
+      const m = b.terroir?.macro_terroir
+      if (!m || !activeMacros.includes(m)) return false
+    }
+    return true
+  })
 
   return (
     <div className="max-w-[1200px] mx-auto px-6 py-8">
@@ -48,54 +93,36 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
         </h1>
         <div className="font-mono text-xs text-latent-mid">
           {brewList.length} {brewList.length === 1 ? 'COFFEE' : 'COFFEES'}
+          {anyActive && allBrews.length !== brewList.length && (
+            <span className="ml-1 text-latent-subtle">/ {allBrews.length}</span>
+          )}
         </div>
       </div>
 
-      {/* Extraction-strategy filter pills */}
-      <div className="flex flex-wrap items-center gap-2 mb-6">
-        <span className="font-mono text-xxs tracking-wide uppercase text-latent-mid mr-1">
-          Strategy
-        </span>
-        <Link
-          href="/brews"
-          className={`font-mono text-xxs font-semibold tracking-wide uppercase px-3 py-1.5 rounded border transition-colors ${
-            activeStrategy === null
-              ? 'bg-latent-fg text-white border-latent-fg'
-              : 'bg-white text-latent-mid border-latent-border hover:border-latent-fg'
-          }`}
-        >
-          All
-        </Link>
-        {EXTRACTION_STRATEGIES.map((s) => {
-          const style = getStrategyStyle(s)!
-          const active = activeStrategy === s
-          return (
-            <Link
-              key={s}
-              href={`/brews?strategy=${encodeURIComponent(s)}`}
-              className="font-mono text-xxs font-semibold tracking-wide uppercase px-3 py-1.5 rounded border transition-colors"
-              style={
-                active
-                  ? { backgroundColor: style.border, color: '#fff', borderColor: style.border }
-                  : { backgroundColor: style.bg, color: style.text, borderColor: style.border }
-              }
-            >
-              {s}
-            </Link>
-          )
-        })}
-      </div>
+      <BrewsFilterBar
+        activeStrategy={activeStrategy}
+        activeProcesses={activeProcesses}
+        activeRoasters={activeRoasters}
+        activeLineages={activeLineages}
+        activeMacros={activeMacros}
+        allLineages={allLineages}
+        allMacros={allMacros}
+        anyActive={anyActive}
+      />
 
-      {/* Empty state */}
       {brewList.length === 0 ? (
         <div className="text-center py-16">
           <div className="w-16 h-16 bg-latent-accent rounded-lg mx-auto mb-6 flex items-center justify-center">
             <span className="text-2xl">☕</span>
           </div>
           <p className="font-mono text-sm text-latent-mid mb-6">
-            {activeStrategy ? `NO ${activeStrategy.toUpperCase()} BREWS YET` : 'NO BREWS YET'}
+            {anyActive ? 'NO BREWS MATCH THESE FILTERS' : 'NO BREWS YET'}
           </p>
-          <Link href="/add" className="btn btn-primary">+ ADD YOUR FIRST BREW</Link>
+          {anyActive ? (
+            <Link href="/brews" className="btn btn-secondary">CLEAR ALL FILTERS</Link>
+          ) : (
+            <Link href="/add" className="btn btn-primary">+ ADD YOUR FIRST BREW</Link>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-0 border-t border-l border-latent-border">
