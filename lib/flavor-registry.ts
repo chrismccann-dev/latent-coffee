@@ -7,6 +7,8 @@
 // sweetness", "Stone fruit sweetness", "Tea-like finish") classify into their
 // base family without needing a migration to collapse them.
 
+import { makeCanonicalLookup } from './canonical-registry'
+
 export const FLAVOR_FAMILIES = [
   'Citrus',
   'Stone Fruit',
@@ -177,8 +179,9 @@ export function getFamilyColor(family: FlavorFamily | 'Other' | string): string 
 // Classification — exact → case-insensitive → longest canonical substring
 // ---------------------------------------------------------------------------
 
-// Pre-built lowercase lookup for tier 2.
-const LOWER_LOOKUP: Map<string, FlavorFamily> = new Map(
+// Family lookup Map — separate from the Set-based canonical lookup below
+// because getFlavorFamily needs the family VALUE, not just existence.
+const FAMILY_LOOKUP: Map<string, FlavorFamily> = new Map(
   Object.entries(FLAVOR_MAP).map(([k, v]) => [k.toLowerCase(), v])
 )
 
@@ -193,17 +196,10 @@ export function getFlavorFamily(note: string | null | undefined): FlavorFamily |
   const trimmed = note.trim()
   if (!trimmed) return 'Other'
 
-  // Tier 1: exact
-  const exact = FLAVOR_MAP[trimmed]
-  if (exact) return exact
-
-  // Tier 2: case-insensitive
-  const ci = LOWER_LOOKUP.get(trimmed.toLowerCase())
+  const ci = FAMILY_LOOKUP.get(trimmed.toLowerCase())
   if (ci) return ci
 
   // Tier 3: longest canonical substring contained in the note
-  // Only match on word boundaries via simple includes — short canonical
-  // names like "cup" don't exist in the registry, so false matches are rare.
   const lowerNote = trimmed.toLowerCase()
   for (const entry of SUBSTRING_KEYS) {
     if (lowerNote.includes(entry.lower)) return entry.family
@@ -212,38 +208,9 @@ export function getFlavorFamily(note: string | null | undefined): FlavorFamily |
   return 'Other'
 }
 
-// Suggest the closest canonical name for a non-registry input — used by the
-// edit form's flavor-chip input to surface "not canonical — did you mean X?"
-// Strategy: prefer a canonical whose lowercase form is a substring of the
-// input (or vice versa); otherwise pick the canonical with the smallest
-// length-delta that shares a prefix. Returns null when nothing is close.
-export function findClosestFlavor(input: string | null | undefined): string | null {
-  if (!input) return null
-  const trimmed = input.trim()
-  if (!trimmed) return null
-  const lower = trimmed.toLowerCase()
-
-  if (FLAVOR_MAP[trimmed] || LOWER_LOOKUP.get(lower)) return null // already canonical
-
-  // Substring both directions
-  for (const canonical of FLAVOR_REGISTRY) {
-    const cl = canonical.toLowerCase()
-    if (lower.includes(cl) || cl.includes(lower)) return canonical
-  }
-
-  // Prefix match, pick shortest
-  const prefixed = FLAVOR_REGISTRY
-    .filter((c) => c.toLowerCase().startsWith(lower.slice(0, Math.min(3, lower.length))))
-    .sort((a, b) => a.length - b.length)
-  return prefixed[0] ?? null
-}
-
-export function isCanonicalFlavor(note: string | null | undefined): boolean {
-  if (!note) return false
-  const trimmed = note.trim()
-  if (!trimmed) return false
-  return !!FLAVOR_MAP[trimmed] || LOWER_LOOKUP.has(trimmed.toLowerCase())
-}
+export const FLAVOR_LOOKUP = makeCanonicalLookup(FLAVOR_REGISTRY)
+export const isCanonicalFlavor = FLAVOR_LOOKUP.isCanonical
+export const findClosestFlavor = FLAVOR_LOOKUP.findClosest
 
 // ---------------------------------------------------------------------------
 // Aggregation helper — used by all 3 aggregation detail pages

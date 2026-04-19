@@ -1,6 +1,8 @@
 // Roaster → family + per-roaster metadata. Names match brews.roaster exactly (free-text, no FK).
 // Family shape mirrors the BMR's extraction-strategy tags.
 
+import { makeCanonicalLookup } from './canonical-registry'
+
 export const ROASTER_FAMILIES = [
   'Clarity-First',
   'Balanced',
@@ -44,6 +46,13 @@ export function getRoasterFamily(roaster: string | null | undefined): RoasterFam
   if (!roaster) return 'Unknown'
   return ROASTER_MAP[roaster] || 'Unknown'
 }
+
+// Sorted canonical roaster names — consumed by the edit-form typeahead
+// datalist and by the ROASTER_LOOKUP bundle below.
+export const ROASTER_REGISTRY = Object.keys(ROASTER_MAP).sort()
+export const ROASTER_LOOKUP = makeCanonicalLookup(ROASTER_REGISTRY)
+export const isCanonicalRoaster = ROASTER_LOOKUP.isCanonical
+export const findClosestRoaster = ROASTER_LOOKUP.findClosest
 
 // Hue-separated palette per feedback_design_conventions. Warm-neutral, distinct from
 // process / flavor / brew-cover palettes.
