@@ -65,98 +65,146 @@ export function BrewsFilterBar({
     updateParam(key, next)
   }
 
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const totalActive =
+    (activeStrategy ? 1 : 0) +
+    activeProcesses.length +
+    activeRoasters.length +
+    activeLineages.length +
+    activeMacros.length
+
   return (
-    <div className="space-y-2 mb-6">
-      <DimensionRow label="Strategy">
-        {EXTRACTION_STRATEGIES.map((s) => {
-          const style = getStrategyStyle(s)!
-          return (
-            <FilterPill
-              key={s}
-              label={s}
-              active={activeStrategy === s}
-              activeBg={style.border}
-              activeFg="#fff"
-              inactiveBg={style.bg}
-              inactiveFg={style.text}
-              borderColor={style.border}
-              onClick={() => toggleSingle(s)}
-            />
-          )
-        })}
-      </DimensionRow>
-
-      <DimensionRow label="Process">
-        {PROCESS_FAMILIES.map((p) => {
-          const color = getProcessFamilyColor(p)
-          return (
-            <FilterPill
-              key={p}
-              label={p}
-              active={activeProcesses.includes(p)}
-              activeBg={color}
-              activeFg="#fff"
-              inactiveBg="white"
-              inactiveFg={color}
-              borderColor={color}
-              onClick={() => toggleMulti('processes', p)}
-            />
-          )
-        })}
-      </DimensionRow>
-
-      <DimensionRow label="Roaster">
-        {ROASTER_FAMILIES.map((r) => {
-          const color = getRoasterFamilyColor(r)
-          return (
-            <FilterPill
-              key={r}
-              label={r}
-              active={activeRoasters.includes(r)}
-              activeBg={color}
-              activeFg="#fff"
-              inactiveBg="white"
-              inactiveFg={color}
-              borderColor={color}
-              onClick={() => toggleMulti('roasters', r)}
-            />
-          )
-        })}
-      </DimensionRow>
-
-      <DimensionRow label="Origin">
-        <FilterPopover
-          label="Lineage"
-          options={allLineages}
-          active={activeLineages}
-          onToggle={(v) => toggleMulti('lineages', v)}
-          onClear={() => updateParam('lineages', null)}
+    <div className="mb-6">
+      <div className="md:hidden mb-2">
+        <FilterTrigger
+          label="Filters"
+          activeCount={totalActive}
+          open={mobileOpen}
+          onClick={() => setMobileOpen((v) => !v)}
         />
-        <FilterPopover
-          label="Macro"
-          options={allMacros}
-          active={activeMacros}
-          onToggle={(v) => toggleMulti('macros', v)}
-          onClear={() => updateParam('macros', null)}
-        />
-        {anyActive && (
-          <button
-            type="button"
-            onClick={() => router.push('/brews', { scroll: false })}
-            className="font-mono text-xxs tracking-wide uppercase text-latent-mid hover:text-latent-fg transition-colors ml-2"
-          >
-            Clear all
-          </button>
-        )}
-      </DimensionRow>
+      </div>
+      <div className={`${mobileOpen ? 'block' : 'hidden'} md:block space-y-2`}>
+        <DimensionRow label="Strategy">
+          {EXTRACTION_STRATEGIES.map((s) => {
+            const style = getStrategyStyle(s)!
+            return (
+              <FilterPill
+                key={s}
+                label={s}
+                active={activeStrategy === s}
+                activeBg={style.border}
+                activeFg="#fff"
+                inactiveBg={style.bg}
+                inactiveFg={style.text}
+                borderColor={style.border}
+                onClick={() => toggleSingle(s)}
+              />
+            )
+          })}
+        </DimensionRow>
+
+        <DimensionRow label="Process">
+          {PROCESS_FAMILIES.map((p) => {
+            const color = getProcessFamilyColor(p)
+            return (
+              <FilterPill
+                key={p}
+                label={p}
+                active={activeProcesses.includes(p)}
+                activeBg={color}
+                activeFg="#fff"
+                inactiveBg="white"
+                inactiveFg={color}
+                borderColor={color}
+                onClick={() => toggleMulti('processes', p)}
+              />
+            )
+          })}
+        </DimensionRow>
+
+        <DimensionRow label="Roaster">
+          {ROASTER_FAMILIES.map((r) => {
+            const color = getRoasterFamilyColor(r)
+            return (
+              <FilterPill
+                key={r}
+                label={r}
+                active={activeRoasters.includes(r)}
+                activeBg={color}
+                activeFg="#fff"
+                inactiveBg="white"
+                inactiveFg={color}
+                borderColor={color}
+                onClick={() => toggleMulti('roasters', r)}
+              />
+            )
+          })}
+        </DimensionRow>
+
+        <DimensionRow label="Origin">
+          <FilterPopover
+            label="Lineage"
+            options={allLineages}
+            active={activeLineages}
+            onToggle={(v) => toggleMulti('lineages', v)}
+            onClear={() => updateParam('lineages', null)}
+          />
+          <FilterPopover
+            label="Macro"
+            options={allMacros}
+            active={activeMacros}
+            onToggle={(v) => toggleMulti('macros', v)}
+            onClear={() => updateParam('macros', null)}
+          />
+          {anyActive && (
+            <button
+              type="button"
+              onClick={() => router.push('/brews', { scroll: false })}
+              className="font-mono text-xxs tracking-wide uppercase text-latent-mid hover:text-latent-fg transition-colors ml-2"
+            >
+              Clear all
+            </button>
+          )}
+        </DimensionRow>
+      </div>
     </div>
+  )
+}
+
+interface FilterTriggerProps {
+  label: string
+  activeCount: number
+  open: boolean
+  onClick: () => void
+}
+
+function FilterTrigger({ label, activeCount, open, onClick }: FilterTriggerProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-expanded={open}
+      className={`font-mono text-xxs font-semibold tracking-wide uppercase px-3 py-1.5 rounded border transition-colors flex items-center gap-1.5 ${
+        activeCount > 0
+          ? 'bg-latent-fg text-white border-latent-fg'
+          : 'bg-white text-latent-mid border-latent-border hover:border-latent-fg'
+      }`}
+    >
+      <span>{label}</span>
+      {activeCount > 0 && (
+        <span className="font-mono text-chip bg-white/20 rounded px-1 py-0.5">
+          {activeCount}
+        </span>
+      )}
+      <span aria-hidden>{open ? '▴' : '▾'}</span>
+    </button>
   )
 }
 
 function DimensionRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="font-mono text-xxs tracking-wide uppercase text-latent-mid mr-1 w-16 flex-shrink-0">
+      <span className="font-mono text-xxs tracking-wide uppercase text-latent-mid mr-1">
         {label}
       </span>
       {children}
@@ -226,26 +274,15 @@ function FilterPopover({ label, options, active, onToggle, onClear }: FilterPopo
 
   return (
     <div className="relative" ref={ref}>
-      <button
-        type="button"
+      <FilterTrigger
+        label={label}
+        activeCount={activeCount}
+        open={open}
         onClick={() => setOpen((v) => !v)}
-        className={`font-mono text-xxs font-semibold tracking-wide uppercase px-3 py-1.5 rounded border transition-colors flex items-center gap-1.5 ${
-          activeCount > 0
-            ? 'bg-latent-fg text-white border-latent-fg'
-            : 'bg-white text-latent-mid border-latent-border hover:border-latent-fg'
-        }`}
-      >
-        <span>{label}</span>
-        {activeCount > 0 && (
-          <span className="font-mono text-chip bg-white/20 rounded px-1 py-0.5">
-            {activeCount}
-          </span>
-        )}
-        <span aria-hidden>{open ? '▴' : '▾'}</span>
-      </button>
+      />
 
       {open && (
-        <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-latent-border rounded shadow-lg min-w-[220px] max-h-[320px] flex flex-col">
+        <div className="absolute top-full right-0 md:right-auto md:left-0 mt-1 z-50 bg-white border border-latent-border rounded shadow-lg min-w-[220px] max-w-[calc(100vw-3rem)] max-h-[320px] flex flex-col">
           <div className="flex-1 overflow-y-auto py-1">
             {options.length === 0 ? (
               <div className="px-3 py-2 font-mono text-xxs text-latent-mid">

@@ -125,7 +125,7 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-0 border-t border-l border-latent-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-0 border-t border-l border-latent-border">
           {brewList.map((brew) => {
             const cardColor = getCoverColor(brew)
             const producer = brew.producer || brew.green_bean?.producer || null
