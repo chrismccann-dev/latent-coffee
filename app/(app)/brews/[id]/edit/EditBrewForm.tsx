@@ -4,7 +4,10 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Brew, Terroir, Cultivar } from '@/lib/types'
 import { EXTRACTION_STRATEGIES } from '@/lib/brew-import'
+import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
+import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import { SectionCard } from '@/components/SectionCard'
+import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 import { FlavorNotesInput } from '@/components/FlavorNotesInput'
 
 type TerroirOption = Pick<Terroir, 'id' | 'country' | 'admin_region' | 'macro_terroir' | 'meso_terroir'>
@@ -169,14 +172,19 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
             <label className="label">Coffee name *</label>
             <input className="input" value={form.coffee_name} onChange={(e) => set('coffee_name', e.target.value)} required />
           </div>
-          <div>
-            <label className="label">Roaster</label>
-            <input className="input" value={form.roaster} onChange={(e) => set('roaster', e.target.value)} />
-          </div>
-          <div>
-            <label className="label">Producer</label>
-            <input className="input" value={form.producer} onChange={(e) => set('producer', e.target.value)} />
-          </div>
+          <CanonicalTextInput
+            label="Roaster"
+            value={form.roaster}
+            onChange={(v) => set('roaster', v)}
+            registry={ROASTER_LOOKUP}
+          />
+          <CanonicalTextInput
+            label="Producer"
+            value={form.producer}
+            onChange={(v) => set('producer', v)}
+            registry={PRODUCER_LOOKUP}
+          />
+
           <div>
             <label className="label">Variety</label>
             <input className="input" value={form.variety} onChange={(e) => set('variety', e.target.value)} />
