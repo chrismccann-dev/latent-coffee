@@ -40,7 +40,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
 
       {/* Hero Card */}
       <div className="section-card mb-6">
-        <div className="flex gap-8 mb-6">
+        <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 mb-6">
           {/* Book cover */}
           <div
             className="w-28 h-40 rounded flex-shrink-0 flex flex-col justify-between p-3 text-white"
@@ -56,7 +56,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
 
           {/* Title info */}
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
               <h1 className="font-sans text-2xl font-semibold">
                 {brew.coffee_name}
               </h1>
