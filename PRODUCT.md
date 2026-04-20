@@ -203,10 +203,11 @@ Both terroir and cultivar detail pages generate AI synthesis using Claude Sonnet
 - `/brews` grid, `/brews/[id]` hero, and the 5-dim filter bar all now render cleanly at 375px (see "Recently completed" below).
 - The add wizard, 3 aggregation indices, and 3 aggregation detail pages all render cleanly at 375 / 768 / 1280.
 
-**Experiments table — partially backfilled**
+**Experiments table — synced for resolved bean cycles**
 - Schema supports structured A/B/C/D experiments with full hypothesis → outcome → insight flow
-- 18 experiments imported (migration 019) for the 4 green beans currently in the database
-- The roasting spreadsheet has 16 additional experiments tied to 5 CGLE / Forrest / Higuito beans whose green_beans rows have not been imported yet — these will land in the next sprint alongside the green_beans backfill
+- 18 experiments imported (migration 019) for the 4 fully-resolved green bean cycles currently in the database
+- The roasting spreadsheet has 16 additional experiments tied to 5 in-progress beans (CGLE Mandela XO / Sudan Rume Hybrid Washed / Sudan Rume Natural, Forrest Gesha Clouds, Higuito Anaerobic Bourbon). These are intentionally NOT yet in the app: Chris uploads each bean as a single bundle when its green-bean → roast → cupping → best-brew cycle fully resolves, never progressively. Mandela XO + Sudan Rume Hybrid Washed are nearing resolution (Apr 2026)
+- Open future question: systematic Claude-driven sync from the live spreadsheet may eventually relax the upload-on-resolution rule, but until that exists the bundle-on-resolution discipline stands
 
 **Cross-dimensional search**
 - Brews list now filters across 5 dimensions — extraction strategy, process family, roaster family, cultivar lineage, terroir macro — with multi-select within each dimension (OR) and intersection across dimensions (AND). URL-driven state, shareable links, back-button works.
@@ -382,7 +383,7 @@ These are ideas and patterns that have emerged from the data, not committed feat
 - **Split `brews.producer` into `producer_name` + `farm_name`** — the "Person, Farm" convention (now locked post migration 018) makes this a clean parse. Valuable for the roasting side: reaching out to farms directly on Instagram for future sourcing needs the person and the farm as separate fields.
 - **Producers aggregation (`/producers`)** — producer is now canonical (49 names); a 5th aggregation dimension is a 1-day follow-up (copy the `/roasters` pattern: lookup lib, small cache table, index/detail). Deferred until 2+ producers have 3+ brews each so aggregation has signal.
 - **Backfill remaining what_i_learned** — ~19 brews still missing long-form learnings.
-- **Green_beans backfill (5 beans) + remaining experiments** — the roasting spreadsheet tracks 9 beans but only 4 have green_beans rows. Add CGLE Mandela XO, CGLE Sudan Rume Washed, CGLE Sudan Rume Natural, Forrest Gesha Clouds, and Higuito Anaerobic Bourbon. That unlocks the remaining 16 experiments (already in the spreadsheet) which are blocked on the green_bean FK.
+- **Green_beans uploads when their cycles resolve (event-driven, not a sprint)** — the roasting spreadsheet tracks 9 beans but the 5 not yet in the DB are intentionally mid-iteration per Chris's "upload only fully-resolved sets" rule. As each bean's green-bean → roast → cupping → best-brew cycle finalizes, that bean's full dataset (1 green_bean row + ~10-20 roasts + ~3-6 experiments + cuppings + roast learnings + 1 best brew) lands in one bundle. Mandela XO + Sudan Rume Hybrid Washed are next in the queue (~Apr 2026). This is event-driven, not a queued sprint — the actual sprint to define is the *upload mechanic* (today: ad-hoc Claude-assisted; future: systematic sync from the live sheet).
 
 ### Medium-term (knowledge compounding)
 
