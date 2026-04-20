@@ -3,6 +3,16 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { SectionCard } from '@/components/SectionCard'
 
+function LearningField({ label, value }: { label: string; value?: string | null }) {
+  if (!value) return null
+  return (
+    <div>
+      <div className="label">{label}</div>
+      {value}
+    </div>
+  )
+}
+
 export default async function GreenBeanDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
   
@@ -110,15 +120,18 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
                   <th>Batch</th>
                   <th>Date</th>
                   <th>FC</th>
+                  <th>FC Temp</th>
                   <th>Drop</th>
+                  <th>Drop Temp</th>
                   <th>Dev</th>
                   <th>Agtron</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {bean.roasts.map((roast: any) => (
-                  <tr 
-                    key={roast.id} 
+                  <tr
+                    key={roast.id}
                     className={String(roast.batch_id) === String(bestBatchId) ? 'highlight' : ''}
                   >
                     <td className={String(roast.batch_id) === String(bestBatchId) ? 'font-semibold' : ''}>
@@ -126,12 +139,27 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
                     </td>
                     <td>{roast.roast_date || '—'}</td>
                     <td>{roast.fc_start || '—'}</td>
+                    <td>{roast.fc_temp ? `${roast.fc_temp}°C` : '—'}</td>
                     <td>{roast.drop_time || '—'}</td>
+                    <td>{roast.drop_temp ? `${roast.drop_temp}°C` : '—'}</td>
                     <td>
                       {roast.dev_time_s ? `${roast.dev_time_s}s` : '—'}
                       {roast.dev_ratio && ` (${roast.dev_ratio})`}
                     </td>
                     <td>{roast.agtron || '—'}</td>
+                    <td>
+                      {roast.profile_link && (
+                        <a
+                          href={roast.profile_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-latent-mid hover:text-latent-fg"
+                          title="Roest profile"
+                        >
+                          ↗
+                        </a>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -193,36 +221,20 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
       {learnings && (
         <SectionCard title="🔥 ROAST LEARNINGS">
           <div className="space-y-4 font-sans text-sm leading-relaxed">
-            {learnings.aromatic_behavior && (
-              <div>
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Aromatic Behavior</div>
-                {learnings.aromatic_behavior}
-              </div>
-            )}
-            {learnings.structural_behavior && (
-              <div>
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Structural Behavior</div>
-                {learnings.structural_behavior}
-              </div>
-            )}
-            {learnings.elasticity && (
-              <div>
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Elasticity</div>
-                {learnings.elasticity}
-              </div>
-            )}
-            {learnings.primary_lever && (
-              <div>
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Primary Lever</div>
-                {learnings.primary_lever}
-              </div>
-            )}
-            {learnings.secondary_levers && (
-              <div>
-                <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Secondary Levers</div>
-                {learnings.secondary_levers}
-              </div>
-            )}
+            <LearningField label="Aromatic Behavior" value={learnings.aromatic_behavior} />
+            <LearningField label="Structural Behavior" value={learnings.structural_behavior} />
+            <LearningField label="Elasticity" value={learnings.elasticity} />
+            <LearningField label="Roast Window Width" value={learnings.roast_window_width} />
+            <LearningField label="Primary Lever" value={learnings.primary_lever} />
+            <LearningField label="Secondary Levers" value={learnings.secondary_levers} />
+            <LearningField label="What Didn't Move the Needle" value={learnings.what_didnt_move_needle} />
+            <LearningField label="Underdevelopment Signal" value={learnings.underdevelopment_signal} />
+            <LearningField label="Overdevelopment Signal" value={learnings.overdevelopment_signal} />
+            <LearningField label="Cultivar Takeaway" value={learnings.cultivar_takeaway} />
+            <LearningField label="General Takeaway" value={learnings.general_takeaway} />
+            <LearningField label="Rest Behavior" value={learnings.rest_behavior} />
+            <LearningField label="Reference Roasts" value={learnings.reference_roasts} />
+            <LearningField label="Starting Hypothesis" value={learnings.starting_hypothesis} />
           </div>
         </SectionCard>
       )}
