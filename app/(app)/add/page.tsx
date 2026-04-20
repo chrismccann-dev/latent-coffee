@@ -392,16 +392,25 @@ export default function AddPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      // 1. Create or get terroir
+      // 1. Create or get terroir. Unique constraint is on
+      // (user_id, country, admin_region, macro_terroir) — the lookup must
+      // filter on all 4 columns or it can silently miss existing rows and
+      // then collide on insert.
       let terroirId = null
       if (parsedTerroir?.country) {
-        const { data: existingTerroir } = await supabase
+        let terroirQuery = supabase
           .from('terroirs')
           .select('id')
           .eq('user_id', user.id)
           .eq('country', parsedTerroir.country)
-          .eq('macro_terroir', parsedTerroir.macroTerroir || '')
-          .single()
+        terroirQuery = parsedTerroir.adminRegion
+          ? terroirQuery.eq('admin_region', parsedTerroir.adminRegion)
+          : terroirQuery.is('admin_region', null)
+        terroirQuery = parsedTerroir.macroTerroir
+          ? terroirQuery.eq('macro_terroir', parsedTerroir.macroTerroir)
+          : terroirQuery.is('macro_terroir', null)
+
+        const { data: existingTerroir } = await terroirQuery.maybeSingle()
 
         if (existingTerroir) {
           terroirId = existingTerroir.id
@@ -411,14 +420,14 @@ export default function AddPage() {
             .insert({
               user_id: user.id,
               country: parsedTerroir.country,
-              admin_region: parsedTerroir.adminRegion,
-              macro_terroir: parsedTerroir.macroTerroir,
-              meso_terroir: parsedTerroir.mesoTerroir,
+              admin_region: parsedTerroir.adminRegion || null,
+              macro_terroir: parsedTerroir.macroTerroir || null,
+              meso_terroir: parsedTerroir.mesoTerroir || null,
               elevation_min: parsedTerroir.elevationMin ? parseInt(parsedTerroir.elevationMin) : null,
               elevation_max: parsedTerroir.elevationMax ? parseInt(parsedTerroir.elevationMax) : null,
-              climate_stress: parsedTerroir.climateStress,
+              climate_stress: parsedTerroir.climateStress || null,
             })
-            .select()
+            .select('id')
             .single()
 
           if (terroirError) throw terroirError
@@ -426,7 +435,7 @@ export default function AddPage() {
         }
       }
 
-      // 2. Create or get cultivar
+      // 2. Create or get cultivar. Unique constraint: (user_id, cultivar_name).
       let cultivarId = null
       if (parsedCultivar?.cultivar) {
         const { data: existingCultivar } = await supabase
@@ -434,7 +443,7 @@ export default function AddPage() {
           .select('id')
           .eq('user_id', user.id)
           .eq('cultivar_name', parsedCultivar.cultivar)
-          .single()
+          .maybeSingle()
 
         if (existingCultivar) {
           cultivarId = existingCultivar.id
@@ -444,15 +453,15 @@ export default function AddPage() {
             .insert({
               user_id: user.id,
               species: parsedCultivar.species || 'Arabica',
-              genetic_family: parsedCultivar.geneticFamily,
-              lineage: parsedCultivar.lineage,
+              genetic_family: parsedCultivar.geneticFamily || null,
+              lineage: parsedCultivar.lineage || null,
               cultivar_name: parsedCultivar.cultivar,
-              genetic_background: parsedCultivar.geneticBackground,
-              acidity_style: parsedCultivar.acidityStyle,
-              body_style: parsedCultivar.bodyStyle,
-              aromatics: parsedCultivar.aromatics,
+              genetic_background: parsedCultivar.geneticBackground || null,
+              acidity_style: parsedCultivar.acidityStyle || null,
+              body_style: parsedCultivar.bodyStyle || null,
+              aromatics: parsedCultivar.aromatics || null,
             })
-            .select()
+            .select('id')
             .single()
 
           if (cultivarError) throw cultivarError
@@ -460,33 +469,41 @@ export default function AddPage() {
         }
       }
 
-      // 3. Create green bean
+      // 3. Create green bean. lot_id is unique per user — if it collides the
+      // user is trying to re-upload a bean they already have; surface a
+      // friendlier error than the raw Postgres constraint message.
+      const lotId = parsedGreenBean?.lotId || `LOT-${Date.now()}`
       const { data: greenBean, error: greenBeanError } = await supabase
         .from('green_beans')
         .insert({
           user_id: user.id,
-          lot_id: parsedGreenBean?.lotId || `LOT-${Date.now()}`,
+          lot_id: lotId,
           name: parsedGreenBean?.name || 'Unnamed',
-          producer: parsedGreenBean?.producer,
-          origin: parsedGreenBean?.origin,
-          region: parsedGreenBean?.region,
-          variety: parsedGreenBean?.variety,
-          process: parsedGreenBean?.process,
-          importer: parsedGreenBean?.importer,
-          source_type: parsedGreenBean?.sourceType,
-          link: parsedGreenBean?.link,
+          producer: parsedGreenBean?.producer || null,
+          origin: parsedGreenBean?.origin || null,
+          region: parsedGreenBean?.region || null,
+          variety: parsedGreenBean?.variety || null,
+          process: parsedGreenBean?.process || null,
+          importer: parsedGreenBean?.importer || null,
+          source_type: parsedGreenBean?.sourceType || null,
+          link: parsedGreenBean?.link || null,
           purchase_date: parsedGreenBean?.purchaseDate || null,
           price_per_kg: parsedGreenBean?.pricePerKg ? parseFloat(parsedGreenBean.pricePerKg.replace(/[^0-9.]/g, '')) : null,
           quantity_g: parsedGreenBean?.quantity ? parseInt(parsedGreenBean.quantity) : null,
-          moisture: parsedGreenBean?.moisture,
-          density: parsedGreenBean?.density,
+          moisture: parsedGreenBean?.moisture || null,
+          density: parsedGreenBean?.density || null,
           terroir_id: terroirId,
           cultivar_id: cultivarId,
         })
-        .select()
+        .select('id')
         .single()
 
-      if (greenBeanError) throw greenBeanError
+      if (greenBeanError) {
+        if (greenBeanError.code === '23505' || /duplicate key/i.test(greenBeanError.message)) {
+          throw new Error(`A green bean with lot_id "${lotId}" already exists. Pick a new lot_id or delete the existing bean first.`)
+        }
+        throw greenBeanError
+      }
 
       // 4. Create roasts
       const roastIdMap: Record<string, string> = {}
