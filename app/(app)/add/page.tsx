@@ -110,11 +110,20 @@ export default function AddPage() {
   const parseSpreadsheet = (input: string): Record<string, string>[] => {
     const lines = input.trim().split('\n')
     if (lines.length < 2) return []
-    
-    const headers = lines[0].split('\t').map(h => 
-      h.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
-    )
-    
+
+    // Normalize each header to a snake_case key. Empty or duplicate headers get
+    // a positional `col_N` fallback so columns with blank/duplicate titles
+    // (e.g. the unlabeled "Observed Outcome D" column in some exports) still
+    // get a stable lookup name.
+    const seen = new Map<string, number>()
+    const headers = lines[0].split('\t').map((h, i) => {
+      let key = h.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
+      if (!key) key = `col_${i}`
+      const count = (seen.get(key) ?? 0) + 1
+      seen.set(key, count)
+      return count > 1 ? `${key}_${count}` : key
+    })
+
     return lines.slice(1).map(line => {
       const values = line.split('\t')
       const row: Record<string, string> = {}
@@ -125,58 +134,253 @@ export default function AddPage() {
     }).filter(row => Object.keys(row).length > 0)
   }
 
-  // Simple parse for green bean spreadsheet
+  // Simple parse for green bean spreadsheet.
+  // Keys are what `parseSpreadsheet` produces: lowercase, non-alphanumeric → `_`,
+  // consecutive underscores collapsed to one, leading/trailing underscores stripped.
   const parseGreenBeanSpreadsheet = (input: string) => {
     const rows = parseSpreadsheet(input)
     if (rows.length === 0) return null
-    
+
     const row = rows[0]
     return {
-      lotId: row.green_lot_id__unique_key_ || row.lot_id || row.lotid || '',
+      lotId: row.green_lot_id_unique_key || row.lot_id || row.lotid || '',
       name: row.coffee_name || row.name || '',
       producer: row.producer || '',
-      origin: row.origin || row.country || '',
+      origin: row.origin || row.origin_country || row.country || '',
       region: row.region || '',
       variety: row.variety || row.cultivar || '',
       process: row.process || '',
-      importer: row.importer || '',
-      sourceType: row.source_type__importer___roaster___farm_direct_ || row.source_type || '',
+      importer: row.seller_importer || row.importer || '',
+      sourceType: row.source_type_importer_roaster_farm_direct || row.source_type || '',
       link: row.link || row.url || '',
       purchaseDate: row.purchase_date || '',
-      pricePerKg: row.price___kg_ || row.price_per_kg || '',
-      moisture: row.moisture___ || row.moisture || '',
-      density: row.density__g_l_ || row.density || '',
-      quantity: row.total_purchased__g_ || row.quantity || '',
+      pricePerKg: row.price_per_kg || row.price_kg || '',
+      moisture: row.moisture || row.moisture_pct || '',
+      density: row.density_g_l || row.density || '',
+      quantity: row.total_purchased_g || row.quantity || '',
     }
   }
 
-  // Parse roast log spreadsheet
+  // Parse roast log spreadsheet.
+  // Header key lookups match the output of `parseSpreadsheet` (lowercase,
+  // non-alphanumeric collapsed to underscores, trimmed).
   const parseRoastLogSpreadsheet = (input: string) => {
     const rows = parseSpreadsheet(input)
     return rows.map(row => ({
-      batchId: row.roest_batch__ || row.batch_id || row.batch || '',
+      batchId: row.roest_batch || row.batch_id || row.batch || '',
       roastDate: row.roast_date || row.date || '',
       coffeeName: row.coffee_name || '',
       profileLink: row.roest_graph || row.profile_link || '',
-      batchSize: row.green_coffee_weight__g_ || row.batch_size || '',
-      roastedWeight: row.roasted_weight__g_ || row.roasted_weight || '',
-      weightLoss: row.weight_loss___ || row.weight_loss || '',
+      batchSize: row.green_coffee_weight_g || row.batch_size || '',
+      roastedWeight: row.roasted_weight_g || row.roasted_weight || '',
+      weightLoss: row.weight_loss || '',
       agtron: row.agtron_color || row.agtron || '',
       colorDescription: row.color_description || '',
       yellowingTime: row.yellow_time || row.yellowing_time || '',
       fcStart: row.first_crack_time || row.fc_time || row.fc_start || '',
-      fcTemp: row.first_crack_bean_temp__c_ || row.fc_temp || '',
+      fcTemp: row.first_crack_bean_temp_c || row.fc_temp || '',
       dropTime: row.drop_time || '',
-      dropTemp: row.drop_bean_temp__c_ || row.drop_temp || '',
-      devTime: row.dev_time__s_ || row.dev_time || '',
-      devRatio: row.dev__ || row.dev_ratio || '',
-      whatWorked: row.what_worked_ || row.what_worked || '',
-      whatDidnt: row.what_didn_t_work_ || row.what_didnt || '',
-      whatToChange: row.what_will_you_change_next_time_ || row.what_to_change || '',
-      worthRepeating: row.worth_repeating_ || row.worth_repeating || '',
-      isReference: row.reference_roast_ || row.is_reference || '',
+      dropTemp: row.drop_bean_temp_c || row.drop_temp || '',
+      devTime: row.dev_time_s || row.dev_time || '',
+      devRatio: row.dev || row.dev_ratio || row.dev_pct || '',
+      whatWorked: row.what_worked || '',
+      whatDidnt: row.what_didn_t || row.what_didnt || row.what_didn_t_work || '',
+      whatToChange:
+        row.what_i_d_change_next_time ||
+        row.what_i_would_change_next_time ||
+        row.what_will_you_change_next_time ||
+        row.what_to_change ||
+        '',
+      worthRepeating: row.worth_repeating || '',
+      isReference: row.reference_roast || row.is_reference || '',
       drumDirection: row.drum_direction || '',
     })).filter(r => r.batchId)
+  }
+
+  // Parse experiments spreadsheet.
+  // Chris's sheet has an unlabeled column for "Observed Outcome D" — handled
+  // via the col_N positional fallback in parseSpreadsheet.
+  const parseExperimentSpreadsheet = (input: string) => {
+    const rows = parseSpreadsheet(input)
+    return rows.map(row => ({
+      experimentId: row.experiment_id || '',
+      batchIds: row.roest_batch_s || row.batch_ids || '',
+      context: row.context || '',
+      primaryQuestion: row.primary_question || '',
+      controlBaseline: row.control_baseline_if_applicable || row.control_baseline || '',
+      sharedConstants: row.shared_constants || '',
+      variableChanged: row.variable_changed || '',
+      levelsTested: row.levels_tested_a_b_c || row.levels_tested || '',
+      expectedOutcomes: row.expected_outcomes_a_b_c || row.expected_outcomes || '',
+      failureBoundary: row.failure_boundary_definition || row.failure_boundary || '',
+      observedOutcomeA: row.observed_outcome_a || '',
+      observedOutcomeB: row.observed_outcome_b || '',
+      observedOutcomeC: row.observed_outcome_c || '',
+      observedOutcomeD:
+        row.observed_outcome_d_optional ||
+        row.observed_outcome_d ||
+        row.col_14 ||
+        '',
+      winner: row.winner_best_expression || row.winner || '',
+      keyInsight: row.key_insight || '',
+      whatChangesGoingForward:
+        row.what_this_changes_going_forward || row.what_changes_going_forward || '',
+    })).filter(r => r.experimentId)
+  }
+
+  // Parse cuppings spreadsheet. Source has `Sweetness` and separate `Brew Method`
+  // that schema doesn't support — Brew Method is folded into eval_method and
+  // Sweetness is dropped. Audit `/tmp/sprint-handoff/green-detail-audit.md` P1.
+  const parseCuppingSpreadsheet = (input: string) => {
+    const rows = parseSpreadsheet(input)
+    return rows.map(row => {
+      const evalMethod = row.evaluation_method || row.eval_method || ''
+      const brewMethod = row.brew_method || ''
+      const combined =
+        evalMethod && brewMethod && brewMethod !== evalMethod
+          ? `${evalMethod} - ${brewMethod}`
+          : (evalMethod || brewMethod || '')
+      return {
+        batchId: row.roest_batch || row.batch_id || '',
+        cuppingDate: row.cupping_date || '',
+        restDays: row.rest_days_at_tasting || row.rest_days || '',
+        evalMethod: combined,
+        groundAgtron: row.ground_agtron_color || row.ground_agtron || '',
+        groundColorDescription: row.ground_color_description || '',
+        aroma: row.aroma || '',
+        flavor: row.flavor || '',
+        acidity: row.acidity || '',
+        body: row.body || '',
+        finish: row.finish || '',
+        overall: row.overall_impression || row.overall || '',
+      }
+    }).filter(c => c.batchId)
+  }
+
+  // Parse overall lessons / roast learnings (single-row).
+  // Accepts multi-value `Best Roast Batch #` like "#133 (confirmed), #148 (closest)"
+  // by extracting the first integer — UI string-matches `roasts.batch_id` against
+  // this value to highlight the winning row (see /green/[id]/page.tsx).
+  const parseLearningsSpreadsheet = (input: string) => {
+    const rows = parseSpreadsheet(input)
+    if (rows.length === 0) return null
+    const row = rows[0]
+    const rawBest = row.best_roast_batch || row.best_batch_id || ''
+    const firstInt = rawBest.match(/\d+/)?.[0] || ''
+    return {
+      bestBatchId: firstInt,
+      whyThisRoastWon: row.why_this_roast_won || '',
+      aromaticBehavior: row.aromatic_behavior || '',
+      structuralBehavior: row.structural_behavior || '',
+      elasticity: row.elasticity || '',
+      roastWindowWidth: row.roast_window_width || '',
+      primaryLever: row.primary_lever_that_mattered || row.primary_lever || '',
+      secondaryLevers: row.secondary_lever_s || row.secondary_levers || '',
+      whatDidntMoveNeedle:
+        row.what_didn_t_move_the_needle_and_why ||
+        row.what_didnt_move_the_needle ||
+        row.what_didnt_move_needle ||
+        '',
+      underdevelopmentSignal:
+        row.underdevelopment_failure_signal || row.underdevelopment_signal || '',
+      overdevelopmentSignal:
+        row.overdevelopment_failure_signal || row.overdevelopment_signal || '',
+      cultivarTakeaway:
+        row.cultivar_specific_takeaway || row.cultivar_takeaway || '',
+      generalTakeaway:
+        row.general_roasting_takeaway || row.general_takeaway || '',
+      referenceRoasts:
+        row.reference_roasts_to_keep_in_mind || row.reference_roasts || '',
+      startingHypothesis:
+        row.starting_hypothesis_for_similar_coffees || row.starting_hypothesis || '',
+      restBehavior:
+        row.rest_behavior_evaluation_timing || row.rest_behavior || '',
+    }
+  }
+
+  // Parse terroir spreadsheet (single-row). Columns mirror the purchased-flow
+  // terroir tab, so the same paste format works for both flows.
+  const parseTerroirSpreadsheet = (input: string) => {
+    const rows = parseSpreadsheet(input)
+    if (rows.length === 0) return null
+    const row = rows[0]
+    // Elevation band like "1500-1800 masl" or "1571 - 1852" → min/max.
+    let elevationMin = ''
+    let elevationMax = ''
+    const band = row.elevation_band || row.elevation || ''
+    const nums = band.match(/\d+/g)
+    if (nums && nums.length >= 1) elevationMin = nums[0]
+    if (nums && nums.length >= 2) elevationMax = nums[1]
+    return {
+      country: row.country || '',
+      adminRegion: row.admin_region || '',
+      macroTerroir: row.macro_terroir || '',
+      mesoTerroir: row.meso_terroir || '',
+      microTerroir: row.micro_terroir || '',
+      context: row.context || '',
+      elevationMin,
+      elevationMax,
+      climateStress: row.climate || row.climate_stress || '',
+      soil: row.soil || '',
+      cupProfile: row.cup_profile || '',
+      whyItStandsOut: row.why_it_stands_out || '',
+    }
+  }
+
+  // Parse cultivar spreadsheet (single-row). Columns mirror the purchased-flow
+  // cultivar tab.
+  const parseCultivarSpreadsheet = (input: string) => {
+    const rows = parseSpreadsheet(input)
+    if (rows.length === 0) return null
+    const row = rows[0]
+    return {
+      cultivar: row.cultivar || row.cultivar_name || '',
+      species: row.species || 'Arabica',
+      geneticFamily: row.genetic_family || '',
+      lineage: row.lineage || '',
+      geneticBackground: row.genetic_background || '',
+      acidityStyle: row.acidity_style || row.acidity_character || '',
+      bodyStyle: row.body_style || row.body_character || '',
+      aromatics: row.aromatics || '',
+    }
+  }
+
+  // Parse self-roasted brew tab (single-row). Produces the nested
+  // `{recipe, sensory, learnings}` shape `handleSaveSelfRoasted` reads.
+  const parseBrewSpreadsheet = (input: string) => {
+    const rows = parseSpreadsheet(input)
+    if (rows.length === 0) return null
+    const row = rows[0]
+    const learned = row.what_i_learned_from_this_coffee || row.what_i_learned || ''
+    return {
+      coffeeName: row.coffee_name || '',
+      recipe: {
+        brewer: row.brewer || '',
+        filter: row.filter || '',
+        doseG: row.dose || row.dose_g || '',
+        waterG: row.water || row.water_g || '',
+        grind: row.grind || '',
+        tempC: row.temp || row.temp_c || '',
+        bloom: row.bloom || '',
+        pourStructure: row.pour_structure || '',
+        totalTime: row.total_time || '',
+        extractionStrategy: row.extraction_strategy || '',
+        extractionConfirmed: row.extraction_strategy_confirmed || '',
+      },
+      sensory: {
+        aroma: row.aroma || '',
+        attack: row.attack || '',
+        midPalate: row.mid_palate || '',
+        body: row.body || '',
+        finish: row.finish || '',
+        temperatureEvolution: row.temperature_evolution || '',
+        peakExpression: row.peak_expression || '',
+      },
+      learnings: {
+        keyTakeaways: learned ? [learned] : [],
+        classification: '',
+      },
+    }
   }
 
   // Handle save for self-roasted flow
@@ -654,43 +858,115 @@ export default function AddPage() {
       )
     }
 
-    // Steps 4-9: Experiments, Cuppings, Learnings, Terroir, Cultivar, Brew
-    // (Simplified for now - would follow same pattern)
-    
+    // Steps 4-8: Experiments, Cuppings, Learnings, Terroir, Cultivar
+    // Each step: paste tab-delimited rows -> Parse -> summary -> Next.
     if (step >= 4 && step <= 8) {
-      const stepConfig: Record<number, { title: string, field: string, setter: any, value: string }> = {
-        4: { title: 'Experiments (Optional)', field: 'experiments', setter: setExperimentInput, value: experimentInput },
-        5: { title: 'Cupping Notes', field: 'cuppings', setter: setCuppingInput, value: cuppingInput },
-        6: { title: 'Roast Learnings', field: 'learnings', setter: setLearningsInput, value: learningsInput },
-        7: { title: 'Terroir Info', field: 'terroir', setter: setTerroirInput, value: terroirInput },
-        8: { title: 'Cultivar Info', field: 'cultivar', setter: setCultivarInput, value: cultivarInput },
+      const cfg: Record<number, {
+        title: string
+        placeholder: string
+        value: string
+        setter: (v: string) => void
+        onParse: () => void
+        summary: string | null
+        hasParsed: boolean
+      }> = {
+        4: {
+          title: 'Experiments (Optional)',
+          placeholder: 'Paste experiment rows with header (Experiment ID, Coffee Name, Roest Batch #s, ...)',
+          value: experimentInput,
+          setter: setExperimentInput,
+          onParse: () => setParsedExperiments(parseExperimentSpreadsheet(experimentInput)),
+          summary: parsedExperiments.length
+            ? `Parsed ${parsedExperiments.length} experiments (${parsedExperiments.map(e => e.experimentId).join(', ')})`
+            : null,
+          hasParsed: parsedExperiments.length > 0,
+        },
+        5: {
+          title: 'Cupping Notes (Optional)',
+          placeholder: 'Paste cupping rows with header (Roest Batch #, Coffee Name, Cupping Date, ...)',
+          value: cuppingInput,
+          setter: setCuppingInput,
+          onParse: () => setParsedCuppings(parseCuppingSpreadsheet(cuppingInput)),
+          summary: parsedCuppings.length
+            ? `Parsed ${parsedCuppings.length} cuppings across ${new Set(parsedCuppings.map(c => c.batchId)).size} batches`
+            : null,
+          hasParsed: parsedCuppings.length > 0,
+        },
+        6: {
+          title: 'Roast Learnings (Optional)',
+          placeholder: 'Paste the overall-lessons row with header (Coffee Name, Producer / Region, Cultivar, ...)',
+          value: learningsInput,
+          setter: setLearningsInput,
+          onParse: () => setParsedLearnings(parseLearningsSpreadsheet(learningsInput)),
+          summary: parsedLearnings?.bestBatchId
+            ? `Parsed — best batch: #${parsedLearnings.bestBatchId}`
+            : null,
+          hasParsed: !!parsedLearnings,
+        },
+        7: {
+          title: 'Terroir',
+          placeholder: 'Paste the terroir row with header (Country, Admin Region, Macro Terroir, ...)',
+          value: terroirInput,
+          setter: setTerroirInput,
+          onParse: () => setParsedTerroir(parseTerroirSpreadsheet(terroirInput)),
+          summary: parsedTerroir?.country
+            ? `Parsed — ${parsedTerroir.country} / ${parsedTerroir.adminRegion || '?'} / ${parsedTerroir.macroTerroir || '?'}`
+            : null,
+          hasParsed: !!parsedTerroir,
+        },
+        8: {
+          title: 'Cultivar',
+          placeholder: 'Paste the cultivar row with header (Cultivar, Species, Genetic Family, Lineage, ...)',
+          value: cultivarInput,
+          setter: setCultivarInput,
+          onParse: () => setParsedCultivar(parseCultivarSpreadsheet(cultivarInput)),
+          summary: parsedCultivar?.cultivar
+            ? `Parsed — ${parsedCultivar.cultivar} (${parsedCultivar.lineage || parsedCultivar.geneticFamily || '?'})`
+            : null,
+          hasParsed: !!parsedCultivar,
+        },
       }
-      
-      const config = stepConfig[step]
-      
+      const config = cfg[step]
+
       return (
         <div className="max-w-lg mx-auto px-6 py-8">
           <button onClick={resetFlow} className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6">
             ← Start Over
           </button>
-          
+
           <StepHeader num={step} title={config.title} />
-          
+
           <div className="mb-6">
-            <label className="label">Paste data</label>
+            <label className="label">Paste data (with header row)</label>
             <textarea
               value={config.value}
               onChange={(e) => config.setter(e.target.value)}
               className="textarea"
-              placeholder={`Paste ${config.field} data here...`}
-              rows={6}
+              placeholder={config.placeholder}
+              rows={8}
             />
           </div>
+
+          <div className="flex gap-3">
+            <button
+              onClick={config.onParse}
+              disabled={!config.value.trim()}
+              className="btn btn-secondary"
+            >
+              Parse
+            </button>
+          </div>
+
+          {config.summary && (
+            <div className="mt-6 p-4 bg-latent-highlight border border-latent-highlight-border rounded">
+              <div className="font-mono text-xs">{config.summary}</div>
+            </div>
+          )}
 
           <div className="flex gap-3 mt-6">
             <button onClick={() => setStep(step - 1)} className="btn btn-secondary">Back</button>
             <button onClick={() => setStep(step + 1)} className="btn btn-primary">
-              {step === 8 ? 'Next →' : 'Skip / Next →'}
+              {config.hasParsed ? 'Next →' : 'Skip / Next →'}
             </button>
           </div>
 
@@ -706,25 +982,45 @@ export default function AddPage() {
           <button onClick={resetFlow} className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6">
             ← Start Over
           </button>
-          
+
           <StepHeader num={9} title="Best Brew & Tasting Notes" />
-          
+
           <div className="mb-6">
-            <label className="label">Paste brew recipe & sensory notes</label>
+            <label className="label">Paste brew recipe & sensory notes (optional — safe to leave empty)</label>
             <textarea
               value={brewInput}
               onChange={(e) => setBrewInput(e.target.value)}
               className="textarea"
-              placeholder="Paste brew data here..."
+              placeholder="Paste the brew row with header (Coffee Name, Brewer, Filter, Dose, Water, ...)"
               rows={8}
             />
           </div>
 
-          {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+          <div className="flex gap-3">
+            <button
+              onClick={() => setParsedBrew(parseBrewSpreadsheet(brewInput))}
+              disabled={!brewInput.trim()}
+              className="btn btn-secondary"
+            >
+              Parse
+            </button>
+          </div>
+
+          {parsedBrew && (
+            <div className="mt-6 p-4 bg-latent-highlight border border-latent-highlight-border rounded">
+              <div className="font-mono text-xs">
+                Parsed — {parsedBrew.recipe?.brewer || 'brewer?'} ·{' '}
+                {parsedBrew.recipe?.extractionStrategy || 'strategy?'} ·{' '}
+                {parsedBrew.recipe?.totalTime || 'total?'}
+              </div>
+            </div>
+          )}
+
+          {error && <div className="text-red-600 text-sm mt-4">{error}</div>}
 
           <div className="flex gap-3 mt-6">
             <button onClick={() => setStep(8)} className="btn btn-secondary">Back</button>
-            <button 
+            <button
               onClick={handleSaveSelfRoasted}
               disabled={isProcessing}
               className="btn btn-primary"
