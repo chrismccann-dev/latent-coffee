@@ -90,7 +90,10 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - Adding a new canonical tag = a deliberate decision, not drift. Same treatment as the macro-terroir + cultivar registries.
 
 ### Green (`app/(app)/green/`)
-- Green bean management (self-roasted lots)
+- **Index:** Card grid of green bean lots, roast count via FK join.
+- **Detail:** `/green/[id]` — hero + GREEN BEAN DETAILS, BEST ROAST (dark), ROAST LOG (table), EXPERIMENTS, ROAST LEARNINGS, CUPPING HISTORY, RELATED BREWS. All chrome routes through canonical [components/SectionCard.tsx](components/SectionCard.tsx) — do NOT re-declare an inline `Section` component.
+- **Experiments block:** renders each row of the `experiments` table (22-field schema, A/B/C/D structured tests). Surfaces `experiment_id` (mono semibold) + `Batches` line + `.label`-prefixed Question / Variable / Winner (highlighted) / Key Insight / What Changes Going Forward. The 4 outcome columns + control_baseline / shared_constants / levels_tested / expected_outcomes / failure_boundary are stored in the DB but not surfaced — the page intentionally stays terse since each experiment can be 2KB+ of prose. Add fields here only with a clear surfacing rationale; the EXPERIMENTS section is already the longest block on the page.
+- **Experiments import:** populated by [supabase/migrations/019_experiments_import.sql](supabase/migrations/019_experiments_import.sql). 18 rows currently land (4 beans × 2-7 experiments). 16 more are in the spreadsheet but blocked on the green_beans backfill for 5 missing beans (CGLE Mandela XO / Sudan Rume Washed / Sudan Rume Natural, Forrest Gesha Clouds, Higuito Anaerobic Bourbon).
 
 ## Dev notes
 

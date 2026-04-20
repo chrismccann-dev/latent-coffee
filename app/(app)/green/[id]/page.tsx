@@ -1,19 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-
-function Section({ title, dark, children }: { title?: string, dark?: boolean, children: React.ReactNode }) {
-  return (
-    <div className={`rounded-md p-6 mb-4 ${dark ? 'bg-latent-fg text-white' : 'bg-white border border-latent-border'}`}>
-      {title && (
-        <div className={`font-mono text-xxs font-semibold tracking-wide uppercase mb-4 ${dark ? 'opacity-60' : 'text-latent-mid'}`}>
-          {title}
-        </div>
-      )}
-      {children}
-    </div>
-  )
-}
+import { SectionCard } from '@/components/SectionCard'
 
 export default async function GreenBeanDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -85,7 +73,7 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
       </div>
 
       {/* Green Bean Details */}
-      <Section title="GREEN BEAN DETAILS">
+      <SectionCard title="GREEN BEAN DETAILS">
         <div className="grid grid-cols-2 gap-x-8 gap-y-3 font-sans text-sm">
           {bean.producer && <div><strong>Producer:</strong> {bean.producer}</div>}
           {bean.region && <div><strong>Region:</strong> {bean.region}</div>}
@@ -96,11 +84,11 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
           {bean.moisture && <div><strong>Moisture:</strong> {bean.moisture}%</div>}
           {bean.density && <div><strong>Density:</strong> {bean.density} g/L</div>}
         </div>
-      </Section>
+      </SectionCard>
 
       {/* Best Roast */}
       {bestBatchId && (
-        <Section title="🏆 BEST ROAST" dark>
+        <SectionCard title="🏆 BEST ROAST" dark>
           <div className="font-mono text-lg font-semibold mb-3">
             Batch #{bestBatchId}
           </div>
@@ -109,12 +97,12 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
               <strong>Why it won:</strong> {learnings.why_this_roast_won}
             </div>
           )}
-        </Section>
+        </SectionCard>
       )}
 
       {/* Roast Log */}
       {bean.roasts && bean.roasts.length > 0 && (
-        <Section title={`ROAST LOG (${bean.roasts.length} ROASTS)`}>
+        <SectionCard title={`ROAST LOG (${bean.roasts.length} ROASTS)`}>
           <div className="overflow-x-auto">
             <table className="data-table">
               <thead>
@@ -149,33 +137,61 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
               </tbody>
             </table>
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Experiments */}
       {bean.experiments && bean.experiments.length > 0 && (
-        <Section title={`🧪 EXPERIMENTS (${bean.experiments.length})`}>
+        <SectionCard title={`EXPERIMENTS (${bean.experiments.length})`}>
           {bean.experiments.map((exp: any, i: number) => (
-            <div 
-              key={exp.id} 
-              className={`${i < bean.experiments.length - 1 ? 'mb-5 pb-5 border-b border-latent-border' : ''}`}
+            <div
+              key={exp.id}
+              className={`${i < bean.experiments.length - 1 ? 'mb-6 pb-6 border-b border-latent-border' : ''}`}
             >
               <div className="font-mono text-sm font-semibold mb-1">{exp.experiment_id}</div>
-              <div className="font-mono text-xs text-latent-mid mb-2">Batches: {exp.batch_ids}</div>
-              <div className="font-sans text-sm mb-2"><strong>Question:</strong> {exp.primary_question}</div>
-              <div className="font-sans text-sm mb-2"><strong>Variable:</strong> {exp.variable_changed}</div>
-              <div className="font-sans text-sm mb-2 bg-latent-highlight p-2 rounded">
-                <strong>Winner:</strong> {exp.winner}
+              {exp.batch_ids && (
+                <div className="font-mono text-xs text-latent-mid mb-4">Batches: {exp.batch_ids}</div>
+              )}
+              <div className="space-y-4 font-sans text-sm leading-relaxed">
+                {exp.primary_question && (
+                  <div>
+                    <div className="label">Question</div>
+                    {exp.primary_question}
+                  </div>
+                )}
+                {exp.variable_changed && (
+                  <div>
+                    <div className="label">Variable</div>
+                    {exp.variable_changed}
+                  </div>
+                )}
+                {exp.winner && (
+                  <div className="bg-latent-highlight p-3 rounded">
+                    <div className="label">Winner</div>
+                    {exp.winner}
+                  </div>
+                )}
+                {exp.key_insight && (
+                  <div>
+                    <div className="label">Key Insight</div>
+                    {exp.key_insight}
+                  </div>
+                )}
+                {exp.what_changes_going_forward && (
+                  <div>
+                    <div className="label">What Changes Going Forward</div>
+                    {exp.what_changes_going_forward}
+                  </div>
+                )}
               </div>
-              <div className="font-sans text-sm"><strong>Key Insight:</strong> {exp.key_insight}</div>
             </div>
           ))}
-        </Section>
+        </SectionCard>
       )}
 
       {/* Roast Learnings */}
       {learnings && (
-        <Section title="🔥 ROAST LEARNINGS">
+        <SectionCard title="🔥 ROAST LEARNINGS">
           <div className="space-y-4 font-sans text-sm leading-relaxed">
             {learnings.aromatic_behavior && (
               <div>
@@ -208,12 +224,12 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
               </div>
             )}
           </div>
-        </Section>
+        </SectionCard>
       )}
 
       {/* Cupping History */}
       {cuppings.length > 0 && (
-        <Section title={`CUPPING HISTORY (${cuppings.length} EVALUATIONS)`}>
+        <SectionCard title={`CUPPING HISTORY (${cuppings.length} EVALUATIONS)`}>
           {cuppings.map((cup: any, i: number) => {
             const roast = bean.roasts?.find((r: any) => r.id === cup.roast_id)
             return (
@@ -231,7 +247,7 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
               </div>
             )
           })}
-        </Section>
+        </SectionCard>
       )}
 
       {/* Related Brews */}
