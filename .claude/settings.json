@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_screenshot",
+      "mcp__Claude_Preview__preview_logs",
+      "mcp__Claude_Preview__preview_resize",
+      "mcp__Claude_Preview__preview_snapshot",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__Claude_Preview__preview_console_logs",
+      "mcp__Claude_Preview__preview_stop",
+      "mcp__Claude_Preview__preview_list",
+      "mcp__ccd_session__mark_chapter",
+      "mcp__495d106a-42d9-4dbc-9226-e65d8939cf5c__list_projects",
+      "mcp__495d106a-42d9-4dbc-9226-e65d8939cf5c__list_tables",
+      "mcp__19406101-6280-4f37-9638-19e43af3fb8a__get_runtime_logs",
+      "mcp__19406101-6280-4f37-9638-19e43af3fb8a__list_deployments",
+      "mcp__19406101-6280-4f37-9638-19e43af3fb8a__get_deployment",
+      "mcp__f1072ded-1d4e-4480-80f5-b5fadced8d5f__read_file_content",
+      "Bash(npx tsc --noEmit)",
+      "Bash(git fetch *)"
+    ]
+  }
+}
