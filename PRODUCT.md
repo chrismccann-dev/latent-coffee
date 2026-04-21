@@ -374,22 +374,129 @@ If a future surface genuinely needs a line-icon (e.g. a settings gear), use Luci
 
 ---
 
+## Active Sprint Queue
+
+The current ranked queue of scoped, sized sprints. Shipped sprints are indexed in [Shipped Sprints](#shipped-sprints) with narrative prose in [Current App State § Recently completed](#recently-completed-april-2026). Per-sprint retrospectives live in `memory/project_*.md`. Idea-stage work not yet scoped lives in [Future Directions](#future-directions).
+
+**Last reorder:** 2026-04-21 (V1-brews sync promoted to #1 per Chris's priority signal — active brews backlog + BMR maintenance pain outranks roasting UI polish).
+
+**Workflow rule that bounds what belongs in this queue:** per `memory/user_workflow.md`, each bean uploads to the app as a single bundle when its full cycle resolves (green bean → roasts → experiments → cuppings → lessons → reference roast → perfected brew). The 5 mid-iteration beans not yet in the DB (CGLE Mandela XO / Sudan Rume Washed / Sudan Rume Natural / Forrest Gesha Clouds / Higuito Anaerobic Bourbon) are NOT a backlog — they land event-driven when Chris finalizes each bean, not on a sprint cadence. Do not propose a "backfill the 5 missing beans" sprint. Revisit when systematic Claude-driven sync exists.
+
+### 1. Claude-authored sync V1 — brews slice (NEXT, scoped 2026-04-21)
+
+Paste resolved archive block from the coffee-brewing Claude project → Claude Code validates against canonical registries → writes to Supabase via Supabase MCP → patches `BREWING.md` → commits.
+
+**Why promoted over #2:** Chris has active backlog of resolved brews sitting in the Claude project threads (not yet uploaded), AND BMR v5 maintenance is getting cumbersome to do manually each time. Roasting pain is lower (slower cycle, fewer entries per bean) and slots behind as sub-sprint 2.
+
+**Findings from paste-format review (2026-04-21, sample = Picolot Emerald Mokka Natural):**
+- **F1** — Archive format is missing Terroir + Cultivar as explicit rows. Today the EA fills them in the spreadsheet. Fix: add **Terroir** (Country / Macro / Meso) + **Cultivar** (canonical name) rows when migrating BMR v5 → `BREWING.md`. Every post-migration brew has what the sync needs; backlog brews need a one-time retrofit.
+- **F2** — "Coffee" row is a dense blob (lot code / producer / roast date / roast machine / roaster tasting notes smashed together). Split into **Lot Code / Producer / Roast Date / Roaster Tasting Notes** rows during migration.
+
+**Sub-sprint 1 — steps:**
+- **a.** ✅ **Done 2026-04-21.** BMR v7.1 migrated to repo as `BREWING.md` at root (monolithic, internal consumption). F1 + F2 already landed in prior Dropbox v7.1 edits. Migration was a file copy + PRODUCT.md Source Data table update + new CLAUDE.md "Living reference docs" section anchoring the pattern for both `BREWING.md` and the future `ROASTING.md`.
+- **b.** Extract `lib/terroir-registry.ts` + `lib/cultivar-registry.ts` via `makeCanonicalLookup` factory. Populate from DB (57 terroirs + 37 cultivars). Producer/roaster/flavor/process already route through the factory — these are the last two canonical dimensions.
+- **c.** Write `SYNC.md` playbook: paste-in format spec, parse → canonical check → warnings surface → Chris confirms → Supabase MCP write → `BREWING.md` patch → commit. Rollback = git revert + compensating migration.
+- **d.** Dog-food against one backlog brew end-to-end. Find real friction, not speculated friction.
+
+**Deferred to sub-sprint 2 (roasting follow-on, post V1-brews dog-food — see candidate #6):**
+- `reference_mode` column on `green_beans` (`yes` / `no` / `partial` + note). Grandfather pre-counterflow beans to `no` / `partial`. Post-counterflow default `yes` on resolution.
+- Roasting Master Reference v2 → `ROASTING.md` in repo.
+- Checkpoint sync for per-roast / per-cupping events.
+- Mid-cycle "in progress" status badge on `/green` + `/green/[id]`.
+
+**Scope note — per-roaster brewing-guide content:** the BMR's per-roaster brewing-guide cards (currently partially surfaced on `/roasters/[id]` as the HOUSE STYLE block) fully land in `BREWING.md` as part of step (a). Follow-on work to have `/roasters/[id]` excerpt the full per-roaster section from `BREWING.md` (same pattern as the Reference-Roast feature's `/roasting-guide/` excerpts going into `/green/[id]`) is a natural extension, either in sub-sprint 2 or as a small follow-up sprint — not a separate feature.
+
+**V1 explicitly out of scope:** EA replacement, brewing iteration capture, Sheets API polling, bespoke /sync UI, auto-scraping terroir/cultivar metadata, `/reference/brewing` page. V2 (MCP server so Claude projects can push directly without the paste step) deferred until V1 has run on 2+ real coffees.
+
+**Sizing:** sub-sprint 1 is probably 2-3 dedicated sessions (step a done; steps b+c = 1; step d = 1).
+
+### 2. Experiments + Cupping History rework
+
+Chris's post-audit call: both `/green/[id]` sections need rethink. Experiments: 6 schema fields render, 10 hidden — introduce a collapsible pattern or A/B/C/D side-by-side grid so `levels_tested` + `observed_outcome_a/b/c/d` surface without dumping all 17 fields inline. Cupping History: 27 rows flat is unreadable — group by batch (collapsible) or by rest-day phase (Day 3-5 cupping vs Day 7+ pourover).
+
+Plan-mode sprint, interpretive. Likely a new collapsible primitive + 2-3 component extractions. Depends on a populated real bean for preview verification (SRH Washed re-upload when resolved, or the next closed bean). Slots after V1-brews so the roasting-side UI work lands when the sync pipeline is already real.
+
+### 3. Schema additions for dropped source data
+
+Close the P1 data-loss gaps from the self-roasted audit. Single migration adds: `green_beans.elevation` (int, masl), `green_beans.producer_tasting_notes` (text), `green_beans.exporter` (text), `roasts.turning_point_temp` (decimal), `cuppings.sweetness` (text), `cuppings.brew_method` (text). Update the /add flow parsers to read these columns instead of folding/dropping them (cupping `brew_method` is currently folded into `eval_method` as a string concat; `sweetness` is dropped entirely). Update `handleSaveSelfRoasted` to write them. Surface the high-value ones in `/green/[id]` UI — elevation in GREEN BEAN DETAILS, producer_tasting_notes as its own block ("what the producer said this should taste like" is the target the roasting is aiming at).
+
+Sizing: 1 sprint — migration + parser update + save update + render update.
+
+### 4. Reference Roasts entity + surface (scoped 2026-04-21)
+
+See [docs/features/reference-roast-and-guide.md § Reference-roast model](docs/features/reference-roast-and-guide.md). Corresponds to Sprint B of the feature doc.
+
+New `reference_roasts` table (one row per resolved bean), replacing `roast_learnings.best_batch_id` free-text + `roasts.is_reference` bool (both dropped). One FK to the canonical reference roast + an array of replication roast FKs + `why_this_roast_won` prose (moved from roast_learnings) + nullable `brew_id`. Renders in the existing BEST ROAST block on `/green/[id]` (enriched: FC/drop/dev/Agtron inline + replication batches + brew backlink).
+
+Sizing: 1 sprint.
+
+### 5. Roasting Guide + cross-bean excerpts (scoped 2026-04-21)
+
+See [docs/features/reference-roast-and-guide.md § Cross-bean insights](docs/features/reference-roast-and-guide.md). Corresponds to Sprints A-remaining + C of the feature doc.
+
+Bootstrap: convert `Coffee_Roasting_Master_Reference_Guide_V2.docx` (1245 lines, 24 sections) to `docs/ROASTING_GUIDE.md` in repo. Build `/roasting-guide/` page as a Next.js server component reading the markdown at request time. Excerpts pull into `/green/[id]` (BEAN CONTEXT block with fallback cascade) and `/cultivars/[id]` (ROASTING PROFILE block). Scope is Chris's Roest L200 Ultra in counterflow mode only — machine-specific, not a universal reference.
+
+Sizing: 1-2 sprints (bootstrap = 1, excerpts + autolinking = 1). Can partially ship in parallel with #4.
+
+### 6. Claude-authored sync V1 — roasting slice (sub-sprint 2)
+
+The roasting half of V1. See candidate #1's "Deferred to sub-sprint 2" block for scope. Fires strictly after sub-sprint 1 has a resolved brew going through the pipe cleanly, not before. Forcing roasting through sync before brews is proven loses the "lower cognitive load on the active pain" sequencing win.
+
+### 7. Event-driven bean uploads (not a sprint, recurring task)
+
+Now that the /add flow works end-to-end (PR #25), this is ergonomic: Chris pastes each bean's 9 tabs through the wizard on resolution. Mandela XO + Sudan Rume Hybrid Washed expected ~Apr-May 2026. Each is a one-sitting upload, no sprint needed. Will move to the V1-roasting sync path once #6 ships.
+
+### Blocked / parked
+
+- **A: Claude-Design-led redesign** — waiting on Chris's Claude Design (claude.ai/design) output. Current design is "pretty good" in the meantime. Anything shipped in self-roasted sprints must stay modular enough for the eventual redesign to re-skin (route through SectionCard, Tag, TagLinkList, .label; no new tokens / colors / spacing unless a canonical registry requires it). **Scope note:** when this fires, explicitly re-examine desktop vs. mobile as a first-class design consideration — current rule is "desktop-first with mobile spot-check", and the redesign is the right moment to revisit whether that's still the correct balance given how the app is actually used.
+
+### Side-quests (logged, do not auto-queue)
+
+- **Split `brews.producer` into `producer_name` + `farm_name`** — the "Person, Farm" convention is locked, a clean comma-parse. Valuable for roasting-side Instagram outreach. Fires when the use case fires, not before.
+- **Edit-form mobile polish** — `/brews/[id]/edit` grid-cols-2 truncates longer canonical values at 375px. Own sprint, post-redesign probably.
+- **Roaster/producer conflation cleanup (flagged 2026-04-21)** — on at least one brew Chris noticed Hydrangea (a roaster) in the producer column. Small data-cleanup audit — query for all rows where `brews.producer` matches a value in `lib/roaster-registry.ts`, review, correct. While we're in there, check whether any other registry cross-contamination exists (e.g. roaster values in other canonical-registry columns, or vice versa). Post-migration-018 the registries are canonical but the data still has some pre-canonical rows with wrong-column values.
+- **Producers aggregation starting point** — the mechanical 1-day "copy the /roasters pattern" sprint that would be the foundation of the "Producers as a first-class citizen" Medium-term feature. See Future Directions § Medium-term for the full framing. Unblock when 2+ producers have 3+ brews each.
+
+### How to apply (operational hints for future sessions)
+
+- **Default next task:** candidate #1, sub-sprint 1, step (b) (extract terroir + cultivar registries). Chris approved the reorder + sub-sprint 1 plan on 2026-04-21 but asked to dedicate a session to it, not start mid-conversation.
+- **Don't bundle (b) + (c) + (d) into one session** — each has real surface area and friction discoveries from step (d) could reshape (c)'s playbook.
+- **Candidate #2** is plan-mode territory when it fires — don't start without a real bean loaded for preview verification.
+- **Candidate #6 (V1-roasting slice)** fires strictly after #1 has been dog-fooded against a real backlog brew. Don't short-circuit the sequencing.
+- **When queue priorities change**, edit this section directly — don't maintain a parallel copy in `memory/project_sprint_roadmap.md` (that file is now a pointer to this section).
+- **When a sprint lands**, add a one-line entry to [Shipped Sprints](#shipped-sprints), write a retrospective `memory/project_[sprint-name].md`, and remove the candidate from this queue.
+
+---
+
 ## Future Directions
 
-These are ideas and patterns that have emerged from the data, not committed features.
+These are ideas and patterns that have emerged from the data, not yet scoped into the Active Sprint Queue.
 
 ### Near-term (data foundation)
 
-- **Split `brews.producer` into `producer_name` + `farm_name`** — the "Person, Farm" convention (now locked post migration 018) makes this a clean parse. Valuable for the roasting side: reaching out to farms directly on Instagram for future sourcing needs the person and the farm as separate fields.
-- **Producers aggregation (`/producers`)** — producer is now canonical (49 names); a 5th aggregation dimension is a 1-day follow-up (copy the `/roasters` pattern: lookup lib, small cache table, index/detail). Deferred until 2+ producers have 3+ brews each so aggregation has signal.
+- **Split `brews.producer` into `producer_name` + `farm_name`** — the "Person, Farm" convention (now locked post migration 018) makes this a clean parse. Valuable for the roasting side: reaching out to farms directly on Instagram for future sourcing needs the person and the farm as separate fields. (Also in Active Sprint Queue § Side-quests.)
 - **Backfill remaining what_i_learned** — ~19 brews still missing long-form learnings.
-- **Green_beans backfill (5 beans) + remaining experiments** — the roasting spreadsheet tracks 9 beans but only 4 have green_beans rows. Add CGLE Mandela XO, CGLE Sudan Rume Washed, CGLE Sudan Rume Natural, Forrest Gesha Clouds, and Higuito Anaerobic Bourbon. That unlocks the remaining 16 experiments (already in the spreadsheet) which are blocked on the green_bean FK.
 
 ### Medium-term (knowledge compounding)
 
+- **Producers as a first-class citizen (needs dedicated brainstorm session — first-principles)** — today producers are a canonical free-text column on brews (49 canonical names post migration 018). Surface-level goal: treat producers the way `/roasters` and `/terroirs` and `/cultivars` are treated — index + detail + synthesis. But the real question goes deeper than "make a page." **What does Chris fundamentally want to get out of producers as a data dimension?** Sourcing intelligence (which farms have I bought from, which importers represent them, what does this producer's other work taste like)? Farm-level lineage tracking (multiple lots from the same farm over time)? Relationship-graph mapping (producer → farm → importer → roaster)? Possibly all three, possibly a different framing entirely. Mechanical starting point is still a 1-day "copy the /roasters pattern" sprint, but the brainstorm should precede that — use the reference-roast brainstorm pattern (four-part interpretive session, probes, reference artifacts, output = `docs/features/*.md` scoping doc). Open thread: **farm** + **importer** as sub-dimensions of producer; whether `brews.producer` stays flat or splits into `producer_name` + `farm_name` + `importer_id`. Deferred until the corpus has signal (currently only Pepe Jijon / Finca Soledad has 3+ brews); the wait also gives the brainstorm time to bake before committing the data shape.
+- **Reference taxonomies umbrella (needs dedicated brainstorm session)** — deeper canonical registries beyond what `lib/*-registry.ts` covers today, modeled loosely on Roberta Sami's single-page reference taxonomies ([processes](https://www.robertasami.com/processes), [drippers](https://www.robertasami.com/drippers), [varietals](https://www.robertasami.com/varietals)). Candidates to deepen:
+  - **Process taxonomy** — extend `lib/process-families.ts` into a full taxonomy capturing fermentation style / drying method / handling detail.
+  - **Variety taxonomy** — extend the cultivar registry (30 cultivars in DB) toward canonical per-variety pages with genetic + sensory reference content.
+  - **Region taxonomy** — lock down the canonical Country / Admin Region / Macro Terroir / Meso Terroir / Micro Terroir list (today `terroirs` has 22 flexible-hierarchy records).
+  - **Dripper taxonomy** — today `brew.brewer` is free-text; canonicalize with per-dripper reference content (agitation behavior, flow profile, paper compatibility).
+  - **Equipment + grind-size analysis** — merge Chris's equipment lists (grinders, brewers, kettles, scales) and his grind-size analysis data into a knowledgebase surface.
+  - **Flavor-note registry expansion from roaster offered-coffees** — every roaster on `/roasters` has a documented URL; scraping each one's current offerings (especially recipe-publishing boutique roasters: Leaves, Substance, Noma Kaffe, Heart, Hydrangea) would expand `lib/flavor-registry.ts` beyond the 132-tag self-sample.
+  - **Tag cleanup mechanism** — the canonical-registry-as-foundation goal implies an edit surface to merge / rename / collapse variations across all these registries. Affects design too — tighter tag sets read cleaner on aggregation detail pages.
+
+  **Meta-framing to resolve when this fires:**
+  - Brewing knowledge is more transferable across setups than roasting knowledge (roasting is heavily machine-specific — already established via the Roasting Guide scope constraint). So the ingestion rules differ: brewing taxonomies can absorb content from trusted external sources more aggressively; roasting stays machine-scoped.
+  - Only a curated handful of trusted sources (Sami / Hoo / Dongzhe / specific boutique roasters), not automated scraping. Chris curates the transfer.
+  - Attribution-preserving architecture is a hard requirement — external claims must read as external, not as Chris's own tested claims.
+
+  This umbrella is big enough to warrant its own scoping doc (pattern: `docs/features/reference-taxonomies.md`) when a dedicated brainstorm session fires. Use the reference-roast brainstorm pattern (four-part interpretive session, probes, reference artifacts, output = scoping doc). Expect the session to decompose the umbrella into multiple feature docs — processes, varieties, regions, equipment, attribution-architecture — with their own sprint phasing. Not ready for sprint scoping yet.
 - **Extraction strategy patterns** — the three strategies (Clarity-First, Balanced Intensity, Full Expression) are a core part of the brewing framework. A view showing which coffees confirmed which strategy, organized by variety × process, would be directly useful for recipe design.
 - **Cooling behavior tracking** — many brews have critical evaluation temperature thresholds (e.g., "do not evaluate before 50°C", "rose character only emerges near 40°C"). This is scattered in temperature_evolution and what_i_learned but not structured or searchable.
-- **Flavor-registry expansion from roaster offered-coffees** — every roaster on `/roasters` has a documented URL; scraping each one's current offerings (especially the recipe-publishing boutique roasters: Leaves, Substance, Noma Kaffe, Heart, Hydrangea) would expand `lib/flavor-registry.ts` beyond the 132-tag self-sample with vocabulary the broader specialty world is using.
 
 ### Longer-term (workflow integration)
 
@@ -436,6 +543,35 @@ Running notes from past sprints — keep this section for future-you.
 - `strict: false` with `strictNullChecks: true` is the current baseline. Discriminated-union narrowing depends on `strictNullChecks`. Do not turn it off without first refactoring `PersistResult` / `ValidationResult` / `TerroirMatch` / `CultivarMatch`.
 - The worktree can't run `npm run build` (missing `@anthropic-ai/sdk`). Use `npx tsc --noEmit` in the main repo dir as a build proxy before pushing. Relying on Vercel to catch type errors cost one failed deploy.
 - Keep PRs scoped. PR #9 shipped with type-narrowing issues that only surfaced when PR #10 triggered a fresh Vercel build. If `next build` had run locally as part of #9's checklist, we'd have caught it at the source.
+
+---
+
+## Shipped Sprints
+
+Compact reverse-chronological index. Richer narrative per-sprint prose lives in [Current App State § Recently completed](#recently-completed-april-2026). Per-sprint retrospectives live in `memory/project_*.md` (one file per sprint).
+
+| Date | Sprint | Landmark |
+|---|---|---|
+| 2026-04-22 | Producer + roaster canonicalization | PR #23 + migration 018 |
+| 2026-04-21 | BMR v7.1 → `BREWING.md` (V1-brews sync sub-sprint 1, step a) | `BREWING.md` at repo root + `docs/features/reference-roast-and-guide.md` |
+| 2026-04-21 | Reference Roasts + Roasting Guide — brainstorm + feature doc | `docs/features/reference-roast-and-guide.md` |
+| 2026-04-21 | Mobile polish on /brews, /brews/[id], filter bar | — |
+| 2026-04-21 | Cross-dim filters on /brews | — |
+| 2026-04-20 | Self-roasted flow audit + /add hardening | PR #25 + migration 020 |
+| 2026-04-20 | Green detail render polish | — |
+| 2026-04-20 | Data-depth backfill (terroirs + cultivars) | Migrations 015 / 016 / 017 |
+| 2026-04-19 | Experiments import + render polish | Migration 019 |
+| 2026-04-19 | Design-system standardization | — |
+| 2026-04-19 | Cross-link backfill across aggregation detail pages | — |
+| 2026-04-18 | Roasters aggregation | Migration 014 |
+| 2026-04-17 | Design polish + mobile pass | PR #14 |
+| 2026-04-17 | Flavor canonicalization + edit UI | Migration 013 |
+| 2026-04-16 | Processes aggregation | Migration 012 |
+| 2026-04-16 | Producer column + backfill | PR #12 + migration 011 |
+| 2026-04-16 | Extraction strategy sprint | PRs #10 / #11 |
+| 2026-04-15 | Terroir macro redesign | PR #5 |
+| 2026-04-14 | Cultivar lineage redesign | PR #4 |
+| (earlier) | Purchased-coffee import flow, build hygiene, initial schema + backfills | PR #9 + migrations 001-010 |
 
 ---
 
