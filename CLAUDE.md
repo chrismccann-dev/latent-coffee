@@ -3,6 +3,17 @@
 Personal coffee research journal that compounds brewing knowledge over time. Built with Next.js 14, Supabase (Postgres + Auth + RLS), deployed on Vercel.
 
 > **See [PRODUCT.md](PRODUCT.md)** for the full product document — vision, workflows, data model, current state, and future directions.
+>
+> **See [BREWING.md](BREWING.md)** for the Brewing Master Reference — brew prompt, roaster reference cards, archive patterns, equipment reference. Chris's living reference for the purchased-coffee brew iteration loop. A sibling `ROASTING.md` is planned for the self-roasted side.
+
+## Living reference docs
+
+`PRODUCT.md` and `BREWING.md` are both **living documents**:
+
+- Chris hand-edits them when the mental model shifts (new brewing strategy, new page shipped, new data source).
+- Claude Code patches them during archive sync — the Claude-authored sync V1 pipeline (see sprint roadmap) appends to `BREWING.md` Archive Patterns / Roaster Reference when a resolved brew teaches something new, and updates `PRODUCT.md` sprint history when a sprint ships.
+- Neither is auto-generated from scratch; both compound edit-by-edit. A `ROASTING.md` will follow the same pattern once V1-roasting ships.
+- The Dropbox originals (BMR, Roasting Intent, Terroir/Cultivar Ruleset) remain as archival snapshots so Claude projects can still load them; the repo copies are the ones that compound going forward.
 
 ## Architecture
 

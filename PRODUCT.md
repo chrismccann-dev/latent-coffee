@@ -242,7 +242,7 @@ The app is one part of a larger system. These are the other parts:
 |--------|----------|----------|
 | **Brewing Spreadsheet** | Google Sheets (exported xlsx) | Best Brew tab (56 entries), Beans tab (93 entries), Terroirs (57), Cultivars (37), Taste Profile |
 | **Roasting Spreadsheet** | Google Sheets (exported xlsx) | Green Beans, Roasts, Experiments, Cuppings, Overall Lessons per bean |
-| **Brewing Master Reference** | Word doc (v5.0) | Brew prompt for Claude, roaster reference cards, archive patterns, equipment reference |
+| **Brewing Master Reference** | Repo — `BREWING.md` (v7.1, living doc). Archival snapshot in Dropbox (`Coffee_Brewing_Master_Reference_v7.md`) for Claude projects. | Brew prompt for Claude, roaster reference cards, archive patterns, equipment reference. Migrated into repo 2026-04-21 as the working copy for Claude-authored sync V1 — compounds edit-by-edit alongside `PRODUCT.md`. |
 | **Terroir + Cultivar Ruleset** | Word doc | Data schemas, hierarchy rules, canonical registries, validation checklists |
 | **Roasting Intent** | Word doc | Roasting philosophy — "roast for elasticity, brew for intensity" |
 | **Claude Projects** | claude.ai | Active iteration workspaces for current coffees (not archived) |
