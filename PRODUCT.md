@@ -395,7 +395,7 @@ Paste resolved archive block from the coffee-brewing Claude project → Claude C
 
 **Sub-sprint 1 — steps:**
 - **a.** ✅ **Done 2026-04-21.** BMR v7.1 migrated to repo as `BREWING.md` at root (monolithic, internal consumption). F1 + F2 already landed in prior Dropbox v7.1 edits. Migration was a file copy + PRODUCT.md Source Data table update + new CLAUDE.md "Living reference docs" section anchoring the pattern for both `BREWING.md` and the future `ROASTING.md`.
-- **b.** Extract `lib/terroir-registry.ts` + `lib/cultivar-registry.ts` via `makeCanonicalLookup` factory. Populate from DB (57 terroirs + 37 cultivars). Producer/roaster/flavor/process already route through the factory — these are the last two canonical dimensions.
+- **b.** ✅ **Done 2026-04-21 (PR #30).** `lib/terroir-registry.ts` (13 countries / 19 macros / 22 mesos as 3 independent `CanonicalLookup`s — mirrors how the archive-format `Country / Macro / Meso` field parses positionally) + `lib/cultivar-registry.ts` (26 canonical names + 13 lineages as flat lookups). Factory gained an optional `aliases` map (tier-0 resolution, backwards-compatible) because the 3-tier classifier returned null on "Geisha" → "Gesha" — trade-name drift isn't catchable by substring / prefix alone. Future registries can declare aliases the same way.
 - **c.** Write `SYNC.md` playbook: paste-in format spec, parse → canonical check → warnings surface → Chris confirms → Supabase MCP write → `BREWING.md` patch → commit. Rollback = git revert + compensating migration.
 - **d.** Dog-food against one backlog brew end-to-end. Find real friction, not speculated friction.
 
@@ -409,7 +409,7 @@ Paste resolved archive block from the coffee-brewing Claude project → Claude C
 
 **V1 explicitly out of scope:** EA replacement, brewing iteration capture, Sheets API polling, bespoke /sync UI, auto-scraping terroir/cultivar metadata, `/reference/brewing` page. V2 (MCP server so Claude projects can push directly without the paste step) deferred until V1 has run on 2+ real coffees.
 
-**Sizing:** sub-sprint 1 is probably 2-3 dedicated sessions (step a done; steps b+c = 1; step d = 1).
+**Sizing:** sub-sprint 1 is probably 2-3 dedicated sessions (steps a + b done; step c = 1; step d = 1).
 
 ### 2. Experiments + Cupping History rework
 
@@ -460,7 +460,7 @@ Now that the /add flow works end-to-end (PR #25), this is ergonomic: Chris paste
 
 ### How to apply (operational hints for future sessions)
 
-- **Default next task:** candidate #1, sub-sprint 1, step (b) (extract terroir + cultivar registries). Chris approved the reorder + sub-sprint 1 plan on 2026-04-21 but asked to dedicate a session to it, not start mid-conversation.
+- **Default next task:** candidate #1, sub-sprint 1, step (c) (write `SYNC.md` playbook). Steps (a) + (b) shipped 2026-04-21. Chris explicitly asked not to bundle (c) + (d) into one session — friction from step (d) dog-fooding could reshape (c).
 - **Don't bundle (b) + (c) + (d) into one session** — each has real surface area and friction discoveries from step (d) could reshape (c)'s playbook.
 - **Candidate #2** is plan-mode territory when it fires — don't start without a real bean loaded for preview verification.
 - **Candidate #6 (V1-roasting slice)** fires strictly after #1 has been dog-fooded against a real backlog brew. Don't short-circuit the sequencing.
@@ -530,6 +530,7 @@ Running notes from past sprints — keep this section for future-you.
 - **Extract on the 2nd duplication, not the 4th.** `<TagLinkList>` (SectionCard + Tag + Link triplet) was duplicated 6+ times across 4 aggregation detail pages within the roasters sprint alone. /simplify caught it with high confidence and the extraction was a 30-line component. The pattern was visible from the 3rd copy; waiting for the 6th was scope drift. Apply the CLAUDE.md "factor on 2+ duplications" rule earlier next time.
 - **Factor canonical-registry boilerplate behind a factory.** Migration 018 added producer + roaster canonical-lookup helpers that were byte-for-byte copies of the pair already in `lib/flavor-registry.ts` (3-tier classifier: trim → case-insensitive set lookup → substring both directions → 3-char prefix match, shortest wins). /simplify flagged it immediately; extracting `makeCanonicalLookup(names)` into `lib/canonical-registry.ts` collapsed 3 copies into one factory, pre-computed the lowercase array once (was re-computing per keystroke in the substring loop), and made the `CanonicalTextInput` prop surface collapse from 6 props to 3 (bundle `list` + `isCanonical` + `findClosest` into one `CanonicalLookup` object). Next time a canonical string-registry ships, route through the factory from the first commit - don't wait for /simplify.
 - **Forward-compatibility via string convention, not schema.** Producer is one free-text column but the data has a dominant "Person, Farm" shape across the corpus. Migration 018 locked the convention (Pepe Jijon → "Pepe Jijon, Finca Soledad", Julio Madrid (La Riviera farm) → "Julio Madrid, La Riviera") rather than splitting the column into `producer_name` + `farm_name` this sprint. The split, when it comes, is now a clean parse on the comma. Pattern: when a future schema split is plausible but not committed, pick the string convention that makes the split trivial, document it in the registry comment, don't commit the split until the use case fires. Keeps the sprint small and preserves the option.
+- **Aliases as a tier-0 of the canonical factory, not per-registry wrapping.** The cultivar registry needed "Geisha" → "Gesha" (trade-name spelling → botanical canonical). The existing 3-tier classifier (exact → substring → 3-char prefix) returned null because the two strings share neither a 3-char prefix nor a substring match. Two options: extend `makeCanonicalLookup` with an optional `aliases` map (tier-0 before the existing tiers), or wrap per-registry. Chose factory extension — uniform API across all 5 registries, backwards-compatible (existing call sites pass nothing), and future registries with known trade-name drift can declare it inline. Pattern: when a drift class is reusable across registries, extend the factory; when it's dataset-specific, wrap at the registry. Aliases are reusable (every canonical registry potentially has trade-name drift); they belong in the factory.
 
 **Data**
 - A field's UI label is a claim about its semantics. The `roaster` fallback into the producer slot broke this — the card read "producer: Hydrangea" but the underlying data said "roaster: Hydrangea". Either add the missing column or label the slot honestly; don't conflate.
@@ -554,6 +555,7 @@ Compact reverse-chronological index. Richer narrative per-sprint prose lives in 
 
 | Date | Sprint | Landmark |
 |---|---|---|
+| 2026-04-21 | Terroir + cultivar canonical registries (V1-brews sync sub-sprint 1, step b) | PR #30 — `lib/terroir-registry.ts` + `lib/cultivar-registry.ts` + factory alias tier |
 | 2026-04-22 | Producer + roaster canonicalization | PR #23 + migration 018 |
 | 2026-04-21 | BMR v7.1 → `BREWING.md` (V1-brews sync sub-sprint 1, step a) | PR #27 — `BREWING.md` at repo root |
 | 2026-04-21 | Reference Roasts + Roasting Guide — brainstorm + feature doc | `docs/features/reference-roast-and-guide.md` |
