@@ -6,6 +6,7 @@ import type { Brew, Terroir, Cultivar } from '@/lib/types'
 import { EXTRACTION_STRATEGIES } from '@/lib/brew-import'
 import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
+import { CULTIVAR_LOOKUP } from '@/lib/cultivar-registry'
 import { SectionCard } from '@/components/SectionCard'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 import { FlavorNotesInput } from '@/components/FlavorNotesInput'
@@ -28,7 +29,7 @@ type FormState = {
   roast_level: string
   flavor_notes: string[]
   terroir_id: string
-  cultivar_id: string
+  cultivar_name: string
   brewer: string
   filter: string
   dose_g: string
@@ -53,7 +54,10 @@ type FormState = {
   what_i_learned: string
 }
 
-function initial(brew: Brew): FormState {
+function initial(brew: Brew, cultivars: CultivarOption[]): FormState {
+  const currentCultivar = brew.cultivar_id
+    ? cultivars.find((c) => c.id === brew.cultivar_id)
+    : null
   return {
     coffee_name: brew.coffee_name ?? '',
     roaster: brew.roaster ?? '',
@@ -63,7 +67,7 @@ function initial(brew: Brew): FormState {
     roast_level: brew.roast_level ?? '',
     flavor_notes: brew.flavor_notes ?? [],
     terroir_id: brew.terroir_id ?? '',
-    cultivar_id: brew.cultivar_id ?? '',
+    cultivar_name: currentCultivar?.cultivar_name ?? '',
     brewer: brew.brewer ?? '',
     filter: brew.filter ?? '',
     dose_g: brew.dose_g != null ? String(brew.dose_g) : '',
@@ -94,15 +98,13 @@ function terroirLabel(t: TerroirOption): string {
   return parts.join(' → ')
 }
 
-function cultivarLabel(c: CultivarOption): string {
-  return c.lineage ? `${c.cultivar_name} (${c.lineage})` : c.cultivar_name
-}
-
 export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
   const router = useRouter()
-  const [form, setForm] = useState<FormState>(() => initial(brew))
+  const [form, setForm] = useState<FormState>(() => initial(brew, cultivars))
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const cultivarValid = CULTIVAR_LOOKUP.isResolvable(form.cultivar_name)
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -122,7 +124,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
       roast_level: form.roast_level.trim() || null,
       flavor_notes: form.flavor_notes,
       terroir_id: form.terroir_id || null,
-      cultivar_id: form.cultivar_id || null,
+      cultivar_name: form.cultivar_name.trim(),
       brewer: form.brewer.trim() || null,
       filter: form.filter.trim() || null,
       dose_g: form.dose_g ? parseFloat(form.dose_g) : null,
@@ -227,17 +229,15 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
             </p>
           </div>
           <div>
-            <label className="label">Cultivar (select from existing)</label>
-            <select
-              className="input"
-              value={form.cultivar_id}
-              onChange={(e) => set('cultivar_id', e.target.value)}
-            >
-              <option value="">—</option>
-              {cultivars.map((c) => (
-                <option key={c.id} value={c.id}>{cultivarLabel(c)}</option>
-              ))}
-            </select>
+            <CanonicalTextInput
+              label="Cultivar"
+              value={form.cultivar_name}
+              onChange={(v) => set('cultivar_name', v)}
+              registry={CULTIVAR_LOOKUP}
+            />
+            <p className="font-mono text-xxs text-latent-mid mt-1">
+              Canonical registry of {CULTIVAR_LOOKUP.list.length} cultivars (aliases resolved on save). To add a genuinely new cultivar, use /add.
+            </p>
           </div>
         </div>
       </SectionCard>
@@ -385,7 +385,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
         >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary" disabled={isSaving}>
+        <button type="submit" className="btn btn-primary" disabled={isSaving || !cultivarValid}>
           {isSaving ? 'Saving…' : 'Save changes'}
         </button>
       </div>
