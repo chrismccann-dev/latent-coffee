@@ -30,7 +30,7 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 ### Core entities
 - **brews** — individual coffee tastings (purchased or self-roasted). 55 records as of April 2026. Has distinct `roaster` and `producer` columns; don't conflate them. Self-roasted brews carry `roaster = 'Latent'`.
 - **terroirs** — geographic/ecological zones. Hierarchy: Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir
-- **cultivars** — coffee varieties. Hierarchy: Species → Genetic Family → Lineage → Cultivar subtype
+- **cultivars** — coffee varieties. Hierarchy: Species → Genetic Family → Lineage → Cultivar. 63 canonical cultivars post-Variety-sprint (2026-04-22); see [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md) for authored content and [lib/cultivar-registry.ts](lib/cultivar-registry.ts) for the validation mirror.
 - **green_beans** — raw coffee lots (self-roasted only, 4 records). Has roasts, experiments, cuppings.
 
 ### Relationship patterns (IMPORTANT)
@@ -41,13 +41,14 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **New brews must set `terroir_id` and `cultivar_id`** on insert. The add flow handles this for self-roasted; purchased brews need an import flow (not yet built).
 
 ### Canonical registries
-- **Macro Terroir names** must come from a predefined registry of ecological systems. See Chris's terroir ruleset doc.
-- **Cultivar names** must resolve to canonical names from the Cultivar Registry. Marketing/trade names are normalized.
-- **Genetic Families:** Ethiopian Landrace Families, Typica Family, Bourbon Family, Typica × Bourbon Crosses, Modern Hybrids
+- **Macro Terroir names** must come from a predefined registry of ecological systems. See Chris's terroir ruleset doc + [lib/terroir-registry.ts](lib/terroir-registry.ts).
+- **Cultivar names** must resolve to the canonical registry in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) (63 canonicals + 48 structural aliases post Variety sprint 2026-04-22). Authoritative authored content in [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md); DB content columns are materialization. Registry exports rich `CultivarEntry[]` (name / species / family / lineage) via `CULTIVARS`; legacy flat exports (`CULTIVAR_NAMES`, `CULTIVAR_LINEAGES`, `CULTIVAR_LOOKUP`) preserved for back-compat. Use `getCultivarEntry(name)` / `resolveCultivar(name)` for the rich shape; use `CULTIVAR_LOOKUP` for validation.
+- **Genetic Families:** 5 Arabica (Ethiopian Landrace Families, Typica Family, Bourbon Family, Typica × Bourbon Crosses, Modern Hybrids) + 3 non-Arabica self-referential (Eugenioides, Liberica, Robusta).
+- **[lib/brew-import.ts](lib/brew-import.ts) `CULTIVAR_REGISTRY` + `GENETIC_FAMILIES` re-export from [lib/cultivar-registry.ts](lib/cultivar-registry.ts)** — do not author new cultivars in brew-import.ts. It's a thin adapter; edits belong in cultivar-registry.ts + varieties.md.
 - **Extraction strategies:** `Clarity-First`, `Balanced Intensity`, `Full Expression` (canonical list in [lib/brew-import.ts](lib/brew-import.ts)). All 55 brews populated. `extraction_confirmed` is optional free-text recorded only when the planned strategy diverged from what was tasted.
 - **Producer names** resolve to [lib/producer-registry.ts](lib/producer-registry.ts) (49 canonical names post migration 018). "Person, Farm" is the dominant shape - keep new entries consistent so a future `producer_name` + `farm_name` column split parses cleanly. Adding a new producer is a deliberate edit, not drift.
 - **Roaster names** resolve to [lib/roaster-registry.ts](lib/roaster-registry.ts) (21 canonical names). See the roasters page section for adding entries - family + metadata card discipline.
-- **Canonical-registry factory:** [lib/canonical-registry.ts](lib/canonical-registry.ts) exports `makeCanonicalLookup(names)` returning a `CanonicalLookup` bundle (`list` / `isCanonical` / `findClosest`) used by flavor / producer / roaster registries. Any new canonical string-registry should route through this factory - do NOT re-implement the 3-tier classifier.
+- **Canonical-registry factory:** [lib/canonical-registry.ts](lib/canonical-registry.ts) exports `makeCanonicalLookup(names, aliases?)` returning a `CanonicalLookup` bundle (`list` / `isCanonical` / `findClosest`) used by flavor / producer / roaster / terroir / cultivar registries. Any new canonical string-registry should route through this factory - do NOT re-implement the 3-tier classifier. Tier-0 alias map supports structural drift mapping (e.g. "Geisha" → "Gesha") — `isCanonical` still returns false on aliases, but `findClosest` surfaces the canonical target.
 
 ## Page structure
 
@@ -119,7 +120,7 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - Migrations are in `supabase/migrations/` — run manually via Supabase SQL Editor
 - The `@anthropic-ai/sdk` package doesn't resolve in the worktree dev server (missing node_modules) but works in Vercel builds
 - **tsconfig has `strictNullChecks: true`** (under `strict: false`) — required so discriminated-union narrowing (`if (result.ok) return; result.code`) compiles under Next.js build. Do not turn it off without refactoring the `PersistResult` / `ValidationResult` / `TerroirMatch` / `CultivarMatch` usages in `lib/brew-import.ts` and the import/parse routes.
-- **Always run `npm run build` before pushing** if you touched API routes or `lib/brew-import.ts`. Vercel will fail the deploy on TS errors, and the worktree can't run the full build because it's missing `@anthropic-ai/sdk`. Use the main repo dir `/Users/chrismccann/latent-coffee` for `npx tsc --noEmit` as a cheap proxy.
+- **Always run `npm run build` before pushing** if you touched API routes or `lib/brew-import.ts`. Vercel will fail the deploy on TS errors, and the worktree can't run the full build because it's missing `@anthropic-ai/sdk`. Two options: (1) use the main repo dir `/Users/chrismccann/latent-coffee` for `npx tsc --noEmit` as a cheap proxy, or (2) `ln -sf ../../../node_modules node_modules` from the worktree to reuse the main repo's node_modules — then `npx tsc --noEmit` works in-place. Remove the symlink before committing (`rm node_modules`); it's gitignored but cleaner to not leave it around.
 
 ## Running locally
 
