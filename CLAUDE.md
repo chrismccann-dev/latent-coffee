@@ -29,7 +29,7 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 
 ### Core entities
 - **brews** — individual coffee tastings (purchased or self-roasted). 55 records as of April 2026. Has distinct `roaster` and `producer` columns; don't conflate them. Self-roasted brews carry `roaster = 'Latent'`.
-- **terroirs** — geographic/ecological zones. Hierarchy: Country → Admin Region → Macro Terroir → Meso Terroir → Micro Terroir
+- **terroirs** — geographic/ecological zones. Hierarchy: Country → Admin Region → Macro Terroir. 121 canonical macros across 38 countries post-Region-sprint (2026-04-22, sprint 1d.1). See [docs/taxonomies/regions.md](docs/taxonomies/regions.md) for authored content and [lib/terroir-registry.ts](lib/terroir-registry.ts) for the validation mirror. Meso and Micro are free-text annotations on terroir rows — retained in the schema, not in the canonical registry, not validated, not autocompleted (every behavioral attribute is macro-scoped; producer-level locality is the right home for farm detail).
 - **cultivars** — coffee varieties. Hierarchy: Species → Genetic Family → Lineage → Cultivar. 63 canonical cultivars post-Variety-sprint (2026-04-22); see [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md) for authored content and [lib/cultivar-registry.ts](lib/cultivar-registry.ts) for the validation mirror.
 - **green_beans** — raw coffee lots (self-roasted only, 4 records). Has roasts, experiments, cuppings.
 
@@ -41,7 +41,8 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 - **New brews must set `terroir_id` and `cultivar_id`** on insert. The add flow handles this for self-roasted; purchased brews need an import flow (not yet built).
 
 ### Canonical registries
-- **Macro Terroir names** must come from a predefined registry of ecological systems. See Chris's terroir ruleset doc + [lib/terroir-registry.ts](lib/terroir-registry.ts).
+- **Macro Terroir names** must resolve to the canonical registry in [lib/terroir-registry.ts](lib/terroir-registry.ts) (121 canonicals + 12 structural aliases post Region sprint 2026-04-22). Authoritative authored content in [docs/taxonomies/regions.md](docs/taxonomies/regions.md); DB content columns are materialization (sprint 1d.2 backfill lands them). Registry exports rich `TerroirEntry[]` (country / admin_region / macro_terroir) via `TERROIRS`; legacy flat exports (`TERROIR_COUNTRIES`, `TERROIR_MACROS`, `TERROIR_MACRO_LOOKUP`, `TERROIR_COUNTRY_LOOKUP`) preserved for back-compat. Use `getTerroirEntry(country, macro)` / `resolveTerroirMacro(macro)` for the rich shape; use `TERROIR_MACRO_LOOKUP` for validation. **Meso / micro demoted 2026-04-22 (sprint 1d.1)** — `TERROIR_MESOS` / `TERROIR_MESO_LOOKUP` deleted; meso is pass-through free-text everywhere (SYNC validator, /add, /brews/[id]/edit).
+- **[lib/brew-import.ts](lib/brew-import.ts) `TERROIR_REGISTRY` + `TerroirRegistryEntry` re-export from [lib/terroir-registry.ts](lib/terroir-registry.ts)** — same pattern as cultivar-registry. Do not author new terroirs in brew-import.ts. It's a thin adapter; edits belong in terroir-registry.ts + regions.md.
 - **Cultivar names** must resolve to the canonical registry in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) (63 canonicals + 48 structural aliases post Variety sprint 2026-04-22). Authoritative authored content in [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md); DB content columns are materialization. Registry exports rich `CultivarEntry[]` (name / species / family / lineage) via `CULTIVARS`; legacy flat exports (`CULTIVAR_NAMES`, `CULTIVAR_LINEAGES`, `CULTIVAR_LOOKUP`) preserved for back-compat. Use `getCultivarEntry(name)` / `resolveCultivar(name)` for the rich shape; use `CULTIVAR_LOOKUP` for validation.
 - **Genetic Families:** 5 Arabica (Ethiopian Landrace Families, Typica Family, Bourbon Family, Typica × Bourbon Crosses, Modern Hybrids) + 3 non-Arabica self-referential (Eugenioides, Liberica, Robusta).
 - **[lib/brew-import.ts](lib/brew-import.ts) `CULTIVAR_REGISTRY` + `GENETIC_FAMILIES` re-export from [lib/cultivar-registry.ts](lib/cultivar-registry.ts)** — do not author new cultivars in brew-import.ts. It's a thin adapter; edits belong in cultivar-registry.ts + varieties.md.
@@ -54,7 +55,7 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 
 ### Terroirs (`app/(app)/terroirs/`)
 - **Index:** Groups by Country → Macro Terroir, brew counts via `select('*, brews(id)')` FK join
-- **Detail:** Aggregates all terroirs sharing `macro_terroir + country`. Merges context fields (first-non-null for scalars, union for meso terroirs, min/max for elevation). Shows synthesis, flavor notes, cultivars, processes, coffee list, confidence.
+- **Detail:** Aggregates all terroirs sharing `macro_terroir + country`. Merges context fields (first-non-null for scalars, union for meso terroirs — now free-text per sprint 1d.1, min/max for elevation). Shows synthesis, flavor notes, cultivars, processes, coffee list, confidence.
 - **Synthesis:** `/api/terroirs/synthesize` — accepts `terriorIds[]`, finds brews via `terroir_id` FK
 
 ### Cultivars (`app/(app)/cultivars/`)

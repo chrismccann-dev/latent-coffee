@@ -8,6 +8,7 @@ import {
   type GeneticFamily as CanonicalGeneticFamily,
   CULTIVARS,
 } from './cultivar-registry'
+import { TERROIRS, type TerroirEntry } from './terroir-registry'
 
 // ---------------------------------------------------------------------------
 // Canonical registries
@@ -28,36 +29,13 @@ export type ExtractionStrategy = (typeof EXTRACTION_STRATEGIES)[number]
 export const GENETIC_FAMILIES = CANONICAL_GENETIC_FAMILIES
 export type GeneticFamily = CanonicalGeneticFamily
 
-export interface TerroirRegistryEntry {
-  country: string
-  macro_terroir: string
-  admin_region: string
-}
-
-export const TERROIR_REGISTRY: TerroirRegistryEntry[] = [
-  { country: 'Brazil', macro_terroir: 'Cerrado Mineiro', admin_region: 'Minas Gerais' },
-  { country: 'Burundi', macro_terroir: 'Lake Kivu Highlands', admin_region: 'Kayanza Province' },
-  { country: 'China', macro_terroir: 'Yunnan Monsoonal Highlands', admin_region: 'Yunnan Province' },
-  { country: 'Colombia', macro_terroir: 'Central Andean Cordillera', admin_region: 'Quindío' },
-  { country: 'Colombia', macro_terroir: 'Huila Highlands', admin_region: 'Huila' },
-  { country: 'Colombia', macro_terroir: 'Southern Andean Cordillera', admin_region: 'Cauca' },
-  { country: 'Colombia', macro_terroir: 'Western Andean Cordillera', admin_region: 'Antioquia' },
-  { country: 'Colombia', macro_terroir: 'Western Andean Cordillera', admin_region: 'Valle del Cauca' },
-  { country: 'Costa Rica', macro_terroir: 'Costa Rican Central Volcanic Highlands', admin_region: 'Alajuela Province' },
-  { country: 'Ecuador', macro_terroir: 'Northern Andean Cordillera', admin_region: 'Imbabura' },
-  { country: 'Ethiopia', macro_terroir: 'Bench Sheko Highlands', admin_region: 'Bench Sheko' },
-  { country: 'Ethiopia', macro_terroir: 'Guji Highlands', admin_region: 'Oromia' },
-  { country: 'Ethiopia', macro_terroir: 'Sidama Highlands', admin_region: 'Sidama' },
-  { country: 'Ethiopia', macro_terroir: 'West Arsi Highlands', admin_region: 'Oromia' },
-  { country: 'Guatemala', macro_terroir: 'Chiapas Highlands', admin_region: 'Huehuetenango' },
-  { country: 'Guatemala', macro_terroir: 'Costa Rican Central Volcanic Highlands', admin_region: 'Chimaltenango' },
-  { country: 'Honduras', macro_terroir: 'Marcala Highlands', admin_region: 'La Paz' },
-  { country: 'Mexico', macro_terroir: 'Chiapas Highlands', admin_region: 'Chiapas' },
-  { country: 'Mexico', macro_terroir: 'Sierra Sur Highlands', admin_region: 'Oaxaca' },
-  { country: 'Panama', macro_terroir: 'Volcán Barú Highlands', admin_region: 'Chiriquí' },
-  { country: 'Peru', macro_terroir: 'Northern Andean Cordillera', admin_region: 'Cajamarca' },
-  { country: 'Rwanda', macro_terroir: 'Lake Kivu Highlands', admin_region: 'Western Province' },
-]
+// Terroir registry sourced from lib/terroir-registry.ts (single source of truth
+// after the Region sprint - 2026-04-22). 127 country-scoped entries across
+// 121 distinct macros / 38 countries. This re-export preserves the
+// TERROIR_REGISTRY / TerroirRegistryEntry names consumed by /add + /api/brews/parse
+// for back-compat; new code should import directly from './terroir-registry'.
+export type TerroirRegistryEntry = TerroirEntry
+export const TERROIR_REGISTRY = TERROIRS
 
 export interface CultivarRegistryEntry {
   cultivar_name: string
@@ -183,13 +161,13 @@ export async function matchTerroir(
   }
 
   // Fetch ALL rows matching country + macro_terroir. There can be multiple
-  // (same macro terroir across different admin regions — e.g. Colombia's
-  // Western Andean Cordillera has rows for Antioquia AND Valle del Cauca).
-  // Prefer the one whose admin_region matches, then whose meso_terroir matches,
-  // else fall back to the first row.
+  // (same macro across different admin regions - e.g. Colombia's Western
+  // Andean Cordillera has rows for both Valle del Cauca and Cauca). Prefer
+  // the one whose admin_region matches, else fall back to the first row.
+  // Meso tiebreak removed in sprint 1d.1 (meso demoted to free-text).
   const { data: rows } = await supabase
     .from('terroirs')
-    .select('id, admin_region, meso_terroir')
+    .select('id, admin_region')
     .eq('user_id', userId)
     .eq('country', terroir.country)
     .eq('macro_terroir', terroir.macro_terroir)
@@ -198,10 +176,7 @@ export async function matchTerroir(
     const byAdmin = terroir.admin_region
       ? rows.find((r: any) => r.admin_region?.toLowerCase() === terroir.admin_region?.toLowerCase())
       : null
-    const byMeso = terroir.meso_terroir
-      ? rows.find((r: any) => r.meso_terroir?.toLowerCase() === terroir.meso_terroir?.toLowerCase())
-      : null
-    const match = byAdmin || byMeso || rows[0]
+    const match = byAdmin || rows[0]
     return { isNew: false, id: match.id, inRegistry, terroir }
   }
   return { isNew: true, inRegistry, terroir }
