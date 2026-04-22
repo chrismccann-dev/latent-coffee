@@ -396,8 +396,8 @@ Paste resolved archive block from the coffee-brewing Claude project → Claude C
 **Sub-sprint 1 — steps:**
 - **a.** ✅ **Done 2026-04-21.** BMR v7.1 migrated to repo as `BREWING.md` at root (monolithic, internal consumption). F1 + F2 already landed in prior Dropbox v7.1 edits. Migration was a file copy + PRODUCT.md Source Data table update + new CLAUDE.md "Living reference docs" section anchoring the pattern for both `BREWING.md` and the future `ROASTING.md`.
 - **b.** ✅ **Done 2026-04-21 (PR #30).** `lib/terroir-registry.ts` (13 countries / 19 macros / 22 mesos as 3 independent `CanonicalLookup`s — mirrors how the archive-format `Country / Macro / Meso` field parses positionally) + `lib/cultivar-registry.ts` (26 canonical names + 13 lineages as flat lookups). Factory gained an optional `aliases` map (tier-0 resolution, backwards-compatible) because the 3-tier classifier returned null on "Geisha" → "Gesha" — trade-name drift isn't catchable by substring / prefix alone. Future registries can declare aliases the same way.
-- **c.** Write `SYNC.md` playbook: paste-in format spec, parse → canonical check → warnings surface → Chris confirms → Supabase MCP write → `BREWING.md` patch → commit. Rollback = git revert + compensating migration.
-- **d.** Dog-food against one backlog brew end-to-end. Find real friction, not speculated friction.
+- **c.** ✅ **Done 2026-04-21.** `SYNC.md` at repo root: validator-table-driven playbook (N canonical fields as rows, not hard-coded), per-field `block` vs. `warn` semantics, decision-prompt shapes (alias / canonical-miss / missing-from-paste / dedup / new-terroir-or-cultivar), field → column mapping table (identifies 4 post-F2 paste fields with no DB column — Lot Code / Roast Date / Roast Machine / Roaster Tasting Notes — deferred to schema-additions sprint #3), 6-phase procedure, rollback runbook (git revert + compensating Supabase DELETE via MCP + verify), and an "Open taxonomy questions" section hedging the Reference Taxonomies brainstorm. Dry-run on Picolot Emerald Mokka Natural surfaced three real findings that reshape step (d): Mokka not in cultivar registry (needs Chris pre-decision on family/lineage), Garrido producer not canonical (scope call: promote Producer to block-level?), `LABEL_ALIASES` in [lib/brew-import.ts](lib/brew-import.ts) missing post-F2 field labels (parser tweak likely wants to land before dog-food).
+- **d.** Dog-food against one backlog brew end-to-end. Find real friction, not speculated friction. **Pre-reqs flagged by step (c) dry-run:** (1) decide Mokka's genetic_family + lineage; (2) decide whether Producer promotes from `warn` to `block`; (3) decide whether to extend `LABEL_ALIASES` first or accept manual stash during the sync.
 
 **Deferred to sub-sprint 2 (roasting follow-on, post V1-brews dog-food — see candidate #6):**
 - `reference_mode` column on `green_beans` (`yes` / `no` / `partial` + note). Grandfather pre-counterflow beans to `no` / `partial`. Post-counterflow default `yes` on resolution.
@@ -555,6 +555,7 @@ Compact reverse-chronological index. Richer narrative per-sprint prose lives in 
 
 | Date | Sprint | Landmark |
 |---|---|---|
+| 2026-04-21 | SYNC.md playbook (V1-brews sync sub-sprint 1, step c) | `SYNC.md` at repo root — validator-table-driven, dry-run against Picolot Emerald |
 | 2026-04-21 | Terroir + cultivar canonical registries (V1-brews sync sub-sprint 1, step b) | PR #30 — `lib/terroir-registry.ts` + `lib/cultivar-registry.ts` + factory alias tier |
 | 2026-04-22 | Producer + roaster canonicalization | PR #23 + migration 018 |
 | 2026-04-21 | BMR v7.1 → `BREWING.md` (V1-brews sync sub-sprint 1, step a) | PR #27 — `BREWING.md` at repo root |

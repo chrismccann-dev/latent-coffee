@@ -5,6 +5,8 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 > **See [PRODUCT.md](PRODUCT.md)** for the full product document — vision, workflows, data model, current state, and future directions.
 >
 > **See [BREWING.md](BREWING.md)** for the Brewing Master Reference — brew prompt, roaster reference cards, archive patterns, equipment reference. Chris's living reference for the purchased-coffee brew iteration loop. A sibling `ROASTING.md` is planned for the self-roasted side.
+>
+> **See [SYNC.md](SYNC.md)** for the Claude-authored archive-sync playbook — validator table, field → column mapping, decision prompts, phase-by-phase procedure, and rollback runbook. Used when Chris pastes a resolved-brew archive block into a Claude Code session.
 
 ## Living reference docs
 
