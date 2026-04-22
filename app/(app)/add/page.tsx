@@ -8,11 +8,12 @@ import {
   EXTRACTION_STRATEGIES,
   GENETIC_FAMILIES,
   TERROIR_REGISTRY,
-  CULTIVAR_REGISTRY,
   type BrewPayload,
   type TerroirCandidate,
   type CultivarCandidate,
 } from '@/lib/brew-import'
+import { CULTIVAR_LOOKUP, resolveCultivar } from '@/lib/cultivar-registry'
+import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 
 type SourceType = 'self-roasted' | 'purchased' | null
 
@@ -1123,6 +1124,28 @@ export default function AddPage() {
         setPurchasedPayload({ ...payload, cultivar: { ...payload.cultivar, [key]: value } })
         setPurchasedConfirmCultivar(false)
       }
+      // Auto-populate species / genetic_family / lineage from the rich-shape
+      // registry when the typed cultivar name resolves canonically (including
+      // via alias). Preserves editability: only overwrites the 3 derived
+      // fields, and only when the name actually resolves.
+      const updateCultivarName = (next: string) => {
+        const entry = resolveCultivar(next)
+        setPurchasedPayload({
+          ...payload,
+          cultivar: {
+            ...payload.cultivar,
+            cultivar_name: next,
+            ...(entry
+              ? {
+                  species: entry.species,
+                  genetic_family: entry.family,
+                  lineage: entry.lineage,
+                }
+              : {}),
+          },
+        })
+        setPurchasedConfirmCultivar(false)
+      }
 
       const handleSave = async () => {
         setIsProcessing(true)
@@ -1375,20 +1398,12 @@ export default function AddPage() {
               </span>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="label">Cultivar name *</label>
-                <input
-                  className="input"
-                  list="cultivar-name-options"
-                  value={payload.cultivar.cultivar_name}
-                  onChange={(e) => updateCultivar('cultivar_name', e.target.value)}
-                />
-                <datalist id="cultivar-name-options">
-                  {CULTIVAR_REGISTRY.map((c) => (
-                    <option key={c.cultivar_name} value={c.cultivar_name} />
-                  ))}
-                </datalist>
-              </div>
+              <CanonicalTextInput
+                label="Cultivar name *"
+                value={payload.cultivar.cultivar_name}
+                onChange={updateCultivarName}
+                registry={CULTIVAR_LOOKUP}
+              />
               <div>
                 <label className="label">Species</label>
                 <input

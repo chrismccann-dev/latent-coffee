@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { EXTRACTION_STRATEGIES, type ExtractionStrategy } from '@/lib/brew-import'
+import { CULTIVAR_LOOKUP, getCultivarEntry } from '@/lib/cultivar-registry'
 
 // Fields the edit form is allowed to PATCH. Excludes identity + audit columns
-// (id/user_id/created_at/updated_at) and the classification FKs that live in
-// a canonical registry (terroir_id/cultivar_id are updatable but only to
-// existing rows — the form enforces "select from existing", no creation).
+// (id/user_id/created_at/updated_at). terroir_id stays pick-from-existing.
+// cultivar_id is resolved from cultivar_name (canonical registry, find-or-create).
 const EDITABLE_FIELDS = [
   'coffee_name',
   'roaster',
@@ -15,7 +15,6 @@ const EDITABLE_FIELDS = [
   'roast_level',
   'flavor_notes',
   'terroir_id',
-  'cultivar_id',
   'brewer',
   'filter',
   'dose_g',
@@ -63,7 +62,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     if (key in body) patch[key] = body[key]
   }
 
-  if (Object.keys(patch).length === 0) {
+  if (Object.keys(patch).length === 0 && !('cultivar_name' in body)) {
     return NextResponse.json({ error: 'no editable fields in body' }, { status: 400 })
   }
 
@@ -92,6 +91,66 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       )
     }
     patch.coffee_name = name
+  }
+
+  // Resolve cultivar_name (canonical registry) → cultivar_id via find-or-create.
+  // Empty string clears the FK; a non-canonical name (not even alias-resolvable)
+  // is rejected. Aliases resolve to their canonical target.
+  if ('cultivar_name' in body) {
+    const raw = typeof body.cultivar_name === 'string' ? body.cultivar_name.trim() : ''
+    if (raw === '') {
+      patch.cultivar_id = null
+    } else {
+      const canonical = CULTIVAR_LOOKUP.isCanonical(raw)
+        ? raw
+        : CULTIVAR_LOOKUP.findClosest(raw)
+      if (!canonical) {
+        return NextResponse.json(
+          {
+            error: 'validation',
+            errors: [`cultivar "${raw}" is not in the canonical registry. To add a new cultivar, use /add.`],
+          },
+          { status: 400 }
+        )
+      }
+      const entry = getCultivarEntry(canonical)
+      if (!entry) {
+        return NextResponse.json(
+          { error: 'cultivar registry lookup failed' },
+          { status: 500 }
+        )
+      }
+      // Find-or-create the cultivars row for this user. ilike matches the
+      // canonical name case-insensitively; tolerates 0 or N hits (mirrors
+      // matchCultivar in lib/brew-import.ts:225-233).
+      const { data: existingRows } = await supabase
+        .from('cultivars')
+        .select('id')
+        .eq('user_id', user.id)
+        .ilike('cultivar_name', canonical)
+      if (existingRows && existingRows.length > 0) {
+        patch.cultivar_id = existingRows[0].id
+      } else {
+        const { data: created, error: createErr } = await supabase
+          .from('cultivars')
+          .insert({
+            user_id: user.id,
+            cultivar_name: canonical,
+            species: entry.species,
+            genetic_family: entry.family,
+            lineage: entry.lineage,
+          })
+          .select('id')
+          .single()
+        if (createErr || !created) {
+          return NextResponse.json(
+            { error: createErr?.message || 'cultivar create failed' },
+            { status: 500 }
+          )
+        }
+        patch.cultivar_id = created.id
+      }
+    }
   }
 
   // RLS scopes to the owning user; `.eq('user_id')` is belt-and-suspenders.

@@ -17,6 +17,11 @@ export interface CanonicalLookup {
   list: readonly string[]
   isCanonical: (input: string | null | undefined) => boolean
   findClosest: (input: string | null | undefined) => string | null
+  // True when the input is either canonical or resolvable to a canonical via
+  // alias/substring/prefix — i.e. safe to accept for strict registries that
+  // canonicalize on write (cultivars). Empty input is treated as resolvable
+  // so callers can use it to gate a "Save" button without forcing a value.
+  isResolvable: (input: string | null | undefined) => boolean
 }
 
 export function makeCanonicalLookup(
@@ -63,5 +68,12 @@ export function makeCanonicalLookup(
     return best
   }
 
-  return { list: registry, isCanonical, findClosest }
+  function isResolvable(input: string | null | undefined): boolean {
+    if (!input) return true
+    const trimmed = input.trim()
+    if (!trimmed) return true
+    return isCanonical(trimmed) || findClosest(trimmed) !== null
+  }
+
+  return { list: registry, isCanonical, findClosest, isResolvable }
 }
