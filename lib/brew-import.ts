@@ -3,9 +3,14 @@
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { InsertBrew } from './types'
+import {
+  GENETIC_FAMILIES as CANONICAL_GENETIC_FAMILIES,
+  type GeneticFamily as CanonicalGeneticFamily,
+  CULTIVARS,
+} from './cultivar-registry'
 
 // ---------------------------------------------------------------------------
-// Canonical registries (mirrors current DB state — migrations 007/008/010)
+// Canonical registries
 // ---------------------------------------------------------------------------
 
 export const EXTRACTION_STRATEGIES = [
@@ -15,14 +20,13 @@ export const EXTRACTION_STRATEGIES = [
 ] as const
 export type ExtractionStrategy = (typeof EXTRACTION_STRATEGIES)[number]
 
-export const GENETIC_FAMILIES = [
-  'Ethiopian Landrace Families',
-  'Typica Family',
-  'Bourbon Family',
-  'Typica × Bourbon Crosses',
-  'Modern Hybrids',
-] as const
-export type GeneticFamily = (typeof GENETIC_FAMILIES)[number]
+// Genetic families + cultivar registry now source from lib/cultivar-registry.ts
+// (single source of truth after the Variety sprint — 2026-04-22). This file
+// re-exports them in the shape existing call sites expect, and derives
+// CULTIVAR_REGISTRY from the canonical CULTIVARS array.
+
+export const GENETIC_FAMILIES = CANONICAL_GENETIC_FAMILIES
+export type GeneticFamily = CanonicalGeneticFamily
 
 export interface TerroirRegistryEntry {
   country: string
@@ -62,38 +66,12 @@ export interface CultivarRegistryEntry {
   species: string
 }
 
-export const CULTIVAR_REGISTRY: CultivarRegistryEntry[] = [
-  { cultivar_name: 'Bourbon Aruzi', genetic_family: 'Bourbon Family', lineage: 'Bourbon (classic)', species: 'Arabica' },
-  { cultivar_name: 'Laurina', genetic_family: 'Bourbon Family', lineage: 'Bourbon (classic)', species: 'Arabica' },
-  { cultivar_name: 'Red Bourbon', genetic_family: 'Bourbon Family', lineage: 'Bourbon (classic)', species: 'Arabica' },
-  { cultivar_name: 'Red Bourbon / Mibirizi blend', genetic_family: 'Bourbon Family', lineage: 'Bourbon (classic)', species: 'Arabica' },
-  { cultivar_name: 'Bourbon / Caturra blend', genetic_family: 'Bourbon Family', lineage: 'Bourbon mutation lineage', species: 'Arabica' },
-  { cultivar_name: 'Caturra', genetic_family: 'Bourbon Family', lineage: 'Bourbon mutation lineage', species: 'Arabica' },
-  { cultivar_name: 'Purple Caturra', genetic_family: 'Bourbon Family', lineage: 'Bourbon mutation lineage', species: 'Arabica' },
-  { cultivar_name: 'Ethiopian landrace population', genetic_family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)', species: 'Arabica' },
-  { cultivar_name: 'Java', genetic_family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)', species: 'Arabica' },
-  { cultivar_name: 'Pink Bourbon', genetic_family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)', species: 'Arabica' },
-  { cultivar_name: 'Rosado', genetic_family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)', species: 'Arabica' },
-  { cultivar_name: 'Sudan Rume', genetic_family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)', species: 'Arabica' },
-  { cultivar_name: 'Gesha', genetic_family: 'Ethiopian Landrace Families', lineage: 'Gesha lineage', species: 'Arabica' },
-  { cultivar_name: 'Gesha (Brazilian selection)', genetic_family: 'Ethiopian Landrace Families', lineage: 'Gesha lineage', species: 'Arabica' },
-  { cultivar_name: 'Gesha (Colombian selection)', genetic_family: 'Ethiopian Landrace Families', lineage: 'Gesha lineage', species: 'Arabica' },
-  { cultivar_name: 'Gesha (Panamanian selection)', genetic_family: 'Ethiopian Landrace Families', lineage: 'Gesha lineage', species: 'Arabica' },
-  { cultivar_name: 'Gesha 1931', genetic_family: 'Ethiopian Landrace Families', lineage: 'Gesha lineage', species: 'Arabica' },
-  { cultivar_name: '74158', genetic_family: 'Ethiopian Landrace Families', lineage: 'JARC selection lineage', species: 'Arabica' },
-  { cultivar_name: '74110/74112', genetic_family: 'Ethiopian Landrace Families', lineage: 'Sidama-type landrace populations (JARC selections)', species: 'Arabica' },
-  { cultivar_name: '74158/74110/74112 blend', genetic_family: 'Ethiopian Landrace Families', lineage: 'Sidama-type landrace populations (JARC selections)', species: 'Arabica' },
-  { cultivar_name: 'Castillo', genetic_family: 'Modern Hybrids', lineage: 'Caturra × Timor Hybrid lineage', species: 'Arabica' },
-  { cultivar_name: 'Mokkita', genetic_family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage', species: 'Arabica' },
-  { cultivar_name: 'Catimor Group', genetic_family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage', species: 'Arabica' },
-  { cultivar_name: 'Marsellesa', genetic_family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage', species: 'Arabica' },
-  { cultivar_name: 'Maracaturra', genetic_family: 'Typica × Bourbon Crosses', lineage: 'Maragogype × Caturra lineage', species: 'Arabica' },
-  { cultivar_name: 'Catuaí', genetic_family: 'Typica × Bourbon Crosses', lineage: 'Mundo Novo × Caturra lineage', species: 'Arabica' },
-  { cultivar_name: 'Pacamara', genetic_family: 'Typica × Bourbon Crosses', lineage: 'Pacas × Maragogype', species: 'Arabica' },
-  { cultivar_name: 'Garnica', genetic_family: 'Typica × Bourbon Crosses', lineage: 'Timor-derived crosses', species: 'Arabica' },
-  { cultivar_name: 'Mejorado', genetic_family: 'Typica × Bourbon Crosses', lineage: 'Typica × Bourbon cross lineage', species: 'Arabica' },
-  { cultivar_name: 'Sidra', genetic_family: 'Typica × Bourbon Crosses', lineage: 'Typica × Bourbon cross lineage', species: 'Arabica' },
-]
+export const CULTIVAR_REGISTRY: CultivarRegistryEntry[] = CULTIVARS.map((c) => ({
+  cultivar_name: c.name,
+  genetic_family: c.family,
+  lineage: c.lineage,
+  species: c.species,
+}))
 
 // ---------------------------------------------------------------------------
 // Payload shape (subset of InsertBrew, plus the classification candidates)
