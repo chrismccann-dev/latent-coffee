@@ -284,3 +284,26 @@ Preserved so the next umbrella-scale brainstorm starts better.
 - Ask for existing authored artifacts at turn 1 of any brainstorm.
 - Open with a "what's the value prop" frame, not the candidate list.
 - Surface sync-pipeline coupling earlier — it reshapes Part 4 phasing.
+
+---
+
+## Retro (from Phylum A1 ports: Variety + Region, shipped 2026-04-22)
+
+Preserved for Phylum A ports still to land (Process / Dripper / Flavor).
+
+**Scope calibration — feature-doc estimates consistently under-estimate by ~4-6×.**
+- Variety feature doc estimated ~20 cultivars. Chris's CSV research returned 72 entries; canonical post-vet landed at **63** (3.6× the feature doc).
+- Region feature doc estimated ~21 macros. CSV research returned 126 rows + 1 hand-authored extension; canonical landed at **121** across 38 countries / 127 country-scoped entries (5.8× the feature doc).
+- **Pattern:** feature-doc estimates run at ~17-28% of final canonical count. For Process / Dripper / Flavor, budget for the CSV to expand meaningfully during Chris's research phase. Don't re-size the sprint off the original feature-doc number once the CSV arrives.
+
+**Pre-sprint dual-registry audit is mandatory, not spot-check.** Variety found 7+ inconsistencies between `lib/cultivar-registry.ts` and `lib/brew-import.ts` `CULTIVAR_REGISTRY` (en-dash vs hyphen, stale Garnica family, divergent 74110/74112 lineage, Gesha 5 vs 1). Region found the same class of drift between `lib/terroir-registry.ts` (3-bundle) and `lib/brew-import.ts` `TERROIR_REGISTRY` (flat 22-entry). Every future port runs `rg "<X>_REGISTRY|<X>_LOOKUP"` before first edit and collapses any dual-registry drift as part of the port.
+
+**Exhaustive DB-cross-check before presenting rename tables** — see [memory/feedback_exhaustive_db_cross_check.md](../../memory/feedback_exhaustive_db_cross_check.md). Region 1d.1 surfaced 2 additional reclassifications in follow-up turns that a systematic pass against the CSV would have caught in round 1 (Colombia Antioquia `Western` → `Central`; Burundi Kayanza `Lake Kivu` → `Mumirwa Escarpment`). Cost of the systematic pass is ~5 minutes of SQL; cost of missing it is 2-3 extra approval round-trips.
+
+**Python generators for CSV → markdown + TS scale past ~50×12 cells.** Hand-authoring Region's 127 × 14 attribute-cells (~1780 cells) + 127 TS registry entries would have been 2 orders of magnitude more error-prone than running a small generator script. Scripts currently live in `/tmp/` (ephemeral); if Process / Dripper / Flavor follow the same CSV-research shape, see [PRODUCT.md § Side-quests](../../PRODUCT.md#side-quests-logged-do-not-auto-queue) for the "commit generator scripts to `scripts/taxonomy-ports/`" candidate.
+
+**Structural vs content migrations always split.** Variety: migration 021 (structural renames + lineage shifts) + migration 022 (content backfill). Region: migration 023 (structural, shipped) + 024 (content, queued for 1d.2). Keeps PRs reviewable and lets the enforcement sub-sprint (1b / 1d.3) run against canonically-named rows even if content hasn't backfilled yet. Codify: rename / reclassify / lineage shifts in one migration, field backfills in a separate migration.
+
+**Trust the user's domain instinct early.** Chris's meso/micro deprecation proposal during Region vet ("maybe I should deprecate meso/micro and roll that into producer attribute — open to your thoughts") was CSV-confirmed within one turn of cross-checking the attribute fields. Interpretive calls the user offers upfront often compress multiple rounds of research. Vet the proposal against evidence, but don't bury it under speculative alternatives.
+
+**Meta-lesson on sub-sprint structure.** Both A1 ports shipped as **1a.1 / 1a.2 / 1b** (structural port / content backfill / enforcement) for Variety and **1d.1 / 1d.2 / 1d.3** for Region. Each sub-sprint is ~1 PR; each has a distinct review shape (structural = registry + migration; content = single SQL migration; enforcement = 3-file UI + API pattern). Codify this as the default shape for remaining A1/A2 ports: don't compress into a single mega-PR, don't split finer than 3 sub-sprints.
