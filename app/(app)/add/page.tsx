@@ -7,12 +7,12 @@ import Link from 'next/link'
 import {
   EXTRACTION_STRATEGIES,
   GENETIC_FAMILIES,
-  TERROIR_REGISTRY,
   type BrewPayload,
   type TerroirCandidate,
   type CultivarCandidate,
 } from '@/lib/brew-import'
 import { CULTIVAR_LOOKUP, resolveCultivar } from '@/lib/cultivar-registry'
+import { TERROIR_MACRO_LOOKUP, resolveTerroirMacro, getTerroirEntry } from '@/lib/terroir-registry'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 
 type SourceType = 'self-roasted' | 'purchased' | null
@@ -1106,10 +1106,14 @@ export default function AddPage() {
 
       const needsTerroirConfirm = terroirState !== 'existing'
       const needsCultivarConfirm = cultivarState !== 'existing'
+      const macroValid = TERROIR_MACRO_LOOKUP.isResolvable(payload.terroir.macro_terroir || '')
+      const cultivarValid = CULTIVAR_LOOKUP.isResolvable(payload.cultivar.cultivar_name || '')
       const saveEnabled =
         !!payload.coffee_name?.trim() &&
         !!payload.terroir.country?.trim() &&
         !!payload.cultivar.cultivar_name?.trim() &&
+        macroValid &&
+        cultivarValid &&
         (!needsTerroirConfirm || purchasedConfirmTerroir) &&
         (!needsCultivarConfirm || purchasedConfirmCultivar)
 
@@ -1145,6 +1149,22 @@ export default function AddPage() {
           },
         })
         setPurchasedConfirmCultivar(false)
+      }
+      // Auto-populate admin_region from the registry when the macro resolves
+      // and admin_region hasn't been user-edited. Parallel to updateCultivarName.
+      const updateMacroTerroir = (next: string) => {
+        const country = payload.terroir.country?.trim()
+        const entry = country ? getTerroirEntry(country, next) : resolveTerroirMacro(next)
+        const adminEmpty = !payload.terroir.admin_region?.trim()
+        setPurchasedPayload({
+          ...payload,
+          terroir: {
+            ...payload.terroir,
+            macro_terroir: next || null,
+            ...(entry && adminEmpty ? { admin_region: entry.admin_region } : {}),
+          },
+        })
+        setPurchasedConfirmTerroir(false)
       }
 
       const handleSave = async () => {
@@ -1296,20 +1316,12 @@ export default function AddPage() {
                 />
               </div>
               <div>
-                <label className="label">Macro terroir</label>
-                <input
-                  className="input"
-                  list="macro-terroir-options"
+                <CanonicalTextInput
+                  label="Macro terroir"
                   value={payload.terroir.macro_terroir || ''}
-                  onChange={(e) => updateTerroir('macro_terroir', e.target.value || null)}
+                  onChange={updateMacroTerroir}
+                  registry={TERROIR_MACRO_LOOKUP}
                 />
-                <datalist id="macro-terroir-options">
-                  {TERROIR_REGISTRY
-                    .filter((t) => !payload.terroir.country || t.country === payload.terroir.country)
-                    .map((t) => (
-                      <option key={`${t.country}-${t.macro_terroir}`} value={t.macro_terroir} />
-                    ))}
-                </datalist>
               </div>
               <div>
                 <label className="label">Meso terroir</label>

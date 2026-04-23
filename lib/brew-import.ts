@@ -7,8 +7,14 @@ import {
   GENETIC_FAMILIES as CANONICAL_GENETIC_FAMILIES,
   type GeneticFamily as CanonicalGeneticFamily,
   CULTIVARS,
+  resolveCultivar,
 } from './cultivar-registry'
-import { TERROIRS, type TerroirEntry } from './terroir-registry'
+import {
+  TERROIRS,
+  type TerroirEntry,
+  TERROIR_MACRO_LOOKUP,
+  getTerroirEntry,
+} from './terroir-registry'
 
 // ---------------------------------------------------------------------------
 // Canonical registries
@@ -207,6 +213,119 @@ export async function matchCultivar(
     return { isNew: false, id: rows[0].id, inRegistry, cultivar }
   }
   return { isNew: true, inRegistry, cultivar }
+}
+
+export type FindOrCreateResult =
+  | { ok: true; id: string | null }
+  | { ok: false; error: string; status: 400 | 500 }
+
+export async function findOrCreateCultivar(
+  supabase: SupabaseClient,
+  userId: string,
+  rawName: string | null | undefined,
+): Promise<FindOrCreateResult> {
+  const raw = typeof rawName === 'string' ? rawName.trim() : ''
+  if (!raw) return { ok: true, id: null }
+
+  const entry = resolveCultivar(raw)
+  if (!entry) {
+    return {
+      ok: false,
+      status: 400,
+      error: `cultivar "${raw}" is not in the canonical registry. To add a new cultivar, use /add.`,
+    }
+  }
+
+  const { data: existingRows } = await supabase
+    .from('cultivars')
+    .select('id')
+    .eq('user_id', userId)
+    .ilike('cultivar_name', entry.name)
+  if (existingRows && existingRows.length > 0) {
+    return { ok: true, id: existingRows[0].id }
+  }
+
+  const { data: created, error: createErr } = await supabase
+    .from('cultivars')
+    .insert({
+      user_id: userId,
+      cultivar_name: entry.name,
+      species: entry.species,
+      genetic_family: entry.family,
+      lineage: entry.lineage,
+    })
+    .select('id')
+    .single()
+  if (createErr || !created) {
+    return { ok: false, status: 500, error: createErr?.message || 'cultivar create failed' }
+  }
+  return { ok: true, id: created.id }
+}
+
+export async function findOrCreateTerroir(
+  supabase: SupabaseClient,
+  userId: string,
+  country: string | null | undefined,
+  rawMacro: string | null | undefined,
+  adminOverride?: string | null,
+  mesoOverride?: string | null,
+): Promise<FindOrCreateResult> {
+  const countryTrim = typeof country === 'string' ? country.trim() : ''
+  const rawMacroTrim = typeof rawMacro === 'string' ? rawMacro.trim() : ''
+
+  if (!countryTrim && !rawMacroTrim) return { ok: true, id: null }
+  if (!countryTrim) {
+    return {
+      ok: false,
+      status: 400,
+      error: 'country is required when setting a terroir',
+    }
+  }
+  if (!rawMacroTrim) return { ok: true, id: null }
+
+  const canonical = TERROIR_MACRO_LOOKUP.isCanonical(rawMacroTrim)
+    ? rawMacroTrim
+    : TERROIR_MACRO_LOOKUP.findClosest(rawMacroTrim)
+  if (!canonical) {
+    return {
+      ok: false,
+      status: 400,
+      error: `macro terroir "${rawMacroTrim}" is not in the canonical registry. To add a new macro terroir, use /add.`,
+    }
+  }
+
+  const match = await matchTerroir(supabase, userId, {
+    country: countryTrim,
+    macro_terroir: canonical,
+    admin_region: adminOverride ?? null,
+  })
+  if (!match.isNew) {
+    return { ok: true, id: match.id }
+  }
+
+  const entry = getTerroirEntry(countryTrim, canonical)
+  const admin = (typeof adminOverride === 'string' && adminOverride.trim())
+    ? adminOverride.trim()
+    : entry?.admin_region ?? null
+  const meso = (typeof mesoOverride === 'string' && mesoOverride.trim())
+    ? mesoOverride.trim()
+    : null
+
+  const { data: created, error: createErr } = await supabase
+    .from('terroirs')
+    .insert({
+      user_id: userId,
+      country: countryTrim,
+      admin_region: admin,
+      macro_terroir: canonical,
+      meso_terroir: meso,
+    })
+    .select('id')
+    .single()
+  if (createErr || !created) {
+    return { ok: false, status: 500, error: createErr?.message || 'terroir create failed' }
+  }
+  return { ok: true, id: created.id }
 }
 
 // ---------------------------------------------------------------------------
