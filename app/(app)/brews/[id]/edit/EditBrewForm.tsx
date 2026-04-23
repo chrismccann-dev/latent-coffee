@@ -7,6 +7,7 @@ import { EXTRACTION_STRATEGIES } from '@/lib/brew-import'
 import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import { CULTIVAR_LOOKUP } from '@/lib/cultivar-registry'
+import { TERROIR_COUNTRY_LOOKUP, TERROIR_MACRO_LOOKUP } from '@/lib/terroir-registry'
 import { SectionCard } from '@/components/SectionCard'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 import { FlavorNotesInput } from '@/components/FlavorNotesInput'
@@ -28,7 +29,9 @@ type FormState = {
   process: string
   roast_level: string
   flavor_notes: string[]
-  terroir_id: string
+  country: string
+  macro_terroir: string
+  meso_terroir: string
   cultivar_name: string
   brewer: string
   filter: string
@@ -54,9 +57,12 @@ type FormState = {
   what_i_learned: string
 }
 
-function initial(brew: Brew, cultivars: CultivarOption[]): FormState {
+function initial(brew: Brew, terroirs: TerroirOption[], cultivars: CultivarOption[]): FormState {
   const currentCultivar = brew.cultivar_id
     ? cultivars.find((c) => c.id === brew.cultivar_id)
+    : null
+  const currentTerroir = brew.terroir_id
+    ? terroirs.find((t) => t.id === brew.terroir_id)
     : null
   return {
     coffee_name: brew.coffee_name ?? '',
@@ -66,7 +72,9 @@ function initial(brew: Brew, cultivars: CultivarOption[]): FormState {
     process: brew.process ?? '',
     roast_level: brew.roast_level ?? '',
     flavor_notes: brew.flavor_notes ?? [],
-    terroir_id: brew.terroir_id ?? '',
+    country: currentTerroir?.country ?? '',
+    macro_terroir: currentTerroir?.macro_terroir ?? '',
+    meso_terroir: currentTerroir?.meso_terroir ?? '',
     cultivar_name: currentCultivar?.cultivar_name ?? '',
     brewer: brew.brewer ?? '',
     filter: brew.filter ?? '',
@@ -93,18 +101,14 @@ function initial(brew: Brew, cultivars: CultivarOption[]): FormState {
   }
 }
 
-function terroirLabel(t: TerroirOption): string {
-  const parts = [t.country, t.admin_region, t.macro_terroir || t.meso_terroir].filter(Boolean)
-  return parts.join(' → ')
-}
-
 export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
   const router = useRouter()
-  const [form, setForm] = useState<FormState>(() => initial(brew, cultivars))
+  const [form, setForm] = useState<FormState>(() => initial(brew, terroirs, cultivars))
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const cultivarValid = CULTIVAR_LOOKUP.isResolvable(form.cultivar_name)
+  const macroValid = TERROIR_MACRO_LOOKUP.isResolvable(form.macro_terroir)
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -123,7 +127,9 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
       process: form.process.trim() || null,
       roast_level: form.roast_level.trim() || null,
       flavor_notes: form.flavor_notes,
-      terroir_id: form.terroir_id || null,
+      country: form.country.trim() || null,
+      terroir_name: form.macro_terroir.trim(),
+      meso_terroir: form.meso_terroir.trim() || null,
       cultivar_name: form.cultivar_name.trim(),
       brewer: form.brewer.trim() || null,
       filter: form.filter.trim() || null,
@@ -209,36 +215,39 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
         </div>
       </SectionCard>
 
-      {/* Classification (read-only selects) */}
       <SectionCard title="TERROIR & CULTIVAR">
-        <div className="grid grid-cols-1 gap-3">
-          <div>
-            <label className="label">Terroir (select from existing)</label>
-            <select
+        <div className="grid grid-cols-2 gap-3">
+          <CanonicalTextInput
+            label="Country"
+            value={form.country}
+            onChange={(v) => set('country', v)}
+            registry={TERROIR_COUNTRY_LOOKUP}
+          />
+          <CanonicalTextInput
+            label="Macro terroir"
+            value={form.macro_terroir}
+            onChange={(v) => set('macro_terroir', v)}
+            registry={TERROIR_MACRO_LOOKUP}
+          />
+          <div className="col-span-2">
+            <label className="label">Meso terroir (free-text)</label>
+            <input
               className="input"
-              value={form.terroir_id}
-              onChange={(e) => set('terroir_id', e.target.value)}
-            >
-              <option value="">—</option>
-              {terroirs.map((t) => (
-                <option key={t.id} value={t.id}>{terroirLabel(t)}</option>
-              ))}
-            </select>
-            <p className="font-mono text-xxs text-latent-mid mt-1">
-              Creating new terroirs is out of scope here — use /add for a new terroir.
-            </p>
+              value={form.meso_terroir}
+              onChange={(e) => set('meso_terroir', e.target.value)}
+            />
           </div>
-          <div>
+          <div className="col-span-2">
             <CanonicalTextInput
               label="Cultivar"
               value={form.cultivar_name}
               onChange={(v) => set('cultivar_name', v)}
               registry={CULTIVAR_LOOKUP}
             />
-            <p className="font-mono text-xxs text-latent-mid mt-1">
-              Canonical registry of {CULTIVAR_LOOKUP.list.length} cultivars (aliases resolved on save). To add a genuinely new cultivar, use /add.
-            </p>
           </div>
+          <p className="col-span-2 font-mono text-xxs text-latent-mid">
+            Canonical registries: {TERROIR_MACRO_LOOKUP.list.length} macros across {TERROIR_COUNTRY_LOOKUP.list.length} countries, {CULTIVAR_LOOKUP.list.length} cultivars. Aliases resolve on save. For genuinely new entries, use /add.
+          </p>
         </div>
       </SectionCard>
 
@@ -385,7 +394,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
         >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary" disabled={isSaving || !cultivarValid}>
+        <button type="submit" className="btn btn-primary" disabled={isSaving || !cultivarValid || !macroValid}>
           {isSaving ? 'Saving…' : 'Save changes'}
         </button>
       </div>
