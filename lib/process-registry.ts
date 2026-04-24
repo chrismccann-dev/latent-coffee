@@ -301,9 +301,9 @@ export const SIGNATURE_NAMES = SIGNATURE_METHODS.map((s) => s.name) as readonly 
 
 export const SIGNATURE_ALIASES: Readonly<Record<string, string>> = {
   'Moonshadow Natural': 'Moonshadow',
-  // DB mis-label: Alo only produces a Moonshadow Natural variant. The one
-  // brew in the corpus labeled "Moonshadow Washed" is a mis-label to be
-  // corrected in 1e.2.
+  // Defensive alias: Alo only produces a Moonshadow Natural variant, so any
+  // "Moonshadow Washed" input is either a typo or a naming error. Route it
+  // to the signature target rather than leaving it unresolved.
   'Moonshadow Washed': 'Moonshadow',
 }
 
@@ -353,9 +353,9 @@ function structured(partial: Partial<StructuredProcess> & { base_process: BasePr
 
 // ---------------------------------------------------------------------------
 // Legacy decompositions — the 20 distinct brews.process values as of
-// 2026-04-23. Used by decomposeProcess + the 1e.2 schema migration to
-// populate the new structured columns. TODO(1e.2) markers flag interpretive
-// cells Chris resolves when 1e.2 lands.
+// 2026-04-23. Used by decomposeProcess; mirrored into brews.base_process /
+// subprocess / *_modifiers / decaf_modifier / signature_method via
+// migration 025.
 // ---------------------------------------------------------------------------
 
 export const LEGACY_DECOMPOSITIONS: Readonly<Record<string, StructuredProcess>> = {
@@ -366,9 +366,9 @@ export const LEGACY_DECOMPOSITIONS: Readonly<Record<string, StructuredProcess>> 
     fermentation_modifiers: ['Anaerobic'],
   }),
   'White Honey': structured({ base_process: 'Honey', subprocess: 'White Honey' }),
-  // TODO(1e.2): confirm Honey subprocess tier for the 2 Anaerobic Honey brews
   'Anaerobic Honey': structured({
     base_process: 'Honey',
+    subprocess: 'Generic Honey',
     fermentation_modifiers: ['Anaerobic'],
   }),
   'Anaerobic Natural': structured({
@@ -379,22 +379,14 @@ export const LEGACY_DECOMPOSITIONS: Readonly<Record<string, StructuredProcess>> 
     base_process: 'Washed',
     fermentation_modifiers: ['Cold Fermentation'],
   }),
-  // TODO(1e.2): confirm brew row is actually Moonshadow Natural (Alo only
-  // produces a Natural variant of Moonshadow).
-  'Moonshadow Washed': structured({
-    base_process: 'Natural',
-    drying_modifiers: ['Dark Room Dried', 'Slow Dry'],
-    signature_method: 'Moonshadow',
-  }),
+  'Moonshadow Washed': structured({ base_process: 'Washed' }),
   'Anoxic Natural': structured({
     base_process: 'Natural',
     fermentation_modifiers: ['Anaerobic'],
   }),
-  // TODO(1e.2): confirm base (Natural vs Washed) for Double Anaerobic
-  // Thermal Shock. Defaulted to Natural; most common pairing in Chris's corpus.
   'Double Anaerobic Thermal Shock': structured({
-    base_process: 'Natural',
-    fermentation_modifiers: ['Double Anaerobic', 'Thermal Shock'],
+    base_process: 'Washed',
+    fermentation_modifiers: ['Double Anaerobic', 'Thermal Shock', 'Yeast Inoculated'],
   }),
   'Tamarind + Red Fruit Co-ferment Washed': structured({
     base_process: 'Washed',
@@ -414,10 +406,9 @@ export const LEGACY_DECOMPOSITIONS: Readonly<Record<string, StructuredProcess>> 
     drying_modifiers: ['Dark Room Dried'],
   }),
   Honey: structured({ base_process: 'Honey', subprocess: 'Generic Honey' }),
-  // TODO(1e.2): confirm base for Double Fermentation Thermal Shock.
   'Double Fermentation Thermal Shock': structured({
-    base_process: 'Natural',
-    fermentation_modifiers: ['Double Anaerobic', 'Thermal Shock'],
+    base_process: 'Washed',
+    fermentation_modifiers: ['Double Anaerobic', 'Thermal Shock', 'Yeast Inoculated'],
   }),
   'ASD Natural': structured({
     base_process: 'Natural',

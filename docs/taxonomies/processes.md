@@ -172,15 +172,15 @@ Structural mappings to canonical names. Additions are as deliberate as adding a 
 
 ### Signature-method aliases (proper-name drift)
 - `Moonshadow Natural` → **Moonshadow** (signature)
-- `Moonshadow Washed` → **Moonshadow** (DB mis-label correction: Alo only produces a Natural variant; see decomposition table below)
+- `Moonshadow Washed` → **Moonshadow** (defensive alias: Alo only produces a Natural variant, so any "Moonshadow Washed" input is a typo or naming error. The single corpus brew carrying this string in 1e.2 was reclassified as plain Washed, not Moonshadow — see decomposition table below.)
 - `Tropical Washed` → *not a signature;* decomposes to `base:Washed + fermentation:[Yeast Inoculated] + intervention:[Fruit Co-ferment]` (Monteblanco, Colombia — co-ferment masquerading as a washed per Robert's notes)
 - `Gold Washed` → *not a signature;* decomposes to `base:Washed + fermentation:[Mossto]` (Campo Hermoso, Colombia — named for the yellow-ish color from mossto + lactic ferment)
 
 ---
 
-## Decomposition of current DB values (for sprint 1e.2)
+## Decomposition of current DB values (applied in migration 025)
 
-The 20 distinct `brews.process` values across the 55-brew corpus, mapped to structured fields. Chris fills the 4 bolded cells in sprint 1e.2.
+The 20 distinct `brews.process` values across the 55-brew corpus, mapped to structured fields. Migration 025 (sprint 1e.2) applied this decomposition to `brews.base_process` / `subprocess` / `*_modifiers` / `decaf_modifier` / `signature_method` on all 55 rows. `brews.process` text column is retained unchanged (legacy display string; dropped in 1e.4 when /processes is redesigned).
 
 | DB string | count | base | subprocess | fermentation | drying | intervention | signature |
 |---|---|---|---|---|---|---|---|
@@ -188,24 +188,32 @@ The 20 distinct `brews.process` values across the 55-brew corpus, mapped to stru
 | Natural | 12 | Natural | - | - | - | - | - |
 | Anaerobic Washed | 3 | Washed | - | [Anaerobic] | - | - | - |
 | White Honey | 2 | Honey | White Honey | - | - | - | - |
-| Anaerobic Honey | 2 | Honey | **? (Chris to resolve in 1e.2)** | [Anaerobic] | - | - | - |
+| Anaerobic Honey | 2 | Honey | Generic Honey | [Anaerobic] | - | - | - |
 | Anaerobic Natural | 2 | Natural | - | [Anaerobic] | - | - | - |
 | Cold Fermented Washed | 1 | Washed | - | [Cold Fermentation] | - | - | - |
-| Moonshadow Washed | 1 | **Natural (DB mis-label; Alo only produces Moonshadow Natural — Chris to confirm brew row)** | - | - | [Dark Room Dried, Slow Dry] | - | Moonshadow |
+| Moonshadow Washed | 1 | Washed | - | - | - | - | - |
 | Anoxic Natural | 1 | Natural | - | [Anaerobic] | - | - | - |
-| Double Anaerobic Thermal Shock | 1 | **? (Chris to resolve in 1e.2)** | - | [Double Anaerobic, Thermal Shock] | - | - | - |
+| Double Anaerobic Thermal Shock | 1 | Washed | - | [Double Anaerobic, Thermal Shock, Yeast Inoculated] | - | - | - |
 | Tamarind + Red Fruit Co-ferment Washed | 1 | Washed | - | [Yeast Inoculated] | - | [Fruit Co-ferment] | - |
 | Yeast Inoculated Natural | 1 | Natural | - | [Yeast Inoculated] | - | - | - |
 | Yeast Anaerobic Natural | 1 | Natural | - | [Anaerobic, Yeast Inoculated] | - | - | - |
 | Dark Room Dry Natural | 1 | Natural | - | - | [Dark Room Dried] | - | - |
 | Honey | 1 | Honey | Generic Honey | - | - | - | - |
-| Double Fermentation Thermal Shock | 1 | **? (Chris to resolve in 1e.2)** | - | [Double Anaerobic, Thermal Shock] | - | - | - |
+| Double Fermentation Thermal Shock | 1 | Washed | - | [Double Anaerobic, Thermal Shock, Yeast Inoculated] | - | - | - |
 | ASD Natural | 1 | Natural | - | [Anaerobic] | [Slow Dry] | - | - |
 | Washed Sakura Co-ferment | 1 | Washed | - | - | - | [Floral Co-ferment] | - |
 | TyOxidator | 1 | Washed | - | [Aerobic] | - | - | TyOxidator |
 | Washed Cascara Infused | 1 | Washed | - | - | - | [Cascara Infusion] | - |
 
-4 interpretive cells to resolve in 1e.2. Tamarind + Red Fruit decomposes to generic `Fruit Co-ferment`; specific ingredient detail (tamarind, red fruit, sakura) is lost at decomposition time but can be preserved as a free-text note in 1e.2 if Chris wants ingredient-level fidelity. Ingredient detail is marketing granularity, not a structural property.
+Post-migration base_process distribution: Washed 31, Natural 19, Honey 5, Wet-hulled 0 (55 total).
+
+Four interpretive reads were resolved via pre-sprint DB audit evidence (full rationale in migration 025 header comment):
+
+- **Anaerobic Honey** (×2 Finca La Reserva Gesha) — subprocess defaulted to Generic Honey; color tier unspecified in brew rows.
+- **Moonshadow Washed** (×1 Alo Tamiru Tadesse) — full mis-label correction. Coffee name is "Alo Village - Tamiru Tadesse - Washed 74158" (no Moonshadow in the name) with a clean-washed flavor profile; plain Washed mis-typed as Moonshadow in the process field, not a Moonshadow lot. The `SIGNATURE_ALIASES` entry is retained as a defensive alias for future mis-types.
+- **Double Anaerobic Thermal Shock** (×1 El Paraiso Lychee) + **Double Fermentation Thermal Shock** (×1 Letty Bermudez) — both Finca El Paraiso house protocol: base Washed with fermentation [Double Anaerobic, Thermal Shock, Yeast Inoculated]. Chris's key_takeaways on both brews explicitly name "yeast inoculation" and "wash process". Identical structured shape; 1e.4 redesign merges them into one faceted tile with 2 brews.
+
+Tamarind + Red Fruit decomposes to generic `Fruit Co-ferment`; specific ingredient detail (tamarind, red fruit, sakura) is lost at decomposition time but could be preserved as a free-text note if Chris wants ingredient-level fidelity. Ingredient detail is marketing granularity, not a structural property.
 
 ---
 
