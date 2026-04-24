@@ -46,7 +46,7 @@ export function CanonicalTextInput({
         <div className="mt-1 font-mono text-xxs text-amber-700">
           {warning.suggestion
             ? `Not in registry — did you mean "${warning.suggestion}"?`
-            : 'Not in registry — will be saved as free-text.'}
+            : 'Not in registry — add via /add to save.'}
         </div>
       )}
     </div>

@@ -7,13 +7,16 @@ import Link from 'next/link'
 import {
   EXTRACTION_STRATEGIES,
   GENETIC_FAMILIES,
+  seedStructuredProcess,
   type BrewPayload,
   type TerroirCandidate,
   type CultivarCandidate,
 } from '@/lib/brew-import'
 import { CULTIVAR_LOOKUP, resolveCultivar } from '@/lib/cultivar-registry'
 import { TERROIR_MACRO_LOOKUP, resolveTerroirMacro, getTerroirEntry } from '@/lib/terroir-registry'
+import { composeProcess, structuredProcessColumns, type StructuredProcess } from '@/lib/process-registry'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
+import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 
 type SourceType = 'self-roasted' | 'purchased' | null
 
@@ -397,7 +400,8 @@ export default function AddPage() {
 
       // 8. Create brew document
       const bestRoastId = parsedLearnings?.bestBatchId ? roastIdMap[parsedLearnings.bestBatchId] : null
-      
+      const srStructured = seedStructuredProcess({ process: parsedGreenBean?.process ?? null })
+
       const { data: brew, error: brewError } = await supabase
         .from('brews')
         .insert({
@@ -409,7 +413,8 @@ export default function AddPage() {
           cultivar_id: cultivarId,
           coffee_name: `${parsedGreenBean?.name} (Batch #${parsedLearnings?.bestBatchId || 'TBD'})`,
           variety: parsedGreenBean?.variety,
-          process: parsedGreenBean?.process,
+          process: composeProcess(srStructured),
+          ...structuredProcessColumns(srStructured),
           roast_level: 'Light',
           flavor_notes: [],
           brewer: parsedBrew?.recipe?.brewer,
@@ -793,6 +798,9 @@ export default function AddPage() {
               ;(merged as any)[k] = v
             }
           }
+          // Re-seed structured process fields whenever process arrives or
+          // changes through the wizard path.
+          Object.assign(merged, structuredProcessColumns(seedStructuredProcess(merged)))
           return merged
         })
         // Update match + drift every parse; final review step shows cumulative state
@@ -1056,6 +1064,9 @@ export default function AddPage() {
                     process_category: data.parsed?.process_category ?? null,
                     process_details: data.parsed?.process_details ?? null,
                   }
+                  // Seed structured process fields so the picker in step 6 is
+                  // pre-populated.
+                  Object.assign(p, structuredProcessColumns(seedStructuredProcess(p)))
                   setPurchasedPayload(p)
                   setPurchasedTerroirMatch(data.terroirMatch)
                   setPurchasedCultivarMatch(data.cultivarMatch)
@@ -1108,12 +1119,15 @@ export default function AddPage() {
       const needsCultivarConfirm = cultivarState !== 'existing'
       const macroValid = TERROIR_MACRO_LOOKUP.isResolvable(payload.terroir.macro_terroir || '')
       const cultivarValid = CULTIVAR_LOOKUP.isResolvable(payload.cultivar.cultivar_name || '')
+      const structuredProcess = seedStructuredProcess(payload)
+      const processValid = isProcessResolvable(structuredProcess)
       const saveEnabled =
         !!payload.coffee_name?.trim() &&
         !!payload.terroir.country?.trim() &&
         !!payload.cultivar.cultivar_name?.trim() &&
         macroValid &&
         cultivarValid &&
+        processValid &&
         (!needsTerroirConfirm || purchasedConfirmTerroir) &&
         (!needsCultivarConfirm || purchasedConfirmCultivar)
 
@@ -1258,12 +1272,16 @@ export default function AddPage() {
                   onChange={(e) => updateField('variety', e.target.value || null)}
                 />
               </div>
-              <div>
-                <label className="label">Process</label>
-                <input
-                  className="input"
-                  value={payload.process || ''}
-                  onChange={(e) => updateField('process', e.target.value || null)}
+              <div className="col-span-2">
+                <ProcessPicker
+                  value={structuredProcess}
+                  onChange={(s) => {
+                    setPurchasedPayload((prev) => prev ? ({
+                      ...prev,
+                      ...structuredProcessColumns(s),
+                      process: composeProcess(s) || null,
+                    }) : prev)
+                  }}
                 />
               </div>
               <div>

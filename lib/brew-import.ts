@@ -15,6 +15,23 @@ import {
   TERROIR_MACRO_LOOKUP,
   getTerroirEntry,
 } from './terroir-registry'
+import {
+  BASE_PROCESSES,
+  type BaseProcess,
+  HONEY_SUBPROCESSES,
+  type HoneySubprocess,
+  FERMENTATION_LOOKUP,
+  DRYING_LOOKUP,
+  INTERVENTION_LOOKUP,
+  EXPERIMENTAL_LOOKUP,
+  DECAF_MODIFIERS,
+  type DecafModifier,
+  SIGNATURE_LOOKUP,
+  composeProcess,
+  decomposeProcess,
+  structuredProcessColumns,
+  type StructuredProcess,
+} from './process-registry'
 
 // ---------------------------------------------------------------------------
 // Canonical registries
@@ -129,6 +146,34 @@ export interface BrewPayload {
   is_process_dominant?: boolean
   process_category?: string | null
   process_details?: string | null
+
+  // Structured process columns. `process` is the denormalized composed
+  // string; callers that only supply legacy `process` have it decomposed
+  // at save time via seedStructuredProcess.
+  base_process?: BaseProcess | null
+  subprocess?: HoneySubprocess | null
+  fermentation_modifiers?: string[] | null
+  drying_modifiers?: string[] | null
+  intervention_modifiers?: string[] | null
+  experimental_modifiers?: string[] | null
+  decaf_modifier?: DecafModifier | null
+  signature_method?: string | null
+}
+
+export function seedStructuredProcess(payload: Partial<BrewPayload>): StructuredProcess {
+  if (payload.base_process) {
+    return {
+      base_process: payload.base_process,
+      subprocess: payload.subprocess ?? null,
+      fermentation_modifiers: (payload.fermentation_modifiers ?? []) as StructuredProcess['fermentation_modifiers'],
+      drying_modifiers: (payload.drying_modifiers ?? []) as StructuredProcess['drying_modifiers'],
+      intervention_modifiers: (payload.intervention_modifiers ?? []) as StructuredProcess['intervention_modifiers'],
+      experimental_modifiers: (payload.experimental_modifiers ?? []) as StructuredProcess['experimental_modifiers'],
+      decaf_modifier: payload.decaf_modifier ?? null,
+      signature_method: payload.signature_method ?? null,
+    }
+  }
+  return decomposeProcess(payload.process)
 }
 
 // ---------------------------------------------------------------------------
@@ -366,6 +411,31 @@ export function validateBrewPayload(payload: BrewPayload): ValidationResult {
     }
   }
 
+  // Structured process validation — each axis canonical-or-null.
+  if (payload.base_process && !BASE_PROCESSES.includes(payload.base_process)) {
+    errors.push(`base_process must be one of: ${BASE_PROCESSES.join(', ')} (got "${payload.base_process}")`)
+  }
+  if (payload.subprocess && !HONEY_SUBPROCESSES.includes(payload.subprocess as HoneySubprocess)) {
+    errors.push(`subprocess must be one of: ${HONEY_SUBPROCESSES.join(', ')} (got "${payload.subprocess}")`)
+  }
+  for (const [axis, lookup, list] of [
+    ['fermentation_modifiers', FERMENTATION_LOOKUP, payload.fermentation_modifiers],
+    ['drying_modifiers', DRYING_LOOKUP, payload.drying_modifiers],
+    ['intervention_modifiers', INTERVENTION_LOOKUP, payload.intervention_modifiers],
+    ['experimental_modifiers', EXPERIMENTAL_LOOKUP, payload.experimental_modifiers],
+  ] as const) {
+    if (!list) continue
+    for (const v of list) {
+      if (!lookup.isCanonical(v)) errors.push(`${axis}: "${v}" is not canonical`)
+    }
+  }
+  if (payload.decaf_modifier && !DECAF_MODIFIERS.includes(payload.decaf_modifier)) {
+    errors.push(`decaf_modifier must be one of: ${DECAF_MODIFIERS.join(', ')} (got "${payload.decaf_modifier}")`)
+  }
+  if (payload.signature_method && !SIGNATURE_LOOKUP.isResolvable(payload.signature_method)) {
+    errors.push(`signature_method "${payload.signature_method}" is not in the canonical registry`)
+  }
+
   return errors.length ? { ok: false, errors } : { ok: true }
 }
 
@@ -470,6 +540,9 @@ export async function persistBrew(
     ratio = `1:${r.toFixed(1)}`
   }
 
+  const structured = seedStructuredProcess(payload)
+  const composed = composeProcess(structured)
+
   const brewInsert: Partial<InsertBrew> = {
     user_id: userId,
     source: 'purchased',
@@ -481,7 +554,8 @@ export async function persistBrew(
     roaster: payload.roaster ?? null,
     producer: payload.producer ?? null,
     variety: payload.variety ?? null,
-    process: payload.process ?? null,
+    process: payload.process ?? composed,
+    ...structuredProcessColumns(structured),
     roast_level: payload.roast_level ?? null,
     flavor_notes: payload.flavor_notes ?? null,
     brewer: payload.brewer ?? null,

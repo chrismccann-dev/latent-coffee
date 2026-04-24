@@ -7,6 +7,20 @@ import {
   findOrCreateTerroir,
   type FindOrCreateResult,
 } from '@/lib/brew-import'
+import {
+  BASE_PROCESSES,
+  type BaseProcess,
+  HONEY_SUBPROCESSES,
+  type HoneySubprocess,
+  FERMENTATION_LOOKUP,
+  DRYING_LOOKUP,
+  INTERVENTION_LOOKUP,
+  EXPERIMENTAL_LOOKUP,
+  DECAF_MODIFIERS,
+  type DecafModifier,
+  SIGNATURE_LOOKUP,
+} from '@/lib/process-registry'
+import type { CanonicalLookup } from '@/lib/canonical-registry'
 
 // Whitelist for direct PATCH. `cultivar_id` / `terroir_id` are resolved
 // server-side via findOrCreateCultivar / findOrCreateTerroir, not here.
@@ -45,6 +59,14 @@ const EDITABLE_FIELDS = [
   'is_process_dominant',
   'process_category',
   'process_details',
+  'base_process',
+  'subprocess',
+  'fermentation_modifiers',
+  'drying_modifiers',
+  'intervention_modifiers',
+  'experimental_modifiers',
+  'decaf_modifier',
+  'signature_method',
 ] as const
 
 function resultToResponse(result: Extract<FindOrCreateResult, { ok: false }>) {
@@ -90,6 +112,62 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       )
     }
     if (s === '') patch.extraction_strategy = null
+  }
+
+  // Validate structured process fields against canonical registries.
+  if ('base_process' in patch) {
+    const v = patch.base_process
+    if (v !== null && (typeof v !== 'string' || !BASE_PROCESSES.includes(v as BaseProcess))) {
+      return NextResponse.json(
+        { error: 'validation', errors: [`base_process must be one of: ${BASE_PROCESSES.join(', ')}`] },
+        { status: 400 },
+      )
+    }
+  }
+  if ('subprocess' in patch) {
+    const v = patch.subprocess
+    if (v !== null && v !== '' && (typeof v !== 'string' || !HONEY_SUBPROCESSES.includes(v as HoneySubprocess))) {
+      return NextResponse.json(
+        { error: 'validation', errors: [`subprocess must be one of: ${HONEY_SUBPROCESSES.join(', ')}`] },
+        { status: 400 },
+      )
+    }
+    if (v === '') patch.subprocess = null
+  }
+  for (const [key, lookup] of [
+    ['fermentation_modifiers', FERMENTATION_LOOKUP],
+    ['drying_modifiers', DRYING_LOOKUP],
+    ['intervention_modifiers', INTERVENTION_LOOKUP],
+    ['experimental_modifiers', EXPERIMENTAL_LOOKUP],
+  ] as const satisfies ReadonlyArray<readonly [string, CanonicalLookup]>) {
+    if (!(key in patch)) continue
+    const v = patch[key]
+    if (!Array.isArray(v) || v.some((x) => typeof x !== 'string' || !lookup.isCanonical(x))) {
+      return NextResponse.json(
+        { error: 'validation', errors: [`${key} must be an array of canonical values`] },
+        { status: 400 },
+      )
+    }
+  }
+  if ('decaf_modifier' in patch) {
+    const v = patch.decaf_modifier
+    if (v !== null && v !== '' && (typeof v !== 'string' || !DECAF_MODIFIERS.includes(v as DecafModifier))) {
+      return NextResponse.json(
+        { error: 'validation', errors: [`decaf_modifier must be one of: ${DECAF_MODIFIERS.join(', ')}`] },
+        { status: 400 },
+      )
+    }
+    if (v === '') patch.decaf_modifier = null
+  }
+  if ('signature_method' in patch) {
+    const v = patch.signature_method
+    if (v !== null && v !== '' && (typeof v !== 'string' || !SIGNATURE_LOOKUP.isResolvable(v))) {
+      return NextResponse.json(
+        { error: 'validation', errors: [`signature_method "${String(v)}" is not in the canonical registry`] },
+        { status: 400 },
+      )
+    }
+    if (v === '') patch.signature_method = null
   }
 
   // Require coffee_name to be non-empty when provided (can't clear it).

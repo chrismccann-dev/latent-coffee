@@ -3,14 +3,16 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Brew, Terroir, Cultivar } from '@/lib/types'
-import { EXTRACTION_STRATEGIES } from '@/lib/brew-import'
+import { EXTRACTION_STRATEGIES, seedStructuredProcess } from '@/lib/brew-import'
 import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import { CULTIVAR_LOOKUP } from '@/lib/cultivar-registry'
 import { TERROIR_COUNTRY_LOOKUP, TERROIR_MACRO_LOOKUP } from '@/lib/terroir-registry'
+import { composeProcess, structuredProcessColumns, type StructuredProcess } from '@/lib/process-registry'
 import { SectionCard } from '@/components/SectionCard'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 import { FlavorNotesInput } from '@/components/FlavorNotesInput'
+import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 
 type TerroirOption = Pick<Terroir, 'id' | 'country' | 'admin_region' | 'macro_terroir' | 'meso_terroir'>
 type CultivarOption = Pick<Cultivar, 'id' | 'cultivar_name' | 'lineage' | 'genetic_family'>
@@ -26,7 +28,7 @@ type FormState = {
   roaster: string
   producer: string
   variety: string
-  process: string
+  structuredProcess: StructuredProcess
   roast_level: string
   flavor_notes: string[]
   country: string
@@ -69,7 +71,17 @@ function initial(brew: Brew, terroirs: TerroirOption[], cultivars: CultivarOptio
     roaster: brew.roaster ?? '',
     producer: brew.producer ?? '',
     variety: brew.variety ?? '',
-    process: brew.process ?? '',
+    structuredProcess: seedStructuredProcess({
+      process: brew.process ?? null,
+      base_process: brew.base_process as StructuredProcess['base_process'] | undefined,
+      subprocess: brew.subprocess as StructuredProcess['subprocess'],
+      fermentation_modifiers: brew.fermentation_modifiers ?? undefined,
+      drying_modifiers: brew.drying_modifiers ?? undefined,
+      intervention_modifiers: brew.intervention_modifiers ?? undefined,
+      experimental_modifiers: brew.experimental_modifiers ?? undefined,
+      decaf_modifier: brew.decaf_modifier as StructuredProcess['decaf_modifier'],
+      signature_method: brew.signature_method ?? null,
+    }),
     roast_level: brew.roast_level ?? '',
     flavor_notes: brew.flavor_notes ?? [],
     country: currentTerroir?.country ?? '',
@@ -109,6 +121,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
 
   const cultivarValid = CULTIVAR_LOOKUP.isResolvable(form.cultivar_name)
   const macroValid = TERROIR_MACRO_LOOKUP.isResolvable(form.macro_terroir)
+  const processValid = isProcessResolvable(form.structuredProcess)
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -124,7 +137,8 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
       roaster: form.roaster.trim() || null,
       producer: form.producer.trim() || null,
       variety: form.variety.trim() || null,
-      process: form.process.trim() || null,
+      process: composeProcess(form.structuredProcess) || null,
+      ...structuredProcessColumns(form.structuredProcess),
       roast_level: form.roast_level.trim() || null,
       flavor_notes: form.flavor_notes,
       country: form.country.trim() || null,
@@ -198,12 +212,14 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
             <input className="input" value={form.variety} onChange={(e) => set('variety', e.target.value)} />
           </div>
           <div>
-            <label className="label">Process</label>
-            <input className="input" value={form.process} onChange={(e) => set('process', e.target.value)} />
-          </div>
-          <div>
             <label className="label">Roast level</label>
             <input className="input" value={form.roast_level} onChange={(e) => set('roast_level', e.target.value)} />
+          </div>
+          <div className="col-span-2">
+            <ProcessPicker
+              value={form.structuredProcess}
+              onChange={(s) => set('structuredProcess', s)}
+            />
           </div>
           <div className="col-span-2">
             <FlavorNotesInput
@@ -394,7 +410,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
         >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary" disabled={isSaving || !cultivarValid || !macroValid}>
+        <button type="submit" className="btn btn-primary" disabled={isSaving || !cultivarValid || !macroValid || !processValid}>
           {isSaving ? 'Saving…' : 'Save changes'}
         </button>
       </div>
