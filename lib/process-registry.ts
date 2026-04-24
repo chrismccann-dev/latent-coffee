@@ -274,6 +274,11 @@ export interface SignatureEntry {
 }
 
 export const SIGNATURE_METHODS: readonly SignatureEntry[] = [
+  // Moonshadow is defined by the shade-dry + extended LDE drying protocol;
+  // typically applied to a Natural ferment but a rare Washed variant exists
+  // (MSW1 Airworks x Shoebox x Alo special lot, 2024). Base here reflects
+  // the typical shape — individual brews can carry signature:Moonshadow with
+  // their own base_process.
   {
     name: 'Moonshadow',
     producer: 'Alo Coffee',
@@ -301,9 +306,6 @@ export const SIGNATURE_NAMES = SIGNATURE_METHODS.map((s) => s.name) as readonly 
 
 export const SIGNATURE_ALIASES: Readonly<Record<string, string>> = {
   'Moonshadow Natural': 'Moonshadow',
-  // Defensive alias: Alo only produces a Moonshadow Natural variant, so any
-  // "Moonshadow Washed" input is either a typo or a naming error. Route it
-  // to the signature target rather than leaving it unresolved.
   'Moonshadow Washed': 'Moonshadow',
 }
 
@@ -379,7 +381,13 @@ export const LEGACY_DECOMPOSITIONS: Readonly<Record<string, StructuredProcess>> 
     base_process: 'Washed',
     fermentation_modifiers: ['Cold Fermentation'],
   }),
-  'Moonshadow Washed': structured({ base_process: 'Washed' }),
+  // MSW1 Airworks x Shoebox x Alo special-lot Washed variant of Moonshadow.
+  // Moonshadow is typically Natural; this is the exception, not a mis-label.
+  'Moonshadow Washed': structured({
+    base_process: 'Washed',
+    drying_modifiers: ['Dark Room Dried', 'Slow Dry'],
+    signature_method: 'Moonshadow',
+  }),
   'Anoxic Natural': structured({
     base_process: 'Natural',
     fermentation_modifiers: ['Anaerobic'],

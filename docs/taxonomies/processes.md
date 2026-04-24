@@ -104,7 +104,7 @@ Single-value. Orthogonal to wet-process base — decaf coffee still has an under
 
 Single-value. Proper-name proprietary techniques. Each has a canonical decomposition; the signature captures the producer brand that the decomposition alone would lose.
 
-- **Moonshadow** - Alo Coffee, Ethiopia. Decomposition: `base:Natural + drying:[Dark Room Dried, Slow Dry]`. Shade-dried to 20% moisture, then extended LDE drying to 11% moisture over ~57 days.
+- **Moonshadow** - Alo Coffee, Ethiopia. Typical decomposition: `base:Natural + drying:[Dark Room Dried, Slow Dry]`. Shade-dried to 20% moisture, then extended LDE drying to 11% moisture over ~57 days. Typically Natural; a rare Washed variant exists (MSW1 Airworks x Shoebox x Alo special lot, 2024 — same drying protocol applied to a washed ferment).
 - **TyOxidator** - Pepe Jijon at Finca Soledad, Ecuador. Decomposition: `base:Washed + fermentation:[Aerobic]`. Aerobic oxidative fermentation protocol designed for Typica Mejorado.
 - **Hybrid Washed** - Café Granja La Esperanza (CGLE), Colombia. Decomposition: `base:Washed + fermentation:[Anaerobic, Aerobic]`. Whole-cherry aerobic → sealed anaerobic → depulp → mucilage aerobic finish. Often described as "premium anaerobic washed."
 
@@ -172,7 +172,7 @@ Structural mappings to canonical names. Additions are as deliberate as adding a 
 
 ### Signature-method aliases (proper-name drift)
 - `Moonshadow Natural` → **Moonshadow** (signature)
-- `Moonshadow Washed` → **Moonshadow** (defensive alias: Alo only produces a Natural variant, so any "Moonshadow Washed" input is a typo or naming error. The single corpus brew carrying this string in 1e.2 was reclassified as plain Washed, not Moonshadow — see decomposition table below.)
+- `Moonshadow Washed` → **Moonshadow** (alias — legitimate rare variant. Moonshadow is typically Natural, but the MSW1 Airworks x Shoebox x Alo special lot is the Washed variant: same signature drying protocol applied to a washed ferment.)
 - `Tropical Washed` → *not a signature;* decomposes to `base:Washed + fermentation:[Yeast Inoculated] + intervention:[Fruit Co-ferment]` (Monteblanco, Colombia — co-ferment masquerading as a washed per Robert's notes)
 - `Gold Washed` → *not a signature;* decomposes to `base:Washed + fermentation:[Mossto]` (Campo Hermoso, Colombia — named for the yellow-ish color from mossto + lactic ferment)
 
@@ -191,7 +191,7 @@ The 20 distinct `brews.process` values across the 55-brew corpus, mapped to stru
 | Anaerobic Honey | 2 | Honey | Generic Honey | [Anaerobic] | - | - | - |
 | Anaerobic Natural | 2 | Natural | - | [Anaerobic] | - | - | - |
 | Cold Fermented Washed | 1 | Washed | - | [Cold Fermentation] | - | - | - |
-| Moonshadow Washed | 1 | Washed | - | - | - | - | - |
+| Moonshadow Washed | 1 | Washed | - | - | [Dark Room Dried, Slow Dry] | - | Moonshadow |
 | Anoxic Natural | 1 | Natural | - | [Anaerobic] | - | - | - |
 | Double Anaerobic Thermal Shock | 1 | Washed | - | [Double Anaerobic, Thermal Shock, Yeast Inoculated] | - | - | - |
 | Tamarind + Red Fruit Co-ferment Washed | 1 | Washed | - | [Yeast Inoculated] | - | [Fruit Co-ferment] | - |
@@ -210,7 +210,7 @@ Post-migration base_process distribution: Washed 31, Natural 19, Honey 5, Wet-hu
 Four interpretive reads were resolved via pre-sprint DB audit evidence (full rationale in migration 025 header comment):
 
 - **Anaerobic Honey** (×2 Finca La Reserva Gesha) — subprocess defaulted to Generic Honey; color tier unspecified in brew rows.
-- **Moonshadow Washed** (×1 Alo Tamiru Tadesse) — full mis-label correction. Coffee name is "Alo Village - Tamiru Tadesse - Washed 74158" (no Moonshadow in the name) with a clean-washed flavor profile; plain Washed mis-typed as Moonshadow in the process field, not a Moonshadow lot. The `SIGNATURE_ALIASES` entry is retained as a defensive alias for future mis-types.
+- **Moonshadow Washed** (×1 Alo Tamiru Tadesse) — legitimate rare Washed variant of Moonshadow. The MSW1 Airworks x Shoebox x Alo special-release collab lot (no public product page; confirmed via Airworks Instagram). Same Moonshadow drying signature (Dark Room Dried + Slow Dry) applied to a washed ferment. Decomposes as `base:Washed + drying:[Dark Room Dried, Slow Dry] + signature:Moonshadow`. Note: sprint 1e.2's initial audit over-read the coffee_name ("Alo Village - Tamiru Tadesse - Washed 74158", no Moonshadow mentioned) and reclassified as plain Washed; post-ship correction from Chris reinstated the signature in migration 026.
 - **Double Anaerobic Thermal Shock** (×1 El Paraiso Lychee) + **Double Fermentation Thermal Shock** (×1 Letty Bermudez) — both Finca El Paraiso house protocol: base Washed with fermentation [Double Anaerobic, Thermal Shock, Yeast Inoculated]. Chris's key_takeaways on both brews explicitly name "yeast inoculation" and "wash process". Identical structured shape; 1e.4 redesign merges them into one faceted tile with 2 brews.
 
 Tamarind + Red Fruit decomposes to generic `Fruit Co-ferment`; specific ingredient detail (tamarind, red fruit, sakura) is lost at decomposition time but could be preserved as a free-text note if Chris wants ingredient-level fidelity. Ingredient detail is marketing granularity, not a structural property.
