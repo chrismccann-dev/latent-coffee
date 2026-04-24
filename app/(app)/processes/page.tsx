@@ -5,7 +5,7 @@ import {
   getProcessFamily,
   getFamilyColor,
   type ProcessFamily,
-} from '@/lib/process-families'
+} from '@/lib/process-registry'
 
 interface ProcessGroup {
   process: string

@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { EXTRACTION_STRATEGIES, getStrategyStyle } from '@/lib/extraction-strategy'
-import { PROCESS_FAMILIES, getFamilyColor as getProcessFamilyColor } from '@/lib/process-families'
+import { PROCESS_FAMILIES, getFamilyColor as getProcessFamilyColor } from '@/lib/process-registry'
 import { ROASTER_FAMILIES, getFamilyColor as getRoasterFamilyColor } from '@/lib/roaster-registry'
 
 type MultiKey = 'processes' | 'roasters' | 'lineages' | 'macros'
