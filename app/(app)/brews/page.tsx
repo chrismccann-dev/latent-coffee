@@ -5,7 +5,7 @@ import { EXTRACTION_STRATEGIES } from '@/lib/extraction-strategy'
 import { getCoverColor } from '@/lib/brew-colors'
 import { StrategyPill } from '@/components/StrategyPill'
 import { BrewsFilterBar } from '@/components/BrewsFilterBar'
-import { PROCESS_FAMILIES, getProcessFamily } from '@/lib/process-families'
+import { PROCESS_FAMILIES, getProcessFamily } from '@/lib/process-registry'
 import { ROASTER_FAMILIES, getRoasterFamily } from '@/lib/roaster-registry'
 
 interface BrewsPageProps {

@@ -42,7 +42,7 @@ The sync validates N canonical fields. Adding a dimension = a row edit here, not
 | 4 | Terroir macro            | `Terroir` row, position 2           | `TERROIR_MACRO_LOOKUP` (same file)                  | yes      | block     |
 | 5 | Terroir meso             | `Terroir` row, position 3           | none (free-text since sprint 1d.1)                  | no       | pass-through |
 | 6 | Cultivar                 | `Cultivar` row                      | `CULTIVAR_LOOKUP` ([lib/cultivar-registry.ts](lib/cultivar-registry.ts)) | yes      | block     |
-| 7 | Process                  | Not in Step 4 — see Phase 2         | `getProcessFamily` ([lib/process-families.ts](lib/process-families.ts)) | yes      | block (ask Chris) |
+| 7 | Process                  | Not in Step 4 — see Phase 2         | `getProcessFamily` ([lib/process-registry.ts](lib/process-registry.ts)) | yes      | block (ask Chris) |
 | 8 | Extraction strategy      | `Extraction Strategy` row           | `EXTRACTION_STRATEGIES` ([lib/extraction-strategy.ts](lib/extraction-strategy.ts)) | yes      | block     |
 | 9 | Extraction confirmed     | `Extraction Strategy Confirmed` row | same as #8                                          | yes      | block     |
 | 10 | Flavor notes (optional) | Not in Step 4 — see Phase 2         | `FLAVOR_LOOKUP` ([lib/flavor-registry.ts](lib/flavor-registry.ts))     | no       | warn (per-note) |

@@ -35,7 +35,7 @@ Single-user (Chris McCann). Next.js 14 App Router + Supabase Postgres + Claude S
 These are **hard-won** — lessons from prior sprints (see PRODUCT.md "Lessons Learned"):
 
 - **Book-cover brew cards**: all content sits on the cover — variety / process / producer / region stack top-left, extraction-strategy chip top-right, flavor notes bottom. No text below the card. Duplicating content in surrounding chrome is a known anti-pattern here.
-- **One color helper per visual system**: `lib/brew-colors.ts` (cover colors), `lib/extraction-strategy.ts` (strategy pills), `lib/process-families.ts` (family colors). Never re-implement inline.
+- **One color helper per visual system**: `lib/brew-colors.ts` (cover colors), `lib/extraction-strategy.ts` (strategy pills), `lib/process-registry.ts` (family colors). Never re-implement inline.
 - **Hue separation, not lightness**: the palette uses forest green (Gesha), muted teal (floral), burgundy (anaerobic/berry/wine), gold (honey), brown (natural), slate (fallback). Adding a color requires a hue-distinctness pass.
 - **Signal density must co-vary with the view**: on aggregation detail pages, a per-coffee strategy pill was noise because it didn't relate to the page's grouping dimension — it was removed.
 
