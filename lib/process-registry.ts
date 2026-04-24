@@ -438,6 +438,42 @@ export const LEGACY_DECOMPOSITIONS: Readonly<Record<string, StructuredProcess>> 
   }),
 }
 
+/**
+ * Shallow-copies the structured fields into an object shaped for a
+ * `brews` row insert/update. Spreads the 4 readonly modifier arrays into
+ * mutable arrays at the boundary. Used at every save site to avoid
+ * repeating the 8-field spread.
+ */
+export function structuredProcessColumns(s: StructuredProcess) {
+  return {
+    base_process: s.base_process,
+    subprocess: s.subprocess,
+    fermentation_modifiers: [...s.fermentation_modifiers],
+    drying_modifiers: [...s.drying_modifiers],
+    intervention_modifiers: [...s.intervention_modifiers],
+    experimental_modifiers: [...s.experimental_modifiers],
+    decaf_modifier: s.decaf_modifier,
+    signature_method: s.signature_method,
+  }
+}
+
+/**
+ * True when every entered value resolves canonically. Modifier arrays must
+ * be strictly canonical (no aliases); signature and decaf may be aliases
+ * (resolved on save). Used by /add + /edit save gates.
+ */
+export function isProcessResolvable(s: StructuredProcess): boolean {
+  if (!BASE_PROCESSES.includes(s.base_process)) return false
+  if (s.subprocess && !HONEY_SUBPROCESSES.includes(s.subprocess)) return false
+  if (s.decaf_modifier && !DECAF_MODIFIERS.includes(s.decaf_modifier)) return false
+  if (s.signature_method && !SIGNATURE_LOOKUP.isResolvable(s.signature_method)) return false
+  for (const m of s.fermentation_modifiers) if (!FERMENTATION_LOOKUP.isCanonical(m)) return false
+  for (const m of s.drying_modifiers) if (!DRYING_LOOKUP.isCanonical(m)) return false
+  for (const m of s.intervention_modifiers) if (!INTERVENTION_LOOKUP.isCanonical(m)) return false
+  for (const m of s.experimental_modifiers) if (!EXPERIMENTAL_LOOKUP.isCanonical(m)) return false
+  return true
+}
+
 // ---------------------------------------------------------------------------
 // composeProcess — structured → display string
 // ---------------------------------------------------------------------------

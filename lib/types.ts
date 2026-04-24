@@ -211,6 +211,14 @@ export interface Brew {
   producer: string | null
   variety: string | null
   process: string | null
+  base_process: string
+  subprocess: string | null
+  fermentation_modifiers: string[]
+  drying_modifiers: string[]
+  intervention_modifiers: string[]
+  experimental_modifiers: string[]
+  decaf_modifier: string | null
+  signature_method: string | null
   roast_level: string | null
   flavor_notes: string[] | null
   brewer: string | null
