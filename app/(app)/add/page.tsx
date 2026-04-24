@@ -8,17 +8,48 @@ import {
   EXTRACTION_STRATEGIES,
   GENETIC_FAMILIES,
   seedStructuredProcess,
+  findOrCreateCultivar,
+  findOrCreateTerroir,
   type BrewPayload,
   type TerroirCandidate,
   type CultivarCandidate,
 } from '@/lib/brew-import'
 import { CULTIVAR_LOOKUP, resolveCultivar } from '@/lib/cultivar-registry'
-import { TERROIR_MACRO_LOOKUP, resolveTerroirMacro, getTerroirEntry } from '@/lib/terroir-registry'
+import { TERROIR_COUNTRY_LOOKUP, TERROIR_MACRO_LOOKUP, resolveTerroirMacro, getTerroirEntry } from '@/lib/terroir-registry'
 import { composeProcess, structuredProcessColumns, type StructuredProcess } from '@/lib/process-registry'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 
 type SourceType = 'self-roasted' | 'purchased' | null
+
+type ParsedTerroir = {
+  country?: string
+  macroTerroir?: string
+  adminRegion?: string
+  mesoTerroir?: string
+}
+
+type ParsedCultivar = {
+  cultivar?: string
+}
+
+function GreenBeanHint({ fields }: { fields: Array<[string, string | null | undefined]> }) {
+  const populated = fields.filter(([, v]) => v && v.trim().length > 0)
+  if (populated.length === 0) return null
+  return (
+    <div className="mb-6 p-4 bg-latent-highlight border border-latent-highlight-border rounded">
+      <div className="font-mono text-xxs font-semibold mb-1 text-latent-mid">FROM GREEN BEAN</div>
+      <div className="text-sm">
+        {populated.map(([label, value], i) => (
+          <span key={label}>
+            {i > 0 && ' · '}
+            <span className="font-mono text-xxs text-latent-mid">{label}:</span> {value}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function AddPage() {
   const router = useRouter()
@@ -50,8 +81,8 @@ export default function AddPage() {
   const [parsedExperiments, setParsedExperiments] = useState<any[]>([])
   const [parsedCuppings, setParsedCuppings] = useState<any[]>([])
   const [parsedLearnings, setParsedLearnings] = useState<any>(null)
-  const [parsedTerroir, setParsedTerroir] = useState<any>(null)
-  const [parsedCultivar, setParsedCultivar] = useState<any>(null)
+  const [parsedTerroir, setParsedTerroir] = useState<ParsedTerroir | null>(null)
+  const [parsedCultivar, setParsedCultivar] = useState<ParsedCultivar | null>(null)
   const [parsedBrew, setParsedBrew] = useState<any>(null)
   const [parsedCoffee, setParsedCoffee] = useState<any>(null)
 
@@ -192,73 +223,22 @@ export default function AddPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      // 1. Create or get terroir
-      let terroirId = null
-      if (parsedTerroir?.country) {
-        const { data: existingTerroir } = await supabase
-          .from('terroirs')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('country', parsedTerroir.country)
-          .eq('macro_terroir', parsedTerroir.macroTerroir || '')
-          .single()
-
-        if (existingTerroir) {
-          terroirId = existingTerroir.id
-        } else {
-          const { data: newTerroir, error: terroirError } = await supabase
-            .from('terroirs')
-            .insert({
-              user_id: user.id,
-              country: parsedTerroir.country,
-              admin_region: parsedTerroir.adminRegion,
-              macro_terroir: parsedTerroir.macroTerroir,
-              meso_terroir: parsedTerroir.mesoTerroir,
-              elevation_min: parsedTerroir.elevationMin ? parseInt(parsedTerroir.elevationMin) : null,
-              elevation_max: parsedTerroir.elevationMax ? parseInt(parsedTerroir.elevationMax) : null,
-              climate_stress: parsedTerroir.climateStress,
-            })
-            .select()
-            .single()
-
-          if (terroirError) throw terroirError
-          terroirId = newTerroir.id
-        }
-      }
-
-      // 2. Create or get cultivar
-      let cultivarId = null
-      if (parsedCultivar?.cultivar) {
-        const { data: existingCultivar } = await supabase
-          .from('cultivars')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('cultivar_name', parsedCultivar.cultivar)
-          .single()
-
-        if (existingCultivar) {
-          cultivarId = existingCultivar.id
-        } else {
-          const { data: newCultivar, error: cultivarError } = await supabase
-            .from('cultivars')
-            .insert({
-              user_id: user.id,
-              species: parsedCultivar.species || 'Arabica',
-              genetic_family: parsedCultivar.geneticFamily,
-              lineage: parsedCultivar.lineage,
-              cultivar_name: parsedCultivar.cultivar,
-              genetic_background: parsedCultivar.geneticBackground,
-              acidity_style: parsedCultivar.acidityStyle,
-              body_style: parsedCultivar.bodyStyle,
-              aromatics: parsedCultivar.aromatics,
-            })
-            .select()
-            .single()
-
-          if (cultivarError) throw cultivarError
-          cultivarId = newCultivar.id
-        }
-      }
+      // Resolve terroir + cultivar in parallel — independent lookups, saves ~1 RTT
+      const [terroirResult, cultivarResult] = await Promise.all([
+        findOrCreateTerroir(
+          supabase,
+          user.id,
+          parsedTerroir?.country ?? null,
+          parsedTerroir?.macroTerroir ?? null,
+          parsedTerroir?.adminRegion ?? null,
+          parsedTerroir?.mesoTerroir ?? null,
+        ),
+        findOrCreateCultivar(supabase, user.id, parsedCultivar?.cultivar ?? null),
+      ])
+      if (!terroirResult.ok) throw new Error(terroirResult.error)
+      if (!cultivarResult.ok) throw new Error(cultivarResult.error)
+      const terroirId = terroirResult.id
+      const cultivarId = cultivarResult.id
 
       // 3. Create green bean
       const { data: greenBean, error: greenBeanError } = await supabase
@@ -537,6 +517,18 @@ export default function AddPage() {
 
   // Self-roasted flow
   if (sourceType === 'self-roasted') {
+    const countryInput = parsedTerroir?.country ?? ''
+    const macroInput = parsedTerroir?.macroTerroir ?? ''
+    const cultivarInputName = parsedCultivar?.cultivar ?? ''
+    const countryValid = TERROIR_COUNTRY_LOOKUP.isResolvable(countryInput) && countryInput.trim().length > 0
+    const macroValid = TERROIR_MACRO_LOOKUP.isResolvable(macroInput) && macroInput.trim().length > 0
+    const cultivarValid = CULTIVAR_LOOKUP.isResolvable(cultivarInputName) && cultivarInputName.trim().length > 0
+    const gateOk = countryValid && macroValid && cultivarValid
+
+    const setTerroirField = (key: keyof ParsedTerroir, val: string) => {
+      setParsedTerroir((prev) => ({ ...(prev ?? {}), [key]: val }))
+    }
+
     // Step 2: Green Bean Details
     if (step === 2) {
       return (
@@ -660,28 +652,25 @@ export default function AddPage() {
       )
     }
 
-    // Steps 4-9: Experiments, Cuppings, Learnings, Terroir, Cultivar, Brew
-    // (Simplified for now - would follow same pattern)
-    
-    if (step >= 4 && step <= 8) {
+    // Steps 4-6: Experiments, Cuppings, Learnings — generic paste-textarea
+    // (parsers not yet wired; save flow currently ignores these — follow-up sprint)
+    if (step >= 4 && step <= 6) {
       const stepConfig: Record<number, { title: string, field: string, setter: any, value: string }> = {
         4: { title: 'Experiments (Optional)', field: 'experiments', setter: setExperimentInput, value: experimentInput },
         5: { title: 'Cupping Notes', field: 'cuppings', setter: setCuppingInput, value: cuppingInput },
         6: { title: 'Roast Learnings', field: 'learnings', setter: setLearningsInput, value: learningsInput },
-        7: { title: 'Terroir Info', field: 'terroir', setter: setTerroirInput, value: terroirInput },
-        8: { title: 'Cultivar Info', field: 'cultivar', setter: setCultivarInput, value: cultivarInput },
       }
-      
+
       const config = stepConfig[step]
-      
+
       return (
         <div className="max-w-lg mx-auto px-6 py-8">
           <button onClick={resetFlow} className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6">
             ← Start Over
           </button>
-          
+
           <StepHeader num={step} title={config.title} />
-          
+
           <div className="mb-6">
             <label className="label">Paste data</label>
             <textarea
@@ -696,7 +685,151 @@ export default function AddPage() {
           <div className="flex gap-3 mt-6">
             <button onClick={() => setStep(step - 1)} className="btn btn-secondary">Back</button>
             <button onClick={() => setStep(step + 1)} className="btn btn-primary">
-              {step === 8 ? 'Next →' : 'Skip / Next →'}
+              Skip / Next →
+            </button>
+          </div>
+
+          <Progress />
+        </div>
+      )
+    }
+
+    // Step 7: Terroir — structured form backed by canonical registry
+    if (step === 7) {
+      const adminRegion = parsedTerroir?.adminRegion ?? ''
+      const mesoTerroir = parsedTerroir?.mesoTerroir ?? ''
+      const autoAdmin = (countryInput && macroInput
+        ? getTerroirEntry(countryInput, macroInput)?.admin_region
+        : null) ?? ''
+
+      return (
+        <div className="max-w-lg mx-auto px-6 py-8">
+          <button onClick={resetFlow} className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6">
+            ← Start Over
+          </button>
+
+          <StepHeader num={7} title="Terroir" />
+
+          <GreenBeanHint
+            fields={[
+              ['Origin', parsedGreenBean?.origin],
+              ['Region', parsedGreenBean?.region],
+            ]}
+          />
+
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <CanonicalTextInput
+              label="Country *"
+              value={countryInput}
+              onChange={(v) => setTerroirField('country', v)}
+              registry={TERROIR_COUNTRY_LOOKUP}
+            />
+            <CanonicalTextInput
+              label="Macro terroir *"
+              value={macroInput}
+              onChange={(v) => setTerroirField('macroTerroir', v)}
+              registry={TERROIR_MACRO_LOOKUP}
+            />
+            <div className="col-span-2">
+              <label className="label">Admin region</label>
+              <input
+                className="input"
+                value={adminRegion}
+                onChange={(e) => setTerroirField('adminRegion', e.target.value)}
+                placeholder={autoAdmin || ''}
+              />
+              {autoAdmin && !adminRegion && (
+                <div className="mt-1 font-mono text-xxs text-latent-mid">
+                  Leave empty to use registry default: {autoAdmin}
+                </div>
+              )}
+            </div>
+            <div className="col-span-2">
+              <label className="label">Meso terroir (free-text)</label>
+              <input
+                className="input"
+                value={mesoTerroir}
+                onChange={(e) => setTerroirField('mesoTerroir', e.target.value)}
+              />
+            </div>
+          </div>
+
+          <p className="font-mono text-xxs text-latent-mid mb-4">
+            Registry: {TERROIR_MACRO_LOOKUP.list.length} macros across {TERROIR_COUNTRY_LOOKUP.list.length} countries. Aliases resolve on save.
+          </p>
+
+          {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+
+          <div className="flex gap-3 mt-6">
+            <button onClick={() => setStep(6)} className="btn btn-secondary">Back</button>
+            <button
+              onClick={() => setStep(8)}
+              disabled={!countryValid || !macroValid}
+              className="btn btn-primary"
+            >
+              Next →
+            </button>
+          </div>
+
+          <Progress />
+        </div>
+      )
+    }
+
+    // Step 8: Cultivar — structured form backed by canonical registry
+    if (step === 8) {
+      const resolved = cultivarInputName ? resolveCultivar(cultivarInputName) : null
+      const setCultivarName = (val: string) => {
+        setParsedCultivar((prev) => ({ ...(prev ?? {}), cultivar: val }))
+      }
+
+      return (
+        <div className="max-w-lg mx-auto px-6 py-8">
+          <button onClick={resetFlow} className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6">
+            ← Start Over
+          </button>
+
+          <StepHeader num={8} title="Cultivar" />
+
+          <GreenBeanHint fields={[['Variety', parsedGreenBean?.variety]]} />
+
+          <div className="mb-4">
+            <CanonicalTextInput
+              label="Cultivar *"
+              value={cultivarInputName}
+              onChange={setCultivarName}
+              registry={CULTIVAR_LOOKUP}
+            />
+          </div>
+
+          {resolved && (
+            <div className="mb-4 p-3 bg-latent-bg border border-latent-border rounded-md">
+              <div className="font-mono text-xxs font-semibold mb-1 text-latent-mid">RESOLVED</div>
+              <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+                <span className="font-mono text-xxs text-latent-mid">Species</span>
+                <span>{resolved.species}</span>
+                <span className="font-mono text-xxs text-latent-mid">Family</span>
+                <span>{resolved.family}</span>
+                <span className="font-mono text-xxs text-latent-mid">Lineage</span>
+                <span>{resolved.lineage}</span>
+              </div>
+            </div>
+          )}
+
+          <p className="font-mono text-xxs text-latent-mid mb-4">
+            Registry: {CULTIVAR_LOOKUP.list.length} canonical cultivars. Aliases resolve on save.
+          </p>
+
+          {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+
+          <div className="flex gap-3 mt-6">
+            <button onClick={() => setStep(7)} className="btn btn-secondary">Back</button>
+            <button
+              onClick={() => setStep(9)}
+              disabled={!cultivarValid}
+              className="btn btn-primary"
+            >
+              Next →
             </button>
           </div>
 
@@ -712,9 +845,9 @@ export default function AddPage() {
           <button onClick={resetFlow} className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6">
             ← Start Over
           </button>
-          
+
           <StepHeader num={9} title="Best Brew & Tasting Notes" />
-          
+
           <div className="mb-6">
             <label className="label">Paste brew recipe & sensory notes</label>
             <textarea
@@ -726,13 +859,22 @@ export default function AddPage() {
             />
           </div>
 
+          {!gateOk && (
+            <div className="mb-4 p-3 bg-amber-50 border border-amber-300 rounded-md font-mono text-xxs text-amber-900">
+              <div className="font-semibold mb-1">Cannot save yet</div>
+              {!countryValid && <div>• Step 7: country must resolve to the canonical registry</div>}
+              {!macroValid && <div>• Step 7: macro terroir must resolve to the canonical registry</div>}
+              {!cultivarValid && <div>• Step 8: cultivar must resolve to the canonical registry</div>}
+            </div>
+          )}
+
           {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
 
           <div className="flex gap-3 mt-6">
             <button onClick={() => setStep(8)} className="btn btn-secondary">Back</button>
-            <button 
+            <button
               onClick={handleSaveSelfRoasted}
-              disabled={isProcessing}
+              disabled={isProcessing || !gateOk}
               className="btn btn-primary"
             >
               {isProcessing ? 'Saving...' : 'Save & Finish'}
