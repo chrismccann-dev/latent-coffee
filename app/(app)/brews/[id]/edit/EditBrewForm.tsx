@@ -7,6 +7,8 @@ import { EXTRACTION_STRATEGIES, seedStructuredProcess } from '@/lib/brew-import'
 import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
+import { GRINDER_LOOKUP, isResolvableSetting } from '@/lib/grinder-registry'
+import { GrindSettingInput } from '@/components/GrindSettingInput'
 import { CULTIVAR_LOOKUP } from '@/lib/cultivar-registry'
 import { TERROIR_COUNTRY_LOOKUP, TERROIR_MACRO_LOOKUP } from '@/lib/terroir-registry'
 import { composeProcess, structuredProcessColumns, type StructuredProcess } from '@/lib/process-registry'
@@ -41,7 +43,8 @@ type FormState = {
   filter: string
   dose_g: string
   water_g: string
-  grind: string
+  grinder: string
+  grind_setting: string
   temp_c: string
   bloom: string
   pour_structure: string
@@ -94,7 +97,8 @@ function initial(brew: Brew, terroirs: TerroirOption[], cultivars: CultivarOptio
     filter: brew.filter ?? '',
     dose_g: brew.dose_g != null ? String(brew.dose_g) : '',
     water_g: brew.water_g != null ? String(brew.water_g) : '',
-    grind: brew.grind ?? '',
+    grinder: brew.grinder ?? '',
+    grind_setting: brew.grind_setting ?? '',
     temp_c: brew.temp_c != null ? String(brew.temp_c) : '',
     bloom: brew.bloom ?? '',
     pour_structure: brew.pour_structure ?? '',
@@ -121,6 +125,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [roasterOverride, setRoasterOverride] = useState(false)
+  const [grinderOverride, setGrinderOverride] = useState(false)
 
   const cultivarValid = CULTIVAR_LOOKUP.isResolvable(form.cultivar_name)
   const macroValid = TERROIR_MACRO_LOOKUP.isResolvable(form.macro_terroir)
@@ -128,7 +133,13 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
   const roasterValid =
     ROASTER_LOOKUP.isResolvable(form.roaster) || (roasterOverride && !!form.roaster.trim())
   const roastLevelValid = ROAST_LEVEL_LOOKUP.isResolvable(form.roast_level)
-  const saveEnabled = cultivarValid && macroValid && processValid && roasterValid && roastLevelValid
+  const grinderValid =
+    GRINDER_LOOKUP.isResolvable(form.grinder) || (grinderOverride && !!form.grinder.trim())
+  const grinderCanonical = GRINDER_LOOKUP.canonicalize(form.grinder) ?? form.grinder
+  const settingValid = isResolvableSetting(grinderCanonical, form.grind_setting)
+  const saveEnabled =
+    cultivarValid && macroValid && processValid && roasterValid && roastLevelValid &&
+    grinderValid && settingValid
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -157,7 +168,9 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
       filter: form.filter.trim() || null,
       dose_g: form.dose_g ? parseFloat(form.dose_g) : null,
       water_g: form.water_g ? parseFloat(form.water_g) : null,
-      grind: form.grind.trim() || null,
+      grinder: form.grinder.trim() || null,
+      grinder_override: grinderOverride,
+      grind_setting: form.grind_setting.trim() || null,
       temp_c: form.temp_c ? parseFloat(form.temp_c) : null,
       bloom: form.bloom.trim() || null,
       pour_structure: form.pour_structure.trim() || null,
@@ -291,10 +304,20 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
             <label className="label">Filter</label>
             <input className="input" value={form.filter} onChange={(e) => set('filter', e.target.value)} />
           </div>
-          <div>
-            <label className="label">Grind</label>
-            <input className="input" value={form.grind} onChange={(e) => set('grind', e.target.value)} />
-          </div>
+          <CanonicalTextInput
+            label="Grinder"
+            value={form.grinder}
+            onChange={(v) => { set('grinder', v); setGrinderOverride(false) }}
+            registry={GRINDER_LOOKUP}
+            allowOverride
+            overridden={grinderOverride}
+            onOverrideChange={setGrinderOverride}
+          />
+          <GrindSettingInput
+            grinderName={grinderCanonical}
+            value={form.grind_setting}
+            onChange={(v) => set('grind_setting', v)}
+          />
           <div>
             <label className="label">Dose (g)</label>
             <input className="input" type="number" step="0.1" value={form.dose_g} onChange={(e) => set('dose_g', e.target.value)} />
@@ -421,6 +444,8 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
           { met: processValid, message: 'Process is not fully resolvable' },
           { met: roasterValid, message: 'Roaster is not in the canonical registry — pick from the list or click "Use anyway"' },
           { met: roastLevelValid, message: 'Roast level is not in the canonical registry' },
+          { met: grinderValid, message: 'Grinder is not in the canonical registry — pick from the list or click "Use anyway"' },
+          { met: settingValid, message: 'Grind setting is not in the grinder’s valid range' },
         ]}
       />
 

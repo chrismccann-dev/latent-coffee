@@ -8,6 +8,9 @@ import {
   EXTRACTION_STRATEGIES,
   GENETIC_FAMILIES,
   seedStructuredProcess,
+  seedStructuredGrind,
+  composeGrind,
+  structuredGrindColumns,
   findOrCreateCultivar,
   findOrCreateTerroir,
   type BrewPayload,
@@ -18,6 +21,8 @@ import { CULTIVAR_LOOKUP, resolveCultivar } from '@/lib/cultivar-registry'
 import { TERROIR_COUNTRY_LOOKUP, TERROIR_MACRO_LOOKUP, resolveTerroirMacro, getTerroirEntry } from '@/lib/terroir-registry'
 import { composeProcess, structuredProcessColumns, type StructuredProcess } from '@/lib/process-registry'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
+import { GRINDER_LOOKUP, isResolvableSetting } from '@/lib/grinder-registry'
+import { GrindSettingInput } from '@/components/GrindSettingInput'
 import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 import { SaveGateWarning } from '@/components/SaveGateWarning'
@@ -105,6 +110,7 @@ export default function AddPage() {
   const [purchasedConfirmTerroir, setPurchasedConfirmTerroir] = useState(false)
   const [purchasedConfirmCultivar, setPurchasedConfirmCultivar] = useState(false)
   const [purchasedRoasterOverride, setPurchasedRoasterOverride] = useState(false)
+  const [purchasedGrinderOverride, setPurchasedGrinderOverride] = useState(false)
 
   const totalSteps = sourceType === 'self-roasted' ? 9 : 6
 
@@ -144,6 +150,7 @@ export default function AddPage() {
     setPurchasedConfirmTerroir(false)
     setPurchasedConfirmCultivar(false)
     setPurchasedRoasterOverride(false)
+    setPurchasedGrinderOverride(false)
   }
 
   // Parse spreadsheet data helper
@@ -386,6 +393,7 @@ export default function AddPage() {
       // 8. Create brew document
       const bestRoastId = parsedLearnings?.bestBatchId ? roastIdMap[parsedLearnings.bestBatchId] : null
       const srStructured = seedStructuredProcess({ process: parsedGreenBean?.process ?? null })
+      const srGrind = seedStructuredGrind({ grind: parsedBrew?.recipe?.grind ?? null })
 
       const { data: brew, error: brewError } = await supabase
         .from('brews')
@@ -406,7 +414,9 @@ export default function AddPage() {
           filter: parsedBrew?.recipe?.filter,
           dose_g: parsedBrew?.recipe?.doseG ? parseFloat(parsedBrew.recipe.doseG) : null,
           water_g: parsedBrew?.recipe?.waterG ? parseFloat(parsedBrew.recipe.waterG) : null,
-          grind: parsedBrew?.recipe?.grind,
+          grinder: srGrind.grinder,
+          grind_setting: srGrind.grind_setting,
+          grind: composeGrind(srGrind) ?? parsedBrew?.recipe?.grind,
           temp_c: parsedBrew?.recipe?.tempC ? parseFloat(parsedBrew.recipe.tempC) : null,
           bloom: parsedBrew?.recipe?.bloom,
           pour_structure: parsedBrew?.recipe?.pourStructure,
@@ -945,9 +955,10 @@ export default function AddPage() {
               ;(merged as any)[k] = v
             }
           }
-          // Re-seed structured process fields whenever process arrives or
-          // changes through the wizard path.
+          // Re-seed structured process + grinder fields whenever they arrive
+          // or change through the wizard path.
           Object.assign(merged, structuredProcessColumns(seedStructuredProcess(merged)))
+          Object.assign(merged, structuredGrindColumns(seedStructuredGrind(merged)))
           return merged
         })
         // Update match + drift every parse; final review step shows cumulative state
@@ -1211,9 +1222,10 @@ export default function AddPage() {
                     process_category: data.parsed?.process_category ?? null,
                     process_details: data.parsed?.process_details ?? null,
                   }
-                  // Seed structured process fields so the picker in step 6 is
-                  // pre-populated.
+                  // Seed structured process + grinder fields so the picker in
+                  // step 6 is pre-populated.
                   Object.assign(p, structuredProcessColumns(seedStructuredProcess(p)))
+                  Object.assign(p, structuredGrindColumns(seedStructuredGrind(p)))
                   setPurchasedPayload(p)
                   setPurchasedTerroirMatch(data.terroirMatch)
                   setPurchasedCultivarMatch(data.cultivarMatch)
@@ -1222,6 +1234,7 @@ export default function AddPage() {
                   setPurchasedConfirmTerroir(false)
                   setPurchasedConfirmCultivar(false)
                   setPurchasedRoasterOverride(false)
+                  setPurchasedGrinderOverride(false)
                   setStep(3)
                 } catch (err: any) {
                   setError(err.message || 'Parse failed')
@@ -1273,6 +1286,11 @@ export default function AddPage() {
         ROASTER_LOOKUP.isResolvable(payload.roaster || '') ||
         (purchasedRoasterOverride && !!payload.roaster?.trim())
       const roastLevelValid = ROAST_LEVEL_LOOKUP.isResolvable(payload.roast_level || '')
+      const grinderValid =
+        GRINDER_LOOKUP.isResolvable(payload.grinder || '') ||
+        (purchasedGrinderOverride && !!payload.grinder?.trim())
+      const grinderCanonical = GRINDER_LOOKUP.canonicalize(payload.grinder || '') ?? payload.grinder ?? ''
+      const settingValid = isResolvableSetting(grinderCanonical, payload.grind_setting || '')
       const saveEnabled =
         !!payload.coffee_name?.trim() &&
         !!payload.terroir.country?.trim() &&
@@ -1282,6 +1300,8 @@ export default function AddPage() {
         processValid &&
         roasterValid &&
         roastLevelValid &&
+        grinderValid &&
+        settingValid &&
         (!needsTerroirConfirm || purchasedConfirmTerroir) &&
         (!needsCultivarConfirm || purchasedConfirmCultivar)
 
@@ -1343,7 +1363,12 @@ export default function AddPage() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              payload: { ...payload, source: 'purchased', roaster_override: purchasedRoasterOverride },
+              payload: {
+                ...payload,
+                source: 'purchased',
+                roaster_override: purchasedRoasterOverride,
+                grinder_override: purchasedGrinderOverride,
+              },
               confirmNewTerroir: purchasedConfirmTerroir,
               confirmNewCultivar: purchasedConfirmCultivar,
             }),
@@ -1684,8 +1709,25 @@ export default function AddPage() {
                 <input className="input" value={payload.filter || ''} onChange={(e) => updateField('filter', e.target.value || null)} />
               </div>
               <div>
-                <label className="label">Grind</label>
-                <input className="input" value={payload.grind || ''} onChange={(e) => updateField('grind', e.target.value || null)} />
+                <CanonicalTextInput
+                  label="Grinder"
+                  value={payload.grinder || ''}
+                  onChange={(v) => {
+                    updateField('grinder', v || null)
+                    setPurchasedGrinderOverride(false)
+                  }}
+                  registry={GRINDER_LOOKUP}
+                  allowOverride
+                  overridden={purchasedGrinderOverride}
+                  onOverrideChange={setPurchasedGrinderOverride}
+                />
+              </div>
+              <div>
+                <GrindSettingInput
+                  grinderName={grinderCanonical}
+                  value={payload.grind_setting || ''}
+                  onChange={(v) => updateField('grind_setting', v || null)}
+                />
               </div>
               <div>
                 <label className="label">Dose (g)</label>
@@ -1782,6 +1824,8 @@ export default function AddPage() {
               { met: processValid, message: 'Process is not fully resolvable' },
               { met: roasterValid, message: 'Roaster is not in the canonical registry — pick from the list or click "Use anyway"' },
               { met: roastLevelValid, message: 'Roast level is not in the canonical registry' },
+              { met: grinderValid, message: 'Grinder is not in the canonical registry — pick from the list or click "Use anyway"' },
+              { met: settingValid, message: 'Grind setting is not in the grinder’s valid range' },
               { met: !needsTerroirConfirm || purchasedConfirmTerroir, message: 'Confirm new terroir below' },
               { met: !needsCultivarConfirm || purchasedConfirmCultivar, message: 'Confirm new cultivar below' },
             ]}

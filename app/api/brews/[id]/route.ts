@@ -22,6 +22,8 @@ import {
 } from '@/lib/process-registry'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
+import { GRINDER_LOOKUP, isResolvableSetting } from '@/lib/grinder-registry'
+import { composeGrind } from '@/lib/brew-import'
 import type { CanonicalLookup } from '@/lib/canonical-registry'
 
 // Whitelist for direct PATCH. `cultivar_id` / `terroir_id` are resolved
@@ -40,6 +42,8 @@ const EDITABLE_FIELDS = [
   'water_g',
   'ratio',
   'grind',
+  'grinder',
+  'grind_setting',
   'temp_c',
   'bloom',
   'pour_structure',
@@ -214,6 +218,59 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         )
       }
     }
+  }
+
+  // Grinder: strict canonical unless body.grinder_override:true. Mirror of
+  // the roaster shape. brews.grinder is text-only (no FK).
+  if ('grinder' in patch) {
+    const v = patch.grinder
+    const override = body.grinder_override === true
+    if (v === '' || v === null) {
+      patch.grinder = null
+    } else if (typeof v !== 'string') {
+      return NextResponse.json({ error: 'validation', errors: ['grinder must be a string'] }, { status: 400 })
+    } else {
+      const canonical = GRINDER_LOOKUP.canonicalize(v)
+      if (canonical) {
+        patch.grinder = canonical
+      } else if (override) {
+        patch.grinder = v.trim()
+      } else {
+        return NextResponse.json(
+          { error: 'validation', errors: [`grinder "${v}" is not in the canonical registry. Send grinder_override:true to bypass.`] },
+          { status: 400 },
+        )
+      }
+    }
+  }
+  if ('grind_setting' in patch) {
+    const v = patch.grind_setting
+    if (v === '' || v === null) {
+      patch.grind_setting = null
+    } else if (typeof v !== 'string') {
+      return NextResponse.json({ error: 'validation', errors: ['grind_setting must be a string'] }, { status: 400 })
+    } else {
+      const trimmed = v.trim()
+      // Validate against the grinder's per-grinder enumerated settings.
+      // Uses the grinder from this same patch when present (the form sends
+      // both together). When grinder is absent from the patch, the setting
+      // is accepted — the next save will catch it.
+      const grinderForLookup = typeof patch.grinder === 'string' ? patch.grinder : null
+      if (grinderForLookup && !isResolvableSetting(grinderForLookup, trimmed)) {
+        return NextResponse.json(
+          { error: 'validation', errors: [`grind_setting "${trimmed}" is not valid on ${grinderForLookup}`] },
+          { status: 400 },
+        )
+      }
+      patch.grind_setting = trimmed
+    }
+  }
+  // Recompute legacy display column from structured pair when either changes.
+  if ('grinder' in patch || 'grind_setting' in patch) {
+    patch.grind = composeGrind({
+      grinder: typeof patch.grinder === 'string' ? patch.grinder : null,
+      grind_setting: typeof patch.grind_setting === 'string' ? patch.grind_setting : null,
+    })
   }
 
   // Require coffee_name to be non-empty when provided (can't clear it).

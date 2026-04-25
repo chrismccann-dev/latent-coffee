@@ -34,6 +34,7 @@ import {
 } from './process-registry'
 import { ROASTER_LOOKUP } from './roaster-registry'
 import { ROAST_LEVEL_LOOKUP } from './roast-level-registry'
+import { GRINDER_LOOKUP, isResolvableSetting } from './grinder-registry'
 
 // ---------------------------------------------------------------------------
 // Canonical registries
@@ -122,7 +123,16 @@ export interface BrewPayload {
   dose_g?: number | null
   water_g?: number | null
   ratio?: string | null
+  // `grind` is the legacy denormalized display string ("EG-1 6.5"). Callers
+  // can supply structured `grinder` + `grind_setting` instead; persistBrew
+  // recomposes the legacy column from them.
   grind?: string | null
+  grinder?: string | null
+  // Transient: opt-out of strict grinder canonical enforcement for this brew.
+  // Same shape as `roaster_override` — accepts the verbatim string when the
+  // grinder isn't yet in the registry.
+  grinder_override?: boolean
+  grind_setting?: string | null
   temp_c?: number | null
   bloom?: string | null
   pour_structure?: string | null
@@ -164,6 +174,85 @@ export interface BrewPayload {
   experimental_modifiers?: string[] | null
   decaf_modifier?: DecafModifier | null
   signature_method?: string | null
+}
+
+// Grinder helpers. Same shape pattern as the process helpers: a structured
+// pair (`grinder`, `grind_setting`) is the source of truth; the legacy
+// `brews.grind` text column is the denormalized display recomposed at save.
+
+export interface StructuredGrind {
+  grinder: string | null
+  grind_setting: string | null
+}
+
+export function composeGrind(s: StructuredGrind): string | null {
+  if (!s.grinder) return null
+  return s.grind_setting ? `${s.grinder} ${s.grind_setting}` : s.grinder
+}
+
+export function structuredGrindColumns(s: StructuredGrind): {
+  grinder: string | null
+  grind_setting: string | null
+} {
+  return { grinder: s.grinder, grind_setting: s.grind_setting }
+}
+
+// Bridge — accepts either structured fields (grinder + grind_setting) or a
+// legacy `grind` string, and returns the structured pair. The structured
+// fields win when present. The legacy string is decomposed back-compat for
+// rows written before brews.grinder / brews.grind_setting existed.
+const LEGACY_GRIND_FORWARD_RE =
+  /^(?:Grind:\s*)?(?:Weber\s+Workshop\s+|Weber\s+)?EG-?1\s*[-:@]?\s*(.+?)\s*$/i
+const LEGACY_GRIND_REVERSE_RE =
+  /^(\d+(?:[.\-]\d+)?(?:\s*\([^)]*\))?)\s*\((?:Weber\s+(?:Workshop\s+)?)?EG-?1[^)]*\)\s*$/i
+
+export function seedStructuredGrind(
+  payload: Partial<Pick<BrewPayload, 'grinder' | 'grind_setting' | 'grind'>>,
+): StructuredGrind {
+  const grinderRaw = payload.grinder?.trim() ?? null
+  if (grinderRaw) {
+    return {
+      grinder: GRINDER_LOOKUP.canonicalize(grinderRaw) ?? grinderRaw,
+      grind_setting: payload.grind_setting?.trim() || null,
+    }
+  }
+  const legacy = payload.grind?.trim()
+  if (!legacy) return { grinder: null, grind_setting: null }
+
+  const reverse = legacy.match(LEGACY_GRIND_REVERSE_RE)
+  if (reverse) return { grinder: 'EG-1', grind_setting: reverse[1].trim() }
+  const forward = legacy.match(LEGACY_GRIND_FORWARD_RE)
+  if (forward) return { grinder: 'EG-1', grind_setting: forward[1].trim() }
+
+  // Unknown legacy shape — fall back to whole string on grinder so the
+  // strict registry surfaces it as non-resolvable on the next edit.
+  return { grinder: legacy, grind_setting: null }
+}
+
+export type FindOrCreateGrinderResult =
+  | { ok: true; canonicalName: string | null; resolved: boolean }
+  | { ok: false; error: string; status: 400 }
+
+// Mirror of findOrCreateRoaster — validate-and-normalize only (no DB write
+// since brews.grinder is a text-only column with no FK). `allowOverride`
+// passes a non-resolvable string through verbatim for legitimately new
+// grinders before they land in lib/grinder-registry.ts.
+export async function findOrCreateGrinder(
+  _supabase: SupabaseClient,
+  _userId: string,
+  rawName: string | null | undefined,
+  opts: { allowOverride?: boolean } = {},
+): Promise<FindOrCreateGrinderResult> {
+  const raw = typeof rawName === 'string' ? rawName.trim() : ''
+  if (!raw) return { ok: true, canonicalName: null, resolved: false }
+  const canonical = GRINDER_LOOKUP.canonicalize(raw)
+  if (canonical) return { ok: true, canonicalName: canonical, resolved: true }
+  if (opts.allowOverride) return { ok: true, canonicalName: raw, resolved: false }
+  return {
+    ok: false,
+    status: 400,
+    error: `grinder "${raw}" is not in the canonical registry. To add a new grinder, edit lib/grinder-registry.ts.`,
+  }
 }
 
 export function seedStructuredProcess(payload: Partial<BrewPayload>): StructuredProcess {
@@ -507,13 +596,30 @@ export async function persistBrew(
     return { ok: false, code: 'validation', errors: validation.errors }
   }
 
-  // Validate roaster + roast_level before any DB writes — failures here would
-  // otherwise leave orphan terroir/cultivar inserts.
+  // Validate roaster + grinder + roast_level before any DB writes — failures
+  // here would otherwise leave orphan terroir/cultivar inserts.
   const roasterResult = await findOrCreateRoaster(supabase, userId, payload.roaster, {
     allowOverride: payload.roaster_override === true,
   })
   if (!roasterResult.ok) {
     return { ok: false, code: 'validation', errors: [roasterResult.error] }
+  }
+  const grinderResult = await findOrCreateGrinder(supabase, userId, payload.grinder, {
+    allowOverride: payload.grinder_override === true,
+  })
+  if (!grinderResult.ok) {
+    return { ok: false, code: 'validation', errors: [grinderResult.error] }
+  }
+  if (
+    grinderResult.canonicalName &&
+    payload.grind_setting?.trim() &&
+    !isResolvableSetting(grinderResult.canonicalName, payload.grind_setting)
+  ) {
+    return {
+      ok: false,
+      code: 'validation',
+      errors: [`grind_setting "${payload.grind_setting}" is not valid on ${grinderResult.canonicalName}`],
+    }
   }
   let canonicalRoastLevel: string | null = null
   if (payload.roast_level?.trim()) {
@@ -597,6 +703,11 @@ export async function persistBrew(
 
   const structured = seedStructuredProcess(payload)
   const composed = composeProcess(structured)
+  const structuredGrind: StructuredGrind = {
+    grinder: grinderResult.canonicalName,
+    grind_setting: payload.grind_setting?.trim() || null,
+  }
+  const composedGrind = composeGrind(structuredGrind) ?? payload.grind ?? null
 
   const brewInsert: Partial<InsertBrew> = {
     user_id: userId,
@@ -618,7 +729,9 @@ export async function persistBrew(
     dose_g: payload.dose_g ?? null,
     water_g: payload.water_g ?? null,
     ratio,
-    grind: payload.grind ?? null,
+    grinder: structuredGrind.grinder,
+    grind_setting: structuredGrind.grind_setting,
+    grind: composedGrind,
     temp_c: payload.temp_c ?? null,
     bloom: payload.bloom ?? null,
     pour_structure: payload.pour_structure ?? null,
