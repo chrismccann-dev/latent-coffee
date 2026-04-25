@@ -20,6 +20,8 @@ import {
   type DecafModifier,
   SIGNATURE_LOOKUP,
 } from '@/lib/process-registry'
+import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
+import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
 import type { CanonicalLookup } from '@/lib/canonical-registry'
 
 // Whitelist for direct PATCH. `cultivar_id` / `terroir_id` are resolved
@@ -168,6 +170,50 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       )
     }
     if (v === '') patch.signature_method = null
+  }
+
+  // Roast level: strict canonical, canonicalize on write.
+  if ('roast_level' in patch) {
+    const v = patch.roast_level
+    if (v === '' || v === null) {
+      patch.roast_level = null
+    } else if (typeof v !== 'string') {
+      return NextResponse.json({ error: 'validation', errors: ['roast_level must be a string'] }, { status: 400 })
+    } else {
+      const canonical = ROAST_LEVEL_LOOKUP.canonicalize(v)
+      if (!canonical) {
+        return NextResponse.json(
+          { error: 'validation', errors: [`roast_level "${v}" is not in the canonical registry`] },
+          { status: 400 },
+        )
+      }
+      patch.roast_level = canonical
+    }
+  }
+
+  // Roaster: strict canonical unless body.roaster_override:true. Override persists
+  // the verbatim string for legitimately new roasters before they land in the
+  // registry (brews.roaster is text-only, no FK).
+  if ('roaster' in patch) {
+    const v = patch.roaster
+    const override = body.roaster_override === true
+    if (v === '' || v === null) {
+      patch.roaster = null
+    } else if (typeof v !== 'string') {
+      return NextResponse.json({ error: 'validation', errors: ['roaster must be a string'] }, { status: 400 })
+    } else {
+      const canonical = ROASTER_LOOKUP.canonicalize(v)
+      if (canonical) {
+        patch.roaster = canonical
+      } else if (override) {
+        patch.roaster = v.trim()
+      } else {
+        return NextResponse.json(
+          { error: 'validation', errors: [`roaster "${v}" is not in the canonical registry. Send roaster_override:true to bypass.`] },
+          { status: 400 },
+        )
+      }
+    }
   }
 
   // Require coffee_name to be non-empty when provided (can't clear it).
