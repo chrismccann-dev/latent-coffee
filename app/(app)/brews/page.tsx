@@ -6,7 +6,7 @@ import { getCoverColor } from '@/lib/brew-colors'
 import { StrategyPill } from '@/components/StrategyPill'
 import { BrewsFilterBar } from '@/components/BrewsFilterBar'
 import { PROCESS_FAMILIES, getProcessFamily } from '@/lib/process-registry'
-import { ROASTER_FAMILIES, getRoasterFamily } from '@/lib/roaster-registry'
+import { ROASTER_FAMILIES, getRoasterFamily, getDisplayName } from '@/lib/roaster-registry'
 
 interface BrewsPageProps {
   searchParams: {
@@ -129,7 +129,7 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
           {brewList.map((brew) => {
             const cardColor = getCoverColor(brew)
             const producer = brew.producer || brew.green_bean?.producer || null
-            const roaster = brew.roaster || null
+            const roaster = getDisplayName(brew.roaster)
             const region =
               brew.terroir?.macro_terroir ||
               brew.terroir?.admin_region ||
