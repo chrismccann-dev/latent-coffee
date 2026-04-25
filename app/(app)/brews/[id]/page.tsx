@@ -103,7 +103,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
           <div className="grid grid-cols-2 gap-x-8 gap-y-2 font-sans text-sm mb-4">
             <div><strong>Variety:</strong> {brew.variety || brew.cultivar?.cultivar_name}</div>
             <div><strong>Process:</strong> {brew.process}</div>
-            <div><strong>Roast:</strong> {brew.roast_level || 'Light'}</div>
+            <div><strong>Roast:</strong> {brew.roast_level ?? '—'}</div>
           </div>
 
           {brew.flavor_notes && brew.flavor_notes.length > 0 && (

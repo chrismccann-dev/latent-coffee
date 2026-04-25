@@ -17,7 +17,10 @@ import {
 import { CULTIVAR_LOOKUP, resolveCultivar } from '@/lib/cultivar-registry'
 import { TERROIR_COUNTRY_LOOKUP, TERROIR_MACRO_LOOKUP, resolveTerroirMacro, getTerroirEntry } from '@/lib/terroir-registry'
 import { composeProcess, structuredProcessColumns, type StructuredProcess } from '@/lib/process-registry'
+import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
+import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
+import { SaveGateWarning } from '@/components/SaveGateWarning'
 import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 
 type SourceType = 'self-roasted' | 'purchased' | null
@@ -101,6 +104,7 @@ export default function AddPage() {
   const [purchasedUsedClaude, setPurchasedUsedClaude] = useState(false)
   const [purchasedConfirmTerroir, setPurchasedConfirmTerroir] = useState(false)
   const [purchasedConfirmCultivar, setPurchasedConfirmCultivar] = useState(false)
+  const [purchasedRoasterOverride, setPurchasedRoasterOverride] = useState(false)
 
   const totalSteps = sourceType === 'self-roasted' ? 9 : 6
 
@@ -139,6 +143,7 @@ export default function AddPage() {
     setPurchasedDrift(null)
     setPurchasedConfirmTerroir(false)
     setPurchasedConfirmCultivar(false)
+    setPurchasedRoasterOverride(false)
   }
 
   // Parse spreadsheet data helper
@@ -395,7 +400,7 @@ export default function AddPage() {
           variety: parsedGreenBean?.variety,
           process: composeProcess(srStructured),
           ...structuredProcessColumns(srStructured),
-          roast_level: 'Light',
+          roast_level: null,
           flavor_notes: [],
           brewer: parsedBrew?.recipe?.brewer,
           filter: parsedBrew?.recipe?.filter,
@@ -1216,6 +1221,7 @@ export default function AddPage() {
                   setPurchasedUsedClaude(data.usedClaude)
                   setPurchasedConfirmTerroir(false)
                   setPurchasedConfirmCultivar(false)
+                  setPurchasedRoasterOverride(false)
                   setStep(3)
                 } catch (err: any) {
                   setError(err.message || 'Parse failed')
@@ -1263,6 +1269,10 @@ export default function AddPage() {
       const cultivarValid = CULTIVAR_LOOKUP.isResolvable(payload.cultivar.cultivar_name || '')
       const structuredProcess = seedStructuredProcess(payload)
       const processValid = isProcessResolvable(structuredProcess)
+      const roasterValid =
+        ROASTER_LOOKUP.isResolvable(payload.roaster || '') ||
+        (purchasedRoasterOverride && !!payload.roaster?.trim())
+      const roastLevelValid = ROAST_LEVEL_LOOKUP.isResolvable(payload.roast_level || '')
       const saveEnabled =
         !!payload.coffee_name?.trim() &&
         !!payload.terroir.country?.trim() &&
@@ -1270,6 +1280,8 @@ export default function AddPage() {
         macroValid &&
         cultivarValid &&
         processValid &&
+        roasterValid &&
+        roastLevelValid &&
         (!needsTerroirConfirm || purchasedConfirmTerroir) &&
         (!needsCultivarConfirm || purchasedConfirmCultivar)
 
@@ -1331,7 +1343,7 @@ export default function AddPage() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              payload: { ...payload, source: 'purchased' },
+              payload: { ...payload, source: 'purchased', roaster_override: purchasedRoasterOverride },
               confirmNewTerroir: purchasedConfirmTerroir,
               confirmNewCultivar: purchasedConfirmCultivar,
             }),
@@ -1391,11 +1403,17 @@ export default function AddPage() {
                 />
               </div>
               <div>
-                <label className="label">Roaster</label>
-                <input
-                  className="input"
+                <CanonicalTextInput
+                  label="Roaster"
                   value={payload.roaster || ''}
-                  onChange={(e) => updateField('roaster', e.target.value || null)}
+                  onChange={(v) => {
+                    updateField('roaster', v || null)
+                    setPurchasedRoasterOverride(false)
+                  }}
+                  registry={ROASTER_LOOKUP}
+                  allowOverride
+                  overridden={purchasedRoasterOverride}
+                  onOverrideChange={setPurchasedRoasterOverride}
                 />
               </div>
               <div>
@@ -1427,11 +1445,11 @@ export default function AddPage() {
                 />
               </div>
               <div>
-                <label className="label">Roast level</label>
-                <input
-                  className="input"
+                <CanonicalTextInput
+                  label="Roast level"
                   value={payload.roast_level || ''}
-                  onChange={(e) => updateField('roast_level', e.target.value || null)}
+                  onChange={(v) => updateField('roast_level', v || null)}
+                  registry={ROAST_LEVEL_LOOKUP}
                 />
               </div>
               <div>
@@ -1753,6 +1771,21 @@ export default function AddPage() {
           </div>
 
           {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+
+          <SaveGateWarning
+            requirements={[
+              { met: !!payload.coffee_name?.trim(), message: 'Coffee name is required' },
+              { met: !!payload.terroir.country?.trim(), message: 'Terroir country is required' },
+              { met: !!payload.cultivar.cultivar_name?.trim(), message: 'Cultivar name is required' },
+              { met: macroValid, message: 'Macro terroir is not in the canonical registry' },
+              { met: cultivarValid, message: 'Cultivar is not in the canonical registry' },
+              { met: processValid, message: 'Process is not fully resolvable' },
+              { met: roasterValid, message: 'Roaster is not in the canonical registry — pick from the list or click "Use anyway"' },
+              { met: roastLevelValid, message: 'Roast level is not in the canonical registry' },
+              { met: !needsTerroirConfirm || purchasedConfirmTerroir, message: 'Confirm new terroir below' },
+              { met: !needsCultivarConfirm || purchasedConfirmCultivar, message: 'Confirm new cultivar below' },
+            ]}
+          />
 
           <div className="flex gap-3">
             <button onClick={() => setStep(5)} className="btn btn-secondary">

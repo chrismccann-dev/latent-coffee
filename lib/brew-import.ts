@@ -32,6 +32,8 @@ import {
   structuredProcessColumns,
   type StructuredProcess,
 } from './process-registry'
+import { ROASTER_LOOKUP } from './roaster-registry'
+import { ROAST_LEVEL_LOOKUP } from './roast-level-registry'
 
 // ---------------------------------------------------------------------------
 // Canonical registries
@@ -100,6 +102,10 @@ export interface BrewPayload {
   coffee_name: string
   source?: 'purchased' // always purchased in this flow; default applied below
   roaster?: string | null
+  // Transient: opt-out of strict roaster canonical enforcement for this brew.
+  // When true, a non-resolvable roaster string persists verbatim (escape hatch
+  // for legitimately new roasters before they land in lib/roaster-registry.ts).
+  roaster_override?: boolean
   producer?: string | null
   variety?: string | null
   process?: string | null
@@ -307,6 +313,35 @@ export async function findOrCreateCultivar(
   return { ok: true, id: created.id }
 }
 
+// Validate-and-normalize for `brews.roaster`. No DB write — `brews.roaster` is
+// text-only (no FK / no roasters table), so this resolves aliases → canonical
+// or short-circuits when the caller supplied `allowOverride`. Returns the form
+// to persist (canonical if resolved, verbatim if overridden, null if empty).
+// Shape mirrors findOrCreateCultivar / findOrCreateTerroir for signature
+// parity — if a real roasters table lands in sprint 2.x, this helper absorbs
+// the find-or-create logic without changing callers.
+export type FindOrCreateRoasterResult =
+  | { ok: true; canonicalName: string | null; resolved: boolean }
+  | { ok: false; error: string; status: 400 }
+
+export async function findOrCreateRoaster(
+  _supabase: SupabaseClient,
+  _userId: string,
+  rawName: string | null | undefined,
+  opts: { allowOverride?: boolean } = {},
+): Promise<FindOrCreateRoasterResult> {
+  const raw = typeof rawName === 'string' ? rawName.trim() : ''
+  if (!raw) return { ok: true, canonicalName: null, resolved: false }
+  const canonical = ROASTER_LOOKUP.canonicalize(raw)
+  if (canonical) return { ok: true, canonicalName: canonical, resolved: true }
+  if (opts.allowOverride) return { ok: true, canonicalName: raw, resolved: false }
+  return {
+    ok: false,
+    status: 400,
+    error: `roaster "${raw}" is not in the canonical registry. To add a new roaster, use /add with override.`,
+  }
+}
+
 export async function findOrCreateTerroir(
   supabase: SupabaseClient,
   userId: string,
@@ -472,6 +507,26 @@ export async function persistBrew(
     return { ok: false, code: 'validation', errors: validation.errors }
   }
 
+  // Validate roaster + roast_level before any DB writes — failures here would
+  // otherwise leave orphan terroir/cultivar inserts.
+  const roasterResult = await findOrCreateRoaster(supabase, userId, payload.roaster, {
+    allowOverride: payload.roaster_override === true,
+  })
+  if (!roasterResult.ok) {
+    return { ok: false, code: 'validation', errors: [roasterResult.error] }
+  }
+  let canonicalRoastLevel: string | null = null
+  if (payload.roast_level?.trim()) {
+    canonicalRoastLevel = ROAST_LEVEL_LOOKUP.canonicalize(payload.roast_level)
+    if (!canonicalRoastLevel) {
+      return {
+        ok: false,
+        code: 'validation',
+        errors: [`roast_level "${payload.roast_level}" is not in the canonical registry`],
+      }
+    }
+  }
+
   const terroirMatch = await matchTerroir(supabase, userId, payload.terroir)
   const cultivarMatch = await matchCultivar(supabase, userId, payload.cultivar)
 
@@ -551,12 +606,12 @@ export async function persistBrew(
     terroir_id: terroirId,
     cultivar_id: cultivarId,
     coffee_name: payload.coffee_name.trim(),
-    roaster: payload.roaster ?? null,
+    roaster: roasterResult.canonicalName,
     producer: payload.producer ?? null,
     variety: payload.variety ?? null,
     process: payload.process ?? composed,
     ...structuredProcessColumns(structured),
-    roast_level: payload.roast_level ?? null,
+    roast_level: canonicalRoastLevel,
     flavor_notes: payload.flavor_notes ?? null,
     brewer: payload.brewer ?? null,
     filter: payload.filter ?? null,
@@ -1007,7 +1062,14 @@ function applyTabbedBlock(out: Partial<BrewPayload>, t: TerroirCandidate, c: Cul
         if (EXTRACTION_STRATEGIES.includes(value as ExtractionStrategy)) {
           out.extraction_strategy = value as ExtractionStrategy
         } else {
-          out.roast_level = value
+          // Canonicalize via ROAST_LEVEL_LOOKUP. Historical-import-tolerant —
+          // warn on drift but pass through if truly unresolvable so legacy
+          // paste blocks don't silently drop data.
+          const canonical = ROAST_LEVEL_LOOKUP.canonicalize(value)
+          if (canonical && canonical !== value) {
+            console.warn(`[brew-import] roast_level drift: "${value}" → "${canonical}"`)
+          }
+          out.roast_level = canonical ?? value
         }
         break
       case 'coffee.flavor_notes':

@@ -6,11 +6,13 @@ import type { Brew, Terroir, Cultivar } from '@/lib/types'
 import { EXTRACTION_STRATEGIES, seedStructuredProcess } from '@/lib/brew-import'
 import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
+import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
 import { CULTIVAR_LOOKUP } from '@/lib/cultivar-registry'
 import { TERROIR_COUNTRY_LOOKUP, TERROIR_MACRO_LOOKUP } from '@/lib/terroir-registry'
 import { composeProcess, structuredProcessColumns, type StructuredProcess } from '@/lib/process-registry'
 import { SectionCard } from '@/components/SectionCard'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
+import { SaveGateWarning } from '@/components/SaveGateWarning'
 import { FlavorNotesInput } from '@/components/FlavorNotesInput'
 import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 
@@ -118,10 +120,15 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
   const [form, setForm] = useState<FormState>(() => initial(brew, terroirs, cultivars))
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [roasterOverride, setRoasterOverride] = useState(false)
 
   const cultivarValid = CULTIVAR_LOOKUP.isResolvable(form.cultivar_name)
   const macroValid = TERROIR_MACRO_LOOKUP.isResolvable(form.macro_terroir)
   const processValid = isProcessResolvable(form.structuredProcess)
+  const roasterValid =
+    ROASTER_LOOKUP.isResolvable(form.roaster) || (roasterOverride && !!form.roaster.trim())
+  const roastLevelValid = ROAST_LEVEL_LOOKUP.isResolvable(form.roast_level)
+  const saveEnabled = cultivarValid && macroValid && processValid && roasterValid && roastLevelValid
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -135,6 +142,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
     const payload: Record<string, unknown> = {
       coffee_name: form.coffee_name.trim(),
       roaster: form.roaster.trim() || null,
+      roaster_override: roasterOverride,
       producer: form.producer.trim() || null,
       variety: form.variety.trim() || null,
       process: composeProcess(form.structuredProcess) || null,
@@ -197,8 +205,11 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
           <CanonicalTextInput
             label="Roaster"
             value={form.roaster}
-            onChange={(v) => set('roaster', v)}
+            onChange={(v) => { set('roaster', v); setRoasterOverride(false) }}
             registry={ROASTER_LOOKUP}
+            allowOverride
+            overridden={roasterOverride}
+            onOverrideChange={setRoasterOverride}
           />
           <CanonicalTextInput
             label="Producer"
@@ -211,10 +222,12 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
             <label className="label">Variety</label>
             <input className="input" value={form.variety} onChange={(e) => set('variety', e.target.value)} />
           </div>
-          <div>
-            <label className="label">Roast level</label>
-            <input className="input" value={form.roast_level} onChange={(e) => set('roast_level', e.target.value)} />
-          </div>
+          <CanonicalTextInput
+            label="Roast level"
+            value={form.roast_level}
+            onChange={(v) => set('roast_level', v)}
+            registry={ROAST_LEVEL_LOOKUP}
+          />
           <div className="col-span-2">
             <ProcessPicker
               value={form.structuredProcess}
@@ -401,6 +414,16 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
 
       {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
 
+      <SaveGateWarning
+        requirements={[
+          { met: macroValid, message: 'Macro terroir is not in the canonical registry' },
+          { met: cultivarValid, message: 'Cultivar is not in the canonical registry' },
+          { met: processValid, message: 'Process is not fully resolvable' },
+          { met: roasterValid, message: 'Roaster is not in the canonical registry — pick from the list or click "Use anyway"' },
+          { met: roastLevelValid, message: 'Roast level is not in the canonical registry' },
+        ]}
+      />
+
       <div className="flex gap-3 mt-6">
         <button
           type="button"
@@ -410,7 +433,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
         >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary" disabled={isSaving || !cultivarValid || !macroValid || !processValid}>
+        <button type="submit" className="btn btn-primary" disabled={isSaving || !saveEnabled}>
           {isSaving ? 'Saving…' : 'Save changes'}
         </button>
       </div>
