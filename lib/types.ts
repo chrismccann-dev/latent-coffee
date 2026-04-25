@@ -227,6 +227,8 @@ export interface Brew {
   water_g: number | null
   ratio: string | null
   grind: string | null
+  grinder: string | null
+  grind_setting: string | null
   temp_c: number | null
   bloom: string | null
   pour_structure: string | null
