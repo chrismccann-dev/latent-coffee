@@ -4,6 +4,7 @@ import {
   ROASTER_FAMILIES,
   getRoasterFamily,
   getFamilyColor,
+  getDisplayName,
   type RoasterFamily,
 } from '@/lib/roaster-registry'
 
@@ -95,7 +96,7 @@ export default async function RoastersPage() {
                       />
                       <div className="flex-1">
                         <div className="font-sans text-sm font-semibold">
-                          {group.roaster}
+                          {getDisplayName(group.roaster) || group.roaster}
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
