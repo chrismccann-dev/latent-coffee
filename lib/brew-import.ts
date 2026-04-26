@@ -35,6 +35,7 @@ import {
 import { ROASTER_LOOKUP } from './roaster-registry'
 import { ROAST_LEVEL_LOOKUP } from './roast-level-registry'
 import { GRINDER_LOOKUP, isResolvableSetting } from './grinder-registry'
+import { PRODUCER_LOOKUP } from './producer-registry'
 
 // ---------------------------------------------------------------------------
 // Canonical registries
@@ -108,6 +109,12 @@ export interface BrewPayload {
   // for legitimately new roasters before they land in lib/roaster-registry.ts).
   roaster_override?: boolean
   producer?: string | null
+  // Transient: opt-out of strict producer canonical enforcement for this brew.
+  // Same shape as `roaster_override` / `grinder_override` — accepts a verbatim
+  // string when the producer isn't yet in lib/producer-registry.ts. Net-new
+  // producers appear more often than net-new cultivars, so adopting the
+  // override path was a deliberate choice (sprint 1l plan-mode round 1).
+  producer_override?: boolean
   variety?: string | null
   process?: string | null
   roast_level?: string | null
@@ -431,6 +438,32 @@ export async function findOrCreateRoaster(
   }
 }
 
+// Mirror of findOrCreateRoaster. brews.producer is a text-only column (no FK
+// to a producers table) so this is validate-and-normalize only — no DB side
+// effects. `allowOverride` accepts a non-resolvable string verbatim for
+// legitimately new producers before they land in lib/producer-registry.ts.
+export type FindOrCreateProducerResult =
+  | { ok: true; canonicalName: string | null; resolved: boolean }
+  | { ok: false; error: string; status: 400 }
+
+export async function findOrCreateProducer(
+  _supabase: SupabaseClient,
+  _userId: string,
+  rawName: string | null | undefined,
+  opts: { allowOverride?: boolean } = {},
+): Promise<FindOrCreateProducerResult> {
+  const raw = typeof rawName === 'string' ? rawName.trim() : ''
+  if (!raw) return { ok: true, canonicalName: null, resolved: false }
+  const canonical = PRODUCER_LOOKUP.canonicalize(raw)
+  if (canonical) return { ok: true, canonicalName: canonical, resolved: true }
+  if (opts.allowOverride) return { ok: true, canonicalName: raw, resolved: false }
+  return {
+    ok: false,
+    status: 400,
+    error: `producer "${raw}" is not in the canonical registry. To add a new producer, use /add with override.`,
+  }
+}
+
 export async function findOrCreateTerroir(
   supabase: SupabaseClient,
   userId: string,
@@ -604,6 +637,12 @@ export async function persistBrew(
   if (!roasterResult.ok) {
     return { ok: false, code: 'validation', errors: [roasterResult.error] }
   }
+  const producerResult = await findOrCreateProducer(supabase, userId, payload.producer, {
+    allowOverride: payload.producer_override === true,
+  })
+  if (!producerResult.ok) {
+    return { ok: false, code: 'validation', errors: [producerResult.error] }
+  }
   const grinderResult = await findOrCreateGrinder(supabase, userId, payload.grinder, {
     allowOverride: payload.grinder_override === true,
   })
@@ -718,7 +757,7 @@ export async function persistBrew(
     cultivar_id: cultivarId,
     coffee_name: payload.coffee_name.trim(),
     roaster: roasterResult.canonicalName,
-    producer: payload.producer ?? null,
+    producer: producerResult.canonicalName,
     variety: payload.variety ?? null,
     process: payload.process ?? composed,
     ...structuredProcessColumns(structured),
