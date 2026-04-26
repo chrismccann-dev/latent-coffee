@@ -23,6 +23,7 @@ import {
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
 import { GRINDER_LOOKUP, isResolvableSetting } from '@/lib/grinder-registry'
+import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { composeGrind } from '@/lib/brew-import'
 import type { CanonicalLookup } from '@/lib/canonical-registry'
 
@@ -81,6 +82,46 @@ function resultToResponse(result: Extract<FindOrCreateResult, { ok: false }>) {
       ? { error: 'validation', errors: [result.error] }
       : { error: result.error },
     { status: result.status },
+  )
+}
+
+// Canonicalize a text-only-no-FK PATCH field with an `allowOverride` escape
+// hatch (roaster / producer / grinder share this shape). Mutates `patch[field]`
+// in place. Returns a 400 NextResponse to short-circuit, or null to continue.
+function canonicalizeOverridable(
+  patch: Record<string, unknown>,
+  body: Record<string, unknown>,
+  field: string,
+  lookup: CanonicalLookup,
+  overrideKey: string,
+): NextResponse | null {
+  if (!(field in patch)) return null
+  const v = patch[field]
+  if (v === '' || v === null) {
+    patch[field] = null
+    return null
+  }
+  if (typeof v !== 'string') {
+    return NextResponse.json(
+      { error: 'validation', errors: [`${field} must be a string`] },
+      { status: 400 },
+    )
+  }
+  const canonical = lookup.canonicalize(v)
+  if (canonical) {
+    patch[field] = canonical
+    return null
+  }
+  if (body[overrideKey] === true) {
+    patch[field] = v.trim()
+    return null
+  }
+  return NextResponse.json(
+    {
+      error: 'validation',
+      errors: [`${field} "${v}" is not in the canonical registry. Send ${overrideKey}:true to bypass.`],
+    },
+    { status: 400 },
   )
 }
 
@@ -195,54 +236,15 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     }
   }
 
-  // Roaster: strict canonical unless body.roaster_override:true. Override persists
-  // the verbatim string for legitimately new roasters before they land in the
-  // registry (brews.roaster is text-only, no FK).
-  if ('roaster' in patch) {
-    const v = patch.roaster
-    const override = body.roaster_override === true
-    if (v === '' || v === null) {
-      patch.roaster = null
-    } else if (typeof v !== 'string') {
-      return NextResponse.json({ error: 'validation', errors: ['roaster must be a string'] }, { status: 400 })
-    } else {
-      const canonical = ROASTER_LOOKUP.canonicalize(v)
-      if (canonical) {
-        patch.roaster = canonical
-      } else if (override) {
-        patch.roaster = v.trim()
-      } else {
-        return NextResponse.json(
-          { error: 'validation', errors: [`roaster "${v}" is not in the canonical registry. Send roaster_override:true to bypass.`] },
-          { status: 400 },
-        )
-      }
-    }
-  }
-
-  // Grinder: strict canonical unless body.grinder_override:true. Mirror of
-  // the roaster shape. brews.grinder is text-only (no FK).
-  if ('grinder' in patch) {
-    const v = patch.grinder
-    const override = body.grinder_override === true
-    if (v === '' || v === null) {
-      patch.grinder = null
-    } else if (typeof v !== 'string') {
-      return NextResponse.json({ error: 'validation', errors: ['grinder must be a string'] }, { status: 400 })
-    } else {
-      const canonical = GRINDER_LOOKUP.canonicalize(v)
-      if (canonical) {
-        patch.grinder = canonical
-      } else if (override) {
-        patch.grinder = v.trim()
-      } else {
-        return NextResponse.json(
-          { error: 'validation', errors: [`grinder "${v}" is not in the canonical registry. Send grinder_override:true to bypass.`] },
-          { status: 400 },
-        )
-      }
-    }
-  }
+  // Text-only-no-FK fields with allowOverride escape hatch. brews.roaster /
+  // brews.producer / brews.grinder all share this shape: canonicalize via
+  // their lookup, accept verbatim if `<field>_override` is true, else 400.
+  const roasterErr = canonicalizeOverridable(patch, body, 'roaster', ROASTER_LOOKUP, 'roaster_override')
+  if (roasterErr) return roasterErr
+  const producerErr = canonicalizeOverridable(patch, body, 'producer', PRODUCER_LOOKUP, 'producer_override')
+  if (producerErr) return producerErr
+  const grinderErr = canonicalizeOverridable(patch, body, 'grinder', GRINDER_LOOKUP, 'grinder_override')
+  if (grinderErr) return grinderErr
   if ('grind_setting' in patch) {
     const v = patch.grind_setting
     if (v === '' || v === null) {

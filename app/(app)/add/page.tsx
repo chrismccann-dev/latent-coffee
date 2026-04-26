@@ -21,6 +21,7 @@ import { CULTIVAR_LOOKUP, resolveCultivar } from '@/lib/cultivar-registry'
 import { TERROIR_COUNTRY_LOOKUP, TERROIR_MACRO_LOOKUP, resolveTerroirMacro, getTerroirEntry } from '@/lib/terroir-registry'
 import { composeProcess, structuredProcessColumns, type StructuredProcess } from '@/lib/process-registry'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
+import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { GRINDER_LOOKUP, isResolvableSetting } from '@/lib/grinder-registry'
 import { GrindSettingInput } from '@/components/GrindSettingInput'
 import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
@@ -110,6 +111,7 @@ export default function AddPage() {
   const [purchasedConfirmTerroir, setPurchasedConfirmTerroir] = useState(false)
   const [purchasedConfirmCultivar, setPurchasedConfirmCultivar] = useState(false)
   const [purchasedRoasterOverride, setPurchasedRoasterOverride] = useState(false)
+  const [purchasedProducerOverride, setPurchasedProducerOverride] = useState(false)
   const [purchasedGrinderOverride, setPurchasedGrinderOverride] = useState(false)
 
   const totalSteps = sourceType === 'self-roasted' ? 9 : 6
@@ -150,6 +152,7 @@ export default function AddPage() {
     setPurchasedConfirmTerroir(false)
     setPurchasedConfirmCultivar(false)
     setPurchasedRoasterOverride(false)
+    setPurchasedProducerOverride(false)
     setPurchasedGrinderOverride(false)
   }
 
@@ -1285,6 +1288,9 @@ export default function AddPage() {
       const roasterValid =
         ROASTER_LOOKUP.isResolvable(payload.roaster || '') ||
         (purchasedRoasterOverride && !!payload.roaster?.trim())
+      const producerValid =
+        PRODUCER_LOOKUP.isResolvable(payload.producer || '') ||
+        (purchasedProducerOverride && !!payload.producer?.trim())
       const roastLevelValid = ROAST_LEVEL_LOOKUP.isResolvable(payload.roast_level || '')
       const grinderValid =
         GRINDER_LOOKUP.isResolvable(payload.grinder || '') ||
@@ -1299,6 +1305,7 @@ export default function AddPage() {
         cultivarValid &&
         processValid &&
         roasterValid &&
+        producerValid &&
         roastLevelValid &&
         grinderValid &&
         settingValid &&
@@ -1367,6 +1374,7 @@ export default function AddPage() {
                 ...payload,
                 source: 'purchased',
                 roaster_override: purchasedRoasterOverride,
+                producer_override: purchasedProducerOverride,
                 grinder_override: purchasedGrinderOverride,
               },
               confirmNewTerroir: purchasedConfirmTerroir,
@@ -1442,11 +1450,17 @@ export default function AddPage() {
                 />
               </div>
               <div>
-                <label className="label">Producer</label>
-                <input
-                  className="input"
+                <CanonicalTextInput
+                  label="Producer"
                   value={payload.producer || ''}
-                  onChange={(e) => updateField('producer', e.target.value || null)}
+                  onChange={(v) => {
+                    updateField('producer', v || null)
+                    setPurchasedProducerOverride(false)
+                  }}
+                  registry={PRODUCER_LOOKUP}
+                  allowOverride
+                  overridden={purchasedProducerOverride}
+                  onOverrideChange={setPurchasedProducerOverride}
                 />
               </div>
               <div>
@@ -1823,6 +1837,7 @@ export default function AddPage() {
               { met: cultivarValid, message: 'Cultivar is not in the canonical registry' },
               { met: processValid, message: 'Process is not fully resolvable' },
               { met: roasterValid, message: 'Roaster is not in the canonical registry — pick from the list or click "Use anyway"' },
+              { met: producerValid, message: 'Producer is not in the canonical registry — pick from the list or click "Use anyway"' },
               { met: roastLevelValid, message: 'Roast level is not in the canonical registry' },
               { met: grinderValid, message: 'Grinder is not in the canonical registry — pick from the list or click "Use anyway"' },
               { met: settingValid, message: 'Grind setting is not in the grinder’s valid range' },
