@@ -115,3 +115,15 @@ export function makeCanonicalLookup(
 
   return { list: registry, isCanonical, findClosest, isResolvable, canonicalize }
 }
+
+// Save-gate validity for a `CanonicalTextInput` with `allowOverride`. True
+// when the value resolves through the registry, OR the user clicked "Use
+// anyway" on a non-empty value. Empty input is treated as resolvable so
+// callers can use it for an optional-field gate.
+export function isOverridableValid(
+  value: string | null | undefined,
+  lookup: CanonicalLookup,
+  overridden: boolean,
+): boolean {
+  return lookup.isResolvable(value) || (overridden && !!(value ?? '').trim())
+}

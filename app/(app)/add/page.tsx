@@ -23,6 +23,9 @@ import { composeProcess, structuredProcessColumns, type StructuredProcess } from
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { GRINDER_LOOKUP, isResolvableSetting } from '@/lib/grinder-registry'
+import { BREWER_LOOKUP } from '@/lib/brewer-registry'
+import { FILTER_LOOKUP } from '@/lib/filter-registry'
+import { isOverridableValid } from '@/lib/canonical-registry'
 import { GrindSettingInput } from '@/components/GrindSettingInput'
 import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
@@ -113,6 +116,8 @@ export default function AddPage() {
   const [purchasedRoasterOverride, setPurchasedRoasterOverride] = useState(false)
   const [purchasedProducerOverride, setPurchasedProducerOverride] = useState(false)
   const [purchasedGrinderOverride, setPurchasedGrinderOverride] = useState(false)
+  const [purchasedBrewerOverride, setPurchasedBrewerOverride] = useState(false)
+  const [purchasedFilterOverride, setPurchasedFilterOverride] = useState(false)
 
   const totalSteps = sourceType === 'self-roasted' ? 9 : 6
 
@@ -1285,18 +1290,14 @@ export default function AddPage() {
       const cultivarValid = CULTIVAR_LOOKUP.isResolvable(payload.cultivar.cultivar_name || '')
       const structuredProcess = seedStructuredProcess(payload)
       const processValid = isProcessResolvable(structuredProcess)
-      const roasterValid =
-        ROASTER_LOOKUP.isResolvable(payload.roaster || '') ||
-        (purchasedRoasterOverride && !!payload.roaster?.trim())
-      const producerValid =
-        PRODUCER_LOOKUP.isResolvable(payload.producer || '') ||
-        (purchasedProducerOverride && !!payload.producer?.trim())
+      const roasterValid = isOverridableValid(payload.roaster, ROASTER_LOOKUP, purchasedRoasterOverride)
+      const producerValid = isOverridableValid(payload.producer, PRODUCER_LOOKUP, purchasedProducerOverride)
       const roastLevelValid = ROAST_LEVEL_LOOKUP.isResolvable(payload.roast_level || '')
-      const grinderValid =
-        GRINDER_LOOKUP.isResolvable(payload.grinder || '') ||
-        (purchasedGrinderOverride && !!payload.grinder?.trim())
+      const grinderValid = isOverridableValid(payload.grinder, GRINDER_LOOKUP, purchasedGrinderOverride)
       const grinderCanonical = GRINDER_LOOKUP.canonicalize(payload.grinder || '') ?? payload.grinder ?? ''
       const settingValid = isResolvableSetting(grinderCanonical, payload.grind_setting || '')
+      const brewerValid = isOverridableValid(payload.brewer, BREWER_LOOKUP, purchasedBrewerOverride)
+      const filterValid = isOverridableValid(payload.filter, FILTER_LOOKUP, purchasedFilterOverride)
       const saveEnabled =
         !!payload.coffee_name?.trim() &&
         !!payload.terroir.country?.trim() &&
@@ -1309,6 +1310,8 @@ export default function AddPage() {
         roastLevelValid &&
         grinderValid &&
         settingValid &&
+        brewerValid &&
+        filterValid &&
         (!needsTerroirConfirm || purchasedConfirmTerroir) &&
         (!needsCultivarConfirm || purchasedConfirmCultivar)
 
@@ -1376,6 +1379,8 @@ export default function AddPage() {
                 roaster_override: purchasedRoasterOverride,
                 producer_override: purchasedProducerOverride,
                 grinder_override: purchasedGrinderOverride,
+                brewer_override: purchasedBrewerOverride,
+                filter_override: purchasedFilterOverride,
               },
               confirmNewTerroir: purchasedConfirmTerroir,
               confirmNewCultivar: purchasedConfirmCultivar,
@@ -1715,12 +1720,32 @@ export default function AddPage() {
             <div className="label">Recipe</div>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="label">Brewer</label>
-                <input className="input" value={payload.brewer || ''} onChange={(e) => updateField('brewer', e.target.value || null)} />
+                <CanonicalTextInput
+                  label="Brewer"
+                  value={payload.brewer || ''}
+                  onChange={(v) => {
+                    updateField('brewer', v || null)
+                    setPurchasedBrewerOverride(false)
+                  }}
+                  registry={BREWER_LOOKUP}
+                  allowOverride
+                  overridden={purchasedBrewerOverride}
+                  onOverrideChange={setPurchasedBrewerOverride}
+                />
               </div>
               <div>
-                <label className="label">Filter</label>
-                <input className="input" value={payload.filter || ''} onChange={(e) => updateField('filter', e.target.value || null)} />
+                <CanonicalTextInput
+                  label="Filter"
+                  value={payload.filter || ''}
+                  onChange={(v) => {
+                    updateField('filter', v || null)
+                    setPurchasedFilterOverride(false)
+                  }}
+                  registry={FILTER_LOOKUP}
+                  allowOverride
+                  overridden={purchasedFilterOverride}
+                  onOverrideChange={setPurchasedFilterOverride}
+                />
               </div>
               <div>
                 <CanonicalTextInput
@@ -1841,6 +1866,8 @@ export default function AddPage() {
               { met: roastLevelValid, message: 'Roast level is not in the canonical registry' },
               { met: grinderValid, message: 'Grinder is not in the canonical registry — pick from the list or click "Use anyway"' },
               { met: settingValid, message: 'Grind setting is not in the grinder’s valid range' },
+              { met: brewerValid, message: 'Brewer is not in the canonical registry — pick from the list or click "Use anyway"' },
+              { met: filterValid, message: 'Filter is not in the canonical registry — pick from the list or click "Use anyway"' },
               { met: !needsTerroirConfirm || purchasedConfirmTerroir, message: 'Confirm new terroir below' },
               { met: !needsCultivarConfirm || purchasedConfirmCultivar, message: 'Confirm new cultivar below' },
             ]}
