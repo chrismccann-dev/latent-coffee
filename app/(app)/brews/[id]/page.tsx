@@ -5,6 +5,8 @@ import { Brew } from '@/lib/types'
 import { getCoverColor } from '@/lib/brew-colors'
 import { SectionCard } from '@/components/SectionCard'
 import { Tag } from '@/components/Tag'
+import { ModifierBadges } from '@/components/ModifierBadges'
+import { cleanModifiers } from '@/lib/extraction-modifiers'
 
 export default async function BrewDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -180,16 +182,27 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
             const planned = brew.extraction_strategy
             const confirmed = brew.extraction_confirmed?.trim() || null
             const diverged = !!confirmed && confirmed.toLowerCase() !== planned.trim().toLowerCase()
+            const modifiersResult = cleanModifiers(brew.modifiers)
+            const modifiers = modifiersResult.ok ? modifiersResult.value : []
+            const hasModifiers = modifiers.length > 0
             return (
-              <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-latent-border">
-                <div>
-                  <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Extraction Strategy</div>
-                  <div className="font-sans text-sm">{planned}</div>
-                </div>
-                {diverged && (
+              <div className="mt-4 pt-4 border-t border-latent-border space-y-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <div className="font-mono text-xxs text-latent-accent-light uppercase mb-1">Tasted As (differs)</div>
-                    <div className="font-sans text-sm">{confirmed}</div>
+                    <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Extraction Strategy</div>
+                    <div className="font-sans text-sm">{planned}</div>
+                  </div>
+                  {diverged && (
+                    <div>
+                      <div className="font-mono text-xxs text-latent-accent-light uppercase mb-1">Tasted As (differs)</div>
+                      <div className="font-sans text-sm">{confirmed}</div>
+                    </div>
+                  )}
+                </div>
+                {hasModifiers && (
+                  <div>
+                    <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Modifiers</div>
+                    <ModifierBadges modifiers={modifiers} />
                   </div>
                 )}
               </div>

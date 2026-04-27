@@ -14,10 +14,21 @@ export interface StrategyStyle {
   short: string
 }
 
+// Sprint Extraction Strategy v2 (2026-04-27): 5-strategy palette, hue-separated
+// across the temperature/control spectrum (Chris-approved):
+//   Suppression       — cool gray-blue   (controlled / dampened)
+//   Clarity-First     — cool green       (gentle protection)
+//   Balanced          — neutral warm     (middle)
+//   Full Expression   — warm red/pink    (heavy push on co-ferments)
+//   Extraction Push   — hot orange/burnt (active push on clean coffees)
+// Full Expression bg/text/border slightly deepened in v2 to keep it visually
+// distinct from Suppression after the gray-blue swap.
 const STRATEGY_STYLES: Record<ExtractionStrategy, StrategyStyle> = {
+  'Suppression':         { bg: '#E3E7ED', text: '#2F3E55', border: '#5A6B82', short: 'SUPP' },
   'Clarity-First':       { bg: '#E8F0EA', text: '#2D5E3A', border: '#4A7C59', short: 'CLARITY' },
   'Balanced Intensity':  { bg: '#F5E8D0', text: '#6B4A10', border: '#8B6914', short: 'BALANCED' },
-  'Full Expression':     { bg: '#F0DCE1', text: '#722F4B', border: '#8B3B4B', short: 'FULL' },
+  'Full Expression':     { bg: '#EED3DB', text: '#6A1F3D', border: '#8A2E4C', short: 'FULL' },
+  'Extraction Push':     { bg: '#F3E1D6', text: '#7A2F12', border: '#A3471B', short: 'PUSH' },
 }
 
 export function getStrategyStyle(strategy: string | null | undefined): StrategyStyle | null {

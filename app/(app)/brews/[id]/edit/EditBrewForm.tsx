@@ -22,6 +22,8 @@ import { FlavorComposer } from '@/components/FlavorComposer'
 import { StructureTagsPicker } from '@/components/StructureTagsPicker'
 import type { FlavorChip } from '@/lib/flavor-registry'
 import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
+import { ModifierComposer } from '@/components/ModifierComposer'
+import { cleanModifiers, type Modifier } from '@/lib/extraction-modifiers'
 
 type TerroirOption = Pick<Terroir, 'id' | 'country' | 'admin_region' | 'macro_terroir' | 'meso_terroir'>
 type CultivarOption = Pick<Cultivar, 'id' | 'cultivar_name' | 'lineage' | 'genetic_family'>
@@ -57,6 +59,7 @@ type FormState = {
   total_time: string
   extraction_strategy: string
   extraction_confirmed: string
+  modifiers: Modifier[]
   aroma: string
   attack: string
   mid_palate: string
@@ -112,6 +115,10 @@ function initial(brew: Brew, terroirs: TerroirOption[], cultivars: CultivarOptio
     total_time: brew.total_time ?? '',
     extraction_strategy: brew.extraction_strategy ?? '',
     extraction_confirmed: brew.extraction_confirmed ?? '',
+    modifiers: (() => {
+      const r = cleanModifiers(brew.modifiers)
+      return r.ok ? r.value : []
+    })(),
     aroma: brew.aroma ?? '',
     attack: brew.attack ?? '',
     mid_palate: brew.mid_palate ?? '',
@@ -192,6 +199,7 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
       total_time: form.total_time.trim() || null,
       extraction_strategy: form.extraction_strategy || null,
       extraction_confirmed: form.extraction_confirmed.trim() || null,
+      modifiers: form.modifiers,
       aroma: form.aroma.trim() || null,
       attack: form.attack.trim() || null,
       mid_palate: form.mid_palate.trim() || null,
@@ -403,6 +411,10 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
               onChange={(e) => set('extraction_confirmed', e.target.value)}
             />
           </div>
+          <ModifierComposer
+            value={form.modifiers}
+            onChange={(next) => set('modifiers', next)}
+          />
         </div>
       </SectionCard>
 

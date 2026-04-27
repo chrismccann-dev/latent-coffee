@@ -28,6 +28,7 @@ import { BREWER_LOOKUP } from '@/lib/brewer-registry'
 import { FILTER_LOOKUP } from '@/lib/filter-registry'
 import { composeGrind } from '@/lib/brew-import'
 import { cleanFlavors, cleanStructureTags, composeFlavorNotes } from '@/lib/flavor-registry'
+import { cleanModifiers } from '@/lib/extraction-modifiers'
 import type { CanonicalLookup } from '@/lib/canonical-registry'
 
 // Whitelist for direct PATCH. `cultivar_id` / `terroir_id` are resolved
@@ -56,6 +57,7 @@ const EDITABLE_FIELDS = [
   'total_time',
   'extraction_strategy',
   'extraction_confirmed',
+  'modifiers',
   'aroma',
   'attack',
   'mid_palate',
@@ -164,6 +166,18 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       )
     }
     if (s === '') patch.extraction_strategy = null
+  }
+
+  // Validate modifiers (Axis 2) against canonical shape.
+  if ('modifiers' in patch) {
+    const result = cleanModifiers(patch.modifiers)
+    if (!result.ok) {
+      return NextResponse.json(
+        { error: 'validation', errors: [result.error] },
+        { status: 400 },
+      )
+    }
+    patch.modifiers = result.value
   }
 
   // Validate structured process fields against canonical registries.

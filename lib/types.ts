@@ -237,6 +237,9 @@ export interface Brew {
   total_time: string | null
   extraction_strategy: string | null
   extraction_confirmed: string | null
+  // Sprint Extraction Strategy v2 (2026-04-27): Axis 2 modifier array.
+  // jsonb column on brews; default []. See lib/extraction-modifiers.ts for shape.
+  modifiers: import('./extraction-modifiers').Modifier[]
   aroma: string | null
   attack: string | null
   mid_palate: string | null
