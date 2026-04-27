@@ -31,6 +31,8 @@ import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 import { SaveGateWarning } from '@/components/SaveGateWarning'
 import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
+import { FlavorComposer } from '@/components/FlavorComposer'
+import { StructureTagsPicker } from '@/components/StructureTagsPicker'
 
 type SourceType = 'self-roasted' | 'purchased' | null
 
@@ -1496,17 +1498,16 @@ export default function AddPage() {
                   registry={ROAST_LEVEL_LOOKUP}
                 />
               </div>
-              <div>
-                <label className="label">Flavor notes (comma-separated)</label>
-                <input
-                  className="input"
-                  value={(payload.flavor_notes || []).join(', ')}
-                  onChange={(e) =>
-                    updateField(
-                      'flavor_notes',
-                      e.target.value.split(',').map((s) => s.trim()).filter(Boolean)
-                    )
-                  }
+              <div className="md:col-span-2">
+                <FlavorComposer
+                  value={payload.flavors ?? []}
+                  onChange={(v) => updateField('flavors', v)}
+                />
+              </div>
+              <div className="md:col-span-2">
+                <StructureTagsPicker
+                  value={payload.structure_tags ?? []}
+                  onChange={(v) => updateField('structure_tags', v)}
                 />
               </div>
             </div>

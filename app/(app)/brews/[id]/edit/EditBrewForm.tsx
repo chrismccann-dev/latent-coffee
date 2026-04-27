@@ -18,7 +18,9 @@ import { composeProcess, structuredProcessColumns, type StructuredProcess } from
 import { SectionCard } from '@/components/SectionCard'
 import { CanonicalTextInput } from '@/components/CanonicalTextInput'
 import { SaveGateWarning } from '@/components/SaveGateWarning'
-import { FlavorNotesInput } from '@/components/FlavorNotesInput'
+import { FlavorComposer } from '@/components/FlavorComposer'
+import { StructureTagsPicker } from '@/components/StructureTagsPicker'
+import type { FlavorChip } from '@/lib/flavor-registry'
 import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 
 type TerroirOption = Pick<Terroir, 'id' | 'country' | 'admin_region' | 'macro_terroir' | 'meso_terroir'>
@@ -37,7 +39,8 @@ type FormState = {
   variety: string
   structuredProcess: StructuredProcess
   roast_level: string
-  flavor_notes: string[]
+  flavors: FlavorChip[]
+  structure_tags: string[]
   country: string
   macro_terroir: string
   meso_terroir: string
@@ -91,7 +94,8 @@ function initial(brew: Brew, terroirs: TerroirOption[], cultivars: CultivarOptio
       signature_method: brew.signature_method ?? null,
     }),
     roast_level: brew.roast_level ?? '',
-    flavor_notes: brew.flavor_notes ?? [],
+    flavors: (brew.flavors ?? []) as FlavorChip[],
+    structure_tags: brew.structure_tags ?? [],
     country: currentTerroir?.country ?? '',
     macro_terroir: currentTerroir?.macro_terroir ?? '',
     meso_terroir: currentTerroir?.meso_terroir ?? '',
@@ -167,7 +171,8 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
       process: composeProcess(form.structuredProcess) || null,
       ...structuredProcessColumns(form.structuredProcess),
       roast_level: form.roast_level.trim() || null,
-      flavor_notes: form.flavor_notes,
+      flavors: form.flavors,
+      structure_tags: form.structure_tags,
       country: form.country.trim() || null,
       terroir_name: form.macro_terroir.trim(),
       meso_terroir: form.meso_terroir.trim() || null,
@@ -261,10 +266,15 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
             />
           </div>
           <div className="col-span-2">
-            <FlavorNotesInput
-              value={form.flavor_notes}
-              onChange={(v) => set('flavor_notes', v)}
-              label="Flavor notes"
+            <FlavorComposer
+              value={form.flavors}
+              onChange={(v) => set('flavors', v)}
+            />
+          </div>
+          <div className="col-span-2">
+            <StructureTagsPicker
+              value={form.structure_tags}
+              onChange={(v) => set('structure_tags', v)}
             />
           </div>
         </div>

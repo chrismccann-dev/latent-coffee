@@ -27,6 +27,7 @@ import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
 import { BREWER_LOOKUP } from '@/lib/brewer-registry'
 import { FILTER_LOOKUP } from '@/lib/filter-registry'
 import { composeGrind } from '@/lib/brew-import'
+import { cleanFlavors, cleanStructureTags, composeFlavorNotes } from '@/lib/flavor-registry'
 import type { CanonicalLookup } from '@/lib/canonical-registry'
 
 // Whitelist for direct PATCH. `cultivar_id` / `terroir_id` are resolved
@@ -39,6 +40,8 @@ const EDITABLE_FIELDS = [
   'process',
   'roast_level',
   'flavor_notes',
+  'flavors',
+  'structure_tags',
   'brewer',
   'filter',
   'dose_g',
@@ -273,6 +276,19 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       patch.grind_setting = trimmed
     }
   }
+  if ('flavors' in patch) {
+    const result = cleanFlavors(patch.flavors)
+    if (!result.ok) return NextResponse.json({ error: 'validation', errors: [result.error] }, { status: 400 })
+    patch.flavors = result.value
+    // flavor_notes is recomputed from flavors so back-compat reads stay aligned.
+    patch.flavor_notes = composeFlavorNotes(result.value)
+  }
+  if ('structure_tags' in patch) {
+    const result = cleanStructureTags(patch.structure_tags)
+    if (!result.ok) return NextResponse.json({ error: 'validation', errors: [result.error] }, { status: 400 })
+    patch.structure_tags = result.value
+  }
+
   // Recompute legacy display column from structured pair when either changes.
   if ('grinder' in patch || 'grind_setting' in patch) {
     patch.grind = composeGrind({

@@ -221,6 +221,8 @@ export interface Brew {
   signature_method: string | null
   roast_level: string | null
   flavor_notes: string[] | null
+  flavors: import('./flavor-registry').FlavorChip[]
+  structure_tags: string[]
   brewer: string | null
   filter: string | null
   dose_g: number | null
