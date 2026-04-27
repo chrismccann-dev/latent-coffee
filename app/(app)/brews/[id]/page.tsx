@@ -114,6 +114,15 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
               </div>
             </>
           )}
+
+          {brew.structure_tags && brew.structure_tags.length > 0 && (
+            <>
+              <div className="label mt-4">STRUCTURE</div>
+              <div>
+                {brew.structure_tags.map((tag: string) => <Tag key={tag}>{tag}</Tag>)}
+              </div>
+            </>
+          )}
         </div>
       </div>
 

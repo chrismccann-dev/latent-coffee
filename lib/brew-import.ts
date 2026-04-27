@@ -33,6 +33,21 @@ import {
   type StructuredProcess,
 } from './process-registry'
 import { ROASTER_LOOKUP } from './roaster-registry'
+import {
+  cleanFlavors,
+  cleanStructureTags,
+  composeFlavorNotes,
+  decomposeFlavorNote,
+  type FlavorChip,
+} from './flavor-registry'
+
+/** Parse a comma-separated raw flavor string and pre-decompose each entry
+ *  via the alias map, so /add purchased flow seeds both flavors[] and the
+ *  legacy flavor_notes display. Non-resolvable entries fall back to a
+ *  base-only chip with the verbatim string (composer surfaces amber). */
+export function parseFlavorList(raw: string): FlavorChip[] {
+  return splitList(raw).map(s => decomposeFlavorNote(s) ?? { base: s, modifiers: [] })
+}
 import { ROAST_LEVEL_LOOKUP } from './roast-level-registry'
 import { GRINDER_LOOKUP, isResolvableSetting } from './grinder-registry'
 import { PRODUCER_LOOKUP } from './producer-registry'
@@ -122,6 +137,12 @@ export interface BrewPayload {
   process?: string | null
   roast_level?: string | null
   flavor_notes?: string[] | null
+  // Sprint 1g 3-axis flavor taxonomy. `flavors` is the structured form
+  // (array of {base, modifiers}); `flavor_notes` is the denormalized display
+  // recomposed via composeFlavorNotes() at insert. `structure_tags` stores
+  // per-coffee structure descriptors as "Axis:Descriptor" keys.
+  flavors?: { base: string; modifiers: string[] }[] | null
+  structure_tags?: string[] | null
 
   // Classification (required)
   terroir: TerroirCandidate
@@ -663,6 +684,13 @@ export async function persistBrew(
     }
   }
 
+  const flavorsResult = cleanFlavors(payload.flavors ?? null)
+  if (!flavorsResult.ok) return { ok: false, code: 'validation', errors: [flavorsResult.error] }
+  const cleanedFlavors = flavorsResult.value
+  const structureResult = cleanStructureTags(payload.structure_tags ?? null)
+  if (!structureResult.ok) return { ok: false, code: 'validation', errors: [structureResult.error] }
+  const cleanedStructureTags = structureResult.value
+
   const terroirMatch = await matchTerroir(supabase, userId, payload.terroir)
   const cultivarMatch = await matchCultivar(supabase, userId, payload.cultivar)
 
@@ -753,7 +781,9 @@ export async function persistBrew(
     process: payload.process ?? composed,
     ...structuredProcessColumns(structured),
     roast_level: canonicalRoastLevel,
-    flavor_notes: payload.flavor_notes ?? null,
+    flavors: cleanedFlavors,
+    structure_tags: cleanedStructureTags,
+    flavor_notes: cleanedFlavors.length > 0 ? composeFlavorNotes(cleanedFlavors) : (payload.flavor_notes ?? null),
     brewer: brewerResult.canonicalName,
     filter: filterResult.canonicalName,
     dose_g: payload.dose_g ?? null,
@@ -1217,6 +1247,7 @@ function applyTabbedBlock(out: Partial<BrewPayload>, t: TerroirCandidate, c: Cul
         break
       case 'coffee.flavor_notes':
         out.flavor_notes = splitList(value)
+        out.flavors = parseFlavorList(value)
         break
       // --- Terroir ---
       case 'terroir.country':
@@ -1404,6 +1435,7 @@ export function parseSpreadsheetRow(text: string): Partial<BrewPayload> | null {
         break
       case 'flavor_notes':
         out.flavor_notes = splitList(value)
+        out.flavors = parseFlavorList(value)
         break
       case 'key_takeaways':
         out.key_takeaways = splitList(value)
