@@ -196,6 +196,23 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Stability flat
 
+### CAFEC Abaca+ Cup 1 Cone Paper Filter — Owned
+
+- SKU: `APC1-100W`
+- Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-abaca-cup-1-cone-paper-filter-v60-01-ac1-100w>
+- Paper shape: Conical
+- Size standard: V60-01
+- Fits brewers: V60, Origami, Cafec
+- Seal/fit: Standard
+- Material: Abaca + pulp
+- Thickness: Thin
+- Flow rate: Fast
+- Flow consistency: Stable
+- Clarity / Body / Sweetness: High / Low / Clean
+- Best archetype: Clarity cone
+- Location: Home
+- Primary use case: Fast clarity baseline (low clog, consistent flow)
+
 ### CAFEC Abaca+ Deep 27 Coffee Filter (white) — Owned
 
 - SKU: `AFD27-100W`
@@ -228,7 +245,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Clarity / Body / Sweetness: High / Medium / Clean
 - Best archetype: Clarity cone (controlled)
 
-### CAFEC Cup 1 Dark Roast Paper Filter — Owned
+### CAFEC T-83 - Cup 1 Dark Roast Paper Filter — Owned
 
 - SKU: `DC1-40W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/cup-1-dark-roast-paper-filter-dc1-40w>
@@ -245,7 +262,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Location: Home
 - Primary use case: Extraction push via resistance (increase contact time without grind change)
 
-### CAFEC Cup 1 Light Roast Paper Filter (slow) — Owned
+### CAFEC T-92 - Cup 1 Light Roast Paper Filter (slow) — Owned
 
 - SKU: `LC1-100W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/cafec-cup-1-pour-over-coffee-paper-filter-by-roasting-type-flow-rate-differences-for-specialty-coffee-light-roast-slower-flow-rate-1-cup-size-v60-01>
@@ -262,7 +279,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Location: Home
 - Primary use case: Controlled clarity (slightly extended contact vs LC4)
 
-### CAFEC Cup 1 Medium Roast Paper Filter — Owned
+### CAFEC T-90 - Cup 1 Medium Roast Paper Filter — Owned
 
 - SKU: `MC1-100W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/cafec-cup-1-pour-over-coffee-paper-filter-by-roasting-type-flow-rate-differences-for-specialty-coffee-medium-roast-faster-flow-rate-1-cup-size-v60-01>
@@ -294,7 +311,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Clarity / Body / Sweetness: Low / High / Muted
 - Best archetype: Immersion hybrid (cone assist)
 
-### CAFEC Cup 4 Light Roast Paper Filter — Owned
+### CAFEC T-92 - Cup 4 Light Roast Paper Filter — Owned
 
 - SKU: `LC4-100W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/cafec-pour-over>
@@ -1050,7 +1067,7 @@ Drift variants observed in legacy DB rows. Note: ambiguous Sibarist drift (e.g. 
 - `Hario V60 paper` → **Hario V60 Paper Filter 01 (Tabbed)**
 - `Hario V60 Paper` → **Hario V60 Paper Filter 01 (Tabbed)**
 - `Hario V60 white paper` → **Hario V60 Paper Filter 01 (Tabbed)**
-- `CAFEC Abaca Plus` → **CAFEC Abaca Cup 1 Cone Paper Filter**
+- `CAFEC Abaca Plus` → **CAFEC Abaca+ Cup 1 Cone Paper Filter**
 - `Standard flat filter (no puck screen)` → **xBloom Premium Paper Filters**
 - `Sibarist FAST Flat` → **FLAT FAST**
 - `Sibarist FAST flat` → **FLAT FAST**
@@ -1076,3 +1093,4 @@ Drift variants observed in legacy DB rows. Note: ambiguous Sibarist drift (e.g. 
 
 - 2026-04-26 — initial registry built from authored CSV (Sprint 1f).
   - Same-name dedupes (5): CAFEC Abaca Cup 1 Cone Paper Filter, CAFEC Cup 4 Dark Roast Paper Filter, CAFEC Cup 4 Medium Roast Paper Filter, CAFEC Traditional Cup 1 Filter.
+- 2026-04-27 — Cafec packaging-name update (migration 034). Five owned papers gain the T-XX codes printed on their packaging: T-92 (light, LC4 + LC1 slow), T-90 (medium, MC1), T-83 (dark, DC1), plus the "+" on Abaca+ (APC1). Re-introduces the owned APC1 entry that was deduped in 1f when it shared a canonical name with the not-owned AC1; renaming to "Abaca+" lets both coexist as distinct canonicals. 1 DB row affected (the APC1 brew aliased through "CAFEC Abaca Plus" in 1f migration 032).
