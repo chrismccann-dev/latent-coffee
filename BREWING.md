@@ -66,15 +66,29 @@ Evaluate the coffee's process and variety against the Process / Variety Signal t
 
 In 3–5 sentences: what is this coffee, what does the terroir and cultivar suggest about likely expression, what does the process tell you about extraction behavior, and what does the roaster's positioning (if known) suggest about intent?
 
-**1d. Proposed extraction strategy**
+**1d. Proposed extraction strategy + modifiers**
 
-Based on the above, propose one of the three extraction strategies below and explain why. Then pause and ask for confirmation before proceeding to the recipe.
+Based on the above, propose one of the **five extraction strategies** below (Axis 1) and explain why. Then propose any **modifiers** (Axis 2) if the coffee warrants them — most coffees do not. Pause and ask for confirmation before proceeding to the recipe.
+
+**Axis 1 — Extraction Strategy** (5 canonical, intent-distinct):
 
 | **Strategy**                | **Grind Range**    | **Typical Agitation**                                                | **Ratio Tendency** | **Best For**                                                                                                                                                                                                                                                                             |
 |-----------------------------|--------------------|----------------------------------------------------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Clarity-First (default)** | 6.8–6.5            | Low — Melodrip, gentle spiral                                        | 1:16–1:17          | Washed Gesha, Ethiopian landraces, delicate light roasts                                                                                                                                                                                                                                 |
-| **Balanced Intensity**      | 6.5–6.3            | Moderate — controlled spiral, some bed exposure                      | 1:15–1:16          | Honey lots, natural washed hybrids, denser high-elevation coffees                                                                                                                                                                                                                        |
-| **Full Expression**         | 6.3–5.5 (or finer) | Higher — active spiral, multiple pours, boiling or near-boiling temp | 1:13–1:17          | Heavy anaerobic, experimental fermentation, very expressive lots, and high-EY roasters (Sey, Flower Child, Picky Chemist, Dak). Note: on the EG-1, grind below 5.5 changes distribution shape but not D50 — temperature, agitation, filter choice, and brew time are the primary levers. |
+| **Suppression**             | 6.8–6.5            | Low — Melodrip, gentle spiral                                        | 1:16–1:17          | Heavy co-ferments, anaerobic naturals where fermentation harshness would surface if extracted normally. Same coarse-low-temp-low-agitation mechanics as Clarity-First, opposite intent: hold an over-expressive coffee back, not protect a delicate one. Temperature is the primary lever. Confirmed pattern: anaerobic naturals (Hydrangea Finca Inmaculada). |
+| **Clarity-First (default)** | 6.8–6.5            | Low — Melodrip, gentle spiral                                        | 1:16–1:17          | Washed Gesha, Ethiopian landraces, delicate light roasts. Default when the coffee's expressive ceiling is moderate and the goal is preserving aromatic and structural transparency.                                                                                                       |
+| **Balanced Intensity**      | 6.5–6.3            | Moderate — controlled spiral, some bed exposure                      | 1:15–1:16          | Honey lots, natural washed hybrids, denser high-elevation coffees. Sits between Clarity-First's gentleness and Full Expression's force.                                                                                                                                                   |
+| **Full Expression**         | 6.3–5.5 (or finer) | **Higher** — active spiral, multiple pours, boiling or near-boiling temp | 1:13–1:17          | Heavy anaerobic, experimental fermentation, very expressive lots, and high-EY roasters (Sey, Flower Child, Picky Chemist, Dak) where the coffee won't open up without force. Note: on the EG-1, grind below 5.5 changes distribution shape but not D50 — temperature, agitation, filter choice, and brew time are the primary levers. |
+| **Extraction Push**         | 6.3–5.5 (or finer) | **Low — Melodrip** (clarity-preserving)                              | 1:15–1:17          | Push yield on a *clean* coffee (washed Gesha, washed Ethiopian, transparent processed lots) without losing transparency. Mechanically Full Expression's fine grind + high temp, but Melodrip controls turbulence so clarity survives. Reference WBC recipes: Wölfl, Tran, Giachgia.        |
+
+**Mechanics-vs-intent symmetry:** Suppression and Clarity-First share mechanics, differ in intent. Full Expression and Extraction Push share fine-grind + high-temp mechanics, differ in agitation (and therefore in the coffee class they serve). Pick the strategy by intent at strategy-selection time, not by mechanics.
+
+**Axis 2 — Modifiers** (optional, stackable, layered on any strategy). Most brews have none — only propose when the notes or coffee profile clearly warrant them:
+
+| **Modifier**                       | **Sub-data**                                              | **When to use**                                                                                                                                                                                  |
+|------------------------------------|-----------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Output Selection**               | form (early_cut / late_cut / both), brew_weight, cup_yield | Discard portions of the extraction curve to reshape the cup. Heavy co-ferments where the bitter tail is geographically concentrated in the late fraction; processed lots where the early fraction reads salty/sharp. Carlos Escobar 2025: keep middle band only.  |
+| **Inverted Temperature Staging**   | phases (e.g. "86°C → 92°C")                               | Start low, end high — opposite of natural decline. Low-temp opens up sweetness/aromatics without phenolics; raising temp on a partially-extracted bed builds structure. Ryan Wibawa 2024.        |
+| **Aroma Capture**                  | application (e.g. "Paragon ball on bloom + Pour 1")       | Mid-brew cooling of the early extract fraction to preserve aromatics. Highly aromatic coffees (washed Geshas, Esmeralda climate-controlled naturals). Giacomo Vannelli, Wataru Iidaka.           |
 
 Grind range 6.8–6.5 is the default. Going below 6.3 is intentional and must be justified by the extraction strategy — it is not a tweak, it is a different philosophy. For the highest-EY roasters, going below 5.5 may be required — but see Grinder Notes.
 
@@ -864,3 +878,59 @@ After each coffee is finished, run through this checklist before starting the ne
 - File the best brew in the app with a complete 'What I Learned' entry — specific, testable bullet points and a closing 'Extraction Strategy Confirmed' line. Note: office coffees do not go through the home inventory or Agtron workflow. Two separate inventories are maintained — home (full tracking: Agtron color, spreadsheet entry, bean cellar doses) and office (no color reading, no spreadsheet tracking). Only home coffees require the Agtron step at dose-out.
 
 - Note brewer rotation — were you relying on the same brewer repeatedly? If so, plan to rotate next coffee.
+
+# SECTION 4 — WBC REFERENCE
+
+Reference layer derived from Chris's "World Brewers Cup Champion - Recipes and Extraction Taxonomy" research (18 finalists/champions across 2023-2025). The five-axis foundational framework + eight strategy families below describe how competition brewers think about extraction. Latent's live taxonomy (Section 1, Step 1d) intentionally folds these into a smaller, single-origin-friendly shape (5 strategies + 3 modifiers) — this section is the comprehensive reference for "what was the WBC competitor doing" lookups, not the live registry.
+
+## Foundational Control Axes (5)
+
+| **Axis**              | **Definition**                                | **Main Levers**                                          |
+|-----------------------|-----------------------------------------------|----------------------------------------------------------|
+| Extraction Intensity  | How much is extracted                         | grind, ratio, temp, water chemistry                      |
+| Time Distribution     | When extraction happens                       | pours, pulse timing, immersion duration                  |
+| Physical System       | Where/how extraction occurs in the bed        | geometry, layering, PSD, grind separation                |
+| External Control      | Stabilizing or shaping the process externally | tools, flow devices, thermal handling                    |
+| Output Selection      | Which parts of extraction are kept            | discarding early/late fractions, yield cutoff            |
+
+Latent's live taxonomy maps onto axes 1 (Strategy) and partially onto axes 2 / 4 / 5 (Modifiers). Axis 3 (Physical System) is mostly blend-engineering and not in scope for single-origin home brewing.
+
+## Core Strategy Families (8)
+
+| **Family**                            | **Subtypes**                                                                                                  | **Definition**                                                                                                                              | **Representative**                                       | **Failure Mode**                              |
+|---------------------------------------|---------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|-----------------------------------------------|
+| Extraction Push (High-Yield Clarity)  | -                                                                                                             | Maximize extraction yield while preserving clarity. Fine grind, fast filters, high or stable temp, moderate-high ppm.                       | Savina Giachgia, Jackie Tran, Martin Wölfl               | Astringency, drying finish, loss of structure |
+| Suppression Systems                   | -                                                                                                             | Intentionally limit extraction to avoid harshness while maintaining structure. Lower temp, coarser grind, low agitation.                    | Carlos Medina                                            | Naturals / co-ferments + slightly developed roasts |
+| Time-Distributed Systems              | Pulse-based (Carlos), Parametric (George, Bayu), Selective Output (Escobar)                                   | Shape extraction by controlling timing or selecting portions of the curve. Fixed intervals, repeated pulses, programmable final phase.      | Carlos Medina, George Peng, Bayu Prawiro, Carlos Escobar | Over-complexity, timing sensitivity           |
+| Structural Systems                    | Dual grind (Luca), Layered bed (Wataru), Pre-brew alignment (Elysia), Ratio-engineered blends (Andrea), Roast-based structure (George 2025) | Engineer the inputs or physical structure before/during brewing. Multi-grind, layering, blend ratio, roast-level differentiation.           | Luca Croce, Wataru Iidaka, Elysia Tan, Andrea Batacchi   | Disjointed cup, poor integration              |
+| Thermal Systems                       | Staged temp (Garam, Giacomo), Inverted temp (Ryan), Continuous blending (Tom)                                 | Use temperature actively to shape extraction. Multi-kettle workflows, temperature staging or inversion, cooling / aroma locking.            | Giacomo Vannelli, Tom Hutchins, Ryan Wibawa              | Over-engineering, instability                 |
+| Flow / Stability Systems              | -                                                                                                             | Stabilize flow and reduce variability. Melodrip / drip assist, needling / bed prep, flat-bottom or controlled geometry.                     | Martin Wölfl, Jackie Tran (partial)                      | Over-smoothing, reduced character             |
+| Immersion Systems                     | -                                                                                                             | Use immersion to equalize extraction across components. Switch-style, multi-stage immersion, low agitation.                                 | Ryan Wibawa, Charity Cheung                              | Flat or muted cup, loss of separation         |
+| Hybrid Systems                        | Sequential (Garam), Immersion staging (Ryan), Parametric (Bayu), Phase-mapped (Justin)                        | Combine percolation and immersion in distinct phases to assign different extraction roles. Hybrid brewer, phase-mapped extraction.          | Garam Victor Um, Ryan Wibawa, Bayu Prawiro, Justin Bull  | Poor phase balance, transition instability    |
+
+## How the families map onto Latent's live taxonomy
+
+| **WBC family**           | **Latent slot**                                       |
+|--------------------------|-------------------------------------------------------|
+| Extraction Push          | Strategy: Extraction Push (clean coffees)             |
+| Suppression Systems      | Strategy: Suppression                                 |
+| Time-Distributed (Selective Output sub-type) | Modifier: Output Selection         |
+| Time-Distributed (other sub-types — Pulse, Parametric)        | Implicit in pour structure; not a separate slot |
+| Structural Systems       | Out of scope (single-origin context)                  |
+| Thermal (Inverted)       | Modifier: Inverted Temperature Staging                |
+| Thermal (Aroma capture sub-type) | Modifier: Aroma Capture                       |
+| Flow / Stability         | Implicit (Melodrip is a primary tool, not a strategy) |
+| Immersion                | Out of scope (no switch-style brewer)                 |
+| Hybrid                   | Out of scope (no hybrid brewer)                       |
+
+## Consciously not pursuing
+
+Techniques present in the WBC dataset that Chris has decided not to pursue, with the reason. This list exists so the decision is legible and the next "should we do this?" question has a recorded answer.
+
+- **Mid-pour temperature blending** (Tom Hutchins 2024). Two kettles at different temps, mixed in real time during the pour. Over-engineered for home/office context; hardware overhead is significant for marginal gain.
+- **Roast-based structuring on single origin** (George Peng 2025). One coffee roasted at three different end temps, blended in the brewer. Latent does roast (Sprint 1k+ self-roasted track) but the structural-blending application is parked — too many variables to dial in without competition pressure.
+- **Mesh-then-paper transitions** (Garam Victor Um 2023). Switch filter type mid-brew. Requires brewer geometry not currently in the equipment set.
+- **Solubility alignment via roast matching** (Elysia Tan 2024). Match roast development across multiple coffees in a blend so they extract together. Blend-specific; no single-origin transfer.
+- **Layered bed by component** (Wataru Iidaka 2024). Spatially place different coffees within the bed. Blend-specific.
+- **Triangle variable thinking** (Bayu Prawiro 2025). Treat agitation / flow / contact time as linked variables that move together. Useful as a mental model but already implicit in Chris's grind-vs-valve thinking on the SWORKS bottomless dripper. Not a new technique, just a name for what he already does.
+

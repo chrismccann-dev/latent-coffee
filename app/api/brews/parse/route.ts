@@ -60,6 +60,7 @@ Schema:
   "total_time": string | null,
   "extraction_strategy": ${EXTRACTION_STRATEGIES.map((s) => `"${s}"`).join(' | ')} | null,
   "extraction_confirmed": string | null,
+  "modifiers": Modifier[] | null,
   "aroma": string | null,
   "attack": string | null,
   "mid_palate": string | null,
@@ -83,7 +84,12 @@ Rules:
 ${TERROIR_REGISTRY.map((t) => `  • ${t.country} → ${t.macro_terroir} (${t.admin_region})`).join('\n')}
   If the roaster's region maps to one of these, use the canonical macro_terroir name. Otherwise pick the best ecological macro-region name (not an administrative name).
 - The canonical cultivar registry (${CULTIVAR_REGISTRY.length} entries) includes: ${CULTIVAR_REGISTRY.map((c) => c.cultivar_name).join(', ')}.
-- extraction_strategy must be one of: ${EXTRACTION_STRATEGIES.join(', ')}. If not explicitly stated, infer from context or leave null.
+- extraction_strategy must be one of: ${EXTRACTION_STRATEGIES.join(', ')}. If not explicitly stated, infer from context or leave null. Mechanics-vs-intent matters here: "Suppression" and "Clarity-First" share coarse/low-temp/low-agitation mechanics but differ in intent (Suppression holds an over-expressive co-ferment back; Clarity-First protects a delicate cup); "Full Expression" and "Extraction Push" both use fine grind + high temp but differ in agitation (Full Expression is high agitation, used to develop heavy co-ferments; Extraction Push uses Melodrip / low agitation to push yield on a clean coffee while preserving transparency).
+- modifiers (Axis 2) is an array of optional, stackable techniques layered on top of any strategy. Most brews have none — only include when the notes explicitly mention them. Shape per modifier:
+  • { "type": "output_selection", "form": "early_cut" | "late_cut" | "both", "brew_weight": number | null, "cup_yield": number | null, "notes": string | null } — discarding portions of the extraction curve to reshape the cup. brew_weight and cup_yield are grams (brewed vs. served).
+  • { "type": "inverted_temperature_staging", "phases": string | null } — starting low and ending high, opposite of natural decline. e.g. "86°C → 92°C across two phases".
+  • { "type": "aroma_capture", "application": string | null } — mid-brew cooling of the early extract fraction to preserve aromatics. e.g. "Paragon ball on bloom + Pour 1".
+  Return [] (empty array) or null when no modifiers are mentioned.
 - key_takeaways: 5-7 short bullet strings covering primary levers, extraction ceiling/floor, cooling behavior, reference transferability, cross-coffee insights.
 - Unknown fields → null. Do not invent data.
 

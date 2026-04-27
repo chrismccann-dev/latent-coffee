@@ -33,6 +33,7 @@ import { SaveGateWarning } from '@/components/SaveGateWarning'
 import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 import { FlavorComposer } from '@/components/FlavorComposer'
 import { StructureTagsPicker } from '@/components/StructureTagsPicker'
+import { ModifierComposer } from '@/components/ModifierComposer'
 
 type SourceType = 'self-roasted' | 'purchased' | null
 
@@ -1216,6 +1217,7 @@ export default function AddPage() {
                     total_time: data.parsed?.total_time ?? null,
                     extraction_strategy: data.parsed?.extraction_strategy ?? null,
                     extraction_confirmed: data.parsed?.extraction_confirmed ?? null,
+                    modifiers: data.parsed?.modifiers ?? [],
                     aroma: data.parsed?.aroma ?? null,
                     attack: data.parsed?.attack ?? null,
                     mid_palate: data.parsed?.mid_palate ?? null,
@@ -1813,6 +1815,12 @@ export default function AddPage() {
                   rows={2}
                   value={payload.extraction_confirmed || ''}
                   onChange={(e) => updateField('extraction_confirmed', e.target.value || null)}
+                />
+              </div>
+              <div className="col-span-3">
+                <ModifierComposer
+                  value={payload.modifiers ?? []}
+                  onChange={(next) => updateField('modifiers', next)}
                 />
               </div>
             </div>

@@ -40,6 +40,7 @@ import {
   decomposeFlavorNote,
   type FlavorChip,
 } from './flavor-registry'
+import { cleanModifiers, type Modifier } from './extraction-modifiers'
 
 /** Parse a comma-separated raw flavor string and pre-decompose each entry
  *  via the alias map, so /add purchased flow seeds both flavors[] and the
@@ -59,10 +60,22 @@ import type { CanonicalLookup } from './canonical-registry'
 // Canonical registries
 // ---------------------------------------------------------------------------
 
+// Sprint Extraction Strategy v2 (2026-04-27): 3 → 5 strategies. Two new
+// entries are added at the ends of the intensity gradient. `Suppression` sits
+// below Clarity-First — same coarse-low-temp-low-agitation mechanics, but
+// applied with the *opposite* intent (hold an over-expressive coffee back
+// rather than protect a delicate one). `Extraction Push` sits above Full
+// Expression mechanically (fine + high temp) but with low agitation
+// (Melodrip) — push yield on a *clean* coffee while preserving transparency,
+// not force-develop a co-ferment. Mechanics-vs-intent symmetry: Suppression
+// got promoted because intent matters at strategy-selection time; same logic
+// promoted Extraction Push.
 export const EXTRACTION_STRATEGIES = [
+  'Suppression',
   'Clarity-First',
   'Balanced Intensity',
   'Full Expression',
+  'Extraction Push',
 ] as const
 export type ExtractionStrategy = (typeof EXTRACTION_STRATEGIES)[number]
 
@@ -176,9 +189,12 @@ export interface BrewPayload {
   pour_structure?: string | null
   total_time?: string | null
 
-  // Extraction strategy
+  // Extraction strategy + modifiers (Axis 2, sprint Extraction Strategy v2).
+  // `modifiers` is a jsonb array of {type, ...subfields} entries. Optional,
+  // stackable. See lib/extraction-modifiers.ts for the discriminated union.
   extraction_strategy?: ExtractionStrategy | string | null
   extraction_confirmed?: string | null
+  modifiers?: Modifier[] | null
 
   // Sensory
   aroma?: string | null
@@ -613,6 +629,11 @@ export function validateBrewPayload(payload: BrewPayload): ValidationResult {
     errors.push(`signature_method "${payload.signature_method}" is not in the canonical registry`)
   }
 
+  if (payload.modifiers !== undefined && payload.modifiers !== null) {
+    const m = cleanModifiers(payload.modifiers)
+    if (!m.ok) errors.push(m.error)
+  }
+
   return errors.length ? { ok: false, errors } : { ok: true }
 }
 
@@ -798,6 +819,7 @@ export async function persistBrew(
     total_time: payload.total_time ?? null,
     extraction_strategy: payload.extraction_strategy ?? null,
     extraction_confirmed: payload.extraction_confirmed ?? null,
+    modifiers: payload.modifiers ?? [],
     aroma: payload.aroma ?? null,
     attack: payload.attack ?? null,
     mid_palate: payload.mid_palate ?? null,
