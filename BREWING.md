@@ -89,6 +89,7 @@ Based on the above, propose one of the **five extraction strategies** below (Axi
 | **Output Selection**               | form (early_cut / late_cut / both), brew_weight, cup_yield | Discard portions of the extraction curve to reshape the cup. Heavy co-ferments where the bitter tail is geographically concentrated in the late fraction; processed lots where the early fraction reads salty/sharp. Carlos Escobar 2025: keep middle band only.  |
 | **Inverted Temperature Staging**   | phases (e.g. "86°C → 92°C")                               | Start low, end high — opposite of natural decline. Low-temp opens up sweetness/aromatics without phenolics; raising temp on a partially-extracted bed builds structure. Ryan Wibawa 2024.        |
 | **Aroma Capture**                  | application (e.g. "Paragon ball on bloom + Pour 1")       | Mid-brew cooling of the early extract fraction to preserve aromatics. Highly aromatic coffees (washed Geshas, Esmeralda climate-controlled naturals). Giacomo Vannelli, Wataru Iidaka.           |
+| **Immersion**                      | application (e.g. "SWORKS valve-modulated staging — restricted main pours, opened late to drain"; "Hario Switch staged: closed bloom + open pour") | Modulate flow restriction across phases to engage immersion behavior on a percolation system, or run a true immersion brewer with staged dumps. SWORKS Bottomless valve modulation, Hario Switch staged immersion, Ryan Wibawa multi-stage immersion, Garam Victor Um sequential hybrid.            |
 
 Grind range 6.8–6.5 is the default. Going below 6.3 is intentional and must be justified by the extraction strategy — it is not a tweak, it is a different philosophy. For the highest-EY roasters, going below 5.5 may be required — but see Grinder Notes.
 
@@ -920,8 +921,8 @@ Latent's live taxonomy maps onto axes 1 (Strategy) and partially onto axes 2 / 4
 | Thermal (Inverted)       | Modifier: Inverted Temperature Staging                |
 | Thermal (Aroma capture sub-type) | Modifier: Aroma Capture                       |
 | Flow / Stability         | Implicit (Melodrip is a primary tool, not a strategy) |
-| Immersion                | Out of scope (no switch-style brewer)                 |
-| Hybrid                   | Out of scope (no hybrid brewer)                       |
+| Immersion                | Modifier: Immersion (SWORKS valve-modulated; Hario Switch when experimented) |
+| Hybrid                   | Modifier: Immersion captures the SWORKS-as-percolation-immersion-hybrid case; true sequential hybrid out of scope |
 
 ## Consciously not pursuing
 

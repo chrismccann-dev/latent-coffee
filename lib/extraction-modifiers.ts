@@ -6,12 +6,14 @@
 // default + by far the most common state — modifiers are deliberate
 // additions, not defaults.
 //
-// Sourced from Chris's WBC research (see BREWING.md § WBC Reference): three
-// orthogonal techniques that map to three of the WBC taxonomy's five
+// Sourced from Chris's WBC research (see BREWING.md § WBC Reference): four
+// orthogonal techniques. Three map to three of the WBC taxonomy's five
 // foundational axes (Output Selection / Time Distribution / External
-// Control). Folded into one heterogeneous bucket because Chris's current
-// brewing context (single origin, home/office) doesn't combine them in ways
-// that would warrant per-axis sub-bucketing yet.
+// Control); Immersion was added same-sprint after Chris flagged Hario Switch
+// + SWORKS valve-modulated immersion staging as legitimate per-brew slots.
+// Folded into one heterogeneous bucket because Chris's current brewing
+// context (single origin, home/office) doesn't combine them in ways that
+// would warrant per-axis sub-bucketing yet.
 
 export type CleanResult<T> = { ok: true; value: T } | { ok: false; error: string }
 
@@ -23,6 +25,7 @@ export const MODIFIER_TYPES = [
   'output_selection',
   'inverted_temperature_staging',
   'aroma_capture',
+  'immersion',
 ] as const
 export type ModifierType = (typeof MODIFIER_TYPES)[number]
 
@@ -47,10 +50,16 @@ export interface AromaCaptureModifier {
   application?: string | null  // free-text e.g. "Paragon ball on bloom + Pour 1"
 }
 
+export interface ImmersionModifier {
+  type: 'immersion'
+  application?: string | null  // free-text e.g. "Hario Switch staged: closed bloom + open pour"
+}
+
 export type Modifier =
   | OutputSelectionModifier
   | InvertedTemperatureStagingModifier
   | AromaCaptureModifier
+  | ImmersionModifier
 
 // ---------------------------------------------------------------------------
 // Display
@@ -60,6 +69,7 @@ const TYPE_LABELS: Record<ModifierType, string> = {
   output_selection: 'Output Selection',
   inverted_temperature_staging: 'Inverted Temperature Staging',
   aroma_capture: 'Aroma Capture',
+  immersion: 'Immersion',
 }
 
 const FORM_LABELS: Record<OutputSelectionForm, string> = {
@@ -80,6 +90,7 @@ export function outputSelectionFormLabel(form: OutputSelectionForm): string {
  *    "Output Selection (late cut) — kept 245g of 288g"
  *    "Inverted Temperature Staging — 86°C → 92°C across two phases"
  *    "Aroma Capture — Paragon ball on bloom + Pour 1"
+ *    "Immersion — Hario Switch staged: closed bloom + open pour"
  *    "Output Selection (late cut)"      // when no sub-data populated
  */
 export function composeModifierLabel(m: Modifier): string {
@@ -98,6 +109,8 @@ export function composeModifierLabel(m: Modifier): string {
     case 'inverted_temperature_staging':
       return m.phases ? `${head} — ${m.phases}` : head
     case 'aroma_capture':
+      return m.application ? `${head} — ${m.application}` : head
+    case 'immersion':
       return m.application ? `${head} — ${m.application}` : head
   }
 }
@@ -184,6 +197,13 @@ export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
         })
         break
       }
+      case 'immersion': {
+        out.push({
+          type: 'immersion',
+          application: nullableStr((raw as { application?: unknown }).application),
+        })
+        break
+      }
     }
   }
   return { ok: true, value: out }
@@ -198,6 +218,8 @@ export function emptyModifier(type: ModifierType): Modifier {
     case 'inverted_temperature_staging':
       return { type, phases: null }
     case 'aroma_capture':
+      return { type, application: null }
+    case 'immersion':
       return { type, application: null }
   }
 }

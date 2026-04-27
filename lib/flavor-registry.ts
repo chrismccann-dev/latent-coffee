@@ -254,7 +254,7 @@ export const BASE_FLAVORS: readonly BaseFlavorEntry[] = [
   // generic sugar-bound expressions when the specific sugar isn't named.
   { name: "Sugar", category: "Sweet", subCategory: "Sugar" },
 
-  // ── Tea & Herbal (20)
+  // ── Tea & Herbal (21)
   //    Citrus-Botanical
   { name: "Bergamot", category: "Tea & Herbal", subCategory: "Citrus-Botanical" },
   //    Herbal
@@ -266,6 +266,7 @@ export const BASE_FLAVORS: readonly BaseFlavorEntry[] = [
   { name: "Peppermint", category: "Tea & Herbal", subCategory: "Herbal" },
   { name: "Hops", category: "Tea & Herbal", subCategory: "Herbal" },
   { name: "Lemon Verbena", category: "Tea & Herbal", subCategory: "Herbal" },
+  { name: "Rosemary", category: "Tea & Herbal", subCategory: "Herbal" },
   //    Tea
   { name: "Black Tea", category: "Tea & Herbal", subCategory: "Tea" },
   { name: "Chamomile", category: "Tea & Herbal", subCategory: "Tea" },

@@ -3622,6 +3622,7 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Lamastus Family, El Burro": "Lamastus Family",
   "Letty Bermudez": "Diego Samuel Bermúdez Tapia",
   "Local producers surrounding Ninga washing station": "Long Miles Coffee Project",
+  "Garrido Specialty Coffee": "Mama Cata Estate (Garrido Family)",
   "Mama Cata Estate / Garrido Specialty Coffee": "Mama Cata Estate (Garrido Family)",
   "Mekuria Mergia": "Mekuria Mergia & Elias Rooba",
   "Miguel Estela": "Miguel Estela",
