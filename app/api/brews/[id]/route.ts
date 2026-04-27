@@ -24,6 +24,8 @@ import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import { ROAST_LEVEL_LOOKUP } from '@/lib/roast-level-registry'
 import { GRINDER_LOOKUP, isResolvableSetting } from '@/lib/grinder-registry'
 import { PRODUCER_LOOKUP } from '@/lib/producer-registry'
+import { BREWER_LOOKUP } from '@/lib/brewer-registry'
+import { FILTER_LOOKUP } from '@/lib/filter-registry'
 import { composeGrind } from '@/lib/brew-import'
 import type { CanonicalLookup } from '@/lib/canonical-registry'
 
@@ -245,6 +247,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (producerErr) return producerErr
   const grinderErr = canonicalizeOverridable(patch, body, 'grinder', GRINDER_LOOKUP, 'grinder_override')
   if (grinderErr) return grinderErr
+  const brewerErr = canonicalizeOverridable(patch, body, 'brewer', BREWER_LOOKUP, 'brewer_override')
+  if (brewerErr) return brewerErr
+  const filterErr = canonicalizeOverridable(patch, body, 'filter', FILTER_LOOKUP, 'filter_override')
+  if (filterErr) return filterErr
   if ('grind_setting' in patch) {
     const v = patch.grind_setting
     if (v === '' || v === null) {

@@ -36,6 +36,9 @@ import { ROASTER_LOOKUP } from './roaster-registry'
 import { ROAST_LEVEL_LOOKUP } from './roast-level-registry'
 import { GRINDER_LOOKUP, isResolvableSetting } from './grinder-registry'
 import { PRODUCER_LOOKUP } from './producer-registry'
+import { BREWER_LOOKUP } from './brewer-registry'
+import { FILTER_LOOKUP } from './filter-registry'
+import type { CanonicalLookup } from './canonical-registry'
 
 // ---------------------------------------------------------------------------
 // Canonical registries
@@ -126,7 +129,14 @@ export interface BrewPayload {
 
   // Recipe
   brewer?: string | null
+  // Net-new brewers (new Orea bases, new Sibarist systems) appear in the
+  // wild more often than net-new cultivars; opt-out persists a verbatim
+  // string when the brewer isn't yet in lib/brewer-registry.ts.
+  brewer_override?: boolean
   filter?: string | null
+  // Same opt-out for filter — Sibarist FAST variants and Cafec roast-pack
+  // SKUs churn frequently.
+  filter_override?: boolean
   dose_g?: number | null
   water_g?: number | null
   ratio?: string | null
@@ -236,30 +246,41 @@ export function seedStructuredGrind(
   return { grinder: legacy, grind_setting: null }
 }
 
-export type FindOrCreateGrinderResult =
+// Shared validate-and-normalize for the 5 text-only canonical fields
+// (`brews.roaster` / `producer` / `grinder` / `brewer` / `filter`). None of
+// these have a FK to a separate table — the rich entry lives in
+// lib/<axis>-registry.ts and the brews row stores the canonical name as
+// text. `allowOverride` passes a non-resolvable string through verbatim
+// for legitimately new entries before they land in the registry.
+export type CanonicalTextResult =
   | { ok: true; canonicalName: string | null; resolved: boolean }
   | { ok: false; error: string; status: 400 }
 
-// Mirror of findOrCreateRoaster — validate-and-normalize only (no DB write
-// since brews.grinder is a text-only column with no FK). `allowOverride`
-// passes a non-resolvable string through verbatim for legitimately new
-// grinders before they land in lib/grinder-registry.ts.
-export async function findOrCreateGrinder(
-  _supabase: SupabaseClient,
-  _userId: string,
-  rawName: string | null | undefined,
+function validateCanonicalText(
+  raw: string | null | undefined,
+  lookup: CanonicalLookup,
+  label: string,
   opts: { allowOverride?: boolean } = {},
-): Promise<FindOrCreateGrinderResult> {
-  const raw = typeof rawName === 'string' ? rawName.trim() : ''
-  if (!raw) return { ok: true, canonicalName: null, resolved: false }
-  const canonical = GRINDER_LOOKUP.canonicalize(raw)
+): CanonicalTextResult {
+  const trimmed = typeof raw === 'string' ? raw.trim() : ''
+  if (!trimmed) return { ok: true, canonicalName: null, resolved: false }
+  const canonical = lookup.canonicalize(trimmed)
   if (canonical) return { ok: true, canonicalName: canonical, resolved: true }
-  if (opts.allowOverride) return { ok: true, canonicalName: raw, resolved: false }
+  if (opts.allowOverride) return { ok: true, canonicalName: trimmed, resolved: false }
   return {
     ok: false,
     status: 400,
-    error: `grinder "${raw}" is not in the canonical registry. To add a new grinder, edit lib/grinder-registry.ts.`,
+    error: `${label} "${trimmed}" is not in the canonical registry. To add a new ${label}, use /add with override.`,
   }
+}
+
+export type FindOrCreateGrinderResult = CanonicalTextResult
+
+export function findOrCreateGrinder(
+  rawName: string | null | undefined,
+  opts: { allowOverride?: boolean } = {},
+): FindOrCreateGrinderResult {
+  return validateCanonicalText(rawName, GRINDER_LOOKUP, 'grinder', opts)
 }
 
 export function seedStructuredProcess(payload: Partial<BrewPayload>): StructuredProcess {
@@ -409,59 +430,37 @@ export async function findOrCreateCultivar(
   return { ok: true, id: created.id }
 }
 
-// Validate-and-normalize for `brews.roaster`. No DB write — `brews.roaster` is
-// text-only (no FK / no roasters table), so this resolves aliases → canonical
-// or short-circuits when the caller supplied `allowOverride`. Returns the form
-// to persist (canonical if resolved, verbatim if overridden, null if empty).
-// Shape mirrors findOrCreateCultivar / findOrCreateTerroir for signature
-// parity — if a real roasters table lands in sprint 2.x, this helper absorbs
-// the find-or-create logic without changing callers.
-export type FindOrCreateRoasterResult =
-  | { ok: true; canonicalName: string | null; resolved: boolean }
-  | { ok: false; error: string; status: 400 }
+export type FindOrCreateRoasterResult = CanonicalTextResult
+export type FindOrCreateProducerResult = CanonicalTextResult
+export type FindOrCreateBrewerResult = CanonicalTextResult
+export type FindOrCreateFilterResult = CanonicalTextResult
 
-export async function findOrCreateRoaster(
-  _supabase: SupabaseClient,
-  _userId: string,
+export function findOrCreateRoaster(
   rawName: string | null | undefined,
   opts: { allowOverride?: boolean } = {},
-): Promise<FindOrCreateRoasterResult> {
-  const raw = typeof rawName === 'string' ? rawName.trim() : ''
-  if (!raw) return { ok: true, canonicalName: null, resolved: false }
-  const canonical = ROASTER_LOOKUP.canonicalize(raw)
-  if (canonical) return { ok: true, canonicalName: canonical, resolved: true }
-  if (opts.allowOverride) return { ok: true, canonicalName: raw, resolved: false }
-  return {
-    ok: false,
-    status: 400,
-    error: `roaster "${raw}" is not in the canonical registry. To add a new roaster, use /add with override.`,
-  }
+): FindOrCreateRoasterResult {
+  return validateCanonicalText(rawName, ROASTER_LOOKUP, 'roaster', opts)
 }
 
-// Mirror of findOrCreateRoaster. brews.producer is a text-only column (no FK
-// to a producers table) so this is validate-and-normalize only — no DB side
-// effects. `allowOverride` accepts a non-resolvable string verbatim for
-// legitimately new producers before they land in lib/producer-registry.ts.
-export type FindOrCreateProducerResult =
-  | { ok: true; canonicalName: string | null; resolved: boolean }
-  | { ok: false; error: string; status: 400 }
-
-export async function findOrCreateProducer(
-  _supabase: SupabaseClient,
-  _userId: string,
+export function findOrCreateProducer(
   rawName: string | null | undefined,
   opts: { allowOverride?: boolean } = {},
-): Promise<FindOrCreateProducerResult> {
-  const raw = typeof rawName === 'string' ? rawName.trim() : ''
-  if (!raw) return { ok: true, canonicalName: null, resolved: false }
-  const canonical = PRODUCER_LOOKUP.canonicalize(raw)
-  if (canonical) return { ok: true, canonicalName: canonical, resolved: true }
-  if (opts.allowOverride) return { ok: true, canonicalName: raw, resolved: false }
-  return {
-    ok: false,
-    status: 400,
-    error: `producer "${raw}" is not in the canonical registry. To add a new producer, use /add with override.`,
-  }
+): FindOrCreateProducerResult {
+  return validateCanonicalText(rawName, PRODUCER_LOOKUP, 'producer', opts)
+}
+
+export function findOrCreateBrewer(
+  rawName: string | null | undefined,
+  opts: { allowOverride?: boolean } = {},
+): FindOrCreateBrewerResult {
+  return validateCanonicalText(rawName, BREWER_LOOKUP, 'brewer', opts)
+}
+
+export function findOrCreateFilter(
+  rawName: string | null | undefined,
+  opts: { allowOverride?: boolean } = {},
+): FindOrCreateFilterResult {
+  return validateCanonicalText(rawName, FILTER_LOOKUP, 'filter', opts)
 }
 
 export async function findOrCreateTerroir(
@@ -631,24 +630,16 @@ export async function persistBrew(
 
   // Validate roaster + grinder + roast_level before any DB writes — failures
   // here would otherwise leave orphan terroir/cultivar inserts.
-  const roasterResult = await findOrCreateRoaster(supabase, userId, payload.roaster, {
-    allowOverride: payload.roaster_override === true,
-  })
-  if (!roasterResult.ok) {
-    return { ok: false, code: 'validation', errors: [roasterResult.error] }
-  }
-  const producerResult = await findOrCreateProducer(supabase, userId, payload.producer, {
-    allowOverride: payload.producer_override === true,
-  })
-  if (!producerResult.ok) {
-    return { ok: false, code: 'validation', errors: [producerResult.error] }
-  }
-  const grinderResult = await findOrCreateGrinder(supabase, userId, payload.grinder, {
-    allowOverride: payload.grinder_override === true,
-  })
-  if (!grinderResult.ok) {
-    return { ok: false, code: 'validation', errors: [grinderResult.error] }
-  }
+  const roasterResult = findOrCreateRoaster(payload.roaster, { allowOverride: payload.roaster_override === true })
+  if (!roasterResult.ok) return { ok: false, code: 'validation', errors: [roasterResult.error] }
+  const producerResult = findOrCreateProducer(payload.producer, { allowOverride: payload.producer_override === true })
+  if (!producerResult.ok) return { ok: false, code: 'validation', errors: [producerResult.error] }
+  const brewerResult = findOrCreateBrewer(payload.brewer, { allowOverride: payload.brewer_override === true })
+  if (!brewerResult.ok) return { ok: false, code: 'validation', errors: [brewerResult.error] }
+  const filterResult = findOrCreateFilter(payload.filter, { allowOverride: payload.filter_override === true })
+  if (!filterResult.ok) return { ok: false, code: 'validation', errors: [filterResult.error] }
+  const grinderResult = findOrCreateGrinder(payload.grinder, { allowOverride: payload.grinder_override === true })
+  if (!grinderResult.ok) return { ok: false, code: 'validation', errors: [grinderResult.error] }
   if (
     grinderResult.canonicalName &&
     payload.grind_setting?.trim() &&
@@ -763,8 +754,8 @@ export async function persistBrew(
     ...structuredProcessColumns(structured),
     roast_level: canonicalRoastLevel,
     flavor_notes: payload.flavor_notes ?? null,
-    brewer: payload.brewer ?? null,
-    filter: payload.filter ?? null,
+    brewer: brewerResult.canonicalName,
+    filter: filterResult.canonicalName,
     dose_g: payload.dose_g ?? null,
     water_g: payload.water_g ?? null,
     ratio,
