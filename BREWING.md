@@ -89,6 +89,7 @@ Based on the above, propose one of the **five extraction strategies** below (Axi
 | **Output Selection**               | form (early_cut / late_cut / both), brew_weight, cup_yield | Discard portions of the extraction curve to reshape the cup. Heavy co-ferments where the bitter tail is geographically concentrated in the late fraction; processed lots where the early fraction reads salty/sharp. Carlos Escobar 2025: keep middle band only.  |
 | **Inverted Temperature Staging**   | phases (e.g. "86°C → 92°C")                               | Start low, end high — opposite of natural decline. Low-temp opens up sweetness/aromatics without phenolics; raising temp on a partially-extracted bed builds structure. Ryan Wibawa 2024.        |
 | **Aroma Capture**                  | application (e.g. "Paragon ball on bloom + Pour 1")       | Mid-brew cooling of the early extract fraction to preserve aromatics. Highly aromatic coffees (washed Geshas, Esmeralda climate-controlled naturals). Giacomo Vannelli, Wataru Iidaka.           |
+| **Immersion**                      | application (e.g. "Hario Switch closed 0-1:30, opened for 1:30-3:00 percolation finish") | Switch-style or multi-stage immersion brewing — full immersion, staged immersion, or hybrid immersion-to-percolation phase transitions. Used to equalize extraction or assign different extraction roles to distinct phases. **Currently unexperimented — Hario Switch hardware available, no confirmed pattern in the archive yet.** Ryan Wibawa (immersion staging), Charity Cheung (multi-stage immersion), Garam Victor Um (sequential hybrid). |
 
 Grind range 6.8–6.5 is the default. Going below 6.3 is intentional and must be justified by the extraction strategy — it is not a tweak, it is a different philosophy. For the highest-EY roasters, going below 5.5 may be required — but see Grinder Notes.
 
@@ -920,17 +921,21 @@ Latent's live taxonomy maps onto axes 1 (Strategy) and partially onto axes 2 / 4
 | Thermal (Inverted)       | Modifier: Inverted Temperature Staging                |
 | Thermal (Aroma capture sub-type) | Modifier: Aroma Capture                       |
 | Flow / Stability         | Implicit (Melodrip is a primary tool, not a strategy) |
-| Immersion                | Out of scope (no switch-style brewer)                 |
-| Hybrid                   | Out of scope (no hybrid brewer)                       |
+| Immersion                | Modifier: Immersion (Hario Switch hardware available; unexperimented to date) |
+| Hybrid (Sequential / Immersion staging / Phase-mapped) | Covered by Modifier: Immersion (the "immersion-to-percolation" application captures phase-mapped hybrids on the Switch). Mesh-then-paper transitions specifically remain out of scope (no mesh filter in equipment set). |
 
-## Consciously not pursuing
+## Consciously not pursuing (with future-capture notes)
 
-Techniques present in the WBC dataset that Chris has decided not to pursue, with the reason. This list exists so the decision is legible and the next "should we do this?" question has a recorded answer.
+Techniques present in the WBC dataset that Chris has decided not to actively pursue today. Two categories: (a) "no plan to ever do this" and (b) "want the system to be able to capture it down the line, just not today." This list exists so the decision is legible and the next "should we do this?" question has a recorded answer.
 
-- **Mid-pour temperature blending** (Tom Hutchins 2024). Two kettles at different temps, mixed in real time during the pour. Over-engineered for home/office context; hardware overhead is significant for marginal gain.
-- **Roast-based structuring on single origin** (George Peng 2025). One coffee roasted at three different end temps, blended in the brewer. Latent does roast (Sprint 1k+ self-roasted track) but the structural-blending application is parked — too many variables to dial in without competition pressure.
-- **Mesh-then-paper transitions** (Garam Victor Um 2023). Switch filter type mid-brew. Requires brewer geometry not currently in the equipment set.
-- **Solubility alignment via roast matching** (Elysia Tan 2024). Match roast development across multiple coffees in a blend so they extract together. Blend-specific; no single-origin transfer.
-- **Layered bed by component** (Wataru Iidaka 2024). Spatially place different coffees within the bed. Blend-specific.
+**(a) No plan to ever pursue:**
+
+- **Mid-pour temperature blending** (Tom Hutchins 2024). Two kettles at different temps, mixed in real time during the pour. Over-engineered for home/office context; hardware overhead is significant for marginal gain. Chris owns multiple kettles but has explicitly deferred this.
 - **Triangle variable thinking** (Bayu Prawiro 2025). Treat agitation / flow / contact time as linked variables that move together. Useful as a mental model but already implicit in Chris's grind-vs-valve thinking on the SWORKS bottomless dripper. Not a new technique, just a name for what he already does.
+
+**(b) Future-capture (system should be able to represent these even though Chris isn't experimenting with them today):**
+
+- **Structural Systems — blending (dual grind / layered bed / blend ratio / solubility alignment)** (Luca Croce / Wataru Iidaka / Andrea Batacchi / Elysia Tan). Chris does not blend at all today and does not plan to for a long time. **However:** the Modifier axis (Axis 2 in Step 1d) is the right home for this when the day comes. A `structural` modifier with sub-fields for blend composition / dual-grind ratio / layering scheme would slot in naturally alongside the existing 4 modifier types. No code today; documented here so the future addition is a 1-step extension, not a structural rethink.
+- **Mesh-then-paper transitions** (Garam Victor Um 2023). Switch filter type mid-brew. Hario Switch hardware is available, but Chris doesn't own a metal mesh filter to enable the mid-brew swap. (Note: Sibarist speed boosters are a different category — flow-rate accelerators on top of paper, not mesh-then-paper transitions.) The Immersion modifier covers the immersion-and-percolation phase-mapping aspect of Hybrid Systems; the literal mesh-to-paper swap requires equipment Chris doesn't have.
+- **Roast-based structuring on single origin** (George Peng 2025). One coffee roasted at three different end temps, blended in the brewer. Latent does roast (self-roasted track since 2026) but the structural-blending application is parked — too many variables to dial in without competition pressure. Not a long-term "no", just deferred. Future implementation would likely use the same Modifier axis as Structural Systems above (blend composition is the same data shape regardless of whether the blended components are different coffees or the same coffee at different roast levels).
 

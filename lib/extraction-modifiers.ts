@@ -23,6 +23,7 @@ export const MODIFIER_TYPES = [
   'output_selection',
   'inverted_temperature_staging',
   'aroma_capture',
+  'immersion',
 ] as const
 export type ModifierType = (typeof MODIFIER_TYPES)[number]
 
@@ -47,10 +48,16 @@ export interface AromaCaptureModifier {
   application?: string | null  // free-text e.g. "Paragon ball on bloom + Pour 1"
 }
 
+export interface ImmersionModifier {
+  type: 'immersion'
+  application?: string | null  // free-text e.g. "Switch closed 0-1:30, opened for 1:30-3:00 percolation finish"
+}
+
 export type Modifier =
   | OutputSelectionModifier
   | InvertedTemperatureStagingModifier
   | AromaCaptureModifier
+  | ImmersionModifier
 
 // ---------------------------------------------------------------------------
 // Display
@@ -60,6 +67,7 @@ const TYPE_LABELS: Record<ModifierType, string> = {
   output_selection: 'Output Selection',
   inverted_temperature_staging: 'Inverted Temperature Staging',
   aroma_capture: 'Aroma Capture',
+  immersion: 'Immersion',
 }
 
 const FORM_LABELS: Record<OutputSelectionForm, string> = {
@@ -98,6 +106,8 @@ export function composeModifierLabel(m: Modifier): string {
     case 'inverted_temperature_staging':
       return m.phases ? `${head} — ${m.phases}` : head
     case 'aroma_capture':
+      return m.application ? `${head} — ${m.application}` : head
+    case 'immersion':
       return m.application ? `${head} — ${m.application}` : head
   }
 }
@@ -184,6 +194,13 @@ export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
         })
         break
       }
+      case 'immersion': {
+        out.push({
+          type: 'immersion',
+          application: nullableStr((raw as { application?: unknown }).application),
+        })
+        break
+      }
     }
   }
   return { ok: true, value: out }
@@ -198,6 +215,8 @@ export function emptyModifier(type: ModifierType): Modifier {
     case 'inverted_temperature_staging':
       return { type, phases: null }
     case 'aroma_capture':
+      return { type, application: null }
+    case 'immersion':
       return { type, application: null }
   }
 }

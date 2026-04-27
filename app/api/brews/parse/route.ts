@@ -89,6 +89,7 @@ ${TERROIR_REGISTRY.map((t) => `  • ${t.country} → ${t.macro_terroir} (${t.ad
   • { "type": "output_selection", "form": "early_cut" | "late_cut" | "both", "brew_weight": number | null, "cup_yield": number | null, "notes": string | null } — discarding portions of the extraction curve to reshape the cup. brew_weight and cup_yield are grams (brewed vs. served).
   • { "type": "inverted_temperature_staging", "phases": string | null } — starting low and ending high, opposite of natural decline. e.g. "86°C → 92°C across two phases".
   • { "type": "aroma_capture", "application": string | null } — mid-brew cooling of the early extract fraction to preserve aromatics. e.g. "Paragon ball on bloom + Pour 1".
+  • { "type": "immersion", "application": string | null } — switch-style or multi-stage immersion brewing (full immersion, staged immersion, or hybrid immersion-to-percolation). e.g. "Hario Switch closed 0-1:30 then opened for percolation finish" or "full immersion 3:00 then drained".
   Return [] (empty array) or null when no modifiers are mentioned.
 - key_takeaways: 5-7 short bullet strings covering primary levers, extraction ceiling/floor, cooling behavior, reference transferability, cross-coffee insights.
 - Unknown fields → null. Do not invent data.
