@@ -12,6 +12,7 @@ import {
   type OutputSelectionModifier,
   type InvertedTemperatureStagingModifier,
   type AromaCaptureModifier,
+  type ImmersionModifier,
 } from '@/lib/extraction-modifiers'
 
 interface ModifierComposerProps {
@@ -126,6 +127,9 @@ function ModifierRow({ modifier, onChange, onRemove }: ModifierRowProps) {
         {modifier.type === 'aroma_capture' && (
           <AromaCaptureFields modifier={modifier} onChange={onChange} />
         )}
+        {modifier.type === 'immersion' && (
+          <ImmersionFields modifier={modifier} onChange={onChange} />
+        )}
       </div>
     </div>
   )
@@ -223,6 +227,26 @@ function AromaCaptureFields({
         value={modifier.application ?? ''}
         onChange={(e) => onChange({ ...modifier, application: e.target.value || null })}
         placeholder="e.g. Paragon ball on bloom + Pour 1"
+      />
+    </div>
+  )
+}
+
+function ImmersionFields({
+  modifier,
+  onChange,
+}: {
+  modifier: ImmersionModifier
+  onChange: (next: Modifier) => void
+}) {
+  return (
+    <div>
+      <label className="font-mono text-xxs uppercase text-latent-mid">Application</label>
+      <input
+        className="input mt-0.5"
+        value={modifier.application ?? ''}
+        onChange={(e) => onChange({ ...modifier, application: e.target.value || null })}
+        placeholder="e.g. Hario Switch staged: closed bloom + open pour"
       />
     </div>
   )
