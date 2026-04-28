@@ -5,7 +5,7 @@
 **Last adopted:** 2026-04-22
 **Adoption path:** Authored new (Chris, 2026-04-22 research pass drawing on the ChatGPT context doc terroir ruleset, Sweet Maria's origin documentation, SCA / specialty-coffee origin references, producer-published farm locations, and Chris's 55-brew corpus for Observed sections)
 
-Canonical terroir reference for the latent-coffee app. 121 canonical macro terroirs across 38 countries (127 country-scoped entries - some macros like Lake Kivu Highlands span multiple countries). Part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint-1 Phylum A1 port (second after Varieties).
+Canonical terroir reference for the latent-coffee app. 120 canonical macro terroirs across 38 countries (126 country-scoped entries - some macros like Lake Kivu Highlands span multiple countries). Part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint-1 Phylum A1 port (second after Varieties).
 
 **Hierarchy:** Country -> Admin Region -> Macro Terroir. Meso and Micro are intentionally **not** canonical - they are optional free-text annotations on individual terroir rows, not enforced, not autocompleted, not aggregated. Chris's research (April 2026) confirmed that every behavioral attribute (climate, soil, elevation, farming, processing, cup profile, acidity, body, why-it-stands-out) is macro-scoped; meso and micro carry no distinct signal worth canonicalizing. Producer-level locality is the right home for farm / sub-region detail, via the planned `producer_name` + `farm_name` split.
 
@@ -17,7 +17,7 @@ External claims in this doc are cited at authoring time and rolled up in the `##
 
 ## Canonical list
 
-Matches the `TERROIRS` array in [lib/terroir-registry.ts](../../lib/terroir-registry.ts) exactly. 121 distinct macros across 38 countries (127 country-scoped entries).
+Matches the `TERROIRS` array in [lib/terroir-registry.ts](../../lib/terroir-registry.ts) exactly. 120 distinct macros across 38 countries (126 country-scoped entries).
 
 **Bolivia**
 - Bolivian Yungas Cloud Forest Slopes
@@ -154,7 +154,6 @@ Matches the `TERROIRS` array in [lib/terroir-registry.ts](../../lib/terroir-regi
 - Northern Highlands
 
 **Panama**
-- Boquete Slopes
 - Santa Clara Highlands
 - Volcán Barú Highlands
 
@@ -1380,7 +1379,7 @@ Dry climate and natural processing create distinct fruit-forward but less struct
 High-elevation southern system with balanced rainfall and broad production base
 
 #### Environmental System
-- **Elevation Band:** 1600-2200 m
+- **Elevation Band:** 1600-2300 m
 - **Climate Regime:** temperate, reliable rainfall, moderate humidity
 - **Soil Base:** red-brown clay loam
 - **Farming Model:** smallholder, washing station-based
@@ -2463,32 +2462,6 @@ Consistent elevation and processing create reliable, balanced Central American p
 
 ---
 
-### Boquete Slopes
-
-**Country:** Panama  **Admin Regions it overlaps:** Chiriquí
-**Typical Meso Terroirs (reference only; not canonical):** Jaramillo, Alto Quiel, Palmira
-
-#### Context
-Western slopes of Barú with dense cloud cover and strong specialty infrastructure
-
-#### Environmental System
-- **Elevation Band:** 1400-2000 m
-- **Climate Regime:** cool, high humidity, cloud forest influence
-- **Soil Base:** volcanic soils
-- **Farming Model:** estate
-
-#### What Comes Out of This System
-- **Dominant Varieties:** Gesha, Caturra, Catuai
-- **Typical Processing:** washed, natural
-- **Cup Profile (structural):** floral, citrus, tea-like, refined sweetness
-- **Acidity Character:** citric-linear
-- **Body Character:** light to medium
-
-#### Why This Macro Stands Out
-Consistent cloud cover and elevation create stable, high-precision cups
-
----
-
 ### Santa Clara Highlands
 
 **Country:** Panama  **Admin Regions it overlaps:** Chiriquí
@@ -2518,7 +2491,7 @@ Lower elevation reduces clarity and floral intensity compared to Barú systems
 ### Volcán Barú Highlands
 
 **Country:** Panama  **Admin Regions it overlaps:** Chiriquí
-**Typical Meso Terroirs (reference only; not canonical):** Boquete (Jaramillo, Alto Quiel), Cerro Punta, Volcán, Guadalupe
+**Typical Meso Terroirs (reference only; not canonical):** Boquete (Jaramillo, Alto Quiel, Palmira), Cerro Punta, Volcán, Guadalupe
 
 #### Context
 High-elevation volcanic system centered around Volcán Barú with strong microclimate variation

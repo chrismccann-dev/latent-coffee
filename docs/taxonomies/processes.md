@@ -5,7 +5,9 @@
 **Last adopted:** 2026-04-23
 **Adoption path:** Phylum A2 (authored new ruleset). Chris authored canonical list 2026-04-22, revised 2026-04-23, drawing on Roberta Sami's process taxonomy, Robert (Moonwake) producer research, and the 55-brew corpus. First A2 port after Variety + Region A1 ports.
 
-Canonical process reference for the latent-coffee app. Unlike Variety (63 flat strings) and Region (121 flat strings), Process is **composable**: every brew carries a `base_process` (1 of 4) + optional `subprocess` (Honey color tiers only) + up to 4 stackable modifier axes (fermentation / drying / intervention / experimental) + optional `decaf_modifier` + optional `signature_method` (proper-name proprietary technique). This maps real-world variants onto a tight, composable vocabulary instead of a combinatorial flat list.
+Canonical process reference for the latent-coffee app. Unlike Variety (63 flat strings) and Region (120 flat strings), Process is **composable**: every brew carries a `base_process` (1 of 4) + optional `subprocess` (Honey color tiers only) + up to 4 stackable modifier axes (fermentation / drying / intervention / experimental) + optional `decaf_modifier` + optional `signature_method` (proper-name proprietary technique). This maps real-world variants onto a tight, composable vocabulary instead of a combinatorial flat list.
+
+**Qualifiers** (optional, free-text-bounded but enumerated): orthogonal annotations on a modifier that preserve a structural distinction without forking a new modifier. Currently defined: `Anoxic` on `Anaerobic` (sealed-container, no-headspace execution). Qualifiers are intended to surface in aggregation views and gate strategy logic where the canonical modifier alone collapses meaningful distinctions — for example, `Anoxic Natural` typically calls for Full Expression mechanics while plain `Anaerobic Natural` typically calls for Suppression. **Storage layer pending** — the qualifier is defined here and in the alias map below, but the brew row does not yet carry a `fermentation_qualifiers` field. Until that schema lands, qualifier metadata only persists on inputs that explicitly preserve it (e.g. the `process` legacy display string, or what_i_learned prose). This is logged as a follow-up sprint.
 
 Worked examples:
 - "Anaerobic Washed" = `base:Washed + fermentation:[Anaerobic]`
@@ -46,7 +48,7 @@ Kept only for truly distinct within-base variants. All other legacy "subprocesse
 
 Multi-value. Stacks on any base.
 
-- **Anaerobic** - sealed/oxygen-free tank fermentation
+- **Anaerobic** - sealed / oxygen-restricted fermentation. Optional qualifier: `Anoxic` = fully sealed, no-headspace or near-zero-oxygen execution. Canonical modifier remains `[Anaerobic]`, but qualifier should be preserved when present (preserves the strategy distinction: Anoxic naturals → Full Expression; Anaerobic naturals → Suppression). Qualifier storage is doc-defined; brew-row schema pending.
 - **Double Anaerobic** - two sequential anaerobic stages
 - **Triple Anaerobic** - three sequential anaerobic stages
 - **Aerobic** - oxidative fermentation (oxygen-exposed)
@@ -131,7 +133,12 @@ Structural mappings to canonical names. Additions are as deliberate as adding a 
 - `Twice Washed` → (historical Double Honey; flag case-by-case)
 
 ### Fermentation modifier aliases
-- `Anoxic`, `No Oxygen`, `Zero O2`, `Oxygen Free`, `Sealed Tank`, `Hermetic Fermentation` → **Anaerobic**
+- `Anoxic` → **Anaerobic** + qualifier: `Anoxic`
+- `No Oxygen` → **Anaerobic** + qualifier: `Anoxic`
+- `Zero O2` → **Anaerobic** + qualifier: `Anoxic`
+- `Oxygen Free` → **Anaerobic** + qualifier: `Anoxic`
+- `Sealed Tank` → **Anaerobic**
+- `Hermetic Fermentation` → **Anaerobic**
 - `Double Fermentation Anaerobic`, `Double Fermentation` → **Double Anaerobic**
 - `Oxidator`, `Oxidation Fermentation` → **Aerobic**
 - `CM`, `Carbonic`, `CO2 Maceration` → **Carbonic Maceration**
@@ -192,7 +199,7 @@ The 20 distinct `brews.process` values across the 55-brew corpus, mapped to stru
 | Anaerobic Natural | 2 | Natural | - | [Anaerobic] | - | - | - |
 | Cold Fermented Washed | 1 | Washed | - | [Cold Fermentation] | - | - | - |
 | Moonshadow Washed | 1 | Washed | - | - | [Dark Room Dried, Slow Dry] | - | Moonshadow |
-| Anoxic Natural | 1 | Natural | - | [Anaerobic] | - | - | - |
+| Anoxic Natural | 1 | Natural | - | [Anaerobic] (qualifier: Anoxic — storage pending) | - | - | - |
 | Double Anaerobic Thermal Shock | 1 | Washed | - | [Double Anaerobic, Thermal Shock, Yeast Inoculated] | - | - | - |
 | Tamarind + Red Fruit Co-ferment Washed | 1 | Washed | - | [Yeast Inoculated] | - | [Fruit Co-ferment] | - |
 | Yeast Inoculated Natural | 1 | Natural | - | [Yeast Inoculated] | - | - | - |

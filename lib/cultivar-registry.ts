@@ -178,6 +178,10 @@ export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
   'Gesha (Queen selection)': 'Gesha',
   'Gesha 1931': 'Gesha',
   'Green tip Gesha': 'Gesha',
+  'Green Tip Gesha': 'Gesha',
+  'Green-Tip Gesha': 'Gesha',
+  'Bronze Tip Gesha': 'Gesha',
+  'Bronze-Tip Gesha': 'Gesha',
   'Gesha Queen': 'Gesha',
   'Gesha peaberry': 'Gesha',
 

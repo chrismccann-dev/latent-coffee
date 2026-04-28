@@ -2277,7 +2277,7 @@ export const ROASTERS: RoasterEntry[] = [
     roastStyle: 'Ultra-light (rest-driven expressive clarity)',
     developmentBias: 'Low development, high sensitivity to resting phase',
     restCurve: 'Multi-phase: 0–10d intense → 17–21d peak → 24–27d muted → 40–60d clean/balanced',
-    strategyTag: 'VARIES',
+    strategyTag: 'CLARITY-FIRST',
     primaryDriver: 'Rest phase',
     extractionPurpose: 'Allow coffee to express different profiles across rest phases using a stable brewing baseline',
     houseStyle: 'Simple V60 recipe; low temp (92°C), 4 even pours (30/70/70/30), minimal agitation',
@@ -2411,6 +2411,7 @@ const ROASTER_ALIASES: Record<string, string> = {
   'Scenery': 'Scenery Coffee',
   'Daturra Coffee': 'Datura Coffee',
   'Datura': 'Datura Coffee',
+  'Coffee with Dongze': 'Dongzhe',
   'normlppl': 'normlppl/minmax',
   'minmax': 'normlppl/minmax',
 }
