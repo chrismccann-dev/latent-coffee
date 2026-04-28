@@ -32,7 +32,7 @@ export const ROAST_LEVEL_NAMES: readonly string[] = ROAST_LEVELS.map((e) => e.na
 // Marketing-tag + drift-variant aliases. Keys are lowercased by the factory,
 // so one entry covers all case variants (e.g. 'Light Roast' covers 'light roast',
 // 'LIGHT ROAST', etc.). Values must be canonical title-case forms.
-const ROAST_LEVEL_ALIASES: Record<string, string> = {
+export const ROAST_LEVEL_ALIASES: Record<string, string> = {
   // Marketing tags (roasters' self-positioning — resolve to objective bucket)
   'Ultra Light': 'Extremely Light',
   'UL': 'Extremely Light',
