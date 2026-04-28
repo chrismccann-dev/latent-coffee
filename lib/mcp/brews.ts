@@ -6,7 +6,7 @@ const RECENT_MAX_N = 100
 type RawBrewRow = Record<string, unknown> & {
   id: string
   green_bean?: { name?: string | null; lot_id?: string | null; producer?: string | null } | null
-  terroir?: { country?: string | null; admin_region?: string | null; macro_terroir?: string | null; meso_terroir?: string | null; micro_terroir?: string | null } | null
+  terroir?: { country?: string | null; admin_region?: string | null; macro_terroir?: string | null; meso_terroir?: string | null } | null
   cultivar?: { cultivar_name?: string | null; species?: string | null; genetic_family?: string | null; lineage?: string | null } | null
 }
 
@@ -20,7 +20,7 @@ const RECENT_SELECT = `
   flavors, structure_tags, flavor_notes,
   aroma, attack, mid_palate, body, finish, temperature_evolution, peak_expression, what_i_learned,
   is_process_dominant,
-  terroir:terroirs(country, admin_region, macro_terroir, meso_terroir, micro_terroir),
+  terroir:terroirs(country, admin_region, macro_terroir, meso_terroir),
   cultivar:cultivars(cultivar_name, species, genetic_family, lineage),
   green_bean:green_beans(name, lot_id, producer)
 `

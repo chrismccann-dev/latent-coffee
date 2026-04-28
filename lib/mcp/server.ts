@@ -67,7 +67,20 @@ function registerCanonicalResources(server: McpServer) {
 function registerBrewResources(server: McpServer, auth: McpAuthContext) {
   server.registerResource(
     'brews-recent',
-    'brews://recent',
+    new ResourceTemplate('brews://recent{?n,strategy}', {
+      list: async () => ({
+        resources: [
+          {
+            uri: 'brews://recent',
+            name: 'brews-recent',
+            title: 'Recent Brews',
+            description:
+              'Most recent N brews (default 20, max 100). Optional ?n= and ?strategy= query params. Returns trimmed JSON with FK-joined terroir / cultivar / green_bean.',
+            mimeType: 'application/json',
+          },
+        ],
+      }),
+    }),
     {
       title: 'Recent Brews',
       description:
