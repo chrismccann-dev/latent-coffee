@@ -38,7 +38,7 @@ export const ROASTER_STRATEGY_TAGS = [
 
 export type RoasterStrategyTag = (typeof ROASTER_STRATEGY_TAGS)[number]
 
-const STRATEGY_TAG_FAMILY: Record<RoasterStrategyTag, RoasterFamily> = {
+export const STRATEGY_TAG_FAMILY: Record<RoasterStrategyTag, RoasterFamily> = {
   'CLARITY-FIRST': 'Clarity-First',
   'CLARITY-FIRST → BALANCED': 'Clarity-First',
   'BALANCED': 'Balanced',
@@ -2388,7 +2388,7 @@ export const ROASTER_REGISTRY = ROASTER_NAMES
 
 // Aliases: short-form / structural-drift variants → canonical full name.
 // Used by ROASTER_LOOKUP.findClosest to surface a "did you mean X?" suggestion.
-const ROASTER_ALIASES: Record<string, string> = {
+export const ROASTER_ALIASES: Record<string, string> = {
   'Moonwake': 'Moonwake Coffee Roasters',
   'Hydrangea': 'Hydrangea Coffee',
   'Strait': 'Strait Coffee',

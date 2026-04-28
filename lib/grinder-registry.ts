@@ -207,7 +207,7 @@ export const GRINDER_NAMES: readonly string[] = GRINDERS.map((g) => g.name)
 // Drift variants observed in DB (pre-1k audit). Setting decimals decompose
 // at migration / save time via the regex set in lib/brew-import.ts; the
 // grinder portion resolves through this alias map.
-const GRINDER_ALIASES: Record<string, string> = {
+export const GRINDER_ALIASES: Record<string, string> = {
   'Weber EG-1': 'EG-1',
   'Weber Workshop EG-1': 'EG-1',
   'EG1': 'EG-1',

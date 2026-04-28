@@ -332,7 +332,7 @@ export const TERROIR_MACROS: readonly string[] = [
 // Aliases - pre-1d.1 canonical drift + diacritic-free spellings
 // ---------------------------------------------------------------------------
 
-const TERROIR_MACRO_ALIASES: Readonly<Record<string, string>> = {
+export const TERROIR_MACRO_ALIASES: Readonly<Record<string, string>> = {
   'Acatenango Volcanic Highlands': 'Central Volcanic Highlands',
   'Alotepec-Metapan Highlands': 'Alotepec-Metapán Highlands',
   'Balsamo Volcanic Belt': 'Bálsamo Volcanic Belt',
