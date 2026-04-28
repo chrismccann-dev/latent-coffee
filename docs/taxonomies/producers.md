@@ -9,13 +9,13 @@ calibration reference (Anchor reference role). Tier 2: repeat top-roaster
 producer with strong sourcing/brewing signal (Signal). Tier 3: emerging or
 edge-case producer useful for tracking directional change (Experimental).
 
-**Coverage** — 118 producers covering Chris's estimated 60-70% of brewed
+**Coverage** — 121 producers covering Chris's estimated 60-70% of brewed
 coffees. Producer data branches unboundedly compared to cultivar/terroir,
 so the registry is intentionally tier-scoped rather than comprehensive.
 Net-new producers can be persisted via the `/add` flow's `allowOverride`
 path; rich content gets backfilled when the producer earns it.
 
-**Total entries:** 120 (Tier 1: 51 · Tier 2: 62 · Tier 3: 7)
+**Total entries:** 121 (Tier 1: 52 · Tier 2: 62 · Tier 3: 7)
 
 ---
 
@@ -428,7 +428,7 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Panama Genetic + Precision Estates  ·  9 producers
+### Panama Genetic + Precision Estates  ·  10 producers
 
 ### Altieri Family
 
@@ -486,6 +486,37 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Archers, Terres de Café
 - **Roaster References:** Moonwake, Archers
 - **Contact:** https://www.instagram.com/hartmannreserve
+
+---
+
+### Jannette & Kai Janson (Janson Farms)
+
+**Country:** Panama · **Admin:** Chiriquí · **Macro:** Volcán Barú Highlands
+
+- **Tier:** 1
+- **Producer System:** Panama Genetic + Precision Estates
+- **Processing System Tags:** Controlled Processing System
+- **Reference Role:** Anchor
+- **Producer Type:** Family
+- **Farm:** Janson Farms (Multiple estates: Los Alpes, San Sebastián, El Velo, etc.)
+- **Locality (meso):** Volcán / Boquete
+- **Farming Model:** Estate / Precision Agriculture / Multi-farm separation
+- **Processing Capability:** Washed / Natural / Honey / ASD
+- **Processing Style Tags:** Lot Separation, Anaerobic Slow Dry, Controlled Fermentation
+- **Drying Method:** Raised beds (sun + greenhouse controlled)
+- **Primary Cultivars:** Gesha (Green Tip, Bronze Tip)
+- **Secondary Cultivars:** Catuai, Caturra, Typica, SL28
+- **Experimental Cultivars:** None prominent
+- **Known For:** Best of Panama winners, Multi-estate Gesha program, Extreme lot separation
+- **Typical Flavor Profile:** Floral + High Tone, Citrus + Bright, Stone Fruit + Clean
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Silky / Tea-like
+- **Consistency Rating:** High
+- **Market Tier:** Rare / Auction / Competition
+- **Exporters:** Janson Coffee (Direct Export)
+- **Importers:** Specialty importers globally
+- **Roaster References:** Onyx, Black & White, Gardelli, La Cabra, Proud Mary
+- **Contact:** https://jansoncoffee.com/ (IG: @jansoncoffee)
 
 ---
 
@@ -594,7 +625,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Drying Method:** Greenhouse-controlled raised beds / patios
 - **Primary Cultivars:** Caturra, Catuai, Typica
 - **Secondary Cultivars:** Gesha (Green Tip, Bronze Tip)
-- **Experimental Cultivars:** Mokkita (mutation)
+- **Experimental Cultivars:** Mokka, Mokkita (mutation)
 - **Known For:** Mokkita discovery, BOP record non-Gesha, Precision plot monitoring
 - **Typical Flavor Profile:** Floral + High Tone, Tropical Fruit + Clean, Tea + Structured
 - **Acidity Style:** Citric / Mixed
@@ -1869,7 +1900,7 @@ path; rich content gets backfilled when the producer earns it.
 
 ### Diego Samuel Bermúdez Tapia
 
-**Country:** Colombia · **Admin:** Cauca · **Macro:** Central Andean Cordillera
+**Country:** Colombia · **Admin:** Cauca · **Macro:** Western Andean Cordillera
 
 - **Tier:** 1
 - **Producer System:** —

@@ -19,14 +19,15 @@ External claims in this doc are sourced at authoring time from the CSV; Chris's 
 
 Matches the `ROASTERS` array in [lib/roaster-registry.ts](../../lib/roaster-registry.ts) exactly. 70 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
 
-### Clarity-First (25)
+### Clarity-First (26)
 
-Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 25 entries.
+Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 26 entries.
 
 - **April Coffee**
 - **Bean & Bean Coffee Roasters**
 - **Center Coffee**
 - **Coffee Collective**
+- **Dongzhe**
 - **Drop Coffee Roasters**
 - **Exposure Therapy Coffee**
 - **Finca Coffee (Coffee Libre)**
@@ -103,11 +104,10 @@ Roasters who intentionally push extraction. Includes BALANCED → FULL (most), F
 - **Subtext Coffee**
 - **The Picky Chemist**
 
-### Varies (5)
+### Varies (4)
 
-Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 5 entries.
+Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 4 entries.
 
-- **Dongzhe**
 - **Moonwake Coffee Roasters**
 - **Scenery Coffee**
 - **Strait Coffee** — BALANCED / VARIES
@@ -153,6 +153,7 @@ Migration 027 renames the 20 short-form entries to canonical full names. Aliases
 
 - `Daturra Coffee` → **Datura Coffee** (xlsx research-pass spelling)
 - `Datura` → **Datura Coffee** (short form)
+- `Coffee with Dongze` → **Dongzhe**
 - `normlppl` / `minmax` → **normlppl/minmax** (the canonical preserves the dual-name slash convention)
 
 ---
@@ -250,6 +251,28 @@ _Copenhagen, Denmark_ · **CLARITY-FIRST**
 - **Calibration role:** Nordic Clarity Benchmark
 - **Confidence:** High
 - **Notes:** Foundational Nordic style; emphasizes even extraction and clarity without pushing EY; less extreme than Sey; highly repeatable and forgiving within clarity-first range
+
+#### Dongzhe
+_Mountain View, CA, USA_ · **CLARITY-FIRST**
+
+- **Roast style:** Ultra-light (rest-driven expressive clarity)
+- **Development bias:** Low development, high sensitivity to resting phase
+- **Rest curve:** Multi-phase: 0–10d intense → 17–21d peak → 24–27d muted → 40–60d clean/balanced
+- **Primary driver:** Rest phase
+- **Extraction purpose:** Allow coffee to express different profiles across rest phases using a stable Clarity-First baseline
+- **House style:** Simple V60 recipe; low temp (92°C), 4 even pours (30/70/70/30), minimal agitation. Default-Clarity-First mechanics: 12.5g / 200g / V60 + Sibarist B3 / EG-1 6.5 / 93–94°C confirmed across 4 brews (washed + natural).
+- **Brew guide:** Direct (brew card)
+- **Recipe baseline:** temp=92, dose=12-15, water=200-240, ratio=~1:16, time=2:30-3:00, agitation=Low-Medium
+- **Primary brewer:** V60
+- **Filter type:** Cone
+- **Extraction intent:** Clarity→Balanced (19-21%)
+- **Failure mode:** Brewing during muted phase (~24–27d) leads to flat cups; early brews may taste roasty or unstable. Note: 92°C label under-extracts at 12.5g bed depth; correct upward to 93–94°C by process.
+- **Over-extraction tolerance:** Medium
+- **Process sensitivity:** Washed: expressive across phases; Natural: more forgiving; Processed: phase behavior amplified
+- **Brew adjustment method:** Rest + grind
+- **Calibration role:** Clarity-First default + Rest Phase Model Benchmark
+- **Confidence:** High
+- **Notes:** Unique model: brew method remains constant while coffee evolves; does not encourage aggressive extraction changes; emphasizes observing flavor across time rather than forcing outcomes; 4-pour structure provides stable, repeatable extraction baseline. Promoted from VARIES to CLARITY-FIRST 2026-04-28 — 4 confirmed brews across washed and natural converge on Clarity-First mechanics.
 
 #### Drop Coffee Roasters
 _Stockholm, Sweden_ · **CLARITY-FIRST**
@@ -1588,28 +1611,6 @@ _Chaudfontaine, Belgium_ · **SYSTEM** · archive: 1 brew
 ---
 
 ### Varies
-
-#### Dongzhe
-_Mountain View, CA, USA_ · **VARIES**
-
-- **Roast style:** Ultra-light (rest-driven expressive clarity)
-- **Development bias:** Low development, high sensitivity to resting phase
-- **Rest curve:** Multi-phase: 0–10d intense → 17–21d peak → 24–27d muted → 40–60d clean/balanced
-- **Primary driver:** Rest phase
-- **Extraction purpose:** Allow coffee to express different profiles across rest phases using a stable brewing baseline
-- **House style:** Simple V60 recipe; low temp (92°C), 4 even pours (30/70/70/30), minimal agitation
-- **Brew guide:** Direct (brew card)
-- **Recipe baseline:** temp=92, dose=12-15, water=200-240, ratio=~1:16, time=2:30-3:00, agitation=Low-Medium
-- **Primary brewer:** V60
-- **Filter type:** Cone
-- **Extraction intent:** Clarity→Balanced (19-21%)
-- **Failure mode:** Brewing during muted phase (~24–27d) leads to flat cups; early brews may taste roasty or unstable
-- **Over-extraction tolerance:** Medium
-- **Process sensitivity:** Washed: expressive across phases; Natural: more forgiving; Processed: phase behavior amplified
-- **Brew adjustment method:** Rest + grind
-- **Calibration role:** Rest Phase Model Benchmark
-- **Confidence:** High
-- **Notes:** Unique model: brew method remains constant while coffee evolves; does not encourage aggressive extraction changes; emphasizes observing flavor across time rather than forcing outcomes; 4-pour structure provides stable, repeatable extraction baseline
 
 #### Moonwake Coffee Roasters
 _San Jose, CA, USA_ · **VARIES** · archive: 10 brews
