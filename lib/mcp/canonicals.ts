@@ -77,10 +77,10 @@ import {
   GRINDER_NAMES,
   GRINDER_ALIASES,
 } from '@/lib/grinder-registry'
-import { EXTRACTION_STRATEGIES } from '@/lib/brew-import'
-import { MODIFIER_TYPES } from '@/lib/extraction-modifiers'
+import { EXTRACTION_STRATEGIES, type ExtractionStrategy } from '@/lib/brew-import'
+import { MODIFIER_TYPES, type ModifierType } from '@/lib/extraction-modifiers'
 
-const STRATEGY_DESCRIPTIONS: Record<string, string> = {
+const STRATEGY_DESCRIPTIONS: Record<ExtractionStrategy, string> = {
   'Suppression':
     'Mechanics-of-Clarity intent: hold an over-expressive co-ferment back. Coarse grind, low temp, low agitation. Mechanically twins with Clarity-First but the coffee dictates the choice.',
   'Clarity-First':
@@ -93,7 +93,7 @@ const STRATEGY_DESCRIPTIONS: Record<string, string> = {
     'Push yield on a clean coffee while preserving transparency. Fine grind + high temp + Melodrip / low agitation. Wölfl/Tran/Giachgia pattern.',
 }
 
-const MODIFIER_TYPE_DESCRIPTIONS: Record<string, { description: string; subfields: Record<string, string> }> = {
+const MODIFIER_TYPE_DESCRIPTIONS: Record<ModifierType, { description: string; subfields: Record<string, string> }> = {
   output_selection: {
     description:
       'Cut early or late from the brew (or both). Used when you want to drop the head or tail of the extraction.',
@@ -154,10 +154,7 @@ export type CanonicalPayload = {
   data: Record<string, unknown>
 }
 
-export function getCanonicalPayload(axis: string): CanonicalPayload | null {
-  const meta = CANONICAL_AXES.find((a) => a.axis === axis)
-  if (!meta) return null
-
+function buildPayload(meta: { axis: CanonicalAxis; description: string }): CanonicalPayload {
   const data = (() => {
     switch (meta.axis) {
       case 'cultivars':
@@ -255,4 +252,12 @@ export function getCanonicalPayload(axis: string): CanonicalPayload | null {
   })()
 
   return { axis: meta.axis, notes: meta.description, data: data as Record<string, unknown> }
+}
+
+const PAYLOAD_CACHE: Record<CanonicalAxis, CanonicalPayload> = Object.fromEntries(
+  CANONICAL_AXES.map((meta) => [meta.axis, buildPayload(meta)]),
+) as Record<CanonicalAxis, CanonicalPayload>
+
+export function getCanonicalPayload(axis: string): CanonicalPayload | null {
+  return (PAYLOAD_CACHE as Record<string, CanonicalPayload | undefined>)[axis] ?? null
 }

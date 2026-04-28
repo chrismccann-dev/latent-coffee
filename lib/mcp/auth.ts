@@ -46,14 +46,13 @@ export async function requireApiKey(req: Request): Promise<McpAuthContext> {
 }
 
 export function authErrorResponse(err: McpAuthError): Response {
-  const status = err.reason === 'missing' ? 401 : err.reason === 'malformed' ? 401 : 401
   const body = {
     jsonrpc: '2.0' as const,
     error: { code: -32001, message: `Authentication failed: ${err.reason}` },
     id: null,
   }
   return new Response(JSON.stringify(body), {
-    status,
+    status: 401,
     headers: { 'Content-Type': 'application/json' },
   })
 }
