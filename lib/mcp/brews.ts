@@ -1,7 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 const RECENT_DEFAULT_N = 20
-const RECENT_MAX_N = 100
 
 type RawBrewRow = Record<string, unknown> & {
   id: string
@@ -11,8 +10,8 @@ type RawBrewRow = Record<string, unknown> & {
 }
 
 const RECENT_SELECT = `
-  id, created_at, brewed_at, source, classification,
-  roaster, coffee_name, producer, roast_level, roast_date, lot_code,
+  id, created_at, source, classification,
+  roaster, coffee_name, producer, roast_level,
   brewer, filter, grinder, grind, grind_setting,
   dose_g, water_g, ratio, temp_c, bloom, pour_structure, total_time,
   process, base_process, subprocess, fermentation_modifiers, drying_modifiers, intervention_modifiers, experimental_modifiers, decaf_modifier, signature_method,
@@ -35,17 +34,13 @@ const FULL_SELECT = `
 export async function fetchRecentBrews(
   supabase: SupabaseClient,
   userId: string,
-  opts: { n?: number; strategy?: string | null } = {},
 ): Promise<RawBrewRow[]> {
-  const n = Math.min(Math.max(1, opts.n ?? RECENT_DEFAULT_N), RECENT_MAX_N)
-  let query = supabase
+  const { data, error } = await supabase
     .from('brews')
     .select(RECENT_SELECT)
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
-    .limit(n)
-  if (opts.strategy) query = query.eq('extraction_strategy', opts.strategy)
-  const { data, error } = await query
+    .limit(RECENT_DEFAULT_N)
   if (error) throw error
   return (data ?? []) as unknown as RawBrewRow[]
 }
@@ -65,14 +60,3 @@ export async function fetchBrewById(
   return (data ?? null) as unknown as RawBrewRow | null
 }
 
-export function parseRecentQuery(search: URLSearchParams): { n?: number; strategy?: string | null } {
-  const opts: { n?: number; strategy?: string | null } = {}
-  const rawN = search.get('n')
-  if (rawN) {
-    const parsed = Number.parseInt(rawN, 10)
-    if (Number.isFinite(parsed)) opts.n = parsed
-  }
-  const strat = search.get('strategy')
-  if (strat) opts.strategy = strat
-  return opts
-}

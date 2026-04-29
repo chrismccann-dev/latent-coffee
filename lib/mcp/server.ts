@@ -1,7 +1,7 @@
 import { McpServer, ResourceTemplate } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { Variables } from '@modelcontextprotocol/sdk/shared/uriTemplate.js'
 import { CANONICAL_AXES, getCanonicalPayload } from '@/lib/mcp/canonicals'
-import { fetchBrewById, fetchRecentBrews, parseRecentQuery } from '@/lib/mcp/brews'
+import { fetchBrewById, fetchRecentBrews } from '@/lib/mcp/brews'
 import { listDocs, readDoc } from '@/lib/mcp/docs'
 import { registerPushBrewTool } from '@/lib/mcp/push-brew'
 import type { McpAuthContext } from '@/lib/mcp/auth'
@@ -67,29 +67,15 @@ function registerCanonicalResources(server: McpServer) {
 function registerBrewResources(server: McpServer, auth: McpAuthContext) {
   server.registerResource(
     'brews-recent',
-    new ResourceTemplate('brews://recent{?n,strategy}', {
-      list: async () => ({
-        resources: [
-          {
-            uri: 'brews://recent',
-            name: 'brews-recent',
-            title: 'Recent Brews',
-            description:
-              'Most recent N brews (default 20, max 100). Optional ?n= and ?strategy= query params. Returns trimmed JSON with FK-joined terroir / cultivar / green_bean.',
-            mimeType: 'application/json',
-          },
-        ],
-      }),
-    }),
+    'brews://recent',
     {
       title: 'Recent Brews',
       description:
-        'Most recent N brews (default 20, max 100). Optional ?n= and ?strategy= query params. Returns trimmed JSON with FK-joined terroir / cultivar / green_bean.',
+        'Most recent 20 brews scoped to the authenticated user. Returns trimmed JSON with FK-joined terroir / cultivar / green_bean. Filtered fetches (by strategy / process / cultivar) belong on a future query_brews Tool, not this static Resource — the SDK URI matcher is strict on parameterized templates.',
       mimeType: 'application/json',
     },
     async (uri) => {
-      const opts = parseRecentQuery(uri.searchParams)
-      const rows = await fetchRecentBrews(auth.supabase, auth.userId, opts)
+      const rows = await fetchRecentBrews(auth.supabase, auth.userId)
       return {
         contents: [
           {
