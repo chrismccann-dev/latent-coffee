@@ -2,8 +2,9 @@ import { McpServer, ResourceTemplate } from '@modelcontextprotocol/sdk/server/mc
 import type { Variables } from '@modelcontextprotocol/sdk/shared/uriTemplate.js'
 import { CANONICAL_AXES, getCanonicalPayload } from '@/lib/mcp/canonicals'
 import { fetchBrewById, fetchRecentBrews } from '@/lib/mcp/brews'
-import { listDocs, readDoc } from '@/lib/mcp/docs'
+import { isKnownDoc, listTaxonomyAxes, readDoc, readDocSection } from '@/lib/mcp/docs'
 import { registerPushBrewTool } from '@/lib/mcp/push-brew'
+import { registerProposeDocChangesTool } from '@/lib/mcp/propose-doc-changes'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 function templateVar(variables: Variables, key: string): string {
@@ -13,12 +14,13 @@ function templateVar(variables: Variables, key: string): string {
 }
 
 export function buildMcpServer(auth: McpAuthContext): McpServer {
-  const server = new McpServer({ name: 'latent-coffee', version: '0.1.0' })
+  const server = new McpServer({ name: 'latent-coffee', version: '0.2.0' })
 
   registerCanonicalResources(server)
   registerBrewResources(server, auth)
   registerDocResources(server)
   registerPushBrewTool(server, auth)
+  registerProposeDocChangesTool(server, auth)
 
   return server
 }
@@ -117,23 +119,136 @@ function registerBrewResources(server: McpServer, auth: McpAuthContext) {
 }
 
 function registerDocResources(server: McpServer) {
-  for (const doc of listDocs()) {
-    server.registerResource(
-      doc.name,
-      doc.uri,
-      { title: doc.title, description: 'Repo file served live from filesystem.', mimeType: doc.mimeType },
-      async (uri) => {
-        const text = await readDoc(uri.href)
-        return {
-          contents: [
-            {
-              uri: uri.href,
-              mimeType: doc.mimeType,
-              text,
-            },
-          ],
-        }
-      },
-    )
-  }
+  // Bare full-file fetches for the two brewing-domain docs.
+  server.registerResource(
+    'docs-brewing',
+    'docs://brewing.md',
+    {
+      title: 'Brewing Master Reference',
+      description:
+        'Full BREWING.md served live from the deploy filesystem. For one section by anchor, use docs://brewing.md#<Section%20Name>.',
+      mimeType: 'text/markdown',
+    },
+    async (uri) => {
+      const text = await readDoc('docs://brewing.md')
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text }] }
+    },
+  )
+
+  server.registerResource(
+    'docs-brewing-roasters',
+    'docs://brewing/roasters.md',
+    {
+      title: 'Roaster Brewing Lessons',
+      description:
+        'Per-roaster brewing lessons + house-style cards. Split out of BREWING.md SECTION 2 in Sprint 2.4 so each roaster is a `## {Canonical Name}` section. Use docs://brewing/roasters.md#<Roaster%20Name> for one card.',
+      mimeType: 'text/markdown',
+    },
+    async (uri) => {
+      const text = await readDoc('docs://brewing/roasters.md')
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text }] }
+    },
+  )
+
+  // Section-anchor variants for both brewing docs.
+  server.registerResource(
+    'docs-brewing-section',
+    new ResourceTemplate('docs://brewing.md#{anchor}', { list: undefined }),
+    {
+      title: 'BREWING.md (one section)',
+      description:
+        'Returns the body of one BREWING.md section by header text (case-sensitive, URL-encoded). Throws if the anchor is not found — useful for catching stale propose_doc_changes citations.',
+      mimeType: 'text/markdown',
+    },
+    async (uri, variables) => {
+      const anchor = decodeURIComponent(templateVar(variables, 'anchor'))
+      if (!anchor) throw new Error('docs://brewing.md#{anchor} requires an anchor')
+      const body = await readDocSection('docs://brewing.md', anchor)
+      if (body == null) {
+        throw new Error(`Section not found in BREWING.md: ${anchor}`)
+      }
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text: body }] }
+    },
+  )
+
+  server.registerResource(
+    'docs-brewing-roasters-section',
+    new ResourceTemplate('docs://brewing/roasters.md#{anchor}', { list: undefined }),
+    {
+      title: 'docs/brewing/roasters.md (one section)',
+      description:
+        'Returns the body of one roaster card by header text (e.g. anchor=Hydrangea%20Coffee). Anchor must match the canonical roaster name exactly.',
+      mimeType: 'text/markdown',
+    },
+    async (uri, variables) => {
+      const anchor = decodeURIComponent(templateVar(variables, 'anchor'))
+      if (!anchor) throw new Error('docs://brewing/roasters.md#{anchor} requires an anchor')
+      const body = await readDocSection('docs://brewing/roasters.md', anchor)
+      if (body == null) {
+        throw new Error(`Section not found in docs/brewing/roasters.md: ${anchor}`)
+      }
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text: body }] }
+    },
+  )
+
+  // Taxonomy MD files: one bare template + one section template (covers all 10 axes).
+  // Distinct from canonicals://{axis} (JSON registry for validation); these serve the
+  // human-authored markdown so claude.ai's project no longer has to paste-and-drift.
+  server.registerResource(
+    'docs-taxonomy',
+    new ResourceTemplate('docs://taxonomies/{axis}.md', {
+      list: async () => ({
+        resources: listTaxonomyAxes().map((axis) => ({
+          uri: `docs://taxonomies/${axis}.md`,
+          name: `docs/taxonomies/${axis}.md`,
+          title: `Taxonomy: ${axis}`,
+          mimeType: 'text/markdown',
+        })),
+      }),
+    }),
+    {
+      title: 'Taxonomy MD (full file)',
+      description:
+        'Full markdown file for one of the 10 canonical taxonomies (regions, varieties, processes, roasters, producers, brewers, filters, flavors, grinders, roast-levels). Use docs://taxonomies/{axis}.md#<Section%20Name> for one section.',
+      mimeType: 'text/markdown',
+    },
+    async (uri, variables) => {
+      const axis = templateVar(variables, 'axis')
+      const docUri = `docs://taxonomies/${axis}.md`
+      if (!isKnownDoc(docUri)) {
+        throw new Error(
+          `Unknown taxonomy axis: ${axis}. Valid: ${listTaxonomyAxes().join(', ')}`,
+        )
+      }
+      const text = await readDoc(docUri)
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text }] }
+    },
+  )
+
+  server.registerResource(
+    'docs-taxonomy-section',
+    new ResourceTemplate('docs://taxonomies/{axis}.md#{anchor}', { list: undefined }),
+    {
+      title: 'Taxonomy MD (one section)',
+      description:
+        'Returns the body of one section of a taxonomy markdown file. Throws on unknown axis or missing anchor.',
+      mimeType: 'text/markdown',
+    },
+    async (uri, variables) => {
+      const axis = templateVar(variables, 'axis')
+      const anchor = decodeURIComponent(templateVar(variables, 'anchor'))
+      if (!anchor) throw new Error('docs://taxonomies/{axis}.md#{anchor} requires an anchor')
+      const docUri = `docs://taxonomies/${axis}.md`
+      if (!isKnownDoc(docUri)) {
+        throw new Error(
+          `Unknown taxonomy axis: ${axis}. Valid: ${listTaxonomyAxes().join(', ')}`,
+        )
+      }
+      const body = await readDocSection(docUri, anchor)
+      if (body == null) {
+        throw new Error(`Section not found in ${docUri}: ${anchor}`)
+      }
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text: body }] }
+    },
+  )
 }
