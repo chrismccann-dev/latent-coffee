@@ -228,23 +228,26 @@ Direct write per experiment (2.5). 22-field experiment schema; populated end-of-
 
 #### `propose_doc_changes`
 
-The ONE write tool for prose. Polymorphic on `target_doc`. Claude.ai writes a proposal; Claude Code arbitrates.
+The ONE write tool for prose. Polymorphic on `target_doc` (proposal-level default + per-citation override since Sprint 2.4.1). Claude.ai writes a proposal; Claude Code arbitrates.
 
 ```ts
 propose_doc_changes({
-  target_doc: 'brewing.md' | 'roasting.md' | 'roaster/picolot' | 'roaster/{slug}',
+  target_doc: 'brewing.md' | 'roasting.md' | 'roaster/{Canonical Name}' | 'taxonomies/{axis}.md',
   source: { kind: 'brew' | 'roast' | 'cupping' | 'session', id?: string },
   citations: Array<{
     section_anchor: string,         // e.g. "Coffees That Needed Balanced Intensity"
     line_range?: [number, number],  // optional, target file line numbers
-    current_text?: string,          // optional, what's there now (for context)
+    current_text?: string,          // optional, primarily for replace ops (drift detection)
     proposed_text: string,          // what to add or replace with
     operation: 'append' | 'replace' | 'prepend',
     rationale: string,              // why this change, free-text
+    target_doc?: string,            // optional, overrides proposal-level for cross-doc proposals (Sprint 2.4.1)
   }>,
   summary: string,                  // one-line summary of what this proposal does
-}) → { proposal_id: string, status: 'pending' }
+}) → { proposal_id: string, status: 'pending', superseded_ids: string[] }
 ```
+
+**Per-citation `target_doc` (Sprint 2.4.1):** A single brew-debrief insight often touches multiple files (roaster card + BREWING.md archive bullet + Open Questions). Citations may override the proposal-level `target_doc` to span multiple files in one proposal. The Tool normalizes each citation's effective `target_doc` and stores it on the citation row, so auto-supersede operates per (target_doc, section_anchor) regardless of where the field is set.
 
 Schema:
 
