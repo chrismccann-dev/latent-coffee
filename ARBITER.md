@@ -53,6 +53,10 @@ For `roaster/{Name}` proposals: open `docs/brewing/roasters.md`, locate the `## 
 
 For `roasting.md` before 2.5 ships: surface to Chris that the file doesn't exist yet, and ask whether to discard (mark `rejected`) or hold (leave `pending` until 2.5).
 
+**Multi-target_doc proposals (post Sprint 2.4.1):** A single proposal may have citations that target different files (one insight from a brew debrief often touches roaster card + BREWING.md archive bullet + Open Questions). Each citation now carries its own `target_doc` field (defaults to the proposal-level value when not set). When arbitrating: **group citations by their per-citation `target_doc`**, process one group per file, but apply the entire proposal as one DB row update at the end (Step 7). The proposal-level `target_doc` is just a default — don't use it for routing if citations override it.
+
+**Cross-doc apply (legacy / drift case):** If you encounter a pre-2.4.1 proposal where target_doc says one thing but citations clearly target another file (anchor matches in a different file), don't reject — surface the mismatch to Chris and offer to apply each citation against its natural file. Mark the proposal `applied` with notes documenting the cross-doc apply. (This is the path used in the original Sprint 2.4 dog-food when proposal `a7f37316` filed everything under `roaster/Dongzhe` but only one citation actually lived there.)
+
 ### 4. Per citation: locate the section anchor
 
 For each citation in the proposal, use the `Read` tool to grab the file content, then locate the `## {section_anchor}` header (case-sensitive exact match).
@@ -91,6 +95,8 @@ For multi-citation proposals, ask Chris citation-by-citation, then roll up the p
 - **apply:** use the `Edit` tool on the resolved file. For `append` operations, find the end of the section's body (first line of next header at equal-or-higher level, minus 1) and insert before that line. For `replace`, swap `current_text` for `proposed_text` (require exact match; bail if the file has drifted). For `prepend`, insert at the start of the section body.
 - **reject:** no file edit; record as a rejected citation.
 - **edit:** Chris dictates an alternative text; apply that instead and note the divergence.
+
+**House style normalization at apply time.** Chris's `feedback_hyphens_not_emdashes.md` rule: always use plain hyphens (`-`), never em-dashes (`—`) or en-dashes (`–`). When applying `proposed_text`, normalize em-dashes and en-dashes to plain hyphens before writing to the file. Claude.ai's `proposed_text` often contains em-dashes by default; the arbiter is the right place to enforce house style. Don't push this back to Claude.ai as a rejection — just normalize during apply.
 
 ### 7. Roll up proposal status
 

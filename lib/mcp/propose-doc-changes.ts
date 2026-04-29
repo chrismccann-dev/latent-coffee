@@ -11,7 +11,7 @@ import type { McpAuthContext } from '@/lib/mcp/auth'
 // Claude.ai stages a proposal; Claude Code (the arbiter) reads pending rows
 // and applies them to the actual repo file in a follow-up session.
 //
-// target_doc allow-list:
+// target_doc allow-list (proposal-level default + per-citation override):
 //   - 'brewing.md'                                — repo root BREWING.md
 //   - 'roasting.md'                               — repo root ROASTING.md (file lands in 2.5; arbiter surfaces orphan in 2.4)
 //   - 'roaster/{Canonical Roaster Name}'          — section in docs/brewing/roasters.md (Sprint 2.4 split)
@@ -20,17 +20,33 @@ import type { McpAuthContext } from '@/lib/mcp/auth'
 // Roaster names are canonicalized via ROASTER_LOOKUP.canonicalize on insert so
 // 'roaster/hydrangea coffee' and 'roaster/Hydrangea Coffee' converge to the
 // same target_doc value (auto-supersede then matches both).
+//
+// Per-citation target_doc (Sprint 2.4.1 follow-up): a single brew-debrief
+// insight often spans multiple files (e.g. one finding lands a roaster card
+// edit + a BREWING.md archive bullet). Citations may override the proposal-
+// level target_doc on a per-citation basis. The proposal-level field stays
+// as the default for citations that don't specify one. Each citation's
+// EFFECTIVE target_doc is normalized + stored on the citation itself, which
+// makes auto-supersede operate cleanly per (target_doc, section_anchor)
+// regardless of how the proposal-level field is set.
 
 const VALID_OPERATIONS = ['append', 'replace', 'prepend'] as const
 const VALID_SOURCE_KINDS = ['brew', 'roast', 'cupping', 'session'] as const
 
 const citation = z.object({
-  section_anchor: z.string().describe('Header text WITHOUT the leading `#` characters. E.g. "Equipment Reference".'),
+  section_anchor: z.string().describe(
+    'Header text WITHOUT the leading `#` characters. E.g. "Equipment Reference". Anchor matching is case-sensitive exact match against `## ` or `### ` headers in the resolved file. The arbiter does NOT fuzzy-match — stale anchors surface to the user with current_text + proposed_text for retarget vs discard decision.',
+  ),
   line_range: z.tuple([z.number(), z.number()]).optional(),
-  current_text: z.string().optional().describe('Best-effort excerpt of what the section looks like now. Helps the arbiter detect drift.'),
+  current_text: z.string().optional().describe(
+    'OPTIONAL. For `replace` operations, include the exact text being replaced — lets the arbiter detect drift if the file content has changed since you wrote the proposal. For `append` / `prepend`, omit unless you want to give the arbiter a positional hint (e.g. "after the Heritage Collection bullet").',
+  ),
   proposed_text: z.string().describe('The text to append / prepend / replace with.'),
   operation: z.enum(VALID_OPERATIONS),
   rationale: z.string().describe('Free-text justification — surfaced to the arbiter at apply time.'),
+  target_doc: z.string().optional().describe(
+    'OPTIONAL per-citation override of the proposal-level target_doc. Use when a single proposal\'s citations span multiple files (e.g. one citation targets `roaster/Dongzhe` and another targets `brewing.md`). When omitted, inherits the proposal-level target_doc.',
+  ),
 })
 
 const sourceRef = z.object({
@@ -40,11 +56,11 @@ const sourceRef = z.object({
 
 export const proposeDocChangesInputSchema = {
   target_doc: z.string().describe(
-    'Doc identifier: "brewing.md" | "roasting.md" | "roaster/{Canonical Roaster Name}" | "taxonomies/{axis}.md". Roaster names are auto-canonicalized via ROASTER_LOOKUP. Unknown roasters are rejected (no override path); add to docs/taxonomies/roasters.md first.',
+    'Default doc identifier for citations that don\'t override it. Allowed values: "brewing.md" | "roasting.md" | "roaster/{Canonical Roaster Name}" | "taxonomies/{axis}.md". Roaster names auto-canonicalize via ROASTER_LOOKUP; unknown roasters are rejected (add to docs/taxonomies/roasters.md first). For cross-doc proposals, set per-citation target_doc on each citation that diverges from this default.',
   ),
   source: sourceRef.describe('What triggered the proposal — a brew log session, a roast cupping, an end-of-coffee debrief, or a general session.'),
   citations: z.array(citation).min(1).describe(
-    'One or more edits, each scoped to a section_anchor. Multi-citation proposals are arbitrated per-citation; partial application is supported.',
+    'One or more edits, each scoped to a section_anchor + optional per-citation target_doc. Multi-citation proposals are arbitrated per-citation; partial application is supported. Multi-target_doc proposals (where citations span multiple files) are arbitrated per (target_doc, section_anchor) group.',
   ),
   summary: z.string().describe('One-line summary the arbiter sees when triaging the queue.'),
 }
@@ -102,9 +118,27 @@ export async function proposeDocChanges(
   auth: McpAuthContext,
   input: ProposeDocChangesInput,
 ): Promise<ProposeDocChangesResult> {
-  const normalized = normalizeTargetDoc(input.target_doc)
-  if (!normalized.ok) return { ok: false, error: normalized.error }
-  const target_doc = normalized.target_doc
+  // Normalize the proposal-level default first.
+  const normalizedProposal = normalizeTargetDoc(input.target_doc)
+  if (!normalizedProposal.ok) return { ok: false, error: normalizedProposal.error }
+  const proposalTargetDoc = normalizedProposal.target_doc
+
+  // Resolve + normalize each citation's effective target_doc. Always write the
+  // canonical form back onto the citation so auto-supersede operates cleanly
+  // per (target_doc, section_anchor) regardless of whether the field was
+  // explicitly set or inherited from the proposal-level default.
+  const normalizedCitations: Array<z.infer<typeof citation> & { target_doc: string }> = []
+  for (const c of input.citations) {
+    const effectiveRaw = c.target_doc ?? input.target_doc
+    const normalized = normalizeTargetDoc(effectiveRaw)
+    if (!normalized.ok) {
+      return {
+        ok: false,
+        error: `Citation "${c.section_anchor}" target_doc invalid: ${normalized.error}`,
+      }
+    }
+    normalizedCitations.push({ ...c, target_doc: normalized.target_doc })
+  }
 
   // INSERT first so we have the new id for the supersede UPDATE's `notes`. Two
   // calls (INSERT then UPDATE) instead of a single transaction — supabase-js
@@ -112,9 +146,9 @@ export async function proposeDocChanges(
   // is bounded: a parallel write would just supersede whichever arrives second.
   const insertRow = {
     user_id: auth.userId,
-    target_doc,
+    target_doc: proposalTargetDoc,
     source: input.source,
-    citations: input.citations,
+    citations: normalizedCitations,
     summary: input.summary,
   }
   const { data: inserted, error: insertErr } = await auth.supabase
@@ -131,13 +165,14 @@ export async function proposeDocChanges(
   const newId = inserted.id as string
 
   // Supersede older pending proposals overlapping any of the new citations'
-  // (target_doc, section_anchor) pairs. Per-citation UPDATEs; overlap on the
-  // same older row across multiple citations is harmless (status is idempotent).
-  // Soft-fail on UPDATE error so the INSERT still succeeds; arbiter can manually
-  // reconcile if needed.
+  // (target_doc, section_anchor) pairs. The per-citation target_doc is now
+  // always set (above), so the @> match scopes by both fields cleanly. Older
+  // pre-2.4.1 proposals have only proposal-level target_doc — they won't match
+  // a citation-level @> filter. That's OK; pre-2.4.1 rows in the wild are rare
+  // (only proposals filed via the original Tool shape, which auto-superseded
+  // the same way).
   const supersededIds = new Set<string>()
-  for (const citation of input.citations) {
-    const anchor = citation.section_anchor
+  for (const c of normalizedCitations) {
     const { data: superseded, error: updErr } = await auth.supabase
       .from('doc_proposals')
       .update({
@@ -145,13 +180,15 @@ export async function proposeDocChanges(
         notes: `Superseded by ${newId} on ${new Date().toISOString()}`,
       })
       .eq('user_id', auth.userId)
-      .eq('target_doc', target_doc)
       .eq('status', 'pending')
       .neq('id', newId)
-      .contains('citations', [{ section_anchor: anchor }])
+      .contains('citations', [{ target_doc: c.target_doc, section_anchor: c.section_anchor }])
       .select('id')
     if (updErr) {
-      console.error(`[propose_doc_changes] supersede UPDATE failed for anchor "${anchor}":`, updErr)
+      console.error(
+        `[propose_doc_changes] supersede UPDATE failed for ${c.target_doc}#${c.section_anchor}:`,
+        updErr,
+      )
       continue
     }
     if (superseded) {
@@ -168,7 +205,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
     {
       title: 'Propose Doc Changes',
       description:
-        'Stage a prose change to a brewing/roasting doc. Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. Each citation targets a section_anchor (header text without `#` prefix). Multi-citation proposals are arbitrated per-citation. Auto-supersedes older pending proposals overlapping the same (target_doc, section_anchor).',
+        'Stage a prose change to a brewing/roasting doc. Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal — the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor).',
       inputSchema: proposeDocChangesInputSchema,
     },
     async (input) => {
