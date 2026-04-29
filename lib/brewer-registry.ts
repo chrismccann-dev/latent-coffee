@@ -762,7 +762,16 @@ export const BREWER_ALIASES: Record<string, string> = {
   "Hario V60 (glass)": "Hario V60",
   "Hario V60 Glass": "Hario V60",
   "Hario V60 glass": "Hario V60",
+  // Bare-form V60 — Claude.ai-style casual references that drop the manufacturer prefix.
+  // Sprint 2.3 dog-food (brew_id 955d1dab) tripped on "V60 Glass" before these landed.
+  "V60": "Hario V60",
+  "V60 Glass": "Hario V60",
+  "V60 (glass)": "Hario V60",
+  "V60 Plastic": "Hario V60",
+  "V60 (plastic)": "Hario V60",
+  "V60 Ceramic": "Hario V60",
   "Hario Switch (glass)": "Hario Switch",
+  "Switch": "Hario Switch",
   "UFO Ceramic": "UFO",
   "UFO Ceramic Dripper": "UFO",
   "Brewer: UFO Ceramic": "UFO",

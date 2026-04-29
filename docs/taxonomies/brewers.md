@@ -661,7 +661,14 @@ Drift variants observed in legacy DB rows. Resolve to canonical via `BREWER_LOOK
 - `Hario V60 (glass)` → **Hario V60**
 - `Hario V60 Glass` → **Hario V60**
 - `Hario V60 glass` → **Hario V60**
+- `V60` → **Hario V60**
+- `V60 Glass` → **Hario V60**
+- `V60 (glass)` → **Hario V60**
+- `V60 Plastic` → **Hario V60**
+- `V60 (plastic)` → **Hario V60**
+- `V60 Ceramic` → **Hario V60**
 - `Hario Switch (glass)` → **Hario Switch**
+- `Switch` → **Hario Switch**
 - `UFO Ceramic` → **UFO**
 - `UFO Ceramic Dripper` → **UFO**
 - `Brewer: UFO Ceramic` → **UFO**
