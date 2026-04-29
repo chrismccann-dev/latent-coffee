@@ -76,8 +76,12 @@ MCP Resources are content endpoints Claude.ai can list and fetch. Each Resource 
 |---|---|---|
 | `canonicals://{axis}` | JSON registry for one axis (e.g. `cultivars`, `terroirs`, `processes`, `roasters`, `producers`, `brewers`, `filters`, `flavors`, `roast-levels`, `grinders`, `extraction-strategies`, `modifiers`) | `lib/{axis}-registry.ts` exports |
 | `docs://brewing.md` | `BREWING.md` text | Repo file via `fs.readFileSync` |
+| `docs://brewing.md#{anchor}` | One section of BREWING.md by header text (Sprint 2.4) | Repo file |
+| `docs://brewing/roasters.md` | Per-roaster lessons + house-style cards (split out of BREWING.md SECTION 2 in Sprint 2.4) | Repo file |
+| `docs://brewing/roasters.md#{anchor}` | One roaster card by `## {Canonical Name}` (Sprint 2.4) | Repo file |
+| `docs://taxonomies/{axis}.md` | Authored markdown for one of the 10 canonical taxonomies (regions / varieties / processes / roasters / producers / brewers / filters / flavors / grinders / roast-levels). Distinct from `canonicals://{axis}` (JSON registry); this serves the human-authored markdown so claude.ai's project no longer paste-and-drifts (Sprint 2.4) | Repo file |
+| `docs://taxonomies/{axis}.md#{anchor}` | One section of a taxonomy markdown file (Sprint 2.4) | Repo file |
 | `docs://roasting.md` | `ROASTING.md` text (created in 2.5) | Repo file |
-| `docs://roaster/{slug}` | Per-roaster lessons doc — TBD whether this is a section of `BREWING.md` or its own file (decided in 2.4) | Repo file |
 | `brews://recent?n=20` | Last N resolved brews as JSON: id, roaster, coffee_name, terroir, cultivar, process, extraction_strategy, modifiers, flavors, structure_tags, what_i_learned | Supabase query |
 | `brews://by-id/{uuid}` | One brew, full record | Supabase query |
 | `roasts://by-bean/{green_bean_id}` | All roasts + cuppings + experiments for one bean (created in 2.5) | Supabase query |
@@ -289,7 +293,7 @@ CREATE INDEX doc_proposals_pending ON doc_proposals (user_id, target_doc, create
 
 - `BREWING.md` lives at repo root (existing location).
 - `ROASTING.md` lives at repo root (created in 2.5).
-- Per-roaster lessons: TBD in 2.4 whether they're a section of `BREWING.md` or separate files at `docs/roasters/{slug}.md`. Default plan is sectioned-within-BREWING.md (matches existing § Roaster Reference structure); flip to per-file if the docs grow large.
+- Per-roaster lessons: split out of BREWING.md SECTION 2 into `docs/brewing/roasters.md` in Sprint 2.4 (2026-04-29). Each roaster gets a `## {Canonical Name}` section so `propose_doc_changes` can section-anchor against it. target_doc='roaster/{Canonical Name}' resolves to a section in this file. The strategy-tag legend lives at the top of `docs/brewing/roasters.md` as the canonical source.
 
 ### How Claude.ai sees them
 
@@ -478,8 +482,8 @@ Each sprint is intended to be ship-able independently. 2.3 unlocks the rest. The
 These are not blocking 2.3 but should resolve during the build queue.
 
 1. **MCP HTTP transport on Vercel cold-start.** Validate in 2.3. Fallback: Edge Functions or dedicated MCP host (Railway/Fly).
-2. **Section-anchor matching robustness** — when Claude.ai's proposal cites `## Coffees That Needed Balanced Intensity`, the arbiter's file-edit logic needs to find that section anchor. If anchors drift (Chris renames a section), proposals against the old anchor become orphaned. Mitigation: `superseded` status when arbiter can't find the anchor; surface to Chris for manual resolution.
-3. **Per-roaster lessons doc model** — sectioned in BREWING.md vs `docs/roasters/{slug}.md`. Decide in 2.4 based on existing § Roaster Reference structure.
+2. **~~Section-anchor matching robustness~~** — RESOLVED in Sprint 2.4. Stale anchors mark `superseded` + surface to Chris with `current_text` for retarget vs discard. No fuzzy matching (silent retargets are hard to audit). Validated end-to-end with one deliberately-misaligned dog-food proposal.
+3. **~~Per-roaster lessons doc model~~** — RESOLVED in Sprint 2.4. Split out to `docs/brewing/roasters.md`; each roaster is a `## {Canonical Name}` section. target_doc='roaster/{Canonical Name}' canonicalizes via ROASTER_LOOKUP on insert.
 4. **Producer research routine cadence** — daily cron, weekly cron, on-demand only? Default to on-demand (Chris invokes when he wants it); add scheduled-tasks integration in 2.6 if backlog accumulates.
 5. **`extraction_confirmed` semantic drift** — flagged in Extraction Strategy v2 retro, still untouched. Not blocking; revisit before 2.7 (the prompt rewrite is a natural moment to re-spec the field).
 6. **Brewing prompt v9 scope** — content sprint, not engineering. Chris drives. May expand into a separate retro doc.
