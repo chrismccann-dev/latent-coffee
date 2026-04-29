@@ -396,6 +396,8 @@ These coffee types have consistently worked well at the default approach (EG-1 6
 
 - Panama Gesha Natural from Hacienda La Esmeralda El Velo — climate-controlled drying (“NC” designation, Peterson family’s indoor drying room) produces a cleaner, more restrained natural than traditional raised-bed sun-dried lots. Confirmed Clarity-First across two data points: Hydrangea El Velo Natural (15g, UFO Ceramic + Sibarist UFO Fast, EG-1 6.7 / 91°C) and Coffee with Dongze HLE Valle 3NC (12.5g, V60 Glass + Sibarist B3 Cone, EG-1 6.5 / 93.5°C). Dose determines grind: 6.7 works at 15g but produces hollow body at 12.5g; 6.5 is the correct setting for small-pouch 12.5g format. Climate-controlled drying preserves variety transparency — do not push toward Balanced Intensity despite the natural process. Cup peaks cool (45–50°C); expect rose, bergamot, stone fruit, wildflower honey, tea-like silky body.
 
+- Finca Sophia Grand Reserve Natural (Gesha) from Coffee with Dongze — Finca Sophia Gesha lot at Volcán altitude, standard raised-bed natural drying. Confirmed Clarity-First at 12.5g / 200g / Hario V60 + CONE B3 / EG-1 6.5 / 94°C. Cup: honey, bergamot, light black tea structure, stone fruit, with rose emerging on the back half cooling and deepening below 45°C into honeyed-tea-with-rose. Peak 45-50°C. Sits +0.5°C above the HLE Valle 3NC (NC climate-controlled) reference at the same dose - confirms the working rule that standard raised-bed naturals want slightly more extraction than NC drying. One data point - flag for confirmation on other standard-natural Panama Gesha lots from Finca Sophia or equivalent altitude.
+
 ## Coffees That Needed Balanced Intensity
 
 These types consistently under-performed at Clarity-First and improved with moderate extraction increase:
@@ -505,6 +507,12 @@ Yeast-inoculated white honey Gesha (Moonwake Sebastian Ramirez El Placer, Quind�
 
 **Body intuition is not always a grind signal.** Light, tea-like body on high-elevation Panama Gesha (≥1,900 masl) is variety-intrinsic, not an extraction deficit. Confirmed across Hydrangea El Velo Natural and Dongze HLE Valle 3NC: cups showing full aromatic expression (florals, citrus, stone fruit), integrated tart-sweet structure, and cool-peak behavior are fully extracted even when body reads silky/light. Before adjusting grind on the basis of body alone, check: (1) aromatic integration — are the roaster’s target notes present and layered? (2) cooling behavior — does the cup peak cool rather than collapse? (3) finish — is there drying tannin, or a clean close? If all three pass, the body is the variety, not the recipe. Pushing finer will compress florals before it adds weight.
 
+## Cooling Behavior Observations
+
+Per-cup cooling-arc patterns surfaced from the brew archive. Use as diagnostic signals when evaluating finish below 50°C, not as recipe levers.
+
+- Standard raised-bed Panama Gesha Natural (Finca Sophia Grand Reserve, Coffee with Dongze) - peaks 45-50°C. Rose volatile sits on the cooling arc, not on the attack - emerges around 50°C and deepens below. Hot signature is honey/bergamot/light tea forward; cool signature is honeyed-tea-with-rose. Distinct from Esmeralda El Velo NC drying (similar peak window, but rose more present from serving temp on the NC profile). Diagnostic: if rose is absent at 45°C on a properly extracted Panama Gesha Natural, the brew likely under-extracted; if it dominates the attack, over-extracted.
+
 ## Office Brewing Notes (Palo Alto)
 
 - Kalita Wave 155 + Espro Bloom drains consistently at 3:00–3:30 at the office. Pour structure and rest timing between pours are the primary extraction levers, not grind size. NOTE: on some coffees (confirmed: Sebastian Ramirez White Honey Gesha) the Kalita still drains too fast for Balanced Intensity — switch to SWORKS Bottomless Dripper with Restricted valve when contact time is critical.
@@ -534,6 +542,8 @@ Things to test across future brews:
 - Does the April Brewer at home (remineralized water) drain significantly slower than at the office (tap water)?
 
 - Has a Flower Child coffee been tried with T-92 filter + boiling water? Their guide specifies this — worth a direct test.
+
+- Does the Dongze 12.5g small-pouch pattern (Hario V60 + CONE B3 + EG-1 6.5 + 93-94°C) hold as a reliable Clarity-First vehicle for non-Dongze 12.5g single-pouch coffees? **Strengthened (5 data points):** the vehicle is now confirmed across washed (93°C), NC climate-controlled natural (93.5°C), and standard raised-bed natural (94°C) processes - three distinct process classes on identical equipment with a coherent temp ladder. This is a strong generalization signal. Test next on a 12.5g pouch from another roaster (e.g. normlppl/minmax at 12.5g format) to confirm the pattern is dose-and-vehicle driven rather than roaster-specific.
 
 ## End-of-Coffee Workflow
 
