@@ -105,7 +105,9 @@ push_brew({
   producer_override?: boolean,      // true if producer not in registry
   
   // Origin (FK targets — server resolves via findOrCreateTerroir/Cultivar)
-  terroir: { country: string, macro: string, meso?: string },
+  // elevation + climate_stress are TERROIR-level (registry + terroirs row),
+  // not pushable per-brew — populated at terroir-create time only.
+  terroir: { country: string, macro: string, meso?: string, admin_region?: string },
   cultivar: string,                 // canonical cultivar; aliases resolve
   
   // Process (composable, all canonical)
@@ -141,7 +143,8 @@ push_brew({
   
   // Extraction (canonical strategy + canonical modifiers jsonb)
   extraction_strategy: 'Suppression' | 'Clarity-First' | 'Balanced Intensity' | 'Full Expression' | 'Extraction Push',
-  extraction_confirmed?: string,
+  extraction_confirmed?: string,        // cross-strategy divergence ("planned Clarity, tasted Balanced")
+  strategy_notes?: string,              // within-strategy gradient ("lower edge of Balanced Intensity") + recipe nuance that doesn't fit the enum (Sprint MCP feedback batch 1, 2026-04-29)
   modifiers?: Array<{
     type: 'output_selection' | 'inverted_temperature_staging' | 'aroma_capture' | 'immersion',
     // type-specific subfields
