@@ -194,6 +194,11 @@ export interface BrewPayload {
   // stackable. See lib/extraction-modifiers.ts for the discriminated union.
   extraction_strategy?: ExtractionStrategy | string | null
   extraction_confirmed?: string | null
+  // Free-text within-strategy gradient + recipe nuance ("Balanced Intensity
+  // (lower edge)" etc.) that doesn't fit the canonical 5-value enum.
+  // Distinct from extraction_confirmed (cross-strategy divergence) and
+  // classification (lot-code stash).
+  strategy_notes?: string | null
   modifiers?: Modifier[] | null
 
   // Sensory
@@ -819,6 +824,7 @@ export async function persistBrew(
     total_time: payload.total_time ?? null,
     extraction_strategy: payload.extraction_strategy ?? null,
     extraction_confirmed: payload.extraction_confirmed ?? null,
+    strategy_notes: payload.strategy_notes ?? null,
     modifiers: payload.modifiers ?? [],
     aroma: payload.aroma ?? null,
     attack: payload.attack ?? null,

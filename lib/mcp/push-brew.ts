@@ -25,14 +25,16 @@ const modifierEntry = z.object({
   application: z.string().optional().nullable(),
 })
 
+// Elevation + climate_stress live at the TERROIR level (canonical registry +
+// terroirs row), not per-brew. They populate at terroir-create time only and
+// are not pushable through push_brew. Lot-specific elevation gradients are
+// not currently a tracked dimension; folding them in here would create silent
+// drift between the lot fact and the macro-terroir envelope.
 const terroir = z.object({
   country: z.string(),
   admin_region: z.string().optional().nullable(),
   macro_terroir: z.string().optional().nullable(),
   meso_terroir: z.string().optional().nullable(),
-  elevation_min: z.number().optional().nullable(),
-  elevation_max: z.number().optional().nullable(),
-  climate_stress: z.string().optional().nullable(),
 })
 
 const cultivar = z.object({
@@ -89,6 +91,9 @@ export const pushBrewInputSchema = {
   // Extraction
   extraction_strategy: z.string().optional().nullable(),
   extraction_confirmed: z.string().optional().nullable(),
+  strategy_notes: z.string().optional().nullable().describe(
+    'Free-text within-strategy gradient + miscellaneous recipe nuance that does NOT fit the canonical extraction_strategy enum. Use for "lower edge of Balanced Intensity", "leaning toward Suppression", or recipe-context that the 5-value enum + extraction_confirmed (cross-strategy divergence) cannot capture. Distinct from `classification` (lot code + roast date stash).',
+  ),
   modifiers: z.array(modifierEntry).optional().nullable(),
 
   // Tasting

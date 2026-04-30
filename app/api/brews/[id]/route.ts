@@ -57,6 +57,7 @@ const EDITABLE_FIELDS = [
   'total_time',
   'extraction_strategy',
   'extraction_confirmed',
+  'strategy_notes',
   'modifiers',
   'aroma',
   'attack',

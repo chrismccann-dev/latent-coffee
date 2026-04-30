@@ -237,6 +237,11 @@ export interface Brew {
   total_time: string | null
   extraction_strategy: string | null
   extraction_confirmed: string | null
+  // Free-text within-strategy gradient + miscellaneous recipe nuance that
+  // does not fit the canonical extraction_strategy enum (e.g. "lower edge
+  // of Balanced Intensity"). Distinct from extraction_confirmed (cross-
+  // strategy divergence). Migration 038, 2026-04-29.
+  strategy_notes: string | null
   // Sprint Extraction Strategy v2 (2026-04-27): Axis 2 modifier array.
   // jsonb column on brews; default []. See lib/extraction-modifiers.ts for shape.
   modifiers: import('./extraction-modifiers').Modifier[]
