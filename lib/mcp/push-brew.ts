@@ -1,13 +1,36 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistBrew, type BrewPayload } from '@/lib/brew-import'
+import {
+  HONEY_SUBPROCESSES,
+  FERMENTATION_MODIFIERS,
+  DRYING_MODIFIERS,
+  INTERVENTION_MODIFIERS,
+  EXPERIMENTAL_MODIFIERS,
+  DECAF_MODIFIERS,
+  SIGNATURE_NAMES,
+} from '@/lib/process-registry'
+import { STRUCTURE_KEYS } from '@/lib/flavor-registry'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 // Input schema mirrors lib/brew-import.ts BrewPayload + SYNC_V2.md push_brew spec.
 // We let zod validate shape, then hand the typed object to persistBrew which
 // runs the canonical-registry checks via the existing findOrCreate* + clean*
 // helpers. That keeps validation logic in ONE place (lib/brew-import.ts).
+//
+// Schema-discoverability tradeoff (MCP feedback batch 2, 2026-04-30):
+// - Axes with active alias resolution (fermentation / drying / intervention /
+//   decaf / signature / subprocess) stay `z.string()` so server-side aliases
+//   ('Anoxic' → 'Anaerobic', 'CM' → 'Carbonic Maceration', etc.) keep working.
+//   Their canonical lists are surfaced via `.describe()` for tool-introspection.
+// - Axes with zero aliases (experimental_modifiers, structure_tags) tighten
+//   to `z.enum()` so introspection sees the literal values + zod rejects
+//   typos before they reach the server.
 const baseProcess = z.enum(['Washed', 'Honey', 'Natural', 'Wet-hulled'])
+
+// readonly arrays → z.enum tuple cast. zod v4 z.enum requires [string, ...string[]].
+const experimentalModifierEnum = z.enum(EXPERIMENTAL_MODIFIERS as readonly [string, ...string[]])
+const structureTagEnum = z.enum(STRUCTURE_KEYS as readonly [string, ...string[]])
 
 const flavorChip = z.object({
   base: z.string(),
@@ -59,14 +82,30 @@ export const pushBrewInputSchema = {
 
   // Process
   process: z.string().optional().nullable().describe('Composed display string. Optional if structured fields supplied.'),
-  base_process: baseProcess.optional().nullable(),
-  subprocess: z.string().optional().nullable(),
-  fermentation_modifiers: z.array(z.string()).optional().nullable(),
-  drying_modifiers: z.array(z.string()).optional().nullable(),
-  intervention_modifiers: z.array(z.string()).optional().nullable(),
-  experimental_modifiers: z.array(z.string()).optional().nullable(),
-  decaf_modifier: z.string().optional().nullable(),
-  signature_method: z.string().optional().nullable(),
+  base_process: baseProcess.optional().nullable().describe(
+    'Canonical: Washed | Honey | Natural | Wet-hulled. See `canonicals://processes` or `docs://taxonomies/processes.md` for full registry.',
+  ),
+  subprocess: z.string().optional().nullable().describe(
+    `Honey color tier (only valid when base_process = Honey). Canonical: ${HONEY_SUBPROCESSES.join(' | ')}. Aliases also accepted (Blanco/Amarillo/Rojo/Negro). See \`canonicals://processes\`.`,
+  ),
+  fermentation_modifiers: z.array(z.string()).optional().nullable().describe(
+    `Process modifier — fermentation axis. Canonical: ${FERMENTATION_MODIFIERS.join(' | ')}. Aliases accepted (e.g. CM → Carbonic Maceration, Cryo → Cryomaceration, "Yeast Fermentation" → Yeast Inoculated). See \`canonicals://processes\` for the full alias map.`,
+  ),
+  drying_modifiers: z.array(z.string()).optional().nullable().describe(
+    `Process modifier — drying axis. Canonical: ${DRYING_MODIFIERS.join(' | ')}. Aliases accepted (DRD/LDE → Dark Room Dried, ASD → Anaerobic Slow Dry). See \`canonicals://processes\`.`,
+  ),
+  intervention_modifiers: z.array(z.string()).optional().nullable().describe(
+    `Process modifier — co-ferments + infusions. Canonical: ${INTERVENTION_MODIFIERS.join(' | ')}. Aliases accepted (Coferment → Co-ferment, Infused → Infusion). See \`canonicals://processes\`.`,
+  ),
+  experimental_modifiers: z.array(experimentalModifierEnum).optional().nullable().describe(
+    `Process modifier — experimental techniques. Strict canonical (no aliases): ${EXPERIMENTAL_MODIFIERS.join(' | ')}.`,
+  ),
+  decaf_modifier: z.string().optional().nullable().describe(
+    `Decaffeination process. Canonical: ${DECAF_MODIFIERS.join(' | ')}. Aliases accepted (SWP → Swiss Water, MWP → Mountain Water, EA → Ethyl Acetate). See \`canonicals://processes\`.`,
+  ),
+  signature_method: z.string().optional().nullable().describe(
+    `Proper-name proprietary technique. Canonical: ${SIGNATURE_NAMES.join(' | ')}. Aliases accepted (Moonshadow Natural / Moonshadow Washed → Moonshadow). See \`canonicals://processes\`.`,
+  ),
 
   // Roast
   roast_level: z.string().optional().nullable(),
@@ -97,8 +136,12 @@ export const pushBrewInputSchema = {
   modifiers: z.array(modifierEntry).optional().nullable(),
 
   // Tasting
-  flavors: z.array(flavorChip).optional().nullable(),
-  structure_tags: z.array(z.string()).optional().nullable(),
+  flavors: z.array(flavorChip).optional().nullable().describe(
+    'Structured flavor chips. Each chip = { base: <canonical base name>, modifiers: [<up to 2 modifier names>] }. Bases (181 canonical, e.g. Blueberry, Jasmine, Earl Grey) and modifiers (43 canonical, e.g. Baked, Dried, Candied) live in `canonicals://flavors` + `docs://taxonomies/flavors.md`. Tea-base rule: when base ∈ {Tea, Black Tea, Green Tea, Earl Grey, etc.}, modifiers can include other base flavor names ("Peach Tea" → {base: "Tea", modifiers: ["Peach"]}). Aliases accepted via the canonical-registry alias map.',
+  ),
+  structure_tags: z.array(structureTagEnum).optional().nullable().describe(
+    `Per-coffee structure descriptors as canonical "Axis:Descriptor" keys. Strict (no aliases). 29 valid keys across 7 axes (Acidity / Body / Clarity / Finish / Sweetness / Balance / Overall). Examples: "Body:Light", "Acidity:Bright", "Clarity:Transparent". Full list (sorted): ${STRUCTURE_KEYS.join(', ')}. See \`canonicals://flavors\` or \`docs://taxonomies/flavors.md#Structure Tags\`.`,
+  ),
   flavor_notes: z.array(z.string()).optional().nullable().describe('Legacy display strings; use flavors[] structured form.'),
   aroma: z.string().optional().nullable(),
   attack: z.string().optional().nullable(),
