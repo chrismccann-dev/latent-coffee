@@ -5,6 +5,7 @@ import { fetchBrewById, fetchRecentBrews } from '@/lib/mcp/brews'
 import { isKnownDoc, listTaxonomyAxes, readDoc, readDocSection } from '@/lib/mcp/docs'
 import { registerPushBrewTool } from '@/lib/mcp/push-brew'
 import { registerProposeDocChangesTool } from '@/lib/mcp/propose-doc-changes'
+import { registerDocTools } from '@/lib/mcp/doc-tools'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 function templateVar(variables: Variables, key: string): string {
@@ -21,6 +22,7 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerDocResources(server)
   registerPushBrewTool(server, auth)
   registerProposeDocChangesTool(server, auth)
+  registerDocTools(server)
 
   return server
 }

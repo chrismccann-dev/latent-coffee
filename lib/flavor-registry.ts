@@ -432,7 +432,7 @@ export function parseStructureTag(key: string): { axis: StructureAxis; descripto
   return { axis: key.slice(0, idx) as StructureAxis, descriptor: key.slice(idx + 1) }
 }
 
-const STRUCTURE_KEYS = STRUCTURE_TAGS.map(structureTagKey).sort()
+export const STRUCTURE_KEYS: readonly string[] = STRUCTURE_TAGS.map(structureTagKey).sort()
 
 // Group structure tags by axis for axis-grouped pickers in StructureTagsPicker.
 export const STRUCTURE_BY_AXIS: Record<StructureAxis, readonly string[]> = (() => {
