@@ -664,7 +664,7 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 
 #### Genetics
 - **Genetic Background:** Historic Ethiopian-related landrace material originating from the Boma Plateau in South Sudan; represents indigenous Arabica populations rather than a stabilized modern cultivar or breeding program.
-- **Market names normalized here:** Rume Sudan (word-order variant).
+- **Market names normalized here:** Rume Sudan (word-order variant), Sudán Rumé / Sudán Rume / Sudan Rumé (Spanish-accent variants — claude.ai / ChatGPT default rendering of the variety name; aliased to canonical).
 
 #### Agronomy
 - **Typical Origins:** South Sudan; now also grown in limited specialty lots in Latin America.

@@ -30,7 +30,7 @@ export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext)
     {
       title: 'Push Cupping',
       description:
-        'Log / record / save / push a cupping evaluation (Day 7 pourover or Day 4 table cupping) scoped to a roast_id. Captures eval_method (Cupping vs Pourover), rest_days (V4 evaluation gate is Day 7), ground_agtron (paired with roasts.agtron for WB-to-Ground delta), and the 6 prose fields (aroma / flavor / acidity / body / finish / overall).',
+        'Log / record / save / push / archive a cupping evaluation (Day 7 post-roast pourover or Day 4 table cupping) — STAGE 4 of the self-roasted roasting pipeline; runs after push_roast for each batch you cup. Captures eval_method (Cupping vs Pourover), rest_days (V4 evaluation gate is Day 7), ground_agtron (paired with roasts.agtron for WB-to-Ground delta), and the 6 prose fields (aroma / flavor / acidity / body / finish / overall). Requires roast_id from a prior push_roast.',
       inputSchema: pushCuppingInputSchema,
     },
     async (input) => {
