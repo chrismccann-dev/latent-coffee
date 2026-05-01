@@ -70,7 +70,7 @@ export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContex
     {
       title: 'Push Green Bean',
       description:
-        'Log / register / save / push / import / archive a new green coffee bean lot to the app — STAGE 1 of the self-roasted roasting pipeline (push_green_bean → list_roest_logs → pull_roest_log → push_roast → push_cupping → push_experiment → push_roast_learnings). Required before any roast batch can be pushed; push_roast / push_experiment / push_roast_learnings all need green_bean_id as a non-nullable FK. Resolves terroir + cultivar FKs via lazy find-or-create against canonical registries. Producer canonicalizes via PRODUCER_LOOKUP (allowOverride). Returns green_bean_id + flags for newly-created FKs. Use list_roest_inventory + pull_roest_log first to seed structured fields from Roest, then augment with seller/price/notes.',
+        'Log / register / save / push / import / archive a new green coffee bean lot to the app — STAGE 1 of the self-roasted roasting pipeline (push_green_bean → list_roest_logs → pull_roest_log → push_roast → push_cupping → push_experiment → push_roast_learnings). Required before any roast batch can be pushed; push_roast / push_experiment / push_roast_learnings all need green_bean_id as a non-nullable FK. UPSERT semantics on (user_id, lot_id): safe to retry after crash — when a row already exists the existing green_bean_id + terroir_id + cultivar_id are returned with `created: false` and field values are NOT overwritten (use the app /add or /edit UI to update fields on an existing lot). On a fresh insert, resolves terroir + cultivar FKs via lazy find-or-create against canonical registries; producer canonicalizes via PRODUCER_LOOKUP (allowOverride). Use list_roest_inventory + pull_roest_log first to seed structured fields from Roest. To recover green_bean_id without re-pushing (e.g. cross-session retry where you only have the lot_id), use get_green_bean.',
       inputSchema: pushGreenBeanInputSchema,
     },
     async (input) => {
@@ -86,6 +86,7 @@ export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContex
         green_bean_id: result.green_bean_id,
         terroir_id: result.terroir_id,
         cultivar_id: result.cultivar_id,
+        created: result.created,
       }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
