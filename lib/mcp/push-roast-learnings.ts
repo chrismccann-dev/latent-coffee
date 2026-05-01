@@ -38,7 +38,7 @@ export function registerPushRoastLearningsTool(server: McpServer, auth: McpAuthC
     {
       title: 'Push Roast Learnings',
       description:
-        'UPSERTs the per-bean lessons row at lot close-out. Mirrors the "Overall Lessons (Per Bean)" spreadsheet sheet 17-col shape. ONE row per green_bean_id. Distinct from propose_doc_changes against ROASTING.md — this Tool fills the structured DB table that /green/[id] renders; propose_doc_changes adds prose narrative to the living roasting reference doc.',
+        'Log / save / record / push the per-bean roast lessons row at lot close-out — one row per closed bean. UPSERTs the structured "Overall Lessons (Per Bean)" 17-col shape keyed on (user_id, green_bean_id). Distinct from propose_doc_changes against ROASTING.md — this Tool fills the structured DB table that /green/[id] renders; propose_doc_changes adds prose narrative to the living roasting reference doc.',
       inputSchema: pushRoastLearningsInputSchema,
     },
     async (input) => {

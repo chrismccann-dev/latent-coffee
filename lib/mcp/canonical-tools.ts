@@ -27,7 +27,7 @@ export function registerCanonicalTools(server: McpServer) {
     {
       title: 'List Canonical Registries',
       description:
-        'Enumerate every canonical-taxonomy registry the MCP server validates against. Returns an array of { axis, title, description } for the 12 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers). Use this BEFORE drafting a push_brew payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical.',
+        'List / lookup / browse / discover / enumerate the canonical-taxonomy registries the MCP server validates against. Returns an array of { axis, title, description } for the 12 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers). Use this BEFORE drafting a push_brew payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical.',
       inputSchema: {},
     },
     async () => {
@@ -48,7 +48,7 @@ export function registerCanonicalTools(server: McpServer) {
     {
       title: 'Read Canonical Registry',
       description:
-        'Return the full canonical-registry payload for one axis. Each payload contains the canonical name list, alias map, and any structural metadata (genetic family / strategy tag / grinder valid_settings / etc.) — same content the canonicals://{axis} Resource serves. Use this to validate a name or look up an alias before push_brew. For just the catalog of axes (without payloads), use list_canonicals.',
+        'Read / lookup / validate / find / get the full canonical-registry payload for one axis (cultivars / roasters / producers / etc.). Each payload contains the canonical name list, alias map, and any structural metadata (genetic family / strategy tag / grinder valid_settings / etc.) — same content the canonicals://{axis} Resource serves. Use this to validate a name or look up an alias before push_brew. For just the catalog of axes (without payloads), use list_canonicals.',
       inputSchema: {
         axis: z.enum(AXES_TUPLE).describe(
           `One of the 12 canonical-axis names. Run list_canonicals to discover them. Valid: ${VALID_AXES.join(', ')}.`,

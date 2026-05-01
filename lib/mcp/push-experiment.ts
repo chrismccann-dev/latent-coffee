@@ -43,7 +43,7 @@ export function registerPushExperimentTool(server: McpServer, auth: McpAuthConte
     {
       title: 'Push Experiment',
       description:
-        'UPSERTs an experiment row keyed on (user_id, green_bean_id, experiment_id). Same experiment_id pushed twice updates the existing row — supports the iterative shape where experiment design lands first, then outcomes / winner / key_insight populate as batches resolve at Day 7. Returns experiment_pk + created flag (true on first push, false on update).',
+        'Log / save / update / record / push a roasting experiment (A/B/C/D batch comparison) — UPSERTs on (user_id, green_bean_id, experiment_id). Same experiment_id pushed twice updates the existing row — supports the iterative shape where experiment design lands first, then outcomes / winner / key_insight populate as batches resolve at Day 7. Returns experiment_pk + created flag (true on first push, false on update).',
       inputSchema: pushExperimentInputSchema,
     },
     async (input) => {

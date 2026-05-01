@@ -37,7 +37,7 @@ export function registerPullRoestLogTool(server: McpServer, auth: McpAuthContext
     {
       title: 'Pull Roest Log',
       description:
-        'Fetches a Roest roast log + linked profile from api.roestcoffee.com and returns a normalized push_roast-shaped payload (batch_id, fc_temp, drop_temp, fc_start, drop_time, dev_time_s, fan_curve display string, inlet_curve display string, agtron, weight_loss_pct). Sets roest_log_id for cross-reference. Caller augments with prose fields (what_worked / what_didnt / what_to_change) before calling push_roast. green_bean_id is null in the response — caller resolves by matching log.inventory_id against green_beans.roest_inventory_id and calling push_green_bean first if needed.',
+        'Pull / fetch / import / load / sync a Roest machine roast log + its linked profile from api.roestcoffee.com. Returns a normalized push_roast-shaped payload (batch_id, fc_temp, drop_temp, fc_start, drop_time, dev_time_s, fan_curve display string, inlet_curve display string, agtron, weight_loss_pct). Sets roest_log_id for cross-reference. Caller augments with prose fields (what_worked / what_didnt / what_to_change) before calling push_roast. green_bean_id is null in the response — caller resolves by matching log.inventory_id against green_beans.roest_inventory_id and calling push_green_bean first if needed.',
       inputSchema: pullRoestLogInputSchema,
     },
     async (input) => {

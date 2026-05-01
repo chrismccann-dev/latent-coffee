@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check:mcp": "npx -y -p tsx@4 tsx scripts/check-mcp-tools.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.89.0",

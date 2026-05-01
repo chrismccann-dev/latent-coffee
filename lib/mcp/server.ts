@@ -15,6 +15,10 @@ import { registerPushExperimentTool } from '@/lib/mcp/push-experiment'
 import { registerPushRoastLearningsTool } from '@/lib/mcp/push-roast-learnings'
 import { registerPullRoestLogTool } from '@/lib/mcp/pull-roest-log'
 import { registerListRoestInventoryTool } from '@/lib/mcp/list-roest-inventory'
+import {
+  assertToolDiscoverability,
+  type ToolDescriptor,
+} from '@/lib/mcp/discoverability-check'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 function templateVar(variables: Variables, key: string): string {
@@ -42,7 +46,32 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerPullRoestLogTool(server, auth)
   registerListRoestInventoryTool(server, auth)
 
+  // Discoverability guard (MCP feedback batch 4). Dev-only — fires fast on the
+  // first MCP request after a tool description regresses into the "Inserts a
+  // ..." / "UPSERTs a..." anti-pattern that blocked Stages 1-6 of the Sudan
+  // Rume Hybrid Washed dog-food. Production silently skips so a description
+  // regression doesn't take down /api/mcp.
+  if (process.env.NODE_ENV === 'development') {
+    assertToolDiscoverability(collectToolDescriptors(server))
+  }
+
   return server
+}
+
+// Walks the SDK-private _registeredTools map. The SDK type annotates this as
+// private; we narrow via a single explicit cast in this one spot. If the SDK
+// renames the field in a future version, the standalone scripts/check-mcp-
+// tools.ts script + the dev-only assertion fail loudly here, surfacing the
+// drift before it silently starts skipping the check.
+function collectToolDescriptors(server: McpServer): ToolDescriptor[] {
+  const internal = server as unknown as {
+    _registeredTools?: Record<string, { description?: string }>
+  }
+  const map = internal._registeredTools ?? {}
+  return Object.entries(map).map(([name, tool]) => ({
+    name,
+    description: tool.description ?? '',
+  }))
 }
 
 function registerCanonicalResources(server: McpServer) {
