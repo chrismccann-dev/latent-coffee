@@ -4,18 +4,20 @@ Personal coffee research journal that compounds brewing knowledge over time. Bui
 
 > **See [PRODUCT.md](PRODUCT.md)** for the full product document — vision, workflows, data model, current state, and future directions.
 >
-> **See [BREWING.md](BREWING.md)** for the Brewing Master Reference — brew prompt, roaster reference cards, archive patterns, equipment reference. Chris's living reference for the purchased-coffee brew iteration loop. A sibling `ROASTING.md` is planned for the self-roasted side.
+> **See [BREWING.md](BREWING.md)** for the Brewing Master Reference — brew prompt, roaster reference cards, archive patterns, equipment reference. Chris's living reference for the purchased-coffee brew iteration loop.
 >
-> **See [SYNC.md](SYNC.md)** for the Claude-authored archive-sync playbook — validator table, field → column mapping, decision prompts, phase-by-phase procedure, and rollback runbook. Used when Chris pastes a resolved-brew archive block into a Claude Code session.
+> **See [ROASTING.md](ROASTING.md)** for the Roasting Master Reference — counterflow methodology, evaluation protocol, fan/inlet curves, FC marking protocol, per-bean experiment patterns, recently-closed-lot archive, roast-to-brew translation. Sibling of BREWING.md, seeded 2026-04-30 verbatim from Chris's authored V4 doc and patched on every lot close-out via the V2 propose_doc_changes pipeline.
+>
+> **See [SYNC.md](SYNC.md)** for the legacy paste-driven archive-sync playbook (operational through 2.3; superseded by the V2 MCP path). **See [SYNC_V2.md](SYNC_V2.md)** for the live V2 architecture — MCP transport, propose_doc_changes pipeline, asymmetric write trust, sprint 2.3-2.7 build queue. **See [ARBITER.md](ARBITER.md)** for the Claude Code playbook used when batching pending doc proposals.
 
 ## Living reference docs
 
-`PRODUCT.md` and `BREWING.md` are both **living documents**:
+`PRODUCT.md`, `BREWING.md`, and `ROASTING.md` are all **living documents**:
 
-- Chris hand-edits them when the mental model shifts (new brewing strategy, new page shipped, new data source).
-- Claude Code patches them during archive sync — the Claude-authored sync V1 pipeline (see sprint roadmap) appends to `BREWING.md` Archive Patterns / Roaster Reference when a resolved brew teaches something new, and updates `PRODUCT.md` sprint history when a sprint ships.
-- Neither is auto-generated from scratch; both compound edit-by-edit. A `ROASTING.md` will follow the same pattern once V1-roasting ships.
-- The Dropbox originals (BMR, Roasting Intent, Terroir/Cultivar Ruleset) remain as archival snapshots so Claude projects can still load them; the repo copies are the ones that compound going forward.
+- Chris hand-edits them when the mental model shifts (new brewing strategy, new page shipped, new data source, new lot closed).
+- Claude Code patches them via the V2 `propose_doc_changes` pipeline (Sprints 2.4 + 2.5) — claude.ai writes proposals during a brew or roast session, Claude Code arbitrates in batch and applies citation-by-citation. Same playbook for both BREWING.md and ROASTING.md (see [ARBITER.md](ARBITER.md)).
+- None auto-generated from scratch; they compound edit-by-edit.
+- The Dropbox originals (BMR, Roasting Master Reference, Terroir/Cultivar Ruleset) remain as archival snapshots so Claude projects can still load them; the repo copies are the ones that compound going forward.
 
 ## Architecture
 
