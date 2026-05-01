@@ -723,7 +723,7 @@ Drier conditions reduce acidity and increase body vs southern systems
 ### Western Andean Cordillera
 
 **Country:** Colombia  **Admin Regions it overlaps:** Valle del Cauca / Risaralda / Cauca
-**Typical Meso Terroirs (reference only; not canonical):** Trujillo, El Cairo, Santuario, Apía, Balboa, Inzá, Piendamó
+**Typical Meso Terroirs (reference only; not canonical):** Trujillo, El Cairo, Santuario, Apía, Balboa, Inzá, Piendamó, Caicedonia (where farms like Las Margaritas / La Esperanza sit; aliased to canonical via TERROIR_MACRO_ALIASES)
 
 #### Context
 Closer to Pacific moisture influence with higher humidity and cloud cover

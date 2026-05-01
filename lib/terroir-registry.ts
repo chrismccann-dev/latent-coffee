@@ -335,6 +335,13 @@ export const TERROIR_MACROS: readonly string[] = [
 export const TERROIR_MACRO_ALIASES: Readonly<Record<string, string>> = {
   'Acatenango Volcanic Highlands': 'Central Volcanic Highlands',
   'Alotepec-Metapan Highlands': 'Alotepec-Metapán Highlands',
+  // Caicedonia is a Valle del Cauca municipality (where Las Margaritas farm
+  // sits); the canonical macro is Western Andean Cordillera. MCP feedback
+  // batch 2 (2026-05-01) surfaced this when push_brew silently created a
+  // non-canonical "Caicedonia" macro_terroir row. Same root cause as the
+  // Sudán Rumé cultivar alias gap — find-or-create accepts whatever the
+  // model sends without registry-side canonicalization on terroir.
+  Caicedonia: 'Western Andean Cordillera',
   'Balsamo Volcanic Belt': 'Bálsamo Volcanic Belt',
   'Costa Rican Central Volcanic Highlands': 'Central Volcanic Highlands',
   'Espirito Santo Highlands': 'Espírito Santo Highlands',
