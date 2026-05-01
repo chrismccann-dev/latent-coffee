@@ -99,15 +99,17 @@ export type ProposeDocChangesResult =
   | { ok: false; error: string }
 
 // Map a normalized target_doc back to its docs:// URI for live-doc reads
-// (used by the per-citation preflight). Returns null when the target_doc
-// has no docs:// mapping yet (e.g. roasting.md before Sprint 2.5).
+// (used by the per-citation preflight).
 //
 // For roaster/{name}, the URI always resolves to docs://brewing/roasters.md
 // (the post-Sprint-2.4 split location); the section_anchor on the citation
-// is the canonical roaster name verbatim.
+// is the canonical roaster name verbatim. Sprint 2.5 added roasting.md as
+// a real served doc; the prior "return null" stub silently set
+// anchor_resolved: false on every roasting.md proposal — fixed in this
+// follow-up.
 function targetDocToUri(targetDoc: string): string | null {
   if (targetDoc === 'brewing.md') return 'docs://brewing.md'
-  if (targetDoc === 'roasting.md') return null // not yet served — Sprint 2.5
+  if (targetDoc === 'roasting.md') return 'docs://roasting.md'
   if (targetDoc.startsWith('roaster/')) return 'docs://brewing/roasters.md'
   if (targetDoc.startsWith('taxonomies/')) return `docs://${targetDoc}`
   return null
