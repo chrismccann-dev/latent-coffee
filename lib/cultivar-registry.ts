@@ -247,6 +247,13 @@ export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
 
   // Sudan Rume word order
   'Rume Sudan': 'Sudan Rume',
+  // Accented forms — claude.ai / ChatGPT default rendering of the variety
+  // name carries Spanish-style accents. MCP feedback batch 2 (2026-05-01)
+  // surfaced this when push_brew silently created a non-canonical
+  // "Sudán Rumé" row with NULL lineage instead of aliasing to canonical.
+  'Sudán Rumé': 'Sudan Rume',
+  'Sudan Rumé': 'Sudan Rume',
+  'Sudán Rume': 'Sudan Rume',
 
   // Maragogype spelling
   Maragogipe: 'Maragogype',
