@@ -670,51 +670,73 @@ export async function persistBrew(
   payload: BrewPayload,
   opts: PersistOptions = {}
 ): Promise<PersistResult> {
+  // Aggregate ALL validation errors into one response (MCP feedback batch 3,
+  // 2026-04-30 — "validation surfaces one error at a time" was the highest-
+  // leverage friction point: multi-field problems used to require N round-
+  // trips, now they collapse to one). Order of accumulation:
+  //   1. validateBrewPayload (already accumulates internally).
+  //   2. Each text-only canonical (roaster / producer / brewer / filter /
+  //      grinder + grind_setting / roast_level) — run all in sequence, push
+  //      every failure, only fail-out as a batch.
+  // Aggregation runs BEFORE any DB write so a failed validation never leaves
+  // orphan terroir/cultivar inserts.
+  const errors: string[] = []
   const validation = validateBrewPayload(payload)
-  if (!validation.ok) {
-    return { ok: false, code: 'validation', errors: validation.errors }
-  }
+  if (!validation.ok) errors.push(...validation.errors)
 
-  // Validate roaster + grinder + roast_level before any DB writes — failures
-  // here would otherwise leave orphan terroir/cultivar inserts.
   const roasterResult = findOrCreateRoaster(payload.roaster, { allowOverride: payload.roaster_override === true })
-  if (!roasterResult.ok) return { ok: false, code: 'validation', errors: [roasterResult.error] }
+  if (!roasterResult.ok) errors.push(roasterResult.error)
   const producerResult = findOrCreateProducer(payload.producer, { allowOverride: payload.producer_override === true })
-  if (!producerResult.ok) return { ok: false, code: 'validation', errors: [producerResult.error] }
+  if (!producerResult.ok) errors.push(producerResult.error)
   const brewerResult = findOrCreateBrewer(payload.brewer, { allowOverride: payload.brewer_override === true })
-  if (!brewerResult.ok) return { ok: false, code: 'validation', errors: [brewerResult.error] }
+  if (!brewerResult.ok) errors.push(brewerResult.error)
   const filterResult = findOrCreateFilter(payload.filter, { allowOverride: payload.filter_override === true })
-  if (!filterResult.ok) return { ok: false, code: 'validation', errors: [filterResult.error] }
+  if (!filterResult.ok) errors.push(filterResult.error)
   const grinderResult = findOrCreateGrinder(payload.grinder, { allowOverride: payload.grinder_override === true })
-  if (!grinderResult.ok) return { ok: false, code: 'validation', errors: [grinderResult.error] }
+  if (!grinderResult.ok) errors.push(grinderResult.error)
   if (
+    grinderResult.ok &&
     grinderResult.canonicalName &&
     payload.grind_setting?.trim() &&
     !isResolvableSetting(grinderResult.canonicalName, payload.grind_setting)
   ) {
-    return {
-      ok: false,
-      code: 'validation',
-      errors: [`grind_setting "${payload.grind_setting}" is not valid on ${grinderResult.canonicalName}`],
-    }
+    errors.push(`grind_setting "${payload.grind_setting}" is not valid on ${grinderResult.canonicalName}`)
   }
   let canonicalRoastLevel: string | null = null
   if (payload.roast_level?.trim()) {
     canonicalRoastLevel = ROAST_LEVEL_LOOKUP.canonicalize(payload.roast_level)
     if (!canonicalRoastLevel) {
-      return {
-        ok: false,
-        code: 'validation',
-        errors: [`roast_level "${payload.roast_level}" is not in the canonical registry`],
-      }
+      errors.push(`roast_level "${payload.roast_level}" is not in the canonical registry`)
     }
   }
 
+  // cleanFlavors / cleanStructureTags also accumulate into the same batch so
+  // a payload with both a bad roaster AND bad flavors gets both errors back
+  // in one round-trip. Deferred until after the canonical-text checks so we
+  // don't burn cleaning cycles when the upstream fields are already failing.
   const flavorsResult = cleanFlavors(payload.flavors ?? null)
-  if (!flavorsResult.ok) return { ok: false, code: 'validation', errors: [flavorsResult.error] }
-  const cleanedFlavors = flavorsResult.value
+  if (!flavorsResult.ok) errors.push(flavorsResult.error)
   const structureResult = cleanStructureTags(payload.structure_tags ?? null)
-  if (!structureResult.ok) return { ok: false, code: 'validation', errors: [structureResult.error] }
+  if (!structureResult.ok) errors.push(structureResult.error)
+
+  if (errors.length > 0) {
+    return { ok: false, code: 'validation', errors }
+  }
+  // Discriminated-union narrowing for the rest of the function — every
+  // findOrCreate* + clean* has succeeded above. TS can't infer this through
+  // the accumulator pattern, so we re-assert as a safety net.
+  if (
+    !roasterResult.ok ||
+    !producerResult.ok ||
+    !brewerResult.ok ||
+    !filterResult.ok ||
+    !grinderResult.ok ||
+    !flavorsResult.ok ||
+    !structureResult.ok
+  ) {
+    return { ok: false, code: 'validation', errors: ['unreachable: post-aggregation narrowing'] }
+  }
+  const cleanedFlavors = flavorsResult.value
   const cleanedStructureTags = structureResult.value
 
   const terroirMatch = await matchTerroir(supabase, userId, payload.terroir)

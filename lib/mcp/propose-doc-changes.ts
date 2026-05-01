@@ -1,7 +1,7 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
-import { listTaxonomyAxes, type TaxonomyAxis } from '@/lib/mcp/docs'
+import { isKnownDoc, listTaxonomyAxes, readDocSection, type TaxonomyAxis } from '@/lib/mcp/docs'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 // propose_doc_changes — the polymorphic prose-edit Tool.
@@ -35,23 +35,27 @@ const VALID_SOURCE_KINDS = ['brew', 'roast', 'cupping', 'session'] as const
 
 const citation = z.object({
   section_anchor: z.string().describe(
-    'Header text WITHOUT the leading `#` characters. E.g. "Equipment Reference". Anchor matching is case-sensitive exact match against `## ` or `### ` headers in the resolved file. The arbiter does NOT fuzzy-match — stale anchors surface to the user with current_text + proposed_text for retarget vs discard decision.',
+    'Header text WITHOUT the leading `#` characters. E.g. "Equipment Reference". Anchor matching is case-sensitive exact match against `## ` or `### ` headers in the resolved file — call `list_doc_sections(uri)` to discover valid anchors before drafting. The arbiter does NOT fuzzy-match — stale anchors surface to the user with current_text + proposed_text for retarget vs discard decision.',
   ),
   line_range: z.tuple([z.number(), z.number()]).optional(),
   current_text: z.string().optional().describe(
-    'OPTIONAL. For `replace` operations, include the exact text being replaced — lets the arbiter detect drift if the file content has changed since you wrote the proposal. For `append` / `prepend`, omit unless you want to give the arbiter a positional hint (e.g. "after the Heritage Collection bullet").',
+    'For `replace` operations: REQUIRED-IF-LOAD-BEARING. Include the exact verbatim text being replaced (copy via `read_doc_section`) so the arbiter can detect drift between when you wrote the proposal and when it gets applied. Matching is byte-for-byte exact — preserve smart-quotes, em-dashes, trailing whitespace, and Unicode normalization (NFC) as they appear in the live doc. For `append` / `prepend`: this field is currently IGNORED by the arbiter (positional hints are not yet wired). Omit on append/prepend ops to keep proposals lean.',
   ),
   proposed_text: z.string().describe('The text to append / prepend / replace with.'),
-  operation: z.enum(VALID_OPERATIONS),
+  operation: z.enum(VALID_OPERATIONS).describe(
+    '`replace` — substitute matching text (uses current_text for drift detection). `append` — add to the END of the named section. `prepend` — add to the START of the named section. Note: append/prepend currently land at section boundaries; mid-section positioning relative to specific bullets is not yet supported.',
+  ),
   rationale: z.string().describe('Free-text justification — surfaced to the arbiter at apply time.'),
   target_doc: z.string().optional().describe(
-    'OPTIONAL per-citation override of the proposal-level target_doc. Use when a single proposal\'s citations span multiple files (e.g. one citation targets `roaster/Dongzhe` and another targets `brewing.md`). When omitted, inherits the proposal-level target_doc.',
+    'OPTIONAL per-citation override of the proposal-level target_doc. Accepts the same shape as the proposal-level field: `brewing.md` | `roasting.md` | `roaster/{Canonical Roaster Name}` | `taxonomies/{axis}.md`. Use when a single proposal\'s citations span multiple files (e.g. one citation targets `roaster/Dongzhe` and another targets `brewing.md`). When omitted, inherits the proposal-level target_doc.',
   ),
 })
 
 const sourceRef = z.object({
-  kind: z.enum(VALID_SOURCE_KINDS),
-  id: z.string().optional(),
+  kind: z.enum(VALID_SOURCE_KINDS).describe('What triggered the proposal. `brew` = a single completed brew; `roast` / `cupping` = roasting-side events (Sprint 2.5+); `session` = a general working-session not tied to a specific entity.'),
+  id: z.string().optional().describe(
+    'For `kind: brew`, set this to the brew_id returned by `push_brew`. Establishes a queryable lineage from the proposal back to the brew that triggered it (visible in the arbiter UI + DB). For `kind: roast` / `cupping`, set to the roast/cupping id once those tools land in Sprint 2.5. For `kind: session`, optional free-text id (e.g. a date stamp).',
+  ),
 })
 
 export const proposeDocChangesInputSchema = {
@@ -72,9 +76,42 @@ type ProposeDocChangesInput = {
   summary: string
 }
 
+export type CitationPreflight = {
+  target_doc: string
+  section_anchor: string
+  operation: (typeof VALID_OPERATIONS)[number]
+  anchor_resolved: boolean
+  // For replace ops: did current_text match what's actually in the live doc?
+  // null = not checked (no current_text supplied, or operation isn't replace).
+  current_text_match: boolean | null
+}
+
 export type ProposeDocChangesResult =
-  | { ok: true; proposal_id: string; superseded_ids: string[] }
+  | {
+      ok: true
+      proposal_id: string
+      superseded_ids: string[]
+      summary: string
+      target_doc: string
+      citation_count: number
+      preflight: CitationPreflight[]
+    }
   | { ok: false; error: string }
+
+// Map a normalized target_doc back to its docs:// URI for live-doc reads
+// (used by the per-citation preflight). Returns null when the target_doc
+// has no docs:// mapping yet (e.g. roasting.md before Sprint 2.5).
+//
+// For roaster/{name}, the URI always resolves to docs://brewing/roasters.md
+// (the post-Sprint-2.4 split location); the section_anchor on the citation
+// is the canonical roaster name verbatim.
+function targetDocToUri(targetDoc: string): string | null {
+  if (targetDoc === 'brewing.md') return 'docs://brewing.md'
+  if (targetDoc === 'roasting.md') return null // not yet served — Sprint 2.5
+  if (targetDoc.startsWith('roaster/')) return 'docs://brewing/roasters.md'
+  if (targetDoc.startsWith('taxonomies/')) return `docs://${targetDoc}`
+  return null
+}
 
 // Validates target_doc against the allow-list. On roaster/{name} input, the name
 // is canonicalized via ROASTER_LOOKUP so the stored value is always the canonical
@@ -140,6 +177,49 @@ export async function proposeDocChanges(
     normalizedCitations.push({ ...c, target_doc: normalized.target_doc })
   }
 
+  // Preflight each citation against the live doc (Sprint 2.4.3). Resolves
+  // section_anchor existence + (for replace ops with current_text) drift
+  // detection BEFORE the proposal lands in the queue. Returns the per-citation
+  // status in the response so the caller can immediately retarget stale
+  // anchors / re-fetch verbatim text without round-tripping through the
+  // arbiter. This does NOT block insert — even citations with unresolved
+  // anchors get queued so the arbiter can still surface them with full
+  // context. The preflight is a SIGNAL, not a gate.
+  //
+  // target_doc → docs:// URI mapping: bare files map directly; roaster/{name}
+  // maps to docs://brewing/roasters.md (anchor = canonical name); taxonomies/
+  // {axis}.md maps directly. Anchors that don't have a docs:// mapping
+  // (currently only roasting.md before Sprint 2.5 ships the file) preflight
+  // to anchor_resolved: false but the proposal still queues.
+  const preflight: CitationPreflight[] = []
+  for (const c of normalizedCitations) {
+    const docUri = targetDocToUri(c.target_doc)
+    let anchorResolved = false
+    let currentTextMatch: boolean | null = null
+    if (docUri && isKnownDoc(docUri)) {
+      try {
+        const body = await readDocSection(docUri, c.section_anchor)
+        anchorResolved = body !== null
+        if (c.operation === 'replace' && c.current_text != null && body != null) {
+          currentTextMatch = body.includes(c.current_text)
+        }
+      } catch (err) {
+        console.error(
+          `[propose_doc_changes] preflight failed for ${c.target_doc}#${c.section_anchor}:`,
+          err,
+        )
+        // Soft-fail; let the arbiter handle it.
+      }
+    }
+    preflight.push({
+      target_doc: c.target_doc,
+      section_anchor: c.section_anchor,
+      operation: c.operation,
+      anchor_resolved: anchorResolved,
+      current_text_match: currentTextMatch,
+    })
+  }
+
   // INSERT first so we have the new id for the supersede UPDATE's `notes`. Two
   // calls (INSERT then UPDATE) instead of a single transaction — supabase-js
   // doesn't expose Postgres transactions natively in this shape. The race window
@@ -196,7 +276,15 @@ export async function proposeDocChanges(
     }
   }
 
-  return { ok: true, proposal_id: newId, superseded_ids: Array.from(supersededIds) }
+  return {
+    ok: true,
+    proposal_id: newId,
+    superseded_ids: Array.from(supersededIds),
+    summary: input.summary,
+    target_doc: proposalTargetDoc,
+    citation_count: normalizedCitations.length,
+    preflight,
+  }
 }
 
 export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthContext) {
@@ -205,7 +293,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
     {
       title: 'Propose Doc Changes',
       description:
-        'Stage a prose change to a brewing/roasting doc. Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal — the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor).',
+        'Stage a prose change to a brewing/roasting doc. Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. WORKFLOW: before drafting, call `read_doc_section(uri, anchor)` to fetch the live target so `current_text` (for replace ops) is verbatim from what\'s actually in the doc — project-uploaded copies often drift behind live, especially for fields with pending-but-unapplied edits. Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match against `## ` / `### ` headers). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal — the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor). Response includes a per-citation preflight echo (anchor_resolved + current_text_match) so stale anchors / drifted current_text surface immediately, not at arbiter time.',
       inputSchema: proposeDocChangesInputSchema,
     },
     async (input) => {
@@ -213,22 +301,18 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
       if (!result.ok) {
         throw new Error(`Proposal failed: ${result.error}`)
       }
+      const responsePayload = {
+        proposal_id: result.proposal_id,
+        status: 'pending' as const,
+        superseded_ids: result.superseded_ids,
+        summary: result.summary,
+        target_doc: result.target_doc,
+        citation_count: result.citation_count,
+        preflight: result.preflight,
+      }
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify({
-              proposal_id: result.proposal_id,
-              status: 'pending',
-              superseded_ids: result.superseded_ids,
-            }),
-          },
-        ],
-        structuredContent: {
-          proposal_id: result.proposal_id,
-          status: 'pending',
-          superseded_ids: result.superseded_ids,
-        },
+        content: [{ type: 'text', text: JSON.stringify(responsePayload) }],
+        structuredContent: responsePayload,
       }
     },
   )
