@@ -22,6 +22,7 @@ export type TaxonomyAxis = (typeof TAXONOMY_AXES)[number]
 const DOC_FILES: Record<string, string> = {
   'docs://brewing.md': 'BREWING.md',
   'docs://brewing/roasters.md': 'docs/brewing/roasters.md',
+  'docs://roasting.md': 'ROASTING.md',
   ...Object.fromEntries(
     TAXONOMY_AXES.map((axis) => [`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`]),
   ),
@@ -60,6 +61,12 @@ export function listDocs(): { uri: string; name: string; title: string; mimeType
       uri: 'docs://brewing/roasters.md',
       name: 'docs/brewing/roasters.md',
       title: 'Roaster Brewing Lessons',
+      mimeType: 'text/markdown',
+    },
+    {
+      uri: 'docs://roasting.md',
+      name: 'docs/roasting.md',
+      title: 'Roasting Master Reference',
       mimeType: 'text/markdown',
     },
     ...TAXONOMY_AXES.map((axis) => ({
