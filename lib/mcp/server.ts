@@ -121,7 +121,7 @@ function registerBrewResources(server: McpServer, auth: McpAuthContext) {
 }
 
 function registerDocResources(server: McpServer) {
-  // Bare full-file fetches for the two brewing-domain docs.
+  // Bare full-file fetches for the brewing-domain docs.
   server.registerResource(
     'docs-brewing',
     'docs://brewing.md',
@@ -133,6 +133,21 @@ function registerDocResources(server: McpServer) {
     },
     async (uri) => {
       const text = await readDoc('docs://brewing.md')
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text }] }
+    },
+  )
+
+  server.registerResource(
+    'docs-roasting',
+    'docs://roasting.md',
+    {
+      title: 'Roasting Master Reference',
+      description:
+        'Full ROASTING.md served live from the deploy filesystem. Sibling to BREWING.md for the self-roasted side. Compounds edit-by-edit via the V2 sync pipeline + the doc-proposal arbiter. For one section by anchor, use docs://roasting.md#<Section%20Name>.',
+      mimeType: 'text/markdown',
+    },
+    async (uri) => {
+      const text = await readDoc('docs://roasting.md')
       return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text }] }
     },
   )
@@ -152,7 +167,7 @@ function registerDocResources(server: McpServer) {
     },
   )
 
-  // Section-anchor variants for both brewing docs.
+  // Section-anchor variants for the brewing-domain docs.
   server.registerResource(
     'docs-brewing-section',
     new ResourceTemplate('docs://brewing.md#{anchor}', { list: undefined }),
@@ -168,6 +183,26 @@ function registerDocResources(server: McpServer) {
       const body = await readDocSection('docs://brewing.md', anchor)
       if (body == null) {
         throw new Error(`Section not found in BREWING.md: ${anchor}`)
+      }
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text: body }] }
+    },
+  )
+
+  server.registerResource(
+    'docs-roasting-section',
+    new ResourceTemplate('docs://roasting.md#{anchor}', { list: undefined }),
+    {
+      title: 'ROASTING.md (one section)',
+      description:
+        'Returns the body of one ROASTING.md section by header text (case-sensitive, URL-encoded). Throws if the anchor is not found - useful for catching stale propose_doc_changes citations against this doc.',
+      mimeType: 'text/markdown',
+    },
+    async (uri, variables) => {
+      const anchor = decodeURIComponent(templateVar(variables, 'anchor'))
+      if (!anchor) throw new Error('docs://roasting.md#{anchor} requires an anchor')
+      const body = await readDocSection('docs://roasting.md', anchor)
+      if (body == null) {
+        throw new Error(`Section not found in ROASTING.md: ${anchor}`)
       }
       return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text: body }] }
     },

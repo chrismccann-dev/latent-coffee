@@ -24,7 +24,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'List Docs',
       description:
-        'Enumerate every prose / taxonomy doc the MCP server can read. Returns an array of { uri, name, title, mimeType }. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section`. The catalog covers BREWING.md, docs/brewing/roasters.md, and the 10 taxonomy markdown files.',
+        'Enumerate every prose / taxonomy doc the MCP server can read. Returns an array of { uri, name, title, mimeType }. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section`. The catalog covers BREWING.md, ROASTING.md, docs/brewing/roasters.md, and the 10 taxonomy markdown files.',
       inputSchema: {},
     },
     async () => {

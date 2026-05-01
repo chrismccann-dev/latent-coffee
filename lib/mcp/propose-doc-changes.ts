@@ -13,7 +13,7 @@ import type { McpAuthContext } from '@/lib/mcp/auth'
 //
 // target_doc allow-list (proposal-level default + per-citation override):
 //   - 'brewing.md'                                — repo root BREWING.md
-//   - 'roasting.md'                               — repo root ROASTING.md (file lands in 2.5; arbiter surfaces orphan in 2.4)
+//   - 'roasting.md'                               — repo root ROASTING.md (sibling to BREWING.md; file created by the arbiter alongside the first roasting.md proposal application)
 //   - 'roaster/{Canonical Roaster Name}'          — section in docs/brewing/roasters.md (Sprint 2.4 split)
 //   - 'taxonomies/{axis}.md'                      — one of 10 canonical taxonomy MD files
 //
