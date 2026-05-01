@@ -70,7 +70,7 @@ export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContex
     {
       title: 'Push Green Bean',
       description:
-        'Inserts a green_beans row (top of the self-roasted lineage). Resolves terroir + cultivar FKs via lazy find-or-create against canonical registries. Producer canonicalizes via PRODUCER_LOOKUP (allowOverride). Returns green_bean_id + flags for newly-created FKs. Use list_roest_inventory + pull_roest_log first to seed structured fields from Roest, then augment with seller/price/notes.',
+        'Log / register / save / add / push / import a new green coffee bean lot to the app — the top-level entry for the self-roasted lineage. Inserts a green_beans row + resolves terroir + cultivar FKs via lazy find-or-create against canonical registries. Producer canonicalizes via PRODUCER_LOOKUP (allowOverride). Returns green_bean_id + flags for newly-created FKs. Use list_roest_inventory + pull_roest_log first to seed structured fields from Roest, then augment with seller/price/notes.',
       inputSchema: pushGreenBeanInputSchema,
     },
     async (input) => {

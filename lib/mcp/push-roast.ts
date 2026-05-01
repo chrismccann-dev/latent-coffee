@@ -74,7 +74,7 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
     {
       title: 'Push Roast',
       description:
-        'Inserts a single batch roast log scoped to a green_bean_id. Mirrors the roasts table 1:1 plus 8 Sprint 2.5 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id). Pull from Roest via pull_roest_log first when the source is a real machine batch — that returns a normalized payload with most fields populated; augment with prose and push.',
+        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus 8 Sprint 2.5 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id). Pull from Roest via pull_roest_log first when the source is a real machine batch — that returns a normalized payload with most fields populated; augment with prose and push.',
       inputSchema: pushRoastInputSchema,
     },
     async (input) => {
