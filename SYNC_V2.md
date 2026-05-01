@@ -88,11 +88,11 @@ MCP Resources are content endpoints Claude.ai can list and fetch. Each Resource 
 
 Claude.ai project's session start fetches `canonicals://` for each axis it needs + `docs://brewing.md` for context. Recent brews are pulled on demand when iterating a new coffee (e.g., "find prior yeast-inoculated naturals" → fetch `brews://recent?strategy=balanced&process_modifier=anaerobic`).
 
-### MCP Tools (write actions + doc reads)
+### MCP Tools (write actions + doc reads + canonical reads)
 
-Nine Tools post MCP feedback batch 2 (2026-04-30): five write/push tools (hybrid granularity per Chris's deferred-to-me call — fat tools for the hot path, one polymorphic tool for proposals) plus four doc-introspection read tools.
+Eleven Tools post MCP feedback batch 3 (2026-04-30): five write/push tools (hybrid granularity per Chris's deferred-to-me call — fat tools for the hot path, one polymorphic tool for proposals), four doc-introspection read tools, and two canonical-introspection read tools.
 
-**Why doc reads are Tools, not just Resources:** SYNC_V2.md's original design assumed `docs://` Resources would be model-callable from claude.ai. Dog-food round 1 (2026-04-30) surfaced that claude.ai's MCP client surfaces Tools as the on-demand model surface; Resources are catalog/context but not reliably reachable as "fetch X now" by the model. Without Tool-shaped reads, `propose_doc_changes` citations couldn't be drafted against verbatim live-doc text — drift detection breaks. The four doc-introspection Tools (`list_docs` / `list_doc_sections` / `read_doc` / `read_doc_section`) close that gap. Resources stay registered for clients that DO surface them.
+**Why doc + canonical reads are Tools, not just Resources:** SYNC_V2.md's original design assumed `docs://` and `canonicals://` Resources would be model-callable from claude.ai. Dog-food rounds 1+2 (2026-04-29 / 2026-04-30) surfaced that claude.ai's MCP client surfaces Tools as the on-demand model surface; Resources are catalog/context but not reliably reachable as "fetch X now" by the model. Without Tool-shaped reads, `propose_doc_changes` citations couldn't be drafted against verbatim live-doc text and `push_brew` callers had to read full taxonomy markdown (133 anchors for producers!) to validate single canonical names. The six introspection Tools (`list_docs` / `list_doc_sections` / `read_doc` / `read_doc_section` / `list_canonicals` / `read_canonical`) close that gap. Resources stay registered for clients that DO surface them.
 
 #### `push_brew`
 

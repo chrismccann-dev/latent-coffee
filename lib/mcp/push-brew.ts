@@ -1,6 +1,6 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { persistBrew, type BrewPayload } from '@/lib/brew-import'
+import { EXTRACTION_STRATEGIES, persistBrew, type BrewPayload } from '@/lib/brew-import'
 import {
   HONEY_SUBPROCESSES,
   FERMENTATION_MODIFIERS,
@@ -31,6 +31,12 @@ const baseProcess = z.enum(['Washed', 'Honey', 'Natural', 'Wet-hulled'])
 // readonly arrays → z.enum tuple cast. zod v4 z.enum requires [string, ...string[]].
 const experimentalModifierEnum = z.enum(EXPERIMENTAL_MODIFIERS as readonly [string, ...string[]])
 const structureTagEnum = z.enum(STRUCTURE_KEYS as readonly [string, ...string[]])
+// Extraction strategy is a strict 5-value enum with zero aliases — same shape as
+// structure_tags. Tightening to z.enum lets tool-introspection see the canonical
+// list directly. Within-strategy gradient ("lower edge of Balanced Intensity")
+// goes in strategy_notes; cross-strategy divergence ("planned Balanced, drank
+// like Suppression") goes in extraction_confirmed.
+const extractionStrategyEnum = z.enum(EXTRACTION_STRATEGIES as readonly [string, ...string[]])
 
 const flavorChip = z.object({
   base: z.string(),
@@ -70,10 +76,18 @@ const cultivar = z.object({
 export const pushBrewInputSchema = {
   // Identity
   coffee_name: z.string().describe('Coffee marketing name (e.g. "Emerald PL#015").'),
-  roaster: z.string().describe('Canonical roaster name. allowOverride via roaster_override.'),
-  roaster_override: z.boolean().optional(),
-  producer: z.string().optional().nullable(),
-  producer_override: z.boolean().optional(),
+  roaster: z.string().describe(
+    'Canonical roaster name. Resolves via ROASTER_LOOKUP — alias inputs auto-canonicalize ("Hydrangea Coffee Roasters" → "Hydrangea Coffee"). Inspect via `read_canonical(axis="roasters")` or `docs://taxonomies/roasters.md`. For net-new roasters not in the registry, set `roaster_override: true` to persist verbatim.',
+  ),
+  roaster_override: z.boolean().optional().describe(
+    'Set true to bypass canonical-roaster validation for legitimately net-new roasters. Persists verbatim; the registry will need a deliberate edit before the next brew from this roaster matches canonical.',
+  ),
+  producer: z.string().optional().nullable().describe(
+    'Producer / farm. Convention: "Person, Farm" or canonical farm name. Resolves via PRODUCER_LOOKUP (~120 canonicals + alias map; tier-scoped, ~60-70% coverage). Inspect via `read_canonical(axis="producers")` or `docs://taxonomies/producers.md`. For net-new, set `producer_override: true`.',
+  ),
+  producer_override: z.boolean().optional().describe(
+    'Set true to bypass canonical-producer validation for legitimately net-new producers. Persists verbatim; queues for the producer-research routine (Sprint 2.6) which proposes a registry entry async.',
+  ),
 
   // Origin (FK targets)
   terroir,
@@ -81,7 +95,9 @@ export const pushBrewInputSchema = {
   variety: z.string().optional().nullable().describe('Legacy compat — use cultivar.cultivar_name.'),
 
   // Process
-  process: z.string().optional().nullable().describe('Composed display string. Optional if structured fields supplied.'),
+  process: z.string().optional().nullable().describe(
+    'Composed display string ("Natural · Anaerobic · Yeast Inoculated"). Server-side `composeProcess(structured)` recomputes this from base_process + the modifier arrays on every save, so when structured fields are supplied this field is OPTIONAL and any value here is overwritten by the recomposed form. Use only as a back-compat path or sanity-check echo.',
+  ),
   base_process: baseProcess.optional().nullable().describe(
     'Canonical: Washed | Honey | Natural | Wet-hulled. See `canonicals://processes` or `docs://taxonomies/processes.md` for full registry.',
   ),
@@ -108,17 +124,35 @@ export const pushBrewInputSchema = {
   ),
 
   // Roast
-  roast_level: z.string().optional().nullable(),
+  roast_level: z.string().optional().nullable().describe(
+    'Roast level. Resolves via ROAST_LEVEL_LOOKUP — 8 Agtron-anchored canonical buckets (Extremely Light → Very Dark) + 22 aliases (marketing tags like Nordic Light / Specialty Light alias to objective buckets). Strict; no override. Inspect via `read_canonical(axis="roast-levels")`. Omit when the bag does not state a roast level — house-style inferences belong on the roaster card, not on the brew row.',
+  ),
 
   // Recipe
-  brewer: z.string().optional().nullable(),
-  brewer_override: z.boolean().optional(),
-  filter: z.string().optional().nullable(),
-  filter_override: z.boolean().optional(),
-  grinder: z.string().optional().nullable(),
-  grinder_override: z.boolean().optional(),
-  grind: z.string().optional().nullable().describe('Legacy denormalized "EG-1 6.5". Use grinder + grind_setting instead when possible.'),
-  grind_setting: z.string().optional().nullable(),
+  brewer: z.string().optional().nullable().describe(
+    'Brewer / dripper. Resolves via BREWER_LOOKUP (46 canonicals, 24 aliases). Inspect via `read_canonical(axis="brewers")` or `docs://taxonomies/brewers.md`. For net-new, set `brewer_override: true`.',
+  ),
+  brewer_override: z.boolean().optional().describe(
+    'Set true to bypass canonical-brewer validation for legitimately net-new brewers. Persists verbatim.',
+  ),
+  filter: z.string().optional().nullable().describe(
+    'Filter paper. Resolves via FILTER_LOOKUP (64 canonicals, 34 aliases). Pair-aware on some bare names (e.g. "Sibarist FAST" maps to FLAT/CONE/UFO FAST depending on brewer). Inspect via `read_canonical(axis="filters")` or `docs://taxonomies/filters.md`. For net-new, set `filter_override: true`.',
+  ),
+  filter_override: z.boolean().optional().describe(
+    'Set true to bypass canonical-filter validation for legitimately net-new filters. Persists verbatim.',
+  ),
+  grinder: z.string().optional().nullable().describe(
+    'Grinder. Resolves via GRINDER_LOOKUP (currently only EG-1 + aliases; not comprehensive — captures only what Chris owns). Inspect via `read_canonical(axis="grinders")`. For other grinders, set `grinder_override: true`.',
+  ),
+  grinder_override: z.boolean().optional().describe(
+    'Set true to bypass canonical-grinder validation for legitimately net-new grinders. Persists verbatim.',
+  ),
+  grind: z.string().optional().nullable().describe(
+    'Legacy denormalized "EG-1 6.5". Server-side `composeGrind(grinder, grind_setting)` recomputes this on save when both structured fields are supplied — when you supply structured `grinder` + `grind_setting`, OMIT this field; any value here is overwritten by the recomposed form.',
+  ),
+  grind_setting: z.string().optional().nullable().describe(
+    'Strict canonical setting value for the supplied grinder. EG-1 has 51 valid settings (3.0-8.0 in 0.1 steps). Server validates via `isResolvableSetting(grinder, setting)`. If you set `grinder_override: true`, this field is unvalidated.',
+  ),
   dose_g: z.number().optional().nullable(),
   water_g: z.number().optional().nullable(),
   ratio: z.string().optional().nullable(),
@@ -128,8 +162,12 @@ export const pushBrewInputSchema = {
   total_time: z.string().optional().nullable(),
 
   // Extraction
-  extraction_strategy: z.string().optional().nullable(),
-  extraction_confirmed: z.string().optional().nullable(),
+  extraction_strategy: extractionStrategyEnum.optional().nullable().describe(
+    `Strict canonical 5-value enum: ${EXTRACTION_STRATEGIES.join(' | ')}. Within-strategy gradient ("lower edge of Balanced Intensity") goes in \`strategy_notes\`. Cross-strategy divergence ("planned Balanced, drank like Suppression") goes in \`extraction_confirmed\`.`,
+  ),
+  extraction_confirmed: z.string().optional().nullable().describe(
+    'Free-text. Set ONLY when the planned extraction_strategy diverged from what was tasted in the cup. Cross-strategy correction signal. Leave null when the planned strategy delivered. (See SYNC_V2 logged follow-up #5 — semantic re-spec deferred to Sprint 2.7.)',
+  ),
   strategy_notes: z.string().optional().nullable().describe(
     'Free-text within-strategy gradient + miscellaneous recipe nuance that does NOT fit the canonical extraction_strategy enum. Use for "lower edge of Balanced Intensity", "leaning toward Suppression", or recipe-context that the 5-value enum + extraction_confirmed (cross-strategy divergence) cannot capture. Distinct from `classification` (lot code + roast date stash).',
   ),
@@ -142,7 +180,9 @@ export const pushBrewInputSchema = {
   structure_tags: z.array(structureTagEnum).optional().nullable().describe(
     `Per-coffee structure descriptors as canonical "Axis:Descriptor" keys. Strict (no aliases). 29 valid keys across 7 axes (Acidity / Body / Clarity / Finish / Sweetness / Balance / Overall). Examples: "Body:Light", "Acidity:Bright", "Clarity:Transparent". Full list (sorted): ${STRUCTURE_KEYS.join(', ')}. See \`canonicals://flavors\` or \`docs://taxonomies/flavors.md#Structure Tags\`.`,
   ),
-  flavor_notes: z.array(z.string()).optional().nullable().describe('Legacy display strings; use flavors[] structured form.'),
+  flavor_notes: z.array(z.string()).optional().nullable().describe(
+    'Legacy display strings ("Blueberry (Baked)"). When `flavors[]` structured form is supplied, the server composes `flavor_notes` from it — OMIT this field on the structured path; any value here is overwritten.',
+  ),
   aroma: z.string().optional().nullable(),
   attack: z.string().optional().nullable(),
   mid_palate: z.string().optional().nullable(),
@@ -150,12 +190,20 @@ export const pushBrewInputSchema = {
   finish: z.string().optional().nullable(),
   temperature_evolution: z.string().optional().nullable(),
   peak_expression: z.string().optional().nullable(),
-  what_i_learned: z.string().optional().nullable(),
+  what_i_learned: z.string().optional().nullable().describe(
+    'Free-text prose summary of the brew lesson — narrative, conversational. Distinct from `key_takeaways` (bulleted, testable rules). Both are persisted; pick the one that matches the shape of the insight, or split between them when both apply (prose narrative + 2-4 bullets).',
+  ),
 
   // Flags + extras
-  is_process_dominant: z.boolean().optional(),
-  classification: z.string().optional().nullable().describe('Free-text lot code + roast date stash until schema add.'),
-  key_takeaways: z.array(z.string()).optional().nullable(),
+  is_process_dominant: z.boolean().optional().describe(
+    'Set true when process (e.g. yeast inoculation, thermal shock, anaerobic fermentation) is overriding typical varietal expression in the cup. Aggregation pages weight this signal when surfacing "this coffee is a process showcase, not a variety showcase." Default false.',
+  ),
+  classification: z.string().optional().nullable().describe(
+    'Free-text lot code + roast date stash until structured fields land (lot_code / roast_date / roast_machine — architectural follow-up tracked in MCP feedback log). Use for things like "899 N-NS, roasted 2026-04-12, S7X" until the dedicated columns ship.',
+  ),
+  key_takeaways: z.array(z.string()).optional().nullable().describe(
+    'Bulleted, testable rules learned from this brew (4-6 short bullets typical). Distinct from `what_i_learned` (free-text prose). Both persisted; surface in the brew detail UI as a takeaways block.',
+  ),
   terroir_connection: z.string().optional().nullable(),
   cultivar_connection: z.string().optional().nullable(),
   process_category: z.string().optional().nullable(),
@@ -168,7 +216,7 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
     {
       title: 'Push Brew',
       description:
-        'Inserts a resolved brew into the app. Validates against canonical registries; FK-resolves terroir + cultivar via lazy find-or-create. Returns brew_id + flags for which FKs were newly created. On validation failure returns the error list as a tool error so the caller can retry with corrections.',
+        'Log / submit / save / archive / record a brew to the app — the primary write path for finished brews. Inserts a resolved brew row into the brews table; validates every field against canonical registries (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / structure_tags / extraction_strategy / etc.); FK-resolves terroir + cultivar via lazy find-or-create. ALL validation errors return aggregated in one response (no fail-fast), so a payload with multiple problems gets the full list back in a single retry round. Returns brew_id + per-field resolution metadata (which FKs were newly created, which canonicals matched). For canonical lookup before drafting the payload, call list_canonicals + read_canonical.',
       inputSchema: pushBrewInputSchema,
     },
     async (input) => {
@@ -187,7 +235,14 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
 
       if (!result.ok) {
         if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
+          // Validation errors now aggregate (Sprint 2.4.3 — was fail-fast). All
+          // failing fields are reported together so the caller can fix every-
+          // thing in ONE retry round instead of N. Append the override-hint when
+          // the failure looks like a missing canonical.
+          const hint = result.errors.some((e) => /not in the canonical|not canonical/.test(e))
+            ? '\n\nHint: For genuinely net-new entities (roaster / producer / brewer / filter / grinder), re-send with the matching `*_override: true` flag (e.g. `producer_override: true`).'
+            : ''
+          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}${hint}`)
         }
         if (result.code === 'db_error') {
           throw new Error(`Database error: ${result.message}`)
@@ -200,26 +255,27 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
         throw new Error(`Unknown persistBrew failure: ${JSON.stringify(result)}`)
       }
 
+      // Response shape (Sprint 2.4.3 — was {brew_id, terroir_id, cultivar_id,
+      // created_terroir, created_cultivar} only):
+      // - `warnings` is a stable empty-by-default array; future soft-issue signals
+      //   land here without changing the response shape (e.g. "structure_tags
+      //   includes both Body:Silky and Body:Light — consider whether one supersedes
+      //   the other").
+      // - For full canonical-resolution detail (which input alias canonicalized to
+      //   what), fetch the inserted brew via the `brews://by-id/{brew_id}` Resource
+      //   (or the upcoming `query_brews` Tool) — round-tripping through the DB
+      //   guarantees the response matches what was actually persisted.
+      const responsePayload = {
+        brew_id: result.brewId,
+        terroir_id: result.terroirId,
+        cultivar_id: result.cultivarId,
+        created_terroir: result.createdTerroir,
+        created_cultivar: result.createdCultivar,
+        warnings: [] as string[],
+      }
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify({
-              brew_id: result.brewId,
-              terroir_id: result.terroirId,
-              cultivar_id: result.cultivarId,
-              created_terroir: result.createdTerroir,
-              created_cultivar: result.createdCultivar,
-            }),
-          },
-        ],
-        structuredContent: {
-          brew_id: result.brewId,
-          terroir_id: result.terroirId,
-          cultivar_id: result.cultivarId,
-          created_terroir: result.createdTerroir,
-          created_cultivar: result.createdCultivar,
-        },
+        content: [{ type: 'text', text: JSON.stringify(responsePayload) }],
+        structuredContent: responsePayload,
       }
     },
   )
