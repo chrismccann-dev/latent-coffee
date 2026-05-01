@@ -439,17 +439,25 @@ Each sprint is intended to be ship-able independently. 2.3 unlocks the rest. The
 
 ### Sprint 2.5 — Roasting MCP tools + ROASTING.md
 
-**Scope:**
-- Tools: `push_roast`, `push_cupping`, `push_experiment`. Schemas mirror existing `roasts` / `cuppings` / `experiments` tables.
-- Resource: `roasts://by-bean/{green_bean_id}` returns full roast history + cuppings + experiments.
-- New repo file: `ROASTING.md` (initial scaffold; per Chris's audio less authored than BREWING.md, can start light).
-- Resource: `docs://roasting.md`.
-- Self-roasted brew sync: extend `push_brew` to accept `green_bean_id` + `source: 'self-roasted'`. Validate against an in-progress green bean iteration.
-- Validate: dog-food a roast cycle for an active green bean (Mandela XO or Sudan Rume Hybrid Washed if landing per timeline). Per-roast push, mid-iteration cupping push, end-of-bean lessons proposal.
+**Status:** SHIPPED 2026-04-30 (PR #73 + follow-up #74). Mandela XO end-to-end dog-food validated the substrate the same day it landed.
 
-**Substrate decisions:** roasting taxonomy expansion — Chris's audio suggests roast schema is mostly there but per-bean lessons compile may want a structured shape (currently free-text in `green_beans.roast_learnings`). Leave free-text for V2; revisit if patterns emerge.
+**Shipped:**
+- 7 new MCP Tools: `push_green_bean`, `push_roast`, `push_cupping`, `push_experiment`, `push_roast_learnings`, `pull_roest_log`, `list_roest_inventory`. Total tools/list = 15 (8 pre-existing + 7 new).
+- Resource: `roasts://by-bean/{green_bean_id}` returns fat JSON `{ green_bean, roasts[], cuppings[], experiments[], roast_learnings }`.
+- ROASTING.md at repo root: ~770-line verbatim port from `Coffee_Roasting_Master_Reference_Guide_V4.md`, hyphen-normalized.
+- Resources: `docs://roasting.md` + `docs://roasting.md#{anchor}` (section variant).
+- `push_brew` extended: `source: 'purchased' | 'self-roasted'` enum + `green_bean_id` + `roast_id` fields with cross-validation.
+- Migration 039: 14 new columns (8 on roasts + 6 on green_beans) for V4-doc control signals + Roest cross-references.
+- Migration 040 (follow-up #74): `roasts.roasted_weight_g` + `batch_size_g` widened from `integer` to `numeric` to accept Roest's sub-gram precision.
+- Roest API integration via Django OAuth Toolkit `/o/token/` (client_credentials, 10h token cache). `lib/roest-client.ts` + `pull_roest_log` Tool eliminates manual transcription error.
 
-**Estimate:** ~4 hours. Wider scope than 2.3/2.4; touches multiple tables.
+**Dog-food artifacts:** green_bean_id `a88f3d97-1f20-417a-96b1-70766a2825eb` (CGLE Mandela XO, Roest inventory 8705) + 13 roasts + 15 cuppings + 4 experiments + 1 roast_learnings + 1 SR brew (`a116bb9c-f639-4ef8-8aba-f6e21a2d1ed7`, source='self-roasted', linked to Batch 139 reference roast) + 1 ROASTING.md proposal (`bbb537fc...`).
+
+**Substrate gaps surfaced + fixed (PR #74):**
+1. `roasts.roasted_weight_g` was integer; Roest returns float (89.7g) → migration 040 widens to numeric.
+2. `propose-doc-changes.ts:targetDocToUri('roasting.md')` had stale "not yet shipped" stub returning null; every roasting.md proposal got `anchor_resolved: false` → one-line fix.
+
+**Architectural note:** Lessons compile lives in TWO surfaces — `roast_learnings` table (structured 17 cols, filled at lot close-out via `push_roast_learnings`, renders on /green/[id]) AND ROASTING.md prose narrative (filled via `propose_doc_changes` against `Recently Closed Lots` / `Cross-Coffee Insight Layer`, consumed as living context by claude.ai's roasting project). The asymmetric write trust pattern from Sprint 2.4 extends cleanly to the new doc.
 
 ### Sprint 2.6 — Producer research routine + override-queue cleanup
 
