@@ -84,6 +84,9 @@ export type PersistGreenBeanResult =
   | (PersistOk<'green_bean_id'> & {
       terroir_id: string | null
       cultivar_id: string | null
+      // true on fresh INSERT, false when an existing (user_id, lot_id) row was
+      // returned. Mirrors persistRoastLearnings + persistExperiment shape.
+      created: boolean
     })
   | PersistFail
 
@@ -110,6 +113,36 @@ export async function persistGreenBean(
 ): Promise<PersistGreenBeanResult> {
   const v = validateGreenBeanPayload(payload)
   if (!v.ok) return { ok: false, code: 'validation', errors: v.errors }
+
+  // UPSERT semantics on (user_id, lot_id). Mirrors persistRoastLearnings +
+  // persistExperiment find-then-insert-or-skip pattern. MCP feedback batch 3
+  // (2026-05-01) — the prior INSERT-only behavior threw a Postgres unique-
+  // constraint violation on retry-after-crash with no recovery path. The
+  // dog-food caller had no way to recover the existing green_bean_id.
+  //
+  // Idempotency choice: when a row already exists for (user_id, lot_id), we
+  // return the existing row's IDs WITHOUT updating fields. The retry case is
+  // "I lost track of the ID", not "I want to update fields" — accidentally
+  // overwriting a curated row with a re-pushed payload would silently destroy
+  // data. If the caller wants to update fields on an existing row, use the
+  // app's /add or /edit UI (or a future patch_green_bean Tool).
+  const { data: existing, error: lookupErr } = await supabase
+    .from('green_beans')
+    .select('id, terroir_id, cultivar_id')
+    .eq('user_id', userId)
+    .eq('lot_id', payload.lot_id)
+    .maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+
+  if (existing) {
+    return {
+      ok: true,
+      green_bean_id: existing.id as string,
+      terroir_id: (existing.terroir_id as string | null) ?? null,
+      cultivar_id: (existing.cultivar_id as string | null) ?? null,
+      created: false,
+    }
+  }
 
   // Producer canonicalization (text-only, allowOverride pattern same as brews)
   let canonicalProducer: string | null = null
@@ -195,7 +228,94 @@ export async function persistGreenBean(
     green_bean_id: data.id as string,
     terroir_id: terroirId,
     cultivar_id: cultivarId,
+    created: true,
   }
+}
+
+// ---------------------------------------------------------------------------
+// Green bean lookup (read-only — supports get_green_bean Tool)
+// ---------------------------------------------------------------------------
+
+export interface LookupGreenBeanFilter {
+  lot_id?: string
+  roest_inventory_id?: number
+  green_bean_id?: string
+}
+
+export type GreenBeanRow = {
+  id: string
+  lot_id: string
+  name: string
+  producer: string | null
+  origin: string | null
+  region: string | null
+  variety: string | null
+  process: string | null
+  importer: string | null
+  seller: string | null
+  exporter: string | null
+  source_type: string | null
+  link: string | null
+  purchase_date: string | null
+  price_per_kg: number | null
+  quantity_g: number | null
+  moisture: string | null
+  density: string | null
+  elevation_m: number | null
+  producer_tasting_notes: string | null
+  additional_notes: string | null
+  roest_inventory_id: number | null
+  terroir_id: string | null
+  cultivar_id: string | null
+  created_at: string
+}
+
+export type LookupGreenBeanResult =
+  | { ok: true; row: GreenBeanRow }
+  | { ok: false; code: 'validation'; errors: string[] }
+  | { ok: false; code: 'not_found'; message: string }
+  | { ok: false; code: 'db_error'; message: string }
+
+export async function lookupGreenBean(
+  supabase: SupabaseClient,
+  userId: string,
+  filter: LookupGreenBeanFilter,
+): Promise<LookupGreenBeanResult> {
+  // At least one filter must be provided. We validate up-front so the SELECT
+  // doesn't accidentally return ALL of the user's beans on an empty filter.
+  const errors: string[] = []
+  if (!filter.lot_id && !filter.roest_inventory_id && !filter.green_bean_id) {
+    errors.push('At least one of lot_id, roest_inventory_id, or green_bean_id is required.')
+  }
+  if (errors.length) return { ok: false, code: 'validation', errors }
+
+  let q = supabase
+    .from('green_beans')
+    .select(
+      'id, lot_id, name, producer, origin, region, variety, process, importer, seller, exporter, source_type, link, purchase_date, price_per_kg, quantity_g, moisture, density, elevation_m, producer_tasting_notes, additional_notes, roest_inventory_id, terroir_id, cultivar_id, created_at',
+    )
+    .eq('user_id', userId)
+  if (filter.lot_id) q = q.eq('lot_id', filter.lot_id)
+  if (filter.roest_inventory_id != null) q = q.eq('roest_inventory_id', filter.roest_inventory_id)
+  if (filter.green_bean_id) q = q.eq('id', filter.green_bean_id)
+
+  const { data, error } = await q.maybeSingle()
+  if (error) return { ok: false, code: 'db_error', message: error.message }
+  if (!data) {
+    const filterDesc = [
+      filter.lot_id ? `lot_id="${filter.lot_id}"` : null,
+      filter.roest_inventory_id != null ? `roest_inventory_id=${filter.roest_inventory_id}` : null,
+      filter.green_bean_id ? `green_bean_id="${filter.green_bean_id}"` : null,
+    ]
+      .filter((s): s is string => s != null)
+      .join(' + ')
+    return {
+      ok: false,
+      code: 'not_found',
+      message: `No green_bean found matching ${filterDesc}.`,
+    }
+  }
+  return { ok: true, row: data as GreenBeanRow }
 }
 
 // ---------------------------------------------------------------------------
