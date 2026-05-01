@@ -160,6 +160,17 @@ export const pushBrewInputSchema = {
   cultivar_connection: z.string().optional().nullable(),
   process_category: z.string().optional().nullable(),
   process_details: z.string().optional().nullable(),
+
+  // Self-roasted lineage (Sprint 2.5)
+  source: z.enum(['purchased', 'self-roasted']).optional().describe(
+    'Origin of the coffee. Defaults to "purchased". When "self-roasted", green_bean_id is required (cross-validated server-side).',
+  ),
+  green_bean_id: z.string().uuid().optional().nullable().describe(
+    'FK to green_beans.id — required when source = "self-roasted". Use list_roest_inventory + push_green_bean to seed if the bean isn\'t in DB yet.',
+  ),
+  roast_id: z.string().uuid().optional().nullable().describe(
+    'FK to roasts.id — optional even for self-roasted; links the brew to the specific roast batch (e.g. Mandela XO Batch 139).',
+  ),
 }
 
 export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {

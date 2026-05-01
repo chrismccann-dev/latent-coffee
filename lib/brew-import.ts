@@ -133,7 +133,11 @@ export interface CultivarCandidate {
 export interface BrewPayload {
   // Coffee details
   coffee_name: string
-  source?: 'purchased' // always purchased in this flow; default applied below
+  // Sprint 2.5: widen to accept self-roasted brews via push_brew. SR brews
+  // require green_bean_id; persistBrew enforces this in validation.
+  source?: 'purchased' | 'self-roasted'
+  green_bean_id?: string | null
+  roast_id?: string | null
   roaster?: string | null
   // Transient: opt-out of strict roaster canonical enforcement for this brew.
   // When true, a non-resolvable roaster string persists verbatim (escape hatch
@@ -583,8 +587,11 @@ export function validateBrewPayload(payload: BrewPayload): ValidationResult {
   if (!payload.coffee_name || !payload.coffee_name.trim()) {
     errors.push('coffee_name is required')
   }
-  if (payload.source && payload.source !== 'purchased') {
-    errors.push('source must be "purchased" for this import flow')
+  if (payload.source && payload.source !== 'purchased' && payload.source !== 'self-roasted') {
+    errors.push(`source must be "purchased" or "self-roasted" (got "${payload.source}")`)
+  }
+  if (payload.source === 'self-roasted' && !payload.green_bean_id?.trim()) {
+    errors.push('green_bean_id is required when source = "self-roasted"')
   }
 
   if (payload.extraction_strategy && !EXTRACTION_STRATEGIES.includes(payload.extraction_strategy as ExtractionStrategy)) {
@@ -795,9 +802,9 @@ export async function persistBrew(
 
   const brewInsert: Partial<InsertBrew> = {
     user_id: userId,
-    source: 'purchased',
-    green_bean_id: null,
-    roast_id: null,
+    source: payload.source ?? 'purchased',
+    green_bean_id: payload.green_bean_id ?? null,
+    roast_id: payload.roast_id ?? null,
     terroir_id: terroirId,
     cultivar_id: cultivarId,
     coffee_name: payload.coffee_name.trim(),

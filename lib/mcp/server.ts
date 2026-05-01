@@ -2,10 +2,18 @@ import { McpServer, ResourceTemplate } from '@modelcontextprotocol/sdk/server/mc
 import type { Variables } from '@modelcontextprotocol/sdk/shared/uriTemplate.js'
 import { CANONICAL_AXES, getCanonicalPayload } from '@/lib/mcp/canonicals'
 import { fetchBrewById, fetchRecentBrews } from '@/lib/mcp/brews'
+import { fetchByBean } from '@/lib/mcp/roasts'
 import { isKnownDoc, listTaxonomyAxes, readDoc, readDocSection } from '@/lib/mcp/docs'
 import { registerPushBrewTool } from '@/lib/mcp/push-brew'
 import { registerProposeDocChangesTool } from '@/lib/mcp/propose-doc-changes'
 import { registerDocTools } from '@/lib/mcp/doc-tools'
+import { registerPushGreenBeanTool } from '@/lib/mcp/push-green-bean'
+import { registerPushRoastTool } from '@/lib/mcp/push-roast'
+import { registerPushCuppingTool } from '@/lib/mcp/push-cupping'
+import { registerPushExperimentTool } from '@/lib/mcp/push-experiment'
+import { registerPushRoastLearningsTool } from '@/lib/mcp/push-roast-learnings'
+import { registerPullRoestLogTool } from '@/lib/mcp/pull-roest-log'
+import { registerListRoestInventoryTool } from '@/lib/mcp/list-roest-inventory'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 function templateVar(variables: Variables, key: string): string {
@@ -15,14 +23,22 @@ function templateVar(variables: Variables, key: string): string {
 }
 
 export function buildMcpServer(auth: McpAuthContext): McpServer {
-  const server = new McpServer({ name: 'latent-coffee', version: '0.2.0' })
+  const server = new McpServer({ name: 'latent-coffee', version: '0.3.0' })
 
   registerCanonicalResources(server)
   registerBrewResources(server, auth)
+  registerRoastResources(server, auth)
   registerDocResources(server)
   registerPushBrewTool(server, auth)
   registerProposeDocChangesTool(server, auth)
   registerDocTools(server)
+  registerPushGreenBeanTool(server, auth)
+  registerPushRoastTool(server, auth)
+  registerPushCuppingTool(server, auth)
+  registerPushExperimentTool(server, auth)
+  registerPushRoastLearningsTool(server, auth)
+  registerPullRoestLogTool(server, auth)
+  registerListRoestInventoryTool(server, auth)
 
   return server
 }
@@ -120,6 +136,36 @@ function registerBrewResources(server: McpServer, auth: McpAuthContext) {
   )
 }
 
+function registerRoastResources(server: McpServer, auth: McpAuthContext) {
+  server.registerResource(
+    'roasts-by-bean',
+    new ResourceTemplate('roasts://by-bean/{green_bean_id}', { list: undefined }),
+    {
+      title: 'Roasts by Bean',
+      description:
+        'Full roast history for one green bean: { green_bean, roasts[], cuppings[], experiments[], roast_learnings }. Cuppings are joined via roast_id; experiments + lessons are filtered by green_bean_id. One fat JSON per fetch — mirrors brews://by-id pattern.',
+      mimeType: 'application/json',
+    },
+    async (uri, variables) => {
+      const id = templateVar(variables, 'green_bean_id')
+      if (!id) throw new Error('roasts://by-bean requires a green_bean_id path segment')
+      const payload = await fetchByBean(auth.supabase, auth.userId, id)
+      if (!payload) {
+        throw new Error(`Green bean ${id} not found (or not owned by this api_key's user)`)
+      }
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            mimeType: 'application/json',
+            text: JSON.stringify(payload),
+          },
+        ],
+      }
+    },
+  )
+}
+
 function registerDocResources(server: McpServer) {
   // Bare full-file fetches for the two brewing-domain docs.
   server.registerResource(
@@ -188,6 +234,42 @@ function registerDocResources(server: McpServer) {
       const body = await readDocSection('docs://brewing/roasters.md', anchor)
       if (body == null) {
         throw new Error(`Section not found in docs/brewing/roasters.md: ${anchor}`)
+      }
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text: body }] }
+    },
+  )
+
+  // ROASTING.md — sibling of BREWING.md. Sprint 2.5 verbatim port from V4.
+  server.registerResource(
+    'docs-roasting',
+    'docs://roasting.md',
+    {
+      title: 'Roasting Master Reference',
+      description:
+        'Full ROASTING.md served live from the deploy filesystem. For one section by anchor, use docs://roasting.md#<Section%20Name>. Seeded 2026-04-30 from Coffee_Roasting_Master_Reference_Guide_V4.md (~770 lines, hyphen-normalized).',
+      mimeType: 'text/markdown',
+    },
+    async (uri) => {
+      const text = await readDoc('docs://roasting.md')
+      return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text }] }
+    },
+  )
+
+  server.registerResource(
+    'docs-roasting-section',
+    new ResourceTemplate('docs://roasting.md#{anchor}', { list: undefined }),
+    {
+      title: 'ROASTING.md (one section)',
+      description:
+        'Returns the body of one ROASTING.md section by header text (case-sensitive, URL-encoded). Throws if the anchor is not found.',
+      mimeType: 'text/markdown',
+    },
+    async (uri, variables) => {
+      const anchor = decodeURIComponent(templateVar(variables, 'anchor'))
+      if (!anchor) throw new Error('docs://roasting.md#{anchor} requires an anchor')
+      const body = await readDocSection('docs://roasting.md', anchor)
+      if (body == null) {
+        throw new Error(`Section not found in ROASTING.md: ${anchor}`)
       }
       return { contents: [{ uri: uri.href, mimeType: 'text/markdown', text: body }] }
     },
