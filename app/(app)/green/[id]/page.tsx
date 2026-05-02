@@ -251,6 +251,7 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
               >
                 <div className="font-mono text-xs text-latent-mid mb-1">
                   Batch #{roast?.batch_id || '?'} · {cup.rest_days}d rest · {cup.eval_method}
+                  {cup.recipe_variant && ` · ${cup.recipe_variant}`}
                   {cup.ground_agtron && ` · Gnd Agtron: ${cup.ground_agtron}`}
                 </div>
                 <div className="font-sans text-sm">
