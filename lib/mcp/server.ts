@@ -17,6 +17,7 @@ import { registerPullRoestLogTool } from '@/lib/mcp/pull-roest-log'
 import { registerListRoestInventoryTool } from '@/lib/mcp/list-roest-inventory'
 import { registerListRoestLogsTool } from '@/lib/mcp/list-roest-logs'
 import { registerGetGreenBeanTool } from '@/lib/mcp/get-green-bean'
+import { registerGetBeanPipelineTool } from '@/lib/mcp/get-bean-pipeline'
 import {
   assertToolDiscoverability,
   type ToolDescriptor,
@@ -49,6 +50,7 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerListRoestInventoryTool(server, auth)
   registerListRoestLogsTool(server, auth)
   registerGetGreenBeanTool(server, auth)
+  registerGetBeanPipelineTool(server, auth)
 
   // Discoverability guard (MCP feedback batch 4). Dev-only — fires fast on the
   // first MCP request after a tool description regresses into the "Inserts a
