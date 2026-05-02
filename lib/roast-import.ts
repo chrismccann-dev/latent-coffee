@@ -465,6 +465,13 @@ export interface CuppingPayload {
   cupping_date?: string | null
   rest_days?: number | null
   eval_method?: string | null
+  // recipe_variant added MCP feedback batch 8 (migration 041). Free-text label
+  // distinguishing two evaluations on the same (roast_id, cupping_date,
+  // eval_method) - the dual-cupping workflow (e.g. xbloom-gate + Balanced-
+  // Intensity pourover on the same Day 7). NULL = "single cupping per
+  // method/date" (back-compat default; UPSERT idempotency preserved via
+  // PG 17 NULLS NOT DISTINCT).
+  recipe_variant?: string | null
   ground_agtron?: number | null
   ground_color_description?: string | null
   aroma?: string | null
@@ -514,10 +521,11 @@ export async function persistCupping(
   // overwrite curated tasting notes." If the caller wants to update fields,
   // use the app /add or /edit UI (or a future patch_cupping Tool).
   //
-  // The composite key includes nullable fields (cupping_date, eval_method).
-  // Postgres treats NULL as not-equal-to-NULL in unique constraints, so two
-  // rows with NULL cupping_date for the same roast_id would both insert. The
-  // lookup uses .is(null) for null values; the constraint mirrors this.
+  // The composite key includes 3 nullable fields (cupping_date, eval_method,
+  // recipe_variant). The DB constraint uses PG 17 NULLS NOT DISTINCT so NULL
+  // matches NULL on uniqueness — the lookup mirrors that semantic via
+  // .is(null) for each null payload value. recipe_variant added migration 041
+  // (MCP feedback batch 8) for the dual-cupping workflow.
   let lookup = supabase
     .from('cuppings')
     .select('id')
@@ -531,6 +539,10 @@ export async function persistCupping(
     payload.eval_method != null
       ? lookup.eq('eval_method', payload.eval_method)
       : lookup.is('eval_method', null)
+  lookup =
+    payload.recipe_variant != null
+      ? lookup.eq('recipe_variant', payload.recipe_variant)
+      : lookup.is('recipe_variant', null)
   const { data: existing, error: lookupErr } = await lookup.maybeSingle()
   if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
 
@@ -546,6 +558,7 @@ export async function persistCupping(
       cupping_date: payload.cupping_date ?? null,
       rest_days: payload.rest_days ?? null,
       eval_method: payload.eval_method ?? null,
+      recipe_variant: payload.recipe_variant ?? null,
       ground_agtron: payload.ground_agtron ?? null,
       ground_color_description: payload.ground_color_description ?? null,
       aroma: payload.aroma ?? null,

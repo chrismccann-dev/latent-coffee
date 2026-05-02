@@ -3567,6 +3567,41 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     contact: null,
     skeleton: true,
   },
+  {
+    // Skeleton entry — surfaced from MCP feedback batch 8 (2026-05-02 Higuito
+    // Costa Rica in-process dog-food). Sweet Maria's Costa Rican lots tend to
+    // use farm-name-as-producer convention; "Higuito" is the farm/lot name,
+    // the actual producer is Nelsyn Hernández running Fátima Micromill in
+    // Tarrazú. Add full attribution via producer-research routine when ready.
+    name: "Nelsyn Hernández",
+    tier: 2,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Signal",
+    producerType: "Smallholder",
+    farmName: "Fátima Micromill",
+    country: "Costa Rica",
+    adminRegion: "Tarrazu (San Marcos)",
+    macroTerroir: "Southern Highlands",
+    farmingModel: "Smallholder micro-mill",
+    processingCapability: null,
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: [],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: ["Sweet Maria's"],
+    roasterReferences: [],
+    contact: null,
+    skeleton: true,
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -3594,6 +3629,11 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   // refer to this farm. Aliases to the canonical family-name entry per the
   // tier-3 attribution philosophy. MCP feedback batch 6 (2026-05-02).
   CGLE: "Rigoberto & Luis Eduardo Herrera",
+  // "Higuito" is Sweet Maria's farm-name-as-producer label for Nelsyn
+  // Hernández's Fátima Micromill lot in Tarrazú. MCP feedback batch 8
+  // (2026-05-02). Sweet Maria's Costa Rican lots tend to use this
+  // convention - more farm-name aliases likely to follow.
+  Higuito: "Nelsyn Hernández",
   "Carlos Morera": "Carlos Fernández Morera",
   "Carlos Morera, El Diamante": "Carlos Fernández Morera",
   "Carmen Estate": "Carlos Franceschi",
