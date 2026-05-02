@@ -3590,6 +3590,10 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Buncho, Daye Bensa": "Asefa & Mulugeta Dukamo",
   "Cafe Granja la Esperanza": "Rigoberto & Luis Eduardo Herrera",
   "Café Granja La Esperanza": "Rigoberto & Luis Eduardo Herrera",
+  // CGLE is the abbreviation most people (and Chris's lot_id naming) use to
+  // refer to this farm. Aliases to the canonical family-name entry per the
+  // tier-3 attribution philosophy. MCP feedback batch 6 (2026-05-02).
+  CGLE: "Rigoberto & Luis Eduardo Herrera",
   "Carlos Morera": "Carlos Fernández Morera",
   "Carlos Morera, El Diamante": "Carlos Fernández Morera",
   "Carmen Estate": "Carlos Franceschi",
