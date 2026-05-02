@@ -30,7 +30,7 @@ export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext)
     {
       title: 'Push Cupping',
       description:
-        'Log / record / save / push / archive a cupping evaluation (Day 7 post-roast pourover or Day 4 table cupping) — STAGE 4 of the self-roasted roasting pipeline; runs after push_roast for each batch you cup. Captures eval_method (Cupping vs Pourover), rest_days (V4 evaluation gate is Day 7), ground_agtron (paired with roasts.agtron for WB-to-Ground delta), and the 6 prose fields (aroma / flavor / acidity / body / finish / overall). Requires roast_id from a prior push_roast.',
+        'Log / record / save / push / archive a cupping evaluation (Day 7 post-roast pourover or Day 4 table cupping) — STAGE 4 of the self-roasted roasting pipeline; runs after push_roast for each batch you cup. UPSERT semantics on (user_id, roast_id, cupping_date, eval_method): safe to re-push during mid-iteration syncs - when a row already exists with the same composite key, the existing cupping_id is returned with `created: false` and field values are NOT overwritten (use the app /add or /edit UI to update notes on an existing cupping). This makes idempotent re-runs of the in-process sync prompt non-destructive even when cuppings have already been pushed in a prior session. Captures eval_method (Cupping vs Pourover), rest_days (V4 evaluation gate is Day 7), ground_agtron (paired with roasts.agtron for WB-to-Ground delta), and the 6 prose fields (aroma / flavor / acidity / body / finish / overall). Requires roast_id from a prior push_roast.',
       inputSchema: pushCuppingInputSchema,
     },
     async (input) => {
@@ -42,7 +42,7 @@ export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext)
         }
         throw new Error(`Database error: ${result.message}`)
       }
-      const out = { cupping_id: result.cupping_id }
+      const out = { cupping_id: result.cupping_id, created: result.created }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,

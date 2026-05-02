@@ -475,7 +475,15 @@ export interface CuppingPayload {
   overall?: string | null
 }
 
-export type PersistCuppingResult = PersistOk<'cupping_id'> | PersistFail
+export type PersistCuppingResult =
+  | (PersistOk<'cupping_id'> & {
+      // true on fresh INSERT, false when an existing row matched on
+      // (user_id, roast_id, cupping_date, eval_method) was returned.
+      // Mirrors persistGreenBean / persistRoast / persistExperiment /
+      // persistRoastLearnings idempotency shape.
+      created: boolean
+    })
+  | PersistFail
 
 export function validateCuppingPayload(p: CuppingPayload): ValidationResult {
   const errors: string[] = []
@@ -490,6 +498,46 @@ export async function persistCupping(
 ): Promise<PersistCuppingResult> {
   const v = validateCuppingPayload(payload)
   if (!v.ok) return { ok: false, code: 'validation', errors: v.errors }
+
+  // UPSERT on (user_id, roast_id, cupping_date, eval_method) per the DB unique
+  // constraint cuppings_user_roast_date_method_unique. Mirrors persistRoast +
+  // persistGreenBean + persistExperiment + persistRoastLearnings find-then-
+  // insert-or-skip pattern. MCP feedback batch 6 (2026-05-02) — the prior
+  // INSERT-only behavior threw a duplicate-constraint error on idempotent
+  // re-syncs (e.g. mid-iteration prompt re-run), forcing the caller to track
+  // what's already pushed via get_bean_pipeline. With UPSERT semantics the
+  // re-push is harmless.
+  //
+  // Idempotency choice: on conflict we return the existing cupping_id with
+  // `created: false` WITHOUT updating fields. Same rationale as #R9 / #R13 /
+  // #R20 — the retry case is "I lost track of what's pushed", not "I want to
+  // overwrite curated tasting notes." If the caller wants to update fields,
+  // use the app /add or /edit UI (or a future patch_cupping Tool).
+  //
+  // The composite key includes nullable fields (cupping_date, eval_method).
+  // Postgres treats NULL as not-equal-to-NULL in unique constraints, so two
+  // rows with NULL cupping_date for the same roast_id would both insert. The
+  // lookup uses .is(null) for null values; the constraint mirrors this.
+  let lookup = supabase
+    .from('cuppings')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('roast_id', payload.roast_id)
+  lookup =
+    payload.cupping_date != null
+      ? lookup.eq('cupping_date', payload.cupping_date)
+      : lookup.is('cupping_date', null)
+  lookup =
+    payload.eval_method != null
+      ? lookup.eq('eval_method', payload.eval_method)
+      : lookup.is('eval_method', null)
+  const { data: existing, error: lookupErr } = await lookup.maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+
+  if (existing) {
+    return { ok: true, cupping_id: existing.id as string, created: false }
+  }
+
   const { data, error } = await supabase
     .from('cuppings')
     .insert({
@@ -512,7 +560,7 @@ export async function persistCupping(
   if (error || !data) {
     return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
   }
-  return { ok: true, cupping_id: data.id as string }
+  return { ok: true, cupping_id: data.id as string, created: true }
 }
 
 // ---------------------------------------------------------------------------

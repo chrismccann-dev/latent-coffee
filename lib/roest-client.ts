@@ -398,6 +398,15 @@ export type NormalizedGreenBeanPayload = {
   inference_hints: string[]
 }
 
+// Roest inventory weight normalization. Exported for tests + reuse if other
+// Roest weight fields surface the same unit ambiguity. See note in
+// roestInventoryToPushGreenBeanPayload for the heuristic rationale.
+export function normalizeRoestInventoryWeightG(raw: number | null): number | null {
+  if (raw == null || !Number.isFinite(raw) || raw <= 0) return null
+  // Threshold: > 100kg = unrealistic home-roaster lot, treat as 1000x-multiplied unit.
+  return raw > 100_000 ? Math.round(raw / 1000) : Math.round(raw)
+}
+
 export function roestInventoryToPushGreenBeanPayload(
   inv: RoestInventory,
 ): NormalizedGreenBeanPayload {
@@ -416,6 +425,16 @@ export function roestInventoryToPushGreenBeanPayload(
   // Density: bare numeric, no g/L suffix (column convention).
   const density =
     inv.density != null && inv.density > 0 ? inv.density.toFixed(0) : null
+  // Quantity: Roest returns inventory weight as kg-as-integer-with-1000x
+  // multiplier (e.g. 2268000 for a 2.268kg / 2268g lot). The schema column
+  // is grams, so divide. MCP feedback batch 6 (2026-05-02) — without this
+  // normalization the model in every Roest dog-food had to manually override
+  // the inflated normalizer value with the spreadsheet ground-truth.
+  //
+  // Heuristic: > 100000 g = > 100kg, unrealistic for any home roaster lot, so
+  // treat as the multiplied unit and divide. Below threshold treat as grams
+  // (defensive against future Roest API changes that might return raw grams).
+  // Sample data: 2268000 -> 2268g (CGLE 5lb), 1360000 -> 1360g (CGLE 3lb).
   return {
     roest_inventory_id: inv.id,
     name: inv.name,
@@ -430,7 +449,7 @@ export function roestInventoryToPushGreenBeanPayload(
     elevation_m: inv.elevation != null && inv.elevation > 0 ? Math.round(inv.elevation) : null,
     moisture,
     density,
-    quantity_g: inv.initial_weight != null ? Math.round(inv.initial_weight) : null,
+    quantity_g: normalizeRoestInventoryWeightG(inv.initial_weight),
     price_per_kg: inv.price,
     purchase_date: inv.reg_date ? inv.reg_date.slice(0, 10) : null,
     producer_tasting_notes: null, // Roest stores everything in `notes`; caller splits
