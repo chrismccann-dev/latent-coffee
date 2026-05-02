@@ -48,7 +48,7 @@ export const TERROIRS: readonly TerroirEntry[] = [
   { country: 'China', admin_region: 'Yunnan', macro_terroir: 'Yunnan Central Highlands' },
   { country: 'China', admin_region: 'Yunnan', macro_terroir: 'Yunnan Northern Highlands' },
   { country: 'China', admin_region: 'Yunnan', macro_terroir: 'Yunnan Southern Highlands' },
-  { country: 'Colombia', admin_region: 'Antioquia / Caldas / Quindío', macro_terroir: 'Central Andean Cordillera' },
+  { country: 'Colombia', admin_region: 'Antioquia / Caldas / Quindío / Tolima', macro_terroir: 'Central Andean Cordillera' },
   { country: 'Colombia', admin_region: 'Huila', macro_terroir: 'Huila Highlands' },
   { country: 'Colombia', admin_region: 'Santander / Norte de Santander', macro_terroir: 'Northern Andean Cordillera' },
   { country: 'Colombia', admin_region: 'Valle del Cauca / Risaralda / Cauca', macro_terroir: 'Western Andean Cordillera' },
@@ -342,7 +342,15 @@ export const TERROIR_MACRO_ALIASES: Readonly<Record<string, string>> = {
   'Marcala Highlands': 'Central Honduras Highlands',
   'Pinar del Rio Western Highlands': 'Pinar del Río Western Highlands',
   'Sierra Sur Highlands': 'Oaxaca Southern Highlands',
-  'Southern Andean Cordillera': 'Western Andean Cordillera',
+  // 'Southern Andean Cordillera' alias removed in MCP feedback batch 7
+  // (2026-05-02). Originally added when Cauca was reclassified from Southern
+  // to Western (per CSV row 28). The alias misled the Gesha Clouds dog-food
+  // when Roest's region field returned "Southern Andean Cordillera" for a
+  // Tolima lot - it auto-resolved to Western Andean Cordillera (Valle del
+  // Cauca / Risaralda / Cauca), which is geographically unrelated to Tolima.
+  // Zero DB rows reference the legacy macro name; safe to remove. Future
+  // inputs of "Southern Andean Cordillera" will fail canonical resolution
+  // and surface the gap to the caller (correct behavior).
   'Volcan Baru Highlands': 'Volcán Barú Highlands',
   'Yunnan Monsoonal Highlands': 'Yunnan Central Highlands',
 }

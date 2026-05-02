@@ -644,8 +644,8 @@ Fast maturation and high rainfall reduce acidity and increase body, limiting cla
 
 ### Central Andean Cordillera
 
-**Country:** Colombia  **Admin Regions it overlaps:** Antioquia / Caldas / Quindío
-**Typical Meso Terroirs (reference only; not canonical):** Santa Elena, Manizales, Villamaría, Chinchiná, Armenia, Salento, Filandia
+**Country:** Colombia  **Admin Regions it overlaps:** Antioquia / Caldas / Quindío / Tolima
+**Typical Meso Terroirs (reference only; not canonical):** Santa Elena, Manizales, Villamaría, Chinchiná, Armenia, Salento, Filandia, Ibagué (Tolima — added MCP feedback batch 7 after the Gesha Clouds dog-food surfaced Tolima as a registry gap)
 
 #### Context
 Core Colombian mountain chain with stable climate and strong infrastructure
