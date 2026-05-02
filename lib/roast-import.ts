@@ -364,7 +364,14 @@ export interface RoastPayload {
   is_reference?: boolean | null
 }
 
-export type PersistRoastResult = PersistOk<'roast_id'> | PersistFail
+export type PersistRoastResult =
+  | (PersistOk<'roast_id'> & {
+      // true on fresh INSERT, false when an existing (user_id, green_bean_id,
+      // batch_id) row was returned. Mirrors persistGreenBean / persistExperiment
+      // / persistRoastLearnings shape.
+      created: boolean
+    })
+  | PersistFail
 
 export function validateRoastPayload(p: RoastPayload): ValidationResult {
   const errors: string[] = []
@@ -380,6 +387,30 @@ export async function persistRoast(
 ): Promise<PersistRoastResult> {
   const v = validateRoastPayload(payload)
   if (!v.ok) return { ok: false, code: 'validation', errors: v.errors }
+
+  // UPSERT semantics on (user_id, green_bean_id, batch_id). MCP feedback
+  // batch 4 (2026-05-01) — same retry-after-crash failure mode that bit
+  // push_green_bean before PR #77's UPSERT fix. Without this, push_roast
+  // throws a Postgres unique-constraint violation on retry with no recovery
+  // path, blocking Stage 4 cuppings (which need roast_id per batch).
+  //
+  // Idempotency choice mirrors persistGreenBean: when a row exists, return
+  // the existing roast_id with `created: false` WITHOUT updating fields. If
+  // the caller wants to update prose / curves on an existing batch, they
+  // should use the app /add or /edit UI (or a future patch_roast Tool).
+  const { data: existing, error: lookupErr } = await supabase
+    .from('roasts')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('green_bean_id', payload.green_bean_id)
+    .eq('batch_id', payload.batch_id)
+    .maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+
+  if (existing) {
+    return { ok: true, roast_id: existing.id as string, created: false }
+  }
+
   const { data, error } = await supabase
     .from('roasts')
     .insert({
@@ -422,7 +453,7 @@ export async function persistRoast(
   if (error || !data) {
     return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
   }
-  return { ok: true, roast_id: data.id as string }
+  return { ok: true, roast_id: data.id as string, created: true }
 }
 
 // ---------------------------------------------------------------------------

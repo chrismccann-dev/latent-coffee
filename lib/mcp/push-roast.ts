@@ -74,7 +74,7 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
     {
       title: 'Push Roast',
       description:
-        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus 8 Sprint 2.5 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id). Pull from Roest via pull_roest_log first when the source is a real machine batch — that returns a normalized payload with most fields populated; augment with prose and push.',
+        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus 8 Sprint 2.5 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id). UPSERT semantics on (user_id, green_bean_id, batch_id): safe to retry after crash — when a row already exists, the existing roast_id is returned with `created: false` and field values are NOT overwritten (use the app /add or /edit UI to update fields on an existing batch). Pull from Roest via pull_roest_log first when the source is a real machine batch — that returns a normalized payload with most fields populated; augment with prose and push. To recover roast_ids without re-pushing (e.g. cross-session retry where you need batch_id → roast_id mapping for push_cupping), use get_bean_pipeline.',
       inputSchema: pushRoastInputSchema,
     },
     async (input) => {
@@ -86,7 +86,7 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
         }
         throw new Error(`Database error: ${result.message}`)
       }
-      const out = { roast_id: result.roast_id }
+      const out = { roast_id: result.roast_id, created: result.created }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
