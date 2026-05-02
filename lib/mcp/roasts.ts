@@ -1,9 +1,29 @@
-// Helper for the roasts://by-bean/{green_bean_id} Resource (Sprint 2.5).
+// Helper for the roasts://by-bean/{green_bean_id} Resource (Sprint 2.5)
+// + the get_bean_pipeline Tool (PR #78 / batch 4 + brews[] extension batch 5).
 //
-// Returns one fat JSON: { green_bean, roasts, cuppings, experiments, roast_learnings }
+// Returns one fat JSON:
+//   { green_bean, roasts, cuppings, experiments, roast_learnings, brews }
 // scoped to the authenticated user's data. Mirrors lib/mcp/brews.ts shape.
+//
+// brews[] (added MCP feedback batch 5, 2026-05-02): lightweight per-brew
+// summaries filtered by green_bean_id. Surfaces the prior-brew-detection case
+// the latest dog-food hit — the model pushed a duplicate brew because it
+// couldn't see existing brews for the bean before push_brew. Each summary
+// includes roast_id (null = orphan brew not linked to any roast); future
+// patch_brew Tool (architectural-queue #R16) would let callers backfill
+// missing roast_id linkage.
 
 import type { SupabaseClient } from '@supabase/supabase-js'
+
+export type BrewSummary = {
+  id: string
+  coffee_name: string | null
+  source: string | null
+  roast_id: string | null
+  extraction_strategy: string | null
+  what_i_learned: string | null
+  created_at: string
+}
 
 export type ByBeanPayload = {
   green_bean: Record<string, unknown> | null
@@ -11,6 +31,7 @@ export type ByBeanPayload = {
   cuppings: Record<string, unknown>[]
   experiments: Record<string, unknown>[]
   roast_learnings: Record<string, unknown> | null
+  brews: BrewSummary[]
 }
 
 export async function fetchByBean(
@@ -67,11 +88,25 @@ export async function fetchByBean(
     .maybeSingle()
   if (lessonsErr) throw new Error(`roast_learnings fetch failed: ${lessonsErr.message}`)
 
+  // Brews: lightweight summaries (id + key linkage + the prose field that
+  // tells the caller what this brew taught). Sorted desc by created_at so
+  // the latest brew is first — matches how a session-resume caller would
+  // ask "what's the most recent brew for this bean?". Full brew row is
+  // available via brews://by-id/{brew_id} for round-trip detail.
+  const { data: brews, error: brewsErr } = await supabase
+    .from('brews')
+    .select('id, coffee_name, source, roast_id, extraction_strategy, what_i_learned, created_at')
+    .eq('user_id', userId)
+    .eq('green_bean_id', green_bean_id)
+    .order('created_at', { ascending: false })
+  if (brewsErr) throw new Error(`brews fetch failed: ${brewsErr.message}`)
+
   return {
     green_bean: bean,
     roasts: roastRows,
     cuppings: cuppingRows,
     experiments: experiments ?? [],
     roast_learnings: lessons,
+    brews: (brews ?? []) as BrewSummary[],
   }
 }
