@@ -764,3 +764,400 @@ export async function persistRoastLearnings(
     return { ok: true, roast_learnings_id: data.id as string, created: false }
   }
 }
+
+// ---------------------------------------------------------------------------
+// Patch helpers (Sprint 2.6) — field-level mutation Tools
+//
+// One helper per push_* sibling. Each:
+//   1. Looks up row by key (PK for most; composite for cupping per plan).
+//   2. Returns `not_found` when no row matches.
+//   3. Builds an UPDATE patch from supplied fields ONLY (key-in-payload check,
+//      NOT `?? null` — that would clear unsupplied fields).
+//   4. UPDATE + return the updated row's id.
+//
+// Terroir + cultivar updates on green_beans route through Sprint 2.6's strict
+// findOrCreate* helpers (same path as persistGreenBean).
+// ---------------------------------------------------------------------------
+
+export type PatchResult<TIdField extends string> =
+  | ({ ok: true } & Record<TIdField, string>)
+  | { ok: false; code: 'validation'; errors: string[] }
+  | { ok: false; code: 'no_op'; message: string }
+  | { ok: false; code: 'not_found'; message: string }
+  | { ok: false; code: 'db_error'; message: string }
+
+// Build a Postgres UPDATE patch from a Partial<T> by including only keys that
+// are PRESENT in the payload (using `in` operator so explicit `null` clears
+// the field but `undefined` / missing leaves it unchanged).
+function buildPatchObject<T extends object>(
+  payload: Partial<T>,
+  allowedKeys: readonly (keyof T)[],
+): Record<string, unknown> {
+  const out: Record<string, unknown> = {}
+  for (const key of allowedKeys) {
+    if (key in payload) out[key as string] = payload[key]
+  }
+  return out
+}
+
+// ---- patchGreenBean ------------------------------------------------------
+
+export interface PatchGreenBeanPayload {
+  green_bean_id: string
+  // Re-routable through findOrCreate* on Sprint 2.6 strict-canonical path.
+  terroir?: TerroirCandidate | null
+  cultivar?: CultivarCandidate | null
+  // Producer canonicalize (with override)
+  producer?: string | null
+  producer_override?: boolean
+  // Pass-through fields (mirror GreenBeanPayload, all optional)
+  lot_id?: string
+  name?: string
+  origin?: string | null
+  region?: string | null
+  variety?: string | null
+  process?: string | null
+  importer?: string | null
+  seller?: string | null
+  exporter?: string | null
+  source_type?: string | null
+  link?: string | null
+  purchase_date?: string | null
+  price_per_kg?: number | null
+  quantity_g?: number | null
+  moisture?: string | null
+  density?: string | null
+  elevation_m?: number | null
+  producer_tasting_notes?: string | null
+  additional_notes?: string | null
+  roest_inventory_id?: number | null
+}
+
+const GREEN_BEAN_PATCH_FIELDS = [
+  'lot_id', 'name', 'origin', 'region', 'variety', 'process',
+  'importer', 'seller', 'exporter', 'source_type', 'link',
+  'purchase_date', 'price_per_kg', 'quantity_g',
+  'moisture', 'density', 'elevation_m',
+  'producer_tasting_notes', 'additional_notes', 'roest_inventory_id',
+] as const
+
+export async function patchGreenBean(
+  supabase: SupabaseClient,
+  userId: string,
+  payload: PatchGreenBeanPayload,
+): Promise<PatchResult<'green_bean_id'>> {
+  if (!payload.green_bean_id?.trim()) {
+    return { ok: false, code: 'validation', errors: ['green_bean_id is required'] }
+  }
+
+  const { data: existing, error: lookupErr } = await supabase
+    .from('green_beans')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('id', payload.green_bean_id)
+    .maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+  if (!existing) {
+    return { ok: false, code: 'not_found', message: `green_bean "${payload.green_bean_id}" not found` }
+  }
+
+  const errors: string[] = []
+  const patch = buildPatchObject(payload, GREEN_BEAN_PATCH_FIELDS)
+
+  // Producer canonicalize (text-only, allowOverride).
+  if ('producer' in payload) {
+    if (payload.producer == null || (typeof payload.producer === 'string' && !payload.producer.trim())) {
+      patch.producer = null
+    } else {
+      const pr = findOrCreateProducer(payload.producer, { allowOverride: payload.producer_override === true })
+      if (!pr.ok) errors.push(pr.error)
+      else patch.producer = pr.canonicalName
+    }
+  }
+
+  // Terroir / cultivar — re-resolve via Sprint 2.6 strict findOrCreate*.
+  if ('terroir' in payload && payload.terroir) {
+    const tr = await findOrCreateTerroir(
+      supabase,
+      userId,
+      payload.terroir.country,
+      payload.terroir.macro_terroir,
+      payload.terroir.admin_region,
+      payload.terroir.meso_terroir,
+    )
+    if (!tr.ok) errors.push(tr.error)
+    else patch.terroir_id = tr.id
+  }
+  if ('cultivar' in payload && payload.cultivar?.cultivar_name) {
+    const cr = await findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name)
+    if (!cr.ok) errors.push(cr.error)
+    else patch.cultivar_id = cr.id
+  }
+
+  if (errors.length > 0) return { ok: false, code: 'validation', errors }
+  if (Object.keys(patch).length === 0) {
+    return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
+  }
+
+  const { data, error } = await supabase
+    .from('green_beans')
+    .update(patch)
+    .eq('id', payload.green_bean_id)
+    .eq('user_id', userId)
+    .select('id')
+    .single()
+  if (error || !data) {
+    return { ok: false, code: 'db_error', message: error?.message || 'green_bean update failed' }
+  }
+  return { ok: true, green_bean_id: data.id as string }
+}
+
+// ---- patchRoast ----------------------------------------------------------
+
+export interface PatchRoastPayload extends Partial<Omit<RoastPayload, 'green_bean_id' | 'batch_id'>> {
+  roast_id: string
+  // green_bean_id + batch_id are the UPSERT key on push_roast; technically
+  // patchable here but rarely useful. Allow them through for completeness.
+  green_bean_id?: string
+  batch_id?: string
+}
+
+const ROAST_PATCH_FIELDS = [
+  'green_bean_id', 'batch_id',
+  'roast_date', 'coffee_name', 'profile_link', 'drum_direction',
+  'batch_size_g', 'roasted_weight_g', 'weight_loss_pct', 'agtron', 'color_description',
+  'yellowing_time', 'fc_start', 'drop_time',
+  'charge_temp', 'fc_temp', 'drop_temp', 'dev_time_s', 'dev_ratio',
+  'roast_profile_name', 'tp_time', 'tp_temp', 'yellowing_temp', 'hopper_load_temp',
+  'fan_curve', 'inlet_curve', 'roest_log_id',
+  'what_worked', 'what_didnt', 'what_to_change', 'worth_repeating', 'is_reference',
+] as const
+
+export async function patchRoast(
+  supabase: SupabaseClient,
+  userId: string,
+  payload: PatchRoastPayload,
+): Promise<PatchResult<'roast_id'>> {
+  if (!payload.roast_id?.trim()) {
+    return { ok: false, code: 'validation', errors: ['roast_id is required'] }
+  }
+
+  const { data: existing, error: lookupErr } = await supabase
+    .from('roasts')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('id', payload.roast_id)
+    .maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+  if (!existing) {
+    return { ok: false, code: 'not_found', message: `roast "${payload.roast_id}" not found` }
+  }
+
+  const patch = buildPatchObject(payload, ROAST_PATCH_FIELDS)
+  if (Object.keys(patch).length === 0) {
+    return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
+  }
+
+  const { data, error } = await supabase
+    .from('roasts')
+    .update(patch)
+    .eq('id', payload.roast_id)
+    .eq('user_id', userId)
+    .select('id')
+    .single()
+  if (error || !data) {
+    return { ok: false, code: 'db_error', message: error?.message || 'roast update failed' }
+  }
+  return { ok: true, roast_id: data.id as string }
+}
+
+// ---- patchCupping --------------------------------------------------------
+
+// patch_cupping uses the migration-041 composite key for lookup
+// (roast_id, cupping_date, eval_method, recipe_variant) with NULLS NOT
+// DISTINCT semantics so NULL fields match NULL fields. Mirrors persistCupping's
+// composite-key UPSERT lookup. Patching fields that are part of the key is
+// allowed (the lookup matches OLD state, UPDATE writes NEW state).
+export interface PatchCuppingPayload extends Partial<Omit<CuppingPayload, 'roast_id'>> {
+  // Composite-key lookup fields (required to identify the row)
+  roast_id: string
+  cupping_date: string | null
+  eval_method: string | null
+  recipe_variant: string | null
+  // Optional patch fields override the composite-key fields above when also
+  // supplied as new values. To CHANGE recipe_variant from null → "xbloom_gate",
+  // pass `recipe_variant: null` (lookup) and `new_recipe_variant: "xbloom_gate"`.
+  // Or accept the simpler shape: lookup by old key, patch overwrites whatever
+  // new fields are present. For now, the patch fields share names — passing
+  // recipe_variant updates the field; lookup uses the SAME values. If you want
+  // to change the key, do it via raw SQL or split into delete+re-push.
+}
+
+export async function patchCupping(
+  supabase: SupabaseClient,
+  userId: string,
+  payload: PatchCuppingPayload,
+): Promise<PatchResult<'cupping_id'>> {
+  if (!payload.roast_id?.trim()) {
+    return { ok: false, code: 'validation', errors: ['roast_id is required'] }
+  }
+
+  // Composite-key lookup with NULLS NOT DISTINCT semantics.
+  let lookup = supabase
+    .from('cuppings')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('roast_id', payload.roast_id)
+  lookup = payload.cupping_date != null
+    ? lookup.eq('cupping_date', payload.cupping_date)
+    : lookup.is('cupping_date', null)
+  lookup = payload.eval_method != null
+    ? lookup.eq('eval_method', payload.eval_method)
+    : lookup.is('eval_method', null)
+  lookup = payload.recipe_variant != null
+    ? lookup.eq('recipe_variant', payload.recipe_variant)
+    : lookup.is('recipe_variant', null)
+  const { data: existing, error: lookupErr } = await lookup.maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+  if (!existing) {
+    const desc = `(roast_id="${payload.roast_id}", cupping_date=${payload.cupping_date ?? 'NULL'}, eval_method=${payload.eval_method ?? 'NULL'}, recipe_variant=${payload.recipe_variant ?? 'NULL'})`
+    return { ok: false, code: 'not_found', message: `cupping ${desc} not found` }
+  }
+
+  // Patchable fields — every cuppings column EXCEPT the lookup key. The key
+  // fields can technically be changed by patching them too (lookup matches old,
+  // update writes new), but this is rare; document via tool description.
+  const CUPPING_PATCH_FIELDS = [
+    'cupping_date', 'rest_days', 'eval_method', 'recipe_variant',
+    'ground_agtron', 'ground_color_description',
+    'aroma', 'flavor', 'acidity', 'body', 'finish', 'overall',
+  ] as const
+  const patch = buildPatchObject(payload, CUPPING_PATCH_FIELDS)
+  if (Object.keys(patch).length === 0) {
+    return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
+  }
+
+  const { data, error } = await supabase
+    .from('cuppings')
+    .update(patch)
+    .eq('id', existing.id)
+    .eq('user_id', userId)
+    .select('id')
+    .single()
+  if (error || !data) {
+    return { ok: false, code: 'db_error', message: error?.message || 'cupping update failed' }
+  }
+  return { ok: true, cupping_id: data.id as string }
+}
+
+// ---- patchExperiment -----------------------------------------------------
+
+export interface PatchExperimentPayload extends Partial<Omit<ExperimentPayload, 'green_bean_id' | 'experiment_id'>> {
+  experiment_pk: string
+  // green_bean_id + experiment_id are the UPSERT key on push_experiment;
+  // patchable here for completeness (e.g. fix a typo in experiment_id).
+  green_bean_id?: string
+  experiment_id?: string
+}
+
+const EXPERIMENT_PATCH_FIELDS = [
+  'green_bean_id', 'experiment_id', 'batch_ids',
+  'context', 'primary_question', 'control_baseline', 'shared_constants',
+  'variable_changed', 'levels_tested', 'expected_outcomes', 'failure_boundary',
+  'observed_outcome_a', 'observed_outcome_b', 'observed_outcome_c', 'observed_outcome_d',
+  'winner', 'key_insight', 'what_changes_going_forward',
+] as const
+
+export async function patchExperiment(
+  supabase: SupabaseClient,
+  userId: string,
+  payload: PatchExperimentPayload,
+): Promise<PatchResult<'experiment_pk'>> {
+  if (!payload.experiment_pk?.trim()) {
+    return { ok: false, code: 'validation', errors: ['experiment_pk is required'] }
+  }
+
+  const { data: existing, error: lookupErr } = await supabase
+    .from('experiments')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('id', payload.experiment_pk)
+    .maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+  if (!existing) {
+    return { ok: false, code: 'not_found', message: `experiment "${payload.experiment_pk}" not found` }
+  }
+
+  const patch = buildPatchObject(payload, EXPERIMENT_PATCH_FIELDS)
+  if (Object.keys(patch).length === 0) {
+    return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
+  }
+
+  const { data, error } = await supabase
+    .from('experiments')
+    .update(patch)
+    .eq('id', payload.experiment_pk)
+    .eq('user_id', userId)
+    .select('id')
+    .single()
+  if (error || !data) {
+    return { ok: false, code: 'db_error', message: error?.message || 'experiment update failed' }
+  }
+  return { ok: true, experiment_pk: data.id as string }
+}
+
+// ---- patchRoastLearnings -------------------------------------------------
+
+export interface PatchRoastLearningsPayload extends Partial<Omit<RoastLearningsPayload, 'green_bean_id'>> {
+  roast_learnings_id: string
+  // green_bean_id is the UPSERT key on push_roast_learnings (one per bean);
+  // patchable but rarely changed.
+  green_bean_id?: string
+}
+
+const ROAST_LEARNINGS_PATCH_FIELDS = [
+  'green_bean_id', 'best_batch_id', 'why_this_roast_won',
+  'aromatic_behavior', 'structural_behavior', 'elasticity',
+  'roast_window_width', 'primary_lever', 'secondary_levers',
+  'what_didnt_move_needle', 'underdevelopment_signal', 'overdevelopment_signal',
+  'cultivar_takeaway', 'general_takeaway', 'reference_roasts',
+  'starting_hypothesis', 'rest_behavior',
+] as const
+
+export async function patchRoastLearnings(
+  supabase: SupabaseClient,
+  userId: string,
+  payload: PatchRoastLearningsPayload,
+): Promise<PatchResult<'roast_learnings_id'>> {
+  if (!payload.roast_learnings_id?.trim()) {
+    return { ok: false, code: 'validation', errors: ['roast_learnings_id is required'] }
+  }
+
+  const { data: existing, error: lookupErr } = await supabase
+    .from('roast_learnings')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('id', payload.roast_learnings_id)
+    .maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+  if (!existing) {
+    return { ok: false, code: 'not_found', message: `roast_learnings "${payload.roast_learnings_id}" not found` }
+  }
+
+  const patch = buildPatchObject(payload, ROAST_LEARNINGS_PATCH_FIELDS)
+  if (Object.keys(patch).length === 0) {
+    return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
+  }
+
+  const { data, error } = await supabase
+    .from('roast_learnings')
+    .update(patch)
+    .eq('id', payload.roast_learnings_id)
+    .eq('user_id', userId)
+    .select('id')
+    .single()
+  if (error || !data) {
+    return { ok: false, code: 'db_error', message: error?.message || 'roast_learnings update failed' }
+  }
+  return { ok: true, roast_learnings_id: data.id as string }
+}
