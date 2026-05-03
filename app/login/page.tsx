@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -15,7 +15,7 @@ function safeNext(raw: string | null): string {
   return raw
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -45,6 +45,50 @@ export default function LoginPage() {
   }
 
   return (
+    <form onSubmit={handleLogin} className="space-y-4">
+      <div>
+        <label className="label">Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="input"
+          placeholder="you@example.com"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="label">Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="input"
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      {error && (
+        <div className="text-red-600 text-sm font-mono">
+          {error}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="btn btn-primary w-full"
+      >
+        {loading ? 'Logging in...' : 'Log in'}
+      </button>
+    </form>
+  )
+}
+
+export default function LoginPage() {
+  return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="border-b border-latent-border">
@@ -65,45 +109,10 @@ export default function LoginPage() {
             Log in
           </h1>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="label">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="label">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-
-            {error && (
-              <div className="text-red-600 text-sm font-mono">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary w-full"
-            >
-              {loading ? 'Logging in...' : 'Log in'}
-            </button>
-          </form>
+          {/* Suspense wrap is required because LoginForm calls useSearchParams() */}
+          <Suspense fallback={<div className="h-64" />}>
+            <LoginForm />
+          </Suspense>
 
           <p className="mt-6 text-center text-sm text-latent-mid">
             Don't have an account?{' '}
