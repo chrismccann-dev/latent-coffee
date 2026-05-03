@@ -23,7 +23,7 @@ async function handleMcpRequest(req: Request): Promise<Response> {
   try {
     auth = await requireApiKey(req)
   } catch (err) {
-    if (err instanceof McpAuthError) return authErrorResponse(err)
+    if (err instanceof McpAuthError) return authErrorResponse(err, req)
     return internalErrorResponse(err)
   }
 

@@ -2,8 +2,18 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+
+// Only accept same-origin path-style next values (e.g. /api/mcp/authorize?...).
+// Blocks absolute URLs, protocol-relative URLs, and anything that could redirect
+// off-site. Used by Sprint 3.0's OAuth /authorize endpoint when an unauthenticated
+// session needs to log in mid-flow.
+function safeNext(raw: string | null): string {
+  if (!raw) return '/brews'
+  if (!raw.startsWith('/') || raw.startsWith('//')) return '/brews'
+  return raw
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -11,6 +21,8 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const next = safeNext(searchParams.get('next'))
   const supabase = createClient()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -27,7 +39,7 @@ export default function LoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      router.push('/brews')
+      router.push(next)
       router.refresh()
     }
   }

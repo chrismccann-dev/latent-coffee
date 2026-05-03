@@ -45,14 +45,25 @@ export async function requireApiKey(req: Request): Promise<McpAuthContext> {
   return { userId: data.user_id, supabase }
 }
 
-export function authErrorResponse(err: McpAuthError): Response {
+function resourceMetadataUrl(req: Request): string {
+  const u = new URL(req.url)
+  return `${u.origin}/.well-known/oauth-protected-resource`
+}
+
+export function authErrorResponse(err: McpAuthError, req?: Request): Response {
   const body = {
     jsonrpc: '2.0' as const,
     error: { code: -32001, message: `Authentication failed: ${err.reason}` },
     id: null,
   }
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (req) {
+    // RFC 9728 / MCP authorization spec: 401 must point clients at the resource metadata
+    // so they can discover the authorization server and start the OAuth flow.
+    headers['WWW-Authenticate'] = `Bearer realm="latent-coffee-mcp", resource_metadata="${resourceMetadataUrl(req)}"`
+  }
   return new Response(JSON.stringify(body), {
     status: 401,
-    headers: { 'Content-Type': 'application/json' },
+    headers,
   })
 }

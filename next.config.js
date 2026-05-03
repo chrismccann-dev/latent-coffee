@@ -17,6 +17,21 @@ const nextConfig = {
       ],
     },
   },
+  // Sprint 3.0: OAuth discovery requires /.well-known/* URLs. Next.js app router
+  // ignores dot-prefixed folders, so the route handlers live under app/oauth/
+  // and we rewrite the public URLs to them.
+  async rewrites() {
+    return [
+      {
+        source: '/.well-known/oauth-protected-resource',
+        destination: '/oauth/well-known/oauth-protected-resource',
+      },
+      {
+        source: '/.well-known/oauth-authorization-server',
+        destination: '/oauth/well-known/oauth-authorization-server',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
