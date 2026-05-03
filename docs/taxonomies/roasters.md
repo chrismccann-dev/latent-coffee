@@ -5,7 +5,7 @@
 **Last adopted:** 2026-04-24
 **Adoption path:** Authored taxonomy (Chris, 2026-04-23 CSV pass + 2026-04-24 enrichment) drawing on roaster-published brew guides, BMR roaster reference cards, and the 55-brew corpus. First taxonomy port without a DB FK column — `brews.roaster` is text-only; canonical enforcement is code-and-validation only, no migration to a `roasters` table.
 
-Canonical roaster reference for the latent-coffee app. **70 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](../../lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint 1h structural port.
+Canonical roaster reference for the latent-coffee app. **71 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](../../lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint 1h structural port.
 
 **Composition:** Each roaster is a single canonical name (no nested hierarchy like Region's Country → Macro). The rich shape captures 29 fields per entry: location/country, roast style + development bias + rest curve, strategy tag + family, primary driver / extraction purpose, house style + brew guide link, recipe baseline (temp / dose / water / ratio / time / agitation), brewer + filter type, extraction intent + failure mode + tolerance, process sensitivity, brew adjustment method, calibration role, confidence level, and free-text notes. Plus optional `displayName` for tight UI surfaces (brew cards) and `bmrHouseStyle` / `bmrNotes` authored prose preserved verbatim from the prior 21-entry registry where richer than CSV.
 
@@ -17,11 +17,11 @@ External claims in this doc are sourced at authoring time from the CSV; Chris's 
 
 ## Canonical list
 
-Matches the `ROASTERS` array in [lib/roaster-registry.ts](../../lib/roaster-registry.ts) exactly. 70 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
+Matches the `ROASTERS` array in [lib/roaster-registry.ts](../../lib/roaster-registry.ts) exactly. 71 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
 
-### Clarity-First (26)
+### Clarity-First (27)
 
-Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 26 entries.
+Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 27 entries.
 
 - **April Coffee**
 - **Bean & Bean Coffee Roasters**
@@ -42,6 +42,7 @@ Roasters whose default is to protect clarity. Low-agitation, conservative pour s
 - **Mok Coffee**
 - **normlppl/minmax**
 - **Onibus Coffee**
+- **Special Guests Coffee**
 - **Swerl Coffee Roasters**
 - **Tanat Coffee**
 - **Terraform Coffee Roasters**
@@ -581,6 +582,22 @@ _Tokyo, Japan_ · **CLARITY-FIRST**
 - **Calibration role:** Japanese Clarity Baseline
 - **Confidence:** High
 - **Notes:** Emphasizes restraint and consistency; broader method coverage than most roasters; less rigid than Tanat, less baseline than Kurasu; sits as a flexible clarity-first system with strong fundamentals
+
+#### Special Guests Coffee
+_London, UK_ · **CLARITY-FIRST**
+
+- **Roast style:** Light (precision-fermentation focus, transparent processing)
+- **Primary driver:** Rare micro-lots and competition-level beans; Orea + Fellow Ode geometry baseline
+- **Extraction purpose:** Preserve clarity, sweetness, and place; highlight precision fermentation without distraction
+- **House style:** Orea (flat-bottom) with 40g bloom + 2 equal-mass pours; low agitation, 92°C, Fellow Ode 4.25
+- **Brew guide:** [Official (Video + Website)](https://specialguestscoffee.com/pages/our-go-to-brewing-guide)
+- **Recipe baseline:** temp=92, dose=12, water=200, ratio=1:16.67, time=2:15-2:30, agitation=Low
+- **Primary brewer:** Orea
+- **Filter type:** Flat-bottom (Orea)
+- **Extraction intent:** Clarity (19-20%)
+- **Brew adjustment method:** Grind + ratio
+- **Confidence:** Medium
+- **Notes:** Founded 2022 in London by 2x UK Barista Champion Paul Ross. Focus on rare micro-lots and competition-level beans; Aybrook Street flagship runs a 12-coffee pourover bar. Go-to recipe (per video guide using Inmaculada Natural Gesha, Edition 1022-01): 40g bloom for 30s, then pour 1: 80g, pour 2: 80g, total 12g/200g at 92°C, Fellow Ode 4.25, Orea brewer. Reference setup is Orea + Fellow Ode + Acacia Pearl + Orea x MK Studio cup. Added 2026-05-02 cleanup mini-session (post-Sprint 2.6).
 
 #### Swerl Coffee Roasters
 _Sweden_ · **CLARITY-FIRST**

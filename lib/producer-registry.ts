@@ -3634,6 +3634,7 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   // (2026-05-02). Sweet Maria's Costa Rican lots tend to use this
   // convention - more farm-name aliases likely to follow.
   Higuito: "Nelsyn Hernández",
+  "Nelsyn Hernández, Fátima Micromill (Higuito Farm)": "Nelsyn Hernández",
   "Carlos Morera": "Carlos Fernández Morera",
   "Carlos Morera, El Diamante": "Carlos Fernández Morera",
   "Carmen Estate": "Carlos Franceschi",

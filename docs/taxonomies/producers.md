@@ -3502,6 +3502,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 | `Café Granja La Esperanza` | `Rigoberto & Luis Eduardo Herrera` |
 | `CGLE` | `Rigoberto & Luis Eduardo Herrera` |
 | `Higuito` | `Nelsyn Hernández` |
+| `Nelsyn Hernández, Fátima Micromill (Higuito Farm)` | `Nelsyn Hernández` |
 | `Carlos Morera` | `Carlos Fernández Morera` |
 | `Carlos Morera, El Diamante` | `Carlos Fernández Morera` |
 | `Carmen Estate` | `Carlos Franceschi` |
