@@ -921,6 +921,307 @@ export async function persistBrew(
 }
 
 // ---------------------------------------------------------------------------
+// Patch — field-level mutation for an existing brew row.
+//
+// Sprint 2.6 — extracted from `app/api/brews/[id]/route.ts` PATCH handler so
+// the MCP `patch_brew` Tool and the route can share canonical-validation
+// logic verbatim. The route becomes a thin NextResponse wrapper around this
+// helper; `lib/mcp/patch-brew.ts` calls the same path.
+//
+// Patch semantics: only fields PRESENT in the body are UPDATEd. Omitted
+// fields are untouched. Empty-string is normalized to null on text fields.
+//
+// Validation: aggregates all field-level errors into a single PatchBrewResult
+// (mirrors persistBrew batch-error behavior post-2.4.3) so multi-field
+// problems collapse to one round-trip.
+// ---------------------------------------------------------------------------
+
+// Whitelist for direct patch. `cultivar_id` / `terroir_id` are resolved
+// server-side via findOrCreateCultivar / findOrCreateTerroir from
+// `cultivar_name` / `country` / `terroir_name` body keys.
+export const PATCH_BREW_EDITABLE_FIELDS = [
+  'coffee_name',
+  'roaster',
+  'producer',
+  'variety',
+  'process',
+  'roast_level',
+  'flavor_notes',
+  'flavors',
+  'structure_tags',
+  'brewer',
+  'filter',
+  'dose_g',
+  'water_g',
+  'ratio',
+  'grind',
+  'grinder',
+  'grind_setting',
+  'temp_c',
+  'bloom',
+  'pour_structure',
+  'total_time',
+  'extraction_strategy',
+  'extraction_confirmed',
+  'strategy_notes',
+  'modifiers',
+  'aroma',
+  'attack',
+  'mid_palate',
+  'body',
+  'finish',
+  'temperature_evolution',
+  'peak_expression',
+  'key_takeaways',
+  'classification',
+  'terroir_connection',
+  'cultivar_connection',
+  'what_i_learned',
+  'is_process_dominant',
+  'process_category',
+  'process_details',
+  'base_process',
+  'subprocess',
+  'fermentation_modifiers',
+  'drying_modifiers',
+  'intervention_modifiers',
+  'experimental_modifiers',
+  'decaf_modifier',
+  'signature_method',
+  'green_bean_id',
+  'roast_id',
+] as const
+
+export type PatchBrewResult =
+  | { ok: true; brewId: string }
+  | { ok: false; code: 'validation'; errors: string[] }
+  | { ok: false; code: 'no_op'; message: string }
+  | { ok: false; code: 'not_found'; message: string }
+  | { ok: false; code: 'db_error'; message: string }
+
+// Aggregating canonicalize for text-only-no-FK fields with allowOverride
+// (roaster / producer / brewer / filter / grinder). Mutates `patch[field]`
+// in place; pushes errors into the accumulator instead of returning. Mirrors
+// `canonicalizeOverridable` from app/api/brews/[id]/route.ts but error-shape
+// is plain string (not NextResponse).
+function canonicalizeOverridablePatch(
+  patch: Record<string, unknown>,
+  body: Record<string, unknown>,
+  field: string,
+  lookup: CanonicalLookup,
+  overrideKey: string,
+  errors: string[],
+): void {
+  if (!(field in patch)) return
+  const v = patch[field]
+  if (v === '' || v === null) {
+    patch[field] = null
+    return
+  }
+  if (typeof v !== 'string') {
+    errors.push(`${field} must be a string`)
+    return
+  }
+  const canonical = lookup.canonicalize(v)
+  if (canonical) {
+    patch[field] = canonical
+    return
+  }
+  if (body[overrideKey] === true) {
+    patch[field] = v.trim()
+    return
+  }
+  errors.push(`${field} "${v}" is not in the canonical registry. Send ${overrideKey}:true to bypass.`)
+}
+
+export async function patchBrew(
+  supabase: SupabaseClient,
+  userId: string,
+  brewId: string,
+  body: Record<string, unknown>,
+): Promise<PatchBrewResult> {
+  const errors: string[] = []
+  const patch: Record<string, unknown> = {}
+  for (const key of PATCH_BREW_EDITABLE_FIELDS) {
+    if (key in body) patch[key] = body[key]
+  }
+
+  const hasCanonicalKey = 'cultivar_name' in body || 'terroir_name' in body || 'country' in body
+  if (Object.keys(patch).length === 0 && !hasCanonicalKey) {
+    return { ok: false, code: 'no_op', message: 'no editable fields in body' }
+  }
+
+  // extraction_strategy
+  if ('extraction_strategy' in patch) {
+    const s = patch.extraction_strategy
+    if (s !== null && s !== '' && !EXTRACTION_STRATEGIES.includes(s as ExtractionStrategy)) {
+      errors.push(
+        `extraction_strategy must be one of: ${EXTRACTION_STRATEGIES.join(', ')} (got "${String(s)}")`,
+      )
+    } else if (s === '') patch.extraction_strategy = null
+  }
+
+  // modifiers
+  if ('modifiers' in patch) {
+    const result = cleanModifiers(patch.modifiers)
+    if (!result.ok) errors.push(result.error)
+    else patch.modifiers = result.value
+  }
+
+  // structured process axes
+  if ('base_process' in patch) {
+    const v = patch.base_process
+    if (v !== null && (typeof v !== 'string' || !BASE_PROCESSES.includes(v as BaseProcess))) {
+      errors.push(`base_process must be one of: ${BASE_PROCESSES.join(', ')}`)
+    }
+  }
+  if ('subprocess' in patch) {
+    const v = patch.subprocess
+    if (v !== null && v !== '' && (typeof v !== 'string' || !HONEY_SUBPROCESSES.includes(v as HoneySubprocess))) {
+      errors.push(`subprocess must be one of: ${HONEY_SUBPROCESSES.join(', ')}`)
+    } else if (v === '') patch.subprocess = null
+  }
+  for (const [key, lookup] of [
+    ['fermentation_modifiers', FERMENTATION_LOOKUP],
+    ['drying_modifiers', DRYING_LOOKUP],
+    ['intervention_modifiers', INTERVENTION_LOOKUP],
+    ['experimental_modifiers', EXPERIMENTAL_LOOKUP],
+  ] as const satisfies ReadonlyArray<readonly [string, CanonicalLookup]>) {
+    if (!(key in patch)) continue
+    const v = patch[key]
+    if (!Array.isArray(v) || v.some((x) => typeof x !== 'string' || !lookup.isCanonical(x))) {
+      errors.push(`${key} must be an array of canonical values`)
+    }
+  }
+  if ('decaf_modifier' in patch) {
+    const v = patch.decaf_modifier
+    if (v !== null && v !== '' && (typeof v !== 'string' || !DECAF_MODIFIERS.includes(v as DecafModifier))) {
+      errors.push(`decaf_modifier must be one of: ${DECAF_MODIFIERS.join(', ')}`)
+    } else if (v === '') patch.decaf_modifier = null
+  }
+  if ('signature_method' in patch) {
+    const v = patch.signature_method
+    if (v !== null && v !== '' && (typeof v !== 'string' || !SIGNATURE_LOOKUP.isResolvable(v))) {
+      errors.push(`signature_method "${String(v)}" is not in the canonical registry`)
+    } else if (v === '') patch.signature_method = null
+  }
+
+  // roast_level — strict canonical, canonicalize on write
+  if ('roast_level' in patch) {
+    const v = patch.roast_level
+    if (v === '' || v === null) {
+      patch.roast_level = null
+    } else if (typeof v !== 'string') {
+      errors.push('roast_level must be a string')
+    } else {
+      const canonical = ROAST_LEVEL_LOOKUP.canonicalize(v)
+      if (!canonical) errors.push(`roast_level "${v}" is not in the canonical registry`)
+      else patch.roast_level = canonical
+    }
+  }
+
+  // text-only-no-FK with allowOverride
+  canonicalizeOverridablePatch(patch, body, 'roaster', ROASTER_LOOKUP, 'roaster_override', errors)
+  canonicalizeOverridablePatch(patch, body, 'producer', PRODUCER_LOOKUP, 'producer_override', errors)
+  canonicalizeOverridablePatch(patch, body, 'grinder', GRINDER_LOOKUP, 'grinder_override', errors)
+  canonicalizeOverridablePatch(patch, body, 'brewer', BREWER_LOOKUP, 'brewer_override', errors)
+  canonicalizeOverridablePatch(patch, body, 'filter', FILTER_LOOKUP, 'filter_override', errors)
+
+  // grind_setting — pair-aware with the grinder from same patch
+  if ('grind_setting' in patch) {
+    const v = patch.grind_setting
+    if (v === '' || v === null) {
+      patch.grind_setting = null
+    } else if (typeof v !== 'string') {
+      errors.push('grind_setting must be a string')
+    } else {
+      const trimmed = v.trim()
+      const grinderForLookup = typeof patch.grinder === 'string' ? patch.grinder : null
+      if (grinderForLookup && !isResolvableSetting(grinderForLookup, trimmed)) {
+        errors.push(`grind_setting "${trimmed}" is not valid on ${grinderForLookup}`)
+      } else {
+        patch.grind_setting = trimmed
+      }
+    }
+  }
+
+  // flavors / structure_tags
+  if ('flavors' in patch) {
+    const result = cleanFlavors(patch.flavors)
+    if (!result.ok) errors.push(result.error)
+    else {
+      patch.flavors = result.value
+      patch.flavor_notes = composeFlavorNotes(result.value)
+    }
+  }
+  if ('structure_tags' in patch) {
+    const result = cleanStructureTags(patch.structure_tags)
+    if (!result.ok) errors.push(result.error)
+    else patch.structure_tags = result.value
+  }
+
+  // Recompute legacy `grind` display column when either structured field changes.
+  if ('grinder' in patch || 'grind_setting' in patch) {
+    patch.grind = composeGrind({
+      grinder: typeof patch.grinder === 'string' ? patch.grinder : null,
+      grind_setting: typeof patch.grind_setting === 'string' ? patch.grind_setting : null,
+    })
+  }
+
+  // coffee_name non-empty when supplied
+  if ('coffee_name' in patch) {
+    const name = typeof patch.coffee_name === 'string' ? patch.coffee_name.trim() : ''
+    if (!name) errors.push('coffee_name cannot be empty')
+    else patch.coffee_name = name
+  }
+
+  if (errors.length > 0) {
+    return { ok: false, code: 'validation', errors }
+  }
+
+  // Resolve cultivar_name + terroir_name to FK ids (Sprint 2.6: strict canonical
+  // via the new findOrCreate*; auto-populates registry-derived fields on create).
+  if ('cultivar_name' in body) {
+    const result = await findOrCreateCultivar(
+      supabase,
+      userId,
+      typeof body.cultivar_name === 'string' ? body.cultivar_name : null,
+    )
+    if (!result.ok) return { ok: false, code: 'validation', errors: [result.error] }
+    patch.cultivar_id = result.id
+  }
+  if ('terroir_name' in body || 'country' in body) {
+    const result = await findOrCreateTerroir(
+      supabase,
+      userId,
+      typeof body.country === 'string' ? body.country : null,
+      typeof body.terroir_name === 'string' ? body.terroir_name : null,
+      typeof body.admin_region === 'string' ? body.admin_region : null,
+      typeof body.meso_terroir === 'string' ? body.meso_terroir : null,
+    )
+    if (!result.ok) return { ok: false, code: 'validation', errors: [result.error] }
+    patch.terroir_id = result.id
+  }
+
+  // RLS scopes to the owning user; `.eq('user_id')` is belt-and-suspenders.
+  const { data, error } = await supabase
+    .from('brews')
+    .update(patch)
+    .eq('id', brewId)
+    .eq('user_id', userId)
+    .select('id')
+    .single()
+
+  if (error?.code === 'PGRST116') {
+    return { ok: false, code: 'not_found', message: `brew "${brewId}" not found (or not owned by this user)` }
+  }
+  if (error || !data) {
+    return { ok: false, code: 'db_error', message: error?.message || 'brew update failed' }
+  }
+  return { ok: true, brewId: data.id }
+}
+
+// ---------------------------------------------------------------------------
 // Drift detection — auto-correct casing/whitespace, warn on mis-pairings
 // ---------------------------------------------------------------------------
 
