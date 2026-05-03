@@ -380,19 +380,27 @@ export async function matchTerroir(
     return { isNew: true, inRegistry, terroir }
   }
 
-  // Fetch ALL rows matching country + macro_terroir. There can be multiple
-  // (same macro across different admin regions - e.g. Colombia's Western
-  // Andean Cordillera has rows for both Valle del Cauca and Cauca). Prefer
-  // the one whose admin_region matches, else fall back to the first row.
-  // Meso tiebreak removed in sprint 1d.1 (meso demoted to free-text).
-  const { data: rows } = await supabase
+  // Sprint 2.6 — meso is part of the match key. The pre-2.6 behavior matched
+  // on (country, macro) only, which silently collapsed beans with different
+  // localities onto the first matching row (the R12 Las Margaritas → Trujillo
+  // highlands silent-collapse failure mode). Now: same macro + different meso
+  // → distinct rows. NULL meso matches NULL meso (mirrors the persistCupping
+  // NULLS NOT DISTINCT pattern from migration 041).
+  let lookup = supabase
     .from('terroirs')
     .select('id, admin_region')
     .eq('user_id', userId)
     .eq('country', terroir.country)
     .eq('macro_terroir', terroir.macro_terroir)
+  lookup = terroir.meso_terroir
+    ? lookup.eq('meso_terroir', terroir.meso_terroir)
+    : lookup.is('meso_terroir', null)
+  const { data: rows } = await lookup
 
   if (rows && rows.length > 0) {
+    // After meso filter, multi-row case is (same country+macro+meso, different
+    // admin_region). Prefer the row whose admin_region matches caller input,
+    // else fall back to the first row.
     const byAdmin = terroir.admin_region
       ? rows.find((r: any) => r.admin_region?.toLowerCase() === terroir.admin_region?.toLowerCase())
       : null
@@ -429,8 +437,12 @@ export async function matchCultivar(
   return { isNew: true, inRegistry, cultivar }
 }
 
+// Sprint 2.6: `created` flag distinguishes "found existing row" from "inserted
+// fresh row" — used by persistBrew to populate createdTerroir / createdCultivar
+// in its response without a separate pre-existence DB check. False when input
+// is empty (no FK resolved) and on the find-existing branch; true on insert.
 export type FindOrCreateResult =
-  | { ok: true; id: string | null }
+  | { ok: true; id: string | null; created: boolean }
   | { ok: false; error: string; status: 400 | 500 }
 
 export async function findOrCreateCultivar(
@@ -439,7 +451,7 @@ export async function findOrCreateCultivar(
   rawName: string | null | undefined,
 ): Promise<FindOrCreateResult> {
   const raw = typeof rawName === 'string' ? rawName.trim() : ''
-  if (!raw) return { ok: true, id: null }
+  if (!raw) return { ok: true, id: null, created: false }
 
   const entry = resolveCultivar(raw)
   if (!entry) {
@@ -456,7 +468,7 @@ export async function findOrCreateCultivar(
     .eq('user_id', userId)
     .ilike('cultivar_name', entry.name)
   if (existingRows && existingRows.length > 0) {
-    return { ok: true, id: existingRows[0].id }
+    return { ok: true, id: existingRows[0].id, created: false }
   }
 
   const { data: created, error: createErr } = await supabase
@@ -473,7 +485,7 @@ export async function findOrCreateCultivar(
   if (createErr || !created) {
     return { ok: false, status: 500, error: createErr?.message || 'cultivar create failed' }
   }
-  return { ok: true, id: created.id }
+  return { ok: true, id: created.id, created: true }
 }
 
 export type FindOrCreateRoasterResult = CanonicalTextResult
@@ -520,7 +532,7 @@ export async function findOrCreateTerroir(
   const countryTrim = typeof country === 'string' ? country.trim() : ''
   const rawMacroTrim = typeof rawMacro === 'string' ? rawMacro.trim() : ''
 
-  if (!countryTrim && !rawMacroTrim) return { ok: true, id: null }
+  if (!countryTrim && !rawMacroTrim) return { ok: true, id: null, created: false }
   if (!countryTrim) {
     return {
       ok: false,
@@ -528,7 +540,7 @@ export async function findOrCreateTerroir(
       error: 'country is required when setting a terroir',
     }
   }
-  if (!rawMacroTrim) return { ok: true, id: null }
+  if (!rawMacroTrim) return { ok: true, id: null, created: false }
 
   const canonical = TERROIR_MACRO_LOOKUP.isCanonical(rawMacroTrim)
     ? rawMacroTrim
@@ -537,26 +549,51 @@ export async function findOrCreateTerroir(
     return {
       ok: false,
       status: 400,
-      error: `macro terroir "${rawMacroTrim}" is not in the canonical registry. To add a new macro terroir, use /add.`,
+      error: `macro terroir "${rawMacroTrim}" is not in the canonical registry. Add to docs/taxonomies/regions.md + lib/terroir-registry.ts before pushing.`,
     }
   }
 
+  // Sprint 2.6 — country/macro pair validation. Closes the R23 Gesha Clouds
+  // failure mode where a Tolima bean was misattributed to Antioquia because
+  // findOrCreateTerroir validated `macro` against the country-agnostic
+  // TERROIR_MACRO_LOOKUP — any (country, macro) pair where the macro existed
+  // SOMEWHERE passed validation. With the rich-registry pair check, the macro
+  // must be registered for THIS country, else fail-fast pointing the caller
+  // at the registry edit path.
+  const entry = getTerroirEntry(countryTrim, canonical)
+  if (!entry) {
+    return {
+      ok: false,
+      status: 400,
+      error: `macro terroir "${canonical}" is not registered for country "${countryTrim}" — registry gap. Add to docs/taxonomies/regions.md + lib/terroir-registry.ts before pushing.`,
+    }
+  }
+
+  // Pass meso to the meso-aware match (Sprint 2.6 — closes R12 silent-collapse).
+  const mesoTrim = (typeof mesoOverride === 'string' && mesoOverride.trim())
+    ? mesoOverride.trim()
+    : null
   const match = await matchTerroir(supabase, userId, {
     country: countryTrim,
     macro_terroir: canonical,
     admin_region: adminOverride ?? null,
+    meso_terroir: mesoTrim,
   })
   if (!match.isNew) {
-    return { ok: true, id: match.id }
+    return { ok: true, id: match.id, created: false }
   }
 
-  const entry = getTerroirEntry(countryTrim, canonical)
-  const admin = (typeof adminOverride === 'string' && adminOverride.trim())
-    ? adminOverride.trim()
-    : entry?.admin_region ?? null
-  const meso = (typeof mesoOverride === 'string' && mesoOverride.trim())
-    ? mesoOverride.trim()
-    : null
+  // Registry's admin_region wins over caller input when caller's value differs
+  // from canonical (warn via console — Sprint 2.6 closes R7/R8 silent-NULL by
+  // preferring registry metadata over caller-supplied fields). Caller's meso
+  // is always preserved (meso is per-bean, not in the rich registry).
+  const callerAdmin = (typeof adminOverride === 'string' && adminOverride.trim()) || null
+  const admin = entry.admin_region
+  if (callerAdmin && callerAdmin.toLowerCase() !== admin.toLowerCase()) {
+    console.warn(
+      `[findOrCreateTerroir] admin_region drift: caller sent "${callerAdmin}" but registry has "${admin}" for ${countryTrim}/${canonical}. Using registry value.`,
+    )
+  }
 
   const { data: created, error: createErr } = await supabase
     .from('terroirs')
@@ -565,14 +602,14 @@ export async function findOrCreateTerroir(
       country: countryTrim,
       admin_region: admin,
       macro_terroir: canonical,
-      meso_terroir: meso,
+      meso_terroir: mesoTrim,
     })
     .select('id')
     .single()
   if (createErr || !created) {
     return { ok: false, status: 500, error: createErr?.message || 'terroir create failed' }
   }
-  return { ok: true, id: created.id }
+  return { ok: true, id: created.id, created: true }
 }
 
 // ---------------------------------------------------------------------------
@@ -653,8 +690,16 @@ export function validateBrewPayload(payload: BrewPayload): ValidationResult {
 // Persistence — resolves/creates terroir + cultivar, inserts the brew
 // ---------------------------------------------------------------------------
 
+// Sprint 2.6: PersistOptions retained for back-compat with /add UI + /api/brews/import
+// callers, but `confirmNewTerroir` / `confirmNewCultivar` are now NO-OPS. The new
+// strict-canonical model fails fast on non-canonical terroir/cultivar input — there
+// is no "confirm new" flow because non-registry entries can't be persisted at all.
+// The confirm_required PersistResult variant is also retained for back-compat but
+// is never returned from persistBrew post-2.6.
 export interface PersistOptions {
+  /** @deprecated Sprint 2.6 — no-op; persistBrew always routes through findOrCreateTerroir which fails fast on non-canonical input. */
   confirmNewTerroir?: boolean
+  /** @deprecated Sprint 2.6 — no-op; persistBrew always routes through findOrCreateCultivar which fails fast on non-canonical input. */
   confirmNewCultivar?: boolean
 }
 
@@ -746,66 +791,48 @@ export async function persistBrew(
   const cleanedFlavors = flavorsResult.value
   const cleanedStructureTags = structureResult.value
 
-  const terroirMatch = await matchTerroir(supabase, userId, payload.terroir)
-  const cultivarMatch = await matchCultivar(supabase, userId, payload.cultivar)
-
-  if ((terroirMatch.isNew && !opts.confirmNewTerroir) || (cultivarMatch.isNew && !opts.confirmNewCultivar)) {
+  // Sprint 2.6 — terroir + cultivar route through the strict-canonical
+  // findOrCreate* helpers. Closes 4 silent-failure modes from the dog-food log
+  // (R7 silent-NULL, R8 silent-create-non-canonical, R12 meso-collapse, R23
+  // misattributed-canonical). Errors aggregate into the same accumulator that
+  // collects roaster/producer/etc validation failures so a multi-field problem
+  // reports every error in one round-trip. Run in parallel (Promise.all) since
+  // they're independent DB calls. The opts.confirmNew{Terroir,Cultivar} flags
+  // are NO-OPS in this path — strict-canonical model has no "confirm new" flow.
+  const [terroirResult, cultivarResult] = await Promise.all([
+    findOrCreateTerroir(
+      supabase,
+      userId,
+      payload.terroir.country,
+      payload.terroir.macro_terroir,
+      payload.terroir.admin_region,
+      payload.terroir.meso_terroir,
+    ),
+    findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name),
+  ])
+  if (!terroirResult.ok) errors.push(terroirResult.error)
+  if (!cultivarResult.ok) errors.push(cultivarResult.error)
+  if (errors.length > 0) {
+    return { ok: false, code: 'validation', errors }
+  }
+  // Post-FK narrowing — both must be ok past the errors-length check above.
+  if (!terroirResult.ok || !cultivarResult.ok) {
+    return { ok: false, code: 'validation', errors: ['unreachable: post-FK narrowing'] }
+  }
+  if (!terroirResult.id || !cultivarResult.id) {
+    // findOrCreate* returns id:null on empty input. validateBrewPayload already
+    // requires terroir.country + cultivar.cultivar_name, so this is unreachable
+    // unless validation regresses. Surface as validation error rather than crash.
     return {
       ok: false,
-      code: 'confirm_required',
-      newTerroir: terroirMatch.isNew ? terroirMatch : undefined,
-      newCultivar: cultivarMatch.isNew ? cultivarMatch : undefined,
+      code: 'validation',
+      errors: ['terroir and cultivar must resolve to non-null IDs (post-validation guard)'],
     }
   }
-
-  // Resolve terroir
-  let terroirId: string
-  let createdTerroir = false
-  if (!terroirMatch.isNew) {
-    terroirId = terroirMatch.id
-  } else {
-    const t = payload.terroir
-    const { data, error } = await supabase
-      .from('terroirs')
-      .insert({
-        user_id: userId,
-        country: t.country,
-        admin_region: t.admin_region ?? null,
-        macro_terroir: t.macro_terroir ?? null,
-        meso_terroir: t.meso_terroir ?? null,
-        elevation_min: t.elevation_min ?? null,
-        elevation_max: t.elevation_max ?? null,
-        climate_stress: t.climate_stress ?? null,
-      })
-      .select('id')
-      .single()
-    if (error || !data) return { ok: false, code: 'db_error', message: error?.message || 'terroir insert failed' }
-    terroirId = data.id
-    createdTerroir = true
-  }
-
-  // Resolve cultivar
-  let cultivarId: string
-  let createdCultivar = false
-  if (!cultivarMatch.isNew) {
-    cultivarId = cultivarMatch.id
-  } else {
-    const c = payload.cultivar
-    const { data, error } = await supabase
-      .from('cultivars')
-      .insert({
-        user_id: userId,
-        species: c.species ?? 'Arabica',
-        genetic_family: c.genetic_family ?? null,
-        lineage: c.lineage ?? null,
-        cultivar_name: c.cultivar_name,
-      })
-      .select('id')
-      .single()
-    if (error || !data) return { ok: false, code: 'db_error', message: error?.message || 'cultivar insert failed' }
-    cultivarId = data.id
-    createdCultivar = true
-  }
+  const terroirId = terroirResult.id
+  const cultivarId = cultivarResult.id
+  const createdTerroir = terroirResult.created
+  const createdCultivar = cultivarResult.created
 
   // Compute ratio if possible
   let ratio = payload.ratio ?? null

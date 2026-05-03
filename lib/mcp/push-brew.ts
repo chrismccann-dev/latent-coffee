@@ -239,29 +239,42 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
         cultivar: input.cultivar,
       } as BrewPayload
 
-      const result = await persistBrew(auth.supabase, auth.userId, payload, {
-        confirmNewTerroir: true,
-        confirmNewCultivar: true,
-      })
+      // Sprint 2.6 — opts param is no-op now (strict-canonical model has no
+      // confirm-new flow). persistBrew always routes terroir/cultivar through
+      // findOrCreate* which fail-fast on non-canonical input.
+      const result = await persistBrew(auth.supabase, auth.userId, payload)
 
       if (!result.ok) {
         if (result.code === 'validation') {
-          // Validation errors now aggregate (Sprint 2.4.3 — was fail-fast). All
-          // failing fields are reported together so the caller can fix every-
-          // thing in ONE retry round instead of N. Append the override-hint when
-          // the failure looks like a missing canonical.
-          const hint = result.errors.some((e) => /not in the canonical|not canonical/.test(e))
-            ? '\n\nHint: For genuinely net-new entities (roaster / producer / brewer / filter / grinder), re-send with the matching `*_override: true` flag (e.g. `producer_override: true`).'
-            : ''
+          // Validation errors aggregate (Sprint 2.4.3). All failing fields are
+          // reported together so the caller can fix everything in ONE retry
+          // round instead of N. Two distinct hint surfaces:
+          //   - text-only canonicals (roaster / producer / brewer / filter /
+          //     grinder) → suggest *_override flag for genuinely net-new entries
+          //   - terroir / cultivar → strict, no override; suggest the registry
+          //     edit path (Sprint 2.6 closed the override path on FK tables)
+          const hasOverridable = result.errors.some(
+            (e) => /\b(roaster|producer|brewer|filter|grinder)\b.*not in the canonical/i.test(e),
+          )
+          const hasRegistryGap = result.errors.some(
+            (e) => /registry gap|cultivar.*not in the canonical|macro terroir.*not in the canonical/i.test(e),
+          )
+          const hints: string[] = []
+          if (hasOverridable) {
+            hints.push(
+              'For genuinely net-new entities (roaster / producer / brewer / filter / grinder), re-send with the matching `*_override: true` flag (e.g. `producer_override: true`).',
+            )
+          }
+          if (hasRegistryGap) {
+            hints.push(
+              'Terroir and cultivar are strict-canonical (no override). To add a new entry, edit `docs/taxonomies/regions.md` + `lib/terroir-registry.ts` (or `varieties.md` + `lib/cultivar-registry.ts`) and redeploy before pushing.',
+            )
+          }
+          const hint = hints.length ? '\n\nHint:\n  - ' + hints.join('\n  - ') : ''
           throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}${hint}`)
         }
         if (result.code === 'db_error') {
           throw new Error(`Database error: ${result.message}`)
-        }
-        if (result.code === 'confirm_required') {
-          throw new Error(
-            'Unexpected confirm_required result — push_brew opts in to confirmNew{Terroir,Cultivar}; this should not fire.',
-          )
         }
         throw new Error(`Unknown persistBrew failure: ${JSON.stringify(result)}`)
       }
