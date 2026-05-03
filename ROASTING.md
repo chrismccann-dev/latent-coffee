@@ -2,7 +2,41 @@
 
 *Latent Coffee*
 
-*V4 - Last updated: April 25, 2026. V4 changes (April 25, 2026, post-CGLE Mandela XO full lot close-out): CGLE-MANDELA-XO-2026 moved from Active to Recently Closed with confirmed reference roast (Batch 139) and brew recipe. FC Marking Protocol strengthened: silent-crack coffees must use bean temp end condition, not dev time - dev time anchored to an inaudible FC produces unpredictable Maillard overrun. Fan Strategy: Mandela XO reference fan curve updated from working hypothesis to confirmed. Cross-Coffee Insight Layer updated throughout: FC Floor & Ceiling table updated with confirmed XO-fermented data; Varietal Aromatic Fingerprints table updated with confirmed Mandela XO descriptor vocabulary (caramelized pineapple, lemongrass, barbecue caramel, milk tea body); Green Spec → Starting Hypothesis table updated with confirmed XO/heavy fermentation guidance including bean temp end condition rule; Rest Behavior Patterns updated for XO-fermented; Roast-to-Brew Translation updated with confirmed Mandela XO brew recipe and corrected XO brew strategy (Balanced Intensity, not Full Expression). New Key Learning added: for XO and heavily fermented coffees, the roast job is distribution of fermentation character through the body, not amplification - fan curve shape is the primary lever. Prior updates (V3, April 25, 2026, post-CGLE Sudan Rume Hybrid Washed full lot close-out): Hopper pre-load replication caveat added - reference roast #133 was produced at old ~120°C standard, not the current 125°C standard; replication requires ~120°C to match logged parameters. Seventh Key Learning added: stone fruit tartness (malic acid) is a confirmed varietal characteristic of Sudan Rume Washed, not an extraction artifact. Varietal Aromatic Fingerprints table updated with stone fruit tartness descriptor for Sudan Rume Hybrid Washed. Rest Behavior Patterns updated: Day 6 confirmed as directionally reliable for winner selection on this coffee type. Reference Brew Recipe key signal updated to include stone fruit tartness. Current State updated to reflect final lot close-out parameters. Prior updates (V2, April 18, 2026, post-Costa Rica Higuito onboarding): Session-position compensation default changed from 128°C hopper load to no compensation (thermal reset protocol is sufficient). Experiment naming convention codified (v1a/v1b/v1c in Roest profile names; A/B/C retained in spreadsheet columns). Producer tasting notes promoted from optional to required intake field. Anchor profile tie-breaker logic added. Q1 on experiment structure made conditional. Green bean intake format aligned to Roest inventory fields. Prior updates (V1): CGLE Sudan Rume Hybrid Washed lot closed with confirmed reference roast and brew recipe. Evaluation protocol updated to Day 7 pourover-only. Standard workflow updated with new BBP and hopper pre-load protocol. Key counterflow learnings added. FC floor/ceiling concept introduced. Session position effect documented. Sections added: Session Debrief Template, Cross-Coffee Insight Layer, Roast-to-Brew Translation. New Coffee Onboarding Protocol section added. Standard Inlet Curve Template added. Green Spec → Starting Hypothesis table added.*
+*Last updated: 2026-05-03. Version history in `git log`.*
+
+---
+
+## Canonical taxonomy lookups (live via MCP)
+
+The Latent Coffee app validates green bean, roast, and cupping records against canonical registries. The Latent MCP server serves these registries live as Resources; fetch them via `canonicals://{axis}` when populating any field on a green bean intake (Step 1) or a session debrief / lot close-out:
+
+| Axis | MCP Resource URI | Use when populating |
+|---|---|---|
+| Cultivars | `canonicals://varieties` | Variety field on green bean intake |
+| Regions / Macro Terroirs | `canonicals://regions` | Origin / Region |
+| Processes | `canonicals://processes` | Process (composable: base + fermentation modifier + drying modifier + experimental modifier where applicable) |
+| Producers | `canonicals://producers` | Producer (canonical `Person, Farm` form) |
+| Roasters | `canonicals://roasters` | Latent self-roasted defaults to canonical `Latent`; only relevant when documenting comparison roasts from external roasters |
+
+**Lookup discipline.** When populating a field on a green bean intake or roast / cupping record:
+
+1. Fetch the relevant `canonicals://{axis}` Resource. If the value matches a canonical name (or an alias that resolves to canonical), use the canonical form.
+2. If it does not match canonically but a close match exists (e.g. `Geisha` → `Gesha`, `Anaerobic Dry Process` → `Natural` + fermentation modifier `Anaerobic` + qualifier `Anoxic`), use the canonical and note the alias resolution.
+3. If nothing resolves, write the best guess and flag it as `(NET-NEW)`. The sync step surfaces this for a deliberate canonical-registry edit.
+
+Drift is caught at sync time, not after.
+
+## Working with the Latent MCP server
+
+A few operational notes for fetching MCP Resources and calling Tools via this Claude project:
+
+- **Tool search ranking is opaque.** If a Tool you expect (e.g. `push_roast`, `push_cupping`, `push_experiment`, `push_roast_learnings`, `pull_roest_log`, `propose_doc_changes`) does not surface on the first `tool_search`, retry with broader search terms before assuming the Tool isn't loaded. The MCP server has 24+ Tools live; if `push_roast` returns nothing, try "roast", "push", or "latent" before concluding it's missing.
+- **When pulling Roest logs, call `list_roest_logs` first.** Don't try to extrapolate a `log_id` from sequence patterns - the Roest API generates IDs that aren't predictable from batch numbers. `list_roest_logs` returns a fresh batch_url + log_id pair for each batch in the recent inventory; pass that into `pull_roest_log` directly.
+- **For closed-bean full fills, call `get_green_bean` BEFORE `push_green_bean`.** A defensive lookup that avoids the UPSERT path entirely when the bean is already known. Faster, less surprising, no risk of clobbering an existing record by accident.
+- **Re-fetch the schema before claiming a field is missing.** The deployed Tool manifest may be fresher than the model's session memory. If a field on `push_roast` or another Tool seems to have changed shape, call the Tool's introspection (or read the Tool's input_schema directly) before reporting it as missing.
+- **After a code merge, wait for Vercel deploy and start a fresh conversation.** New MCP Tools and updated schemas propagate via Vercel's auto-deploy (~30-60 seconds typical). The claude.ai conversation's tool manifest is cached at conversation start; a fresh conversation picks up the new manifest. Reusing an old conversation after a server-side change can produce stale-tool errors that look like real bugs but are cache propagation issues.
+
+For brewing-side context (extraction strategies, modifier framework, brewer / filter canonicals), see [BREWING.md](BREWING.md). The Roast-to-Brew Translation section below cross-references the Two-Axis Framework defined there.
 
 ---
 
@@ -407,26 +441,17 @@ When running experiments across multiple lots in parallel:
 
 ## Recently Closed Lots
 
-**CGLE-MANDELA-XO-2026 - Mandela Variety, XO Extended Fermentation - CLOSED**
+Per-lot reference roast + best brew + generalized lessons live in [docs/roasting/archive.md](docs/roasting/archive.md). The summary table below points at the relevant section anchor for each closed lot.
 
-- Reference roast: Batch #139 (confirmed)
-- Best brew: April Brewer Glass + April Brewer Paper, EG-1 6.4, 15g/255g, 93°C, bloom 50g/40s, pour to 160g then 255g, target 2:45-3:15
-- Roast parameters: v3b inlet (195°C→232°C→240°C→241°C→236°C→228°C), fan (80%→68%→63%→70%→73%), charge 117°C, hopper load 125°C, end condition bean temp ~203-204°C, Maillard 44.5%, Agtron WB 76 / ground 72.4
-- Key process learning: FC is inaudible on XO-fermented coffees - use bean temp end condition, not dev time. Fan curve shape is the primary roast lever for fermentation character distribution.
-- Overall Lessons entry complete. See archive for full record.
+| Lot ID | Variety / Process | Reference Roast | Subdoc |
+|---|---|---|---|
+| CGLE-MANDELA-XO-2026 | Mandela XO Extended Fermentation | Batch #139 | [archive.md § CGLE-MANDELA-XO-2026](docs/roasting/archive.md#cgle-mandela-xo-2026---mandela-variety-xo-extended-fermentation) |
+| CGLE-SRUME-WASHED-2026 | Sudan Rume Hybrid Washed | Batch #133 | [archive.md § CGLE-SRUME-WASHED-2026](docs/roasting/archive.md#cgle-srume-washed-2026---sudan-rume-hybrid-washed) |
+| GUA-SOC-JAVA-2024 | Guatemala (legacy, pre-counterflow) | Batch 88 | [archive.md § GUA-SOC-JAVA-2024](docs/roasting/archive.md#gua-soc-java-2024) |
+| GUA-LIB-ADC-2024 | Guatemala (legacy, pre-counterflow) | Batch 94 | [archive.md § GUA-LIB-ADC-2024](docs/roasting/archive.md#gua-lib-adc-2024) |
+| GV-OMA-25-035 | Gesha Village Oma (counterflow incomplete) | Batch 52 | [archive.md § GV-OMA-25-035](docs/roasting/archive.md#gv-oma-25-035---gesha-village-oma) |
 
-**CGLE-SRUME-WASHED-2026 - Sudan Rume Hybrid Washed - CLOSED**
-
-- Reference roast: Batch #133 (confirmed), Batch #148 (closest replication)
-- Best brew: UFO Ceramic + Sibarist Fast Cone, EG-1 6.0, 15g/210g, 91°C, Melodrip, bloom 45g/45s, pour to 130g then 210g, target 2:45-3:15
-- Roast parameters: CF-Light inlet (200→237→245→245→240→230→222°C), fan (80→70→65→72→75%), charge 117°C, hopper load ~120°C (old standard - see Hopper Pre-Load replication caveat), drop at 206-207°C, dev time 0:45 end condition
-- Overall Lessons entry complete. See archive for full record.
-
-**GUA-SOC-JAVA-2024 - CLOSED.** Reference roast: Batch 88. Best brew: UFO Ceramic + Sibarist UFO Fast Cone, EG-1 6.5, 15g/255g, 94°C, Melodrip.
-
-**GUA-LIB-ADC-2024 - CLOSED.** Reference roast: Batch 94. Brew recipe developed.
-
-**GV-OMA-25-035 (Gesha Village Oma) - CLOSED.** Reference roast: Batch 52 (pre-counterflow). Counterflow chapter unresolved - green exhausted. Treat 40s as confirmed floor for future washed Gesha in counterflow - start at 48s minimum.
+> Lot-specific generalized learnings live in each lot's archive subdoc (linked above). Cross-lot patterns that have generalized are surfaced in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) below.
 
 ---
 
@@ -470,39 +495,9 @@ Use the washed profile as the starting point. Lower inlet for early stages - gen
 
 ---
 
-# Key Learnings - Sudan Rume Hybrid Washed (Generalized)
+# Per-lot generalized learnings
 
-These learnings emerged from 6 experiment sets across 20+ batches and are likely to apply broadly to high-density washed Colombians with unusual aromatic profiles.
-
-**1. FC floor and ceiling are real and coffee-specific.** The usable roast window was approximately 4°C wide at FC temp and 2°C wide at drop temp. Assume other coffees have similar windows - find them empirically.
-
-**2. The Day 7 pourover evaluation gate is mandatory for delicate aromatic coffees.** Day 4 cupping was actively misleading across multiple sessions.
-
-**3. Aromatics may be present in the roast but hidden at standard brew parameters.** When a roast passes the evaluation gate but feels muted, try a pushed brew before concluding the roast needs more development.
-
-**4. WB-to-ground Agtron delta is a better development predictor than DTR alone.** Evenness of development, not total development time, was the decisive factor.
-
-**5. Session position affects roast outcomes even with identical protocol.** First roast in a session runs ~10-15 seconds slower through Maillard than subsequent roasts.
-
-**6. The lemongrass/herbal descriptor is varietal, not a defect signal.** Sudan Rume's characteristic aromatic compounds read as funky when underdeveloped and as lemongrass/bergamot/jasmine when developed correctly. Naming the descriptor correctly transformed the evaluation.
-
-**7. Stone fruit tartness (malic acid) is a varietal characteristic, not an extraction artifact.** At the correct roast and brew, Sudan Rume Washed expresses a simultaneous sweet-and-tart quality consistent with candied dried apricot - this is malic acid, the primary acid in stone fruits. It sits underneath the sweetness rather than dominating, softens and integrates as the cup cools fully, and reads as complexity rather than sharpness. Do not attempt to brew it away - it is part of the correct expression. If it reads sharp or disconnected rather than integrated, the likely cause is brew temperature too high or extraction too aggressive, not a roast problem.
-
----
-
-# Key Learnings - Mandela XO (Generalized)
-
-These learnings emerged from 4 experiment sets across 13 batches and are likely to apply broadly to XO-fermented, heavily anaerobic, and co-fermented coffees where fermentation intensity is very high.
-
-**1. For heavily fermented coffees, the roast job is distribution of fermentation character, not amplification.** The XO fermentation places high-concentration aromatic compounds at very high intensity in the green bean. Short Maillard / high momentum into FC concentrates those compounds in the attack and produces an aggressive, pungent, front-loaded cup. Extended Maillard / lower momentum distributes the fermentation character through the body and finish. Fan curve shape was the most powerful lever for controlling this.
-
-**2. Shaped fan curve is mandatory for XO-fermented coffees under the new charge protocol.** Flat 90% fan combined with the 125°C hopper pre-load produced darker development (Agtron 67-71 vs. target 74-76) and more aggressive cups, moving away from the target rather than toward it. This was the single most impactful variable change in the entire experiment series.
-
-**3. FC is acoustically absent on XO-fermented coffees - never use dev time as the end condition.** Across all four experiment sets (13 batches), FC was inaudible or ambiguous on the majority of roasts. Dev time end condition fired at machine-estimated FC timestamps that were not reliable, producing Maillard overrun (51-58% vs. target 44%) in the final experiment set. Bean temp end condition at the confirmed drop target is the only reliable drop signal on these coffees.
-
-**4. Brew strategy for XO-fermented coffees is Balanced Intensity, not Full Expression.** The fermentation already provides all the intensity the cup needs. Full Expression brewing (UFO fast cone, fine grind, high temp) amplifies the attack and produces a sharp, aggressive cup. Balanced Intensity (April Brewer, coarser grind, moderate temp) rounds the fermentation character into the body without muting it.
-
-**5. Lemongrass is a CGLE terroir/varietal descriptor, not a defect signal.** It appeared consistently across Mandela XO from V3 onward and is shared with Sudan Rume Natural from the same farm. When integrated correctly, it reads as a complex herbal-floral note alongside pineapple and caramel. When the roast is underdeveloped or over-extracted, it reads as pungent and dominating. The correct goal is integration, not elimination.
+Per-lot generalized lessons (Sudan Rume Hybrid Washed, Mandela XO) live in [docs/roasting/archive.md](docs/roasting/archive.md) under each lot's section. Cross-lot patterns that have generalized across 2+ lots are surfaced in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) below.
 
 ---
 
@@ -695,6 +690,8 @@ Universal finding: Day 7 pourover is the correct evaluation gate for all lot typ
 # Roast-to-Brew Translation
 
 *This section translates roast parameter patterns into expected brew behavior and starting recipe adjustments. It bridges the gap between the roasting reference guide and the brewing reference guide. Updated as new lots are resolved.*
+
+> The 5 brewing strategies + 4 modifiers referenced below (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push + Output Selection / Inverted Temperature Staging / Aroma Capture / Immersion) are defined in [BREWING.md § The Two-Axis Framework](BREWING.md#the-two-axis-framework). The brew-side documentation contract (Step 4 Resolved Brew Output Format) lives in [BREWING.md § Step 4](BREWING.md#step-4---resolved-brew-output-format). When proposing a brew strategy from a roast outcome, name the canonical strategy explicitly so the iteration loop matches the framework.
 
 > Core principle: The brew recipe does not fix a bad roast, but it can hide a good one. A roast that passes the Day 7 evaluation gate but feels muted is often an extraction problem, not a roast problem. Always try a pushed brew before concluding more development is needed.
 
