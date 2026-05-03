@@ -392,7 +392,7 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 
 #### Genetics
 - **Genetic Background:** Indigenous Ethiopian coffee populations consisting of thousands of genetically diverse Arabica genotypes originating in Ethiopian forest systems. Typically not stabilized cultivars but mixed local selections maintained by farmers. Represents population genetics rather than a single selection.
-- **Market names normalized here:** Heirloom, Ethiopian Heirloom, Local Landrace, Indigenous varieties.
+- **Market names normalized here:** Heirloom, Ethiopian Heirloom, Local Landrace, Landrace, Indigenous varieties.
 
 #### Agronomy
 - **Typical Origins:** Ethiopia (Sidama, Yirgacheffe, Guji, Bench Sheko, Limu, Kaffa, West Arsi, Bale Highlands).

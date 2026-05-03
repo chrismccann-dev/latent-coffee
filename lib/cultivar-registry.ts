@@ -204,6 +204,7 @@ export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
   Heirloom: 'Ethiopian landrace population',
   'Ethiopian Heirloom': 'Ethiopian landrace population',
   'Local Landrace': 'Ethiopian landrace population',
+  Landrace: 'Ethiopian landrace population',
   'Indigenous varieties': 'Ethiopian landrace population',
 
   // Wush Wush
