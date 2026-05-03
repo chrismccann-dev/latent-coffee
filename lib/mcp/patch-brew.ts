@@ -85,6 +85,11 @@ export const patchBrewInputSchema = {
   terroir_name: z.string().optional().nullable().describe('Macro terroir name. Resolves with country.'),
   admin_region: z.string().optional().nullable().describe('Optional admin region passed to findOrCreateTerroir.'),
   meso_terroir: z.string().optional().nullable().describe('Per-bean meso terroir. Now part of the match key as of Sprint 2.6 — distinct mesos for the same macro produce distinct terroir rows.'),
+
+  // ---- Display recompose flag (post-2.6 cleanup) ----
+  recompose_process: z.boolean().optional().describe(
+    'Set to true to recompute the legacy `process` display string from the row\'s current structured process columns (base_process / subprocess / *_modifiers / decaf_modifier / signature_method). Used to fix legacy rows where the structured cols are correct but the display string was never run through composeProcess (e.g. verbose paste-text imports pre-Sprint 1e.3). When true, the helper fetches the row, merges with any structured-process fields you also supply in this patch, and writes the canonical composed form. Auto-applies whenever any structured-process field is in the patch (mirrors the grind/grind_setting recompute).',
+  ),
 }
 
 export function registerPatchBrewTool(server: McpServer, auth: McpAuthContext) {
