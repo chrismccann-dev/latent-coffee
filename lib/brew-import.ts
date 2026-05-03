@@ -21,9 +21,13 @@ import {
   HONEY_SUBPROCESSES,
   type HoneySubprocess,
   FERMENTATION_LOOKUP,
+  type FermentationModifier,
   DRYING_LOOKUP,
+  type DryingModifier,
   INTERVENTION_LOOKUP,
+  type InterventionModifier,
   EXPERIMENTAL_LOOKUP,
+  type ExperimentalModifier,
   DECAF_MODIFIERS,
   type DecafModifier,
   SIGNATURE_LOOKUP,
@@ -1047,7 +1051,8 @@ export async function patchBrew(
   }
 
   const hasCanonicalKey = 'cultivar_name' in body || 'terroir_name' in body || 'country' in body
-  if (Object.keys(patch).length === 0 && !hasCanonicalKey) {
+  const recomposeProcess = body.recompose_process === true
+  if (Object.keys(patch).length === 0 && !hasCanonicalKey && !recomposeProcess) {
     return { ok: false, code: 'no_op', message: 'no editable fields in body' }
   }
 
@@ -1201,6 +1206,38 @@ export async function patchBrew(
     )
     if (!result.ok) return { ok: false, code: 'validation', errors: [result.error] }
     patch.terroir_id = result.id
+  }
+
+  // Recompose legacy `process` display when any structured-process field
+  // changes OR when the caller explicitly requests recomposition (cleanup of
+  // legacy verbose paste-text rows where structured cols are correct but the
+  // display string was never run through composeProcess). Mirrors the grind
+  // recompute pattern above.
+  const PROCESS_FIELDS = [
+    'base_process', 'subprocess', 'fermentation_modifiers', 'drying_modifiers',
+    'intervention_modifiers', 'experimental_modifiers', 'decaf_modifier', 'signature_method',
+  ] as const
+  if (recomposeProcess || PROCESS_FIELDS.some((k) => k in patch)) {
+    const { data: row } = await supabase
+      .from('brews')
+      .select('base_process, subprocess, fermentation_modifiers, drying_modifiers, intervention_modifiers, experimental_modifiers, decaf_modifier, signature_method')
+      .eq('id', brewId)
+      .eq('user_id', userId)
+      .single()
+    if (!row) {
+      return { ok: false, code: 'not_found', message: `brew "${brewId}" not found (or not owned by this user)` }
+    }
+    const merged: StructuredProcess = {
+      base_process: ('base_process' in patch ? patch.base_process : row.base_process) as StructuredProcess['base_process'],
+      subprocess: ('subprocess' in patch ? patch.subprocess : row.subprocess) as StructuredProcess['subprocess'],
+      fermentation_modifiers: ('fermentation_modifiers' in patch ? patch.fermentation_modifiers : row.fermentation_modifiers) as readonly FermentationModifier[],
+      drying_modifiers: ('drying_modifiers' in patch ? patch.drying_modifiers : row.drying_modifiers) as readonly DryingModifier[],
+      intervention_modifiers: ('intervention_modifiers' in patch ? patch.intervention_modifiers : row.intervention_modifiers) as readonly InterventionModifier[],
+      experimental_modifiers: ('experimental_modifiers' in patch ? patch.experimental_modifiers : row.experimental_modifiers) as readonly ExperimentalModifier[],
+      decaf_modifier: ('decaf_modifier' in patch ? patch.decaf_modifier : row.decaf_modifier) as StructuredProcess['decaf_modifier'],
+      signature_method: ('signature_method' in patch ? patch.signature_method : row.signature_method) as StructuredProcess['signature_method'],
+    }
+    patch.process = composeProcess(merged)
   }
 
   // RLS scopes to the owning user; `.eq('user_id')` is belt-and-suspenders.
