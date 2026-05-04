@@ -67,10 +67,18 @@ const terroir = z.object({
 })
 
 const cultivar = z.object({
-  cultivar_name: z.string(),
-  species: z.string().optional().nullable(),
-  genetic_family: z.string().optional().nullable(),
-  lineage: z.string().optional().nullable(),
+  cultivar_name: z.string().describe(
+    'Canonical cultivar name (e.g. "Gesha", "Pink Bourbon", "Mokka", "Sudan Rume"). Resolves via CULTIVAR_LOOKUP — bare canonical name is sufficient; species / genetic_family / lineage auto-populate from the registry on insert. Aliases also resolve ("Geisha" → "Gesha", "Green-Tip Gesha" → "Gesha"). Strict canonical: no `cultivar_override` flag exists; net-new cultivars require a registry edit (docs/taxonomies/varieties.md + lib/cultivar-registry.ts) before the brew can land. Inspect via `read_canonical(axis="cultivars")`.',
+  ),
+  species: z.string().optional().nullable().describe(
+    'OPTIONAL — auto-populates from CULTIVAR_LOOKUP when cultivar_name resolves. Set explicitly only when you need to override the registry derivation, which is rare.',
+  ),
+  genetic_family: z.string().optional().nullable().describe(
+    'OPTIONAL — auto-populates from CULTIVAR_LOOKUP. Same caveat as species.',
+  ),
+  lineage: z.string().optional().nullable().describe(
+    'OPTIONAL — auto-populates from CULTIVAR_LOOKUP. Same caveat as species.',
+  ),
 })
 
 export const pushBrewInputSchema = {
@@ -86,7 +94,7 @@ export const pushBrewInputSchema = {
     'Producer / farm. Convention: "Person, Farm" or canonical farm name. Resolves via PRODUCER_LOOKUP (~120 canonicals + alias map; tier-scoped, ~60-70% coverage). Inspect via `read_canonical(axis="producers")` or `docs://taxonomies/producers.md`. For net-new, set `producer_override: true`.',
   ),
   producer_override: z.boolean().optional().describe(
-    'Set true to bypass canonical-producer validation for legitimately net-new producers. Persists verbatim; queues for the producer-research routine (Sprint 2.6) which proposes a registry entry async.',
+    'Set true to bypass canonical-producer validation for legitimately net-new producers. Persists verbatim. NOTE: there is currently no async research routine — promoting an overridden producer to canonical requires a deliberate edit to docs/taxonomies/producers.md + lib/producer-registry.ts. Until that edit lands, every brew with this producer name will need `producer_override: true` again.',
   ),
 
   // Origin (FK targets)
