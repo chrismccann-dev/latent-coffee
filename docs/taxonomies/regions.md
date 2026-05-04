@@ -2465,7 +2465,7 @@ Consistent elevation and processing create reliable, balanced Central American p
 ### Santa Clara Highlands
 
 **Country:** Panama  **Admin Regions it overlaps:** Chiriquí
-**Typical Meso Terroirs (reference only; not canonical):** Santa Clara, Renacimiento, Río Sereno
+**Typical Meso Terroirs (reference only; not canonical):** Santa Clara, Renacimiento (lower-elevation only - high-elevation pockets like Jurutungo / Candela Basin are functionally Volcán Barú-system; see below), Río Sereno
 
 #### Context
 Isolated lower-elevation system with warmer baseline climate
@@ -2491,7 +2491,7 @@ Lower elevation reduces clarity and floral intensity compared to Barú systems
 ### Volcán Barú Highlands
 
 **Country:** Panama  **Admin Regions it overlaps:** Chiriquí
-**Typical Meso Terroirs (reference only; not canonical):** Boquete (Jaramillo, Alto Quiel, Palmira), Cerro Punta, Volcán, Guadalupe
+**Typical Meso Terroirs (reference only; not canonical):** Boquete (Jaramillo, Alto Quiel, Palmira), Renacimiento (Jurutungo / Candela Basin - high-elevation pockets at 1,800-1,980m; lower-elevation Renacimiento is Santa Clara Highlands, see above), Cerro Punta, Volcán, Guadalupe
 
 #### Context
 High-elevation volcanic system centered around Volcán Barú with strong microclimate variation

@@ -26,26 +26,28 @@ Claude works through the Coffee Brief, confirms the extraction strategy with Chr
 
 ### Canonical taxonomy lookups (live via MCP)
 
-The Latent Coffee app validates every field on the resolved brew (Step 4) against canonical registries. The Latent MCP server serves these registries live as Resources - fetch them via the `canonicals://{axis}` URI when populating any field on a resolved brew. Live fetch is preferred over any uploaded copy in the project Files; the registries change as Chris adds new producers, cultivars, brewers, etc., and stale uploads cause spurious "did you mean X?" warnings at sync time.
+The Latent Coffee app validates every field on the resolved brew (Step 4) against canonical registries. The Latent MCP server serves these registries live; **call `read_canonical(axis: "<name>")` to fetch any one** — the axis names below are the inputs. Live fetch is preferred over any uploaded copy in the project Files; the registries change as Chris adds new producers, cultivars, brewers, etc., and stale uploads cause spurious "did you mean X?" warnings at sync time.
 
-| Axis | MCP Resource URI | Use when populating |
+| Field on the resolved brew | `read_canonical` axis | Notes |
 |---|---|---|
-| Regions / Macro Terroirs | `canonicals://regions` | Country + Macro Terroir |
-| Cultivars | `canonicals://varieties` | Cultivar |
-| Processes | `canonicals://processes` | Base Process + fermentation / drying / intervention / experimental modifiers + decaf + signature |
-| Roasters | `canonicals://roasters` | Roaster |
-| Producers | `canonicals://producers` | Producer |
-| Brewers | `canonicals://brewers` | Brewer |
-| Filters | `canonicals://filters` | Filter |
-| Flavors | `canonicals://flavors` | Flavor Notes + Structure Tags |
-| Grinders | `canonicals://grinders` | Grinder + Grind Setting |
-| Roast levels | `canonicals://roast-levels` | Roast Level |
+| Country + Macro Terroir | `terroirs` | Internal axis name; `docs://taxonomies/regions.md` is the doc-path equivalent for prose. |
+| Cultivar | `cultivars` | Internal axis name; `docs://taxonomies/varieties.md` is the doc-path equivalent. |
+| Base Process + fermentation / drying / intervention / experimental modifiers + decaf + signature | `processes` | |
+| Roaster | `roasters` | |
+| Producer | `producers` | |
+| Brewer | `brewers` | |
+| Filter | `filters` | |
+| Flavor Notes + Structure Tags | `flavors` | |
+| Grinder + Grind Setting | `grinders` | |
+| Roast Level | `roast-levels` | |
+| Extraction Strategy | `extraction-strategies` | Strict 5-value enum; rarely needs lookup at Step 4. |
+| Extraction Modifiers | `modifiers` | Optional Axis 2 on the resolved brew. |
 
-**If `canonicals://` Resources don't enumerate in your client's resource list,** call the `read_canonical({axis: '<name>'})` Tool instead - it serves the same payload. Some MCP clients (claude.ai mobile in particular) only surface concrete Resources, not URI templates, so `canonicals://{axis}` looks absent even when it's wired. The Tool path is the workaround. The catalog of available axes is at `list_canonicals()`.
+**Tool, not URI.** `canonicals://{axis}` URIs ALSO exist as MCP Resources (same JSON payload), but two gotchas: (1) many MCP clients (claude.ai mobile in particular) don't enumerate URI templates in the resource list, and (2) `read_doc(uri="canonicals://...")` returns "Unknown doc URI" because `read_doc` only handles `docs://` URIs. **Always use the `read_canonical(axis)` Tool**; it serves the same content and works on every client. The catalog of available axes is at `list_canonicals()`.
 
 **Lookup discipline.** For every Step 4 field that has a corresponding taxonomy:
 
-1. Fetch the relevant `canonicals://{axis}` Resource. If the value matches a canonical name (or an alias that resolves to canonical), use the canonical form.
+1. Call `read_canonical(axis: "<name>")` for the axis. If the value matches a canonical name (or an alias that resolves to canonical), use the canonical form.
 2. If it does not match canonically but a close match exists (e.g. "Geisha" -> "Gesha", "Espro Bloom Flat" -> "xBloom Premium Paper Filters"), use the canonical and add a one-line note that the original term was an alias.
 3. If nothing resolves, write the best guess and flag it as `(NET-NEW)`. The sync step surfaces this for a deliberate canonical-registry edit.
 
