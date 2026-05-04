@@ -8,19 +8,21 @@
 
 ## Canonical taxonomy lookups (live via MCP)
 
-The Latent Coffee app validates green bean, roast, and cupping records against canonical registries. The Latent MCP server serves these registries live as Resources; fetch them via `canonicals://{axis}` when populating any field on a green bean intake (Step 1) or a session debrief / lot close-out:
+The Latent Coffee app validates green bean, roast, and cupping records against canonical registries. The Latent MCP server serves these registries live; **call `read_canonical(axis: "<name>")` to fetch any one** — the axis names below are the inputs:
 
-| Axis | MCP Resource URI | Use when populating |
+| Field on green bean / roast / cupping | `read_canonical` axis | Notes |
 |---|---|---|
-| Cultivars | `canonicals://varieties` | Variety field on green bean intake |
-| Regions / Macro Terroirs | `canonicals://regions` | Origin / Region |
-| Processes | `canonicals://processes` | Process (composable: base + fermentation modifier + drying modifier + experimental modifier where applicable) |
-| Producers | `canonicals://producers` | Producer (canonical `Person, Farm` form) |
-| Roasters | `canonicals://roasters` | Latent self-roasted defaults to canonical `Latent`; only relevant when documenting comparison roasts from external roasters |
+| Variety / Cultivar | `cultivars` | Internal axis name; `docs://taxonomies/varieties.md` is the doc-path equivalent for prose. |
+| Origin / Region (Country + Macro Terroir) | `terroirs` | Internal axis name; `docs://taxonomies/regions.md` is the doc-path equivalent. |
+| Process (composable: base + fermentation modifier + drying modifier + experimental modifier where applicable) | `processes` | |
+| Producer (canonical `Person, Farm` form) | `producers` | |
+| Roaster | `roasters` | Latent self-roasted defaults to canonical `Latent`; only relevant when documenting comparison roasts from external roasters. |
+
+**Tool, not URI.** `canonicals://{axis}` URIs ALSO exist as MCP Resources, but two gotchas: (1) many MCP clients (claude.ai mobile in particular) don't enumerate URI templates in the resource list, and (2) `read_doc(uri="canonicals://...")` returns "Unknown doc URI" because `read_doc` only handles `docs://` URIs. **Always use the `read_canonical(axis)` Tool**; it serves the same content and works on every client. The catalog of axes is at `list_canonicals()`.
 
 **Lookup discipline.** When populating a field on a green bean intake or roast / cupping record:
 
-1. Fetch the relevant `canonicals://{axis}` Resource. If the value matches a canonical name (or an alias that resolves to canonical), use the canonical form.
+1. Call `read_canonical(axis: "<name>")` for the axis. If the value matches a canonical name (or an alias that resolves to canonical), use the canonical form.
 2. If it does not match canonically but a close match exists (e.g. `Geisha` → `Gesha`, `Anaerobic Dry Process` → `Natural` + fermentation modifier `Anaerobic` + qualifier `Anoxic`), use the canonical and note the alias resolution.
 3. If nothing resolves, write the best guess and flag it as `(NET-NEW)`. The sync step surfaces this for a deliberate canonical-registry edit.
 
