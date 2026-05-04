@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
-const RECENT_DEFAULT_N = 20
+export const RECENT_DEFAULT_LIMIT = 20
+export const RECENT_MAX_LIMIT = 50
 
 type RawBrewRow = Record<string, unknown> & {
   id: string
@@ -34,13 +35,15 @@ const FULL_SELECT = `
 export async function fetchRecentBrews(
   supabase: SupabaseClient,
   userId: string,
+  limit: number = RECENT_DEFAULT_LIMIT,
 ): Promise<RawBrewRow[]> {
+  const clamped = Math.max(1, Math.min(RECENT_MAX_LIMIT, Math.trunc(limit)))
   const { data, error } = await supabase
     .from('brews')
     .select(RECENT_SELECT)
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
-    .limit(RECENT_DEFAULT_N)
+    .limit(clamped)
   if (error) throw error
   return (data ?? []) as unknown as RawBrewRow[]
 }

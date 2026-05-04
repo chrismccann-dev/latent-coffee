@@ -18,6 +18,8 @@ import { registerListRoestInventoryTool } from '@/lib/mcp/list-roest-inventory'
 import { registerListRoestLogsTool } from '@/lib/mcp/list-roest-logs'
 import { registerGetGreenBeanTool } from '@/lib/mcp/get-green-bean'
 import { registerGetBeanPipelineTool } from '@/lib/mcp/get-bean-pipeline'
+import { registerListRecentBrewsTool } from '@/lib/mcp/list-recent-brews'
+import { registerGetBrewTool } from '@/lib/mcp/get-brew'
 import { registerPatchBrewTool } from '@/lib/mcp/patch-brew'
 import { registerPatchGreenBeanTool } from '@/lib/mcp/patch-green-bean'
 import { registerPatchRoastTool } from '@/lib/mcp/patch-roast'
@@ -57,6 +59,8 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerListRoestLogsTool(server, auth)
   registerGetGreenBeanTool(server, auth)
   registerGetBeanPipelineTool(server, auth)
+  registerListRecentBrewsTool(server, auth)
+  registerGetBrewTool(server, auth)
   registerPatchBrewTool(server, auth)
   registerPatchGreenBeanTool(server, auth)
   registerPatchRoastTool(server, auth)
