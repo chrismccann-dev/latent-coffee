@@ -41,6 +41,8 @@ The Latent Coffee app validates every field on the resolved brew (Step 4) agains
 | Grinders | `canonicals://grinders` | Grinder + Grind Setting |
 | Roast levels | `canonicals://roast-levels` | Roast Level |
 
+**If `canonicals://` Resources don't enumerate in your client's resource list,** call the `read_canonical({axis: '<name>'})` Tool instead - it serves the same payload. Some MCP clients (claude.ai mobile in particular) only surface concrete Resources, not URI templates, so `canonicals://{axis}` looks absent even when it's wired. The Tool path is the workaround. The catalog of available axes is at `list_canonicals()`.
+
 **Lookup discipline.** For every Step 4 field that has a corresponding taxonomy:
 
 1. Fetch the relevant `canonicals://{axis}` Resource. If the value matches a canonical name (or an alias that resolves to canonical), use the canonical form.
