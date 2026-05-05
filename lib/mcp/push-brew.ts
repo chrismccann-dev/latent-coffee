@@ -28,6 +28,12 @@ import type { McpAuthContext } from '@/lib/mcp/auth'
 //   typos before they reach the server.
 const baseProcess = z.enum(['Washed', 'Honey', 'Natural', 'Wet-hulled'])
 
+// Shared describe-suffix for the four modifier-array axes. composeProcess
+// (lib/process-registry.ts) sorts each modifier array alphabetically before
+// emitting the display string, so callers don't need to pre-order.
+const MODIFIER_ORDER_NOTE =
+  "Order doesn't affect storage or composition — composeProcess sorts each modifier array alphabetically before producing the display string."
+
 // readonly arrays → z.enum tuple cast. zod v4 z.enum requires [string, ...string[]].
 const experimentalModifierEnum = z.enum(EXPERIMENTAL_MODIFIERS as readonly [string, ...string[]])
 const structureTagEnum = z.enum(STRUCTURE_KEYS as readonly [string, ...string[]])
@@ -113,16 +119,16 @@ export const pushBrewInputSchema = {
     `Honey color tier (only valid when base_process = Honey). Canonical: ${HONEY_SUBPROCESSES.join(' | ')}. Aliases also accepted (Blanco/Amarillo/Rojo/Negro). See \`canonicals://processes\`.`,
   ),
   fermentation_modifiers: z.array(z.string()).optional().nullable().describe(
-    `Process modifier — fermentation axis. Canonical: ${FERMENTATION_MODIFIERS.join(' | ')}. Aliases accepted (e.g. CM → Carbonic Maceration, Cryo → Cryomaceration, "Yeast Fermentation" → Yeast Inoculated). See \`canonicals://processes\` for the full alias map.`,
+    `Process modifier — fermentation axis. Canonical: ${FERMENTATION_MODIFIERS.join(' | ')}. Aliases accepted (e.g. CM → Carbonic Maceration, Cryo → Cryomaceration, "Yeast Fermentation" → Yeast Inoculated). See \`canonicals://processes\` for the full alias map. ${MODIFIER_ORDER_NOTE}`,
   ),
   drying_modifiers: z.array(z.string()).optional().nullable().describe(
-    `Process modifier — drying axis. Canonical: ${DRYING_MODIFIERS.join(' | ')}. Aliases accepted (DRD/LDE → Dark Room Dried, ASD → Anaerobic Slow Dry). See \`canonicals://processes\`.`,
+    `Process modifier — drying axis. Canonical: ${DRYING_MODIFIERS.join(' | ')}. Aliases accepted (DRD/LDE → Dark Room Dried, ASD → Anaerobic Slow Dry). See \`canonicals://processes\`. ${MODIFIER_ORDER_NOTE}`,
   ),
   intervention_modifiers: z.array(z.string()).optional().nullable().describe(
-    `Process modifier — co-ferments + infusions. Canonical: ${INTERVENTION_MODIFIERS.join(' | ')}. Aliases accepted (Coferment → Co-ferment, Infused → Infusion). See \`canonicals://processes\`.`,
+    `Process modifier — co-ferments + infusions. Canonical: ${INTERVENTION_MODIFIERS.join(' | ')}. Aliases accepted (Coferment → Co-ferment, Infused → Infusion). See \`canonicals://processes\`. ${MODIFIER_ORDER_NOTE}`,
   ),
   experimental_modifiers: z.array(experimentalModifierEnum).optional().nullable().describe(
-    `Process modifier — experimental techniques. Strict canonical (no aliases): ${EXPERIMENTAL_MODIFIERS.join(' | ')}.`,
+    `Process modifier — experimental techniques. Strict canonical (no aliases): ${EXPERIMENTAL_MODIFIERS.join(' | ')}. ${MODIFIER_ORDER_NOTE}`,
   ),
   decaf_modifier: z.string().optional().nullable().describe(
     `Decaffeination process. Canonical: ${DECAF_MODIFIERS.join(' | ')}. Aliases accepted (SWP → Swiss Water, MWP → Mountain Water, EA → Ethyl Acetate). See \`canonicals://processes\`.`,

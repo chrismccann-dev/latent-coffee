@@ -14,6 +14,7 @@ const nextConfig = {
         './ROASTING.md',
         './docs/brewing/*.md',
         './docs/taxonomies/*.md',
+        './docs/prompts/*.md',
       ],
     },
   },

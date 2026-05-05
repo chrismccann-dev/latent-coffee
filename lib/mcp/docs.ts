@@ -19,12 +19,25 @@ const TAXONOMY_AXES = [
 
 export type TaxonomyAxis = (typeof TAXONOMY_AXES)[number]
 
+const PROMPT_FILES = [
+  'start-brew',
+  'log-brew',
+  'propose-doc-changes-from-brew',
+  'bundled-brewing-completion',
+  'new-bean-intake',
+  'in-process-bean-incremental-sync',
+  'closed-bean-full-fill',
+] as const
+
 const DOC_FILES: Record<string, string> = {
   'docs://brewing.md': 'BREWING.md',
   'docs://brewing/roasters.md': 'docs/brewing/roasters.md',
   'docs://roasting.md': 'ROASTING.md',
   ...Object.fromEntries(
     TAXONOMY_AXES.map((axis) => [`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`]),
+  ),
+  ...Object.fromEntries(
+    PROMPT_FILES.map((name) => [`docs://prompts/${name}.md`, `docs/prompts/${name}.md`]),
   ),
 }
 
@@ -73,6 +86,12 @@ export function listDocs(): { uri: string; name: string; title: string; mimeType
       uri: `docs://taxonomies/${axis}.md`,
       name: `docs/taxonomies/${axis}.md`,
       title: `Taxonomy: ${axis}`,
+      mimeType: 'text/markdown',
+    })),
+    ...PROMPT_FILES.map((name) => ({
+      uri: `docs://prompts/${name}.md`,
+      name: `docs/prompts/${name}.md`,
+      title: `Prompt: ${name}`,
       mimeType: 'text/markdown',
     })),
   ]

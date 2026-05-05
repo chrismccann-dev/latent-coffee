@@ -260,7 +260,7 @@ Once a recipe is confirmed as the reference brew for a coffee (iteration complet
 
 - **Base Process** - one of `Washed`, `Honey`, `Natural`, `Wet-hulled` (per `canonicals://processes`).
 
-- **Subprocess** - Honey color tier only: `White`, `Yellow`, `Red`, `Black`, `Purple`, `Generic`, `Hydro`. Omit for non-Honey bases.
+- **Subprocess** - Honey color tier only: `White Honey`, `Yellow Honey`, `Red Honey`, `Black Honey`, `Purple Honey`, `Generic Honey`, `Hydro Honey` (canonical form includes the `Honey` suffix). Omit for non-Honey bases.
 
 - **Fermentation Modifiers** - array, optional. Canonical values from `canonicals://processes` § fermentation axis (e.g. `Anaerobic`, `Double Anaerobic`, `Yeast Inoculated`, `Lactic`, `Thermal Shock`).
 
