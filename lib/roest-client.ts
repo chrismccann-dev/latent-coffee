@@ -247,6 +247,50 @@ export function msecToMMSS(msec: number | null | undefined): string | null {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
 }
 
+// Resolved TZ used for converting Roest UTC timestamps to local roast_date.
+// Roest's API returns ISO-8601 timestamps in UTC; slicing the date portion
+// silently drifts the recorded date forward whenever a roast happens late-day
+// local time (Bean 4 case: Roest returned 2026-05-05 for a 2026-05-04 17:00
+// PT roast — Phase 2 #R65). The MCP server runs on Vercel (UTC), so we
+// can't rely on system locale. Configured via ROEST_USER_TIMEZONE env var
+// (IANA name like "America/Los_Angeles"). Default surfaces a hint when fired.
+export const DEFAULT_ROEST_TZ = 'America/Los_Angeles'
+
+export function resolveRoestTimezone(): { tz: string; defaulted: boolean } {
+  const configured = process.env.ROEST_USER_TIMEZONE?.trim()
+  if (configured) return { tz: configured, defaulted: false }
+  return { tz: DEFAULT_ROEST_TZ, defaulted: true }
+}
+
+// Convert a Roest UTC ISO timestamp to a YYYY-MM-DD date string in the user's
+// configured local timezone. Returns null when the input is null / unparseable.
+// Phase 2 (#R65).
+export function roestTimestampToLocalDate(
+  iso: string | null | undefined,
+  tz: string,
+): string | null {
+  if (!iso) return null
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return null
+  // Intl.DateTimeFormat is the only stdlib path in Node that knows IANA TZ
+  // rules. Use the en-CA locale because it natively renders ISO-style
+  // YYYY-MM-DD without a workaround for parts ordering.
+  try {
+    const fmt = new Intl.DateTimeFormat('en-CA', {
+      timeZone: tz,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    return fmt.format(d)
+  } catch {
+    // Invalid TZ string — fall back to the UTC slice rather than throwing,
+    // since this would break Roest pulls entirely. Caller can surface the
+    // hint via inference_hints if it cares.
+    return iso.slice(0, 10)
+  }
+}
+
 // Format a bezier curve as a display string. e.g. [[0,80],[105000,68],[150000,63]]
 // becomes "80% at 0:00 -> 68% at 1:45 -> 63% at 2:30". Pass `unit` to format the
 // y-axis label (% for fan, deg-C for inlet).
@@ -277,7 +321,11 @@ export type NormalizedRoastPayload = {
   roest_log_id: number
   // Identity
   batch_id: string
+  // Phase 2 (#R65): roast_date is in the user's configured local TZ
+  // (ROEST_USER_TIMEZONE, default America/Los_Angeles). roast_date_utc carries
+  // the raw UTC slice for callers that want the original.
   roast_date: string | null
+  roast_date_utc: string | null
   coffee_name: string | null
   profile_link: string | null
   // Profile shape
@@ -285,15 +333,25 @@ export type NormalizedRoastPayload = {
   drum_direction: string | null
   // Recipe / control
   charge_temp: number | null
+  // Phase 2 (#R59): pulled from RoestProfile.preheat_temperature when available.
+  // V4 standard: 125°C. Primary control lever per ROASTING.md.
+  hopper_load_temp: number | null
   fc_temp: number | null
   drop_temp: number | null
+  // Phase 2 (#R58): drop trigger as set on the Roest profile. Not what the
+  // machine actually dropped at — that's drop_temp / drop_time.
+  end_condition_type: 'bean_temp' | 'dev_time' | 'manual' | null
+  end_condition_target: number | null
   // Times (mm:ss)
   fc_start: string | null
   drop_time: string | null
   yellowing_time: string | null
   dev_time_s: number | null
   dev_ratio: string | null
-  // Curves (display strings)
+  // Curves (display strings). Phase 2 (#R64): inlet_curve is the as-DESIGNED
+  // template (RoestProfile.temperature_bezier). Mid-roast operator overrides
+  // (manual inlet adjustments during the roast) are NOT exposed by the Roest
+  // API and therefore not captured here.
   fan_curve: string | null
   inlet_curve: string | null
   // Mass / color
@@ -301,12 +359,34 @@ export type NormalizedRoastPayload = {
   roasted_weight_g: number | null
   weight_loss_pct: number | null
   agtron: number | null
-  // Misc
-  notes: string | null
+  // Phase 2 (#R57) — pass-through of Roest UI Notes / first_comment.comment.
+  // Renamed from `notes` to disambiguate from operator-prose fields. Caller
+  // sets push_roast.roest_notes from this on the augment step.
+  roest_notes: string | null
   // Reference roast flag — Roest doesn't track this; caller sets it explicitly
   is_reference: boolean
   // Surface for caller to know what was inferred
   inference_hints: string[]
+}
+
+// Roest profile end_condition enum — sampled from /profiles/{id}/ payloads.
+// 1 appears as the bean-temp drop trigger across V4 lots; 2 appears as
+// dev-time triggers in some BBP-driven profiles; 0 appears on legacy /
+// hand-driven profiles. Treat unknown enums as 'manual' since that's the
+// safest fallback (no structured trigger inferred). The model can always
+// override end_condition_type explicitly if the inference is wrong.
+function mapEndConditionEnum(n: number | null | undefined): {
+  type: 'bean_temp' | 'dev_time' | 'manual' | null
+  hint: string | null
+} {
+  if (n == null) return { type: null, hint: null }
+  if (n === 0) return { type: 'manual', hint: null }
+  if (n === 1) return { type: 'bean_temp', hint: null }
+  if (n === 2) return { type: 'dev_time', hint: null }
+  return {
+    type: 'manual',
+    hint: `Unknown Roest end_condition enum ${n}; defaulted to 'manual'. Override end_condition_type explicitly if the trigger was bean_temp or dev_time.`,
+  }
 }
 
 export function roestLogToPushRoastPayload(
@@ -315,6 +395,24 @@ export function roestLogToPushRoastPayload(
   green_bean_id: string | null,
 ): NormalizedRoastPayload {
   const hints: string[] = []
+  // Phase 2 (#R65): resolve the user's configured TZ for roast_date conversion.
+  const { tz, defaulted } = resolveRoestTimezone()
+  const utcSlice = log.start_timestamp ? log.start_timestamp.slice(0, 10) : null
+  const localDate = roestTimestampToLocalDate(log.start_timestamp, tz)
+  if (defaulted && log.start_timestamp) {
+    hints.push(
+      `roast_date converted to ${tz} (default - set ROEST_USER_TIMEZONE env var to override). UTC slice was ${utcSlice}.`,
+    )
+  } else if (localDate !== utcSlice && log.start_timestamp) {
+    hints.push(
+      `roast_date converted UTC ${utcSlice} -> ${tz} ${localDate}.`,
+    )
+  }
+  // Phase 2 (#R58): map RoestProfile.end_condition + end_condition_value to
+  // the structured fields on push_roast. Profile may be null (no linked
+  // profile) — fall through to null.
+  const endCondition = mapEndConditionEnum(profile?.end_condition)
+  if (endCondition.hint) hints.push(endCondition.hint)
   // Dev time = drop_event - firstcrack_event (in seconds)
   let dev_time_s: number | null = null
   let dev_ratio: string | null = null
@@ -345,7 +443,8 @@ export function roestLogToPushRoastPayload(
     green_bean_id,
     roest_log_id: log.id,
     batch_id: log.batch_no != null ? String(log.batch_no) : `roest-${log.id}`,
-    roast_date: log.start_timestamp ? log.start_timestamp.slice(0, 10) : null,
+    roast_date: localDate,
+    roast_date_utc: utcSlice,
     coffee_name: log.inventory_name ?? log.bean_name ?? null,
     profile_link: log.share_uuid
       ? `https://connect.roestcoffee.com/shared_log/${log.share_uuid}`
@@ -353,8 +452,13 @@ export function roestLogToPushRoastPayload(
     roast_profile_name: log.profile_data?.name ?? null,
     drum_direction: log.profile_data?.reversed_drum_direction ? 'Counterflow' : 'Conventional',
     charge_temp: log.charge_drum_temp,
+    // Phase 2 (#R59): pull from RoestProfile.preheat_temperature when present.
+    hopper_load_temp: profile?.preheat_temperature ?? null,
     fc_temp: log.fc_temp,
     drop_temp: log.end_temp,
+    // Phase 2 (#R58): structured end-condition trigger from the profile.
+    end_condition_type: endCondition.type,
+    end_condition_target: profile?.end_condition_value ?? null,
     fc_start,
     drop_time,
     yellowing_time,
@@ -366,7 +470,7 @@ export function roestLogToPushRoastPayload(
     roasted_weight_g: log.end_weight,
     weight_loss_pct,
     agtron: log.whole_bean_color,
-    notes: log.first_comment?.comment ?? null,
+    roest_notes: log.first_comment?.comment ?? null,
     is_reference: false,
     inference_hints: hints,
   }

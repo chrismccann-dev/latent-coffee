@@ -91,7 +91,7 @@ export const pushBrewInputSchema = {
   // Identity
   coffee_name: z.string().describe('Coffee marketing name (e.g. "Emerald PL#015").'),
   roaster: z.string().describe(
-    'Canonical roaster name. Resolves via ROASTER_LOOKUP — alias inputs auto-canonicalize ("Hydrangea Coffee Roasters" → "Hydrangea Coffee"). Inspect via `read_canonical(axis="roasters")` or `docs://taxonomies/roasters.md`. For net-new roasters not in the registry, set `roaster_override: true` to persist verbatim.',
+    'When in doubt, use the roaster name as it appears on the bag - alias resolution will canonicalize it ("Hydrangea Coffee Roasters" -> "Hydrangea Coffee"). For genuinely net-new roasters not in the registry, set `roaster_override: true` to persist verbatim. Inspect the canonical list via `read_canonical(axis="roasters")` or `docs://taxonomies/roasters.md`.',
   ),
   roaster_override: z.boolean().optional().describe(
     'Set true to bypass canonical-roaster validation for legitimately net-new roasters. Persists verbatim; the registry will need a deliberate edit before the next brew from this roaster matches canonical.',
@@ -180,12 +180,14 @@ export const pushBrewInputSchema = {
     `Strict canonical 5-value enum: ${EXTRACTION_STRATEGIES.join(' | ')}. Within-strategy gradient ("lower edge of Balanced Intensity") goes in \`strategy_notes\`. Cross-strategy divergence ("planned Balanced, drank like Suppression") goes in \`extraction_confirmed\`.`,
   ),
   extraction_confirmed: z.string().optional().nullable().describe(
-    'Free-text. Set ONLY when the planned extraction_strategy diverged from what was tasted in the cup. Cross-strategy correction signal. Leave null when the planned strategy delivered. (See SYNC_V2 logged follow-up #5 — semantic re-spec deferred to Sprint 2.7.)',
+    'Free-text. Set ONLY when the planned extraction_strategy diverged from what was tasted in the cup (cross-strategy correction signal: planned Balanced, drank like Suppression). Leave null when the planned strategy delivered. NOTE: the framework-default-vs-executed-vs-confirmed reshape (Phase 2 #R49 - splitting framework_default for the Process/Variety table prediction out of this field) is deferred to its own sprint. For now, do NOT use this field to record framework-default divergence - keep that nuance in `strategy_notes` until the schema reshape lands.',
   ),
   strategy_notes: z.string().optional().nullable().describe(
     'Free-text within-strategy gradient + miscellaneous recipe nuance that does NOT fit the canonical extraction_strategy enum. Use for "lower edge of Balanced Intensity", "leaning toward Suppression", or recipe-context that the 5-value enum + extraction_confirmed (cross-strategy divergence) cannot capture. Distinct from `classification` (lot code + roast date stash).',
   ),
-  modifiers: z.array(modifierEntry).optional().nullable(),
+  modifiers: z.array(modifierEntry).optional().nullable().describe(
+    'Axis 2 - extraction modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture / Immersion). Optional + stackable. Persistence equivalence: `[]`, `null`, and omitted are all stored as the empty array (cleanModifiers() normalizes; the column never holds null). Send `[]` to be explicit that modifiers were considered and rejected, or omit when there\'s nothing to say.',
+  ),
 
   // Tasting
   flavors: z.array(flavorChip).optional().nullable().describe(
@@ -299,16 +301,30 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
       //   land here without changing the response shape (e.g. "structure_tags
       //   includes both Body:Silky and Body:Light — consider whether one supersedes
       //   the other").
+      // - `created_with_overrides` echoes which fields used the *_override flag on
+      //   this push (Phase 2 #R47). Empty array when no overrides were used.
+      //   Confirms the override path was taken without requiring a re-query.
       // - For full canonical-resolution detail (which input alias canonicalized to
       //   what), fetch the inserted brew via the `brews://by-id/{brew_id}` Resource
       //   (or the upcoming `query_brews` Tool) — round-tripping through the DB
       //   guarantees the response matches what was actually persisted.
+      const overridable: Array<keyof typeof input> = [
+        'roaster_override',
+        'producer_override',
+        'brewer_override',
+        'filter_override',
+        'grinder_override',
+      ]
+      const created_with_overrides = overridable
+        .filter((key) => input[key] === true)
+        .map((key) => key.replace(/_override$/, ''))
       const responsePayload = {
         brew_id: result.brewId,
         terroir_id: result.terroirId,
         cultivar_id: result.cultivarId,
         created_terroir: result.createdTerroir,
         created_cultivar: result.createdCultivar,
+        created_with_overrides,
         warnings: [] as string[],
       }
       return {

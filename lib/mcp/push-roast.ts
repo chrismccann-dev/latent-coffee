@@ -53,16 +53,40 @@ export const pushRoastInputSchema = {
     'Shaped fan curve as display string (e.g. "80% at 0:00 -> 70% at 1:45 -> 65% at 2:30 -> 72% at 4:15 -> 75% at 5:30"). Source: Roest profile fan_bezier.',
   ),
   inlet_curve: z.string().optional().nullable().describe(
-    'Shaped inlet temp curve as display string. Source: Roest profile temperature_bezier.',
+    'Shaped inlet temp curve as display string. Source: Roest profile temperature_bezier - this is the as-DESIGNED template, not the as-recorded operator-set curve. Mid-roast inlet adjustments (operator nudging the curve during the roast) are not exposed by the Roest API and therefore not captured. If you need to record divergence between designed and actual, note it in what_didnt or what_to_change.',
   ),
   roest_log_id: z.number().int().optional().nullable().describe(
     'api.roestcoffee.com /logs/{id}/ — set when seeded from pull_roest_log.',
+  ),
+  // Roest UI pass-through (Phase 2 #R57). Preserves the Roest "Notes" / comment
+  // verbatim; pull_roest_log populates this from log.first_comment.comment.
+  roest_notes: z.string().optional().nullable().describe(
+    'Pass-through of the Roest UI Notes / first_comment.comment. pull_roest_log auto-populates this; preserve as-is rather than folding into what_worked / what_to_change (those are Chris\'s analytical prose).',
+  ),
+  // End-condition trigger (Phase 2 #R58) — distinct from drop_temp (where the
+  // machine actually dropped). Captures what the operator SET as the trigger.
+  end_condition_type: z.enum(['bean_temp', 'dev_time', 'manual']).optional().nullable().describe(
+    'Drop trigger as set on the Roest profile. bean_temp = drop when bean reaches end_condition_target °C; dev_time = drop after end_condition_target seconds post-FC; manual = operator-controlled with no machine trigger. Distinct from drop_temp / dev_time_s (what the machine actually recorded). On silent-FC coffees, bean_temp is the more reliable trigger; setting this lets the arbiter detect when a roast diverged from intent.',
+  ),
+  end_condition_target: z.number().optional().nullable().describe(
+    'Numeric target for the end_condition_type. °C when bean_temp; seconds when dev_time; null when manual. Phase 2 (#R58).',
+  ),
+  // FC audibility signal (Phase 2 #R61).
+  fc_total_cracks: z.number().int().min(0).optional().nullable().describe(
+    'Total audible cracks counted from the FC event through drop. 0 on silent-FC coffees (anaerobic naturals, heavy co-ferments). Strong audibility signal that complements fc_temp / fc_start. Phase 2 (#R61).',
   ),
   // Prose
   what_worked: z.string().optional().nullable(),
   what_didnt: z.string().optional().nullable(),
   what_to_change: z.string().optional().nullable(),
-  worth_repeating: z.boolean().optional().nullable(),
+  // Tristate: yes | no | pending. Existing callers passing boolean coerce on
+  // write (true → 'yes', false → 'no'). Phase 2 (#R62).
+  worth_repeating: z.union([
+    z.boolean(),
+    z.enum(['yes', 'no', 'pending']),
+  ]).optional().nullable().describe(
+    'Tristate: "yes" | "no" | "pending". Use "pending" for "yes at the structural-roast level but waiting on Day 7 cupping confirmation" - boolean true/false can\'t represent the conditional case (Bean 6 V1B). Boolean true/false also accepted for back-compat (coerced to "yes"/"no" on write).',
+  ),
   is_reference: z.boolean().optional().nullable().describe(
     'True for the lot\'s confirmed reference roast (the batch you\'d replicate). One per closed bean typically.',
   ),
@@ -74,7 +98,7 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
     {
       title: 'Push Roast',
       description:
-        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus 8 Sprint 2.5 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id). UPSERT semantics on (user_id, green_bean_id, batch_id): safe to retry after crash — when a row already exists, the existing roast_id is returned with `created: false` and field values are NOT overwritten (use the app /add or /edit UI to update fields on an existing batch). Pull from Roest via pull_roest_log first when the source is a real machine batch — that returns a normalized payload with most fields populated; augment with prose and push. To recover roast_ids without re-pushing (e.g. cross-session retry where you need batch_id → roast_id mapping for push_cupping), use get_bean_pipeline.',
+        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus the Sprint 2.5 + Phase 2 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id, roest_notes, end_condition_type/target, fc_total_cracks, worth_repeating tristate). UPSERT semantics on (user_id, green_bean_id, batch_id): safe to retry after crash - when a row already exists, the existing roast_id is returned with `created: false` and field values are NOT overwritten (use patch_roast for field-level updates). Pull from Roest via pull_roest_log first when the source is a real machine batch - that returns a normalized payload with most fields populated; augment with prose and push. Returns warnings[] when a green_bean parent has roest_inventory_id NULL but the roast is being pushed with a roest_log_id (orphan reconciliation hint per #R66 - patch_green_bean to backfill the FK).',
       inputSchema: pushRoastInputSchema,
     },
     async (input) => {
@@ -86,7 +110,11 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
         }
         throw new Error(`Database error: ${result.message}`)
       }
-      const out = { roast_id: result.roast_id, created: result.created }
+      const out = {
+        roast_id: result.roast_id,
+        created: result.created,
+        warnings: result.warnings,
+      }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,

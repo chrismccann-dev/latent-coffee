@@ -174,14 +174,37 @@ read_doc_section(uri="docs://roasting.md", anchor="<Section Name>"). If
 anchor doesn't resolve, list_doc_sections(uri="docs://roasting.md") to find
 verbatim. section_anchor is case-sensitive, no leading #.
 
-- For "Active Lots": REPLACE existing entry with current state (current
-  best batch, working hypothesis for next session, open questions). If
-  absent, APPEND.
-- For mid-iteration insights worth surfacing across coffees ("naturals
-  from this farm carry distinctive lemongrass," "84-hour anaerobic produces
-  silent FC"): APPEND to Cross-Coffee Insight Layer with confidence marker
-  (Low / Medium / Medium-High / High) and a hypothesis tag rather than a
-  confirmed claim.
+Routing decision tree - pick the section that matches the SHAPE of the
+insight, not just the topic:
+
+- For lot-state changes (current best batch, working hypothesis for next
+  session, open questions): REPLACE the existing `### LOT-CODE - Description`
+  sub-section under Active Lots. Each lot has its own anchor - citations
+  should target ONE lot's anchor, not the parent `Active Lots` section. If
+  the lot has no entry yet, APPEND a new `### LOT-CODE - Description`
+  sub-section under Active Lots.
+- For one-shot calibration lots (no V1/V2/V3 framing, single-question
+  bean-system comparison or machine calibration): add a `### LOT-CODE -
+  Description` sub-section under "One-Shot Calibrations in Process" instead
+  of Active Lots. One-shots get a different shape (no next-session
+  hypothesis, no V-numbering) and live in the dedicated subsection.
+- For PROTOCOL-LEVEL insights that generalize beyond a single coffee - e.g.
+  "use bean-temp end conditions on silent-FC coffees", "load hopper at
+  125°C as the default", "FC marking is unreliable on anaerobic naturals
+  and requires audibility-count + total-cracks confirmation": route these
+  to the appropriate workflow / protocol section (FC Marking Protocol,
+  Hopper Pre-Load Timing, Standard Inlet Curve Template, Drop Temp as the
+  Primary Drop Signal, Between Batch Protocol). DO NOT park protocol-level
+  insights in Cross-Coffee Insight Layer just because that section is
+  always mid-iteration-safe - protocol changes belong in the protocol
+  sections so future onboarding reads them. If the live protocol section
+  contradicts the new insight, REPLACE the relevant paragraph; if the
+  insight is additive, APPEND.
+- For mid-iteration insights worth surfacing across coffees that AREN'T
+  protocol-level ("naturals from this farm carry distinctive lemongrass,"
+  "84-hour anaerobic produces silent FC"): APPEND to Cross-Coffee Insight
+  Layer with confidence marker (Low / Medium / Medium-High / High) and a
+  hypothesis tag rather than a confirmed claim.
 - For Varietal Aromatic Fingerprints: only update if a NEW descriptor
   consistently appeared across multiple roasts. If still hypothetical,
   leave alone or annotate "(working hypothesis)".

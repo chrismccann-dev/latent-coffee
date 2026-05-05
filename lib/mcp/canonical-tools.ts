@@ -1,6 +1,13 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { CANONICAL_AXES, getCanonicalPayload, type CanonicalAxis } from '@/lib/mcp/canonicals'
+import {
+  CANONICAL_AXES,
+  CANONICAL_AXIS_ALIASES,
+  getCanonicalPayload,
+  listAcceptedCanonicalAxisNames,
+  resolveCanonicalAxis,
+  type CanonicalAxis,
+} from '@/lib/mcp/canonicals'
 
 // Canonical-introspection Tools (MCP feedback batch 3, 2026-04-30).
 //
@@ -17,9 +24,27 @@ import { CANONICAL_AXES, getCanonicalPayload, type CanonicalAxis } from '@/lib/m
 //   - read_canonical(axis)    → full registry payload for one axis
 //
 // The Resources stay registered for clients that DO surface them.
+//
+// Phase 2 (#R38): read_canonical accepts the docs:// aliases (regions →
+// terroirs, varieties → cultivars) in addition to the 12 canonical axis
+// names. The response echoes the resolved canonical axis name.
 
 const VALID_AXES = CANONICAL_AXES.map((m) => m.axis) as readonly CanonicalAxis[]
-const AXES_TUPLE = VALID_AXES as readonly [CanonicalAxis, ...CanonicalAxis[]]
+const ACCEPTED_AXIS_NAMES = listAcceptedCanonicalAxisNames()
+const AXIS_ALIAS_PAIRS = Object.entries(CANONICAL_AXIS_ALIASES)
+  .map(([alias, target]) => `${alias} → ${target}`)
+  .join(', ')
+
+const axisInput = z
+  .string()
+  .refine((v) => resolveCanonicalAxis(v) != null, {
+    message: `Unknown canonical axis. Valid (12 canonical + 2 aliases): ${ACCEPTED_AXIS_NAMES.join(', ')}.`,
+  })
+  .describe(
+    `One of the 12 canonical-axis names: ${VALID_AXES.join(', ')}. ` +
+      `Aliases also accepted (resolved server-side): ${AXIS_ALIAS_PAIRS.replace(/→/g, '->')}. ` +
+      `Run list_canonicals to discover them. The response echoes the resolved canonical axis as \`axis\`.`,
+  )
 
 export function registerCanonicalTools(server: McpServer) {
   server.registerTool(
@@ -27,7 +52,7 @@ export function registerCanonicalTools(server: McpServer) {
     {
       title: 'List Canonical Registries',
       description:
-        'List / lookup / browse / discover / enumerate the canonical-taxonomy registries the MCP server validates against. Returns an array of { axis, title, description } for the 12 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers). Use this BEFORE drafting a push_brew payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical.',
+        'List / lookup / browse / discover / enumerate the canonical-taxonomy registries the MCP server validates against. Returns an array of { axis, title, description } for the 12 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers). Use this BEFORE drafting a push_brew payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical. NOTE: read_canonical also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars) for symmetry with `docs://taxonomies/{axis}.md` URIs.',
       inputSchema: {},
     },
     async () => {
@@ -48,19 +73,17 @@ export function registerCanonicalTools(server: McpServer) {
     {
       title: 'Read Canonical Registry',
       description:
-        'Read / lookup / validate / find / get the full canonical-registry payload for one axis (cultivars / roasters / producers / etc.). Each payload contains the canonical name list, alias map, and any structural metadata (genetic family / strategy tag / grinder valid_settings / etc.) — same content the canonicals://{axis} Resource serves. Use this to validate a name or look up an alias before push_brew. For just the catalog of axes (without payloads), use list_canonicals.',
+        'Read / lookup / validate / find / get the full canonical-registry payload for one axis (cultivars / roasters / producers / etc.). Each payload contains the canonical name list, alias map, and any structural metadata (genetic family / strategy tag / grinder valid_settings / etc.) - same content the canonicals://{axis} Resource serves. Use this to validate a name or look up an alias before push_brew. For just the catalog of axes (without payloads), use list_canonicals. Phase 2 (#R38): also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars).',
       inputSchema: {
-        axis: z.enum(AXES_TUPLE).describe(
-          `One of the 12 canonical-axis names. Run list_canonicals to discover them. Valid: ${VALID_AXES.join(', ')}.`,
-        ),
+        axis: axisInput,
       },
     },
     async ({ axis }) => {
       const payload = getCanonicalPayload(axis)
       if (!payload) {
-        // Belt-and-suspenders — z.enum should already reject anything not in the tuple.
+        // Belt-and-suspenders — refine should already reject unknown values.
         throw new Error(
-          `Unknown canonical axis: ${axis}. Valid: ${VALID_AXES.join(', ')}.`,
+          `Unknown canonical axis: ${axis}. Valid: ${ACCEPTED_AXIS_NAMES.join(', ')}.`,
         )
       }
       return {
