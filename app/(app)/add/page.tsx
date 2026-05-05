@@ -318,7 +318,16 @@ export default function AddPage() {
             what_worked: roast.whatWorked,
             what_didnt: roast.whatDidnt,
             what_to_change: roast.whatToChange,
-            worth_repeating: roast.worthRepeating?.toLowerCase() === 'yes',
+            // Phase 2 (#R62, migration 044): worth_repeating column is now
+            // text tristate (`yes` | `no` | `pending` | NULL) with a CHECK
+            // constraint. Map paste-input strings to the canonical tristate;
+            // empty / unrecognized falls through to NULL rather than 'no' so
+            // the column genuinely reflects "not yet evaluated".
+            worth_repeating: (() => {
+              const v = roast.worthRepeating?.trim().toLowerCase()
+              if (v === 'yes' || v === 'no' || v === 'pending') return v
+              return null
+            })(),
             is_reference: roast.isReference?.toLowerCase() === 'yes',
             drum_direction: roast.drumDirection,
           })

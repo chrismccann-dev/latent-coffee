@@ -120,10 +120,17 @@ export interface Roast {
   what_worked: string | null
   what_didnt: string | null
   what_to_change: string | null
-  worth_repeating: boolean | null
+  // Phase 2 (#R62, migration 044): tristate text. Use 'yes' | 'no' | 'pending'.
+  // Pre-migration data was boolean; migration coerced true -> 'yes', false -> 'no'.
+  worth_repeating: 'yes' | 'no' | 'pending' | null
   is_reference: boolean
   drum_direction: string | null
   charge_temp: number | null
+  // Phase 2 enrichments (migration 044)
+  roest_notes: string | null
+  end_condition_type: 'bean_temp' | 'dev_time' | 'manual' | null
+  end_condition_target: number | null
+  fc_total_cracks: number | null
   created_at: string
   updated_at: string
   // Joined data
