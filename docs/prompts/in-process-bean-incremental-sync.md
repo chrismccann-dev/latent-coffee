@@ -1,0 +1,205 @@
+This is a mid-iteration sync via the Latent Coffee MCP. Push only what's
+new since last sync, UPSERT the experiments that have advanced, and propose
+any prose updates for ROASTING.md Active Lots. push_roast_learnings is
+deferred to close-out (kept in the numbered sequence below). If you have
+feedback for Claude Code on the roasting MCP path, mention it.
+
+MCP NAMESPACE: tools surface under `Latent Coffee` (with space, capitalized).
+
+TOOL SEARCH NOTE: tool_search ranks by name+description match. If a tool
+you expect doesn't surface on the first search, try the verb alone ("push",
+"list", "log", "get", "patch"), the domain word ("roast", "Roest", "green",
+"cupping"), or both. Only flag a tool as missing after 3 broadly-varied
+searches all return empty.
+
+PUSH vs PATCH: every push_* Tool has a paired patch_* Tool (patch_roast /
+patch_cupping / patch_experiment / patch_green_bean / patch_roast_learnings /
+patch_brew) for field-level updates. Use push_* on first write or full
+re-archive; use patch_* when only a few fields change post-push (avoids
+re-sending the full payload + risks accidental overwrite of preserved-
+context fields like context_baseline / shared_constants).
+
+FK DEPENDENCY CHAIN: STAGE 1 returns green_bean_id (used by STAGES 2-7) +
+the FULL pipeline state baseline so downstream stages can skip what's
+already pushed. STAGE 2 returns roast_ids per NEW batch (used by STAGE 3
+cuppings + STAGE 6 brew if pushed). If a stage fails, halt and report;
+downstream stages will fail FK validation.
+
+STAGE 1 - Resolve the bean against Roest + DB, then baseline pipeline state:
+
+- list_roest_inventory({search: "<bean term>"}) FIRST. Returns the lot's
+  producer / region / elevation / moisture / density / cultivar / process /
+  producer_tasting_notes / additional_notes per match. Always run this
+  BEFORE any project-doc claim of "tasting notes unavailable" — the Roest
+  inventory data is often richer than the project doc.
+
+- get_green_bean({lot_id: "<lot_id>"}) — preferred lookup, deterministic
+  from the bean name. Returns green_bean_id + terroir_id + cultivar_id.
+  Alternative: get_green_bean({roest_inventory_id: <id>}) if only Roest ID.
+
+- INTAKE DRIFT DETECTION: compare project-doc claims (moisture / density /
+  region / cultivar) against the Roest inventory + DB row from the calls
+  above. Flag any divergence in the report-back step (e.g. "project doc
+  says 11.2% moisture, Roest inventory says 10.8%; using Roest as source
+  of truth"). Same shape as STAGE 7's prose drift detection but applied at
+  intake.
+
+- If get_green_bean returns not_found: bean has never been pushed. Call
+  push_green_bean(payload) — UPSERT-safe so this branch is non-destructive.
+
+  Decision flowchart for the canonical fields BEFORE pushing:
+
+  - Producer in PRODUCER_LOOKUP? Verify via read_canonical(axis: "producers").
+    NO → set producer_override:true. Tier-3 attribution philosophy means
+    many small producers (especially small Colombian farms) won't be in
+    canonical; do not let find-or-create silently create a non-canonical
+    row.
+    YES → use canonical name.
+
+  - Region/department in canonical macro_terroir? Verify via read_canonical(
+    axis: "terroirs"). Roest labels meso/locality (Caicedonia, Las Margaritas,
+    Ibagué) as "region"; the canonical macro_terroir is the BROADER area
+    (Western Andean Cordillera, Central Andean Cordillera). Locality goes
+    in meso_terroir, NOT macro_terroir.
+    NO CANONICAL MACRO FOUND for the actual region: HALT, report the gap,
+    and ask whether to add the macro to the registry OR confirm a fallback.
+    If fallback: include "TERROIR_DRIFT: actual region <X>, registry doesn't
+    cover; using closest macro <Y>" in additional_notes so it stays visible
+    at arbiter review.
+
+  - Cultivar in canonical? Verify via read_canonical(axis: "cultivars").
+    Spanish-accent variants (Sudán Rumé) alias to canonical (Sudan Rume).
+    If your input doesn't match canonical AND doesn't match an alias,
+    find-or-create silently creates a non-canonical row with NULL metadata.
+
+- DO NOT rely on green_bean_id from prior conversation memory.
+
+- get_bean_pipeline({green_bean_id: <returned by get_green_bean or
+  push_green_bean>}) — returns { green_bean, roasts[], cuppings[],
+  experiments[], roast_learnings, brews[] }.
+
+- Build local maps from the pipeline:
+  - existing_batch_ids: Set from roasts[]. STAGE 2 skips matches.
+  - batch_id -> roast_id: for STAGE 3 lookups.
+  - existing_cuppings: Set of (roast_id, cupping_date, eval_method,
+    recipe_variant). STAGE 3 skips matches; recipe_variant is part of the
+    composite key (NULLS NOT DISTINCT) — see STAGE 3.
+  - existing_experiment_ids: Set from experiments[]. STAGE 4 UPSERTs.
+  - existing_brews: lightweight summaries from brews[]. STAGE 6 dedupes.
+
+- This baseline is load-bearing for the rest of the stages.
+
+STAGE 2 - Push NEW roasts since last sync:
+- list_roest_logs({inventory_id: <STAGE 1>}) to enumerate ALL Roest batches
+  for this lot. Compare against existing_batch_ids.
+- For each NEW batch_id:
+  - pull_roest_log(log_id=<int>) for normalized push_roast-shaped payload.
+  - Augment with prose: what_worked / what_didnt / what_to_change /
+    worth_repeating.
+  - is_reference: true ONLY if this batch is the lot's confirmed reference
+    (rare mid-iteration; usually set at close-out).
+  - push_roast(payload) with green_bean_id + roest_log_id cross-ref.
+- push_roast UPSERTs on (user_id, green_bean_id, batch_id); re-pushing is
+  safe (returns created: false) but skipping is more efficient.
+- For field-level updates to a roast already pushed (e.g. correcting agtron
+  after re-measure, adding worth_repeating prose), prefer patch_roast over
+  re-sending the full push_roast payload.
+- Capture roast_ids per batch_no for STAGE 3.
+
+STAGE 3 - Push NEW cuppings since last sync:
+- For each Day 7 (or Day 4) row that's landed since last sync:
+  - Look up roast_id via the batch_id -> roast_id map.
+  - SKIP if (roast_id, cupping_date, eval_method, recipe_variant) is in
+    existing_cuppings.
+  - Otherwise push_cupping(payload) with roast_id + cupping_date (YYYY-MM-DD)
+    + rest_days + eval_method ("Pourover" or "Cupping") + recipe_variant
+    (optional; distinguishes multiple cuppings of the same batch on the
+    same day under different recipes — e.g. "xbloom_gate",
+    "balanced_intensity_pourover") + ground_agtron (paired with
+    roasts.agtron for WB-to-Ground delta) + 6 prose fields (aroma /
+    flavor / acidity / body / finish / overall).
+- Cupping composite key is (user_id, roast_id, cupping_date, eval_method,
+  recipe_variant) with NULLS NOT DISTINCT — meaning when you push a row
+  with recipe_variant unset, the server treats NULL as a real key value
+  and a same-day same-method second cupping with recipe_variant ALSO unset
+  returns created:false (no duplicate). To intentionally push two
+  evaluations on the same (roast, date, method), set distinct
+  recipe_variant labels on at least one of them so the keys diverge.
+- For field-level updates to a cupping already pushed (e.g. refining a
+  flavor descriptor or correcting ground_agtron), prefer patch_cupping
+  over re-sending.
+
+STAGE 4 - UPSERT experiments:
+- push_experiment UPSERTs on (user_id, green_bean_id, experiment_id).
+- For each experiment with new observations / determined winner /
+  key_insight: use the SAME experiment_id you used previously (or a fresh
+  one for new experiments). The created flag in the response distinguishes
+  fresh insert (true) from update (false).
+- Don't pass null for fields you want preserved — UPSERT overwrites with
+  whatever you send. If you only have new observations, send the full
+  payload with prior context_baseline / shared_constants preserved.
+- For field-level updates (e.g. just adding observed_outcome_b after the
+  next batch), prefer patch_experiment over re-sending — patch_* preserves
+  the fields you don't pass, eliminating the overwrite-with-null risk.
+
+STAGE 5 - push_roast_learnings — skipped at mid-iteration:
+- See the closed-bean prompt for close-out shape. Mid-iteration the
+  elasticity / roast_window_width / primary_lever / cultivar_takeaway
+  fields are still hypotheses; pushing half-formed lessons rows produces
+  a misleading /green/[id] render. Defer until the lot is closed.
+- If the lot IS closed and you're retro-filling, switch to the closed-bean
+  prompt instead.
+- For field-level edits to a roast_learnings row already pushed, prefer
+  patch_roast_learnings.
+
+STAGE 6 - One representative SR brew (optional — skip if no SR brew this
+session):
+- SKIP if any apply: no SR brew this session; brewing was paused
+  mid-iteration without a final recipe; brews this round were exploratory
+  tastings without resolved tasting notes / extraction strategy.
+- If pushing: check existing_brews from STAGE 1 first. Brews don't UPSERT
+  (multi-brews-per-coffee is normal); a duplicate creates a separate row
+  needing cleanup. Confirm before pushing if signature matches.
+- BEFORE pushing: apply canonical-validation discipline from the brewing
+  prompt (extraction_strategy z.enum, structure_tags z.enum, flavors chip
+  array, *_override pattern).
+- push_brew(payload) with source:"self-roasted", green_bean_id from STAGE 1,
+  optional roast_id from the batch_id -> roast_id map.
+- For field-level edits to a brew already pushed, prefer patch_brew.
+
+STAGE 7 - Propose ROASTING.md updates for in-process state:
+
+BEFORE drafting any citation, fetch the live doc via
+read_doc_section(uri="docs://roasting.md", anchor="<Section Name>"). If
+anchor doesn't resolve, list_doc_sections(uri="docs://roasting.md") to find
+verbatim. section_anchor is case-sensitive, no leading #.
+
+- For "Active Lots": REPLACE existing entry with current state (current
+  best batch, working hypothesis for next session, open questions). If
+  absent, APPEND.
+- For mid-iteration insights worth surfacing across coffees ("naturals
+  from this farm carry distinctive lemongrass," "84-hour anaerobic produces
+  silent FC"): APPEND to Cross-Coffee Insight Layer with confidence marker
+  (Low / Medium / Medium-High / High) and a hypothesis tag rather than a
+  confirmed claim.
+- For Varietal Aromatic Fingerprints: only update if a NEW descriptor
+  consistently appeared across multiple roasts. If still hypothetical,
+  leave alone or annotate "(working hypothesis)".
+- AVOID editing mid-iteration: Recently Closed Lots, Reference Brew Recipes
+  by Lot, FC Floor & Ceiling (close-out artifacts).
+
+For replace, copy the existing text VERBATIM into current_text. For append,
+omit current_text unless a positional hint is helpful.
+
+Submit as a single multi-citation propose_doc_changes call with source =
+{kind: "session", id: "<lot_id or date stamp>"}.
+
+DRIFT DETECTION: if the live doc disagrees with what you observed in Roest
+data during STAGES 1-2 (e.g. existing Active Lot entry quotes a fan curve
+that doesn't match the actual Roest profile), include a replace citation
+that updates the doc to match observed reality.
+
+Report back: green_bean_id + count of NEW roasts pushed (STAGE 2) + count
+of NEW cuppings pushed (STAGE 3) + experiment_pks UPSERTed with created
+flag for each (STAGE 4) + brew_id (STAGE 6, if pushed; "skipped: <reason>"
+if not) + proposal_id (STAGE 7) + intake drift findings from STAGE 1, if any.
