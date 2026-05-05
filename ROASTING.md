@@ -222,7 +222,21 @@ Roast position within a session meaningfully affects FC timing. First roast in a
 
 ## Drop Temp as the Primary Drop Signal
 
-> **Drop on temp, not on clock.** End conditions in the Roest profile are useful as a safety net and upper limit, but drop temp is the more reliable and consistent decision gate. If bean temp reaches the target before the dev time fires, drop early. If the end condition fires before the target temp, override and wait.
+> **Drop on temp, not on clock.** Drop temp is the primary decision gate on every roast.
+
+**Default mechanism (as of 2026-05-04): bean temp end condition on every profile.** The Roest end condition can be set to one of: total time, dev time, dev %, or **bean temp**. Setting bean temp end condition to your target drop temp (e.g. 208°C) is the cleanest mechanism: the machine auto-drops at the threshold, no manual reaction time, no "did I catch it at 207 or 208" variance.
+
+**Why this is the default now (was previously dev time as safety net + manual drop):**
+
+- Drop temp becomes a first-class controlled variable on the profile, not a manual-execution variable. Reproducibility batch-to-batch tightens.
+- For silent-FC coffees (Mandela XO, anaerobic naturals, XO-process), bean temp is the only meaningful drop signal. Setting it on the profile honors that directly instead of relying on the roaster watching the probe.
+- Confirmed reliable on the L200 Ultra: end-condition trigger fires effectively instantly at the threshold; bean temp probe reads in 0.1°C increments and clicks up to the target cleanly with no observable lag at the drop-zone range.
+
+**Manual drop is now the fallback:** if you want to override (e.g. roast is running unusually fast and you want to drop earlier than the profile threshold), the Roest UI provides a manual-override button - confirmed working in practice. After overriding, the rest of the roast is on you.
+
+**Drop temp as a per-experiment-batch design variable:** because drop is now profile-set, you can design experiments that deliberately vary drop temp across A/B/C batches (e.g. v3a 208°C / v3b 210°C / v3c 212°C drop sweep on a fixed peak inlet). This was clunky under the manual-drop regime; it's clean under bean temp end condition.
+
+**Compatibility with FC marking:** if a coffee has audible FC, mark it manually for the data record - bean temp end condition still drives the drop. If silent, do not try to mark FC; let the profile end condition do the work and log as manual-no-audio at the drop temp.
 
 ## WB-to-Ground Agtron Delta as Development Signal
 
@@ -418,34 +432,57 @@ section.
 
 ### CGLE-SRUME-NATURAL-2026 - Sudan Rume Natural
 
-- Status: Active - V1, V2, V3 complete. V4 not yet executed.
-- V3 batches 152/153/154(discarded)/155. Current best expression: Batch 152 - confirmed at Day 7 pourover cupping and real pourover (April Glass, 92°C, EG-1 6.3, 15g/255g). Sweet, tart, blueberry, lemongrass, ginger, cardamom spice, brown tea - blended and integrated. Sichuan peppercorn quality present as pleasant texture. Sweetness leads hot, lemongrass/ginger emerges cool.
+- Status: Active - V1, V2, V3, V4 complete (roasts only; V4 Day 7 pourover pending May 11).
+- V4 batches 167 (V4A, 238°C peak), 168 (V4B, 240°C peak), 169 (V4C, 242°C peak). Hard post-peak cliff across all three. Bean temp end condition (Roest profile setting).
+- Execution note: V4A (167) end condition was set to 200°C instead of 204-205°C - dropped too early (Agtron 85.7, too light). Not a valid data point at intended development level. V4B (168): drop 202.4°C, total 6:15, Agtron 75.0 (in range). V4C (169): drop 204.0°C, total 5:59, Agtron 76.1 (in range) - cleanest execution, direct replication of Batch 152 profile.
+- Current best expression: Batch 152 (V3A) - sweet, tart, blueberry, lemongrass, ginger, cardamom, brown tea, blended and integrated. Sichuan peppercorn quality as pleasant texture. V4C is the most structurally comparable batch to 152 pending pourover confirmation.
 - Confirmed brew recipe: April Brewer Glass + April Paper, 15g/255g, EG-1 6.3, 92°C, bloom 45g/55s, pour to 155g at 0:55 centered, pour to 255g at 1:45 centered.
-- Paradoxical roast finding: Batch 152 (no audible FC, Maillard 66.9%, total time 6:00) produced the preferred cup. The hard post-peak cliff accidentally created a slow-bake effect - extended time at lower temperature through Maillard - that integrated flavor compounds better than any higher-energy profile. Sichuan peppercorn drying finish correlates positively with energy input and is suppressed by lower heat.
-- FC is ambiguous/inaudible on this coffee (confirmed across V1-V3). Bean temp end condition is the correct drop management approach, consistent with Mandela XO protocol.
-- V4 hypothesis: replicate Batch 152's thermal history intentionally. Low peak (238-242°C), hard post-peak cliff, bean temp end condition at 204-205°C, accept total roast time 5:30-6:00. Vary peak inlet across three batches (238/240/242°C) holding cliff shape constant. Agtron WB target 74-80. Drop ceiling framework retired - replaced by bean temp end condition.
+- Key protocol confirmed: always set bean temp end condition to 205°C in Roest profile settings for this coffee. Manual drop is unreliable. V4A execution error underscores this.
+- Pending: Day 7 pourover on 168 and 169 (2026-05-11). If V4C cup matches Batch 152, profile is validated as repeatable and lot approaches close-out. If V4A needs rerun, use 238°C peak with end condition 205°C.
 
 ### CGLE-GESHA-CLOUDS-2026 - Gesha Clouds (Forest Coffee, Milton Monroy, Tolima)
 
-- Status: Active - V1 complete, V2 hypothesis drafted but not yet executed; brewing iteration on V1 winner paused mid-stream
-- V1 batches 161/162/163 - peak inlet variation (242 / 247 / 252°C). #161 within drop ceiling but Maillard 53.0%; #162 ceiling-tight at 208.0°C, dev 18s, Maillard 51.7%, Agtron WB 88.7; #163 BREACHED ceiling at 209.9°C (held deliberately to extend dev), Agtron WB 91.3.
-- WB-to-Ground deltas: #161 +4.4, #162 +2.5 (best), #163 +10.5 (worst). Aggressive inlet failed to penetrate core despite extended dev.
-- **V1 winner: #162** - confirmed via Day 7 pourover gate, NOT cupping table. Cupping-table preference for #163 was reversed by the pourover (#163 fell apart at pushed extraction; #162 cup was structurally cleanest with low volume as the only deficit).
-- Producer flavor target: tangerine, rose, kiwi, raspberry, lemongrass. Pushed pourover on #162 surfaced apricot, grapefruit, bergamot tea on cooling - closest the lot has come to producer notes.
-- V1 brewing diagnosis: Full Expression / Extraction Push (NOT Suppression). The cup is under-expressed, not over-expressive - heavy black-tea body is a brewing problem, not a fermentation-restraint problem.
-- V2 hypothesis (paused pending decision on whether brewing iteration alone resolves the lot): hold v1b inlet structure (peak 247°C); soften post-peak decline by raising 04:00 inlet from 240 -> ~244°C to extend dev to 35-45s without compressing Maillard further. Variable: post-peak decline steepness, not Maillard length and not peak inlet.
-- Open question: does pushed pourover iteration on #162 (5.9 grind, 93°C, 1:15, evaluate cool 50-45°C) close the lot at V1, or do the structural deficits at the brewing ceiling require V2?
+- Status: Active - V1 + V2 roasts complete. V2 Day 7 pourover lands 2026-05-11. Brewing iteration on V1 winner #162 still paused mid-stream.
+- V1 (April 19): batches 161/162/163, peak inlet variation (242/247/252°C). V1 winner: #162 confirmed via Day 7 pourover gate (cupping table picked #163; pourover reversed it). #162 had tightest WB-to-Ground delta (+2.5) despite worst-on-paper roast metrics (Maillard 51.7%, dev 18s, Agtron WB 88.7).
+- V2 (May 4): batches 170/171/172, post-peak decline variation (04:00 inlet 240/244/246°C, holding #162's pre-peak structure). Cuppings pending Day 7 (2026-05-11).
+- **Two structural failures on V2 at the roast level (independent of cup outcomes):**
+  1. v2a did NOT reproduce #162. Identical inlet curve, similar charge drum (116.3°C vs #162's 116.2°C), but Agtron WB 94.7 vs #162's 88.7 - 6 points lighter on what was meant to be a strict reproduction. Possible causes: green aging (2 weeks elapsed since V1), ambient drift in the roast space, or undetected session-position effect not compensated by 128°C hopper load. V2 as a strict reproducibility check of #162 is now compromised; V2 batches can still be evaluated against each other but not cleanly against V1 metrics.
+  2. v2b silent FC + drop 208.0°C (at ceiling); v2c silent FC + drop 209.9°C (BREACHES ceiling - identical breach to v1c). Root cause: the dev-time end condition (0:50) was the wrong fallback for a coffee with documented silent-FC risk. With FC silent, dev time can't trigger drop because there's no FC mark to count from - the curve climbed until the timer expired. Not a curve-shape failure; an end-condition-design failure.
+- **Critical design lesson surfaced by V2:** USE BEAN TEMP at 207°C as the Roest end condition for this coffee, NOT dev time. The Roest profile UI supports bean-temp end conditions directly. Eliminates the silent-FC-amplified-by-timer failure mode entirely. This change should propagate to all future heavy-anaerobic-Gesha experiments (and likely all Gesha-anaerobic experiments more broadly).
+- V1 brewing diagnosis (still standing): Full Expression / Extraction Push, NOT Suppression. #162 pushed pourover at 5.8 grind / 93°C / 1:15 surfaced apricot/grapefruit/bergamot tea on cooling - closest the lot has come to producer notes (tangerine, rose, kiwi, raspberry, lemongrass).
+- Open questions for next session: (1) Does V2 Day 7 pourover validate v2b's gentle-decline hypothesis or does the pre-cupping roast data already foreclose it? (2) Does the v2a-vs-#162 divergence reflect green aging (which would compromise comparison even within V2 if the bean continues to drift)? (3) Should V3 commit to the bean-temp end condition lesson and re-run the post-peak decline experiment cleanly, or pivot to closing the lot at #162 + brewing iteration?
 
 ### COS-HIG-BOR-2026 - Costa Rica Anaerobic Dry Process Higuito
 
-- Status: Active - V1 complete, V2 not yet executed
-- V1 batches 157/158/159 - silent crack confirmed across all three (heavy anaerobic Green Spec table prediction matched). All drops 207-208°C, total times 4:15-5:07. Session-position effect small under thermal reset protocol (TP band 79.5-81.3°C - confirms V2 onboarding protocol's no-compensation default)
-- Winner: v1c (#159, 251°C peak, drop 208°C, total 4:15) - decisive across both xbloom evaluation gate AND real pourover Balanced Intensity session. WB-to-ground delta 1.3 (target zone). "Best by far. Right volume of flavor, right notes - the one."
-- Confirmed flavor target: honey mead, Port wine, tobacco, sweet-tart integration, peatiness/whiskey-textural finish (peatiness is a NEW descriptor for this coffee - not in producer notes but reads as integrated smoke+sweetness when development is even)
-- Critical V1 finding: higher peak inlet produced EVENER core development on this coffee, not over-development as predicted. Heavy anaerobic + fruit-layer thermal insulation requires more energy to drive core in step with surface. v1a's "darkest WB Agtron" (82) was actually the MOST surface-over-developed batch - surface running ahead of core, smoke and fruit don't integrate at brew. WB-to-ground delta is more diagnostic than WB Agtron alone for this coffee type.
-- Drop ceiling for this coffee is at least 208°C, not the Sudan Rume Washed-derived 207°C - v1c at 208°C produced the most integrated cup, not overdevelopment. V2 should formalize 208°C as the ceiling.
-- xbloom evaluation gate produced FALSE-POSITIVE underdevelopment signal on v1b (lactic note in aroma) that the real pourover at Balanced Intensity (Orea Glass + Sibarist FAST Flat, 1:16, 92°C, EG-1 6.5) cleanly resolved. The Brew-Reveals-Roast Principle applies in the inverse direction on anaerobic naturals - evaluation recipe can flag false defects.
-- V2 hypothesis: anchor on v1c (251°C peak) and probe headroom upward - test 253°C and 255°C peak with drop ceiling held at 208°C. Push total roast time toward 4:30-5:00 by extending post-peak decline. Continue fan curve 80->68->63->70->73%. Target tighter delta (<=2 points) at higher peak.
+- Status: Active - V1 complete, V2 roasted 2026-05-04, Day 7 cup pending 2026-05-11
+- V1 winner: v1c (#159, 251°C peak, drop 208°C, total 4:15) - decisive across both xbloom evaluation gate AND real pourover Balanced Intensity. WB-to-ground delta 1.3 (target zone). Confirmed flavor target: honey mead, Port wine, tobacco, sweet-tart integration, peatiness/whiskey-textural finish.
+- V2 batches 164/165/166 - peak inlet sweep (251 / 253 / 255°C). All three deviated from designed 208°C drop ceiling - roaster intentionally held past 208°C because of FC behavior at session: v2a's FC arrived very late (4:18 at 209.4°C) so drop at 208°C would have been pre-FC; v2b held to 210°C past clean 3:43 FC for proper dev structure; v2c silent FC + light Agtron at 208°C -> held to 211°C for development. V2 became a "let dev happen, see where coffee actually wants to drop" experiment rather than strict-ceiling probe.
+- V2 batch detail: v2a #164 - audible FC 4:18/209.4°C (FIRST audible FC on this lot), drop 4:31/210.9°C, dev 13s/4.8%, Maillard 50.2% (above 48% threshold), WB Agtron 81.7. v2b #165 - clean audible FC 3:43/203.3°C, drop 4:17/210.0°C, dev 34s/13.2%, Maillard 39.3% (most balanced of all roasts on lot), WB Agtron 85.5. v2c #166 - silent FC, drop 4:16/211.0°C, Maillard 52.7%, WB Agtron 83.
+- Pre-cup observations: (1) v1c "winner" profile NOT cleanly reproducible at v2a - identical inlet curve produced different FC behavior (audible vs silent) and required higher drop temp. Suggests subtle session-state factors not currently controlled. (2) Audible FC pattern unlocked at 251-253°C peak inlet but suppressed again at 255°C (silent FC on v2c). (3) v2b is structural standout - clean audible FC + balanced phase ratios + reasonable Agtron. Strong candidate if cup confirms.
+- 208°C drop ceiling formalization from V1 was too tight for this peak inlet range. Drop ceiling moves with peak inlet rather than being a fixed constant.
+- V3 hypothesis (pending V2 cup outcome): if v2b is winner, isolate the drop ceiling question more cleanly - hold peak inlet at 253°C (v2b), sweep drop temp 209/210/211/212°C to find actual cup ceiling. If v2c is winner, V3 explores even higher peak inlet headroom. If v2a is winner, V3 attempts to understand replication failure (what controls FC audibility on this coffee).
+
+### BRA-FAZENDAUM-WUSHWUSH-NAT-2026 - Fazenda Um Wush Wush Natural (Dark Room Dried)
+
+- Status: Active - V1 complete (5/4/2026, batches 173/174/175), Day 7 pourover scheduled 5/11. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah ($419/kg, deferred).
+- Density 809 g/L (high), moisture 9.10% (lowest in archive). Producer notes: mandarin, prune, cacao. Untold paired roasted reference cup AVAILABLE (Tier 2). Untold Stronghold profile (47.7% Maillard) AVAILABLE - Tier 3, directional only.
+- V1 anchor: Sudan Rume Natural V1 working profile (peak 247°C, shaped fan 80%->68%->63%->70%->73%) - NOT the V3/V4 low-energy reframe, since that finding is variety-specific to SR Natural's lemongrass/ginger axis. V1 spread widened to 245/248/251°C from anchor uncertainty stack.
+- V1 batches 173 (245°C peak) / 174 (248°C peak) / 175 (251°C peak) - peak inlet variation. ALL THREE BREACHED FAILURE BOUNDARIES BEFORE DAY 7. #173: dev 25s/Maillard 53.2%, FC 4:51/205.1°C (FC arrived very late). #174: dev 23s/Maillard 50.3%/drop 207.5°C (triple boundary breach). #175: dev 42s/Maillard 43.7%/drop 209.0°C (only viable dev, but drop ceiling +3°C breach). Agtron WB 73.3 / 75.6 / 76.6 - inverted from typical natural pattern (lightest at highest peak).
+- Critical V1 architectural finding: FC arrives at 204-206°C across ALL THREE peak inlet levels. Higher peak inlet pulls FC TIME earlier (4:51 -> 4:27 -> 4:02) but does NOT pull FC TEMP lower. FC temp anchored around the 204-206°C band regardless of peak. Same architectural failure pattern as Sudan Rume Natural V2 reproduced exactly on a different cultivar / different lot / different terroir - reinforcing this as a recurring counterflow constraint, not a coffee-specific quirk.
+- V2 hypothesis space (deferred to post-Day-7 evaluation): (1) lower peak floor across spread to 240-244°C and shift anchor down (borrowing SR Natural V3 architecture without the variety-specific flavor reframe); (2) restructure early ramp to push FC arrival to 200-202°C (failed on SR Natural V2, but failure may be SR-specific); (3) switch end-condition philosophy to bean-temp like Mandela XO and accept FC at 205°C as a measurement artifact. Decision contingent on whether Day 7 cup quality stratifies clearly across the three batches despite structural failure (as on SR Natural V1) or is uniformly muddled.
+- Watch list at Day 7: Gesha-adjacent floral emergence (primary strategic question for Finca Deborah transfer), mandarin-as-top-note vs. prune/cacao secondary, cool-stage behavior, possible dark-room-drying-specific aromatic preservation.
+
+### RWA-NOVA-NAT21-RB-2026 - Bukure Natural Lot 21 (Red Bourbon, Rwanda Northern Province)
+
+- Status: Active - V1 roasted 2026-05-04 (batches 176/177/178), Day 7 pourover pending (target 2026-05-11)
+- V1 batches 176/177/178 - peak inlet variation 240 / 244 / 248°C, centered on Sudan Rume Natural V3 winner direction. Standard SR Natural fan curve (80->68->63->70->73%) held constant.
+- Roast outcomes: #176 (v1a, 240°C peak): FC 05:09 / 204.0°C, drop 05:47 / 204.5°C, dev 38s (11.0%), Maillard 51.3%, Agtron WB 75. 7 audible cracks. Drop fired 1.5°C below target due to longer post-FC accumulation. #177 (v1b, 244°C peak): FC 04:32 / 204.7°C, drop 04:59 / 206.5°C, dev 27s (9.0%), Maillard 48.8%, Agtron WB 82.5. 3 audible cracks. Cleanest data point - all failure boundaries respected. #178 (v1c, 248°C peak): FC 04:19 / 206.4°C, drop 04:42 / 209.0°C, dev 23s (8.2%), Maillard 48.6%, Agtron WB 81.4. 0 audible cracks (Roest auto-marked). **DROP CEILING BREACH: 209.0°C > 207°C ceiling - invalidated as clean V1 spread comparison; still cup-able as data point.**
+- Surprising Agtron WB inversion: 75 / 82.5 / 81.4 - v1a is darkest despite lowest peak inlet. Dev time inversion (38s > 27s > 23s) compounded surface development on v1a, producing color reading that doesn't match peak-inlet ordering. Diagnostic implication: on this lot, dev time outweighs peak inlet for Agtron WB outcome at the low-energy end.
+- Session-position acceleration confirmed at high-peak end: v1c (third roast) ran 13s faster to FC and 1.7°C hotter than v1b on identical-shape profile +4°C peak. The session-position effect ate the safety margin and pushed drop past ceiling. For future V1s with high-peak third batch: consider Roest end-condition set to bean temp 207°C (NOT dev time) so drop fires automatically at the ceiling regardless of clock.
+- FC behavior matches standard-natural prediction for v1a/v1b (audible at first crack >202°C). v1c showed silent/diffuse FC despite firing at 206.4°C - possibly the high-energy compressed dev produced quieter cracking, or operator missed manual mark at that energy level.
+- Day 7 question: Does the Sudan Rume Natural V3 lower-energy direction transfer to East African Red Bourbon natural at high altitude? Cleanest comparison will be v1a vs v1b (v1c invalidated). Watch whether v1a's longer dev produces SR Natural Batch 152-style integration, or whether Maillard 51.3% reads as bake/dark tea on this variety.
+- Brew direction hypothesis at Day 7: tea-forward profile suggests gentler extraction (1:16-1:17, 92-93°C). NOT a Full Expression candidate. Confirm or revise after first pourover.
+- TERROIR_DRIFT flagged: Northern Province (Virunga volcanic foothills) not in canonical Rwanda macro list (Eastern Low / Central Plateau / Lake Kivu). Pushed under Lake Kivu Highlands as closest available; suggest registry edit for "Northern Volcanic Highlands" or similar covering Burera/Musanze. Producer Agnes Mukamushinja & Felix Hitayezu / Nova Washing Station net-new (producer_override:true).
 
 ## One-Shot Calibrations in Process
 
@@ -458,7 +495,14 @@ awaiting cupping), single-batch parameters, and the specific question
 the calibration was built to answer. On close-out, move to Recently Closed
 Lots like any other lot.
 
-(Empty as of 2026-05-05.)
+### ECU-TD24-RANCHOTIO-TM-WASHED - Rancho Tio Emilio Typica Mejorado Washed (Taza Dorada 2024 #6)
+
+- Status: One-Shot Calibration - single batch executed, Day 7 pourover pending. NOT a V1 experiment lot. 100g gift sample, no iteration possible.
+- Anchor: Sudan Rume Washed CF-Light #133 with -2°C peak inlet hedge for low-altitude/low-density (peak 243°C vs. anchor 245°C); hopper pre-load 120°C to match #133 archive parameters.
+- Batch 179 outcome: FC 04:50 / 203.1°C (40-60s LATE vs. design ~3:50-4:10). Drop fired on profile end-clock at 05:30 / 203.3°C - only 0.2°C above FC, 3°C BELOW the 206-207°C V1 design drop target. Maillard 49.4% (BREACHED 47% bloated boundary). Weight loss 11.89% below 13-15% target. Agtron WB 77.3 in design range despite the timing miss.
+- Counterintuitive read: this 1,300m Ecuadorian washed wanted MORE energy, not less, despite the low-altitude assumption. Likely confounders: (1) 120°C hopper pre-load slowed drying phase ~30-40s vs. 125°C standard would have; (2) first-roast-of-day session position adds 10-15s through Maillard. Both contributed; magnitudes can't be separated from a single batch. The downward 2°C low-altitude/low-density hedge was wrong direction for THIS lot.
+- Forward implication for the Cruz Loma TM Honey one-shot (1,800m, same Typica Mejorado variety, queued next): use FULL #133 anchor energy (245°C peak) without the low-altitude hedge - 1,300m at 243°C produced underdevelopment, 1,800m honey-process should sit closer to anchor.
+- Day 7 pourover still pending. Cup outcome may rebut or confirm the underdevelopment read - WB-to-ground delta from Day 7 will be the diagnostic.
 
 ## Recently Closed Lots
 
@@ -534,15 +578,20 @@ Measure ground Agtron (15g) at the Day 7 evaluation session before brewing - gri
 
 # FC Marking Protocol
 
-**Manual marking at first audible crack above 202°C** is the standard. This gives the earliest reliable signal and is more consistent than waiting for the Roest auto-mark (which fires after a second crack, lagging actual onset by 5-15 seconds).
+**FC marking is now decoupled from drop control.** As of 2026-05-04, drop is controlled by bean temp end condition on the profile (see Drop Temp as the Primary Drop Signal). FC marking is a data-recording event, not a drop-trigger event.
 
-**Exceptions:**
+**Manual marking at first audible crack above 202°C** is the standard for the data record. This gives the earliest reliable signal and is more consistent than waiting for the Roest auto-mark (which fires after a second crack, lagging actual onset by 5-15 seconds).
 
-- **False positive below 202°C:** A single crack below 202°C is almost certainly a defect bean - do not mark. Wait for confirmation above 202°C.
-- **Silent crack coffees (e.g. Mandela XO, heavily fermented, XO process):** FC on these coffees is acoustically absent or too diffuse to reliably anchor a dev time end condition. **Do not use dev time as the end condition on silent-crack coffees - use bean temp end condition instead.** Set Roest end condition to bean temp at the confirmed drop target (203-205°C for Mandela XO). A dev time end condition anchored to an inaudible or machine-estimated FC timestamp will produce unpredictable Maillard overrun - confirmed across V4 of Mandela XO where Maillard reached 51-58% instead of the target 44%. Use RoR flattening around 200-203°C as the primary FC proxy alongside bean temp. If no audible crack by 208°C and bean temp end condition is not set, mark manually at 208°C to preserve drop headroom - but this is a fallback, not the primary protocol.
-- **High-volume crack:** If the Roest auto-marks due to a dense, vigorous crack event, accept the auto-mark.
+**Cases:**
 
-Record FC method in the Roast log (manual / auto / manual-no-audio) for any session where exception cases apply.
+- **Audible FC above 202°C:** mark manually for the data record. Drop is controlled by the bean temp end condition on the profile, not by FC.
+- **False positive below 202°C:** a single crack below 202°C is almost certainly a defect bean - do not mark. Wait for confirmation above 202°C.
+- **High-volume crack:** if the Roest auto-marks due to a dense, vigorous crack event, accept the auto-mark.
+- **Silent crack coffees (e.g. Mandela XO, anaerobic naturals, XO process):** do not attempt to mark. Log as manual-no-audio at the drop temp (which the profile end condition will fire at automatically). FC timestamp is null; drop temp is the only meaningful event. This was previously called out as an exception requiring bean temp end condition; with bean temp end condition now the default on every profile, silent-crack coffees are no longer an exception - they're just the case where the FC mark is null.
+
+**Why dev time as end condition is retired:** dev time anchored to an inaudible or machine-estimated FC timestamp produces unpredictable Maillard overrun - confirmed across V4 of Mandela XO where Maillard reached 51-58% instead of the target 44%. Bean temp end condition removes this failure mode entirely. Dev time is now a measured output, not an end condition.
+
+Record FC method in the Roast log (manual / auto / manual-no-audio) on every batch.
 
 ---
 
@@ -677,6 +726,10 @@ Translates density, moisture, processing method, and variety into directional cu
 
 **How to use this table:** Read every row whose Signal applies to the new coffee. Combine the Starting Hypotheses into V1 design. Signals can stack (e.g. high density + natural + heavy anaerobic) and their guidance compounds. When confidence is Low or Medium, widen the A/B/C spread on peak inlet to improve the chance that one of the three batches lands in a usable zone even if the anchor hypothesis is wrong.
 
+**Working hypothesis added (Low confidence, 1 lot - ECU-TD24-RANCHOTIO-TM-WASHED):** When density is unmeasured, altitude is a WEAK proxy for density adjustment direction. Batch 179 (1,300m Ecuadorian washed, density unmeasured) was anchored on #133 with a -2°C peak inlet hedge applied on the assumption that low altitude implies low density. Outcome was underdevelopment - FC 40-60s late, drop 3°C below target, weight loss 11.89% (below 13-15%). The lot wanted MORE energy, not less, indicating either (a) actual density was higher than altitude predicted, or (b) the 120°C hopper pre-load standard chosen to match #133 archive parameters cost more drying-phase time than the -2°C peak inlet hedge could compensate for.
+
+Operational implication for one-shot calibrations where density cannot be measured: do NOT preemptively apply downward energy adjustments based on altitude alone. Use the anchor profile at full energy and let FC timing tell you whether to compensate next session - except there is no next session for one-shots, so the safer default is FULL anchor energy + 125°C hopper pre-load (current standard) over the matched-archive 120°C hopper pre-load. The replication discipline of matching archive parameters costs roast quality on lots where the anchor is the closest match but not an exact match. Confidence will firm only with 2+ more one-shot data points.
+
 ## Varietal Aromatic Fingerprints
 
 Sudan Rume as a variety produces unusually delicate, high-compound aromatics that are shared across washed and natural processing. The flavor vocabulary took many sessions to establish correctly - this table is intended to short-circuit that process for future lots.
@@ -705,6 +758,38 @@ Universal finding: Day 7 pourover is the correct evaluation gate for all lot typ
 **Working hypothesis added (Low confidence, 1 lot - CGLE-GESHA-CLOUDS-2026):** On heavy anaerobic Gesha, the cupping table actively reversed the Day 7 pourover verdict. The cupping table preferred #163 (which fell apart under pushed extraction); the pourover identified #162 as the structurally cleanest cup. This is the strongest data point yet for the V4 principle that Day 7 pourover is the only evaluation gate. For this process type specifically, the cupping table protocol may amplify body and suppress structural defects in ways that mislead about brewing behavior. Treat as hypothesis pending 1-2 more heavy-anaerobic-Gesha lots before promoting to a confirmed pattern.
 
 **xbloom evaluation gate can produce false-positive underdevelopment signals on anaerobic naturals (Low confidence - single lot, working hypothesis):** COS-HIG-BOR-2026 V1 Batch #158 (v1b) showed a lactic note in xbloom aroma that triggered an underdevelopment diagnosis. Real pourover at Balanced Intensity (Orea Glass + Sibarist FAST Flat, 1:16, 92°C, EG-1 6.5) cleanly resolved the lactic note - it was an extraction artifact at the xbloom recipe (1:17.5/94°C), not a roast defect. This is the Brew-Reveals-Roast Principle applying in the inverse direction: evaluation gate flagging false defects on coffees that need different extraction strategy. Operational implication: for heavy-anaerobic / co-ferment / anaerobic-natural lots, the optimized brew session should be elevated from "after winner identified" to "always run on top 2 candidates before declaring underdevelopment." Watch for repeat pattern on Mandela XO, Sudan Rume Natural future experiments, and other heavy-ferment lots before promoting from hypothesis.
+
+**v1c profile may not be cleanly reproducible at identical inlet curve (Low confidence - single observation):** COS-HIG-BOR-2026 v2a (#164) was designed as a controlled replication of v1c (#159) at 251°C peak inlet, identical fan curve, same hopper pre-load (125°C), same charge temp protocol. Result: v2a produced AUDIBLE FC at 4:18/209.4°C; v1c produced SILENT FC at drop 208°C. v2a dropped at 210.9°C (FC + 1.5°C); v1c dropped at 208°C (post-silent-FC). Despite identical inlet/fan curves, the two roasts produced structurally different events. Possible explanations: (1) ambient/session-state factors not currently controlled (room temp, humidity, machine warm-up history), (2) subtle BBP variation, (3) drum thermal mass state, (4) genuine random variation in silent-FC bean structure. Watch for repeat pattern on V3 / next-lot replication attempts before promoting from hypothesis.
+
+**Audible FC vs. peak inlet on heavy anaerobic naturals (Low confidence - single coffee, single session):** On COS-HIG-BOR-2026 V2 batches 164/165/166 (peak inlet 251 / 253 / 255°C, identical fan curve), audible FC was unlocked at 251 and 253°C peak (v2a, v2b) but suppressed again at 255°C peak (v2c). All V1 batches (243 / 247 / 251°C peak) were silent. Hypothesis: audible FC requires (a) sufficient energy to push the bean through the FC structural threshold AND (b) sufficient time at FC for bubble propagation - too little energy -> silent (V1 pattern), too much energy -> compressed time-at-FC suppresses audibility (v2c pattern). 251-253°C peak inlet sits in a window where both conditions are met. Watch for similar non-monotonic FC-audibility patterns on other heavy-anaerobic / extended-fermentation coffees.
+
+**Working hypothesis added (Low confidence, 1 lot - CGLE-GESHA-CLOUDS-2026 V2 session):** On coffees with documented silent-FC risk (heavy anaerobic processing, in this lot specifically Gesha + 84hr in-cherry anaerobic), the Roest profile end condition should be set to BEAN TEMP at the target drop temp (e.g. 207°C), NOT dev time. Dev-time end conditions assume an FC mark exists to count from; on silent-FC coffees there is no FC mark, so dev-time fires on whatever timer value was set, often well past the target drop temp. CGLE-GESHA-CLOUDS-2026 V2 demonstrated this: v2b/v2c both ran with silent FC and drops at 208.0°C / 209.9°C (the latter a 1.9°C ceiling breach identical to v1c) because the 0:50 dev-time safety net couldn't fire until the timer expired. v2a (audible FC) did not have this problem - drop fired at 207.2°C as designed. Implication: bean-temp end condition is the safer default for ALL heavy-anaerobic experiments going forward; dev-time should only be used as a true safety-net fallback layered on top of bean-temp, not as the primary trigger. Treat as hypothesis pending 1-2 more heavy-anaerobic experiments before promoting to confirmed pattern.
+
+## FC-Temp Architectural Constraint on Naturals - Working Hypothesis
+
+**Working hypothesis (Medium confidence, 2 lots - CGLE-SRUME-NATURAL-2026 + BRA-FAZENDAUM-WUSHWUSH-NAT-2026):** On natural-process coffees in counterflow, FC temperature appears anchored to 204-206°C across a wide range of peak inlet variation (242-251°C tested), regardless of cultivar, density, moisture, or terroir. Peak inlet variation pulls FC TIME earlier when raised but does NOT pull FC TEMP lower. The result: drop ceiling discipline forces dev floor failure (drop fires immediately after FC), or dev requirement forces drop ceiling breach.
+
+Evidence:
+- CGLE-SRUME-NATURAL-2026 V2 (242-248°C peak): FC temps 204-206°C across all three batches, dev compressed to 14-40s.
+- BRA-FAZENDAUM-WUSHWUSH-NAT-2026 V1 (245-251°C peak): FC temps 204.7-205.6°C across all three batches, dev 23-42s. Replicates exact failure pattern on different cultivar (Wush Wush vs Sudan Rume), different terroir (Mantiqueira/Sul de Minas vs Western Andean Cordillera), different density (809 vs 791), different moisture (9.10% vs 10.30%), different drying (dark-room vs standard).
+
+If this pattern confirms across a 3rd natural lot, the architectural fix is to abandon the peak-inlet-as-primary-V1-variable approach for naturals and design V1 around the FC-temp ceiling directly: either (a) push FC ARRIVAL to 200-202°C via early-ramp restructuring, or (b) switch end-condition to bean-temp like Mandela XO and accept FC at ~205°C as a measurement artifact, or (c) treat the SR Natural V3/V4 low-energy slow-bake as the architectural template for naturals generally, not as a SR-Natural-flavor-specific approach. Promote from hypothesis to confirmed pattern after a third natural lot exhibits the same FC-temp anchoring.
+
+## Session-Position Acceleration vs Drop Ceiling on High-Peak Third Batch (working hypothesis - 1 lot, Low confidence)
+
+Observed on Bukure Natural Lot 21 V1 (batch 178, third roast of session): peak inlet +4°C above v1b (248°C vs 244°C) combined with third-roast session-position acceleration produced FC 13s earlier and 1.7°C hotter than v1b on identical-shape profile. Bean temp climbed past the 207°C drop ceiling between dev-time check and operator response, drop fired at 209.0°C.
+
+Working hypothesis: when V1 spread includes a high-peak batch run third in session, the cumulative effect of session-position acceleration + the higher inlet pushes drop-trigger reaction-time below what manual drop-on-temp can reliably handle.
+
+Potential mitigation (untested): set Roest end-condition to bean temp 207°C (NOT dev time) so drop fires automatically at ceiling regardless of clock or operator. Alternative: run high-peak batch in v1b's session position (second) and middle batch third, accepting that experiment-set design becomes more complex. Confidence will firm if the pattern repeats on the next V1 with a high-peak third batch.
+
+## Dev-Time Outweighs Peak Inlet for Agtron WB at Low-Energy Spread End (working hypothesis - 1 lot, Low confidence)
+
+Observed on Bukure Natural Lot 21 V1: Agtron WB ordered 75 (v1a, 240°C peak) / 82.5 (v1b, 244°C peak) / 81.4 (v1c, 248°C peak) - inverted from expected color-by-peak-inlet ordering. The 38s dev time on v1a (vs 27s on v1b, 23s on v1c) drove enough additional surface development to invert the relationship. Maillard% tells the same story (51.3% / 48.8% / 48.6%).
+
+Working hypothesis: at the low-energy end of a peak-inlet spread, post-FC dev time accumulates more surface-development effect than the +4°C peak inlet difference contributes - because lower peak produces gentler RoR into FC, which produces longer dev when drop is held at a fixed temp.
+
+Operational implication: do not read Agtron WB ordering as a peak-inlet proxy across a spread. WB-to-ground delta and Maillard% are more reliable structural signals than WB alone when dev-time varies meaningfully across a V1 set. Validate at 2+ more lots before promoting from hypothesis - this could be a Bukure-specific quirk or a general property of natural-process spreads with held-constant drop temp.
 
 ---
 
