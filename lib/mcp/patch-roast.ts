@@ -36,10 +36,22 @@ export const patchRoastInputSchema = {
   fan_curve: z.string().optional().nullable(),
   inlet_curve: z.string().optional().nullable(),
   roest_log_id: z.number().int().optional().nullable(),
+  // Phase 2 (#R57 / #R58 / #R61)
+  roest_notes: z.string().optional().nullable().describe(
+    'Pass-through Roest UI Notes. See push_roast.roest_notes - same semantics.',
+  ),
+  end_condition_type: z.enum(['bean_temp', 'dev_time', 'manual']).optional().nullable().describe(
+    'Drop trigger as set on the Roest profile. See push_roast.end_condition_type.',
+  ),
+  end_condition_target: z.number().optional().nullable(),
+  fc_total_cracks: z.number().int().min(0).optional().nullable(),
   what_worked: z.string().optional().nullable(),
   what_didnt: z.string().optional().nullable(),
   what_to_change: z.string().optional().nullable(),
-  worth_repeating: z.boolean().optional().nullable(),
+  // Phase 2 (#R62) — tristate. Boolean accepted for back-compat (coerced).
+  worth_repeating: z.union([z.boolean(), z.enum(['yes', 'no', 'pending'])]).optional().nullable().describe(
+    'Tristate: "yes" | "no" | "pending". See push_roast.worth_repeating - same semantics.',
+  ),
   is_reference: z.boolean().optional().nullable(),
 }
 

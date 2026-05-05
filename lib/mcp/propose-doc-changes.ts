@@ -1,8 +1,65 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
-import { isKnownDoc, listTaxonomyAxes, readDocSection, type TaxonomyAxis } from '@/lib/mcp/docs'
+import {
+  isKnownDoc,
+  listDocSections,
+  listTaxonomyAxes,
+  readDocSection,
+  type TaxonomyAxis,
+} from '@/lib/mcp/docs'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+
+// Cheap fuzzy-match for anchor "did you mean" hints (#R50). Returns the
+// best candidate from the doc's sections list when the supplied anchor
+// doesn't resolve. Score = lowercase substring containment first, then
+// Levenshtein distance below a threshold relative to the input length.
+// Returns null when no candidate is good enough (avoids noisy hints on
+// totally-unrelated input).
+function levenshtein(a: string, b: string): number {
+  if (a === b) return 0
+  if (!a.length) return b.length
+  if (!b.length) return a.length
+  const prev = new Array<number>(b.length + 1)
+  const curr = new Array<number>(b.length + 1)
+  for (let j = 0; j <= b.length; j++) prev[j] = j
+  for (let i = 1; i <= a.length; i++) {
+    curr[0] = i
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1
+      curr[j] = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost)
+    }
+    for (let j = 0; j <= b.length; j++) prev[j] = curr[j]
+  }
+  return prev[b.length]
+}
+
+function findClosestAnchor(target: string, candidates: string[]): string | null {
+  if (!candidates.length) return null
+  const lower = target.toLowerCase()
+  // First pass: substring-contains either direction.
+  const containers = candidates.filter((c) => {
+    const cl = c.toLowerCase()
+    return cl.includes(lower) || lower.includes(cl)
+  })
+  if (containers.length === 1) return containers[0]
+  if (containers.length > 1) {
+    // Pick the shortest container; it's typically the most specific match.
+    return containers.sort((a, b) => a.length - b.length)[0]
+  }
+  // Second pass: Levenshtein. Threshold = 40% of the longer string's length,
+  // floor 3, cap 10. Conservative — avoids surfacing nonsense for typos
+  // that are too far off.
+  let best: { name: string; dist: number } | null = null
+  for (const c of candidates) {
+    const dist = levenshtein(lower, c.toLowerCase())
+    const threshold = Math.max(3, Math.min(10, Math.floor(Math.max(c.length, target.length) * 0.4)))
+    if (dist <= threshold && (!best || dist < best.dist)) {
+      best = { name: c, dist }
+    }
+  }
+  return best?.name ?? null
+}
 
 // propose_doc_changes — the polymorphic prose-edit Tool.
 //
@@ -84,6 +141,11 @@ export type CitationPreflight = {
   // For replace ops: did current_text match what's actually in the live doc?
   // null = not checked (no current_text supplied, or operation isn't replace).
   current_text_match: boolean | null
+  // Phase 2 (#R50). Populated only when anchor_resolved is false AND a fuzzy
+  // candidate scored above threshold. Saves one round-trip vs. having the
+  // caller list_doc_sections + manually pick. null = anchor resolved cleanly,
+  // or no good candidate exists.
+  closest_match: string | null
 }
 
 export type ProposeDocChangesResult =
@@ -198,12 +260,18 @@ export async function proposeDocChanges(
     const docUri = targetDocToUri(c.target_doc)
     let anchorResolved = false
     let currentTextMatch: boolean | null = null
+    let closestMatch: string | null = null
     if (docUri && isKnownDoc(docUri)) {
       try {
         const body = await readDocSection(docUri, c.section_anchor)
         anchorResolved = body !== null
         if (c.operation === 'replace' && c.current_text != null && body != null) {
           currentTextMatch = body.includes(c.current_text)
+        }
+        // Phase 2 (#R50): fuzzy "did you mean X" hint when anchor misses.
+        if (!anchorResolved) {
+          const anchors = await listDocSections(docUri)
+          closestMatch = findClosestAnchor(c.section_anchor, anchors)
         }
       } catch (err) {
         console.error(
@@ -219,6 +287,7 @@ export async function proposeDocChanges(
       operation: c.operation,
       anchor_resolved: anchorResolved,
       current_text_match: currentTextMatch,
+      closest_match: closestMatch,
     })
   }
 
@@ -295,7 +364,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
     {
       title: 'Propose Doc Changes',
       description:
-        'Propose / submit / save / log / archive a prose change to a brewing or roasting doc — the primary write path for living-reference markdown. Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. WORKFLOW: before drafting, call `read_doc_section(uri, anchor)` to fetch the live target so `current_text` (for replace ops) is verbatim from what\'s actually in the doc — project-uploaded copies often drift behind live, especially for fields with pending-but-unapplied edits. Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match against `## ` / `### ` headers). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal — the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor). Response includes a per-citation preflight echo (anchor_resolved + current_text_match) so stale anchors / drifted current_text surface immediately, not at arbiter time.',
+        'Propose / submit / save / log / archive a prose change to a brewing or roasting doc - the primary write path for living-reference markdown. EVERY citation requires section_anchor + operation + proposed_text + rationale (all four are required; the schema rejects missing fields). Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. WORKFLOW: before drafting, call `read_doc_section(uri, anchor)` to fetch the live target so `current_text` (for replace ops) is verbatim from what\'s actually in the doc - project-uploaded copies often drift behind live, especially for fields with pending-but-unapplied edits. Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match against `## ` / `### ` headers). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal - the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor). Response includes a per-citation preflight echo (anchor_resolved + current_text_match + closest_match hint when anchor doesn\'t resolve) so stale anchors / drifted current_text surface immediately, not at arbiter time.',
       inputSchema: proposeDocChangesInputSchema,
     },
     async (input) => {

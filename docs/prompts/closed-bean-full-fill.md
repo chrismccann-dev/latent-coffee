@@ -138,13 +138,31 @@ read_doc_section(uri="docs://roasting.md", anchor="<Section Name>"). If
 anchor doesn't resolve, list_doc_sections(uri="docs://roasting.md").
 section_anchor case-sensitive, no leading #.
 
-- Active Lots: REPLACE entry (move out).
-- Recently Closed Lots: APPEND close-out summary.
+Routing decision tree - pick the section that matches the SHAPE of the
+insight, not just the topic:
+
+- Active Lots `### LOT-CODE - Description` sub-section: REMOVE the closed
+  lot's block (use a `replace` op with `proposed_text: ""` against the
+  full sub-section body). Each lot has its own `### ` anchor under Active
+  Lots - target the lot anchor, not the parent `Active Lots` section.
+- Recently Closed Lots: APPEND close-out summary row to the table + link
+  to the new archive subdoc section.
+- For PROTOCOL-LEVEL insights confirmed by close-out - e.g. "use bean-temp
+  end conditions on silent-FC coffees", "anaerobic naturals tolerate
+  drop ceilings 1°C above the Sudan-Rume-Washed-derived 207°C", "audibility
+  count is the diagnostic primary on silent-FC lots": route to the
+  appropriate workflow / protocol section (FC Marking Protocol, Drop Temp
+  as the Primary Drop Signal, Between Batch Protocol). DO NOT park
+  protocol-level insights in Cross-Coffee Insight Layer just because the
+  lot's state is changing - protocol changes belong in the protocol
+  sections so future onboarding reads them. REPLACE the relevant paragraph
+  when the new insight contradicts; APPEND when additive.
 - Varietal Aromatic Fingerprints: APPEND or REPLACE if variety already had
   a placeholder.
 - Reference Brew Recipes by Lot: APPEND optimized recipe.
 - FC Floor & Ceiling: APPEND if new floor/ceiling confirmed.
-- Cross-Coffee Insight Layer: APPEND if new generalizable pattern.
+- Cross-Coffee Insight Layer: APPEND if new generalizable cross-COFFEE
+  pattern (NOT protocol-level - see above).
 - Rest Behavior Patterns: APPEND if new rest-curve insight.
 - Green Spec to Starting Hypothesis: APPEND if new green-spec rule.
 

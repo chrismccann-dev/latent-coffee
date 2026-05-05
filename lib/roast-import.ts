@@ -356,11 +356,17 @@ export interface RoastPayload {
   fan_curve?: string | null
   inlet_curve?: string | null
   roest_log_id?: number | null
-  // Prose (Chris-authored)
+  // Phase 2 additions (#R57 / #R58 / #R61)
+  roest_notes?: string | null
+  end_condition_type?: 'bean_temp' | 'dev_time' | 'manual' | null
+  end_condition_target?: number | null
+  fc_total_cracks?: number | null
+  // Prose (Chris-authored). worth_repeating accepts boolean for back-compat;
+  // coerced to 'yes'/'no'/'pending' tristate on write per migration 044.
   what_worked?: string | null
   what_didnt?: string | null
   what_to_change?: string | null
-  worth_repeating?: boolean | null
+  worth_repeating?: boolean | 'yes' | 'no' | 'pending' | null
   is_reference?: boolean | null
 }
 
@@ -370,8 +376,23 @@ export type PersistRoastResult =
       // batch_id) row was returned. Mirrors persistGreenBean / persistExperiment
       // / persistRoastLearnings shape.
       created: boolean
+      // Soft-issue signals from the write path. Currently surfaces #R66 orphan
+      // reconciliation hint (roest_log_id supplied + parent green_bean has NULL
+      // roest_inventory_id). Empty by default.
+      warnings: string[]
     })
   | PersistFail
+
+// Coerce worth_repeating boolean → tristate text per migration 044. Pass-through
+// for already-canonical strings; null stays null.
+function coerceWorthRepeating(
+  v: boolean | 'yes' | 'no' | 'pending' | null | undefined,
+): 'yes' | 'no' | 'pending' | null {
+  if (v == null) return null
+  if (v === true) return 'yes'
+  if (v === false) return 'no'
+  return v
+}
 
 export function validateRoastPayload(p: RoastPayload): ValidationResult {
   const errors: string[] = []
@@ -398,6 +419,8 @@ export async function persistRoast(
   // the existing roast_id with `created: false` WITHOUT updating fields. If
   // the caller wants to update prose / curves on an existing batch, they
   // should use the app /add or /edit UI (or a future patch_roast Tool).
+  const warnings: string[] = []
+
   const { data: existing, error: lookupErr } = await supabase
     .from('roasts')
     .select('id')
@@ -408,7 +431,28 @@ export async function persistRoast(
   if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
 
   if (existing) {
-    return { ok: true, roast_id: existing.id as string, created: false }
+    return { ok: true, roast_id: existing.id as string, created: false, warnings }
+  }
+
+  // Phase 2 #R66 — orphan reconciliation hint. When the new roast carries a
+  // roest_log_id but the parent green_bean has no roest_inventory_id, the FK
+  // is silently disconnected. Bean 4 case: bean was pushed before Roest had
+  // ingested it; the reconciliation later required a manual patch_green_bean.
+  // We don't auto-mutate green_beans from a roast write (read-tool semantics)
+  // but we surface the gap so the caller can patch_green_bean to close it.
+  if (payload.roest_log_id != null) {
+    const { data: parentBean, error: parentErr } = await supabase
+      .from('green_beans')
+      .select('roest_inventory_id')
+      .eq('user_id', userId)
+      .eq('id', payload.green_bean_id)
+      .maybeSingle()
+    if (!parentErr && parentBean && parentBean.roest_inventory_id == null) {
+      warnings.push(
+        `green_bean ${payload.green_bean_id} has roest_inventory_id=NULL but this roast carries roest_log_id=${payload.roest_log_id}. ` +
+          'Consider patch_green_bean({green_bean_id, roest_inventory_id: <id>}) to backfill the FK so future pull_roest_log calls map cleanly.',
+      )
+    }
   }
 
   const { data, error } = await supabase
@@ -442,10 +486,15 @@ export async function persistRoast(
       fan_curve: payload.fan_curve ?? null,
       inlet_curve: payload.inlet_curve ?? null,
       roest_log_id: payload.roest_log_id ?? null,
+      // Phase 2 additions (#R57 / #R58 / #R61 / #R62)
+      roest_notes: payload.roest_notes ?? null,
+      end_condition_type: payload.end_condition_type ?? null,
+      end_condition_target: payload.end_condition_target ?? null,
+      fc_total_cracks: payload.fc_total_cracks ?? null,
       what_worked: payload.what_worked ?? null,
       what_didnt: payload.what_didnt ?? null,
       what_to_change: payload.what_to_change ?? null,
-      worth_repeating: payload.worth_repeating ?? null,
+      worth_repeating: coerceWorthRepeating(payload.worth_repeating),
       is_reference: payload.is_reference ?? false,
     })
     .select('id')
@@ -453,7 +502,7 @@ export async function persistRoast(
   if (error || !data) {
     return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
   }
-  return { ok: true, roast_id: data.id as string, created: true }
+  return { ok: true, roast_id: data.id as string, created: true, warnings }
 }
 
 // ---------------------------------------------------------------------------
@@ -930,6 +979,8 @@ const ROAST_PATCH_FIELDS = [
   'charge_temp', 'fc_temp', 'drop_temp', 'dev_time_s', 'dev_ratio',
   'roast_profile_name', 'tp_time', 'tp_temp', 'yellowing_temp', 'hopper_load_temp',
   'fan_curve', 'inlet_curve', 'roest_log_id',
+  // Phase 2 (#R57 / #R58 / #R61)
+  'roest_notes', 'end_condition_type', 'end_condition_target', 'fc_total_cracks',
   'what_worked', 'what_didnt', 'what_to_change', 'worth_repeating', 'is_reference',
 ] as const
 
@@ -954,6 +1005,14 @@ export async function patchRoast(
   }
 
   const patch = buildPatchObject(payload, ROAST_PATCH_FIELDS)
+  // Phase 2 (#R62) — coerce worth_repeating boolean → tristate text. Caller may
+  // pass true/false from pre-migration-044 codepaths; the column check
+  // constraint rejects boolean now.
+  if ('worth_repeating' in patch) {
+    patch.worth_repeating = coerceWorthRepeating(
+      patch.worth_repeating as boolean | 'yes' | 'no' | 'pending' | null,
+    )
+  }
   if (Object.keys(patch).length === 0) {
     return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
   }

@@ -133,6 +133,31 @@ export type CanonicalAxis =
   | 'extraction-strategies'
   | 'modifiers'
 
+// Phase 2 (#R38) — alias map for the dual-namespace gotcha: docs/taxonomies/
+// uses the user-facing words (regions, varieties), canonicals:// uses the
+// data-model words (terroirs, cultivars). BREWING.md and roasting prompts
+// have been working around this for months. The alias resolves both ways:
+// `read_canonical(axis: "regions")` → terroirs, `read_canonical(axis:
+// "varieties")` → cultivars. The 12 canonical axis names remain authoritative
+// for response payloads (the resolved axis is echoed back as `axis`).
+export const CANONICAL_AXIS_ALIASES: Record<string, CanonicalAxis> = {
+  regions: 'terroirs',
+  varieties: 'cultivars',
+}
+
+// All input names accepted by read_canonical / canonicals:// — the 12
+// canonical axes plus the 2 aliases above.
+export function listAcceptedCanonicalAxisNames(): string[] {
+  return [...CANONICAL_AXES.map((m) => m.axis), ...Object.keys(CANONICAL_AXIS_ALIASES)]
+}
+
+export function resolveCanonicalAxis(input: string): CanonicalAxis | null {
+  if ((CANONICAL_AXES as ReadonlyArray<{ axis: string }>).some((m) => m.axis === input)) {
+    return input as CanonicalAxis
+  }
+  return CANONICAL_AXIS_ALIASES[input] ?? null
+}
+
 export const CANONICAL_AXES: { axis: CanonicalAxis; title: string; description: string }[] = [
   { axis: 'cultivars', title: 'Cultivars', description: '63 canonical cultivars + 48 aliases. Genetic family + lineage hierarchy. Strict — adopt aliases, don’t add net-new bases without registry edit.' },
   { axis: 'terroirs', title: 'Terroirs', description: '121 macro terroirs across 38 countries + 12 structural aliases. Country + macro_terroir is the canonical compound key; meso/micro are pass-through free-text.' },
@@ -259,5 +284,9 @@ const PAYLOAD_CACHE: Record<CanonicalAxis, CanonicalPayload> = Object.fromEntrie
 ) as Record<CanonicalAxis, CanonicalPayload>
 
 export function getCanonicalPayload(axis: string): CanonicalPayload | null {
-  return (PAYLOAD_CACHE as Record<string, CanonicalPayload | undefined>)[axis] ?? null
+  // Phase 2 (#R38) — accept both canonical axis names and the docs:// aliases
+  // (regions → terroirs, varieties → cultivars).
+  const resolved = resolveCanonicalAxis(axis)
+  if (!resolved) return null
+  return PAYLOAD_CACHE[resolved] ?? null
 }

@@ -410,7 +410,13 @@ When running experiments across multiple lots in parallel:
 
 ## Active Lots
 
-**CGLE-SRUME-NATURAL-2026 - Sudan Rume Natural**
+Per-lot state lives under the lot-id headers below — `propose_doc_changes`
+citations should target one lot block (`### LOT-CODE - Description`), not the
+whole `## Active Lots` section. One-shot calibration lots that don't fit
+the V1/V2/V3 framing live in the sibling [One-Shot Calibrations in Process](#one-shot-calibrations-in-process)
+section.
+
+### CGLE-SRUME-NATURAL-2026 - Sudan Rume Natural
 
 - Status: Active - V1, V2, V3 complete. V4 not yet executed.
 - V3 batches 152/153/154(discarded)/155. Current best expression: Batch 152 - confirmed at Day 7 pourover cupping and real pourover (April Glass, 92°C, EG-1 6.3, 15g/255g). Sweet, tart, blueberry, lemongrass, ginger, cardamom spice, brown tea - blended and integrated. Sichuan peppercorn quality present as pleasant texture. Sweetness leads hot, lemongrass/ginger emerges cool.
@@ -419,7 +425,7 @@ When running experiments across multiple lots in parallel:
 - FC is ambiguous/inaudible on this coffee (confirmed across V1-V3). Bean temp end condition is the correct drop management approach, consistent with Mandela XO protocol.
 - V4 hypothesis: replicate Batch 152's thermal history intentionally. Low peak (238-242°C), hard post-peak cliff, bean temp end condition at 204-205°C, accept total roast time 5:30-6:00. Vary peak inlet across three batches (238/240/242°C) holding cliff shape constant. Agtron WB target 74-80. Drop ceiling framework retired - replaced by bean temp end condition.
 
-**CGLE-GESHA-CLOUDS-2026 - Gesha Clouds (Forest Coffee, Milton Monroy, Tolima)**
+### CGLE-GESHA-CLOUDS-2026 - Gesha Clouds (Forest Coffee, Milton Monroy, Tolima)
 
 - Status: Active - V1 complete, V2 hypothesis drafted but not yet executed; brewing iteration on V1 winner paused mid-stream
 - V1 batches 161/162/163 - peak inlet variation (242 / 247 / 252°C). #161 within drop ceiling but Maillard 53.0%; #162 ceiling-tight at 208.0°C, dev 18s, Maillard 51.7%, Agtron WB 88.7; #163 BREACHED ceiling at 209.9°C (held deliberately to extend dev), Agtron WB 91.3.
@@ -430,7 +436,7 @@ When running experiments across multiple lots in parallel:
 - V2 hypothesis (paused pending decision on whether brewing iteration alone resolves the lot): hold v1b inlet structure (peak 247°C); soften post-peak decline by raising 04:00 inlet from 240 -> ~244°C to extend dev to 35-45s without compressing Maillard further. Variable: post-peak decline steepness, not Maillard length and not peak inlet.
 - Open question: does pushed pourover iteration on #162 (5.9 grind, 93°C, 1:15, evaluate cool 50-45°C) close the lot at V1, or do the structural deficits at the brewing ceiling require V2?
 
-**COS-HIG-BOR-2026 - Costa Rica Anaerobic Dry Process Higuito**
+### COS-HIG-BOR-2026 - Costa Rica Anaerobic Dry Process Higuito
 
 - Status: Active - V1 complete, V2 not yet executed
 - V1 batches 157/158/159 - silent crack confirmed across all three (heavy anaerobic Green Spec table prediction matched). All drops 207-208°C, total times 4:15-5:07. Session-position effect small under thermal reset protocol (TP band 79.5-81.3°C - confirms V2 onboarding protocol's no-compensation default)
@@ -440,6 +446,19 @@ When running experiments across multiple lots in parallel:
 - Drop ceiling for this coffee is at least 208°C, not the Sudan Rume Washed-derived 207°C - v1c at 208°C produced the most integrated cup, not overdevelopment. V2 should formalize 208°C as the ceiling.
 - xbloom evaluation gate produced FALSE-POSITIVE underdevelopment signal on v1b (lactic note in aroma) that the real pourover at Balanced Intensity (Orea Glass + Sibarist FAST Flat, 1:16, 92°C, EG-1 6.5) cleanly resolved. The Brew-Reveals-Roast Principle applies in the inverse direction on anaerobic naturals - evaluation recipe can flag false defects.
 - V2 hypothesis: anchor on v1c (251°C peak) and probe headroom upward - test 253°C and 255°C peak with drop ceiling held at 208°C. Push total roast time toward 4:30-5:00 by extending post-peak decline. Continue fan curve 80->68->63->70->73%. Target tighter delta (<=2 points) at higher peak.
+
+## One-Shot Calibrations in Process
+
+One-shot calibration lots have a different shape than the V1/V2/V3 iteration
+arc - they don't carry a "next-session hypothesis" because the lot is being
+roasted to answer a single point question (machine calibration, single-bean
+sanity check, bean-system comparison test). When a one-shot is in process,
+add a `### LOT-CODE - Description` block here with: status (in-process /
+awaiting cupping), single-batch parameters, and the specific question
+the calibration was built to answer. On close-out, move to Recently Closed
+Lots like any other lot.
+
+(Empty as of 2026-05-05.)
 
 ## Recently Closed Lots
 

@@ -30,8 +30,8 @@ The Latent Coffee app validates every field on the resolved brew (Step 4) agains
 
 | Field on the resolved brew | `read_canonical` axis | Notes |
 |---|---|---|
-| Country + Macro Terroir | `terroirs` | Internal axis name; `docs://taxonomies/regions.md` is the doc-path equivalent for prose. |
-| Cultivar | `cultivars` | Internal axis name; `docs://taxonomies/varieties.md` is the doc-path equivalent. |
+| Country + Macro Terroir | `terroirs` | `regions` is also accepted as an alias (resolves to `terroirs`); `docs://taxonomies/regions.md` is the doc-path equivalent for prose. |
+| Cultivar | `cultivars` | `varieties` is also accepted as an alias (resolves to `cultivars`); `docs://taxonomies/varieties.md` is the doc-path equivalent. |
 | Base Process + fermentation / drying / intervention / experimental modifiers + decaf + signature | `processes` | |
 | Roaster | `roasters` | |
 | Producer | `producers` | |
