@@ -130,6 +130,7 @@ export const TERROIRS: readonly TerroirEntry[] = [
   { country: 'Philippines', admin_region: 'Benguet / Ifugao', macro_terroir: 'Cordillera Highlands' },
   { country: 'Philippines', admin_region: 'Bukidnon / Davao', macro_terroir: 'Mindanao Highlands' },
   { country: 'Rwanda', admin_region: 'Eastern Province', macro_terroir: 'Eastern Low Highlands' },
+  { country: 'Rwanda', admin_region: 'Northern Province', macro_terroir: 'Central Plateau Highlands' },
   { country: 'Rwanda', admin_region: 'Southern Province', macro_terroir: 'Central Plateau Highlands' },
   { country: 'Rwanda', admin_region: 'Western Province', macro_terroir: 'Lake Kivu Highlands' },
   { country: 'Taiwan', admin_region: 'Chiayi', macro_terroir: 'Alishan Belt' },

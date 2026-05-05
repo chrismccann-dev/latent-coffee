@@ -2750,8 +2750,8 @@ Lower elevation and warmer climate reduce acidity and increase body
 
 ### Central Plateau Highlands
 
-**Country:** Rwanda  **Admin Regions it overlaps:** Southern Province
-**Typical Meso Terroirs (reference only; not canonical):** Huye, Nyanza
+**Country:** Rwanda  **Admin Regions it overlaps:** Southern Province / Northern Province
+**Typical Meso Terroirs (reference only; not canonical):** Huye, Nyanza, Gicumbi (Bukure)
 
 #### Context
 Interior plateau system with slightly lower elevation and reduced lake influence
