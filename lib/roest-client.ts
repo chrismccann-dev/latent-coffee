@@ -1,20 +1,24 @@
-// Roest API client (Sprint 2.5).
+// Roest API client (Sprint 2.5; write scope added Phase 1 of Roest write integration).
 //
 // Server-side OAuth2 client_credentials flow against api.roestcoffee.com (Django
 // REST framework + Django OAuth Toolkit). Mints a Bearer token via Basic auth
 // against /o/token/, caches in-memory for the token lifetime (typ. 36000s = 10h),
-// and exposes typed fetchers for the four endpoints we consume:
+// and exposes typed fetchers for the read endpoints we consume:
 // /logs/{id}/, /profiles/{id}/, /inventories/{id}/, /inventories/?customer=&search=
+// plus an `authedWrite` sibling for POST/PATCH/PUT against /profiles/ and
+// future /inventories/ writes.
 //
 // Plus a normalizer (`roestLogToPushRoastPayload`) that translates a Roest log
 // payload into our `push_roast` input shape.
 //
 // Why server-side only:
-// - Roest credentials are read-only (scope: 'read') but still must not be
-//   exposed to claude.ai. The MCP Tools (pull_roest_log, list_roest_inventory)
-//   call THIS module, never round-trip the secret to the caller.
-// - Vercel container memory is the cache lifetime. Cold start = 1 token mint;
-//   warm container = 1 mint per ~10h.
+// - Roest credentials mint scope `read write` but the secret must not be
+//   exposed to claude.ai. The MCP Tools (pull_roest_log, list_roest_inventory,
+//   push_roast_profile) call THIS module, never round-trip the secret to the
+//   caller.
+// - Vercel container memory is the cache lifetime. Cold start = 1 token mint
+//   + 1 customer-info fetch; warm container = 1 mint per ~10h, customer-info
+//   reused for the container lifetime.
 
 const ROEST_BASE = 'https://api.roestcoffee.com'
 
@@ -45,7 +49,12 @@ async function mintToken(): Promise<CachedToken> {
       Authorization: `Basic ${basic}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: 'grant_type=client_credentials',
+    // scope=read+write so a cached token can hit POST /profiles/ etc.
+    // Phase 1 of Roest write integration. The credential itself is provisioned
+    // for write; without the explicit scope param the issued token defaults to
+    // read-only and a write attempt 403s. Including it on every mint keeps the
+    // cache invariant: every token in tokenCache is read+write, no scope drift.
+    body: 'grant_type=client_credentials&scope=read+write',
   })
   if (!res.ok) {
     const text = await res.text().catch(() => '')
@@ -75,6 +84,55 @@ async function authedFetch<T>(path: string): Promise<T> {
     throw new Error(`Roest GET ${path} failed: ${res.status} ${text.slice(0, 200)}`)
   }
   return (await res.json()) as T
+}
+
+// Write sibling to authedFetch. Kept as a separate function rather than a
+// method param on authedFetch so that GET (idempotent, cached) and POST/PUT/PATCH
+// (state-changing) paths are visibly distinct at every call site.
+export async function authedWrite<TIn, TOut>(
+  method: 'POST' | 'PATCH' | 'PUT',
+  path: string,
+  body: TIn,
+): Promise<TOut> {
+  const token = await getToken()
+  const res = await fetch(`${ROEST_BASE}${path}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(`Roest ${method} ${path} failed: ${res.status} ${text.slice(0, 500)}`)
+  }
+  return (await res.json()) as TOut
+}
+
+// Customer info — needed two ways: as a numeric ID for the existing read
+// endpoints (?customer=2424 query param) and as a Roest API URL for write FK
+// fields (POST /profiles/ body customer: "https://api.roestcoffee.com/customers/2424/").
+// Cached at module level for the lifetime of the Vercel container — same as
+// the token cache. Replaces the previously hardcoded customer=2424.
+type CustomerInfo = { id: number; url: string }
+let customerInfoCache: CustomerInfo | null = null
+
+type RoestUserSelf = {
+  customers: { id: number; url: string }[]
+}
+
+export async function getRoestCustomerInfo(): Promise<CustomerInfo> {
+  if (customerInfoCache) return customerInfoCache
+  const data = await authedFetch<RoestUserSelf>('/users/self/')
+  const first = data.customers?.[0]
+  if (!first || typeof first.id !== 'number' || typeof first.url !== 'string') {
+    throw new Error(
+      'Roest /users/self/ returned no customers; cannot resolve customer URL for API calls.',
+    )
+  }
+  customerInfoCache = { id: first.id, url: first.url }
+  return customerInfoCache
 }
 
 // --- Roest types (subset; only fields we consume) ----------------------------
@@ -183,12 +241,14 @@ export function getRoestLog(log_id: number): Promise<RoestLog> {
   return authedFetch<RoestLog>(`/logs/${log_id}/`)
 }
 
-export function getRoestProfile(profile_id: number): Promise<RoestProfile> {
-  return authedFetch<RoestProfile>(`/profiles/${profile_id}/?customer=2424`)
+export async function getRoestProfile(profile_id: number): Promise<RoestProfile> {
+  const { id } = await getRoestCustomerInfo()
+  return authedFetch<RoestProfile>(`/profiles/${profile_id}/?customer=${id}`)
 }
 
-export function getRoestInventory(inventory_id: number): Promise<RoestInventory> {
-  return authedFetch<RoestInventory>(`/inventories/${inventory_id}/?customer=2424`)
+export async function getRoestInventory(inventory_id: number): Promise<RoestInventory> {
+  const { id } = await getRoestCustomerInfo()
+  return authedFetch<RoestInventory>(`/inventories/${inventory_id}/?customer=${id}`)
 }
 
 export type SearchInventoriesOpts = {
@@ -198,7 +258,8 @@ export type SearchInventoriesOpts = {
 }
 
 export async function searchRoestInventories(opts: SearchInventoriesOpts = {}): Promise<RoestInventory[]> {
-  const params = new URLSearchParams({ customer: '2424' })
+  const { id } = await getRoestCustomerInfo()
+  const params = new URLSearchParams({ customer: String(id) })
   if (opts.search) params.set('search', opts.search)
   if (typeof opts.archived === 'boolean') params.set('is_archived', String(opts.archived))
   if (opts.limit) params.set('limit', String(opts.limit))
@@ -369,20 +430,33 @@ export type NormalizedRoastPayload = {
   inference_hints: string[]
 }
 
-// Roest profile end_condition enum — sampled from /profiles/{id}/ payloads.
-// 1 appears as the bean-temp drop trigger across V4 lots; 2 appears as
-// dev-time triggers in some BBP-driven profiles; 0 appears on legacy /
-// hand-driven profiles. Treat unknown enums as 'manual' since that's the
-// safest fallback (no structured trigger inferred). The model can always
-// override end_condition_type explicitly if the inference is wrong.
+// Roest profile end_condition enum — corrected 2026-05-06 against the Roest UI
+// Profiles page dropdown (Chris's screenshot). The dropdown order matches the
+// OpenAPI integer enum 1:1: 0=None / 1=Total time / 2=Dev time / 3=Dev time %
+// / 4=Bean temp. Prior version of this decoder had `1 → bean_temp` from a
+// stale reading; corrected as part of the Phase 1 push_roast_profile cross-
+// system audit. Surface the integer + a hint when the trigger doesn't map to
+// our 3-bucket type so the caller can override explicitly.
 function mapEndConditionEnum(n: number | null | undefined): {
   type: 'bean_temp' | 'dev_time' | 'manual' | null
   hint: string | null
 } {
   if (n == null) return { type: null, hint: null }
-  if (n === 0) return { type: 'manual', hint: null }
-  if (n === 1) return { type: 'bean_temp', hint: null }
-  if (n === 2) return { type: 'dev_time', hint: null }
+  if (n === 0) return { type: 'manual', hint: null } // None
+  if (n === 4) return { type: 'bean_temp', hint: null } // Bean temp
+  if (n === 2) return { type: 'dev_time', hint: null } // Dev time
+  if (n === 1) {
+    return {
+      type: 'manual',
+      hint: 'Roest end_condition enum 1 = Total time target; mapped to manual since push_roast does not have a total_time bucket. Override end_condition_type explicitly if you want to record this as something else.',
+    }
+  }
+  if (n === 3) {
+    return {
+      type: 'dev_time',
+      hint: 'Roest end_condition enum 3 = Development time percentage (DTR); collapsed to dev_time bucket since push_roast does not distinguish. end_condition_target carries the percentage value.',
+    }
+  }
   return {
     type: 'manual',
     hint: `Unknown Roest end_condition enum ${n}; defaulted to 'manual'. Override end_condition_type explicitly if the trigger was bean_temp or dev_time.`,

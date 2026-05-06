@@ -13,6 +13,9 @@ import { registerPushRoastTool } from '@/lib/mcp/push-roast'
 import { registerPushCuppingTool } from '@/lib/mcp/push-cupping'
 import { registerPushExperimentTool } from '@/lib/mcp/push-experiment'
 import { registerPushRoastLearningsTool } from '@/lib/mcp/push-roast-learnings'
+import { registerPushRoastProfileTool } from '@/lib/mcp/push-roast-profile'
+import { registerPushInventoryTool } from '@/lib/mcp/push-inventory'
+import { registerPatchInventoryTool } from '@/lib/mcp/patch-inventory'
 import { registerPullRoestLogTool } from '@/lib/mcp/pull-roest-log'
 import { registerListRoestInventoryTool } from '@/lib/mcp/list-roest-inventory'
 import { registerListRoestLogsTool } from '@/lib/mcp/list-roest-logs'
@@ -57,6 +60,9 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerPushCuppingTool(server, auth)
   registerPushExperimentTool(server, auth)
   registerPushRoastLearningsTool(server, auth)
+  registerPushRoastProfileTool(server, auth)
+  registerPushInventoryTool(server, auth)
+  registerPatchInventoryTool(server, auth)
   registerPullRoestLogTool(server, auth)
   registerListRoestInventoryTool(server, auth)
   registerListRoestLogsTool(server, auth)
