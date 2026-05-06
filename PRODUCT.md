@@ -495,7 +495,7 @@ Scoped, sized, and ready-to-launch when timing is right. Not currently ranked in
 
 ### Workflow + sync
 
-- **Roest API write integration - Phase 2.** `push_inventory` + `patch_inventory` MCP Tools. Phase 1 (`push_roast_profile`) lives in Active Queue. Phase 2 lets claude.ai create / update inventory rows when net-new beans arrive (currently a manual Roest Connect step). Scope at [docs/features/roest-write-integration.md](docs/features/roest-write-integration.md). ~1 sprint after Phase 1 lands and battle-tests.
+- ~~**Roest API write integration - Phase 2.** `push_inventory` + `patch_inventory` MCP Tools.~~ **Promoted 2026-05-06** into the same sprint as Phase 1 — Chris flagged that bidirectional inventory sync matters for the new-bean onboarding loop now that writes flow both directions. All 3 Tools (`push_roast_profile` + `push_inventory` + `patch_inventory`) ship together. See `memory/project_roest_write_phase_1.md` for the bundled retro.
 
 - **Experiments + Cupping History rework** (Chris-flagged 2026-05-05: scoped-but-needs-brainstorm). Both `/green/[id]` sections need rethinking. Experiments: 6 schema fields render, 10 hidden - introduce a collapsible pattern or A/B/C/D side-by-side grid so `levels_tested` + `observed_outcome_a/b/c/d` surface. Cupping History: 27 rows flat is unreadable - group by batch (collapsible) or by rest-day phase (Day 3-5 cupping vs Day 7+ pourover). Plan-mode interpretive sprint, 1 sprint after brainstorm. Depends on a populated real bean for preview verification.
 
