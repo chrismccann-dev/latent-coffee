@@ -4,8 +4,11 @@ If you have feedback for Claude Code on either path, mention it.
 STEP 1 - push_brew. Treat fields as final, no confirmation. Validation
 errors aggregate in one response - fix all in one retry round. For canonical
 lookups call read_canonical(axis: "<name>"). For net-new roaster / producer /
-brewer / filter / grinder, set *_override: true. Cultivars and terroirs are
-strict (no override). Capture the brew_id from the success response.
+brewer / filter / grinder, set *_override: true (the override path also queues
+the value for canonical promotion via taxonomy_overrides_queue; push_brew echoes
+queued_for_taxonomy_review[] in the response). Cultivars and terroirs are
+strict (no override) — net-new requires a registry edit or a propose_canonical_addition
+call. Capture the brew_id from the success response.
 
 STEP 2 - propose_doc_changes for lessons from this session. source =
 {kind: "brew", id: "<brew_id from STEP 1>"}. BEFORE drafting any citation,

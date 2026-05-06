@@ -26,6 +26,9 @@ import { registerPatchRoastTool } from '@/lib/mcp/patch-roast'
 import { registerPatchCuppingTool } from '@/lib/mcp/patch-cupping'
 import { registerPatchExperimentTool } from '@/lib/mcp/patch-experiment'
 import { registerPatchRoastLearningsTool } from '@/lib/mcp/patch-roast-learnings'
+import { registerListTaxonomyQueueTool } from '@/lib/mcp/list-taxonomy-queue'
+import { registerProposeCanonicalAdditionTool } from '@/lib/mcp/propose-canonical-addition'
+import { registerResolveQueueEntryTool } from '@/lib/mcp/resolve-queue-entry'
 import {
   assertToolDiscoverability,
   type ToolDescriptor,
@@ -67,6 +70,9 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerPatchCuppingTool(server, auth)
   registerPatchExperimentTool(server, auth)
   registerPatchRoastLearningsTool(server, auth)
+  registerListTaxonomyQueueTool(server, auth)
+  registerProposeCanonicalAdditionTool(server, auth)
+  registerResolveQueueEntryTool(server, auth)
 
   // Discoverability guard (MCP feedback batch 4). Dev-only — fires fast on the
   // first MCP request after a tool description regresses into the "Inserts a

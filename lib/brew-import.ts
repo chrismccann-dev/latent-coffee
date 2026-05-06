@@ -59,6 +59,10 @@ import { PRODUCER_LOOKUP } from './producer-registry'
 import { BREWER_LOOKUP } from './brewer-registry'
 import { FILTER_LOOKUP } from './filter-registry'
 import type { CanonicalLookup } from './canonical-registry'
+import {
+  fireQueueInserts,
+  type QueuedEntry,
+} from './taxonomy-queue'
 
 // ---------------------------------------------------------------------------
 // Canonical registries
@@ -302,8 +306,12 @@ export function seedStructuredGrind(
 // lib/<axis>-registry.ts and the brews row stores the canonical name as
 // text. `allowOverride` passes a non-resolvable string through verbatim
 // for legitimately new entries before they land in the registry.
+//
+// `needsQueue` is set to true when allowOverride is taken AND the value
+// didn't resolve canonically. Phase 3 — persistBrew/persistGreenBean read
+// this flag post-insert to fire taxonomy_overrides_queue rows.
 export type CanonicalTextResult =
-  | { ok: true; canonicalName: string | null; resolved: boolean }
+  | { ok: true; canonicalName: string | null; resolved: boolean; needsQueue: boolean }
   | { ok: false; error: string; status: 400 }
 
 function validateCanonicalText(
@@ -313,10 +321,12 @@ function validateCanonicalText(
   opts: { allowOverride?: boolean } = {},
 ): CanonicalTextResult {
   const trimmed = typeof raw === 'string' ? raw.trim() : ''
-  if (!trimmed) return { ok: true, canonicalName: null, resolved: false }
+  if (!trimmed) return { ok: true, canonicalName: null, resolved: false, needsQueue: false }
   const canonical = lookup.canonicalize(trimmed)
-  if (canonical) return { ok: true, canonicalName: canonical, resolved: true }
-  if (opts.allowOverride) return { ok: true, canonicalName: trimmed, resolved: false }
+  if (canonical) return { ok: true, canonicalName: canonical, resolved: true, needsQueue: false }
+  if (opts.allowOverride) {
+    return { ok: true, canonicalName: trimmed, resolved: false, needsQueue: true }
+  }
   return {
     ok: false,
     status: 400,
@@ -715,6 +725,7 @@ export type PersistResult =
       cultivarId: string
       createdTerroir: boolean
       createdCultivar: boolean
+      queuedForTaxonomyReview: QueuedEntry[]
     }
   | { ok: false; code: 'confirm_required'; newTerroir?: TerroirMatch; newCultivar?: CultivarMatch }
   | { ok: false; code: 'validation'; errors: string[] }
@@ -853,13 +864,22 @@ export async function persistBrew(
   }
   const composedGrind = composeGrind(structuredGrind) ?? payload.grind ?? null
 
-  const brewInsert: Partial<InsertBrew> = {
+  // Phase 3 — provenance columns. 'auto_created' when this push materialized
+  // the FK row for the first time; 'canonical' (default) when an existing row
+  // was returned. Surfaces in get_green_bean / future get_brew so claude.ai
+  // can flag "this row's terroir/cultivar was just minted" to the arbiter.
+  const brewInsert: Partial<InsertBrew> & {
+    terroir_provenance: 'canonical' | 'auto_created'
+    cultivar_provenance: 'canonical' | 'auto_created'
+  } = {
     user_id: userId,
     source: payload.source ?? 'purchased',
     green_bean_id: payload.green_bean_id ?? null,
     roast_id: payload.roast_id ?? null,
     terroir_id: terroirId,
     cultivar_id: cultivarId,
+    terroir_provenance: createdTerroir ? 'auto_created' : 'canonical',
+    cultivar_provenance: createdCultivar ? 'auto_created' : 'canonical',
     coffee_name: payload.coffee_name.trim(),
     roaster: roasterResult.canonicalName,
     producer: producerResult.canonicalName,
@@ -914,6 +934,21 @@ export async function persistBrew(
     return { ok: false, code: 'db_error', message: brewError?.message || 'brew insert failed' }
   }
 
+  // Phase 3 — Site A queue inserts. Fire AFTER the brew row lands so source_id
+  // points at a real row. Best-effort; failures log but don't fail the push.
+  const queuedForTaxonomyReview = await fireQueueInserts(
+    supabase,
+    userId,
+    [
+      { axis: 'roaster', raw_value: roasterResult.canonicalName, needsQueue: roasterResult.needsQueue },
+      { axis: 'producer', raw_value: producerResult.canonicalName, needsQueue: producerResult.needsQueue },
+      { axis: 'brewer', raw_value: brewerResult.canonicalName, needsQueue: brewerResult.needsQueue },
+      { axis: 'filter', raw_value: filterResult.canonicalName, needsQueue: filterResult.needsQueue },
+      { axis: 'grinder', raw_value: grinderResult.canonicalName, needsQueue: grinderResult.needsQueue },
+    ],
+    { kind: 'brew', id: brew.id },
+  )
+
   return {
     ok: true,
     brewId: brew.id,
@@ -921,6 +956,7 @@ export async function persistBrew(
     cultivarId,
     createdTerroir,
     createdCultivar,
+    queuedForTaxonomyReview,
   }
 }
 

@@ -82,11 +82,15 @@ export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContex
         }
         throw new Error(`Database error: ${result.message}`)
       }
+      // Phase 3 (#R47): queued_for_taxonomy_review echoes Site A queue inserts
+      // for the producer override path. Empty on existing-row hits and when
+      // producer resolves canonically.
       const out = {
         green_bean_id: result.green_bean_id,
         terroir_id: result.terroir_id,
         cultivar_id: result.cultivar_id,
         created: result.created,
+        queued_for_taxonomy_review: result.queued_for_taxonomy_review,
       }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],

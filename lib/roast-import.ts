@@ -22,6 +22,7 @@ import {
   type TerroirCandidate,
   type CultivarCandidate,
 } from '@/lib/brew-import'
+import { fireQueueInserts, type QueuedEntry } from '@/lib/taxonomy-queue'
 
 // ---------------------------------------------------------------------------
 // Shared types
@@ -87,6 +88,8 @@ export type PersistGreenBeanResult =
       // true on fresh INSERT, false when an existing (user_id, lot_id) row was
       // returned. Mirrors persistRoastLearnings + persistExperiment shape.
       created: boolean
+      // Phase 3 — Site A queue echoes for net-new producer_override values.
+      queued_for_taxonomy_review: QueuedEntry[]
     })
   | PersistFail
 
@@ -141,17 +144,20 @@ export async function persistGreenBean(
       terroir_id: (existing.terroir_id as string | null) ?? null,
       cultivar_id: (existing.cultivar_id as string | null) ?? null,
       created: false,
+      queued_for_taxonomy_review: [],
     }
   }
 
   // Producer canonicalization (text-only, allowOverride pattern same as brews)
   let canonicalProducer: string | null = null
+  let producerNeedsQueue = false
   if (payload.producer?.trim()) {
     const pr = findOrCreateProducer(payload.producer, {
       allowOverride: payload.producer_override === true,
     })
     if (!pr.ok) return { ok: false, code: 'validation', errors: [pr.error] }
     canonicalProducer = pr.canonicalName
+    producerNeedsQueue = pr.needsQueue
   }
 
   // Terroir + cultivar FK resolution (lazy find-or-create).
@@ -159,6 +165,8 @@ export async function persistGreenBean(
   // not the candidate object. findOrCreateCultivar takes the name string.
   let terroirId: string | null = null
   let cultivarId: string | null = null
+  let createdTerroir = false
+  let createdCultivar = false
 
   if (payload.terroir) {
     const tr = await findOrCreateTerroir(
@@ -176,6 +184,7 @@ export async function persistGreenBean(
         : { ok: false, code: 'db_error', message: tr.error }
     }
     terroirId = tr.id
+    createdTerroir = tr.created
   }
   if (payload.cultivar?.cultivar_name) {
     const cr = await findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name)
@@ -186,6 +195,7 @@ export async function persistGreenBean(
         : { ok: false, code: 'db_error', message: cr.error }
     }
     cultivarId = cr.id
+    createdCultivar = cr.created
   }
 
   const insert = {
@@ -213,6 +223,10 @@ export async function persistGreenBean(
     roest_inventory_id: payload.roest_inventory_id ?? null,
     terroir_id: terroirId,
     cultivar_id: cultivarId,
+    // Phase 3 — provenance flags. 'auto_created' when this push materialized
+    // the FK row. Surfaces in get_green_bean.
+    terroir_provenance: createdTerroir ? 'auto_created' : 'canonical',
+    cultivar_provenance: createdCultivar ? 'auto_created' : 'canonical',
   }
 
   const { data, error } = await supabase
@@ -223,12 +237,23 @@ export async function persistGreenBean(
   if (error || !data) {
     return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
   }
+
+  // Phase 3 — Site A queue inserts for producer_override:true on a value that
+  // didn't resolve canonically. Best-effort post-insert.
+  const queued = await fireQueueInserts(
+    supabase,
+    userId,
+    [{ axis: 'producer', raw_value: canonicalProducer, needsQueue: producerNeedsQueue }],
+    { kind: 'green_bean', id: data.id as string },
+  )
+
   return {
     ok: true,
     green_bean_id: data.id as string,
     terroir_id: terroirId,
     cultivar_id: cultivarId,
     created: true,
+    queued_for_taxonomy_review: queued,
   }
 }
 
@@ -267,6 +292,10 @@ export type GreenBeanRow = {
   roest_inventory_id: number | null
   terroir_id: string | null
   cultivar_id: string | null
+  // Phase 3 (migration 045): provenance + re-resolution timestamp on FK fields.
+  terroir_provenance: 'canonical' | 'auto_created'
+  cultivar_provenance: 'canonical' | 'auto_created'
+  canonicals_updated_at: string | null
   created_at: string
 }
 
@@ -292,7 +321,7 @@ export async function lookupGreenBean(
   let q = supabase
     .from('green_beans')
     .select(
-      'id, lot_id, name, producer, origin, region, variety, process, importer, seller, exporter, source_type, link, purchase_date, price_per_kg, quantity_g, moisture, density, elevation_m, producer_tasting_notes, additional_notes, roest_inventory_id, terroir_id, cultivar_id, created_at',
+      'id, lot_id, name, producer, origin, region, variety, process, importer, seller, exporter, source_type, link, purchase_date, price_per_kg, quantity_g, moisture, density, elevation_m, producer_tasting_notes, additional_notes, roest_inventory_id, terroir_id, cultivar_id, terroir_provenance, cultivar_provenance, canonicals_updated_at, created_at',
     )
     .eq('user_id', userId)
   if (filter.lot_id) q = q.eq('lot_id', filter.lot_id)

@@ -110,10 +110,19 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
         }
         throw new Error(`Database error: ${result.message}`)
       }
+      // Phase 3 (#R47): push_roast itself doesn't trigger queue inserts (the
+      // roasts table has no canonical text fields with override flags;
+      // canonicals live on the parent green_beans). Always-empty echo
+      // preserves response-shape symmetry with push_brew + push_green_bean.
       const out = {
         roast_id: result.roast_id,
         created: result.created,
         warnings: result.warnings,
+        queued_for_taxonomy_review: [] as Array<{
+          axis: string
+          raw_value: string
+          queue_id: string
+        }>,
       }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
