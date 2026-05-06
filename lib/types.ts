@@ -88,6 +88,16 @@ export interface GreenBean {
   density: string | null
   terroir_id: string | null
   cultivar_id: string | null
+  // Phase 3 (migration 045): canonical-vs-auto_created flag for FK rows.
+  // 'canonical' = lookup hit an existing row; 'auto_created' = this insert
+  // materialized the FK row. Forward-looking; historical rows default to
+  // 'canonical' (we don't retro-flag pre-Phase-3 auto-creates).
+  terroir_provenance: 'canonical' | 'auto_created'
+  cultivar_provenance: 'canonical' | 'auto_created'
+  // Bumped whenever terroir_id / cultivar_id changes via patch_green_bean
+  // or future canonical re-resolution. NULL on rows whose canonicals have
+  // not been re-resolved post-original-insert.
+  canonicals_updated_at: string | null
   created_at: string
   updated_at: string
   // Joined data
@@ -268,6 +278,9 @@ export interface Brew {
   process_category: string | null
   process_details: string | null
   what_i_learned: string | null
+  // Phase 3 (migration 045): canonical-vs-auto_created flag for FK rows.
+  terroir_provenance: 'canonical' | 'auto_created'
+  cultivar_provenance: 'canonical' | 'auto_created'
   created_at: string
   updated_at: string
   // Joined data

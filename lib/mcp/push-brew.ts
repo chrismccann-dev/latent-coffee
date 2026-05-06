@@ -318,6 +318,11 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
       const created_with_overrides = overridable
         .filter((key) => input[key] === true)
         .map((key) => key.replace(/_override$/, ''))
+      // Phase 3 (#R47): queued_for_taxonomy_review echoes the queue rows
+      // inserted post-brew-insert by Site A hooks. Empty array when no
+      // overrides were applied or every overridden value resolved canonically.
+      // Each entry: { axis, raw_value, queue_id }. Confirms the queue picked
+      // up the override without requiring a list_taxonomy_queue follow-up.
       const responsePayload = {
         brew_id: result.brewId,
         terroir_id: result.terroirId,
@@ -325,6 +330,7 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
         created_terroir: result.createdTerroir,
         created_cultivar: result.createdCultivar,
         created_with_overrides,
+        queued_for_taxonomy_review: result.queuedForTaxonomyReview,
         warnings: [] as string[],
       }
       return {

@@ -1,14 +1,14 @@
 # Doc Proposal Arbiter Playbook
 
-This file is the standalone playbook a Claude Code session loads when Chris says **"process pending doc proposals."** It's the "apply side" of the V2 bidirectional sync (Claude.ai writes proposals via the `propose_doc_changes` MCP Tool; Claude Code arbitrates and applies them to repo prose docs).
+This file is the standalone playbook a Claude Code session loads when Chris says **"process pending arbitration"** (or any of the aliases below). It covers two queues now — **prose proposals** in `doc_proposals` and **canonical promotions** in `taxonomy_overrides_queue` (Phase 3, migration 045). One Claude Code session walks both.
 
-If you're a future Claude session reading this for the first time: this is the same shape as how PRODUCT.md gets updated at the end of every sprint — Chris says "do the thing" and you read state, present diffs, get approval, edit files, commit, PR, merge. The doc_proposals table is the queue; this playbook is the procedure.
+If you're a future Claude session reading this for the first time: this is the same shape as how PRODUCT.md gets updated at the end of every sprint — Chris says "do the thing" and you read state, present diffs, get approval, edit files, commit, PR, merge. Two staging tables; one arbiter procedure.
 
 ---
 
 ## When to use
 
-**Trigger phrase:** "process pending doc proposals" (or anything functionally equivalent — "arbitrate", "apply pending docs", "review the proposal queue").
+**Trigger phrase:** "process pending arbitration" (or anything functionally equivalent — "process pending doc proposals", "arbitrate", "apply pending docs", "review the proposal queue", "review canonical proposals", "process pending taxonomy queue"). All trigger phrases route to the same playbook; the playbook checks BOTH tables.
 
 **Cadence:** Batched. Chris aggregates proposals across Claude.ai sessions and processes them in one Claude Code session. Don't expect to run this in real-time after a single proposal.
 
@@ -160,6 +160,120 @@ Once merged: Vercel auto-deploys (~30-60s). Claude.ai's next session pulls fresh
 
 ---
 
+## Taxonomy queue arbitration (Phase 3)
+
+`taxonomy_overrides_queue` (migration 045) is the canonical-side analog of `doc_proposals`. Same arbiter playbook, parallel substrate. claude.ai writes via push-tool override flags or `propose_canonical_addition`; the queue holds pending entries until Chris-as-arbiter walks them in a Claude Code session.
+
+The procedure is structurally identical to the prose-proposal flow above, with the doc_proposals reads + edits replaced by registry edits. Run AFTER (or interleaved with) the prose-proposal pass — both queues are walked in the same session.
+
+### T1. Read pending queue entries
+
+Use the `list_taxonomy_queue` MCP Tool (axis filter optional) — same auth context as the prose pass.
+
+```ts
+list_taxonomy_queue({ status: 'pending' })
+```
+
+Or, equivalently, via `execute_sql`:
+
+```sql
+SELECT id, axis, raw_value, submission_path, source_kind, source_id,
+       evidence, submitted_at
+FROM taxonomy_overrides_queue
+WHERE user_id = $CHRIS_USER_ID AND status = 'pending'
+ORDER BY axis, submitted_at;
+```
+
+If zero rows, surface to Chris and skip.
+
+### T2. Group by `axis`
+
+Each axis becomes one PR (one branch, one batch commit). Registry edits are per-file, so axis grouping aligns naturally with PR scope:
+
+| axis        | Registry file                    | Markdown file                          |
+|-------------|----------------------------------|----------------------------------------|
+| `producer`  | `lib/producer-registry.ts`       | `docs/taxonomies/producers.md`         |
+| `roaster`   | `lib/roaster-registry.ts`        | `docs/taxonomies/roasters.md`          |
+| `brewer`    | `lib/brewer-registry.ts`         | `docs/taxonomies/brewers.md`           |
+| `filter`    | `lib/filter-registry.ts`         | `docs/taxonomies/filters.md`           |
+| `grinder`   | `lib/grinder-registry.ts`        | `docs/taxonomies/grinders.md`          |
+| `terroir`   | `lib/terroir-registry.ts`        | `docs/taxonomies/regions.md`           |
+| `cultivar`  | `lib/cultivar-registry.ts`       | `docs/taxonomies/varieties.md`         |
+
+Small batches (≤2 axes) → one PR. Larger batches → one PR per axis.
+
+### T3. Per queue row: present to Chris
+
+Show:
+- The `raw_value` verbatim
+- The `axis` + `submission_path` (override_flag vs manual_propose)
+- The `source_kind` + `source_id` (link to the brew / green_bean / roast row that triggered it)
+- The `evidence` jsonb (URLs, prose, tier, country/macro for terroir)
+- The current canonical list for context (use `read_canonical(axis)` Tool — quicker than reading the full `.md`)
+
+Ask Chris one of four resolutions:
+
+- **promote** — net-new canonical worth adding to the registry. The arbiter edits the registry file + markdown + records `canonical_target = <new canonical>`.
+- **alias** — same canonical as an existing entry under a different name. The arbiter adds an alias map entry to the registry + records `canonical_target = <existing canonical>`.
+- **reject** — drift / typo / not actually net-new. No registry edit; status flips to `rejected`.
+- **duplicate** — collapse to another pending row. Records `duplicate_of = <survivor queue_id>`.
+
+### T4. Apply Chris's decision (registry edit + Tool call)
+
+For `promote`:
+1. **Edit `docs/taxonomies/{axis}.md`** — add the entry per the file's authoring template (e.g. `ProducerEntry` shape, `BrewerEntry` shape).
+2. **Edit `lib/{axis}-registry.ts`** — add the rich entry to the corresponding constant (e.g. `PRODUCERS`, `ROASTERS`).
+3. **Call `resolve_queue_entry({ queue_id, action: 'promoted', canonical_target, arbiter_notes })`** — flips DB row.
+
+For `alias`:
+1. **Edit `lib/{axis}-registry.ts`** — add to the alias-map argument passed to `makeCanonicalLookup` (the second arg).
+2. **Edit `docs/taxonomies/{axis}.md`** — note the alias in the relevant entry's notes section if the file has one.
+3. **Call `resolve_queue_entry({ queue_id, action: 'aliased', canonical_target, arbiter_notes })`**.
+
+For `reject`:
+- Just **`resolve_queue_entry({ queue_id, action: 'rejected', arbiter_notes })`**. No file edit.
+
+For `duplicate`:
+- **`resolve_queue_entry({ queue_id, action: 'duplicate', duplicate_of, arbiter_notes })`**. The survivor row gets resolved separately.
+
+The Tool ONLY records the decision. The registry edits are the source of truth for promotion/alias — `resolve_queue_entry` does not edit TS source files (auto-editing TS from the MCP server would require Claude Code execution context the server doesn't have).
+
+### T5. Commit + PR + merge
+
+Per axis grouping (T2):
+
+```bash
+git checkout -b claude/taxonomy-queue-<axis>-<date>
+git add docs/taxonomies/<axis>.md lib/<axis>-registry.ts
+git commit -m "$(cat <<'EOF'
+Promote pending <axis> queue entries to canonical: <list>
+
+Applied N taxonomy_overrides_queue resolutions for axis=<axis>.
+Source rows: <brew_ids / green_bean_ids>.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+EOF
+)"
+git push -u origin claude/<branch>:claude/<branch>
+gh pr create --title "Promote pending <axis> taxonomy queue: <one-line summary>" --body "..."
+```
+
+Once merged + Vercel deploys: claude.ai's next push that resolves the new canonical no longer needs `*_override:true`. Validate by re-pushing one of the source rows (no override flag) — should resolve canonically with no new queue row.
+
+### T6. Differences vs. prose-proposal flow (quick reference)
+
+| Step | Prose (doc_proposals) | Canonical (taxonomy_overrides_queue) |
+|------|------------------------|---------------------------------------|
+| Read | `SELECT * FROM doc_proposals WHERE status='pending'` | `list_taxonomy_queue({ status: 'pending' })` |
+| Group by | `target_doc` | `axis` |
+| Edit target | `BREWING.md` / `ROASTING.md` / `docs/brewing/roasters.md` / `docs/taxonomies/{axis}.md` | `lib/{axis}-registry.ts` + `docs/taxonomies/{axis}.md` |
+| Apply mechanism | Edit tool — append/prepend/replace | Edit tool — add registry entry / alias map entry |
+| Status flip | UPDATE doc_proposals SET status='applied' (per citation) | `resolve_queue_entry` Tool call |
+| Status values | applied / rejected / superseded | promoted / aliased / rejected / duplicate |
+| Auto-supersede | Yes — per (target_doc, section_anchor) on insert | EXCLUDE constraint on (user, axis, lower(raw_value)) — second push returns existing pending row id |
+
+---
+
 ## Stale-anchor protocol
 
 When a citation's `section_anchor` doesn't match any header in the resolved file:
@@ -225,4 +339,5 @@ Decision tree:
 - **Architecture:** [SYNC_V2.md § propose_doc_changes](SYNC_V2.md#propose_doc_changes) + § "Doc storage model" + § "Conflict resolution / two-store reconciliation".
 - **Tool spec:** `lib/mcp/propose-doc-changes.ts` — input schema, target_doc allow-list, supersede logic.
 - **Migration:** `supabase/migrations/037_doc_proposals.sql` — table schema + RLS + indices.
-- **The PRODUCT.md retro analog:** Chris's mental model is "this is just like updating PRODUCT.md after every sprint." Same write-cycle: stage state, present diff, get approval, edit, commit, PR. The doc_proposals table is the staging surface; the rest is identical.
+- **Phase 3 (taxonomy queue):** [docs/features/taxonomy-overrides-queue.md](docs/features/taxonomy-overrides-queue.md) (design) + `supabase/migrations/045_taxonomy_overrides_queue.sql` (substrate) + `lib/mcp/list-taxonomy-queue.ts` / `propose-canonical-addition.ts` / `resolve-queue-entry.ts` (Tools).
+- **The PRODUCT.md retro analog:** Chris's mental model is "this is just like updating PRODUCT.md after every sprint." Same write-cycle: stage state, present diff, get approval, edit, commit, PR. Two staging surfaces (`doc_proposals` + `taxonomy_overrides_queue`); the rest is identical.

@@ -370,41 +370,31 @@ Sprint 2.1 surfaced that `BREWING.md` sometimes leads the DB: Claude.ai writes p
 
 ---
 
-## Net-new producer flow
+## Net-new producer flow (and other text-only canonicals)
 
 Chris's audio: producers won't ever be 100% comprehensive; AI-assisted research at sync time is OK as background; don't block Claude.ai when a new producer appears.
+
+**Status (post-Phase-3, 2026-05-05):** SHIPPED as `taxonomy_overrides_queue` (migration 045) — single table covering all 7 axes, not the per-axis `producer_overrides_queue` originally scoped here. The single-table shape mirrors `doc_proposals` and lets one arbiter playbook walk both queues. See [docs/features/taxonomy-overrides-queue.md](docs/features/taxonomy-overrides-queue.md) for design.
 
 **Push path (Claude.ai → app):**
 
 1. Claude.ai detects producer not in registry. Sets `producer_override: true`, passes verbatim string.
-2. Server-side `push_brew`: stores producer text, marks the brew row's `producer_canonical: false` (new column added in 2.3 if needed; today's `allowOverride` pattern stores verbatim without flagging).
-3. Server inserts a row in `producer_overrides_queue` (new table in 2.3):
-   ```sql
-   CREATE TABLE producer_overrides_queue (
-     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-     user_id uuid NOT NULL,
-     producer_name text NOT NULL,
-     first_seen_brew_id uuid REFERENCES brews(id),
-     status text NOT NULL DEFAULT 'pending'
-       CHECK (status IN ('pending', 'researched', 'rejected')),
-     researched_payload jsonb,        -- proposed ProducerEntry from research routine
-     created_at timestamptz DEFAULT now()
-   );
-   ```
+2. Server-side `push_brew` / `push_green_bean`: stores producer text verbatim. `validateCanonicalText` returns `needsQueue: true`.
+3. After the brew/green_bean row lands, `fireQueueInserts` from `lib/taxonomy-queue.ts` writes a row to `taxonomy_overrides_queue`:
+   - `axis = 'producer'`
+   - `raw_value = <verbatim>`
+   - `submission_path = 'override_flag'`
+   - `source_kind = 'brew' | 'green_bean'`
+   - `source_id = <new row id>`
+4. Push response echoes `queued_for_taxonomy_review: [{ axis, raw_value, queue_id }]` so claude.ai can confirm the queue picked it up without a follow-up `list_taxonomy_queue`.
 
-**Research routine (Sprint 2.6):**
+**Net-new terroirs / cultivars** (strict-canonical, no override flag on push) flow through the `propose_canonical_addition` Tool — same queue, `submission_path = 'manual_propose'`. The push fails fast; the model recovers by proposing the canonical, waiting for arbiter, retrying.
 
-A scheduled or on-demand Claude Code session (could be a cron, could be invoked manually) sweeps the queue:
+**Arbiter (Chris-as-arbiter / Claude Code session):**
 
-1. `SELECT * FROM producer_overrides_queue WHERE status='pending'`.
-2. For each: web-research (Anthropic SDK + WebSearch tool) — find producer's region, farming model, cultivars, processing style, references. Build a `ProducerEntry`.
-3. `UPDATE producer_overrides_queue SET status='researched', researched_payload = ...`.
-4. Generate a `propose_doc_changes` row targeting `lib/producer-registry.ts` + `docs/taxonomies/producers.md` with the new entry as proposed_text.
-5. On next arbiter session, Chris reviews + applies → commits → deploys → next push_brew with that producer hits the canonical lookup cleanly.
+Same playbook as `doc_proposals` (see [ARBITER.md § Taxonomy queue arbitration](ARBITER.md#taxonomy-queue-arbitration-phase-3)): list pending → group by axis → present to Chris → edit registry + markdown → call `resolve_queue_entry`. No automated background research routine in v1; if the manual cadence becomes onerous, a Claude Code routine can sweep the queue + draft `propose_doc_changes` entries with the proposed `ProducerEntry` shape (the original 2.6 plan), but that's deferred until the queue's actually full.
 
-**Same pattern for net-new cultivars** (rare; registry is ~comprehensive) and **net-new roasters** (occasional). All flow through `*_overrides_queue` tables; same research routine architecture applies.
-
-**Why not real-time research:** Chris's audio explicitly: "I don't want Claude.ai to be stuck waiting on me." Backgrounding the research preserves Claude.ai velocity. The brew lands with `producer_override=true`; the canonical entry catches up later.
+**Why not real-time research:** Chris's audio explicitly: "I don't want Claude.ai to be stuck waiting on me." Backgrounding the research preserves Claude.ai velocity. The brew lands with `producer_override=true`; the canonical entry catches up at the next arbiter session.
 
 ---
 
