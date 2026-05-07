@@ -22,8 +22,9 @@ context fields like context_baseline / shared_constants).
 FK DEPENDENCY CHAIN: STAGE 1 returns green_bean_id (used by STAGES 2-7) +
 the FULL pipeline state baseline so downstream stages can skip what's
 already pushed. STAGE 2 returns roast_ids per NEW batch (used by STAGE 3
-cuppings + STAGE 6 brew if pushed). If a stage fails, halt and report;
-downstream stages will fail FK validation.
+cuppings + STAGE 6 brew if pushed). STAGE 8 (push_roast_profile, optional
+forward design) is independent of the FK chain - writes to Roest only. If a
+stage fails, halt and report; downstream stages will fail FK validation.
 
 STAGE 1 - Resolve the bean against Roest + DB, then baseline pipeline state:
 
@@ -224,7 +225,29 @@ data during STAGES 1-2 (e.g. existing Active Lot entry quotes a fan curve
 that doesn't match the actual Roest profile), include a replace citation
 that updates the doc to match observed reality.
 
+STAGE 8 - Optional: design + push the next experiment set (v2 / v3 / etc.):
+
+If we're designing forward at this sync - V1 debrief points at a V2
+hypothesis, V2 winner indicates a V3 confirmation, etc. - push the next
+profile set inline. Skip this stage if no forward design this session.
+
+- Apply the new-bean-intake prompt's framework (Standard Inlet Curve
+  Template, hopper pre-load 125°C, charge 117°C, preheat air 210°C, fan
+  curve held constant, RPM flat 65, BEAN_TEMP end condition).
+- V2 narrows on V1's winning peak (1-2°C spread typical); V3 confirms on
+  V2's winner. Don't carry V1's bracket-wide default forward.
+- Print the full push_roast_profile payload for each batch (bezier arrays
+  in msec, name, end_condition + value) BEFORE pushing.
+- After my confirm, push all batches with enable_share=true. Return
+  profile_id + share_url + tablet-name table per batch.
+- Capture the design hypothesis via STAGE 4's push_experiment with a fresh
+  experiment_id (e.g. "v2-peak-sweep") + expected_outcomes per batch. The
+  push_roast_profile call writes to Roest only; the parallel push_experiment
+  carries green_bean_id from STAGE 1.
+
 Report back: green_bean_id + count of NEW roasts pushed (STAGE 2) + count
 of NEW cuppings pushed (STAGE 3) + experiment_pks UPSERTed with created
 flag for each (STAGE 4) + brew_id (STAGE 6, if pushed; "skipped: <reason>"
-if not) + proposal_id (STAGE 7) + intake drift findings from STAGE 1, if any.
+if not) + proposal_id (STAGE 7) + push_roast_profile profile_ids + share_urls
+(STAGE 8, if designed forward; "skipped: not designing forward this sync"
+if not) + intake drift findings from STAGE 1, if any.

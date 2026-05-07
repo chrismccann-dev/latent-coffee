@@ -84,7 +84,7 @@ function refineBezier(label: string, valueBounds: readonly [number, number]) {
       if (!Number.isFinite(v) || v < lo || v > hi) {
         ctx.addIssue({
           code: 'custom',
-          message: `${label}: value at point ${i} (${v}) outside bounds [${lo}, ${hi}]`,
+          message: `${label}: value at point ${i} (${v}) must be in [${lo}, ${hi}]`,
         })
       }
     }
