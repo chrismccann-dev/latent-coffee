@@ -17,8 +17,9 @@ overwrite of preserved-context fields).
 
 FK DEPENDENCY CHAIN: STAGE 2 returns green_bean_id (used by STAGES 3, 5, 6,
 7). STAGE 3 returns roast_id per batch (used by STAGE 4 + STAGE 7 reference
-brew). If a stage fails, halt and report; downstream stages will fail FK
-validation.
+brew). STAGE 8 (patch_inventory archive) uses inventory_id from STAGE 1 -
+independent of the green_bean / roast FK chain. If a stage fails, halt and
+report; downstream stages will fail FK validation.
 
 STAGE 1 - Resolve the bean against Roest:
 - list_roest_inventory({search: "<bean term>"}) returns matches with
@@ -184,5 +185,16 @@ data during STAGES 1-3 (e.g. reference brew recipe specifies a fan curve
 that doesn't match the actual Roest profile), include a replace citation
 that updates the doc to match observed reality.
 
+STAGE 8 - Archive the lot in Roest:
+
+After the close-out proposal lands (STAGE 7), mark the Roest inventory row
+archived so the tablet picker hides the lot from the active inventory list.
+
+- patch_inventory({roest_inventory_id: <STAGE 1>, is_archived: true}).
+- Skip if the lot was never pushed to Roest (rare; most beans flow through
+  Roest first).
+- Report back: archived: true, or "skipped: <reason>".
+
 Report back: green_bean_id + roast count + cupping count + experiment count +
-roast_learnings_id + brew_id (if pushed) + proposal_id.
+roast_learnings_id + brew_id (if pushed) + proposal_id + archived: bool
+(STAGE 8).
