@@ -23,12 +23,18 @@ export interface StrategyStyle {
 //   Extraction Push   — hot orange/burnt (active push on clean coffees)
 // Full Expression bg/text/border slightly deepened in v2 to keep it visually
 // distinct from Suppression after the gray-blue swap.
+//
+// v8.4 (2026-05-06): Hybrid added as 6th strategy. Warm purple — distinct from
+// the 5 intensity colors because Hybrid describes structure (phase boundaries),
+// not intensity. Hue chosen to read as "structural / phased" rather than fitting
+// onto the cool→hot temperature spectrum the other 5 sit on.
 const STRATEGY_STYLES: Record<ExtractionStrategy, StrategyStyle> = {
   'Suppression':         { bg: '#E3E7ED', text: '#2F3E55', border: '#5A6B82', short: 'SUPP' },
   'Clarity-First':       { bg: '#E8F0EA', text: '#2D5E3A', border: '#4A7C59', short: 'CLARITY' },
   'Balanced Intensity':  { bg: '#F5E8D0', text: '#6B4A10', border: '#8B6914', short: 'BALANCED' },
   'Full Expression':     { bg: '#EED3DB', text: '#6A1F3D', border: '#8A2E4C', short: 'FULL' },
   'Extraction Push':     { bg: '#F3E1D6', text: '#7A2F12', border: '#A3471B', short: 'PUSH' },
+  'Hybrid':              { bg: '#E8E0EE', text: '#4A2F5C', border: '#7B5A98', short: 'HYBRID' },
 }
 
 export function getStrategyStyle(strategy: string | null | undefined): StrategyStyle | null {

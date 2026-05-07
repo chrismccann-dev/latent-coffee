@@ -32,6 +32,8 @@ const PROMPT_FILES = [
 const DOC_FILES: Record<string, string> = {
   'docs://brewing.md': 'BREWING.md',
   'docs://brewing/roasters.md': 'docs/brewing/roasters.md',
+  'docs://brewing/wbc-reference.md': 'docs/brewing/wbc-reference.md',
+  'docs://brewing/wbc-recipes.md': 'docs/brewing/wbc-recipes.md',
   'docs://roasting.md': 'ROASTING.md',
   ...Object.fromEntries(
     TAXONOMY_AXES.map((axis) => [`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`]),
@@ -74,6 +76,18 @@ export function listDocs(): { uri: string; name: string; title: string; mimeType
       uri: 'docs://brewing/roasters.md',
       name: 'docs/brewing/roasters.md',
       title: 'Roaster Brewing Lessons',
+      mimeType: 'text/markdown',
+    },
+    {
+      uri: 'docs://brewing/wbc-reference.md',
+      name: 'docs/brewing/wbc-reference.md',
+      title: 'WBC Reference (Latent mapping)',
+      mimeType: 'text/markdown',
+    },
+    {
+      uri: 'docs://brewing/wbc-recipes.md',
+      name: 'docs/brewing/wbc-recipes.md',
+      title: 'WBC 102-Recipe Archive (2022-2025)',
       mimeType: 'text/markdown',
     },
     {

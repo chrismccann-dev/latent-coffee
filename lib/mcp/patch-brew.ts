@@ -46,9 +46,17 @@ export const patchBrewInputSchema = {
   bloom: z.string().optional().nullable(),
   pour_structure: z.string().optional().nullable(),
   total_time: z.string().optional().nullable(),
-  extraction_strategy: z.string().optional().nullable(),
+  extraction_strategy: z.string().optional().nullable().describe(
+    "Strict 6-value enum (v8.4): Suppression | Clarity-First | Balanced Intensity | Full Expression | Extraction Push | Hybrid. When patching to 'Hybrid', also send hybrid_subform in the same patch. When patching AWAY from 'Hybrid', the server auto-clears hybrid_subform.",
+  ),
+  hybrid_subform: z.string().optional().nullable().describe(
+    'v8.4 conditional sub-form. Required when extraction_strategy = Hybrid. Canonical: sequential | phase_mapped | selective_bloom | intensity_clarity_split | temperature_staged. See `canonicals://hybrid-subforms`.',
+  ),
   extraction_confirmed: z.string().optional().nullable(),
   strategy_notes: z.string().optional().nullable(),
+  cooling_curve_target: z.string().optional().nullable().describe(
+    'v8.4 named consideration. Free-text peak evaluation window when it IS the strategy (e.g. "40-45°C peak"). Default null = normal cooling progression. Empty string normalizes to null.',
+  ),
   modifiers: z.array(z.unknown()).optional().nullable(),
   flavors: z.array(z.unknown()).optional().nullable(),
   structure_tags: z.array(z.string()).optional().nullable(),

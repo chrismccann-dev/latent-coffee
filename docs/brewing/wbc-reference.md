@@ -1,8 +1,13 @@
-# WBC Reference
+# WBC Reference (Latent Mapping)
 
-Reference layer derived from Chris's "World Brewers Cup Champion - Recipes and Extraction Taxonomy" research (18 finalists/champions across 2023-2025). The five-axis foundational framework + eight strategy families below describe how competition brewers think about extraction. Latent's live taxonomy ([BREWING.md](../../BREWING.md) Section 1, Step 1d) intentionally folds these into a smaller, single-origin-friendly shape (5 strategies + 4 modifiers) - this doc is the comprehensive reference for "what was the WBC competitor doing" lookups, not the live registry.
+Lean reference layer derived from Chris's "World Brewers Cup Champion - Recipes and Extraction Taxonomy" research. The five-axis foundational framework + eight strategy families below describe how competition brewers think about extraction. Latent's live taxonomy ([BREWING.md](../../BREWING.md) Section 1, Step 1d) intentionally folds these into a smaller, single-origin-friendly shape (**6 strategies + 3 modifiers** post-v8.4) — this doc is the lookup table for "what was the WBC competitor doing" → "where does that map in Latent's framework".
 
-Split out of BREWING.md SECTION 4 on 2026-05-03 (Sprint 2.7) so the master brewing reference stays lean. This content is referenced during framework discussions and "is this WBC technique already covered as a modifier?" lookups, but not during a normal Coffee Brief Step 1-4 iteration. Pull via `read_doc(docs/brewing/wbc-reference.md)` when needed.
+For the comprehensive 102-recipe archive (subtype definitions, per-recipe detail, year-by-year coverage 2022-2025), see **[wbc-recipes.md](wbc-recipes.md)**.
+
+## History
+
+- **2026-05-03 (Sprint 2.7):** Originally split out of BREWING.md SECTION 4 with a summary of 18 finalists/champions. Latent taxonomy at that point was 5 strategies + 4 modifiers (Immersion was a modifier).
+- **2026-05-06 (v8.4):** Refreshed against the 102-recipe expansion. Latent taxonomy promoted Hybrid to a 6th first-class strategy (absorbing the Immersion modifier); the mapping table below reflects the v8.4 framework. Comprehensive 102-recipe data moved to [wbc-recipes.md](wbc-recipes.md); this doc stays lean.
 
 ## Foundational Control Axes (5)
 
@@ -14,43 +19,53 @@ Split out of BREWING.md SECTION 4 on 2026-05-03 (Sprint 2.7) so the master brewi
 | External Control      | Stabilizing or shaping the process externally | tools, flow devices, thermal handling                    |
 | Output Selection      | Which parts of extraction are kept            | discarding early/late fractions, yield cutoff            |
 
-Latent's live taxonomy maps onto axes 1 (Strategy) and partially onto axes 2 / 4 / 5 (Modifiers). Axis 3 (Physical System) is mostly blend-engineering and not in scope for single-origin home brewing.
+Latent's live taxonomy maps onto axes 1 (intensity strategies), 4 (modifiers like Aroma Capture / Inverted Temperature Staging), and 5 (Output Selection modifier). Axis 2 (Time Distribution) is partially absorbed into Hybrid sub-forms; axis 3 (Physical System) is mostly blend-engineering and out of scope for single-origin home brewing.
 
 ## Core Strategy Families (8)
 
-| **Family**                            | **Subtypes**                                                                                                  | **Definition**                                                                                                                              | **Representative**                                       | **Failure Mode**                              |
-|---------------------------------------|---------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|-----------------------------------------------|
-| Extraction Push (High-Yield Clarity)  | -                                                                                                             | Maximize extraction yield while preserving clarity. Fine grind, fast filters, high or stable temp, moderate-high ppm.                       | Savina Giachgia, Jackie Tran, Martin Wölfl               | Astringency, drying finish, loss of structure |
-| Suppression Systems                   | -                                                                                                             | Intentionally limit extraction to avoid harshness while maintaining structure. Lower temp, coarser grind, low agitation.                    | Carlos Medina                                            | Naturals / co-ferments + slightly developed roasts |
-| Time-Distributed Systems              | Pulse-based (Carlos), Parametric (George, Bayu), Selective Output (Escobar)                                   | Shape extraction by controlling timing or selecting portions of the curve. Fixed intervals, repeated pulses, programmable final phase.      | Carlos Medina, George Peng, Bayu Prawiro, Carlos Escobar | Over-complexity, timing sensitivity           |
-| Structural Systems                    | Dual grind (Luca), Layered bed (Wataru), Pre-brew alignment (Elysia), Ratio-engineered blends (Andrea), Roast-based structure (George 2025) | Engineer the inputs or physical structure before/during brewing. Multi-grind, layering, blend ratio, roast-level differentiation.           | Luca Croce, Wataru Iidaka, Elysia Tan, Andrea Batacchi   | Disjointed cup, poor integration              |
-| Thermal Systems                       | Staged temp (Garam, Giacomo), Inverted temp (Ryan), Continuous blending (Tom)                                 | Use temperature actively to shape extraction. Multi-kettle workflows, temperature staging or inversion, cooling / aroma locking.            | Giacomo Vannelli, Tom Hutchins, Ryan Wibawa              | Over-engineering, instability                 |
-| Flow / Stability Systems              | -                                                                                                             | Stabilize flow and reduce variability. Melodrip / drip assist, needling / bed prep, flat-bottom or controlled geometry.                     | Martin Wölfl, Jackie Tran (partial)                      | Over-smoothing, reduced character             |
-| Immersion Systems                     | -                                                                                                             | Use immersion to equalize extraction across components. Switch-style, multi-stage immersion, low agitation.                                 | Ryan Wibawa, Charity Cheung                              | Flat or muted cup, loss of separation         |
-| Hybrid Systems                        | Sequential (Garam), Immersion staging (Ryan), Parametric (Bayu), Phase-mapped (Justin)                        | Combine percolation and immersion in distinct phases to assign different extraction roles. Hybrid brewer, phase-mapped extraction.          | Garam Victor Um, Ryan Wibawa, Bayu Prawiro, Justin Bull  | Poor phase balance, transition instability    |
+Distribution across the 102-recipe archive (2022-2025) — the relative weight has shifted since the original 18-recipe summary:
 
-## How the families map onto Latent's live taxonomy
+| **Family**                            | **Count** | **Definition**                                                                                                  | **Latent Mapping (post-v8.4)**                                                                                          |
+|---------------------------------------|-----------|------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| **Hybrid Systems**                    | 18 (largest cluster) | Combine percolation and immersion in distinct phases to assign different extraction roles.            | **Strategy: Hybrid (v8.4)**. Sub-form picks one of: Sequential / Phase-Mapped / Selective Bloom / Intensity-Clarity Split / Temperature-Staged. |
+| **Flow / Stability Systems**          | 14        | Stabilize flow and reduce variability to enable controlled extraction (Melodrip, needling, fast filters).        | Implicit: Melodrip is a primary tool inside Clarity-First and Extraction Push, not a separate slot. Filter-Mediated Flow noted as deliberate non-add (v8.4 changelog). |
+| **Thermal Systems**                   | 8         | Use temperature actively to shape extraction (staged, inverted, fluctuation, continuous blending, cooling-curve).| Modifier: Inverted Temperature Staging. Modifier: Aroma Capture. v8.4 named consideration: Cooling-Curve Design. Hybrid (Temperature-Staged) sub-form when phase boundaries coincide with temp changes. |
+| **Structural Systems** (sum of variants) | 24    | Engineer the inputs / physical bed / blend structure (layered bed, dual grind, blend ratio, roast-based, filter-mediated). | **Out of scope** for single-origin home brewing. Future-capture only.                                                    |
+| **Suppression Systems**               | 6         | Intentionally limit extraction intensity to avoid harshness while maintaining structure.                         | Strategy: Suppression.                                                                                                   |
+| **Time-Distributed Systems**          | 9 (Pulse 5 + Role-Based 2 + Parametric 2 + others) | Shape extraction by controlling when extraction happens (pulse, role-based, parametric, double bloom, drain-based). | Implicit in pour structure; Phase-Mapped Hybrid covers Role-Based-Pulse-with-immersion. Time Distribution noted as deliberate non-add for now (v8.4 changelog). |
+| **Immersion Systems** (standalone)    | 5         | Use full immersion or staged immersion alone (no percolation phase).                                             | **Strategy: Hybrid (Sequential)** when there's any drawdown phase. Pure full-immersion (Switch closed throughout) is a degenerate Sequential. |
+| **Extraction Push (High-Yield Clarity)** | 5      | Maximize extraction yield while preserving clarity (Wölfl, Tran, Giachgia).                                       | Strategy: Extraction Push.                                                                                               |
+| **Output Selection Systems** (standalone) | 1     | Selective output extraction / bloom fraction separation / yield cutoff (when this IS the primary strategy).      | Modifier: Output Selection (one of three forms: early_cut / late_cut / both). Selective Bloom Hybrid when bloom-separation is the structural intent. |
 
-| **WBC family**           | **Latent slot**                                       |
-|--------------------------|-------------------------------------------------------|
-| Extraction Push          | Strategy: Extraction Push (clean coffees)             |
-| Suppression Systems      | Strategy: Suppression                                 |
-| Time-Distributed (Selective Output sub-type) | Modifier: Output Selection         |
-| Time-Distributed (other sub-types - Pulse, Parametric)        | Implicit in pour structure; not a separate slot |
-| Structural Systems       | Out of scope (single-origin context)                  |
-| Thermal (Inverted)       | Modifier: Inverted Temperature Staging                |
-| Thermal (Aroma capture sub-type) | Modifier: Aroma Capture                       |
-| Flow / Stability         | Implicit (Melodrip is a primary tool, not a strategy) |
-| Immersion                | Modifier: Immersion (SWORKS valve-modulated; Hario Switch when experimented) |
-| Hybrid                   | Modifier: Immersion captures the SWORKS-as-percolation-immersion-hybrid case; true sequential hybrid out of scope |
+The 102-recipe expansion shifted relative weights significantly from the 18-recipe set: Hybrid emerged as the largest single cluster (was tied with several others), and Time-Distributed Systems showed up as the primary axis on 34 of 102 recipes — under-served as a strategic axis in Latent's framework. See v8.4 changelog in BREWING.md § SECTION 5 for the deliberate non-add reasoning on Time Distribution.
+
+## Sub-form mapping cheat sheet
+
+When a WBC recipe is described as a Hybrid sub-form, here's where it lands in Latent's `hybrid_subform` enum:
+
+| **WBC subtype**                    | **Latent `hybrid_subform`**         | **Notes**                                                                                                           |
+|------------------------------------|-------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| Sequential Hybrid                  | `sequential`                        | Canonical Switch recipe. SWORKS slow/slow/open also fits.                                                            |
+| Immersion Staging                  | `sequential`                        | Hybrid sub-types collapse — immersion staging within a hybrid brew is a Sequential pattern.                          |
+| Phase-Mapped Hybrid                | `phase_mapped`                      | Each pour has explicit sensory target (saturation / body / clarity / finish).                                        |
+| Selective Bloom Hybrid             | `selective_bloom`                   | Bloom liquid separated from main brew. Bridges Output Selection; classify under Hybrid when bloom-separation IS the strategy. |
+| Intensity-Clarity Split            | `intensity_clarity_split`           | Immersion → percolation, body-then-clarity. Phase order matters.                                                     |
+| Alternating Phase Control          | `phase_mapped` (collapse)           | More elaborate Phase-Mapped pattern; not a separate sub-form in Latent.                                              |
+| Temperature-Staged Hybrid          | `temperature_staged`                | Phase boundaries coincide with temperature changes.                                                                  |
+| Temperature-Sandwich Hybrid        | `temperature_staged` (collapse)     | Specific low-high-low Temperature-Staged pattern; not a separate sub-form in Latent.                                 |
+| Parametric Hybrid                  | (deferred - blend territory)        | Multi-variable coordinated control; competition stagecraft. Add if the Latent context ever warrants it.              |
 
 ## Consciously not pursuing
 
 Techniques present in the WBC dataset that Chris has decided not to pursue, with the reason. This list exists so the decision is legible and the next "should we do this?" question has a recorded answer.
 
 - **Mid-pour temperature blending** (Tom Hutchins 2024). Two kettles at different temps, mixed in real time during the pour. Over-engineered for home/office context; hardware overhead is significant for marginal gain.
-- **Roast-based structuring on single origin** (George Peng 2025). One coffee roasted at three different end temps, blended in the brewer. Latent does roast (Sprint 1k+ self-roasted track) but the structural-blending application is parked - too many variables to dial in without competition pressure.
+- **Roast-based structuring on single origin** (George Peng 2025, Raul Rodas 2025). One coffee roasted at multiple end temps, blended in the brewer. Latent does roast (Sprint 1k+ self-roasted track) but the structural-blending application is parked - too many variables to dial in without competition pressure.
 - **Mesh-then-paper transitions** (Garam Victor Um 2023). Switch filter type mid-brew. Requires brewer geometry not currently in the equipment set.
 - **Solubility alignment via roast matching** (Elysia Tan 2024). Match roast development across multiple coffees in a blend so they extract together. Blend-specific; no single-origin transfer.
 - **Layered bed by component** (Wataru Iidaka 2024). Spatially place different coffees within the bed. Blend-specific.
+- **Dual-Chamber / Wet-Blended Component Extraction.** Components extracted in physically separate chambers or blended after brewing. Pure blend stagecraft.
+- **Heritage Brewer Re-Engineering** (provisional). Cultural-specific brewer modifications. Not Chris's context.
 - **Triangle variable thinking** (Bayu Prawiro 2025). Treat agitation / flow / contact time as linked variables that move together. Useful as a mental model but already implicit in Chris's grind-vs-valve thinking on the SWORKS bottomless dripper. Not a new technique, just a name for what he already does.
+- **Time Distribution as a foundational axis** (v8.4 deliberate non-add). The Drain-Based Pulse half is descriptive-only (already happening on SWORKS). The Role-Based Pulse half is real new discipline but covered by the Phase-Mapped Hybrid sub-form when immersion is involved. Reconsider if a queued experiment actually treats time-distribution-without-immersion as the primary lever.
+- **Filter-Mediated Flow as a foundational axis** (v8.4 deliberate non-add). Filter material as an active variable beyond flow speed. Pure future-capture; add when an Extraction Push or similar experiment treats filter as an explicit strategic variable.

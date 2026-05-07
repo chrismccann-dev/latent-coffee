@@ -1,19 +1,25 @@
 // Axis 2 — Extraction Modifiers (sprint Extraction Strategy v2, 2026-04-27).
 //
-// Stackable, optional techniques layered on top of any of the 5 strategies in
+// Stackable, optional techniques layered on top of any of the 6 strategies in
 // EXTRACTION_STRATEGIES (lib/brew-import.ts). Persisted in `brews.modifiers`
 // as a jsonb array of discriminated-union objects. Empty array is the
 // default + by far the most common state — modifiers are deliberate
 // additions, not defaults.
 //
-// Sourced from Chris's WBC research (see BREWING.md § WBC Reference): four
-// orthogonal techniques. Three map to three of the WBC taxonomy's five
-// foundational axes (Output Selection / Time Distribution / External
-// Control); Immersion was added same-sprint after Chris flagged Hario Switch
-// + SWORKS valve-modulated immersion staging as legitimate per-brew slots.
-// Folded into one heterogeneous bucket because Chris's current brewing
-// context (single origin, home/office) doesn't combine them in ways that
-// would warrant per-axis sub-bucketing yet.
+// v8.4 (2026-05-06): The Immersion modifier was REMOVED from the canonical
+// type set. v8.3 had folded SWORKS valve-modulated immersion staging + Hario
+// Switch staged immersion into a 4th modifier slot. v8.4 promotes Hybrid to
+// a 6th first-class strategy (lib/brew-import.ts) and absorbs the Immersion
+// modifier into it via the conditional hybrid_subform sub-field. What was
+// "Balanced Intensity + Immersion (sequential)" is now "Hybrid (Sequential)"
+// with intensity range as a recipe parameter. See lib/hybrid-subform.ts.
+//
+// Sourced from Chris's WBC research (see docs/brewing/wbc-recipes.md): three
+// orthogonal techniques. Each maps to one of the WBC taxonomy's foundational
+// axes (Output Selection / Time-Distributed / External Control). Folded into
+// one heterogeneous bucket because Chris's current brewing context (single
+// origin, home/office) doesn't combine them in ways that would warrant
+// per-axis sub-bucketing yet.
 
 export type CleanResult<T> = { ok: true; value: T } | { ok: false; error: string }
 
@@ -25,7 +31,6 @@ export const MODIFIER_TYPES = [
   'output_selection',
   'inverted_temperature_staging',
   'aroma_capture',
-  'immersion',
 ] as const
 export type ModifierType = (typeof MODIFIER_TYPES)[number]
 
@@ -50,16 +55,10 @@ export interface AromaCaptureModifier {
   application?: string | null  // free-text e.g. "Paragon ball on bloom + Pour 1"
 }
 
-export interface ImmersionModifier {
-  type: 'immersion'
-  application?: string | null  // free-text e.g. "Hario Switch staged: closed bloom + open pour"
-}
-
 export type Modifier =
   | OutputSelectionModifier
   | InvertedTemperatureStagingModifier
   | AromaCaptureModifier
-  | ImmersionModifier
 
 // ---------------------------------------------------------------------------
 // Display
@@ -69,7 +68,6 @@ const TYPE_LABELS: Record<ModifierType, string> = {
   output_selection: 'Output Selection',
   inverted_temperature_staging: 'Inverted Temperature Staging',
   aroma_capture: 'Aroma Capture',
-  immersion: 'Immersion',
 }
 
 const FORM_LABELS: Record<OutputSelectionForm, string> = {
@@ -90,7 +88,6 @@ export function outputSelectionFormLabel(form: OutputSelectionForm): string {
  *    "Output Selection (late cut) — kept 245g of 288g"
  *    "Inverted Temperature Staging — 86°C → 92°C across two phases"
  *    "Aroma Capture — Paragon ball on bloom + Pour 1"
- *    "Immersion — Hario Switch staged: closed bloom + open pour"
  *    "Output Selection (late cut)"      // when no sub-data populated
  */
 export function composeModifierLabel(m: Modifier): string {
@@ -109,8 +106,6 @@ export function composeModifierLabel(m: Modifier): string {
     case 'inverted_temperature_staging':
       return m.phases ? `${head} — ${m.phases}` : head
     case 'aroma_capture':
-      return m.application ? `${head} — ${m.application}` : head
-    case 'immersion':
       return m.application ? `${head} — ${m.application}` : head
   }
 }
@@ -145,7 +140,13 @@ function nullableStr(v: unknown): string | null {
 /** Strict cleaner: validates discriminator + per-type sub-fields, drops
  *  unknown keys, rejects entries whose type isn't canonical. Returns the
  *  cleaned array (may be shorter than input if entries were dropped, but
- *  never silently — invalid types raise an error). */
+ *  never silently — invalid types raise an error).
+ *
+ *  v8.4 note: 'immersion' is no longer a canonical type. cleanModifiers()
+ *  REJECTS it (returns ok:false) so a stale payload from a v8.3-era client
+ *  fails loudly rather than silently dropping data. The 4 brews that carried
+ *  immersion modifiers were migrated in 046_extraction_strategy_v8_4.sql
+ *  (3 reclassified to Hybrid, 1 kept Full Expression with modifiers cleared). */
 export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
   if (input == null) return { ok: true, value: [] }
   if (!Array.isArray(input)) {
@@ -160,9 +161,12 @@ export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
     }
     const type = (raw as { type?: unknown }).type
     if (!isModifierType(type)) {
+      const hint = type === 'immersion'
+        ? ' — the immersion modifier was removed in v8.4 (2026-05-06); use extraction_strategy="Hybrid" with hybrid_subform set instead'
+        : ''
       return {
         ok: false,
-        error: `modifiers[${i}].type "${String(type)}" is not one of: ${MODIFIER_TYPES.join(', ')}`,
+        error: `modifiers[${i}].type "${String(type)}" is not one of: ${MODIFIER_TYPES.join(', ')}${hint}`,
       }
     }
     switch (type) {
@@ -197,13 +201,6 @@ export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
         })
         break
       }
-      case 'immersion': {
-        out.push({
-          type: 'immersion',
-          application: nullableStr((raw as { application?: unknown }).application),
-        })
-        break
-      }
     }
   }
   return { ok: true, value: out }
@@ -218,8 +215,6 @@ export function emptyModifier(type: ModifierType): Modifier {
     case 'inverted_temperature_staging':
       return { type, phases: null }
     case 'aroma_capture':
-      return { type, application: null }
-    case 'immersion':
       return { type, application: null }
   }
 }

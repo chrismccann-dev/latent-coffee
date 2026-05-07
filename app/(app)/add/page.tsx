@@ -34,6 +34,8 @@ import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 import { FlavorComposer } from '@/components/FlavorComposer'
 import { StructureTagsPicker } from '@/components/StructureTagsPicker'
 import { ModifierComposer } from '@/components/ModifierComposer'
+import { HybridSubformPicker } from '@/components/HybridSubformPicker'
+import type { HybridSubform } from '@/lib/hybrid-subform'
 
 type SourceType = 'self-roasted' | 'purchased' | null
 
@@ -1311,6 +1313,10 @@ export default function AddPage() {
       const settingValid = isResolvableSetting(grinderCanonical, payload.grind_setting || '')
       const brewerValid = isOverridableValid(payload.brewer, BREWER_LOOKUP, purchasedBrewerOverride)
       const filterValid = isOverridableValid(payload.filter, FILTER_LOOKUP, purchasedFilterOverride)
+      // v8.4 — hybrid_subform required when extraction_strategy='Hybrid'.
+      const hybridSubformValid = payload.extraction_strategy === 'Hybrid'
+        ? !!payload.hybrid_subform
+        : true
       const saveEnabled =
         !!payload.coffee_name?.trim() &&
         !!payload.terroir.country?.trim() &&
@@ -1325,6 +1331,7 @@ export default function AddPage() {
         settingValid &&
         brewerValid &&
         filterValid &&
+        hybridSubformValid &&
         (!needsTerroirConfirm || purchasedConfirmTerroir) &&
         (!needsCultivarConfirm || purchasedConfirmCultivar)
 
@@ -1809,7 +1816,15 @@ export default function AddPage() {
                 <select
                   className="input"
                   value={payload.extraction_strategy || ''}
-                  onChange={(e) => updateField('extraction_strategy', e.target.value || null)}
+                  onChange={(e) => {
+                    const next = e.target.value || null
+                    // v8.4 — auto-clear hybrid_subform when strategy moves away from Hybrid.
+                    setPurchasedPayload({
+                      ...payload,
+                      extraction_strategy: next,
+                      hybrid_subform: next === 'Hybrid' ? payload.hybrid_subform ?? null : null,
+                    } as BrewPayload)
+                  }}
                 >
                   <option value="">—</option>
                   {EXTRACTION_STRATEGIES.map((s) => (
@@ -1817,6 +1832,14 @@ export default function AddPage() {
                   ))}
                 </select>
               </div>
+              {payload.extraction_strategy === 'Hybrid' && (
+                <div className="col-span-3">
+                  <HybridSubformPicker
+                    value={payload.hybrid_subform ?? null}
+                    onChange={(next: HybridSubform | null) => updateField('hybrid_subform', next)}
+                  />
+                </div>
+              )}
               <div className="col-span-3">
                 <label className="label">Extraction confirmed (strategy + explanation)</label>
                 <textarea
@@ -1824,6 +1847,15 @@ export default function AddPage() {
                   rows={2}
                   value={payload.extraction_confirmed || ''}
                   onChange={(e) => updateField('extraction_confirmed', e.target.value || null)}
+                />
+              </div>
+              <div className="col-span-3">
+                <label className="label">Cooling-curve target (v8.4 — only when peak window IS the strategy)</label>
+                <input
+                  className="input"
+                  value={payload.cooling_curve_target || ''}
+                  onChange={(e) => updateField('cooling_curve_target', e.target.value || null)}
+                  placeholder='e.g. "40-45°C peak", "evaluate below 50°C". Leave blank for normal cooling progression.'
                 />
               </div>
               <div className="col-span-3">

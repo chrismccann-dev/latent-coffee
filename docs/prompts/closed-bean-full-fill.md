@@ -117,10 +117,16 @@ ROASTING.md close-out narrative:
 - Pick the optimized brew session that established the reference brew recipe.
 - Apply the canonical-validation discipline from the brewing prompt. Key
   schema-strict gates:
-  - extraction_strategy z.enum, 5 strict canonicals only (Suppression /
-    Clarity-First / Balanced Intensity / Full Expression / Extraction Push).
-    Within-strategy gradient ("lower edge of Balanced Intensity") goes in
-    strategy_notes, NOT extraction_strategy.
+  - extraction_strategy z.enum, 6 strict canonicals (v8.4: Suppression /
+    Clarity-First / Balanced Intensity / Full Expression / Extraction Push /
+    Hybrid). When extraction_strategy = 'Hybrid', hybrid_subform is
+    REQUIRED — pick one of: sequential / phase_mapped / selective_bloom /
+    intensity_clarity_split / temperature_staged. Within-strategy gradient
+    ("lower edge of Balanced Intensity") goes in strategy_notes, NOT
+    extraction_strategy. Cooling-window-as-strategy goes in
+    cooling_curve_target (free-text), populated only when peak evaluation
+    window IS the strategy (e.g. "40-45°C peak"). Modifier slot dropped from
+    4 to 3 in v8.4 — Immersion was absorbed into Hybrid.
   - structure_tags z.enum on canonical "Axis:Descriptor" keys. Inspect via
     read_canonical(axis: "flavors") for the full list.
   - flavors: structured chip array of {base, modifiers[]}, NOT free-text.
@@ -128,7 +134,8 @@ ROASTING.md close-out narrative:
     *_LOOKUP; *_override:true ONLY if legitimately new.
 - push_brew(payload) with source:"self-roasted", green_bean_id from STAGE 2,
   roast_id of the reference batch from STAGE 3, recipe / extraction_strategy /
-  strategy_notes / flavors / structure_tags / prose.
+  hybrid_subform (if Hybrid) / strategy_notes / cooling_curve_target (if
+  applicable) / flavors / structure_tags / prose.
 - For field-level edits to a brew already pushed, prefer patch_brew.
 
 (b) Propose ROASTING.md close-out:

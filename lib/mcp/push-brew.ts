@@ -11,6 +11,7 @@ import {
   SIGNATURE_NAMES,
 } from '@/lib/process-registry'
 import { STRUCTURE_KEYS } from '@/lib/flavor-registry'
+import { HYBRID_SUBFORMS } from '@/lib/hybrid-subform'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 // Input schema mirrors lib/brew-import.ts BrewPayload + SYNC_V2.md push_brew spec.
@@ -37,12 +38,18 @@ const MODIFIER_ORDER_NOTE =
 // readonly arrays → z.enum tuple cast. zod v4 z.enum requires [string, ...string[]].
 const experimentalModifierEnum = z.enum(EXPERIMENTAL_MODIFIERS as readonly [string, ...string[]])
 const structureTagEnum = z.enum(STRUCTURE_KEYS as readonly [string, ...string[]])
-// Extraction strategy is a strict 5-value enum with zero aliases — same shape as
-// structure_tags. Tightening to z.enum lets tool-introspection see the canonical
-// list directly. Within-strategy gradient ("lower edge of Balanced Intensity")
-// goes in strategy_notes; cross-strategy divergence ("planned Balanced, drank
-// like Suppression") goes in extraction_confirmed.
+// Extraction strategy is a strict 6-value enum with zero aliases — same shape as
+// structure_tags (was 5 pre-v8.4; Hybrid promoted 2026-05-06). Tightening to
+// z.enum lets tool-introspection see the canonical list directly. Within-strategy
+// gradient ("lower edge of Balanced Intensity") goes in strategy_notes;
+// cross-strategy divergence ("planned Balanced, drank like Suppression") goes
+// in extraction_confirmed.
 const extractionStrategyEnum = z.enum(EXTRACTION_STRATEGIES as readonly [string, ...string[]])
+// v8.4: conditional sub-form when extraction_strategy = 'Hybrid'. Required when
+// strategy is Hybrid; must be null otherwise. Server-side cross-field check in
+// validateBrewPayload (lib/brew-import.ts) — zod can't express the conditional
+// across sibling fields without .superRefine, kept simple.
+const hybridSubformEnum = z.enum(HYBRID_SUBFORMS as readonly [string, ...string[]])
 
 const flavorChip = z.object({
   base: z.string(),
@@ -50,7 +57,10 @@ const flavorChip = z.object({
 })
 
 const modifierEntry = z.object({
-  type: z.enum(['output_selection', 'inverted_temperature_staging', 'aroma_capture', 'immersion']),
+  // v8.4 (2026-05-06): MODIFIER_TYPES dropped from 4 -> 3. Immersion was absorbed
+  // into the Hybrid strategy via hybrid_subform; sending modifier.type='immersion'
+  // now fails validation with a hint pointing at extraction_strategy='Hybrid'.
+  type: z.enum(['output_selection', 'inverted_temperature_staging', 'aroma_capture']),
   // type-specific subfields (the discriminated union is hand-validated in cleanModifiers)
   form: z.enum(['early_cut', 'late_cut', 'both']).optional(),
   brew_weight: z.number().optional().nullable(),
@@ -177,16 +187,22 @@ export const pushBrewInputSchema = {
 
   // Extraction
   extraction_strategy: extractionStrategyEnum.optional().nullable().describe(
-    `Strict canonical 5-value enum: ${EXTRACTION_STRATEGIES.join(' | ')}. Within-strategy gradient ("lower edge of Balanced Intensity") goes in \`strategy_notes\`. Cross-strategy divergence ("planned Balanced, drank like Suppression") goes in \`extraction_confirmed\`.`,
+    `Strict canonical 6-value enum (v8.4 — Hybrid promoted 2026-05-06): ${EXTRACTION_STRATEGIES.join(' | ')}. Five describe extraction intensity (single-mode logic running throughout); Hybrid describes extraction structure (phase boundaries where the brewer changes mode). When set to 'Hybrid', \`hybrid_subform\` is required. Within-strategy gradient ("lower edge of Balanced Intensity") goes in \`strategy_notes\`. Cross-strategy divergence ("planned Balanced, drank like Suppression") goes in \`extraction_confirmed\`.`,
+  ),
+  hybrid_subform: hybridSubformEnum.optional().nullable().describe(
+    `Conditional sub-form, REQUIRED when extraction_strategy='Hybrid', null otherwise. Canonical 5-value enum (v8.4): ${HYBRID_SUBFORMS.join(' | ')}. See \`canonicals://hybrid-subforms\` or \`docs://brewing.md#Axis 1 - Extraction Strategy\` for sub-form descriptions. Mapping: sequential = "immersion phase then percolation, each does one job" (canonical Switch + SWORKS slow/slow/open); phase_mapped = "each pour has explicit sensory target"; selective_bloom = "bloom liquid separated"; intensity_clarity_split = "immersion builds body then percolation recovers clarity"; temperature_staged = "phase boundaries coincide with temp changes".`,
   ),
   extraction_confirmed: z.string().optional().nullable().describe(
     'Free-text. Set ONLY when the planned extraction_strategy diverged from what was tasted in the cup (cross-strategy correction signal: planned Balanced, drank like Suppression). Leave null when the planned strategy delivered. NOTE: the framework-default-vs-executed-vs-confirmed reshape (Phase 2 #R49 - splitting framework_default for the Process/Variety table prediction out of this field) is deferred to its own sprint. For now, do NOT use this field to record framework-default divergence - keep that nuance in `strategy_notes` until the schema reshape lands.',
   ),
   strategy_notes: z.string().optional().nullable().describe(
-    'Free-text within-strategy gradient + miscellaneous recipe nuance that does NOT fit the canonical extraction_strategy enum. Use for "lower edge of Balanced Intensity", "leaning toward Suppression", or recipe-context that the 5-value enum + extraction_confirmed (cross-strategy divergence) cannot capture. Distinct from `classification` (lot code + roast date stash).',
+    'Free-text within-strategy gradient + miscellaneous recipe nuance that does NOT fit the canonical extraction_strategy enum. Use for "lower edge of Balanced Intensity", "leaning toward Suppression", or recipe-context that the 6-value enum + extraction_confirmed (cross-strategy divergence) cannot capture. Distinct from `classification` (lot code + roast date stash).',
+  ),
+  cooling_curve_target: z.string().optional().nullable().describe(
+    'v8.4 named consideration. Free-text. Default null = normal cooling progression (the answer for most brews). Populated when peak evaluation window IS the strategy (e.g. "40-45°C peak", "evaluate below 50°C"). Surfaces a previously-implicit decision at brief time so iteration starts in the right window rather than discovering it on brew 2. Most relevant on El Paraíso lots, Garrido Mokka/Mokkita, anaerobic naturals, and other coffees where the cup integrates well below 50°C.',
   ),
   modifiers: z.array(modifierEntry).optional().nullable().describe(
-    'Axis 2 - extraction modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture / Immersion). Optional + stackable. Persistence equivalence: `[]`, `null`, and omitted are all stored as the empty array (cleanModifiers() normalizes; the column never holds null). Send `[]` to be explicit that modifiers were considered and rejected, or omit when there\'s nothing to say.',
+    'Axis 2 - extraction modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture). Optional + stackable. v8.4 (2026-05-06): MODIFIER_TYPES dropped from 4 -> 3 — the Immersion modifier was absorbed into the Hybrid strategy. Sending modifier.type="immersion" fails validation; use extraction_strategy="Hybrid" with hybrid_subform set instead. Persistence equivalence: `[]`, `null`, and omitted are all stored as the empty array (cleanModifiers() normalizes; the column never holds null). Send `[]` to be explicit that modifiers were considered and rejected, or omit when there\'s nothing to say.',
   ),
 
   // Tasting

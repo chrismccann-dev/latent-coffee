@@ -253,14 +253,25 @@ export interface Brew {
   pour_structure: string | null
   total_time: string | null
   extraction_strategy: string | null
+  // v8.4 (migration 046, 2026-05-06): conditional sub-form. Required (text
+  // value, code-side enforced) when extraction_strategy = 'Hybrid'; NULL
+  // otherwise. Canonical: see lib/hybrid-subform.ts.
+  hybrid_subform: string | null
   extraction_confirmed: string | null
   // Free-text within-strategy gradient + miscellaneous recipe nuance that
   // does not fit the canonical extraction_strategy enum (e.g. "lower edge
   // of Balanced Intensity"). Distinct from extraction_confirmed (cross-
   // strategy divergence). Migration 038, 2026-04-29.
   strategy_notes: string | null
+  // v8.4 (migration 046): free-text Step-1d named consideration. Default
+  // null = normal cooling progression. Populated when peak evaluation
+  // window IS the strategy (e.g. "40-45°C peak", "evaluate below 50°C").
+  cooling_curve_target: string | null
   // Sprint Extraction Strategy v2 (2026-04-27): Axis 2 modifier array.
   // jsonb column on brews; default []. See lib/extraction-modifiers.ts for shape.
+  // v8.4 (2026-05-06): MODIFIER_TYPES dropped from 4 -> 3 (Immersion absorbed
+  // into the Hybrid strategy; remaining: output_selection, inverted_temperature_staging,
+  // aroma_capture).
   modifiers: import('./extraction-modifiers').Modifier[]
   aroma: string | null
   attack: string | null
