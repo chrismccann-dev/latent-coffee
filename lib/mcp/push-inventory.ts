@@ -3,9 +3,21 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import {
   authedWrite,
   getRoestCustomerInfo,
+  resolveRoestTimezone,
+  roestTimestampToLocalDate,
   type RoestInventory,
 } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+
+// Today's date in YYYY-MM-DD as the user's configured TZ (ROEST_USER_TIMEZONE,
+// default America/Los_Angeles). Used as the reg_date default — Roest requires
+// reg_date and a UTC slice can drift into tomorrow when Chris registers a bean
+// late evening PT. Falls back to UTC slice if the TZ formatter throws.
+function todayInUserTz(): string {
+  const { tz } = resolveRoestTimezone()
+  const now = new Date().toISOString()
+  return roestTimestampToLocalDate(now, tz) ?? now.slice(0, 10)
+}
 
 // push_inventory — server-side POST /inventories/ to api.roestcoffee.com.
 // Phase 2 of Roest write integration. Pushes a green coffee lot from our DB
@@ -57,12 +69,20 @@ export const pushInventoryInputSchema = {
   water_activity: z.number().optional().nullable().describe('Water activity (aw), typically 0.45-0.65.'),
   elevation: z.number().optional().nullable().describe('Elevation in meters above sea level (single number; for ranges, send the midpoint).'),
   density: z.number().optional().nullable().describe('Bulk density in g/L (e.g. 776).'),
-  initial_weight: z.number().optional().nullable().describe(
-    'Initial lot weight in grams (raw — do not multiply by 1000). Roest reads return weights as kg-as-integer-with-1000x multiplier; the write side accepts raw grams. Confirm during first push.',
+  initial_weight: z.number().describe(
+    'Initial lot weight in grams (raw — do not multiply by 1000). Roest reads return weights as kg-as-integer-with-1000x multiplier; the write side accepts raw grams. Required — Roest rejects without it, and the wrapper uses this value as the default for current_weight when current_weight is omitted.',
   ),
   current_weight: z.number().optional().nullable().describe(
-    'Current remaining weight in grams. Same unit convention as initial_weight. Omit on initial push to mirror initial_weight.',
+    'Current remaining weight in grams. Same unit convention as initial_weight. When omitted, the wrapper auto-mirrors initial_weight on initial push (typical fresh-intake case). Roest requires this field; the auto-mirror prevents a silent 400.',
   ),
+  reg_date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'reg_date must be YYYY-MM-DD')
+    .optional()
+    .nullable()
+    .describe(
+      'Registration date (YYYY-MM-DD). The date this lot was registered in inventory — typically receipt / arrival date. Pass green_beans.purchase_date when known for accuracy on backfilled lots; defaults to today in the configured user TZ (ROEST_USER_TIMEZONE, default America/Los_Angeles) when omitted. Roest requires this field; the wrapper auto-defaults so you cannot accidentally 400.',
+    ),
   price: z.number().optional().nullable().describe('Price per kg in your local currency (Roest does not specify currency).'),
   notes: z.string().optional().nullable().describe('Free-text notes — Roest UI Notes field.'),
   importer: z.string().optional().nullable(),
@@ -85,8 +105,9 @@ type PushInventoryInput = {
   water_activity?: number | null
   elevation?: number | null
   density?: number | null
-  initial_weight?: number | null
+  initial_weight: number
   current_weight?: number | null
+  reg_date?: string | null
   price?: number | null
   notes?: string | null
   importer?: string | null
@@ -98,6 +119,8 @@ type PushInventoryInput = {
 
 type CreateInventoryBody = Omit<PushInventoryInput, 'green_bean_id'> & {
   customer: string
+  current_weight: number
+  reg_date: string
 }
 
 export function registerPushInventoryTool(server: McpServer, auth: McpAuthContext) {
@@ -106,15 +129,23 @@ export function registerPushInventoryTool(server: McpServer, auth: McpAuthContex
     {
       title: 'Push Inventory',
       description:
-        'Push / create / upload / sync / register a green coffee lot to Chris\'s Roest inventory via api.roestcoffee.com POST /inventories/. Mirrors the read shape from list_roest_inventory (RoestInventory) — same fields, write direction. When green_bean_id is provided, on successful create the Tool also updates our `green_beans.roest_inventory_id` column so the two records are permanently linked (closing the loop with pull_roest_log / list_roest_inventory which depend on that FK to map a Roest log back to our DB row). Roest bean_process enum is 5 buckets (1=Natural, 2=Washed, 3=Honey, 4=Co-fermented/XO, 5=Anaerobic) — caller collapses our composable taxonomy down to one. Weight units: send raw grams (not the kg-as-integer-1000x form returned on read). Moisture: send as percentage value (8.7), not fraction. customer field resolved server-side. Returns { roest_inventory_id, linked: bool } where linked is true when green_bean_id was provided AND the green_beans update succeeded. Idempotency: create-new (no upsert); pushing the same lot twice yields two Roest rows.',
+        'Push / create / upload / sync / register a green coffee lot to Chris\'s Roest inventory via api.roestcoffee.com POST /inventories/. Mirrors the read shape from list_roest_inventory (RoestInventory) — same fields, write direction. When green_bean_id is provided, on successful create the Tool also updates our `green_beans.roest_inventory_id` column so the two records are permanently linked (closing the loop with pull_roest_log / list_roest_inventory which depend on that FK to map a Roest log back to our DB row). Roest bean_process enum is 5 buckets (1=Natural, 2=Washed, 3=Honey, 4=Co-fermented/XO, 5=Anaerobic) — caller collapses our composable taxonomy down to one. Weight units: send raw grams (not the kg-as-integer-1000x form returned on read). Moisture: send as percentage value (8.7), not fraction. customer + reg_date + current_weight are auto-filled server-side when omitted (reg_date defaults to today in user TZ; current_weight mirrors initial_weight on fresh intake) — these were silent-400 sources before the wrapper learned to default them (Roest dog-food round 1, 2026-05-06). initial_weight is required at the schema level since the mirror needs it. Returns { roest_inventory_id, linked: bool } where linked is true when green_bean_id was provided AND the green_beans update succeeded. Idempotency: create-new (no upsert); pushing the same lot twice yields two Roest rows.',
       inputSchema: pushInventoryInputSchema,
     },
     async (input) => {
       const i = input as PushInventoryInput
       const { url: customerUrl } = await getRoestCustomerInfo()
       const { green_bean_id, ...inventoryFields } = i
+      // Auto-fill the two Roest-required fields whose absence Chris's first
+      // dog-food run hit as 400s (2026-05-06): reg_date defaults to today in
+      // user TZ; current_weight mirrors initial_weight on fresh intake.
+      const reg_date = inventoryFields.reg_date ?? todayInUserTz()
+      const current_weight =
+        inventoryFields.current_weight ?? inventoryFields.initial_weight
       const body: CreateInventoryBody = {
         ...inventoryFields,
+        reg_date,
+        current_weight,
         customer: customerUrl,
       }
       const created = await authedWrite<CreateInventoryBody, RoestInventory>(
