@@ -16,7 +16,7 @@ const RECENT_SELECT = `
   brewer, filter, grinder, grind, grind_setting,
   dose_g, water_g, ratio, temp_c, bloom, pour_structure, total_time,
   process, base_process, subprocess, fermentation_modifiers, drying_modifiers, intervention_modifiers, experimental_modifiers, decaf_modifier, signature_method,
-  extraction_strategy, extraction_confirmed, modifiers,
+  extraction_strategy, hybrid_subform, extraction_confirmed, strategy_notes, cooling_curve_target, modifiers,
   flavors, structure_tags, flavor_notes,
   aroma, attack, mid_palate, body, finish, temperature_evolution, peak_expression, what_i_learned,
   is_process_dominant,

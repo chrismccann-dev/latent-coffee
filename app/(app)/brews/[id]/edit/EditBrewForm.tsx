@@ -24,6 +24,8 @@ import type { FlavorChip } from '@/lib/flavor-registry'
 import { ProcessPicker, isProcessResolvable } from '@/components/ProcessPicker'
 import { ModifierComposer } from '@/components/ModifierComposer'
 import { cleanModifiers, type Modifier } from '@/lib/extraction-modifiers'
+import { HybridSubformPicker } from '@/components/HybridSubformPicker'
+import { isCanonicalHybridSubform, type HybridSubform } from '@/lib/hybrid-subform'
 
 type TerroirOption = Pick<Terroir, 'id' | 'country' | 'admin_region' | 'macro_terroir' | 'meso_terroir'>
 type CultivarOption = Pick<Cultivar, 'id' | 'cultivar_name' | 'lineage' | 'genetic_family'>
@@ -58,7 +60,9 @@ type FormState = {
   pour_structure: string
   total_time: string
   extraction_strategy: string
+  hybrid_subform: HybridSubform | null
   extraction_confirmed: string
+  cooling_curve_target: string
   modifiers: Modifier[]
   aroma: string
   attack: string
@@ -114,7 +118,9 @@ function initial(brew: Brew, terroirs: TerroirOption[], cultivars: CultivarOptio
     pour_structure: brew.pour_structure ?? '',
     total_time: brew.total_time ?? '',
     extraction_strategy: brew.extraction_strategy ?? '',
+    hybrid_subform: isCanonicalHybridSubform(brew.hybrid_subform) ? brew.hybrid_subform : null,
     extraction_confirmed: brew.extraction_confirmed ?? '',
+    cooling_curve_target: brew.cooling_curve_target ?? '',
     modifiers: (() => {
       const r = cleanModifiers(brew.modifiers)
       return r.ok ? r.value : []
@@ -155,9 +161,12 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
   const settingValid = isResolvableSetting(grinderCanonical, form.grind_setting)
   const brewerValid = isOverridableValid(form.brewer, BREWER_LOOKUP, brewerOverride)
   const filterValid = isOverridableValid(form.filter, FILTER_LOOKUP, filterOverride)
+  // v8.4 — hybrid_subform required when extraction_strategy === 'Hybrid'.
+  const hybridSubformValid = form.extraction_strategy === 'Hybrid' ? form.hybrid_subform !== null : true
   const saveEnabled =
     cultivarValid && macroValid && processValid && roasterValid && producerValid &&
-    roastLevelValid && grinderValid && settingValid && brewerValid && filterValid
+    roastLevelValid && grinderValid && settingValid && brewerValid && filterValid &&
+    hybridSubformValid
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -198,7 +207,9 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
       pour_structure: form.pour_structure.trim() || null,
       total_time: form.total_time.trim() || null,
       extraction_strategy: form.extraction_strategy || null,
+      hybrid_subform: form.extraction_strategy === 'Hybrid' ? form.hybrid_subform : null,
       extraction_confirmed: form.extraction_confirmed.trim() || null,
+      cooling_curve_target: form.cooling_curve_target.trim() || null,
       modifiers: form.modifiers,
       aroma: form.aroma.trim() || null,
       attack: form.attack.trim() || null,
@@ -394,7 +405,15 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
             <select
               className="input"
               value={form.extraction_strategy}
-              onChange={(e) => set('extraction_strategy', e.target.value)}
+              onChange={(e) => {
+                const next = e.target.value
+                setForm((prev) => ({
+                  ...prev,
+                  extraction_strategy: next,
+                  // v8.4 — auto-clear hybrid_subform when strategy moves away from Hybrid.
+                  hybrid_subform: next === 'Hybrid' ? prev.hybrid_subform : null,
+                }))
+              }}
             >
               <option value="">—</option>
               {EXTRACTION_STRATEGIES.map((s) => (
@@ -402,6 +421,12 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
               ))}
             </select>
           </div>
+          {form.extraction_strategy === 'Hybrid' && (
+            <HybridSubformPicker
+              value={form.hybrid_subform}
+              onChange={(next) => set('hybrid_subform', next)}
+            />
+          )}
           <div>
             <label className="label">Extraction confirmed (only if it diverged from plan)</label>
             <textarea
@@ -409,6 +434,15 @@ export function EditBrewForm({ brew, terroirs, cultivars }: EditBrewFormProps) {
               rows={2}
               value={form.extraction_confirmed}
               onChange={(e) => set('extraction_confirmed', e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="label">Cooling-curve target (v8.4 — only when peak window IS the strategy)</label>
+            <input
+              className="input"
+              value={form.cooling_curve_target}
+              onChange={(e) => set('cooling_curve_target', e.target.value)}
+              placeholder='e.g. "40-45°C peak", "evaluate below 50°C". Leave blank for normal cooling progression.'
             />
           </div>
           <ModifierComposer

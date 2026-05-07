@@ -79,6 +79,7 @@ import {
 } from '@/lib/grinder-registry'
 import { EXTRACTION_STRATEGIES, type ExtractionStrategy } from '@/lib/brew-import'
 import { MODIFIER_TYPES, type ModifierType } from '@/lib/extraction-modifiers'
+import { HYBRID_SUBFORM_ENTRIES } from '@/lib/hybrid-subform'
 
 const STRATEGY_DESCRIPTIONS: Record<ExtractionStrategy, string> = {
   'Suppression':
@@ -91,6 +92,8 @@ const STRATEGY_DESCRIPTIONS: Record<ExtractionStrategy, string> = {
     'Develop heavy co-ferments. Fine grind + high temp + high agitation to drive the coffee. Mechanically twins with Extraction Push but uses agitation as the lever.',
   'Extraction Push':
     'Push yield on a clean coffee while preserving transparency. Fine grind + high temp + Melodrip / low agitation. Wölfl/Tran/Giachgia pattern.',
+  'Hybrid':
+    'Phase boundaries where the brewer changes mode (immersion ↔ percolation), each phase doing a different job. v8.4 promotion (2026-05-06) — absorbed the v8.3 Immersion modifier. Required sub-axis: hybrid_subform (sequential | phase_mapped | selective_bloom | intensity_clarity_split | temperature_staged). Canonical hardware: Hario Switch (home), SWORKS Bottomless Dripper at extreme valve transitions (office).',
 }
 
 const MODIFIER_TYPE_DESCRIPTIONS: Record<ModifierType, { description: string; subfields: Record<string, string> }> = {
@@ -112,11 +115,6 @@ const MODIFIER_TYPE_DESCRIPTIONS: Record<ModifierType, { description: string; su
     description: 'Aromatic-distillation accessory inserted into the brew (Paragon ball, scent diffuser).',
     subfields: { application: 'Free-text, e.g. "Paragon ball on bloom + Pour 1".' },
   },
-  immersion: {
-    description:
-      'Valve-modulated or staged immersion (SWORKS Bottomless valve mod, Hario Switch). Distinct from a flat-bed percolation; the contact time is part of the recipe.',
-    subfields: { application: 'Free-text, e.g. "Hario Switch staged: closed bloom + open pour".' },
-  },
 }
 
 export type CanonicalAxis =
@@ -132,6 +130,7 @@ export type CanonicalAxis =
   | 'grinders'
   | 'extraction-strategies'
   | 'modifiers'
+  | 'hybrid-subforms'
 
 // Phase 2 (#R38) — alias map for the dual-namespace gotcha: docs/taxonomies/
 // uses the user-facing words (regions, varieties), canonicals:// uses the
@@ -169,8 +168,9 @@ export const CANONICAL_AXES: { axis: CanonicalAxis; title: string; description: 
   { axis: 'flavors', title: 'Flavors', description: '3-axis composable taxonomy: 182 bases (12 categories) + 43 modifiers (10 categories with priority order) + 29 structure tags (7 axes). Tea-base reversal rule + fallback anchors.' },
   { axis: 'roast-levels', title: 'Roast Levels', description: '8 Agtron-anchored canonical buckets (Extremely Light → Very Dark, 10-unit ranges) + 22 aliases. Marketing tags (Nordic / Ultra Light / etc.) are aliases-only.' },
   { axis: 'grinders', title: 'Grinders', description: 'Single canonical: EG-1 with 51 valid settings (3.0-8.0 in 0.1 steps); 16 carry rich measured-D50 content. Setting axis is enumerated strict, not free-text.' },
-  { axis: 'extraction-strategies', title: 'Extraction Strategies', description: '5 canonical strategies post Sprint Extraction Strategy v2 (2026-04-27). Mechanics-vs-intent symmetry: Suppression / Clarity-First share mechanics, Full Expression / Extraction Push share grind+temp.' },
-  { axis: 'modifiers', title: 'Extraction Modifiers', description: '4 canonical modifier types (output_selection, inverted_temperature_staging, aroma_capture, immersion). Optional + stackable.' },
+  { axis: 'extraction-strategies', title: 'Extraction Strategies', description: '6 canonical strategies (v8.4, Hybrid promoted 2026-05-06). Five describe extraction intensity (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push); Hybrid describes extraction structure (phase boundaries with different jobs per phase). Mechanics-vs-intent symmetry holds across the 5 intensity strategies; Hybrid is orthogonal.' },
+  { axis: 'modifiers', title: 'Extraction Modifiers', description: '3 canonical modifier types (output_selection, inverted_temperature_staging, aroma_capture). Optional + stackable. v8.4 (2026-05-06): the Immersion modifier was removed and absorbed into the Hybrid strategy via hybrid_subform.' },
+  { axis: 'hybrid-subforms', title: 'Hybrid Sub-forms', description: '5 canonical sub-forms (v8.4) for the Hybrid extraction strategy: sequential | phase_mapped | selective_bloom | intensity_clarity_split | temperature_staged. Required when extraction_strategy="Hybrid". Sourced from the WBC Hybrid Systems family reduced to single-origin scope.' },
 ]
 
 export type CanonicalPayload = {
@@ -272,6 +272,10 @@ function buildPayload(meta: { axis: CanonicalAxis; description: string }): Canon
             type,
             ...MODIFIER_TYPE_DESCRIPTIONS[type],
           })),
+        }
+      case 'hybrid-subforms':
+        return {
+          subforms: HYBRID_SUBFORM_ENTRIES,
         }
     }
   })()

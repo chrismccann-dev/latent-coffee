@@ -161,8 +161,10 @@ session):
   (multi-brews-per-coffee is normal); a duplicate creates a separate row
   needing cleanup. Confirm before pushing if signature matches.
 - BEFORE pushing: apply canonical-validation discipline from the brewing
-  prompt (extraction_strategy z.enum, structure_tags z.enum, flavors chip
-  array, *_override pattern).
+  prompt (extraction_strategy z.enum 6 canonicals incl. Hybrid v8.4;
+  hybrid_subform required when strategy=Hybrid; structure_tags z.enum,
+  flavors chip array, *_override pattern; cooling_curve_target free-text
+  only when peak window IS the strategy).
 - push_brew(payload) with source:"self-roasted", green_bean_id from STAGE 1,
   optional roast_id from the batch_id -> roast_id map.
 - For field-level edits to a brew already pushed, prefer patch_brew.

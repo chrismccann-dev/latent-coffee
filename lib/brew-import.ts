@@ -45,6 +45,7 @@ import {
   type FlavorChip,
 } from './flavor-registry'
 import { cleanModifiers, type Modifier } from './extraction-modifiers'
+import { HYBRID_SUBFORMS, isCanonicalHybridSubform } from './hybrid-subform'
 
 /** Parse a comma-separated raw flavor string and pre-decompose each entry
  *  via the alias map, so /add purchased flow seeds both flavors[] and the
@@ -78,12 +79,22 @@ import {
 // not force-develop a co-ferment. Mechanics-vs-intent symmetry: Suppression
 // got promoted because intent matters at strategy-selection time; same logic
 // promoted Extraction Push.
+//
+// v8.4 (2026-05-06): `Hybrid` promoted to a 6th first-class strategy. Five
+// describe extraction intensity (single-mode logic running throughout); Hybrid
+// describes extraction structure (phase boundaries where the brewer changes
+// mode, immersion <-> percolation). Selection rule: if the brew has phase
+// boundaries with distinct sensory targets per phase, it's Hybrid. The
+// Immersion modifier from v8.3 was absorbed - what was "Balanced + Immersion"
+// is now "Hybrid (Sequential)" with the intensity range as a recipe parameter.
+// See lib/hybrid-subform.ts for the 5 canonical sub-forms.
 export const EXTRACTION_STRATEGIES = [
   'Suppression',
   'Clarity-First',
   'Balanced Intensity',
   'Full Expression',
   'Extraction Push',
+  'Hybrid',
 ] as const
 export type ExtractionStrategy = (typeof EXTRACTION_STRATEGIES)[number]
 
@@ -201,17 +212,26 @@ export interface BrewPayload {
   pour_structure?: string | null
   total_time?: string | null
 
-  // Extraction strategy + modifiers (Axis 2, sprint Extraction Strategy v2).
-  // `modifiers` is a jsonb array of {type, ...subfields} entries. Optional,
-  // stackable. See lib/extraction-modifiers.ts for the discriminated union.
+  // Extraction strategy + modifiers (Axis 2, sprint Extraction Strategy v2;
+  // Hybrid promoted in v8.4 2026-05-06). `modifiers` is a jsonb array of
+  // {type, ...subfields} entries. Optional, stackable (3 types post-v8.4 —
+  // Immersion was absorbed into the Hybrid strategy). See
+  // lib/extraction-modifiers.ts and lib/hybrid-subform.ts.
   extraction_strategy?: ExtractionStrategy | string | null
+  // v8.4: required when extraction_strategy = 'Hybrid', NULL otherwise.
+  // Canonical: see HYBRID_SUBFORMS in lib/hybrid-subform.ts.
+  hybrid_subform?: string | null
   extraction_confirmed?: string | null
   // Free-text within-strategy gradient + recipe nuance ("Balanced Intensity
-  // (lower edge)" etc.) that doesn't fit the canonical 5-value enum.
+  // (lower edge)" etc.) that doesn't fit the canonical 6-value enum.
   // Distinct from extraction_confirmed (cross-strategy divergence) and
   // classification (lot-code stash).
   strategy_notes?: string | null
   modifiers?: Modifier[] | null
+  // v8.4 named consideration. Free-text. Default null = normal cooling
+  // progression. Populated when peak evaluation window IS the strategy
+  // (e.g. "40-45°C peak", "evaluate below 50°C").
+  cooling_curve_target?: string | null
 
   // Sensory
   aroma?: string | null
@@ -651,6 +671,23 @@ export function validateBrewPayload(payload: BrewPayload): ValidationResult {
     )
   }
 
+  // v8.4: hybrid_subform conditional. Required when strategy='Hybrid', forbidden otherwise.
+  if (payload.extraction_strategy === 'Hybrid') {
+    if (!payload.hybrid_subform?.trim()) {
+      errors.push(
+        `hybrid_subform is required when extraction_strategy = 'Hybrid'. Canonical: ${HYBRID_SUBFORMS.join(', ')}`
+      )
+    } else if (!isCanonicalHybridSubform(payload.hybrid_subform)) {
+      errors.push(
+        `hybrid_subform must be one of: ${HYBRID_SUBFORMS.join(', ')} (got "${payload.hybrid_subform}")`
+      )
+    }
+  } else if (payload.hybrid_subform) {
+    errors.push(
+      `hybrid_subform must be null unless extraction_strategy = 'Hybrid' (got strategy "${payload.extraction_strategy ?? 'null'}", hybrid_subform "${payload.hybrid_subform}")`
+    )
+  }
+
   if (!payload.terroir || !payload.terroir.country?.trim()) {
     errors.push('terroir.country is required')
   }
@@ -903,8 +940,10 @@ export async function persistBrew(
     pour_structure: payload.pour_structure ?? null,
     total_time: payload.total_time ?? null,
     extraction_strategy: payload.extraction_strategy ?? null,
+    hybrid_subform: payload.extraction_strategy === 'Hybrid' ? (payload.hybrid_subform ?? null) : null,
     extraction_confirmed: payload.extraction_confirmed ?? null,
     strategy_notes: payload.strategy_notes ?? null,
+    cooling_curve_target: payload.cooling_curve_target?.trim() || null,
     modifiers: payload.modifiers ?? [],
     aroma: payload.aroma ?? null,
     attack: payload.attack ?? null,
@@ -1002,8 +1041,10 @@ export const PATCH_BREW_EDITABLE_FIELDS = [
   'pour_structure',
   'total_time',
   'extraction_strategy',
+  'hybrid_subform',
   'extraction_confirmed',
   'strategy_notes',
+  'cooling_curve_target',
   'modifiers',
   'aroma',
   'attack',
@@ -1100,6 +1141,47 @@ export async function patchBrew(
         `extraction_strategy must be one of: ${EXTRACTION_STRATEGIES.join(', ')} (got "${String(s)}")`,
       )
     } else if (s === '') patch.extraction_strategy = null
+  }
+
+  // v8.4: hybrid_subform conditional. Validate the in-patch pair when either is
+  // supplied. When extraction_strategy moves AWAY from 'Hybrid' in the same
+  // patch, auto-clear hybrid_subform (mirrors the recompose-process pattern).
+  if ('hybrid_subform' in patch) {
+    const v = patch.hybrid_subform
+    if (v === '' || v === null) {
+      patch.hybrid_subform = null
+    } else if (typeof v !== 'string' || !isCanonicalHybridSubform(v)) {
+      errors.push(`hybrid_subform must be one of: ${HYBRID_SUBFORMS.join(', ')} (got "${String(v)}")`)
+    }
+  }
+  // If strategy is in the patch, enforce the conditional rule using the
+  // patch's own intended pair (don't second-guess the existing row's strategy
+  // on a partial patch — the caller is responsible for keeping the pair coherent).
+  if ('extraction_strategy' in patch) {
+    if (patch.extraction_strategy === 'Hybrid') {
+      // Required when explicitly setting Hybrid AND no sub-form supplied in same patch.
+      if (!('hybrid_subform' in patch) || !patch.hybrid_subform) {
+        errors.push(
+          `hybrid_subform is required when extraction_strategy = 'Hybrid'. Canonical: ${HYBRID_SUBFORMS.join(', ')}`,
+        )
+      }
+    } else if (patch.extraction_strategy !== undefined) {
+      // Strategy moved away from Hybrid — auto-clear sub-form (don't error
+      // if the caller didn't explicitly null it; this is the natural shape).
+      patch.hybrid_subform = null
+    }
+  }
+
+  // cooling_curve_target — free-text, normalize empty -> null
+  if ('cooling_curve_target' in patch) {
+    const v = patch.cooling_curve_target
+    if (v === '' || v === null) {
+      patch.cooling_curve_target = null
+    } else if (typeof v !== 'string') {
+      errors.push('cooling_curve_target must be a string')
+    } else {
+      patch.cooling_curve_target = v.trim() || null
+    }
   }
 
   // modifiers

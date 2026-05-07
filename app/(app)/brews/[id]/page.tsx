@@ -7,6 +7,7 @@ import { SectionCard } from '@/components/SectionCard'
 import { Tag } from '@/components/Tag'
 import { ModifierBadges } from '@/components/ModifierBadges'
 import { cleanModifiers } from '@/lib/extraction-modifiers'
+import { composeHybridSubformLabel } from '@/lib/hybrid-subform'
 
 export default async function BrewDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -185,12 +186,22 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
             const modifiersResult = cleanModifiers(brew.modifiers)
             const modifiers = modifiersResult.ok ? modifiersResult.value : []
             const hasModifiers = modifiers.length > 0
+            // v8.4
+            const hybridSubformLabel = planned === 'Hybrid'
+              ? composeHybridSubformLabel(brew.hybrid_subform)
+              : null
+            const coolingTarget = brew.cooling_curve_target?.trim() || null
             return (
               <div className="mt-4 pt-4 border-t border-latent-border space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Extraction Strategy</div>
-                    <div className="font-sans text-sm">{planned}</div>
+                    <div className="font-sans text-sm">
+                      {planned}
+                      {hybridSubformLabel && (
+                        <span className="font-sans text-sm text-latent-mid"> · {hybridSubformLabel}</span>
+                      )}
+                    </div>
                   </div>
                   {diverged && (
                     <div>
@@ -199,6 +210,12 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
                     </div>
                   )}
                 </div>
+                {coolingTarget && (
+                  <div>
+                    <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Cooling-Curve Target</div>
+                    <div className="font-sans text-sm">{coolingTarget}</div>
+                  </div>
+                )}
                 {hasModifiers && (
                   <div>
                     <div className="font-mono text-xxs text-latent-mid uppercase mb-1">Modifiers</div>
