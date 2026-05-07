@@ -36,6 +36,12 @@ export const patchInventoryInputSchema = {
   density: z.number().optional().nullable(),
   initial_weight: z.number().optional().nullable().describe('Raw grams.'),
   current_weight: z.number().optional().nullable().describe('Raw grams. Use to record post-roast remaining weight.'),
+  reg_date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'reg_date must be YYYY-MM-DD')
+    .optional()
+    .nullable()
+    .describe('Registration date (YYYY-MM-DD). Use to fix a typo on a previously-set reg_date. Patch-only — push_inventory auto-defaults this.'),
   price: z.number().optional().nullable(),
   notes: z.string().optional().nullable(),
   importer: z.string().optional().nullable(),
@@ -64,6 +70,7 @@ type PatchInventoryInput = {
   density: number | null
   initial_weight: number | null
   current_weight: number | null
+  reg_date: string | null
   price: number | null
   notes: string | null
   importer: string | null
