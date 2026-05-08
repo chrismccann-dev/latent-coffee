@@ -2,7 +2,7 @@
 
 *Latent Coffee*
 
-*Last updated: 2026-05-07. Version history in `git log`.*
+*Last updated: 2026-05-08. Version history in `git log`.*
 
 ---
 
@@ -422,7 +422,15 @@ When running experiments across multiple lots in parallel:
 
 ---
 
-# Current State
+# Lot Knowledge
+
+> Lot knowledge is organized as a 5-tier structure — read top-down for what's currently being learned, drill into the archive for full per-lot history.
+>
+> 1. **Active Lots** — working hypotheses on lots currently in the V1/V2/V3 loop (this section, volatile).
+> 2. **Reference Roasts + Brews** — confirmed reference roast + reference brew per closed lot (below, stable).
+> 3. **Cross-Coffee Insight Layer** — patterns that have generalized across ≥2 lots ([§ Cross-Coffee Insight Layer](#cross-coffee-insight-layer)).
+> 4. **Open Questions** — research questions to test on future roasts ([§ Open Questions](#open-questions)).
+> 5. **Archive** — full per-lot prose, experiment history, generalized lessons ([docs/roasting/archive.md](docs/roasting/archive.md)).
 
 ## Active Lots
 
@@ -494,8 +502,9 @@ roasted to answer a single point question (machine calibration, single-bean
 sanity check, bean-system comparison test). When a one-shot is in process,
 add a `### LOT-CODE - Description` block here with: status (in-process /
 awaiting cupping), single-batch parameters, and the specific question
-the calibration was built to answer. On close-out, move to Recently Closed
-Lots like any other lot.
+the calibration was built to answer. On close-out, move to [Reference
+Roasts + Brews (Closed Lots)](#reference-roasts--brews-closed-lots) like any
+other lot.
 
 ### ECU-TD24-RANCHOTIO-TM-WASHED - Rancho Tio Emilio Typica Mejorado Washed (Taza Dorada 2024 #6)
 
@@ -506,19 +515,31 @@ Lots like any other lot.
 - Forward implication for the Cruz Loma TM Honey one-shot (1,800m, same Typica Mejorado variety, queued next): use FULL #133 anchor energy (245°C peak) without the low-altitude hedge - 1,300m at 243°C produced underdevelopment, 1,800m honey-process should sit closer to anchor.
 - Day 7 pourover still pending. Cup outcome may rebut or confirm the underdevelopment read - WB-to-ground delta from Day 7 will be the diagnostic.
 
-## Recently Closed Lots
+## Reference Roasts + Brews (Closed Lots)
 
-Per-lot reference roast + best brew + generalized lessons live in [docs/roasting/archive.md](docs/roasting/archive.md). The summary table below points at the relevant section anchor for each closed lot.
+Confirmed reference roast + reference brew per closed lot. Full per-lot prose (experiment history, generalized lessons, process learnings) lives in [docs/roasting/archive.md](docs/roasting/archive.md); the table below is the at-a-glance summary plus the canonical reference brew recipe for each lot where one was established.
 
-| Lot ID | Variety / Process | Reference Roast | Subdoc |
-|---|---|---|---|
-| CGLE-MANDELA-XO-2026 | Mandela XO Extended Fermentation | Batch #139 | [archive.md § CGLE-MANDELA-XO-2026](docs/roasting/archive.md#cgle-mandela-xo-2026---mandela-variety-xo-extended-fermentation) |
-| CGLE-SRUME-WASHED-2026 | Sudan Rume Hybrid Washed | Batch #133 | [archive.md § CGLE-SRUME-WASHED-2026](docs/roasting/archive.md#cgle-srume-washed-2026---sudan-rume-hybrid-washed) |
-| GUA-SOC-JAVA-2024 | Guatemala (legacy, pre-counterflow) | Batch 88 | [archive.md § GUA-SOC-JAVA-2024](docs/roasting/archive.md#gua-soc-java-2024) |
-| GUA-LIB-ADC-2024 | Guatemala (legacy, pre-counterflow) | Batch 94 | [archive.md § GUA-LIB-ADC-2024](docs/roasting/archive.md#gua-lib-adc-2024) |
-| GV-OMA-25-035 | Gesha Village Oma (counterflow incomplete) | Batch 52 | [archive.md § GV-OMA-25-035](docs/roasting/archive.md#gv-oma-25-035---gesha-village-oma) |
+### CGLE-MANDELA-XO-2026 - Mandela XO Extended Fermentation
 
-> Lot-specific generalized learnings live in each lot's archive subdoc (linked above). Cross-lot patterns that have generalized are surfaced in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) below.
+- **Reference roast:** Batch #139
+- **Reference brew:** April Brewer Glass + April Brewer Paper, EG-1 6.4, 15g/255g, 93°C, bloom 50g/40s, pour to 160g at 0:50 (15s pour, 25s wait), pour to 255g at 1:30 (15s pour). Target brew time 2:45-3:15. Best at warm-to-cool stage (50-45°C); rounds out as it cools. **Critical:** do NOT use UFO + fast cone for this coffee — flat-bottom geometry of April Brewer is essential to integrate the fermentation character.
+- **Archive:** [archive.md § CGLE-MANDELA-XO-2026](docs/roasting/archive.md#cgle-mandela-xo-2026---mandela-variety-xo-extended-fermentation)
+
+### CGLE-SRUME-WASHED-2026 - Sudan Rume Hybrid Washed
+
+- **Reference roast:** Batch #133 (confirmed); Batch #148 (closest replication)
+- **Reference brew:** UFO Ceramic + Sibarist Fast Cone, EG-1 6.0, 15g/210g (1:14 ratio), 91°C, Melodrip throughout, bloom 45g/45s, slow pour to 130g, slow pour to 210g. Target brew time 2:45-3:15. Best at warm-to-cool stage — opens significantly as it cools. Key signal: candied apricot + bergamot + jasmine + lemon + integrated stone fruit tartness emerges at cool stage. If muted at 91°C, go 1 click finer on grind (don't increase temp).
+- **Archive:** [archive.md § CGLE-SRUME-WASHED-2026](docs/roasting/archive.md#cgle-srume-washed-2026---sudan-rume-hybrid-washed)
+
+### Legacy and incomplete lots
+
+| Lot ID | Variety / Process | Reference Roast | Reference Brew | Archive |
+|---|---|---|---|---|
+| GUA-SOC-JAVA-2024 | Guatemala (legacy, pre-counterflow) | Batch 88 | UFO Ceramic + Sibarist UFO Fast Cone, EG-1 6.5, 15g/255g, 94°C, Melodrip | [archive.md](docs/roasting/archive.md#gua-soc-java-2024) |
+| GUA-LIB-ADC-2024 | Guatemala (legacy, pre-counterflow) | Batch 94 | Recipe parameters not preserved | [archive.md](docs/roasting/archive.md#gua-lib-adc-2024) |
+| GV-OMA-25-035 | Gesha Village Oma (counterflow incomplete — green exhausted before resolution) | Batch 52 (pre-counterflow) | Counterflow chapter unresolved | [archive.md](docs/roasting/archive.md#gv-oma-25-035---gesha-village-oma) |
+
+> Cross-lot patterns that have generalized are surfaced in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) below. Open research questions on these lots live in [§ Open Questions](#open-questions).
 
 ---
 
@@ -561,12 +582,6 @@ Shorter Maillard + higher momentum at crack + shorter dev → more acidity and c
 Use the washed profile as the starting point. Lower inlet for early stages - gentler start. Taper heat away earlier. Primary failure mode for naturals is overdevelopment, not underdevelopment.
 
 **Caveat from Sudan Rume Natural experience:** Sudan Rume Natural required nearly as much energy as the washed version due to the fruit layer insulating the core. Always start from the washed profile and let FC timing tell you whether to add or reduce energy.
-
----
-
-# Per-lot generalized learnings
-
-Per-lot generalized lessons (Sudan Rume Hybrid Washed, Mandela XO) live in [docs/roasting/archive.md](docs/roasting/archive.md) under each lot's section. Cross-lot patterns that have generalized across 2+ lots are surfaced in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) below.
 
 ---
 
@@ -799,6 +814,42 @@ Operational implication: do not read Agtron WB ordering as a peak-inlet proxy ac
 
 ---
 
+# Open Questions
+
+Things to test on future roast sessions. **Maintenance rule:** when a question resolves, delete it (don't strikethrough). Resolved-with-strikethrough creates clutter at scale; the resolution lives in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) (if a generalizable pattern emerged) and the commit history.
+
+- Does FC temperature anchor at 204-206°C across all naturals in counterflow regardless of cultivar / density / moisture / drying method? Two lots replicate so far (see [§ FC-Temp Architectural Constraint on Naturals](#fc-temp-architectural-constraint-on-naturals---working-hypothesis)) — need a 3rd natural lot to promote.
+
+- Is COS-HIG-BOR-2026 v1c (251°C peak, silent FC, drop 208°C) cleanly reproducible? V2a at identical inlet produced audible FC and drop 210.9°C. Watch for repeat on V3 / next-lot replication attempts.
+
+- Audible FC threshold on heavy anaerobic naturals: 251-253°C peak unlocks audible FC; 255°C suppresses again to silent (COS-HIG-BOR-2026 V2 only). Validate on next heavy-anaerobic lot before treating as a generalizable window.
+
+- Does Day 7 pourover consistently reverse the cupping-table verdict on heavy anaerobic Gesha? Confirmed once on CGLE-GESHA-CLOUDS-2026 V1 (#162 won at pourover, #163 won at cupping table). Need 1-2 more heavy-anaerobic-Gesha lots before promoting.
+
+- xbloom evaluation gate false-positive lactic on anaerobic naturals: COS-HIG-BOR-2026 V1 #158 read as defective at xbloom but cleanly resolved at Balanced Intensity pourover. Watch for repeat on Mandela XO retro / next anaerobic natural / co-ferment lot before generalizing "for heavy-ferment lots, run optimized brew on top 2 candidates before declaring underdevelopment."
+
+- Does dev-time outweigh peak inlet for Agtron WB at the low-energy end of a peak-inlet spread? Observed once on RWA-NOVA-NAT21-RB-2026 V1 (Agtron 75 / 82.5 / 81.4 inverted from peak ordering — see [§ Dev-Time Outweighs Peak Inlet](#dev-time-outweighs-peak-inlet-for-agtron-wb-at-low-energy-spread-end-working-hypothesis---1-lot-low-confidence)). Validate on next V1 with a low-energy floor batch.
+
+- Does session-position acceleration on a high-peak third batch need profile-end-condition (bean temp) to keep drop on target? RWA-NOVA-NAT21-RB-2026 v1c produced a 1.7°C ceiling breach (see [§ Session-Position Acceleration vs Drop Ceiling](#session-position-acceleration-vs-drop-ceiling-on-high-peak-third-batch-working-hypothesis---1-lot-low-confidence)). Test mitigation (bean-temp 207°C end condition) on next V1 with a high-peak third batch.
+
+- For washed Gesha in counterflow, does 48s dev-time floor hold across new lots? Confirmed once on GV-OMA-25-035 (3 underdeveloped batches at 24-40s dev). Use shaped fan from the start on future Gesha lots. Promote when next washed Gesha lot exhibits the same below-48s underdevelopment.
+
+- One-shot calibrations where density is unmeasured: is altitude alone a reliable proxy for energy direction? ECU-TD24-RANCHOTIO-TM-WASHED Batch 179 (1,300m, -2°C peak inlet hedge applied) underdeveloped. Default until 2+ more one-shot data points: full anchor energy, no altitude-based downward hedge, 125°C hopper pre-load.
+
+- Does the SR Natural V3/V4 low-energy slow-bake template generalize to other naturals as a recovery move when peak-inlet sweep fails? Reserved as architectural follow-up if the FC-Temp Architectural Constraint hypothesis promotes to confirmed.
+
+- Does the Gesha Clouds v2a-vs-#162 divergence reflect green aging? V2a at strict replication produced Agtron WB 6 points lighter on what was meant to be reproduction. Watch the next strict-replication attempt on a 2+-week-aged green to see whether this is bean-specific or a general aging effect.
+
+- Does bean-temp end condition (replacing dev-time end condition) hold up across more heavy-anaerobic lots? Working on Mandela XO V4 + CGLE-GESHA-CLOUDS-2026 V2. Promote to default for all heavy-anaerobic experiments; dev-time only as a true safety-net layered on top.
+
+---
+
+# Archive
+
+Full per-lot prose, experiment history, generalized lessons, and process learnings: [docs/roasting/archive.md](docs/roasting/archive.md). Five lots indexed; new closed lots get added on close-out via `closed-bean-full-fill.md` STAGE 7 (`propose_doc_changes` proposes a new section, the arbiter applies citation-by-citation per [ARBITER.md](ARBITER.md)).
+
+---
+
 # Roast-to-Brew Translation
 
 *This section translates roast parameter patterns into expected brew behavior and starting recipe adjustments. It bridges the gap between the roasting reference guide and the brewing reference guide. Updated as new lots are resolved.*
@@ -822,44 +873,7 @@ Several roast parameters directly predict how a coffee will behave at brew time,
 | Maillard 40-44% | Balanced phase structure - full aromatic expression available | Pushed recipe appropriate. Lower temp, higher concentration. |
 | FC temp 202-205°C, drop 206-207°C | Confirmed target zone for Sudan Rume-type coffees - full expression should be achievable at brew | Pushed recipe. See reference recipe below. |
 
-## Reference Brew Recipes by Lot
-
-These are confirmed optimized brew recipes established through the full roast-to-cup process. Use as direct starting points when brewing these reference roasts.
-
-### CGLE Sudan Rume Hybrid Washed - Reference Roast #133
-
-| Field | Value |
-|---|---|
-| Brewer | UFO Ceramic + Sibarist Fast Cone |
-| Dose | 15g |
-| Water | 210g (1:14 ratio) |
-| Water temp | 91°C |
-| Grind | EG-1 at 6.0 |
-| Agitation | Melodrip throughout |
-| Bloom | 45g, 45 seconds |
-| First pour | To 130g total, slow through Melodrip |
-| Second pour | To 210g total, slow through Melodrip |
-| Target brew time | 2:45-3:15 |
-| Best evaluation stage | Warm to cool (50-45°C) - opens significantly as it cools. Do not evaluate at high temp. |
-| Key signal | Candied apricot, bergamot, jasmine, lemon, and integrated stone fruit tartness (malic acid) should appear at cool stage - sweet and tart simultaneously, like a candied dried apricot. The tartness sits underneath sweetness and softens as it cools. If muted at 91°C, do not increase temp - try 1 click finer on grind. If tartness feels sharp or disconnected rather than integrated, lower temp slightly or extend bloom. |
-
-### CGLE Mandela XO - Reference Roast #139
-
-| Field | Value |
-|---|---|
-| Brewer | April Brewer Glass + April Brewer Paper |
-| Dose | 15g |
-| Water | 255g (1:17 ratio) |
-| Water temp | 93°C |
-| Grind | EG-1 at 6.4 |
-| Agitation | Spiral bloom, center pours for main pours |
-| Bloom | 50g, 10s pour, wait 40s |
-| First pour | 0:50 → pour to 160g, 15s, wait 25s |
-| Second pour | 1:30 → pour to 255g, 15s |
-| Target brew time | 2:45-3:15 |
-| Best evaluation stage | Warm to cool (50-45°C) - cup rounds out and integrates as it cools. Do not evaluate at high temp - acidity reads sharp at hot stage. |
-| Key signal | Caramelized/charred pineapple, barbecue caramel, lemongrass tea, creamy milk tea body, light liqueur warmth at finish. Flavors should distribute through the full body rather than concentrating in the attack. If cup reads pungent and front-loaded, drop brew temp to 91°C before adjusting grind - lower temp is the primary correction lever for this coffee. |
-| Critical note | Do not use UFO + fast cone as the primary brewer for this coffee - it amplifies the fermentation attack and produces a sharp, over-expressed result. April Brewer's flat bottom geometry and rounded flow is essential to the target expression. |
+> Per-lot reference brew recipes (CGLE Sudan Rume Washed #133, CGLE Mandela XO #139) live in [§ Reference Roasts + Brews (Closed Lots)](#reference-roasts--brews-closed-lots). The decision logic + processing-method hypotheses below apply when designing the optimized brew for a new lot reaching reference-roast declaration.
 
 ## Pushed vs. Standard Recipe Decision Logic
 
@@ -899,10 +913,3 @@ The implication for the development loop:
 
 **Build the optimized brew session into every lot close-out.** Do not declare a reference roast without confirming it produces the target cup through the optimized brew, not just the evaluation recipe.
 
----
-
-# Washed Gesha - Counterflow Signal (Incomplete)
-
-Three counterflow batches (95, 97, 99) all returned underdeveloped at Day 10 pourover despite dev times of 24-40s. Even Batch 99 at 40s/16.1% DTR was monotone, nutty, and missing Gesha character.
-
-> **Treat 40s as a confirmed floor, not a target.** For future washed Gesha lots in counterflow, start at 48s minimum. These batches also used flat fan - shaped fan curves should be used from the start on future Gesha lots.
