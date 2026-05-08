@@ -84,4 +84,4 @@ These learnings emerged from 6 experiment sets across 20+ batches.
 **Status:** CLOSED. Counterflow chapter unresolved - green exhausted before reaching a confirmed counterflow reference roast.
 
 - **Reference roast:** Batch 52 (pre-counterflow)
-- **Counterflow signal:** Treat 40s as confirmed floor for future washed Gesha in counterflow - start at 48s minimum. See [ROASTING.md § Washed Gesha - Counterflow Signal (Incomplete)](../../ROASTING.md#washed-gesha---counterflow-signal-incomplete) for the full open-question entry.
+- **Counterflow signal:** Three counterflow batches (95, 97, 99) all returned underdeveloped at Day 10 pourover despite dev times of 24-40s. Batch 99 at 40s/16.1% DTR was monotone, nutty, and missing Gesha character. **Treat 40s as a confirmed floor, not a target — for future washed Gesha lots in counterflow, start at 48s minimum.** Flat fan was used on these batches; shaped fan curves should be used from the start on future Gesha lots. Tracked as a forward research question in [ROASTING.md § Open Questions](../../ROASTING.md#open-questions) ("Does 48s dev-time floor hold across new lots?").
