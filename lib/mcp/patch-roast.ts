@@ -61,7 +61,7 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
     {
       title: 'Patch Roast',
       description:
-        'Update / save / record / push field-level changes to an existing roast batch by roast_id. Sibling of push_roast (for new batches). Use this for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later, mark `is_reference: true` once Day-7 cupping confirms the lot winner), or any field-level correction. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] with id keyed by batch_id). Returns { roast_id }.',
+        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id. Sibling of push_roast (for new batches). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] with id keyed by batch_id). Returns { roast_id }.',
       inputSchema: patchRoastInputSchema,
     },
     async (input) => {
