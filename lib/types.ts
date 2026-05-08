@@ -272,6 +272,13 @@ export interface Brew {
   // v8.4 (2026-05-06): MODIFIER_TYPES dropped from 4 -> 3 (Immersion absorbed
   // into the Hybrid strategy; remaining: output_selection, inverted_temperature_staging,
   // aroma_capture).
+  // v8.5 (2026-05-08): MODIFIER_TYPES grew back from 3 -> 4 with the addition
+  // of role_based_pulse for assigning per-pour sensory roles on
+  // percolation-only brewers (Justin Bull 2025 Phase-Mapped Hybrid analog
+  // when no immersion phase is involved). The shape mirrors aroma_capture:
+  // type + free-text "roles" field. OUTPUT_SELECTION_FORMS also grew 3 -> 4
+  // with `dilution` (post-brew dilution; carries optional `dilution_g` on
+  // OutputSelectionModifier).
   modifiers: import('./extraction-modifiers').Modifier[]
   aroma: string | null
   attack: string | null

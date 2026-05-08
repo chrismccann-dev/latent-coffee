@@ -99,11 +99,12 @@ const STRATEGY_DESCRIPTIONS: Record<ExtractionStrategy, string> = {
 const MODIFIER_TYPE_DESCRIPTIONS: Record<ModifierType, { description: string; subfields: Record<string, string> }> = {
   output_selection: {
     description:
-      'Cut early or late from the brew (or both). Used when you want to drop the head or tail of the extraction.',
+      'Reshape the cup by discarding portions of the extraction curve OR adding water post-brew. v8.5 (2026-05-08) added `dilution` as a 4th form for post-brew water addition.',
     subfields: {
-      form: 'early_cut | late_cut | both',
+      form: 'early_cut | late_cut | both | dilution',
       brew_weight: 'Total grams brewed before cutting (number, optional).',
       cup_yield: 'Grams kept after the cut (number, optional).',
+      dilution_g: 'Grams of water added post-brew (number, optional, only when form=dilution).',
       notes: 'Free-text rationale.',
     },
   },
@@ -114,6 +115,13 @@ const MODIFIER_TYPE_DESCRIPTIONS: Record<ModifierType, { description: string; su
   aroma_capture: {
     description: 'Aromatic-distillation accessory inserted into the brew (Paragon ball, scent diffuser).',
     subfields: { application: 'Free-text, e.g. "Paragon ball on bloom + Pour 1".' },
+  },
+  role_based_pulse: {
+    description:
+      'Assigning each pour an explicit sensory role (saturation / body / clarity / finish) on a percolation-only brewer (V60 / Orea / Kalita / April / Chemex). v8.5 (2026-05-08) promotion. If the recipe involves immersion or a valve transition, classify under extraction_strategy="Hybrid" with hybrid_subform="phase_mapped" instead — RBP-as-modifier applies only when no immersion phase is involved. Agitation taper (high-energy early, low-energy late) is one shape of this modifier on the agitation axis.',
+    subfields: {
+      roles: 'Free-text per-pour role description, e.g. "Pour 1=saturation · Pour 2=body · Pour 3=clarity".',
+    },
   },
 }
 
