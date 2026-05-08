@@ -1,0 +1,73 @@
+# Shipped Sprints
+
+Compact reverse-chronological index of every shipped sprint. Per-sprint retrospectives with full narrative + lessons live in `memory/project_*.md` (one file per sprint). Migrations live in `supabase/migrations/*.sql` — each filename + header comment documents what changed.
+
+Moved out of PRODUCT.md as part of the May 2026 doc cleanup PR (when PRODUCT.md crossed the 120KB tripwire). The pointer remains at PRODUCT.md § Where shipped sprint history lives.
+
+| Date | Sprint | Landmark |
+|---|---|---|
+| 2026-05-07 | **May 2026 doc cleanup PR** | Track 1 of the 3-track General cleanup sprint. Walks the full root-doc surface: PRODUCT.md restructure (7-section roadmap collapses 4 prior sections + relocates "What's Missing"), CLAUDE.md (Documentation Index + Sprint cadence 4→6 items), README.md refresh, SYNC_V2.md restructure (~555→~250 lines), ARBITER.md drift fixes, BREWING.md (April Brewer registry fix in 3 files), ROASTING.md (13 edits incl. new Roast Philosophy paragraph), 3 prompts updated, lib/mcp/docs.ts adds descriptions + registers docs/roasting/archive.md, migration 046 (cuppings.sweetness + cuppings.temperature_behavior), SYNC.md + design-brief.md deleted. |
+| 2026-05-06 | **Roest API write integration Phase 1+2 (bundled)** | PR #110. 3 new MCP Tools: `push_roast_profile` + `push_inventory` + `patch_inventory`. Tool count 29 → 32. Phase 2 promoted into the same sprint as Phase 1 — bidirectional inventory sync matters for the new-bean onboarding loop now that writes flow both directions. Substrate: scope=read+write + authedWrite + getRoestCustomerInfo + 3-read retrofit. Empirical end_condition wins over OpenAPI (BEAN_TEMP=1 not 4). |
+| 2026-05-06 | **Brewing v8.4 — Hybrid promotion + WBC docs refresh** | PR #108. 6th strategy promoted (Hybrid as extraction structure vs the 5 intensity strategies). 102-recipe WBC archive (`docs/brewing/wbc-recipes.md`) ships alongside refreshed `docs/brewing/wbc-reference.md`. 3 brew reclassifications from Balanced+Immersion → Hybrid (Sequential). Cooling-Curve Design as new Step 1d named consideration with `cooling_curve_target` free-text column. |
+| 2026-05-05 | **Phase 3 — taxonomy_overrides_queue + provenance + 3 MCP Tools** | PRs #103 (design) + #104 (doc proposals batch) + #105 (impl). Migration 045 adds `taxonomy_overrides_queue` (single shape across 7 axes; EXCLUDE constraint on `(user_id, axis, lower(raw_value)) WHERE status='pending'` auto-collapses duplicates) + `terroir_provenance` / `cultivar_provenance` enum on `green_beans` + `brews` + `green_beans.canonicals_updated_at`. 3 new Tools (`list_taxonomy_queue` + `propose_canonical_addition` + `resolve_queue_entry`) lift count 26 → 29. ARBITER.md gained "Taxonomy queue arbitration" section + T1-T6 procedure. |
+| 2026-05-05 | **Phase 2 — substrate gaps from 16 roasting + 5 brewing dog-food sessions** | PR #101 + follow-up #102 (cross-system audit findings post-#101 merge: `lib/types.ts` + `/add` page drift caught only because Chris asked — origin of `feedback_cross_system_audit.md` standing rule). |
+| 2026-05-05 | **Phase 1 — prompts foundation cleanup** | PR #100. Port 7 prompts to `docs/prompts/`, MCP-served via `lib/mcp/docs.ts` `DOC_FILES` + `listDocs()`. Single source of truth that auto-updates on every Vercel deploy, replacing manual paste-into-claude.ai-project-files cycle. Cluster F prompt-v5 rewrites + Cluster A namespace updates included. |
+| 2026-05-04 | **Iteration round-2 fixes + doc proposals batches** | PRs #95 / #96 / #97 / #98 / #99. Rwanda Northern Province / Central Plateau Highlands terroir registry add (#99); BREWING + ROASTING canonicals reframe (#96 + #97); doc proposals batch from May 4 brewing dog-food (#98); BREWING.md `canonicals://` Tool fallback note for clients that don't enumerate URI templates (#95). |
+| 2026-05-03 | **V2 Sprint 3.0.5 — promote brews Resources to Tools** | PR #94. `brews://recent` + `brews://by-id` Resources promoted to `list_recent_brews` + `get_brew` Tools (architectural rule: claude.ai surfaces Tools to the model, Resources only as catalog). Tool count 24 → 26. |
+| 2026-05-03 | **V2 Sprint 3.0 — OAuth 2.1 + PKCE for claude.ai web MCP** | PR #93. Discovery endpoints (`/.well-known/oauth-protected-resource` + `/.well-known/oauth-authorization-server`), `/api/mcp/authorize`, `/api/mcp/token`, WWW-Authenticate header on `/api/mcp` 401. Migration 043 for auth-code storage. Static client credentials via Vercel env. claude.ai web becomes the main brewing surface post-3.0 + post-2.7. |
+| 2026-05-03 | **V2 Sprint 2.7 — Brewing prompt v9 + canonicalization + MCP-as-source-of-truth flip** | PR #92 — last build sprint in V2 queue. Bidirectional canonicalization: BREWING.md +173 lines, ROASTING.md -3 lines. Two new subdocs: `docs/brewing/wbc-reference.md` + `docs/roasting/archive.md`. After deploy + MCP registration, claude.ai retires 12 uploaded files (-14,614 lines from project context). Em-dash sweep (103 → 0 in BREWING) shipped same PR. |
+| 2026-05-02 | **Post-2.6 cleanup mini-session** | PRs #87 (cherry-pick of #86) + #88 (registry edits) + #89 (recompose_process flag) + #90 (migration 042: terroirs UNIQUE includes meso_terroir). 17 patches + 8 orphan deletions via Sprint 2.6 patch_* Tools. |
+| 2026-05-02 | **V2 Sprint 2.6 PR2 — 6 patch_* Tools** | PR #87 (cherry-pick of #86). 6 new Tools: `patch_brew` / `patch_green_bean` / `patch_roast` / `patch_cupping` / `patch_experiment` / `patch_roast_learnings`. Tool count 18 → 24. `patchBrew` helper extracted from `app/api/brews/[id]/route.ts` as single source of truth. |
+| 2026-05-02 | **V2 Sprint 2.6 PR1 — strict find-or-create on FK tables** | PR #85. Closes 4 silent-failure modes on terroir / cultivar find-or-create (R7 / R8 / R12 / R23) via strict-canonical fail-fast + meso in match key + (country, macro) pair validation. |
+| 2026-05-01 | **Roasting MCP feedback batches 1-9** | PRs #75 - #84. Tool discoverability sweep + workflow context + push_green_bean UPSERT + push_roast UPSERT + brews[] in get_bean_pipeline + push_cupping UPSERT + Tolima registry gap + push_cupping recipe_variant + get_bean_pipeline desc surfaces patch_cupping. PR #84 doc proposals batch from May 1-2 roasting dog-food. |
+| 2026-04-30 | **V2 Sprint 2.5 — Roasting MCP tools + ROASTING.md** | PR #73 + follow-up #74. 7 new Tools (5 push + 2 Roest pull). ROASTING.md ~770-line verbatim port. Migration 039 (14 cols on roasts + cuppings + experiments + green_beans). Roest API integration via `/o/token/`. CGLE Mandela XO end-to-end dog-food. 2 substrate gaps fixed in #74 (numeric weights + preflight). |
+| 2026-04-29 | **V2 Sprint 2.4 — propose_doc_changes + arbiter playbook** | PRs #66 + #67 + #68 + feedback batches #69 / #70 / #71. Polymorphic `propose_doc_changes` Tool + `doc_proposals` queue (migration 037) + ARBITER.md + per-citation `target_doc` + section-anchor reads + 4 doc-introspection + 2 canonical-introspection Tools. First prose round-trip = Dongzhe 5th brew. |
+| 2026-04-28 | **V2 Sprint 2.3 — MCP scaffold + push_brew + read Resources** | First V2 build sprint — sync infrastructure live. `@modelcontextprotocol/sdk` 1.29.0 + `WebStandardStreamableHTTPServerTransport` on Vercel Node serverless. Bearer auth via `api_keys` table + migration 036. 12 canonical Resources at `canonicals://{axis}` + `brews://recent` + `brews://by-id/{uuid}` + `docs://brewing.md`. `push_brew` Tool wrapping `persistBrew`. `SUPABASE_SERVICE_ROLE_KEY` substrate gap closed mid-sprint. |
+| 2026-04-28 | **V2 architecture brainstorm (Sprint 2.2)** | Architecture doc shipped at SYNC_V2.md. Five locked decisions: MCP transport / API key auth / bidirectional with Resources / repo-file source-of-truth + DB proposal queue / asymmetric write trust. Build queue locked. |
+| 2026-04-27 | **V1-brews dog-food (Sprint 2.1)** | First end-to-end SYNC pipeline run. Picolot Emerald PL#015 (Mokka Natural) + Janson Green-Tip Gesha Natural Anaerobic 1010 landed. Mokka cultivar instantiated. `immersion` shipped as 4th canonical Modifier type (later absorbed into Hybrid in v8.4). |
+| 2026-04-27 | **Extraction Strategy v2** | Migration 034. `EXTRACTION_STRATEGIES` extended 3 → 5 (Suppression + Extraction Push promoted) + new `brews.modifiers jsonb` array (3 canonical types: output_selection / inverted_temperature_staging / aroma_capture). Hue-separated 5-pill palette. ModifierComposer + ModifierBadges. BREWING.md gains SECTION 4 = WBC Reference. **8-registry taxonomy batch complete** post this sprint. |
+| 2026-04-26 | **Brewer + Filter taxonomy adoption (sprint 1f)** | Migration 032. Two new registries from one CSV pair: 46 brewers (12 owned, 24 aliases) + 64 filters (22 owned post-dedupe, 34 aliases). Schema Option A. Material axis dropped. Orea v3/v4 ambiguity defaults to v4. xBloom net-new dripper. "Espro Bloom" relabel → xBloom Premium Paper Filters. |
+| 2026-04-26 | **Producer taxonomy adoption (sprint 1l)** | Migration 031. 49-name flat → 120-entry rich registry. Schema Option A. allowOverride pattern. 6 collapses. /simplify rule-of-three hit on `canonicalizeOverridable` PATCH helper. |
+| 2026-04-25 | **Grinder taxonomy adoption + V2 rework (sprint 1k)** | Migrations 029 + 030. V2 same-session rework: single EG-1 with burrs/burrShape/burrSize fields; setting axis flipped to enumerated strict (51 valid values 3.0-8.0 in 0.1 steps; 16 with rich content). New `components/GrindSettingInput.tsx`. |
+| 2026-04-24 | **Roast level taxonomy + roaster /add enforcement (1m + 1h.2)** | Migration 028. 8 Agtron-anchored canonical buckets + 22 aliases. New `canonicalize()` method on CanonicalLookup fixes case-drift. CanonicalTextInput gains `allowOverride` + "Use anyway" link. |
+| 2026-04-24 | **Roaster taxonomy structural port (1h.1)** | PR #52. Migration 027. 70 canonical roasters across 6 families (added SYSTEM as 6th). 4 strategy reclassifications (Rose/Noma/Picky Chemist → SYSTEM, TM Coffee → CLARITY-FIRST). |
+| 2026-04-24 | **/add SR canonical rebuild (1i)** | SR steps 7+8 rebuilt to canonical pickers; `handleSaveSelfRoasted` routes through findOrCreateTerroir + findOrCreateCultivar via Promise.all. |
+| 2026-04-23 | **Process enforcement (1e.3)** | PR #46. ProcessPicker (shared builder) + `/add` purchased + `/add` SR + `/edit` + persistBrew + PATCH route + save-gate. |
+| 2026-04-23 | **Process schema migration + decomposition (1e.2)** | Migrations 025 + 026 (post-ship correction). 8 structured columns added to brews + 55-row backfill. |
+| 2026-04-23 | **Process structural port (1e.1)** | First Phylum A2 port. Composable taxonomy. `lib/process-families.ts` → `lib/process-registry.ts`. composeProcess / decomposeProcess + LEGACY_DECOMPOSITIONS for 20 DB values. Zero DB/UI change. |
+| 2026-04-22 | **Region enforcement (1d.3)** | CanonicalTextInput on `/add` + `/brews/[id]/edit` bound to `TERROIR_MACRO_LOOKUP`. `findOrCreateCultivar` + `findOrCreateTerroir` extracted to `lib/brew-import.ts`. Admin_region auto-populates from registry. |
+| 2026-04-22 | **Region content backfill (1d.2)** | Migration 024. 22 UPDATEs populating 11 content columns from regions.md. climate_stress → free-text; typical_processing Title Case. Overwrites migration 009. |
+| 2026-04-22 | **Region taxonomy adoption (1d.1)** | Migration 023. 121 canonical macros across 38 countries + rich `lib/terroir-registry.ts`. Meso/micro demoted to free-text. Dual-registry drift killed. 11 DB-row renames preserving 55 brew FKs. |
+| 2026-04-22 | **Variety enforcement (1b)** | CanonicalTextInput on `/add` purchased review + `/brews/[id]/edit`. Edit picker flips from 26-DB-rows to 63-canonical registry with lazy find-or-create; aliases resolve on save; `isResolvable` added to `makeCanonicalLookup`. |
+| 2026-04-22 | **Variety content backfill (1a.2)** | PR #36 + migration 022. 26 existing DB cultivar rows populated with 18 attribute fields from varieties.md. |
+| 2026-04-22 | **Variety taxonomy adoption (1a.1)** | PR #34 + migration 021. `docs/taxonomies/varieties.md` + rich `lib/cultivar-registry.ts` (63 canonicals / 20 lineages / 48 aliases). Dual-registry drift killed. Mokka pre-req for SYNC V1 resolved. |
+| 2026-04-22 | **Producer + roaster canonicalization** | PR #23 + migration 018. Mirrors migration 013's flavor-notes pattern. Audit found 2 drifted producer clusters + 5 verbose strings. New `lib/producer-registry.ts` + `lib/canonical-registry.ts` factory. New `components/CanonicalTextInput.tsx`. |
+| 2026-04-21 | **SYNC.md playbook (V1-brews step c)** | `SYNC.md` at repo root — validator-table-driven. Deprecated 2026-05-07 in May doc cleanup PR (V2 MCP path is canonical). |
+| 2026-04-21 | **Terroir + cultivar canonical registries (V1-brews step b)** | PR #30 — `lib/terroir-registry.ts` + `lib/cultivar-registry.ts` + factory alias tier. |
+| 2026-04-21 | **BMR v7.1 → BREWING.md (V1-brews step a)** | PR #27 — `BREWING.md` at repo root. |
+| 2026-04-21 | **Reference Roasts + Roasting Guide — brainstorm + feature doc** | `docs/features/reference-roast-and-guide.md`. |
+| 2026-04-21 | **Mobile polish on /brews, /brews/[id], filter bar** | — |
+| 2026-04-21 | **Cross-dim filters on /brews** | — |
+| 2026-04-20 | **Self-roasted flow audit + /add hardening** | PR #25 + migration 020. |
+| 2026-04-20 | **Green detail render polish** | — |
+| 2026-04-20 | **Data-depth backfill (terroirs + cultivars)** | Migrations 015 / 016 / 017. |
+| 2026-04-19 | **Experiments import + render polish** | Migration 019. |
+| 2026-04-19 | **Design-system standardization** | — |
+| 2026-04-19 | **Cross-link backfill across aggregation detail pages** | — |
+| 2026-04-18 | **Roasters aggregation** | Migration 014. |
+| 2026-04-17 | **Design polish + mobile pass** | PR #14. |
+| 2026-04-17 | **Flavor canonicalization + edit UI** | Migration 013. |
+| 2026-04-16 | **Processes aggregation** | Migration 012. |
+| 2026-04-16 | **Producer column + backfill** | PR #12 + migration 011. |
+| 2026-04-16 | **Extraction strategy sprint** | PRs #10 / #11. |
+| 2026-04-15 | **Terroir macro redesign** | PR #5. |
+| 2026-04-14 | **Cultivar lineage redesign** | PR #4. |
+| (earlier) | **Purchased-coffee import flow, build hygiene, initial schema + backfills** | PR #9 + migrations 001-010. |
+
+---
+
+## See also
+
+- **Per-sprint retros:** `memory/project_*.md` — full narrative + lessons per sprint, indexed in `memory/MEMORY.md`.
+- **Migrations:** `supabase/migrations/*.sql` — each filename + header comment is the authoritative record of what changed.
+- **Active and queued sprints:** [PRODUCT.md § Roadmap](../../PRODUCT.md#roadmap).

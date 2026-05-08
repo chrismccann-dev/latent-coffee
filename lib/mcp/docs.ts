@@ -35,12 +35,66 @@ const DOC_FILES: Record<string, string> = {
   'docs://brewing/wbc-reference.md': 'docs/brewing/wbc-reference.md',
   'docs://brewing/wbc-recipes.md': 'docs/brewing/wbc-recipes.md',
   'docs://roasting.md': 'ROASTING.md',
+  'docs://roasting/archive.md': 'docs/roasting/archive.md',
   ...Object.fromEntries(
     TAXONOMY_AXES.map((axis) => [`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`]),
   ),
   ...Object.fromEntries(
     PROMPT_FILES.map((name) => [`docs://prompts/${name}.md`, `docs/prompts/${name}.md`]),
   ),
+}
+
+// Per-doc descriptions used in listDocs() catalog so claude.ai can route to the
+// right doc without fetching first. New rule when adding a doc here: also write
+// a one-sentence "use when..." description below. Without descriptions, claude.ai
+// has only the title to go on (titles are short and mechanical).
+const DOC_DESCRIPTIONS: Record<string, string> = {
+  'docs://brewing.md':
+    'Use when planning a new brew recipe — contains the 6-strategy + 3-modifier Two-Axis framework, Step 1d Coffee Brief structure, equipment reference, and archive patterns by strategy/modifier/process/variety.',
+  'docs://brewing/roasters.md':
+    'Use when working with a specific roaster — per-roaster brewing lessons + house-style cards (e.g. Hydrangea El Paraíso thermal-shock guidance, Sey extraction expectations). Reference for roaster-anchored brew design.',
+  'docs://brewing/wbc-reference.md':
+    'Use when looking up WBC competition technique categories — 5 foundational control axes + 8 strategy families mapped onto the Latent framework. Lean reference layer.',
+  'docs://brewing/wbc-recipes.md':
+    'Use when looking up specific competitor recipes from World Brewers Cup 2022-2025 — 102-recipe archive with subtype definitions. Reference material for the "experiment Chris wouldn\'t think of" goal.',
+  'docs://roasting.md':
+    'Use when planning a roast on the Roest L200 Ultra (counterflow mode) — covers the New Coffee Onboarding Protocol (Steps 1-4), Standard Workflow, evaluation protocol (Day 7 pourover gate), fan/inlet curve templates, FC marking protocol, and per-coffee + cross-coffee insight layers.',
+  'docs://roasting/archive.md':
+    'Use when researching closed-lot roasting outcomes — per-lot Key Learnings, reference roast parameters, and structural takeaways from completed beans. Read before roasting a similar coffee.',
+  'docs://taxonomies/regions.md':
+    'Use when validating or looking up a country/macro_terroir for a green bean or brew. 121 canonical macros across 38 countries; meso/locality stays free-text.',
+  'docs://taxonomies/varieties.md':
+    'Use when validating or looking up a cultivar — 63 canonical cultivars across 5 Arabica genetic families + 3 non-Arabica species. Aliases (e.g. "Geisha" → "Gesha") resolve at canonicalize time.',
+  'docs://taxonomies/processes.md':
+    'Use when decomposing a process into the composable taxonomy — 4 bases (Washed/Honey/Natural/Wet-hulled) + Honey color subprocesses + 4 modifier axes (fermentation/drying/intervention/experimental) + decaf + signature methods.',
+  'docs://taxonomies/roasters.md':
+    'Use when validating or looking up a roaster — 70 canonical roasters across 6 strategy families (Clarity-First / Balanced / Extraction-Forward / System / Varies / Self-Roasted). Includes BMR house-style cards.',
+  'docs://taxonomies/producers.md':
+    'Use when validating or looking up a producer — 120 canonical producers across 6 producer systems. Tier-scoped (60-70% comprehensive); allowOverride pattern for net-new entries.',
+  'docs://taxonomies/brewers.md':
+    'Use when validating or looking up a brewer — 46 canonical brewers (12 owned by Chris). Material axis dropped (model name only). allowOverride pattern.',
+  'docs://taxonomies/filters.md':
+    'Use when validating or looking up a filter — 64 canonical filters (22 owned), pairs with brewer registry. allowOverride pattern.',
+  'docs://taxonomies/flavors.md':
+    'Use when validating flavor notes or structure tags — 3-axis composable: 181 base flavors across 12 categories + 43 modifiers + 29 structure descriptors across 7 axes. Tea-base reversal rule for "Peach Tea" type chips.',
+  'docs://taxonomies/grinders.md':
+    'Use when validating grinder + grind setting — currently single canonical (EG-1) with 51 enumerated valid settings (3.0-8.0 in 0.1 steps).',
+  'docs://taxonomies/roast-levels.md':
+    'Use when validating roast level — 8 Agtron-anchored canonical buckets (Extremely Light → Very Dark, 10-unit ranges) + marketing-tag aliases.',
+  'docs://prompts/start-brew.md':
+    'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
+  'docs://prompts/log-brew.md':
+    'Operational prompt for logging a finished brew via push_brew — short, no-confirmation submission with canonical-validation discipline.',
+  'docs://prompts/propose-doc-changes-from-brew.md':
+    'Operational prompt for proposing BREWING.md / roaster card / taxonomy edits after a brew session via propose_doc_changes.',
+  'docs://prompts/bundled-brewing-completion.md':
+    'Operational prompt combining log-brew + propose-doc-changes in one shot. Use for a finished PURCHASED brew. (Self-roasted brews flow through closed-bean-full-fill.md STAGE 7.)',
+  'docs://prompts/new-bean-intake.md':
+    'Operational prompt for green bean intake + V1 profile design — runs ROASTING.md New Coffee Onboarding Protocol Steps 1-4, pushes green_bean + inventory + 3 roast profiles to Roest.',
+  'docs://prompts/in-process-bean-incremental-sync.md':
+    'Operational prompt for mid-iteration roast sync — push roasts/cuppings/experiments since last sync, optionally design forward (V2/V3), propose ROASTING.md Active Lots updates.',
+  'docs://prompts/closed-bean-full-fill.md':
+    'Operational prompt for lot close-out — push every layer (green_bean / roasts / cuppings / experiments / roast_learnings / SR reference brew) + propose ROASTING.md close-out narrative + archive Roest inventory.',
 }
 
 export type Section = {
@@ -64,50 +118,34 @@ export function isKnownDoc(uri: string): boolean {
   return uri in DOC_FILES
 }
 
-export function listDocs(): { uri: string; name: string; title: string; mimeType: string }[] {
+export function listDocs(): {
+  uri: string
+  name: string
+  title: string
+  mimeType: string
+  description: string
+}[] {
+  const entry = (uri: string, name: string, title: string) => ({
+    uri,
+    name,
+    title,
+    mimeType: 'text/markdown',
+    description: DOC_DESCRIPTIONS[uri] ?? '',
+  })
+
   return [
-    {
-      uri: 'docs://brewing.md',
-      name: 'docs/brewing.md',
-      title: 'Brewing Master Reference',
-      mimeType: 'text/markdown',
-    },
-    {
-      uri: 'docs://brewing/roasters.md',
-      name: 'docs/brewing/roasters.md',
-      title: 'Roaster Brewing Lessons',
-      mimeType: 'text/markdown',
-    },
-    {
-      uri: 'docs://brewing/wbc-reference.md',
-      name: 'docs/brewing/wbc-reference.md',
-      title: 'WBC Reference (Latent mapping)',
-      mimeType: 'text/markdown',
-    },
-    {
-      uri: 'docs://brewing/wbc-recipes.md',
-      name: 'docs/brewing/wbc-recipes.md',
-      title: 'WBC 102-Recipe Archive (2022-2025)',
-      mimeType: 'text/markdown',
-    },
-    {
-      uri: 'docs://roasting.md',
-      name: 'docs/roasting.md',
-      title: 'Roasting Master Reference',
-      mimeType: 'text/markdown',
-    },
-    ...TAXONOMY_AXES.map((axis) => ({
-      uri: `docs://taxonomies/${axis}.md`,
-      name: `docs/taxonomies/${axis}.md`,
-      title: `Taxonomy: ${axis}`,
-      mimeType: 'text/markdown',
-    })),
-    ...PROMPT_FILES.map((name) => ({
-      uri: `docs://prompts/${name}.md`,
-      name: `docs/prompts/${name}.md`,
-      title: `Prompt: ${name}`,
-      mimeType: 'text/markdown',
-    })),
+    entry('docs://brewing.md', 'docs/brewing.md', 'Brewing Master Reference'),
+    entry('docs://brewing/roasters.md', 'docs/brewing/roasters.md', 'Roaster Brewing Lessons'),
+    entry('docs://brewing/wbc-reference.md', 'docs/brewing/wbc-reference.md', 'WBC Reference (Latent mapping)'),
+    entry('docs://brewing/wbc-recipes.md', 'docs/brewing/wbc-recipes.md', 'WBC 102-Recipe Archive (2022-2025)'),
+    entry('docs://roasting.md', 'docs/roasting.md', 'Roasting Master Reference'),
+    entry('docs://roasting/archive.md', 'docs/roasting/archive.md', 'Roasting Closed-Lot Archive'),
+    ...TAXONOMY_AXES.map((axis) =>
+      entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),
+    ),
+    ...PROMPT_FILES.map((name) =>
+      entry(`docs://prompts/${name}.md`, `docs/prompts/${name}.md`, `Prompt: ${name}`),
+    ),
   ]
 }
 

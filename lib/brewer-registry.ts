@@ -71,21 +71,25 @@ export const BREWERS: readonly BrewerEntry[] = [
     accessories: "Prismo / Puckpuck",
   },
   {
+    // Standard April Brewer (passive flat percolation). The April HYBRID Brewer
+    // is a separate model with an immersion base / valve / stopper system —
+    // Chris doesn't own one, so it's intentionally not in this registry.
+    // If acquired in future, add as a separate entry (don't conflate).
     name: "April",
     manufacturer: "April",
     category: "Wave Filter Drippers",
-    paperType: "Flat (Kalita 155) + trapezoid option",
+    paperType: "Flat (April small / Kalita 155 compatible)",
     doseSize: "15g to 25g",
     bedGeometry: "Flat / shallow",
     bypassProfile: "Low",
-    flowControl: "Immersion hybrid",
-    restrictionSource: "Valve-controlled",
-    agitationTolerance: "High",
-    brewArchetype: "Immersion hybrid",
-    accessories: "Immersion base / stopper",
+    flowControl: "Passive percolation",
+    restrictionSource: "Geometry-limited",
+    agitationTolerance: "Medium",
+    brewArchetype: "Stability flat",
+    accessories: "None",
     owned: true,
     location: "Home, Office",
-    primaryUseCase: "Structured clarity (restricted flat control)",
+    primaryUseCase: "Mid-palate integration (round sweetness, controlled clarity)",
   },
   {
     name: "Brewista Tornado",

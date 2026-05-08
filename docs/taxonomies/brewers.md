@@ -311,18 +311,20 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 
 ### April — Owned
 
+(Standard April Brewer — passive flat percolation. The April Hybrid Brewer is a separate model with an immersion base / valve / stopper; Chris doesn't own one, so not in this registry. Add as a separate entry if acquired — don't conflate.)
+
 - Manufacturer: April
-- Paper type: Flat (Kalita 155) + trapezoid option
+- Paper type: Flat (April small / Kalita 155 compatible)
 - Dose size: 15g to 25g
 - Bed geometry: Flat / shallow
 - Bypass profile: Low
-- Flow control: Immersion hybrid
-- Restriction source: Valve-controlled
-- Agitation tolerance: High
-- Brew archetype: Immersion hybrid
-- Accessories: Immersion base / stopper
+- Flow control: Passive percolation
+- Restriction source: Geometry-limited
+- Agitation tolerance: Medium
+- Brew archetype: Stability flat
+- Accessories: None
 - Location: Home, Office
-- Primary use case: Structured clarity (restricted flat control)
+- Primary use case: Mid-palate integration (round sweetness, controlled clarity)
 
 ### Espro
 

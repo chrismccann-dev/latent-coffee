@@ -116,8 +116,8 @@ ROASTING.md close-out narrative:
 
 (a) SR brew:
 - Pick the optimized brew session that established the reference brew recipe.
-- Apply the canonical-validation discipline from the brewing prompt. Key
-  schema-strict gates:
+- Apply the canonical-validation discipline from `log-brew.md` /
+  `bundled-brewing-completion.md`. Key schema-strict gates:
   - extraction_strategy z.enum, 6 strict canonicals (v8.4: Suppression /
     Clarity-First / Balanced Intensity / Full Expression / Extraction Push /
     Hybrid). When extraction_strategy = 'Hybrid', hybrid_subform is

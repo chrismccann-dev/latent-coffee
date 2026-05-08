@@ -1,14 +1,29 @@
 # Latent Coffee Research
 
-Personal coffee research journal that compounds brewing knowledge over time. Built with Next.js 14, Supabase (Postgres + Auth + RLS), deployed on Vercel.
+Latent Coffee Research is Chris's personal coffee research journal — single-tenant, single-user, no plans for multi-tenancy. Two workflows compound knowledge: **brewing is archive-driven** (claude.ai iterates, the app gets the final brew); **roasting is iterative** (Roest API streams logs/experiments/cuppings into the app as the lot resolves, then closes with a reference roast + roast_learnings synthesis). Built with Next.js 14, Supabase (Postgres + Auth + RLS), deployed on Vercel. **claude.ai writing via MCP is the canonical input path** — no manual DB inserts, no paste-into-spreadsheet flows.
 
-> **See [PRODUCT.md](PRODUCT.md)** for the full product document — vision, workflows, data model, current state, and future directions.
->
-> **See [BREWING.md](BREWING.md)** for the Brewing Master Reference — brew prompt, roaster reference cards, archive patterns, equipment reference. Chris's living reference for the purchased-coffee brew iteration loop.
->
-> **See [ROASTING.md](ROASTING.md)** for the Roasting Master Reference — counterflow methodology, evaluation protocol, fan/inlet curves, FC marking protocol, per-bean experiment patterns, recently-closed-lot archive, roast-to-brew translation. Sibling of BREWING.md, seeded 2026-04-30 verbatim from Chris's authored V4 doc and patched on every lot close-out via the V2 propose_doc_changes pipeline.
->
-> **See [SYNC.md](SYNC.md)** for the legacy paste-driven archive-sync playbook (operational through 2.3; superseded by the V2 MCP path). **See [SYNC_V2.md](SYNC_V2.md)** for the live V2 architecture — MCP transport, propose_doc_changes pipeline, asymmetric write trust, sprint 2.3-2.7 build queue. **See [ARBITER.md](ARBITER.md)** for the Claude Code playbook used when batching pending doc proposals + canonical-promotion queue entries (Phase 3, 2026-05-05). MCP server registers **32 Tools** post-Roest-write (+`push_roast_profile`, +`push_inventory`, +`patch_inventory` — 2026-05-06; previously 29 post-Phase-3 with +`list_taxonomy_queue`, +`propose_canonical_addition`, +`resolve_queue_entry`).
+## Documentation Index
+
+Foundational living docs (root level — first thing you read):
+- **[PRODUCT.md](PRODUCT.md)** — Vision, data model, taste profile, full Roadmap (7 sections: Active Sprints / Side Quests / Blocked and Parked / Missing and Incomplete / Bugs and Issues / Longer Term Items / Future Directions), Scaling Watch-Items, Lessons Learned.
+- **[BREWING.md](BREWING.md)** — Brewing master reference: 6 strategies (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid) + 3 modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture), Two-Axis Framework, equipment reference, archive patterns. Living doc; patched via `propose_doc_changes` MCP Tool.
+- **[ROASTING.md](ROASTING.md)** — Roasting master reference: counterflow methodology on Roest L200 Ultra, evaluation protocol, fan/inlet curves, FC marking protocol, per-bean experiment patterns, lot knowledge, roast-to-brew translation. Sibling of BREWING.md.
+
+Architecture & operating playbooks:
+- **[SYNC_V2.md](SYNC_V2.md)** — MCP-based sync architecture (claude.ai ↔ app, bidirectional). Five locked decisions; transport, auth (bearer + OAuth 2.1), Resources, Tools, asymmetric write trust.
+- **[ARBITER.md](ARBITER.md)** — Doc-proposal + canonical-queue arbiter playbook. Triggered by `process pending arbitration` in a Claude Code session.
+
+Domain references in `docs/`:
+- **[docs/taxonomies/](docs/taxonomies/)** — 10 canonical taxonomies authored by Chris. Each .md is the source of truth; `lib/<axis>-registry.ts` is the validation mirror (2-step deliberate edit when adding a new entry).
+- **[docs/brewing/](docs/brewing/)** — Roaster reference cards, WBC reference (5-axis foundational map + 8 strategy families), 102-recipe WBC corpus.
+- **[docs/roasting/archive.md](docs/roasting/archive.md)** — Closed-lot archive (per-lot Key Learnings).
+- **[docs/prompts/](docs/prompts/)** — 7 operational prompts for claude.ai sessions.
+- **[docs/features/](docs/features/)** — Per-sprint scoping/brainstorm docs (archive layer, not surfaced via MCP).
+- **[docs/sprints/shipped.md](docs/sprints/shipped.md)** — Reverse-chronological shipped log.
+
+Per-sprint retrospectives: `~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_*.md`.
+
+**MCP server status:** 32 Tools live as of 2026-05-06 (Roest API write integration shipped `push_roast_profile` + `push_inventory` + `patch_inventory`). Auth: bearer-token (desktop MCP clients) + OAuth 2.1 + PKCE (claude.ai web). All 32 Tools, schema, and discovery surfaces documented in [SYNC_V2.md](SYNC_V2.md).
 
 ## Living reference docs
 
@@ -177,12 +192,22 @@ Requires `.env.local` with:
 
 ## Sprint cadence (for Claude)
 
-Run these four checkpoints on every non-trivial sprint:
+These rules bias toward caution. For trivial tasks, use judgment — but err on the side of pausing.
+Run these six checkpoints on every non-trivial sprint:
 
-1. **Plan before coding when scope is interpretive.** If the brief is a mockup, a redesign, or anything with "make it better" — enter plan mode (ExitPlanMode tool) and surface your interpretation *before* editing files. Skip only when the scope is fully concrete (specific file, specific line, specific fix). Silent interpretation calls are the #1 source of back-and-forth.
+1. **Plan before coding when scope is interpretive — and err toward planning.** If the brief is a mockup, a redesign, or anything with "make it better" — enter plan mode (ExitPlanMode tool) and surface your interpretation *before* editing files. When proposing a non-obvious approach, present 2-3 options with tradeoffs and your recommendation, not a single silent pick. Skip plan mode only when the scope is *genuinely* concrete (specific file, specific line, specific fix); "simple" is where unexamined assumptions waste the most work.
 
-2. **Preview every UI change.** Start the dev server (`preview_start`), take a screenshot after each change, and verify via `preview_eval` / `preview_screenshot` before committing. Don't rely on "it should work" — the mismatched Alo Village cover color would have been caught on the first screenshot.
+2. **State success criteria before implementing.** Transform vague tasks into verifiable goals. "Add validation" → "These cases pass: X / Y / Z." "Fix the bug" → "This specific reproduction now succeeds." Strong criteria let me self-loop without constant clarification; weak criteria force back-and-forth. When writing a plan, no placeholders — no "TBD", "TODO", "implement later", "add appropriate error handling." Concrete content or the step doesn't ship.
 
-3. **Run `/simplify` before review or commit.** Claude over-engineers — duplicate JSX across pages, inline IIFEs, copy-pasted inline styles. Let the simplify skill catch it before it becomes tech debt. Run once per sprint, after implementation is done but before the commit step. Especially important when a sprint touched 2+ files that now share a rendering pattern.
+3. **Preview every UI change.** Start the dev server (`preview_start`), take a screenshot after each change, and verify via `preview_eval` / `preview_screenshot` before committing. Don't rely on "it should work" — the mismatched Alo Village cover color would have been caught on the first screenshot.
 
-4. **Retro before docs.** Before updating PRODUCT.md / CLAUDE.md / memory files at the end of a sprint, explicitly pause and list: what we tried that didn't work, what surprised us, what we'd do differently next time. The doc updates then write themselves. Don't wait for Chris to ask — this is a standing part of every sprint.
+4. **Doc-touch check before PR.** If this sprint changed substrate that PRODUCT.md / CLAUDE.md / BREWING.md / ROASTING.md / SYNC_V2.md / docs/taxonomies/* describe (a new strategy, Tool, column, count delta, registry entry, page), list which docs need updating before opening the PR. Cross-system audit at substrate-change time, not monthly cleanup time.
+
+5. **Run `/simplify` before review or commit.** Claude over-engineers — duplicate JSX across pages, inline IIFEs, copy-pasted inline styles. Let the simplify skill catch it before it becomes tech debt. Run once per sprint, after implementation is done but before the commit step. Especially important when a sprint touched 2+ files that now share a rendering pattern.
+
+6. **Retro before docs.** Before updating PRODUCT.md / CLAUDE.md / memory files at the end of a sprint, explicitly pause and list: what we tried that didn't work, what surprised us, what we'd do differently next time. The doc updates then write themselves. Don't wait for Chris to ask — this is a standing part of every sprint.
+
+**Standing tripwires (not per-sprint, but always-on):**
+- **120KB on any root-level living doc** — when crossed, plan a split sprint. Currently: BREWING.md 188KB, PRODUCT.md ~140KB post-cleanup. PRODUCT.md's `## Scaling Watch-Items` section enumerates the broader set.
+- **Tool count crosses 50** — consider Tool consolidation (merging related `push_*` into polymorphic) or namespace grouping. Currently 32 Tools.
+- **MEMORY.md index size** — already at warning. Run `consolidate-memory` skill quarterly, not just when warned.
