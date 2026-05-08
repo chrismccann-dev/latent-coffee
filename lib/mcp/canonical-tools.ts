@@ -73,7 +73,7 @@ export function registerCanonicalTools(server: McpServer) {
     {
       title: 'Read Canonical Registry',
       description:
-        'Read / lookup / validate / find / get the full canonical-registry payload for one axis (cultivars / roasters / producers / etc.). Each payload contains the canonical name list, alias map, and any structural metadata (genetic family / strategy tag / grinder valid_settings / etc.) - same content the canonicals://{axis} Resource serves. Use this to validate a name or look up an alias before push_brew. For just the catalog of axes (without payloads), use list_canonicals. Phase 2 (#R38): also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars).',
+        'Read / lookup / validate / find / get the full canonical-registry payload for one axis (cultivars / roasters / producers / etc.). Use this to validate a name or look up an alias before push_brew. For just the catalog of axes (without payloads), use list_canonicals. Phase 2 (#R38): also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars). Returns { axis, canonicals: string[], aliases: Record<string,string>, ...structural metadata } where structural metadata varies by axis (genetic family / strategy tag / grinder valid_settings / etc.) — same content the canonicals://{axis} Resource serves.',
       inputSchema: {
         axis: axisInput,
       },

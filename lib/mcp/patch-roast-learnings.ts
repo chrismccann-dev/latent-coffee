@@ -34,7 +34,7 @@ export function registerPatchRoastLearningsTool(server: McpServer, auth: McpAuth
     {
       title: 'Patch Roast Learnings',
       description:
-        'Update / save / record / push field-level changes to the per-bean roast lessons row by roast_learnings_id. Sibling of push_roast_learnings (which UPSERTs by green_bean_id, one row per closed bean). Use this for post-close-out edits — e.g. starting_hypothesis revision after a related bean lands, or correcting a prose field on the canonical "lot lessons" record without a full re-push. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_learnings_id: call get_bean_pipeline (returns the roast_learnings record).',
+        'Update / save / record / push field-level changes to the per-bean roast lessons row by roast_learnings_id. Sibling of push_roast_learnings (which UPSERTs by green_bean_id, one row per closed bean). Use this for post-close-out edits — e.g. starting_hypothesis revision after a related bean lands, or correcting a prose field on the canonical "lot lessons" record without a full re-push. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_learnings_id: call get_bean_pipeline (returns the roast_learnings record). Returns { roast_learnings_id }.',
       inputSchema: patchRoastLearningsInputSchema,
     },
     async (input) => {

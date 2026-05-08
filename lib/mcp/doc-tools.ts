@@ -24,7 +24,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'List Docs',
       description:
-        'Enumerate every prose / taxonomy doc the MCP server can read. Returns an array of { uri, name, title, mimeType }. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section`. The catalog covers BREWING.md, docs/brewing/roasters.md, and the 10 taxonomy markdown files.',
+        'List / browse / discover / enumerate every prose / taxonomy / prompt doc the MCP server can read. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section` — each entry carries a one-line "use when..." description so you can route to the right doc without fetching first. Catalog covers BREWING.md, ROASTING.md, the 10 taxonomy markdown files, the 7 operational prompt files, and split-out subdocs (docs/brewing/roasters.md, docs/brewing/wbc-reference.md, docs/brewing/wbc-recipes.md, docs/roasting/archive.md). Returns { docs: [{ uri, name, title, mimeType, description }] }.',
       inputSchema: {},
     },
     async () => {
@@ -41,7 +41,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'List Doc Sections',
       description:
-        'List / browse / discover / find every header anchor in a doc, in document order. Use this to discover valid `section_anchor` values for `propose_doc_changes` citations BEFORE drafting them — anchor matching is case-sensitive exact match against `## ` / `### ` headers, no fuzzy resolution. If your intended anchor isn\'t in the returned list, the section either doesn\'t exist or has been renamed.',
+        'List / browse / discover / find every header anchor in a doc, in document order. Use this to discover valid `section_anchor` values for `propose_doc_changes` citations BEFORE drafting them — anchor matching is case-sensitive exact match against `## ` / `### ` headers, no fuzzy resolution. If your intended anchor isn\'t in the returned list, the section either doesn\'t exist or has been renamed. Returns { uri, anchors: string[] }.',
       inputSchema: {
         uri: z.string().describe(
           'Doc URI to enumerate. One of the values returned by `list_docs` (e.g. `docs://brewing.md`, `docs://brewing/roasters.md`, `docs://taxonomies/processes.md`).',
@@ -67,7 +67,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'Read Doc',
       description:
-        'Read / fetch / get / load the full text of a doc by URI. Use this when you need the entire file (e.g. orienting before a multi-citation proposal touches several sections). For just one section by anchor, prefer `read_doc_section` — it returns less context and is cheaper to read.',
+        'Read / fetch / get / load the full text of a doc by URI. Use this when you need the entire file (e.g. orienting before a multi-citation proposal touches several sections). For just one section by anchor, prefer `read_doc_section` — it returns less context and is cheaper to read. Returns { uri, text } where text is the raw markdown body.',
       inputSchema: {
         uri: z.string().describe(
           'Doc URI to fetch. One of the values returned by `list_docs` (e.g. `docs://brewing.md`, `docs://brewing/roasters.md`, `docs://taxonomies/flavors.md`).',
@@ -93,7 +93,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'Read Doc Section',
       description:
-        'Read / fetch / get / load the body of one section by header text. Use this BEFORE drafting `propose_doc_changes` citations so your `current_text` (for replace ops) is verbatim from the live doc — the arbiter uses `current_text` to detect drift between when the proposal was written and when it gets applied. Anchor matching is case-sensitive exact match (no leading `#`). If the anchor doesn\'t resolve, call `list_doc_sections` to see what actually exists.',
+        'Read / fetch / get / load the body of one section by header text. Use this BEFORE drafting `propose_doc_changes` citations so your `current_text` (for replace ops) is verbatim from the live doc — the arbiter uses `current_text` to detect drift between when the proposal was written and when it gets applied. Anchor matching is case-sensitive exact match (no leading `#`). If the anchor doesn\'t resolve, call `list_doc_sections` to see what actually exists. Returns { uri, anchor, body } where body is the section text from below the header up to (but not including) the next header of equal or higher level.',
       inputSchema: {
         uri: z.string().describe(
           'Doc URI to fetch from. One of the values returned by `list_docs`.',
