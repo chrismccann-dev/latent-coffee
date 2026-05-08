@@ -386,7 +386,7 @@ If a future surface genuinely needs a line-icon (e.g. a settings gear), use Luci
 
 The full forward-looking work surface, structured by readiness + scope. Per-sprint retrospectives live in `memory/project_*.md`. Sprint-by-sprint shipped log is at [docs/sprints/shipped.md](docs/sprints/shipped.md).
 
-**Last reorder:** 2026-05-07 (May 2026 doc cleanup PR collapsed Active Sprint Queue + Long-term Roadmap + Future Directions + Current App State § What's Missing into a single 7-section Roadmap. Tool count 32 post-Roest write integration. New entries surfaced during the cleanup: WBC Integration Sprint, ROASTING.md Lot Knowledge reorg, registry-md sync script, MCP Tool descriptions audit, scaling watch-items.)
+**Last reorder:** 2026-05-08 (PR #114 shipped the MCP Tool descriptions audit; bullet moved to shipped.md). Prior reorder 2026-05-07 (May 2026 doc cleanup PR collapsed Active Sprint Queue + Long-term Roadmap + Future Directions + Current App State § What's Missing into a single 7-section Roadmap. Tool count 32 post-Roest write integration. New entries surfaced during the cleanup: WBC Integration Sprint, ROASTING.md Lot Knowledge reorg, registry-md sync script, scaling watch-items.)
 
 ### Active Sprints
 
@@ -497,7 +497,6 @@ Scoped, sized, and ready-to-launch when timing is right. Not currently ranked in
 
 - **WBC Integration Sprint** (~2-3h, plan-mode-heavy). Modifier expansion call (Role-Based Pulse as 4th modifier? AskUserQuestion) + Section 4 reframe (drop "reference-only" framing) + new Step 1d "WBC corpus check" named consideration + brewer rotation cross-refs to WBC examples ("Hario Switch is the canonical Eline Ferket Selective Bloom vehicle"). Dog-food validation on next non-default brew. **Triggers when:** ready anytime.
 - **ROASTING.md Lot Knowledge reorg** (~3-4h). 5-tier restructure (Active Lots / Reference Roasts+Brews / Cross-Coffee Insights / Open Questions / Archive). Reorg ~250 lines from current scattered "How This Project Is Structured" + "Active Lots" + "One-Shot Calibrations" + "Recently Closed Lots" + "Cross-Coffee Insight Layer" + "Reference Brew Recipes by Lot" + "Per-lot generalized learnings." Can bundle with an Active Lots currency refresh. **Triggers when:** doc cleanup PR lands.
-- **MCP Tool descriptions audit** (~2h). 32 Tools live; tool_search ranks by name+description match (per the prompt files). Audit existing descriptions for clarity + searchability so claude.ai routes to the right Tool on first try. Not part of the cleanup PR — its own focused sprint. **Triggers when:** after cleanup lands.
 - **Active Lots refresh on ROASTING.md** (small). Confirm currency of the 5 listed lots, add new ones if any are mid-iteration. Bundle with Lot Knowledge reorg.
 
 ---
@@ -562,7 +561,7 @@ Tripwires for the 1,000-brew goal — what to watch as the corpus grows. Surface
 
 ### Triggers that need action before 200+ brews
 
-- **MCP Tool count discoverability** — currently 32 Tools; claude.ai's `tool_search` ranks opaquely. At 50+ Tools, consider Tool consolidation (merging related `push_*` into polymorphic) or better grouping (namespace prefix). Closely tied to the queued MCP Tool descriptions audit sprint.
+- **MCP Tool count discoverability** — currently 32 Tools; claude.ai's `tool_search` ranks opaquely. At 50+ Tools, consider Tool consolidation (merging related `push_*` into polymorphic) or better grouping (namespace prefix). Description-quality lever already pulled in PR #114 (MCP Tool descriptions audit); next mitigation is structural.
 
 ### Triggers that need action before 1,000 brews
 
