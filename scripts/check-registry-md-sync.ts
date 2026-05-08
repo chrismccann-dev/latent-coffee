@@ -110,7 +110,9 @@ function skipString(src: string, start: number): number {
 function extractNameFields(block: string): string[] {
   const re = /\bname:\s*(['"])((?:\\.|(?!\1).)*)\1/g
   const out: string[] = []
-  for (const m of block.matchAll(re)) out.push(unescape(m[2]))
+  // Array.from materializes the iterator so this compiles under the
+  // project's default TS target (no downlevelIteration required).
+  for (const m of Array.from(block.matchAll(re))) out.push(unescape(m[2]))
   return out
 }
 
@@ -118,7 +120,7 @@ function extractNameFields(block: string): string[] {
 function extractStringLiterals(block: string): string[] {
   const re = /(['"`])((?:\\.|(?!\1).)*)\1/g
   const out: string[] = []
-  for (const m of block.matchAll(re)) out.push(unescape(m[2]))
+  for (const m of Array.from(block.matchAll(re))) out.push(unescape(m[2]))
   return out
 }
 
@@ -190,7 +192,7 @@ function tsStructureTags(src: string): string[] {
   // Each entry is { axis: "X", descriptor: "Y", ... }.
   const re = /\{[^{}]*\baxis:\s*(['"])([^'"]+)\1[^{}]*\bdescriptor:\s*(['"])([^'"]+)\3[^{}]*\}/g
   const out: string[] = []
-  for (const m of block.matchAll(re)) out.push(`${m[2]}:${m[4]}`)
+  for (const m of Array.from(block.matchAll(re))) out.push(`${m[2]}:${m[4]}`)
   return out
 }
 
@@ -230,7 +232,7 @@ function mdH3HeadersForOwnable(rootSrc: string): string[] {
     const m = /^### \s*(.+?)\s*$/.exec(line)
     if (!m) continue
     let name = m[1]
-    name = name.replace(/\s+—\s+Owned\s*$/u, '')
+    name = name.replace(/\s+—\s+Owned\s*$/, '')
     out.push(name.trim())
   }
   return out
@@ -245,9 +247,9 @@ function mdH3HeadersForProducers(src: string): string[] {
     if (!m) continue
     let name = m[1]
     // System-grouping headers carry a `· N producers` suffix.
-    if (/·\s+\d+\s+producers?\s*$/u.test(name)) continue
+    if (/·\s+\d+\s+producers?\s*$/.test(name)) continue
     // Strip skeleton annotation: ` *[skeleton — pending rich research]*`.
-    name = name.replace(/\s+\*\[[^\]]+\]\*\s*$/u, '')
+    name = name.replace(/\s+\*\[[^\]]+\]\*\s*$/, '')
     out.push(name.trim())
   }
   return out
