@@ -12,6 +12,7 @@ import {
   type OutputSelectionModifier,
   type InvertedTemperatureStagingModifier,
   type AromaCaptureModifier,
+  type RoleBasedPulseModifier,
 } from '@/lib/extraction-modifiers'
 
 interface ModifierComposerProps {
@@ -126,6 +127,9 @@ function ModifierRow({ modifier, onChange, onRemove }: ModifierRowProps) {
         {modifier.type === 'aroma_capture' && (
           <AromaCaptureFields modifier={modifier} onChange={onChange} />
         )}
+        {modifier.type === 'role_based_pulse' && (
+          <RoleBasedPulseFields modifier={modifier} onChange={onChange} />
+        )}
       </div>
     </div>
   )
@@ -139,6 +143,7 @@ function OutputSelectionFields({
   onChange: (next: Modifier) => void
 }) {
   const update = (patch: Partial<OutputSelectionModifier>) => onChange({ ...modifier, ...patch })
+  const isDilution = modifier.form === 'dilution'
   return (
     <div className="space-y-2">
       <div className="grid grid-cols-3 gap-2">
@@ -175,6 +180,18 @@ function OutputSelectionFields({
           />
         </div>
       </div>
+      {isDilution && (
+        <div>
+          <label className="font-mono text-xxs uppercase text-latent-mid">Dilution water (g)</label>
+          <input
+            type="number"
+            className="input mt-0.5"
+            value={modifier.dilution_g ?? ''}
+            onChange={(e) => update({ dilution_g: e.target.value === '' ? null : Number(e.target.value) })}
+            placeholder="e.g. 12"
+          />
+        </div>
+      )}
       <div>
         <label className="font-mono text-xxs uppercase text-latent-mid">Notes</label>
         <input
@@ -223,6 +240,26 @@ function AromaCaptureFields({
         value={modifier.application ?? ''}
         onChange={(e) => onChange({ ...modifier, application: e.target.value || null })}
         placeholder="e.g. Paragon ball on bloom + Pour 1"
+      />
+    </div>
+  )
+}
+
+function RoleBasedPulseFields({
+  modifier,
+  onChange,
+}: {
+  modifier: RoleBasedPulseModifier
+  onChange: (next: Modifier) => void
+}) {
+  return (
+    <div>
+      <label className="font-mono text-xxs uppercase text-latent-mid">Roles</label>
+      <input
+        className="input mt-0.5"
+        value={modifier.roles ?? ''}
+        onChange={(e) => onChange({ ...modifier, roles: e.target.value || null })}
+        placeholder="e.g. Pour 1=saturation · Pour 2=body · Pour 3=clarity"
       />
     </div>
   )

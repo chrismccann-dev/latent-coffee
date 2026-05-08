@@ -60,14 +60,19 @@ const modifierEntry = z.object({
   // v8.4 (2026-05-06): MODIFIER_TYPES dropped from 4 -> 3. Immersion was absorbed
   // into the Hybrid strategy via hybrid_subform; sending modifier.type='immersion'
   // now fails validation with a hint pointing at extraction_strategy='Hybrid'.
-  type: z.enum(['output_selection', 'inverted_temperature_staging', 'aroma_capture']),
+  // v8.5 (2026-05-08): MODIFIER_TYPES grew 3 -> 4 with `role_based_pulse` (per-pour
+  // sensory roles on percolation-only brewers). OUTPUT_SELECTION_FORMS grew 3 -> 4
+  // with `dilution` (post-brew dilution; carries optional `dilution_g`).
+  type: z.enum(['output_selection', 'inverted_temperature_staging', 'aroma_capture', 'role_based_pulse']),
   // type-specific subfields (the discriminated union is hand-validated in cleanModifiers)
-  form: z.enum(['early_cut', 'late_cut', 'both']).optional(),
+  form: z.enum(['early_cut', 'late_cut', 'both', 'dilution']).optional(),
   brew_weight: z.number().optional().nullable(),
   cup_yield: z.number().optional().nullable(),
+  dilution_g: z.number().optional().nullable(),
   notes: z.string().optional().nullable(),
   phases: z.string().optional().nullable(),
   application: z.string().optional().nullable(),
+  roles: z.string().optional().nullable(),
 })
 
 // Elevation + climate_stress live at the TERROIR level (canonical registry +
@@ -202,7 +207,7 @@ export const pushBrewInputSchema = {
     'v8.4 named consideration. Free-text. Default null = normal cooling progression (the answer for most brews). Populated when peak evaluation window IS the strategy (e.g. "40-45°C peak", "evaluate below 50°C"). Surfaces a previously-implicit decision at brief time so iteration starts in the right window rather than discovering it on brew 2. Most relevant on El Paraíso lots, Garrido Mokka/Mokkita, anaerobic naturals, and other coffees where the cup integrates well below 50°C.',
   ),
   modifiers: z.array(modifierEntry).optional().nullable().describe(
-    'Axis 2 - extraction modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture). Optional + stackable. v8.4 (2026-05-06): MODIFIER_TYPES dropped from 4 -> 3 — the Immersion modifier was absorbed into the Hybrid strategy. Sending modifier.type="immersion" fails validation; use extraction_strategy="Hybrid" with hybrid_subform set instead. Persistence equivalence: `[]`, `null`, and omitted are all stored as the empty array (cleanModifiers() normalizes; the column never holds null). Send `[]` to be explicit that modifiers were considered and rejected, or omit when there\'s nothing to say.',
+    'Axis 2 - extraction modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture / Role-Based Pulse). Optional + stackable. v8.4 (2026-05-06): the Immersion modifier was absorbed into the Hybrid strategy — sending modifier.type="immersion" fails validation; use extraction_strategy="Hybrid" with hybrid_subform set instead. v8.5 (2026-05-08): MODIFIER_TYPES grew 3 -> 4 with `role_based_pulse` (per-pour sensory roles on percolation-only brewers — V60 / Orea / Kalita; if the recipe involves immersion, classify under Hybrid (Phase-Mapped) instead). OUTPUT_SELECTION_FORMS grew 3 -> 4 with `dilution` (post-brew dilution; carries optional `dilution_g` numeric sub-field). Per-type sub-fields: output_selection={form,brew_weight?,cup_yield?,dilution_g?,notes?}, inverted_temperature_staging={phases?}, aroma_capture={application?}, role_based_pulse={roles?}. Persistence equivalence: `[]`, `null`, and omitted are all stored as the empty array (cleanModifiers() normalizes; the column never holds null). Send `[]` to be explicit that modifiers were considered and rejected, or omit when there\'s nothing to say.',
   ),
 
   // Tasting
