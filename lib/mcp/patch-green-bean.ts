@@ -60,7 +60,7 @@ export function registerPatchGreenBeanTool(server: McpServer, auth: McpAuthConte
     {
       title: 'Patch Green Bean',
       description:
-        'Update / save / record / push field-level changes to an existing green coffee bean lot by green_bean_id. Sibling of push_green_bean (for new lots). Use this when registry adds happen mid-flight (e.g. an alias was added so producer should re-canonicalize), to backfill missing fields (additional_notes, producer_tasting_notes), to correct previously-saved values, or to update terroir / cultivar via the strict-canonical findOrCreate* path (Sprint 2.6). Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Producer canonicalizes via PRODUCER_LOOKUP with `producer_override:true` for net-new producers. To find green_bean_id: call get_green_bean({lot_id}) or list it via get_bean_pipeline.',
+        'Update / save / record / push field-level changes to an existing green coffee bean lot by green_bean_id. Sibling of push_green_bean (for new lots). Use this when registry adds happen mid-flight (e.g. an alias was added so producer should re-canonicalize), to backfill missing fields (additional_notes, producer_tasting_notes), to correct previously-saved values, or to update terroir / cultivar via the strict-canonical findOrCreate* path (Sprint 2.6). Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Producer canonicalizes via PRODUCER_LOOKUP with `producer_override:true` for net-new producers. To find green_bean_id: call get_green_bean({lot_id}) or list it via get_bean_pipeline. Returns { green_bean_id }.',
       inputSchema: patchGreenBeanInputSchema,
     },
     async (input) => {
