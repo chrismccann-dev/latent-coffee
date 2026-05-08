@@ -4,7 +4,7 @@
 
 Brew Prompt · Roaster Reference · Archive Patterns · Grind Reference
 
-*Last updated: 2026-05-03. Version history in `git log`.*
+*Last updated: 2026-05-07. Version history in `git log`.*
 
 # SECTION 1 - BREW PROMPT
 
@@ -58,7 +58,7 @@ Drift is caught at sync time, not after. Be precise.
 
 A few operational notes for fetching MCP Resources and calling Tools via this Claude project:
 
-- **Tool search ranking is opaque.** If a Tool you expect (e.g. `push_brew`, `propose_doc_changes`) does not surface on the first `tool_search`, retry with broader search terms before assuming the Tool isn't loaded. The MCP server has 24+ Tools live; if `push_brew` returns nothing, try "brew", "push", or "latent" before concluding it's missing.
+- **Tool search ranking is opaque.** If a Tool you expect (e.g. `push_brew`, `propose_doc_changes`) does not surface on the first `tool_search`, retry with broader search terms before assuming the Tool isn't loaded. The MCP server has 32 Tools live; if `push_brew` returns nothing, try "brew", "push", or "latent" before concluding it's missing.
 - **Re-fetch the schema before claiming a field is missing.** The deployed Tool manifest may be fresher than the model's session memory. If a field on `push_brew` or another Tool seems to have changed shape, call the Tool's introspection (or read the Tool's input_schema directly) before reporting it as missing.
 - **After a code merge, wait for Vercel deploy and start a fresh conversation.** New MCP Tools and updated schemas propagate via Vercel's auto-deploy (~30-60 seconds typical). The claude.ai conversation's tool manifest is cached at conversation start; a fresh conversation picks up the new manifest. Reusing an old conversation after a server-side change can produce stale-tool errors that look like real bugs but are cache propagation issues.
 
@@ -71,7 +71,7 @@ A few operational notes for fetching MCP Resources and calling Tools via this Cl
 | **Brewers**                   | April Brewer Glass, Kalita Wave Tsubame 155, SWORKS Bottomless Dripper. (XBLOOM available but manual preferred.)                                                                                                                                                                                                                                                                          |
 | **Filters**                   | xBloom Premium Paper only (compatible with both Kalita Wave 155 and Bottomless Dripper).                                                                                                                                                                                                                                                                                                      |
 | **Water**                     | Tap water - Downtown Palo Alto municipal supply. Do not assume soft or mineralized water. No water adjustments available.                                                                                                                                                                                                                                                                 |
-| **April Brewer**              | Drains consistently fast (~2:30) regardless of grind or agitation - not suitable for Full Expression. Reserve for Clarity-First office brews only.                                                                                                                                                                                                                                        |
+| **April Brewer**              | OFFICE: drains ~2:30 with xBloom Premium Paper regardless of grind. Strong fit for integration / Suppression / mid-palate work — works well on heavy-roast / loud beans where the brew layer needs to control rather than push (e.g. Mandela XO heavy-suppression brewing). Not suitable for Full Expression at the office (use Kalita 155 or SWORKS Bottomless when high agitation is needed).                                                                                                                                                                                                                                       |
 | **Kalita Wave 155**           | Reliable 3:00–3:30 drawdown with xBloom Premium Paper. Pour structure and rest timing are the primary extraction levers. NOTE: runs faster than expected even at finer grind - use Bottomless Dripper when precise flow control is needed.                                                                                                                                                         |
 | **SWORKS Bottomless Dripper** | Variable-flow valve dripper. Cone geometry, uses 155 flat or wave filters (xBloom Premium Paper at office). Valve dial restricts or opens flow mid-brew - each pour phase can have an independent valve state (Restricted / Half-Open / Open). Primary office brewer for Balanced Intensity and Full Expression when contact time management is critical. See Valve Position Reference below. |
 
@@ -412,7 +412,7 @@ After producing the resolved brew, assess whether the learnings should propagate
 | **Orea Porcelain**            | Flat                   | Fast-Medium                 | Slightly sweeter and rounder than glass   | Fruit-forward coffees needing balance. Home only.                                                                                                                                                                        |
 | **Orea v4**                   | Flat (modular)         | Variable - base-controlled  | Clarity-balanced flat with base-driven flow control | Home only. Modular base system - flow is controlled by interchangeable base rather than fixed geometry. Distinct from v1-3 (Glass/Porcelain) in that flow can be tuned independently of paper choice. Pair with Negotiator base or Sibarist FLAT papers. |
 | **Hario V60 Glass**           | Cone                   | Medium-Fast                 | Classic clarity, balanced extraction      | Baseline dialing brewer. Home only.                                                                                                                                                                                      |
-| **April Brewer Glass**        | Flat                   | Medium                      | High sweetness, rounded acidity           | Home + Office. OFFICE: drains ~2:30 regardless of grind - not suitable for Full Expression. Use Kalita 155 or Bottomless Dripper instead.                                                                                |
+| **April Brewer**              | Flat (wave / shallow)  | Medium                      | High sweetness, rounded acidity, mid-palate integration           | Home + Office. Primary use case: integration vehicle for round sweetness + controlled clarity. OFFICE: drains ~2:30 with xBloom Premium Paper — use for Suppression / integration work; not for Full Expression (route Full Expression to Kalita 155 or SWORKS Bottomless).                                                                                |
 | **Kalita Wave 155**           | Wave Flat              | Medium-Slow                 | Fuller body, strong sweetness             | Home + Office. OFFICE DEFAULT for Full Expression/Balanced Intensity: 3:00–3:30 with xBloom Premium Paper. NOTE: runs faster than expected even at finer grinds.                                                                  |
 | **SWORKS Bottomless Dripper** | Cone (variable)        | Variable - valve-controlled | Flexible depending on valve state         | Office only. Primary variable-flow brewer. Valve dial adjusts flow restriction per pour phase. Key advantage: solves fast-drain problem by restricting flow independently of grind size. Functionally an **immersion-to-percolation continuum** with finer-grained control than the Switch lever - Dial 0 = immersion, Dial 5 = near-immersion modulation, Dial 6-7 = percolation finish. **Canonical Hybrid-strategy brewer at the office (v8.4)** when valve transitions are doing strategic work (slow/slow/open Sequential, fast/fast/slow Phase-Mapped, or Intensity-Clarity Split on heavy co-ferments). Also used inside the 5 intensity strategies for bloom-phase flow control without invoking Hybrid framing. See Valve Position Reference. |
 | **Hario Switch Glass**        | Cone Hybrid            | Variable                    | Round sweetness, controlled extraction    | Difficult coffees, extraction experiments. Home only. **Canonical Hybrid-strategy brewer at home (v8.4)** - lever closed = immersion phase, opened = percolation drawdown. Use for Switch-style Sequential staging (Wibawa), Selective Bloom Hybrid (Ferket 2025 — separate bloom liquid from main brew), and immersion-to-percolation Phase-Mapped recipes (Garam Victor Um 2023, modulo no mesh-then-paper swap available).                                                                                                                                                                    |
@@ -837,7 +837,7 @@ Per-cup cooling-arc patterns surfaced from the brew archive. Use as diagnostic s
 
 ## Open Questions
 
-Things to test across future brews:
+Things to test across future brews. **Maintenance rule:** when a question resolves, delete it (don't strikethrough). Resolved-with-strikethrough creates clutter at scale; the resolution lives in the relevant Archive Patterns section + commit history.
 
 - Does finer grind (6.0 vs 6.1) consistently trade body clarity for attack intensity on anaerobic washed lots, or is this specific to Jeferson Motta?
 
@@ -846,8 +846,6 @@ Things to test across future brews:
 - Does the anoxic natural Full Expression signal hold regardless of variety, or was Pikudo's Rosado result driven by Huila terroir specifically? Test on a non-Huila anoxic natural.
 
 - Is temperature the primary finishing lever for bitter tail on Colombian naturals generally? Partially confirmed across two lots. Test on a non-Colombian anaerobic natural.
-
-- ~~Is the extreme (~40°C) evaluation threshold on El Paraíso thermal shock lots specific to rose/floral-target varieties (Gesha), or does it apply to all Diego Bermúdez lots?~~ **Resolved (Luna Bermúdez):** Flavor-target-driven, not variety- or lot-driven. Luna is the same variety (Gesha) and producer/farm as Letty but with an aromatic-floral flavor target without rose (egg waffle / blueberry / oolong) - peaks ~45-50°C, matching Lychee Castillo rather than Letty's near-40°C peak. The ~40°C evaluation threshold is specific to rose-forward El Paraíso lots; non-rose aromatic lots peak in the standard 45-50°C window.
 
 - Does the April Brewer at home (remineralized water) drain significantly slower than at the office (tap water)?
 
@@ -904,20 +902,4 @@ Both are reference-only - used for WBC-context lookups, not consulted during a n
 
 # SECTION 5 - CHANGELOG
 
-## v8.4 - 2026-05-06 - Hybrid promotion + Cooling-Curve Design
-
-**Promoted Hybrid to a 6th first-class strategy.** Five strategies describe extraction intensity (single-mode logic running throughout the brew); Hybrid describes extraction structure (phase boundaries where the brewer changes mode, immersion ↔ percolation). Selection rule: if the brewer changes mode mid-brew or pours have explicitly different sensory jobs, it's Hybrid. Otherwise pick from the five intensity strategies. Five canonical sub-forms required at strategy time when Hybrid is picked: Sequential / Phase-Mapped / Selective Bloom / Intensity-Clarity Split / Temperature-Staged. See § Axis 1 - Extraction Strategy.
-
-**Removed the Immersion modifier** (v8.3 only — never promoted out of experimental). Switch-style + SWORKS valve-modulated brewing was always doing strategy-level work, not modifier work; calling it a modifier created an awkward "Balanced Intensity + Immersion modifier" framing where the modifier was redundant with what the strategy already implied. Hybrid as a strategy resolves that. Modifier slot count drops 4→3 (Output Selection / Inverted Temperature Staging / Aroma Capture remain).
-
-**Reclassified 3 archive entries** from Balanced Intensity + Immersion → Hybrid (Sequential): Janson Green-Tip Gesha 1010 (Picolot), Sebastian Ramirez White Honey Gesha (Moonwake), and the SWORKS variant of Finca La Reserva Gesha (Colibri). Picolot Emerald PL#015 stays Full Expression (Mokka Natural reference recipe) - just dropped the Immersion modifier; the bloom-immersion phase is recipe detail, not a phase-boundary that changes extraction logic. See § Coffees That Confirmed Hybrid in Archive Patterns.
-
-**Added Cooling-Curve Design as a Step 1d named consideration.** New free-text `cooling_curve_target` column on the brew row. Default null = normal cooling progression (the answer for most brews). Populated when peak evaluation window IS the strategy (e.g. "40-45°C peak", "evaluate below 50°C"). Surfaces a previously-implicit decision at brief time so iteration starts in the right window rather than discovering it on brew 2-3.
-
-**Refreshed WBC reference docs.** Old wbc-reference.md (18-recipe summary) replaced with a leaner Latent-mapping doc; new wbc-recipes.md is a 102-recipe archive (2022-2025) with 38 subtype definitions. See § SECTION 4.
-
-**Deliberately not added (documented so future expansions don't re-litigate):**
-
-- **Time Distribution as a foundational axis.** WBC taxonomy treats Pulse / Role-Based Pulse / Drain-Based Pulse / Double Bloom / Parametric Time as distinct subtypes. Drain-Based Pulse is what your SWORKS valve work already IS - naming it doesn't change behavior, it just makes the strategy legible to a fresh reader. Role-Based Pulse is real new discipline but not currently practiced. Both rejected for v8.4 because: Drain-Based is descriptive-only (no behavior change); Role-Based is future-capture for a discipline not yet adopted. Add when there's a queued experiment that needs it. The Phase-Mapped Hybrid sub-form covers Role-Based-Pulse-with-immersion patterns, which is the highest-leverage subset.
-- **Filter-Mediated Flow as a foundational axis.** Filter material as an active variable beyond flow speed (Lakis Psomas inverse-bloom paper, Andreina Guerrero lipid-permeable paper). Filters are currently treated as a flow-speed parameter, which is correct for actual brewing being done. The Sibarist FAST does have structured-paper behavior beyond speed, but isn't currently used as a strategic variable. Pure future-capture; add when an Extraction Push or similar experiment treats filter as an explicit variable.
-
+*Last updated: 2026-05-07. Full version history (v8.4 Hybrid promotion + Cooling-Curve Design, v8.3 immersion modifier, prior v8.x evolution) lives in `git log` — `git log --oneline BREWING.md` for the audit trail.*

@@ -2,7 +2,7 @@
 
 *Latent Coffee*
 
-*Last updated: 2026-05-03. Version history in `git log`.*
+*Last updated: 2026-05-07. Version history in `git log`.*
 
 ---
 
@@ -32,35 +32,39 @@ Drift is caught at sync time, not after.
 
 A few operational notes for fetching MCP Resources and calling Tools via this Claude project:
 
-- **Tool search ranking is opaque.** If a Tool you expect (e.g. `push_roast`, `push_cupping`, `push_experiment`, `push_roast_learnings`, `pull_roest_log`, `propose_doc_changes`) does not surface on the first `tool_search`, retry with broader search terms before assuming the Tool isn't loaded. The MCP server has 24+ Tools live; if `push_roast` returns nothing, try "roast", "push", or "latent" before concluding it's missing.
+- **Tool search ranking is opaque.** If a Tool you expect (e.g. `push_roast`, `push_cupping`, `push_experiment`, `push_roast_learnings`, `pull_roest_log`, `push_roast_profile`, `push_inventory`, `propose_doc_changes`) does not surface on the first `tool_search`, retry with broader search terms before assuming the Tool isn't loaded. The MCP server has 32 Tools live; if `push_roast` returns nothing, try "roast", "push", or "latent" before concluding it's missing.
 - **When pulling Roest logs, call `list_roest_logs` first.** Don't try to extrapolate a `log_id` from sequence patterns - the Roest API generates IDs that aren't predictable from batch numbers. `list_roest_logs` returns a fresh batch_url + log_id pair for each batch in the recent inventory; pass that into `pull_roest_log` directly.
 - **For closed-bean full fills, call `get_green_bean` BEFORE `push_green_bean`.** A defensive lookup that avoids the UPSERT path entirely when the bean is already known. Faster, less surprising, no risk of clobbering an existing record by accident.
 - **Re-fetch the schema before claiming a field is missing.** The deployed Tool manifest may be fresher than the model's session memory. If a field on `push_roast` or another Tool seems to have changed shape, call the Tool's introspection (or read the Tool's input_schema directly) before reporting it as missing.
 - **After a code merge, wait for Vercel deploy and start a fresh conversation.** New MCP Tools and updated schemas propagate via Vercel's auto-deploy (~30-60 seconds typical). The claude.ai conversation's tool manifest is cached at conversation start; a fresh conversation picks up the new manifest. Reusing an old conversation after a server-side change can produce stale-tool errors that look like real bugs but are cache propagation issues.
 
-For brewing-side context (extraction strategies, modifier framework, brewer / filter canonicals), see [BREWING.md](BREWING.md). The Roast-to-Brew Translation section below cross-references the Two-Axis Framework defined there.
+For brewing-side context (extraction strategies, modifier framework, brewer / filter canonicals), see [BREWING.md](BREWING.md). The Roast-to-Brew Translation section below cross-references BREWING.md's 6+3 framework (6 extraction strategies + 3 modifiers).
 
 ---
 
-# Who I Am & What I'm Doing
+# How to Use This Document
 
-I am roasting for myself only - I control the full chain from green bean sourcing through roasting to brewing and end cup. I am not roasting for customers, consistency, or broad appeal.
+I am roasting for myself only — I control the full chain from green bean sourcing through roasting to brewing and end cup. I am not roasting for customers, consistency, or broad appeal.
 
-I am treating this like preparation for competition-level coffee (Brewers Cup / Roasting Championship standard). The goal is not to produce one universally "best" roast style - it is to build a repeatable, systematic methodology for understanding each coffee as a unique material, identifying the roast parameters that maximize its potential, and producing a reference roast that can be brewed with precision and confidence.
+I am treating this like preparation for competition-level coffee (Brewers Cup / Roasting Championship standard). The goal is not to produce one universally "best" roast style — it is to build a repeatable, systematic methodology for understanding each coffee as a unique material, identifying the roast parameters that maximize its potential, and producing a reference roast that can be brewed with precision and confidence.
 
-Different coffees have different ideal expressions. A washed Sudan Rume wants jasmine, bergamot, and stone fruit clarity. A natural from the same farm wants lemongrass and ginger integration. An XO-fermented lot wants caramelized pineapple, lemongrass tea, and integrated fermentation warmth. I am not chasing one ideal - I am building the skills and system to find the ideal for each individual coffee I source.
+Different coffees have different ideal expressions. A washed Sudan Rume wants jasmine, bergamot, and stone fruit clarity. A natural from the same farm wants lemongrass and ginger integration. An XO-fermented lot wants caramelized pineapple, lemongrass tea, and integrated fermentation warmth. I am not chasing one ideal — I am building the skills and system to find the ideal for each individual coffee I source.
 
 Every coffee is an opportunity to learn something generalizable, not just to make a good cup.
+
+claude.ai is the primary write surface — Per-coffee threads in claude.ai run the iteration loop (intake → V1 design → roast → cupping → V2 design → ...) using the operational prompts in `docs/prompts/`. Each step syncs to the app via MCP Tools as the work happens. The Standard Workflow + the per-step protocols below are what claude.ai consults during each thread.
 
 ---
 
 # Roasting Philosophy
 
-> **Roast for elasticity. Brew for intensity.**
+A successful roast is not the loudest or sweetest cup at first sip. It is a roast that improves as it cools, responds positively to small brewing changes, and keeps the brewing layer's full leverage available.
 
-A successful roast is not the loudest or sweetest cup at first sip. It is a roast that improves as it cools, responds positively to small brewing changes, and allows me to choose how aggressively I want to brew. The goal is optional intensity - the ability to push a coffee hard at brew time without it collapsing.
+Because I control both ends — roast and brew — I can express the coffee on whichever layer fits it. A loud roast (Mandela XO) can be controlled with a heavy-suppression brew. A restrained roast can be pushed with Full Expression. The goal is **optionality**: the roast preserves the coffee's expressive range so the brew has maximum leverage to land the cup I want.
 
-I like coffees roasted in the style of Moonwake, Substance, Sey, Picky Chemist, Big Sur - very expressive, very light. But I am not chasing one style of coffee. I like the uniqueness and expressiveness of naturals, washed, honey, co-fermented, from many different origins and varieties. It is an exploratory exercise, not a search for one ideal type.
+The roasting question is less "how should this taste?" and more "what range am I keeping available?" A narrow-range roast forces a narrow-range brew. A wide-range roast lets the brew system carry strategic weight.
+
+I like coffees roasted in the style of Moonwake, Substance, Sey, Picky Chemist, Big Sur — very expressive, very light. But I am not chasing one style of coffee. I like the uniqueness and expressiveness of naturals, washed, honey, co-fermented, from many different origins and varieties. It is an exploratory exercise, not a search for one ideal type.
 
 I roast exclusively in counterflow mode on the Roest L200 Ultra. Counterflow changes heat transfer mechanics enough that conventional roast logic does not map directly. All active experiments and learnings are built around counterflow.
 
@@ -71,8 +75,8 @@ I roast exclusively in counterflow mode on the Roest L200 Ultra. Counterflow cha
 - **Roaster:** Roest L200 Ultra (counterflow mode, 100g batches)
 - **Color measurement:** Lightcells CM-200 - whole bean Agtron post-roast, ground Agtron pre-brew at Day 7 evaluation
 - **Primary evaluation brewer:** xbloom (Brian Quan recipe - consistent, repeatable pourover for all evaluation sessions)
-- **Optimized brew setup:** UFO Ceramic + Sibarist Fast Cone, EG-1 (Weber Workshop), Melodrip
-- **Grinder:** EG-1 (Weber Workshop) - primary grinder for both evaluation and optimized brew
+- **Optimized brew setup:** Once a reference roast is identified, treat the roasted bean as you would a purchased bean — route through the full [BREWING.md](BREWING.md) framework (Two-Axis strategy selection, Step 1d Coffee Brief, Equipment Reference rotation). Don't hardcode a single brewer/filter combo. The xbloom evaluation recipe (Brian Quan, used during evaluation cupping) is a different tool from the optimized brew recipe.
+- **Grinder:** EG-1 (Weber Workshop) — primary grinder for both evaluation and optimized brew. Full setting taxonomy in [docs/taxonomies/grinders.md](docs/taxonomies/grinders.md).
 
 ---
 
@@ -152,7 +156,6 @@ This is likely part of the reason a trusted peer (same machine, same mode) consi
 
 **Important caveat:** Loading too early produces underdevelopment. Batch #134 (hopper loaded at ~125°C on a non-standard session) produced FC at 197.6°C - below the FC floor for Sudan Rume Washed - resulting in a nutty, grassy, flat cup regardless of dev time. The 125°C hopper load with 117°C charge produces FC at approximately 201-205°C on the CF-Light profile. Do not push the hopper pre-load earlier.
 
-**Replication caveat:** The confirmed reference roast for Sudan Rume Washed (#133) and its closest replication (#148) were both produced using the **old ~120°C hopper load standard**, not the current 125°C standard. The 125°C standard was established mid-lot after the #134 discovery. If replicating #133 exactly, use ~120°C hopper load to match the logged FC timing (~4:07, 204.5°C). Using the current 125°C standard will shift FC approximately 10-15 seconds earlier and ~1-2°C cooler - still within the usable window but not an exact match to the archive parameters. Note this difference in the Roast log when replicating.
 
 ## Standard Inlet Curve Template
 
@@ -171,6 +174,7 @@ All V1 roast profiles on this machine use the same seven inlet stage timestamps.
 **Design rules for V1 experiments:**
 
 - Hold all seven timestamps constant across A/B/C. Only inlet temperature values change.
+- **V1 is a mapping pass** — go wider on the inlet variance across A/B/C than feels comfortable. The point is to bracket the strategy space, not to find the answer in V1. After cupping, V2 narrows toward where the signal is.
 - When varying peak inlet, scale the full curve proportionally: the entire shape shifts up or down while preserving relative ratios between stages.
 - Later experiment sets (V2, V3) may deliberately shift timestamps to test Maillard length or post-peak decline steepness as isolated variables. When that happens, note the deviation explicitly in the Experiment record.
 - Reference for V1 batches A/B/C: 200 → [low/mid/high] → [low/mid/high] → peak → peak-4 → peak-14 → peak-20°C. The low/mid/high row is the only row that changes across batches.
@@ -209,10 +213,11 @@ The logged "charge drum temp" in Roest Connect will read 113-116°C due to probe
 
 ## Total Roast Time
 
-**Target total roast time: 4:30-5:00.**
+**Acceptable range: 4:30 – 6:00.** Below 4:30 is almost always underdeveloped (tighter tolerance on the lower end). Between 5:00 and 6:00 can still produce strong cups depending on the coffee. Above 6:30 starts to enter overdevelopment / baked territory regardless of profile. The lower bound is firm; the upper bound has more give.
 
 - Under 4:30: risk of insufficient internal development in counterflow mode regardless of surface Agtron reading
-- Over 5:00: risk of Maillard stall, roasty/baked notes, loss of top-note expressiveness
+- 4:30 – 6:00: usable window; 4:30-5:00 is the typical target, 5:00-6:00 acceptable when the coffee benefits from longer Maillard
+- Over 6:30: Maillard stall, roasty/baked notes, loss of top-note expressiveness
 
 ## Session Position Effect
 
@@ -293,30 +298,27 @@ Use the washed profile as the starting point. Lower inlet temp for the early sta
 
 ---
 
-# How This Project Is Structured
+# Data Capture Per Step
 
-## Per-Coffee Threads
+All roasting data flows into the app via MCP Tools — the previous Archive Spreadsheet workflow has been retired. claude.ai uses the operational prompts in `docs/prompts/` to drive each step:
 
-One thread per green lot, active while that coffee is in rotation. Each thread contains the full experiment history, current best batch, open questions, and the working hypothesis for the next session. When a coffee is finished, the thread is closed and key findings are archived.
+| Workflow step | Prompt | MCP Tools called |
+|---|---|---|
+| Bean intake → V1 profile design | `new-bean-intake.md` | `push_green_bean` + `push_inventory` (Roest write) + `push_roast_profile` × 3 (v1a/v1b/v1c) + `push_experiment` (initial ExperimentSet1) |
+| Per-roast log push | `in-process-bean-incremental-sync.md` STAGE 2 | `pull_roest_log` + `push_roast` |
+| Day 7 cupping | `in-process-bean-incremental-sync.md` STAGE 3 | `push_cupping` per batch + `patch_experiment` (update ExperimentSet with cupping results) |
+| V2/V3 forward design | `in-process-bean-incremental-sync.md` STAGE 8 | `push_roast_profile` × 3 + `push_experiment` (new set) |
+| Lot close-out (reference roast + reference brew) | `closed-bean-full-fill.md` | `push_roast_learnings` + `push_brew` (SR reference brew with `source: 'self-roasted'` + green_bean_id + roast_id) + `propose_doc_changes` for ROASTING.md narrative + `patch_inventory` (Roest archive) |
 
-## Archive Spreadsheet
+**Per-table field reference:** the underlying app schema is broader than the original spreadsheet. See [README.md § Database Schema](README.md#database-schema) for current tables; each push Tool's input_schema is the source of truth for required + optional fields. Most fields from the prior Archive Spreadsheet are preserved; new structured columns added since (Roest API integration, V4-doc control signals, fan/inlet curves, OAuth, taxonomy provenance) are documented in migrations 039-046.
 
-The canonical record of all roasts. Contains five sheets with the following canonical formats:
+**Roest API write integration:** see [docs/features/roest-write-integration.md](docs/features/roest-write-integration.md) for the bidirectional Roest sync (`push_roast_profile` + `push_inventory` + `patch_inventory` push; `pull_roest_log` + `list_roest_inventory` + `list_roest_logs` pull).
 
-**Green Beans sheet columns:**
-Green Lot ID (unique key) / Picture / Coffee Name / Producer / Origin (Country) / Region / Variety / Process / Seller / Importer / Source Type / Link / Purchase Date / Price per kg / Moisture % / Density (g/L) / Total Purchased (g)
+**Full sync architecture:** see [SYNC_V2.md](SYNC_V2.md) for the MCP transport, auth, Resources, and Tool catalog.
 
-**Roasts sheet columns:**
-Roast Date / Roest Batch # / Coffee Name / Roest Graph (link) / Green Coffee Weight (g) / Roasted Weight (g) / Weight Loss (%) / Agtron Color / Color Description / Yellow Time / First Crack Time / First Crack Bean Temp (°C) / Drop Time / Drop Bean Temp (°C) / Dev Time (s) / Dev % / What Worked / What Didn't / What I'd Change Next Time / Worth Repeating? / Reference Roast?
+## Per-Coffee Threads (claude.ai workflow)
 
-**Experiments sheet columns:**
-Experiment ID / Coffee Name / Roest Batch #s / Context / Primary Question / Control Baseline (If Applicable) / Shared Constants / Variable Changed / Levels Tested / Expected Outcomes / Failure Boundary Definition / Observed Outcome A / Observed Outcome B / Observed Outcome C / Observed Outcome D (Optional) / Winner / Best Expression / Key Insight / What This Changes Going Forward
-
-**Cuppings sheet columns:**
-Roest Batch # / Coffee Name / Cupping Date / Rest Days at Tasting / Evaluation Method / Brew Method / Ground Agtron Color / Ground Color Description / Aroma / Flavor / Acidity / Sweetness / Body / Finish / Overall Impression / Temperature Behavior (direction / when / what changes) / Spoon-to-cup gap notes / Comparative statements / Aromatic descriptors / Body/texture notes at temperature
-
-**Overall Lessons sheet columns (filled at lot close-out only):**
-Coffee Name / Producer & Region / Cultivar / Process / Best Roast Batch # / Why This Roast Won / Aromatic Behavior / Structural Behavior / Elasticity / Roast Window Width / Primary Lever That Mattered / Secondary Levers / What Didn't Move the Needle (and why) / Underdevelopment Failure Signal / Overdevelopment Failure Signal / Cultivar-Specific Takeaway / General Roasting Takeaway / Reference Roasts to Keep in Mind / Starting Hypothesis for Similar Coffees / Rest Behavior / Evaluation Timing
+One claude.ai thread per green lot, active while that coffee is in rotation. Each thread runs the iteration loop end-to-end (intake → V1 design → roast → cupping → V2 design → ... → reference roast → reference brew → lot close-out), syncing to the app via the MCP Tools above as each step lands. When a coffee is finished and the close-out has fired, the thread is archived in claude.ai and the per-bean knowledge lives in the DB + ROASTING.md cross-coffee insights.
 
 ---
 
@@ -536,6 +538,8 @@ The primary external reference for style and structure throughout Sudan Rume Was
 
 **Machine differences confirmed:** Peer's TP is 94.3°C vs. this machine's 78-81°C. Peer's charge temp is 112.2°C vs. this machine's resolved 117°C. These differences are machine-specific and do not represent different roast philosophies - directional principles transfer, specific numbers do not.
 
+**Process caveat:** Peer's #249 is a **washed** coffee. The profile shape is a great washed-counterflow benchmark to keep in mind, but naturals, anaerobics, processed lots, and high-moisture greens all behave differently. Don't transfer the inlet shape directly to non-washed lots — use it as a reference for what good development cadence looks like on washed coffee, then adapt the inlet curve per the coffee's process + green spec.
+
 ---
 
 # Peer Insights - Counterflow L200 Ultra (Same Machine, Same Mode)
@@ -658,7 +662,9 @@ Once a winner is identified from Day 7 evaluation, run an optimized brew session
 - Whether the cup improves as it cools (elasticity signal)
 - Whether it matches the producer's published tasting notes
 
-Claude will then write the final brew recipe for the lot record and assess whether the lot is resolved.
+**Reference [BREWING.md](BREWING.md) when designing the optimized brew session** — the reference roast becomes a roasted-bean input to the full Two-Axis Framework, including the Coffee Brief / Step 1d strategy confirmation / WBC corpus check (when the WBC integration sprint lands). Treat the SR reference brew the same way you'd treat a brew on a roasted bean from any other roaster.
+
+Claude will then write the final brew recipe for the lot record and assess whether the lot is resolved. The SR reference brew gets pushed via `closed-bean-full-fill.md` STAGE 7(a) as part of the lot close-out (don't push separately).
 
 ---
 

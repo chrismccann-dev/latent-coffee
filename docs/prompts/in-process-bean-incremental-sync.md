@@ -108,12 +108,15 @@ STAGE 2 - Push NEW roasts since last sync:
 - Capture roast_ids per batch_no for STAGE 3.
 
 STAGE 3 - Push NEW cuppings since last sync:
-- For each Day 7 (or Day 4) row that's landed since last sync:
+- For each Day 7 pourover row (or Day 4 defect-screen row, if a catastrophic
+  defect was being checked — Day 4 is NOT for ranking; ROASTING.md § Evaluation
+  Protocol demoted Day 4 to defect-screen-only) that's landed since last sync:
   - Look up roast_id via the batch_id -> roast_id map.
   - SKIP if (roast_id, cupping_date, eval_method, recipe_variant) is in
     existing_cuppings.
   - Otherwise push_cupping(payload) with roast_id + cupping_date (YYYY-MM-DD)
-    + rest_days + eval_method ("Pourover" or "Cupping") + recipe_variant
+    + rest_days + eval_method ("Pourover" for Day 7 evaluation, "Cupping"
+    only for the rare Day 4 defect-screen pass) + recipe_variant
     (optional; distinguishes multiple cuppings of the same batch on the
     same day under different recipes — e.g. "xbloom_gate",
     "balanced_intensity_pourover") + ground_agtron (paired with

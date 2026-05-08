@@ -45,15 +45,13 @@ For a small batch (≤2 groups), one PR is fine. For a larger batch (3+), one PR
 | target_doc                              | File path                             |
 |-----------------------------------------|---------------------------------------|
 | `brewing.md`                            | `BREWING.md`                          |
-| `roasting.md`                           | `ROASTING.md` (lands in 2.5; ENOENT until then) |
+| `roasting.md`                           | `ROASTING.md`                          |
 | `roaster/{Canonical Name}`              | `docs/brewing/roasters.md` (find `## {Name}` section) |
 | `taxonomies/{axis}.md`                  | `docs/taxonomies/{axis}.md`           |
 
 For `roaster/{Name}` proposals: open `docs/brewing/roasters.md`, locate the `## {Canonical Name}` header, and operate within that section's body.
 
-For `roasting.md` before 2.5 ships: surface to Chris that the file doesn't exist yet, and ask whether to discard (mark `rejected`) or hold (leave `pending` until 2.5).
-
-**Multi-target_doc proposals (post Sprint 2.4.1):** A single proposal may have citations that target different files (one insight from a brew debrief often touches roaster card + BREWING.md archive bullet + Open Questions). Each citation now carries its own `target_doc` field (defaults to the proposal-level value when not set). When arbitrating: **group citations by their per-citation `target_doc`**, process one group per file, but apply the entire proposal as one DB row update at the end (Step 7). The proposal-level `target_doc` is just a default — don't use it for routing if citations override it.
+**Multi-target_doc proposals (post Sprint 2.4 follow-up):** A single proposal may have citations that target different files (one insight from a brew debrief often touches roaster card + BREWING.md archive bullet + Open Questions). Each citation now carries its own `target_doc` field (defaults to the proposal-level value when not set). When arbitrating: **group citations by their per-citation `target_doc`**, process one group per file, but apply the entire proposal as one DB row update at the end (Step 7). The proposal-level `target_doc` is just a default — don't use it for routing if citations override it.
 
 **Cross-doc apply (legacy / drift case):** If you encounter a pre-2.4.1 proposal where target_doc says one thing but citations clearly target another file (anchor matches in a different file), don't reject — surface the mismatch to Chris and offer to apply each citation against its natural file. Mark the proposal `applied` with notes documenting the cross-doc apply. (This is the path used in the original Sprint 2.4 dog-food when proposal `a7f37316` filed everything under `roaster/Dongzhe` but only one citation actually lived there.)
 
