@@ -8,7 +8,7 @@ import { Tag } from '@/components/Tag'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
-import CultivarSynthesis from './CultivarSynthesis'
+import SynthesisCard from '@/components/SynthesisCard'
 import { getFamilyColor } from '@/lib/cultivar-family-colors'
 
 /**
@@ -238,9 +238,12 @@ export default async function CultivarLineagePage({ params }: { params: { id: st
 
       {/* AI Synthesis — What I've Learned (lineage-level) */}
       {brewList.length > 0 && (
-        <CultivarSynthesis
-          cultivarIds={cultivarIds}
-          lineageName={lineageName}
+        <SynthesisCard
+          title="WHAT I'VE LEARNED ABOUT THIS LINEAGE"
+          fetchKey={cultivarIds.join(',')}
+          endpoint="/api/cultivars/synthesize"
+          requestBody={{ cultivarIds }}
+          loadingText={`Synthesizing knowledge from ${brewList.length} coffees across ${lineageName}...`}
           existingSynthesis={cultivar.synthesis}
           existingBrewCount={cultivar.synthesis_brew_count}
           currentBrewCount={brewList.length}

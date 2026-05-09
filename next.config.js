@@ -16,6 +16,13 @@ const nextConfig = {
         './docs/taxonomies/*.md',
         './docs/prompts/*.md',
       ],
+      // The 4 synthesize routes load lib/synthesis/humanizer-skill.md at
+      // runtime via fs.readFileSync. Without this, Vercel's static-trace
+      // misses the file and the polish call ENOENTs in production.
+      '/api/terroirs/synthesize': ['./lib/synthesis/humanizer-skill.md'],
+      '/api/cultivars/synthesize': ['./lib/synthesis/humanizer-skill.md'],
+      '/api/processes/synthesize': ['./lib/synthesis/humanizer-skill.md'],
+      '/api/roasters/synthesize': ['./lib/synthesis/humanizer-skill.md'],
     },
   },
   // Sprint 3.0: OAuth discovery requires /.well-known/* URLs. Next.js app router

@@ -12,7 +12,7 @@ import { SectionCard } from '@/components/SectionCard'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
-import RoasterSynthesis from './RoasterSynthesis'
+import SynthesisCard from '@/components/SynthesisCard'
 
 export default async function RoasterDetailPage({ params }: { params: { slug: string } }) {
   const supabase = createClient()
@@ -128,8 +128,12 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
       )}
 
       {/* AI Synthesis */}
-      <RoasterSynthesis
-        roaster={roasterName}
+      <SynthesisCard
+        title="WHAT I'VE LEARNED ABOUT THIS ROASTER"
+        fetchKey={roasterName}
+        endpoint="/api/roasters/synthesize"
+        requestBody={{ roaster: roasterName }}
+        loadingText={`Synthesizing knowledge from ${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} from ${roasterName}...`}
         existingSynthesis={cache?.synthesis ?? null}
         existingBrewCount={cache?.synthesis_brew_count ?? null}
         currentBrewCount={brewCount}

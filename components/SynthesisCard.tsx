@@ -2,42 +2,50 @@
 
 import { useState, useEffect } from 'react'
 import { SectionCard } from '@/components/SectionCard'
+import SynthesisRenderer from '@/components/SynthesisRenderer'
 
-interface CultivarSynthesisProps {
-  cultivarIds: string[]
-  lineageName: string
+interface SynthesisCardProps {
+  title: string
+  // Stable string identifying the entity for the regeneration effect dep.
+  fetchKey: string
+  endpoint: string
+  requestBody: Record<string, unknown>
+  loadingText: string
   existingSynthesis: string | null
   existingBrewCount: number | null
   currentBrewCount: number
 }
 
-export default function CultivarSynthesis({
-  cultivarIds,
-  lineageName,
+export default function SynthesisCard({
+  title,
+  fetchKey,
+  endpoint,
+  requestBody,
+  loadingText,
   existingSynthesis,
   existingBrewCount,
   currentBrewCount,
-}: CultivarSynthesisProps) {
+}: SynthesisCardProps) {
   const [synthesis, setSynthesis] = useState(existingSynthesis)
   const [loading, setLoading] = useState(false)
 
-  const needsUpdate = currentBrewCount > 0 && (
-    !existingSynthesis || existingBrewCount !== currentBrewCount
-  )
+  const needsUpdate =
+    currentBrewCount > 0 && (!existingSynthesis || existingBrewCount !== currentBrewCount)
 
   useEffect(() => {
     if (needsUpdate) {
       generateSynthesis()
     }
-  }, [cultivarIds.join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchKey])
 
   async function generateSynthesis() {
     setLoading(true)
     try {
-      const res = await fetch('/api/cultivars/synthesize', {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cultivarIds }),
+        body: JSON.stringify(requestBody),
       })
       const data = await res.json()
       if (data.synthesis) {
@@ -53,18 +61,18 @@ export default function CultivarSynthesis({
   if (!synthesis && !loading && currentBrewCount === 0) return null
 
   return (
-    <SectionCard title="WHAT I'VE LEARNED ABOUT THIS LINEAGE">
+    <SectionCard title={title}>
       {loading ? (
         <div className="flex items-center gap-3">
           <div className="w-4 h-4 border-2 border-latent-mid border-t-latent-fg rounded-full animate-spin" />
-          <p className="font-mono text-xs text-latent-mid">Synthesizing knowledge from {currentBrewCount} coffees across {lineageName}...</p>
+          <p className="font-mono text-xs text-latent-mid">{loadingText}</p>
         </div>
       ) : synthesis ? (
         <div>
-          <p className="font-sans text-sm leading-relaxed">{synthesis}</p>
+          <SynthesisRenderer text={synthesis} />
           <button
             onClick={generateSynthesis}
-            className="font-mono text-xxs text-latent-mid hover:text-latent-fg mt-3 transition-colors"
+            className="font-mono text-xxs text-latent-mid hover:text-latent-fg mt-4 transition-colors"
           >
             Regenerate
           </button>

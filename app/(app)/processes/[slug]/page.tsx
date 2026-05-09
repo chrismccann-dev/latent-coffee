@@ -8,7 +8,7 @@ import { SectionCard } from '@/components/SectionCard'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
-import ProcessSynthesis from './ProcessSynthesis'
+import SynthesisCard from '@/components/SynthesisCard'
 
 export default async function ProcessDetailPage({ params }: { params: { slug: string } }) {
   const supabase = createClient()
@@ -89,8 +89,12 @@ export default async function ProcessDetailPage({ params }: { params: { slug: st
       </div>
 
       {/* AI Synthesis — What I've Learned (process-level) */}
-      <ProcessSynthesis
-        process={processName}
+      <SynthesisCard
+        title="WHAT I'VE LEARNED ABOUT THIS PROCESS"
+        fetchKey={processName}
+        endpoint="/api/processes/synthesize"
+        requestBody={{ process: processName }}
+        loadingText={`Synthesizing knowledge from ${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} processed ${processName.toLowerCase()}...`}
         existingSynthesis={cache?.synthesis ?? null}
         existingBrewCount={cache?.synthesis_brew_count ?? null}
         currentBrewCount={brewCount}
