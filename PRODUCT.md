@@ -386,7 +386,7 @@ If a future surface genuinely needs a line-icon (e.g. a settings gear), use Luci
 
 The full forward-looking work surface, structured by readiness + scope. Per-sprint retrospectives live in `memory/project_*.md`. Sprint-by-sprint shipped log is at [docs/sprints/shipped.md](docs/sprints/shipped.md).
 
-**Last reorder:** 2026-05-08 (PR #114 shipped the MCP Tool descriptions audit; bullet moved to shipped.md). Prior reorder 2026-05-07 (May 2026 doc cleanup PR collapsed Active Sprint Queue + Long-term Roadmap + Future Directions + Current App State § What's Missing into a single 7-section Roadmap. Tool count 32 post-Roest write integration. New entries surfaced during the cleanup: WBC Integration Sprint, ROASTING.md Lot Knowledge reorg, registry-md sync script, scaling watch-items.)
+**Last reorder:** 2026-05-08 (post-v8.5 sweep — PRs #112 + #116 + #117 + #114 follow-up #115 moved to shipped.md; Newly queued subsection cleared since all 3 entries shipped same-week). Prior reorder same-day (PR #114). Prior reorder 2026-05-07 (May 2026 doc cleanup PR collapsed Active Sprint Queue + Long-term Roadmap + Future Directions + Current App State § What's Missing into a single 7-section Roadmap. Tool count 32 post-Roest write integration.)
 
 ### Active Sprints
 
@@ -421,13 +421,7 @@ Three independently-scopable cleanup tracks Chris flagged 2026-05-05 post-Phase-
 - **Track 2 — Data sanity audit.** Orphan rows, childless pairs, drift between text + structured columns (e.g. `brews.process` vs `base_process` + modifiers), Phase 3 queue health, roast-to-cupping pair completeness, `brews.green_bean_id` populated for all SR brews. Method: write `scripts/data-sanity-audit.ts`, run it, triage findings. ~2-3h script + cleanup sized by what surfaces. Absorbs the long-standing "roaster/producer conflation cleanup" side-quest (flagged 2026-04-21).
 - **Track 3 — Page-design refresh.** Bundle with future design sprint per Chris's call. Stale fields displayed, ordering drift, Phase 3 surfaces not yet rendered (provenance flags), mobile regressions, inconsistencies between aggregation detail pages. ~4-6h. Don't ship standalone; wait for the Claude-Design redesign window.
 
-**Recommended order:** Track 1 (this PR) → Track 2 → Track 3 bundled with redesign.
-
-#### 4. Registry-md sync script (near-term, Chris-driven)
-
-Small one-time guard against drift between `lib/*-registry.ts` (validation mirrors) and `docs/taxonomies/*.md` (authored sources). Today's pattern is "2-step deliberate edit" but no tooling enforces it. Build `scripts/check-registry-md-sync.ts` — for each axis, parse the .md headers + the .ts canonical array, fail CI if they diverge. Permanent guard at very low maintenance cost.
-
-**Sizing:** ~1-2h.
+**Recommended order:** Track 1 (shipped 2026-05-07 in May 2026 doc cleanup PR) → Track 2 → Track 3 bundled with redesign.
 
 ### Side Quests
 
@@ -492,12 +486,6 @@ Scoped, sized, and ready-to-launch when timing is right. Not currently ranked in
 #### Redesign
 
 - **Claude-Design-led redesign.** Chris finished a redesign session with claude.ai/design 2026-04-25 and the output is ready-to-launch. Waiting on app stability (post-2.7.5 punch-list resolution + post-cleanup-sprint). Probably its own large sprint; scope re-examines desktop vs mobile as a first-class consideration since the current rule "desktop-first with mobile spot-check" was set before Chris's brewing surface fully shifted to mobile claude.ai. Anything shipped between now and the redesign must stay modular (route through `<SectionCard>` / `<Tag>` / `<TagLinkList>` / `.label`; no new tokens / colors / spacing unless a canonical registry requires it). **Triggers when:** Active Sprints clear + a stable surface window opens.
-
-#### Newly queued (May 2026 doc cleanup)
-
-- **WBC Integration Sprint** (~2-3h, plan-mode-heavy). Modifier expansion call (Role-Based Pulse as 4th modifier? AskUserQuestion) + Section 4 reframe (drop "reference-only" framing) + new Step 1d "WBC corpus check" named consideration + brewer rotation cross-refs to WBC examples ("Hario Switch is the canonical Eline Ferket Selective Bloom vehicle"). Dog-food validation on next non-default brew. **Triggers when:** ready anytime.
-- **ROASTING.md Lot Knowledge reorg** (~3-4h). 5-tier restructure (Active Lots / Reference Roasts+Brews / Cross-Coffee Insights / Open Questions / Archive). Reorg ~250 lines from current scattered "How This Project Is Structured" + "Active Lots" + "One-Shot Calibrations" + "Recently Closed Lots" + "Cross-Coffee Insight Layer" + "Reference Brew Recipes by Lot" + "Per-lot generalized learnings." Can bundle with an Active Lots currency refresh. **Triggers when:** doc cleanup PR lands.
-- **Active Lots refresh on ROASTING.md** (small). Confirm currency of the 5 listed lots, add new ones if any are mid-iteration. Bundle with Lot Knowledge reorg.
 
 ---
 
