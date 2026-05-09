@@ -7,7 +7,7 @@ import { Tag } from '@/components/Tag'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
-import TerroirSynthesis from './TerroirSynthesis'
+import SynthesisCard from '@/components/SynthesisCard'
 import { getCountryColor } from '@/lib/country-colors'
 
 /**
@@ -258,9 +258,12 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
       {/* AI Synthesis */}
       {brewList.length > 0 && (
-        <TerroirSynthesis
-          terriorIds={terriorIds}
-          macroTerroirName={macroName || terroir.country}
+        <SynthesisCard
+          title="WHAT I'VE LEARNED ABOUT THIS TERROIR"
+          fetchKey={terriorIds.join(',')}
+          endpoint="/api/terroirs/synthesize"
+          requestBody={{ terriorIds }}
+          loadingText={`Synthesizing knowledge from ${brewList.length} coffees across ${macroName || terroir.country}...`}
           existingSynthesis={terroir.synthesis}
           existingBrewCount={terroir.synthesis_brew_count}
           currentBrewCount={brewList.length}
