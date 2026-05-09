@@ -243,6 +243,23 @@ Roast position within a session meaningfully affects FC timing. First roast in a
 
 **Compatibility with FC marking:** if a coffee has audible FC, mark it manually for the data record - bean temp end condition still drives the drop. If silent, do not try to mark FC; let the profile end condition do the work and log as manual-no-audio at the drop temp.
 
+**Manual-override exception rules (when to override the BEAN_TEMP end condition):**
+
+The BEAN_TEMP end condition is the default mechanism, but operator override is appropriate in four specific cases. The override button is the right tool when one of these patterns is recognized in real time.
+
+Long-end overrides (drop earlier than the auto-drop would fire):
+
+- **RoR has stalled out and the curve is flattening before the bean temp target is reached.** If RoR drifts to ~0% with bean temp still below the auto-drop threshold and the curve isn't going to recover, holding for the auto-drop just bakes the coffee. Drop manually before the bake propagates. (Example: REDPLUM v1a / batch 180 - FC at 5:07 / 203.6°C, RoR drifted to ~0% by ~5:30, drop fired manually at 5:30 / 203.6°C rather than waiting for the 207°C BEAN_TEMP target.)
+- **Past first crack but still well short of the bean temp target with no momentum.** Same shape as the stall case but framed by FC reference rather than RoR shape - if FC has happened, dev is accumulating, and bean temp isn't climbing toward the auto-drop, the dev window is going to overrun before the temp hits.
+- **Total roast is approaching the 6:00-6:30 mark.** Hard time ceiling - once total roast is in the 6:00-6:30 window, operator judgment call regardless of where bean temp is. The character of the roast at that point is determined more by the long total time than by the drop temp the auto-drop would fire at.
+
+Short-end overrides (hold past the auto-drop):
+
+- **Bean temp blows past the end condition target but the roast is too short.** Most commonly because peak inlet was too aggressive and bean temp climbed faster than FC kinetics. If FC hasn't happened yet (or just barely happened with no dev accumulation), the auto-drop will fire pre-FC or near-pre-FC and the result is baked, not roasted. Hold past the auto-drop until FC occurs and at least minimal dev accumulates. (Example: REDPLUM v1c / batch 182 - reached 207°C bean temp at 4:15 with no FC heard; should have held past 207°C rather than letting auto-drop fire. Result was Agtron 90.8 / 10.3% weight loss - nearly green-bean territory.)
+- **FC arrived hotter than expected and you want a longer development.** Less critical than the short-roast case; this is fine-tuning rather than failure-mode prevention. If FC hits the bean temp target with too little dev accumulation behind it, holding past the auto-drop for 5-10s of additional dev is a defensible operator decision.
+
+The pattern across all five rules: **the BEAN_TEMP auto-drop optimizes for the typical case where FC arrives in window and dev accumulates normally; operator override is for the edge cases where the typical assumptions break down.** When override happens, document end_condition_type as `manual` on the roast row (not `bean_temp`) so the analysis layer can distinguish operator-initiated drops from machine-initiated drops.
+
 ## WB-to-Ground Agtron Delta as Development Signal
 
 The delta between whole bean (WB) Agtron and ground Agtron is one of the most sensitive internal development signals available.
@@ -493,6 +510,17 @@ section.
 - Day 7 question: Does the Sudan Rume Natural V3 lower-energy direction transfer to East African Red Bourbon natural at high altitude? Cleanest comparison will be v1a vs v1b (v1c invalidated). Watch whether v1a's longer dev produces SR Natural Batch 152-style integration, or whether Maillard 51.3% reads as bake/dark tea on this variety.
 - Brew direction hypothesis at Day 7: tea-forward profile suggests gentler extraction (1:16-1:17, 92-93°C). NOT a Full Expression candidate. Confirm or revise after first pourover.
 - TERROIR_DRIFT flagged: Northern Province (Virunga volcanic foothills) not in canonical Rwanda macro list (Eastern Low / Central Plateau / Lake Kivu). Pushed under Lake Kivu Highlands as closest available; suggest registry edit for "Northern Volcanic Highlands" or similar covering Burera/Musanze. Producer Agnes Mukamushinja & Felix Hitayezu / Nova Washing Station net-new (producer_override:true).
+
+### REDPLUM-CAS-2026 - El Paraiso Red Plum Castillo (Diego Samuel Bermúdez, Cauca, Colombia)
+
+- Status: Active - V1 roasted 2026-05-08 (batches 180/181/182), Day 7 pourover pending (target 2026-05-15).
+- Anchor: SR Washed CF-Light #133 reference profile. Density 802 g/L matches anchor range. Off-anchor variables: 11.2% moisture (highest in measured set), pulp-fermentation washed process variant, different farm/producer. Anchor confidence framed Medium-High at intake.
+- V1 batches 180/181/182 - peak inlet spread 240 / 245 / 250°C, full curve scaled proportionally from #133 anchor (charge stays at 200°C). Standard fan curve held constant (80->68->63->70->73% at 0:00/1:45/2:30/4:15/5:30). RPM flat 65. End condition BEAN_TEMP @ 207°C auto-drop. BBP 117°C drum / 125°C hopper alert.
+- Roast outcomes: **#180 (v1a, 240°C peak)**: FC 05:07 / 203.6°C, drop 05:30 / 203.6°C (operator-initiated stall-prevention drop), dev 39s (11.3%), Agtron WB 77.4, weight loss 12.2%. Underdevelopment-side probe landed in underdevelopment zone as designed. By the time bean temp had passed FC and was approaching the 207°C BEAN_TEMP target, RoR had drifted to ~0% and the curve was flattening; total roast was approaching 5:30 with stall risk. Operator invoked the long-end stall-prevention exception rather than waiting for the auto-drop. Right call given the curve. **#181 (v1b, 245°C peak)**: FC 04:34 / 205.4°C, drop 05:08 / 207.0°C, dev 34s (11.0%), Agtron WB 80.9, weight loss 11.8%. Direct anchor batch, BEAN_TEMP auto-drop fired correctly. FC at 205.4°C is high - only 1.6°C of headroom to the 207°C drop ceiling, dev compressed. **#182 (v1c, 250°C peak)**: NO FC RECORDED, drop 04:15 / 207.0°C (BEAN_TEMP auto-drop fired correctly), dev N/A, Agtron WB 90.8, weight loss 10.3%. **CEILING-COLLISION FAILURE: bean temp reached 207°C BEAN_TEMP target before FC could occur - auto-drop fired pre-crack.** In retrospect, this was a missed short-end manual-hold opportunity; operator should have held past 207°C to give FC time to occur. Agtron 90.8 + 10.3% weight loss + Roest "very light color" auto-comment confirm this is essentially baked, not roasted.
+- Moisture-aware FC delay confirmed across the spread: predicted FC arrival missed by 12-17s on v1a, 4-19s on v1b. The 11.2% moisture intake hypothesis was correct; drying took longer than the SR Washed #133 anchor predicted, and the proportional-curve-scaling rule didn't capture it. The moisture-aware shape adjustment we deferred from V1 (hold 01:15 and 02:30 inlet 1-2°C higher) should be applied in V2.
+- Ceiling discovery: the SR Washed CF-Light 245°C peak is at-or-near the ceiling for this lot, not a centerline. v1c (250°C) revealed bean temp climbs faster than FC kinetics, auto-drop fires at 207°C BEAN_TEMP before FC can occur. V2 spread should be narrower and shifted cooler - proposed 242 / 245 / 248.
+- Day 7 question: Does the SR Washed CF-Light reference transfer cleanly to a different farm + pulp-fermentation washed variant? Most likely V1 winner is v1b given centerline anchor positioning. v1c likely tastes underdeveloped / cereal / grassy (confirms ceiling). v1a expected to read flatter than v1b but cleaner than v1c.
+- Brew direction hypothesis at Day 7: Stone fruit + raspberry profile with panela sweetness backbone - Full Expression direction. Plan UFO + Sibarist, 91°C, 1:14, EG-1 6.0 for optimized brew session.
 
 ## One-Shot Calibrations in Process
 
