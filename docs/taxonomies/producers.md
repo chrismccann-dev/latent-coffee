@@ -428,7 +428,7 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Panama Genetic + Precision Estates  ·  10 producers
+### Panama Genetic + Precision Estates  ·  12 producers
 
 ### Altieri Family
 
@@ -579,6 +579,25 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+### Justin Boudeman *[skeleton — pending rich research]*
+
+**Country:** Panama · **Admin:** Chiriquí · **Macro:** Volcán Barú Highlands
+
+- **Tier:** 2
+- **Producer System:** Panama Genetic + Precision Estates
+- **Processing System Tags:** —
+- **Reference Role:** Signal
+- **Producer Type:** Smallholder
+- **Farm:** Longboard Coffee
+- **Farming Model:** —
+- **Processing Capability:** —
+- **Processing Style Tags:** —
+- **Drying Method:** —
+- **Primary Cultivars:** Gesha
+- **Roaster References:** Dongzhe
+
+---
+
 ### Lamastus Family
 
 **Country:** Panama · **Admin:** Chiriquí · **Macro:** Volcán Barú Highlands
@@ -669,6 +688,25 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+### Pocho Gallardo *[skeleton — pending rich research]*
+
+**Country:** Panama · **Admin:** Chiriquí · **Macro:** Volcán Barú Highlands
+
+- **Tier:** 2
+- **Producer System:** Panama Genetic + Precision Estates
+- **Processing System Tags:** —
+- **Reference Role:** Signal
+- **Producer Type:** Smallholder
+- **Farm:** Finca Nuguo
+- **Farming Model:** —
+- **Processing Capability:** —
+- **Processing Style Tags:** —
+- **Drying Method:** —
+- **Primary Cultivars:** Gesha
+- **Roaster References:** Dongzhe, Picolot (Brian Quan)
+
+---
+
 ### Ratibor Jr. & Tessie Hartmann
 
 **Country:** Panama · **Admin:** Chiriquí · **Macro:** Volcán Barú Highlands
@@ -729,7 +767,7 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Ethiopia High-Altitude Clarity  ·  8 producers
+### Ethiopia High-Altitude Clarity  ·  9 producers
 
 ### Basha Bekele
 
@@ -816,6 +854,25 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Crop to Cup, Showroom
 - **Roaster References:** Moonwake, September
 - **Contact:** https://www.instagram.com/nigussienare
+
+---
+
+### Rumu Damo Washing Station *[skeleton — pending rich research]*
+
+**Country:** Ethiopia · **Admin:** Sidama · **Macro:** Sidama Highlands
+
+- **Tier:** 2
+- **Producer System:** Ethiopia High-Altitude Clarity
+- **Processing System Tags:** —
+- **Reference Role:** Signal
+- **Producer Type:** Washing Station
+- **Farm:** —
+- **Farming Model:** Smallholder catchment / Washing station
+- **Processing Capability:** —
+- **Processing Style Tags:** —
+- **Drying Method:** —
+- **Primary Cultivars:** Ethiopian Landrace Blend (74110/74112)
+- **Roaster References:** Dak Coffee Roasters
 
 ---
 
@@ -3142,6 +3199,26 @@ path; rich content gets backfilled when the producer earns it.
 - **Drying Method:** —
 - **Primary Cultivars:** Maracaturra
 - **Roaster References:** Shoebox Coffee
+
+---
+
+### Nelsyn Hernández *[skeleton — pending rich research]*
+
+**Country:** Costa Rica · **Admin:** Tarrazu (San Marcos) · **Macro:** Southern Highlands
+
+- **Tier:** 2
+- **Producer System:** —
+- **Processing System Tags:** —
+- **Reference Role:** Signal
+- **Producer Type:** Smallholder
+- **Farm:** Fátima Micromill
+- **Farming Model:** Smallholder micro-mill
+- **Processing Capability:** —
+- **Processing Style Tags:** —
+- **Drying Method:** —
+- **Primary Cultivars:** —
+- **Importers:** Sweet Maria's
+- **Notes:** Sweet Maria's Costa Rican lots use farm-name-as-producer convention; "Higuito" is the farm/lot name (aliased to this producer in the registry).
 
 ---
 

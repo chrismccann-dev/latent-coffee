@@ -326,8 +326,8 @@ function mdBoldBullets(parentH2: string, h3Title: string) {
 //   - Mixed inline bold names: `- Cherry Blossom, ..., **+ Coffee Blossom**`
 //   - Bolded names with italic note: `- ..., **Sugar** *(generic catch-all)*`
 function mdFlavorBases(src: string): string[] {
-  const section = sliceSection(src, 2, 'Base Flavors (181)')
-  if (section == null) throw new Error('mdFlavorBases: ## Base Flavors (181) missing')
+  const section = sliceSection(src, 2, 'Base Flavors (182)')
+  if (section == null) throw new Error('mdFlavorBases: ## Base Flavors (182) missing')
   const out: string[] = []
   const seen = new Set<string>()
   for (const line of section.split('\n')) {
@@ -357,8 +357,8 @@ function mdFlavorBases(src: string): string[] {
 
 // --- md: flavor modifiers — table rows `| {Name} | description |` under each H3 of `## Modifiers`.
 function mdFlavorModifiers(src: string): string[] {
-  const section = sliceSection(src, 2, 'Modifiers (43)')
-  if (section == null) throw new Error('mdFlavorModifiers: ## Modifiers (43) missing')
+  const section = sliceSection(src, 2, 'Modifiers (44)')
+  if (section == null) throw new Error('mdFlavorModifiers: ## Modifiers (44) missing')
   const out: string[] = []
   const seen = new Set<string>()
   for (const line of section.split('\n')) {
