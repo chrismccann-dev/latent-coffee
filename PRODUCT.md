@@ -417,11 +417,11 @@ Same shape as Sprint 2.2 brainstorm: plan-mode design, no code, AskUserQuestion 
 
 Three independently-scopable cleanup tracks Chris flagged 2026-05-05 post-Phase-3. Bundle into one sprint or ship separately. Full scope in `memory/project_general_cleanup_sprint.md`.
 
-- **Track 1 — Docs consolidation pass.** **Executing now via the May 2026 doc cleanup PR** (covers BREWING / ROASTING / docs/prompts / docs/taxonomies / SYNC_V2 / ARBITER / CLAUDE / PRODUCT / README + Documentation Indexes + SYNC.md + design-brief.md deletions + April Brewer registry fix + Documentation Index + Doc-touch sprint cadence rule + cuppings.sweetness + cuppings.temperature_behavior schema migration). Walks the full root-doc surface in one structured pass.
-- **Track 2 — Data sanity audit.** Orphan rows, childless pairs, drift between text + structured columns (e.g. `brews.process` vs `base_process` + modifiers), Phase 3 queue health, roast-to-cupping pair completeness, `brews.green_bean_id` populated for all SR brews. Method: write `scripts/data-sanity-audit.ts`, run it, triage findings. ~2-3h script + cleanup sized by what surfaces. Absorbs the long-standing "roaster/producer conflation cleanup" side-quest (flagged 2026-04-21).
-- **Track 3 — Page-design refresh.** Bundle with future design sprint per Chris's call. Stale fields displayed, ordering drift, Phase 3 surfaces not yet rendered (provenance flags), mobile regressions, inconsistencies between aggregation detail pages. ~4-6h. Don't ship standalone; wait for the Claude-Design redesign window.
+- **Track 1 — Docs consolidation pass.** Shipped 2026-05-07 in the May 2026 doc cleanup PR (covers BREWING / ROASTING / docs/prompts / docs/taxonomies / SYNC_V2 / ARBITER / CLAUDE / PRODUCT / README + Documentation Indexes + SYNC.md + design-brief.md deletions + April Brewer registry fix + Documentation Index + Doc-touch sprint cadence rule + cuppings.sweetness + cuppings.temperature_behavior schema migration).
+- **Track 2 — Data sanity audit.** Shipped 2026-05-08. `scripts/data-sanity-audit.ts` + dry-run report at `docs/audits/track-2-2026-05-08.md`. 159 findings across 7 dirty dimensions (process recompose, producer drift, terroir orphans, roast→cupping completeness, synthesis cache staleness, provenance markers). Bucket A fixes split to a follow-up PR; Bucket B items either queued as mini-sprints or bundled with Track 3.
+- **Track 3 — Page-design refresh.** Bundle with future design sprint per Chris's call. Stale fields displayed, ordering drift, Phase 3 surfaces not yet rendered (provenance flags), mobile regressions, inconsistencies between aggregation detail pages. ~4-6h. Don't ship standalone; wait for the Claude-Design redesign window. Will also absorb the synthesis-cache-keyed-on-terroir_id architectural finding from Track 2 (see audit report § dim 12a).
 
-**Recommended order:** Track 1 (shipped 2026-05-07 in May 2026 doc cleanup PR) → Track 2 → Track 3 bundled with redesign.
+**Recommended order:** Track 1 (shipped 2026-05-07) → Track 2 (shipped 2026-05-08) → Track 3 bundled with redesign.
 
 ### Side Quests
 

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "check:mcp": "npx -y -p tsx@4 tsx scripts/check-mcp-tools.ts",
-    "check:registry-sync": "npx -y -p tsx@4 tsx scripts/check-registry-md-sync.ts"
+    "check:registry-sync": "npx -y -p tsx@4 tsx scripts/check-registry-md-sync.ts",
+    "audit:data": "npx -y -p tsx@4 tsx scripts/data-sanity-audit.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.89.0",
