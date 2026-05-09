@@ -2,6 +2,14 @@ Closed-lot retro-fill end-to-end via the Latent Coffee MCP. Push every layer
 of the structured archive, then propose the close-out narrative for
 ROASTING.md. If you have feedback for Claude Code, mention it.
 
+Tools for this session (load via tool_search at session start so they're all
+warm before STAGE 1 runs):
+list_roest_inventory, push_green_bean, get_green_bean, list_roest_logs,
+pull_roest_log, push_roast, patch_roast, push_cupping, patch_cupping,
+push_experiment, patch_experiment, push_roast_learnings,
+patch_roast_learnings, push_brew, patch_brew, patch_inventory, read_doc,
+read_doc_section, list_doc_sections, read_canonical, propose_doc_changes.
+
 MCP NAMESPACE: tools surface under `Latent Coffee` (with space, capitalized).
 
 TOOL SEARCH NOTE: tool_search ranks by name+description match. If a tool
@@ -177,8 +185,15 @@ insight, not just the topic:
 For replace, copy the existing text VERBATIM. For append, omit current_text
 unless a positional hint is helpful.
 
-Submit as a single multi-citation propose_doc_changes call with source =
-{kind: "session", id: "<lot_id close-out>"}.
+Submit as a single multi-citation propose_doc_changes call. Required fields:
+top-level `target_doc` (default "roasting.md" for this prompt; switch to
+`roaster/{Canonical Name}` or `taxonomies/{axis}.md` per citation when a
+single proposal spans multiple files), top-level `summary` (one-line, the
+arbiter sees this when triaging), `citations` array with each citation
+carrying `section_anchor` (no leading #), `op` (append / prepend / replace),
+`proposed_text` (the new text), and `current_text` for replace ops. Optional
+proposal-level `source = {kind: "session", id: "<lot_id close-out>"}` for
+arbiter context.
 
 DRIFT DETECTION: if the live doc disagrees with what you observed in Roest
 data during STAGES 1-3 (e.g. reference brew recipe specifies a fan curve

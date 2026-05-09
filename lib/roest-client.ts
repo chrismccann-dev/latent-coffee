@@ -570,7 +570,12 @@ export type NormalizedGreenBeanPayload = {
   quantity_g: number | null
   price_per_kg: number | null
   purchase_date: string | null
-  producer_tasting_notes: string | null
+  // Roest's inventory schema has a single `notes` field — there is no separate
+  // producer_tasting_notes column. Whatever the user typed in the Roest UI
+  // notes field (which may contain producer prose, importer prose, sourcing
+  // notes, anything) lands here. caller (claude.ai) decides how to split into
+  // green_beans.producer_tasting_notes vs green_beans.additional_notes when
+  // pushing onward via push_green_bean.
   additional_notes: string | null
   is_archived: boolean
   inference_hints: string[]
@@ -630,7 +635,12 @@ export function roestInventoryToPushGreenBeanPayload(
     quantity_g: normalizeRoestInventoryWeightG(inv.initial_weight),
     price_per_kg: inv.price,
     purchase_date: inv.reg_date ? inv.reg_date.slice(0, 10) : null,
-    producer_tasting_notes: null, // Roest stores everything in `notes`; caller splits
+    // Roest has only one notes field (inv.notes) — caller decides whether the
+    // contents are producer prose, importer prose, or sourcing notes when
+    // pushing onward via push_green_bean. Surfacing a separate
+    // producer_tasting_notes:null here was misleading (looked like a write
+    // target that wasn't), so the field was dropped from this payload shape
+    // 2026-05-09 per Roest dog-food round-3 feedback.
     additional_notes: inv.notes,
     is_archived: inv.is_archived,
     inference_hints: hints,
