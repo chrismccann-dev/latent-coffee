@@ -633,18 +633,22 @@ async function auditPairCompleteness(
     const has = cuppingsByRoast.get(r.id)?.length ?? 0
     if (has > 0) continue
     const age = daysAgo(r.roast_date)
+    // Per Chris's workflow: only the ULTIMATE reference roast per green-bean
+    // lot needs a formal cupping. Per-experiment iterations are intentionally
+    // not cupped. So is_reference=true + no cupping is the only Bucket B case;
+    // everything else is observational (info).
     let severity: Severity = 'info'
-    let bucketLabel = '<7d (mid-iteration)'
-    if (age != null) {
-      if (age >= 30) {
-        severity = 'B'
-        bucketLabel = `>30d (closed lot)`
-      } else if (age >= 7) {
-        severity = 'C'
-        bucketLabel = `7-30d (warn)`
-      }
+    let bucketLabel: string
+    if (r.is_reference) {
+      severity = age != null && age >= 7 ? 'B' : 'info'
+      bucketLabel = 'is_reference=true (must have cupping ≥ day 7)'
+    } else if (age != null && age >= 30) {
+      bucketLabel = '>30d non-reference (intentional, no formal cupping)'
+    } else if (age != null && age >= 7) {
+      bucketLabel = '7-30d non-reference'
+    } else {
+      bucketLabel = '<7d (mid-iteration)'
     }
-    if (r.is_reference) severity = 'B'
     findings.push({
       severity,
       row: `roasts/${r.id.slice(0, 8)}`,
@@ -655,9 +659,9 @@ async function auditPairCompleteness(
   return {
     number: 7,
     name: 'Roast → cupping pair completeness',
-    summary: `Scanned ${roasts.length} roasts × ${cuppings.length} cuppings. Severity escalates by age: <7d info → 7-30d C → >30d B; is_reference=true always B.`,
+    summary: `Scanned ${roasts.length} roasts × ${cuppings.length} cuppings. Bucket B reserved for is_reference=true with no cupping ≥ 7d old; non-reference findings are observational (Chris doesn't formally cup every iteration — only the lot's ultimate reference).`,
     findings,
-    clean: findings.length === 0 || findings.every((f) => f.severity === 'info'),
+    clean: findings.every((f) => f.severity === 'info'),
   }
 }
 
