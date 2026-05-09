@@ -4,6 +4,14 @@ any prose updates for ROASTING.md Active Lots. push_roast_learnings is
 deferred to close-out (kept in the numbered sequence below). If you have
 feedback for Claude Code on the roasting MCP path, mention it.
 
+Tools for this session (load via tool_search at session start so they're all
+warm before STAGE 1 runs):
+list_roest_inventory, get_green_bean, push_green_bean, get_bean_pipeline,
+list_roest_logs, pull_roest_log, push_roast, patch_roast, push_cupping,
+patch_cupping, push_experiment, patch_experiment, push_brew, patch_brew,
+push_roast_profile, read_doc, read_doc_section, list_doc_sections,
+read_canonical, propose_doc_changes.
+
 MCP NAMESPACE: tools surface under `Latent Coffee` (with space, capitalized).
 
 TOOL SEARCH NOTE: tool_search ranks by name+description match. If a tool
@@ -17,7 +25,7 @@ patch_cupping / patch_experiment / patch_green_bean / patch_roast_learnings /
 patch_brew) for field-level updates. Use push_* on first write or full
 re-archive; use patch_* when only a few fields change post-push (avoids
 re-sending the full payload + risks accidental overwrite of preserved-
-context fields like context_baseline / shared_constants).
+context fields like context / shared_constants on push_experiment).
 
 FK DEPENDENCY CHAIN: STAGE 1 returns green_bean_id (used by STAGES 2-7) +
 the FULL pipeline state baseline so downstream stages can skip what's
@@ -99,6 +107,20 @@ STAGE 2 - Push NEW roasts since last sync:
     worth_repeating.
   - is_reference: true ONLY if this batch is the lot's confirmed reference
     (rare mid-iteration; usually set at close-out).
+  - OPERATOR-OVERRIDE CHECK before pushing: if `end_condition_target` (the
+    profile-set drop trigger, °C for bean_temp / seconds for dev_time) and
+    `drop_temp` (where the machine actually dropped) diverge by more than
+    ~0.5°C / a couple seconds AND the divergence isn't explained by Roest
+    behavior (ceiling breach from session-position acceleration, dev-time
+    timer firing slightly early/late), ASK whether the operator manually
+    pulled the drop. If yes, override `end_condition_type: "manual"` on the
+    push_roast payload regardless of what the profile encoded — the schema's
+    end_condition_type enum (bean_temp / dev_time / manual) is for
+    distinguishing operator-initiated from machine-initiated drops in
+    downstream analysis. Without this check, a manually-pulled drop on a
+    BEAN_TEMP profile would persist as `end_condition_type: "bean_temp"`
+    and contaminate any "what was the typical FC-to-drop time when the
+    machine fired auto-drop" filter.
   - push_roast(payload) with green_bean_id + roest_log_id cross-ref.
 - push_roast UPSERTs on (user_id, green_bean_id, batch_id); re-pushing is
   safe (returns created: false) but skipping is more efficient.
@@ -135,13 +157,21 @@ STAGE 3 - Push NEW cuppings since last sync:
 
 STAGE 4 - UPSERT experiments:
 - push_experiment UPSERTs on (user_id, green_bean_id, experiment_id).
+- Schema fields (use these names exactly): green_bean_id, experiment_id,
+  batch_ids, context (what prompted this experiment), primary_question
+  (what it's asking), control_baseline, shared_constants (what was held
+  constant), variable_changed (single variable being tested), levels_tested
+  (A/B/C levels), expected_outcomes, failure_boundary (what "broken" looks
+  like), observed_outcome_a/b/c/d, winner, key_insight,
+  what_changes_going_forward.
 - For each experiment with new observations / determined winner /
   key_insight: use the SAME experiment_id you used previously (or a fresh
   one for new experiments). The created flag in the response distinguishes
   fresh insert (true) from update (false).
 - Don't pass null for fields you want preserved — UPSERT overwrites with
   whatever you send. If you only have new observations, send the full
-  payload with prior context_baseline / shared_constants preserved.
+  payload with prior context / shared_constants / control_baseline /
+  expected_outcomes preserved.
 - For field-level updates (e.g. just adding observed_outcome_b after the
   next batch), prefer patch_experiment over re-sending — patch_* preserves
   the fields you don't pass, eliminating the overwrite-with-null risk.
@@ -220,8 +250,15 @@ insight, not just the topic:
 For replace, copy the existing text VERBATIM into current_text. For append,
 omit current_text unless a positional hint is helpful.
 
-Submit as a single multi-citation propose_doc_changes call with source =
-{kind: "session", id: "<lot_id or date stamp>"}.
+Submit as a single multi-citation propose_doc_changes call. Required fields:
+top-level `target_doc` (default "roasting.md" for this prompt), top-level
+`summary` (one-line, the arbiter sees this when triaging), `citations` array
+with each citation carrying `section_anchor` (no leading #), `op`
+(append / prepend / replace), `proposed_text` (the new text), and
+`current_text` for replace ops. Per-citation `target_doc` only when a
+citation diverges from the proposal-level default (rare). Optional
+proposal-level `source = {kind: "session", id: "<lot_id or date stamp>"}`
+for arbiter context.
 
 DRIFT DETECTION: if the live doc disagrees with what you observed in Roest
 data during STAGES 1-2 (e.g. existing Active Lot entry quotes a fan curve
