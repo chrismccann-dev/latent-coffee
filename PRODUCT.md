@@ -423,6 +423,18 @@ Three independently-scopable cleanup tracks Chris flagged 2026-05-05 post-Phase-
 
 **Recommended order:** Track 1 (shipped 2026-05-07) → Track 2 (shipped 2026-05-08) → Track 3 bundled with redesign.
 
+#### 4. Per-entity directed synthesis
+
+Promoted from Longer Term Items 2026-05-08 — the next non-blocked sized sprint slot, queued behind two side-quest sessions (`latentcoffee.com` HTTPS bug + MEMORY.md consolidation, both flagged elsewhere in the roadmap and being handled in dedicated sessions).
+
+Today's `cultivar` / `terroir` / `processes` / `roasters` synthesis prompts are too generic — Chris's framing: "If it's about Volcán Barú Highlands where I had 24 coffees, the insight shouldn't be 'taste the coffee cooler', it should be more directed about that specific terroir." Per-entity prompt customization that uses brew count + dimension salience + entity-specific context (e.g. terroir's macro-level processing + variety mix; roaster's BMR strategy tag) to direct the synthesis.
+
+**Sizing:** ~1-2 sprints; needs plan-mode brainstorm first since the prompt-engineering shape is interpretive. Touches `/api/{terroirs,cultivars,processes,roasters}/synthesize`.
+
+**Compounds with:** the per-roaster archive page enhancement (Longer Term) — same prompt-customization machinery becomes the template for `/cultivars/[id]` + `/terroirs/[id]` + `/processes/[slug]` archive surfaces. Also compounds with `/brews/[id]` lessons rework. See `Longer Term Items § Per-entity directed synthesis` for the original framing.
+
+**Triggers when:** the two side-quest sessions wrap, OR Chris pulls the trigger sooner.
+
 ### Side Quests
 
 Logged but not auto-queued — promote when a trigger fires.
