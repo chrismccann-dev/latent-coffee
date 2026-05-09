@@ -77,7 +77,7 @@ Keep them separate, the taxonomy stays stable.
 
 ---
 
-## Base Flavors (181)
+## Base Flavors (182)
 
 Hierarchy: Category → Sub-Category → Descriptor. Pick the most specific descriptor that's still recognizable.
 
@@ -135,9 +135,9 @@ Hierarchy: Category → Sub-Category → Descriptor. Pick the most specific desc
 - **Confection (12):** Cacao, Candy, Caramel, Caramelized, Chocolate, Dark Chocolate, Maple Syrup, Marzipan, Milk Candy, Milk Chocolate, Nougat, Vanilla, White Chocolate, **Baklava**, **Haw Flake**
 - **Sugar (7):** Brown Sugar, Honey, Molasses, Panela, Raw Sugar, **Sugar** *(generic catch-all)*, Sugar Cane
 
-### Tea & Herbal (21)
+### Tea & Herbal (22)
 - **Citrus-Botanical (1):** Bergamot
-- **Herbal (8):** Eucalyptus, Hops, Juniper, Lemon Verbena, Lemongrass, Mint, Peppermint, Spearmint
+- **Herbal (9):** Eucalyptus, Hops, Juniper, Lemon Verbena, Lemongrass, Mint, Peppermint, Rosemary, Spearmint
 - **Tea (12):** Assam Tea, Black Tea, Chamomile, Dragon Well Tea, Earl Grey, Green Tea, Oolong, Pu'Er, Rooibos Tea, **Tea** *(generic catch-all)*, White Tea, Yunnan Red Tea
 
 > Fallback anchor: `Herbal → Mint`. Tea base reverses modifier direction (see Rule 11).
@@ -147,7 +147,7 @@ Hierarchy: Category → Sub-Category → Descriptor. Pick the most specific desc
 
 ---
 
-## Modifiers (43)
+## Modifiers (44)
 
 Modifiers attach to a base flavor (max 2 per flavor). Use the priority order in Rule 7.
 

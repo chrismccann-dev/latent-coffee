@@ -363,6 +363,7 @@ export const FLAVOR_MODIFIERS: readonly ModifierEntry[] = [
 
   // ── Other (priority 7)
   { name: "Botanical", category: "Other", priority: 7, description: "Non-floral plant aromatics (hops, herbal blends)" },
+  { name: "Herbal", category: "Other", priority: 7, description: "Herbal-floral hybrid (used as Modifier 2 for floral-herbal crossover, e.g. Jasmine + Herbal)" },
 
   // ── Structure (priority 8)
   { name: "Tannic", category: "Structure", priority: 8, description: "Light astringency; drying grip (common in tea-like coffees)" },
