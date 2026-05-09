@@ -463,7 +463,7 @@ Logged but not auto-queued — promote when a trigger fires.
 
 ### Bugs and Issues
 
-- **`latentcoffee.com` apex over HTTP.** The apex domain is not redirecting to HTTPS even though "Certificate is valid" shows in the browser certificate popup. Vercel domain config — typically a 5-min fix in the project's domain settings. Flagged 2026-05-07 doc review.
+_None._
 
 ### Workflow rule that bounds the sprint queue
 
