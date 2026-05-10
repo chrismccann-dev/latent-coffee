@@ -105,6 +105,18 @@ export function outputSelectionFormLabel(form: OutputSelectionForm): string {
   return FORM_LABELS[form]
 }
 
+/** Split composeModifierLabel output at the em-dash so the type/form portion
+ *  can render as a pill while the prose detail renders separately.
+ *  Returns { head, detail } where detail is null when the modifier carries
+ *  no sub-fields. Used by /brews/[id] to surface "Modifier Detail" as its
+ *  own labeled subblock under the recipe pills. */
+export function splitModifierLabel(m: Modifier): { head: string; detail: string | null } {
+  const full = composeModifierLabel(m)
+  const idx = full.indexOf(' — ')
+  if (idx === -1) return { head: full, detail: null }
+  return { head: full.slice(0, idx), detail: full.slice(idx + 3) }
+}
+
 /** Render a modifier as a single line for display. Examples:
  *    "Output Selection (late cut) — kept 245g of 288g"
  *    "Inverted Temperature Staging — 86°C → 92°C across two phases"
