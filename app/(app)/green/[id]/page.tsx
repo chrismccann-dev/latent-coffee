@@ -38,15 +38,37 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
   const roastIds = bean.roasts?.map((r: any) => r.id) || []
   let cuppings: any[] = []
   if (roastIds.length > 0) {
+    // Order asc by cupping_date so the WB-to-Ground delta map below picks
+    // the chronologically-first cupping (Day 7 evaluation per ROASTING.md
+    // when present) as the primary ground_agtron read per roast.
     const { data } = await supabase
       .from('cuppings')
       .select('*')
       .in('roast_id', roastIds)
+      .order('cupping_date', { ascending: true })
     cuppings = data || []
   }
 
   const learnings = bean.roast_learnings?.[0] || bean.roast_learnings
   const bestBatchId = learnings?.best_batch_id
+
+  // Build roast_id -> primary ground_agtron map for the WB-to-Ground delta
+  // column in the roast log. Pick the chronologically-first cupping per roast
+  // with a non-null ground_agtron (matches the Day 7 evaluation convention
+  // when present; falls through any later cuppings if Day 7 had no reading).
+  // Round-5 dogfood (2026-05-10): the delta is diagnostic per ROASTING.md
+  // § WB-to-Ground Agtron Delta as Development Signal - surfacing it inline
+  // saves the manual subtract during sync review.
+  const primaryGroundAgtronByRoast: Record<string, number> = {}
+  for (const cup of cuppings) {
+    if (
+      cup.roast_id &&
+      typeof cup.ground_agtron === 'number' &&
+      !(cup.roast_id in primaryGroundAgtronByRoast)
+    ) {
+      primaryGroundAgtronByRoast[cup.roast_id] = cup.ground_agtron
+    }
+  }
 
   // Get related brews
   const { data: relatedBrews } = await supabase
@@ -125,11 +147,18 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
                   <th>Drop Temp</th>
                   <th>Dev</th>
                   <th>Agtron</th>
+                  <th title="Whole bean Agtron minus ground Agtron (primary cupping). ROASTING.md targets |Δ| ≤ 2 for even internal development.">WB→Gnd Δ</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                {bean.roasts.map((roast: any) => (
+                {bean.roasts.map((roast: any) => {
+                  const groundAgtron = primaryGroundAgtronByRoast[roast.id]
+                  const delta =
+                    typeof roast.agtron === 'number' && typeof groundAgtron === 'number'
+                      ? Number((roast.agtron - groundAgtron).toFixed(1))
+                      : null
+                  return (
                   <tr
                     key={roast.id}
                     className={String(roast.batch_id) === String(bestBatchId) ? 'highlight' : ''}
@@ -147,6 +176,9 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
                       {roast.dev_ratio && ` (${roast.dev_ratio})`}
                     </td>
                     <td>{roast.agtron || '—'}</td>
+                    <td title={groundAgtron != null ? `Ground Agtron: ${groundAgtron}` : 'No cupping with ground Agtron'}>
+                      {delta != null ? `${delta > 0 ? '+' : ''}${delta}` : '—'}
+                    </td>
                     <td>
                       {roast.profile_link && (
                         <a
@@ -161,7 +193,8 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
                       )}
                     </td>
                   </tr>
-                ))}
+                  )
+                })}
               </tbody>
             </table>
           </div>

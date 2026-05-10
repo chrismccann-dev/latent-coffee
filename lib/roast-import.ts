@@ -1158,7 +1158,7 @@ export interface PatchExperimentPayload extends Partial<Omit<ExperimentPayload, 
   experiment_id?: string
 }
 
-const EXPERIMENT_PATCH_FIELDS = [
+export const EXPERIMENT_PATCH_FIELDS = [
   'green_bean_id', 'experiment_id', 'batch_ids',
   'context', 'primary_question', 'control_baseline', 'shared_constants',
   'variable_changed', 'levels_tested', 'expected_outcomes', 'failure_boundary',
