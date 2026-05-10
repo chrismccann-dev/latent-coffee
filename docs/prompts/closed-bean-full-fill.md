@@ -104,7 +104,12 @@ STAGE 5 - Loop push_experiment (UPSERT keyed on experiment_id):
 - For each experiment set: experiment_id, batch_ids, context, primary_question,
   control_baseline, shared_constants, variable_changed, levels_tested,
   expected_outcomes, failure_boundary, observed_outcome_a/b/c/d, winner,
-  key_insight, what_changes_going_forward.
+  key_insight, key_insight_confidence (Low / Medium / Medium-High / High -
+  mirrors Cross-Coffee Insight Layer vocabulary), what_changes_going_forward
+  (lessons-applied-forward only), open_questions (what was NOT answered -
+  distinct from what_changes_going_forward), additional_notes (free-text
+  catch-all for operator-framing prose that does not fit the structured
+  fields).
 - For field-level updates (e.g. amending what_changes_going_forward after
   a follow-up roast), prefer patch_experiment over re-sending the full
   payload — patch_* preserves the fields you don't pass.

@@ -176,7 +176,13 @@ STAGE 4 - UPSERT experiments:
   constant), variable_changed (single variable being tested), levels_tested
   (A/B/C levels), expected_outcomes, failure_boundary (what "broken" looks
   like), observed_outcome_a/b/c/d, winner, key_insight,
-  what_changes_going_forward.
+  key_insight_confidence (Low / Medium / Medium-High / High - mirrors the
+  Cross-Coffee Insight Layer hypothesis-confidence vocabulary),
+  what_changes_going_forward (lessons-applied-forward only),
+  open_questions (what this experiment did NOT answer - distinct from
+  what_changes_going_forward), additional_notes (free-text catch-all for
+  operator-framing prose / "opposite ends of the spectrum" / cup-vs-
+  structure tension narratives that do not fit observed_outcome_*).
 - For each experiment with new observations / determined winner /
   key_insight: use the SAME experiment_id you used previously (or a fresh
   one for new experiments). The created flag in the response distinguishes

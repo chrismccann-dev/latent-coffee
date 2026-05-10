@@ -32,8 +32,21 @@ export const pushExperimentInputSchema = {
   observed_outcome_d: z.string().optional().nullable().describe('Optional 4th level (used when 4-batch sessions are run).'),
   winner: z.string().optional().nullable().describe('Which batch / level won at Day 7 pourover.'),
   key_insight: z.string().optional().nullable().describe('What this experiment taught — Chris\'s post-hoc framing.'),
+  key_insight_confidence: z
+    .enum(['Low', 'Medium', 'Medium-High', 'High'])
+    .optional()
+    .nullable()
+    .describe(
+      'Hypothesis confidence on key_insight. Mirrors the Cross-Coffee Insight Layer pattern in ROASTING.md - High = ready to promote to a protocol change; Medium-High = strong but warrants another lot to confirm; Medium = directional, not yet generalizable; Low = early signal worth flagging but not relying on. Round-4 dogfood (2026-05-11): structuring this lets downstream queries filter "what insights are High confidence" without parsing inline prose markers.',
+    ),
   what_changes_going_forward: z.string().optional().nullable().describe(
-    'What changes about the next experiment / next bean / general approach as a result.',
+    'What changes about the next experiment / next bean / general approach as a result. Lessons-applied-forward only - park "what we still don\'t know" in open_questions instead.',
+  ),
+  open_questions: z.string().optional().nullable().describe(
+    'What this experiment did NOT answer. Round-4 dogfood (2026-05-11): separated from what_changes_going_forward to avoid conflating lessons-applied-forward with open-questions-for-next-iteration. The Higuito V1->V2 transition surfaced the gap - V1 had three open questions, two were design-relevant for V2 and one wasn\'t; structured separation makes the V-to-V transition crisp.',
+  ),
+  additional_notes: z.string().optional().nullable().describe(
+    'Free-text catch-all for operator-framing observations and tasting prose that does not fit the structured outcome / insight fields. Examples: "almost like opposite ends of the spectrum" cup framings, narrow-roast-window hypotheses, cup-vs-structure tension narratives. Round-4 dogfood (2026-05-11): keeps observed_outcome_a/b/c/d and key_insight tight rather than bloated with prose.',
   ),
 }
 
@@ -43,7 +56,7 @@ export function registerPushExperimentTool(server: McpServer, auth: McpAuthConte
     {
       title: 'Push Experiment',
       description:
-        'Log / save / update / record / push a roasting experiment (A/B/C/D batch comparison) — UPSERTs on (user_id, green_bean_id, experiment_id). Same experiment_id pushed twice updates the existing row — supports the iterative shape where experiment design lands first, then outcomes / winner / key_insight populate as batches resolve at Day 7. Returns experiment_pk + created flag (true on first push, false on update).',
+        'Log / save / update / record / push a roasting experiment (A/B/C/D batch comparison) — UPSERTs on (user_id, green_bean_id, experiment_id). Same experiment_id pushed twice updates the existing row — supports the iterative shape where experiment design lands first, then outcomes / winner / key_insight populate as batches resolve at Day 7. Three Round-4 (2026-05-11) free-text additions live alongside the structured fields: additional_notes (operator-framing prose that does not fit observed_outcome_*), open_questions (what this experiment did NOT answer - distinct from what_changes_going_forward), and key_insight_confidence (Low / Medium / Medium-High / High). Returns { experiment_pk, created }.',
       inputSchema: pushExperimentInputSchema,
     },
     async (input) => {
