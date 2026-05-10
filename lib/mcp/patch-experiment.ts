@@ -1,6 +1,10 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { patchExperiment, type PatchExperimentPayload } from '@/lib/roast-import'
+import {
+  patchExperiment,
+  EXPERIMENT_PATCH_FIELDS,
+  type PatchExperimentPayload,
+} from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 export const patchExperimentInputSchema = {
@@ -42,11 +46,12 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
     {
       title: 'Patch Experiment',
       description:
-        'Update / save / record / push field-level changes to an existing experiment by experiment_pk. Sibling of push_experiment — push_experiment UPSERTs by composite (green_bean_id, experiment_id) so the iterative-design path is well covered, but patch_experiment uses the PK so you can correct the experiment_id label itself or fix prose typos in observed_outcome_* / key_insight without composite-key matching. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find experiment_pk: call get_bean_pipeline (returns experiments[] with id keyed by experiment_id). Returns { experiment_pk }.',
+        'Update / save / record / push field-level changes to an existing experiment by experiment_pk. Sibling of push_experiment — push_experiment UPSERTs by composite (green_bean_id, experiment_id) so the iterative-design path is well covered, but patch_experiment uses the PK so you can correct the experiment_id label itself or fix prose typos in observed_outcome_* / key_insight without composite-key matching. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find experiment_pk: call get_bean_pipeline (returns experiments[] with id keyed by experiment_id). Returns { experiment_pk, updated_fields: [...] } — updated_fields echoes which columns landed in the patch so you can sanity-check without a follow-up read (mirrors patch_inventory pattern).',
       inputSchema: patchExperimentInputSchema,
     },
     async (input) => {
-      const result = await patchExperiment(auth.supabase, auth.userId, input as PatchExperimentPayload)
+      const payload = input as PatchExperimentPayload
+      const result = await patchExperiment(auth.supabase, auth.userId, payload)
       if (!result.ok) {
         if (result.code === 'validation') {
           throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
@@ -55,7 +60,14 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
         if (result.code === 'not_found') throw new Error(result.message)
         throw new Error(`Database error: ${result.message}`)
       }
-      const out = { experiment_pk: result.experiment_pk }
+      // Echo the diff so the caller can sanity-check which fields landed
+      // without a follow-up get_bean_pipeline read. Mirrors patch_inventory's
+      // updated_fields pattern. Round-5 dogfood (2026-05-10).
+      const payloadObj = payload as unknown as Record<string, unknown>
+      const updated_fields = EXPERIMENT_PATCH_FIELDS.filter(
+        (k) => k in payloadObj && payloadObj[k] !== undefined,
+      )
+      const out = { experiment_pk: result.experiment_pk, updated_fields }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
