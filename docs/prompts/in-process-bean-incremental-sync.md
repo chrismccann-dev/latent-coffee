@@ -151,6 +151,19 @@ STAGE 3 - Push NEW cuppings since last sync:
   returns created:false (no duplicate). To intentionally push two
   evaluations on the same (roast, date, method), set distinct
   recipe_variant labels on at least one of them so the keys diverge.
+- FIRST-OF-LIKELY-TWO RULE: when a single-recipe round is "the first of
+  likely two" (e.g. xbloom-only this week, real-pourover next week), label
+  the variant explicitly (e.g. "xbloom_gate") rather than leaving it null.
+  NULL is technically valid for true single-cupping rounds, but explicit
+  labels avoid retroactive patching when the second evaluation lands - if
+  you leave round 1 NULL and round 2 also defaults NULL, NULLS NOT DISTINCT
+  collapses both into the same row, forcing you to patch round 1 to add
+  a label after the fact. Being explicit upfront is the safer call. Use
+  NULL only when you're confident no second evaluation will follow.
+- The push_cupping response echoes the composite_key tuple (roast_id +
+  cupping_date + eval_method + recipe_variant) so you can sanity-check
+  the row landed where you expected. If the composite_key shows null for
+  recipe_variant when you intended a label, treat as a bug and patch.
 - For field-level updates to a cupping already pushed (e.g. refining a
   flavor descriptor or correcting ground_agtron), prefer patch_cupping
   over re-sending.
