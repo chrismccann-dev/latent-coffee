@@ -36,6 +36,8 @@ const DOC_FILES: Record<string, string> = {
   'docs://brewing/wbc-recipes.md': 'docs/brewing/wbc-recipes.md',
   'docs://roasting.md': 'ROASTING.md',
   'docs://roasting/archive.md': 'docs/roasting/archive.md',
+  'docs://roasting/wbc-roasting.md': 'docs/roasting/wbc-roasting.md',
+  'docs://roasting/wbc-sourcing.md': 'docs/roasting/wbc-sourcing.md',
   ...Object.fromEntries(
     TAXONOMY_AXES.map((axis) => [`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`]),
   ),
@@ -61,6 +63,10 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when planning a roast on the Roest L200 Ultra (counterflow mode) — covers the New Coffee Onboarding Protocol (Steps 1-4), Standard Workflow, evaluation protocol (Day 7 pourover gate), fan/inlet curve templates, FC marking protocol, and per-coffee + cross-coffee insight layers.',
   'docs://roasting/archive.md':
     'Use when researching closed-lot roasting outcomes — per-lot Key Learnings, reference roast parameters, and structural takeaways from completed beans. Read before roasting a similar coffee.',
+  'docs://roasting/wbc-roasting.md':
+    'Use when scoping a roast experiment or designing a V1 profile — WBC-derived lessons, Roest L200 hypotheses, blending experiment protocols, and structured rest-curve protocol. Ideas / hypotheses doc, not a recipe lookup.',
+  'docs://roasting/wbc-sourcing.md':
+    'Use when evaluating a green offer or rebalancing inventory — WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, Tier 1/2/3 priority targets, and current Latent inventory mapped to portfolio lanes (snapshot 2026-05-09).',
   'docs://taxonomies/regions.md':
     'Use when validating or looking up a country/macro_terroir for a green bean or brew. 121 canonical macros across 38 countries; meso/locality stays free-text.',
   'docs://taxonomies/varieties.md':
@@ -140,6 +146,8 @@ export function listDocs(): {
     entry('docs://brewing/wbc-recipes.md', 'docs/brewing/wbc-recipes.md', 'WBC 102-Recipe Archive (2022-2025)'),
     entry('docs://roasting.md', 'docs/roasting.md', 'Roasting Master Reference'),
     entry('docs://roasting/archive.md', 'docs/roasting/archive.md', 'Roasting Closed-Lot Archive'),
+    entry('docs://roasting/wbc-roasting.md', 'docs/roasting/wbc-roasting.md', 'WBC Roasting (lessons + open ideas)'),
+    entry('docs://roasting/wbc-sourcing.md', 'docs/roasting/wbc-sourcing.md', 'WBC Sourcing Strategy (Latent)'),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),
     ),
