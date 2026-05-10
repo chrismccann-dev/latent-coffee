@@ -168,6 +168,11 @@ export interface Experiment {
   winner: string | null
   key_insight: string | null
   what_changes_going_forward: string | null
+  // Migration 050 (Round-4 dogfood): unstructured-prose + open-questions +
+  // confidence on key_insight. All nullable, backfill not required.
+  additional_notes: string | null
+  open_questions: string | null
+  key_insight_confidence: string | null
   created_at: string
   updated_at: string
 }

@@ -26,7 +26,14 @@ export const patchExperimentInputSchema = {
   observed_outcome_d: z.string().optional().nullable(),
   winner: z.string().optional().nullable(),
   key_insight: z.string().optional().nullable(),
+  key_insight_confidence: z
+    .enum(['Low', 'Medium', 'Medium-High', 'High'])
+    .optional()
+    .nullable()
+    .describe('Hypothesis confidence on key_insight: Low / Medium / Medium-High / High. Round-4 dogfood (2026-05-11).'),
   what_changes_going_forward: z.string().optional().nullable(),
+  open_questions: z.string().optional().nullable().describe('What this experiment did NOT answer - distinct from what_changes_going_forward. Round-4 dogfood (2026-05-11).'),
+  additional_notes: z.string().optional().nullable().describe('Free-text catch-all for operator-framing prose that does not fit observed_outcome_* / key_insight. Round-4 dogfood (2026-05-11).'),
 }
 
 export function registerPatchExperimentTool(server: McpServer, auth: McpAuthContext) {

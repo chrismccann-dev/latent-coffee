@@ -201,14 +201,33 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
                 )}
                 {exp.key_insight && (
                   <div>
-                    <div className="label">Key Insight</div>
+                    <div className="label">
+                      Key Insight
+                      {exp.key_insight_confidence && (
+                        <span className="ml-2 text-latent-mid font-normal">
+                          ({exp.key_insight_confidence} confidence)
+                        </span>
+                      )}
+                    </div>
                     {exp.key_insight}
+                  </div>
+                )}
+                {exp.open_questions && (
+                  <div>
+                    <div className="label">Open Questions</div>
+                    {exp.open_questions}
                   </div>
                 )}
                 {exp.what_changes_going_forward && (
                   <div>
                     <div className="label">What Changes Going Forward</div>
                     {exp.what_changes_going_forward}
+                  </div>
+                )}
+                {exp.additional_notes && (
+                  <div>
+                    <div className="label">Additional Notes</div>
+                    {exp.additional_notes}
                   </div>
                 )}
               </div>

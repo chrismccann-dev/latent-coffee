@@ -677,6 +677,13 @@ export interface ExperimentPayload {
   winner?: string | null
   key_insight?: string | null
   what_changes_going_forward?: string | null
+  // Migration 050 (Round-4 dogfood): three free-text additions for prose that
+  // didn't fit the structured slots. confidence is "Low" | "Medium" |
+  // "Medium-High" | "High" - validated at the MCP edge via z.enum, plain text
+  // in DB so the canonical set can relax without another migration.
+  additional_notes?: string | null
+  open_questions?: string | null
+  key_insight_confidence?: string | null
 }
 
 export type PersistExperimentResult =
@@ -729,6 +736,9 @@ export async function persistExperiment(
     winner: payload.winner ?? null,
     key_insight: payload.key_insight ?? null,
     what_changes_going_forward: payload.what_changes_going_forward ?? null,
+    additional_notes: payload.additional_notes ?? null,
+    open_questions: payload.open_questions ?? null,
+    key_insight_confidence: payload.key_insight_confidence ?? null,
   }
 
   if (created) {
@@ -1154,6 +1164,7 @@ const EXPERIMENT_PATCH_FIELDS = [
   'variable_changed', 'levels_tested', 'expected_outcomes', 'failure_boundary',
   'observed_outcome_a', 'observed_outcome_b', 'observed_outcome_c', 'observed_outcome_d',
   'winner', 'key_insight', 'what_changes_going_forward',
+  'additional_notes', 'open_questions', 'key_insight_confidence',
 ] as const
 
 export async function patchExperiment(
