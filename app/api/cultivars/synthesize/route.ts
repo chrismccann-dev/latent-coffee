@@ -23,9 +23,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Cultivars not found' }, { status: 404 })
   }
 
-  const allCultivars = cultivars as Cultivar[]
-  const primary = allCultivars[0]
-  const lineageName = primary.lineage || primary.cultivar_name
+  const primary = (cultivars as Cultivar[])[0]
 
   const { data: brews } = await supabase
     .from('brews')
@@ -36,11 +34,8 @@ export async function POST(request: Request) {
   try {
     const outcome = await runSynthesis({
       adapter: cultivarAdapter,
-      entity: {
-        primary,
-        cultivarNamesInLineage: allCultivars.map((c) => c.cultivar_name),
-      },
-      entityName: lineageName,
+      entity: { primary },
+      entityName: primary.cultivar_name,
       brews: brews ?? [],
     })
 
