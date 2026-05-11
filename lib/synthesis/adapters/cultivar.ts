@@ -7,7 +7,6 @@ import type { EntityAdapter } from '../types'
 
 interface CultivarAnchorContext {
   primary: Cultivar
-  cultivarNamesInLineage: string[]
 }
 
 function renderAnchor(ctx: CultivarAnchorContext): string | null {
@@ -16,9 +15,6 @@ function renderAnchor(ctx: CultivarAnchorContext): string | null {
   if (c.species) lines.push(`- Species: ${c.species}`)
   if (c.genetic_family) lines.push(`- Genetic family: ${c.genetic_family}`)
   if (c.lineage) lines.push(`- Lineage: ${c.lineage}`)
-  if (ctx.cultivarNamesInLineage.length) {
-    lines.push(`- Cultivar subtypes in this lineage: ${ctx.cultivarNamesInLineage.join(', ')}`)
-  }
   if (c.genetic_background) lines.push(`- Genetic background: ${c.genetic_background}`)
   if (c.typical_origins?.length) lines.push(`- Typical origins: ${c.typical_origins.join(', ')}`)
   if (c.altitude_sensitivity) lines.push(`- Altitude sensitivity: ${c.altitude_sensitivity}`)
