@@ -302,6 +302,10 @@ If we're designing forward at this sync - V1 debrief points at a V2
 hypothesis, V2 winner indicates a V3 confirmation, etc. - push the next
 profile set inline. Skip this stage if no forward design this session.
 
+Alternative entry point: when the V_N data is already pushed and you want
+a standalone forward-design session (no sync work in the same chat), use
+`design-next-experiment-set.md` instead. Same workflow, no sync overhead.
+
 - Apply the new-bean-intake prompt's framework (Standard Inlet Curve
   Template, hopper pre-load 125°C, charge 117°C, preheat air 210°C, fan
   curve held constant, RPM flat 65, BEAN_TEMP end condition).
