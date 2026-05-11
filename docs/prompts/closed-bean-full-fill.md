@@ -21,7 +21,13 @@ patch_cupping / patch_experiment / patch_green_bean / patch_roast_learnings /
 patch_brew) for field-level updates. Use push_* on first write or full
 re-archive (the closed-lot path); use patch_* when only a few fields need
 correction post-push (avoids re-sending the full payload + risks accidental
-overwrite of preserved-context fields).
+overwrite of preserved-context fields). Every patch_* Tool now echoes
+`updated_fields: [...]` in the response so you can sanity-check which
+columns landed without a follow-up read (Round-5 symmetry sweep,
+2026-05-10). FK re-resolutions on patch_green_bean / patch_brew (terroir /
+cultivar / producer / roaster / process axes) are NOT echoed — they touch
+multiple columns + sibling rows; do a follow-up read if you need to
+confirm those landed.
 
 FK DEPENDENCY CHAIN: STAGE 2 returns green_bean_id (used by STAGES 3, 5, 6,
 7). STAGE 3 returns roast_id per batch (used by STAGE 4 + STAGE 7 reference
@@ -77,7 +83,11 @@ STAGE 3 - Loop push_roast for every batch:
   drop_temp + agtron + profile_name + share_uuid). Don't extrapolate
   log_ids from URL patterns — this Tool is the canonical discovery path.
 - For each log_id: pull_roest_log(log_id=<int>) returns normalized
-  push_roast-shaped payload. Augment with prose: what_worked / what_didnt /
+  push_roast-shaped payload. hopper_load_temp comes back as null — Roest's
+  API does not expose the bean-probe hopper-load reading; the air-preheat
+  trace surfaces in inference_hints[]. Set hopper_load_temp manually from
+  session memory or session notes when known (V4 standard: 125°C).
+  Augment with prose: what_worked / what_didnt /
   what_to_change / worth_repeating. Set is_reference:true on the lot's
   confirmed reference roast (one per closed bean; the batch named in the
   V4 / spreadsheet "Best Roast Batch #").
