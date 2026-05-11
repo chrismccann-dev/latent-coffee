@@ -6,6 +6,7 @@ import { SectionCard } from '@/components/SectionCard'
 import { Tag } from '@/components/Tag'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
+import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { getCountryColor } from '@/lib/country-colors'
@@ -108,15 +109,12 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   const sortedFlavors = aggregateFlavorNotes(brewList)
 
-  const cultivarMap = new Map<string, { id: string; lineage: string }>()
+  const cultivarMap = new Map<string, { id: string }>()
   const processSet = new Set<string>()
   const roasterSet = new Set<string>()
   for (const brew of brewList) {
     if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
-      cultivarMap.set(brew.cultivar.cultivar_name, {
-        id: brew.cultivar.id,
-        lineage: brew.cultivar.lineage || '',
-      })
+      cultivarMap.set(brew.cultivar.cultivar_name, { id: brew.cultivar.id })
     }
     if (brew.process) processSet.add(brew.process)
     if (brew.roaster) roasterSet.add(brew.roaster)
@@ -125,10 +123,16 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   // Confidence level
   const brewCount = brewList.length
   const nonProcessCount = brewList.filter(b => !b.is_process_dominant).length
-  const confidence = brewCount >= 5 ? { emoji: '\uD83D\uDFE2', label: 'HIGH', desc: `${brewCount} coffees explored` }
-    : brewCount >= 2 ? { emoji: '\uD83D\uDFE1', label: 'Medium', desc: `${nonProcessCount} non-process coffees` }
-    : brewCount >= 1 ? { emoji: '\uD83D\uDD34', label: 'LOW', desc: `${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} explored` }
-    : { emoji: '\uD83D\uDD34', label: 'LOW', desc: '0 coffees explored' }
+  const confidence = brewCount >= 5 ? { emoji: '🟢', label: 'HIGH', desc: `${brewCount} coffees explored` }
+    : brewCount >= 2 ? { emoji: '🟡', label: 'Medium', desc: `${nonProcessCount} non-process coffees` }
+    : brewCount >= 1 ? { emoji: '🔴', label: 'LOW', desc: `${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} explored` }
+    : { emoji: '🔴', label: 'LOW', desc: '0 coffees explored' }
+
+  const hasAdditionalInfo =
+    sortedFlavors.length > 0 ||
+    cultivarMap.size > 0 ||
+    processSet.size > 0 ||
+    roasterSet.size > 0
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
@@ -139,7 +143,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
         &larr; Back to Terroirs
       </Link>
 
-      {/* Hero */}
+      {/* Hero (unchanged) */}
       <div className="section-card mb-6">
         <div className="flex gap-6 items-start">
           <div
@@ -165,6 +169,13 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
         </div>
       </div>
 
+      {/* High Level Summary - promoted from context row */}
+      {merged.context && (
+        <SectionCard title="HIGH LEVEL SUMMARY">
+          <p className="font-sans text-sm leading-relaxed">{merged.context}</p>
+        </SectionCard>
+      )}
+
       {/* Meso Terroirs */}
       {merged.mesoTerroirs.length > 0 && (
         <SectionCard title="MESO TERROIRS EXPLORED">
@@ -176,16 +187,10 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
         </SectionCard>
       )}
 
-      {/* Terroir Context */}
-      {(merged.context || merged.soil || merged.cup_profile || merged.why_it_stands_out) && (
+      {/* Terroir Context - context row removed (now in High Level Summary above) */}
+      {(merged.soil || merged.cup_profile || merged.why_it_stands_out) && (
         <SectionCard title="TERROIR CONTEXT">
           <div className="space-y-3 font-sans text-sm">
-            {merged.context && (
-              <div>
-                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Context:</span>
-                {merged.context}
-              </div>
-            )}
             {merged.soil && (
               <div>
                 <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Soil:</span>
@@ -234,7 +239,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
         </SectionCard>
       )}
 
-      {/* Dominant Varieties & Typical Processing */}
+      {/* Typical Production */}
       {(merged.dominant_varieties.length > 0 || merged.typical_processing.length > 0) && (
         <SectionCard title="TYPICAL PRODUCTION">
           {merged.dominant_varieties.length > 0 && (
@@ -256,7 +261,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
         </SectionCard>
       )}
 
-      {/* AI Synthesis */}
+      {/* Job 2: AI Synthesis - the primary aggregation surface */}
       {brewList.length > 0 && (
         <SynthesisCard
           title="WHAT I'VE LEARNED ABOUT THIS TERROIR"
@@ -270,44 +275,15 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
         />
       )}
 
-      {/* Common Flavor Notes (grouped by registry family) */}
-      <FlavorNotesByFamily notes={sortedFlavors} />
-
-      <TagLinkList
-        title="CULTIVARS EXPLORED"
-        items={Array.from(cultivarMap.entries()).map(([name, { id, lineage }]) => ({
-          key: name,
-          label: lineage ? `${lineage} / ${name}` : name,
-          href: `/cultivars/${id}`,
-        }))}
-      />
-
-      <TagLinkList
-        title="PROCESSES EXPLORED"
-        items={Array.from(processSet).map((p) => ({
-          key: p, label: p, href: `/processes/${encodeURIComponent(p)}`,
-        }))}
-      />
-
-      <TagLinkList
-        title="ROASTERS EXPLORED"
-        items={Array.from(roasterSet).map((r) => ({
-          key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
-        }))}
-      />
-
-      {/* Coffee list */}
+      {/* Job 3: Coffees brewed from this region - promoted up from old position */}
       {brewList.length > 0 && (
-        <div className="mb-4">
-          <div className="font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid mb-3">
-            COFFEES FROM {(macroName || terroir.country).toUpperCase()}
-          </div>
+        <SectionCard title="COFFEES BREWED FROM THIS REGION">
           <div className="space-y-0">
             {brewList.map((brew) => (
               <Link
                 key={brew.id}
                 href={`/brews/${brew.id}`}
-                className="flex items-center gap-3 py-3 border border-latent-border rounded-md mb-2 px-4 hover:bg-latent-bg transition-colors group"
+                className="flex items-center gap-3 py-3 border border-latent-border rounded-md mb-2 last:mb-0 px-4 hover:bg-latent-bg transition-colors group"
               >
                 <div className="flex-1 min-w-0">
                   <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
@@ -326,7 +302,42 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
               </Link>
             ))}
           </div>
-        </div>
+        </SectionCard>
+      )}
+
+      {/* Supporting context: flavor notes + cross-axis tag lists.
+          Visible on desktop, collapsed-by-default on mobile. */}
+      {hasAdditionalInfo && (
+        <CollapsibleBlock title="ADDITIONAL INFORMATION">
+          <FlavorNotesByFamily
+            notes={sortedFlavors}
+            title="FLAVOR NOTES I HAVE EXPERIENCED"
+            bare
+          />
+          <TagLinkList
+            title="CULTIVARS I HAVE EXPLORED"
+            bare
+            items={Array.from(cultivarMap.entries()).map(([name, { id }]) => ({
+              key: name,
+              label: name,
+              href: `/cultivars/${id}`,
+            }))}
+          />
+          <TagLinkList
+            title="PROCESSES I HAVE EXPLORED"
+            bare
+            items={Array.from(processSet).map((p) => ({
+              key: p, label: p, href: `/processes/${encodeURIComponent(p)}`,
+            }))}
+          />
+          <TagLinkList
+            title="ROASTERS EXPLORED WHO SOURCED FROM THIS REGION"
+            bare
+            items={Array.from(roasterSet).map((r) => ({
+              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
+            }))}
+          />
+        </CollapsibleBlock>
       )}
 
       {/* Confidence */}

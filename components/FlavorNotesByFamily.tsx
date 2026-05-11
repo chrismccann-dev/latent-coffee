@@ -11,6 +11,9 @@ interface FlavorNotesByFamilyProps {
   // Pairs of [note, count], typically pre-sorted by count desc.
   notes: [string, number][]
   title?: string
+  // When true, renders without the SectionCard wrapper - for nesting inside
+  // CollapsibleBlock or other parent chrome.
+  bare?: boolean
 }
 
 type FamilyKey = FlavorFamily | 'Other'
@@ -18,7 +21,7 @@ type FamilyKey = FlavorFamily | 'Other'
 // Render order: registry families first in registry order, then Other last.
 const FAMILY_ORDER: FamilyKey[] = [...FLAVOR_FAMILIES, 'Other']
 
-export function FlavorNotesByFamily({ notes, title = 'COMMON FLAVOR NOTES' }: FlavorNotesByFamilyProps) {
+export function FlavorNotesByFamily({ notes, title = 'COMMON FLAVOR NOTES', bare }: FlavorNotesByFamilyProps) {
   if (notes.length === 0) return null
 
   const byFamily: Record<FamilyKey, [string, number][]> = {
@@ -29,33 +32,44 @@ export function FlavorNotesByFamily({ notes, title = 'COMMON FLAVOR NOTES' }: Fl
     byFamily[getFlavorFamily(entry[0])].push(entry)
   }
 
-  return (
-    <SectionCard title={title}>
-      <div className="space-y-4">
-        {FAMILY_ORDER.map((family) => {
-          const items = byFamily[family]
-          if (items.length === 0) return null
-          const color = getFamilyColor(family)
-          return (
-            <div key={family}>
-              <div
-                className="font-mono text-xxs font-semibold tracking-wide uppercase mb-2"
-                style={{ color }}
-              >
-                {family}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {items.map(([note, count]) => (
-                  <Tag key={note}>
-                    {note}
-                    {count > 1 ? ` (${count})` : ''}
-                  </Tag>
-                ))}
-              </div>
+  const body = (
+    <div className="space-y-4">
+      {FAMILY_ORDER.map((family) => {
+        const items = byFamily[family]
+        if (items.length === 0) return null
+        const color = getFamilyColor(family)
+        return (
+          <div key={family}>
+            <div
+              className="font-mono text-xxs font-semibold tracking-wide uppercase mb-2"
+              style={{ color }}
+            >
+              {family}
             </div>
-          )
-        })}
-      </div>
-    </SectionCard>
+            <div className="flex flex-wrap gap-2">
+              {items.map(([note, count]) => (
+                <Tag key={note}>
+                  {note}
+                  {count > 1 ? ` (${count})` : ''}
+                </Tag>
+              ))}
+            </div>
+          </div>
+        )
+      })}
+    </div>
   )
+
+  if (bare) {
+    return (
+      <div className="mb-6 last:mb-0">
+        <div className="font-mono text-xxs font-semibold tracking-wide uppercase mb-2 text-latent-mid">
+          {title}
+        </div>
+        {body}
+      </div>
+    )
+  }
+
+  return <SectionCard title={title}>{body}</SectionCard>
 }

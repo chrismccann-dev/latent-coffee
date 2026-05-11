@@ -43,6 +43,15 @@ export default async function TerroirsPage() {
     }
   }
 
+  // Hide macro_terroir groups with 0 brews (auto-created skeletons from
+  // green-bean uploads not yet associated with a brew). New terroirs appear
+  // on the index once at least one brew references them. Matches the
+  // event-driven workflow rule (memory/feedback_upload_on_resolution.md).
+  for (const country of Object.keys(countryMap)) {
+    countryMap[country] = countryMap[country].filter(g => g.brewCount > 0)
+    if (countryMap[country].length === 0) delete countryMap[country]
+  }
+
   const totalMacroTerroirs = Object.values(countryMap).reduce((sum, groups) => sum + groups.length, 0)
 
   return (
