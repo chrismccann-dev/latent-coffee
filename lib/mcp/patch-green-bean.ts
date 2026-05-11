@@ -1,6 +1,6 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { patchGreenBean, type PatchGreenBeanPayload } from '@/lib/roast-import'
+import { patchGreenBean, GREEN_BEAN_PATCH_FIELDS, type PatchGreenBeanPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 const terroir = z.object({
@@ -60,11 +60,12 @@ export function registerPatchGreenBeanTool(server: McpServer, auth: McpAuthConte
     {
       title: 'Patch Green Bean',
       description:
-        'Update / save / record / push field-level changes to an existing green coffee bean lot by green_bean_id. Sibling of push_green_bean (for new lots). Use this when registry adds happen mid-flight (e.g. an alias was added so producer should re-canonicalize), to backfill missing fields (additional_notes, producer_tasting_notes), to correct previously-saved values, or to update terroir / cultivar via the strict-canonical findOrCreate* path (Sprint 2.6). Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Producer canonicalizes via PRODUCER_LOOKUP with `producer_override:true` for net-new producers. To find green_bean_id: call get_green_bean({lot_id}) or list it via get_bean_pipeline. Returns { green_bean_id }.',
+        'Update / save / record / push field-level changes to an existing green coffee bean lot by green_bean_id. Sibling of push_green_bean (for new lots). Use this when registry adds happen mid-flight (e.g. an alias was added so producer should re-canonicalize), to backfill missing fields (additional_notes, producer_tasting_notes), to correct previously-saved values, or to update terroir / cultivar via the strict-canonical findOrCreate* path (Sprint 2.6). Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Producer canonicalizes via PRODUCER_LOOKUP with `producer_override:true` for net-new producers. To find green_bean_id: call get_green_bean({lot_id}) or list it via get_bean_pipeline. Returns { green_bean_id, updated_fields: [...] } — updated_fields echoes which simple text/numeric columns landed in the patch (mirrors patch_inventory + patch_experiment pattern). FK re-resolutions (terroir / cultivar / producer) are NOT echoed because they touch multiple columns + sibling rows; check terroir_id / cultivar_id on a follow-up read if you need to confirm those landed.',
       inputSchema: patchGreenBeanInputSchema,
     },
     async (input) => {
-      const result = await patchGreenBean(auth.supabase, auth.userId, input as PatchGreenBeanPayload)
+      const payload = input as PatchGreenBeanPayload
+      const result = await patchGreenBean(auth.supabase, auth.userId, payload)
       if (!result.ok) {
         if (result.code === 'validation') {
           throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
@@ -73,7 +74,15 @@ export function registerPatchGreenBeanTool(server: McpServer, auth: McpAuthConte
         if (result.code === 'not_found') throw new Error(result.message)
         throw new Error(`Database error: ${result.message}`)
       }
-      const out = { green_bean_id: result.green_bean_id }
+      // Echo simple-column diff. FK re-resolutions (terroir / cultivar /
+      // producer) intentionally excluded - they touch multiple columns + sibling
+      // rows; caller should follow-up read if they need terroir_id / cultivar_id
+      // confirmation. Round-5 dogfood symmetry sweep (2026-05-10).
+      const payloadObj = payload as unknown as Record<string, unknown>
+      const updated_fields = GREEN_BEAN_PATCH_FIELDS.filter(
+        (k) => k in payloadObj && payloadObj[k] !== undefined,
+      )
+      const out = { green_bean_id: result.green_bean_id, updated_fields }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,

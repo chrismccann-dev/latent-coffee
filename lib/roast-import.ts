@@ -921,7 +921,7 @@ export interface PatchGreenBeanPayload {
   roest_inventory_id?: number | null
 }
 
-const GREEN_BEAN_PATCH_FIELDS = [
+export const GREEN_BEAN_PATCH_FIELDS = [
   'lot_id', 'name', 'origin', 'region', 'variety', 'process',
   'importer', 'seller', 'exporter', 'source_type', 'link',
   'purchase_date', 'price_per_kg', 'quantity_g',
@@ -1010,7 +1010,7 @@ export interface PatchRoastPayload extends Partial<Omit<RoastPayload, 'green_bea
   batch_id?: string
 }
 
-const ROAST_PATCH_FIELDS = [
+export const ROAST_PATCH_FIELDS = [
   'green_bean_id', 'batch_id',
   'roast_date', 'coffee_name', 'profile_link', 'drum_direction',
   'batch_size_g', 'roasted_weight_g', 'weight_loss_pct', 'agtron', 'color_description',
@@ -1071,6 +1071,13 @@ export async function patchRoast(
 
 // ---- patchCupping --------------------------------------------------------
 
+// Module-level so the MCP Tool can import + compute updated_fields echo.
+export const CUPPING_PATCH_FIELDS = [
+  'cupping_date', 'rest_days', 'eval_method', 'recipe_variant',
+  'ground_agtron', 'ground_color_description',
+  'aroma', 'flavor', 'acidity', 'body', 'finish', 'overall',
+] as const
+
 // patch_cupping uses the migration-041 composite key for lookup
 // (roast_id, cupping_date, eval_method, recipe_variant) with NULLS NOT
 // DISTINCT semantics so NULL fields match NULL fields. Mirrors persistCupping's
@@ -1125,11 +1132,6 @@ export async function patchCupping(
   // Patchable fields — every cuppings column EXCEPT the lookup key. The key
   // fields can technically be changed by patching them too (lookup matches old,
   // update writes new), but this is rare; document via tool description.
-  const CUPPING_PATCH_FIELDS = [
-    'cupping_date', 'rest_days', 'eval_method', 'recipe_variant',
-    'ground_agtron', 'ground_color_description',
-    'aroma', 'flavor', 'acidity', 'body', 'finish', 'overall',
-  ] as const
   const patch = buildPatchObject(payload, CUPPING_PATCH_FIELDS)
   if (Object.keys(patch).length === 0) {
     return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
@@ -1214,7 +1216,7 @@ export interface PatchRoastLearningsPayload extends Partial<Omit<RoastLearningsP
   green_bean_id?: string
 }
 
-const ROAST_LEARNINGS_PATCH_FIELDS = [
+export const ROAST_LEARNINGS_PATCH_FIELDS = [
   'green_bean_id', 'best_batch_id', 'why_this_roast_won',
   'aromatic_behavior', 'structural_behavior', 'elasticity',
   'roast_window_width', 'primary_lever', 'secondary_levers',

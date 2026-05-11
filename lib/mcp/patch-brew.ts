@@ -1,6 +1,6 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { patchBrew } from '@/lib/brew-import'
+import { patchBrew, PATCH_BREW_EDITABLE_FIELDS } from '@/lib/brew-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 // patch_brew (Sprint 2.6) — field-level mutation Tool. Mirrors push_brew's
@@ -106,11 +106,12 @@ export function registerPatchBrewTool(server: McpServer, auth: McpAuthContext) {
     {
       title: 'Patch Brew',
       description:
-        'Update / fix / correct / save / record / push field-level changes to an existing brew row by brew_id. Sibling of push_brew (for new rows) — use this when you need to fix a typo on a brew you already pushed, backfill a missing field on an existing brew (orphan-brew with NULL roast_id, FK linkage correction), or otherwise mutate a single brew without re-pushing the whole payload. Field-level mutation: only fields you EXPLICITLY supply in the body are updated; omitted fields are untouched. Re-validates every canonical-validated field (roaster / producer / brewer / filter / grinder / roast_level / flavors / structure_tags / extraction_strategy / process axes) the same way push_brew does — including the `*_override` flags for legitimately net-new entities. Validation errors aggregate (multi-field problems collapse to one round-trip). To find brew_ids: call get_bean_pipeline (returns brews[] for self-roasted beans). Returns { brew_id }.',
+        'Update / fix / correct / save / record / push field-level changes to an existing brew row by brew_id. Sibling of push_brew (for new rows) — use this when you need to fix a typo on a brew you already pushed, backfill a missing field on an existing brew (orphan-brew with NULL roast_id, FK linkage correction), or otherwise mutate a single brew without re-pushing the whole payload. Field-level mutation: only fields you EXPLICITLY supply in the body are updated; omitted fields are untouched. Re-validates every canonical-validated field (roaster / producer / brewer / filter / grinder / roast_level / flavors / structure_tags / extraction_strategy / process axes) the same way push_brew does — including the `*_override` flags for legitimately net-new entities. Validation errors aggregate (multi-field problems collapse to one round-trip). To find brew_ids: call get_bean_pipeline (returns brews[] for self-roasted beans). Returns { brew_id, updated_fields: [...] } — updated_fields echoes simple-column keys the caller supplied (canonical re-resolutions like roaster / producer / cultivar / terroir / process axes are NOT echoed because they touch multiple columns; check a follow-up read if you need to confirm those landed).',
       inputSchema: patchBrewInputSchema,
     },
     async (input) => {
-      const result = await patchBrew(auth.supabase, auth.userId, input.brew_id, input as Record<string, unknown>)
+      const body = input as Record<string, unknown>
+      const result = await patchBrew(auth.supabase, auth.userId, input.brew_id, body)
       if (!result.ok) {
         if (result.code === 'validation') {
           throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
@@ -119,7 +120,14 @@ export function registerPatchBrewTool(server: McpServer, auth: McpAuthContext) {
         if (result.code === 'not_found') throw new Error(result.message)
         throw new Error(`Database error: ${result.message}`)
       }
-      const out = { brew_id: result.brewId }
+      // Echo simple-column diff. FK re-resolutions (roaster / producer /
+      // cultivar / terroir / process axes) intentionally excluded - they touch
+      // multiple columns + sibling rows. Round-5 dogfood symmetry sweep
+      // (2026-05-10).
+      const updated_fields = PATCH_BREW_EDITABLE_FIELDS.filter(
+        (k) => k in body && body[k] !== undefined,
+      )
+      const out = { brew_id: result.brewId, updated_fields }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
