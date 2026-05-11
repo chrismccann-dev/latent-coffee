@@ -394,8 +394,14 @@ export type NormalizedRoastPayload = {
   drum_direction: string | null
   // Recipe / control
   charge_temp: number | null
-  // Phase 2 (#R59): pulled from RoestProfile.preheat_temperature when available.
-  // V4 standard: 125°C. Primary control lever per ROASTING.md.
+  // Round-5 dogfood (2026-05-10): always null. Roest's
+  // RoestProfile.preheat_temperature is the "Preheat air temp" (inlet air
+  // target during preheat phase, ~210°C in Chris's V1/V2 profiles), which is a
+  // DIFFERENT signal from ROASTING.md's hopper_load_temp (bean probe reading
+  // at hopper-load, ~125°C V4 standard). Earlier versions mapped them as if
+  // they were the same field — they aren't. Caller (claude.ai) should set
+  // hopper_load_temp from session memory if known. The Roest air-preheat value
+  // surfaces in inference_hints for trace.
   hopper_load_temp: number | null
   fc_temp: number | null
   drop_temp: number | null
@@ -482,6 +488,14 @@ export function roestLogToPushRoastPayload(
       `roast_date converted UTC ${utcSlice} -> ${tz} ${localDate}.`,
     )
   }
+  // Round-5 dogfood (2026-05-10): surface the Roest air-preheat target for
+  // trace so the caller can record it manually if they care, but DO NOT map
+  // it to hopper_load_temp on the payload (different signal).
+  if (profile?.preheat_temperature != null) {
+    hints.push(
+      `Roest profile.preheat_temperature = ${profile.preheat_temperature}°C is the air-preheat target (inlet air during preheat phase), not hopper_load_temp (bean probe at hopper-load, ~125°C V4 standard). hopper_load_temp returned as null; set manually if known.`,
+    )
+  }
   // Phase 2 (#R58): map RoestProfile.end_condition + end_condition_value to
   // the structured fields on push_roast. Profile may be null (no linked
   // profile) — fall through to null.
@@ -526,8 +540,13 @@ export function roestLogToPushRoastPayload(
     roast_profile_name: log.profile_data?.name ?? null,
     drum_direction: log.profile_data?.reversed_drum_direction ? 'Counterflow' : 'Conventional',
     charge_temp: log.charge_drum_temp,
-    // Phase 2 (#R59): pull from RoestProfile.preheat_temperature when present.
-    hopper_load_temp: profile?.preheat_temperature ?? null,
+    // Round-5 dogfood (2026-05-10): always null. Roest's
+    // RoestProfile.preheat_temperature is the air-preheat target (~210°C),
+    // NOT the bean-probe hopper-load reading (~125°C V4 standard) — different
+    // signals; mapping them together produced misleading 210°C values on
+    // hopper_load_temp. Caller fills hopper_load_temp from session memory.
+    // The Roest air-preheat value surfaces in inference_hints for trace.
+    hopper_load_temp: null,
     fc_temp: log.fc_temp,
     drop_temp: log.end_temp,
     // Phase 2 (#R58): structured end-condition trigger from the profile.

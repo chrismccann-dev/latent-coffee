@@ -1,6 +1,6 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { patchCupping, type PatchCuppingPayload } from '@/lib/roast-import'
+import { patchCupping, CUPPING_PATCH_FIELDS, type PatchCuppingPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 // patch_cupping (Sprint 2.6) — composite-key lookup mirroring the
@@ -37,11 +37,12 @@ export function registerPatchCuppingTool(server: McpServer, auth: McpAuthContext
     {
       title: 'Patch Cupping',
       description:
-        'Update / save / record / push field-level changes to an existing cupping evaluation by composite key (roast_id + cupping_date + eval_method + recipe_variant — the migration 041 NULLS NOT DISTINCT key from push_cupping). Sibling of push_cupping (for new evaluations); push_cupping returns `created:false` without overwriting fields on conflict, so this Tool closes the prose-typo / numeric-correction path (R29 from the MCP feedback log). Use this for fixes to aroma / flavor / acidity / body / finish / overall prose or numeric ground_agtron / rest_days. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. NULL matches NULL on the composite key (NULLS NOT DISTINCT) — single-cupping rows look up cleanly with recipe_variant: null. To find cupping rows: call get_bean_pipeline (returns cuppings[] with the composite-key fields). Returns { cupping_id }.',
+        'Update / save / record / push field-level changes to an existing cupping evaluation by composite key (roast_id + cupping_date + eval_method + recipe_variant — the migration 041 NULLS NOT DISTINCT key from push_cupping). Sibling of push_cupping (for new evaluations); push_cupping returns `created:false` without overwriting fields on conflict, so this Tool closes the prose-typo / numeric-correction path (R29 from the MCP feedback log). Use this for fixes to aroma / flavor / acidity / body / finish / overall prose or numeric ground_agtron / rest_days. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. NULL matches NULL on the composite key (NULLS NOT DISTINCT) — single-cupping rows look up cleanly with recipe_variant: null. To find cupping rows: call get_bean_pipeline (returns cuppings[] with the composite-key fields). Returns { cupping_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch (mirrors patch_inventory + patch_experiment pattern).',
       inputSchema: patchCuppingInputSchema,
     },
     async (input) => {
-      const result = await patchCupping(auth.supabase, auth.userId, input as PatchCuppingPayload)
+      const payload = input as PatchCuppingPayload
+      const result = await patchCupping(auth.supabase, auth.userId, payload)
       if (!result.ok) {
         if (result.code === 'validation') {
           throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
@@ -50,7 +51,12 @@ export function registerPatchCuppingTool(server: McpServer, auth: McpAuthContext
         if (result.code === 'not_found') throw new Error(result.message)
         throw new Error(`Database error: ${result.message}`)
       }
-      const out = { cupping_id: result.cupping_id }
+      // Echo the diff. Round-5 dogfood symmetry sweep (2026-05-10).
+      const payloadObj = payload as unknown as Record<string, unknown>
+      const updated_fields = CUPPING_PATCH_FIELDS.filter(
+        (k) => k in payloadObj && payloadObj[k] !== undefined,
+      )
+      const out = { cupping_id: result.cupping_id, updated_fields }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,

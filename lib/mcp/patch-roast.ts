@@ -1,6 +1,6 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { patchRoast, type PatchRoastPayload } from '@/lib/roast-import'
+import { patchRoast, ROAST_PATCH_FIELDS, type PatchRoastPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 export const patchRoastInputSchema = {
@@ -61,11 +61,12 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
     {
       title: 'Patch Roast',
       description:
-        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id. Sibling of push_roast (for new batches). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] with id keyed by batch_id). Returns { roast_id }.',
+        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id. Sibling of push_roast (for new batches). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] with id keyed by batch_id). Returns { roast_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch so you can sanity-check without a follow-up read (mirrors patch_inventory + patch_experiment pattern).',
       inputSchema: patchRoastInputSchema,
     },
     async (input) => {
-      const result = await patchRoast(auth.supabase, auth.userId, input as PatchRoastPayload)
+      const payload = input as PatchRoastPayload
+      const result = await patchRoast(auth.supabase, auth.userId, payload)
       if (!result.ok) {
         if (result.code === 'validation') {
           throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
@@ -74,7 +75,13 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
         if (result.code === 'not_found') throw new Error(result.message)
         throw new Error(`Database error: ${result.message}`)
       }
-      const out = { roast_id: result.roast_id }
+      // Echo the diff. Mirrors patch_inventory + patch_experiment. Round-5
+      // dogfood symmetry sweep (2026-05-10).
+      const payloadObj = payload as unknown as Record<string, unknown>
+      const updated_fields = ROAST_PATCH_FIELDS.filter(
+        (k) => k in payloadObj && payloadObj[k] !== undefined,
+      )
+      const out = { roast_id: result.roast_id, updated_fields }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
