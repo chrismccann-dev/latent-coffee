@@ -26,6 +26,7 @@ const PROMPT_FILES = [
   'bundled-brewing-completion',
   'new-bean-intake',
   'in-process-bean-incremental-sync',
+  'design-next-experiment-set',
   'closed-bean-full-fill',
 ] as const
 
@@ -99,6 +100,8 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Operational prompt for green bean intake + V1 profile design — runs ROASTING.md New Coffee Onboarding Protocol Steps 1-4, pushes green_bean + inventory + 3 roast profiles to Roest.',
   'docs://prompts/in-process-bean-incremental-sync.md':
     'Operational prompt for mid-iteration roast sync — push roasts/cuppings/experiments since last sync, optionally design forward (V2/V3), propose ROASTING.md Active Lots updates.',
+  'docs://prompts/design-next-experiment-set.md':
+    'Operational prompt for designing + pushing the next experiment set (V2 / V3 / V4 ...) when prior V-set is resolved and only the forward design is needed — V_N -> V_{N+1} progression discipline, push 3 profiles + 1 experiment record, optional ROASTING.md Active Lots update.',
   'docs://prompts/closed-bean-full-fill.md':
     'Operational prompt for lot close-out — push every layer (green_bean / roasts / cuppings / experiments / roast_learnings / SR reference brew) + propose ROASTING.md close-out narrative + archive Roest inventory.',
 }
