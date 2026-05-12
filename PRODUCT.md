@@ -392,19 +392,45 @@ The full forward-looking work surface, structured by readiness + scope. Per-spri
 
 The current ranked queue of scoped, sized sprints in flight or next up.
 
-#### 1. Sprint 3.1 — Architectural-queue brainstorm
+Sprint 3.1 brainstorm shipped 2026-05-12 (this section is its output). Brainstorm retro: [project_v3_1_brainstorm.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_v3_1_brainstorm.md). Six follow-up sprints (3.2-3.7) queued in build order below. Continuous-feedback channel for non-architectural friction continues at `memory/feedback_mcp_continuous_log.md`.
 
-Same shape as Sprint 2.2 brainstorm: plan-mode design, no code, AskUserQuestion rounds. Pulls in:
+#### 1. Sprint 3.2 — Cleanup-A bundle (code + migration)
 
-- ~10 architectural-queue items pending in `feedback_v2_mcp_feedback_log.md` pre-Phase-3 (the cluster that didn't fit in Phases 1-3).
-- Whatever Sprint 2.7.5 surfaced as architectural (vs workflow / MCP enhancement) — see `memory/project_v2_7_5_workflow_walkthrough.md` for the full outstanding-follow-ups breakdown; cleanup-sprint bundle is 5 items.
-- Phase 3 PR #105 deviations (backfill SQL skipped per substrate gap on `*_override` columns; SR `/add` direct-insert path retains DEFAULT canonical provenance; `/green/[id]` UI doesn't surface provenance / `canonicals_updated_at`).
-- 3.0 OAuth retro follow-ups (Anthropic-style OAuth error wrapping; `.env.local` git-tracked hygiene fix).
-- Cleanup-sprint bundle from 2.7.5 retro: tokenize admin_region in findOrCreateTerroir, auto-populate green_beans.origin from terroir.country, end_condition_value cross-field semantic bounds, power_bezier vs profile_type=5 consistency check, migration-drift mitigation script + PR template + CI gate.
+12 low-risk items in one ~2-3 day code sprint. Bundles the 5-item 2.7.5 retro cleanup (tokenize `admin_region` in `findOrCreateTerroir`; auto-populate `green_beans.origin` from `terroir.country`; `end_condition_value` cross-field semantic bounds; `power_bezier` vs `profile_type=5` consistency check; `npm run migrations:check` script + PR template prereq + CI gate) + 3 Phase 3 PR #105 deviations (backfill SQL for `*_override` columns; SR `/add` direct-insert path computes provenance from `FindOrCreateResult.created`; `/green/[id]` UI surfaces provenance + `canonicals_updated_at`) + 2 OAuth 3.0 retro follow-ups (Anthropic-style OAuth error wrapping diagnostic note; `.env.local` git-tracked hygiene fix) + defensive try/catch + console.error sweep across all MCP Tool handlers (promoted from debt).
 
-**Triggers when:** ready to plan next iteration. Brainstorm output is a scoped sprint queue, not code. Continuous-feedback channel for non-architectural friction lives at `feedback_mcp_continuous_log.md`.
+**Triggers when:** ships next. **Sizing:** ~2-3 days. **Scoping doc:** none (cleanup-bundle pattern).
 
-#### 2. General cleanup sprint — 3 tracks
+#### 2. Sprint 3.3 — Auto-supersede paired sprint
+
+3 items, ~2-3h. 3.0.5-shape sub-sprint. #R88 adds `supersede_ids: string[]` parameter on `propose_doc_changes` for the explicit-intent path (claude.ai-side). #R89 closes the complementary implicit-intent gap arbiter-side via summary-parse `CORRECTED: ... (supersedes <UUID>)` + source-id stem detection. Promoted from debt: MCP tool-list cache visibility — improve new-tool-ship workflow visibility (so we don't ship a Tool and wonder why claude.ai doesn't see it).
+
+**Triggers when:** after Sprint 3.2. **Sizing:** ~2-3h. **Scoping doc:** none.
+
+#### 3. Sprint 3.4 — Per-batch failure_boundary breach record (plan-mode + impl)
+
+Plan-mode brainstorm produces JSONB shape decision + `/green/[id]` render strategy + relationship to existing `failure_boundary` text on experiments. Then impl. Inputs: #R67 (`failure_boundary` text → structured JSON), #R68 (`failure_boundary_breached` field on `push_experiment` or per-batch breach record), 2.7.5 plan-mode flag. Data points: Wush Wush V1 (all 3 batches breached) + Bean 4-6 cases. Scoping doc lands as a placeholder ahead of the plan-mode session.
+
+**Triggers when:** after Sprint 3.3. **Sizing:** ~1-2 day brainstorm + ~1-2 day impl. **Scoping doc:** [docs/features/experiments-breach-record.md](docs/features/experiments-breach-record.md).
+
+#### 4. Sprint 3.5 — Roest API parity Phase 3 (pull-side schema sweep)
+
+7 items + breach cross-ref. Symmetric to the Phase 1+2 write integration shipped 2026-05-06. #R57 push_roast missing `notes` pass-through; #R59 `hopper_load_temp` missing from `pull_roest_log`; #R60 TP + yellowing temp missing; #R61 total cracks count missing; #R64 inlet curve display string as-designed vs as-recorded clarification; **#R65 — HIGH IMPACT: Roest API returns UTC dates, silently miscodes late-day batches** (rides along, not carved out as hotfix); #R66 `roest_inventory_id` orphan reconciliation. Cross-ref to Sprint 3.4 — breach detection at `push_roast` time fits here.
+
+**Triggers when:** after Sprint 3.4 (breach-record schema decisions land before pull-side schema additions). **Sizing:** ~3-4 days. **Scoping doc:** [docs/features/roest-api-parity-phase-3.md](docs/features/roest-api-parity-phase-3.md).
+
+#### 5. Sprint 3.6 — BREWING/ROASTING doc reconciliation
+
+Doc-content fixes bundled. ROASTING.md anchor-confidence framing in new-bean-intake template; #R52 BREWING.md subprocess spec disagrees with canonical; #R70 STAGE 8 routing for protocol-level learnings → FC Marking Protocol / Standard Workflow; #R71 Active Lots sub-anchoring per-lot (e.g. `Active Lots > COS-HIG-BOR-2026`); #R72 one-shot calibration framing as separate subsection; schema-describe micro-fixes #R45 / R48 / R51 / R69 / R86 (describe-string-only edits across `push_brew` / `push_roast` / `propose_doc_changes`).
+
+**Triggers when:** after Sprint 3.5. **Sizing:** ~1-2 days. **Scoping doc:** none.
+
+#### 6. Sprint 3.7 — Prompt v5 rewrites
+
+9 items — `docs/prompts/in-process-bean-incremental-sync.md` + `new-bean-intake.md` updates. #R76 add `list_roest_inventory({search})` call at intake; #R77 `hopper_load_temp` schema describe rewording; #R78 density `TBM` placeholder vs `null` clarification; #R79 STAGE 1 intake drift detection (project doc vs Roest inventory); #R80 STAGE renumbering 1-7 with no skips; #R81 `patch_*` tools mentioned; #R82 cupping composite key (`recipe_variant` added) flag; #R83 STAGE 6 prohibitive language softened; #R84 `producer_override:true` caveat surfaced earlier in flowchart.
+
+**Triggers when:** after Sprint 3.6. **Sizing:** ~1 day. **Scoping doc:** none.
+
+#### 7. General cleanup sprint — 3 tracks
 
 Three independently-scopable cleanup tracks Chris flagged 2026-05-05 post-Phase-3. Bundle into one sprint or ship separately. Full scope in `memory/project_general_cleanup_sprint.md`.
 
@@ -414,7 +440,7 @@ Three independently-scopable cleanup tracks Chris flagged 2026-05-05 post-Phase-
 
 **Recommended order:** Track 1 (shipped 2026-05-07) → Track 2 (shipped 2026-05-08) → Track 3 bundled with redesign.
 
-#### 4. Per-entity directed synthesis
+#### 8. Per-entity directed synthesis
 
 Promoted from Longer Term Items 2026-05-08 — the next non-blocked sized sprint slot, queued behind two side-quest sessions (`latentcoffee.com` HTTPS bug + MEMORY.md consolidation, both flagged elsewhere in the roadmap and being handled in dedicated sessions).
 
