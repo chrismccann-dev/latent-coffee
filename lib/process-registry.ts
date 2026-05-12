@@ -677,20 +677,51 @@ export interface BaseProcessEntry {
 export const BASE_PROCESS_ENTRIES: readonly BaseProcessEntry[] = [
   {
     name: 'Washed',
-    // Phase A authoring pending — Chris's mockup 1 verbatim will land here.
+    summary:
+      'One of the base processes of processing coffee where the mucilage is fully removed before drying. Historically, washed coffees were considered higher quality due to a separation of the bad floating cherries and cleaner, even, predictable results.',
+    brewArchetype: {
+      bestArchetype: 'Clarity-First',
+      commonFailureMode: 'too much agitation flattens nuance',
+      whenToDeviate: 'denser / more developed washed coffees may need more intensity',
+      typicalStrength: 'Transparent, structured, clean',
+      whatUsuallyHelps: 'low agitation, careful cooling-window evaluation',
+    },
   },
   {
     name: 'Natural',
-    // Phase A authoring pending.
+    summary:
+      'One of the base processes of processing coffee where the whole cherry is dried with the fruit still intact around the seed. Historically, natural coffees were associated with heavier fruit expression and more variability, but careful drying has made them capable of high sweetness, intensity, and aromatic complexity.',
+    brewArchetype: {
+      bestArchetype: 'Full Expression',
+      commonFailureMode: 'too much extraction can turn fruit into ferment, heaviness, or drying finish',
+      whenToDeviate: 'cleaner / lighter naturals may benefit from Clarity-First structure',
+      typicalStrength: 'Fruity, sweet, aromatic, expressive',
+      whatUsuallyHelps: 'controlled extraction, moderate agitation, cooling-window evaluation',
+    },
   },
   {
     name: 'Honey',
-    // Phase A authoring pending.
+    summary:
+      'One of the base processes of processing coffee where some mucilage is left on the seed during drying. Historically, honey coffees sat between washed and natural styles, offering more sweetness and body than washed coffees while retaining more structure and clarity than full naturals.',
+    brewArchetype: {
+      bestArchetype: 'Balanced Intensity',
+      commonFailureMode: 'too much agitation can blur sweetness and create sticky heaviness',
+      whenToDeviate: 'very clean yellow / white honey lots may work better as Clarity-First',
+      typicalStrength: 'Sweet, rounded, structured, medium-bodied',
+      whatUsuallyHelps: 'moderate agitation, steady extraction, careful finish control',
+    },
   },
   {
     name: 'Wet-hulled',
-    // Phase A authoring pending. 0 brews currently; hub hidden on index per
-    // event-driven rule.
+    summary:
+      'One of the base processes of processing coffee where parchment is removed while the coffee is still at high moisture before final drying. Historically, wet-hulled coffees were tied to Indonesian production needs and often produce earthy, herbal, savory, lower-acid profiles with heavier body.',
+    brewArchetype: {
+      bestArchetype: 'Suppression',
+      commonFailureMode: 'too much extraction can emphasize earth, spice, bitterness, or woody finish',
+      whenToDeviate: 'cleaner / high-elevation wet-hulled coffees may tolerate more intensity',
+      typicalStrength: 'Heavy, earthy, low-acid, savory',
+      whatUsuallyHelps: 'lower agitation, restrained extraction, avoiding tail-end bitterness',
+    },
   },
 ]
 
@@ -713,14 +744,56 @@ export interface ModifierEntry {
 }
 
 export const MODIFIER_ENTRIES: readonly ModifierEntry[] = [
-  { name: 'Anaerobic', axis: 'fermentation' },
-  { name: 'Yeast Inoculated', axis: 'fermentation' },
-  { name: 'Dark Room Dried', axis: 'drying' },
-  { name: 'Cold Fermentation', axis: 'fermentation' },
-  { name: 'Raised Bed', axis: 'drying' },
-  { name: 'Slow Dry', axis: 'drying' },
-  { name: 'Double Anaerobic', axis: 'fermentation' },
-  { name: 'Thermal Shock', axis: 'fermentation' },
+  {
+    name: 'Anaerobic',
+    axis: 'fermentation',
+    // NOTE: Chris didn't include Anaerobic in his Phase A doc (2026-05-11);
+    // using this draft as a placeholder. Replace when authored.
+    overview:
+      "Anaerobic is sealed-vessel fermentation — the cherry or seed is held in an oxygen-restricted environment, usually a hermetic tank, during the wet phase. It's the highest-traffic fermentation modifier in my corpus (16 coffees across Natural, Washed, and Honey), and the most likely to shift cup behavior away from what the base process alone would suggest.\n\nThe directional signal: anaerobic amplifies sweetness, intensifies aromatics, and produces denser, more structured cups — but risks crossing into lactic, fermenty, or booze-forward territory when uncontrolled. Strategy implications differ by base: on Naturals it usually calls for Suppression (low temp + low agitation, hold the volatile fruit back); on Washes it calls for Balanced Intensity or Full Expression depending on cultivar density. Watch for the `Anoxic` qualifier on the producer side — fully-sealed no-headspace executions behave more like an extraction-push candidate, not a suppression one.",
+  },
+  {
+    name: 'Yeast Inoculated',
+    axis: 'fermentation',
+    overview:
+      'Yeast Inoculated is controlled fermentation with selected yeast introduced into the cherry or seed environment to guide fermentation rather than relying only on ambient microbes. In the corpus, it usually appears as a precision modifier layered onto Washed, Natural, or more complex experimental processes, and it often signals producer intent to shape aromatics, sweetness, or flavor direction more deliberately.\n\nThe directional signal: yeast inoculation tends to sharpen aromatic identity, increase fruit definition, and make the cup feel more designed - but risks becoming too flavor-forward, perfumed, or confectionary if the fermentation signature overtakes terroir and cultivar. Strategy implications differ by base: on Washed coffees it often supports Clarity-First or Balanced Intensity because the structure is still clean; on Naturals it often needs Suppression to keep fruit density from turning heavy. Watch for yeast plus thermal shock or anaerobic stacking - once layered, the modifier becomes less about precision alone and more about volatility management.',
+  },
+  {
+    name: 'Dark Room Dried',
+    axis: 'drying',
+    overview:
+      'Dark Room Dried is a drying modifier where coffee is dried away from direct sunlight, often in a shaded or controlled dark environment, to slow drying and reduce UV / heat exposure. It usually signals an attempt to preserve volatile aromatics, stabilize fruit expression, and create a more layered drying curve than standard exposed drying.\n\nThe directional signal: dark room drying tends to increase aromatic preservation, deepen sweetness, and create a more polished fruit profile - but risks density, heaviness, or a slightly closed cup if the coffee also carries a strong fermentation load. Strategy implications differ by base: on Naturals it often calls for Suppression or Balanced Intensity to avoid over-thick fruit; on Washed coffees it can support Clarity-First because the drying method may protect florals and nuance. Watch for dark room drying stacked with anaerobic or yeast modifiers - the cup may look clean on paper but behave like a high-volatility coffee in brewing.',
+  },
+  {
+    name: 'Cold Fermentation',
+    axis: 'fermentation',
+    overview:
+      'Cold Fermentation is a temperature-controlled fermentation modifier where the cherry or seed is fermented at lower temperatures to slow microbial activity and extend the wet phase. It usually signals a producer trying to preserve aromatics, create cleaner fermentation, and stretch complexity without letting the process run hot or chaotic.\n\nThe directional signal: cold fermentation tends to produce cleaner sweetness, brighter aromatics, and more composed fruit than warmer or more aggressive fermentation - but risks tasting muted, tight, or overly delicate if extraction is too restrained. Strategy implications differ by base: on Washed coffees it usually supports Clarity-First with slightly more extraction headroom; on Naturals or Honeys it can allow Balanced Intensity because the cold phase helps control ferment pressure. Watch for cold fermentation paired with high-density cultivars - those coffees often need enough energy to open the cup rather than pure suppression.',
+  },
+  {
+    name: 'Raised Bed',
+    axis: 'drying',
+    overview:
+      'Raised Bed is a drying modifier where coffee is dried on elevated beds that improve airflow around the cherry or parchment. It is one of the most common drying signals in specialty coffee, and by itself it usually indicates cleaner, more even drying rather than a strong flavor intervention.\n\nThe directional signal: raised bed drying tends to support cleaner sweetness, better airflow, and more even moisture reduction - but it is usually a quality-control modifier, not a primary cup-shaping modifier. Strategy implications differ by base: on Washed coffees it reinforces Clarity-First because it supports clean structure; on Naturals and Honeys it helps keep fruit expression cleaner but does not automatically remove the need for Suppression. Watch for raised bed listed alone versus raised bed plus shade, dark room, or slow drying - alone it is mostly baseline quality language, while stacked drying terms carry more brew-behavior signal.',
+  },
+  {
+    name: 'Slow Dry',
+    axis: 'drying',
+    overview:
+      'Slow Dry is a drying modifier where coffee is dried over an extended period, usually through lower heat, shade, thicker layers, controlled airflow, or more careful moisture reduction. It usually signals a producer trying to preserve aromatics, deepen sweetness, and avoid the harshness or instability that comes from drying too quickly.\n\nThe directional signal: slow drying tends to create more integrated sweetness, smoother fruit, and a more composed finish - but risks heaviness, muted acidity, or a slightly "held back" cup if paired with dense fermentation or darker development. Strategy implications differ by base: on Naturals and Honeys it often calls for Balanced Intensity or Suppression to keep fruit and body from getting too thick; on Washed coffees it can support Clarity-First with a little more extraction tolerance. Watch for slow dry stacked with dark room or shade drying - that usually means aromatic preservation, but also a higher chance the coffee needs enough energy to open fully.',
+  },
+  {
+    name: 'Double Anaerobic',
+    axis: 'fermentation',
+    overview:
+      'Double Anaerobic is a fermentation modifier where the coffee goes through two sequential oxygen-restricted fermentation stages. It usually signals a more intensive producer intervention than standard Anaerobic, and it often pushes the cup further away from what the base process alone would suggest.\n\nThe directional signal: double anaerobic tends to amplify sweetness, deepen fruit, increase structure, and create a more layered fermentation signature - but risks becoming lactic, boozy, heavy, or flavor-stacked if extraction is too aggressive. Strategy implications differ by base: on Naturals it usually calls for Suppression because the second anaerobic stage can make volatile fruit feel dense fast; on Washed coffees it often calls for Balanced Intensity because the washed base still gives some structural clarity. Watch for double anaerobic plus thermal shock or yeast inoculation - that combination usually behaves less like a clean base process and more like a high-intervention coffee needing volatility control.',
+  },
+  {
+    name: 'Thermal Shock',
+    axis: 'fermentation',
+    overview:
+      'Thermal Shock is a fermentation modifier where hot and cold temperature shifts are used during processing, often to influence microbial activity, stabilize fermentation, or change how compounds move through the cherry or seed. It usually signals a deliberate attempt to create high aromatic intensity and vivid fruit structure rather than a passive fermentation style.\n\nThe directional signal: thermal shock tends to sharpen aromatics, brighten acidity, and create a high-definition fruit profile - but risks becoming angular, artificial, or overly intense if the coffee is already heavily fermented. Strategy implications differ by base: on Washed coffees it often supports Full Expression or Balanced Intensity because the clean base can carry the extra intensity; on Naturals and Honeys it may need Suppression to prevent the fruit from turning loud or candy-like. Watch for thermal shock paired with anaerobic or yeast inoculation - the cup often rewards careful cooling-window evaluation because the warm cup may feel intense while the cooler cup shows whether the structure is integrated.',
+  },
 ]
 
 const modifierEntryByName = new Map(MODIFIER_ENTRIES.map((e) => [e.name.toLowerCase(), e]))
