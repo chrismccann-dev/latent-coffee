@@ -46,7 +46,7 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
     {
       title: 'Patch Experiment',
       description:
-        'Update / save / record / push field-level changes to an existing experiment by experiment_pk. Sibling of push_experiment — push_experiment UPSERTs by composite (green_bean_id, experiment_id) so the iterative-design path is well covered, but patch_experiment uses the PK so you can correct the experiment_id label itself or fix prose typos in observed_outcome_* / key_insight without composite-key matching. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find experiment_pk: call get_bean_pipeline (returns experiments[] with id keyed by experiment_id). Returns { experiment_pk, updated_fields: [...] } — updated_fields echoes which columns landed in the patch so you can sanity-check without a follow-up read (mirrors patch_inventory pattern).',
+        'Update / save / record / push field-level changes to an existing experiment by experiment_pk. Sibling of push_experiment — push_experiment UPSERTs by composite (green_bean_id, experiment_id) so the iterative-design path is well covered, but patch_experiment uses the PK so you can correct the experiment_id label itself or fix prose typos in observed_outcome_* / key_insight without composite-key matching. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find experiment_pk: call get_bean_pipeline (returns experiments[] with id keyed by experiment_id). Returns { experiment_pk, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which columns landed; canonical_values echoes the actual values of enum-validated fields (key_insight_confidence) so the caller can confirm the level / vocabulary landed without a follow-up read.',
       inputSchema: patchExperimentInputSchema,
     },
     async (input) => {
@@ -67,7 +67,21 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
       const updated_fields = EXPERIMENT_PATCH_FIELDS.filter(
         (k) => k in payloadObj && payloadObj[k] !== undefined,
       )
-      const out = { experiment_pk: result.experiment_pk, updated_fields }
+      // Round-7 dogfood (2026-05-12): also echo the VALUES of enum-validated
+      // fields. The updated_fields[] array tells the caller WHICH columns
+      // landed; canonical_values tells them WHAT enum-vocabulary value the
+      // server received. Small-vocab fields like key_insight_confidence
+      // benefit from level confirmation - "Medium" landing as "Medium" (not
+      // "medium" or "med") is worth surfacing without a follow-up read.
+      const canonical_values: Record<string, unknown> = {}
+      if (payloadObj.key_insight_confidence !== undefined) {
+        canonical_values.key_insight_confidence = payloadObj.key_insight_confidence
+      }
+      const out = {
+        experiment_pk: result.experiment_pk,
+        updated_fields,
+        canonical_values,
+      }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,

@@ -87,7 +87,7 @@ export function registerPatchInventoryTool(server: McpServer, auth: McpAuthConte
     {
       title: 'Patch Inventory',
       description:
-        'Patch / update / modify / archive / adjust a single Roest inventory by id via api.roestcoffee.com PATCH /inventories/{id}/. Field-level updates: only keys present in the input are sent. Common uses: mark is_archived=true after final roast on a lot, update current_weight after a roast, fix typos on producer / notes / cultivar. Weight units: raw grams (same convention as push_inventory). Moisture: percentage value (8.7), not fraction. bean_process: Roest 5-bucket enum (1=Natural, 2=Washed, 3=Honey, 4=Co-fermented/XO, 5=Anaerobic). No DB-side effects — the green_beans.roest_inventory_id link (if any) is established at push_inventory time; to bind an existing Roest inventory to an existing green_beans row, use patch_green_bean. Returns { ok: true, updated_fields: [...] }.',
+        'Patch / update / modify / archive / adjust a single Roest inventory by id via api.roestcoffee.com PATCH /inventories/{id}/. Field-level updates: only keys present in the input are sent. Common uses: mark is_archived=true after final roast on a lot, update current_weight after a roast, fix typos on producer / notes / cultivar. Weight units: raw grams (same convention as push_inventory). Moisture: percentage value (8.7), not fraction. bean_process: Roest 5-bucket enum (1=Natural, 2=Washed, 3=Honey, 4=Co-fermented/XO, 5=Anaerobic). No DB-side effects — the green_beans.roest_inventory_id link (if any) is established at push_inventory time; to bind an existing Roest inventory to an existing green_beans row, use patch_green_bean. Returns { ok: true, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which keys were sent; canonical_values echoes the actual values of small-vocab fields (bean_process, is_archived) so the caller can confirm without a follow-up read.',
       inputSchema: patchInventoryInputSchema,
     },
     async (input) => {
@@ -114,7 +114,13 @@ export function registerPatchInventoryTool(server: McpServer, auth: McpAuthConte
         body,
       )
       void auth
-      const out = { ok: true as const, updated_fields }
+      // Round-7 dogfood (2026-05-12): echo VALUES of small-vocab fields so
+      // the caller can confirm the value landed without a follow-up read.
+      // bean_process is a constrained int (1-5); is_archived is boolean.
+      const canonical_values: Record<string, unknown> = {}
+      if (body.bean_process !== undefined) canonical_values.bean_process = body.bean_process
+      if (body.is_archived !== undefined) canonical_values.is_archived = body.is_archived
+      const out = { ok: true as const, updated_fields, canonical_values }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,

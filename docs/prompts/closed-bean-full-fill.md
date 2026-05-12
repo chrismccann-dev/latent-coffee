@@ -24,10 +24,16 @@ correction post-push (avoids re-sending the full payload + risks accidental
 overwrite of preserved-context fields). Every patch_* Tool now echoes
 `updated_fields: [...]` in the response so you can sanity-check which
 columns landed without a follow-up read (Round-5 symmetry sweep,
-2026-05-10). FK re-resolutions on patch_green_bean / patch_brew (terroir /
-cultivar / producer / roaster / process axes) are NOT echoed — they touch
-multiple columns + sibling rows; do a follow-up read if you need to
-confirm those landed.
+2026-05-10). patch_experiment / patch_roast / patch_inventory additionally
+echo `canonical_values: { ... }` for enum-validated fields
+(key_insight_confidence / end_condition_type / worth_repeating /
+bean_process / is_archived) so the caller can confirm the exact vocabulary
+landed (Round-7, 2026-05-12). FK re-resolutions on patch_green_bean /
+patch_brew (terroir / cultivar / producer / roaster / process axes) are
+NOT echoed — they touch multiple columns + sibling rows; do a follow-up
+read if you need to confirm those landed. patch_green_bean DOES write
+`canonicals_updated_at` when terroir_id / cultivar_id actually change vs.
+existing.
 
 FK DEPENDENCY CHAIN: STAGE 2 returns green_bean_id (used by STAGES 3, 5, 6,
 7). STAGE 3 returns roast_id per batch (used by STAGE 4 + STAGE 7 reference

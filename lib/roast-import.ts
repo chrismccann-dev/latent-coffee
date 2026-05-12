@@ -940,7 +940,7 @@ export async function patchGreenBean(
 
   const { data: existing, error: lookupErr } = await supabase
     .from('green_beans')
-    .select('id')
+    .select('id, terroir_id, cultivar_id')
     .eq('user_id', userId)
     .eq('id', payload.green_bean_id)
     .maybeSingle()
@@ -964,6 +964,10 @@ export async function patchGreenBean(
   }
 
   // Terroir / cultivar — re-resolve via Sprint 2.6 strict findOrCreate*.
+  // Round-7 dogfood (2026-05-12): when terroir_id or cultivar_id actually
+  // CHANGES vs. the existing row, bump canonicals_updated_at so cross-session
+  // FK drift is visible. Don't bump on a no-op re-resolution (same id back).
+  let canonicalsChanged = false
   if ('terroir' in payload && payload.terroir) {
     const tr = await findOrCreateTerroir(
       supabase,
@@ -974,12 +978,21 @@ export async function patchGreenBean(
       payload.terroir.meso_terroir,
     )
     if (!tr.ok) errors.push(tr.error)
-    else patch.terroir_id = tr.id
+    else {
+      patch.terroir_id = tr.id
+      if (tr.id !== (existing.terroir_id ?? null)) canonicalsChanged = true
+    }
   }
   if ('cultivar' in payload && payload.cultivar?.cultivar_name) {
     const cr = await findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name)
     if (!cr.ok) errors.push(cr.error)
-    else patch.cultivar_id = cr.id
+    else {
+      patch.cultivar_id = cr.id
+      if (cr.id !== (existing.cultivar_id ?? null)) canonicalsChanged = true
+    }
+  }
+  if (canonicalsChanged) {
+    patch.canonicals_updated_at = new Date().toISOString()
   }
 
   if (errors.length > 0) return { ok: false, code: 'validation', errors }
