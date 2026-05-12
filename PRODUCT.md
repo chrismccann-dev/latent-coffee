@@ -392,28 +392,19 @@ The full forward-looking work surface, structured by readiness + scope. Per-spri
 
 The current ranked queue of scoped, sized sprints in flight or next up.
 
-#### 1. Sprint 2.7.5 — Workflow walkthrough
-
-Audit Chris's actual brewing + roasting workflow end-to-end on the v9 stack to surface friction points that only show up in real iteration. Brief lives at `SPRINT_2_7_5_BRIEF.md` (find via `find /Users/chrismccann/latent-coffee/.claude/worktrees -name "SPRINT_2_7_5_BRIEF.md"`).
-
-**Iteration plan:** 5 brews end-to-end + 3 roasting sessions (intake / iteration / mid-loop, NOT full close-out cycles per the multi-week loop time). Phase B (brewing audit) ships once 4-5 brews are done; Phase C (roasting audit) covers steps 1-3 (intake / push_roast / cupping) and parks lot-close steps 4-5 for a later session. The two phases ship independently.
-
-**Output:** punch list of friction points categorized as workflow tweaks (inline-fixable in the same PR) / MCP enhancements (queued to next feedback batch in `feedback_v2_mcp_feedback_log.md`) / architectural items (queued to Sprint 3.1).
-
-**Sizing:** ~2-3h. Async-friendly because it's gated on iteration cadence, not Claude availability.
-
-#### 2. Sprint 3.1 — Architectural-queue brainstorm
+#### 1. Sprint 3.1 — Architectural-queue brainstorm
 
 Same shape as Sprint 2.2 brainstorm: plan-mode design, no code, AskUserQuestion rounds. Pulls in:
 
 - ~10 architectural-queue items pending in `feedback_v2_mcp_feedback_log.md` pre-Phase-3 (the cluster that didn't fit in Phases 1-3).
-- Whatever 2.7.5's punch list flags as architectural (vs workflow / MCP enhancement).
+- Whatever Sprint 2.7.5 surfaced as architectural (vs workflow / MCP enhancement) — see `memory/project_v2_7_5_workflow_walkthrough.md` for the full outstanding-follow-ups breakdown; cleanup-sprint bundle is 5 items.
 - Phase 3 PR #105 deviations (backfill SQL skipped per substrate gap on `*_override` columns; SR `/add` direct-insert path retains DEFAULT canonical provenance; `/green/[id]` UI doesn't surface provenance / `canonicals_updated_at`).
 - 3.0 OAuth retro follow-ups (Anthropic-style OAuth error wrapping; `.env.local` git-tracked hygiene fix).
+- Cleanup-sprint bundle from 2.7.5 retro: tokenize admin_region in findOrCreateTerroir, auto-populate green_beans.origin from terroir.country, end_condition_value cross-field semantic bounds, power_bezier vs profile_type=5 consistency check, migration-drift mitigation script + PR template + CI gate.
 
-**Triggers when:** 2.7.5 wraps. Brainstorm output is a scoped sprint queue, not code.
+**Triggers when:** ready to plan next iteration. Brainstorm output is a scoped sprint queue, not code. Continuous-feedback channel for non-architectural friction lives at `feedback_mcp_continuous_log.md`.
 
-#### 3. General cleanup sprint — 3 tracks
+#### 2. General cleanup sprint — 3 tracks
 
 Three independently-scopable cleanup tracks Chris flagged 2026-05-05 post-Phase-3. Bundle into one sprint or ship separately. Full scope in `memory/project_general_cleanup_sprint.md`.
 
