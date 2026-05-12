@@ -747,8 +747,6 @@ export const MODIFIER_ENTRIES: readonly ModifierEntry[] = [
   {
     name: 'Anaerobic',
     axis: 'fermentation',
-    // NOTE: Chris didn't include Anaerobic in his Phase A doc (2026-05-11);
-    // using this draft as a placeholder. Replace when authored.
     overview:
       "Anaerobic is sealed-vessel fermentation — the cherry or seed is held in an oxygen-restricted environment, usually a hermetic tank, during the wet phase. It's the highest-traffic fermentation modifier in my corpus (16 coffees across Natural, Washed, and Honey), and the most likely to shift cup behavior away from what the base process alone would suggest.\n\nThe directional signal: anaerobic amplifies sweetness, intensifies aromatics, and produces denser, more structured cups — but risks crossing into lactic, fermenty, or booze-forward territory when uncontrolled. Strategy implications differ by base: on Naturals it usually calls for Suppression (low temp + low agitation, hold the volatile fruit back); on Washes it calls for Balanced Intensity or Full Expression depending on cultivar density. Watch for the `Anoxic` qualifier on the producer side — fully-sealed no-headspace executions behave more like an extraction-push candidate, not a suppression one.",
   },

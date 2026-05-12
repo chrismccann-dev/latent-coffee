@@ -272,7 +272,7 @@ Per-entity reference content mirrored into `lib/process-registry.ts` rich export
 
 ### Modifier Index entries
 
-#### Anaerobic (placeholder — Chris's Phase A doc omitted this entry; first-pass draft retained until authored)
+#### Anaerobic
 
 Anaerobic is sealed-vessel fermentation — the cherry or seed is held in an oxygen-restricted environment, usually a hermetic tank, during the wet phase. It's the highest-traffic fermentation modifier in my corpus (16 coffees across Natural, Washed, and Honey), and the most likely to shift cup behavior away from what the base process alone would suggest.
 
