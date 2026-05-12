@@ -224,6 +224,108 @@ Tamarind + Red Fruit decomposes to generic `Fruit Co-ferment`; specific ingredie
 
 ---
 
+## Authored content (Sub Pages 4 Tier B — 2026-05-11)
+
+Per-entity reference content mirrored into `lib/process-registry.ts` rich exports (`BASE_PROCESS_ENTRIES` + `MODIFIER_ENTRIES` + `SignatureEntry.overview`/`observedCupProfile`) and consumed by `/processes/{base}` hubs + `/processes/modifiers/{modifier}` pages + `/processes/signatures/{name}` pages. Authored by Chris; both this doc and the registry stay in sync — edits land in both files via a small follow-up commit.
+
+### Base processes
+
+#### Washed
+**Process Summary:** One of the base processes of processing coffee where the mucilage is fully removed before drying. Historically, washed coffees were considered higher quality due to a separation of the bad floating cherries and cleaner, even, predictable results.
+
+**Brew Archetype:**
+- Best archetype: Clarity-First
+- Common failure mode: too much agitation flattens nuance
+- When to deviate: denser / more developed washed coffees may need more intensity
+- Typical strength: Transparent, structured, clean
+- What usually helps: low agitation, careful cooling-window evaluation
+
+#### Natural
+**Process Summary:** One of the base processes of processing coffee where the whole cherry is dried with the fruit still intact around the seed. Historically, natural coffees were associated with heavier fruit expression and more variability, but careful drying has made them capable of high sweetness, intensity, and aromatic complexity.
+
+**Brew Archetype:**
+- Best archetype: Full Expression
+- Common failure mode: too much extraction can turn fruit into ferment, heaviness, or drying finish
+- When to deviate: cleaner / lighter naturals may benefit from Clarity-First structure
+- Typical strength: Fruity, sweet, aromatic, expressive
+- What usually helps: controlled extraction, moderate agitation, cooling-window evaluation
+
+#### Honey
+**Process Summary:** One of the base processes of processing coffee where some mucilage is left on the seed during drying. Historically, honey coffees sat between washed and natural styles, offering more sweetness and body than washed coffees while retaining more structure and clarity than full naturals.
+
+**Brew Archetype:**
+- Best archetype: Balanced Intensity
+- Common failure mode: too much agitation can blur sweetness and create sticky heaviness
+- When to deviate: very clean yellow / white honey lots may work better as Clarity-First
+- Typical strength: Sweet, rounded, structured, medium-bodied
+- What usually helps: moderate agitation, steady extraction, careful finish control
+
+#### Wet-hulled
+**Process Summary:** One of the base processes of processing coffee where parchment is removed while the coffee is still at high moisture before final drying. Historically, wet-hulled coffees were tied to Indonesian production needs and often produce earthy, herbal, savory, lower-acid profiles with heavier body.
+
+**Brew Archetype:**
+- Best archetype: Suppression
+- Common failure mode: too much extraction can emphasize earth, spice, bitterness, or woody finish
+- When to deviate: cleaner / high-elevation wet-hulled coffees may tolerate more intensity
+- Typical strength: Heavy, earthy, low-acid, savory
+- What usually helps: lower agitation, restrained extraction, avoiding tail-end bitterness
+
+### Modifier Index entries
+
+#### Anaerobic
+
+Anaerobic is sealed-vessel fermentation — the cherry or seed is held in an oxygen-restricted environment, usually a hermetic tank, during the wet phase. It's the highest-traffic fermentation modifier in my corpus (16 coffees across Natural, Washed, and Honey), and the most likely to shift cup behavior away from what the base process alone would suggest.
+
+The directional signal: anaerobic amplifies sweetness, intensifies aromatics, and produces denser, more structured cups — but risks crossing into lactic, fermenty, or booze-forward territory when uncontrolled. Strategy implications differ by base: on Naturals it usually calls for Suppression (low temp + low agitation, hold the volatile fruit back); on Washes it calls for Balanced Intensity or Full Expression depending on cultivar density. Watch for the `Anoxic` qualifier on the producer side — fully-sealed no-headspace executions behave more like an extraction-push candidate, not a suppression one.
+
+#### Yeast Inoculated
+
+Yeast Inoculated is controlled fermentation with selected yeast introduced into the cherry or seed environment to guide fermentation rather than relying only on ambient microbes. In the corpus, it usually appears as a precision modifier layered onto Washed, Natural, or more complex experimental processes, and it often signals producer intent to shape aromatics, sweetness, or flavor direction more deliberately.
+
+The directional signal: yeast inoculation tends to sharpen aromatic identity, increase fruit definition, and make the cup feel more designed - but risks becoming too flavor-forward, perfumed, or confectionary if the fermentation signature overtakes terroir and cultivar. Strategy implications differ by base: on Washed coffees it often supports Clarity-First or Balanced Intensity because the structure is still clean; on Naturals it often needs Suppression to keep fruit density from turning heavy. Watch for yeast plus thermal shock or anaerobic stacking - once layered, the modifier becomes less about precision alone and more about volatility management.
+
+#### Dark Room Dried
+
+Dark Room Dried is a drying modifier where coffee is dried away from direct sunlight, often in a shaded or controlled dark environment, to slow drying and reduce UV / heat exposure. It usually signals an attempt to preserve volatile aromatics, stabilize fruit expression, and create a more layered drying curve than standard exposed drying.
+
+The directional signal: dark room drying tends to increase aromatic preservation, deepen sweetness, and create a more polished fruit profile - but risks density, heaviness, or a slightly closed cup if the coffee also carries a strong fermentation load. Strategy implications differ by base: on Naturals it often calls for Suppression or Balanced Intensity to avoid over-thick fruit; on Washed coffees it can support Clarity-First because the drying method may protect florals and nuance. Watch for dark room drying stacked with anaerobic or yeast modifiers - the cup may look clean on paper but behave like a high-volatility coffee in brewing.
+
+#### Cold Fermentation
+
+Cold Fermentation is a temperature-controlled fermentation modifier where the cherry or seed is fermented at lower temperatures to slow microbial activity and extend the wet phase. It usually signals a producer trying to preserve aromatics, create cleaner fermentation, and stretch complexity without letting the process run hot or chaotic.
+
+The directional signal: cold fermentation tends to produce cleaner sweetness, brighter aromatics, and more composed fruit than warmer or more aggressive fermentation - but risks tasting muted, tight, or overly delicate if extraction is too restrained. Strategy implications differ by base: on Washed coffees it usually supports Clarity-First with slightly more extraction headroom; on Naturals or Honeys it can allow Balanced Intensity because the cold phase helps control ferment pressure. Watch for cold fermentation paired with high-density cultivars - those coffees often need enough energy to open the cup rather than pure suppression.
+
+#### Raised Bed
+
+Raised Bed is a drying modifier where coffee is dried on elevated beds that improve airflow around the cherry or parchment. It is one of the most common drying signals in specialty coffee, and by itself it usually indicates cleaner, more even drying rather than a strong flavor intervention.
+
+The directional signal: raised bed drying tends to support cleaner sweetness, better airflow, and more even moisture reduction - but it is usually a quality-control modifier, not a primary cup-shaping modifier. Strategy implications differ by base: on Washed coffees it reinforces Clarity-First because it supports clean structure; on Naturals and Honeys it helps keep fruit expression cleaner but does not automatically remove the need for Suppression. Watch for raised bed listed alone versus raised bed plus shade, dark room, or slow drying - alone it is mostly baseline quality language, while stacked drying terms carry more brew-behavior signal.
+
+#### Slow Dry
+
+Slow Dry is a drying modifier where coffee is dried over an extended period, usually through lower heat, shade, thicker layers, controlled airflow, or more careful moisture reduction. It usually signals a producer trying to preserve aromatics, deepen sweetness, and avoid the harshness or instability that comes from drying too quickly.
+
+The directional signal: slow drying tends to create more integrated sweetness, smoother fruit, and a more composed finish - but risks heaviness, muted acidity, or a slightly "held back" cup if paired with dense fermentation or darker development. Strategy implications differ by base: on Naturals and Honeys it often calls for Balanced Intensity or Suppression to keep fruit and body from getting too thick; on Washed coffees it can support Clarity-First with a little more extraction tolerance. Watch for slow dry stacked with dark room or shade drying - that usually means aromatic preservation, but also a higher chance the coffee needs enough energy to open fully.
+
+#### Double Anaerobic
+
+Double Anaerobic is a fermentation modifier where the coffee goes through two sequential oxygen-restricted fermentation stages. It usually signals a more intensive producer intervention than standard Anaerobic, and it often pushes the cup further away from what the base process alone would suggest.
+
+The directional signal: double anaerobic tends to amplify sweetness, deepen fruit, increase structure, and create a more layered fermentation signature - but risks becoming lactic, boozy, heavy, or flavor-stacked if extraction is too aggressive. Strategy implications differ by base: on Naturals it usually calls for Suppression because the second anaerobic stage can make volatile fruit feel dense fast; on Washed coffees it often calls for Balanced Intensity because the washed base still gives some structural clarity. Watch for double anaerobic plus thermal shock or yeast inoculation - that combination usually behaves less like a clean base process and more like a high-intervention coffee needing volatility control.
+
+#### Thermal Shock
+
+Thermal Shock is a fermentation modifier where hot and cold temperature shifts are used during processing, often to influence microbial activity, stabilize fermentation, or change how compounds move through the cherry or seed. It usually signals a deliberate attempt to create high aromatic intensity and vivid fruit structure rather than a passive fermentation style.
+
+The directional signal: thermal shock tends to sharpen aromatics, brighten acidity, and create a high-definition fruit profile - but risks becoming angular, artificial, or overly intense if the coffee is already heavily fermented. Strategy implications differ by base: on Washed coffees it often supports Full Expression or Balanced Intensity because the clean base can carry the extra intensity; on Naturals and Honeys it may need Suppression to prevent the fruit from turning loud or candy-like. Watch for thermal shock paired with anaerobic or yeast inoculation - the cup often rewards careful cooling-window evaluation because the warm cup may feel intense while the cooler cup shows whether the structure is integrated.
+
+### Signature methods
+
+**Deliberately deferred** (2026-05-11). Chris flagged at Phase A delivery that signature method content "needs a bit of a 'what I learned from this XYZ' prompt modifier to get what I need and to be able to evolve with experiences here" — i.e. signatures shouldn't be statically authored Overview prose; they should be synthesis-driven and update as the corpus grows. Punted to a follow-up sprint that adds a per-signature-method synthesis variant with a "what I learned from this signature" framing baked into the prompt. Until then, signature pages render empty-state messaging for Process Overview + Observed Cup Profile blocks; the canonical SignatureEntry decomposition (producer / country / base / modifier stack) still renders correctly via Process Breakdown chips.
+
+---
+
 ## Sources
 
 - Chris's Process Taxonomy Registry CSV (authored 2026-04-22, revised 2026-04-23) - canonical base + subprocess organization

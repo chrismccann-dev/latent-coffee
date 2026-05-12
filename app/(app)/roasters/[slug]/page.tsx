@@ -59,7 +59,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
         })
       }
     }
-    if (brew.process) processSet.add(brew.process)
+    if (brew.base_process) processSet.add(brew.base_process)
   }
 
   const brewCount = brewList.length
@@ -159,7 +159,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
       <TagLinkList
         title="PROCESSES EXPLORED"
         items={Array.from(processSet).map((p) => ({
-          key: p, label: p, href: `/processes/${encodeURIComponent(p)}`,
+          key: p, label: p, href: `/processes/${p.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
         }))}
       />
 
