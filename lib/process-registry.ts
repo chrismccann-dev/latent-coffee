@@ -271,6 +271,11 @@ export interface SignatureEntry {
   fermentation_modifiers?: readonly FermentationModifier[]
   drying_modifiers?: readonly DryingModifier[]
   intervention_modifiers?: readonly InterventionModifier[]
+  // Sub Pages 4 (2026-05-11): authored Tier B content for the /processes/signatures/{name}
+  // page. Both fields are optional during Phase A authoring — pages render an empty
+  // state when missing. Populated as Chris authors the content.
+  overview?: string
+  observedCupProfile?: readonly string[]
 }
 
 export const SIGNATURE_METHODS: readonly SignatureEntry[] = [
@@ -636,4 +641,135 @@ const FAMILY_COLORS: Record<ProcessFamily | 'Other', string> = {
 
 export function getFamilyColor(family: ProcessFamily | 'Other' | string): string {
   return FAMILY_COLORS[family as ProcessFamily | 'Other'] || FAMILY_COLORS.Other
+}
+
+// ---------------------------------------------------------------------------
+// Sub Pages 4 (2026-05-11) — rich content shapes for /processes/[base] hubs +
+// /processes/modifiers/[modifier] index pages.
+//
+// Authored Tier B content lives here per the kickoff brief — same pattern as
+// roasters / producers / cultivars rich registries. Each entry is loaded by
+// the page server-render via the getXxxEntry helpers. Optional fields render
+// empty-state messages until Chris's Phase A authoring lands.
+// ---------------------------------------------------------------------------
+
+import type { ExtractionStrategy } from './extraction-strategy'
+
+/**
+ * Authored content for the 4 base process hubs. Each entry contributes:
+ *   - summary: 1-2 paragraph "Process Summary" prose on the hub page
+ *   - brewArchetype: 5-field structured guide for the "Brew Archetypes" block
+ *
+ * Both are optional during Phase A. Pages fall back to a friendly empty state.
+ */
+export interface BaseProcessEntry {
+  name: BaseProcess
+  summary?: string
+  brewArchetype?: {
+    bestArchetype: ExtractionStrategy
+    commonFailureMode: string
+    whenToDeviate: string
+    typicalStrength: string
+    whatUsuallyHelps: string
+  }
+}
+
+export const BASE_PROCESS_ENTRIES: readonly BaseProcessEntry[] = [
+  {
+    name: 'Washed',
+    // Phase A authoring pending — Chris's mockup 1 verbatim will land here.
+  },
+  {
+    name: 'Natural',
+    // Phase A authoring pending.
+  },
+  {
+    name: 'Honey',
+    // Phase A authoring pending.
+  },
+  {
+    name: 'Wet-hulled',
+    // Phase A authoring pending. 0 brews currently; hub hidden on index per
+    // event-driven rule.
+  },
+]
+
+const baseEntryByName = new Map(BASE_PROCESS_ENTRIES.map((e) => [e.name, e]))
+export function getBaseProcessEntry(name: BaseProcess | string | null | undefined): BaseProcessEntry | null {
+  if (!name) return null
+  return baseEntryByName.get(name as BaseProcess) ?? null
+}
+
+/**
+ * Authored content for the 8 cross-base Modifier Index pages (≥3 brews each
+ * in the current corpus). The list grows as new modifiers cross the threshold;
+ * `eligibleModifierIndexEntries(brews)` is the runtime source of truth for
+ * "which modifiers earn a page right now."
+ */
+export interface ModifierEntry {
+  name: string
+  axis: 'fermentation' | 'drying' | 'intervention' | 'experimental'
+  overview?: string
+}
+
+export const MODIFIER_ENTRIES: readonly ModifierEntry[] = [
+  { name: 'Anaerobic', axis: 'fermentation' },
+  { name: 'Yeast Inoculated', axis: 'fermentation' },
+  { name: 'Dark Room Dried', axis: 'drying' },
+  { name: 'Cold Fermentation', axis: 'fermentation' },
+  { name: 'Raised Bed', axis: 'drying' },
+  { name: 'Slow Dry', axis: 'drying' },
+  { name: 'Double Anaerobic', axis: 'fermentation' },
+  { name: 'Thermal Shock', axis: 'fermentation' },
+]
+
+const modifierEntryByName = new Map(MODIFIER_ENTRIES.map((e) => [e.name.toLowerCase(), e]))
+export function getModifierEntry(name: string | null | undefined): ModifierEntry | null {
+  if (!name) return null
+  return modifierEntryByName.get(name.trim().toLowerCase()) ?? null
+}
+
+/**
+ * Display variant of composeProcess for the new aggregation pages. Differences
+ * from composeProcess:
+ *
+ *   1. Modifiers joined with " + " (matches Chris's brainstorm convention).
+ *   2. A comma separates the modifier list from the trailing base/subprocess
+ *      (e.g. "Anaerobic + Slow Dry + Raised Bed, Natural").
+ *   3. Anaerobic dedupe: if `fermentation_modifiers` includes "Anaerobic"
+ *      AND any `drying_modifiers` entry starts with "Anaerobic ", the
+ *      leading "Anaerobic " is stripped from the drying label. Fixes the
+ *      "Anaerobic Anaerobic Slow Dry" render bug on the brew with
+ *      `fermentation:[Anaerobic] + drying:[Anaerobic Slow Dry, Raised Bed]`.
+ *
+ * Used only by new code (aggregation page surfaces). Legacy composeProcess
+ * preserved verbatim for /add + /edit save paths writing `brews.process`.
+ */
+export function composeProcessDisplay(s: StructuredProcess): string {
+  if (s.signature_method) return s.signature_method
+
+  const sortedFerment = [...s.fermentation_modifiers].sort()
+  const fermentHasAnaerobic = sortedFerment.some((m) => m === 'Anaerobic' || m === 'Double Anaerobic' || m === 'Triple Anaerobic')
+
+  const sortedDrying = [...s.drying_modifiers].sort().map((m) => {
+    if (fermentHasAnaerobic && /^Anaerobic\s/i.test(m)) {
+      return m.replace(/^Anaerobic\s+/i, '')
+    }
+    return m
+  })
+
+  const sortedIntervention = [...s.intervention_modifiers].sort()
+  const sortedExperimental = [...s.experimental_modifiers].sort()
+
+  const modifierParts: string[] = [
+    ...sortedFerment,
+    ...sortedDrying,
+    ...sortedIntervention,
+    ...sortedExperimental,
+  ]
+  if (s.decaf_modifier) modifierParts.push(s.decaf_modifier)
+
+  const tail = s.subprocess ?? s.base_process
+  if (modifierParts.length === 0) return tail
+  return `${modifierParts.join(' + ')}, ${tail}`
 }

@@ -116,7 +116,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
     if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
       cultivarMap.set(brew.cultivar.cultivar_name, { id: brew.cultivar.id })
     }
-    if (brew.process) processSet.add(brew.process)
+    if (brew.base_process) processSet.add(brew.base_process)
     if (brew.roaster) roasterSet.add(brew.roaster)
   }
 
@@ -327,7 +327,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
             title="PROCESSES I HAVE EXPLORED"
             bare
             items={Array.from(processSet).map((p) => ({
-              key: p, label: p, href: `/processes/${encodeURIComponent(p)}`,
+              key: p, label: p, href: `/processes/${p.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
             }))}
           />
           <TagLinkList

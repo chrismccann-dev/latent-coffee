@@ -57,7 +57,7 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
         terroirMap.set(key, { id: brew.terroir.id, country: brew.terroir.country })
       }
     }
-    if (brew.process) processSet.add(brew.process)
+    if (brew.base_process) processSet.add(brew.base_process)
     if (brew.roaster) roasterSet.add(brew.roaster)
   }
 
@@ -237,7 +237,7 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
             items={Array.from(processSet).map((p) => ({
               key: p,
               label: p,
-              href: `/processes/${encodeURIComponent(p)}`,
+              href: `/processes/${p.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
             }))}
           />
           <TagLinkList
