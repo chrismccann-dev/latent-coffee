@@ -61,7 +61,7 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
     {
       title: 'Patch Roast',
       description:
-        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id. Sibling of push_roast (for new batches). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] with id keyed by batch_id). Returns { roast_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch so you can sanity-check without a follow-up read (mirrors patch_inventory + patch_experiment pattern).',
+        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id. Sibling of push_roast (for new batches). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] with id keyed by batch_id). Returns { roast_id, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which columns landed; canonical_values echoes the actual values of enum-validated fields (end_condition_type, worth_repeating) so the caller can confirm the vocabulary landed without a follow-up read.',
       inputSchema: patchRoastInputSchema,
     },
     async (input) => {
@@ -81,7 +81,17 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
       const updated_fields = ROAST_PATCH_FIELDS.filter(
         (k) => k in payloadObj && payloadObj[k] !== undefined,
       )
-      const out = { roast_id: result.roast_id, updated_fields }
+      // Round-7 dogfood (2026-05-12): echo VALUES of enum-validated fields
+      // so the caller can confirm the level / vocabulary landed without a
+      // follow-up read.
+      const canonical_values: Record<string, unknown> = {}
+      if (payloadObj.end_condition_type !== undefined) {
+        canonical_values.end_condition_type = payloadObj.end_condition_type
+      }
+      if (payloadObj.worth_repeating !== undefined) {
+        canonical_values.worth_repeating = payloadObj.worth_repeating
+      }
+      const out = { roast_id: result.roast_id, updated_fields, canonical_values }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,

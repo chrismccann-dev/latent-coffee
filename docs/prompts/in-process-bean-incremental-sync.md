@@ -28,10 +28,22 @@ re-sending the full payload + risks accidental overwrite of preserved-
 context fields like context / shared_constants on push_experiment). Every
 patch_* Tool now echoes `updated_fields: [...]` in the response so you can
 sanity-check which columns landed without a follow-up get_bean_pipeline
-read (Round-5 symmetry sweep, 2026-05-10). FK re-resolutions on
-patch_green_bean / patch_brew (terroir / cultivar / producer / roaster /
-process axes) are NOT echoed — they touch multiple columns + sibling rows;
-do a follow-up read if you need to confirm those landed.
+read (Round-5 symmetry sweep, 2026-05-10). patch_experiment / patch_roast /
+patch_inventory additionally echo `canonical_values: { ... }` for enum-
+validated fields (key_insight_confidence / end_condition_type /
+worth_repeating / bean_process / is_archived) so the caller can confirm the
+exact vocabulary landed - "Medium" arrived as "Medium" (not "medium" or
+"med"), "bean_temp" as "bean_temp" (Round-7, 2026-05-12). FK re-resolutions
+on patch_green_bean / patch_brew (terroir / cultivar / producer / roaster /
+process axes) are NOT echoed in updated_fields — they touch multiple
+columns + sibling rows; do a follow-up read if you need to confirm those
+landed.
+
+Note: patch_green_bean DOES write `canonicals_updated_at` automatically
+when terroir_id or cultivar_id actually change vs. the existing row (no-op
+re-resolutions that resolve to the same id leave the timestamp unchanged).
+Inspect canonicals_updated_at on a follow-up get_bean_pipeline to see
+cross-session FK drift visibility (Round-7, 2026-05-12).
 
 FK DEPENDENCY CHAIN: STAGE 1 returns green_bean_id (used by STAGES 2-7) +
 the FULL pipeline state baseline so downstream stages can skip what's
