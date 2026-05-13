@@ -199,6 +199,16 @@ export function lifecycleStageLabel(
   }
 }
 
+// Strip leading "Batch " / "Batch #" / "#" from a free-text best_batch_id so
+// callers can compose "Batch #N" without double-prefixing. Handles all four
+// historical shapes ("133" / "Batch 139" / "#94" / "Batch #25") consistently.
+// Returns null on null/empty/whitespace-only input.
+export function extractBatchNumber(raw: string | null | undefined): string | null {
+  if (!raw) return null
+  const stripped = raw.replace(/^Batch\s*#?\s*/i, '').replace(/^#/, '').trim()
+  return stripped || null
+}
+
 // Section title for the /green index page header. Sentence case per scope doc
 // § 5.1 ("Waiting for next roast" not "Waiting For Next Roast").
 export function lifecycleSectionTitle(state: LifecycleState): string {

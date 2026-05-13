@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { GreenBean } from '@/lib/types'
 import {
   computeLifecycleState,
+  extractBatchNumber,
   lifecycleSectionTitle,
   lifecycleStageLabel,
   type LifecycleState,
@@ -158,14 +159,13 @@ function LifecycleSection({ state, lots }: { state: LifecycleState; lots: GreenB
 }
 
 function LifecycleRow({ bean, state }: { bean: GreenBeanIndexRow; state: LifecycleState }) {
-  // best_batch_id is free text ("133" / "Batch 139" / "25"); normalize to
-  // "Batch #N" for display (strip any leading "Batch " prefix first so we
-  // don't double up the word). Resolved-without-best_batch_id falls back to
-  // the generic "Reference" label from lifecycleStageLabel.
+  // best_batch_id is free text ("133" / "Batch 139" / "#94" / "Batch #25");
+  // extractBatchNumber strips the prefix so we don't double up "Batch #" on
+  // compose. Resolved-without-best_batch_id falls back to the generic
+  // "Reference" label from lifecycleStageLabel.
   const learnings = bean.roast_learnings?.[0]
-  const referenceLabel = learnings?.best_batch_id
-    ? `Batch #${learnings.best_batch_id.replace(/^Batch\s*#?/i, '')}`
-    : null
+  const stripped = extractBatchNumber(learnings?.best_batch_id)
+  const referenceLabel = stripped ? `Batch #${stripped}` : null
   const stageLabel = lifecycleStageLabel(state, referenceLabel)
 
   // Tile color signals lifecycle state. Sage (`latent-accent-light`) for
