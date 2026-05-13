@@ -121,7 +121,7 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
           {anyActive ? (
             <Link href="/brews" className="btn btn-secondary">CLEAR ALL FILTERS</Link>
           ) : (
-            <Link href="/add" className="btn btn-primary">+ ADD YOUR FIRST BREW</Link>
+            <Link href="/add?type=purchased" className="btn btn-primary">+ ADD YOUR FIRST BREW</Link>
           )}
         </div>
       ) : (

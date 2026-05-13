@@ -104,22 +104,17 @@ export default async function GreenBeansPage() {
         </div>
       </div>
 
-      {/* Empty state */}
+      {/* Empty state. Sub Pages 6.6 (2026-05-13) — claude.ai via the Latent
+       * MCP server is the sole writer for every roasting-side entity. The
+       * legacy /add?type=self-roasted CTA was removed; new lots land here
+       * once a roasting session in claude.ai calls push_green_bean. */}
       {totalSurfaced === 0 ? (
         <div className="text-center py-16">
-          <div className="w-16 h-16 bg-latent-accent rounded-lg mx-auto mb-6 flex items-center justify-center">
-            <span className="text-2xl">🌱</span>
-          </div>
-          <p className="font-mono text-sm text-latent-mid mb-6">NO GREEN BEANS YET</p>
-          {/*
-           * /add?type=self-roasted is the legacy form path. Slated for
-           * deprecation in Sub Pages 6.6 per the MCP-only-input direction
-           * (see feedback_mcp_only_input.md). Leaving the empty-state CTA
-           * in place through 6.6; the route still works today.
-           */}
-          <Link href="/add?type=self-roasted" className="btn btn-primary">
-            + ADD YOUR FIRST LOT
-          </Link>
+          <p className="font-mono text-sm text-latent-mid mb-3">NO GREEN BEANS YET</p>
+          <p className="text-sm text-latent-mid max-w-sm mx-auto">
+            Lots land here once a roasting session in claude.ai writes via the Latent MCP server.
+            Open a roasting session to add your first lot.
+          </p>
         </div>
       ) : (
         <div className="space-y-10">
