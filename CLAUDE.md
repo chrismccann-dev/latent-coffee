@@ -34,6 +34,13 @@ Per-sprint retrospectives: `~/.claude/projects/-Users-chrismccann-latent-coffee/
 - None auto-generated from scratch; they compound edit-by-edit.
 - The Dropbox originals (BMR, Roasting Master Reference, Terroir/Cultivar Ruleset) remain as archival snapshots so Claude projects can still load them; the repo copies are the ones that compound going forward.
 
+## Git Discipline
+
+- Only commit when explicitly asked; only push when explicitly asked (do not push on 'commit')
+- Before starting work, verify branch is up to date with main; many PRs may have landed since last thread touch
+- When squash-merges happen, rebase/reset against the new main rather than the pre-merge state
+- Never reset a branch without confirming via reflog that recoverable work is preserved
+
 ## Architecture
 
 - **Framework:** Next.js 14 App Router, server components by default, client components only for interactivity (synthesis auto-generation)
@@ -202,6 +209,9 @@ Requires `.env.local` with:
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `ANTHROPIC_API_KEY`
 
+### Local Verification Fallbacks
+If `.env.local` is missing `SUPABASE_SERVICE_ROLE_KEY` or local dev has Anthropic auth shadowing, fall back to: (1) MCP `execute_sql` for DB work, (2) Vercel preview for end-to-end UI verification. Do not block the sprint waiting for local config.
+
 ## Design / UX conventions
 
 **See [PRODUCT.md § Design System](PRODUCT.md#design-system) for the full token map, palette, type scale, and component primitive reference.** The rules below are the code-level enforcement points.
@@ -226,7 +236,7 @@ Requires `.env.local` with:
 ## Sprint cadence (for Claude)
 
 These rules bias toward caution. For trivial tasks, use judgment — but err on the side of pausing.
-Run these six checkpoints on every non-trivial sprint:
+Run these seven checkpoints on every non-trivial sprint:
 
 1. **Plan before coding when scope is interpretive — and err toward planning.** If the brief is a mockup, a redesign, or anything with "make it better" — enter plan mode (ExitPlanMode tool) and surface your interpretation *before* editing files. When proposing a non-obvious approach, present 2-3 options with tradeoffs and your recommendation, not a single silent pick. Skip plan mode only when the scope is *genuinely* concrete (specific file, specific line, specific fix); "simple" is where unexamined assumptions waste the most work.
 
@@ -234,11 +244,13 @@ Run these six checkpoints on every non-trivial sprint:
 
 3. **Preview every UI change.** Start the dev server (`preview_start`), take a screenshot after each change, and verify via `preview_eval` / `preview_screenshot` before committing. Don't rely on "it should work" — the mismatched Alo Village cover color would have been caught on the first screenshot.
 
-4. **Doc-touch check before PR.** If this sprint changed substrate that PRODUCT.md / CLAUDE.md / BREWING.md / ROASTING.md / SYNC_V2.md / docs/taxonomies/* describe (a new strategy, Tool, column, count delta, registry entry, page), list which docs need updating before opening the PR. Cross-system audit at substrate-change time, not monthly cleanup time. **Roadmap currency:** if this sprint shipped from `PRODUCT.md § Active Sprints` / `Newly queued` / `Side Quests`, move the entry out of those sections AND add a new line to `docs/sprints/shipped.md` with date / sprint name (bold) / landmark, all in the same PR. The rule prevents drift between "what's queued" and "what's done" — closed-out sprints lingering in Active Sprints implies work that doesn't exist; a shipped item missing from shipped.md erases the audit trail.
+4. **Cross-system audit before PR.** If this sprint changed substrate (a new strategy, Tool, column, count delta, registry entry, page, type, or schema), audit BOTH dependent docs (PRODUCT.md / CLAUDE.md / BREWING.md / ROASTING.md / SYNC_V2.md / docs/taxonomies/*) AND dependent code (lib/types.ts, /add page, MCP tool descriptions, migration files, registry JSON, UI composers wired to the field) before declaring done. Don't wait for Chris to prompt the consistency check. Cross-system audit at substrate-change time, not monthly cleanup time. **Roadmap currency:** if this sprint shipped from `PRODUCT.md § Active Sprints` / `Newly queued` / `Side Quests`, move the entry out of those sections AND add a new line to `docs/sprints/shipped.md` with date / sprint name (bold) / landmark, all in the same PR. The rule prevents drift between "what's queued" and "what's done" — closed-out sprints lingering in Active Sprints implies work that doesn't exist; a shipped item missing from shipped.md erases the audit trail.
 
 5. **Run `/simplify` before review or commit.** Claude over-engineers — duplicate JSX across pages, inline IIFEs, copy-pasted inline styles. Let the simplify skill catch it before it becomes tech debt. Run once per sprint, after implementation is done but before the commit step. Especially important when a sprint touched 2+ files that now share a rendering pattern.
 
 6. **Retro before docs.** Before updating PRODUCT.md / CLAUDE.md / memory files at the end of a sprint, explicitly pause and list: what we tried that didn't work, what surprised us, what we'd do differently next time. The doc updates then write themselves. Don't wait for Chris to ask — this is a standing part of every sprint.
+
+7. **Produce a kickoff brief for the next sprint.** Before closing the session, write a paste-ready brief: goal (1-2 sentences), scope (in/out), files likely to touch, verification plan, open questions. The handoff context lets the next session start with full situational awareness instead of rediscovery.
 
 **Standing tripwires (not per-sprint, but always-on):**
 - **120KB on any root-level living doc** — when crossed, plan a split sprint. Currently: BREWING.md 188KB, PRODUCT.md ~140KB post-cleanup. PRODUCT.md's `## Scaling Watch-Items` section enumerates the broader set.
