@@ -32,6 +32,10 @@ export type ByBeanPayload = {
   experiments: Record<string, unknown>[]
   roast_learnings: Record<string, unknown> | null
   brews: BrewSummary[]
+  // Sub Pages 6.1 (2026-05-13): first-class design-intent rows joined here so
+  // claude.ai can read both the as-designed recipe and the as-recorded roast
+  // in one Resource fetch.
+  roast_recipes: Record<string, unknown>[]
 }
 
 export async function fetchByBean(
@@ -101,6 +105,17 @@ export async function fetchByBean(
     .order('created_at', { ascending: false })
   if (brewsErr) throw new Error(`brews fetch failed: ${brewsErr.message}`)
 
+  // Sub Pages 6.1 (2026-05-13): pull design-intent rows for the bean. Ordered
+  // by created_at desc so the most-recent V-set lands first — matches how a
+  // mid-iteration caller asks "what's the latest recipe I designed?".
+  const { data: recipes, error: recipesErr } = await supabase
+    .from('roast_recipes')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('green_bean_id', green_bean_id)
+    .order('created_at', { ascending: false })
+  if (recipesErr) throw new Error(`roast_recipes fetch failed: ${recipesErr.message}`)
+
   return {
     green_bean: bean,
     roasts: roastRows,
@@ -108,5 +123,6 @@ export async function fetchByBean(
     experiments: experiments ?? [],
     roast_learnings: lessons,
     brews: (brews ?? []) as BrewSummary[],
+    roast_recipes: recipes ?? [],
   }
 }

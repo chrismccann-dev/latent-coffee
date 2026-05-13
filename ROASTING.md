@@ -2,7 +2,13 @@
 
 *Latent Coffee*
 
-*Last updated: 2026-05-08. Version history in `git log`.*
+*Last updated: 2026-05-13. Version history in `git log`.*
+
+---
+
+## Schema model — roasting redesign in progress
+
+The roasting-side data model is mid-rebuild. See [docs/roasting/redesign.md](docs/roasting/redesign.md) for the series-level scope doc covering 4 lifecycle states (in-inventory / waiting-for-next-roast / waiting-for-next-cupping / resolved), the new `roast_recipes` first-class entity (first-class design intent separate from the as-recorded roast), 16 cross-batch fields on `experiments` covering 4 temporal write moments, MCP-only writes (deprecating the `/add` form path for roasting), and 3 new state-driven page shapes at `/green/[id]`. Sub Pages 6.1 shipped 2026-05-13: schema migration + MCP Tool surface (`push_roast_recipe` + `patch_roast_recipe` added, push/patch_experiment + push/patch_roast + push/patch_roast_learnings extended). Page rebuilds (6.2-6.5) and `/add` deprecation (6.6) follow. Read the redesign doc end-to-end before working on roasting pages or the MCP write surface.
 
 ---
 

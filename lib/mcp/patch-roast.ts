@@ -53,6 +53,10 @@ export const patchRoastInputSchema = {
     'Tristate: "yes" | "no" | "pending". See push_roast.worth_repeating - same semantics.',
   ),
   is_reference: z.boolean().optional().nullable(),
+  // Sub Pages 6.1 (migration 052)
+  recipe_id: z.string().uuid().optional().nullable().describe(
+    'FK to roast_recipes.id — design intent. Back-fill via patch_roast when the recipe row landed after the roast (e.g. retroactively wiring up an older lot to its recipes during Phase 3).',
+  ),
 }
 
 export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) {

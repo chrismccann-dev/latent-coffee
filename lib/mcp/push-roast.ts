@@ -90,6 +90,10 @@ export const pushRoastInputSchema = {
   is_reference: z.boolean().optional().nullable().describe(
     'True for the lot\'s confirmed reference roast (the batch you\'d replicate). One per closed bean typically.',
   ),
+  // Sub Pages 6.1 (migration 052, 2026-05-13).
+  recipe_id: z.string().uuid().optional().nullable().describe(
+    'FK to roast_recipes.id — the design intent this roast executed. Phase 2 of docs/roasting/redesign.md § 7: when push_roast follows a push_roast_profile, the matching recipe row was created at push_roast_profile time; set this FK so the roast links to its design intent. Discoverable by querying roast_recipes for (green_bean_id, experiment_id, batch_slot) or via the roasts://by-bean/{green_bean_id} Resource.',
+  ),
 }
 
 export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {

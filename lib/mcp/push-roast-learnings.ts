@@ -14,7 +14,13 @@ import type { McpAuthContext } from '@/lib/mcp/auth'
 
 export const pushRoastLearningsInputSchema = {
   green_bean_id: z.string().uuid().describe('FK to green_beans.id. UPSERT key — pushing twice for the same bean updates the row.'),
-  best_batch_id: z.string().optional().nullable().describe('The reference roast batch number — the one to replicate.'),
+  // Sub Pages 6.1 (migration 052, 2026-05-13): typed FK to the winning roast.
+  // Preferred over best_batch_id going forward; best_batch_id stays as
+  // free-text back-compat through Phase 3.
+  best_roast_id: z.string().uuid().optional().nullable().describe(
+    'FK to roasts.id — the winning roast execution. Sub Pages 6.1 (2026-05-13) addition. Preferred over best_batch_id; populate both during the transition for back-compat. Get via the roasts://by-bean/{green_bean_id} Resource (returns roasts[] with id keyed by batch_id).',
+  ),
+  best_batch_id: z.string().optional().nullable().describe('Free-text reference roast batch number (e.g. "133", "Batch 139"). Legacy; prefer best_roast_id (typed FK).'),
   why_this_roast_won: z.string().optional().nullable().describe('What about this batch made it the lot winner.'),
   aromatic_behavior: z.string().optional().nullable().describe('How aromatics behaved across the lot (when they peak, what suppresses them, what amplifies).'),
   structural_behavior: z.string().optional().nullable().describe('Body / acidity / sweetness behavior across the lot.'),

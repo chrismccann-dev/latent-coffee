@@ -48,6 +48,40 @@ export const pushExperimentInputSchema = {
   additional_notes: z.string().optional().nullable().describe(
     'Free-text catch-all for operator-framing observations and tasting prose that does not fit the structured outcome / insight fields. Examples: "almost like opposite ends of the spectrum" cup framings, narrow-roast-window hypotheses, cup-vs-structure tension narratives. Round-4 dogfood (2026-05-11): keeps observed_outcome_a/b/c/d and key_insight tight rather than bloated with prose.',
   ),
+  // Sub Pages 6.1 (migration 052, 2026-05-13). See docs/roasting/redesign.md
+  // § 4.2 for the four-write-moments rationale. All 16 fields are optional;
+  // populated at distinct workflow stages per the lifecycle:
+  //   - design time           → recipe (predicted_cup on roast_recipes)
+  //   - post-roast            → experiments.updated_cup_prediction_*
+  //   - cupping table prep    → experiments.taste_for_*
+  //   - post-roast review     → experiments.delta_from_roast_*
+  //   - post-cupping review   → experiments.delta_from_cup_*
+  // Legacy observed_outcome_a-d + expected_outcomes stay populated through
+  // Phase 3 — semantic relabel deferred.
+  updated_cup_prediction_a: z.string().optional().nullable().describe(
+    'Post-roast cup prediction for batch A — written between roast and cupping once roast actuals are in. The original design-time prediction stays frozen on roast_recipes.predicted_cup for diff later.',
+  ),
+  updated_cup_prediction_b: z.string().optional().nullable(),
+  updated_cup_prediction_c: z.string().optional().nullable(),
+  updated_cup_prediction_d: z.string().optional().nullable(),
+  taste_for_a: z.string().optional().nullable().describe(
+    'Cupping-table question for batch A — what to actively listen for in this cup (e.g. "Does v3a cup match v2b memory? If yes → reference candidate."). Sets up the post-cupping delta cleanly.',
+  ),
+  taste_for_b: z.string().optional().nullable(),
+  taste_for_c: z.string().optional().nullable(),
+  taste_for_d: z.string().optional().nullable(),
+  delta_from_roast_a: z.string().optional().nullable().describe(
+    'Post-roast reconciliation for batch A — what worked vs didn\'t relative to recipe predictions. Compare against roast_recipes.predicted_fc_temp / predicted_total_time / predicted_agtron_wb.',
+  ),
+  delta_from_roast_b: z.string().optional().nullable(),
+  delta_from_roast_c: z.string().optional().nullable(),
+  delta_from_roast_d: z.string().optional().nullable(),
+  delta_from_cup_a: z.string().optional().nullable().describe(
+    'Post-cupping reconciliation for batch A — what the cup actually was vs the updated_cup_prediction. Surfaces in the resolved-view "Roasting Learnings" synthesis.',
+  ),
+  delta_from_cup_b: z.string().optional().nullable(),
+  delta_from_cup_c: z.string().optional().nullable(),
+  delta_from_cup_d: z.string().optional().nullable(),
 }
 
 export function registerPushExperimentTool(server: McpServer, auth: McpAuthContext) {
@@ -56,7 +90,7 @@ export function registerPushExperimentTool(server: McpServer, auth: McpAuthConte
     {
       title: 'Push Experiment',
       description:
-        'Log / save / update / record / push a roasting experiment (A/B/C/D batch comparison) — UPSERTs on (user_id, green_bean_id, experiment_id). Same experiment_id pushed twice updates the existing row — supports the iterative shape where experiment design lands first, then outcomes / winner / key_insight populate as batches resolve at Day 7. Three Round-4 (2026-05-11) free-text additions live alongside the structured fields: additional_notes (operator-framing prose that does not fit observed_outcome_*), open_questions (what this experiment did NOT answer - distinct from what_changes_going_forward), and key_insight_confidence (Low / Medium / Medium-High / High). Returns { experiment_pk, created }.',
+        'Log / save / update / record / push a roasting experiment (A/B/C/D batch comparison) — UPSERTs on (user_id, green_bean_id, experiment_id). Same experiment_id pushed twice updates the existing row — supports the iterative shape where experiment design lands first, then outcomes / winner / key_insight populate as batches resolve at Day 7. Three Round-4 (2026-05-11) free-text additions live alongside the structured fields: additional_notes, open_questions, and key_insight_confidence (Low / Medium / Medium-High / High). Sub Pages 6.1 (2026-05-13, migration 052) adds 16 cross-batch fields covering 4 temporal write moments per docs/roasting/redesign.md § 4.2: updated_cup_prediction_a/b/c/d (post-roast, before cupping), taste_for_a/b/c/d (cupping-table questions), delta_from_roast_a/b/c/d (reconciliation vs recipe predictions), delta_from_cup_a/b/c/d (reconciliation vs updated cup prediction). Legacy observed_outcome_a-d + expected_outcomes stay populated through Phase 3. Returns { experiment_pk, created }.',
       inputSchema: pushExperimentInputSchema,
     },
     async (input) => {

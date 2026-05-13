@@ -1,0 +1,77 @@
+import * as z from 'zod/v4'
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import {
+  patchRoastRecipe,
+  ROAST_RECIPE_PATCH_FIELDS,
+  type PatchRoastRecipePayload,
+} from '@/lib/roast-import'
+import type { McpAuthContext } from '@/lib/mcp/auth'
+
+export const patchRoastRecipeInputSchema = {
+  recipe_id: z.string().uuid().describe(
+    'PK of the roast_recipes row to update. Get via push_roast_recipe (returns { recipe_id }), or via the roasts://by-bean/{green_bean_id} Resource which now joins roast_recipes.',
+  ),
+  // UPSERT-key fields — patchable but rarely changed
+  green_bean_id: z.string().uuid().optional(),
+  experiment_id: z.string().uuid().optional().nullable(),
+  batch_slot: z.string().optional().nullable(),
+  recipe_name: z.string().optional().nullable(),
+  // Pass-through fields (mirror push_roast_recipe)
+  parent_recipe_id: z.string().uuid().optional().nullable(),
+  rationale: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+  temperature_bezier: z.unknown().optional().nullable(),
+  fan_bezier: z.unknown().optional().nullable(),
+  rpm_bezier: z.unknown().optional().nullable(),
+  power_bezier: z.unknown().optional().nullable(),
+  end_condition_type: z.string().optional().nullable(),
+  end_condition_target: z.number().optional().nullable(),
+  preheat_temperature_c: z.number().optional().nullable(),
+  charge_temp: z.number().optional().nullable(),
+  hopper_load_temp: z.number().optional().nullable(),
+  predicted_fc_temp: z.number().optional().nullable(),
+  predicted_fc_time: z.string().optional().nullable(),
+  predicted_total_time: z.string().optional().nullable(),
+  predicted_maillard_pct: z.number().optional().nullable(),
+  predicted_agtron_wb: z.number().optional().nullable(),
+  predicted_cup: z.string().optional().nullable(),
+  drop_rule_if_fast: z.string().optional().nullable(),
+  drop_rule_if_slow: z.string().optional().nullable(),
+  roest_profile_id: z.number().int().optional().nullable(),
+  roest_share_url: z.string().optional().nullable(),
+  roest_profile_name: z.string().optional().nullable(),
+  pushed_to_roest_at: z.string().optional().nullable(),
+}
+
+export function registerPatchRoastRecipeTool(server: McpServer, auth: McpAuthContext) {
+  server.registerTool(
+    'patch_roast_recipe',
+    {
+      title: 'Patch Roast Recipe',
+      description:
+        'Update / save / record / push field-level changes to an existing roast_recipes row by recipe_id. Sibling of push_roast_recipe — push UPSERTs by composite (experiment_id, batch_slot) or recipe_name so iterative design works cleanly, but patch uses the PK so you can correct the batch_slot label itself, fix prose typos in rationale / notes / drop_rule_*, or backfill Roest linkage (roest_profile_id / roest_share_url) after push_roast_profile lands. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Returns { recipe_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch so you can sanity-check without a follow-up read (mirrors patch_experiment pattern).',
+      inputSchema: patchRoastRecipeInputSchema,
+    },
+    async (input) => {
+      const payload = input as PatchRoastRecipePayload
+      const result = await patchRoastRecipe(auth.supabase, auth.userId, payload)
+      if (!result.ok) {
+        if (result.code === 'validation') {
+          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
+        }
+        if (result.code === 'no_op') throw new Error(result.message)
+        if (result.code === 'not_found') throw new Error(result.message)
+        throw new Error(`Database error: ${result.message}`)
+      }
+      const payloadObj = payload as unknown as Record<string, unknown>
+      const updated_fields = ROAST_RECIPE_PATCH_FIELDS.filter(
+        (k) => k in payloadObj && payloadObj[k] !== undefined,
+      )
+      const out = { recipe_id: result.recipe_id, updated_fields }
+      return {
+        content: [{ type: 'text', text: JSON.stringify(out) }],
+        structuredContent: out,
+      }
+    },
+  )
+}

@@ -1,0 +1,215 @@
+// Sub Pages 6.2 (2026-05-13) — lifecycle state derivation for green bean lots.
+//
+// State is computed per row, not stored. See docs/roasting/redesign.md § 8
+// for the source rules + § 3 for the four lifecycle states.
+//
+// The scope-doc rules (verbatim from § 8):
+//   - Has green_bean but no experiments → in inventory
+//   - Has experiments where the latest one has no roasts yet → waiting for next roast
+//   - Has experiments where the latest one has roasts but no cuppings (or no
+//     synthesis) → waiting for next cupping
+//   - Has roast_learnings → resolved
+//
+// Two real-world edge cases the doc rules don't explicitly name (surfaced by
+// the pre-flight DB audit at Sub Pages 6.1 kickoff):
+//
+//   1. "Synthesis done but V_(n+1) not designed yet." Latest experiment has
+//      winner + key_insight populated, but no new experiment exists for V_(n+1)
+//      yet. Per the doc's framing in § 3 — "the user moves from
+//      waiting-for-next-roast → waiting-for-next-cupping → (back to
+//      waiting-for-next-roast for V_(n+1)) repeatedly" — this is just back to
+//      waiting-for-next-roast. The transitional state is conversational, not
+//      page-state.
+//
+//   2. "Pre-framework legacy lot." Has roasts but no experiments at all
+//      (e.g. Rancho Tio Emilio today — 1 roast, 0 experiments). Strict
+//      scope-doc reading would call this "in inventory" but the lot is
+//      clearly past inventory. Treat as waiting-for-next-roast (the closest
+//      semantic match — there's roasting activity but no V-set framing yet).
+//
+// In-inventory lots are NOT surfaced on the /green index per scope doc § 5.1.
+// The compute helper still returns 'in_inventory' for them; the index page
+// filters them out at render time.
+
+export type LifecycleState =
+  | 'in_inventory'
+  | 'waiting_for_next_roast'
+  | 'waiting_for_next_cupping'
+  | 'resolved'
+
+// Minimal shape — only the fields we read. Callers pass whatever bean shape
+// they have (GreenBean + joined arrays); we read what we need. The cuppings
+// array can be either nested under roasts (PostgREST-style join, preferred —
+// keeps cupping membership tied to its roast) or omitted (treated as
+// "0 cuppings everywhere," which routes to waiting_for_next_cupping when an
+// experiment has roasts).
+export type LifecycleInputs = {
+  experiments?:
+    | Array<{
+        id?: string
+        winner?: string | null
+        batch_ids?: string | null
+        created_at?: string | null
+      }>
+    | null
+  roasts?:
+    | Array<{
+        id?: string
+        batch_id?: string | null
+        cuppings?: Array<{ id?: string }> | null
+      }>
+    | null
+  roast_learnings?:
+    | { id?: string }
+    | Array<{ id?: string }>
+    | null
+    | undefined
+}
+
+/**
+ * Compute the lifecycle state for a green bean lot.
+ *
+ * Order of checks matters — `resolved` wins over everything else because the
+ * scope-doc framing is that a roast_learnings row IS the close-out marker.
+ * If a closed lot accumulates a new experiment (rare — usually means a fresh
+ * V-set is being designed for a re-roast), it still reads as resolved; the
+ * user can deliberately reopen by deleting the learnings row.
+ */
+export function computeLifecycleState(b: LifecycleInputs): LifecycleState {
+  // 1. Resolved: presence of a roast_learnings row.
+  const hasLearnings = Array.isArray(b.roast_learnings)
+    ? b.roast_learnings.length > 0
+    : b.roast_learnings != null
+  if (hasLearnings) return 'resolved'
+
+  const experiments = b.experiments ?? []
+  const roasts = b.roasts ?? []
+
+  // 2. No experiments: either truly in inventory, or pre-framework legacy
+  //    upload (has roasts but no V-set framing). Edge case #2 above.
+  if (experiments.length === 0) {
+    if (roasts.length === 0) return 'in_inventory'
+    // Pre-framework legacy lot. Treat as waiting-for-next-roast — there's
+    // active roasting but no formal V-set; the next move is to design one.
+    return 'waiting_for_next_roast'
+  }
+
+  // 3. Has experiments. Find the latest one by created_at (lexical fallback
+  //    when created_at missing). 'Latest' is the one that drives the current
+  //    state per scope doc § 8.
+  const latest = pickLatestExperiment(experiments)
+
+  // 4. Latest experiment has no roasts yet → waiting for next roast.
+  //    "No roasts yet" = none of the batch_ids in this experiment resolve to
+  //    an existing roast row. batch_ids is free text ("139, 140, 141" or
+  //    "139-141"); we extract numeric tokens and match against roasts.batch_id.
+  const expBatchIds = new Set(parseBatchIds(latest.batch_ids ?? ''))
+  const matchedRoasts = roasts.filter((r) => {
+    const id = r.batch_id?.trim()
+    return id != null && expBatchIds.has(id)
+  })
+  if (matchedRoasts.length === 0) return 'waiting_for_next_roast'
+
+  // 5. Latest experiment has roasts. Per scope doc § 8 the cupping gate is
+  //    "no cuppings OR no synthesis" — a disjunction. Either signal alone
+  //    routes to waiting_for_next_cupping. Use cuppings nested under matched
+  //    roasts as the cupping presence signal; use winner as the synthesis
+  //    presence signal. This matches the mockup intent — Red Plum has
+  //    synthesis but 0 cuppings logged, so the page should say "go log the
+  //    cuppings" not "design V2."
+  const cuppingCount = matchedRoasts.reduce(
+    (sum, r) => sum + (r.cuppings?.length ?? 0),
+    0,
+  )
+  if (cuppingCount === 0 || !latest.winner) return 'waiting_for_next_cupping'
+
+  // 6. Latest experiment fully done (roasts + cuppings + synthesis) → back to
+  //    waiting-for-next-roast for V_(n+1). Edge case #1 above — the
+  //    transitional state the scope doc doesn't name explicitly but follows
+  //    from § 3's loop framing.
+  return 'waiting_for_next_roast'
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function pickLatestExperiment<
+  T extends { created_at?: string | null; id?: string },
+>(experiments: T[]): T {
+  // Sort by created_at desc (null/missing sinks to the bottom). Stable order
+  // by id as a tiebreaker so the result is deterministic across page loads.
+  return [...experiments].sort((a, b) => {
+    const at = a.created_at ?? ''
+    const bt = b.created_at ?? ''
+    if (at !== bt) return bt.localeCompare(at)
+    return (a.id ?? '').localeCompare(b.id ?? '')
+  })[0]
+}
+
+// Parse a free-text batch_ids string ("139, 140, 141", "139-141", "MX-139")
+// into a list of batch_id strings. Conservative — we grab numeric runs and
+// the original tokens; the caller dedupes via Set membership.
+function parseBatchIds(raw: string): string[] {
+  if (!raw) return []
+  const tokens = raw
+    .split(/[,;]/)
+    .map((t) => t.trim())
+    .filter(Boolean)
+  const out = new Set<string>()
+  for (const tok of tokens) {
+    // If the token is a range "139-141", expand.
+    const rangeMatch = tok.match(/^(\d+)\s*-\s*(\d+)$/)
+    if (rangeMatch) {
+      const start = parseInt(rangeMatch[1], 10)
+      const end = parseInt(rangeMatch[2], 10)
+      if (Number.isFinite(start) && Number.isFinite(end) && end >= start && end - start < 100) {
+        for (let i = start; i <= end; i++) out.add(String(i))
+        continue
+      }
+    }
+    // Otherwise add the raw token AND any numeric run inside it
+    // (handles "MX-139" → "MX-139" + "139").
+    out.add(tok)
+    const numeric = tok.match(/\d+/)
+    if (numeric) out.add(numeric[0])
+  }
+  // Array.from instead of [...spread] — tsconfig target is too low for
+  // direct Set iteration. Same pattern as existing helpers in this repo.
+  return Array.from(out)
+}
+
+// Display label for the right-column stage indicator on the index page.
+// Mirrors scope doc § 5.1 mockup ("Next roast" / "Next Cupping" / "Reference").
+// `referenceBatchLabel` lets the caller pass a "Batch #133" string for resolved
+// rows; falls back to the generic word otherwise.
+export function lifecycleStageLabel(
+  state: LifecycleState,
+  referenceBatchLabel?: string | null,
+): string {
+  switch (state) {
+    case 'waiting_for_next_roast':
+      return 'Next roast'
+    case 'waiting_for_next_cupping':
+      return 'Next cupping'
+    case 'resolved':
+      return referenceBatchLabel?.trim() ? referenceBatchLabel : 'Reference'
+    case 'in_inventory':
+      return 'In inventory'
+  }
+}
+
+// Section title for the /green index page header. Sentence case per scope doc
+// § 5.1 ("Waiting for next roast" not "Waiting For Next Roast").
+export function lifecycleSectionTitle(state: LifecycleState): string {
+  switch (state) {
+    case 'waiting_for_next_roast':
+      return 'Waiting for next roast'
+    case 'waiting_for_next_cupping':
+      return 'Waiting for next cupping'
+    case 'resolved':
+      return 'Resolved'
+    case 'in_inventory':
+      return 'In inventory'
+  }
+}

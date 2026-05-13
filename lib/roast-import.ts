@@ -397,6 +397,10 @@ export interface RoastPayload {
   what_to_change?: string | null
   worth_repeating?: boolean | 'yes' | 'no' | 'pending' | null
   is_reference?: boolean | null
+  // Sub Pages 6.1 (migration 052, 2026-05-13): FK to roast_recipes — design
+  // intent this roast executed. Phase 2 of docs/roasting/redesign.md § 7
+  // expects new roasts to set this when pushed alongside a fresh recipe.
+  recipe_id?: string | null
 }
 
 export type PersistRoastResult =
@@ -525,6 +529,8 @@ export async function persistRoast(
       what_to_change: payload.what_to_change ?? null,
       worth_repeating: coerceWorthRepeating(payload.worth_repeating),
       is_reference: payload.is_reference ?? false,
+      // Sub Pages 6.1 (migration 052): nullable FK to roast_recipes.
+      recipe_id: payload.recipe_id ?? null,
     })
     .select('id')
     .single()
@@ -684,6 +690,28 @@ export interface ExperimentPayload {
   additional_notes?: string | null
   open_questions?: string | null
   key_insight_confidence?: string | null
+  // Sub Pages 6.1 (migration 052, 2026-05-13): 16 cross-batch fields covering
+  // the four temporal write moments of the iterative roasting workflow. See
+  // docs/roasting/redesign.md § 4.2 for the rationale. All nullable; only
+  // populated as the lot progresses (set immediately after roast, then after
+  // cupping). Legacy expected_outcomes + observed_outcome_a-d stay populated
+  // through Phase 3.
+  updated_cup_prediction_a?: string | null
+  updated_cup_prediction_b?: string | null
+  updated_cup_prediction_c?: string | null
+  updated_cup_prediction_d?: string | null
+  taste_for_a?: string | null
+  taste_for_b?: string | null
+  taste_for_c?: string | null
+  taste_for_d?: string | null
+  delta_from_roast_a?: string | null
+  delta_from_roast_b?: string | null
+  delta_from_roast_c?: string | null
+  delta_from_roast_d?: string | null
+  delta_from_cup_a?: string | null
+  delta_from_cup_b?: string | null
+  delta_from_cup_c?: string | null
+  delta_from_cup_d?: string | null
 }
 
 export type PersistExperimentResult =
@@ -739,6 +767,23 @@ export async function persistExperiment(
     additional_notes: payload.additional_notes ?? null,
     open_questions: payload.open_questions ?? null,
     key_insight_confidence: payload.key_insight_confidence ?? null,
+    // Sub Pages 6.1 (migration 052): 16 cross-batch fields.
+    updated_cup_prediction_a: payload.updated_cup_prediction_a ?? null,
+    updated_cup_prediction_b: payload.updated_cup_prediction_b ?? null,
+    updated_cup_prediction_c: payload.updated_cup_prediction_c ?? null,
+    updated_cup_prediction_d: payload.updated_cup_prediction_d ?? null,
+    taste_for_a: payload.taste_for_a ?? null,
+    taste_for_b: payload.taste_for_b ?? null,
+    taste_for_c: payload.taste_for_c ?? null,
+    taste_for_d: payload.taste_for_d ?? null,
+    delta_from_roast_a: payload.delta_from_roast_a ?? null,
+    delta_from_roast_b: payload.delta_from_roast_b ?? null,
+    delta_from_roast_c: payload.delta_from_roast_c ?? null,
+    delta_from_roast_d: payload.delta_from_roast_d ?? null,
+    delta_from_cup_a: payload.delta_from_cup_a ?? null,
+    delta_from_cup_b: payload.delta_from_cup_b ?? null,
+    delta_from_cup_c: payload.delta_from_cup_c ?? null,
+    delta_from_cup_d: payload.delta_from_cup_d ?? null,
   }
 
   if (created) {
@@ -767,7 +812,14 @@ export async function persistExperiment(
 
 export interface RoastLearningsPayload {
   green_bean_id: string
+  // Legacy free-text identifier (e.g. "133", "Batch 139"). Kept populated
+  // through Phase 3 of the roasting-redesign migration. New writes should
+  // prefer best_roast_id (typed FK) below; this column stays for back-compat.
   best_batch_id?: string | null
+  // Sub Pages 6.1 (migration 052, 2026-05-13): typed FK to the winning roast
+  // execution. Per docs/roasting/redesign.md § 9.3 the reference is a roast
+  // execution, not a recipe design intent.
+  best_roast_id?: string | null
   why_this_roast_won?: string | null
   aromatic_behavior?: string | null
   structural_behavior?: string | null
@@ -816,6 +868,8 @@ export async function persistRoastLearnings(
     user_id: userId,
     green_bean_id: payload.green_bean_id,
     best_batch_id: payload.best_batch_id ?? null,
+    // Sub Pages 6.1 (migration 052): typed FK reference; coexists with text.
+    best_roast_id: payload.best_roast_id ?? null,
     why_this_roast_won: payload.why_this_roast_won ?? null,
     aromatic_behavior: payload.aromatic_behavior ?? null,
     structural_behavior: payload.structural_behavior ?? null,
@@ -1034,6 +1088,8 @@ export const ROAST_PATCH_FIELDS = [
   // Phase 2 (#R57 / #R58 / #R61)
   'roest_notes', 'end_condition_type', 'end_condition_target', 'fc_total_cracks',
   'what_worked', 'what_didnt', 'what_to_change', 'worth_repeating', 'is_reference',
+  // Sub Pages 6.1 (migration 052)
+  'recipe_id',
 ] as const
 
 export async function patchRoast(
@@ -1180,6 +1236,11 @@ export const EXPERIMENT_PATCH_FIELDS = [
   'observed_outcome_a', 'observed_outcome_b', 'observed_outcome_c', 'observed_outcome_d',
   'winner', 'key_insight', 'what_changes_going_forward',
   'additional_notes', 'open_questions', 'key_insight_confidence',
+  // Sub Pages 6.1 (migration 052): 16 cross-batch fields.
+  'updated_cup_prediction_a', 'updated_cup_prediction_b', 'updated_cup_prediction_c', 'updated_cup_prediction_d',
+  'taste_for_a', 'taste_for_b', 'taste_for_c', 'taste_for_d',
+  'delta_from_roast_a', 'delta_from_roast_b', 'delta_from_roast_c', 'delta_from_roast_d',
+  'delta_from_cup_a', 'delta_from_cup_b', 'delta_from_cup_c', 'delta_from_cup_d',
 ] as const
 
 export async function patchExperiment(
@@ -1236,6 +1297,8 @@ export const ROAST_LEARNINGS_PATCH_FIELDS = [
   'what_didnt_move_needle', 'underdevelopment_signal', 'overdevelopment_signal',
   'cultivar_takeaway', 'general_takeaway', 'reference_roasts',
   'starting_hypothesis', 'rest_behavior',
+  // Sub Pages 6.1 (migration 052)
+  'best_roast_id',
 ] as const
 
 export async function patchRoastLearnings(
@@ -1274,4 +1337,206 @@ export async function patchRoastLearnings(
     return { ok: false, code: 'db_error', message: error?.message || 'roast_learnings update failed' }
   }
   return { ok: true, roast_learnings_id: data.id as string }
+}
+
+// ---------------------------------------------------------------------------
+// Roast recipes (Sub Pages 6.1, 2026-05-13) — first-class entity for per-batch
+// design intent. UPSERT on (user_id, experiment_id, batch_slot) when both are
+// supplied (the canonical V-set framing — v1a / v1b / v1c), otherwise UPSERT
+// on (user_id, green_bean_id, recipe_name) for one-off / calibration recipes
+// outside the V-set framing. See docs/roasting/redesign.md § 4.3 + § 8.
+// ---------------------------------------------------------------------------
+
+export interface RoastRecipePayload {
+  // FK + identity (required)
+  green_bean_id: string
+  // V-set framing: experiment_id + batch_slot disambiguate the recipe. Both
+  // optional so one-off / calibration recipes can land outside the V framing
+  // (in that case recipe_name + green_bean_id form the UPSERT key).
+  experiment_id?: string | null
+  batch_slot?: string | null
+  recipe_name?: string | null
+  // Lineage
+  parent_recipe_id?: string | null
+  // Per-batch Hypothesis prose (mockup row). Distinct from notes.
+  rationale?: string | null
+  notes?: string | null
+  // Curve definition (bezier shape matches push_roast_profile)
+  temperature_bezier?: unknown | null
+  fan_bezier?: unknown | null
+  rpm_bezier?: unknown | null
+  power_bezier?: unknown | null
+  end_condition_type?: string | null
+  end_condition_target?: number | null
+  preheat_temperature_c?: number | null
+  // Design specs
+  charge_temp?: number | null
+  hopper_load_temp?: number | null
+  // Design-time predictions (frozen at recipe creation)
+  predicted_fc_temp?: number | null
+  predicted_fc_time?: string | null
+  predicted_total_time?: string | null
+  predicted_maillard_pct?: number | null
+  predicted_agtron_wb?: number | null
+  predicted_cup?: string | null
+  // Mockup "Drop Rules" card
+  drop_rule_if_fast?: string | null
+  drop_rule_if_slow?: string | null
+  // Roest linkage
+  roest_profile_id?: number | null
+  roest_share_url?: string | null
+  roest_profile_name?: string | null
+  pushed_to_roest_at?: string | null
+}
+
+export type PersistRoastRecipeResult =
+  | (PersistOk<'recipe_id'> & { created: boolean })
+  | PersistFail
+
+export function validateRoastRecipePayload(p: RoastRecipePayload): ValidationResult {
+  const errors: string[] = []
+  if (!p.green_bean_id?.trim()) errors.push('green_bean_id is required')
+  // At least one disambiguator must be supplied (otherwise the UPSERT key is
+  // ambiguous — multiple unnamed recipes per bean would all collide).
+  const hasVSetKey = !!(p.experiment_id && p.batch_slot)
+  const hasNameKey = !!(p.recipe_name && p.recipe_name.trim())
+  if (!hasVSetKey && !hasNameKey) {
+    errors.push(
+      '(experiment_id + batch_slot) OR recipe_name is required for UPSERT key disambiguation',
+    )
+  }
+  return errors.length ? { ok: false, errors } : { ok: true }
+}
+
+export async function persistRoastRecipe(
+  supabase: SupabaseClient,
+  userId: string,
+  payload: RoastRecipePayload,
+): Promise<PersistRoastRecipeResult> {
+  const v = validateRoastRecipePayload(payload)
+  if (!v.ok) return { ok: false, code: 'validation', errors: v.errors }
+
+  // Composite-key lookup — V-set framing takes precedence when both fields
+  // are present. Otherwise recipe_name is the disambiguator.
+  let lookup = supabase
+    .from('roast_recipes')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('green_bean_id', payload.green_bean_id)
+  if (payload.experiment_id && payload.batch_slot) {
+    lookup = lookup.eq('experiment_id', payload.experiment_id).eq('batch_slot', payload.batch_slot)
+  } else if (payload.recipe_name) {
+    lookup = lookup.eq('recipe_name', payload.recipe_name).is('batch_slot', null)
+  }
+  const { data: existing, error: lookupErr } = await lookup.maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+  const created = !existing
+
+  const row = {
+    user_id: userId,
+    green_bean_id: payload.green_bean_id,
+    experiment_id: payload.experiment_id ?? null,
+    batch_slot: payload.batch_slot ?? null,
+    recipe_name: payload.recipe_name ?? null,
+    parent_recipe_id: payload.parent_recipe_id ?? null,
+    rationale: payload.rationale ?? null,
+    notes: payload.notes ?? null,
+    temperature_bezier: payload.temperature_bezier ?? null,
+    fan_bezier: payload.fan_bezier ?? null,
+    rpm_bezier: payload.rpm_bezier ?? null,
+    power_bezier: payload.power_bezier ?? null,
+    end_condition_type: payload.end_condition_type ?? null,
+    end_condition_target: payload.end_condition_target ?? null,
+    preheat_temperature_c: payload.preheat_temperature_c ?? null,
+    charge_temp: payload.charge_temp ?? null,
+    hopper_load_temp: payload.hopper_load_temp ?? null,
+    predicted_fc_temp: payload.predicted_fc_temp ?? null,
+    predicted_fc_time: payload.predicted_fc_time ?? null,
+    predicted_total_time: payload.predicted_total_time ?? null,
+    predicted_maillard_pct: payload.predicted_maillard_pct ?? null,
+    predicted_agtron_wb: payload.predicted_agtron_wb ?? null,
+    predicted_cup: payload.predicted_cup ?? null,
+    drop_rule_if_fast: payload.drop_rule_if_fast ?? null,
+    drop_rule_if_slow: payload.drop_rule_if_slow ?? null,
+    roest_profile_id: payload.roest_profile_id ?? null,
+    roest_share_url: payload.roest_share_url ?? null,
+    roest_profile_name: payload.roest_profile_name ?? null,
+    pushed_to_roest_at: payload.pushed_to_roest_at ?? null,
+  }
+
+  if (created) {
+    const { data, error } = await supabase.from('roast_recipes').insert(row).select('id').single()
+    if (error || !data) {
+      return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
+    }
+    return { ok: true, recipe_id: data.id as string, created: true }
+  } else {
+    const { data, error } = await supabase
+      .from('roast_recipes')
+      .update(row)
+      .eq('id', existing.id)
+      .select('id')
+      .single()
+    if (error || !data) {
+      return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
+    }
+    return { ok: true, recipe_id: data.id as string, created: false }
+  }
+}
+
+// ---- patchRoastRecipe ----------------------------------------------------
+
+export interface PatchRoastRecipePayload extends Partial<Omit<RoastRecipePayload, 'green_bean_id'>> {
+  recipe_id: string
+  green_bean_id?: string
+}
+
+export const ROAST_RECIPE_PATCH_FIELDS = [
+  'green_bean_id', 'experiment_id', 'batch_slot', 'recipe_name',
+  'parent_recipe_id', 'rationale', 'notes',
+  'temperature_bezier', 'fan_bezier', 'rpm_bezier', 'power_bezier',
+  'end_condition_type', 'end_condition_target', 'preheat_temperature_c',
+  'charge_temp', 'hopper_load_temp',
+  'predicted_fc_temp', 'predicted_fc_time', 'predicted_total_time',
+  'predicted_maillard_pct', 'predicted_agtron_wb', 'predicted_cup',
+  'drop_rule_if_fast', 'drop_rule_if_slow',
+  'roest_profile_id', 'roest_share_url', 'roest_profile_name', 'pushed_to_roest_at',
+] as const
+
+export async function patchRoastRecipe(
+  supabase: SupabaseClient,
+  userId: string,
+  payload: PatchRoastRecipePayload,
+): Promise<PatchResult<'recipe_id'>> {
+  if (!payload.recipe_id?.trim()) {
+    return { ok: false, code: 'validation', errors: ['recipe_id is required'] }
+  }
+
+  const { data: existing, error: lookupErr } = await supabase
+    .from('roast_recipes')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('id', payload.recipe_id)
+    .maybeSingle()
+  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+  if (!existing) {
+    return { ok: false, code: 'not_found', message: `roast_recipe "${payload.recipe_id}" not found` }
+  }
+
+  const patch = buildPatchObject(payload, ROAST_RECIPE_PATCH_FIELDS)
+  if (Object.keys(patch).length === 0) {
+    return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
+  }
+
+  const { data, error } = await supabase
+    .from('roast_recipes')
+    .update(patch)
+    .eq('id', payload.recipe_id)
+    .eq('user_id', userId)
+    .select('id')
+    .single()
+  if (error || !data) {
+    return { ok: false, code: 'db_error', message: error?.message || 'roast_recipe update failed' }
+  }
+  return { ok: true, recipe_id: data.id as string }
 }

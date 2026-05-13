@@ -39,6 +39,7 @@ const DOC_FILES: Record<string, string> = {
   'docs://roasting/archive.md': 'docs/roasting/archive.md',
   'docs://roasting/wbc-roasting.md': 'docs/roasting/wbc-roasting.md',
   'docs://roasting/wbc-sourcing.md': 'docs/roasting/wbc-sourcing.md',
+  'docs://roasting/redesign.md': 'docs/roasting/redesign.md',
   ...Object.fromEntries(
     TAXONOMY_AXES.map((axis) => [`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`]),
   ),
@@ -68,6 +69,8 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when scoping a roast experiment or designing a V1 profile — WBC-derived lessons, Roest L200 hypotheses, blending experiment protocols, and structured rest-curve protocol. Ideas / hypotheses doc, not a recipe lookup.',
   'docs://roasting/wbc-sourcing.md':
     'Use when evaluating a green offer or rebalancing inventory — WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, Tier 1/2/3 priority targets, and current Latent inventory mapped to portfolio lanes (snapshot 2026-05-09).',
+  'docs://roasting/redesign.md':
+    'Use when implementing or extending the roasting-side data model / pages — series-level scope doc for the 6-sub-sprint roasting rebuild (Sub Pages 6.1-6.6, scoped 2026-05-13). Covers the lifecycle states, the new roast_recipes entity, the 16 cross-batch fields on experiments, MCP-only writes (deprecating /add for roasting), and the 4-page-shape index + waiting-for-roast + waiting-for-cupping + resolved layout. Read end-to-end before working on roasting pages or MCP Tool surface.',
   'docs://taxonomies/regions.md':
     'Use when validating or looking up a country/macro_terroir for a green bean or brew. 121 canonical macros across 38 countries; meso/locality stays free-text.',
   'docs://taxonomies/varieties.md':
