@@ -90,5 +90,40 @@
       "Bash(ln -sf ../../../node_modules node_modules)",
       "Bash(rm node_modules)"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git fetch origin main --quiet 2>/dev/null; BEHIND=$(git rev-list --count HEAD..origin/main 2>/dev/null || echo 0); if [ \"$BEHIND\" -gt 0 ]; then echo \"⚠ Branch is $BEHIND commit(s) behind origin/main. Consider rebasing before starting work.\"; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git fetch origin main --quiet 2>/dev/null; BEHIND=$(git rev-list --count HEAD..origin/main 2>/dev/null || echo 0); if [ \"$BEHIND\" -gt 0 ]; then echo \"⚠ Branch is now $BEHIND commit(s) behind origin/main since last check. Rebase before editing files that may have changed.\"; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "BEHIND=$(git rev-list --count HEAD..origin/main 2>/dev/null || echo 0); if [ \"$BEHIND\" -gt 0 ]; then echo \"⚠ origin/main has $BEHIND new commit(s). You may clobber pushed work — consider rebasing first.\" >&2; fi; exit 0"
+          }
+        ]
+      }
+    ]
   }
 }
