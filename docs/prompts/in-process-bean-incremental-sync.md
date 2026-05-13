@@ -205,8 +205,13 @@ STAGE 4 - UPSERT experiments:
   what_changes_going_forward (lessons-applied-forward only),
   open_questions (what this experiment did NOT answer - distinct from
   what_changes_going_forward), additional_notes (free-text catch-all for
+  cross-experiment narrative tension that resists categorization -
   operator-framing prose / "opposite ends of the spectrum" / cup-vs-
-  structure tension narratives that do not fit observed_outcome_*).
+  structure disconnect / reframe-the-direction observations that do not
+  fit observed_outcome_a/b/c/d, key_insight, or what_changes_going_forward.
+  This is the right home for "the aggressive direction may not be dead
+  after all"-shaped insights that don't have a single canonical structured
+  slot).
 - For each experiment with new observations / determined winner /
   key_insight: use the SAME experiment_id you used previously (or a fresh
   one for new experiments). The created flag in the response distinguishes
@@ -287,8 +292,17 @@ insight, not just the topic:
 - For Varietal Aromatic Fingerprints: only update if a NEW descriptor
   consistently appeared across multiple roasts. If still hypothetical,
   leave alone or annotate "(working hypothesis)".
+- For FC Floor & Ceiling: APPEND per-lot working-hypothesis ceiling
+  calibrations mid-iteration when a coffee's drop ceiling is converging
+  on a different value than the protocol default. Use a confidence marker
+  on the per-lot annotation (Low / Medium / Working Hypothesis), same
+  shape as Cross-Coffee Insight Layer. Example: "Higuito anaerobic
+  bourbon: drop ceiling appears 209-210°C, not 207°C (Medium confidence,
+  pending V3 confirmation)." Reserve REPLACE for after the lot closes -
+  mid-iteration only appends to preserve the protocol default as the
+  baseline for other coffees.
 - AVOID editing mid-iteration: Recently Closed Lots, Reference Brew Recipes
-  by Lot, FC Floor & Ceiling (close-out artifacts).
+  by Lot (close-out artifacts).
 
 For replace, copy the existing text VERBATIM into current_text. For append,
 omit current_text unless a positional hint is helpful.
