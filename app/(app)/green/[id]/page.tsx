@@ -4,24 +4,18 @@ import Link from 'next/link'
 import { SectionCard } from '@/components/SectionCard'
 import { GreenBeanInfoCard } from '@/components/GreenBeanInfoCard'
 import { RoastLogTable } from '@/components/RoastLogTable'
-import { computeLifecycleState } from '@/lib/lifecycle-state'
+import { StrategyPill } from '@/components/StrategyPill'
+import { ModifierBadges } from '@/components/ModifierBadges'
+import { computeLifecycleState, extractBatchNumber } from '@/lib/lifecycle-state'
 import type { RoastRecipe } from '@/lib/types'
 
-// Sub Pages 6.3 (2026-05-13). /green/[id] is now state-driven per the scope
-// doc § 5 — one URL renders one of 3 page shapes based on the lifecycle state
-// computed from joined data. 6.3 ships the waiting-for-next-roast shape; 6.4
-// + 6.5 add the cupping + resolved shapes. Until those land, lots in other
-// states fall back to the legacy single-shape render below.
-
-function LearningField({ label, value }: { label: string; value?: string | null }) {
-  if (!value) return null
-  return (
-    <div>
-      <div className="label">{label}</div>
-      {value}
-    </div>
-  )
-}
+// Sub Pages 6.5 (2026-05-13). /green/[id] is fully state-driven per the
+// scope doc § 5 — one URL renders one of four lifecycle shapes based on the
+// state computed from joined data. 6.3 shipped waiting-for-next-roast; 6.4
+// shipped waiting-for-next-cupping; 6.5 ships resolved and retires the
+// pre-6.3 LegacyDetailRender fall-through. The remaining in_inventory state
+// is filtered out of the /green index (scope doc § 5.1) and only reachable
+// via direct URL — it routes to the minimal InventoryPlaceholder below.
 
 export default async function GreenBeanDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -63,14 +57,27 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
     cuppings = data || []
   }
 
-  const { data: relatedBrews } = await supabase
+  // Brews on this lot — projection richer than the pre-6.5 `id, coffee_name`
+  // pair so ResolvedView can surface the "Optimized Brew" sub-card without a
+  // second round trip. Other shapes ignore the array.
+  const { data: brewsForLot } = await supabase
     .from('brews')
-    .select('id, coffee_name')
+    .select(
+      `id, coffee_name, roast_id, source, extraction_strategy, hybrid_subform,
+       modifiers, strategy_notes, cooling_curve_target,
+       brewer, filter, dose_g, water_g, ratio, grind, grinder, grind_setting, temp_c,
+       bloom, pour_structure, total_time,
+       aroma, attack, mid_palate, body, finish, peak_expression,
+       flavor_notes, flavors, structure_tags, key_takeaways, what_i_learned,
+       created_at`,
+    )
     .eq('green_bean_id', params.id)
 
-  // Lifecycle dispatch — 6.3 shipped waiting-for-next-roast; 6.4 added
-  // waiting-for-next-cupping; resolved + in_inventory fall through to the
-  // legacy render until 6.5 ships the resolved-view shape.
+  // Lifecycle dispatch — 6.5 ships the third state-specific shape (resolved).
+  // 6.3 = waiting-for-next-roast (V_n design view). 6.4 = waiting-for-next-
+  // cupping (V_n actuals + hypothesis view). 6.5 = resolved (reference roast
+  // + lessons archive). in_inventory is filtered out of /green per scope doc
+  // § 5.1 and only reachable via direct URL — routes to InventoryPlaceholder.
   const state = computeLifecycleState(bean)
   if (state === 'waiting_for_next_roast') {
     return <WaitingForNextRoastView bean={bean} cuppings={cuppings} />
@@ -78,8 +85,11 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
   if (state === 'waiting_for_next_cupping') {
     return <WaitingForNextCuppingView bean={bean} cuppings={cuppings} />
   }
+  if (state === 'resolved') {
+    return <ResolvedView bean={bean} cuppings={cuppings} brewsForLot={brewsForLot ?? []} />
+  }
 
-  return <LegacyDetailRender bean={bean} cuppings={cuppings} relatedBrews={relatedBrews ?? []} />
+  return <InventoryPlaceholder bean={bean} />
 }
 
 // ---------------------------------------------------------------------------
@@ -1091,35 +1101,474 @@ function RoastActualsTable({
 }
 
 // ---------------------------------------------------------------------------
-// Legacy detail render — used for resolved + in_inventory lots until 6.5
-// ships the resolved-view shape. Preserves the existing single-shape page
-// verbatim (still keeps its inline Green Bean Info + Roast Log; the third
-// consumer materializes when 6.5 instantiates the shared-component swap).
+// Sub Pages 6.5 — Resolved view
+//
+// Scope doc § 5.4. The lot is closed; the page is a reference artifact for
+// future re-roasts of the same coffee or for cultivar-/process-anchored lots
+// that share its character. Top to bottom:
+//
+//   1. Lot header (green tile + "Resolved" badge)
+//   2. Reference Roast card — "Why this roast won" + Reference Roast Recipe
+//      (Design column from roast_recipes, Achieved column from the roasts row)
+//   3. Reference Cup card — Best cup synthesis + two side-by-side sub-cards
+//      (Cupping · pourover descriptors / Optimized Brew · brew recipe +
+//      descriptors) + producer notes for comparison
+//   4. Roasting Learnings · {lot} — 3 character cards (Primary Lever / Roast
+//      Window / Elasticity) + 7 detail rows
+//   5. Roasting Learnings · To Carry Forward — Cultivar / General / Starting
+//      hypothesis takeaways
+//   6. Green Bean Info (shared component, third consumer)
+//   7. Roast log (shared component, defaultCollapsed=true, ref-batch
+//      highlighted)
+//   8. All cuppings (collapsed details, one row per cupping, ref starred)
+//   9. Experiment journey (collapsed details, per-set summary cards in
+//      chronological order)
+//   10. Additional Information (collapsed placeholder)
+//
+// Today's resolved-lot count: 6 (CGLE Sudan Rume Hybrid Washed / CGLE Mandela
+// XO / GV Surma / GV Oma / GUA Libertad / GUA El Socorro). All have typed
+// best_roast_id FK post-6.1 backfill; 2 have rich why_this_roast_won prose
+// (Sudan Rume + Mandela XO), 4 have NULL. Recipe rows backfilled 1:1 from
+// existing roasts but with NULL beziers across the board (Phase 3 enrichment
+// is intentionally empty per redesign doc § 7) — Design-side rows render
+// em-dashes today and light up as recipes are enriched via patch_roast_recipe.
 // ---------------------------------------------------------------------------
 
-function LegacyDetailRender({
+function ResolvedView({
   bean,
   cuppings,
-  relatedBrews,
+  brewsForLot,
 }: {
   bean: any
   cuppings: any[]
-  relatedBrews: { id: string; coffee_name: string | null }[]
+  brewsForLot: any[]
 }) {
-  const learnings = bean.roast_learnings?.[0] || bean.roast_learnings
-  const bestBatchId = learnings?.best_batch_id
+  const learnings =
+    (Array.isArray(bean.roast_learnings) ? bean.roast_learnings[0] : bean.roast_learnings) ?? null
+  const rawBestBatchId: string | null = learnings?.best_batch_id ?? null
+  const batchNumber = extractBatchNumber(rawBestBatchId)
+  const refRoastId: string | null = learnings?.best_roast_id ?? null
 
-  const primaryGroundAgtronByRoast: Record<string, number> = {}
-  for (const cup of cuppings) {
-    if (
-      cup.roast_id &&
-      typeof cup.ground_agtron === 'number' &&
-      !(cup.roast_id in primaryGroundAgtronByRoast)
-    ) {
-      primaryGroundAgtronByRoast[cup.roast_id] = cup.ground_agtron
-    }
-  }
+  const roasts = ((bean.roasts ?? []) as any[]).slice().sort((a, b) => {
+    const ad = a.roast_date ?? a.created_at ?? ''
+    const bd = b.roast_date ?? b.created_at ?? ''
+    return ad.localeCompare(bd)
+  })
+  const referenceRoast = refRoastId ? roasts.find((r) => r.id === refRoastId) ?? null : null
+  const referenceRecipe =
+    referenceRoast?.recipe_id
+      ? ((bean.recipes ?? []) as RoastRecipe[]).find((r) => r.id === referenceRoast.recipe_id) ?? null
+      : null
 
+  const pourover = pickPourover(cuppings, refRoastId)
+  const optimizedBrew = pickOptimizedBrew(brewsForLot, refRoastId)
+  // Primary ground Agtron for the WB→Gnd Δ display — prefer the pourover's
+  // ground reading; fall back to any cupping on the reference roast that
+  // measured ground Agtron.
+  const primaryGroundAgtron =
+    (typeof pourover?.ground_agtron === 'number' ? pourover.ground_agtron : null) ??
+    (cuppings.find((c) => c.roast_id === refRoastId && typeof c.ground_agtron === 'number')
+      ?.ground_agtron as number | undefined) ??
+    null
+  const wbGndDelta =
+    typeof referenceRoast?.agtron === 'number' && typeof primaryGroundAgtron === 'number'
+      ? Number((referenceRoast.agtron - primaryGroundAgtron).toFixed(1))
+      : null
+
+  const experimentsChrono = ((bean.experiments ?? []) as any[]).slice().sort((a, b) =>
+    (a.created_at ?? '').localeCompare(b.created_at ?? ''),
+  )
+
+  const roastsById = new Map<string, any>(roasts.map((r) => [r.id, r]))
+
+  // Best-cup synthesis prose source: prefer the optimized brew's
+  // what_i_learned (most narrative-rich field on a closed lot — Sudan Rume's
+  // brew shows the pattern); fall back to the pourover cupping's `overall`.
+  const bestCupSynthesis = optimizedBrew?.what_i_learned || pourover?.overall || null
+  const refBatchLabel = batchNumber ?? rawBestBatchId ?? '?'
+
+  return (
+    <div className="max-w-3xl mx-auto px-6 py-8">
+      <Link
+        href="/green"
+        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+      >
+        ← Back to Green Beans
+      </Link>
+
+      {/* Lot header — green resolved-emphasis tile signals "the answer" per
+          scope doc § 5.5. "Resolved" badge sits inline with the title, using
+          the resolved-emphasis surface + border tokens. */}
+      <div className="flex gap-6 mb-8">
+        <div className="w-20 h-20 bg-latent-resolved-emphasis rounded-md flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-baseline gap-3 flex-wrap mb-2">
+            <h1 className="font-sans text-2xl font-semibold">
+              🌱 {bean.name || bean.lot_id}
+            </h1>
+            <span className="inline-flex items-center px-2 py-0.5 text-xxs font-mono uppercase tracking-wide bg-latent-resolved-emphasis-surface text-latent-resolved-emphasis border border-latent-resolved-emphasis rounded">
+              Resolved
+            </span>
+          </div>
+          {bean.lot_id && (
+            <div className="font-mono text-xs text-latent-mid mb-1">
+              Lot: {bean.lot_id}
+            </div>
+          )}
+          <div className="font-mono text-sm text-latent-mid">
+            {[bean.origin, bean.variety, bean.process].filter(Boolean).join(' · ')}
+          </div>
+        </div>
+      </div>
+
+      {/* Reference Roast card */}
+      <SectionCard title={`REFERENCE ROAST · BATCH #${refBatchLabel}`}>
+        {/* Why this roast won — green-tinted verdict surface, the single
+            most-important block on a resolved page. */}
+        <div className="bg-latent-resolved-emphasis-surface border border-latent-resolved-emphasis rounded p-4 mb-6">
+          <div className="label mb-2">Why this roast won</div>
+          {learnings?.why_this_roast_won ? (
+            <div className="font-sans text-sm leading-relaxed text-latent-fg">
+              {learnings.why_this_roast_won}
+            </div>
+          ) : (
+            <div className="font-sans text-xs italic text-latent-mid">
+              Not yet populated. patch_roast_learnings(green_bean_id, why_this_roast_won: &quot;...&quot;)
+              from claude.ai once the verdict prose is ready.
+            </div>
+          )}
+        </div>
+
+        {/* Reference Roast Recipe — Design vs Achieved two-column grid */}
+        <div className="label mb-3">Reference Roast Recipe</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 font-sans text-sm">
+          <div>
+            <div className="font-mono text-xxs uppercase tracking-wide text-latent-mid mb-2 opacity-70">
+              Design
+            </div>
+            <RecipeRow label="Peak inlet" value={renderPeakInlet(referenceRecipe)} />
+            <RecipeRow label="Drop temp" value={renderDropTemp(referenceRecipe)} />
+            <RecipeRow label="End condition" value={renderEndCondition(referenceRecipe)} />
+            <RecipeRow label="Charge / Hopper" value={renderChargeHopper(referenceRecipe)} />
+            <RecipeRow label="Fan curve" value={renderFanCurve(referenceRecipe)} />
+          </div>
+          <div>
+            <div className="font-mono text-xxs uppercase tracking-wide text-latent-mid mb-2 opacity-70">
+              Achieved
+            </div>
+            <RecipeRow label="FC time" value={referenceRoast?.fc_start ?? '—'} />
+            <RecipeRow
+              label="FC temp"
+              value={referenceRoast?.fc_temp != null ? `${referenceRoast.fc_temp}°C` : '—'}
+            />
+            <RecipeRow label="Drop time" value={referenceRoast?.drop_time ?? '—'} />
+            <RecipeRow
+              label="Drop temp"
+              value={referenceRoast?.drop_temp != null ? `${referenceRoast.drop_temp}°C` : '—'}
+            />
+            <RecipeRow
+              label="Agtron WB / Δ"
+              value={
+                <span>
+                  {referenceRoast?.agtron != null ? referenceRoast.agtron : '—'}
+                  {wbGndDelta != null && (
+                    <span className="text-latent-mid ml-2">
+                      ({wbGndDelta > 0 ? '+' : ''}
+                      {wbGndDelta})
+                    </span>
+                  )}
+                </span>
+              }
+            />
+          </div>
+        </div>
+        {referenceRecipe == null && referenceRoast != null && (
+          <div className="mt-4 font-sans text-xs italic text-latent-mid">
+            Recipe row not linked to this roast yet. Design-side fields populate when
+            the recipe is enriched via patch_roast_recipe.
+          </div>
+        )}
+      </SectionCard>
+
+      {/* Reference Cup card */}
+      <SectionCard title="REFERENCE CUP">
+        {bestCupSynthesis && (
+          <div className="mb-6">
+            <div className="label mb-2">Best cup synthesis</div>
+            <div className="font-sans text-sm leading-relaxed">{bestCupSynthesis}</div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* LEFT — Pourover cupping on the reference roast */}
+          <div className="bg-white border border-latent-border rounded p-4">
+            <div className="label mb-1">Cupping · #{refBatchLabel}</div>
+            {pourover ? (
+              <>
+                <div className="font-mono text-xs text-latent-mid mb-3">
+                  {pourover.rest_days != null ? `${pourover.rest_days}d rest` : 'rest ?'}
+                  {pourover.eval_method && ` · ${pourover.eval_method}`}
+                </div>
+                {pourover.overall ? (
+                  <div className="font-sans text-sm leading-relaxed">{pourover.overall}</div>
+                ) : (
+                  <div className="space-y-2 font-sans text-sm">
+                    <CupRow label="Aroma" value={pourover.aroma} />
+                    <CupRow label="Flavor" value={pourover.flavor} />
+                    <CupRow label="Acidity" value={pourover.acidity} />
+                    <CupRow label="Body" value={pourover.body} />
+                    <CupRow label="Finish" value={pourover.finish} />
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="font-sans text-xs italic text-latent-mid">
+                No pourover cupping on the reference roast. push_cupping a Day 7+ pourover
+                eval to surface the integrated read here.
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT — Optimized brew row joined via green_bean_id (prefers
+              roast_id = best_roast_id, falls back to any brew on the lot) */}
+          <div className="bg-white border border-latent-border rounded p-4">
+            <div className="label mb-1">Optimized Brew · #{refBatchLabel} retasted</div>
+            {optimizedBrew ? (
+              <>
+                <div className="font-mono text-xs text-latent-mid mb-3">
+                  {composeBrewRecipeLine(optimizedBrew) || '— recipe not populated —'}
+                </div>
+                {(optimizedBrew.extraction_strategy ||
+                  (optimizedBrew.modifiers && optimizedBrew.modifiers.length > 0)) && (
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    {optimizedBrew.extraction_strategy && (
+                      <StrategyPill strategy={optimizedBrew.extraction_strategy} variant="row" />
+                    )}
+                    {optimizedBrew.modifiers && optimizedBrew.modifiers.length > 0 && (
+                      <ModifierBadges modifiers={optimizedBrew.modifiers} />
+                    )}
+                  </div>
+                )}
+                {(() => {
+                  const descriptors =
+                    optimizedBrew.peak_expression ||
+                    [
+                      optimizedBrew.aroma,
+                      optimizedBrew.attack,
+                      optimizedBrew.mid_palate,
+                      optimizedBrew.body,
+                      optimizedBrew.finish,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')
+                  return descriptors ? (
+                    <div className="font-sans text-sm leading-relaxed">{descriptors}</div>
+                  ) : null
+                })()}
+              </>
+            ) : (
+              <div className="font-sans text-xs italic text-latent-mid">
+                No optimized brew logged for this lot yet. push_brew with source=&apos;self-roasted&apos;
+                + roast_id={refRoastId ? `=${refRoastId}` : ' = <best_roast_id>'} to surface the
+                retasted-with-final-recipe read here.
+              </div>
+            )}
+          </div>
+        </div>
+
+        {bean.producer_tasting_notes && (
+          <div className="mt-4 font-sans text-xs italic text-latent-mid leading-relaxed">
+            <span className="font-mono uppercase tracking-wide not-italic mr-2 text-latent-subtle">
+              Producer notes:
+            </span>
+            {bean.producer_tasting_notes}
+          </div>
+        )}
+      </SectionCard>
+
+      {/* Roasting Learnings: {lot} — three character cards + detail rows */}
+      {learnings ? (
+        <SectionCard title={`ROASTING LEARNINGS · ${bean.name || bean.lot_id}`}>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <CharacterCard label="Primary Lever" value={learnings.primary_lever} />
+            <CharacterCard label="Roast Window" value={learnings.roast_window_width} />
+            <CharacterCard label="Elasticity" value={learnings.elasticity} />
+          </div>
+          <div className="space-y-4 font-sans text-sm leading-relaxed">
+            <LearningRow label="Secondary levers" value={learnings.secondary_levers} />
+            <LearningRow label="Underdev signal" value={learnings.underdevelopment_signal} />
+            <LearningRow label="Overdev signal" value={learnings.overdevelopment_signal} />
+            <LearningRow label="What didn't matter" value={learnings.what_didnt_move_needle} />
+            <LearningRow label="Aromatic behavior" value={learnings.aromatic_behavior} />
+            <LearningRow label="Structural behavior" value={learnings.structural_behavior} />
+            <LearningRow label="Rest behavior" value={learnings.rest_behavior} />
+          </div>
+        </SectionCard>
+      ) : (
+        <SectionCard title="ROASTING LEARNINGS">
+          <div className="font-sans text-sm italic text-latent-mid">
+            No learnings row for this lot yet — push_roast_learnings to populate.
+          </div>
+        </SectionCard>
+      )}
+
+      {/* Roasting Learnings: To Carry Forward — generalization layer */}
+      {learnings && (
+        <SectionCard title="ROASTING LEARNINGS · TO CARRY FORWARD">
+          {learnings.cultivar_takeaway ||
+          learnings.general_takeaway ||
+          learnings.starting_hypothesis ? (
+            <div className="space-y-4 font-sans text-sm leading-relaxed">
+              <LearningRow label="Cultivar takeaway" value={learnings.cultivar_takeaway} />
+              <LearningRow label="General takeaway" value={learnings.general_takeaway} />
+              <LearningRow
+                label="Starting hypothesis for similar lots"
+                value={learnings.starting_hypothesis}
+              />
+            </div>
+          ) : (
+            <div className="font-sans text-sm italic text-latent-mid">
+              Generalizations not yet drafted. patch_roast_learnings(cultivar_takeaway /
+              general_takeaway / starting_hypothesis) once cross-lot synthesis is done.
+            </div>
+          )}
+        </SectionCard>
+      )}
+
+      {/* Green Bean Info — shared 6.4 component, third consumer */}
+      <GreenBeanInfoCard bean={bean} />
+
+      {/* Roast log — collapsed by default on resolved view; ref batch
+          highlighted when expanded. defaultCollapsed=true gets its first
+          real consumer here (6.4 forward investment). */}
+      <RoastLogTable
+        roasts={roasts}
+        cuppings={cuppings}
+        defaultCollapsed
+        highlightedBatchIds={batchNumber ? [batchNumber] : []}
+      />
+
+      {/* All cuppings · {N} evaluations — collapsed details, one row per
+          cupping in chronological order; ref roast's cuppings get
+          font-semibold + a star marker. */}
+      {cuppings.length > 0 && (
+        <details className="bg-white border border-latent-border rounded-md p-6 mb-4">
+          <summary className="cursor-pointer font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid hover:text-latent-fg">
+            All Cuppings ({cuppings.length} EVALUATIONS)
+          </summary>
+          <div className="mt-4 space-y-4">
+            {cuppings.map((cup, i) => {
+              const roast = cup.roast_id ? roastsById.get(cup.roast_id) : null
+              const isRef = roast?.id === refRoastId
+              const descriptors =
+                cup.overall ||
+                [cup.aroma, cup.flavor, cup.acidity, cup.body, cup.finish]
+                  .filter(Boolean)
+                  .join(' · ')
+              return (
+                <div
+                  key={cup.id ?? i}
+                  className="pb-4 border-b border-latent-border last:border-b-0 last:pb-0"
+                >
+                  <div
+                    className={`font-mono text-xs mb-1 ${
+                      isRef ? 'text-latent-fg font-semibold' : 'text-latent-mid'
+                    }`}
+                  >
+                    Batch #{roast?.batch_id ?? '?'}
+                    {' · '}
+                    {cup.rest_days != null ? `${cup.rest_days}d rest` : 'rest ?'}
+                    {cup.eval_method && ` · ${cup.eval_method}`}
+                    {isRef && <span className="ml-2">⭐ reference</span>}
+                    {cup.recipe_variant && ` · ${cup.recipe_variant}`}
+                    {cup.ground_agtron != null && ` · Gnd Agtron: ${cup.ground_agtron}`}
+                  </div>
+                  <div className="font-sans text-sm leading-relaxed">{descriptors || '—'}</div>
+                </div>
+              )
+            })}
+          </div>
+        </details>
+      )}
+
+      {/* Experiment journey · V1 through V_n — collapsed details, per-set
+          summary cards (primary_question + winner + key_insight only — per
+          scope § 5.4 "curated narrative content, not chronology"). */}
+      {experimentsChrono.length > 0 && (
+        <details className="bg-white border border-latent-border rounded-md p-6 mb-4">
+          <summary className="cursor-pointer font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid hover:text-latent-fg">
+            Experiment Journey ({experimentsChrono.length} SETS)
+          </summary>
+          <div className="mt-4 space-y-6">
+            {experimentsChrono.map((exp, i) => (
+              <div
+                key={exp.id ?? i}
+                className="pb-6 border-b border-latent-border last:border-b-0 last:pb-0"
+              >
+                <div className="font-mono text-sm font-semibold mb-1">{exp.experiment_id}</div>
+                {exp.batch_ids && (
+                  <div className="font-mono text-xs text-latent-mid mb-4">
+                    Batches: {exp.batch_ids}
+                  </div>
+                )}
+                <div className="space-y-3 font-sans text-sm leading-relaxed">
+                  {exp.primary_question && (
+                    <div>
+                      <div className="label">Primary Question</div>
+                      {exp.primary_question}
+                    </div>
+                  )}
+                  {exp.winner && (
+                    <div className="bg-latent-highlight p-3 rounded">
+                      <div className="label">Winner</div>
+                      {exp.winner}
+                    </div>
+                  )}
+                  {exp.key_insight && (
+                    <div>
+                      <div className="label">
+                        Key Insight
+                        {exp.key_insight_confidence && (
+                          <span className="ml-2 text-latent-mid font-normal">
+                            ({exp.key_insight_confidence} confidence)
+                          </span>
+                        )}
+                      </div>
+                      {exp.key_insight}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
+
+      {/* Additional Information — collapsed placeholder matching 6.3/6.4. The
+          resolved page is the densest of the four lifecycle shapes; most
+          surface is above, so this tail stays minimal. */}
+      <details className="mt-6 group">
+        <summary className="cursor-pointer font-mono text-xs text-latent-mid hover:text-latent-fg uppercase tracking-wide">
+          Additional Information
+        </summary>
+        <div className="mt-4 font-sans text-sm text-latent-mid italic">
+          The resolved view is the densest of the four lifecycle shapes. Reference roast,
+          reference cup, lot lessons, generalization layer, roast log, all cuppings, and
+          experiment journey all live above — this tail stays minimal.
+        </div>
+      </details>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Inventory placeholder — in_inventory lots are filtered out of the /green
+// index (scope doc § 5.1) but reachable via direct URL. Surface a minimal
+// page so the route still resolves rather than 404s on a real lot. The
+// dedicated inventory page is punted to a later sprint per scope doc § 6.
+// ---------------------------------------------------------------------------
+
+function InventoryPlaceholder({ bean }: { bean: any }) {
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
       <Link
@@ -1141,231 +1590,191 @@ function LegacyDetailRender({
             </div>
           )}
           <div className="font-mono text-sm text-latent-mid">
-            {bean.origin} · {bean.variety} · {bean.process}
+            {[bean.origin, bean.variety, bean.process].filter(Boolean).join(' · ')}
           </div>
         </div>
       </div>
 
-      <SectionCard title="GREEN BEAN DETAILS">
-        <div className="grid grid-cols-2 gap-x-8 gap-y-3 font-sans text-sm">
-          {bean.producer && <div><strong>Producer:</strong> {bean.producer}</div>}
-          {bean.region && <div><strong>Region:</strong> {bean.region}</div>}
-          {bean.importer && <div><strong>Importer:</strong> {bean.importer}</div>}
-          {bean.purchase_date && <div><strong>Purchased:</strong> {bean.purchase_date}</div>}
-          {bean.price_per_kg && <div><strong>Price:</strong> ${bean.price_per_kg}/kg</div>}
-          {bean.quantity_g && <div><strong>Quantity:</strong> {bean.quantity_g}g</div>}
-          {bean.moisture && <div><strong>Moisture:</strong> {bean.moisture}%</div>}
-          {bean.density && <div><strong>Density:</strong> {bean.density} g/L</div>}
+      <SectionCard title="IN INVENTORY">
+        <div className="font-sans text-sm leading-relaxed text-latent-mid italic">
+          This lot is in inventory — no experiments designed yet. Design V1 in claude.ai
+          via push_experiment + push_roast_recipe to surface the waiting-for-next-roast
+          view here. The /green index intentionally hides in-inventory lots; this page
+          is only reachable via direct URL.
         </div>
       </SectionCard>
 
-      {bestBatchId && (
-        <SectionCard title="🏆 BEST ROAST" dark>
-          <div className="font-mono text-lg font-semibold mb-3">
-            Batch #{bestBatchId}
-          </div>
-          {learnings?.why_this_roast_won && (
-            <div className="font-sans text-sm leading-relaxed">
-              <strong>Why it won:</strong> {learnings.why_this_roast_won}
-            </div>
-          )}
-        </SectionCard>
-      )}
+      <GreenBeanInfoCard bean={bean} />
+    </div>
+  )
+}
 
-      {bean.roasts && bean.roasts.length > 0 && (
-        <SectionCard title={`ROAST LOG (${bean.roasts.length} ROASTS)`}>
-          <div className="overflow-x-auto">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Batch</th>
-                  <th>Date</th>
-                  <th>FC</th>
-                  <th>FC Temp</th>
-                  <th>Drop</th>
-                  <th>Drop Temp</th>
-                  <th>Dev</th>
-                  <th>Agtron</th>
-                  <th title="Whole bean Agtron minus ground Agtron (primary cupping). ROASTING.md targets |Δ| ≤ 2 for even internal development.">WB→Gnd Δ</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {bean.roasts.map((roast: any) => {
-                  const groundAgtron = primaryGroundAgtronByRoast[roast.id]
-                  const delta =
-                    typeof roast.agtron === 'number' && typeof groundAgtron === 'number'
-                      ? Number((roast.agtron - groundAgtron).toFixed(1))
-                      : null
-                  return (
-                  <tr
-                    key={roast.id}
-                    className={String(roast.batch_id) === String(bestBatchId) ? 'highlight' : ''}
-                  >
-                    <td className={String(roast.batch_id) === String(bestBatchId) ? 'font-semibold' : ''}>
-                      #{roast.batch_id} {String(roast.batch_id) === String(bestBatchId) && '★'}
-                    </td>
-                    <td>{roast.roast_date || '—'}</td>
-                    <td>{roast.fc_start || '—'}</td>
-                    <td>{roast.fc_temp ? `${roast.fc_temp}°C` : '—'}</td>
-                    <td>{roast.drop_time || '—'}</td>
-                    <td>{roast.drop_temp ? `${roast.drop_temp}°C` : '—'}</td>
-                    <td>
-                      {roast.dev_time_s ? `${roast.dev_time_s}s` : '—'}
-                      {roast.dev_ratio && ` (${roast.dev_ratio})`}
-                    </td>
-                    <td>{roast.agtron || '—'}</td>
-                    <td title={groundAgtron != null ? `Ground Agtron: ${groundAgtron}` : 'No cupping with ground Agtron'}>
-                      {delta != null ? `${delta > 0 ? '+' : ''}${delta}` : '—'}
-                    </td>
-                    <td>
-                      {roast.profile_link && (
-                        <a
-                          href={roast.profile_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-latent-mid hover:text-latent-fg"
-                          title="Roest profile"
-                        >
-                          ↗
-                        </a>
-                      )}
-                    </td>
-                  </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </SectionCard>
-      )}
+// ---------------------------------------------------------------------------
+// Helpers shared across the resolved view
+// ---------------------------------------------------------------------------
 
-      {bean.experiments && bean.experiments.length > 0 && (
-        <SectionCard title={`EXPERIMENTS (${bean.experiments.length})`}>
-          {bean.experiments.map((exp: any, i: number) => (
-            <div
-              key={exp.id}
-              className={`${i < bean.experiments.length - 1 ? 'mb-6 pb-6 border-b border-latent-border' : ''}`}
-            >
-              <div className="font-mono text-sm font-semibold mb-1">{exp.experiment_id}</div>
-              {exp.batch_ids && (
-                <div className="font-mono text-xs text-latent-mid mb-4">Batches: {exp.batch_ids}</div>
-              )}
-              <div className="space-y-4 font-sans text-sm leading-relaxed">
-                {exp.primary_question && (
-                  <div>
-                    <div className="label">Question</div>
-                    {exp.primary_question}
-                  </div>
-                )}
-                {exp.variable_changed && (
-                  <div>
-                    <div className="label">Variable</div>
-                    {exp.variable_changed}
-                  </div>
-                )}
-                {exp.winner && (
-                  <div className="bg-latent-highlight p-3 rounded">
-                    <div className="label">Winner</div>
-                    {exp.winner}
-                  </div>
-                )}
-                {exp.key_insight && (
-                  <div>
-                    <div className="label">
-                      Key Insight
-                      {exp.key_insight_confidence && (
-                        <span className="ml-2 text-latent-mid font-normal">
-                          ({exp.key_insight_confidence} confidence)
-                        </span>
-                      )}
-                    </div>
-                    {exp.key_insight}
-                  </div>
-                )}
-                {exp.open_questions && (
-                  <div>
-                    <div className="label">Open Questions</div>
-                    {exp.open_questions}
-                  </div>
-                )}
-                {exp.what_changes_going_forward && (
-                  <div>
-                    <div className="label">What Changes Going Forward</div>
-                    {exp.what_changes_going_forward}
-                  </div>
-                )}
-                {exp.additional_notes && (
-                  <div>
-                    <div className="label">Additional Notes</div>
-                    {exp.additional_notes}
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </SectionCard>
-      )}
+// Latest pourover cupping on the reference roast. Falls back to any cupping
+// on that roast if no pourover exists. Returns null when refRoastId is null
+// or no cuppings match.
+function pickPourover(cuppings: any[], refRoastId: string | null): any | null {
+  if (!refRoastId) return null
+  const onRef = cuppings.filter((c) => c.roast_id === refRoastId)
+  if (onRef.length === 0) return null
+  const pourovers = onRef.filter(
+    (c) => typeof c.eval_method === 'string' && /pourover/i.test(c.eval_method),
+  )
+  const pool = pourovers.length > 0 ? pourovers : onRef
+  return (
+    [...pool].sort((a, b) => (b.cupping_date ?? '').localeCompare(a.cupping_date ?? ''))[0] ?? null
+  )
+}
 
-      {learnings && (
-        <SectionCard title="🔥 ROAST LEARNINGS">
-          <div className="space-y-4 font-sans text-sm leading-relaxed">
-            <LearningField label="Aromatic Behavior" value={learnings.aromatic_behavior} />
-            <LearningField label="Structural Behavior" value={learnings.structural_behavior} />
-            <LearningField label="Elasticity" value={learnings.elasticity} />
-            <LearningField label="Roast Window Width" value={learnings.roast_window_width} />
-            <LearningField label="Primary Lever" value={learnings.primary_lever} />
-            <LearningField label="Secondary Levers" value={learnings.secondary_levers} />
-            <LearningField label="What Didn't Move the Needle" value={learnings.what_didnt_move_needle} />
-            <LearningField label="Underdevelopment Signal" value={learnings.underdevelopment_signal} />
-            <LearningField label="Overdevelopment Signal" value={learnings.overdevelopment_signal} />
-            <LearningField label="Cultivar Takeaway" value={learnings.cultivar_takeaway} />
-            <LearningField label="General Takeaway" value={learnings.general_takeaway} />
-            <LearningField label="Rest Behavior" value={learnings.rest_behavior} />
-            <LearningField label="Reference Roasts" value={learnings.reference_roasts} />
-            <LearningField label="Starting Hypothesis" value={learnings.starting_hypothesis} />
-          </div>
-        </SectionCard>
-      )}
+// Optimized brew row for the lot. Prefers roast_id === refRoastId (cleanest
+// linkage — Sudan Rume / Mandela XO patterns); falls back to first brew row
+// on the lot (legacy data shape — Surma / Oma / Libertad / El Socorro have
+// roast_id=NULL on their single brew row). Returns null when the lot has no
+// brews at all.
+function pickOptimizedBrew(brewsForLot: any[], refRoastId: string | null): any | null {
+  if (brewsForLot.length === 0) return null
+  if (refRoastId) {
+    const matched = brewsForLot.find((b) => b.roast_id === refRoastId)
+    if (matched) return matched
+  }
+  return brewsForLot[0] ?? null
+}
 
-      {cuppings.length > 0 && (
-        <SectionCard title={`CUPPING HISTORY (${cuppings.length} EVALUATIONS)`}>
-          {cuppings.map((cup: any, i: number) => {
-            const roast = bean.roasts?.find((r: any) => r.id === cup.roast_id)
-            return (
-              <div
-                key={cup.id}
-                className={`${i < cuppings.length - 1 ? 'mb-4 pb-4 border-b border-latent-border' : ''}`}
-              >
-                <div className="font-mono text-xs text-latent-mid mb-1">
-                  Batch #{roast?.batch_id || '?'} · {cup.rest_days}d rest · {cup.eval_method}
-                  {cup.recipe_variant && ` · ${cup.recipe_variant}`}
-                  {cup.ground_agtron && ` · Gnd Agtron: ${cup.ground_agtron}`}
-                </div>
-                <div className="font-sans text-sm">
-                  {cup.overall || [cup.aroma, cup.flavor, cup.acidity, cup.body, cup.finish].filter(Boolean).join(' · ')}
-                </div>
-              </div>
-            )
-          })}
-        </SectionCard>
-      )}
+// Compose a compact brew recipe line: brewer · filter · dose:water (ratio) ·
+// temp · grinder + setting. Pieces that are null skip silently. Returns null
+// when nothing is populated so the caller can render an em-dash fallback.
+function composeBrewRecipeLine(brew: any): string | null {
+  const parts: string[] = []
+  if (brew.brewer) parts.push(brew.brewer)
+  if (brew.filter) parts.push(brew.filter)
+  if (brew.dose_g != null && brew.water_g != null) {
+    const ratio = brew.ratio ? ` (${brew.ratio})` : ''
+    parts.push(`${brew.dose_g}g:${brew.water_g}g${ratio}`)
+  }
+  if (brew.temp_c != null) parts.push(`${brew.temp_c}°C`)
+  if (brew.grinder && brew.grind_setting) {
+    parts.push(`${brew.grinder} ${brew.grind_setting}`)
+  } else if (brew.grinder) {
+    parts.push(brew.grinder)
+  } else if (brew.grind) {
+    parts.push(brew.grind)
+  }
+  return parts.length > 0 ? parts.join(' · ') : null
+}
 
-      {relatedBrews && relatedBrews.length > 0 && (
-        <div className="mt-6">
-          <div className="label">RELATED BREWS</div>
-          {relatedBrews.map((brew) => (
-            <Link
-              key={brew.id}
-              href={`/brews/${brew.id}`}
-              className="flex justify-between items-center bg-white border border-latent-border rounded p-4 mb-2 hover:border-latent-mid transition-colors"
-            >
-              <div className="font-mono text-sm font-semibold">{brew.coffee_name}</div>
-              <span className="text-latent-mid">→</span>
-            </Link>
-          ))}
-        </div>
+// roast_recipes-side renderers. All return em-dash when the underlying field
+// is NULL. The 6 currently-resolved lots all have NULL beziers (Phase 3
+// backfill is intentionally empty per redesign doc § 7) so Peak inlet + Fan
+// curve render em-dashes today and light up as recipes are enriched.
+function renderPeakInlet(recipe: RoastRecipe | null): React.ReactNode {
+  if (!recipe?.temperature_bezier) return '—'
+  try {
+    const points = recipe.temperature_bezier as Array<Record<string, number>>
+    if (!Array.isArray(points) || points.length === 0) return '—'
+    const temps = points
+      .map((p) => p.temp ?? p.value ?? null)
+      .filter((v): v is number => typeof v === 'number')
+    if (temps.length === 0) return '—'
+    return `${Math.max(...temps)}°C`
+  } catch {
+    return '—'
+  }
+}
+
+function renderDropTemp(recipe: RoastRecipe | null): React.ReactNode {
+  if (recipe?.end_condition_type === 'bean_temp' && recipe.end_condition_target != null) {
+    return `${recipe.end_condition_target}°C`
+  }
+  return '—'
+}
+
+function renderEndCondition(recipe: RoastRecipe | null): React.ReactNode {
+  if (!recipe?.end_condition_type) return '—'
+  const unit =
+    recipe.end_condition_type === 'bean_temp'
+      ? '°C'
+      : recipe.end_condition_type === 'dev_time'
+        ? 's'
+        : ''
+  return (
+    <span className="font-mono text-xs">
+      {recipe.end_condition_type.toUpperCase()}
+      {recipe.end_condition_target != null ? ` ${recipe.end_condition_target}${unit}` : ''}
+    </span>
+  )
+}
+
+function renderChargeHopper(recipe: RoastRecipe | null): React.ReactNode {
+  if (!recipe) return '—'
+  const charge = recipe.charge_temp != null ? `${recipe.charge_temp}°C` : null
+  const hopper = recipe.hopper_load_temp != null ? `${recipe.hopper_load_temp}°C` : null
+  if (charge && hopper) return `${charge} / ${hopper}`
+  return charge ?? hopper ?? '—'
+}
+
+function renderFanCurve(recipe: RoastRecipe | null): React.ReactNode {
+  if (!recipe?.fan_bezier) return '—'
+  try {
+    const points = recipe.fan_bezier as Array<Record<string, number>>
+    if (!Array.isArray(points) || points.length === 0) return '—'
+    const pcts = points
+      .map((p) => p.pct ?? p.value ?? null)
+      .filter((v): v is number => typeof v === 'number')
+      .map((v) => `${Math.round(v)}%`)
+    return pcts.length > 0 ? (
+      <span className="font-mono text-xs">{pcts.join(' → ')}</span>
+    ) : (
+      '—'
+    )
+  } catch {
+    return '—'
+  }
+}
+
+function RecipeRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex gap-2 mb-1">
+      <span className="font-sans text-xs text-latent-mid w-32 flex-shrink-0">{label}</span>
+      <span className="font-sans text-sm">{value}</span>
+    </div>
+  )
+}
+
+function CupRow({ label, value }: { label: string; value?: string | null }) {
+  if (!value) return null
+  return (
+    <div>
+      <span className="font-mono text-xxs uppercase tracking-wide text-latent-subtle mr-2">
+        {label}
+      </span>
+      <span>{value}</span>
+    </div>
+  )
+}
+
+function CharacterCard({ label, value }: { label: string; value?: string | null }) {
+  return (
+    <div className="bg-white border border-latent-border rounded p-4">
+      <div className="label mb-2">{label}</div>
+      {value ? (
+        <div className="font-sans text-sm leading-relaxed">{value}</div>
+      ) : (
+        <div className="font-sans text-xs italic text-latent-mid">Not populated</div>
       )}
     </div>
   )
 }
+
+function LearningRow({ label, value }: { label: string; value?: string | null }) {
+  if (!value) return null
+  return (
+    <div>
+      <div className="label">{label}</div>
+      {value}
+    </div>
+  )
+}
+
