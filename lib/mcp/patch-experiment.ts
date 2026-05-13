@@ -38,6 +38,24 @@ export const patchExperimentInputSchema = {
   what_changes_going_forward: z.string().optional().nullable(),
   open_questions: z.string().optional().nullable().describe('What this experiment did NOT answer - distinct from what_changes_going_forward. Round-4 dogfood (2026-05-11).'),
   additional_notes: z.string().optional().nullable().describe('Free-text catch-all for operator-framing prose that does not fit observed_outcome_* / key_insight. Round-4 dogfood (2026-05-11).'),
+  // Sub Pages 6.1 (migration 052, 2026-05-13) — 16 cross-batch fields.
+  // See docs/roasting/redesign.md § 4.2 for write-moment rationale.
+  updated_cup_prediction_a: z.string().optional().nullable().describe('Post-roast cup prediction for batch A (between roast and cupping). Sub Pages 6.1.'),
+  updated_cup_prediction_b: z.string().optional().nullable(),
+  updated_cup_prediction_c: z.string().optional().nullable(),
+  updated_cup_prediction_d: z.string().optional().nullable(),
+  taste_for_a: z.string().optional().nullable().describe('Cupping-table question for batch A. Sub Pages 6.1.'),
+  taste_for_b: z.string().optional().nullable(),
+  taste_for_c: z.string().optional().nullable(),
+  taste_for_d: z.string().optional().nullable(),
+  delta_from_roast_a: z.string().optional().nullable().describe('Post-roast reconciliation vs recipe predictions, batch A. Sub Pages 6.1.'),
+  delta_from_roast_b: z.string().optional().nullable(),
+  delta_from_roast_c: z.string().optional().nullable(),
+  delta_from_roast_d: z.string().optional().nullable(),
+  delta_from_cup_a: z.string().optional().nullable().describe('Post-cupping reconciliation vs updated_cup_prediction, batch A. Sub Pages 6.1.'),
+  delta_from_cup_b: z.string().optional().nullable(),
+  delta_from_cup_c: z.string().optional().nullable(),
+  delta_from_cup_d: z.string().optional().nullable(),
 }
 
 export function registerPatchExperimentTool(server: McpServer, auth: McpAuthContext) {

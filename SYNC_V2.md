@@ -93,7 +93,7 @@ Resources are content endpoints claude.ai can list and fetch. Each Resource has 
 
 ### MCP Tools (write actions + reads that need Tool-level discoverability)
 
-**32 Tools live as of 2026-05-06 (post Roest API write integration).**
+**34 Tools live as of 2026-05-13 (post Sub Pages 6.1 — added `push_roast_recipe` + `patch_roast_recipe` for the roast_recipes first-class entity).**
 
 The full Tool list (with input schemas) is the source of truth — see `lib/mcp/*.ts`. Below is a categorized overview for human reference.
 
@@ -101,10 +101,11 @@ The full Tool list (with input schemas) is the source of truth — see `lib/mcp/
 |---|---|---|
 | **Brews** | `push_brew`, `patch_brew`, `list_recent_brews`, `get_brew` | Push/patch a brew; list recent or fetch by id (promoted from Resources in 3.0.5 because claude.ai surfaces Tools, not Resources). |
 | **Green beans** | `push_green_bean`, `patch_green_bean`, `get_green_bean`, `get_bean_pipeline` | Bean intake + lookups; `get_bean_pipeline` returns fat JSON `{green_bean, roasts[], cuppings[], experiments[], roast_learnings, brews[]}`. |
-| **Roasts** | `push_roast`, `patch_roast` | Per-batch roast log push (UPSERT on `(user_id, green_bean_id, batch_id)`). |
+| **Roasts** | `push_roast`, `patch_roast` | Per-batch roast log push (UPSERT on `(user_id, green_bean_id, batch_id)`). Sub Pages 6.1 (2026-05-13): added optional `recipe_id` FK to roast_recipes. |
+| **Roast recipes** | `push_roast_recipe`, `patch_roast_recipe` | Sub Pages 6.1 (2026-05-13). First-class design-intent entity, separate from the as-recorded roast. UPSERT on `(user_id, experiment_id, batch_slot)` (V-set framing) or `(user_id, green_bean_id, recipe_name)` (one-off). ~30 fields cover curves (bezier jsonb) + design specs + drop rules + design-time predictions + Roest linkage + per-batch `rationale` (Hypothesis prose) + free `notes`. |
 | **Cuppings** | `push_cupping`, `patch_cupping` | Day 7 evaluation push. Composite key includes `recipe_variant` (NULLS NOT DISTINCT). |
-| **Experiments** | `push_experiment`, `patch_experiment` | A/B/C/D experiment record (UPSERT on `experiment_id`). |
-| **Roast learnings** | `push_roast_learnings`, `patch_roast_learnings` | Per-bean lot close-out synthesis (one row per closed bean). |
+| **Experiments** | `push_experiment`, `patch_experiment` | A/B/C/D experiment record (UPSERT on `experiment_id`). Sub Pages 6.1 (2026-05-13): added 16 cross-batch fields covering 4 temporal write moments — `updated_cup_prediction_a/b/c/d` (post-roast, pre-cupping) + `taste_for_a/b/c/d` (cupping-table questions) + `delta_from_roast_a/b/c/d` (vs recipe predictions) + `delta_from_cup_a/b/c/d` (vs updated_cup_prediction). |
+| **Roast learnings** | `push_roast_learnings`, `patch_roast_learnings` | Per-bean lot close-out synthesis (one row per closed bean). Sub Pages 6.1 (2026-05-13): added optional `best_roast_id` typed UUID FK alongside legacy `best_batch_id` text (preferred for new writes). |
 | **Roest API** | `push_roast_profile`, `push_inventory`, `patch_inventory`, `pull_roest_log`, `list_roest_logs`, `list_roest_inventory` | Bidirectional Roest integration: push profiles to the machine, push/patch inventory entries, pull roast graph data + inventory listings. |
 | **Doc proposals** | `propose_doc_changes` | Polymorphic prose-doc-change proposal Tool. Writes to `doc_proposals`; Claude Code arbitrates in batch. |
 | **Doc reads** | `read_doc`, `read_doc_section`, `list_docs`, `list_doc_sections` | Doc-introspection Tools for claude.ai (Resources stay registered but Tools are reliably surfaced). |

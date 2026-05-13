@@ -12,6 +12,8 @@ import { registerPushGreenBeanTool } from '@/lib/mcp/push-green-bean'
 import { registerPushRoastTool } from '@/lib/mcp/push-roast'
 import { registerPushCuppingTool } from '@/lib/mcp/push-cupping'
 import { registerPushExperimentTool } from '@/lib/mcp/push-experiment'
+import { registerPushRoastRecipeTool } from '@/lib/mcp/push-roast-recipe'
+import { registerPatchRoastRecipeTool } from '@/lib/mcp/patch-roast-recipe'
 import { registerPushRoastLearningsTool } from '@/lib/mcp/push-roast-learnings'
 import { registerPushRoastProfileTool } from '@/lib/mcp/push-roast-profile'
 import { registerPushInventoryTool } from '@/lib/mcp/push-inventory'
@@ -61,6 +63,8 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerPushExperimentTool(server, auth)
   registerPushRoastLearningsTool(server, auth)
   registerPushRoastProfileTool(server, auth)
+  registerPushRoastRecipeTool(server, auth)
+  registerPatchRoastRecipeTool(server, auth)
   registerPushInventoryTool(server, auth)
   registerPatchInventoryTool(server, auth)
   registerPullRoestLogTool(server, auth)
@@ -208,7 +212,7 @@ function registerRoastResources(server: McpServer, auth: McpAuthContext) {
     {
       title: 'Roasts by Bean',
       description:
-        'Full roast history for one green bean: { green_bean, roasts[], cuppings[], experiments[], roast_learnings }. Cuppings are joined via roast_id; experiments + lessons are filtered by green_bean_id. One fat JSON per fetch — mirrors brews://by-id pattern.',
+        'Full roast history for one green bean: { green_bean, roasts[], cuppings[], experiments[], roast_learnings, roast_recipes[] }. Cuppings are joined via roast_id; experiments + lessons + recipes are filtered by green_bean_id. roast_recipes added Sub Pages 6.1 (2026-05-13). One fat JSON per fetch — mirrors brews://by-id pattern.',
       mimeType: 'application/json',
     },
     async (uri, variables) => {
@@ -218,6 +222,42 @@ function registerRoastResources(server: McpServer, auth: McpAuthContext) {
       if (!payload) {
         throw new Error(`Green bean ${id} not found (or not owned by this api_key's user)`)
       }
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            mimeType: 'application/json',
+            text: JSON.stringify(payload),
+          },
+        ],
+      }
+    },
+  )
+
+  // Sub Pages 6.1 (2026-05-13). roast_recipes is queryable by experiment so
+  // claude.ai can look up the design intent for a V-set in one call when
+  // logging roasts — discover the recipe_id to set on push_roast via the
+  // matching (experiment_id, batch_slot) pair.
+  server.registerResource(
+    'roast-recipes-by-experiment',
+    new ResourceTemplate('roast_recipes://by-experiment/{experiment_id}', { list: undefined }),
+    {
+      title: 'Roast Recipes by Experiment',
+      description:
+        'All roast_recipes rows for one experiment (V-set), ordered by batch_slot. Returns { experiment_id, recipes[] }. Use after push_experiment + push_roast_recipe calls when you need to map a Roest log back to its design intent (recipe.id) for push_roast.recipe_id. Sub Pages 6.1 (2026-05-13).',
+      mimeType: 'application/json',
+    },
+    async (uri, variables) => {
+      const id = templateVar(variables, 'experiment_id')
+      if (!id) throw new Error('roast_recipes://by-experiment requires an experiment_id path segment')
+      const { data, error } = await auth.supabase
+        .from('roast_recipes')
+        .select('*')
+        .eq('user_id', auth.userId)
+        .eq('experiment_id', id)
+        .order('batch_slot', { ascending: true, nullsFirst: false })
+      if (error) throw new Error(`roast_recipes fetch failed: ${error.message}`)
+      const payload = { experiment_id: id, recipes: data ?? [] }
       return {
         contents: [
           {

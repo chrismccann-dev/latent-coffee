@@ -141,10 +141,15 @@ export interface Roast {
   end_condition_type: 'bean_temp' | 'dev_time' | 'manual' | null
   end_condition_target: number | null
   fc_total_cracks: number | null
+  // Sub Pages 6.1 (migration 052, 2026-05-13): FK to roast_recipes — the
+  // design intent that this roast executed. Nullable through Phase 3 of the
+  // roasting-redesign migration plan. See docs/roasting/redesign.md § 4.4.
+  recipe_id: string | null
   created_at: string
   updated_at: string
   // Joined data
   cuppings?: Cupping[]
+  recipe?: RoastRecipe
 }
 
 export interface Experiment {
@@ -173,6 +178,31 @@ export interface Experiment {
   additional_notes: string | null
   open_questions: string | null
   key_insight_confidence: string | null
+  // Sub Pages 6.1 (migration 052, 2026-05-13): 16 cross-batch fields for the
+  // four temporal write moments of the iterative roasting workflow. See
+  // docs/roasting/redesign.md § 4.2. updated_cup_prediction_* written between
+  // roast and cupping (post-roast actuals inform the cup prediction).
+  // taste_for_* are the cupping-table questions per batch. delta_from_roast_*
+  // reconcile recipe-predicted vs roast-actual. delta_from_cup_* reconcile
+  // updated-cup-prediction vs cup-actual. Legacy observed_outcome_a-d +
+  // expected_outcomes stay populated through Phase 3 — semantic relabel
+  // happens at cleanup, not now.
+  updated_cup_prediction_a: string | null
+  updated_cup_prediction_b: string | null
+  updated_cup_prediction_c: string | null
+  updated_cup_prediction_d: string | null
+  taste_for_a: string | null
+  taste_for_b: string | null
+  taste_for_c: string | null
+  taste_for_d: string | null
+  delta_from_roast_a: string | null
+  delta_from_roast_b: string | null
+  delta_from_roast_c: string | null
+  delta_from_roast_d: string | null
+  delta_from_cup_a: string | null
+  delta_from_cup_b: string | null
+  delta_from_cup_c: string | null
+  delta_from_cup_d: string | null
   created_at: string
   updated_at: string
 }
@@ -200,7 +230,16 @@ export interface RoastLearning {
   id: string
   user_id: string
   green_bean_id: string
+  // Legacy free-text identifier (e.g. "133", "Batch 139"). Kept populated
+  // through Phase 3 of the roasting-redesign migration; new writes should
+  // prefer best_roast_id (typed FK) below.
   best_batch_id: string | null
+  // Sub Pages 6.1 (migration 052, 2026-05-13): typed FK to the winning roast
+  // execution. Per docs/roasting/redesign.md § 9.3, the reference points at
+  // a specific execution, not the design intent. Backfilled cleanly from
+  // best_batch_id via regex strip + JOIN; new writes populate both fields
+  // until Phase 3 drops the text column.
+  best_roast_id: string | null
   why_this_roast_won: string | null
   aromatic_behavior: string | null
   structural_behavior: string | null
@@ -218,6 +257,66 @@ export interface RoastLearning {
   rest_behavior: string | null
   created_at: string
   updated_at: string
+}
+
+// Sub Pages 6.1 (migration 052, 2026-05-13): first-class entity for per-batch
+// design intent. One row per Roest profile pushed (each batch execution = one
+// recipe, even when curves are identical — matches how the Roest tablet stores
+// profiles). See docs/roasting/redesign.md § 4.3 for the full field rationale.
+export interface RoastRecipe {
+  id: string
+  user_id: string
+  green_bean_id: string
+  // Nullable so calibration / one-off recipes outside the V-set framing can
+  // still create a recipe row.
+  experiment_id: string | null
+  // Lineage pointer: "v3a replicates v2b" → parent_recipe_id = v2b's id.
+  // Not constrained; some recipes are genuinely novel, others are pure
+  // replication. See § 8 of the redesign doc.
+  parent_recipe_id: string | null
+  recipe_name: string | null
+  // "v1a" / "v2b" / "v3c" within its experiment set; null for one-off recipes.
+  batch_slot: string | null
+  // Per-batch Hypothesis prose (mockup "Hypothesis" row). Distinct from
+  // notes — rationale is the "why this specific recipe" reasoning.
+  rationale: string | null
+  // General free-text catch-all for per-recipe notes.
+  notes: string | null
+  // Curve definition (bezier jsonb — same shape as push_roast_profile).
+  temperature_bezier: unknown | null
+  fan_bezier: unknown | null
+  rpm_bezier: unknown | null
+  power_bezier: unknown | null
+  end_condition_type: string | null
+  end_condition_target: number | null
+  preheat_temperature_c: number | null
+  charge_temp: number | null
+  hopper_load_temp: number | null
+  // Design-time predictions (frozen at recipe creation, not updated post-roast).
+  predicted_fc_temp: number | null
+  predicted_fc_time: string | null
+  predicted_total_time: string | null
+  predicted_maillard_pct: number | null
+  predicted_agtron_wb: number | null
+  // Frozen design-time cup prediction. The post-roast update goes to
+  // experiments.updated_cup_prediction_* — see § 4.2 of the redesign doc for
+  // the two-moment storage rationale.
+  predicted_cup: string | null
+  // Mockup "Drop Rules" card (two rows × N batches).
+  drop_rule_if_fast: string | null
+  drop_rule_if_slow: string | null
+  // Roest linkage — populated when push_roast_profile sends the recipe to
+  // the Roest tablet. Phase 2 of the redesign doc § 7 wires push_roast_profile
+  // to set these fields on the matching roast_recipes row.
+  roest_profile_id: number | null
+  roest_share_url: string | null
+  roest_profile_name: string | null
+  pushed_to_roest_at: string | null
+  created_at: string
+  updated_at: string
+  // Joined data
+  experiment?: Experiment
+  parent_recipe?: RoastRecipe
 }
 
 export interface Brew {
@@ -315,10 +414,11 @@ export interface Brew {
 
 // Insert types (omit auto-generated fields)
 export type InsertGreenBean = Omit<GreenBean, 'id' | 'created_at' | 'updated_at' | 'terroir' | 'cultivar' | 'roasts' | 'roast_learnings'>
-export type InsertRoast = Omit<Roast, 'id' | 'created_at' | 'updated_at' | 'cuppings'>
+export type InsertRoast = Omit<Roast, 'id' | 'created_at' | 'updated_at' | 'cuppings' | 'recipe'>
 export type InsertBrew = Omit<Brew, 'id' | 'created_at' | 'updated_at' | 'green_bean' | 'roast' | 'terroir' | 'cultivar'>
 export type InsertCupping = Omit<Cupping, 'id' | 'created_at' | 'updated_at'>
 export type InsertExperiment = Omit<Experiment, 'id' | 'created_at' | 'updated_at'>
 export type InsertTerroir = Omit<Terroir, 'id' | 'created_at' | 'updated_at'>
 export type InsertCultivar = Omit<Cultivar, 'id' | 'created_at' | 'updated_at'>
 export type InsertRoastLearning = Omit<RoastLearning, 'id' | 'created_at' | 'updated_at'>
+export type InsertRoastRecipe = Omit<RoastRecipe, 'id' | 'created_at' | 'updated_at' | 'experiment' | 'parent_recipe'>

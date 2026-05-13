@@ -14,7 +14,11 @@ export const patchRoastLearningsInputSchema = {
   // UPSERT-key — patchable but rarely changed
   green_bean_id: z.string().uuid().optional().nullable(),
   // Pass-through fields (mirror push_roast_learnings)
-  best_batch_id: z.string().optional().nullable(),
+  best_batch_id: z.string().optional().nullable().describe('Legacy free-text; prefer best_roast_id.'),
+  // Sub Pages 6.1 (migration 052, 2026-05-13)
+  best_roast_id: z.string().uuid().optional().nullable().describe(
+    'Typed FK to roasts.id — the winning roast execution. Sub Pages 6.1 addition; preferred over best_batch_id going forward.',
+  ),
   why_this_roast_won: z.string().optional().nullable(),
   aromatic_behavior: z.string().optional().nullable(),
   structural_behavior: z.string().optional().nullable(),
