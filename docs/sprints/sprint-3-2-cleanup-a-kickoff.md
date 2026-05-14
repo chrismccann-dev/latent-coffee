@@ -110,3 +110,54 @@ WHERE gb.origin IS DISTINCT FROM t.country;
 ## Bundle option
 
 If item 8 expands beyond ~1h: split to a 3.2-rendered follow-up bundled with Track 3. Cleanup-A stays focused on the 11 non-UI items + 12.
+
+## Additions from Sub Pages 6.7 spot-check (2026-05-13)
+
+Chris ran a manual spot-check of every green-bean page at /green close-out time and surfaced 8 additional items. All low-risk, all cleanup-shaped.
+
+13. **Backfill `green_beans.variety` from `cultivar.cultivar_name`** — sibling of item #2 (`origin` from `terroir.country`). 4 rows affected: CGLE Sudan Rume Hybrid Washed, CGLE Sudan Rume Natural, Gesha Clouds Forest, Fazenda Um Wush Wush. All have `cultivar_id` set but `variety` NULL.
+
+    ```sql
+    UPDATE green_beans gb
+    SET variety = c.cultivar_name, updated_at = NOW()
+    FROM cultivars c
+    WHERE gb.cultivar_id = c.id AND gb.variety IS NULL;
+    ```
+
+14. **Lot header FK fallback on `/green/[id]`** — render `bean.terroir.country` when `bean.origin` is NULL; render `bean.cultivar.cultivar_name` when `bean.variety` is NULL. Today the hero subtitle uses `[bean.origin, bean.variety, bean.process].filter(Boolean).join(' · ')` (page.tsx ~line 178/710); when 2 of 3 fields are NULL the result looks empty. Worst case today: CGLE Sudan Rume Natural — origin + variety both NULL, only "Natural" renders. Item #2 + item #13 backfills resolve the root cause; this UI item is a belt-and-suspenders fallback for any future row that inserts with NULL fields before the backfill runs.
+
+15. **Update Rancho Tio lot name** — currently `"Rancho Tio Emilio - Typica Mejorado Washed (Taza Dorada 2024 #6)"`; Chris wants the `(Taza Dorada 2024 #6)` suffix dropped (auction-metadata-in-name pattern bleeds into render width). One-row UPDATE:
+
+    ```sql
+    UPDATE green_beans
+    SET name = 'Rancho Tio Emilio - Typica Mejorado Washed', updated_at = NOW()
+    WHERE id = 'b0c57fd5-2a43-46b4-9cf8-197ec97bd6ab';
+    ```
+
+16. **Document the lot-naming convention** — Chris's preferred shape: `PRODUCER_OR_FARM_NAME - CULTIVAR_NAME, PROCESS_NAME`. Add to CLAUDE.md (Green section) or `feedback_lot_naming_convention.md` memory file. NOT to retroactively enforce — auction-tier suffixes and per-lot quirks (#6, Lot 21, etc.) are legitimate when distinctive; the convention is a guide for new lots. Spot-check existing names for obvious cleanups while documenting.
+
+17. **One-shot lot framework codification** — Chris flagged Rancho Tio as a single-shot lot (only enough green for one roast, no V-set possible). Today the lifecycle helper routes it to `waiting_for_next_roast` because the rule is "no experiments + has roasts → waiting_for_next_roast (pre-framework legacy)". Chris's intent: treat one-shot lots as **V1 with batch_ids of 1** — they still pass through experiment → roast → cupping → learnings, just without iteration. Action items:
+    - **Backfill an experiment row for Rancho Tio** with `batch_ids = '<batch_id>'` and 1-batch experiment frame fields. Chris will provide content via Track B-style template fire.
+    - **Document in CLAUDE.md (Green section)** and **docs/roasting/redesign.md (§ 3 lifecycle states)** that one-shot lots are V1 with a single batch. No schema flag needed; the pattern is implicit via `batch_ids` cardinality.
+    - **Verify the lifecycle helper handles it correctly** — once the experiment row exists with `batch_ids = '<single>'` and the roast is matched, the helper should route to `waiting_for_next_cupping`. No code change expected.
+
+18. **"Resolved-without-reference-roast" state** — Oma (`6756d000-9581-4f1a-8b04-269d11a9888e`) is resolved (has `roast_learnings` row) but Chris flagged it "didn't actually make it to a real reference roast." Today the resolved view renders em-dashes for the Reference Roast Recipe and Achieved columns when `best_roast_id` is NULL. Decision needed:
+    - **Option A**: Accept the em-dash rendering as the empty-state for non-referenced resolved lots; document in `redesign.md § 5.4` that "Some resolved lots close without identifying a reference roast — render gracefully."
+    - **Option B**: Add a small "Closed without reference" sub-card to the resolved view that explains the state explicitly (rather than em-dashes that look like missing data).
+    - Recommend Option B for clarity. ~30 min UI add. Chris's call.
+
+19. **Auto-hide "Additional Information" placeholder section on ResolvedView** — when the section would render only the existing placeholder italics ("The resolved view is the densest of the four lifecycle shapes..."), drop the section entirely. The placeholder was written as forward-investment for content that didn't materialize. Affects all 6 resolved lots. Trivial fix on `page.tsx` ResolvedView (~lines 1592-1605): delete the section.
+
+20. **Mandela XO text overflow on resolved view** — Chris attached a screenshot showing prose mid-word truncation ("Mai-", "ferm") in the resolved view 2-col grid. Likely cause: `grid grid-cols-1 md:grid-cols-2` on lines 1289 + 1347 don't have `min-w-0` on their children, so long prose can't shrink below content min-content width. Likely fix: add `min-w-0` to the grid children OR add `break-words` Tailwind utility on the prose blocks. Investigate in preview at md: viewport width (~768-900px) with Mandela XO loaded, apply minimum fix, verify on Mandela + Sudan Rume Hybrid Washed (the 2 resolved lots with the longest `why_this_roast_won` prose).
+
+## Track B opportunities surfaced in the spot-check
+
+Not Cleanup-A scope — but Chris flagged ~6 lots' worth of recipe / learnings data he can paste via MCP when ready. Use the templates at `docs/sprints/sub-pages-6-7-recipe-backfill-templates.md` for `patch_roast_recipe`, plus the simpler `patch_roast_learnings({why_this_roast_won: "..."})` for the resolved-lot prose gaps:
+
+- **Higuito V3** — just-completed roast, needs `push_roast_recipe` + `push_roast` for the V3 batches.
+- **Gesha Clouds Forest** — just-completed simulated pourover cupping, needs `push_cupping` + likely `patch_experiment` synthesis fields.
+- **CGLE Sudan Rume Natural** — next roasts done, needs `push_roast_recipe` + `push_roast` + experiment update.
+- **Fazenda Um** — just-completed cupping, needs `push_cupping` + patch.
+- **Surma / Libertad / El Socorro** — resolved-lot enrichment for `why_this_roast_won` + Phase 3 recipe enrichment.
+
+These are the dogfood targets for the next claude.ai workflow session.
