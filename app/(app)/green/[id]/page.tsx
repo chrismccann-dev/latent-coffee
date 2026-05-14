@@ -6,7 +6,17 @@ import { GreenBeanInfoCard } from '@/components/GreenBeanInfoCard'
 import { RoastLogTable } from '@/components/RoastLogTable'
 import { StrategyPill } from '@/components/StrategyPill'
 import { ModifierBadges } from '@/components/ModifierBadges'
-import { computeLifecycleState, extractBatchNumber } from '@/lib/lifecycle-state'
+import { ExperimentFrameCard } from '@/components/ExperimentFrameCard'
+import { CrossBatchNotesBlock } from '@/components/CrossBatchNotesBlock'
+import { PerRoastReflections } from '@/components/PerRoastReflections'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
+import {
+  computeLifecycleState,
+  extractBatchNumber,
+  SLOT_LETTERS,
+  type SlotLetter,
+  type PriorExperimentShape,
+} from '@/lib/lifecycle-state'
 import type { RoastRecipe } from '@/lib/types'
 
 // Sub Pages 6.5 (2026-05-13). /green/[id] is fully state-driven per the
@@ -181,6 +191,16 @@ function WaitingForNextRoastView({
         </div>
       </div>
 
+      {/* Experiment Frame card (Sub Pages 6.7) — visible above the Roasts
+          card so the design-time context renders before the per-batch
+          knobs. Auto-hides when no frame fields populated. */}
+      {latestExp && (
+        <ExperimentFrameCard
+          latestExp={latestExp}
+          title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}
+        />
+      )}
+
       {/* Roasts · V_n card. The V-label comes from experiment_id when set
           (e.g. "MX-DEV-v3" → "V3"); falls back to the full label otherwise. */}
       {latestExp ? (
@@ -251,6 +271,11 @@ function WaitingForNextRoastView({
         cuppings={cuppings}
         highlightedBatchIds={Array.from(currentExpBatchIds)}
       />
+
+      {/* Per-roast reflections (Sub Pages 6.7) — collapsed details surfacing
+          what_worked / what_didnt / what_to_change per roast. Auto-hides
+          when no roasts have any reflection field populated. */}
+      <PerRoastReflections roasts={roasts} />
 
       {/* Additional Information — collapsed block for the rest. Defers the
           deep surface (roast learnings prose / cupping history / experiments
@@ -553,9 +578,6 @@ function DropRulesCard({ recipes }: { recipes: RoastRecipe[] }) {
 // built for the new workflow, not the legacy data.
 // ---------------------------------------------------------------------------
 
-const SLOT_LETTERS = ['a', 'b', 'c', 'd'] as const
-type SlotLetter = (typeof SLOT_LETTERS)[number]
-
 type SlotInfo = {
   slot: SlotLetter
   recipe: RoastRecipe | null
@@ -635,9 +657,9 @@ function computeSlotInfos(
 // `pivot.created_at` — the V_(n-1) the cupping table should reference.
 // Stable on null tie-break by id so the choice is deterministic.
 function pickPriorExperiment(
-  experiments: Array<{ id?: string; created_at?: string | null }>,
+  experiments: Array<PriorExperimentShape>,
   pivot: { created_at?: string | null } | null,
-): { id?: string; winner?: string | null; created_at?: string | null; [k: string]: any } | null {
+): PriorExperimentShape | null {
   if (!pivot?.created_at) return null
   const earlier = experiments.filter(
     (e) => e.created_at != null && pivot.created_at != null && e.created_at < pivot.created_at,
@@ -712,6 +734,18 @@ function WaitingForNextCuppingView({
         </div>
       </div>
 
+      {/* Experiment Frame card (Sub Pages 6.7) — visible above the cupping
+          hypothesis card. skipControlBaseline=true because control_baseline
+          is already surfaced inside the ReferenceSignalsCard as "Anchor
+          cup"; rendering it twice would duplicate the same field. */}
+      {latestExp && (
+        <ExperimentFrameCard
+          latestExp={latestExp}
+          skipControlBaseline
+          title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}
+        />
+      )}
+
       {/* Cupping Hypothesis card */}
       {latestExp ? (
         <SectionCard title={`CUPPING HYPOTHESIS · ${formatVLabel(latestExp.experiment_id)}`}>
@@ -753,6 +787,12 @@ function WaitingForNextCuppingView({
         </SectionCard>
       )}
 
+      {/* Cross-batch notes (Sub Pages 6.7) — collapsed details surfacing
+          observed_outcome_a/b/c/d from V_(n-1). Reflective context for the
+          cupping table, not foreground signal. Auto-hides when priorExp is
+          null or all 4 slots are NULL. */}
+      <CrossBatchNotesBlock priorExp={priorExp} />
+
       {/* Green Bean Info + Roast Log (shared 6.4 components) */}
       <GreenBeanInfoCard bean={bean} />
 
@@ -761,6 +801,11 @@ function WaitingForNextCuppingView({
         cuppings={cuppings}
         highlightedBatchIds={Array.from(currentExpBatchIds)}
       />
+
+      {/* Per-roast reflections (Sub Pages 6.7) — collapsed details surfacing
+          what_worked / what_didnt / what_to_change per roast. Auto-hides
+          when no roasts have any reflection field populated. */}
+      <PerRoastReflections roasts={roasts} />
 
       {/* Additional Information — collapsed placeholder, same shape as 6.3 */}
       <details className="mt-6 group">
@@ -1448,15 +1493,19 @@ function ResolvedView({
         highlightedBatchIds={batchNumber ? [batchNumber] : []}
       />
 
+      {/* Per-roast reflections (Sub Pages 6.7) — collapsed details surfacing
+          what_worked / what_didnt / what_to_change per roast. Most densely
+          populated on resolved lots where Chris has logged the full
+          execution prose; auto-hides when no roasts have any reflection
+          field populated. */}
+      <PerRoastReflections roasts={roasts} />
+
       {/* All cuppings · {N} evaluations — collapsed details, one row per
           cupping in chronological order; ref roast's cuppings get
           font-semibold + a star marker. */}
       {cuppings.length > 0 && (
-        <details className="bg-white border border-latent-border rounded-md p-6 mb-4">
-          <summary className="cursor-pointer font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid hover:text-latent-fg">
-            All Cuppings ({cuppings.length} EVALUATIONS)
-          </summary>
-          <div className="mt-4 space-y-4">
+        <CollapsibleSection title={`All Cuppings (${cuppings.length} EVALUATIONS)`}>
+          <div className="space-y-4">
             {cuppings.map((cup, i) => {
               const roast = cup.roast_id ? roastsById.get(cup.roast_id) : null
               const isRef = roast?.id === refRoastId
@@ -1488,18 +1537,15 @@ function ResolvedView({
               )
             })}
           </div>
-        </details>
+        </CollapsibleSection>
       )}
 
       {/* Experiment journey · V1 through V_n — collapsed details, per-set
           summary cards (primary_question + winner + key_insight only — per
           scope § 5.4 "curated narrative content, not chronology"). */}
       {experimentsChrono.length > 0 && (
-        <details className="bg-white border border-latent-border rounded-md p-6 mb-4">
-          <summary className="cursor-pointer font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid hover:text-latent-fg">
-            Experiment Journey ({experimentsChrono.length} SETS)
-          </summary>
-          <div className="mt-4 space-y-6">
+        <CollapsibleSection title={`Experiment Journey (${experimentsChrono.length} SETS)`}>
+          <div className="space-y-6">
             {experimentsChrono.map((exp, i) => (
               <div
                 key={exp.id ?? i}
@@ -1541,7 +1587,7 @@ function ResolvedView({
               </div>
             ))}
           </div>
-        </details>
+        </CollapsibleSection>
       )}
 
       {/* Additional Information — collapsed placeholder matching 6.3/6.4. The

@@ -37,6 +37,28 @@ export type LifecycleState =
   | 'waiting_for_next_cupping'
   | 'resolved'
 
+// V-set batch slots — three real, fourth is rare (some V-sets run 4 batches).
+// Shared across the cupping view (page.tsx `computeSlotInfos`) and
+// CrossBatchNotesBlock so the slot order stays consistent.
+export const SLOT_LETTERS = ['a', 'b', 'c', 'd'] as const
+export type SlotLetter = (typeof SLOT_LETTERS)[number]
+
+// Minimal shape for pickPriorExperiment's return + CrossBatchNotesBlock's
+// input. Only the fields the cupping view actually reads — explicit so the
+// `[k:string]:any` index signature drift doesn't leak into the component
+// contract.
+export type PriorExperimentShape = {
+  id?: string
+  experiment_id?: string | null
+  winner?: string | null
+  key_insight?: string | null
+  created_at?: string | null
+  observed_outcome_a?: string | null
+  observed_outcome_b?: string | null
+  observed_outcome_c?: string | null
+  observed_outcome_d?: string | null
+}
+
 // Minimal shape — only the fields we read. Callers pass whatever bean shape
 // they have (GreenBean + joined arrays); we read what we need. The cuppings
 // array can be either nested under roasts (PostgREST-style join, preferred —

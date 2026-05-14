@@ -132,11 +132,13 @@ STAGE 5 - Loop push_experiment (UPSERT keyed on experiment_id):
   payload — patch_* preserves the fields you don't pass.
 
 STAGE 6 - push_roast_learnings (one row per closed bean):
-- All 17 fields from "Overall Lessons (Per Bean)": best_batch_id,
-  why_this_roast_won, aromatic_behavior, structural_behavior, elasticity,
-  roast_window_width, primary_lever, secondary_levers, what_didnt_move_needle,
-  underdevelopment_signal, overdevelopment_signal, cultivar_takeaway,
-  general_takeaway, reference_roasts, starting_hypothesis, rest_behavior.
+- All 17 fields from "Overall Lessons (Per Bean)": best_roast_id (Sub Pages 6.1
+  typed FK to roasts.id; preferred), best_batch_id (legacy free-text, back-compat
+  through Phase 3), why_this_roast_won, aromatic_behavior, structural_behavior,
+  elasticity, roast_window_width, primary_lever, secondary_levers,
+  what_didnt_move_needle, underdevelopment_signal, overdevelopment_signal,
+  cultivar_takeaway, general_takeaway, reference_roasts, starting_hypothesis,
+  rest_behavior.
 - For field-level edits to a roast_learnings row already pushed (e.g.
   adding a new general_takeaway after cross-coffee pattern emerges),
   prefer patch_roast_learnings.

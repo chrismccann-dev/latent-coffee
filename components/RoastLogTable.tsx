@@ -1,4 +1,5 @@
 import { SectionCard } from '@/components/SectionCard'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
 
 // Sub Pages 6.4 (2026-05-13). Extracted from app/(app)/green/[id]/page.tsx
 // 6.3 inline render. Shared across the waiting-for-next-roast (6.3),
@@ -148,17 +149,13 @@ export function RoastLogTable({
     </div>
   )
 
-  // Collapsed-by-default uses native <details> instead of SectionCard so the
-  // archival log on 6.5's resolved view starts closed without React state.
-  // Styled to match the rest of the page's chrome.
+  // Collapsed-by-default uses CollapsibleSection so the archival log on 6.5's
+  // resolved view starts closed without React state.
   if (defaultCollapsed) {
     return (
-      <details className="bg-white border border-latent-border rounded-md p-6 mb-4">
-        <summary className="cursor-pointer font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid hover:text-latent-fg">
-          ROAST LOG ({roasts.length} ROASTS)
-        </summary>
-        <div className="mt-4">{tableBody}</div>
-      </details>
+      <CollapsibleSection title={`ROAST LOG (${roasts.length} ROASTS)`}>
+        {tableBody}
+      </CollapsibleSection>
     )
   }
 
