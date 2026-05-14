@@ -2,6 +2,8 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { patchRoast, ROAST_PATCH_FIELDS, type PatchRoastPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 export const patchRoastInputSchema = {
   roast_id: z.string().uuid().describe(
@@ -68,8 +70,11 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
         'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id. Sibling of push_roast (for new batches). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] with id keyed by batch_id). Returns { roast_id, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which columns landed; canonical_values echoes the actual values of enum-validated fields (end_condition_type, worth_repeating) so the caller can confirm the vocabulary landed without a follow-up read.',
       inputSchema: patchRoastInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('patch_roast', async (input) => {
       const payload = input as PatchRoastPayload
+      // Sprint 3.2 #3 — cross-field validation when end_condition pair supplied.
+      const boundsErr = checkEndConditionBounds(payload.end_condition_type, payload.end_condition_target)
+      if (boundsErr) throw new Error(`Validation failed:\n  - ${boundsErr}`)
       const result = await patchRoast(auth.supabase, auth.userId, payload)
       if (!result.ok) {
         if (result.code === 'validation') {
@@ -100,6 +105,6 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

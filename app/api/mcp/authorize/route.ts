@@ -34,6 +34,22 @@ function errorRedirect(redirectUri: string | null, state: string | null, error: 
 }
 
 export async function GET(req: Request) {
+  try {
+    return await handleAuthorize(req)
+  } catch (err) {
+    // Sprint 3.2 #9 — top-level wrapper. Unhandled errors used to bubble up
+    // as Next.js default HTML 500s; OAuth callers expect JSON / 302 with
+    // ?error params. We can't redirect without a validated redirect_uri, so
+    // fall back to a JSON 500 with the inner err logged.
+    console.error('[mcp/authorize] unhandled error:', err)
+    return NextResponse.json(
+      { error: 'server_error', error_description: 'unexpected authorize endpoint error' },
+      { status: 500 },
+    )
+  }
+}
+
+async function handleAuthorize(req: Request): Promise<NextResponse> {
   const u = new URL(req.url)
   const params = u.searchParams
 

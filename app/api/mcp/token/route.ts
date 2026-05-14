@@ -38,7 +38,8 @@ function parseBasicAuth(header: string | null): { id: string; secret: string } |
     const colon = decoded.indexOf(':')
     if (colon < 0) return null
     return { id: decoded.slice(0, colon), secret: decoded.slice(colon + 1) }
-  } catch {
+  } catch (err) {
+    console.error('[mcp/token] Basic auth decode failed:', err)
     return null
   }
 }
@@ -48,6 +49,19 @@ function base64UrlSha256(input: string): string {
 }
 
 export async function POST(req: Request) {
+  try {
+    return await handleToken(req)
+  } catch (err) {
+    // Sprint 3.2 #9 — top-level wrapper. Unhandled errors used to bubble up
+    // as Next.js default HTML 500s; claude.ai's MCP client expected JSON and
+    // surfaced an opaque "unknown auth error." Log the inner err and return
+    // an OAuth-shaped 500 so the caller gets something parseable.
+    console.error('[mcp/token] unhandled error:', err)
+    return errorResponse('server_error', 'unexpected token endpoint error', 500)
+  }
+}
+
+async function handleToken(req: Request): Promise<NextResponse> {
   // Body can be application/x-www-form-urlencoded (per OAuth 2.1) or JSON.
   let form: URLSearchParams
   const contentType = req.headers.get('content-type') ?? ''
@@ -61,7 +75,8 @@ export async function POST(req: Request) {
       // Be lenient — try form-urlencoded first.
       form = new URLSearchParams(await req.text())
     }
-  } catch {
+  } catch (err) {
+    console.error('[mcp/token] body parse failed:', err)
     return errorResponse('invalid_request', 'malformed body')
   }
 

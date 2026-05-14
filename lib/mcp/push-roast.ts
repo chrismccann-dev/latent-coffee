@@ -2,6 +2,8 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistRoast, type RoastPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // push_roast — single batch roast log insert. green_bean_id is required (FK).
 // All other fields optional. The 8 Sprint-2.5 enrichment columns (added in
@@ -105,8 +107,11 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
         'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus the Sprint 2.5 + Phase 2 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id, roest_notes, end_condition_type/target, fc_total_cracks, worth_repeating tristate). UPSERT semantics on (user_id, green_bean_id, batch_id): safe to retry after crash - when a row already exists, the existing roast_id is returned with `created: false` and field values are NOT overwritten (use patch_roast for field-level updates). Pull from Roest via pull_roest_log first when the source is a real machine batch - that returns a normalized payload with most fields populated; augment with prose and push. Returns warnings[] when a green_bean parent has roest_inventory_id NULL but the roast is being pushed with a roest_log_id (orphan reconciliation hint per #R66 - patch_green_bean to backfill the FK).',
       inputSchema: pushRoastInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('push_roast', async (input) => {
       const payload = input as RoastPayload
+      // Sprint 3.2 #3 — cross-field validation on end_condition pair.
+      const boundsErr = checkEndConditionBounds(payload.end_condition_type, payload.end_condition_target)
+      if (boundsErr) throw new Error(`Validation failed:\n  - ${boundsErr}`)
       const result = await persistRoast(auth.supabase, auth.userId, payload)
       if (!result.ok) {
         if (result.code === 'validation') {
@@ -132,6 +137,6 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

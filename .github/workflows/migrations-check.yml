@@ -1,0 +1,38 @@
+name: migrations-check
+
+# Sprint 3.2 #5 — CI gate that runs npm run check:migrations on every PR that
+# touches supabase/migrations/**. Fails the workflow if a tracked migration
+# file is missing from the live DB's schema_migrations table (the recurring
+# drift mode flagged in memory/feedback_migration_drift_pattern.md).
+#
+# Requires the SUPABASE_SERVICE_ROLE_KEY repo secret. When the secret is
+# absent the job skips with a warning rather than fails — pragmatic for the
+# initial rollout where the secret may not be configured yet.
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/migrations/**'
+      - 'scripts/check-migrations.ts'
+      - 'package.json'
+
+jobs:
+  check-migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm install --no-audit --no-fund --prefer-offline
+      - name: Run check:migrations
+        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run check:migrations
+      - name: Skip (secret not configured)
+        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY == '' }}
+        run: |
+          echo "::warning::SUPABASE_SERVICE_ROLE_KEY not set — skipping migrations:check. Configure the secret in repo settings to enable the gate."

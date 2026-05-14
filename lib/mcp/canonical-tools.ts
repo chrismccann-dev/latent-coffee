@@ -8,6 +8,7 @@ import {
   resolveCanonicalAxis,
   type CanonicalAxis,
 } from '@/lib/mcp/canonicals'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // Canonical-introspection Tools (MCP feedback batch 3, 2026-04-30).
 //
@@ -55,7 +56,7 @@ export function registerCanonicalTools(server: McpServer) {
         'List / lookup / browse / discover / enumerate the canonical-taxonomy registries the MCP server validates against. Returns an array of { axis, title, description } for the 12 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers). Use this BEFORE drafting a push_brew payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical. NOTE: read_canonical also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars) for symmetry with `docs://taxonomies/{axis}.md` URIs.',
       inputSchema: {},
     },
-    async () => {
+    withToolErrorLogging('list_canonicals', async () => {
       const axes = CANONICAL_AXES.map(({ axis, title, description }) => ({
         axis,
         title,
@@ -65,7 +66,7 @@ export function registerCanonicalTools(server: McpServer) {
         content: [{ type: 'text', text: JSON.stringify({ axes }) }],
         structuredContent: { axes },
       }
-    },
+    }),
   )
 
   server.registerTool(
@@ -78,7 +79,7 @@ export function registerCanonicalTools(server: McpServer) {
         axis: axisInput,
       },
     },
-    async ({ axis }) => {
+    withToolErrorLogging('read_canonical', async ({ axis }) => {
       const payload = getCanonicalPayload(axis)
       if (!payload) {
         // Belt-and-suspenders — refine should already reject unknown values.
@@ -90,6 +91,6 @@ export function registerCanonicalTools(server: McpServer) {
         content: [{ type: 'text', text: JSON.stringify(payload) }],
         structuredContent: payload as unknown as { [k: string]: unknown },
       }
-    },
+    }),
   )
 }

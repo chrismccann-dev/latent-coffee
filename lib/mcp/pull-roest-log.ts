@@ -8,6 +8,7 @@ import {
   type RoestProfile,
 } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // pull_roest_log — server-side fetch of a Roest /logs/{id}/ row + its linked
 // /profiles/{profile_id}/ (for fan_curve / inlet_curve beziers). Returns a
@@ -40,7 +41,7 @@ export function registerPullRoestLogTool(server: McpServer, auth: McpAuthContext
         'Pull / fetch / import / load / sync a Roest machine roast log + its linked profile from api.roestcoffee.com. Returns a normalized push_roast-shaped payload (batch_id, fc_temp, drop_temp, fc_start, drop_time, dev_time_s, fan_curve, inlet_curve, agtron, weight_loss_pct, hopper_load_temp from profile.preheat_temperature, end_condition_type/target from profile, roest_notes, plus roast_date in the user\'s configured local timezone - see ROEST_USER_TIMEZONE env var; UTC slice is also returned as roast_date_utc). Caller augments with prose fields (what_worked / what_didnt / what_to_change) and any fields the Roest API does NOT expose: yellowing_temp / tp_temp (bean temps at non-FC events; not in Roest API), fc_total_cracks (visible in Roest UI but not API). Note: inlet_curve reflects the as-DESIGNED template (RoestProfile.temperature_bezier); mid-roast operator overrides are not exposed by the Roest API. green_bean_id is null in the response - caller resolves by matching log.inventory_id against green_beans.roest_inventory_id and calling push_green_bean first if needed.',
       inputSchema: pullRoestLogInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('pull_roest_log', async (input) => {
       const log_id = input.log_id as number
       const log = await getRoestLog(log_id)
       // Profile fetch is opportunistic — some logs may have no profile_data
@@ -79,6 +80,6 @@ export function registerPullRoestLogTool(server: McpServer, auth: McpAuthContext
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

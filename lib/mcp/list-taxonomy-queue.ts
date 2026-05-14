@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import type { QueueAxis, QueueSourceKind, QueueSubmissionPath } from '@/lib/taxonomy-queue'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // list_taxonomy_queue — read-only browse of the taxonomy_overrides_queue
 // (Phase 3, migration 045). Mirrors the propose_doc_changes / list_canonicals
@@ -59,7 +60,7 @@ export function registerListTaxonomyQueueTool(server: McpServer, auth: McpAuthCo
         'List / browse / read / discover entries in the taxonomy_overrides_queue (Phase 3) — the canonical-promotion queue. Returns rows for canonical-name overrides (producer / roaster / brewer / filter / grinder via push tool *_override flags) and net-new canonical proposals (terroir / cultivar / etc. via propose_canonical_addition). Each entry pairs a `raw_value` (verbatim input) with lifecycle status (pending → promoted | aliased | rejected | duplicate). Use this BEFORE re-submitting a producer/roaster name to check whether it is already pending review (avoids duplicates). Used by Chris-as-arbiter (Claude Code session) to walk the pending list during a "process pending arbitration" run. Filters: status (default "pending"), axis, since (ISO timestamp), limit (default 50, max 200).',
       inputSchema: listTaxonomyQueueInputSchema,
     },
-    async ({ status, axis, since, limit }) => {
+    withToolErrorLogging('list_taxonomy_queue', async ({ status, axis, since, limit }) => {
       const effectiveStatus = status ?? 'pending'
       let q = auth.supabase
         .from('taxonomy_overrides_queue')
@@ -83,6 +84,6 @@ export function registerListTaxonomyQueueTool(server: McpServer, auth: McpAuthCo
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out as unknown as { [k: string]: unknown },
       }
-    },
+    }),
   )
 }

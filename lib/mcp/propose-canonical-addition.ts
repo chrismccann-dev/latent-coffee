@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { insertQueueRow } from '@/lib/taxonomy-queue'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // propose_canonical_addition — model-callable Tool that submits a net-new
 // canonical value to the taxonomy_overrides_queue with submission_path =
@@ -69,7 +70,7 @@ export function registerProposeCanonicalAdditionTool(server: McpServer, auth: Mc
         'Propose / submit / register / log / save a net-new canonical-registry value to the taxonomy_overrides_queue (Phase 3) — the model-callable path for "this region / cultivar / producer is genuinely new and needs registry promotion." Mirrors propose_doc_changes but for canonical entries instead of prose. Required for terroir + cultivar (strict-canonical, no override path on push tools); also useful for producer / roaster / brewer / filter / grinder when you know ahead of time a value is net-new and want to flag it before attempting a push. Auto-collapses on duplicate: a second proposal for the same (axis, value) returns the existing pending row id with status="duplicate" instead of creating a second row. Status flow: pending → arbiter calls resolve_queue_entry → promoted | aliased | rejected. Promotion happens via a registry edit during a Claude Code arbiter session; this Tool only files the proposal. Returns { queue_id, status: "pending" | "duplicate", duplicate_of? } where duplicate_of is set when status="duplicate".',
       inputSchema: proposeCanonicalAdditionInputSchema,
     },
-    async ({ axis, value, evidence: evidencePayload }) => {
+    withToolErrorLogging('propose_canonical_addition', async ({ axis, value, evidence: evidencePayload }) => {
       const trimmed = value.trim()
       if (!trimmed) {
         throw new Error('value cannot be empty')
@@ -94,6 +95,6 @@ export function registerProposeCanonicalAdditionTool(server: McpServer, auth: Mc
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

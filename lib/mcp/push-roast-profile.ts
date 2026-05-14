@@ -5,6 +5,8 @@ import {
   getRoestCustomerInfo,
 } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // push_roast_profile — server-side POST /profiles/ to api.roestcoffee.com.
 // Constructs an INLET_TEMP counterflow profile from claude.ai-supplied beziers
@@ -193,8 +195,16 @@ export function registerPushRoastProfileTool(server: McpServer, auth: McpAuthCon
         'Push / create / upload / save / send a roast profile to Chris\'s Roest L200 Ultra via api.roestcoffee.com POST /profiles/. Constructs an INLET_TEMP counterflow profile (Chris\'s exclusive mode) from claude.ai-supplied beziers + end-condition + name. Hardcoded counterflow defaults: machinetype=2, profile_type=5 (INLET_TEMP), reversed_drum_direction=true, is_bbp_profile=false, customer resolved at call time. Validates bezier shapes BEFORE the API call: ≥2 points, first msec=0, strictly ascending msec, sane value bounds (temp 50-300°C, fan/rpm/power 0-100). Bezier inputs use msec-since-charge: convert mm:ss timestamps from the experiment-design table (e.g. 01:15 → 75000) before passing. end_condition mapping matches the Roest UI dropdown 1:1: NONE=0 / TOTAL_TIME=1 / DEV_TIME=2 / DTR=3 / BEAN_TEMP=4. When enable_share=true, follows up with PUT /profiles/{id}/enable_share/ and returns the share_url so claude.ai can paste it back into chat or onto the tablet UI. No DB write — the trace is captured later via pull_roest_log once the roast runs. Idempotency: create-new, allow duplicates (re-pushing v1a yields a second row; Chris deletes via the Roest UI). For iteration naming + bezier shape conventions + drop-temp philosophy, see ROASTING.md.',
       inputSchema: pushRoastProfileInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('push_roast_profile', async (input) => {
       const i = input as PushRoastProfileInput
+      // Sprint 3.2 #3 + #4 — cross-field validation before posting to Roest.
+      const boundsErr = checkEndConditionBounds(i.end_condition, i.end_condition_value)
+      if (boundsErr) throw new Error(`Validation failed:\n  - ${boundsErr}`)
+      if (i.power_bezier !== null && i.power_bezier.length > 0) {
+        throw new Error(
+          'Validation failed:\n  - power_bezier must be null on INLET_TEMP profiles (profile_type=5 is hardcoded — Chris\'s exclusive mode). The server controls power to hit inlet target. If you need power-driven profiles, surface profile_type as an input first.',
+        )
+      }
       const { url: customerUrl } = await getRoestCustomerInfo()
       const body: CreateProfileBody = {
         name: i.name,
@@ -238,6 +248,6 @@ export function registerPushRoastProfileTool(server: McpServer, auth: McpAuthCon
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

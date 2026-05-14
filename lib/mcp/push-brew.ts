@@ -13,6 +13,7 @@ import {
 import { STRUCTURE_KEYS } from '@/lib/flavor-registry'
 import { HYBRID_SUBFORMS } from '@/lib/hybrid-subform'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // Input schema mirrors lib/brew-import.ts BrewPayload + SYNC_V2.md push_brew spec.
 // We let zod validate shape, then hand the typed object to persistBrew which
@@ -267,7 +268,7 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
         'Log / submit / save / archive / record a brew to the app — the primary write path for finished brews. Inserts a resolved brew row into the brews table; validates every field against canonical registries (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / structure_tags / extraction_strategy / etc.); FK-resolves terroir + cultivar via lazy find-or-create. ALL validation errors return aggregated in one response (no fail-fast), so a payload with multiple problems gets the full list back in a single retry round. Returns brew_id + per-field resolution metadata (which FKs were newly created, which canonicals matched). For canonical lookup before drafting the payload, call list_canonicals + read_canonical.',
       inputSchema: pushBrewInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('push_brew', async (input) => {
       const payload: BrewPayload = {
         ...input,
         coffee_name: input.coffee_name,
@@ -358,6 +359,6 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
         content: [{ type: 'text', text: JSON.stringify(responsePayload) }],
         structuredContent: responsePayload,
       }
-    },
+    }),
   )
 }

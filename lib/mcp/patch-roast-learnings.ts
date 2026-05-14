@@ -6,6 +6,7 @@ import {
   type PatchRoastLearningsPayload,
 } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 export const patchRoastLearningsInputSchema = {
   roast_learnings_id: z.string().uuid().describe(
@@ -45,7 +46,7 @@ export function registerPatchRoastLearningsTool(server: McpServer, auth: McpAuth
         'Update / save / record / push field-level changes to the per-bean roast lessons row by roast_learnings_id. Sibling of push_roast_learnings (which UPSERTs by green_bean_id, one row per closed bean). Use this for post-close-out edits — e.g. starting_hypothesis revision after a related bean lands, or correcting a prose field on the canonical "lot lessons" record without a full re-push. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_learnings_id: call get_bean_pipeline (returns the roast_learnings record). Returns { roast_learnings_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch (mirrors patch_inventory + patch_experiment pattern).',
       inputSchema: patchRoastLearningsInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('patch_roast_learnings', async (input) => {
       const payload = input as PatchRoastLearningsPayload
       const result = await patchRoastLearnings(auth.supabase, auth.userId, payload)
       if (!result.ok) {
@@ -66,6 +67,6 @@ export function registerPatchRoastLearningsTool(server: McpServer, auth: McpAuth
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

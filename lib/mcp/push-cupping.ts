@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistCupping, type CuppingPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // push_cupping — single cupping evaluation insert. roast_id is required (FK).
 // V4 evaluation protocol is Day 7 pourover — this Tool captures both Day 4
@@ -36,7 +37,7 @@ export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext)
         'Log / record / save / push / archive a cupping evaluation (Day 7 post-roast pourover or Day 4 table cupping) — STAGE 4 of the self-roasted roasting pipeline; runs after push_roast for each batch you cup. UPSERT semantics on (user_id, roast_id, cupping_date, eval_method, recipe_variant): safe to re-push during mid-iteration syncs - when a row already exists with the same composite key, the existing cupping_id is returned with `created: false` and field values are NOT overwritten (use patch_cupping to update notes on an existing cupping). The optional recipe_variant field lets you push TWO evaluations on the same (roast_id, date, method) for the dual-cupping workflow (e.g. xbloom-gate cupping + Balanced-Intensity pourover on the same Day 7) — set distinct recipe_variant labels per row. When only one evaluation per (roast/date/method) exists, leave recipe_variant NULL (the constraint uses NULLS NOT DISTINCT so single-cupping idempotency still works). Captures eval_method (Cupping vs Pourover), rest_days (V4 evaluation gate is Day 7), ground_agtron (paired with roasts.agtron for WB-to-Ground delta), and the 6 prose fields (aroma / flavor / acidity / body / finish / overall). Requires roast_id from a prior push_roast. Returns { cupping_id, created, composite_key: { roast_id, cupping_date, eval_method, recipe_variant } } — composite_key echoes the tuple the row landed under so you can sanity-check without a follow-up read.',
       inputSchema: pushCuppingInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('push_cupping', async (input) => {
       const payload = input as CuppingPayload
       const result = await persistCupping(auth.supabase, auth.userId, payload)
       if (!result.ok) {
@@ -67,6 +68,6 @@ export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext)
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

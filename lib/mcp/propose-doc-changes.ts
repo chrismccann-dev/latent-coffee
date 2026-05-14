@@ -9,6 +9,7 @@ import {
   type TaxonomyAxis,
 } from '@/lib/mcp/docs'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // Cheap fuzzy-match for anchor "did you mean" hints (#R50). Returns the
 // best candidate from the doc's sections list when the supplied anchor
@@ -367,7 +368,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
         'Propose / submit / save / log / archive a prose change to a brewing or roasting doc - the primary write path for living-reference markdown. EVERY citation requires section_anchor + operation + proposed_text + rationale (all four are required; the schema rejects missing fields). Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. WORKFLOW: before drafting, call `read_doc_section(uri, anchor)` to fetch the live target so `current_text` (for replace ops) is verbatim from what\'s actually in the doc - project-uploaded copies often drift behind live, especially for fields with pending-but-unapplied edits. Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match against `## ` / `### ` headers). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal - the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor). Returns { proposal_id, status: "pending", superseded_ids[], summary, target_doc, citation_count, preflight[] } where each preflight entry echoes { target_doc, section_anchor, operation, anchor_resolved, current_text_match, closest_match? } so stale anchors / drifted current_text surface immediately, not at arbiter time.',
       inputSchema: proposeDocChangesInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('propose_doc_changes', async (input) => {
       const result = await proposeDocChanges(auth, input as ProposeDocChangesInput)
       if (!result.ok) {
         throw new Error(`Proposal failed: ${result.error}`)
@@ -385,6 +386,6 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
         content: [{ type: 'text', text: JSON.stringify(responsePayload) }],
         structuredContent: responsePayload,
       }
-    },
+    }),
   )
 }

@@ -19,6 +19,19 @@ import {
 } from '@/lib/lifecycle-state'
 import type { RoastRecipe } from '@/lib/types'
 
+// Sprint 3.2 #14 — lot-header meta with FK fallback. Belt-and-suspenders
+// against future rows where bean.origin / bean.variety might land NULL
+// (the 4 rows surfaced in the 6.7 spot-check were fixed via migration 053
+// backfill, but new inserts that skip those columns would otherwise blank
+// out the subtitle). Falls back to the FK-joined terroir.country /
+// cultivar.cultivar_name. Composed at the call sites — 4 lifecycle views
+// share this string.
+function composeLotMeta(bean: any): string {
+  const origin = bean.origin ?? bean.terroir?.country ?? null
+  const variety = bean.variety ?? bean.cultivar?.cultivar_name ?? null
+  return [origin, variety, bean.process].filter(Boolean).join(' · ')
+}
+
 // Sub Pages 6.5 (2026-05-13). /green/[id] is fully state-driven per the
 // scope doc § 5 — one URL renders one of four lifecycle shapes based on the
 // state computed from joined data. 6.3 shipped waiting-for-next-roast; 6.4
@@ -186,7 +199,7 @@ function WaitingForNextRoastView({
             </div>
           )}
           <div className="font-mono text-sm text-latent-mid">
-            {[bean.origin, bean.variety, bean.process].filter(Boolean).join(' · ')}
+            {composeLotMeta(bean)}
           </div>
         </div>
       </div>
@@ -729,7 +742,7 @@ function WaitingForNextCuppingView({
             </div>
           )}
           <div className="font-mono text-sm text-latent-mid">
-            {[bean.origin, bean.variety, bean.process].filter(Boolean).join(' · ')}
+            {composeLotMeta(bean)}
           </div>
         </div>
       </div>
@@ -1261,10 +1274,24 @@ function ResolvedView({
             </div>
           )}
           <div className="font-mono text-sm text-latent-mid">
-            {[bean.origin, bean.variety, bean.process].filter(Boolean).join(' · ')}
+            {composeLotMeta(bean)}
           </div>
         </div>
       </div>
+
+      {/* Sprint 3.2 #18 — "Closed without reference" disambiguator. When the
+          lot is resolved but why_this_roast_won is NULL, the reference-roast
+          block below reads as "data missing" by default. Surface the state
+          explicitly so the reader knows there's no definitive winner. Per
+          Option B (preferred over em-dashes everywhere). */}
+      {learnings && !learnings.why_this_roast_won && (
+        <div className="bg-latent-bg border border-latent-border rounded p-4 mb-6 font-sans text-sm leading-relaxed text-latent-mid">
+          <div className="label mb-2 text-latent-fg">Closed without identifying a reference roast</div>
+          No definitive winner emerged from the V-set; the lot closed before a confirming
+          cupping landed. The Reference Roast block below shows the best-of-V&apos;s as
+          recorded — read it as the lot&apos;s archive snapshot, not a confirmed answer.
+        </div>
+      )}
 
       {/* Reference Roast card */}
       <SectionCard title={`REFERENCE ROAST · BATCH #${refBatchLabel}`}>
@@ -1284,10 +1311,12 @@ function ResolvedView({
           )}
         </div>
 
-        {/* Reference Roast Recipe — Design vs Achieved two-column grid */}
+        {/* Reference Roast Recipe — Design vs Achieved two-column grid.
+            Sprint 3.2 #20: min-w-0 on grid children so long prose values
+            (e.g. fan_curve string) shrink-to-fit instead of overflowing. */}
         <div className="label mb-3">Reference Roast Recipe</div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 font-sans text-sm">
-          <div>
+          <div className="min-w-0">
             <div className="font-mono text-xxs uppercase tracking-wide text-latent-mid mb-2 opacity-70">
               Design
             </div>
@@ -1297,7 +1326,7 @@ function ResolvedView({
             <RecipeRow label="Charge / Hopper" value={renderChargeHopper(referenceRecipe)} />
             <RecipeRow label="Fan curve" value={renderFanCurve(referenceRecipe)} />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="font-mono text-xxs uppercase tracking-wide text-latent-mid mb-2 opacity-70">
               Achieved
             </div>
@@ -1345,8 +1374,10 @@ function ResolvedView({
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* LEFT — Pourover cupping on the reference roast */}
-          <div className="bg-white border border-latent-border rounded p-4">
+          {/* LEFT — Pourover cupping on the reference roast.
+              Sprint 3.2 #20: min-w-0 + break-words so long descriptor prose
+              (e.g. Mandela XO's overall string) wraps instead of overflowing. */}
+          <div className="bg-white border border-latent-border rounded p-4 min-w-0">
             <div className="label mb-1">Cupping · #{refBatchLabel}</div>
             {pourover ? (
               <>
@@ -1355,7 +1386,7 @@ function ResolvedView({
                   {pourover.eval_method && ` · ${pourover.eval_method}`}
                 </div>
                 {pourover.overall ? (
-                  <div className="font-sans text-sm leading-relaxed">{pourover.overall}</div>
+                  <div className="font-sans text-sm leading-relaxed break-words">{pourover.overall}</div>
                 ) : (
                   <div className="space-y-2 font-sans text-sm">
                     <CupRow label="Aroma" value={pourover.aroma} />
@@ -1375,8 +1406,10 @@ function ResolvedView({
           </div>
 
           {/* RIGHT — Optimized brew row joined via green_bean_id (prefers
-              roast_id = best_roast_id, falls back to any brew on the lot) */}
-          <div className="bg-white border border-latent-border rounded p-4">
+              roast_id = best_roast_id, falls back to any brew on the lot).
+              Sprint 3.2 #20: min-w-0 so the recipe-line + descriptors wrap
+              inside the narrow column. */}
+          <div className="bg-white border border-latent-border rounded p-4 min-w-0">
             <div className="label mb-1">Optimized Brew · #{refBatchLabel} retasted</div>
             {optimizedBrew ? (
               <>
@@ -1407,7 +1440,7 @@ function ResolvedView({
                       .filter(Boolean)
                       .join(' · ')
                   return descriptors ? (
-                    <div className="font-sans text-sm leading-relaxed">{descriptors}</div>
+                    <div className="font-sans text-sm leading-relaxed break-words">{descriptors}</div>
                   ) : null
                 })()}
               </>
@@ -1590,19 +1623,9 @@ function ResolvedView({
         </CollapsibleSection>
       )}
 
-      {/* Additional Information — collapsed placeholder matching 6.3/6.4. The
-          resolved page is the densest of the four lifecycle shapes; most
-          surface is above, so this tail stays minimal. */}
-      <details className="mt-6 group">
-        <summary className="cursor-pointer font-mono text-xs text-latent-mid hover:text-latent-fg uppercase tracking-wide">
-          Additional Information
-        </summary>
-        <div className="mt-4 font-sans text-sm text-latent-mid italic">
-          The resolved view is the densest of the four lifecycle shapes. Reference roast,
-          reference cup, lot lessons, generalization layer, roast log, all cuppings, and
-          experiment journey all live above — this tail stays minimal.
-        </div>
-      </details>
+      {/* Sprint 3.2 #19 — Additional Information placeholder removed. The
+          resolved view's surface is already dense; the empty disclosure was
+          forward-investment for content that didn't materialize. */}
     </div>
   )
 }
@@ -1636,7 +1659,7 @@ function InventoryPlaceholder({ bean }: { bean: any }) {
             </div>
           )}
           <div className="font-mono text-sm text-latent-mid">
-            {[bean.origin, bean.variety, bean.process].filter(Boolean).join(' · ')}
+            {composeLotMeta(bean)}
           </div>
         </div>
       </div>

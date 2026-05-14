@@ -1,6 +1,7 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { isKnownDoc, listDocs, listDocSections, readDoc, readDocSection } from '@/lib/mcp/docs'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // Doc-introspection Tools (MCP feedback batch 2, 2026-04-30).
 //
@@ -27,13 +28,13 @@ export function registerDocTools(server: McpServer) {
         'List / browse / discover / enumerate every prose / taxonomy / prompt doc the MCP server can read. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section` — each entry carries a one-line "use when..." description so you can route to the right doc without fetching first. Catalog covers BREWING.md, ROASTING.md, the 10 taxonomy markdown files, the 7 operational prompt files, and split-out subdocs (docs/brewing/roasters.md, docs/brewing/wbc-reference.md, docs/brewing/wbc-recipes.md, docs/roasting/archive.md). Returns { docs: [{ uri, name, title, mimeType, description }] }.',
       inputSchema: {},
     },
-    async () => {
+    withToolErrorLogging('list_docs', async () => {
       const docs = listDocs()
       return {
         content: [{ type: 'text', text: JSON.stringify({ docs }) }],
         structuredContent: { docs },
       }
-    },
+    }),
   )
 
   server.registerTool(
@@ -48,7 +49,7 @@ export function registerDocTools(server: McpServer) {
         ),
       },
     },
-    async ({ uri }) => {
+    withToolErrorLogging('list_doc_sections', async ({ uri }) => {
       if (!isKnownDoc(uri)) {
         throw new Error(
           `Unknown doc URI: ${uri}. Call list_docs to discover valid URIs.`,
@@ -59,7 +60,7 @@ export function registerDocTools(server: McpServer) {
         content: [{ type: 'text', text: JSON.stringify({ uri, anchors }) }],
         structuredContent: { uri, anchors },
       }
-    },
+    }),
   )
 
   server.registerTool(
@@ -74,7 +75,7 @@ export function registerDocTools(server: McpServer) {
         ),
       },
     },
-    async ({ uri }) => {
+    withToolErrorLogging('read_doc', async ({ uri }) => {
       if (!isKnownDoc(uri)) {
         throw new Error(
           `Unknown doc URI: ${uri}. Call list_docs to discover valid URIs.`,
@@ -85,7 +86,7 @@ export function registerDocTools(server: McpServer) {
         content: [{ type: 'text', text }],
         structuredContent: { uri, text },
       }
-    },
+    }),
   )
 
   server.registerTool(
@@ -103,7 +104,7 @@ export function registerDocTools(server: McpServer) {
         ),
       },
     },
-    async ({ uri, anchor }) => {
+    withToolErrorLogging('read_doc_section', async ({ uri, anchor }) => {
       if (!isKnownDoc(uri)) {
         throw new Error(
           `Unknown doc URI: ${uri}. Call list_docs to discover valid URIs.`,
@@ -120,6 +121,6 @@ export function registerDocTools(server: McpServer) {
         content: [{ type: 'text', text: body }],
         structuredContent: { uri, anchor, body },
       }
-    },
+    }),
   )
 }
