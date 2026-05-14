@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { fetchRecentBrews, RECENT_DEFAULT_LIMIT, RECENT_MAX_LIMIT } from '@/lib/mcp/brews'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // list_recent_brews — Tool surface for the brews://recent Resource.
 //
@@ -39,7 +40,7 @@ export function registerListRecentBrewsTool(server: McpServer, auth: McpAuthCont
         `List / fetch / show / view / get / read / browse / pull the most recent brews scoped to the authenticated user. Returns a trimmed JSON array of brew rows ordered latest-first, each carrying id, source, classification, roaster, coffee_name, producer, roast_level, brewer + filter + grinder, recipe (dose / water / ratio / temp / bloom / pour_structure / total_time), structured process columns, extraction_strategy + hybrid_subform + modifiers + extraction_confirmed + strategy_notes + cooling_curve_target, flavors + structure_tags, full taste-arc fields (aroma / attack / mid_palate / body / finish / temperature_evolution / peak_expression / what_i_learned), and FK-joined terroir + cultivar + green_bean. Use to answer "what did I brew recently?" / "show me my last few brews" / "when did I last brew X?" / "pull recent brew history" / "what's the latest in my brew log?" Pair with get_brew(brew_id) to drill into any one row's full detail. Default limit ${RECENT_DEFAULT_LIMIT}, max ${RECENT_MAX_LIMIT}. Filtered fetches (by strategy / process / cultivar / since_date) belong on a future query_brews Tool — this one returns latest-first across all sources.`,
       inputSchema: listRecentBrewsInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('list_recent_brews', async (input) => {
       const limit = (input as { limit?: number }).limit ?? RECENT_DEFAULT_LIMIT
       const rows = await fetchRecentBrews(auth.supabase, auth.userId, limit)
       const out = { count: rows.length, brews: rows }
@@ -47,6 +48,6 @@ export function registerListRecentBrewsTool(server: McpServer, auth: McpAuthCont
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

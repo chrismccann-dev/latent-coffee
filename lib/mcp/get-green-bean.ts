@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { lookupGreenBean, type LookupGreenBeanFilter } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // get_green_bean — read-only lookup of a green_bean row by lot_id,
 // roest_inventory_id, or green_bean_id. Returns the row scoped to the
@@ -37,7 +38,7 @@ export function registerGetGreenBeanTool(server: McpServer, auth: McpAuthContext
         'Look up / fetch / get / find / read / search an existing green coffee bean lot row by lot_id, roest_inventory_id, or green_bean_id (at least one required). Returns the full green_bean row scoped to the authenticated user. Use AFTER a crash / cross-session retry to recover green_bean_id when push_green_bean returns "already exists" (the UPSERT case where you lost the original ID), or BEFORE push_green_bean to check whether a lot is already in the DB without writing. Returns the row\'s terroir_id + cultivar_id which feed into push_roast / push_experiment / push_roast_learnings as the FK chain. Errors with not_found if no matching row exists for this user.',
       inputSchema: getGreenBeanInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('get_green_bean', async (input) => {
       const filter = input as LookupGreenBeanFilter
       const result = await lookupGreenBean(auth.supabase, auth.userId, filter)
       if (!result.ok) {
@@ -54,6 +55,6 @@ export function registerGetGreenBeanTool(server: McpServer, auth: McpAuthContext
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

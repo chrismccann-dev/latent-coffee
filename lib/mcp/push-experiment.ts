@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistExperiment, type ExperimentPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // push_experiment — UPSERT on (user_id, green_bean_id, experiment_id).
 // Experiments iterate as observations land — first push at experiment design,
@@ -93,7 +94,7 @@ export function registerPushExperimentTool(server: McpServer, auth: McpAuthConte
         'Log / save / update / record / push a roasting experiment (A/B/C/D batch comparison) — UPSERTs on (user_id, green_bean_id, experiment_id). Same experiment_id pushed twice updates the existing row — supports the iterative shape where experiment design lands first, then outcomes / winner / key_insight populate as batches resolve at Day 7. Three Round-4 (2026-05-11) free-text additions live alongside the structured fields: additional_notes, open_questions, and key_insight_confidence (Low / Medium / Medium-High / High). Sub Pages 6.1 (2026-05-13, migration 052) adds 16 cross-batch fields covering 4 temporal write moments per docs/roasting/redesign.md § 4.2: updated_cup_prediction_a/b/c/d (post-roast, before cupping), taste_for_a/b/c/d (cupping-table questions), delta_from_roast_a/b/c/d (reconciliation vs recipe predictions), delta_from_cup_a/b/c/d (reconciliation vs updated cup prediction). Legacy observed_outcome_a-d + expected_outcomes stay populated through Phase 3. Returns { experiment_pk, created }.',
       inputSchema: pushExperimentInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('push_experiment', async (input) => {
       const payload = input as ExperimentPayload
       const result = await persistExperiment(auth.supabase, auth.userId, payload)
       if (!result.ok) {
@@ -107,6 +108,6 @@ export function registerPushExperimentTool(server: McpServer, auth: McpAuthConte
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

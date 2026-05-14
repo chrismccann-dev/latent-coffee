@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { searchRoestLogs, msecToMMSS } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // list_roest_logs — discover Roest roast log batches by inventory_id.
 //
@@ -38,7 +39,7 @@ export function registerListRoestLogsTool(server: McpServer, auth: McpAuthContex
         'List / browse / discover / find / enumerate / search all Roest roast log batches for a given green coffee inventory (lot). Returns lightweight summaries (log_id + batch_no + roast_date + fc_temp + drop_temp + agtron + profile_name + share_uuid) for each batch the Roest machine recorded against this inventory_id. Use BEFORE pull_roest_log when you don\'t already know the log IDs — pull_roest_log requires a specific log_id; this Tool discovers them by inventory_id. Pairs with list_roest_inventory (which discovers inventory_id from a name search) to give a complete two-step lookup. Roest credentials never leave the server.',
       inputSchema: listRoestLogsInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('list_roest_logs', async (input) => {
       const inventory_id = input.inventory_id as number
       const limit = (input.limit as number | undefined) ?? 50
       const logs = await searchRoestLogs(inventory_id, limit)
@@ -73,6 +74,6 @@ export function registerListRoestLogsTool(server: McpServer, auth: McpAuthContex
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

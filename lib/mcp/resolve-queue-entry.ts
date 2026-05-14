@@ -1,6 +1,7 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // resolve_queue_entry — arbiter-side Tool that flips a queue row from
 // 'pending' to 'promoted' / 'aliased' / 'rejected' / 'duplicate'.
@@ -40,7 +41,7 @@ export function registerResolveQueueEntryTool(server: McpServer, auth: McpAuthCo
         'Update / resolve / save / record / log an arbiter decision on a taxonomy_overrides_queue row (Phase 3) — flips status from "pending" to "promoted" | "aliased" | "rejected" | "duplicate" and records canonical_target + arbiter_notes. Used by Chris-as-arbiter (Claude Code session) AFTER the registry edit (docs/taxonomies/{axis}.md + lib/{axis}-registry.ts) has been committed. This Tool does NOT edit the registry — it only records the decision; the editor session is the source of truth for the actual canonical promotion. Mirrors the propose_doc_changes → ARBITER.md flow: human-mediated apply, then status flip. promoted/aliased require canonical_target; duplicate requires duplicate_of (UUID of the survivor pending row). Returns { queue_id, status, resolved_at }.',
       inputSchema: resolveQueueEntryInputSchema,
     },
-    async ({ queue_id, action, canonical_target, duplicate_of, arbiter_notes }) => {
+    withToolErrorLogging('resolve_queue_entry', async ({ queue_id, action, canonical_target, duplicate_of, arbiter_notes }) => {
       // Per-action input validation
       if ((action === 'promoted' || action === 'aliased') && !canonical_target?.trim()) {
         throw new Error(`action="${action}" requires canonical_target.`)
@@ -110,6 +111,6 @@ export function registerResolveQueueEntryTool(server: McpServer, auth: McpAuthCo
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

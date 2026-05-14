@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { fetchBrewById } from '@/lib/mcp/brews'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // get_brew — Tool surface for the brews://by-id/{uuid} Resource.
 //
@@ -29,7 +30,7 @@ export function registerGetBrewTool(server: McpServer, auth: McpAuthContext) {
         'Fetch / get / read / show / look up / pull / find a single brew row by brew_id. Returns the full row with all columns and FK joins (terroir, cultivar, green_bean) — use this when list_recent_brews surfaced a brew you want full detail on, when claude.ai gets a brew_id from a previous conversation and needs to recover its content, or when push_brew returns a brew_id and you want to verify what landed. The trimmed shape from list_recent_brews already covers most fields; reach for get_brew when you need fields list_recent_brews omits or want to confirm post-write state. Errors with not_found if no matching row exists for this user.',
       inputSchema: getBrewInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('get_brew', async (input) => {
       const { brew_id } = input as { brew_id: string }
       const row = await fetchBrewById(auth.supabase, auth.userId, brew_id)
       if (!row) {
@@ -39,6 +40,6 @@ export function registerGetBrewTool(server: McpServer, auth: McpAuthContext) {
         content: [{ type: 'text', text: JSON.stringify(row) }],
         structuredContent: row,
       }
-    },
+    }),
   )
 }

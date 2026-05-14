@@ -6,6 +6,8 @@ import {
   type PatchRoastRecipePayload,
 } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 export const patchRoastRecipeInputSchema = {
   recipe_id: z.string().uuid().describe(
@@ -52,8 +54,17 @@ export function registerPatchRoastRecipeTool(server: McpServer, auth: McpAuthCon
         'Update / save / record / push field-level changes to an existing roast_recipes row by recipe_id. Sibling of push_roast_recipe — push UPSERTs by composite (experiment_id, batch_slot) or recipe_name so iterative design works cleanly, but patch uses the PK so you can correct the batch_slot label itself, fix prose typos in rationale / notes / drop_rule_*, or backfill Roest linkage (roest_profile_id / roest_share_url) after push_roast_profile lands. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Returns { recipe_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch so you can sanity-check without a follow-up read (mirrors patch_experiment pattern).',
       inputSchema: patchRoastRecipeInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('patch_roast_recipe', async (input) => {
       const payload = input as PatchRoastRecipePayload
+      // Sprint 3.2 #3 + #4 — cross-field validation when relevant fields supplied.
+      const boundsErr = checkEndConditionBounds(payload.end_condition_type, payload.end_condition_target)
+      if (boundsErr) throw new Error(`Validation failed:\n  - ${boundsErr}`)
+      const pb = payload.power_bezier as unknown
+      if (Array.isArray(pb) && pb.length > 0) {
+        throw new Error(
+          'Validation failed:\n  - power_bezier must be null/empty on INLET_TEMP recipes (Chris\'s exclusive mode — see push_roast_profile). The server controls power to hit inlet target.',
+        )
+      }
       const result = await patchRoastRecipe(auth.supabase, auth.userId, payload)
       if (!result.ok) {
         if (result.code === 'validation') {
@@ -72,6 +83,6 @@ export function registerPatchRoastRecipeTool(server: McpServer, auth: McpAuthCon
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

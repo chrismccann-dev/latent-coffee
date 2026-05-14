@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistRoastLearnings, type RoastLearningsPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // push_roast_learnings — UPSERT on (user_id, green_bean_id). One row per closed
 // bean, filled at lot close-out. The 17 structured fields mirror the
@@ -47,7 +48,7 @@ export function registerPushRoastLearningsTool(server: McpServer, auth: McpAuthC
         'Log / save / record / push the per-bean roast lessons row at lot close-out — one row per closed bean. UPSERTs the structured "Overall Lessons (Per Bean)" 17-col shape keyed on (user_id, green_bean_id) — re-pushing the same green_bean_id updates the existing row. Distinct from propose_doc_changes against ROASTING.md — this Tool fills the structured DB table that /green/[id] renders; propose_doc_changes adds prose narrative to the living roasting reference doc. Returns { roast_learnings_id, created } where created=true on first push, false on update.',
       inputSchema: pushRoastLearningsInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('push_roast_learnings', async (input) => {
       const payload = input as RoastLearningsPayload
       const result = await persistRoastLearnings(auth.supabase, auth.userId, payload)
       if (!result.ok) {
@@ -61,6 +62,6 @@ export function registerPushRoastLearningsTool(server: McpServer, auth: McpAuthC
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { fetchByBean } from '@/lib/mcp/roasts'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // get_bean_pipeline — read-only fetch of the full SR pipeline for one
 // green_bean_id. Returns { green_bean, roasts[], cuppings[], experiments[],
@@ -36,7 +37,7 @@ export function registerGetBeanPipelineTool(server: McpServer, auth: McpAuthCont
         'Look up / fetch / get / list / read all roasts + cuppings + experiments + roast_learnings + brews for a green coffee bean lot in one call. Returns { green_bean (full row), roasts[] (full rows, chronological), cuppings[] (full rows including recipe_variant, the 6 prose fields, and ground_agtron — ordered by cupping_date asc), experiments[] (full rows including the Round-4 additions additional_notes / open_questions / key_insight_confidence), roast_learnings (single full row or null), brews[] (LIGHTWEIGHT SUMMARIES only: id + coffee_name + source + roast_id + extraction_strategy + what_i_learned + created_at, sorted latest-first) }. brews[] is the only trimmed array — the others all carry every column. Use this AFTER a crash / cross-session retry to recover roast_ids (for the push_cupping FK chain), experiment_pks (for push_experiment UPSERT key matching), or just to verify pipeline state across sessions. Surfaces orphan brews where roast_id is null (those need patch_brew backfill). Most common workflow: get_green_bean({lot_id}) recovers green_bean_id, then get_bean_pipeline({green_bean_id}) recovers all downstream IDs. Mirrors the roasts://by-bean/{green_bean_id} Resource exactly.',
       inputSchema: getBeanPipelineInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('get_bean_pipeline', async (input) => {
       const green_bean_id = input.green_bean_id as string
       const payload = await fetchByBean(auth.supabase, auth.userId, green_bean_id)
       if (!payload) {
@@ -48,6 +49,6 @@ export function registerGetBeanPipelineTool(server: McpServer, auth: McpAuthCont
         content: [{ type: 'text', text: JSON.stringify(payload) }],
         structuredContent: payload as unknown as { [k: string]: unknown },
       }
-    },
+    }),
   )
 }

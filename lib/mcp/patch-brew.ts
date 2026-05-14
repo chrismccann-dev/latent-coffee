@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { patchBrew, PATCH_BREW_EDITABLE_FIELDS } from '@/lib/brew-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // patch_brew (Sprint 2.6) — field-level mutation Tool. Mirrors push_brew's
 // surface but every field is optional except `brew_id`. Re-uses the shared
@@ -109,7 +110,7 @@ export function registerPatchBrewTool(server: McpServer, auth: McpAuthContext) {
         'Update / fix / correct / save / record / push field-level changes to an existing brew row by brew_id. Sibling of push_brew (for new rows) — use this when you need to fix a typo on a brew you already pushed, backfill a missing field on an existing brew (orphan-brew with NULL roast_id, FK linkage correction), or otherwise mutate a single brew without re-pushing the whole payload. Field-level mutation: only fields you EXPLICITLY supply in the body are updated; omitted fields are untouched. Re-validates every canonical-validated field (roaster / producer / brewer / filter / grinder / roast_level / flavors / structure_tags / extraction_strategy / process axes) the same way push_brew does — including the `*_override` flags for legitimately net-new entities. Validation errors aggregate (multi-field problems collapse to one round-trip). To find brew_ids: call get_bean_pipeline (returns brews[] for self-roasted beans). Returns { brew_id, updated_fields: [...] } — updated_fields echoes simple-column keys the caller supplied (canonical re-resolutions like roaster / producer / cultivar / terroir / process axes are NOT echoed because they touch multiple columns; check a follow-up read if you need to confirm those landed).',
       inputSchema: patchBrewInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('patch_brew', async (input) => {
       const body = input as Record<string, unknown>
       const result = await patchBrew(auth.supabase, auth.userId, input.brew_id, body)
       if (!result.ok) {
@@ -132,6 +133,6 @@ export function registerPatchBrewTool(server: McpServer, auth: McpAuthContext) {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

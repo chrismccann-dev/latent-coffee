@@ -8,6 +8,7 @@ import {
   type RoestInventory,
 } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // Today's date in YYYY-MM-DD as the user's configured TZ (ROEST_USER_TIMEZONE,
 // default America/Los_Angeles). Used as the reg_date default — Roest requires
@@ -132,7 +133,7 @@ export function registerPushInventoryTool(server: McpServer, auth: McpAuthContex
         'Push / create / upload / sync / register a green coffee lot to Chris\'s Roest inventory via api.roestcoffee.com POST /inventories/. Mirrors the read shape from list_roest_inventory (RoestInventory) — same fields, write direction. When green_bean_id is provided, on successful create the Tool also updates our `green_beans.roest_inventory_id` column so the two records are permanently linked (closing the loop with pull_roest_log / list_roest_inventory which depend on that FK to map a Roest log back to our DB row). Roest bean_process enum is 5 buckets (1=Natural, 2=Washed, 3=Honey, 4=Co-fermented/XO, 5=Anaerobic) — caller collapses our composable taxonomy down to one. Weight units: send raw grams (not the kg-as-integer-1000x form returned on read). Moisture: send as percentage value (8.7), not fraction. customer + reg_date + current_weight are auto-filled server-side when omitted (reg_date defaults to today in user TZ; current_weight mirrors initial_weight on fresh intake) — these were silent-400 sources before the wrapper learned to default them (Roest dog-food round 1, 2026-05-06). initial_weight is required at the schema level since the mirror needs it. Returns { roest_inventory_id, linked: bool } where linked is true when green_bean_id was provided AND the green_beans update succeeded. Idempotency: create-new (no upsert); pushing the same lot twice yields two Roest rows.',
       inputSchema: pushInventoryInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('push_inventory', async (input) => {
       const i = input as PushInventoryInput
       const { url: customerUrl } = await getRoestCustomerInfo()
       const { green_bean_id, ...inventoryFields } = i
@@ -176,6 +177,6 @@ export function registerPushInventoryTool(server: McpServer, auth: McpAuthContex
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

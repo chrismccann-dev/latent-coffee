@@ -6,6 +6,7 @@ import {
   type PatchExperimentPayload,
 } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 export const patchExperimentInputSchema = {
   experiment_pk: z.string().uuid().describe(
@@ -67,7 +68,7 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
         'Update / save / record / push field-level changes to an existing experiment by experiment_pk. Sibling of push_experiment — push_experiment UPSERTs by composite (green_bean_id, experiment_id) so the iterative-design path is well covered, but patch_experiment uses the PK so you can correct the experiment_id label itself or fix prose typos in observed_outcome_* / key_insight without composite-key matching. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find experiment_pk: call get_bean_pipeline (returns experiments[] with id keyed by experiment_id). Returns { experiment_pk, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which columns landed; canonical_values echoes the actual values of enum-validated fields (key_insight_confidence) so the caller can confirm the level / vocabulary landed without a follow-up read.',
       inputSchema: patchExperimentInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('patch_experiment', async (input) => {
       const payload = input as PatchExperimentPayload
       const result = await patchExperiment(auth.supabase, auth.userId, payload)
       if (!result.ok) {
@@ -104,6 +105,6 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

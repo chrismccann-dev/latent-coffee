@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { searchRoestInventories, roestInventoryToPushGreenBeanPayload } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // list_roest_inventory — search Chris's Roest inventory (customer 2424).
 // Returns an array of inventories with normalized push_green_bean-shaped
@@ -31,7 +32,7 @@ export function registerListRoestInventoryTool(server: McpServer, auth: McpAuthC
         'Search / browse / list / find / discover green coffee lots in Chris\'s Roest inventory (customer 2424) by name (substring) or archived status. Returns normalized push_green_bean-shaped payloads with roest_inventory_id pre-set. Use to discover inventory IDs before calling pull_roest_log on per-batch logs, or to seed push_green_bean for a new bean. Roest credentials never leave the server.',
       inputSchema: listRoestInventoryInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('list_roest_inventory', async (input) => {
       const inventories = await searchRoestInventories({
         search: input.search,
         archived: input.archived,
@@ -44,6 +45,6 @@ export function registerListRoestInventoryTool(server: McpServer, auth: McpAuthC
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { authedWrite, type RoestInventory } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // patch_inventory — PATCH /inventories/{id}/ on api.roestcoffee.com.
 // Phase 2 of Roest write integration. Field-level updates to an existing
@@ -90,7 +91,7 @@ export function registerPatchInventoryTool(server: McpServer, auth: McpAuthConte
         'Patch / update / modify / archive / adjust a single Roest inventory by id via api.roestcoffee.com PATCH /inventories/{id}/. Field-level updates: only keys present in the input are sent. Common uses: mark is_archived=true after final roast on a lot, update current_weight after a roast, fix typos on producer / notes / cultivar. Weight units: raw grams (same convention as push_inventory). Moisture: percentage value (8.7), not fraction. bean_process: Roest 5-bucket enum (1=Natural, 2=Washed, 3=Honey, 4=Co-fermented/XO, 5=Anaerobic). No DB-side effects — the green_beans.roest_inventory_id link (if any) is established at push_inventory time; to bind an existing Roest inventory to an existing green_beans row, use patch_green_bean. Returns { ok: true, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which keys were sent; canonical_values echoes the actual values of small-vocab fields (bean_process, is_archived) so the caller can confirm without a follow-up read.',
       inputSchema: patchInventoryInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('patch_inventory', async (input) => {
       const { roest_inventory_id, ...rest } = input as PatchInventoryInput
       // Strip undefined keys but PRESERVE explicit null (Roest treats null as
       // "clear this field"). Spread of `rest` already omits keys the caller
@@ -125,6 +126,6 @@ export function registerPatchInventoryTool(server: McpServer, auth: McpAuthConte
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

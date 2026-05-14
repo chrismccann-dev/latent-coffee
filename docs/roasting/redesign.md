@@ -54,6 +54,14 @@ A green bean lot moves through these states. The state determines which page ren
 
 The user moves from waiting-for-next-roast → waiting-for-next-cupping → (back to waiting-for-next-roast for V_(n+1)) repeatedly, until the lot resolves. There is no separate "synthesis transition" page — synthesis happens via Claude updating the experiment record in place, after which the page transitions to the next state on its own.
 
+### 3.1 One-shot lots — V1 with cardinality 1
+
+Lots with only enough green for a single roast still flow through the same pipeline, just as a 1-batch V-set. There is no schema flag distinguishing them — the pattern is implicit via `experiments.batch_ids` having a single element. The lifecycle helper handles it identically to a 3-batch V1: once the experiment row exists with a single batch_id and the roast row is matched, the helper routes through `waiting_for_next_cupping` → `resolved` normally.
+
+Pre-framework legacy lots that have a roast but no experiment (today: Rancho Tio with 1 roast and 0 experiments) currently fall through to `waiting_for_next_roast` via lifecycle rule (c). The right close-out is to backfill an experiment row for the lot (1-batch V-set framing) rather than special-case the helper — the framework is the destination, the experiment-less path is the migration shape.
+
+This framing matters because it preserves the same archive surface across lot sizes. A single-shot lot still gets a frame, a hypothesis, a cupping, learnings, and a reference roast; it just doesn't iterate across siblings within the same V-set. Cross-lot iteration (V1 single-shot informing V1 of a similar bean later) still happens — that's what `starting_hypothesis_for_similar_lots` on `roast_learnings` captures.
+
 ---
 
 ## 4. The Data Model — Final Locked Schema

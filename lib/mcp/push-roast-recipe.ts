@@ -2,6 +2,8 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistRoastRecipe, type RoastRecipePayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
+import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // push_roast_recipe — UPSERT on (user_id, experiment_id, batch_slot) when both
 // fields supplied (canonical V-set framing), otherwise UPSERT on
@@ -80,8 +82,20 @@ export function registerPushRoastRecipeTool(server: McpServer, auth: McpAuthCont
         'Create / save / record / push a roast recipe — first-class design-intent entity, separate from the as-recorded roast that executes it. UPSERTs on (user_id, experiment_id, batch_slot) when both supplied (V-set framing — v1a / v1b / v1c are three recipes), otherwise on (user_id, green_bean_id, recipe_name) for one-off recipes outside the V framing. Use when designing an experiment set: create the experiments row first, then 3 (or N) roast_recipes rows referencing it. Recipe-deduplication is deliberate — each batch execution = one recipe, even when curves are identical (matches Roest tablet semantics). Recipe predictions (predicted_fc_temp / predicted_cup / etc.) are frozen at design time; the post-roast cup re-prediction lives on experiments.updated_cup_prediction_* instead. Returns { recipe_id, created }.',
       inputSchema: pushRoastRecipeInputSchema,
     },
-    async (input) => {
+    withToolErrorLogging('push_roast_recipe', async (input) => {
       const payload = input as RoastRecipePayload
+      // Sprint 3.2 #3 + #4 — cross-field validation. Recipe rows mirror the
+      // profile shape; if the recipe later seeds push_roast_profile, the
+      // same bounds apply. power_bezier on roast_recipes follows the same
+      // INLET_TEMP-only rule (Chris's exclusive mode).
+      const boundsErr = checkEndConditionBounds(payload.end_condition_type, payload.end_condition_target)
+      if (boundsErr) throw new Error(`Validation failed:\n  - ${boundsErr}`)
+      const pb = payload.power_bezier as unknown
+      if (Array.isArray(pb) && pb.length > 0) {
+        throw new Error(
+          'Validation failed:\n  - power_bezier must be null/empty on INLET_TEMP recipes (Chris\'s exclusive mode — see push_roast_profile). The server controls power to hit inlet target.',
+        )
+      }
       const result = await persistRoastRecipe(auth.supabase, auth.userId, payload)
       if (!result.ok) {
         if (result.code === 'validation') {
@@ -94,6 +108,6 @@ export function registerPushRoastRecipeTool(server: McpServer, auth: McpAuthCont
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,
       }
-    },
+    }),
   )
 }

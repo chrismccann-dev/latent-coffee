@@ -129,6 +129,42 @@ export const CULTIVAR_REGISTRY: CultivarRegistryEntry[] = CULTIVARS.map((c) => (
 }))
 
 // ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+// Sprint 3.2 (item #1) — admin_region drift-tolerant matcher. The pre-3.2
+// behavior used strict-lowercase equality, which silently false-missed when
+// claude.ai wrote a drift-shaped region ("Tolima Department" vs registry
+// "Tolima") or a single-dept caller against a multi-dept canonical
+// ("Antioquia" vs "Antioquia / Caldas / Quindío / Tolima"). Tokenization +
+// subset comparison fixes both: either side a token-subset of the other =
+// match. Strips slashes / commas / hyphens so multi-dept registry shapes
+// tokenize cleanly. Locale-aware lowercase preserves diacritics.
+function adminRegionTokens(s: string | null | undefined): Set<string> {
+  if (!s) return new Set()
+  return new Set(
+    s
+      .toLowerCase()
+      .replace(/[\/,;\-–—]+/g, ' ')
+      .split(/\s+/)
+      .filter((t) => t.length > 0),
+  )
+}
+
+export function adminRegionMatches(
+  a: string | null | undefined,
+  b: string | null | undefined,
+): boolean {
+  const ta = adminRegionTokens(a)
+  const tb = adminRegionTokens(b)
+  if (ta.size === 0 || tb.size === 0) return ta.size === 0 && tb.size === 0
+  const [small, large] = ta.size <= tb.size ? [ta, tb] : [tb, ta]
+  const tokens = Array.from(small)
+  for (let i = 0; i < tokens.length; i++) if (!large.has(tokens[i])) return false
+  return true
+}
+
+// ---------------------------------------------------------------------------
 // Payload shape (subset of InsertBrew, plus the classification candidates)
 // ---------------------------------------------------------------------------
 
@@ -433,10 +469,12 @@ export async function matchTerroir(
 
   if (rows && rows.length > 0) {
     // After meso filter, multi-row case is (same country+macro+meso, different
-    // admin_region). Prefer the row whose admin_region matches caller input,
-    // else fall back to the first row.
+    // admin_region). Prefer the row whose admin_region tokens overlap with
+    // caller input (Sprint 3.2 #1: tokenized so "Tolima" matches a multi-dept
+    // canonical "Antioquia / Caldas / Quindío / Tolima"), else fall back to
+    // the first row.
     const byAdmin = terroir.admin_region
-      ? rows.find((r: any) => r.admin_region?.toLowerCase() === terroir.admin_region?.toLowerCase())
+      ? rows.find((r: any) => adminRegionMatches(r.admin_region, terroir.admin_region))
       : null
     const match = byAdmin || rows[0]
     return { isNew: false, id: match.id, inRegistry, terroir }
@@ -623,7 +661,7 @@ export async function findOrCreateTerroir(
   // is always preserved (meso is per-bean, not in the rich registry).
   const callerAdmin = (typeof adminOverride === 'string' && adminOverride.trim()) || null
   const admin = entry.admin_region
-  if (callerAdmin && callerAdmin.toLowerCase() !== admin.toLowerCase()) {
+  if (callerAdmin && !adminRegionMatches(callerAdmin, admin)) {
     console.warn(
       `[findOrCreateTerroir] admin_region drift: caller sent "${callerAdmin}" but registry has "${admin}" for ${countryTrim}/${canonical}. Using registry value.`,
     )
