@@ -60,10 +60,10 @@ Source green beans (importers, farm direct)
     → Push experiment record per set → push_experiment (UPSERT as iteration progresses)
     → Iterate until reference roast candidate confirmed
     → Treat reference roast like a purchased bean → optimize brew recipe via BREWING.md flow
-    → Lot close-out via closed-bean-full-fill prompt: push_roast_learnings + push_brew (SR reference brew) + propose ROASTING.md close-out narrative
+    → Lot close-out via close-lot.md prompt: patch_roast (is_reference: true) + push_roast_learnings + push_brew (SR reference brew) + propose ROASTING.md close-out narrative + patch_inventory (Roest archive)
 ```
 
-Roasting iterates incrementally — each roast session and cupping session syncs to the app via MCP Tools as the work happens, not at lot close. claude.ai uses the `in-process-bean-incremental-sync.md` prompt for mid-iteration syncs and the `closed-bean-full-fill.md` prompt for close-out (which bundles the SR reference brew push).
+Roasting iterates incrementally - each roast session and cupping session syncs to the app via MCP Tools as the work happens, not at lot close. The roasting workflow is driven by 4 lifecycle-mapped operational prompts (one per lifecycle-state transition): `start-lot.md` (In inventory → Waiting for next roast), `log-roast.md` (Waiting for next roast → Waiting for next cupping), `log-cupping.md` (Waiting for next cupping → Waiting for next roast loop OR Resolved-pending), `close-lot.md` (Resolved-pending → Resolved; bundles the SR reference brew push).
 
 Key roasting principles (see ROASTING.md for the full reference):
 - **Express on whichever layer fits the coffee** — Chris controls both roast and brew, so a loud roast (Mandela XO) can be controlled with heavy-suppression brewing, or a restrained roast can be pushed with Full Expression

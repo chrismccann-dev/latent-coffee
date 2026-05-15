@@ -27,7 +27,7 @@ The asymmetry is the load-bearing call: Claude.ai's strong suit is structured fi
 **In scope (live):**
 - Brewing flow end-to-end: coffee briefing in claude.ai → recipe iteration → "log it" → push_brew + propose lessons.
 - Roasting flow end-to-end: per-roast push (not just per-bean compile) → push_cupping → push_experiment → push_roast_learnings at lot close. Roest API write integration (push_roast_profile + push_inventory + patch_inventory) closes the manual-transcription step in profile design + inventory bookkeeping.
-- **Self-roasted brew sync** — the SR reference brew gets pushed via `push_brew` with `source: 'self-roasted'` + `green_bean_id` + `roast_id` linking. Bundled into `closed-bean-full-fill.md` STAGE 7(a) so the brew lands together with the lot close-out narrative.
+- **Self-roasted brew sync** - the SR reference brew gets pushed via `push_brew` with `source: 'self-roasted'` + `green_bean_id` + `roast_id` linking. Bundled into `close-lot.md` STAGE 4 so the brew lands together with the lot close-out narrative.
 - Bidirectional reads: claude.ai pulls canonicals + docs + recent brews live (no manual upload to project context).
 - Net-new canonical fallback: push-with-override + Phase 3 `taxonomy_overrides_queue` + arbiter playbook.
 
@@ -87,7 +87,7 @@ Resources are content endpoints claude.ai can list and fetch. Each Resource has 
 | `docs://brewing/wbc-recipes.md` | 102-recipe WBC archive (2022-2025) | Repo file |
 | `docs://roasting.md` | `ROASTING.md` text (full, or `#{anchor}` for one section) | Repo file |
 | `docs://taxonomies/{axis}.md` | Authored markdown for one of the 10 canonical taxonomies (full, or `#{anchor}`) | Repo file |
-| `docs://prompts/{name}.md` | Operational prompts (start-brew / log-brew / propose-doc-changes-from-brew / bundled-brewing-completion / new-bean-intake / in-process-bean-incremental-sync / closed-bean-full-fill) | Repo file |
+| `docs://prompts/{name}.md` | Operational prompts (start-brew / log-brew / propose-doc-changes-from-brew / bundled-brewing-completion brewing-side; start-lot / log-roast / log-cupping / close-lot roasting-side) | Repo file |
 
 **Note:** `brews://recent` and `brews://by-id/{uuid}` were Resources in Sprint 2.3 but were promoted to Tools (`list_recent_brews` + `get_brew`) in Sprint 3.0.5 (2026-05-03). Architectural rule confirmed: claude.ai surfaces Tools to the model; Resources are catalog only.
 

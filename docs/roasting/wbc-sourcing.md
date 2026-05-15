@@ -380,4 +380,4 @@ Prioritized buy list **reordered for Latent's current palate (VERY expressive + 
 - **Brewing-side WBC docs:** [docs/brewing/wbc-reference.md](../brewing/wbc-reference.md), [docs/brewing/wbc-recipes.md](../brewing/wbc-recipes.md).
 - **Canonical taxonomies:** [docs/taxonomies/producers.md](../taxonomies/producers.md), [docs/taxonomies/regions.md](../taxonomies/regions.md), [docs/taxonomies/varieties.md](../taxonomies/varieties.md), [docs/taxonomies/processes.md](../taxonomies/processes.md).
 - **Live lot knowledge:** [ROASTING.md § Lot Knowledge](../../ROASTING.md), [docs/roasting/archive.md](archive.md).
-- **Bean intake operational prompt:** [docs/prompts/new-bean-intake.md](../prompts/new-bean-intake.md).
+- **Bean intake operational prompt:** [docs/prompts/start-lot.md](../prompts/start-lot.md).

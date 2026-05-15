@@ -28,7 +28,7 @@ Domain references in `docs/`:
 - [docs/taxonomies/](docs/taxonomies/) — 10 canonical taxonomies (cultivars, terroirs, processes, roasters, producers, brewers, filters, flavors, grinders, roast-levels). Each .md is the authored source; `lib/<axis>-registry.ts` is the validation mirror.
 - [docs/brewing/](docs/brewing/) — Roaster reference cards, WBC reference (5-axis foundational map + 8 strategy families), 102-recipe WBC corpus
 - [docs/roasting/archive.md](docs/roasting/archive.md) — Closed-lot archive (per-lot Key Learnings)
-- [docs/prompts/](docs/prompts/) — 7 operational prompts for claude.ai sessions (start-brew / log-brew / propose-doc-changes-from-brew / bundled-brewing-completion / new-bean-intake / in-process-bean-incremental-sync / closed-bean-full-fill)
+- [docs/prompts/](docs/prompts/) — 8 operational prompts for claude.ai sessions. Brewing-side: start-brew / log-brew / propose-doc-changes-from-brew / bundled-brewing-completion. Roasting-side: start-lot / log-roast / log-cupping / close-lot (1:1 against the 4-state lifecycle, 2026-05-14 rewrite).
 - [docs/features/](docs/features/) — Per-sprint scoping/brainstorm docs (archive — Chris's thinking at the time of each taxonomy + feature design)
 - [docs/sprints/shipped.md](docs/sprints/shipped.md) — Sprint-by-sprint shipped log
 

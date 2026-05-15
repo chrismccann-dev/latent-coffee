@@ -20,14 +20,16 @@ const TAXONOMY_AXES = [
 export type TaxonomyAxis = (typeof TAXONOMY_AXES)[number]
 
 const PROMPT_FILES = [
+  // Brewing-side prompts (4)
   'start-brew',
   'log-brew',
   'propose-doc-changes-from-brew',
   'bundled-brewing-completion',
-  'new-bean-intake',
-  'in-process-bean-incremental-sync',
-  'design-next-experiment-set',
-  'closed-bean-full-fill',
+  // Roasting-side prompts (4) - mapped 1:1 to the 4-state lifecycle (2026-05-14 rewrite)
+  'start-lot',
+  'log-roast',
+  'log-cupping',
+  'close-lot',
 ] as const
 
 const DOC_FILES: Record<string, string> = {
@@ -101,15 +103,15 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://prompts/propose-doc-changes-from-brew.md':
     'Operational prompt for proposing BREWING.md / roaster card / taxonomy edits after a brew session via propose_doc_changes.',
   'docs://prompts/bundled-brewing-completion.md':
-    'Operational prompt combining log-brew + propose-doc-changes in one shot. Use for a finished PURCHASED brew. (Self-roasted brews flow through closed-bean-full-fill.md STAGE 7.)',
-  'docs://prompts/new-bean-intake.md':
-    'Operational prompt for green bean intake + V1 profile design — runs ROASTING.md New Coffee Onboarding Protocol Steps 1-4, pushes green_bean + inventory + 3 roast profiles to Roest.',
-  'docs://prompts/in-process-bean-incremental-sync.md':
-    'Operational prompt for mid-iteration roast sync — push roasts/cuppings/experiments since last sync, optionally design forward (V2/V3), propose ROASTING.md Active Lots updates.',
-  'docs://prompts/design-next-experiment-set.md':
-    'Operational prompt for designing + pushing the next experiment set (V2 / V3 / V4 ...) when prior V-set is resolved and only the forward design is needed — V_N -> V_{N+1} progression discipline, push 3 profiles + 1 experiment record, optional ROASTING.md Active Lots update.',
-  'docs://prompts/closed-bean-full-fill.md':
-    'Operational prompt for lot close-out — push every layer (green_bean / roasts / cuppings / experiments / roast_learnings / SR reference brew) + propose ROASTING.md close-out narrative + archive Roest inventory.',
+    'Operational prompt combining log-brew + propose-doc-changes in one shot. Use for a finished PURCHASED brew. (Self-roasted brews flow through close-lot.md STAGE 4.)',
+  'docs://prompts/start-lot.md':
+    'Operational prompt for starting a green-bean lot (V1 design at intake, or any later V-set design re-entered via log-cupping.md routing). Triggers state In inventory → Waiting for next roast. Pushes green_bean + inventory + V1 experiment frame + roast_recipes (design intent) + push_roast_profile to Roest. V1 (and often V2) is wide-variance multi-variable exploratory per CONTEXT.md.',
+  'docs://prompts/log-roast.md':
+    'Operational prompt for recording V_n roast actuals after Chris roasted at the machine. Triggers state Waiting for next roast → Waiting for next cupping. Pulls Roest logs, push_roast × N (linked to recipe_id), patches experiment with batch_ids + observed_outcome_* + delta_from_roast_* + updated_cup_prediction_* + taste_for_*. Preps the Day 7 cupping table.',
+  'docs://prompts/log-cupping.md':
+    'Operational prompt for the Day 7 cupping update + adjustment move. Triggers state Waiting for next cupping → Waiting for next roast (loop continues, V_(n+1) designed) OR Resolved-pending (lot ready for close-out). Pushes cuppings, patches experiment with delta_from_cup_* + leading slot (V-set winner) + key_insight, and either designs V_(n+1) inline (push_experiment + push_roast_recipe × N + push_roast_profile × N) or routes to close-lot.md.',
+  'docs://prompts/close-lot.md':
+    'Operational prompt for lot close-out. Triggers state Resolved-pending → Resolved. Marks is_reference: true on the lot-level reference roast (distinct from any V-set leading slot), pushes roast_learnings (lot-specific + carry-forward), pushes the optimized SR brew, proposes ROASTING.md close-out narrative, archives the Roest inventory row.',
 }
 
 export type Section = {
