@@ -31,6 +31,7 @@ const PROMPT_FILES = [
 ] as const
 
 const DOC_FILES: Record<string, string> = {
+  'docs://context.md': 'CONTEXT.md',
   'docs://brewing.md': 'BREWING.md',
   'docs://brewing/roasters.md': 'docs/brewing/roasters.md',
   'docs://brewing/wbc-reference.md': 'docs/brewing/wbc-reference.md',
@@ -53,6 +54,8 @@ const DOC_FILES: Record<string, string> = {
 // a one-sentence "use when..." description below. Without descriptions, claude.ai
 // has only the title to go on (titles are short and mechanical).
 const DOC_DESCRIPTIONS: Record<string, string> = {
+  'docs://context.md':
+    'Use when validating or looking up the meaning of any Latent-specific term — strict glossary covering the roasting workflow (V-set, batch slot, experiment frame, variable / lever / non-factor, roast→cup trace, taste-for, reference roast / reference cup / optimized brew, xBloom, control experiment), the 3-axis Roast Character (primary lever / acceptable roast window / brewing tolerance), the 4-state lifecycle (in inventory / waiting for next roast / waiting for next cupping / resolved), lot-close synthesis (lot-specific learnings vs carry-forward learnings), and forward design (adjustment). No implementation details; grown via /grill-with-docs sessions. Read this first before authoring any prose into Latent so terminology stays consistent.',
   'docs://brewing.md':
     'Use when planning a new brew recipe — contains the 6-strategy + 3-modifier Two-Axis framework, Step 1d Coffee Brief structure, equipment reference, and archive patterns by strategy/modifier/process/variety.',
   'docs://brewing/roasters.md':
@@ -146,6 +149,7 @@ export function listDocs(): {
   })
 
   return [
+    entry('docs://context.md', 'docs/context.md', 'Latent Shared-Language Glossary'),
     entry('docs://brewing.md', 'docs/brewing.md', 'Brewing Master Reference'),
     entry('docs://brewing/roasters.md', 'docs/brewing/roasters.md', 'Roaster Brewing Lessons'),
     entry('docs://brewing/wbc-reference.md', 'docs/brewing/wbc-reference.md', 'WBC Reference (Latent mapping)'),

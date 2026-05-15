@@ -9,6 +9,10 @@ Foundational living docs (root level — first thing you read):
 - **[BREWING.md](BREWING.md)** — Brewing master reference: 6 strategies (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid) + 3 modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture), Two-Axis Framework, equipment reference, archive patterns. Living doc; patched via `propose_doc_changes` MCP Tool.
 - **[ROASTING.md](ROASTING.md)** — Roasting master reference: counterflow methodology on Roest L200 Ultra, evaluation protocol, fan/inlet curves, FC marking protocol, per-bean experiment patterns, lot knowledge, roast-to-brew translation. Sibling of BREWING.md.
 
+Shared language + decisions:
+- **[CONTEXT.md](CONTEXT.md)** — Glossary of Latent-specific terminology (V-set, anchor cup, canonical/alias/override, signature method, lifecycle state, etc.). Strict glossary per [grill-with-docs](.claude/skills/grill-with-docs/SKILL.md) format — no implementation details, only term definitions + cardinality relationships + flagged ambiguities. Grown incrementally via `/grill-with-docs` sessions, not bulk-authored.
+- **[docs/adr/](docs/adr/)** — Architectural Decision Records. One markdown file per non-obvious decision that is hard to reverse + surprising without context + the result of a real trade-off. Most are 1-3 sentences. Directory created lazily on first ADR.
+
 Architecture & operating playbooks:
 - **[SYNC_V2.md](SYNC_V2.md)** — MCP-based sync architecture (claude.ai ↔ app, bidirectional). Five locked decisions; transport, auth (bearer + OAuth 2.1), Resources, Tools, asymmetric write trust.
 - **[ARBITER.md](ARBITER.md)** — Doc-proposal + canonical-queue arbiter playbook. Triggered by `process pending arbitration` in a Claude Code session.
