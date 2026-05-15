@@ -63,6 +63,10 @@ export const pushGreenBeanInputSchema = {
   additional_notes: z.string().optional().nullable().describe('Catch-all for processing / history / additional context.'),
   // Roest cross-ref
   roest_inventory_id: z.number().int().optional().nullable().describe('api.roestcoffee.com /inventories/{id}/ — set when seeded from pull_roest_log.'),
+  // Workflow class (migration 054, 2026-05-15)
+  is_one_shot: z.boolean().optional().nullable().describe(
+    'True for single-batch sample lots (~100-120g, no iteration possible). Origin: auction-lot sample sets, farm sample sets sent during sourcing negotiations, rare allocations. Routes the lot through docs/prompts/one-shot.md + one-shot-closeout.md instead of the 4-prompt V-set pipeline (start-lot / log-roast / log-cupping / close-lot). Triggers schema-validation on push_roast_learnings / patch_roast_learnings: lever-attribution fields (primary_lever / secondary_levers / roast_window_width / elasticity / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) must be NULL on one-shot close-outs (N=1 cannot populate; require cross-batch evidence). Defaults false. See CONTEXT.md "One-shot lot" entry for the workflow class.',
+  ),
 }
 
 export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContext) {

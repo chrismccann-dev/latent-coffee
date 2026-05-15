@@ -106,6 +106,10 @@ _Avoid_: "closed", "complete", "done", "archived", "final"
 A specific green-bean purchase from one producer/farm at one point in time — uniquely identified by its `green_lot_id` (the seller's lot reference). One purchase = one lot, even when the same farm + same cultivar is bought twice in different seasons or from slightly different sub-locations on the farm: agricultural variability (moisture, density, soil, sun, processing) means the two will behave and taste differently. The unit of all roasting research in Latent.
 _Avoid_: "bean", "coffee", "batch" (batch is a slot inside a V-set), "SKU", "purchase", "variety" (variety is the cultivar, not the lot)
 
+**One-shot lot**:
+A green-bean lot purchased in a single small sample (typically 100-120g) sufficient for only one roast. Origin: auction-lot sample sets where the full lot isn't yet sold, farm-direct sample sets sent during sourcing negotiations, rare allocations from limited drops. The constraint is structural, not stylistic: no iteration possible, no V2 recovery, no cross-batch variance attribution, no margin for error. Distinct from V-set lots (5-10+ batches of 100g, supporting V1 / V2 / ... / V_N iteration through the comparative pipeline). Flagged via `green_beans.is_one_shot: true` at intake (migration 054, 2026-05-15). Routes through `docs/prompts/one-shot.md` + `docs/prompts/one-shot-closeout.md` instead of the 4-prompt V-set lifecycle.
+_Avoid_: "sample" (every green-bean purchase is a sample at some scale; the distinguishing feature is single-roast-capacity), "single-batch lot" (every batch slot is single-batch by definition; one-shot is single-batch-AT-LOT-LEVEL)
+
 ### Lot-close synthesis
 
 **Lot-specific learnings**:
@@ -115,6 +119,10 @@ _Avoid_: "lot learnings", "audit trail", "retrospective", "lot summary"
 **Carry-forward learnings**:
 The compressed subset of lessons that generalize beyond this lot to future ones — what to try first when next roasting a similar cultivar, terroir, process, or general roast-style. Forward-looking, designed to shorten time-to-reference-roast on the next lot. The **compounding-knowledge primitive** of Latent: claude.ai consumes prior lots' carry-forward when designing V1 on a new lot with overlapping attributes. Four conceptual axes in Chris's mental model — cultivar takeaway, terroir takeaway, general takeaway, starting hypothesis for similar lots — though the schema today is missing the terroir takeaway field.
 _Avoid_: "lessons learned" (too generic), "general learnings", "forward recipe", "roadmap"
+
+**Closed without reference**:
+A close-out state where the lot did not produce a reference-quality roast. Two paths arrive here: (1) a V-set lot exhausted its green across multiple V-sets without arriving at a roast Chris would repeat - the cup never crystallized into "yes this is the lot's voice"; (2) a one-shot lot's single attempt didn't nail it - typical when the carry-forward anchor was off-target or the design hit a tolerance edge. The lifecycle state stays `resolved` (rule (a) in `lib/lifecycle-state.ts` only requires a `roast_learnings` row exists, not that the row names a winner). The page renders normally via Sprint 3.2 #18's "Closed without reference" sub-card on ResolvedView, triggered by `roast_learnings.why_this_roast_won = NULL`. The salvageable artifact for these lots is often the **optimized brew** - dialed in to compensate for the non-ideal roast via the brewing-side workflow. The brew row's `what_i_learned` captures the compensation reasoning; that prose becomes carry-forward for future similar lots even when the roast itself wasn't reference quality.
+_Avoid_: "failed lot" (pejorative; the lot still produced learning), "unresolved" (the lifecycle state IS resolved), "abandoned", "incomplete"
 
 **Development** (roasting sense):
 The whole-curve completeness of a roast — *not* the classical post-first-crack-only definition, but the full curve shape from charge → Maillard → FC → drop, *plus* the internal-vs-external uniformity measured by the Agtron delta between whole bean (WB) and ground bean (Gnd). A large WB→Gnd delta means the bean looked roasted on the outside but stalled inside; a small delta means even development.
@@ -154,6 +162,10 @@ The deliberate design move from V_n to V_{n+1} that changes one or more variable
 
 Override: if V_n's `open_questions` explicitly demand re-bracketing ("we don't know if the window is in this range at all"), widen the spread regardless of V number. The unit of forward design between V-sets - authored by claude.ai as part of the post-cupping update.
 _Avoid_: "tweak" (too casual, implies small), "iteration" (V-set is the iteration), "variation"
+
+**Tolerance-anchored design**:
+The roast-design philosophy for one-shot lots (single batch, no iteration possible). Distinct from V1's wide-variance exploratory framing AND from V_{n+1}'s narrow-convergent framing. The anchor is the carry-forward window from similar prior lots (cultivar / terroir / process matches); the design rule is to land central in that window with deliberate margin on both sides. Concretely: NOT a super-fast / very-low-tolerance roast (no room if FC arrives late), NOT a super-long / pull-at-the-last-second roast (no room if FC arrives early), middle-of-the-road for operator grace. The goal isn't to find a response surface or to converge on a reference - it's to produce something workable on the single attempt, accepting "workable" may be less than reference quality. Pairs with the schema constraint on `roast_learnings` (migration 054) that one-shot lots cannot populate lever-attribution fields - the design philosophy and the data model both acknowledge that N=1 doesn't support variance attribution.
+_Avoid_: "safe roast" (not specific enough about the carry-forward anchor), "middle path" (loses the anchor framing), "exploratory single-shot" (contradictory - one-shots aren't exploratory)
 
 ## Relationships
 
