@@ -21,7 +21,7 @@ Domain references in `docs/`:
 - **[docs/taxonomies/](docs/taxonomies/)** — 10 canonical taxonomies authored by Chris. Each .md is the source of truth; `lib/<axis>-registry.ts` is the validation mirror (2-step deliberate edit when adding a new entry).
 - **[docs/brewing/](docs/brewing/)** — Roaster reference cards, WBC reference (5-axis foundational map + 8 strategy families), 102-recipe WBC corpus.
 - **[docs/roasting/](docs/roasting/)** — [archive.md](docs/roasting/archive.md) (closed-lot archive, per-lot Key Learnings), [wbc-roasting.md](docs/roasting/wbc-roasting.md) (WBC-derived lessons + Roest L200 hypotheses + blending experiment protocols + structured rest-curve protocol — open-ideas doc, not recipe lookup), [wbc-sourcing.md](docs/roasting/wbc-sourcing.md) (sourcing strategy + Tier 1/2/3 priority targets + current Latent inventory mapped to portfolio lanes — refresh on inventory change).
-- **[docs/prompts/](docs/prompts/)** — 7 operational prompts for claude.ai sessions.
+- **[docs/prompts/](docs/prompts/)** — 8 operational prompts for claude.ai sessions. Roasting-side is 4 lifecycle-mapped prompts (`start-lot.md` / `log-roast.md` / `log-cupping.md` / `close-lot.md`) running 1:1 against the 4-state lifecycle (In inventory → Waiting for next roast ⇄ Waiting for next cupping → Resolved). Brewing-side is `start-brew.md` / `log-brew.md` / `bundled-brewing-completion.md` / `propose-doc-changes-from-brew.md`.
 - **[docs/features/](docs/features/)** — Per-sprint scoping/brainstorm docs (archive layer, not surfaced via MCP).
 - **[docs/sprints/shipped.md](docs/sprints/shipped.md)** — Reverse-chronological shipped log.
 

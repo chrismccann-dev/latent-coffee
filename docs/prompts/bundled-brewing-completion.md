@@ -1,6 +1,5 @@
 Use when a PURCHASED brew is finished. For self-roasted brews, the brew goes
-through `closed-bean-full-fill.md` STAGE 7(a) as part of lot close-out — don't
-push separately.
+through `close-lot.md` STAGE 4 as part of lot close-out - don't push separately.
 
 Complete this brew session: push_brew first, then propose any doc updates.
 If you have feedback for Claude Code on either path, mention it.

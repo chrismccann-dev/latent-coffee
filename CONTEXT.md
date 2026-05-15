@@ -45,8 +45,14 @@ The flavor notes the producer / farm / exporter prints on the bag or website, re
 _Avoid_: "producer notes" (ambiguous — could mean roast notes), "vendor description"
 
 **Reference roast**:
-The single batch slot (one roast execution in one V-set) designated at lot-close as the winning expression — the roast Chris would repeat if he had more green. Chosen by judgment call when the cup matches producer-notes ballpark + Chris's expectations + diminishing returns set in; typically locked in by running one final **control experiment** (a replicate V-set with two slight adjustments) before declaring the winner. Deliberately called "reference" not "best" — tasting is subjective and there is no objective best.
-_Avoid_: "best roast", "winning batch", "final roast", "optimal roast"
+The single batch slot (one roast execution in one V-set) designated at lot-close as the winning expression - the roast Chris would repeat if he had more green. Chosen by judgment call when the cup matches producer-notes ballpark + Chris's expectations + diminishing returns set in; typically locked in by running one final **control experiment** (a replicate V-set with two slight adjustments) before declaring the winner. Deliberately called "reference" not "best" - tasting is subjective and there is no objective best. **Distinct from leading slot**: the leading slot is V-set-scoped (winner of one V-set's batch-slot comparison); the reference roast is lot-scoped (one per lot, declared at close-out). The reference roast is typically the leading slot of the final V-set, but the concepts are not interchangeable - a control experiment V-set can confirm a leading slot from a prior V-set as the reference roast, in which case the leading slot of the control V-set may or may not be the same.
+_Avoid_: "best roast", "winning batch", "final roast", "optimal roast", "leading slot" (V-set-scoped, see separate entry)
+
+**Leading slot**:
+The winner of one V-set's batch-slot comparison - the single batch slot within V_n that came out on top at Day 7 cupping. Lives in `experiments.winner` (one per V-set). Phrased as `V<n><letter> (Batch <Roest#>)` so it's unambiguous and distinguishable from the lot-level reference roast. Changes V-set to V-set as the iteration progresses; the leading slot of V1 may or may not also be the leading slot of V2.
+
+**Distinct from reference roast**: the leading slot is V-set-scoped. The reference roast is lot-scoped - designated exactly once at lot close-out, can be (and often is) the leading slot of the final V-set, but the two concepts must not be conflated. The lifecycle has *N* leading slots (one per V-set) and exactly 1 reference roast.
+_Avoid_: "winner" (ambiguous against reference roast), "best batch", "V-set winner" (the schema column name; vocabulary preference is "leading slot")
 
 **Reference cup**:
 The xBloom pour-over cupping of the reference roast at day-7 of rest — one standardized, mechanically-repeatable evaluation that defines what this coffee tastes like at peak roasted-bean state. Replaces an earlier 2-stage protocol (cupping-bowl day-4 + xBloom day-7); the bowl methodology was deprecated because too many coffees that tasted great on the bowl table "fell apart" at the xBloom step and couldn't hold up during the optimized brew — i.e. the bowl signal had too much brewing-tolerance noise mixed in. xBloom's mechanically-consistent recipe specifically isolates cup-side signals from brewing variance, which is what makes the underdev/overdev signal attribution possible.
@@ -141,7 +147,12 @@ _Avoid_: "rest curve" (already used elsewhere as `RoasterEntry.restCurve` — di
 ### Forward design
 
 **Adjustment**:
-The deliberate design move from V_n to V_{n+1} that changes one or more variable levels with the intent of moving the cup in a specific direction. Informed by V_n's cupping deltas + carry-forward learnings of prior lots + the producer-notes ballpark check. **Scale-dependent**: big and often multi-variable in early V-sets (exploring the response map, finding the zones), small and typically single-variable in late V-sets (converging on the reference roast, fine-tuning). The unit of forward design between V-sets — authored by claude.ai as part of the post-cupping update.
+The deliberate design move from V_n to V_{n+1} that changes one or more variable levels with the intent of moving the cup in a specific direction. Informed by V_n's cupping deltas + carry-forward learnings of prior lots + the producer-notes ballpark check. **Scale-dependent - concretely mapped to V-number bands**:
+- **V1 (and often V2)**: wide-variance, multi-variable exploratory. Spread can be wide on multiple axes simultaneously (lower / medium / higher peak AND faster / slower decline across the same three slots). The point is to *find the response surface*, not to narrow on it. ~5°C+ peak inlet spread is fine and often correct.
+- **V2 → V3**: narrow on V2's leading slot, usually single-variable. 1-2°C peak spread is typical, or replicate V2's leading slot with two slight adjustments (a control experiment). V2 stays wide-ish when V1's signal was ambiguous (still in search space).
+- **V3+**: probe a NEW variable held constant in V_1…V_3 (fan curve through development, drop temp ceiling at fixed peak inlet, charge temperature, hopper pre-load), or run a control experiment to lock in the reference roast.
+
+Override: if V_n's `open_questions` explicitly demand re-bracketing ("we don't know if the window is in this range at all"), widen the spread regardless of V number. The unit of forward design between V-sets - authored by claude.ai as part of the post-cupping update.
 _Avoid_: "tweak" (too casual, implies small), "iteration" (V-set is the iteration), "variation"
 
 ## Relationships
@@ -158,7 +169,8 @@ _Avoid_: "tweak" (too casual, implies small), "iteration" (V-set is the iteratio
 - A **roast→cup trace** runs per batch slot — each slot has its own predicted-roast, actual-roast, roast-delta, predicted-cup-initial (on the recipe), updated-cup-prediction (post-roast), taste-for, actual-cup, and cup-delta.
 - A V-set's **taste-for** for slot `n` is informed by what was tasted in the corresponding slot of prior V-sets on the same lot, plus the producer tasting notes, plus the adjustment being tested this round.
 - All taste-based terms in this glossary are **single-palate** (Chris's). Producer tasting notes are an external ballpark anchor, not a target.
-- A **reference roast** emerges from a V-set when the cup matches expectations + diminishing returns set in, and is typically locked via one final **control experiment**.
+- Each V-set produces a **leading slot** (the V-set-scoped winner; lives in `experiments.winner`). The leading slot of the final V-set is typically (but not always) promoted to the lot-level **reference roast** at close-out.
+- A **reference roast** emerges from a V-set when the cup matches expectations + diminishing returns set in, and is typically locked via one final **control experiment** (which replicates the prior V-set's leading slot with two slight adjustments to confirm).
 - A **reference cup** is the xBloom day-7 pour-over of the reference roast — one cup, one method, one row.
 - An **optimized brew** is dialed in *after* the reference cup, by feeding the reference roast into the brewing-side workflow (same as a purchased roasted bean).
 - The end target of the full roast→cup trace is the **optimized brew**, not the reference cup. Post-hoc attribution flows backward: optimized brew → reference cup → reference roast → variables / levers / non-factors.

@@ -325,15 +325,14 @@ Use the washed profile as the starting point. Lower inlet temp for the early sta
 
 # Data Capture Per Step
 
-All roasting data flows into the app via MCP Tools — the previous Archive Spreadsheet workflow has been retired. claude.ai uses the operational prompts in `docs/prompts/` to drive each step:
+All roasting data flows into the app via MCP Tools - the previous Archive Spreadsheet workflow has been retired. The roasting workflow is driven by 4 lifecycle-mapped operational prompts in `docs/prompts/`, each mapped 1:1 to a lifecycle-state transition. Re-entry into the loop happens at `log-roast.md` ⇄ `log-cupping.md` until a reference roast is declared; `start-lot.md` runs once at intake; `close-lot.md` runs once at close-out.
 
-| Workflow step | Prompt | MCP Tools called |
+| Lifecycle transition | Prompt | MCP Tools called |
 |---|---|---|
-| Bean intake → V1 profile design | `new-bean-intake.md` | `push_green_bean` + `push_inventory` (Roest write) + `push_roast_profile` × 3 (v1a/v1b/v1c) + `push_experiment` (initial ExperimentSet1) |
-| Per-roast log push | `in-process-bean-incremental-sync.md` STAGE 2 | `pull_roest_log` + `push_roast` |
-| Day 7 cupping | `in-process-bean-incremental-sync.md` STAGE 3 | `push_cupping` per batch + `patch_experiment` (update ExperimentSet with cupping results) |
-| V2/V3 forward design | `in-process-bean-incremental-sync.md` STAGE 8 | `push_roast_profile` × 3 + `push_experiment` (new set) |
-| Lot close-out (reference roast + reference brew) | `closed-bean-full-fill.md` | `push_roast_learnings` + `push_brew` (SR reference brew with `source: 'self-roasted'` + green_bean_id + roast_id) + `propose_doc_changes` for ROASTING.md narrative + `patch_inventory` (Roest archive) |
+| In inventory → Waiting for next roast (V1 design at intake, or any later V-set design via `log-cupping.md`) | `start-lot.md` | `push_green_bean` + `push_inventory` + `push_experiment` (V_n frame) + `push_roast_recipe` × N (design intent per slot) + `push_roast_profile` × N (Roest tablet) + `propose_doc_changes` (Active Lots) |
+| Waiting for next roast → Waiting for next cupping (roasts pushed, prep cupping table) | `log-roast.md` | `pull_roest_log` × N + `push_roast` × N (each linked to its `recipe_id`) + `patch_roast_recipe` (Roest linkage) + `patch_experiment` (batch_ids + observed_outcome_* roast layer + delta_from_roast_* + updated_cup_prediction_* + taste_for_*) + optional `propose_doc_changes` (mid-iteration) |
+| Waiting for next cupping → Waiting for next roast (loop continues, V_(n+1) designed) OR Resolved-pending | `log-cupping.md` | `push_cupping` × N + `patch_experiment` (delta_from_cup_* + observed_outcome_* cup layer + winner / leading slot + key_insight) + (Path B) `push_experiment` (V_(n+1) frame) + `push_roast_recipe` × N + `push_roast_profile` × N + optional `propose_doc_changes` |
+| Resolved-pending → Resolved (lot close-out) | `close-lot.md` | `patch_roast` (`is_reference: true` on the reference roast) + `push_roast_learnings` + `push_brew` (SR reference brew) + `propose_doc_changes` (close-out narrative) + `patch_inventory` (Roest archive) |
 
 **Per-table field reference:** the underlying app schema is broader than the original spreadsheet. See [README.md § Database Schema](README.md#database-schema) for current tables; each push Tool's input_schema is the source of truth for required + optional fields. Most fields from the prior Archive Spreadsheet are preserved; new structured columns added since (Roest API integration, V4-doc control signals, fan/inlet curves, OAuth, taxonomy provenance) are documented in migrations 039-046.
 
@@ -724,7 +723,7 @@ Once a winner is identified from Day 7 evaluation, run an optimized brew session
 
 **Reference [BREWING.md](BREWING.md) when designing the optimized brew session** — the reference roast becomes a roasted-bean input to the full Two-Axis Framework, including the Coffee Brief / Step 1d strategy confirmation / WBC corpus check (when the WBC integration sprint lands). Treat the SR reference brew the same way you'd treat a brew on a roasted bean from any other roaster.
 
-Claude will then write the final brew recipe for the lot record and assess whether the lot is resolved. The SR reference brew gets pushed via `closed-bean-full-fill.md` STAGE 7(a) as part of the lot close-out (don't push separately).
+Claude will then write the final brew recipe for the lot record and assess whether the lot is resolved. The SR reference brew gets pushed via `close-lot.md` STAGE 4 as part of the lot close-out (don't push separately).
 
 ---
 
@@ -895,7 +894,7 @@ Things to test on future roast sessions. **Maintenance rule:** when a question r
 
 # Archive
 
-Full per-lot prose, experiment history, generalized lessons, and process learnings: [docs/roasting/archive.md](docs/roasting/archive.md). Five lots indexed; new closed lots get added on close-out via `closed-bean-full-fill.md` STAGE 7 (`propose_doc_changes` proposes a new section, the arbiter applies citation-by-citation per [ARBITER.md](ARBITER.md)).
+Full per-lot prose, experiment history, generalized lessons, and process learnings: [docs/roasting/archive.md](docs/roasting/archive.md). Five lots indexed; new closed lots get added on close-out via `close-lot.md` STAGE 5 (`propose_doc_changes` proposes a new section, the arbiter applies citation-by-citation per [ARBITER.md](ARBITER.md)).
 
 ---
 

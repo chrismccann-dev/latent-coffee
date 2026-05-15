@@ -294,7 +294,7 @@ Latent's freeze-at-peak practice is the first pattern. The structured rest curve
 
 ### Tier 1 experiment: run the rest curve on the next reference roast
 
-Concretely, queue this for the next lot that produces a reference roast (likely CGLE-SRUME-NATURAL-2026 or GESHA CLOUDS). Carve out 80g of the reference batch into 4 × 20g portions; cup each at the dates above. The result becomes the first formal rest curve in `docs/roasting/archive.md`, and the protocol becomes part of the closed-bean handoff (see [docs/prompts/closed-bean-full-fill.md](../prompts/closed-bean-full-fill.md) STAGE 7).
+Concretely, queue this for the next lot that produces a reference roast (likely CGLE-SRUME-NATURAL-2026 or GESHA CLOUDS). Carve out 80g of the reference batch into 4 × 20g portions; cup each at the dates above. The result becomes the first formal rest curve in `docs/roasting/archive.md`, and the protocol becomes part of the close-out handoff (see [docs/prompts/close-lot.md](../prompts/close-lot.md) STAGE 4).
 
 ## Roest experiment queue
 
@@ -356,4 +356,4 @@ The most direct WBrC lesson for Roest work: **roast design is flavor composition
 - **Sourcing-side companion:** [wbc-sourcing.md](wbc-sourcing.md).
 - **Roasting practice anchors:** [ROASTING.md § Evaluation Protocol](../../ROASTING.md), [§ Key Counterflow Observations](../../ROASTING.md), [§ Cross-Coffee Insight Layer](../../ROASTING.md), [§ Roast-to-Brew Translation](../../ROASTING.md).
 - **Closed-lot archive:** [docs/roasting/archive.md](archive.md).
-- **Operational prompts:** [docs/prompts/new-bean-intake.md](../prompts/new-bean-intake.md), [docs/prompts/in-process-bean-incremental-sync.md](../prompts/in-process-bean-incremental-sync.md), [docs/prompts/closed-bean-full-fill.md](../prompts/closed-bean-full-fill.md).
+- **Operational prompts:** 4 lifecycle-mapped prompts: [docs/prompts/start-lot.md](../prompts/start-lot.md) (In inventory → Waiting for next roast), [docs/prompts/log-roast.md](../prompts/log-roast.md) (Waiting for next roast → Waiting for next cupping), [docs/prompts/log-cupping.md](../prompts/log-cupping.md) (Waiting for next cupping → Waiting for next roast loop OR Resolved-pending), [docs/prompts/close-lot.md](../prompts/close-lot.md) (Resolved-pending → Resolved).
