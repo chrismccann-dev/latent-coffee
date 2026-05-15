@@ -2,6 +2,8 @@
 
 **Trigger**: I have a new green-bean lot in hand. Design V1 - the first V-set - and get everything prepped so I can take the Roest profiles to the machine.
 
+**Workflow class**: V-set lot (5-10+ batches, comparative iteration). If this lot is a **one-shot** (single-batch sample ~100-120g, no iteration possible - auction sample, farm-direct sample, rare allocation), use `one-shot.md` instead. Set `green_beans.is_one_shot: true` at intake; the one-shot pipeline (`one-shot.md` + `one-shot-closeout.md`) handles the constrained workflow.
+
 **Workflow position**: First of four lifecycle prompts (`start-lot.md` → `log-roast.md` ⇄ `log-cupping.md` → `close-lot.md`). This one runs once per lot.
 
 Vocabulary used in this prompt is defined in CONTEXT.md (V-set, batch slot, experiment frame, variable, lever, taste-for, leading slot, reference roast, adjustment). When the file ships, claude.ai already has CONTEXT.md in its project context - don't re-explain.
