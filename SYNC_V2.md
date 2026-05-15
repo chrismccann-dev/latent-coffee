@@ -87,7 +87,7 @@ Resources are content endpoints claude.ai can list and fetch. Each Resource has 
 | `docs://brewing/wbc-recipes.md` | 102-recipe WBC archive (2022-2025) | Repo file |
 | `docs://roasting.md` | `ROASTING.md` text (full, or `#{anchor}` for one section) | Repo file |
 | `docs://taxonomies/{axis}.md` | Authored markdown for one of the 10 canonical taxonomies (full, or `#{anchor}`) | Repo file |
-| `docs://prompts/{name}.md` | Operational prompts (start-brew / log-brew / propose-doc-changes-from-brew / bundled-brewing-completion brewing-side; start-lot / log-roast / log-cupping / close-lot roasting-side) | Repo file |
+| `docs://prompts/{name}.md` | Operational prompts (start-brew / log-brew / propose-doc-changes-from-brew / bundled-brewing-completion brewing-side; start-lot / log-roast / log-cupping / close-lot V-set roasting; one-shot / one-shot-closeout one-shot roasting) | Repo file |
 
 **Note:** `brews://recent` and `brews://by-id/{uuid}` were Resources in Sprint 2.3 but were promoted to Tools (`list_recent_brews` + `get_brew`) in Sprint 3.0.5 (2026-05-03). Architectural rule confirmed: claude.ai surfaces Tools to the model; Resources are catalog only.
 

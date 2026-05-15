@@ -79,6 +79,11 @@ export interface GreenBeanPayload {
   additional_notes?: string | null
   // Roest cross-ref
   roest_inventory_id?: number | null
+  // Workflow class (migration 054). True for single-batch sample lots
+  // (~100-120g, no iteration possible). Routes through one-shot.md +
+  // one-shot-closeout.md instead of the 4-prompt V-set pipeline. See
+  // CONTEXT.md "One-shot lot" entry.
+  is_one_shot?: boolean | null
 }
 
 export type PersistGreenBeanResult =
@@ -227,6 +232,9 @@ export async function persistGreenBean(
     // the FK row. Surfaces in get_green_bean.
     terroir_provenance: createdTerroir ? 'auto_created' : 'canonical',
     cultivar_provenance: createdCultivar ? 'auto_created' : 'canonical',
+    // Migration 054 — workflow class flag (default false at SQL level; explicit
+    // override via payload).
+    is_one_shot: payload.is_one_shot ?? false,
   }
 
   const { data, error } = await supabase
@@ -847,6 +855,58 @@ export function validateRoastLearningsPayload(p: RoastLearningsPayload): Validat
   return errors.length ? { ok: false, errors } : { ok: true }
 }
 
+// One-shot lot constraint (migration 054, 2026-05-15). Lever-attribution fields
+// on roast_learnings require cross-batch evidence (variable→lever promotion
+// across V_n slots). One-shot lots (N=1, green_beans.is_one_shot=true) cannot
+// populate them — the cup-quality observation is anchored on a single roast
+// without comparative variance. Writing them on a one-shot contaminates the
+// carry-forward pipeline that future start-lot.md / one-shot.md runs consume.
+// Enforced Node-side here; the MCP server is the canonical writer per
+// feedback_mcp_only_input.md.
+//
+// See docs/sprints/one-shot-lot-framework-kickoff.md for the sprint scope +
+// CONTEXT.md "One-shot lot" entry for the workflow framing.
+const ONE_SHOT_FORBIDDEN_FIELDS = [
+  'primary_lever',
+  'secondary_levers',
+  'roast_window_width',
+  'elasticity',
+  'what_didnt_move_needle',
+  'underdevelopment_signal',
+  'overdevelopment_signal',
+] as const
+
+async function checkOneShotConstraint(
+  supabase: SupabaseClient,
+  userId: string,
+  green_bean_id: string,
+  fields: Partial<Record<(typeof ONE_SHOT_FORBIDDEN_FIELDS)[number], string | null | undefined>>,
+): Promise<ValidationResult> {
+  const populated = ONE_SHOT_FORBIDDEN_FIELDS.filter((f) => {
+    const v = fields[f]
+    return typeof v === 'string' && v.trim().length > 0
+  })
+  if (populated.length === 0) return { ok: true }
+
+  const { data, error } = await supabase
+    .from('green_beans')
+    .select('is_one_shot')
+    .eq('id', green_bean_id)
+    .eq('user_id', userId)
+    .maybeSingle()
+  if (error) return { ok: false, errors: [`green_beans lookup failed: ${error.message}`] }
+  if (!data) return { ok: false, errors: [`green_bean ${green_bean_id} not found`] }
+  if (!data.is_one_shot) return { ok: true }
+
+  return {
+    ok: false,
+    errors: populated.map(
+      (f) =>
+        `Field "${f}" requires cross-batch evidence (variable→lever attribution). One-shot lots (N=1) cannot populate this field. Move the prose to additional_notes on the experiment row, or to cultivar_takeaway / general_takeaway / starting_hypothesis with explicit "Low confidence - N=1, verify on next similar lot" prefix.`,
+    ),
+  }
+}
+
 export async function persistRoastLearnings(
   supabase: SupabaseClient,
   userId: string,
@@ -854,6 +914,9 @@ export async function persistRoastLearnings(
 ): Promise<PersistRoastLearningsResult> {
   const v = validateRoastLearningsPayload(payload)
   if (!v.ok) return { ok: false, code: 'validation', errors: v.errors }
+
+  const oneShot = await checkOneShotConstraint(supabase, userId, payload.green_bean_id, payload)
+  if (!oneShot.ok) return { ok: false, code: 'validation', errors: oneShot.errors }
 
   const { data: existing, error: lookupErr } = await supabase
     .from('roast_learnings')
@@ -973,6 +1036,9 @@ export interface PatchGreenBeanPayload {
   producer_tasting_notes?: string | null
   additional_notes?: string | null
   roest_inventory_id?: number | null
+  // Migration 054 — workflow class flag, patchable for retroactive flagging
+  // (Rancho Tio backfill case + future post-intake reclassification).
+  is_one_shot?: boolean | null
 }
 
 export const GREEN_BEAN_PATCH_FIELDS = [
@@ -981,6 +1047,8 @@ export const GREEN_BEAN_PATCH_FIELDS = [
   'purchase_date', 'price_per_kg', 'quantity_g',
   'moisture', 'density', 'elevation_m',
   'producer_tasting_notes', 'additional_notes', 'roest_inventory_id',
+  // Migration 054
+  'is_one_shot',
 ] as const
 
 export async function patchGreenBean(
@@ -1312,7 +1380,7 @@ export async function patchRoastLearnings(
 
   const { data: existing, error: lookupErr } = await supabase
     .from('roast_learnings')
-    .select('id')
+    .select('id, green_bean_id')
     .eq('user_id', userId)
     .eq('id', payload.roast_learnings_id)
     .maybeSingle()
@@ -1325,6 +1393,13 @@ export async function patchRoastLearnings(
   if (Object.keys(patch).length === 0) {
     return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
   }
+
+  // One-shot constraint applies on patch as well (migration 054). green_bean_id
+  // sourced from the existing row OR the payload (when patching to repoint to a
+  // different bean - rare but supported).
+  const targetGreenBeanId = (payload.green_bean_id ?? existing.green_bean_id) as string
+  const oneShot = await checkOneShotConstraint(supabase, userId, targetGreenBeanId, patch)
+  if (!oneShot.ok) return { ok: false, code: 'validation', errors: oneShot.errors }
 
   const { data, error } = await supabase
     .from('roast_learnings')
