@@ -2,17 +2,22 @@
 const nextConfig = {
   experimental: {
     serverActions: true,
-    // Include BREWING.md + ROASTING.md + the taxonomy/brewing markdown docs in
-    // the /api/mcp serverless bundle so the docs:// Resources can readFile()
-    // them at runtime. Without this Vercel's static-trace misses repo files
-    // the route reads via string paths. Globs are resolved at build time.
-    // (Sprint 2.4 added taxonomy + docs/brewing globs alongside the section-
-    // anchor parser; Sprint 2.5 added ROASTING.md alongside push_roast Tools.)
+    // Include CONTEXT.md + BREWING.md + ROASTING.md + the per-domain markdown
+    // docs in the /api/mcp serverless bundle so the docs:// Resources can
+    // readFile() them at runtime. Without this Vercel's static-trace misses
+    // repo files the route reads via string paths. Globs are resolved at
+    // build time. (Sprint 2.4 added taxonomy + docs/brewing globs alongside
+    // the section-anchor parser; Sprint 2.5 added ROASTING.md alongside
+    // push_roast Tools; CONTEXT.md + docs/roasting/*.md added 2026-05-17
+    // when the brewing-cross-party grilling session surfaced both as
+    // unreachable from claude.ai via read_doc.)
     outputFileTracingIncludes: {
       '/api/mcp/**': [
+        './CONTEXT.md',
         './BREWING.md',
         './ROASTING.md',
         './docs/brewing/*.md',
+        './docs/roasting/*.md',
         './docs/taxonomies/*.md',
         './docs/prompts/*.md',
       ],
