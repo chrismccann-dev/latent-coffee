@@ -247,7 +247,7 @@ Claude will respond with adjusted parameters. At each iteration, Claude must als
 
 - If 2–3 iterations in and the cup still feels off structurally, Claude should flag this explicitly and ask whether to pivot extraction strategy rather than continue tweaking parameters within the current one.
 
-- If the confirmed extraction strategy seems mismatched to what you are tasting, Claude should recommend a strategy shift and explain what that would change about the approach.
+- If the confirmed extraction strategy seems mismatched to what you are tasting, Claude should recommend a strategy pivot and explain what that would change about the approach.
 
 - If a modifier is active and the expected effect is not present (e.g. Output Selection late cut applied but drying tail still present in the kept fraction), Claude should diagnose whether the modifier was wrong, the modifier parameters were wrong (cut at the wrong point), or the underlying strategy is mismatched and the modifier is masking the issue. If a modifier is *not* active and the iteration loop suggests one would help (e.g. persistent bitter tail at correct strategy → late cut is a candidate), Claude should propose adding it and explain the rationale.
 
