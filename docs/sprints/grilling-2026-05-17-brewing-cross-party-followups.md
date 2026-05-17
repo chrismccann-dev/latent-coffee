@@ -71,19 +71,23 @@ The Brewer rotation discipline entry contains "Default-brewer trap" as a sibling
 
 Surface: CONTEXT.md Brewing sub-section. Low priority until a triggering brew lands.
 
-### Roasting-cluster sibling work (Sprint B — queued for after green-bean dogfood closes)
+### Roasting-cluster sibling work — partially addressed by parallel session
 
-**4. V-set budget headword** [ROASTING CROSS-PARTY GRILLING]
+**Update (2026-05-17, post-PR-merge)**: the roasting cross-party `/grill-with-docs` session ran in parallel with this one (Chris had a sibling Claude Code session open against `claude.ai/projects/roasting`), shipping as [latent-coffee#167](https://github.com/chrismccann-dev/latent-coffee/pull/167) — **21 entries + 9 existing edits + 3 ADRs**. Chris's actual standing rule was "don't make major roasting MCP changes until the in-flight green-bean dogfood finishes" (scoped to MCP changes only, NOT the grilling session itself); that rule is correctly captured in #167's brief. The "Sprint B queued for after dogfood" framing in this brief's earlier wording was inaccurate — corrected here for historical traceability.
+
+Neither item below was picked up by #167. Both remain on the board as **future-scope** for a third audit or as inline edits when load-bearing-ness emerges.
+
+**4. V-set budget headword** [FUTURE AUDIT — not picked up by #167]
 
 Direct roasting-side sibling to **Iteration budget**. Named once in CONTEXT.md Relationships ("the roasting side's ~10-V-set budget per green lot") with no headword. Same hybrid structure (physical floor × cognitive ceiling × reference-roast judgment), different physical floor (green-bean weight rather than roasted-bag weight). Drafting this closes the symmetry that Iteration budget's body explicitly references.
 
-Surface: CONTEXT.md Roasting sub-section. **Out-of-scope for the brewing session; in-scope for the roasting cross-party session**.
+Surface: CONTEXT.md Roasting sub-section. **Status**: #167's 21-entry roasting session covered FC floor / Drop ceiling / Anchor profile / Anchor confidence / Signal precedence / Multi-factor weighting / Experiment umbrella / and more — but didn't include V-set budget. Possible interpretations: deemed not-yet-load-bearing at current corpus size (13 closed lots); missed via audit-scope; or deferred to a future round. Future-scope.
 
-**5. Cross-side parallel-table sweep for roasting** [METHODOLOGY — roasting cross-party session opener]
+**5. Cross-side parallel-table sweep** [FUTURE AUDIT — methodology, not picked up by #167]
 
-claude.ai's recommendation for the roasting-cluster cross-party audit: front-load a parallel-structure check before per-entry grep work. The brewing-side iteration cluster has 6 entries; the roasting side has a structurally parallel cluster that's only partially named (V-set budget pending; "diminishing returns" already cross-references both sides; Reference roast is headworded; but the roasting-side equivalent of Wrong-zone trap / Strategy pivot isn't obviously surfaced). A parallel-table sweep identifies which roasting-side concepts have brewing-side analogs already locked, where symmetry is clean, and where asymmetry is real-and-load-bearing rather than just "brewing went first."
+Original recommendation: front-load a parallel-structure check before per-entry grep work in any cross-party audit that has a structurally parallel sibling-side cluster. #167's roasting session used a topic-driven structure (7 rounds covering specific concepts: WB→Gnd / schema-writing seam / taste-for / signal precedence / etc.) rather than a parallel-table opener. The methodology still has merit for future cross-party sessions (e.g. a third audit running both sides simultaneously) but wasn't applied in #167.
 
-Method: opening question of the roasting cross-party session, before any individual entry deep-dive.
+Method: opening question of any future cross-party session where the cluster being audited has a sibling-side cluster already-locked. Identifies which concepts have analogs, where symmetry is clean, and where asymmetry is real-and-load-bearing.
 
 ### Parked candidates (re-test triggers, not actionable today)
 
@@ -128,15 +132,18 @@ Sprint A is lowest-effort and closes the cross-system substrate-change loop. Spr
 
 Combining with prior sessions' followups:
 
-- **Roasting cluster** (2026-05-14, 7 items): all items either shipped or queued for Sprint B as part of cross-party grilling
+- **Roasting cluster** (2026-05-14, 7 items): mostly closed; remaining items folded into the 2026-05-17 roasting cross-party session below
 - **Brewing cluster** (2026-05-15, 9 items): mostly closed via Sprints 1g and 8.5; some parked
 - **MCP cluster** (2026-05-15): items in Sprint A category
 - **Canonical registries cluster** (2026-05-16): items already tracked in PRODUCT.md sprint queue
 - **WBC reference materials cluster** (2026-05-16): items already tracked
 - **Synthesis cluster** (2026-05-16): items already tracked
-- **Brewing cross-party (this session, 2026-05-17, 8 items)**: 2 Sprint A · 2 Sprint B (roasting-side) · 4 parked with re-test triggers
+- **Brewing cross-party** (this session, 2026-05-17, 8 items): 2 Sprint A (shipped via [#166](https://github.com/chrismccann-dev/latent-coffee/pull/166)) · 2 items not picked up by parallel roasting session [#167](https://github.com/chrismccann-dev/latent-coffee/pull/167) · 4 parked with re-test triggers
+- **Roasting cross-party** (2026-05-17, sibling session shipped as [#167](https://github.com/chrismccann-dev/latent-coffee/pull/167)): 21 new entries + 9 existing edits + 3 ADRs (anchor canonicalization / vset-close schema seam / parameter-type signal arbitration) + 6 flagged ambiguities + 9 follow-ups. Surfaced the "substrate-practice gap audit" framing as a candidate name for the cross-party shape itself; if a third session repeats the pattern, ADR-0006 candidate per #167's flag.
 
-**Mega-cleanup Session 7** (queued separately) bundles cross-cluster sequencing work. Cross-party grilling is being run **before** that mega-cleanup specifically to surface any drift that would change Part 1 priorities — and this session's findings (R1 / R2 / R3 methodology rules, the iteration cluster build, the bundle fix) all feed into mega-cleanup's substrate.
+**Mega-cleanup Session 7** (queued separately) bundles cross-cluster sequencing work. Cross-party grilling was run **before** mega-cleanup specifically to surface drift that would change Part 1 priorities — both this session's findings (R1 / R2 / R3 methodology rules, the iteration cluster build, the bundle fix) and the roasting cross-party's findings (3 ADRs, substrate-practice gap pattern) all feed into mega-cleanup's substrate.
+
+**Cross-side asymmetry worth a third audit**: this session's Signal override entry frames brewing as "judgment-based weighting, not strict precedence"; #167's brief characterizes brewing as "pure-precedence" (vs roasting which is parameter-type-conditional per ADR-0005). Interpretive drift between two parallel sessions, not a clear bug — a third audit running both sides simultaneously would resolve which framing is canonical. Low-priority follow-up.
 
 ## Confabulation ledger (running)
 
