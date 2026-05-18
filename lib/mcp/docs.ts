@@ -46,6 +46,7 @@ const DOC_FILES: Record<string, string> = {
   'docs://roasting/wbc-roasting.md': 'docs/roasting/wbc-roasting.md',
   'docs://roasting/wbc-sourcing.md': 'docs/roasting/wbc-sourcing.md',
   'docs://roasting/redesign.md': 'docs/roasting/redesign.md',
+  'docs://roasting/dongzhe-livestream-2026-05.md': 'docs/roasting/dongzhe-livestream-2026-05.md',
   ...Object.fromEntries(
     TAXONOMY_AXES.map((axis) => [`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`]),
   ),
@@ -79,6 +80,8 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when evaluating a green offer or rebalancing inventory — WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, Tier 1/2/3 priority targets, and current Latent inventory mapped to portfolio lanes (snapshot 2026-05-09).',
   'docs://roasting/redesign.md':
     'Use when implementing or extending the roasting-side data model / pages — series-level scope doc for the 7-sub-sprint roasting rebuild (Sub Pages 6.1-6.7, scoped + shipped 2026-05-13). Covers the lifecycle states, the new roast_recipes entity, the 16 cross-batch fields on experiments, MCP-only writes (deprecating /add for roasting), and the 4-page-shape index + waiting-for-roast + waiting-for-cupping + resolved layout. Read end-to-end before working on roasting pages or MCP Tool surface.',
+  'docs://roasting/dongzhe-livestream-2026-05.md':
+    'Use when scoping a new green-bean intake or anchor profile — long-form extraction of peer roaster Dongzhe\'s operational decision tree, captured 2026-05-17 from a Yunnan-Hatchi livestream on the same Roest L200 Ultra in counterflow mode as Chris. Provenance anchor for the green-physics-first framing (moisture/density picks the energy envelope, process picks stretch-vs-compress), the momentum-into-FC > weight-loss principle, the honey-process fork (washed-direction vs natural-direction), and the low-moisture / high-moisture energy adjustment rules. Holds the five operational deltas folded back into ROASTING.md + caveats (single-batch methodology, darker cup target, specific numbers don\'t transfer). Tier 2 reference signal - directional principles transfer, his specific numbers do not.',
   'docs://taxonomies/regions.md':
     'Use when validating or looking up a country/macro_terroir for a green bean or brew. 121 canonical macros across 38 countries; meso/locality stays free-text.',
   'docs://taxonomies/varieties.md':
