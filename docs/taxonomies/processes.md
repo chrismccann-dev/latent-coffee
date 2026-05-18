@@ -102,13 +102,29 @@ Single-value. Orthogonal to wet-process base — decaf coffee still has an under
 - **Ethyl Acetate** - EA / sugarcane decaf
 - **CO2 Process** - supercritical-CO2 decaffeination
 
-### Signature methods (3)
+### Signature methods (15)
 
-Single-value. Proper-name proprietary techniques. Each has a canonical decomposition; the signature captures the producer brand that the decomposition alone would lose.
+Single-value. Proper-name proprietary techniques - branded under a proper-noun name AND mechanically opaque (the producer markets the brand without fully disclosing the underlying recipe). Each has a canonical decomposition; the signature captures the producer brand that the decomposition alone would lose. The picker surfaces the decomposition as a **hint, not auto-fill** - rare variants (Moonshadow Washed at a known Moonshadow Natural producer) are legitimate.
 
-- **Moonshadow** - Alo Coffee, Ethiopia. Typical decomposition: `base:Natural + drying:[Dark Room Dried, Slow Dry]`. Shade-dried to 20% moisture, then extended LDE drying to 11% moisture over ~57 days. Typically Natural; a rare Washed variant exists (MSW1 Airworks x Shoebox x Alo special lot, 2024 — same drying protocol applied to a washed ferment).
+Registry expanded from 3 to 15 entries in Sprint T1 / BR-1 (2026-05-18) to match Chris's working canonical list ([CONTEXT.md § Signature method](../../CONTEXT.md)). Producer + country populated only where attribution is confirmed; the rest land skeleton-pending-verification (synthesis content also deferred per Sub Pages 4's per-signature prompt-variant plan). Non-canonical descriptors in the parenthetical decompositions (Dynamic Cherry as a fermentation token, Biological Fermentation, Thermal Control, Zeolite Drying) are intentionally omitted from the modifier arrays rather than approximated - promotion of any of those terms to a canonical modifier is a separate deliberate edit.
+
+- **Moonshadow** - Alo Coffee, Ethiopia. Decomposition: `base:Natural + drying:[Dark Room Dried, Slow Dry]`. Shade-dried to 20% moisture, then extended LDE drying to 11% moisture over ~57 days. Typically Natural; a rare Washed variant exists (MSW1 Airworks x Shoebox x Alo special lot, 2024 — same drying protocol applied to a washed ferment).
 - **TyOxidator** - Pepe Jijon at Finca Soledad, Ecuador. Decomposition: `base:Washed + fermentation:[Aerobic]`. Aerobic oxidative fermentation protocol designed for Typica Mejorado.
-- **Hybrid Washed** - Café Granja La Esperanza (CGLE), Colombia. Decomposition: `base:Washed + fermentation:[Anaerobic, Aerobic]`. Whole-cherry aerobic → sealed anaerobic → depulp → mucilage aerobic finish. Often described as "premium anaerobic washed."
+- **Alchemy** - producer pending. Decomposition: `base:Washed + fermentation:[Carbonic Maceration, Yeast Inoculated]`.
+- **TIM** - producer pending. Decomposition: `base:Washed + fermentation:[Yeast Inoculated, Mossto]`.
+- **XO** - Café Granja La Esperanza (CGLE), Colombia. Decomposition: `base:Natural + fermentation:[Anaerobic]` (extended-anaerobic dynamic-cherry stack; CGLE Mandela XO is the reference example).
+- **Enzyflow** - producer pending. Decomposition: `base:Washed + fermentation:[Aerobic] + experimental:[Enzyme-Assisted]`.
+- **Bio-innovation** - producer pending. Decomposition: `base:Washed + fermentation:[Anaerobic]` (biological-fermentation descriptor in the parenthetical is non-canonical, omitted).
+- **Sous-vide** - producer pending. Decomposition: `base:Washed + experimental:[Enzyme-Assisted]` (thermal-control descriptor is non-canonical, omitted).
+- **Amazake** - producer pending. Decomposition: `base:Natural + fermentation:[Yeast Inoculated] + experimental:[Koji]`.
+- **Anti-maceration** - producer pending. Decomposition: `base:Natural + fermentation:[Anaerobic]` (vacuum / ozone / zeolite-drying descriptors are non-canonical, omitted).
+- **Dynamic cherry** - producer pending. Decomposition: `base:Natural + fermentation:[Anaerobic]`.
+- **Dry fermentation** - producer pending. Decomposition: `base:Natural + fermentation:[Mossto, Cold Fermentation]`.
+- **Splash** - producer pending. Decomposition: `base:Washed + fermentation:[Anaerobic, Lactic Fermentation]`.
+- **Symbiotic** - producer pending. Decomposition: `base:Washed + fermentation:[Mossto]` (cross-varietal descriptor is non-canonical, omitted).
+- **Wave Hybrid** - Pepe Jijón at Finca Soledad, Ecuador. Decomposition: `base:Washed + fermentation:[Aerobic]`. Pepe Jijón's hybrid follow-on to TyOxidator at the same facility.
+
+**Hybrid Washed deprecated** in Sprint T1 / BR-1 (2026-05-18). CGLE markets the term but publicly discloses the mechanical decomposition (`Whole-cherry aerobic -> sealed anaerobic -> depulp -> mucilage aerobic finish`), which fails the signature-method "mechanically opaque" criterion. Migration 058 re-maps the one affected brew row to `signature_method=NULL + base:Washed + fermentation:[Anaerobic, Aerobic]`; the green_beans lot name keeps the producer-marketing term ("CGLE Sudan Rume Hybrid Washed") as free-text in the lot label. The signature is removed from the canonical list and the alias map - any future write of `signature_method='Hybrid Washed'` now fails the canonical check, surfacing the deprecated term explicitly.
 
 ---
 
@@ -180,6 +196,7 @@ Structural mappings to canonical names. Additions are as deliberate as adding a 
 ### Signature-method aliases (proper-name drift)
 - `Moonshadow Natural` → **Moonshadow** (signature)
 - `Moonshadow Washed` → **Moonshadow** (alias — legitimate rare variant. Moonshadow is typically Natural, but the MSW1 Airworks x Shoebox x Alo special lot is the Washed variant: same signature drying protocol applied to a washed ferment.)
+- `Hybrid Washed` -> **not a signature** (deprecated Sprint T1 / BR-1 2026-05-18). CGLE markets the term but publicly decomposes it as `base:Washed + fermentation:[Anaerobic, Aerobic]` - fails the "mechanically opaque" criterion. Migration 058 re-mapped the one affected brew row to the structured decomposition. No alias entry: a fresh write of `signature_method='Hybrid Washed'` now fails canonical resolution and surfaces in the override queue, which is the right place to catch any future drift.
 - `Tropical Washed` → *not a signature;* decomposes to `base:Washed + fermentation:[Yeast Inoculated] + intervention:[Fruit Co-ferment]` (Monteblanco, Colombia — co-ferment masquerading as a washed per Robert's notes)
 - `Gold Washed` → *not a signature;* decomposes to `base:Washed + fermentation:[Mossto]` (Campo Hermoso, Colombia — named for the yellow-ish color from mossto + lactic ferment)
 

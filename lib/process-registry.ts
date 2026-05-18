@@ -265,12 +265,14 @@ export const DECAF_LOOKUP = makeCanonicalLookup(DECAF_MODIFIERS, DECAF_ALIASES)
 
 export interface SignatureEntry {
   name: string
-  producer: string
-  country: string
+  // Optional: attribution pending verification for newly-added signatures.
+  producer?: string
+  country?: string
   base: BaseProcess
   fermentation_modifiers?: readonly FermentationModifier[]
   drying_modifiers?: readonly DryingModifier[]
   intervention_modifiers?: readonly InterventionModifier[]
+  experimental_modifiers?: readonly ExperimentalModifier[]
   // Sub Pages 4 (2026-05-11): authored Tier B content for the /processes/signatures/{name}
   // page. Both fields are optional during Phase A authoring — pages render an empty
   // state when missing. Populated as Chris authors the content.
@@ -278,6 +280,11 @@ export interface SignatureEntry {
   observedCupProfile?: readonly string[]
 }
 
+// When adding entries: only canonical modifier names go into the arrays.
+// Non-canonical descriptors from a producer's marketing decomposition
+// (e.g. "Dynamic Cherry", "Biological Fermentation", "Zeolite Drying")
+// are intentionally omitted rather than approximated — promotion of any
+// such term to a canonical modifier is a separate deliberate registry edit.
 export const SIGNATURE_METHODS: readonly SignatureEntry[] = [
   // Moonshadow is defined by the shade-dry + extended LDE drying protocol;
   // typically applied to a Natural ferment but a rare Washed variant exists
@@ -299,11 +306,75 @@ export const SIGNATURE_METHODS: readonly SignatureEntry[] = [
     fermentation_modifiers: ['Aerobic'],
   },
   {
-    name: 'Hybrid Washed',
+    name: 'Alchemy',
+    base: 'Washed',
+    fermentation_modifiers: ['Carbonic Maceration', 'Yeast Inoculated'],
+  },
+  {
+    name: 'TIM',
+    base: 'Washed',
+    fermentation_modifiers: ['Yeast Inoculated', 'Mossto'],
+  },
+  {
+    name: 'XO',
     producer: 'Café Granja La Esperanza (CGLE)',
     country: 'Colombia',
+    base: 'Natural',
+    fermentation_modifiers: ['Anaerobic'],
+  },
+  {
+    name: 'Enzyflow',
     base: 'Washed',
-    fermentation_modifiers: ['Anaerobic', 'Aerobic'],
+    fermentation_modifiers: ['Aerobic'],
+    experimental_modifiers: ['Enzyme-Assisted'],
+  },
+  {
+    name: 'Bio-innovation',
+    base: 'Washed',
+    fermentation_modifiers: ['Anaerobic'],
+  },
+  {
+    name: 'Sous-vide',
+    base: 'Washed',
+    experimental_modifiers: ['Enzyme-Assisted'],
+  },
+  {
+    name: 'Amazake',
+    base: 'Natural',
+    fermentation_modifiers: ['Yeast Inoculated'],
+    experimental_modifiers: ['Koji'],
+  },
+  {
+    name: 'Anti-maceration',
+    base: 'Natural',
+    fermentation_modifiers: ['Anaerobic'],
+  },
+  {
+    name: 'Dynamic cherry',
+    base: 'Natural',
+    fermentation_modifiers: ['Anaerobic'],
+  },
+  {
+    name: 'Dry fermentation',
+    base: 'Natural',
+    fermentation_modifiers: ['Mossto', 'Cold Fermentation'],
+  },
+  {
+    name: 'Splash',
+    base: 'Washed',
+    fermentation_modifiers: ['Anaerobic', 'Lactic Fermentation'],
+  },
+  {
+    name: 'Symbiotic',
+    base: 'Washed',
+    fermentation_modifiers: ['Mossto'],
+  },
+  {
+    name: 'Wave Hybrid',
+    producer: 'Pepe Jijón / Finca Soledad',
+    country: 'Ecuador',
+    base: 'Washed',
+    fermentation_modifiers: ['Aerobic'],
   },
 ]
 

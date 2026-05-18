@@ -120,11 +120,12 @@ export function ProcessPicker({ value, onChange }: ProcessPickerProps) {
           value={value.signature_method ?? ''}
           onChange={(v) => setField('signature_method', v.trim() ? v : null)}
           registry={SIGNATURE_LOOKUP}
-          placeholder="Moonshadow, TyOxidator, Hybrid Washed"
+          placeholder="Moonshadow, TyOxidator, Alchemy"
         />
         {signatureEntry && (
           <div className="mt-1 font-mono text-xxs text-latent-mid">
-            {signatureEntry.name} is typically {signatureEntry.base} at {signatureEntry.producer}.
+            {signatureEntry.name} is typically {signatureEntry.base}
+            {signatureEntry.producer ? ` at ${signatureEntry.producer}` : ''}.
           </div>
         )}
       </div>
