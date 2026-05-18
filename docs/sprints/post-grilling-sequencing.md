@@ -1,8 +1,12 @@
 # Post-grilling sequencing plan
 
+**Canonical names** (Chris-locked 2026-05-18):
+- **"Roasting dogfooding - cleanup actions"** = the cleanup queue that shipped out of the Round 1-7 dogfood loop (Sprints 6-8 in this plan). Distinct from the grilling cluster followups. Ships as one PR (the "cleanup-actions PR") in a parallel worktree, while master-plan Sprint 0 + Sprints 1-5 ship sequentially in this worktree. After the cleanup-actions PR merges, the master plan returns to pure sequential cadence.
+- All other names retained from prior drafts.
+
 Planning doc, not an execution doc. Output of the 2026-05-17 planning session that consolidated:
 - The 8 `/grill-with-docs` followup files (2026-05-14 through 2026-05-17)
-- The in-flight green-bean roasting dogfood cleanup queue (Rounds 0-7 logged, Round 8 lands 2026-05-18)
+- The in-flight green-bean roasting Roasting dogfooding - cleanup actions queue (Rounds 0-7 logged, Round 8 lands 2026-05-18)
 - The 3 ADRs that landed during cross-party grilling (0003 / 0004 / 0005)
 
 Subsequent execution sessions consume this doc one sprint at a time, fresh context per session.
@@ -18,8 +22,8 @@ Subsequent execution sessions consume this doc one sprint at a time, fresh conte
 
 Standing fences:
 - **Dogfood closed 2026-05-18 at Round 7**. Original plan was 8 rounds; Round 7 wrapped up the full loop earlier than expected. Closeout docs shipped as [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172). Dogfood-merge gate is now OPEN (see § 3).
-- **Polish PR (Sprints 6-8) is the dogfood deliverable**: 28 items total (13 A prompt edits + 9 B MCP schema-description fixes + 3 C page-render polish + 3 CONTEXT.md additions). Authoritative scope at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md); reconciliation rules at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md).
-- **Dedup rule**: per the reconciliation summary, when a post-grilling followup item touches a file in the polish PR's touch-list AND ships at or before Sprints 6-8, the polish PR ships first and the post-grilling edit rebases. Default applied unless Chris reverses for a specific item.
+- **Cleanup-actions PR (Sprints 6-8) is the dogfood deliverable**: 28 items total (13 A prompt edits + 9 B MCP schema-description fixes + 3 C page-render polish + 3 CONTEXT.md additions). Authoritative scope at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md); reconciliation rules at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md).
+- **Dedup rule**: per the reconciliation summary, when a post-grilling followup item touches a file in the cleanup-actions PR's touch-list AND ships at or before Sprints 6-8, the cleanup-actions PR ships first and the post-grilling edit rebases. Default applied unless Chris reverses for a specific item.
 - **Brewing-side is fully fair game**. The dogfood exercised the roasting + cupping iteration loop, not the brewing-side write surface. Brewing-side schema, MCP Tools, prompts, registries, and UI are pre-safe and were already pre-safe even pre-Round-7.
 - **SYN-8 unified in Sprint 9** (per Chris-confirmed 2026-05-17). Both BREWING.md + ROASTING.md renamed together; no half-rename in Sprint 1.
 - **No --global git config** in any execution sprint (worktree-local `user.email=chris.r.mccann@gmail.com` only).
@@ -156,9 +160,9 @@ Items 1-2 shipped as [PR #167](https://github.com/chrismccann-dev/latent-coffee/
 | RO-CP-8 | `roast_learnings` underdev/overdev cup-side strictness | SCH (data audit) + PRM | POST | S | RO-5 | **= RO-5** dedupe. |
 | RO-CP-9 | Skeleton ADR for substrate-practice gap audit mechanism | ADR | DEF | XS | none | Deferred per Chris-confirmed 2026-05-17 to "when a 3rd cross-party audit lands." Not scoped in current sequence. |
 
-### Part B: Dogfood cleanup queue (post-Round-7 handoff brief, all POST by construction)
+### Part B: Roasting dogfooding - cleanup actions (post-Round-7 handoff brief, all POST by construction)
 
-Authoritative source: [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md) (per-item rationale + round of origin) + [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md) (dedup rules + overlap risks against post-grilling clusters). All items are POST-dogfood-close. Dogfood closed 2026-05-18 at Round 7. **28 polish-PR items total** (Sprints 6-8) + the deferred schema-migration + arbiter + operational items below.
+Authoritative source: [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md) (per-item rationale + round of origin) + [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md) (dedup rules + overlap risks against post-grilling clusters). All items are POST-dogfood-close. Dogfood closed 2026-05-18 at Round 7. **28 cleanup-actions items total** (Sprints 6-8) + the deferred schema-migration + arbiter + operational items below.
 
 #### B.1 Sub-PR A — Prompt edits (13 items, `docs/prompts/`)
 
@@ -240,7 +244,7 @@ Sprint 5 kickoff: enumerate + decide bundling (single dedicated sprint after Spr
 
 #### B.7 Higuito V3 real-pourover discriminator (operational, Chris-driven)
 
-Separate from the polish PR per reconciliation summary § Out-of-scope. Operational brewing-side work. Not in any sprint.
+Separate from the cleanup-actions PR per reconciliation summary § Out-of-scope. Operational brewing-side work. Not in any sprint.
 
 #### B.8 Pour-over discriminator gate + optimized brew lifecycle states (NEW — Chris-flagged 2026-05-18 as near-term)
 
@@ -253,13 +257,13 @@ Per Chris-confirmed 2026-05-18 framing in [docs/sprints/pourover-discriminator-a
 ### Inventory totals after dedupe
 
 - Grilling followups (Parts A.1-A.8): **70 raw items → ~63 unique** after collapsing duplicates (RO-3≡RO-CP-7; RO-5≡RO-CP-8; MCP-2≡BR-1; CR-8≡WBC-3; CR-9≡WBC-4-large) and removing resolved/shipped/done items (MCP-5, MCP-7, MCP-8, CR-12, BCP-1, BCP-2-partial).
-- Dogfood cleanup queue (Part B): **28 polish-PR items** (Sprints 6-8) + 5 schema-migration candidates + 1 arbiter task + 2 operational backfills + 1 pour-over discriminator state expansion = 37 items total.
+- Roasting dogfooding - cleanup actions (Part B): **28 cleanup-actions items** (Sprints 6-8) + 5 schema-migration candidates + 1 arbiter task + 2 operational backfills + 1 pour-over discriminator state expansion = 37 items total.
 - Grand total: **~100 unique items** across the planning surface.
 
 Status mix after Chris-confirmed reclassifications (2026-05-17) + dogfood close (2026-05-18):
 - `DONE` (already shipped or resolved): 6 items (BCP-1, MCP-5, MCP-7, MCP-8, CR-12, BCP-2-partial)
 - `PRE` (pre-dogfood-safe, execution-ready): ~23 items
-- `POST` (post-dogfood-only, gate now OPEN): ~17 items + 28 polish-PR items = ~45 items
+- `POST` (post-dogfood-only, gate now OPEN): ~17 items + 28 cleanup-actions items = ~45 items
 - `DEF` (deferred future-scope): ~20 items (+ POD-1 pour-over discriminator)
 
 ---
@@ -371,7 +375,7 @@ Triggers after Sprint 5 closes and BEFORE any post-dogfood sprint begins. Runs t
 
 ### Post-dogfood sprints (Sprints 6-12)
 
-These run AFTER Round 8 closes the dogfood (target: 2026-05-18 + Round 8 completion). The dogfood cleanup queue (DF-A through DF-OPS) is the highest priority because it's the most current friction.
+These run AFTER Round 8 closes the dogfood (target: 2026-05-18 + Round 8 completion). The Roasting dogfooding - cleanup actions queue (DF-A through DF-OPS) is the highest priority because it's the most current friction.
 
 #### Sprint 6 — DF Sub-PR A: Prompt edits (13 items)
 
@@ -381,7 +385,7 @@ These run AFTER Round 8 closes the dogfood (target: 2026-05-18 + Round 8 complet
 - DF-A2 — log-cupping.md STAGE 0 state-shape migration with worked-content examples. Supersedes 4+ Round 1/3/4/6 items.
 - DF-A3 — log-cupping.md STAGE 4 Path C expansion to TWO variants (C-1 calibration / C-2 discriminator). Supersedes Round 3 + Round 7 claude.ai-invented routing.
 
-**Estimated PRs**: 1 (single polish PR). If DF-A2 + DF-A3 are large enough, they may get their own commit-pair inside the PR for review depth.
+**Estimated PRs**: 1 (single cleanup-actions PR). If DF-A2 + DF-A3 are large enough, they may get their own commit-pair inside the PR for review depth.
 
 **Sizing**: M-L (sizing grew from M when item count went 10 → 13 in the final brief).
 
@@ -544,13 +548,13 @@ The gate Chris specified is now satisfied. Verification trace:
 2. ✅ **Continuous feedback log Round 7 entry written** (`memory/feedback_mcp_continuous_log.md`).
 3. ✅ **Dogfood handoff brief merged to main** as part of [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172) (2026-05-18). Brief lives at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md).
 4. ✅ **Reconciliation summary shipped** at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md). Per-item dedup rules + 5 overlap-risk callouts documented.
-5. ✅ **DF inventory locked** at 28 polish-PR items (Sprints 6-8) + 5 schema-migration candidates + 1 arbiter task + 2 operational backfills + 1 new pour-over discriminator state expansion (POD-1, DEF until Sprint R).
+5. ✅ **DF inventory locked** at 28 cleanup-actions items (Sprints 6-8) + 5 schema-migration candidates + 1 arbiter task + 2 operational backfills + 1 new pour-over discriminator state expansion (POD-1, DEF until Sprint R).
 
-**Sprint 6 kickoff session can proceed without additional verification.** Read the handoff brief + reconciliation summary at kickoff; bundle DF-A items per their order in the polish-PR enumeration (DF-A2 + DF-A3 are the sprint-killers and land first within the sprint).
+**Sprint 6 kickoff session can proceed without additional verification.** Read the handoff brief + reconciliation summary at kickoff; bundle DF-A items per their order in the cleanup-actions enumeration (DF-A2 + DF-A3 are the sprint-killers and land first within the sprint).
 
-**Reconciliation rule (per summary § Deduplication)**: when a post-grilling followup touches a file in the polish PR's touch-list AND ships at or before Sprints 6-8, the polish PR ships first and the post-grilling edit rebases. The polish PR's touch-list is enumerated in the reconciliation summary § Files the polish PR touches.
+**Reconciliation rule (per summary § Deduplication)**: when a post-grilling followup touches a file in the cleanup-actions PR's touch-list AND ships at or before Sprints 6-8, the cleanup-actions PR ships first and the post-grilling edit rebases. The cleanup-actions PR's touch-list is enumerated in the reconciliation summary § Files the cleanup-actions PR touches.
 
-**Coordination point (RO-4)**: the only known overlap requiring sequencing care is RO-4 (Audit `docs/prompts/` for new vocabulary, scheduled for Sprint 14). The reconciliation summary confirms RO-4's vocabulary additions (post-RO-1/3/6 schema renames) don't conflict with the polish PR's prompt edits, but RO-4 must rebase on whatever the polish PR settles in `docs/prompts/log-roast.md` + `log-cupping.md` + `close-lot.md` + `one-shot.md` + `one-shot-closeout.md`.
+**Coordination point (RO-4)**: the only known overlap requiring sequencing care is RO-4 (Audit `docs/prompts/` for new vocabulary, scheduled for Sprint 14). The reconciliation summary confirms RO-4's vocabulary additions (post-RO-1/3/6 schema renames) don't conflict with the cleanup-actions PR's prompt edits, but RO-4 must rebase on whatever the cleanup-actions PR settles in `docs/prompts/log-roast.md` + `log-cupping.md` + `close-lot.md` + `one-shot.md` + `one-shot-closeout.md`.
 
 ### ✅ Phase 2: Post-dogfood (gate now OPEN as of 2026-05-18)
 
@@ -641,7 +645,7 @@ Sprint 12 (RO-CP-5 + MCP-1 + CR-4 + CR-10 + CR-5) touches: schema (3 changes), M
 
 ### 4.7 Dogfood close scope (RESOLVED)
 
-Dogfood closed at Round 7 (2026-05-18), one round earlier than originally planned. DF-A grew from the planning-time estimate of 10 to a final 13 items; DF-B grew 8 → 9; DF-C 3 → 3; CONTEXT.md additions 2 → 3. Total polish PR scope: 28 items.
+Dogfood closed at Round 7 (2026-05-18), one round earlier than originally planned. DF-A grew from the planning-time estimate of 10 to a final 13 items; DF-B grew 8 → 9; DF-C 3 → 3; CONTEXT.md additions 2 → 3. Total cleanup-actions PR scope: 28 items.
 
 Sprint 6 is now sized M-L (up from M planning-estimate); plan-execute split into two sessions is the recommended cadence per Chris's standing caution about mega-sprints. The sprint-killers (DF-A2 state-shape migration + DF-A3 Path C expansion) land in the first session; remaining 11 prompt edits land in the second.
 
@@ -671,7 +675,7 @@ All 8 open questions from the initial draft are now resolved. Captured here for 
 
 3. **Sprint 5 split threshold**: ship as one with hard checkpoint after item 6. Only split into 5a + 5b if review load is too high mid-sprint.
 
-4. **Dogfood close (was "Round 8 fence")**: dogfood loop closed 2026-05-18 at Round 7, one round earlier than the original plan. Closeout docs shipped as [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172) (handoff brief + reconciliation summary). Final polish-PR count: 28 items (13 A + 9 B + 3 C + 3 CONTEXT.md). DF inventory locked.
+4. **Dogfood close (was "Round 8 fence")**: dogfood loop closed 2026-05-18 at Round 7, one round earlier than the original plan. Closeout docs shipped as [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172) (handoff brief + reconciliation summary). Final cleanup-actions count: 28 items (13 A + 9 B + 3 C + 3 CONTEXT.md). DF inventory locked.
 
 5. **ADR-0006 (substrate-practice gap audit)**: DEFERRED to "when a 3rd cross-party audit lands." Removed from Sprint 5. RO-CP-9 status = DEF.
 
