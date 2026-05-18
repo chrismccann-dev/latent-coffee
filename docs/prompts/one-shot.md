@@ -179,8 +179,8 @@ Capture `roast_id` for STAGE 4's experiment patch and STAGE 4's cupping push lat
 - `rest_days`: integer. Day 6-10 is the acceptance window (Day 7 target). If outside [6,10] OR `cupping_date - roast_date` doesn't match `rest_days`, prefix `overall` with `"REST_DAYS_DRIFT: cupped Day <N>, off the Day 7 gate by <delta>"`.
 - `eval_method`: `"Pourover"` for Day 7 xbloom gate
 - `recipe_variant`: `"xbloom_gate"` if you expect a real-pourover follow-up under a different recipe; NULL if confident this is the only cupping
-- `ground_agtron`: paired with `roasts.agtron` for WB-to-Ground delta
-- Six prose fields (`aroma` / `flavor` / `acidity` / `body` / `finish` / `overall`) sourced from Chris's transcript
+- `ground_agtron`: paired with `roasts.agtron` for WB-to-Ground delta. `wb_agtron` is auto-snapshot from the joined roast; `wb_to_ground_delta` is a generated column (Schema sprint S1, migration 055, 2026-05-18).
+- Eight prose fields (`aroma` / `flavor` / `acidity` / **`sweetness`** / `body` / `finish` / `overall` / **`temperature_behavior`**) sourced from Chris's transcript. **Sweetness is a distinct axis** from acidity / body — don't fold it in. **Temperature_behavior** captures direction + when + what changes across the cooling arc. Both fields are NULL-safe if the transcript doesn't address them.
 
 `patch_experiment(experiment_pk, ...)`:
 - `delta_from_cup_a`: per-slot reconciliation of actual cup vs `updated_cup_prediction_a` (or vs `expected_outcomes` design-time prediction if `updated_cup_prediction_a` is NULL). Walk the three `taste_for_a` reference points and note which materialized as expected vs not (producer-notes ballpark / carry-forward-anchor expectation / tolerance-margin behavior).

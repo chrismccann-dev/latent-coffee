@@ -44,16 +44,16 @@ If detection does NOT fire (any of the three are false), skip STAGE 0 entirely a
 
 Three writes, in order. Each call's payload is reconstructed from session memory + the existing DB state — no fabrication. If a piece is genuinely unknowable from what's in front of you, halt and report which slot's which field is missing, do NOT guess.
 
-**(a) `roast_recipes.predicted_cup` backfill** — one `patch_roast_recipe` call per recipe row missing the field.
+**(a) `roast_recipes.predicted_cup` backfill** — one `patch_roast_recipe` call per recipe row missing the field. **Always include `was_backfilled: true` + `backfill_notes: "..."`** on these calls (Schema sprint S4, migration 057, 2026-05-18) — the recipe row's design intent is being recovered post-roast, not captured at design time. Standard `backfill_notes` phrasing: `"Recovered from <source> at V_<n> cup, YYYY-MM-DD"` where source is "session chat memory" / "expected_outcomes per-slot split" / "log-roast.md prose".
 
 Reconstruct from `experiments.expected_outcomes` (the design-time per-slot cup hypothesis prose) when it's per-slot-shaped. Worked example:
 
 > `expected_outcomes` reads: "v3a underdev hypothesis: clean attack, possibly hollow middle; v3b structural target — closest to design intent; v3c overrun hypothesis: heavier body, tannin emphasis."
 
-Split into three `patch_roast_recipe(recipe_id, predicted_cup: "...")` calls:
-- v3a: `"Clean attack, possibly hollow middle - underdev hypothesis."`
-- v3b: `"Structural target - closest to design intent."`
-- v3c: `"Heavier body, tannin emphasis - overrun hypothesis."`
+Split into three `patch_roast_recipe(recipe_id, predicted_cup: "...", was_backfilled: true, backfill_notes: "...")` calls:
+- v3a: `predicted_cup: "Clean attack, possibly hollow middle - underdev hypothesis."` + `was_backfilled: true` + `backfill_notes: "Recovered from expected_outcomes per-slot split at V3 cup, 2026-05-19"`.
+- v3b: `predicted_cup: "Structural target - closest to design intent."` + `was_backfilled: true` + `backfill_notes: "..."`.
+- v3c: `predicted_cup: "Heavier body, tannin emphasis - overrun hypothesis."` + `was_backfilled: true` + `backfill_notes: "..."`.
 
 If `expected_outcomes` is generic ("we expect the lower-peak slot to read cleaner"), it can't be cleanly split — halt and ask Chris to ballpark each slot's predicted_cup before proceeding. Do NOT fabricate a per-slot prediction from a single-blob `expected_outcomes`.
 
@@ -103,8 +103,10 @@ For each slot Chris cupped (typically all V_n slots; sometimes one or two are sk
   - `rest_days`: integer. V4 evaluation gate is Day 7; Day 6-10 is the acceptance window. **If `rest_days` is outside [6,10] OR the implied `cupping_date - roast_date` doesn't match the reported `rest_days`, flag it explicitly** in the same line: prefix `additional_notes` (or `overall` if `additional_notes` isn't a field on cuppings) with `"REST_DAYS_DRIFT: cupped Day <N>, off the Day 7 gate by <delta>"` so cross-lot rest-curve analysis can filter on the flag later. Common cause is a multi-day cupping push that drifted: Chris said "I cupped V3 on the 14th" but the roast was on the 5th → `rest_days: 9`, not 7.
   - `eval_method`: `"Pourover"` for Day 7 evaluation. `"Cupping"` (table bowl) is the legacy Day 4 defect-screen - deprecated as a primary evaluation per CONTEXT.md, but still accepted if you ran one.
   - **`recipe_variant`**: distinguishes multiple cuppings of the same `(roast_id, cupping_date, eval_method)` under different brewing recipes. Examples: `"xbloom_gate"` (mechanically-consistent gate cupping that defines the reference cup), `"real_pourover"` (optimized brew at Chris's daily-consumption recipe). When pushing both for the same slot on the same day, use distinct labels. When pushing only one and you know a second is unlikely, leave NULL - but if a second is *likely* later (the "first of likely two" case), explicitly label this one (e.g. `"xbloom_gate"`) to avoid retroactive patching when the second lands. The NULLS NOT DISTINCT composite key collapses two unlabeled cuppings into one row.
-  - `ground_agtron`: paired with `roasts.agtron` for the WB→Ground delta - V4 primary internal-development signal (target ≤3 points).
-  - The six prose fields: `aroma`, `flavor`, `acidity`, `body`, `finish`, `overall`. Source from Chris's transcript verbatim where possible, your synthesis only where the transcript is fragmentary.
+  - `ground_agtron`: paired with `roasts.agtron` for the WB→Ground delta - V4 primary internal-development signal (target ≤3 points). `wb_agtron` is auto-snapshot from the joined roast row at insert time per Schema sprint S1 (migration 055); `wb_to_ground_delta` is a generated column you can later query directly for cross-lot analysis.
+  - The eight prose fields: `aroma`, `flavor`, `acidity`, **`sweetness`**, `body`, `finish`, `overall`, **`temperature_behavior`**. Source from Chris's transcript verbatim where possible, your synthesis only where the transcript is fragmentary.
+    - **`sweetness` is a distinct axis from acidity and body** (Schema sprint S3, 2026-05-18) — do NOT fold "sweet citrus" into acidity or "syrupy sweetness" into body. The axis stays implicit and uncross-queryable when you do. Examples: "Moderate, structurally honey-like" / "Hidden behind acidity; emerges at 50°C" / "Layered cane sugar → maple as it cools" / NULL if Chris's transcript genuinely doesn't address sweetness.
+    - **`temperature_behavior`** captures direction + when + what changes across the cooling arc (parallel to brews.temperature_evolution). Examples: "Rose emerges below 50°C" / "Bitter tail resolves on cooling" / "Flattens cooler — V3a pattern" / NULL if cup didn't materially evolve.
 
 `push_cupping` UPSERTs on `(user_id, roast_id, cupping_date, eval_method, recipe_variant)` with NULLS NOT DISTINCT. Re-pushing is safe - returns `created: false` and field values are NOT overwritten. Use `patch_cupping` for field-level corrections after the first push.
 
@@ -114,7 +116,7 @@ Capture `cupping_id` per slot for cross-reference.
 
 ## STAGE 3 - Patch the V_n experiment row with cup deltas + leading slot
 
-**This STAGE writes**: `experiments.delta_from_cup_a/b/c/d`, `experiments.observed_outcome_a/b/c/d` (refine), `experiments.winner`, `experiments.key_insight`, `experiments.key_insight_confidence`, `experiments.what_changes_going_forward`, `experiments.open_questions`, `experiments.additional_notes`.
+**This STAGE writes**: `experiments.delta_from_cup_a/b/c/d`, `experiments.observed_outcome_a/b/c/d` (refine), `experiments.winner`, `experiments.key_insight`, `experiments.key_insight_confidence`, `experiments.what_changes_going_forward`, `experiments.open_questions`, `experiments.additional_notes`. Optionally also: **`roasts.is_reference_candidate = true` on the leading-slot roast** when the cup is reference-quality at the V-set level (see "Mark the leading slot as a reference candidate" below).
 
 `patch_experiment(experiment_pk, ...)`:
 
@@ -145,6 +147,16 @@ Capture `cupping_id` per slot for cross-reference.
   Quick disambiguation rule: forward + actionable → `what_changes_going_forward`. Interrogative → `open_questions`. Everything else cross-slot narrative-shaped → `additional_notes`.
 
 `patch_experiment` echoes `updated_fields: [...]` + `canonical_values: { key_insight_confidence }` so you can confirm enum vocabulary landed cleanly.
+
+### Mark the leading slot as a reference candidate (Schema sprint S2, 2026-05-18)
+
+After the V_n leading slot is identified, **assess reference quality** and patch `roasts.is_reference_candidate` accordingly. Distinct from `experiments.winner` (which is always the V-set leading slot, regardless of quality) and `roasts.is_reference` (lot-level final, set at close-out).
+
+- **Set `is_reference_candidate: true`** when the leading slot reads as a plausible lot reference at close-out — the cup is reference-quality at the V-set level, even if more V-sets are coming.
+- **Set `is_reference_candidate: false`** (or leave default false) when the leading slot is "best of the worst" — Fazenda Um V1B is the canonical case: leading slot by Chris's verdict, framed as "best of the worst, NOT a reference example."
+- The candidate flag does NOT auto-flip to `is_reference` at close-out. `close-lot.md` STAGE 2 (or `one-shot-closeout.md` STAGE 2) makes the promotion explicit via a separate `patch_roast(is_reference: true)` on the lot-level final reference.
+
+`patch_roast(roast_id: <leading_slot_roast_id>, is_reference_candidate: true|false)`. Multiple V-sets on one lot can each have a candidate; only one batch ultimately gets `is_reference=true` at close-out.
 
 ## STAGE 4 - Decide: close out, design V_(n+1), or run a pre-V_(n+1) calibration step?
 

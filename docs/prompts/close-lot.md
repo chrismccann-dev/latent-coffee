@@ -38,7 +38,7 @@ The lot-level reference roast designation is distinct from any V-set's leading s
 
 `patch_roast(roast_id, ...)`:
 
-- `is_reference: true`. **Axis-1 of the close-out**: this is the row the resolved-view page renders as the reference roast. Set unconditionally on the named reference roast.
+- `is_reference: true`. **Axis-1 of the close-out**: this is the row the resolved-view page renders as the reference roast. Set unconditionally on the named reference roast. **The `is_reference_candidate` flag set on this batch during V-set iteration does NOT auto-flip — this STAGE 2 patch is the explicit promotion** (Schema sprint S2, migration 056, 2026-05-18). If `is_reference_candidate` was never set true on the eventual reference roast (some V-set leading slots never read as candidate-quality but became the lot reference by elimination), that's fine — `is_reference` stands on its own.
 - `worth_repeating: "yes"` if not already set. **Axis-2, decoupled from `is_reference`**: this is the "I'd run this exact recipe again if I had more green" axis. Usually correlates with `is_reference` on V-set lots (you wouldn't name a roast the reference if you wouldn't repeat it), but they're structurally independent fields. On V-set lots both default to true together; the decoupling matters more for one-shot lots (`one-shot-closeout.md` STAGE 2) where `is_reference` is structural (single batch IS the reference) but `worth_repeating` can vary by outcome.
 - Optionally refine `what_worked` / `what_didnt` / `what_to_change` if the close-out reflection added clarity over the in-iteration prose.
 
