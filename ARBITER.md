@@ -352,6 +352,102 @@ The substrate-to-substrate direction (workflow output proposes substrate edits v
 
 ---
 
+## CCIL consolidation pass
+
+[ROASTING.md § Cross-Coffee Insight Layer](ROASTING.md#cross-coffee-insight-layer) (CCIL) grows append-only as each V-set close-out / lot close-out appends a new working hypothesis. Without periodic consolidation the section drifts toward 6+ working hypotheses per active lot, the High-confidence cross-lot-validated patterns get buried, and the Low-confidence single-lot observations accumulate without ever being retired or promoted. This pass cleans both ends: promotes confirmed patterns to a stable navigable index, retires stale single-lot hypotheses that haven't been corroborated.
+
+**Trigger phrase:** "consolidate cross-coffee insights" / "process pending CCIL consolidation" / "do a CCIL pass" (or any functionally equivalent - same routing intent as the prose-proposal / canonical-queue passes above).
+
+**Cadence:** Chris-driven, not on a fixed schedule. Two natural triggers:
+1. Working Hypotheses (Single-Lot, Low Confidence) subsection in CCIL accumulates 6+ entries (the count Round 4 #11 flagged on 2026-05-15 as the unbounded-growth tripwire).
+2. A High-confidence cross-lot pattern emerges from `log-cupping.md` STAGE 3 / `close-lot.md` STAGE 5 that deserves explicit promotion to Confirmed Patterns rather than just leaving it as an APPEND on a body subsection.
+
+Pair the CCIL pass with the regular prose-proposal / canonical-queue passes when both queues have pending work; otherwise run standalone.
+
+**Pre-conditions:** same as the prose-proposal pass - fresh branch, worktree-local `user.email`. Read [CONTEXT.md § Key-insight confidence ladder](CONTEXT.md) to refresh on the 4-level enum operational definitions; the consolidation pass applies the same ladder.
+
+### CCIL-1. Audit current CCIL entries
+
+Read [ROASTING.md § Cross-Coffee Insight Layer](ROASTING.md#cross-coffee-insight-layer). Inventory every prose paragraph or `## H2` subsection (NOT the reference tables - see below). For each entry, record:
+
+- **Origin date** - when authored. Recoverable from the entry's lot tag (e.g. "RWA-NOVA-NAT21-RB-2026 V1, observed 2026-05") or from `git log -- ROASTING.md` if not embedded.
+- **Confidence level** - Low / Medium / Medium-High / High per [CONTEXT.md § Key-insight confidence ladder](CONTEXT.md).
+- **Corroborating lots since authoring** - count lots that have either reinforced or contradicted the hypothesis. Cross-reference [§ Open Questions](ROASTING.md#open-questions) for tracked-validation status. Run `git log --oneline -- ROASTING.md` to spot subsequent edits that updated the hypothesis.
+- **Parallel Open Questions row** - does the hypothesis have a question entry in the Open Questions section that tracks the next-lot test?
+
+**Out of scope for promote/retire:** the reference tables (FC Floor & Ceiling, WB-to-Ground Agtron Delta Norms, Session Position Effect, Green Spec → Starting Hypothesis, Varietal Aromatic Fingerprints, Rest Behavior Patterns) hold protocol-grade reference data with row-level mixed confidence. They are maintained inline by `propose_doc_changes` during normal sessions; the consolidation pass does not touch them.
+
+### CCIL-2. Promote candidates → Confirmed Patterns subsection
+
+A hypothesis is promotion-eligible when BOTH conditions hold:
+- `key_insight_confidence = High` per the CONTEXT.md operational ladder, AND
+- Repeated across ≥2 lots OR strong cross-lot corroboration (the pattern is invoked in V1 design for 3+ subsequent lots without contradiction; or the pattern is named explicitly in a closed lot's `roast_learnings.carry_forward_general_takeaway`; or the pattern survives an adversarial "what would change my mind?" prompting and is invoked by claude.ai during prior similar-lot V1 designs).
+
+Surface promotion candidates to Chris before editing. For each promotion Chris approves:
+
+1. **Add a one-line bullet** to the **Confirmed Patterns** subsection at the top of CCIL. The bullet should be short (≤2 sentences) + link to the detail section that holds the evidence (FC Floor & Ceiling, Rest Behavior Patterns, etc.). The Confirmed Patterns subsection is a navigable INDEX, not a duplication.
+2. **Leave the detail section in place** - don't move or strip the source evidence.
+3. **If the source was a standalone `## H2 Working Hypothesis` subsection** that has now been promoted, demote it: either delete it entirely (the Confirmed Patterns bullet is the new home) or downgrade the header (e.g. `## FC-Temp Architectural Constraint - Confirmed` → folded into the FC Floor & Ceiling table as a new row). Don't leave it sitting at H2 level with the old "Working Hypothesis" framing if the consolidation now reads it as confirmed.
+
+### CCIL-3. Retire candidates → Open Questions or delete
+
+A hypothesis is retirement-eligible when ANY of these hold:
+- **Aged out**: Confidence is Low AND no corroborating lot has landed within **90 days** of authoring, OR
+- **Tested without corroboration**: hypothesis was tested on **3+ similar lots** since authoring without repeat, OR
+- **Contradicted**: a subsequent lot's evidence rules out the hypothesis (the entry should be removed; CCIL is not the place to record rebuttals).
+
+Two retirement paths:
+
+- **Open Questions retain** - if the hypothesis frames a question that's still operationally useful (Chris still wants to test it on future lots), move the question to [§ Open Questions](ROASTING.md#open-questions) (or update the existing parallel row) and delete the CCIL prose paragraph. The commit message captures what was retired.
+- **Full delete** - if the hypothesis was contradicted OR no longer represents Chris's current thinking, delete entirely. The commit history is the audit trail.
+
+Surface each retirement candidate to Chris before editing. Don't auto-retire - the consolidation pass is human-in-the-loop precisely because aging is contextual (a 90-day-old hypothesis on a slow-moving cultivar class may still be active; a 30-day-old hypothesis on a contradicted observation may be ready to retire).
+
+### CCIL-4. Restructure check
+
+After promote/retire, the three-tier CCIL structure should be coherent:
+1. **Confirmed Patterns** (top) - short bullet index of High-confidence cross-lot-validated patterns.
+2. **Reference tables + Medium / Medium-High `## H2` subsections** (body) - protocol-grade content + hypotheses under validation.
+3. **Working Hypotheses (Single-Lot, Low Confidence)** (bottom) - holding pen for pre-ladder historical Lows; should drain over time. Do NOT accept new Low appends here per the operational ladder; this subsection is for entries authored before the ladder was finalized.
+
+If the Working Hypotheses subsection has drained to zero entries, delete the subsection header and intro blockquote. If new Low entries appeared post-ladder (a per-session prompt bug or claude.ai drift), surface to Chris - those represent operational-ladder violations that need root-cause fix in the prompts, not just a doc-edit move.
+
+### CCIL-5. Commit + PR + merge
+
+Same shape as the prose-proposal commit flow (Step 8 above). Branch name suggestion: `claude/ccil-consolidation-YYYY-MM-DD`. Commit message template:
+
+```
+CCIL consolidation: promote N to Confirmed Patterns, retire M working hypotheses
+
+- Promoted (N): <pattern-1>, <pattern-2>, ...
+- Retired to Open Questions (M_a): <hypothesis-x>
+- Retired (deleted) (M_b): <hypothesis-y> (contradicted by <lot>)
+```
+
+### CCIL-6. Cross-system audit
+
+Per [CLAUDE.md § Sprint cadence](CLAUDE.md#sprint-cadence-for-claude) item #4, a CCIL consolidation IS a substrate change to ROASTING.md. Trace:
+
+- **Actor 6 (UI):** ROASTING.md edits applied. ✓
+- **Actor 4 (MCP):** `roasting.md` doc Resource auto-reflects file content; no Tool/Resource code change required. Verify by running `read_doc_section({ uri: "docs://roasting.md", anchor: "Cross-Coffee Insight Layer" })` after merge to confirm the section still resolves.
+- **Actor 5 (Claude Code):** CLAUDE.md / CONTEXT.md need an edit only if the operational ladder itself shifts; pure CCIL restructure does not.
+- **Actor 2 (prompts):** `log-cupping.md` / `close-lot.md` / `start-lot.md` / `one-shot.md` / `one-shot-closeout.md` reference CCIL by top-level anchor "Cross-Coffee Insight Layer" - that anchor is unchanged, so prompts continue to resolve. If any prompt links to a specific subsection by anchor (e.g. `#fc-floor--ceiling-by-processing-method`), `grep` for those anchors and verify they still resolve after restructure.
+- **Actor 3 (claude.ai):** next session pulls fresh `roasting.md` via `docs://` MCP Resource. The Confirmed Patterns subsection's relative weight on V1-design is something Chris flags to the claude.ai project at the start of the next roasting session.
+- **Actor 1 (Chris):** rendered ROASTING.md should read coherently. Verify navigation from Confirmed Patterns bullets → detail sections works (the bullet links use markdown `[§ Section](#section-anchor)` form; section anchors are GitHub-style slugified from H2 headings).
+
+### CCIL-7. Worked example (2026-05-18 first pass)
+
+The first CCIL consolidation pass ran 2026-05-18, applying the operational ladder retroactively to ~10 Low-confidence single-lot entries authored 2026-04 to 2026-05 (before the ladder finalized today):
+
+- **Promoted to Confirmed Patterns (8 patterns):** drop-temp ceiling 205-208°C across counterflow lots; first-roast-of-session late-and-hot; Day 7 pourover as universal evaluation gate; xbloom under-extracts delicate aromatic washed coffees; WB-to-ground delta tightening as profile-dialing signal; Sudan Rume aromatic vocabulary shared across washed and natural processing; high-density washed Colombian ≥800 g/L energy-tolerant; producer notes including "lemongrass" / "jasmine" / "bergamot" predict eval-recipe under-extraction.
+- **Retired none (all Lows too recent to age out yet):** entries dated 2026-04 to 2026-05 were moved to the Working Hypotheses subsection as a holding pen rather than deleted; the 90-day retire-window first applies at the 2026-08 consolidation pass.
+- **Restructure:** added Confirmed Patterns subsection at top; relocated K (Session-Position Acceleration) + L (Dev-Time Outweighs Peak Inlet) + 6 inline Low paragraphs to the new Working Hypotheses (Single-Lot, Low Confidence) subsection at bottom; promoted M (xbloom_gate misranking) from an orphaned-paragraph position to a proper `## H2` subsection at Medium-High confidence; updated 2 Open Questions backlinks to new anchors.
+- **Sprint shipped log:** added a row to `docs/sprints/shipped.md`; updated [Round 4 #11 in feedback_mcp_continuous_log.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_continuous_log.md) to status `shipped`.
+
+Use this worked example as the shape template for the next pass.
+
+---
+
 ## Cross-references
 
 - **Architecture:** [SYNC_V2.md § propose_doc_changes](SYNC_V2.md#propose_doc_changes) + § "Doc storage model" + § "Conflict resolution / two-store reconciliation".
