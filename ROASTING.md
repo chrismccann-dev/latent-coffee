@@ -323,6 +323,28 @@ Use the washed profile as the starting point. Lower inlet temp for the early sta
 
 ---
 
+# Honey Process - Roast Direction Fork
+
+**Placeholder framework.** No resolved honey lots in the archive yet. Currently the only honey lot in inventory is the **Cruz Loma TM Honey one-shot** (Taza Dorada 2024 #15), queued behind the Rancho Tio Emilio Typica Mejorado Washed one-shot. This section is the starting framework for that roast.
+
+Honey processing produces a wide expression range depending on mucilage retention, drying speed, and fermentation length. Unlike washed (where the cup target is mostly clarity) or natural (where the cup target is mostly fruit/sweetness), honey is a **fork**: the same green can legitimately be roasted toward either expression. From the [Yunnan livestream extraction (Dongzhe, 2026-05-17)](docs/roasting/dongzhe-livestream-2026-05.md), the fork is explicit:
+
+- **Roast toward washed** if the cup target is clarity / florals / acidity. Faster profile. Compress Maillard. Avoid late development. Use the washed anchor energy envelope.
+- **Roast toward natural** if the cup target is sweetness / body / fruit. Slower profile. Slightly more Maillard time. Drop discipline still strict but with a touch more dev tolerance than a fruit-forward natural. Use the natural anchor with a gentler taper than a true natural.
+- **Want both characters?** Run two V1 batches, one compressed and one stretched. The fork decision precedes anchor selection.
+
+**Roast-direction decision precedes anchor selection.** In Step 3 of the New Coffee Onboarding Protocol, the standard flow is process → variety match → energy adjustment. For honey, insert one extra question first: *which side of the honey character is the target?* The answer determines whether the anchor is the closest resolved washed lot or the closest resolved natural lot. Without that decision, the anchor logic is ambiguous.
+
+**Operational steps for the first honey lot (Cruz Loma TM Honey):**
+
+- Read producer notes verbatim before V1 design. If they emphasize florals / citrus / clean acidity → roast-toward-washed. If they emphasize stone fruit / honey / brown sugar / body → roast-toward-natural. If notes split → run both directions in V1.
+- Cruz Loma TM is a Typica Mejorado at 1,800m. Same variety as the Rancho Tio washed one-shot (1,300m). Use the FULL #133 anchor energy without the low-altitude hedge per the Rancho Tio learning: 1,300m at 243°C peak underdeveloped; 1,800m honey should sit closer to anchor.
+- Single-batch (one-shot lot, ~100-120g, no iteration possible). The roast-direction choice IS the experiment. Document the choice and reasoning before the roast - per `one-shot.md`, the carry-forward language must be prefixed "Low confidence - N=1."
+
+Cup outcome from the first lot will replace this section's hypothesis prose with lot-specific knowledge.
+
+---
+
 # Data Capture Per Step
 
 All roasting data flows into the app via MCP Tools - the previous Archive Spreadsheet workflow has been retired. The roasting workflow is driven by 4 lifecycle-mapped operational prompts in `docs/prompts/`, each mapped 1:1 to a lifecycle-state transition. Re-entry into the loop happens at `log-roast.md` ⇄ `log-cupping.md` until a reference roast is declared; `start-lot.md` runs once at intake; `close-lot.md` runs once at close-out.
@@ -404,6 +426,8 @@ Before drafting V1, Claude should ask exactly these three questions. These defin
 - **FC ambiguity risk** - how to handle silent-crack risk. Naturals, heavy-ferment processes, and some high-grown washed coffees often produce subtle or silent cracks. Decision: plan for manual mark at 208°C if silent, manage primarily by drop temp.
 
 ## Step 3 - Anchor Profile Selection Logic
+
+**Green-physics-first framing.** Read the lot's moisture + density (paired) as a first-order intake signal **alongside** process and terroir/cultivar - not subordinate to process. This is a structural refinement from the [Yunnan livestream extraction (Dongzhe, 2026-05-17)](docs/roasting/dongzhe-livestream-2026-05.md): moisture/density picks the energy envelope, then process decides stretch-vs-compress within that envelope. In practice that means the priority-order list below picks the anchor *coffee* via process + variety, but the starting *energy* on that anchor profile is set by moisture/density per the Green Spec table - so a 9.3% moisture honey and an 11% moisture honey anchor on the same profile but start with different early-energy adjustments. For lots where no process-family match exists (e.g. a Daterra Laurina with unfamiliar bean shape), moisture/density alone is a defensible starting point for energy even when the anchor process is uncertain.
 
 Select the anchor profile in priority order:
 
@@ -618,7 +642,9 @@ The primary external reference for style and structure throughout Sudan Rume Was
 
 # Peer Insights - Counterflow L200 Ultra (Same Machine, Same Mode)
 
-Source: A peer who roasts exclusively on the Roest L200 Ultra in counterflow mode. High weight on directional principles; specific numbers don't transfer due to confirmed machine-level thermal differences (his TP ~94°C vs. my ~78-81°C, his charge 112.2°C vs. my resolved 117°C).
+Source: A peer (Dongzhe) who roasts exclusively on the Roest L200 Ultra in counterflow mode. High weight on directional principles; specific numbers don't transfer due to confirmed machine-level thermal differences (his TP ~94°C vs. my ~78-81°C, his charge 112.2°C vs. my resolved 117°C).
+
+**Long-form decision tree captured 2026-05-17 from a Yunnan-Hatchi livestream** - see [docs/roasting/dongzhe-livestream-2026-05.md](docs/roasting/dongzhe-livestream-2026-05.md) for the full extraction (three coffees roasted, his intake hierarchy, the five operational deltas folded back into this doc, and caveats about his single-batch methodology + darker cup target). Key structural framing from that capture: **green physics first, process second**. His intake order is moisture → density → bean size → process intensity → desired expression → prior reference curve. Process determines whether to stretch or compress; moisture/density set the starting energy envelope. This framing is folded into [§ Step 3 - Anchor Profile Selection Logic](#step-3---anchor-profile-selection-logic) above, and the moisture rows in the [Green Spec → Starting Hypothesis](#green-spec--starting-hypothesis) table now carry his confirmation. The Honey Process - Roast Direction Fork subsection below also sources from this livestream.
 
 ## Core Insight - RoR Shape Over Dev Time as the Primary Lever
 
@@ -791,8 +817,8 @@ Translates density, moisture, processing method, and variety into directional cu
 |---|---|---|
 | **Density ≥ 800 g/L (high density)** | More energy-tolerant. Anchor peak inlet on CF-Light or equivalent confirmed profile. Expect FC floor near 200°C. | High - confirmed on Sudan Rume Washed (810 g/L) and Sudan Rume Natural (805 g/L) |
 | **Density ≤ 760 g/L (low density)** | Taper energy earlier. Reduce peak inlet by 3-5°C vs. CF-Light. Compress Maillard slightly. Watch for overdevelopment. | Low - no directly resolved low-density counterflow lot yet. Treat as starting hypothesis only. |
-| **Moisture ≥ 11% (high moisture)** | Longer drying phase needed. Hold 01:15 and 02:30 inlet higher to complete drying before Maillard. Expect later FC if energy is normal. | Medium - counterflow has not yet seen a high-moisture lot. Principle carries from conventional roasting logic. |
-| **Moisture ≤ 10% (low moisture)** | Shorter drying phase. FC arrives faster. Watch for compressed dev time. Drop ceiling more important than usual. | Medium - confirmed on Sudan Rume Natural (10.3%); carries to Gesha Clouds (10.4%) as active hypothesis |
+| **Moisture ≥ 11% (high moisture)** | Longer drying phase needed. Hold 01:15 and 02:30 inlet higher to complete drying before Maillard. Expect later FC if energy is normal. Critical nuance: raise *drying* energy to match the curve traced on a normal-moisture lot - **do not conflate with more development**. High moisture needs drying support; it does not automatically mean more post-crack dev. | Medium-High - counterflow has not yet seen a high-moisture lot in Chris's archive, but [peer livestream confirmation (Dongzhe, 2026-05-17)](docs/roasting/dongzhe-livestream-2026-05.md): he raised overall drying power on an ~11% moisture Cascade Fermentation to match prior-roast momentum, deliberately separated from late Maillard / development decisions. Same machine + same counterflow mode. |
+| **Moisture ≤ 10% (low moisture)** | Shorter drying phase. FC arrives faster. Gentler / slower early energy to avoid overshoot and runaway. Watch for compressed dev time. Drop ceiling more important than usual. | Medium-High - confirmed on Sudan Rume Natural (10.3%); carries to Gesha Clouds (10.4%) as active hypothesis. [Peer livestream confirmation (Dongzhe, 2026-05-17)](docs/roasting/dongzhe-livestream-2026-05.md): explicit "approach it a little bit slower" on an 8.9-9% moisture Precursor Amplification Natural to avoid overshoot. Same machine + same counterflow mode. |
 | **Natural with visible fruit layer** | May need more energy than density/moisture predict (fruit layer thermal insulation) to get FC timing right - but this is a timing fix only, not a flavor fix. Sudan Rume Natural V1-V3 (10 batches): 247°C peak was needed to get FC timing into range, but higher energy amplified an unwanted drying/astringent compound. The preferred cup came from the lowest-energy batch (Batch 152, no audible FC, Maillard 66.9%, extended total time). For this variety: once FC timing is approximately workable, dial energy back rather than forward. Do NOT assume "natural = less heat" for FC timing, but DO assume "natural = less heat" for flavor quality on Sudan Rume-type naturals. | Medium-High - confirmed on Sudan Rume Natural V1-V3 (10 batches). The energy-vs-flavor tension is now well-established for this specific variety/process combination. |
 | **Heavy anaerobic / extended fermentation (>36hr)** | Expect subtle or silent FC. **Use bean temp end condition in Roest, not dev time** - a dev time end condition anchored to an inaudible FC will produce unpredictable Maillard overrun (confirmed: Mandela XO V4 reached 51-58% Maillard when dev time fired at machine-estimated FC). Set end condition to bean temp at the expected drop target (~203-205°C for XO-type coffees). Manage drop primarily by bean temp and RoR flattening. Fan floor slightly lower (63-65% in Maillard). | Medium-High - confirmed on Mandela XO (silent crack across all 4 experiment sets), active hypothesis for Gesha Clouds (84hr anaerobic) |
 | **Variety = Gesha (any process, counterflow)** | Dev time floor of 48s minimum. Use shaped fan curve from start. Be skeptical of any batch with dev time under 40s regardless of Agtron. | Medium - GV Oma Washed 40s confirmed as floor (3 underdeveloped batches), active hypothesis for Gesha Clouds |
