@@ -117,7 +117,12 @@ export default async function ProcessesIndexPage() {
           <div className="space-y-0">
             {signatures.map((sig) => {
               const entry = getSignatureEntry(sig.name)
-              const producerLine = entry ? `${entry.base} · ${entry.producer}, ${entry.country}` : null
+              let producerLine: string | null = null
+              if (entry) {
+                producerLine = entry.producer && entry.country
+                  ? `${entry.base} · ${entry.producer}, ${entry.country}`
+                  : entry.base
+              }
               return (
                 <Link
                   key={sig.name}

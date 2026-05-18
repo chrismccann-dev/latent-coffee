@@ -97,7 +97,13 @@ export default async function SignaturePage({
           <div className="flex-1">
             <h1 className="font-sans text-2xl font-semibold mb-1">{name}</h1>
             <p className="font-mono text-xs text-latent-mid">
-              Signature method &middot; {entry.producer}, {entry.country} &middot; {brewList.length} {brewList.length === 1 ? 'coffee' : 'coffees'}
+              {[
+                'Signature method',
+                entry.producer && entry.country ? `${entry.producer}, ${entry.country}` : null,
+                `${brewList.length} ${brewList.length === 1 ? 'coffee' : 'coffees'}`,
+              ]
+                .filter(Boolean)
+                .join(' · ')}
             </p>
           </div>
         </div>

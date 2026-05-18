@@ -292,9 +292,11 @@ function renderSignatureAnchor(ctx: SignatureAnchorContext): string | null {
   if (!entry) return `- Signature method: ${ctx.name}`
   const lines: string[] = [
     `- Signature method: ${entry.name}`,
-    `- Producer: ${entry.producer}, ${entry.country}`,
-    `- Base process: ${entry.base}`,
   ]
+  if (entry.producer && entry.country) {
+    lines.push(`- Producer: ${entry.producer}, ${entry.country}`)
+  }
+  lines.push(`- Base process: ${entry.base}`)
   if (entry.fermentation_modifiers && entry.fermentation_modifiers.length > 0) {
     lines.push(`- Fermentation modifiers: ${entry.fermentation_modifiers.join(', ')}`)
   }
@@ -303,6 +305,9 @@ function renderSignatureAnchor(ctx: SignatureAnchorContext): string | null {
   }
   if (entry.intervention_modifiers && entry.intervention_modifiers.length > 0) {
     lines.push(`- Intervention modifiers: ${entry.intervention_modifiers.join(', ')}`)
+  }
+  if (entry.experimental_modifiers && entry.experimental_modifiers.length > 0) {
+    lines.push(`- Experimental modifiers: ${entry.experimental_modifiers.join(', ')}`)
   }
   if (entry.overview) lines.push(`- Authored overview: ${entry.overview}`)
   if (entry.observedCupProfile && entry.observedCupProfile.length > 0) {
