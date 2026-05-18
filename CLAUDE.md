@@ -254,7 +254,36 @@ Run these seven checkpoints on every non-trivial sprint:
 
 3. **Preview every UI change.** Start the dev server (`preview_start`), take a screenshot after each change, and verify via `preview_eval` / `preview_screenshot` before committing. Don't rely on "it should work" — the mismatched Alo Village cover color would have been caught on the first screenshot.
 
-4. **Cross-system audit before PR.** If this sprint changed substrate (a new strategy, Tool, column, count delta, registry entry, page, type, or schema), audit BOTH dependent docs (PRODUCT.md / CLAUDE.md / BREWING.md / ROASTING.md / SYNC_V2.md / docs/taxonomies/*) AND dependent code (lib/types.ts, /add page, MCP tool descriptions, migration files, registry JSON, UI composers wired to the field) before declaring done. Don't wait for Chris to prompt the consistency check. Cross-system audit at substrate-change time, not monthly cleanup time. **MCP Resource bundle check:** if this sprint added a new `docs://` Resource to [lib/mcp/docs.ts](lib/mcp/docs.ts), audit [next.config.js](next.config.js) `outputFileTracingIncludes['/api/mcp/**']` to ensure the file is in the Vercel serverless bundle — three recurring misses (PR #65, plus CONTEXT.md + docs/roasting/*.md both fixed in #164) shipped Resources that ENOENT'd in production while `listDocs()` returned their catalog entries cleanly. Pattern always-on: docs registered in `DOC_FILES` but the bundle glob not updated. **Roadmap currency:** if this sprint shipped from `PRODUCT.md § Active Sprints` / `Newly queued` / `Side Quests`, move the entry out of those sections AND add a new line to `docs/sprints/shipped.md` with date / sprint name (bold) / landmark, all in the same PR. The rule prevents drift between "what's queued" and "what's done" — closed-out sprints lingering in Active Sprints implies work that doesn't exist; a shipped item missing from shipped.md erases the audit trail.
+4. **Cross-system audit before PR.** If this sprint changed substrate (a new strategy, Tool, column, count delta, registry entry, page, type, schema, prompt vocabulary, or anything that propagates beyond the file edited), trace the change through the **six-actor chain** before declaring done. Each substrate change should be traceable through every hop where it affects behavior; missing a hop is the bug pattern that has bitten this codebase repeatedly (PR #65 humanizer-skill bundle miss, PR #164 CONTEXT.md + docs/roasting/*.md bundle miss). Don't wait for Chris to prompt the consistency check. Audit at substrate-change time, not monthly cleanup time.
+
+   The six actors:
+
+   | # | Actor | Read direction | Write direction |
+   |---|---|---|---|
+   | 1 | Chris (human) | reads CONTEXT.md / CLAUDE.md / PRODUCT.md / rendered app pages | authors source data via claude.ai sessions; writes to DB via MCP |
+   | 2 | `docs/prompts/*.md` | claude.ai loads at session start | Claude Code edits |
+   | 3 | claude.ai project instructions | reads `docs://...` Resources at runtime via MCP | Chris edits in claude.ai UI |
+   | 4 | MCP server (`lib/mcp/*.ts` Tools + Resources + descriptions) | exposes Tool surface + Resource catalog to claude.ai | Claude Code edits |
+   | 5 | Claude Code (CLAUDE.md + CONTEXT.md + docs/) | reads at session start | Claude Code edits |
+   | 6 | Latent app (schema + UI + registries) | renders to Chris via /pages | Claude Code edits schema + UI + `lib/*-registry.ts` |
+
+   Two named change directions are real and both are subject to this audit. Naming them lets sprints reference the right pipeline cleanly:
+
+   - **Substrate-to-substrate** = the existing `propose_doc_changes` arbiter pipeline. A workflow output (a brew session, a roast close-out) generates structured edits to a doc (BREWING.md / ROASTING.md / a roaster card); the arbiter applies them. Closed loop. See [ARBITER.md](ARBITER.md).
+   - **Practice-to-substrate** = cross-party `/grill-with-docs` audit (the **substrate-practice gap audit** pattern). Lived practice has diverged from documented substrate; the cross-party audit surfaces the gap; output becomes substrate updates (CONTEXT.md entries / ADRs / ROASTING.md edits). See [docs/sprints/grilling-2026-05-17-roasting-cross-party-followups.md](docs/sprints/grilling-2026-05-17-roasting-cross-party-followups.md) for the precedent that named the pattern + [ARBITER.md § Substrate-practice gap audit](ARBITER.md#substrate-practice-gap-audit) for the mechanism.
+
+   Trace template — use as a checklist when auditing a substrate change. Skip hops that genuinely don't apply, but be explicit about the skip:
+
+   - Actor 6 (schema/UI): does the change land in `lib/types.ts` / migration / UI render path?
+   - Actor 4 (MCP): does the new field/value land in the Tool input schema + Tool description + matching Resource description?
+   - Actor 5 (Claude Code): does CLAUDE.md / CONTEXT.md / docs/ reflect the new vocabulary?
+   - Actor 2 (prompts): do `docs/prompts/*.md` flows use the new field/vocabulary correctly?
+   - Actor 3 (claude.ai): will claude.ai see the new Tool / Resource on its next session start (catalog refresh)?
+   - Actor 1 (Chris): does the rendered UI / Resource read surface to Chris coherently?
+
+   **MCP Resource bundle check (enforced via script):** if this sprint added a new `docs://` Resource to [lib/mcp/docs.ts](lib/mcp/docs.ts) `DOC_FILES`, run `npm run check:mcp-bundle` to verify the file path is covered by a glob in [next.config.js](next.config.js) `outputFileTracingIncludes['/api/mcp/**']`. Script exits non-zero with a per-miss report on mismatch. The recurring misses (PR #65 humanizer-skill, PR #164 CONTEXT.md, PR #164 docs/roasting/*.md) prove prose alone is insufficient — the script is the enforcement.
+
+   **Roadmap currency:** if this sprint shipped from `PRODUCT.md § Active Sprints` / `Newly queued` / `Side Quests`, move the entry out of those sections AND add a new line to `docs/sprints/shipped.md` with date / sprint name (bold) / landmark, all in the same PR. The rule prevents drift between "what's queued" and "what's done" — closed-out sprints lingering in Active Sprints implies work that doesn't exist; a shipped item missing from shipped.md erases the audit trail.
 
 5. **Run `/simplify` before review or commit.** Claude over-engineers — duplicate JSX across pages, inline IIFEs, copy-pasted inline styles. Let the simplify skill catch it before it becomes tech debt. Run once per sprint, after implementation is done but before the commit step. Especially important when a sprint touched 2+ files that now share a rendering pattern.
 
