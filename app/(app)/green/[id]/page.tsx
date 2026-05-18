@@ -1466,8 +1466,10 @@ function ResolvedView({
                     <CupRow label="Aroma" value={pourover.aroma} />
                     <CupRow label="Flavor" value={pourover.flavor} />
                     <CupRow label="Acidity" value={pourover.acidity} />
+                    <CupRow label="Sweetness" value={pourover.sweetness} />
                     <CupRow label="Body" value={pourover.body} />
                     <CupRow label="Finish" value={pourover.finish} />
+                    <CupRow label="Temperature behavior" value={pourover.temperature_behavior} />
                   </div>
                 )}
               </>
@@ -1618,7 +1620,7 @@ function ResolvedView({
               const isRef = roast?.id === refRoastId
               const descriptors =
                 cup.overall ||
-                [cup.aroma, cup.flavor, cup.acidity, cup.body, cup.finish]
+                [cup.aroma, cup.flavor, cup.acidity, cup.sweetness, cup.body, cup.finish]
                   .filter(Boolean)
                   .join(' · ')
               return (
@@ -1640,6 +1642,18 @@ function ResolvedView({
                     {cup.ground_agtron != null && ` · Gnd Agtron: ${cup.ground_agtron}`}
                   </div>
                   <div className="font-sans text-sm leading-relaxed">{descriptors || '—'}</div>
+                  {cup.temperature_behavior && (
+                    <div className="font-sans text-sm leading-relaxed mt-1 text-latent-mid">
+                      <span className="label mr-1 inline-block">Temp behavior</span>
+                      {cup.temperature_behavior}
+                    </div>
+                  )}
+                  {cup.wb_to_ground_delta != null && (
+                    <div className="font-mono text-xs text-latent-mid mt-1">
+                      WB→Gnd Δ: {cup.wb_to_ground_delta > 0 ? '+' : ''}
+                      {cup.wb_to_ground_delta}
+                    </div>
+                  )}
                 </div>
               )
             })}

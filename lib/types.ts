@@ -134,6 +134,12 @@ export interface Roast {
   // Pre-migration data was boolean; migration coerced true -> 'yes', false -> 'no'.
   worth_repeating: 'yes' | 'no' | 'pending' | null
   is_reference: boolean
+  // Schema sprint S2 (migration 056, 2026-05-18): forward-looking quality flag
+  // during V-set iteration. TRUE on leading slots that could plausibly become
+  // the lot reference at close-out. Distinct from is_reference (lot-level
+  // final, set at close-out — candidate does NOT auto-flip to is_reference).
+  // Distinct from worth_repeating (judgment axis on the recipe).
+  is_reference_candidate: boolean
   drum_direction: string | null
   charge_temp: number | null
   // Phase 2 enrichments (migration 044)
@@ -219,9 +225,21 @@ export interface Cupping {
   aroma: string | null
   flavor: string | null
   acidity: string | null
+  // Migration 046 (2026-05-07, cupping_sweetness_temperature_behavior): distinct
+  // axis from body / overall. Surfaced via MCP in Schema sprint S3 (2026-05-18).
+  sweetness: string | null
   body: string | null
   finish: string | null
   overall: string | null
+  // Migration 046: parallel to brews.temperature_evolution — direction / when /
+  // what changes prose across the cooling arc. Surfaced via MCP in Schema sprint S3.
+  temperature_behavior: string | null
+  // Schema sprint S1 (migration 055, 2026-05-18): WB→Ground delta queryability.
+  // wb_agtron snapshots roasts.agtron at push_cupping time (drift-tolerant per
+  // patch_cupping override). wb_to_ground_delta is a generated column (STORED)
+  // from (wb_agtron - ground_agtron) — read-only on writes.
+  wb_agtron: number | null
+  wb_to_ground_delta: number | null
   created_at: string
   updated_at: string
 }
@@ -312,6 +330,14 @@ export interface RoastRecipe {
   roest_share_url: string | null
   roest_profile_name: string | null
   pushed_to_roest_at: string | null
+  // Schema sprint S4 (migration 057, 2026-05-18): provenance for backfilled
+  // recipes. was_backfilled TRUE when the row was authored as backfill (design
+  // intent recovered after the roast — log-cupping.md STAGE 0 inline-backfill,
+  // operational backfill prompts, or migration 052's 1:1 legacy backfill).
+  // backfill_notes captures source + date prose. FALSE for design-time recipes
+  // pushed via push_roast_recipe before the roast.
+  was_backfilled: boolean
+  backfill_notes: string | null
   created_at: string
   updated_at: string
   // Joined data

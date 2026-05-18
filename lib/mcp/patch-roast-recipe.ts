@@ -43,6 +43,13 @@ export const patchRoastRecipeInputSchema = {
   roest_share_url: z.string().optional().nullable(),
   roest_profile_name: z.string().optional().nullable(),
   pushed_to_roest_at: z.string().optional().nullable(),
+  // Schema sprint S4 (migration 057, 2026-05-18)
+  was_backfilled: z.boolean().optional().nullable().describe(
+    'See push_roast_recipe.was_backfilled. Patch when retroactively marking a legacy recipe as backfilled (e.g. enrichment of a migration-052 shell that\'s since been populated with design intent recovered from session memory).',
+  ),
+  backfill_notes: z.string().optional().nullable().describe(
+    'See push_roast_recipe.backfill_notes. Standard phrasing: "Recovered from <source> at <event>, <date>".',
+  ),
 }
 
 export function registerPatchRoastRecipeTool(server: McpServer, auth: McpAuthContext) {

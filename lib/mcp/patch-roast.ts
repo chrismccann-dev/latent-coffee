@@ -57,6 +57,9 @@ export const patchRoastInputSchema = {
   is_reference: z.boolean().optional().nullable().describe(
     'See push_roast.is_reference for the full semantics. Quick form: structural axis (which row the resolved-view renders as the reference), decoupled from worth_repeating (judgment axis). On one-shot lots set TRUE unconditionally at close-out regardless of Outcome A/B — the "Closed without reference" sub-card on ResolvedView triggers on roast_learnings.why_this_roast_won = NULL, not on is_reference = false.',
   ),
+  is_reference_candidate: z.boolean().optional().nullable().describe(
+    'See push_roast.is_reference_candidate for full semantics. Quick form: forward-looking quality flag during V-set iteration, distinct from is_reference (lot-level final). Set at log-cupping.md STAGE 3 when the V_n leading slot reads as a viable lot-reference candidate; flip to is_reference at close-out via a separate patch (candidate does NOT auto-flip).',
+  ),
   // Sub Pages 6.1 (migration 052)
   recipe_id: z.string().uuid().optional().nullable().describe(
     'FK to roast_recipes.id — design intent. Back-fill via patch_roast when the recipe row landed after the roast (e.g. retroactively wiring up an older lot to its recipes during Phase 3).',

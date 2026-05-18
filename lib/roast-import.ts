@@ -405,6 +405,10 @@ export interface RoastPayload {
   what_to_change?: string | null
   worth_repeating?: boolean | 'yes' | 'no' | 'pending' | null
   is_reference?: boolean | null
+  // Schema sprint S2 (migration 056, 2026-05-18): forward-looking quality flag
+  // during V-set iteration. Decoupled from is_reference (lot-level final) and
+  // worth_repeating (judgment axis).
+  is_reference_candidate?: boolean | null
   // Sub Pages 6.1 (migration 052, 2026-05-13): FK to roast_recipes — design
   // intent this roast executed. Phase 2 of docs/roasting/redesign.md § 7
   // expects new roasts to set this when pushed alongside a fresh recipe.
@@ -537,6 +541,8 @@ export async function persistRoast(
       what_to_change: payload.what_to_change ?? null,
       worth_repeating: coerceWorthRepeating(payload.worth_repeating),
       is_reference: payload.is_reference ?? false,
+      // Schema sprint S2 (migration 056): forward-looking candidate flag.
+      is_reference_candidate: payload.is_reference_candidate ?? false,
       // Sub Pages 6.1 (migration 052): nullable FK to roast_recipes.
       recipe_id: payload.recipe_id ?? null,
     })
@@ -569,9 +575,20 @@ export interface CuppingPayload {
   aroma?: string | null
   flavor?: string | null
   acidity?: string | null
+  // Migration 046 (2026-05-07): distinct prose axis from acidity / body.
+  // Surfaced via MCP in Schema sprint S3 (2026-05-18).
+  sweetness?: string | null
   body?: string | null
   finish?: string | null
   overall?: string | null
+  // Migration 046: parallel to brews.temperature_evolution — direction / when /
+  // what changes prose across the cooling arc.
+  temperature_behavior?: string | null
+  // Schema sprint S1 (migration 055, 2026-05-18): explicit wb_agtron override
+  // for the rare post-hoc re-measurement case. NULL or omitted = auto-populate
+  // from joined roasts.agtron at insert time. wb_to_ground_delta is a
+  // generated column; do NOT pass it on the payload.
+  wb_agtron?: number | null
 }
 
 export type PersistCuppingResult =
@@ -642,6 +659,22 @@ export async function persistCupping(
     return { ok: true, cupping_id: existing.id as string, created: false }
   }
 
+  // Schema sprint S1 (migration 055, 2026-05-18): snapshot roasts.agtron into
+  // cuppings.wb_agtron at insert time so the generated wb_to_ground_delta
+  // column populates. Explicit payload override wins; otherwise join roast.
+  let wbAgtron = payload.wb_agtron ?? null
+  if (wbAgtron == null) {
+    const { data: parentRoast } = await supabase
+      .from('roasts')
+      .select('agtron')
+      .eq('user_id', userId)
+      .eq('id', payload.roast_id)
+      .maybeSingle()
+    if (parentRoast && typeof parentRoast.agtron === 'number') {
+      wbAgtron = parentRoast.agtron
+    }
+  }
+
   const { data, error } = await supabase
     .from('cuppings')
     .insert({
@@ -656,9 +689,12 @@ export async function persistCupping(
       aroma: payload.aroma ?? null,
       flavor: payload.flavor ?? null,
       acidity: payload.acidity ?? null,
+      sweetness: payload.sweetness ?? null,
       body: payload.body ?? null,
       finish: payload.finish ?? null,
       overall: payload.overall ?? null,
+      temperature_behavior: payload.temperature_behavior ?? null,
+      wb_agtron: wbAgtron,
     })
     .select('id')
     .single()
@@ -1156,6 +1192,8 @@ export const ROAST_PATCH_FIELDS = [
   // Phase 2 (#R57 / #R58 / #R61)
   'roest_notes', 'end_condition_type', 'end_condition_target', 'fc_total_cracks',
   'what_worked', 'what_didnt', 'what_to_change', 'worth_repeating', 'is_reference',
+  // Schema sprint S2 (migration 056, 2026-05-18)
+  'is_reference_candidate',
   // Sub Pages 6.1 (migration 052)
   'recipe_id',
 ] as const
@@ -1213,6 +1251,13 @@ export const CUPPING_PATCH_FIELDS = [
   'cupping_date', 'rest_days', 'eval_method', 'recipe_variant',
   'ground_agtron', 'ground_color_description',
   'aroma', 'flavor', 'acidity', 'body', 'finish', 'overall',
+  // Migration 046 (2026-05-07): two prose axes added at schema layer; reachable
+  // via MCP in Schema sprint S3 (2026-05-18).
+  'sweetness', 'temperature_behavior',
+  // Schema sprint S1 (migration 055, 2026-05-18): explicit override for
+  // post-hoc Agtron re-measurement. wb_to_ground_delta is a generated column,
+  // NOT patchable.
+  'wb_agtron',
 ] as const
 
 // patch_cupping uses the migration-041 composite key for lookup
@@ -1462,6 +1507,12 @@ export interface RoastRecipePayload {
   roest_share_url?: string | null
   roest_profile_name?: string | null
   pushed_to_roest_at?: string | null
+  // Schema sprint S4 (migration 057, 2026-05-18): backfill provenance.
+  // was_backfilled=true when this recipe was authored as backfill (design
+  // intent recovered after the roast). backfill_notes captures the
+  // when/how/source prose. Default false on design-time pushes.
+  was_backfilled?: boolean | null
+  backfill_notes?: string | null
 }
 
 export type PersistRoastRecipeResult =
@@ -1537,6 +1588,10 @@ export async function persistRoastRecipe(
     roest_share_url: payload.roest_share_url ?? null,
     roest_profile_name: payload.roest_profile_name ?? null,
     pushed_to_roest_at: payload.pushed_to_roest_at ?? null,
+    // Schema sprint S4 (migration 057): default false on design-time pushes.
+    // Backfill flows pass was_backfilled=true + backfill_notes explicitly.
+    was_backfilled: payload.was_backfilled ?? false,
+    backfill_notes: payload.backfill_notes ?? null,
   }
 
   if (created) {
@@ -1576,6 +1631,8 @@ export const ROAST_RECIPE_PATCH_FIELDS = [
   'predicted_maillard_pct', 'predicted_agtron_wb', 'predicted_cup',
   'drop_rule_if_fast', 'drop_rule_if_slow',
   'roest_profile_id', 'roest_share_url', 'roest_profile_name', 'pushed_to_roest_at',
+  // Schema sprint S4 (migration 057, 2026-05-18)
+  'was_backfilled', 'backfill_notes',
 ] as const
 
 export async function patchRoastRecipe(

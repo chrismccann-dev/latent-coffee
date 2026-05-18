@@ -1,8 +1,8 @@
 # Cleanup queue handoff brief (post Round 7)
 
-Paste-ready brief for a fresh Claude Code session that doesn't see the multi-day dogfood thread that produced this queue. Authored 2026-05-17, updated 2026-05-18 after Round 7 (Higuito V3 cupping) landed.
+Paste-ready brief for a fresh Claude Code session that doesn't see the multi-day dogfood thread that produced this queue. Authored 2026-05-17, updated 2026-05-18 after Round 7 (Higuito V3 cupping) landed, updated again 2026-05-18 post-schema-sprint.
 
-## Status (2026-05-18, post-#174)
+## Status (2026-05-18, post-#174 + schema sprint)
 
 **Polish PR shipped + merged**: [latent-coffee#174](https://github.com/chrismccann-dev/latent-coffee/pull/174) — 28 items across Sub-PRs A (prompts) + B (MCP) + C (page) + CONTEXT.md additions. The bulk of the cleanup queue closed.
 
@@ -10,8 +10,8 @@ Paste-ready brief for a fresh Claude Code session that doesn't see the multi-day
 
 | # | Item | Status | Next action |
 |---|---|---|---|
-| Schema sprint | S1-S4 candidates (S5 closed via prompt-level path in #174) | Ready to start | See § Schema sprint kickoff below |
-| CCIL consolidation | ARBITER.md playbook extension + ROASTING.md CCIL promote/retire pass | Ready to start (~1-2h) | See § CCIL consolidation kickoff below |
+| Schema sprint | S1-S4 candidates (S5 closed via prompt-level path in #174) | ✅ Shipped 2026-05-18 (this session) — migrations 055/056/057 + S3 MCP-exposure fold-in. See `docs/sprints/shipped.md` for the per-item landmark | — |
+| CCIL consolidation | ARBITER.md playbook extension + ROASTING.md CCIL promote/retire pass | Ready to start (~1-2h) — natural next sprint | See § CCIL consolidation kickoff below |
 | `patch_roast` + `read_doc_section` intermittent failures | Vercel logs investigation | Deferred — investigate when next intermittent surfaces (pattern more informative than archaeology). Vercel MCP is available, no setup needed | See § Vercel investigation note below |
 | CGLE Sudan Rume Natural V5 missing recipe rows | Auto-handles | No manual action — the new `log-cupping.md` STAGE 0 catches V5 next time it cups. Optional V1-V4 history backfill prompt below if you want the full lot history linked | See § V1-V4 historical backfill (optional) below |
 | Historical `end_condition` backfill on roasts ≤169 | Scoped to 110 roasts across 8 lots (per `execute_sql` 2026-05-18) | Paste prompt ready | See § End-condition backfill prompt below |

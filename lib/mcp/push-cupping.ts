@@ -23,9 +23,19 @@ export const pushCuppingInputSchema = {
   aroma: z.string().optional().nullable(),
   flavor: z.string().optional().nullable(),
   acidity: z.string().optional().nullable(),
+  sweetness: z.string().optional().nullable().describe(
+    'Distinct prose axis from acidity / body / overall (migration 046, 2026-05-07 — surfaced via MCP in Schema sprint S3, 2026-05-18). Do NOT fold sweetness into acidity ("bright + sweet citrus") or body ("syrupy sweetness") — the axis stays implicit and uncross-queryable when you do. Examples: "Moderate, structurally honey-like" / "Hidden behind acidity; emerges at 50°C" / "Layered cane sugar → maple as it cools".',
+  ),
   body: z.string().optional().nullable(),
   finish: z.string().optional().nullable(),
   overall: z.string().optional().nullable().describe('Overall impression / verdict prose.'),
+  temperature_behavior: z.string().optional().nullable().describe(
+    'Parallel to brews.temperature_evolution (migration 046, 2026-05-07 — surfaced via MCP in Schema sprint S3, 2026-05-18). Direction + when + what changes prose across the cooling arc. Examples: "Rose emerges below 50°C" / "Bitter tail resolves on cooling" / "Flattens cooler — V3a pattern".',
+  ),
+  // Schema sprint S1 (migration 055, 2026-05-18): wb_agtron NOT exposed on
+  // push_cupping. persistCupping snapshots roasts.agtron internally via
+  // roast_id JOIN at insert time. wb_to_ground_delta is generated automatically.
+  // Use patch_cupping(wb_agtron=...) for the rare post-hoc override case.
 }
 
 export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext) {
@@ -34,7 +44,7 @@ export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext)
     {
       title: 'Push Cupping',
       description:
-        'Log / record / save / push / archive a cupping evaluation (Day 7 post-roast pourover or Day 4 table cupping) — STAGE 4 of the self-roasted roasting pipeline; runs after push_roast for each batch you cup. UPSERT semantics on (user_id, roast_id, cupping_date, eval_method, recipe_variant): safe to re-push during mid-iteration syncs - when a row already exists with the same composite key, the existing cupping_id is returned with `created: false` and field values are NOT overwritten (use patch_cupping to update notes on an existing cupping). The optional recipe_variant field lets you push TWO evaluations on the same (roast_id, date, method) for the dual-cupping workflow (e.g. xbloom-gate cupping + Balanced-Intensity pourover on the same Day 7) — set distinct recipe_variant labels per row. When only one evaluation per (roast/date/method) exists, leave recipe_variant NULL (the constraint uses NULLS NOT DISTINCT so single-cupping idempotency still works). Captures eval_method (Cupping vs Pourover), rest_days (V4 evaluation gate is Day 7), ground_agtron (paired with roasts.agtron for WB-to-Ground delta), and the 6 prose fields (aroma / flavor / acidity / body / finish / overall). Requires roast_id from a prior push_roast. Returns { cupping_id, created, composite_key: { roast_id, cupping_date, eval_method, recipe_variant } } — composite_key echoes the tuple the row landed under so you can sanity-check without a follow-up read.',
+        'Log / record / save / push / archive a cupping evaluation (Day 7 post-roast pourover or Day 4 table cupping) — STAGE 4 of the self-roasted roasting pipeline; runs after push_roast for each batch you cup. UPSERT semantics on (user_id, roast_id, cupping_date, eval_method, recipe_variant): safe to re-push during mid-iteration syncs - when a row already exists with the same composite key, the existing cupping_id is returned with `created: false` and field values are NOT overwritten (use patch_cupping to update notes on an existing cupping). The optional recipe_variant field lets you push TWO evaluations on the same (roast_id, date, method) for the dual-cupping workflow (e.g. xbloom-gate cupping + Balanced-Intensity pourover on the same Day 7) — set distinct recipe_variant labels per row. When only one evaluation per (roast/date/method) exists, leave recipe_variant NULL (the constraint uses NULLS NOT DISTINCT so single-cupping idempotency still works). Captures eval_method (Cupping vs Pourover), rest_days (V4 evaluation gate is Day 7), ground_agtron (paired with roasts.agtron for WB-to-Ground delta — wb_agtron is auto-snapshot from the joined roast at insert time per Schema sprint S1; wb_to_ground_delta is a generated column), and the 8 prose fields (aroma / flavor / acidity / sweetness / body / finish / overall / temperature_behavior). Requires roast_id from a prior push_roast. Returns { cupping_id, created, composite_key: { roast_id, cupping_date, eval_method, recipe_variant } } — composite_key echoes the tuple the row landed under so you can sanity-check without a follow-up read.',
       inputSchema: pushCuppingInputSchema,
     },
     withToolErrorLogging('push_cupping', async (input) => {

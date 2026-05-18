@@ -71,6 +71,13 @@ export const pushRoastRecipeInputSchema = {
   roest_share_url: z.string().optional().nullable(),
   roest_profile_name: z.string().optional().nullable().describe('Exact name on the Roest tablet.'),
   pushed_to_roest_at: z.string().optional().nullable().describe('ISO timestamp the recipe was pushed to Roest.'),
+  // Schema sprint S4 (migration 057, 2026-05-18)
+  was_backfilled: z.boolean().optional().nullable().describe(
+    'Provenance flag — TRUE when this recipe was authored as backfill (design intent recovered AFTER the roast). Set TRUE when calling push_roast_recipe from log-cupping.md STAGE 0 / log-roast.md STAGE 1(b) inline-backfill paths or operational backfill prompts. FALSE (default) for design-time pushes BEFORE the roast — the normal log-roast.md design flow. Pairs with backfill_notes which captures source + date prose. Migration 057 backfilled the 129 migration-052 legacy shells with was_backfilled=true.',
+  ),
+  backfill_notes: z.string().optional().nullable().describe(
+    'Provenance prose for backfilled rows. Standard phrasing: "Recovered from <source> at <event>, <date>". Source examples: "prior session chat memory" / "cupping prose" / "Roest tablet log". Distinct from notes (general catch-all). Only set when was_backfilled=true.',
+  ),
 }
 
 export function registerPushRoastRecipeTool(server: McpServer, auth: McpAuthContext) {
