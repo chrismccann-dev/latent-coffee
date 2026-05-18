@@ -332,6 +332,26 @@ Decision tree:
 
 ---
 
+## Substrate-practice gap audit
+
+Cross-party `/grill-with-docs` sessions are the canonical mechanism for closing the **practice-to-substrate** direction: lived workflow practice diverges from substrate (schema / prompts / ROASTING.md / BREWING.md / CONTEXT.md), the cross-party audit surfaces the gap, the audit output becomes substrate updates.
+
+The substrate-to-substrate direction (workflow output proposes substrate edits via `propose_doc_changes`, arbitrated through the procedure above) and the practice-to-substrate direction (cross-party audit catches drift between lived practice and documented substrate) are paired mechanisms. Both are subject to the six-actor cross-system audit discipline in [CLAUDE.md § Sprint cadence](CLAUDE.md#sprint-cadence-for-claude) item #4.
+
+**Mechanism shape:** Claude Code (auditor) and the relevant claude.ai project (auditee) take turns through Chris as a pure message relay. The auditor proposes "missing X" / "drift in Y" / "ambiguous Z" claims about a cluster's documented terminology; the auditee responds from its lived authoring practice; Chris relays both without re-framing. Where the two diverge, the audit output is the canonical record. R1/R2/R3 grilling methodology rules apply (grep-first / analytical-vs-operational classification / confabulation ledger — see [memory/feedback_grilling_methodology_rules.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_grilling_methodology_rules.md)).
+
+**Precedent (both 2026-05-17):**
+- [grilling-2026-05-17-brewing-cross-party-followups.md](docs/sprints/grilling-2026-05-17-brewing-cross-party-followups.md) — brewing-side; 7 new headwords forming the iteration cluster (Named Consideration / Iteration budget / Wrong-zone trap / etc.); R1/R2/R3 methodology rules distilled.
+- [grilling-2026-05-17-roasting-cross-party-followups.md](docs/sprints/grilling-2026-05-17-roasting-cross-party-followups.md) — roasting-side; 21 new headwords + 9 existing edits + 3 ADRs (0003 anchor canonicalization / 0004 V-set close schema seam / 0005 parameter-type signal arbitration); 7 substrate-practice gaps documented at audit-output level (six-field roast→cup trace not operational; taste-for non-articulation principled; lever-promotion-at-lot-close; ROASTING.md additive-only table; "experiment" overload; peer-roaster storage gap; carry-forward scope-tag gap). The roasting-side claude.ai named the pattern "substrate-practice gap" in round 7 retro.
+
+**Cadence:** not on a fixed schedule. Chris-driven, triggered when claude.ai's lived authoring vocabulary feels drifted from Latent's documented terminology, or when a recurring friction pattern in a workflow suggests the substrate is incomplete. **Trigger phrase**: "let's do a cross-party grill on the {cluster} side" (or functionally equivalent — "cross-party audit", "grill against claude.ai").
+
+**Output shape:** same as other grilling sessions — followup file at `docs/sprints/grilling-YYYY-MM-DD-<scope>-followups.md` + CONTEXT.md entries inline (per the "grow incrementally" rule) + optional ADR if a non-obvious decision crystallized. The session does NOT route through `doc_proposals` / `taxonomy_overrides_queue` — cross-party output is direct doc edits, not staged proposals.
+
+**Future ADR-0006 candidate:** if the cross-party pattern repeats across 3+ sessions, the mechanism itself earns explicit framing alongside the existing arbiter procedures. Tracked as RO-CP-9 in [docs/sprints/post-grilling-sequencing.md](docs/sprints/post-grilling-sequencing.md); deferred per Chris-confirmed 2026-05-17 to "when a 3rd cross-party audit lands."
+
+---
+
 ## Cross-references
 
 - **Architecture:** [SYNC_V2.md § propose_doc_changes](SYNC_V2.md#propose_doc_changes) + § "Doc storage model" + § "Conflict resolution / two-store reconciliation".
