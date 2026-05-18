@@ -13,8 +13,9 @@ Paste-ready brief for a fresh Claude Code session that doesn't see the multi-day
 | Schema sprint | S1-S4 candidates (S5 closed via prompt-level path in #174) | ✅ Shipped 2026-05-18 (this session) — migrations 055/056/057 + S3 MCP-exposure fold-in. See `docs/sprints/shipped.md` for the per-item landmark | — |
 | CCIL consolidation | ARBITER.md playbook extension + ROASTING.md CCIL promote/retire pass | Ready to start (~1-2h) — natural next sprint | See § CCIL consolidation kickoff below |
 | `patch_roast` + `read_doc_section` intermittent failures | Vercel logs investigation | Deferred — investigate when next intermittent surfaces (pattern more informative than archaeology). Vercel MCP is available, no setup needed | See § Vercel investigation note below |
-| CGLE Sudan Rume Natural V5 missing recipe rows | Auto-handles | No manual action — the new `log-cupping.md` STAGE 0 catches V5 next time it cups. Optional V1-V4 history backfill prompt below if you want the full lot history linked | See § V1-V4 historical backfill (optional) below |
-| Historical `end_condition` backfill on roasts ≤169 | Scoped to 110 roasts across 8 lots (per `execute_sql` 2026-05-18) | Paste prompt ready | See § End-condition backfill prompt below |
+| CGLE Sudan Rume Natural V5 missing recipe rows | V5 still auto-handles via STAGE 0; V1-V4 history backfill **shipped 2026-05-18** | No action — 13/13 V1-V4 recipe rows linked (experiment_id + batch_slot); batch 154 `(experiment_id, batch_slot)` collision defused by renaming its slot to `v3b_switched` | Archived prompt in § V1-V4 historical backfill below |
+| Historical `end_condition` backfill on roasts ≤169 | Counterflow portion **shipped 2026-05-18**; pre-counterflow dropped from scope | 49/49 in-scope counterflow rows patched (SR Hybrid Washed 17 / Mandela XO 13 / SR Natural 12 / Gesha Clouds 3 + 4 stranded recovery). 6 additional rows flipped to `manual` via override rule. Pre-counterflow 4 lots (61 roasts: El Socorro / Libertad / GV Oma / GV Surma) deliberately dropped per counterflow-only archive rule | Archived prompt in § End-condition backfill prompt below |
+| `manual` end_condition target convention (surfaced 2026-05-18) | DB inconsistent: 14 rows null target, 1 row (Red Plum batch 180) preserves it | ADR + standardization deferred to its own task — spawned 2026-05-18 | See spawned task chip |
 | Round 8 dogfood (first one-shot.md production run) | Chris has auction samples ready to bundle 2026-05-18 | Bundle when an auction sample lands; exercises full one-shot.md pipeline end-to-end | See § Round 8 bundling note below |
 
 ## Schema sprint kickoff
@@ -144,9 +145,11 @@ What to actually query in Vercel (via the wired MCP):
 
 Triage rule: **defer until the next intermittent surfaces**. Repeating pattern is more informative than log archaeology — one more failure gives a fresh timestamp window and an active reproduction.
 
-## V1-V4 historical backfill (optional, Sudan Rume Natural)
+## V1-V4 historical backfill (shipped 2026-05-18)
 
-The new STAGE 0 only handles the CURRENT V_n. V1-V4's 13 historical recipe rows have NULL `experiment_id` + `batch_slot` — not blocking (lot is mid-iteration), but if you want them linked:
+**Closed.** 13/13 V1-V4 historical recipe rows linked via `patch_roast_recipe` from a claude.ai session. Batch 154's `(experiment_id, batch_slot)` collision with batch 153 was defused by renaming 154's slot from `v3b` to `v3b_switched` directly via SQL (no DB-level unique constraint exists, but `persistRoastRecipe`'s `.maybeSingle()` lookup would have errored on the next `push_roast_recipe` call against that slot pair). V5 batches 187/188/189 still auto-handle via `log-cupping.md` STAGE 0 on the next cupping. Prompt below retained as historical reference:
+
+
 
 ```
 Backfill V1-V4 historical recipe row linkages for CGLE Sudan Rume Natural
@@ -174,9 +177,21 @@ V5 (batches 187/188/189) is handled separately by log-cupping.md STAGE 0
 on the next cupping run — don't backfill V5 manually here.
 ```
 
-## End-condition backfill prompt
+## End-condition backfill prompt (counterflow shipped 2026-05-18; pre-counterflow dropped)
 
-Paste-ready for claude.ai (one session can do all 8 lots, or split per-lot):
+**Closed (counterflow portion).** 49/49 in-scope counterflow rows patched across two claude.ai turns:
+
+- Turn 1 (45 rows): SR Hybrid Washed 17 / Mandela XO 13 / SR Natural 12 / Gesha Clouds Forest 3. All came back `dev_time` from the Roest API; unit conversion (ms → s) applied at patch time. Override rule never fired.
+- Turn 2 (4 rows, stranded-row recovery): SR Washed 146/147/148 + SR Natural 144. `roest_log_id` was NULL on these (NULL `profile_link` too), so Chris pulled the log_ids manually from the Roest UI. Patched via `pull_roest_log` → `patch_roast` with `roest_log_id` included in the same call to close the FK gap.
+- 6 additional rows flipped to `manual` via the >0.5°C override rule + Chris's manual confirmation: SR Natural V5 187/188/189 (already-set bean_temp from Round 7, divergences 0.8/2.3/2.3°C) + Gesha Clouds Forest 170/171/172 (dev_time profiles where FC was silent or operator dropped short — functionally manual).
+
+**Pre-counterflow lots (61 roasts) deliberately dropped** per the counterflow-only archive rule: El Socorro / Libertad / GV Oma / GV Surma. Their `green_beans.roest_inventory_id` is NULL and their `roasts.roest_log_id` is also NULL — recovery would require URL extraction from `profile_link` + Roest retention check, and these lots are already resolved + outside the active archive.
+
+**Convention question surfaced:** 14 manual rows have `end_condition_target = NULL`, 1 row (Red Plum batch 180, created 2026-05-09) preserves the programmed target. Spawned as its own task 2026-05-18 — see the spawned task chip / new status-table row.
+
+Prompt below retained as historical reference:
+
+
 
 ```
 Backfill `end_condition_type` + `end_condition_target` on historical roasts
@@ -314,10 +329,14 @@ Defer to its own sprint. Bundle when timing makes sense (e.g. after Round 8 surf
 - **CCIL consolidation arbiter task** (Round 4 #11). Recurring doc-maintenance: promote High-confidence hypotheses in ROASTING.md's Cross-Coffee Insight Layer to a Confirmed Patterns subsection + retire Low-confidence ones that haven't repeated across N lots. Lives in ARBITER.md playbook (or extends it).
 - **patch_roast + read_doc_section intermittent failures** (Round 1 #4 + #5). req_011CawGMmSjMThH9XeESJs / req_011CawGMmSjMNWThH9XeESJs / req_011Cb3bFZiMduh6ZkKcFSSqy. Pattern: tool surfaces in tool_search but errors on execution. Retries succeeded. Open for Vercel logs investigation when there's a pause.
 
-## Operational backfills queued
+## Operational backfills (closed 2026-05-18)
 
-- **CGLE Sudan Rume Natural V5 missing recipe rows** (Round 1 #2). The lot's V5 push from 2026-05-14 wrote roasts + experiment but no `push_roast_recipe` calls (since it ran under pre-rewrite prompts). 13 recipe rows still have NULL `experiment_id` + `batch_slot` + design-intent fields. Chris hasn't backfilled yet. Track-B-style operational backfill candidate via patch_roast_recipe calls.
-- **Historical end_condition backfill on roasts ≤batch 169** (Round 1 #8). All historical roasts have NULL `end_condition_type` because `pull_roest_log` didn't surface these fields when those roasts were originally pushed. Opportunistic: fold into next close-lot.md run when a relevant lot closes.
+- ~~**CGLE Sudan Rume Natural V1-V4 historical recipe linkage**~~ (Round 1 #2) — **shipped 2026-05-18.** 13/13 rows linked via `patch_roast_recipe` from claude.ai; batch 154 slot collision defused via SQL rename to `v3b_switched`. V5 still auto-handles via STAGE 0.
+- ~~**Historical end_condition backfill on roasts ≤batch 169**~~ (Round 1 #8) — **counterflow portion shipped 2026-05-18.** 49/49 in-scope counterflow rows patched + 6 additional rows flipped to `manual` via override rule. Pre-counterflow 61 roasts deliberately dropped from scope.
+
+## Newly queued (2026-05-18)
+
+- **`manual` end_condition_target convention** — DB inconsistent (14 rows null target, 1 row Red Plum batch 180 preserves it). Spawned as its own task; ADR + standardization pending. See status table row above.
 
 ## Pending dogfood rounds
 
