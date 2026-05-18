@@ -50,6 +50,8 @@ Learning intent: [find out what this coffee wants | optimize toward specific
 
 ## STAGE 1 - Push the bean as one-shot + carry-forward search
 
+**This STAGE writes**: `green_beans` row (`push_green_bean` with `is_one_shot: true`, OR `patch_green_bean` on a retroactive flag), `roest_inventory` row (`push_inventory`).
+
 Canonical-field decision flowchart BEFORE the push (same as start-lot.md):
 
 - **Producer** in `PRODUCER_LOOKUP`? Verify via `read_canonical(axis: "producers")`. If NO -> set `producer_override: true`.
@@ -80,6 +82,8 @@ Note: peer-roasted reference cup of THIS bean typically isn't available for auct
 
 ## STAGE 2 - Design the single profile (tolerance-anchored)
 
+**This STAGE writes**: `experiments` row (V1, batch_ids NULL at design time), `roast_recipes` row × 1, Roest tablet profile × 1 (via `push_roast_profile`), `roast_recipes` patch linking Roest profile ID back.
+
 Read ROASTING.md sections via `read_doc_section`:
 
 - Standard Inlet Curve Template (7-timestamp fixed template)
@@ -108,7 +112,7 @@ Three writes pair up here (same discipline as start-lot.md / log-cupping.md - "d
 (a) `push_experiment(payload)`:
 - `green_bean_id` from STAGE 1
 - `experiment_id`: `<LOT-PREFIX>-V1` (one-shot lots still use the V1 framing per CONTEXT.md "lots with batch_ids of cardinality 1 flow through the same experiment -> roast -> cupping -> learnings pipeline as V-set V1")
-- `batch_ids`: NULL at design time. STAGE 3 fills it.
+- `batch_ids`: omit entirely at design time (leave NULL). STAGE 3 fills it. Do NOT pass the string `"null"`.
 - `context`: "One-shot lot, single batch. Carry-forward anchor: <prior lot Y's takeaway>. Tolerance-anchored design - middle-of-the-road, no margin for error."
 - `primary_question`: what the one-shot is asking. "Does the carry-forward anchor from <prior lot Y> transfer to this <cultivar/process/terroir> at <Z spec>?"
 - `control_baseline`: any peer reference if available (rare); usually the prior lot whose carry-forward is anchoring the design.
@@ -136,6 +140,8 @@ Three writes pair up here (same discipline as start-lot.md / log-cupping.md - "d
 
 ## STAGE 3 - Record the roast (after I execute at the machine)
 
+**This STAGE writes**: `roasts` row × 1 (the single batch, via UPSERT), `experiments` row patch (batch_ids + observed_outcome_a + delta_from_roast_a + updated_cup_prediction_a + taste_for_a).
+
 (Run this stage when I come back with Roest log data + photos.)
 
 - `list_roest_logs({inventory_id})` to find the just-recorded batch number.
@@ -150,7 +156,7 @@ Three writes pair up here (same discipline as start-lot.md / log-cupping.md - "d
 - `batch_id` from Roest (integer as string)
 - **`recipe_id`**: FK to the matching `roast_recipes` row from STAGE 2(b). NON-NEGOTIABLE - one-shot lots have a single recipe and a single roast, the linkage must be set.
 - Roest numeric fields, prose synthesis (`what_worked` / `what_didnt` / `what_to_change`), `roest_log_id`, `roest_notes`, `roast_profile_name`, `fc_total_cracks`, `worth_repeating` (tristate: typically `"pending"` until Day 7 cupping).
-- `is_reference: false`. The lot-level reference roast designation only lands at one-shot-closeout.md STAGE 5 (after the Day 7 cup verdict).
+- `is_reference: false`. The lot-level reference roast designation lands at one-shot-closeout.md STAGE 2 — for one-shots, `is_reference: true` is set unconditionally at close-out regardless of outcome (single batch IS structurally the reference). Outcome A/B distinction lives on `worth_repeating` + `why_this_roast_won`, not `is_reference`.
 
 Capture `roast_id` for STAGE 4's experiment patch and STAGE 4's cupping push later.
 
@@ -163,37 +169,41 @@ Capture `roast_id` for STAGE 4's experiment patch and STAGE 4's cupping push lat
 
 ## STAGE 4 - Record Day 7 cupping + verdict decision
 
+**This STAGE writes**: `cuppings` row × 1, `experiments` row patch (delta_from_cup_a + winner + key_insight + key_insight_confidence + what_changes_going_forward + open_questions + additional_notes), `roasts` row patch (`worth_repeating` per the verdict; `is_reference` stays false until close-out).
+
 (Run this stage when I come back with cupping transcript.)
 
 `push_cupping(payload)`:
 - `roast_id` from STAGE 3
 - `cupping_date`: YYYY-MM-DD
-- `rest_days`: integer (Day 7 target; flag in additional_notes if outside [6,10] window)
+- `rest_days`: integer. Day 6-10 is the acceptance window (Day 7 target). If outside [6,10] OR `cupping_date - roast_date` doesn't match `rest_days`, prefix `overall` with `"REST_DAYS_DRIFT: cupped Day <N>, off the Day 7 gate by <delta>"`.
 - `eval_method`: `"Pourover"` for Day 7 xbloom gate
 - `recipe_variant`: `"xbloom_gate"` if you expect a real-pourover follow-up under a different recipe; NULL if confident this is the only cupping
 - `ground_agtron`: paired with `roasts.agtron` for WB-to-Ground delta
 - Six prose fields (`aroma` / `flavor` / `acidity` / `body` / `finish` / `overall`) sourced from Chris's transcript
 
 `patch_experiment(experiment_pk, ...)`:
-- `delta_from_cup_a`: per-slot reconciliation of actual cup vs `updated_cup_prediction_a` (or vs `expected_outcomes` design-time prediction if `updated_cup_prediction_a` is NULL).
-- `winner` = `"V1A (Batch <Roest#>)"` - trivially the only slot. The "leading slot" concept is degenerate for one-shots; the single batch is the leading slot AND the reference roast candidate (if quality permits).
+- `delta_from_cup_a`: per-slot reconciliation of actual cup vs `updated_cup_prediction_a` (or vs `expected_outcomes` design-time prediction if `updated_cup_prediction_a` is NULL). Walk the three `taste_for_a` reference points and note which materialized as expected vs not (producer-notes ballpark / carry-forward-anchor expectation / tolerance-margin behavior).
+- `winner` = `"V1A (Batch <Roest#>)"` - trivially the only slot. The "leading slot" concept is degenerate for one-shots; the single batch is the leading slot. Format strictly — everything past `"V1A (Batch <N>)"` goes in `additional_notes`.
 - `key_insight`: 2-4 sentences. What did this one-shot teach? Frame explicitly as N=1 observation. Variable→lever attribution does NOT apply.
-- `key_insight_confidence`: typically `Low` or `Medium` for one-shots (single observation, no cross-batch evidence).
-- `what_changes_going_forward`: lessons-applied-forward for the NEXT one-shot in this lane (similar cultivar / process / terroir).
-- `open_questions`: what this one-shot did NOT answer. Substantial on one-shots since iteration wasn't possible.
-- `additional_notes`: free-text catch-all.
+- `key_insight_confidence`: typically `Low` or `Medium` for one-shots (single observation, no cross-batch evidence). Apply the ladder from log-cupping.md STAGE 3 — Low = "interesting hypothesis"; Medium = "consistent with 1-2 prior data points (carry-forward anchor)"; rarely Medium-High on one-shots; never High (N=1 isn't enough for protocol promotion).
+- `what_changes_going_forward`: lessons-applied-forward for the NEXT one-shot in this lane (similar cultivar / process / terroir). Forward-actionable phrasing.
+- `open_questions`: what this one-shot did NOT answer. Substantial on one-shots since iteration wasn't possible. Phrase as questions.
+- `additional_notes`: free-text catch-all (operator-framing prose, leading-slot verdict prose, cup-vs-structure disconnects). Descriptive, not directive.
 
 ### Verdict decision (load-bearing for STAGE 5 routing)
 
-Two outcomes:
+Two outcomes. The distinction lives on `worth_repeating` + `why_this_roast_won` (the latter recorded in `one-shot-closeout.md` STAGE 4), NOT on `is_reference` — `is_reference: true` is set unconditionally at close-out for one-shots (single batch IS structurally the reference roast for the lot).
 
-**Outcome A - Reference-quality**: The single batch cup is satisfying. Chris would repeat this roast if more green existed. Mark `worth_repeating: "yes"` on the roast row via `patch_roast`. The roast becomes the lot's reference roast at close-out. Brew dial-in via the brewing-side workflow proceeds normally. State -> Resolved-pending. Run `one-shot-closeout.md` next.
+**Outcome A - Reference-quality**: The single batch cup is satisfying. Chris would repeat this roast if more green existed. Mark `worth_repeating: "yes"` on the roast row via `patch_roast`. `why_this_roast_won` will be populated at close-out. Brew dial-in via the brewing-side workflow proceeds normally. State -> Resolved-pending. Run `one-shot-closeout.md` next.
 
-**Outcome B - Closed without reference (the Rancho Tio shape)**: The cup is okay but not reference quality. Roast may have been off-target (too dark, too underdeveloped, etc.). Mark `worth_repeating: "no"` on the roast row via `patch_roast`. The lot still closes as Resolved but with `why_this_roast_won = NULL` in roast_learnings (existing Sprint 3.2 #18 page-render handles this via the "Closed without reference" sub-card on ResolvedView). Salvageable artifact becomes the optimized brew (dialed in to compensate for the non-ideal roast). State -> Resolved-pending. Run `one-shot-closeout.md` next.
+**Outcome B - Closed without reference (the Rancho Tio shape)**: The cup is okay but not reference quality. Roast may have been off-target (too dark, too underdeveloped, etc.). Mark `worth_repeating: "no"` on the roast row via `patch_roast`. `why_this_roast_won` will be NULL at close-out (Sprint 3.2 #18's "Closed without reference" sub-card on ResolvedView triggers on NULL `why_this_roast_won`, not on `is_reference: false`). Salvageable artifact becomes the optimized brew (dialed in to compensate for the non-ideal roast). State -> Resolved-pending. Run `one-shot-closeout.md` next.
 
 State after STAGE 4: **Resolved-pending** in both outcomes. Brew dial-in happens via the brewing-side workflow next (`bundled-brewing-completion.md` typically), then `one-shot-closeout.md` records the final brew + writes the constrained `roast_learnings` row.
 
 ## Confirmation output
+
+**This STAGE writes**: nothing (output only).
 
 Print everything needed to verify the state-flip cleanly:
 
@@ -212,7 +222,7 @@ Print everything needed to verify the state-flip cleanly:
 ## What this prompt does NOT do
 
 - Push roast_learnings (the constrained close-out). That's `one-shot-closeout.md`.
-- Set `is_reference: true` on the roast row. Only `one-shot-closeout.md` does that, and only on Outcome A.
+- Set `is_reference: true` on the roast row. Only `one-shot-closeout.md` does that, and it sets the flag unconditionally regardless of Outcome A/B.
 - Push the optimized brew. Brewing-side workflow handles it between STAGE 4 and `one-shot-closeout.md`.
 - Archive the Roest inventory row. `one-shot-closeout.md` STAGE 5 does that.
 - Propose ROASTING.md updates. Defer to `one-shot-closeout.md` STAGE 5 - one bundled doc proposal at close-out is cleaner than mid-iteration appends on a one-shot.

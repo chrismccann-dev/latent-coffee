@@ -215,6 +215,19 @@ The structured prose unit produced at V_n's Day 7 cupping close-out, before desi
 **Schema seam**: the experiments table has per-slot structured fields (`observed_outcome_a/b/c/d`, `updated_cup_prediction_a/b/c/d`, `taste_for_a/b/c/d`, `delta_from_cup_a/b/c/d`) that conceptually decompose this V-set-wide narrative. Lived practice populates them either from the narrative or leaves them null — the writing produces the narrative, the schema captures what the narrative encodes. See **Taste-for** for the principled non-articulation case; see flagged ambiguity for the broader schema-vs-writing seam.
 _Avoid_: "V-set summary" (too loose); "V-set retro" (wrong scope — retro implies looking back across multiple V-sets); "experiment write-up" (overloaded "experiment" — see V-set entry).
 
+**Key-insight confidence ladder**:
+The 4-level enum graded on `experiments.key_insight_confidence` at V-set close-out via `log-cupping.md` STAGE 3 (also `one-shot.md` STAGE 4 for one-shots, where the upper levels cap at Medium per N=1 constraint). Apply consistently across sessions; downstream queries + ROASTING.md routing decisions filter on this level. **Operational ladder** (cleanup-actions PR, 2026-05-18):
+
+- **Low** — interesting hypothesis. Single-V-set observation, not yet replicated. Flag in the log but don't act on it yet. Stays in `additional_notes` or `key_insight` prose; does NOT route to the Cross-Coffee Insight Layer in ROASTING.md.
+- **Medium** — consistent with 1-2 prior data points (this lot's earlier V-sets, or a closely-similar prior lot's carry-forward). Worth weighting in V_(n+1) design but not promotion-ready. Acceptable as a CCIL append at Medium-marker level.
+- **Medium-High** — strong evidence within this lot, ready to be a working assumption for the rest of the lot's V-sets and for similar-cultivar carry-forward. Survives "what would change my mind?" prompting.
+- **High** — ready to promote to a protocol change in ROASTING.md (typically routes through `log-cupping.md` STAGE 6 or `close-lot.md` STAGE 5 as an APPEND or REPLACE on a protocol section). Requires either multi-V-set repetition within this lot OR strong cross-lot corroboration.
+
+**Tie-breaking rule**: if unsure between two levels, pick the lower and explain why in `additional_notes`. The cost of under-claiming is delayed-promotion (low); the cost of over-claiming is bad protocol changes (high).
+
+**Mirrors the CCIL marker vocabulary** in ROASTING.md so the append-confidence marker on a CCIL entry matches the source experiment's level. The schema enum + this entry are the single source of truth for the four levels.
+_Avoid_: bare "confidence" without the level qualifier; "strong" / "weak" (loses the threshold-shape semantics); collapsing Medium and Medium-High (the distinction is whether the insight has survived adversarial framing).
+
 ### Lot-close synthesis
 
 **Lot-specific learnings**:
@@ -227,6 +240,9 @@ _Avoid_: "lessons learned" (too generic), "general learnings", "forward recipe",
 
 **Closed without reference**:
 A close-out state where the lot did not produce a reference-quality roast. Two paths arrive here: (1) a V-set lot exhausted its green across multiple V-sets without arriving at a roast Chris would repeat - the cup never crystallized into "yes this is the lot's voice"; (2) a one-shot lot's single attempt didn't nail it - typical when the carry-forward anchor was off-target or the design hit a tolerance edge. The lifecycle state stays `resolved` (rule (a) in `lib/lifecycle-state.ts` only requires a `roast_learnings` row exists, not that the row names a winner). The page renders normally via Sprint 3.2 #18's "Closed without reference" sub-card on ResolvedView, triggered by `roast_learnings.why_this_roast_won = NULL`. The salvageable artifact for these lots is often the **optimized brew** - dialed in to compensate for the non-ideal roast via the brewing-side workflow. The brew row's `what_i_learned` captures the compensation reasoning; that prose becomes carry-forward for future similar lots even when the roast itself wasn't reference quality.
+
+**`is_reference: true` can coexist with `why_this_roast_won = NULL` on one-shot Outcome B lots** (cleanup-actions PR, 2026-05-18). The two columns sit on different axes — `roasts.is_reference` is the structural axis ("this row is what the resolved-view page renders as the reference roast"); `roast_learnings.why_this_roast_won` is the verdict-prose axis ("this roast is the lot's voice"). On V-set lots the two correlate (close-lot.md sets both together). On one-shot lots they decouple: `one-shot-closeout.md` STAGE 2 sets `is_reference: true` unconditionally regardless of Outcome A/B because the single batch IS structurally the reference, while `why_this_roast_won` is populated only on Outcome A and stays NULL on Outcome B. The "Closed without reference" sub-card triggers on `why_this_roast_won = NULL`, NOT on `is_reference = false` — that decoupling is what makes the sub-card render correctly on one-shot Outcome B lots.
+
 _Avoid_: "failed lot" (pejorative; the lot still produced learning), "unresolved" (the lifecycle state IS resolved), "abandoned", "incomplete"
 
 **Development** (roasting sense):
@@ -377,6 +393,17 @@ _Avoid_: "tweak" (too casual, implies small), "iteration" (V-set is the iteratio
 **Tolerance-anchored design**:
 The roast-design philosophy for one-shot lots (single batch, no iteration possible). Distinct from V1's wide-variance exploratory framing AND from V_{n+1}'s narrow-convergent framing. The anchor is the **anchor profile** from a similar prior closed lot (graded by its **anchor confidence** level); the design rule is to land central within the anchor's resolved parameters with deliberate margin on both sides. Concretely: NOT a super-fast / very-low-tolerance roast (no room if FC arrives late), NOT a super-long / pull-at-the-last-second roast (no room if FC arrives early), middle-of-the-road for operator grace. The goal isn't to find a response surface or to converge on a reference - it's to produce something workable on the single attempt, accepting "workable" may be less than reference quality. Pairs with the schema constraint on `roast_learnings` (migration 054) that one-shot lots cannot populate lever-attribution fields - the design philosophy and the data model both acknowledge that N=1 doesn't support variance attribution.
 _Avoid_: "safe roast" (not specific enough about the carry-forward anchor), "middle path" (loses the anchor framing), "exploratory single-shot" (contradictory - one-shots aren't exploratory)
+
+**Pre-V_n calibration gate**:
+A gate that halts V_(n+1) design (or V_1 design pre-V1) until missing calibration data is acquired. Distinct from **Pre-V1 risk reduction** (which is a bundle of practices Chris runs before committing to V1 on expensive / low-confidence lots — density gating, paired roasted-reference cupping, etc.) — the calibration gate is the lifecycle-state hold-point that pre-V1 risk reduction practices flow through, and it ALSO fires post-V1 in the V_(n+1)-design moment.
+
+Two variants in lived practice (`log-cupping.md` STAGE 4):
+
+- **C-1 — missing peer-roasted reference cup**. V_n landed in a plausible zone but the lot lacks an external reference cup to calibrate V_(n+1)'s adjustment direction. Canonical case: Fazenda Um — Untold sells a roasted version, V1 produced a reasonable cup but the adjustment direction for V2 is operator-guesswork without the peer reference. The calibration step is "buy the peer-roasted version, cup it Day 7 at xbloom_gate, paste the transcript back into a new log-cupping.md session" — the peer cup tells you which direction V_(n+1) needs to move.
+- **C-2 — missing cup-side discriminator (recipe_variant)**. V_n was cupped at one recipe_variant only (typically `xbloom_gate`), AND prior V-sets on the lot showed recipe_variant inversions (the leading slot at xbloom_gate did NOT match the leading slot at real_pourover). The leading-slot identity for V_n is provisional, so V_(n+1) narrowed around it could narrow around the wrong slot. Canonical case: Higuito V3 cupped at gate only, V2 showed gate-vs-pourover inversion. The calibration step is "brew V_n at real_pourover, push the second cuppings under `recipe_variant: real_pourover`" — both variants on the same batches, no machine time needed.
+
+Lifecycle state stays **Waiting for next cupping** through both variants. Distinct from a **control experiment** (which IS a new V-set replicating the leading slot with two slight adjustments — that routes through Path B in `log-cupping.md` STAGE 4 + 5, NOT through Path C). The schema/UI doesn't have a distinct "waiting for calibration" state today — the prompt is the gate, the state is reused. **Open follow-up**: if Path C fires often enough, schema/page may want a dedicated lifecycle state ("waiting for calibration cup") with its own page render distinct from waiting-for-next-cupping.
+_Avoid_: "calibration step" (too generic — pre-V1 risk reduction also runs calibration steps); "halt-and-report" (this is the prompt's directive, not the concept); "blocker" (too generic — calibration gates are deliberate design hold-points, not external blockers).
 
 ### Brewing
 

@@ -9,9 +9,9 @@ Vocabulary used in this prompt is defined in CONTEXT.md (V-set, batch slot, tast
 ## Tools for this session
 
 `get_green_bean`, `get_bean_pipeline`, `list_roest_logs`, `pull_roest_log`,
-`push_roast`, `patch_roast`, `patch_roast_recipe`, `push_experiment`,
-`patch_experiment`, `read_doc`, `read_doc_section`, `list_doc_sections`,
-`read_canonical`, `propose_doc_changes`.
+`push_roast`, `patch_roast`, `push_roast_recipe`, `patch_roast_recipe`,
+`push_experiment`, `patch_experiment`, `read_doc`, `read_doc_section`,
+`list_doc_sections`, `read_canonical`, `propose_doc_changes`.
 
 MCP namespace: tools surface under `Latent Coffee`.
 
@@ -21,13 +21,43 @@ I'll reference the lot by `lot_id` or `green_bean_id` + tell you which V-set jus
 
 ## STAGE 1 - Resolve bean + V_n state, baseline pipeline
 
+**This STAGE writes**: nothing (read-only), unless the missing-recipe-row backfill in (b) fires.
+
 - `get_green_bean({lot_id})` → returns `green_bean_id`.
 - `get_bean_pipeline({green_bean_id})` → returns `green_bean`, `roasts[]`, `cuppings[]`, `experiments[]`, `roast_learnings`, `brews[]`, `roast_recipes[]`.
 - Identify the V_n `experiment` row (most recent by `created_at` matching `<LOT-PREFIX>-V<n>`). Its `roast_recipes[]` (filtered by `experiment_id` matching the experiment_pk) are the design-intent rows authored by `start-lot.md` or `log-cupping.md` (forward-design step from V_(n-1) → V_n).
 - Build the slot → recipe_id map: `v<n>a` → recipe_id, `v<n>b` → recipe_id, etc., keyed on `roast_recipes.batch_slot`.
 - Compare project-doc / paste-in claims against existing DB state (intake-drift detection). Flag any divergence.
 
+### (a) Pre-rewrite-lot `batch_slot` fallback
+
+Pre-rewrite lots (V-sets authored before PR #157) have `roast_recipes` rows with `batch_slot IS NULL` and `experiment_id IS NULL`. The slot → recipe_id map can't be built directly.
+
+Fallback: infer the slot from `roast_recipes.roest_profile_name` (or `roast_recipes.recipe_name`) matching the V-set / slot pattern. The Roest profile name carries the slot tag explicitly. Patterns the regex should accept:
+
+- `<LOT-PREFIX> - v<n><letter>` (canonical post-rewrite format: `"Higuito - v3a"`)
+- `<LOT-PREFIX> v<n><letter>` (pre-rewrite, no hyphen: `"Higuito v3a"`)
+- `... v<n><letter> ...` (slot tag anywhere in the name: `"Higuito Test v3a 2026-05-09"`)
+
+Where `<letter>` ∈ `{a, b, c, d}`. Case-insensitive on `v` and the letter.
+
+When the fallback fires, **also** `patch_roast_recipe(recipe_id, batch_slot: "v<n><letter>", experiment_id: <V_n experiment_pk>)` so future passes can use the direct map without re-running the fallback. One patch per recipe row. The fallback is opportunistic, not blocking — proceed to STAGE 2 once the map is built.
+
+### (b) Missing-recipe-row halt relaxation
+
+If the slot → recipe_id map is empty (no `roast_recipes` rows exist for the V_n experiment at all) **and** the design intent is reconstructable from session memory (the conversation in front of you contains the design-time hypothesis Chris and I framed before the roast), inline-backfill the recipe rows before proceeding. Specifically:
+
+- `push_roast_recipe(payload)` × N for each V_n slot. Fill the curve fields (`temperature_bezier` / `fan_bezier` / `rpm_bezier`) from the design-time discussion + any Roest tablet artifacts Chris pasted. Design-time predictions (`predicted_fc_temp` / `predicted_fc_time` / `predicted_total_time` / `predicted_maillard_pct` / `predicted_agtron_wb` / `predicted_cup`) get reconstructed from session memory; if a field is genuinely unknown (e.g. Chris doesn't recall what we predicted Agtron WB would be), leave NULL — do NOT fabricate.
+- Set `batch_slot`, `experiment_id`, `recipe_name`, `rationale`, `end_condition_type`, `end_condition_target`, `charge_temp`, `hopper_load_temp`, `preheat_temperature_c` on each.
+- Drop rules (`drop_rule_if_fast` / `drop_rule_if_slow`) when documented.
+
+If the design intent is NOT reconstructable from session memory (the lot was V'd in a project-doc thread that's since rolled off, no Roest tablet artifact pasted in, Chris doesn't remember the per-slot rationale), THEN halt and report — pushing roasts without design-intent linkage breaks the resolved-view's "intended vs achieved" render.
+
+Whichever way recipe rows landed (already present / fallback fired / inline backfill), the slot → recipe_id map must be complete before STAGE 2.
+
 ## STAGE 2 - Pull the Roest logs for the slots Chris just roasted
+
+**This STAGE writes**: nothing (read-only).
 
 For each slot in V_n:
 
@@ -41,12 +71,14 @@ For each slot in V_n:
 
 ## STAGE 3 - Push the V_n roasts
 
+**This STAGE writes**: `roasts` rows (one per slot, via UPSERT on `(user_id, green_bean_id, batch_id)`).
+
 For each slot:
 
 - `push_roast(payload)`:
   - `green_bean_id` from STAGE 1
   - `batch_id` from Roest (the integer batch number as string - e.g. `"187"`)
-  - **`recipe_id`**: FK to the matching `roast_recipes` row from the slot → recipe_id map. This is the design-intent linkage - without it the page can't render "intended vs achieved" on the resolved view. NON-NEGOTIABLE; if no matching recipe row exists, halt and report (it means `start-lot.md` or the prior `log-cupping.md` skipped `push_roast_recipe`).
+  - **`recipe_id`**: FK to the matching `roast_recipes` row from the slot → recipe_id map. This is the design-intent linkage - without it the page can't render "intended vs achieved" on the resolved view. STAGE 1's fallback + inline-backfill paths produce this; if both failed in STAGE 1 we already halted there.
   - All numeric fields from Roest: fc_start, fc_temp, drop_time, drop_temp, dev_time_s, agtron, charge_temp, hopper_load_temp, end_condition_type, end_condition_target, fc_total_cracks, weight_loss_pct.
   - `roest_log_id` (cross-ref) + `roest_notes` (pass-through of the Roest UI Notes / first_comment.comment - preserve verbatim, don't fold into the prose fields).
   - `roast_profile_name` from Roest.
@@ -63,6 +95,8 @@ Capture `roast_id` per slot for STAGE 5's experiment-row patch and `log-cupping.
 
 ## STAGE 4 - Patch the recipe rows with Roest linkage
 
+**This STAGE writes**: `roast_recipes` patches (Roest profile linkage fields).
+
 For each V_n recipe row authored at design time, link back to its Roest profile if not already done:
 
 - `patch_roast_recipe(recipe_id, roest_profile_id, roest_share_url, roest_profile_name, pushed_to_roest_at)`.
@@ -70,6 +104,8 @@ For each V_n recipe row authored at design time, link back to its Roest profile 
 Skip slots where these fields already populated.
 
 ## STAGE 5 - Patch the V_n experiment row
+
+**This STAGE writes**: `experiments.batch_ids`, `experiments.observed_outcome_a/b/c/d`, `experiments.delta_from_roast_a/b/c/d`, `experiments.updated_cup_prediction_a/b/c/d`, `experiments.taste_for_a/b/c/d`. Optional: `key_insight` / `key_insight_confidence` / `what_changes_going_forward` / `open_questions` / `additional_notes`.
 
 `patch_experiment(experiment_pk, ...)`:
 
@@ -84,13 +120,15 @@ Skip slots where these fields already populated.
 
   Format each `taste_for_X` as 1-3 sentences combining the three reference points. The page UI surfaces these front-and-center when the lot enters Waiting for next cupping state - front-and-center is what I see Day 7 when I sit down to cup.
 
-Optional: also update `key_insight` / `key_insight_confidence` / `what_changes_going_forward` / `open_questions` / `additional_notes` if the roast-side actuals alone already reveal something insightful (rare at the post-roast stage; usually wait for cupping data).
+Optional: also update `key_insight` / `key_insight_confidence` / `what_changes_going_forward` / `open_questions` / `additional_notes` if the roast-side actuals alone already reveal something insightful (rare at the post-roast stage; usually wait for cupping data). When set, use the `key_insight_confidence` ladder documented in `log-cupping.md` STAGE 3.
 
 The `winner` field stays NULL until Day 7 cupping resolves it. `log-cupping.md` declares the leading slot for V_n.
 
 `patch_experiment` echoes `updated_fields: [...]` so you can sanity-check which columns landed.
 
 ## STAGE 6 - Optional: propose ROASTING.md mid-iteration update
+
+**This STAGE writes**: `doc_proposals` row (one multi-citation proposal), OR nothing if skipped.
 
 Only if V_n's roast-side observations reveal a lot-state change worth recording NOW (rather than waiting for cupping). Examples:
 
@@ -106,9 +144,13 @@ Route by SHAPE of the insight:
 
 Fetch live anchor via `read_doc_section(uri="docs://roasting.md", anchor="<Section Name>")` BEFORE drafting. Submit as a single multi-citation `propose_doc_changes` call with top-level `target_doc: "roasting.md"`, top-level `summary`, `citations: [{section_anchor, op, proposed_text, current_text}]`.
 
+**When to skip and report why**: Day 7 cupping is imminent and will either confirm or invalidate the proposed insight. Skip and tell Chris the proposal queues for the `log-cupping.md` STAGE 6 pass. Print `STAGE 6: skipped - cupping imminent, defer`.
+
 AVOID editing mid-iteration: Recently Closed Lots, Reference Brew Recipes by Lot - those are close-out artifacts owned by `close-lot.md`.
 
 ## STAGE 7 - Confirmation output
+
+**This STAGE writes**: nothing (output only).
 
 Print:
 
@@ -120,7 +162,7 @@ Print:
   - `updated_cup_prediction` (1-line)
   - `taste_for` (1-line)
 - `experiment_pk` + `updated_fields: [...]` from patch_experiment
-- `proposal_id` from propose_doc_changes (if STAGE 6 ran)
+- `proposal_id` from propose_doc_changes (if STAGE 6 ran), or `STAGE 6: skipped - <reason>`
 - Lifecycle state confirmation: "V_n complete, lot state flipped to **Waiting for next cupping**. Day 7 cupping target: <YYYY-MM-DD>."
 
 ## What this prompt does NOT do
