@@ -1,0 +1,117 @@
+# Cleanup queue handoff brief (post Round 7)
+
+Paste-ready brief for a fresh Claude Code session that doesn't see the multi-day dogfood thread that produced this queue. Authored 2026-05-17, updated 2026-05-18 after Round 7 (Higuito V3 cupping) landed.
+
+## Goal for the next session
+
+**Ship the polish PR(s) closing out the V-set + one-shot prompt-rewrite cycle.** Round 7 was the final dogfood datapoint — all recurring friction patterns are now confirmed twice or more across different lots, so the polish PR can ship with confidence that proposed edits cover real-world friction. The dogfood loop continues with Round 8 (first auction-lot sample landing → first one-shot.md production run on a fresh-from-the-start one-shot lot) but that's independent of the polish PR shipping.
+
+## Load-bearing reference docs
+
+- **[memory/feedback_mcp_continuous_log.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_continuous_log.md)** — Rounds 0-6 with full triage notes. THE source of truth for which items came from which round. Round 7 entry will be appended here.
+- **PR [latent-coffee#157](https://github.com/chrismccann-dev/latent-coffee/pull/157)** (merged 2026-05-15) — 4-prompt rewrite (start-lot / log-roast / log-cupping / close-lot) + CONTEXT.md polish.
+- **PR [latent-coffee#158](https://github.com/chrismccann-dev/latent-coffee/pull/158)** (merged 2026-05-15) — One-shot lot framework: migration 054 + persistRoastLearnings validation + one-shot.md + one-shot-closeout.md + CONTEXT.md additions.
+- **[docs/sprints/one-shot-lot-framework-kickoff.md](docs/sprints/one-shot-lot-framework-kickoff.md)** — Original sprint scope for PR #158 with locked decisions.
+- **[CONTEXT.md](CONTEXT.md)** — Latent terminology glossary. Vocabulary referenced throughout the prompts.
+- **[CLAUDE.md](CLAUDE.md)** — Codebase + workflow rules. Standing-rules section is load-bearing for sprint discipline.
+
+## Polish PR scope (~25 items across 3 layers)
+
+Three natural sub-PR chunks if you want to ship in stages — A first, then B + C bundled after Round 8 confirms no new patterns surface. Or one chunky PR if you'd rather minimize review cycles.
+
+**The two biggest items (sprint-killers if dropped):**
+- A #2: log-cupping.md STAGE 0 state-shape migration (Round 6 #4)
+- A #3: Path C expansion to TWO variants (Round 3 #1 + Round 7 #7)
+
+Both close recurring patterns confirmed twice or more across different lots.
+
+### Sub-PR A: Prompt edits (13 items)
+
+Targets: `docs/prompts/log-roast.md` + `log-cupping.md` + `close-lot.md` + `one-shot.md` + `one-shot-closeout.md`.
+
+| # | Item | Round |
+|---|---|---|
+| 1 | log-roast.md STAGE 1 halt-and-report relaxation (allow backfill when design intent is reconstructable from session memory) | 1 #1 |
+| 2 | **log-cupping.md STAGE 0 state-shape migration** (load-bearing — supersedes prior items 3/5/7). Detects pre-rewrite lots in STAGE 1 and one-pass-backfills `updated_cup_prediction_*` / `taste_for_*` on experiment + `predicted_cup` on recipes. With worked-content examples (1-2 sentences each) closing the prose-granularity ambiguity | 6 #4 |
+| 3 | **log-cupping.md STAGE 4 Path C expansion to TWO variants** (load-bearing — confirmed recurring across Rounds 3 + 7). Path C-1: design blocked on missing calibration data (Fazenda Um — Untold paired roasted reference cup). Path C-2: design blocked on cup-side discriminator (Higuito V3 — real-pourover comparison on already-roasted beans, triggered when V-set cupped at one recipe_variant only AND prior V-sets on the lot show recipe_variant inversions). Both distinct from "control experiment" (which IS a new V-set replicating leading slot). | 3 #1 + 7 #7 |
+| 4 | log-cupping.md STAGE 2 rest_days flag + date-drift handling | 3 #4 + #10 |
+| 5 | log-cupping.md STAGE 3 winner format guidance ("everything past V<n><letter> (Batch <Roest#>) goes in additional_notes") | 3 #7 |
+| 6 | log-cupping.md STAGE 3 prose-field disambiguation guide (additional_notes vs what_changes_going_forward vs open_questions) | 3 #9 |
+| 7 | log-cupping.md stage-write directive checklists ("this STAGE writes: X / Y / Z") at top of each STAGE | 6 #5 |
+| 8 | one-shot-closeout.md STAGE 2 + close-lot.md STAGE 2 is_reference vs worth_repeating decoupling (Outcome B + only-batch case: is_reference: true ALWAYS for one-shots; A/B distinction is about worth_repeating + why_this_roast_won) | 5 #4 + #6 |
+| 9 | log-roast.md STAGE 1 fallback: when `roast_recipes.batch_slot` is NULL (pre-rewrite lot), infer slot from `roasts.roast_profile_name` matching `*v<n><letter>*` | 3 #2 |
+| 10 | one-shot.md + one-shot-closeout.md stage-write directive checklists (propagated from #7) | 6 #5 |
+| 11 | **log-cupping.md + close-lot.md STAGE 3 `key_insight_confidence` ladder operationalization.** Document the heuristic: Low = "interesting hypothesis"; Medium = "consistent with 1-2 prior data points"; Medium-High = "strong evidence, ready to be a working assumption"; High = "ready to promote to a protocol change in ROASTING.md". | 7 #8 |
+| 12 | log-cupping.md STAGE 6 "skip and report why" language. When downstream evidence is imminent (real-pourover discriminator pending, V_(n+1) imminent), defer the doc proposal to the next round. | 7 #9 |
+| 13 | log-cupping.md STAGE 3 `delta_from_cup_*` description extension: walk the three taste_for_* reference points (producer notes / prior V_(n-1) memory / specific adjustment) noting which materialized as expected vs not. (Alternative: schema migration option in Sub-PR D below.) | 7 #10 |
+
+### Sub-PR B: MCP schema-description + behavior fixes (9 items)
+
+Targets: `lib/mcp/*.ts` Zod schemas + tool descriptions + `lib/mcp/patch-experiment.ts` behavior fix.
+
+| # | Item | Round |
+|---|---|---|
+| 14 | `lib/mcp/patch-experiment.ts` — omit `canonical_values: {}` when empty (currently echoes empty object even when no enum fields touched) | 1 #7 |
+| 15 | `lib/mcp/push-experiment.ts` + `patch-experiment.ts` — `delta_from_cup_*` description: "vs `updated_cup_prediction_*` if populated, else vs design-time `predicted_cup`" | 4 #8 |
+| 16 | `lib/mcp/push-roast-recipe.ts` — `parent_recipe_id` semantics relax from strict-replication to directional-ancestor ("set when v3a was directly informed by v2b's design intent, including shifted spread anchored on v2b") | 4 #9 |
+| 17 | `lib/mcp/push-roast-profile.ts` + `push-roast.ts` — BEAN_TEMP vs bean_temp case discipline notes (push_roast_profile takes all-caps Roest API enum; push_roast takes lowercase column enum) | 4 #10 |
+| 18 | `lib/mcp/push-roast.ts` + `patch-roast.ts` — `is_reference` description: decouple from worth_repeating. "For one-shot lots with N=1, true by default after close-out - orthogonal to worth_repeating" | 5 #4 |
+| 19 | `lib/mcp/push-experiment.ts` + `patch-experiment.ts` — `batch_ids` description clarification ("Omit field entirely to leave NULL at design time. Do NOT pass the string 'null'") + enumerate the 16 cross-batch fields more readably | 6 #6 + #7 |
+| 20 | `lib/mcp/propose-doc-changes.ts` — document ASCII-vs-Unicode normalization behavior in tool description | 6 #8 |
+| 21 | `lib/mcp/patch-experiment.ts` — `winner` canonical_values echo extension (currently free-text; add regex validation echo) | 3 #7 + 6 #9 |
+| 22 | `lib/mcp/push-experiment.ts` + `patch-experiment.ts` — `key_insight_confidence` description: add the operational ladder per A #11 | 7 #8 |
+
+### Sub-PR C: Page-render polish (3 items)
+
+Targets: `app/(app)/green/[id]/page.tsx` (the WaitingForNextRoastView / WaitingForNextCuppingView function bodies).
+
+| # | Item | Round |
+|---|---|---|
+| 23 | WaitingForNextRoastView section reorder: (1) ROASTS · V_n SectionCard with Primary Question + Roast Hypothesis, (2) `<GreenBeanInfoCard>`, (3) `<ExperimentFrameCard>` (demoted from current top position), rest unchanged | 1 #12 |
+| 24 | WaitingForNextCuppingView section reorder: (1) CUPPING HYPOTHESIS · V_n, (2) ROAST ACTUALS · V_n, (3) **TBD-clarify-at-PR-time** (likely CrossBatchNotesBlock slot when V_(n-1) exists), (4) GreenBeanInfoCard, (5) ExperimentFrameCard, (6) RoastLogTable | 1 #13 |
+| 25 | Design/Achieved diff render on WaitingForNextCuppingView ROAST ACTUALS card (currently shows drop_temp actual but not Design-side end_condition_target from recipe row — surfaces operator-override visually at cupping prep time) | 3 #2 |
+
+### CONTEXT.md additions (3 items)
+
+| # | Item | Round |
+|---|---|---|
+| 26 | "Pre-V_n calibration gate" entry under § Forward design (next to "Adjustment" + "Tolerance-anchored design") | 3 #11 |
+| 27 | Clarifier on "Closed without reference" entry: `is_reference: true` can coexist with `why_this_roast_won = NULL` on one-shot Outcome B lots | 5 #4 |
+| 28 | `key_insight_confidence` ladder operationalization entry: documents the heuristic (Low / Medium / Medium-High / High) so confidence calibration is consistent across syncs | 7 #8 |
+
+## Schema migration sprint (separate, 4-5 candidates)
+
+Defer to its own sprint. Bundle when timing makes sense (e.g. after Round 8 surfaces additional schema-shape items):
+
+| # | Item | Round |
+|---|---|---|
+| S1 | `cuppings.wb_to_ground_delta` derived column (computed from `roasts.agtron - cuppings.ground_agtron`) | 3 #6 |
+| S2 | `is_reference_candidate` boolean on experiments OR roasts (distinct from "no winner yet" + "leading slot IS reference quality") | 3 #8 |
+| S3 | `cuppings.sweetness` column (currently folded into acidity/body/flavor) | 4 #12 |
+| S4 | `roast_recipes.was_backfilled` boolean OR `backfill_notes` text column (distinguishes design-intent-captured-at-design-time from design-intent-recovered-after-fact) | 5 #5 |
+| S5 | (Optional, defer or alternative to A #13) `experiments.taste_for_validation_a/b/c/d` text columns: post-cup verification of whether the three taste_for reference points each materialized as predicted. Default: handle via A #13 prompt-level extension instead. Promote to schema if structural treatment preferred after the prompt-level approach is dogfooded. | 7 #10 |
+
+## Other queued items
+
+- **CCIL consolidation arbiter task** (Round 4 #11). Recurring doc-maintenance: promote High-confidence hypotheses in ROASTING.md's Cross-Coffee Insight Layer to a Confirmed Patterns subsection + retire Low-confidence ones that haven't repeated across N lots. Lives in ARBITER.md playbook (or extends it).
+- **patch_roast + read_doc_section intermittent failures** (Round 1 #4 + #5). req_011CawGMmSjMThH9XeESJs / req_011CawGMmSjMNWThH9XeESJs / req_011Cb3bFZiMduh6ZkKcFSSqy. Pattern: tool surfaces in tool_search but errors on execution. Retries succeeded. Open for Vercel logs investigation when there's a pause.
+
+## Operational backfills queued
+
+- **CGLE Sudan Rume Natural V5 missing recipe rows** (Round 1 #2). The lot's V5 push from 2026-05-14 wrote roasts + experiment but no `push_roast_recipe` calls (since it ran under pre-rewrite prompts). 13 recipe rows still have NULL `experiment_id` + `batch_slot` + design-intent fields. Chris hasn't backfilled yet. Track-B-style operational backfill candidate via patch_roast_recipe calls.
+- **Historical end_condition backfill on roasts ≤batch 169** (Round 1 #8). All historical roasts have NULL `end_condition_type` because `pull_roest_log` didn't surface these fields when those roasts were originally pushed. Opportunistic: fold into next close-lot.md run when a relevant lot closes.
+
+## Pending dogfood rounds
+
+- **Round 7: Higuito V3 cupping** (target 2026-05-19, possibly 2026-05-18 if convenient). First cupping on a fresh-from-rewrite V-set lot (V3 recipes have full bezier + design intent + Roest linkage end-to-end). Should NOT hit the STAGE 0 migration friction since the lot ran through new prompts from V3 design onward. If Round 7 is clean, that's confirmation the polish PR scope is correctly sized + doesn't have unforeseen interactions.
+- **Round 8: First auction-lot sample** (timing depends on when Chris's friend forwards samples or sourcing conversations land). First production run of `one-shot.md` on a fresh-from-the-start one-shot lot (not retroactive backfill like Rancho Tio was). Exercises the full one-shot pipeline end-to-end including tolerance-anchored design + carry-forward search across similar prior lots.
+
+## How to use this brief in a fresh Claude Code session
+
+Paste verbatim. Add as a first-message preamble: "Working through the cleanup queue from the recent Latent dogfood pass. Brief at `docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md`. Round 7 just landed — see Round 7 entry in `memory/feedback_mcp_continuous_log.md`. Want to start with Sub-PR A (prompt edits)."
+
+The new session will have full context via:
+1. The brief (this file)
+2. The memory log (Rounds 0-6 + Round 7 once landed)
+3. The two PRs as commit-history reference
+4. CONTEXT.md + CLAUDE.md as standing guidance
