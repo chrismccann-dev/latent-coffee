@@ -11,13 +11,16 @@ Subsequent execution sessions consume this doc one sprint at a time, fresh conte
 
 1. Inventory (Option A: per-followup-file rows + per-dogfood-bucket rows, deduped)
 2. Sprint bundling
-3. Sprint sequence with the 3 fence-points Chris locked (Sprint 0 = strengthened cross-system rule; Sprint M = mid-sequence sync; Sprint F = final sync; Sprint R = roadmap review)
+3. Sprint sequence with the explicit blocking dogfood-merge gate Chris asked for (Sprint 0 = strengthened cross-system rule; Sprints 1-5 = pre-dogfood; Sprint M = mid-sequence sync; **🚨 BLOCKING GATE 🚨**; Sprints 6-14 = post-dogfood; Sprint F = final sync; Sprint R = roadmap review)
 4. Risk flags surfaced by planning, not by per-cluster grilling
-5. Open questions for Chris
+5. Resolved decisions (Chris-confirmed 2026-05-17 — all 8 original open questions resolved)
+6. PRODUCT.md § Active Sprints 3.3-3.7 scope-impact assessment (Chris-requested)
 
 Standing fences:
-- **Dogfood close**: Round 8 (one-shot.md production run, scheduled 2026-05-18). NO roasting-side MCP / prompt / schema changes ship before this fence.
-- **Per Chris's correction in [grilling-2026-05-17-brewing-cross-party-followups.md](grilling-2026-05-17-brewing-cross-party-followups.md)**: the "no roasting changes until dogfood" rule is scoped to MCP / prompt / schema only. Doc-only roasting changes (CONTEXT.md, ADRs, ROASTING.md prose, docs/roasting/*.md prose) MAY ship pre-dogfood.
+- **Dogfood close**: Round 8 (one-shot.md production run, scheduled 2026-05-18, Chris-confirmed definitive last). NO roasting-side MCP / prompt / schema changes ship before this fence.
+- **Brewing-side is fully fair game during dogfood (Chris-confirmed 2026-05-17)**. The dogfood exercises the roasting + cupping iteration loop, not the brewing-side write surface. Brewing-side schema, MCP Tools, prompts, registries, and UI are pre-safe.
+- **Doc-only roasting changes** (CONTEXT.md, ADRs, ROASTING.md prose, docs/roasting/*.md prose) are also pre-safe. The "no roasting changes" rule is scoped to MCP / prompt / schema only per Chris's correction in [grilling-2026-05-17-brewing-cross-party-followups.md](grilling-2026-05-17-brewing-cross-party-followups.md). HOWEVER, per Chris-confirmed 2026-05-17, SYN-8's roasting-side rename ships unified with the brewing-side in Sprint 9 (post-dogfood) to avoid any risk to claude.ai's roasting-substrate read during dogfood.
+- **Round 8 may grow the dogfood inventory**. Chris flagged that Round 8 could add items to the DF-* queue. Sprint 6's exact sizing is gated on the post-Round-8 handoff brief update.
 - **No --global git config** in any execution sprint (worktree-local `user.email=chris.r.mccann@gmail.com` only).
 
 ---
@@ -83,7 +86,7 @@ After dedupe and resolution: MCP-1, MCP-3, MCP-4 are the only live MCP items. MC
 | CR-2 | Nordic Approach → Mekuria Mergia alias removal | REG + TAX + SCH (data) | PRE | S | CR-3 | Alias edit + DB audit + brew-by-brew producer re-identification. |
 | CR-3 | Importer/exporter as future canonical axis - scoping | scoping | PRE | M | CR-2 | Scoping doc; implementation deferred. Triggered by CR-2 pain. |
 | CR-4 | Skeleton-entry review extension to arbiter procedure | ARB + MCP + REG | POST | M | CR-10 | Touches MCP Tool surface; POST. Pairs with CR-10 roaster extension. |
-| CR-5 | `fermentation_qualifiers` schema column on `brews` | SCH + MCP + LIB | POST | M | none | Touches push_brew Tool; POST per Chris's correction (brewing-side MCP also subject to dogfood fence? See risk flag § 4.3). |
+| CR-5 | `fermentation_qualifiers` schema column on `brews` | SCH + MCP + LIB | PRE | M | none | Brewing-side MCP fully fair game during dogfood per Chris-confirmed 2026-05-17. Lands in Sprint 3. |
 | CR-6 | Strategy tag ↔ extraction strategy vocab-coherence audit | DOCS + REG (potential) | PRE | M | none | Audit doc; rename sprint follow-up if signal emerges. |
 | CR-7 | SWORKS valve flow taxonomy promotion scoping | TAX + REG | PRE | S (scope) / M (promote) | none | Self-only axis. Promotion-effort gated on Chris's TODO. |
 | CR-8 | Filter flow-rate measurement exercise | OPS + REG + TAX | PRE (scope) / OPS (execute) | M | WBC-3 | **Duplicate of WBC-3** — track as CR-8≡WBC-3. |
@@ -119,7 +122,7 @@ After dedupe and resolution: MCP-1, MCP-3, MCP-4 are the only live MCP items. MC
 | SYN-5 | Humanizer vocabulary grounding | LIB + investigation | PRE | S | none | Decision doc + possible refactor to CONTEXT.md-aware humanizer. |
 | SYN-6 | Cross-source brewing + roasting unified capsule | LIB + adapter + SCH (query) | POST | L | RO-3, RO-6 | Touches `roast_learnings` query path. POST. |
 | SYN-7 | Resynthesize trigger gap (content-change-without-count-change) | LIB | POST | S | SYN-6 | Partly tied to SYN-6 cross-source. POST. |
-| SYN-8 | BREWING.md ↔ ROASTING.md cross-coffee section naming asymmetry | BR + RO | PRE | XS | none | Doc rename to "Cross-Coffee Insight Layer" on both sides. Roasting-side rename is doc-only; PRE-safe. |
+| SYN-8 | BREWING.md ↔ ROASTING.md cross-coffee section naming asymmetry | BR + RO | POST | XS | none | Both sides rename together in Sprint 9 (unified post-dogfood) per Chris-confirmed 2026-05-17. Avoids transient asymmetry + any risk to claude.ai's roasting-substrate read during dogfood. |
 
 #### A.7 Brewing cross-party — 2026-05-17 (file: `grilling-2026-05-17-brewing-cross-party-followups.md`)
 
@@ -150,7 +153,7 @@ Items 1-2 shipped as [PR #167](https://github.com/chrismccann-dev/latent-coffee/
 | RO-CP-6 | Roast recipe specification canonical noun (recipe vs profile vs spec) | CTX + PRM | PRE | S | none | Glossary edit + prompt language consistency. Touching prompts → POST per Chris's rule. **Reclassify to POST.** |
 | RO-CP-7 | `roast_learnings.terroir_takeaway` column gap | SCH + MCP + RO + PRM | POST | M | RO-1, RO-3 | **= RO-3** dedupe. |
 | RO-CP-8 | `roast_learnings` underdev/overdev cup-side strictness | SCH (data audit) + PRM | POST | S | RO-5 | **= RO-5** dedupe. |
-| RO-CP-9 | Skeleton ADR for substrate-practice gap audit mechanism | ADR | PRE | XS | none | If scoped, lands as `0006-*.md`. Pre-safe doc-only. |
+| RO-CP-9 | Skeleton ADR for substrate-practice gap audit mechanism | ADR | DEF | XS | none | Deferred per Chris-confirmed 2026-05-17 to "when a 3rd cross-party audit lands." Not scoped in current sequence. |
 
 ### Part B: Dogfood cleanup queue (post-Round-7 handoff brief, all POST by construction)
 
@@ -220,11 +223,11 @@ Exact decomposition pending re-read of full handoff brief; 8 items distributed a
 - Dogfood cleanup queue (Part B): **32 items**.
 - Grand total: **~95 unique items** across the planning surface.
 
-Status mix after dedupe:
+Status mix after dedupe + Chris-confirmed reclassifications (2026-05-17):
 - `DONE` (already shipped or resolved): 6 items (BCP-1, MCP-5, MCP-7, MCP-8, CR-12, BCP-2-partial)
-- `PRE` (pre-dogfood-safe, execution-ready): ~22 items
-- `POST` (post-dogfood-only): ~17 items + all 32 dogfood items = ~49 items
-- `DEF` (deferred future-scope): ~18 items
+- `PRE` (pre-dogfood-safe, execution-ready): ~23 items (+CR-5 moved from POST; -RO-CP-9 moved to DEF; -SYN-8 moved to POST = net +0 from prior count of ~22, but composition shifted)
+- `POST` (post-dogfood-only): ~17 items + 32 dogfood items = ~49 items (CR-5 left POST; SYN-8 joined; RO-CP-9 left)
+- `DEF` (deferred future-scope): ~19 items (+RO-CP-9)
 
 ---
 
@@ -263,9 +266,11 @@ A substrate change must be traced through the chain. Example trace for "add `ter
 
 #### Sprint 1 — Brewing cluster doc edits + canonical surface
 
-**Bundled items**: BR-1 (signature method registry, registry-only edit) + BR-2 (BREWING.md Phase-Mapped vocab) + WBC-1 (BREWING.md single-variable orthodoxy softening) + SYN-8 (BREWING.md ↔ ROASTING.md cross-coffee naming, brewing side only — defer roasting-side rename to post-dogfood).
+**Bundled items**: BR-1 (signature method registry, 11+ canonical entries) + BR-2 (BREWING.md Phase-Mapped vocab) + WBC-1 (BREWING.md single-variable orthodoxy softening).
 
 **Why bundle**: all touch brewing-side authoritative content (BREWING.md + process registry); shared review surface.
+
+**Note on SYN-8**: moved to Sprint 9 (unified rename both sides post-dogfood) per Chris-confirmed.
 
 **Estimated PRs**: 1.
 
@@ -281,15 +286,15 @@ A substrate change must be traced through the chain. Example trace for "add `ter
 
 **Sizing**: S (1-3h).
 
-#### Sprint 3 — Canonical registries doc edits + alias cleanup
+#### Sprint 3 — Canonical registries doc edits + alias cleanup + brewing-side MCP schema
 
-**Bundled items**: CR-1 (processes.md qualifier doc-edit) + CR-2 (Nordic Approach alias removal + producer re-ID) + CR-3 (importer/exporter scoping doc).
+**Bundled items**: CR-1 (processes.md qualifier doc-edit) + CR-2 (Nordic Approach alias removal + producer re-ID) + CR-3 (importer/exporter scoping doc) + CR-5 (`fermentation_qualifiers` schema column on `brews` + `push_brew` Tool wiring).
 
-**Why bundle**: all touch producer/process canonical surface; CR-2's brew-by-brew producer re-ID is the load-bearing work, the others ride along.
+**Why bundle**: all touch the canonical/process surface; CR-2's brew-by-brew producer re-ID is the load-bearing item. CR-5 added per Chris-confirmed brewing-side MCP is fair game during dogfood; the column addition + Tool wiring + `composeProcess`/`decomposeProcess` updates land alongside the related processes.md qualifier doc-edit (CR-1).
 
-**Estimated PRs**: 1-2 (CR-2's data audit may want its own commit for review-ability).
+**Estimated PRs**: 1-2 (CR-2's data audit may want its own commit; CR-5's schema migration may want its own commit for review depth — split if review load is too high).
 
-**Sizing**: M.
+**Sizing**: M-L (CR-5 pushes this from M into L territory; if too big, split CR-5 into its own Sprint 3b).
 
 #### Sprint 4 — Synthesis pipeline pre-safe edits
 
@@ -305,15 +310,17 @@ A substrate change must be traced through the chain. Example trace for "add `ter
 
 #### Sprint 5 — Pre-safe scoping + audit docs
 
-**Bundled items**: BR-3 (WBC systematic review report) + BR-4 (extraction_confirmed retirement decision) + BR-5 (process_dominant evaluation decision) + WBC-2 (Time Distribution Playbook promotion scoping) + CR-6 (strategy tag ↔ extraction strategy audit) + CR-7 (SWORKS valve flow scoping) + CR-11 (95-96% pick-not-author saturation audit) + MCP-3 + CR-13 (canonical-strictness 4-tier audit) + MCP-4 (xBloom API check) + RO-7 (rest_behavior decision) + RO-CP-9 (substrate-practice gap audit ADR-0006).
+**Bundled items**: BR-3 (WBC systematic review report) + BR-4 (extraction_confirmed retirement decision) + BR-5 (process_dominant evaluation decision) + WBC-2 (Time Distribution Playbook promotion scoping) + CR-6 (strategy tag ↔ extraction strategy audit) + CR-7 (SWORKS valve flow scoping) + CR-11 (95-96% pick-not-author saturation audit) + MCP-3 + CR-13 (canonical-strictness 4-tier audit) + MCP-4 (xBloom API check) + RO-7 (rest_behavior decision) + DF-SCH enumeration (the 4 dogfood schema-migration candidates get enumerated at this sprint's kickoff per Chris-confirmed; sequencing decision is made then).
 
 **Why bundle**: all are reflective/scoping/audit work producing decision docs, not code or schema changes. Bundling lets Chris read the entire decision surface in one review pass.
 
-**Estimated PRs**: 1 PR with multiple commits per audit doc, OR split into 2 PRs (audits vs decisions) if review becomes unwieldy.
+**Note**: RO-CP-9 (substrate-practice gap audit ADR-0006) removed per Chris-confirmed deferral to "when a 3rd cross-party audit lands."
 
-**Sizing**: M-L (12+ small scoping deliverables stacked).
+**Estimated PRs**: 1 PR with multiple commits per audit doc, OR split into 2 PRs (audits vs decisions) if review becomes unwieldy. Per Chris's standing caution about mega-sprints, the kickoff brief includes a hard checkpoint after item 6 — if review/cognitive load is too high, split there into Sprint 5a + 5b.
 
-**Output**: A folder `docs/audits/2026-05-XX/` with per-item decision docs. Each one is short — 1 page typical.
+**Sizing**: M-L (11 small scoping deliverables stacked + DF-SCH enumeration).
+
+**Output**: A folder `docs/audits/2026-05-XX/` with per-item decision docs. Each one is short, 1 page typical.
 
 ### Sprint M — Mid-sequence cross-system sync
 
@@ -361,9 +368,9 @@ These run AFTER Round 8 closes the dogfood (target: 2026-05-18 + Round 8 complet
 
 #### Sprint 9 — Roasting cluster doc edits (post-dogfood)
 
-**Bundled items**: RO-CP-1 + RO-CP-2 (ROASTING.md table split + Development polarity edit) + SYN-8-roasting-side (ROASTING.md rename to match Cross-Coffee Insight Layer if BREWING.md side renamed in Sprint 1).
+**Bundled items**: RO-CP-1 (ROASTING.md additive-vs-precedence table split per ADR-0005) + RO-CP-2 (Development entry framing edit for WB→Gnd polarity by lot family) + SYN-8 (BREWING.md ↔ ROASTING.md cross-coffee section naming asymmetry — UNIFIED rename both sides in this sprint per Chris-confirmed).
 
-**Why post-dogfood despite being doc-only**: ROASTING.md drives claude.ai's roasting design language; editing it mid-dogfood would change the substrate claude.ai is reading. Even doc-only roasting edits ship after the dogfood closes.
+**Why post-dogfood despite being doc-only**: ROASTING.md drives claude.ai's roasting design language; editing it mid-dogfood would change the substrate claude.ai is reading. Even doc-only roasting edits ship after the dogfood closes. SYN-8's brewing-side rename rides along here to avoid the transient asymmetry of half-renamed cross-doc vocabulary.
 
 **Estimated PRs**: 1.
 
@@ -395,13 +402,15 @@ These run AFTER Round 8 closes the dogfood (target: 2026-05-18 + Round 8 complet
 
 #### Sprint 12 — Roasting scope-tag + MCP queue + arbiter extensions
 
-**Bundled items**: RO-CP-5 (carry-forward scope-tag mechanism) + MCP-1 (signature method queue addition) + CR-4 (skeleton-entry arbiter extension) + CR-10 (roaster skeleton flag) + CR-5 (`fermentation_qualifiers` schema column on brews).
+**Bundled items**: RO-CP-5 (carry-forward scope-tag mechanism) + MCP-1 (signature method queue addition on `taxonomy_overrides_queue`) + CR-4 (skeleton-entry arbiter extension, third queue type) + CR-10 (roaster skeleton-flag extension).
 
 **Why bundle**: all touch MCP Tool surface + ARBITER.md procedure + schema. Bundling lets the cross-actor propagation (actor 4 → 5 → 3 → 2) happen as one coherent change.
 
-**Estimated PRs**: 1-2.
+**Note**: CR-5 moved to Sprint 3 (brewing-side MCP is fair game during dogfood per Chris-confirmed).
 
-**Sizing**: L.
+**Estimated PRs**: 1-2 (split if L sizing turns into XL after Sprint 5 enumerates the DF-SCH candidates that may also land here).
+
+**Sizing**: L. Per Chris's caution about mega-sprints, this is a candidate for plan-execute split (one session scopes the cross-actor matrix; a second session executes).
 
 #### Sprint 13 — Cross-source synthesis + resynthesize trigger (post-roasting-schema)
 
@@ -462,40 +471,91 @@ Triggers after Sprint F closes. Walks PRODUCT.md § Active Sprints / Newly queue
 
 ## 3. Sprint sequence
 
-Linear execution order. Each sprint is one session with fresh context — kickoff brief per sprint generated from this plan's bundling section.
+Linear execution order. Each sprint is one session with fresh context; kickoff brief per sprint generated from this plan's bundling section. Per Chris-confirmed, L+ sprints are candidates for plan-execute split (one session plans, a second session executes) to avoid mega-session overload.
+
+### ✅ Phase 1: Pre-dogfood (safe to ship now)
+
+These sprints have ZERO dependency on Round 8 closing. All items are brewing-side, doc-only, or scoping/audit work.
 
 ```
-[ Pre-dogfood (Round 8 lands 2026-05-18) ]
-
 Sprint 0:  Strengthened cross-system sync rule + check-mcp-bundle.ts script + 6-actor matrix in CLAUDE.md
-Sprint 1:  Brewing cluster doc edits + canonical surface  (BR-1, BR-2, WBC-1, SYN-8-brewing)
+           [substrate: CLD + SCRIPT + ARB]
+Sprint 1:  Brewing cluster doc edits + canonical surface  (BR-1, BR-2, WBC-1)
+           [substrate: BR + REG + TAX]
 Sprint 2:  wbc-sourcing.md doc-edit bundle  (WBC-6, WBC-7, WBC-8)
-Sprint 3:  Canonical registries doc edits + alias cleanup  (CR-1, CR-2, CR-3)
+           [substrate: DOCS]
+Sprint 3:  Canonical registries cleanup + brewing-side MCP schema  (CR-1, CR-2, CR-3, CR-5)
+           [substrate: TAX + REG + SCH + MCP for brews-side only]
 Sprint 4:  Synthesis pipeline pre-safe edits  (SYN-2, SYN-4, SYN-5)
-Sprint 5:  Pre-safe scoping + audit docs  (BR-3, BR-4, BR-5, WBC-2, CR-6, CR-7-scope, CR-11, MCP-3+CR-13, MCP-4, RO-7, RO-CP-9)
+           [substrate: LIB]
+Sprint 5:  Pre-safe scoping + audit docs  (BR-3, BR-4, BR-5, WBC-2, CR-6, CR-7, CR-11,
+           MCP-3+CR-13, MCP-4, RO-7, DF-SCH enumeration)
+           [substrate: DOCS + scoping; checkpoint mid-sprint]
 
 Sprint M:  Mid-sequence cross-system sync against Sprints 1-5
-
-[ Dogfood closes: Round 8 lands. Wait until Chris confirms close. ]
-
-Sprint 6:  DF Sub-PR A  (10 prompt-edit items; DF-A2 lead)
-Sprint 7:  DF Sub-PR B  (8 MCP description + behavior fixes)
-Sprint 8:  DF Sub-PR C + CONTEXT.md additions  (3 page-render + 2 CTX)
-Sprint 9:  Roasting cluster doc edits post-dogfood  (RO-CP-1, RO-CP-2, SYN-8-roasting)
-Sprint 10: Roasting schema migrations bundle 1  (RO-1, RO-2, RO-3, RO-4)  — ADR-0007 candidate
-Sprint 11: Roasting schema migrations bundle 2  (RO-CP-3, RO-5, RO-6)  — ADR-0008 candidate
-Sprint 12: Roasting scope-tag + MCP queue + arbiter extensions  (RO-CP-5, MCP-1, CR-4, CR-10, CR-5)
-Sprint 13: Cross-source synthesis + mobile capsule  (SYN-6, SYN-7, SYN-3)
-Sprint 14: Roasting prompt vocab + recipe noun  (RO-CP-6, RO-4-final, DF-ARB1)
-
-Sprint F:  Final cross-system sync against the full delta of Sprints 1-14
-
-Sprint R:  PRODUCT.md / roadmap review + kickoff brief for the next sequence
+           [substrate: read-only audit; no edits unless drift surfaces]
 ```
 
-Total: 17 execution sprints (Sprint 0 + Sprints 1-14 + Sprint M + Sprint F + Sprint R).
+### 🚨 BLOCKING GATE: DOGFOOD MERGE 🚨
 
-Estimated wall-clock at ~1 sprint/session, ~1-2 sessions/day: **2-3 weeks** at a steady cadence, ~4-5 weeks if Chris chunks sessions less aggressively.
+**Cannot proceed to Sprint 6 until ALL of the following are true**:
+
+1. Round 8 (one-shot.md production run on Higuito V3 or equivalent) has been executed by Chris on the Roest L200 + cupped at day-7
+2. The continuous feedback log (`memory/feedback_mcp_continuous_log.md`) has its Round 8 entry written
+3. The dogfood handoff brief (`docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md` or successor) is updated with any Round 8 friction items appended to the DF-* inventory
+4. Chris confirms in-session: "dogfood is closed, DF inventory is locked, you may proceed to Sprint 6"
+5. The handoff brief is merged to `main` so Claude Code can read the full DF inventory cold
+
+**Sprint 6 kickoff session must verify all 5 conditions before doing any DF-A work.** If any condition is unmet, the session pauses and surfaces the gap to Chris.
+
+**Trigger**: Round 8 is Chris-confirmed for Monday 2026-05-18. Estimated gate opens within ~24-48h of Round 8 cupping completion.
+
+**Risk**: Round 8 may grow the DF inventory. Sprint 6 sizing rebalances based on the post-Round-8 brief; if DF-A exceeds 12-15 items it splits into DF-A1 (mechanical state-shape backfill: DF-A2 only) + DF-A2 (remaining edits).
+
+### 🔒 Phase 2: Post-dogfood (BLOCKED until gate opens)
+
+```
+Sprint 6:  DF Sub-PR A  (10+ prompt-edit items; DF-A2 STAGE-0 state-shape migration leads)
+           [substrate: PRM]
+Sprint 7:  DF Sub-PR B  (8 MCP description + behavior fixes across 6 Tool files)
+           [substrate: MCP]
+Sprint 8:  DF Sub-PR C + CONTEXT.md additions  (3 page-render + 2 CTX entries)
+           [substrate: UI + CTX]
+Sprint 9:  Roasting cluster doc edits + unified cross-coffee rename
+           (RO-CP-1, RO-CP-2, SYN-8 both sides)
+           [substrate: RO + BR]
+Sprint 10: Roasting schema migrations bundle 1  (RO-1, RO-2, RO-3, RO-4)
+           [substrate: SCH + MCP + UI + PRM; ADR-0007 candidate]
+Sprint 11: Roasting schema migrations bundle 2  (RO-CP-3, RO-5, RO-6)
+           [substrate: SCH + MCP + UI + PRM; ADR-0008 candidate]
+Sprint 12: Roasting scope-tag + MCP queue + arbiter extensions
+           (RO-CP-5, MCP-1, CR-4, CR-10)
+           [substrate: SCH + MCP + ARB + REG; L, possibly plan-execute split]
+Sprint 13: Cross-source synthesis + mobile capsule  (SYN-6, SYN-7, SYN-3)
+           [substrate: LIB + adapter + SCH; depends on Sprints 10-12 stable]
+Sprint 14: Roasting prompt vocab + recipe noun  (RO-CP-6, RO-4-final, DF-ARB1)
+           [substrate: PRM + ARB]
+```
+
+### ✅ Phase 3: Close-out
+
+```
+Sprint F:  Final cross-system sync against full delta of Sprints 1-14
+           [substrate: read-only audit; 6-actor matrix end-to-end]
+Sprint R:  PRODUCT.md / roadmap review
+           [substrate: PRD; reconciles 3.3-3.7 against post-grilling/post-dogfood state]
+```
+
+### Totals
+
+- 17 execution sprints (Sprint 0 + Sprints 1-14 + Sprint M + Sprint F + Sprint R)
+- 6 pre-dogfood sprints (0-5)
+- 1 pre-dogfood sync (M)
+- 1 BLOCKING GATE
+- 9 post-dogfood sprints (6-14)
+- 2 close-out sprints (F, R)
+
+**Wall-clock estimate**: ~2-3 weeks at ~1 sprint per session and 1-2 sessions per day, ~4-5 weeks if Chris chunks sessions less aggressively. L+ sprints (3, 5, 10, 11, 12, 13) may each span 2 sessions (plan + execute) per Chris-confirmed.
 
 ---
 
@@ -517,21 +577,15 @@ The v8.5 WBC corpus check Named Consideration bundles "WBC corpus + cross-cuttin
 
 **Mitigation**: Sprint 1's BR-2 review should explicitly check for this. If the writer (Claude Code) and reader (Chris) feel the composite obscures the test, promote BCP-6 from DEF to a same-sprint item.
 
-### 4.3 Brewing-side MCP changes during dogfood
+### 4.3 Brewing-side MCP changes during dogfood (RESOLVED)
 
-Chris's standing rule per cross-party correction: "no roasting MCP/prompt/schema changes until dogfood closes." Brewing-side MCP changes are unspecified.
+Chris-confirmed 2026-05-17: ALL brewing-side edits (schema, MCP Tools, prompts, registries, UI) are fair game during dogfood. The dogfood exercises the roasting + cupping iteration loop, not the brewing-side write surface. CR-5 moved from POST to PRE; lands in Sprint 3.
 
-CR-5 (`fermentation_qualifiers` column on `brews` + `push_brew` Tool field) is brewing-side MCP. I've classified it POST out of caution, but if Chris confirms brewing-side MCP edits are pre-safe, CR-5 could move to a pre-dogfood sprint.
+The brewing-side close-out full-fill flow DOES touch `push_brew` (the end of a closed bean produces a perfected-brew row), but Chris confirmed that's a separate workflow he's not blocking on for dogfood. Brewing-side MCP edits ride.
 
-**Mitigation**: open question § 5 below.
+### 4.4 SYN-8 split (RESOLVED)
 
-### 4.4 SYN-8 split (brewing-side rename vs roasting-side rename)
-
-The cross-coffee-insight-layer naming asymmetry edit touches both BREWING.md and ROASTING.md. I've split it across Sprint 1 (brewing-side, PRE) and Sprint 9 (roasting-side, POST) per Chris's no-roasting-during-dogfood rule. This creates a transient asymmetry between Sprints 1-9 where BREWING.md has the new name and ROASTING.md doesn't.
-
-**Mitigation**: name the transient state in Sprint 1's PR description; sprint 9's PR closes it. Or: bundle SYN-8 fully into Sprint 9 (both renames at once, post-dogfood) and accept the brewing-side delay. Sprint 1 is otherwise lighter — moving SYN-8 to Sprint 9 doesn't cost much.
-
-**Recommendation**: move SYN-8 fully to Sprint 9 (both sides together, post-dogfood). Removes the transient asymmetry.
+Chris-confirmed 2026-05-17: ship SYN-8 unified in Sprint 9 (both BREWING.md + ROASTING.md renamed together). Removes the transient asymmetry. Sprint 1 doesn't carry SYN-8.
 
 ### 4.5 Sprint 5 bundle size
 
@@ -545,11 +599,14 @@ Sprint 12 (RO-CP-5 + MCP-1 + CR-4 + CR-10 + CR-5) touches: schema (3 changes), M
 
 **Mitigation**: Sprint 12 kickoff brief includes the matrix as a checklist Claude Code completes inline before opening the PR.
 
-### 4.7 Round 8 timing uncertainty
+### 4.7 Round 8 scope expansion (likely, not just possible)
 
-The user said Round 8 may land 2026-05-18 (originally 2026-05-19, moved up). If Round 8 reveals new friction items, the dogfood cleanup queue grows — Sprints 6-8 sizing increases. Sprint 6 (DF Sub-PR A) is the most likely to grow.
+Chris-confirmed 2026-05-17: Round 8 may add items to the DF-* inventory ("there might be some additional items because of that last one, but that will be the last data point we look at, but that might increase the scope of the number of items in that"). Chris offered to send the Round 8 shape inline if load-bearing for execution; not blocking on it now.
 
-**Mitigation**: schedule Sprint M to run AFTER Round 8 lands and AFTER Chris updates the handoff brief with Round 8 items. Sprint M's report covers any new items that landed.
+**Mitigation**:
+- The blocking dogfood-merge gate explicitly waits for the Round-8-updated handoff brief before Sprint 6 begins (see § 3 gate item 3).
+- Sprint M runs after Sprint 5, BEFORE Round 8 lands — its scope is "audit Sprints 1-5 substrate," not "audit dogfood inventory." Sprint M doesn't block on Round 8.
+- Sprint 6's kickoff brief reads the updated handoff brief cold; if DF-A grows past 12-15 items, Sprint 6 splits into Sprint 6a (DF-A2 mechanical state-shape backfill leading) + Sprint 6b (remaining DF-A edits).
 
 ### 4.8 BREWING.md size already over 120KB tripwire
 
@@ -565,28 +622,39 @@ BREWING.md is at 188KB per CLAUDE.md sprint cadence § Standing tripwires. Sprin
 
 ---
 
-## 5. Open questions for Chris
+## 5. Resolved decisions (Chris-confirmed 2026-05-17)
 
-1. **Brewing-side MCP edits during dogfood**: is CR-5 (`fermentation_qualifiers` column on `brews` + `push_brew` Tool field) pre-safe or post-safe? Your no-roasting rule explicitly carves out roasting MCP/prompts/schema; brewing-side MCP isn't named. I've defaulted to POST out of caution but pre-safe would let it ride in Sprint 3.
+All 8 open questions from the initial draft are now resolved. Captured here for execution-session reference.
 
-2. **SYN-8 split or unified**: ship the BREWING.md ↔ ROASTING.md cross-coffee-insight-layer rename half-and-half (Sprints 1 + 9) or as a single Sprint 9 PR? Recommendation: Sprint 9 unified to avoid the transient asymmetry. Confirm.
+1. **Brewing-side MCP edits during dogfood**: PRE-safe. CR-5 (`fermentation_qualifiers` column + `push_brew` Tool field) moves to Sprint 3. All brewing-side schema/MCP/prompt/UI work is fair game during dogfood. The brewing-side close-out full-fill workflow is separate from the dogfood; not blocking on it.
 
-3. **Sprint 5 split threshold**: bundle 12 scoping/audit items as one sprint, or split into Sprint 5a (audits, 5 items) + Sprint 5b (decisions, 7 items) preemptively? Recommendation: ship as one with a checkpoint; only split if review load is too high.
+2. **SYN-8 split or unified**: UNIFIED in Sprint 9. Both BREWING.md and ROASTING.md renamed together post-dogfood. No half-rename in Sprint 1.
 
-4. **Round 8 fence verification**: is Round 8 the definitive end of the in-flight dogfood, or are there potential Round 9+ rounds that would push the fence further? Sprint 6 timing depends on this.
+3. **Sprint 5 split threshold**: ship as one with hard checkpoint after item 6. Only split into 5a + 5b if review load is too high mid-sprint.
 
-5. **ADR-0006 (substrate-practice gap audit)**: RO-CP-9 proposes scoping an ADR for the cross-party grilling mechanism itself. Sprint 5 includes this as a scoping deliverable. Confirm you want this scoped now vs deferred to "when a 3rd cross-party audit lands."
+4. **Round 8 fence**: Monday 2026-05-18 is the definitive last round. Chris will execute the one-shot.md production run from the new prompt + cup at day-7 + log Round 8 entry + update the handoff brief. May add items to the DF-* inventory; Sprint 6 sizing rebalances post-Round-8.
 
-6. **Schema migration sprint (DF-SCH1-SCH4)**: bundled as a single dedicated sprint after Sprint 14, or interleaved into Sprints 10-12 based on substrate overlap with the grilling-derived schema work? The 4 candidates aren't enumerated in this plan; recommendation is to enumerate them at Sprint 5 kickoff and decide bundling then.
+5. **ADR-0006 (substrate-practice gap audit)**: DEFERRED to "when a 3rd cross-party audit lands." Removed from Sprint 5. RO-CP-9 status = DEF.
 
-7. **Roadmap currency on Sprint 3.3-3.7**: PRODUCT.md § Active Sprints lists Sprint 3.3 (auto-supersede paired sprint), 3.4 (per-batch failure_boundary), 3.5 (Roest API parity Phase 3), 3.6 (BREWING/ROASTING doc reconciliation), 3.7 (Prompt v5 rewrites). The post-grilling sequence DOES NOT include these. Are these:
-   - Paused, reactivated after Sprint R?
-   - Folded into post-grilling sprints where overlap exists (Sprint 3.6 doc reconciliation has obvious overlap with Sprints 1 + 9; Sprint 3.7 Prompt v5 has obvious overlap with Sprint 6 DF Sub-PR A)?
-   - Still queued in their original sequence and these sprints run BEFORE 3.3?
-   
-   This is the largest unresolved sequencing question. Recommendation: Sprint R explicitly reconciles PRODUCT.md § Active Sprints against the post-grilling shipped state.
+6. **DF-SCH1-SCH4 enumeration**: enumerate at Sprint 5 kickoff. Bundling decision (single dedicated sprint after Sprint 14, or interleaved into Sprints 10-12) made at enumeration time when substrate overlap is visible.
 
-8. **Sprint cadence vs session cadence**: this plan assumes 1 sprint per session. Some sprints (Sprint 5, Sprint 10, Sprint 12) are L-sized — they may want 2 sessions (plan + execute). Confirm the plan-execute split policy for L+ sprints.
+7. **PRODUCT.md § Active Sprints 3.3-3.7 sequencing**: see new § 6 below. Sprint R reconciles 3.3-3.7 against the post-grilling/post-dogfood/post-consistency-check state. Do not interleave 3.3-3.7 into the current sequence.
+
+8. **Sprint cadence vs session cadence**: L+ sprints may split plan and execute across two sessions. Avoid mega-sessions. Plan stays as one sprint conceptually; execution may take two sessions when prudent. L-sized sprints flagged in § 2 / § 3 with the "plan-execute split candidate" note.
+
+## 6. PRODUCT.md § Active Sprints 3.3-3.7 scope-impact assessment
+
+Quick read against the existing PRODUCT.md § Active Sprints to surface overlap with the post-grilling work. Chris's directive: reconcile these at Sprint R (after grilling + dogfood + consistency check land), not interleave into the current sequence.
+
+| PRODUCT.md sprint | Original scope | Overlap with post-grilling sequence | Expected Sprint R disposition |
+|---|---|---|---|
+| **3.3** Auto-supersede paired sprint (#R88 + #R89 + MCP tool-list cache visibility) | 3 items, ~2-3h. `supersede_ids[]` parameter on `propose_doc_changes` + arbiter-side implicit-intent gap + MCP tool-list cache visibility | None. Independent MCP work. | **Survives intact**. Ships as scoped after Sprint R. |
+| **3.4** Per-batch failure_boundary breach record | Plan-mode + impl. `failure_boundary` text → structured JSON + per-batch breach record + `/green/[id]` render. Schema work on `experiments`. | Adjacent to RO-CP-3 (fc_audibility enum on roasts) and Sprint 11/12 schema work. The CONTEXT.md "Experiment frame" entry names `failure_boundary` as a frame field. | **Survives**, possibly absorbed into Sprint 11 or 12 if substrate overlap warrants. Re-scope at Sprint R. |
+| **3.5** Roest API parity Phase 3 | 7 items pull-side schema sweep. Includes #R65 HIGH IMPACT (Roest UTC date miscoding). | None. Independent Roest API integration work. #R65 is high-priority bug; should not be further delayed. | **Survives intact**, possibly bumped in priority if Sprint 11 schema sprints exposed more pull-side gaps. |
+| **3.6** BREWING/ROASTING doc reconciliation | Doc-content fixes bundled. ROASTING.md anchor-confidence framing + R52 (BREWING.md subprocess spec disagrees with canonical) + R70-72 (STAGE 8 routing, Active Lots, one-shot calibration) + schema-describe micro-fixes (R45/R48/R51/R69/R86). | **HIGH overlap with Sprint 1 (BREWING.md edits) + Sprint 9 (ROASTING.md edits) + Sprint 14 (prompt vocab) + Sprint 7 (DF-B MCP schema-describe fixes).** Anchor-confidence framing is now in ADR-0003 (anchor profile canonicalization); schema-describe items overlap with DF-B 8 items. | **Scope shrinks substantially**. Sprint R re-scopes what's left. Likely the bulk of 3.6 absorbs into the post-grilling work; residual items become a small follow-up sprint. |
+| **3.7** Prompt v5 rewrites | 9 items. `in-process-bean-incremental-sync.md` + `new-bean-intake.md` updates. R76-84: list_roest_inventory call + hopper_load_temp describe + density TBM + STAGE 1 drift + STAGE renumbering + patch_* mentioned + cupping composite key + STAGE 6 softened + producer_override caveat. | **HIGH overlap with Sprint 6 (DF Sub-PR A 10+ prompt-edit items) + Sprint 14 (roasting prompt vocab + recipe noun).** The 4-prompt rewrite shipped as PR #157 already addressed `new-bean-intake.md` and the lifecycle prompts. | **Scope shrinks substantially**. Sprint R re-scopes; many items absorbed by DF-A2 STAGE-0 state-shape migration + DF-A3-A10. Residual items become small follow-up sprint or fold into Sprint 14's RO-4 prompts vocab audit. |
+
+**Sprint R deliverable**: a re-scoped PRODUCT.md § Active Sprints reflecting what's actually left of 3.3-3.7 after the post-grilling/post-dogfood work lands. Per Chris-confirmed: "look at all the product.md roadmap things and only do the ones in the context of what has actually been changed to merge all that stuff into the new main going forward."
 
 ---
 
