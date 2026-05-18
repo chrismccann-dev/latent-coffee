@@ -17,10 +17,11 @@ Subsequent execution sessions consume this doc one sprint at a time, fresh conte
 6. PRODUCT.md § Active Sprints 3.3-3.7 scope-impact assessment (Chris-requested)
 
 Standing fences:
-- **Dogfood close**: Round 8 (one-shot.md production run, scheduled 2026-05-18, Chris-confirmed definitive last). NO roasting-side MCP / prompt / schema changes ship before this fence.
-- **Brewing-side is fully fair game during dogfood (Chris-confirmed 2026-05-17)**. The dogfood exercises the roasting + cupping iteration loop, not the brewing-side write surface. Brewing-side schema, MCP Tools, prompts, registries, and UI are pre-safe.
-- **Doc-only roasting changes** (CONTEXT.md, ADRs, ROASTING.md prose, docs/roasting/*.md prose) are also pre-safe. The "no roasting changes" rule is scoped to MCP / prompt / schema only per Chris's correction in [grilling-2026-05-17-brewing-cross-party-followups.md](grilling-2026-05-17-brewing-cross-party-followups.md). HOWEVER, per Chris-confirmed 2026-05-17, SYN-8's roasting-side rename ships unified with the brewing-side in Sprint 9 (post-dogfood) to avoid any risk to claude.ai's roasting-substrate read during dogfood.
-- **Round 8 may grow the dogfood inventory**. Chris flagged that Round 8 could add items to the DF-* queue. Sprint 6's exact sizing is gated on the post-Round-8 handoff brief update.
+- **Dogfood closed 2026-05-18 at Round 7**. Original plan was 8 rounds; Round 7 wrapped up the full loop earlier than expected. Closeout docs shipped as [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172). Dogfood-merge gate is now OPEN (see § 3).
+- **Polish PR (Sprints 6-8) is the dogfood deliverable**: 28 items total (13 A prompt edits + 9 B MCP schema-description fixes + 3 C page-render polish + 3 CONTEXT.md additions). Authoritative scope at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md); reconciliation rules at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md).
+- **Dedup rule**: per the reconciliation summary, when a post-grilling followup item touches a file in the polish PR's touch-list AND ships at or before Sprints 6-8, the polish PR ships first and the post-grilling edit rebases. Default applied unless Chris reverses for a specific item.
+- **Brewing-side is fully fair game**. The dogfood exercised the roasting + cupping iteration loop, not the brewing-side write surface. Brewing-side schema, MCP Tools, prompts, registries, and UI are pre-safe and were already pre-safe even pre-Round-7.
+- **SYN-8 unified in Sprint 9** (per Chris-confirmed 2026-05-17). Both BREWING.md + ROASTING.md renamed together; no half-rename in Sprint 1.
 - **No --global git config** in any execution sprint (worktree-local `user.email=chris.r.mccann@gmail.com` only).
 
 ---
@@ -157,77 +158,109 @@ Items 1-2 shipped as [PR #167](https://github.com/chrismccann-dev/latent-coffee/
 
 ### Part B: Dogfood cleanup queue (post-Round-7 handoff brief, all POST by construction)
 
-Source: `docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md` (paste-ready brief in the other session's worktree; canonical recap pasted inline in the planning session prompt). All items are POST-dogfood-close — they target the dogfood-produced friction, not pre-dogfood-safe substrate.
+Authoritative source: [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md) (per-item rationale + round of origin) + [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md) (dedup rules + overlap risks against post-grilling clusters). All items are POST-dogfood-close. Dogfood closed 2026-05-18 at Round 7. **28 polish-PR items total** (Sprints 6-8) + the deferred schema-migration + arbiter + operational items below.
 
-#### B.1 Sub-PR A — Prompt edits (10 items, `docs/prompts/`)
+#### B.1 Sub-PR A — Prompt edits (13 items, `docs/prompts/`)
 
-| ID | Title | Files touched | Scope | Highlight |
-|---|---|---|---|---|
-| DF-A1 | (Round 1+ catch-all) | log-roast.md | S | |
-| DF-A2 | **log-cupping.md STAGE 0 state-shape migration** | log-cupping.md | M | **Highest-leverage in the entire queue.** Supersedes 4+ prior round-specific items (R1#2, R3#2/#3/#5, R4#6/#7 implicit). Single-shot mechanical backfill that detects pre-rewrite-lot state in STAGE 1 and walks claude.ai through writing new-prompt fields. |
-| DF-A3 | (Round 2-5 friction) | log-roast.md / log-cupping.md | S | |
-| DF-A4 | (Round 3-4 friction) | close-lot.md | S | |
-| DF-A5 | (Round 5 one-shot.md friction) | one-shot.md | S | |
-| DF-A6 | (Round 5 one-shot-closeout.md friction) | one-shot-closeout.md | S | |
-| DF-A7-A10 | (Round 6+7 incremental fixes) | various 5 prompt files | S each | Exact decomposition pending re-read of full handoff brief in execution session. |
+Sprint 6. Files touched: `log-roast.md` + `log-cupping.md` (heaviest, 9 items) + `close-lot.md` + `one-shot.md` + `one-shot-closeout.md`.
 
-Full enumeration of A-items will be re-read from the handoff brief at execution-sprint kickoff (the user pasted the high-level recap into this session; full item-by-item decomposition is in the handoff brief itself).
-
-#### B.2 Sub-PR B — MCP schema-description + behavior fixes (8 items, `lib/mcp/*.ts`)
-
-| ID | Title | Files touched | Scope |
+| ID | Title | Files | Scope |
 |---|---|---|---|
-| DF-B1-B8 | Schema-description rewording + behavior fixes across 6 MCP Tool files | lib/mcp/push-*.ts + lib/mcp/patch-*.ts | S each |
+| DF-A1 | log-roast.md STAGE 1 halt-and-report relaxation | log-roast.md | S |
+| DF-A2 | **log-cupping.md STAGE 0 state-shape migration with worked-content examples** | log-cupping.md | M |
+| DF-A3 | log-cupping.md STAGE 4 Path C expansion to TWO variants (C-1 calibration / C-2 discriminator) | log-cupping.md | M |
+| DF-A4 | log-cupping.md STAGE 2 rest_days + date-drift handling | log-cupping.md | S |
+| DF-A5 | log-cupping.md STAGE 3 winner format guidance | log-cupping.md | XS |
+| DF-A6 | log-cupping.md STAGE 3 prose-field disambiguation guide | log-cupping.md | S |
+| DF-A7 | log-cupping.md stage-write directive checklists at each STAGE | log-cupping.md | S |
+| DF-A8 | one-shot-closeout.md + close-lot.md STAGE 2 is_reference vs worth_repeating decoupling | one-shot-closeout.md + close-lot.md | S |
+| DF-A9 | log-roast.md STAGE 1 batch_slot NULL fallback (infer from roast_profile_name) | log-roast.md | S |
+| DF-A10 | one-shot.md + one-shot-closeout.md stage-write directive checklists | one-shot.md + one-shot-closeout.md | S |
+| DF-A11 | log-cupping.md + close-lot.md STAGE 3 key_insight_confidence ladder operationalization | log-cupping.md + close-lot.md | S |
+| DF-A12 | log-cupping.md STAGE 6 "skip and report why" language | log-cupping.md | XS |
+| DF-A13 | log-cupping.md STAGE 3 delta_from_cup_* description extension (walk three taste_for points) | log-cupping.md | XS |
 
-Exact decomposition pending re-read of full handoff brief; 8 items distributed across 6 tool files.
+**Sprint-killers (must land before others)**: DF-A2 (state-shape migration superseding 4+ Round 1/3/4/6 items) + DF-A3 (Path C expansion superseding the Round 3 + Round 7 invented routing pattern).
 
-#### B.3 Sub-PR C — Page-render polish (3 items, `app/(app)/green/[id]/page.tsx`)
+#### B.2 Sub-PR B — MCP schema-description + behavior fixes (9 items, `lib/mcp/*.ts`)
 
-| ID | Title | Files touched | Scope |
+Sprint 7. Files touched: 6 MCP tool files. One item (DF-B14) is a behavior fix; the other 8 are Zod schema description rewords.
+
+| ID | Title | Files | Scope |
 |---|---|---|---|
-| DF-C1-C3 | Page-render polish on green-bean detail page | app/(app)/green/[id]/page.tsx | S each |
+| DF-B14 | patch-experiment.ts omit `canonical_values: {}` when empty (behavior fix) | patch-experiment.ts | S |
+| DF-B15 | push-experiment.ts + patch-experiment.ts delta_from_cup_* description fallback | push-experiment.ts + patch-experiment.ts | XS |
+| DF-B16 | push-roast-recipe.ts parent_recipe_id semantics relax (directional-ancestor) | push-roast-recipe.ts | XS |
+| DF-B17 | push-roast-profile.ts + push-roast.ts BEAN_TEMP vs bean_temp case notes | push-roast-profile.ts + push-roast.ts | XS |
+| DF-B18 | push-roast.ts + patch-roast.ts is_reference description decouple from worth_repeating | push-roast.ts + patch-roast.ts | XS |
+| DF-B19 | push-experiment.ts + patch-experiment.ts batch_ids description + 16 cross-batch field enumeration | push-experiment.ts + patch-experiment.ts | XS |
+| DF-B20 | propose-doc-changes.ts ASCII-vs-Unicode normalization documentation | propose-doc-changes.ts | XS |
+| DF-B21 | patch-experiment.ts winner canonical_values echo | patch-experiment.ts | XS |
+| DF-B22 | push-experiment.ts + patch-experiment.ts key_insight_confidence ladder description | push-experiment.ts + patch-experiment.ts | XS |
 
-#### B.4 CONTEXT.md additions (2 items)
+#### B.3 Sub-PR C — Page-render polish + CONTEXT.md additions (6 items)
 
-| ID | Title | Files touched | Scope |
+Sprint 8. Files touched: `app/(app)/green/[id]/page.tsx` + `CONTEXT.md`.
+
+| ID | Title | Files | Scope |
 |---|---|---|---|
-| DF-CTX1-CTX2 | 2 glossary entries surfaced during dogfood Rounds 0-7 | CONTEXT.md | XS each |
+| DF-C23 | WaitingForNextRoastView section reorder (V_n question first) | app/(app)/green/[id]/page.tsx | S |
+| DF-C24 | WaitingForNextCuppingView section reorder (V_n question first) | app/(app)/green/[id]/page.tsx | S |
+| DF-C25 | Design/Achieved diff render on WaitingForNextCuppingView ROAST ACTUALS card | app/(app)/green/[id]/page.tsx | M |
+| DF-CTX26 | "Pre-V_n calibration gate" entry under § Forward design | CONTEXT.md | XS |
+| DF-CTX27 | "Closed without reference" entry on is_reference orthogonality | CONTEXT.md | XS |
+| DF-CTX28 | `key_insight_confidence` ladder operationalization entry | CONTEXT.md | XS |
 
-#### B.5 Schema migration sprint (4 candidates, separate future sprint)
+#### B.4 Schema migration sprint (5 candidates, separate future sprint — enumerated at Sprint 5 kickoff per Chris-confirmed)
 
-| ID | Title | Substrate | Scope |
-|---|---|---|---|
-| DF-SCH1-SCH4 | 4 schema migration candidates surfaced during dogfood | SCH + MCP + UI | L (bundled sprint) |
+Concrete candidates surfaced during dogfood (per reconciliation summary § Out-of-scope):
 
-#### B.6 Long-term arbiter task
+| ID | Title | Substrate |
+|---|---|---|
+| DF-SCH-CAND-1 | `cuppings.wb_to_ground_delta` | SCH + UI |
+| DF-SCH-CAND-2 | `is_reference_candidate` (column TBD) | SCH + MCP + UI |
+| DF-SCH-CAND-3 | `cuppings.sweetness` | SCH + UI |
+| DF-SCH-CAND-4 | `roast_recipes.was_backfilled` | SCH + UI |
+| DF-SCH-CAND-5 | `experiments.taste_for_validation_*` | SCH + MCP + UI |
+
+Sprint 5 kickoff: enumerate + decide bundling (single dedicated sprint after Sprint 14, or interleaved into Sprints 10-12 by substrate overlap).
+
+#### B.5 Long-term arbiter task
 
 | ID | Title | Substrate | Scope |
 |---|---|---|---|
 | DF-ARB1 | ARBITER.md playbook expansion (CCIL consolidation arbiter task) | ARB | M |
 
-#### B.7 Open investigations
+#### B.6 Operational backfills (Chris-driven, not in any PR scope)
 
 | ID | Title | Substrate | Scope |
 |---|---|---|---|
-| DF-INV1-INV2 | Vercel logs intermittent fail patterns | investigation | S each |
+| DF-OPS1 | CGLE Sudan Rume Natural V5 recipe rows backfill | OPS | OPS |
+| DF-OPS2 | Historical end_condition backfill on roasts ≤ batch 169 | OPS | OPS |
 
-#### B.8 Operational backfills
+#### B.7 Higuito V3 real-pourover discriminator (operational, Chris-driven)
+
+Separate from the polish PR per reconciliation summary § Out-of-scope. Operational brewing-side work. Not in any sprint.
+
+#### B.8 Pour-over discriminator gate + optimized brew lifecycle states (NEW — Chris-flagged 2026-05-18 as near-term)
 
 | ID | Title | Substrate | Scope |
 |---|---|---|---|
-| DF-OPS1-OPS2 | Chris-driven operational backfills | OPS | OPS |
+| POD-1 | First-class workflow state for the Path C interim pour-over discriminator + the post-reference-roast optimized-brew dial-in phase | SCH + UI + PRM + CTX | XL (full sprint) |
+
+Per Chris-confirmed 2026-05-18 framing in [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](pourover-discriminator-and-optimized-brew-states-kickoff.md): "near-term, not longer-term — it maps onto what Chris actually does in his roasting workflow, and the system should reflect that." Triggers as the first "new thing to take on" after Sprint R closes (post-grilling sequence completes). Lives in DEF for this plan; surfaces in Sprint R for promotion.
 
 ### Inventory totals after dedupe
 
 - Grilling followups (Parts A.1-A.8): **70 raw items → ~63 unique** after collapsing duplicates (RO-3≡RO-CP-7; RO-5≡RO-CP-8; MCP-2≡BR-1; CR-8≡WBC-3; CR-9≡WBC-4-large) and removing resolved/shipped/done items (MCP-5, MCP-7, MCP-8, CR-12, BCP-1, BCP-2-partial).
-- Dogfood cleanup queue (Part B): **32 items**.
-- Grand total: **~95 unique items** across the planning surface.
+- Dogfood cleanup queue (Part B): **28 polish-PR items** (Sprints 6-8) + 5 schema-migration candidates + 1 arbiter task + 2 operational backfills + 1 pour-over discriminator state expansion = 37 items total.
+- Grand total: **~100 unique items** across the planning surface.
 
-Status mix after dedupe + Chris-confirmed reclassifications (2026-05-17):
+Status mix after Chris-confirmed reclassifications (2026-05-17) + dogfood close (2026-05-18):
 - `DONE` (already shipped or resolved): 6 items (BCP-1, MCP-5, MCP-7, MCP-8, CR-12, BCP-2-partial)
-- `PRE` (pre-dogfood-safe, execution-ready): ~23 items (+CR-5 moved from POST; -RO-CP-9 moved to DEF; -SYN-8 moved to POST = net +0 from prior count of ~22, but composition shifted)
-- `POST` (post-dogfood-only): ~17 items + 32 dogfood items = ~49 items (CR-5 left POST; SYN-8 joined; RO-CP-9 left)
-- `DEF` (deferred future-scope): ~19 items (+RO-CP-9)
+- `PRE` (pre-dogfood-safe, execution-ready): ~23 items
+- `POST` (post-dogfood-only, gate now OPEN): ~17 items + 28 polish-PR items = ~45 items
+- `DEF` (deferred future-scope): ~20 items (+ POD-1 pour-over discriminator)
 
 ---
 
@@ -340,31 +373,37 @@ Triggers after Sprint 5 closes and BEFORE any post-dogfood sprint begins. Runs t
 
 These run AFTER Round 8 closes the dogfood (target: 2026-05-18 + Round 8 completion). The dogfood cleanup queue (DF-A through DF-OPS) is the highest priority because it's the most current friction.
 
-#### Sprint 6 — DF Sub-PR A: Prompt edits (10 items)
+#### Sprint 6 — DF Sub-PR A: Prompt edits (13 items)
 
-**Bundled items**: DF-A1 through DF-A10. The handoff brief recommends shipping this as Sub-PR A first.
+**Bundled items**: DF-A1 through DF-A13 (full enumeration in § 1 Part B.1).
 
-**Highlighted item**: DF-A2 — log-cupping.md STAGE 0 state-shape migration. Supersedes 4+ prior round-specific items. Land this first within the sprint; the other 9 prompt edits ride along.
+**Sprint-killers** (land first within the sprint):
+- DF-A2 — log-cupping.md STAGE 0 state-shape migration with worked-content examples. Supersedes 4+ Round 1/3/4/6 items.
+- DF-A3 — log-cupping.md STAGE 4 Path C expansion to TWO variants (C-1 calibration / C-2 discriminator). Supersedes Round 3 + Round 7 claude.ai-invented routing.
 
-**Estimated PRs**: 1 (or 2 if DF-A2 wants its own PR for review depth).
+**Estimated PRs**: 1 (single polish PR). If DF-A2 + DF-A3 are large enough, they may get their own commit-pair inside the PR for review depth.
 
-**Sizing**: M.
+**Sizing**: M-L (sizing grew from M when item count went 10 → 13 in the final brief).
 
-#### Sprint 7 — DF Sub-PR B: MCP schema-description + behavior fixes (8 items)
+**Coordination**: per reconciliation summary, this PR ships before any post-grilling cluster item that touches `docs/prompts/log-roast.md` / `log-cupping.md` / `close-lot.md` / `one-shot.md` / `one-shot-closeout.md`. RO-4 (Sprint 14) explicitly rebases on this PR.
 
-**Bundled items**: DF-B1 through DF-B8 across 6 MCP Tool files.
+#### Sprint 7 — DF Sub-PR B: MCP schema-description + behavior fixes (9 items)
 
-**Estimated PRs**: 1.
-
-**Sizing**: M.
-
-#### Sprint 8 — DF Sub-PR C + CONTEXT.md additions (5 items combined)
-
-**Bundled items**: DF-C1-C3 (page-render polish) + DF-CTX1-CTX2 (CONTEXT.md additions).
+**Bundled items**: DF-B14 through DF-B22 across 6 MCP Tool files (push-experiment.ts / patch-experiment.ts / push-roast-recipe.ts / push-roast-profile.ts / push-roast.ts / patch-roast.ts / propose-doc-changes.ts). DF-B14 is the one behavior fix; the other 8 are Zod-schema description rewords.
 
 **Estimated PRs**: 1.
 
-**Sizing**: S.
+**Sizing**: M.
+
+**Coordination**: per reconciliation summary, this PR ships before any post-grilling cluster item touching the 6 MCP files above. MCP-1 (Sprint 12) touches `push-green-bean.ts` (not on this list) so no conflict.
+
+#### Sprint 8 — DF Sub-PR C + CONTEXT.md additions (6 items combined)
+
+**Bundled items**: DF-C23 / DF-C24 / DF-C25 (page-render polish on green-bean detail page) + DF-CTX26 / DF-CTX27 / DF-CTX28 (3 CONTEXT.md entries: Pre-V_n calibration gate / Closed-without-reference clarifier / key_insight_confidence ladder operationalization).
+
+**Estimated PRs**: 1.
+
+**Sizing**: S-M (DF-C25 Design/Achieved diff render is the largest single item).
 
 #### Sprint 9 — Roasting cluster doc edits (post-dogfood)
 
@@ -452,9 +491,10 @@ Triggers after Sprint F closes. Walks PRODUCT.md § Active Sprints / Newly queue
 
 | ID(s) | Title | Trigger |
 |---|---|---|
-| DF-SCH1-SCH4 | Dogfood schema migration sprint (4 candidates) | After Sprint 14; bundle as a separate dedicated migration sprint. |
-| DF-INV1-INV2 | Vercel intermittent fail investigations | Trigger on next failure occurrence. |
-| DF-OPS1-OPS2 | Operational backfills | Chris-driven; standalone. |
+| DF-SCH-CAND-1..5 | Dogfood schema migration sprint (5 candidates) | Enumerated at Sprint 5 kickoff; bundle decision at that time. Candidates: `cuppings.wb_to_ground_delta` / `is_reference_candidate` / `cuppings.sweetness` / `roast_recipes.was_backfilled` / `experiments.taste_for_validation_*`. |
+| DF-OPS1 | CGLE Sudan Rume Natural V5 recipe rows backfill | Chris-driven; standalone. |
+| DF-OPS2 | Historical end_condition backfill on roasts ≤ batch 169 | Chris-driven; standalone. |
+| POD-1 | Pour-over discriminator gate + optimized brew lifecycle states | Chris-flagged near-term 2026-05-18; first "new thing to take on" candidate after Sprint R. Full scope at [pourover-discriminator-and-optimized-brew-states-kickoff.md](pourover-discriminator-and-optimized-brew-states-kickoff.md). |
 | CR-7-promote | SWORKS valve flow taxonomy promotion (post-scoping) | After CR-7's scoping decision in Sprint 5. |
 | CR-9 / WBC-4-large | Water taxonomy bootstrap | Large bottoms-up authoring sprint; trigger when Chris has bandwidth. |
 | WBC-3 / CR-8 | Filter behavior measurement OPS | Chris-physical-world work. |
@@ -496,30 +536,30 @@ Sprint M:  Mid-sequence cross-system sync against Sprints 1-5
            [substrate: read-only audit; no edits unless drift surfaces]
 ```
 
-### 🚨 BLOCKING GATE: DOGFOOD MERGE 🚨
+### ✅ DOGFOOD MERGE GATE: OPEN (as of 2026-05-18)
 
-**Cannot proceed to Sprint 6 until ALL of the following are true**:
+The gate Chris specified is now satisfied. Verification trace:
 
-1. Round 8 (one-shot.md production run on Higuito V3 or equivalent) has been executed by Chris on the Roest L200 + cupped at day-7
-2. The continuous feedback log (`memory/feedback_mcp_continuous_log.md`) has its Round 8 entry written
-3. The dogfood handoff brief (`docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md` or successor) is updated with any Round 8 friction items appended to the DF-* inventory
-4. Chris confirms in-session: "dogfood is closed, DF inventory is locked, you may proceed to Sprint 6"
-5. The handoff brief is merged to `main` so Claude Code can read the full DF inventory cold
+1. ✅ **Dogfood loop closed at Round 7** (Chris-confirmed 2026-05-18). Original plan was 8 rounds; Round 7 wrapped up the full loop earlier than expected. The closeout brief explicitly names Round 7 as the final round.
+2. ✅ **Continuous feedback log Round 7 entry written** (`memory/feedback_mcp_continuous_log.md`).
+3. ✅ **Dogfood handoff brief merged to main** as part of [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172) (2026-05-18). Brief lives at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md).
+4. ✅ **Reconciliation summary shipped** at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md). Per-item dedup rules + 5 overlap-risk callouts documented.
+5. ✅ **DF inventory locked** at 28 polish-PR items (Sprints 6-8) + 5 schema-migration candidates + 1 arbiter task + 2 operational backfills + 1 new pour-over discriminator state expansion (POD-1, DEF until Sprint R).
 
-**Sprint 6 kickoff session must verify all 5 conditions before doing any DF-A work.** If any condition is unmet, the session pauses and surfaces the gap to Chris.
+**Sprint 6 kickoff session can proceed without additional verification.** Read the handoff brief + reconciliation summary at kickoff; bundle DF-A items per their order in the polish-PR enumeration (DF-A2 + DF-A3 are the sprint-killers and land first within the sprint).
 
-**Trigger**: Round 8 is Chris-confirmed for Monday 2026-05-18. Estimated gate opens within ~24-48h of Round 8 cupping completion.
+**Reconciliation rule (per summary § Deduplication)**: when a post-grilling followup touches a file in the polish PR's touch-list AND ships at or before Sprints 6-8, the polish PR ships first and the post-grilling edit rebases. The polish PR's touch-list is enumerated in the reconciliation summary § Files the polish PR touches.
 
-**Risk**: Round 8 may grow the DF inventory. Sprint 6 sizing rebalances based on the post-Round-8 brief; if DF-A exceeds 12-15 items it splits into DF-A1 (mechanical state-shape backfill: DF-A2 only) + DF-A2 (remaining edits).
+**Coordination point (RO-4)**: the only known overlap requiring sequencing care is RO-4 (Audit `docs/prompts/` for new vocabulary, scheduled for Sprint 14). The reconciliation summary confirms RO-4's vocabulary additions (post-RO-1/3/6 schema renames) don't conflict with the polish PR's prompt edits, but RO-4 must rebase on whatever the polish PR settles in `docs/prompts/log-roast.md` + `log-cupping.md` + `close-lot.md` + `one-shot.md` + `one-shot-closeout.md`.
 
-### 🔒 Phase 2: Post-dogfood (BLOCKED until gate opens)
+### ✅ Phase 2: Post-dogfood (gate now OPEN as of 2026-05-18)
 
 ```
-Sprint 6:  DF Sub-PR A  (10+ prompt-edit items; DF-A2 STAGE-0 state-shape migration leads)
+Sprint 6:  DF Sub-PR A  (13 prompt-edit items; DF-A2 STAGE-0 migration + DF-A3 Path C expansion lead)
            [substrate: PRM]
-Sprint 7:  DF Sub-PR B  (8 MCP description + behavior fixes across 6 Tool files)
+Sprint 7:  DF Sub-PR B  (9 MCP description + behavior fixes across 6 Tool files)
            [substrate: MCP]
-Sprint 8:  DF Sub-PR C + CONTEXT.md additions  (3 page-render + 2 CTX entries)
+Sprint 8:  DF Sub-PR C + CONTEXT.md additions  (3 page-render + 3 CTX entries)
            [substrate: UI + CTX]
 Sprint 9:  Roasting cluster doc edits + unified cross-coffee rename
            (RO-CP-1, RO-CP-2, SYN-8 both sides)
@@ -599,14 +639,13 @@ Sprint 12 (RO-CP-5 + MCP-1 + CR-4 + CR-10 + CR-5) touches: schema (3 changes), M
 
 **Mitigation**: Sprint 12 kickoff brief includes the matrix as a checklist Claude Code completes inline before opening the PR.
 
-### 4.7 Round 8 scope expansion (likely, not just possible)
+### 4.7 Dogfood close scope (RESOLVED)
 
-Chris-confirmed 2026-05-17: Round 8 may add items to the DF-* inventory ("there might be some additional items because of that last one, but that will be the last data point we look at, but that might increase the scope of the number of items in that"). Chris offered to send the Round 8 shape inline if load-bearing for execution; not blocking on it now.
+Dogfood closed at Round 7 (2026-05-18), one round earlier than originally planned. DF-A grew from the planning-time estimate of 10 to a final 13 items; DF-B grew 8 → 9; DF-C 3 → 3; CONTEXT.md additions 2 → 3. Total polish PR scope: 28 items.
 
-**Mitigation**:
-- The blocking dogfood-merge gate explicitly waits for the Round-8-updated handoff brief before Sprint 6 begins (see § 3 gate item 3).
-- Sprint M runs after Sprint 5, BEFORE Round 8 lands — its scope is "audit Sprints 1-5 substrate," not "audit dogfood inventory." Sprint M doesn't block on Round 8.
-- Sprint 6's kickoff brief reads the updated handoff brief cold; if DF-A grows past 12-15 items, Sprint 6 splits into Sprint 6a (DF-A2 mechanical state-shape backfill leading) + Sprint 6b (remaining DF-A edits).
+Sprint 6 is now sized M-L (up from M planning-estimate); plan-execute split into two sessions is the recommended cadence per Chris's standing caution about mega-sprints. The sprint-killers (DF-A2 state-shape migration + DF-A3 Path C expansion) land in the first session; remaining 11 prompt edits land in the second.
+
+**New scope item out of Round 7**: POD-1 (pour-over discriminator gate + optimized brew lifecycle states) surfaced as a near-term product expansion. Lives in DEF for this plan; first "new thing to take on" candidate at Sprint R.
 
 ### 4.8 BREWING.md size already over 120KB tripwire
 
@@ -632,7 +671,7 @@ All 8 open questions from the initial draft are now resolved. Captured here for 
 
 3. **Sprint 5 split threshold**: ship as one with hard checkpoint after item 6. Only split into 5a + 5b if review load is too high mid-sprint.
 
-4. **Round 8 fence**: Monday 2026-05-18 is the definitive last round. Chris will execute the one-shot.md production run from the new prompt + cup at day-7 + log Round 8 entry + update the handoff brief. May add items to the DF-* inventory; Sprint 6 sizing rebalances post-Round-8.
+4. **Dogfood close (was "Round 8 fence")**: dogfood loop closed 2026-05-18 at Round 7, one round earlier than the original plan. Closeout docs shipped as [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172) (handoff brief + reconciliation summary). Final polish-PR count: 28 items (13 A + 9 B + 3 C + 3 CONTEXT.md). DF inventory locked.
 
 5. **ADR-0006 (substrate-practice gap audit)**: DEFERRED to "when a 3rd cross-party audit lands." Removed from Sprint 5. RO-CP-9 status = DEF.
 
@@ -662,9 +701,13 @@ Quick read against the existing PRODUCT.md § Active Sprints to surface overlap 
 
 - Grilling followup files: `docs/sprints/grilling-2026-05-14-followups.md` through `grilling-2026-05-17-roasting-cross-party-followups.md`
 - ADRs landed during grilling: `docs/adr/0003-anchor-vocabulary-canonicalization.md`, `0004-vset-close-schema-writing-seam.md`, `0005-parameter-type-conditional-signal-arbitration.md`
-- Dogfood handoff brief: `docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md` (pending merge to main from the parallel dogfood session)
-- Continuous feedback log: `~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_continuous_log.md` (Rounds 0-7 logged; Round 8 incoming)
+- **Dogfood closeout (shipped 2026-05-18 in [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172))**:
+  - Handoff brief: `docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md` (per-item rationale)
+  - Reconciliation summary: `docs/sprints/dogfood-polish-pr-reconciliation-summary.md` (dedup rules + overlap risks)
+- **Near-term product expansion kickoff**: `docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md` (POD-1 scope)
+- Continuous feedback log: `~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_continuous_log.md` (Rounds 0-7 logged; dogfood closed at Round 7)
 - Methodology rules memory: `~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_grilling_methodology_rules.md` (R1 grep-first / R2 analytical-vs-operational / R3 confabulation ledger)
+- PRs in flight or shipped: [#157](https://github.com/chrismccann-dev/latent-coffee/pull/157) (V-set 4-prompt rewrite, merged) · [#158](https://github.com/chrismccann-dev/latent-coffee/pull/158) (One-shot framework, merged) · [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172) (Dogfood closeout docs, merged) · [#169](https://github.com/chrismccann-dev/latent-coffee/pull/169) (this plan, draft pending Chris-approval)
 - Standing rules: `feedback_cross_system_audit.md`, `feedback_vercel_bundle_static_files.md`, `feedback_grilling_refresh_at_feature_ship.md`
 
 ## Appendix B: Plan revision protocol
