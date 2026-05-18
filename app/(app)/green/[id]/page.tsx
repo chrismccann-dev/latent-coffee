@@ -204,18 +204,10 @@ function WaitingForNextRoastView({
         </div>
       </div>
 
-      {/* Experiment Frame card (Sub Pages 6.7) — visible above the Roasts
-          card so the design-time context renders before the per-batch
-          knobs. Auto-hides when no frame fields populated. */}
-      {latestExp && (
-        <ExperimentFrameCard
-          latestExp={latestExp}
-          title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}
-        />
-      )}
-
-      {/* Roasts · V_n card. The V-label comes from experiment_id when set
-          (e.g. "MX-DEV-v3" → "V3"); falls back to the full label otherwise. */}
+      {/* Roasts · V_n card (cleanup-actions PR #23 reorder, was below
+          ExperimentFrame pre-PR). The V-label comes from experiment_id
+          when set (e.g. "MX-DEV-v3" → "V3"); falls back to the full label
+          otherwise. */}
       {latestExp ? (
         <SectionCard title={`ROASTS · ${formatVLabel(latestExp.experiment_id)}`}>
           {/* Primary Question — prose */}
@@ -274,10 +266,24 @@ function WaitingForNextRoastView({
         </SectionCard>
       )}
 
-      {/* Green Bean Info + Roast Log — shared components (Sub Pages 6.4
-          extraction). The roast log highlights rows belonging to the current
-          experiment via the highlightedBatchIds prop. */}
+      {/* Green Bean Info — shared component (Sub Pages 6.4 extraction).
+          Cleanup-actions PR #23 reorder: now slot 3 (was slot 4 pre-PR,
+          below ExperimentFrame). The promotion reflects load-bearing-for-
+          page-job hierarchy: the page's primary job is "what's queued to
+          roast", so ROASTS card first, then the green-bean identity row,
+          then the experiment frame as design-time context. */}
       <GreenBeanInfoCard bean={bean} />
+
+      {/* Experiment Frame card (Sub Pages 6.7; cleanup-actions PR #23
+          demoted from slot 2 to slot 4 — design-time context is useful but
+          not load-bearing at execution prep). Auto-hides when no frame
+          fields populated. */}
+      {latestExp && (
+        <ExperimentFrameCard
+          latestExp={latestExp}
+          title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}
+        />
+      )}
 
       <RoastLogTable
         roasts={roasts}
@@ -747,19 +753,10 @@ function WaitingForNextCuppingView({
         </div>
       </div>
 
-      {/* Experiment Frame card (Sub Pages 6.7) — visible above the cupping
-          hypothesis card. skipControlBaseline=true because control_baseline
-          is already surfaced inside the ReferenceSignalsCard as "Anchor
-          cup"; rendering it twice would duplicate the same field. */}
-      {latestExp && (
-        <ExperimentFrameCard
-          latestExp={latestExp}
-          skipControlBaseline
-          title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}
-        />
-      )}
-
-      {/* Cupping Hypothesis card */}
+      {/* Cupping Hypothesis card (cleanup-actions PR #24 reorder: now slot
+          2, was slot 3 pre-PR with ExperimentFrame above it). Foreground
+          signal for cupping prep — what claude.ai predicted + what to
+          listen for. */}
       {latestExp ? (
         <SectionCard title={`CUPPING HYPOTHESIS · ${formatVLabel(latestExp.experiment_id)}`}>
           {latestExp.primary_question && (
@@ -793,27 +790,52 @@ function WaitingForNextCuppingView({
         </SectionCard>
       )}
 
-      {/* Roast Actuals card */}
+      {/* Roast Actuals card (cleanup-actions PR #24: now slot 3, was slot
+          4 pre-PR — moved up alongside Cupping Hypothesis since both are
+          foreground signal for cupping prep). */}
       {latestExp && slotInfos.length > 0 && (
         <SectionCard title={`ROAST ACTUALS · ${formatVLabel(latestExp.experiment_id)}`}>
           <RoastActualsTable slotInfos={slotInfos} latestExp={latestExp} />
         </SectionCard>
       )}
 
-      {/* Cross-batch notes (Sub Pages 6.7) — collapsed details surfacing
-          observed_outcome_a/b/c/d from V_(n-1). Reflective context for the
-          cupping table, not foreground signal. Auto-hides when priorExp is
-          null or all 4 slots are NULL. */}
-      <CrossBatchNotesBlock priorExp={priorExp} />
-
-      {/* Green Bean Info + Roast Log (shared 6.4 components) */}
+      {/* Green Bean Info — shared 6.4 component. Cleanup-actions PR #24
+          slot 4 (was slot 6 pre-PR). Identity / state of the bean — load-
+          bearing for orientation but not for the active cupping decision. */}
       <GreenBeanInfoCard bean={bean} />
+
+      {/* Experiment Frame card (Sub Pages 6.7). Cleanup-actions PR #24
+          demoted from slot 2 to slot 5 — design-time frame is useful
+          context but isn't consulted at cupping table time. skipControlBaseline
+          stays true because control_baseline is already surfaced inside
+          ReferenceSignalsCard as "Anchor cup"; rendering it twice would
+          duplicate the same field. */}
+      {latestExp && (
+        <ExperimentFrameCard
+          latestExp={latestExp}
+          skipControlBaseline
+          title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}
+        />
+      )}
 
       <RoastLogTable
         roasts={roasts}
         cuppings={cuppings}
         highlightedBatchIds={Array.from(currentExpBatchIds)}
       />
+
+      {/* Cross-batch notes (Sub Pages 6.7) — collapsed details surfacing
+          observed_outcome_a/b/c/d from V_(n-1). Reflective context for the
+          cupping table, not foreground signal. Cleanup-actions PR #24
+          demoted from slot 5 (between Roast Actuals and GreenBeanInfo) to
+          the deep-archive group alongside PerRoastReflections — the 6.7
+          framing called these "reflective context, not foreground signal"
+          and the page's primary jobs (cupping prep + cupping in progress)
+          don't consult V_(n-1) memory live. If Round-8 dogfood shows
+          frequent consultation at cupping prep time, promote back to slot
+          3 (one-line move). Auto-hides when priorExp is null or all 4
+          slots are NULL. */}
+      <CrossBatchNotesBlock priorExp={priorExp} />
 
       {/* Per-roast reflections (Sub Pages 6.7) — collapsed details surfacing
           what_worked / what_didnt / what_to_change per roast. Auto-hides
@@ -1044,6 +1066,43 @@ function ReferenceSignalsCard({
 // are NULL). The "vs expected total" row uses roast-emphasis amber text per
 // scope doc § 5.5 — surfaces "+5s overran" deltas Chris writes into
 // experiments.delta_from_roast_*.
+// Cleanup-actions PR #25 helpers. Surface Design (recipe.end_condition_target)
+// vs Achieved (roast.drop_temp) on the ROAST ACTUALS table so operator
+// override (machine fired automatically vs operator manually pulled the drop)
+// is visible at cupping prep time. end_condition_target is only in °C when
+// end_condition_type is bean_temp; other types (dev_time, manual) leave the
+// design half blank since the target field carries seconds / nothing.
+const DROP_TEMP_DIVERGENCE_THRESHOLD_C = 0.5
+
+function isDesignDropTempApplicable(recipe: RoastRecipe | null): boolean {
+  if (!recipe) return false
+  const type = (recipe.end_condition_type ?? '').toLowerCase()
+  return type === 'bean_temp' && recipe.end_condition_target != null
+}
+
+function formatDropTempDiff(info: SlotInfo): React.ReactNode {
+  const designTarget = isDesignDropTempApplicable(info.recipe)
+    ? (info.recipe!.end_condition_target as number)
+    : null
+  const achieved = info.roast?.drop_temp as number | null | undefined
+  const designStr = designTarget != null ? `${designTarget}°C` : '—'
+  const achievedStr = achieved != null ? `${achieved}°C` : '—'
+  const diverged =
+    designTarget != null &&
+    achieved != null &&
+    Math.abs(achieved - designTarget) > DROP_TEMP_DIVERGENCE_THRESHOLD_C
+  if (designTarget == null && achieved == null) return '—'
+  return (
+    <span>
+      <span className="text-latent-mid">{designStr}</span>
+      <span className="text-latent-mid"> → </span>
+      <span className={diverged ? 'text-latent-roast-emphasis font-semibold' : ''}>
+        {achievedStr}
+      </span>
+    </span>
+  )
+}
+
 function RoastActualsTable({
   slotInfos,
   latestExp,
@@ -1068,6 +1127,21 @@ function RoastActualsTable({
       label: 'Drop',
       getValue: (info) => info.roast?.drop_time ?? '—',
       has: (info) => info.roast?.drop_time != null,
+    },
+    {
+      // Cleanup-actions PR #25: design → achieved drop_temp diff render.
+      // Surfaces operator override visually at cupping prep time. Both
+      // values come together; amber tint applies per-cell when the
+      // achieved value diverges from the design target by > 0.5°C. The
+      // design value pulls from recipe.end_condition_target when
+      // end_condition_type is bean_temp (the dominant case); other end-
+      // condition types (dev_time, manual) leave the design half blank
+      // since end_condition_target isn't in °C for those.
+      label: 'Drop temp',
+      getValue: (info) => formatDropTempDiff(info),
+      has: (info) =>
+        info.roast?.drop_temp != null || isDesignDropTempApplicable(info.recipe),
+      amber: false, // per-cell amber handled inside formatDropTempDiff
     },
     {
       label: 'vs expected total',
@@ -1392,8 +1466,10 @@ function ResolvedView({
                     <CupRow label="Aroma" value={pourover.aroma} />
                     <CupRow label="Flavor" value={pourover.flavor} />
                     <CupRow label="Acidity" value={pourover.acidity} />
+                    <CupRow label="Sweetness" value={pourover.sweetness} />
                     <CupRow label="Body" value={pourover.body} />
                     <CupRow label="Finish" value={pourover.finish} />
+                    <CupRow label="Temperature behavior" value={pourover.temperature_behavior} />
                   </div>
                 )}
               </>
@@ -1544,7 +1620,7 @@ function ResolvedView({
               const isRef = roast?.id === refRoastId
               const descriptors =
                 cup.overall ||
-                [cup.aroma, cup.flavor, cup.acidity, cup.body, cup.finish]
+                [cup.aroma, cup.flavor, cup.acidity, cup.sweetness, cup.body, cup.finish]
                   .filter(Boolean)
                   .join(' · ')
               return (
@@ -1566,6 +1642,18 @@ function ResolvedView({
                     {cup.ground_agtron != null && ` · Gnd Agtron: ${cup.ground_agtron}`}
                   </div>
                   <div className="font-sans text-sm leading-relaxed">{descriptors || '—'}</div>
+                  {cup.temperature_behavior && (
+                    <div className="font-sans text-sm leading-relaxed mt-1 text-latent-mid">
+                      <span className="label mr-1 inline-block">Temp behavior</span>
+                      {cup.temperature_behavior}
+                    </div>
+                  )}
+                  {cup.wb_to_ground_delta != null && (
+                    <div className="font-mono text-xs text-latent-mid mt-1">
+                      WB→Gnd Δ: {cup.wb_to_ground_delta > 0 ? '+' : ''}
+                      {cup.wb_to_ground_delta}
+                    </div>
+                  )}
                 </div>
               )
             })}

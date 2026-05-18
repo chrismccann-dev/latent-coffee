@@ -23,7 +23,7 @@ export const pushRoastRecipeInputSchema = {
     'Human-readable recipe name (e.g. "Higuito - v3a", "Calibration shot 91-93C"). Required when experiment_id + batch_slot are null (used as the UPSERT key for one-off recipes). Optional but recommended for V-set recipes — surfaces in the page UI.',
   ),
   parent_recipe_id: z.string().uuid().optional().nullable().describe(
-    'Lineage pointer: when v3a "replicates v2b" or "marginal modification of v2b", set this to v2b\'s recipe_id. Makes replication relationships queryable later. Optional; some recipes are genuinely novel.',
+    'Lineage pointer (directional-ancestor, not strict-replication). Set this when v3a was directly informed by v2b\'s design intent — including the case where v3a represents a SHIFTED SPREAD anchored on v2b\'s curve (e.g. "v3a tests peak inlet 2°C below v2b\'s peak, holding everything else constant"), not only the case where v3a is a strict replicate. Makes "what design choices flow from what" queryable. Optional; leave NULL when the recipe is genuinely novel (no prior recipe directly informed this one) or when the lineage is ambiguous across multiple parents.',
   ),
   rationale: z.string().optional().nullable().describe(
     'Per-batch Hypothesis prose — the "why this specific recipe / what we expect to learn from this batch" reasoning. Renders in the design-table Hypothesis row on the waiting-for-next-roast page. Distinct from notes (which is the freer catch-all).',
@@ -71,6 +71,13 @@ export const pushRoastRecipeInputSchema = {
   roest_share_url: z.string().optional().nullable(),
   roest_profile_name: z.string().optional().nullable().describe('Exact name on the Roest tablet.'),
   pushed_to_roest_at: z.string().optional().nullable().describe('ISO timestamp the recipe was pushed to Roest.'),
+  // Schema sprint S4 (migration 057, 2026-05-18)
+  was_backfilled: z.boolean().optional().nullable().describe(
+    'Provenance flag — TRUE when this recipe was authored as backfill (design intent recovered AFTER the roast). Set TRUE when calling push_roast_recipe from log-cupping.md STAGE 0 / log-roast.md STAGE 1(b) inline-backfill paths or operational backfill prompts. FALSE (default) for design-time pushes BEFORE the roast — the normal log-roast.md design flow. Pairs with backfill_notes which captures source + date prose. Migration 057 backfilled the 129 migration-052 legacy shells with was_backfilled=true.',
+  ),
+  backfill_notes: z.string().optional().nullable().describe(
+    'Provenance prose for backfilled rows. Standard phrasing: "Recovered from <source> at <event>, <date>". Source examples: "prior session chat memory" / "cupping prose" / "Roest tablet log". Distinct from notes (general catch-all). Only set when was_backfilled=true.',
+  ),
 }
 
 export function registerPushRoastRecipeTool(server: McpServer, auth: McpAuthContext) {

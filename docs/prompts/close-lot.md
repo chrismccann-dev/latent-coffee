@@ -21,6 +21,8 @@ I'll reference the lot by `lot_id` or `green_bean_id` + name the reference roast
 
 ## STAGE 1 - Resolve bean + verify Resolved-pending state
 
+**This STAGE writes**: nothing (read-only).
+
 - `get_green_bean({lot_id})` → returns `green_bean_id`.
 - `get_bean_pipeline({green_bean_id})` → full state. Verify:
   - At least one experiment row has a non-null `winner` (the V-set leading-slot designations).
@@ -30,21 +32,23 @@ I'll reference the lot by `lot_id` or `green_bean_id` + name the reference roast
 
 ## STAGE 2 - Mark the reference roast on the roasts table
 
+**This STAGE writes**: `roasts` row patch (the reference roast).
+
 The lot-level reference roast designation is distinct from any V-set's leading slot. The reference roast is the *one batch I'd replicate if I had more green*.
 
 `patch_roast(roast_id, ...)`:
 
-- `is_reference: true`
-- Optionally `worth_repeating: "yes"` if not already set
-- Optionally refine `what_worked` / `what_didnt` / `what_to_change` if the close-out reflection added clarity over the in-iteration prose
+- `is_reference: true`. **Axis-1 of the close-out**: this is the row the resolved-view page renders as the reference roast. Set unconditionally on the named reference roast. **The `is_reference_candidate` flag set on this batch during V-set iteration does NOT auto-flip — this STAGE 2 patch is the explicit promotion** (Schema sprint S2, migration 056, 2026-05-18). If `is_reference_candidate` was never set true on the eventual reference roast (some V-set leading slots never read as candidate-quality but became the lot reference by elimination), that's fine — `is_reference` stands on its own.
+- `worth_repeating: "yes"` if not already set. **Axis-2, decoupled from `is_reference`**: this is the "I'd run this exact recipe again if I had more green" axis. Usually correlates with `is_reference` on V-set lots (you wouldn't name a roast the reference if you wouldn't repeat it), but they're structurally independent fields. On V-set lots both default to true together; the decoupling matters more for one-shot lots (`one-shot-closeout.md` STAGE 2) where `is_reference` is structural (single batch IS the reference) but `worth_repeating` can vary by outcome.
+- Optionally refine `what_worked` / `what_didnt` / `what_to_change` if the close-out reflection added clarity over the in-iteration prose.
 
 `patch_roast` echoes `updated_fields: [...]` + `canonical_values` for enum fields.
 
 ## STAGE 3 - Write the per-lot roast learnings row
 
-`push_roast_learnings(payload)` - UPSERTs on `(user_id, green_bean_id)`. One row per closed lot.
+**This STAGE writes**: `roast_learnings` row (one per lot, UPSERTs on `(user_id, green_bean_id)`).
 
-This is the structured carry-forward learning - the **compounding-knowledge primitive** that future `start-lot.md` runs consume when designing V1 on a lot with overlapping cultivar / terroir / process. Author every field that has signal; leave NULL only when there's genuinely nothing to say.
+`push_roast_learnings(payload)`. This is the structured carry-forward learning - the **compounding-knowledge primitive** that future `start-lot.md` runs consume when designing V1 on a lot with overlapping cultivar / terroir / process. Author every field that has signal; leave NULL only when there's genuinely nothing to say.
 
 ### Required FK
 
@@ -54,7 +58,7 @@ This is the structured carry-forward learning - the **compounding-knowledge prim
 
 ### Reference-roast explainer
 
-- **`why_this_roast_won`**: what about this specific batch made it the lot-level reference. 3-6 sentences. The most load-bearing field - it's the verdict prose surfaced front-and-center on the resolved-view page. Cite specific roast measurements (FC time/temp, drop temp, Agtron, WB→Gnd delta) AND specific cup descriptors. Distinguish "this roast won the V-set comparison" from "this roast is the lot-level reference" - the latter is what this prompt records.
+- **`why_this_roast_won`**: what about this specific batch made it the lot-level reference. 3-6 sentences. The most load-bearing field - it's the verdict prose surfaced front-and-center on the resolved-view page. Cite specific roast measurements (FC time/temp, drop temp, Agtron, WB→Gnd delta) AND specific cup descriptors. Distinguish "this roast won the V-set comparison" from "this roast is the lot-level reference" - the latter is what this prompt records. Always populated on V-set close-outs (NULL is reserved for "Closed without reference" lots — see one-shot-closeout.md).
 
 ### Roasted bean characteristic (3 attributes per CONTEXT.md)
 
@@ -99,6 +103,8 @@ CONTEXT.md flags a missing axis: **terroir takeaway** is in Chris's mental model
 
 ## STAGE 4 - Push the optimized brew
 
+**This STAGE writes**: `brews` row (the optimized brew, source=self-roasted).
+
 The optimized brew is the daily-consumption recipe Chris dialed in for the reference roast via the brewing-side workflow. It's the **consumption-condition endpoint** of the full pipeline - post-hoc attribution traces backward from here.
 
 Apply canonical-validation discipline from `log-brew.md` / `bundled-brewing-completion.md`. Key schema-strict gates:
@@ -127,6 +133,8 @@ The optimized brew lights up the resolved-view's "Reference Cup" + "Optimized Br
 
 ## STAGE 5 - Propose ROASTING.md close-out narrative
 
+**This STAGE writes**: `doc_proposals` row (one multi-citation proposal).
+
 BEFORE drafting any citation, fetch the live doc structure via `list_doc_sections(uri="docs://roasting.md")` if anchors don't immediately resolve.
 
 Routing decision tree - pick the section that matches the SHAPE of the insight, not just the topic:
@@ -147,6 +155,8 @@ DRIFT DETECTION: if the live doc disagrees with what you observed in DB / Roest 
 
 ## STAGE 6 - Archive the Roest inventory row
 
+**This STAGE writes**: `roest_inventory` row patch (`is_archived: true`).
+
 After the close-out proposal lands, mark the Roest inventory row archived so the tablet picker hides the lot from the active inventory list.
 
 - `patch_inventory({roest_inventory_id: <from STAGE 1's green_bean_inventory_id>, is_archived: true})`.
@@ -154,6 +164,8 @@ After the close-out proposal lands, mark the Roest inventory row archived so the
 - `patch_inventory` echoes `canonical_values: { is_archived }` for sanity-check.
 
 ## STAGE 7 - Confirmation output
+
+**This STAGE writes**: nothing (output only).
 
 Print:
 

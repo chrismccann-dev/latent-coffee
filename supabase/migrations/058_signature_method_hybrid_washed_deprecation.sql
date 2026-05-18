@@ -1,4 +1,9 @@
--- Migration 055: deprecate signature_method='Hybrid Washed' + remap affected brew row.
+-- Migration 058: deprecate signature_method='Hybrid Washed' + remap affected brew row.
+-- (Originally drafted as 055; renumbered to 058 after rebase against main when the
+-- schema sprint's 055/056/057 trio landed in parallel. Live DB tracking row carries
+-- the prefix-less name 'signature_method_hybrid_washed_deprecation' applied via
+-- `mcp__supabase__apply_migration` before the rebase; check:migrations resolves the
+-- filename via its `withoutPrefix` fallback so no DB row rewrite is needed.)
 --
 -- Sprint T1 / BR-1 (2026-05-18). Brewing-cluster grilling follow-up #1 closed:
 -- registry expanded from 3 to 15 signatures to match Chris's working canonical

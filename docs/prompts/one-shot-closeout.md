@@ -2,7 +2,7 @@
 
 **State transition**: Resolved-pending -> Resolved.
 
-**Trigger**: A one-shot lot's STAGES 1-4 are done (intake + design + roast + Day 7 cupping captured via `one-shot.md`) AND the optimized brew has been dialed in via the brewing-side workflow (`bundled-brewing-completion.md` or sibling). I'll reference the lot by `lot_id` or `green_bean_id` + tell you whether the verdict from STAGE 4 was Outcome A (reference-quality) or Outcome B (Closed without reference). Your job: push the optimized brew, mark the reference roast (or not), write the constrained `roast_learnings` row, propose ROASTING.md close-out, archive Roest inventory.
+**Trigger**: A one-shot lot's STAGES 1-4 are done (intake + design + roast + Day 7 cupping captured via `one-shot.md`) AND the optimized brew has been dialed in via the brewing-side workflow (`bundled-brewing-completion.md` or sibling). I'll reference the lot by `lot_id` or `green_bean_id` + tell you whether the verdict from STAGE 4 was Outcome A (reference-quality) or Outcome B (Closed without reference). Your job: push the optimized brew, mark the reference roast (always, regardless of outcome), write the constrained `roast_learnings` row, propose ROASTING.md close-out, archive Roest inventory.
 
 **Workflow position**: Second of two prompts in the one-shot lifecycle (`one-shot.md` -> **`one-shot-closeout.md`**). Distinct from V-set lots' `close-lot.md`.
 
@@ -19,6 +19,8 @@ MCP namespace: tools surface under `Latent Coffee`.
 
 ## STAGE 1 - Resolve bean + verify Resolved-pending state
 
+**This STAGE writes**: nothing (read-only).
+
 - `get_green_bean({lot_id})` -> returns `green_bean_id`. Verify `is_one_shot: true` in the response (if false, this lot is a V-set and should use `close-lot.md` instead).
 - `get_bean_pipeline({green_bean_id})` -> full state. Verify:
   - V1 experiment row exists with `batch_ids` populated (one batch) + `winner` populated.
@@ -28,18 +30,26 @@ MCP namespace: tools surface under `Latent Coffee`.
 
 I'll tell you which verdict came out of `one-shot.md` STAGE 4:
 
-- **Outcome A** = reference-quality cup. Single batch is the lot's reference roast.
-- **Outcome B** = "Closed without reference" (Rancho Tio shape). Cup is okay but not reference. Salvage is the optimized brew.
+- **Outcome A** = reference-quality cup. Single batch is the lot's reference roast AND the cup is what the lot's voice should sound like.
+- **Outcome B** = "Closed without reference" (Rancho Tio shape). Single batch is still the lot's reference roast structurally (it's the only batch — by definition the resolved-view's reference roast), but the cup is okay rather than reference quality. Salvage is the optimized brew.
 
-## STAGE 2 - Mark (or don't mark) the reference roast
+## STAGE 2 - Mark the reference roast (unconditionally for one-shots)
 
-(a) On **Outcome A**: `patch_roast(roast_id, is_reference: true, worth_repeating: "yes")`. The single batch IS the lot's reference roast. Optionally refine the prose fields (`what_worked` / `what_didnt` / `what_to_change`) if close-out reflection added clarity.
+**This STAGE writes**: `roasts` row patch.
 
-(b) On **Outcome B**: leave `is_reference: false` and `worth_repeating: "no"`. The roast wasn't reference quality. Optionally refine prose fields to capture what was learned.
+`patch_roast(roast_id, ...)`:
+
+- `is_reference: true`. **Set unconditionally for one-shots, regardless of Outcome A or B.** The structural fact is: there is one batch, the resolved-view's reference-roast slot has to render something, and that something is this batch. The A/B distinction lives on `worth_repeating` + `why_this_roast_won` (next field + STAGE 4 below), NOT on `is_reference`. The "Closed without reference" sub-card on ResolvedView (Sprint 3.2 #18) triggers on `roast_learnings.why_this_roast_won IS NULL`, not on `is_reference: false`.
+- `worth_repeating`:
+  - On **Outcome A**: `"yes"`. "I'd run this exact recipe again if I had more green."
+  - On **Outcome B**: `"no"`. "I'd adjust the recipe next time, this attempt was off-target."
+- Optionally refine prose fields (`what_worked` / `what_didnt` / `what_to_change`) if close-out reflection added clarity.
 
 `patch_roast` echoes `updated_fields: [...]`.
 
 ## STAGE 3 - Push the optimized brew
+
+**This STAGE writes**: `brews` row (the optimized brew, source=self-roasted).
 
 This brew was dialed in via the brewing-side workflow between `one-shot.md` STAGE 4 and now. Apply canonical-validation discipline from `log-brew.md` / `bundled-brewing-completion.md`:
 
@@ -52,7 +62,7 @@ This brew was dialed in via the brewing-side workflow between `one-shot.md` STAG
 `push_brew(payload)`:
 - `source: "self-roasted"`
 - `green_bean_id` from STAGE 1
-- `roast_id` from STAGE 1 (links the brew to the single roast - on Outcome A this brew IS the reference cup target; on Outcome B this brew is the salvage)
+- `roast_id` from STAGE 1 (the single roast — this brew either celebrates Outcome A or compensates for Outcome B)
 - Recipe: brewer / filter / dose / water / grinder / grind_setting / temperature
 - `extraction_strategy` + optional `hybrid_subform` + `strategy_notes` + optional `cooling_curve_target`
 - `flavors` + `structure_tags`
@@ -62,9 +72,9 @@ For Outcome B in particular, `what_i_learned` is the carry-forward primitive tha
 
 ## STAGE 4 - Write the constrained roast_learnings row
 
-`push_roast_learnings(payload)` - UPSERTs on `(user_id, green_bean_id)`. One row per closed lot.
+**This STAGE writes**: `roast_learnings` row (one per lot, UPSERTs on `(user_id, green_bean_id)`). Schema validation rejects 7 lever-attribution fields on lots where `is_one_shot = true`.
 
-**Schema constraint (migration 054)**: when the parent green_beans has `is_one_shot: true`, the following fields MUST be NULL on this push. Schema validation rejects with a specific error message per field if populated. These fields require cross-batch evidence (variable->lever attribution) which one-shot lots cannot provide.
+`push_roast_learnings(payload)`. **Schema constraint (migration 054)**: when the parent green_beans has `is_one_shot: true`, the following fields MUST be NULL on this push. Schema validation rejects with a specific error message per field if populated. These fields require cross-batch evidence (variable->lever attribution) which one-shot lots cannot provide.
 
 Forbidden on one-shots (must be NULL):
 
@@ -78,10 +88,10 @@ Forbidden on one-shots (must be NULL):
 
 Allowed and recommended:
 
-- **`best_roast_id`** (typed FK) + **`best_batch_id`** (legacy text): set both. The single roast IS the lot's reference roast (on Outcome A) or the lot's only roast (on Outcome B). Get from STAGE 1's `roasts[]`.
+- **`best_roast_id`** (typed FK) + **`best_batch_id`** (legacy text): set both. The single roast IS the lot's reference roast (Outcome A) or the lot's only roast (Outcome B); either way it's the row the resolved view renders, and `is_reference: true` has already landed in STAGE 2 unconditionally. Get from STAGE 1's `roasts[]`.
 - **`why_this_roast_won`**:
   - On **Outcome A**: verdict prose. "The single attempt landed in the carry-forward target zone for <reasoning>. Cup match producer notes ballpark on <descriptors>. Roast structure clean. <Lot> joins the carry-forward anchor set for similar future one-shots in this lane."
-  - On **Outcome B**: explicitly NULL. The Sprint 3.2 #18 "Closed without reference" sub-card on ResolvedView renders based on this field being NULL. Don't fabricate a verdict.
+  - On **Outcome B**: explicitly NULL. The Sprint 3.2 #18 "Closed without reference" sub-card on ResolvedView renders based on this field being NULL (NOT on `is_reference: false` — that flag was set true in STAGE 2 regardless of outcome). Don't fabricate a verdict.
 - **`cultivar_takeaway`**: prefix with `"Low confidence - N=1, verify on next similar lot. "`. Then the takeaway prose. Example: "Low confidence - N=1, verify on next similar lot. <Cultivar> at <altitude band> may want <inlet range>; this single attempt landed at <X> and produced <Y>."
 - **`general_takeaway`**: same `"Low confidence - N=1"` prefix. Cross-cultivar / cross-process patterns observed but anchored on a single observation.
 - **`starting_hypothesis`**: most actionable field for the next similar one-shot. Same `"Low confidence"` prefix; encodes "next time I'd try <Z> based on this attempt." This is what future `one-shot.md` STAGE 1 carry-forward search will consume.
@@ -92,6 +102,8 @@ Allowed and recommended:
 `push_roast_learnings` will reject the push if any of the 7 forbidden fields are populated. The error message will name the specific field. Move the prose to additional_notes on the experiment row, or to cultivar_takeaway / general_takeaway / starting_hypothesis as documented above.
 
 ## STAGE 5 - Propose ROASTING.md close-out narrative
+
+**This STAGE writes**: `doc_proposals` row (one multi-citation proposal).
 
 BEFORE drafting citations, fetch live doc structure via `list_doc_sections(uri="docs://roasting.md")` if anchors don't resolve.
 
@@ -111,6 +123,8 @@ Submit as a single multi-citation `propose_doc_changes` call. Required: top-leve
 
 ## STAGE 6 - Archive the Roest inventory row
 
+**This STAGE writes**: `roest_inventory` row patch (`is_archived: true`).
+
 After the close-out proposal lands, mark the Roest inventory row archived.
 
 - `patch_inventory({roest_inventory_id: <from STAGE 1's green_bean_inventory_id>, is_archived: true})`
@@ -118,15 +132,17 @@ After the close-out proposal lands, mark the Roest inventory row archived.
 
 ## STAGE 7 - Confirmation output
 
+**This STAGE writes**: nothing (output only).
+
 Print:
 
 - `green_bean_id` + verdict outcome (A / B)
-- Reference roast (Outcome A only): `roast_id`, `batch_id`, brief `why_this_roast_won` excerpt
+- Reference roast designation: `roast_id`, `batch_id`, `is_reference: true` confirmed, `worth_repeating` value, brief `why_this_roast_won` excerpt (or `"why_this_roast_won: NULL — Closed without reference"` on Outcome B)
 - `roast_learnings_id` + `created` (true on first push)
 - `brew_id` + key recipe specs one-liner
 - `proposal_id` from `propose_doc_changes`
 - `is_archived: true` confirmation (or "skipped: <reason>")
-- Lifecycle state confirmation: "Lot closed. State flipped to **Resolved**." On Outcome B add: "ResolvedView renders the 'Closed without reference' sub-card per Sprint 3.2 #18."
+- Lifecycle state confirmation: "Lot closed. State flipped to **Resolved**." On Outcome B add: "ResolvedView renders the 'Closed without reference' sub-card per Sprint 3.2 #18 (triggered by `why_this_roast_won = NULL`)."
 - Carry-forward summary: "This lot contributes <X> to the next similar one-shot's STAGE 1 search. Anchored on <lot Y> via <reasoning>. Next time a similar lot lands, carry-forward will surface this one's `starting_hypothesis` at Low confidence."
 
 ## What this prompt does NOT do

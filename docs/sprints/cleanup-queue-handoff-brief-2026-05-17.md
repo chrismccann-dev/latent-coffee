@@ -1,6 +1,239 @@
 # Cleanup queue handoff brief (post Round 7)
 
-Paste-ready brief for a fresh Claude Code session that doesn't see the multi-day dogfood thread that produced this queue. Authored 2026-05-17, updated 2026-05-18 after Round 7 (Higuito V3 cupping) landed.
+Paste-ready brief for a fresh Claude Code session that doesn't see the multi-day dogfood thread that produced this queue. Authored 2026-05-17, updated 2026-05-18 after Round 7 (Higuito V3 cupping) landed, updated again 2026-05-18 post-schema-sprint.
+
+## Status (2026-05-18, post-#174 + schema sprint)
+
+**Polish PR shipped + merged**: [latent-coffee#174](https://github.com/chrismccann-dev/latent-coffee/pull/174) — 28 items across Sub-PRs A (prompts) + B (MCP) + C (page) + CONTEXT.md additions. The bulk of the cleanup queue closed.
+
+**Remaining dogfooding-queue items:**
+
+| # | Item | Status | Next action |
+|---|---|---|---|
+| Schema sprint | S1-S4 candidates (S5 closed via prompt-level path in #174) | ✅ Shipped 2026-05-18 (this session) — migrations 055/056/057 + S3 MCP-exposure fold-in. See `docs/sprints/shipped.md` for the per-item landmark | — |
+| CCIL consolidation | ARBITER.md playbook extension + ROASTING.md CCIL promote/retire pass | Ready to start (~1-2h) — natural next sprint | See § CCIL consolidation kickoff below |
+| `patch_roast` + `read_doc_section` intermittent failures | Vercel logs investigation | Deferred — investigate when next intermittent surfaces (pattern more informative than archaeology). Vercel MCP is available, no setup needed | See § Vercel investigation note below |
+| CGLE Sudan Rume Natural V5 missing recipe rows | V5 still auto-handles via STAGE 0; V1-V4 history backfill **shipped 2026-05-18** | No action — 13/13 V1-V4 recipe rows linked (experiment_id + batch_slot); batch 154 `(experiment_id, batch_slot)` collision defused by renaming its slot to `v3b_switched` | Archived prompt in § V1-V4 historical backfill below |
+| Historical `end_condition` backfill on roasts ≤169 | Counterflow portion **shipped 2026-05-18**; pre-counterflow dropped from scope | 49/49 in-scope counterflow rows patched (SR Hybrid Washed 17 / Mandela XO 13 / SR Natural 12 / Gesha Clouds 3 + 4 stranded recovery). 6 additional rows flipped to `manual` via override rule. Pre-counterflow 4 lots (61 roasts: El Socorro / Libertad / GV Oma / GV Surma) deliberately dropped per counterflow-only archive rule | Archived prompt in § End-condition backfill prompt below |
+| `manual` end_condition target convention (surfaced 2026-05-18) | DB inconsistent: 14 rows null target, 1 row (Red Plum batch 180) preserves it | ADR + standardization deferred to its own task — spawned 2026-05-18 | See spawned task chip |
+| Round 8 dogfood (first one-shot.md production run) | Chris has auction samples ready to bundle 2026-05-18 | Bundle when an auction sample lands; exercises full one-shot.md pipeline end-to-end | See § Round 8 bundling note below |
+
+## Schema sprint kickoff
+
+Paste-ready for a fresh Claude Code session:
+
+```
+Working through the dogfooding-queue schema-migration sprint — the
+deferred S1-S4 candidates from the cleanup-actions PR (latent-coffee#174,
+merged 2026-05-18). S5 was closed via the prompt-level path in #174 so
+it's no longer in scope.
+
+Brief lives at:
+  docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md
+  § Schema migration sprint — 4-5 candidates (original scope)
+  § Schema sprint kickoff (this section, distilled)
+
+The 4 candidates:
+
+  S1. cuppings.wb_to_ground_delta — derived column (computed from
+      roasts.agtron - cuppings.ground_agtron). Round 3 #6. Currently
+      computed inline in page.tsx; promoting to a column lets queries
+      filter / sort on it.
+
+  S2. is_reference_candidate boolean on experiments OR roasts —
+      distinct from "no winner yet" and from "leading slot IS reference
+      quality". Round 3 #8. Open design question: does it live on
+      experiments (V-set-scoped) or roasts (batch-scoped)?
+
+  S3. cuppings.sweetness column — currently folded into
+      acidity/body/flavor. Round 4 #12. The sweetness axis has stayed
+      implicit in cup descriptors; promoting gives queries a dedicated
+      column.
+
+  S4. roast_recipes.was_backfilled boolean OR backfill_notes text —
+      distinguishes design-intent-captured-at-design-time from
+      design-intent-recovered-after-fact (the inline-backfill path
+      #174 added to log-cupping.md STAGE 0 + log-roast.md STAGE 1 (b)).
+      Round 5 #5. Makes the recipe-quality axis queryable.
+
+Sprint shape (expected):
+  - Plan mode first per CLAUDE.md sprint cadence #1 (each migration
+    has interpretive scope; S2 + S4 in particular have design choices
+    worth surfacing before coding via AskUserQuestion)
+  - 4 migrations in supabase/migrations/ (sequential numbering, likely
+    055-058 — check existing migration count)
+  - MCP Tool schema updates for any new field on push_* / patch_*
+    (push_experiment / push_roast / push_cupping / push_roast_recipe
+    and their patch_* siblings)
+  - Page render updates where derived columns become first-class
+    (S1 wb_to_ground_delta on the resolved view + cupping cards;
+    S3 sweetness on the cupping cards)
+  - shipped.md row + cross-system audit per the six-actor matrix
+
+Load-bearing reference docs (priority order):
+  1. docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md
+     § Schema migration sprint (the canonical scope) + § Status
+     (post-#174 state)
+  2. memory/feedback_mcp_continuous_log.md Rounds 3-5 (per-round
+     friction context that surfaced each item)
+  3. CONTEXT.md — terminology + Closed without reference + Key-insight
+     confidence ladder (recently added in #174)
+  4. docs/roasting/redesign.md § 4.2 (cross-batch field write moments
+     — relevant for S4's backfilled-vs-original distinction)
+  5. CLAUDE.md sprint cadence rules (#1 plan-mode + #4 strengthened
+     cross-system audit / six-actor matrix)
+  6. PR #174 commit body — establishes the prompt-level baseline these
+     migrations build on
+
+Out of scope:
+  - S5 taste_for_validation_a/b/c/d (closed via prompt-level path
+    in #174's A #13)
+  - CCIL consolidation arbiter task (separate ~1-2h sprint after this)
+  - Pour-over discriminator + optimized brew lifecycle states
+    (post-Sprint-R per master plan)
+  - Round 8 one-shot dogfood (Chris bundles when an auction sample lands)
+  - Grill-with-docs followups (separate sequential-track sprints per
+    post-grilling-sequencing.md)
+
+Operating preferences (standing):
+  - Plan before coding when scope is interpretive (per CLAUDE.md #1)
+  - AskUserQuestion on interpretive design decisions (e.g. S2's
+    experiments-vs-roasts placement, S4's boolean-vs-text shape)
+  - Only commit / push when explicitly asked
+```
+
+## CCIL consolidation kickoff
+
+Smaller sprint (~1-2h). Run after schema sprint closes. Paste-ready:
+
+```
+Running the CCIL (Cross-Coffee Insight Layer) consolidation arbiter
+task — Round 4 #11 from the dogfooding queue. ~1-2h. Two motions:
+
+  1. Promote High-confidence hypotheses in ROASTING.md's Cross-Coffee
+     Insight Layer to a Confirmed Patterns subsection (or equivalent
+     stable section). Threshold: key_insight_confidence = High AND
+     repeated across ≥2 lots OR strong cross-lot corroboration.
+
+  2. Retire Low-confidence entries that haven't repeated across N
+     lots (suggested threshold: 3+ similar lots without corroboration).
+     Move to an archive section or delete depending on age.
+
+  3. Extend ARBITER.md playbook with a "CCIL consolidation pass"
+     section codifying the cadence (quarterly? when CCIL section
+     crosses a row count?) and the promote/retire heuristics.
+
+Reference docs:
+  - ROASTING.md § Cross-Coffee Insight Layer (current entries)
+  - CONTEXT.md § Key-insight confidence ladder (operational
+    definitions, single source of truth for the 4 levels)
+  - ARBITER.md (existing playbook structure)
+  - memory/feedback_mcp_continuous_log.md Round 4 #11 (original
+    surface)
+
+This is doc-maintenance, not code. Probably one PR with ROASTING.md
++ ARBITER.md edits + a shipped.md row.
+```
+
+## Vercel investigation note
+
+Pattern: `patch_roast` + `read_doc_section` occasionally surface in `tool_search` but error on execution; retries succeed. Anthropic request IDs from the dogfood log: `req_011CawGMmSjMThH9XeESJs`, `req_011CawGMmSjMNWThH9XeESJs`, `req_011Cb3bFZiMduh6ZkKcFSSqy`. Those don't map directly to Vercel request IDs (different service).
+
+What to actually query in Vercel (via the wired MCP):
+- `get_runtime_logs(projectId, level: ['error', 'fatal'], source: ['serverless'], query: 'patch_roast OR read_doc_section', since: '14d')`
+- Cross-ref with Anthropic-side timestamps from the dogfood log.
+
+Triage rule: **defer until the next intermittent surfaces**. Repeating pattern is more informative than log archaeology — one more failure gives a fresh timestamp window and an active reproduction.
+
+## V1-V4 historical backfill (shipped 2026-05-18)
+
+**Closed.** 13/13 V1-V4 historical recipe rows linked via `patch_roast_recipe` from a claude.ai session. Batch 154's `(experiment_id, batch_slot)` collision with batch 153 was defused by renaming 154's slot from `v3b` to `v3b_switched` directly via SQL (no DB-level unique constraint exists, but `persistRoastRecipe`'s `.maybeSingle()` lookup would have errored on the next `push_roast_recipe` call against that slot pair). V5 batches 187/188/189 still auto-handle via `log-cupping.md` STAGE 0 on the next cupping. Prompt below retained as historical reference:
+
+
+
+```
+Backfill V1-V4 historical recipe row linkages for CGLE Sudan Rume Natural
+(green_bean_id 1cf02eb8-accb-4e74-8ce5-52892b4ecfd7). 13 recipe rows in
+`roast_recipes` have NULL `experiment_id` + NULL `batch_slot` from
+pre-PR-#157 days. Match each recipe by its `recipe_name` or its joined
+roast's batch_id, then `patch_roast_recipe` to set:
+  - experiment_id (UUID for CGLE-SRUME-NATURAL-2026-V<n> — get from
+    get_bean_pipeline)
+  - batch_slot ("v<n><letter>")
+Don't write design-intent fields (predicted_*) — those were never authored
+at design time for these legacy V's; leaving them NULL is honest. Optionally
+patch_roast_recipe.was_backfilled = true once S4 lands.
+
+Recipe → batch_id → V<n><letter> map (from execute_sql, 2026-05-18):
+  v1: batches 128/130/131 → slots a/b/c
+  v2: batches 142/143/144 → slots a/b/c (recipe_names use "v130a"-style
+       drift typos but roast_profile_name confirms a/b/c; patch
+       consistently to v2a/v2b/v2c)
+  v3: batches 152/153/154/155 → slots a/b/b-switched-c/c
+       (154 is the "switched mid-roast" hybrid; canonical slot v3b)
+  v4: batches 167/168/169 → slots a/b/c
+
+V5 (batches 187/188/189) is handled separately by log-cupping.md STAGE 0
+on the next cupping run — don't backfill V5 manually here.
+```
+
+## End-condition backfill prompt (counterflow shipped 2026-05-18; pre-counterflow dropped)
+
+**Closed (counterflow portion).** 49/49 in-scope counterflow rows patched across two claude.ai turns:
+
+- Turn 1 (45 rows): SR Hybrid Washed 17 / Mandela XO 13 / SR Natural 12 / Gesha Clouds Forest 3. All came back `dev_time` from the Roest API; unit conversion (ms → s) applied at patch time. Override rule never fired.
+- Turn 2 (4 rows, stranded-row recovery): SR Washed 146/147/148 + SR Natural 144. `roest_log_id` was NULL on these (NULL `profile_link` too), so Chris pulled the log_ids manually from the Roest UI. Patched via `pull_roest_log` → `patch_roast` with `roest_log_id` included in the same call to close the FK gap.
+- 6 additional rows flipped to `manual` via the >0.5°C override rule + Chris's manual confirmation: SR Natural V5 187/188/189 (already-set bean_temp from Round 7, divergences 0.8/2.3/2.3°C) + Gesha Clouds Forest 170/171/172 (dev_time profiles where FC was silent or operator dropped short — functionally manual).
+
+**Pre-counterflow lots (61 roasts) deliberately dropped** per the counterflow-only archive rule: El Socorro / Libertad / GV Oma / GV Surma. Their `green_beans.roest_inventory_id` is NULL and their `roasts.roest_log_id` is also NULL — recovery would require URL extraction from `profile_link` + Roest retention check, and these lots are already resolved + outside the active archive.
+
+**Convention question surfaced:** 14 manual rows have `end_condition_target = NULL`, 1 row (Red Plum batch 180, created 2026-05-09) preserves the programmed target. Spawned as its own task 2026-05-18 — see the spawned task chip / new status-table row.
+
+Prompt below retained as historical reference:
+
+
+
+```
+Backfill `end_condition_type` + `end_condition_target` on historical roasts
+≤batch 169 across 8 lots. Original push happened before pull_roest_log
+surfaced these fields (Round-7 capability landed 2026-05-14). The Roest
+API has them now; re-pull + patch.
+
+For each green_bean_id below, loop over its batches:
+  1. list_roest_logs({inventory_id: <get via get_green_bean>}) to find
+     each roast's log_id.
+  2. pull_roest_log(log_id) — payload now includes end_condition_type +
+     end_condition_target from the Roest API.
+  3. patch_roast({roast_id, end_condition_type, end_condition_target}).
+  4. Operator-override check: if end_condition_target and drop_temp
+     diverge >0.5°C in a way unexplained by Roest behavior, set
+     end_condition_type: "manual" instead of trusting the API payload.
+
+Lots (descending null count, per execute_sql 2026-05-18):
+  - Guatemala El Socorro · 22 roasts (batches 29-88)
+    green_bean_id: 25bc4034-63b7-43c5-831d-0335c0f75f89
+  - Guatemala Libertad · 22 roasts (batches 33-94)
+    green_bean_id: b952f657-242b-4213-979e-40425683b3d9
+  - CGLE Sudan Rume Hybrid Washed · 20 roasts (batches 104-148)
+    green_bean_id: 0d3212f8-3f18-4ff7-b54e-7bd4b3363e86
+  - CGLE Sudan Rume Natural · 13 roasts (batches 128-169)
+    green_bean_id: 1cf02eb8-accb-4e74-8ce5-52892b4ecfd7
+  - CGLE Mandela XO · 13 roasts (batches 100-151)
+    green_bean_id: a88f3d97-1f20-417a-96b1-70766a2825eb
+  - GV Oma · 9 roasts (batches 52-99)
+    green_bean_id: 6756d000-9581-4f1a-8b04-269d11a9888e
+  - GV Surma · 8 roasts (batches 18-27)
+    green_bean_id: a2010599-7837-427f-85d9-6b414505727b
+  - Gesha Clouds Forest · 3 roasts (batches 161-163)
+    green_bean_id: 0f6e1e49-e7d6-41fc-8754-be249fbe4349
+
+Total: 110 roasts across 8 lots. Report a summary table at the end:
+{ lot, patched_count, manual_overrides, already_set, errors }.
+```
+
+## Round 8 bundling note
+
+Chris confirmed 2026-05-18 he has auction sample lots ready to run and plans to bundle Round 8 with the first auction-sample one-shot lot. Trigger: next auction sample lands. Process: paste the contents of `docs/prompts/one-shot.md` into a claude.ai session, fill the LOT SPEC block per the prompt's intake template, run STAGES 1-4 end-to-end. Then close via `one-shot-closeout.md`. This exercises the full one-shot pipeline end-to-end (tolerance-anchored design + carry-forward search) on a fresh-from-the-start lot — distinct from Rancho Tio which was retroactive backfill. Append findings to `memory/feedback_mcp_continuous_log.md` as Round 8 entry once it lands.
 
 ## Goal for the next session
 
@@ -96,10 +329,14 @@ Defer to its own sprint. Bundle when timing makes sense (e.g. after Round 8 surf
 - **CCIL consolidation arbiter task** (Round 4 #11). Recurring doc-maintenance: promote High-confidence hypotheses in ROASTING.md's Cross-Coffee Insight Layer to a Confirmed Patterns subsection + retire Low-confidence ones that haven't repeated across N lots. Lives in ARBITER.md playbook (or extends it).
 - **patch_roast + read_doc_section intermittent failures** (Round 1 #4 + #5). req_011CawGMmSjMThH9XeESJs / req_011CawGMmSjMNWThH9XeESJs / req_011Cb3bFZiMduh6ZkKcFSSqy. Pattern: tool surfaces in tool_search but errors on execution. Retries succeeded. Open for Vercel logs investigation when there's a pause.
 
-## Operational backfills queued
+## Operational backfills (closed 2026-05-18)
 
-- **CGLE Sudan Rume Natural V5 missing recipe rows** (Round 1 #2). The lot's V5 push from 2026-05-14 wrote roasts + experiment but no `push_roast_recipe` calls (since it ran under pre-rewrite prompts). 13 recipe rows still have NULL `experiment_id` + `batch_slot` + design-intent fields. Chris hasn't backfilled yet. Track-B-style operational backfill candidate via patch_roast_recipe calls.
-- **Historical end_condition backfill on roasts ≤batch 169** (Round 1 #8). All historical roasts have NULL `end_condition_type` because `pull_roest_log` didn't surface these fields when those roasts were originally pushed. Opportunistic: fold into next close-lot.md run when a relevant lot closes.
+- ~~**CGLE Sudan Rume Natural V1-V4 historical recipe linkage**~~ (Round 1 #2) — **shipped 2026-05-18.** 13/13 rows linked via `patch_roast_recipe` from claude.ai; batch 154 slot collision defused via SQL rename to `v3b_switched`. V5 still auto-handles via STAGE 0.
+- ~~**Historical end_condition backfill on roasts ≤batch 169**~~ (Round 1 #8) — **counterflow portion shipped 2026-05-18.** 49/49 in-scope counterflow rows patched + 6 additional rows flipped to `manual` via override rule. Pre-counterflow 61 roasts deliberately dropped from scope.
+
+## Newly queued (2026-05-18)
+
+- **`manual` end_condition_target convention** — DB inconsistent (14 rows null target, 1 row Red Plum batch 180 preserves it). Spawned as its own task; ADR + standardization pending. See status table row above.
 
 ## Pending dogfood rounds
 
