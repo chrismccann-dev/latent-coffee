@@ -23,7 +23,7 @@ export const pushRoastRecipeInputSchema = {
     'Human-readable recipe name (e.g. "Higuito - v3a", "Calibration shot 91-93C"). Required when experiment_id + batch_slot are null (used as the UPSERT key for one-off recipes). Optional but recommended for V-set recipes — surfaces in the page UI.',
   ),
   parent_recipe_id: z.string().uuid().optional().nullable().describe(
-    'Lineage pointer: when v3a "replicates v2b" or "marginal modification of v2b", set this to v2b\'s recipe_id. Makes replication relationships queryable later. Optional; some recipes are genuinely novel.',
+    'Lineage pointer (directional-ancestor, not strict-replication). Set this when v3a was directly informed by v2b\'s design intent — including the case where v3a represents a SHIFTED SPREAD anchored on v2b\'s curve (e.g. "v3a tests peak inlet 2°C below v2b\'s peak, holding everything else constant"), not only the case where v3a is a strict replicate. Makes "what design choices flow from what" queryable. Optional; leave NULL when the recipe is genuinely novel (no prior recipe directly informed this one) or when the lineage is ambiguous across multiple parents.',
   ),
   rationale: z.string().optional().nullable().describe(
     'Per-batch Hypothesis prose — the "why this specific recipe / what we expect to learn from this batch" reasoning. Renders in the design-table Hypothesis row on the waiting-for-next-roast page. Distinct from notes (which is the freer catch-all).',
