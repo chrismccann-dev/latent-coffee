@@ -147,6 +147,12 @@ export interface Roast {
   end_condition_type: 'bean_temp' | 'dev_time' | 'manual' | null
   end_condition_target: number | null
   fc_total_cracks: number | null
+  // Sprint 11 (migration 061, 2026-05-20): 4-value enum capturing FC audibility.
+  // Three of four (subtle / silent / ambiguous) trigger the same downstream
+  // protocol (bean-temp end condition + drop-ceiling-primary + Agtron as
+  // proxies); the distinction matters for cause attribution. See CONTEXT.md
+  // § FC audibility state. Historical 135 roasts left NULL per RO-CP-3.
+  fc_audibility: 'audible' | 'subtle' | 'silent' | 'ambiguous' | null
   // Sub Pages 6.1 (migration 052, 2026-05-13): FK to roast_recipes — the
   // design intent that this roast executed. Nullable through Phase 3 of the
   // roasting-redesign migration plan. See docs/roasting/redesign.md § 4.4.
@@ -240,6 +246,13 @@ export interface Cupping {
   // from (wb_agtron - ground_agtron) — read-only on writes.
   wb_agtron: number | null
   wb_to_ground_delta: number | null
+  // Sprint 11 (migration 062, 2026-05-20): two prose axes relocated from
+  // roast_learnings per ADR-0008. They describe what a cup IS (per-tasting
+  // observation), not what a lot TAUGHT (lot-aggregate lesson). 7 closed
+  // lots backfilled to the canonical pourover cupping on each lot's
+  // best_roast_id. See CONTEXT.md § Cup character.
+  aromatic_behavior: string | null
+  structural_behavior: string | null
   created_at: string
   updated_at: string
 }
@@ -259,8 +272,8 @@ export interface RoastLearning {
   // until Phase 3 drops the text column.
   best_roast_id: string | null
   why_this_roast_won: string | null
-  aromatic_behavior: string | null
-  structural_behavior: string | null
+  // Sprint 11 (migration 062, 2026-05-20): aromatic_behavior + structural_behavior
+  // relocated to cuppings per ADR-0008 — they describe a cup, not a lot.
   brewing_tolerance: string | null
   roast_window_width: string | null
   primary_lever: string | null
