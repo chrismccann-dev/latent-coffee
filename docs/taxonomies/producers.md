@@ -3618,7 +3618,6 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 | `Miguel Estela, El Morito Producer's Association` | `Miguel Estela` |
 | `Momokiemo Producers` | `Roque Sánchez Cruz` |
 | `Nguisse Nare and Murago Outgrowers` | `Nguisse Nare` |
-| `Nordic Approach` | `Mekuria Mergia & Elias Rooba` |
 | `Pepe Jijon` | `Pepe Jijón` |
 | `Pepe Jijon, Finca Soledad` | `Pepe Jijón` |
 | `Project One` | `Olina Cai` |
@@ -3645,3 +3644,4 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 ## Changelog
 
 - 2026-04-26 — Sprint 1l: structural port from 49-name flat → 118-entry rich. Migration 031 applies DB drift renames + 6 collapses (Yusuf / Alo Village → Tamiru Tadesse · Local Ninga → Long Miles · Letty + Finca El Paraiso → Diego Bermúdez · Nordic Approach → Mekuria Mergia).
+- 2026-05-18 — Sprint T3 / CR-2: removed the `Nordic Approach → Mekuria Mergia & Elias Rooba` alias. Nordic Approach is a Norwegian importer, NOT a producer; the sprint 1l alias was a data error. The migration 031 collapse happened to land the one affected brew (Ethiopia Burtukaana Goro Bedesa, Substance Café roast) on the legitimate producer of that lot — Mekuria Mergia & Elias Rooba IS the Guji Highlands producer Nordic Approach imports from — so no DB re-identification was needed; the producer entry continues to record `importers: ["Nordic Approach"]` as the real relationship. Going forward, a write of `producer = "Nordic Approach"` fails canonical resolution and surfaces in the override queue rather than silently re-collapsing onto the wrong axis. See [docs/features/importer-exporter-scoping.md](../features/importer-exporter-scoping.md) for the unmodeled-importer/exporter axis decision and how it shaped this fix.

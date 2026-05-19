@@ -3816,7 +3816,16 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Miguel Estela, El Morito Producer's Association": "Miguel Estela",
   "Momokiemo Producers": "Roque Sánchez Cruz",
   "Nguisse Nare and Murago Outgrowers": "Nguisse Nare",
-  "Nordic Approach": "Mekuria Mergia & Elias Rooba",
+  // 2026-04-26 sprint 1l migration 031 collapsed `Nordic Approach` (a Norwegian
+  // importer, NOT a producer) onto `Mekuria Mergia & Elias Rooba`. That collapse
+  // happened to land on the legitimate producer of the one affected brew
+  // (Ethiopia Burtukaana Goro Bedesa) since Mekuria Mergia & Elias Rooba IS the
+  // Guji Highlands producer Nordic Approach imports from; the registry still
+  // records `importers: ["Nordic Approach"]` on that producer entry, which is
+  // the real relationship. Alias removed Sprint T3 / CR-2 2026-05-18 — the
+  // importer/exporter axis is unmodeled today (see docs/features/importer-exporter-scoping.md);
+  // future writes of `producer = "Nordic Approach"` should fail canonical
+  // resolution and surface in the override queue rather than silently re-collapse.
   "Pepe Jijon": "Pepe Jijón",
   "Pepe Jijon, Finca Soledad": "Pepe Jijón",
   "Project One": "Olina Cai",

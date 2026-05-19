@@ -10,7 +10,9 @@ const nextConfig = {
     // the section-anchor parser; Sprint 2.5 added ROASTING.md alongside
     // push_roast Tools; CONTEXT.md + docs/roasting/*.md added 2026-05-17
     // when the brewing-cross-party grilling session surfaced both as
-    // unreachable from claude.ai via read_doc.)
+    // unreachable from claude.ai via read_doc; docs/features/*.md added
+    // Sprint T3 / CR-3 2026-05-18 when importer-exporter-scoping.md was
+    // registered as the first docs/features/ surface in DOC_FILES.)
     outputFileTracingIncludes: {
       '/api/mcp/**': [
         './CONTEXT.md',
@@ -20,6 +22,7 @@ const nextConfig = {
         './docs/roasting/*.md',
         './docs/taxonomies/*.md',
         './docs/prompts/*.md',
+        './docs/features/*.md',
       ],
       // The 4 synthesize routes load lib/synthesis/humanizer-skill.md at
       // runtime via fs.readFileSync. Without this, Vercel's static-trace
