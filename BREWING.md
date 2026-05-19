@@ -2,7 +2,7 @@
 
 *Coffee Research · Latent*
 
-Brew Prompt · Roaster Reference · Archive Patterns · Grind Reference
+Brew Prompt · Roaster Reference · Cross-Coffee Insight Layer · Grind Reference
 
 *Last updated: 2026-05-07. Version history in `git log`.*
 
@@ -112,7 +112,7 @@ Within the five intensity strategies, two pairs share mechanics but differ in in
 - **Intensity-Clarity Split.** Immersion phase builds tactile body and integration; percolation phase recovers clarity and aromatic definition. Phase order matters (intensity first, clarity second). Most likely fit for heavy co-ferment lots on the SWORKS where the goal is structured extraction without muddiness.
 - **Temperature-Staged.** Phase boundaries coincide with temperature changes (e.g. low-temp closed immersion for aroma preservation, then high-temp opened percolation for structure). Distinct from a standalone Inverted Temperature Staging modifier because the temperature change is bound to the phase boundary rather than running independently.
 
-Reference recipes outside this archive: Garam Victor Um (sequential immersion-to-percolation hybrid, 2023 mesh-then-paper Switch variant - mesh swap not in our equipment set); Ryan Wibawa (Switch immersion staging); Eline Ferket (Selective Bloom Hybrid); Justin Bull (Phase-Mapped Hybrid). Currently archive has 3 Sequential confirmed brews and 0 in the other 4 sub-forms - empty-slot status acceptable, sub-forms get populated as deliberate experiments hit. See **Coffees That Confirmed Hybrid** section in Archive Patterns for the SWORKS slow/slow/open template.
+Reference recipes outside this archive: Garam Victor Um (sequential immersion-to-percolation hybrid, 2023 mesh-then-paper Switch variant - mesh swap not in our equipment set); Ryan Wibawa (Switch immersion staging); Eline Ferket (Selective Bloom Hybrid); Justin Bull (Phase-Mapped Hybrid). Currently archive has 3 Sequential confirmed brews and 0 in the other 4 sub-forms - empty-slot status acceptable, sub-forms get populated as deliberate experiments hit. See **Coffees That Confirmed Hybrid** section in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) for the SWORKS slow/slow/open template.
 
 ### Axis 2 - Modifiers (orthogonal techniques)
 
@@ -403,7 +403,7 @@ Once a recipe is confirmed as the reference brew for a coffee (iteration complet
 
 ## End-of-coffee document review
 
-After producing the resolved brew, assess whether the learnings should propagate back to the master reference. Candidate sections to update: [Roaster Reference](docs/brewing/roasters.md) (new roaster data or strategy tag refinement), Archive Patterns (add coffee to appropriate Suppression / Balanced / Full / Unclear section), By Variety (new variety data point), By Process (process row exception or confirmation), Office Brewing Notes (equipment-specific principle), Modifier Patterns (if a modifier was used - add or refine), Open Questions (resolve or add question). Propose specific edits via the `propose_doc_changes` MCP Tool with citations targeting the relevant `BREWING.md#section-anchor` location, not generic "should update" observations.
+After producing the resolved brew, assess whether the learnings should propagate back to the master reference. Candidate sections to update: [Roaster Reference](docs/brewing/roasters.md) (new roaster data or strategy tag refinement), [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) (add coffee to appropriate Suppression / Balanced / Full / Unclear section), By Variety (new variety data point), By Process (process row exception or confirmation), Office Brewing Notes (equipment-specific principle), Modifier Patterns (if a modifier was used - add or refine), Open Questions (resolve or add question). Propose specific edits via the `propose_doc_changes` MCP Tool with citations targeting the relevant `BREWING.md#section-anchor` location, not generic "should update" observations.
 
 ## Process / Variety Signal Table
 
@@ -578,15 +578,15 @@ The Sibarist B3 Cone (medium-fast) and Sibarist FAST Cone (very fast) sit at not
 
 Per-roaster brewing lessons + house-style cards (and the strategy-tag legend) moved to [docs/brewing/roasters.md](docs/brewing/roasters.md) on 2026-04-29 (Sprint 2.4) so each roaster card section-anchors cleanly under MCP for `propose_doc_changes` Tool support. That file is the canonical source for roaster lessons going forward; per-roaster proposals via Claude.ai target `roaster/{name}` and resolve to a `## {Canonical Name}` section there.
 
-Continue to SECTION 3 - ARCHIVE PATTERNS below.
+Continue to the Cross-Coffee Insight Layer below.
 
 <!-- Original SECTION 2 cards (Moonwake / Dak / Sey / ... / Colibri) are preserved verbatim in docs/brewing/roasters.md; this stub keeps the SECTION 2 header anchor for back-references. -->
 
-# SECTION 3 - ARCHIVE PATTERNS
+# Cross-Coffee Insight Layer
 
 *Coffee Research · Latent*
 
-This section captures strategy-level learnings from the brew archive. It is NOT a recipe log - the app handles that. This is about extraction strategy patterns: what approaches work for which types of coffees, and what corrections have been needed.
+This section captures strategy-level learnings from the brew archive. It is NOT a recipe log - the app handles that. This is about extraction strategy patterns: what approaches work for which types of coffees, and what corrections have been needed. Sibling of [ROASTING.md § Cross-Coffee Insight Layer](ROASTING.md#cross-coffee-insight-layer); see [CONTEXT.md § Cross-coffee insight layer](CONTEXT.md) for the canonical noun and how this surface complements per-anchor knowledge capsules.
 
 *Rule: Don't add a pattern until you have seen it in at least 2 coffees. One coffee is a data point. Two is the beginning of a pattern.*
 
@@ -873,7 +873,7 @@ Per-cup cooling-arc patterns surfaced from the brew archive. Use as diagnostic s
 
 ## Open Questions
 
-Things to test across future brews. **Maintenance rule:** when a question resolves, delete it (don't strikethrough). Resolved-with-strikethrough creates clutter at scale; the resolution lives in the relevant Archive Patterns section + commit history.
+Things to test across future brews. **Maintenance rule:** when a question resolves, delete it (don't strikethrough). Resolved-with-strikethrough creates clutter at scale; the resolution lives in the relevant [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) section + commit history.
 
 - Does finer grind (6.0 vs 6.1) consistently trade body clarity for attack intensity on anaerobic washed lots, or is this specific to Jeferson Motta?
 
@@ -919,7 +919,7 @@ After each coffee is finished, run through this checklist before starting the ne
 
 - Review this document - did the extraction strategy behave as expected? Did anything new emerge? If a modifier was used, did it do what it was meant to? If a modifier was *not* used but the iteration loop suggested one might have helped, note this as a flag for next time.
 
-- Update Archive Patterns if the coffee confirmed an existing pattern (add a data point) or revealed a new one. New strategy data points go to By Extraction Strategy. New modifier data points go to By Modifier (Axis 2).
+- Update the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) if the coffee confirmed an existing pattern (add a data point) or revealed a new one. New strategy data points go to By Extraction Strategy. New modifier data points go to By Modifier (Axis 2).
 
 - Update Roaster Reference (`docs/brewing/roasters.md`) if you learned something about this roaster's style that wasn't captured before. Use `propose_doc_changes` MCP Tool with a citation targeting the relevant `## {Roaster Name}` anchor.
 

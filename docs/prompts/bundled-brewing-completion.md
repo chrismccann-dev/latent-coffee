@@ -24,7 +24,7 @@ roast-levels). Per-citation target_doc overrides the proposal-level default.
 For replace, copy current_text VERBATIM. Multi-citation + multi-target_doc
 proposals are supported.
 
-Most likely sections: By Process, By Variety, Archive Patterns, Cooling
+Most likely sections: By Process, By Variety, Cross-Coffee Insight Layer, Cooling
 Behavior, the relevant roaster card, Open Questions.
 
 Here is the completed archive entry:

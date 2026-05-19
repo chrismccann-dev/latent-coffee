@@ -5,7 +5,7 @@ path, mention it.
 BEFORE drafting any citation, fetch the live document so current_text is
 verbatim from what's deployed (project-uploaded copies may have drifted):
 
-  - BREWING.md sections (By Process, By Variety, Archive Patterns, Cooling
+  - BREWING.md sections (By Process, By Variety, Cross-Coffee Insight Layer, Cooling
     Behavior, Open Questions, etc.): read_doc_section(uri="docs://brewing.md",
     anchor="<Section Name>"). If anchor doesn't resolve, call
     list_doc_sections(uri="docs://brewing.md") to find the verbatim header.
