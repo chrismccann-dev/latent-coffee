@@ -21,6 +21,7 @@ The sourcing tiers in this doc reference producers and varieties from those regi
 ## History
 
 - **2026-05-09:** Initial draft. Authored from Chris's "Sourcing Strategy Ideas for Roasting" synthesis doc plus the underlying WBC corpus. Latent inventory mapped to tiers as a 2026-05-09 snapshot — refresh on inventory change. Two-doc split with [wbc-roasting.md](wbc-roasting.md) covering the *how to roast* side.
+- **2026-05-18 (Sprint T2):** Three doc edits folding the 2026-05-16 grilling locks into the authored doc — § 10 portfolio formalized 4 → 5 lanes (Value / roast-practice promoted from gap-analysis-only to authored frame; WBC-6); § 11 Sourcing channels added with 6 channel kinds (Generalist retailer / Specialty importer / Competition-grade importer / Direct-from-farm / Auction-sample channel / Direct-from-auction awareness-only; WBC-8); Geisha Village classification corrected inside the new § 11 (direct-from-farm with 1kg-sample-bag sub-pattern, not generalist retailer; WBC-7). Each lock matches the canonical vocabulary already in [CONTEXT.md § WBC Reference Materials](../../CONTEXT.md).
 
 ## How sourcing thinking shifted post-WBC review
 
@@ -304,9 +305,9 @@ Score future green offers like this:
 | Sensory fit | 10% | Floral, citrus, stone fruit, tea-like, honey, clean finish |
 | Learning value | 5% | Fills a gap in the roasting database |
 
-## 10. Best sourcing strategy — four-lane portfolio
+## 10. Best sourcing strategy — five-lane portfolio
 
-Build the green inventory around four lanes:
+Build the green inventory around five lanes:
 
 | Lane | Example green |
 |---|---|
@@ -314,8 +315,51 @@ Build the green inventory around four lanes:
 | **Fruit-tea expression** | Natural Panama Gesha, white honey Gesha, clean Sidra |
 | **Process learning** | CM Gesha, mossto washed, cold-fermented natural |
 | **Roast-learning hybrids** | Mandela, Sudan Rume, Java, Chiroso, CGLE 17 |
+| **Value / roast-practice** | Sub-$30/kg washed Bourbon or Caturra; value-tier Brazil / Guatemala / Honduras washed |
 
 The shift the WBC data supports: **buy coffees with clear experimental jobs**, not "buy the most interesting coffee."
+
+The **Value / roast-practice lane** was formalized 2026-05-18 (Sprint T2 / WBC-6) — the gap analysis below had been treating it as load-bearing since the 2026-05-09 snapshot, but the authored frame above lagged at 4 lanes. The 5th lane carries cheap experiment substrate (sub-$30/kg, washed Bourbon / Caturra / value-tier blends) for running 3-batch dev ladders + rest-curve experiments + green-curve calibration without burning expensive lots on basic-skill iterations. Eats fast at 100g/batch — the Roest L200 100g-per-batch capacity (see Sourcing constraints in CONTEXT.md) means even a 5-pound value lot supports ~22 practice roasts, which the iteration cadence consumes quickly enough to matter.
+
+## 11. Sourcing channels
+
+§§ 1-10 above answer **what to buy**. This section answers **how the green actually gets acquired** — the operational substrate against which the portfolio-construction framework operates. Distinct from Producer signals (§ 1) which is about *which producers' green is worth wanting*; channels is about *which paths make a given producer's green reachable at single-person scale*.
+
+Six channel kinds, each characterized by volume + access pattern + relationship depth + competition-grade compatibility:
+
+| Channel | Volume window | Access pattern | Competition-grade fit | Examples |
+|---|---|---|---|---|
+| **Generalist retailer** | Open (any size) | Anonymous + non-relational; broad catalog | Rare to find competition-grade content | Sweet Maria's |
+| **Specialty importer** | Typically 1-5lb | Semi-anonymous; small curated catalog | Bridges generalist + competition-grade | Jah Coffee, Showroom Coffee |
+| **Competition-grade importer** | Typically 1-5lb | Relationship-keyed; niche catalog, often single-person-run | Critical channel for competition-grade at single-person scale | Untold Coffee Lab, Forward Coffee (Panama-based) |
+| **Direct-from-farm** | 1kg sample bags up to multi-kg allocations | Relationship-keyed with the producer directly; the Tier-1-producer-access-paradox's primary unlock | Highest cup ceiling + hobbyist-compatible volume when available | CGLE (WhatsApp post-relationship-building), Forest Coffee (Milton Monroy / GESHA CLOUDS source post-World-of-Coffee), Geisha Village (1kg sample bags via website) |
+| **Auction-sample channel** | 100-120g single batches | Auction-keyed sample sets, farm-direct sample sets sent during sourcing negotiations, rare allocations from limited drops | One-shot competition-grade access at the smallest viable volume | Auction sample sets, World of Coffee allocation samples |
+| **Direct-from-auction** (awareness-only) | Full auction lots (typically 5-50kg+) | Direct purchase of full auction lots, typically through friends or contacts who participate in auctions | Highest-end access path AND incompatible with the 1-5lb window today | Future scope as relationship network grows |
+
+### Direct-from-farm sub-pattern: 1kg-ish sample bags
+
+The most operationally important sub-pattern under Direct-from-farm: **farms that sell 1kg-ish bags directly to end consumers via their own website or contact channel**. When available, this is the ideal channel — highest cup ceiling + hobbyist-compatible volume + zero importer markup. Not all farms do it. Geisha Village is the canonical example today; CGLE post-relationship is a different sub-pattern (WhatsApp-keyed, relationship-gated, ad-hoc allocations rather than a standing 1kg-bag offering).
+
+Watch for this sub-pattern when evaluating any high-end farm — if the website shows a direct-purchase option, the channel kind upgrades from "I'd need an importer" to "I can buy direct," and the buying calculus shifts substantially.
+
+### Geisha Village classification
+
+Geisha Village had been informally classified as a **generalist retailer** because it sells via a consumer-facing website. The 2026-05-16 grilling re-classified it as **direct-from-farm**: Geisha Village is the high-end farm itself, sells 1kg sample bags directly via its own website, and operates with no importer or aggregator between the farm and the buyer. The website-as-storefront masks the channel kind on first inspection — the structural relationship is direct-from-farm.
+
+### Direct-from-auction is awareness-only today
+
+The 6th channel is locked as awareness-only — Chris doesn't currently bid on full auction lots, and the typical 5-50kg auction-lot quantities are incompatible with the Sourcing-constraints 1-5lb window (see CONTEXT.md § Sourcing constraints for the layer). Future scope as the producer-relationship network grows and as the long-term Competition-grade-access-trajectory advances (also CONTEXT.md). The reason this channel earns documentation today rather than waiting for first-use: the awareness-floor principle of Strategy-zone completeness applies on the sourcing side too — Chris should never not-know-the-channel-exists, even when it's not currently adopted.
+
+### Channel mix today
+
+Most current inventory came in via:
+
+- **Generalist retailer** — Sweet Maria's (historical skill-building lots, value-tier purchases)
+- **Specialty importer** — Jah Coffee, Showroom Coffee (the post-World-of-Coffee 2026 mid-tier mix)
+- **Competition-grade importer** — Untold Coffee Lab, Forward Coffee (the higher-end specialty lots)
+- **Direct-from-farm** — CGLE (Sudan Rume Hybrid Washed + Sudan Rume Natural, both via WhatsApp post-relationship-building), Forest Coffee (GESHA CLOUDS, Milton Monroy source)
+
+The Competition-grade-access-trajectory (CONTEXT.md) names the multi-year shift in this mix — from generalist + specialty importer dominant today toward direct-from-farm + competition-grade importer + direct-from-auction dominant at championship-mode horizon.
 
 ## Latent inventory mapped to tiers (snapshot 2026-05-09)
 
@@ -345,7 +389,7 @@ This section is the operational scoreboard — fold the abstract framework above
 
 ### Portfolio gap analysis (Latent-adjusted)
 
-Mapping current inventory against the four-lane portfolio model in § 10, **using the Latent-adjusted priority from § Latent's actual current palate vs. the WBC sweet spot** (not the raw WBC tier reading):
+Mapping current inventory against the five-lane portfolio model in § 10, **using the Latent-adjusted priority from § Latent's actual current palate vs. the WBC sweet spot** (not the raw WBC tier reading):
 
 | Lane | Currently in inventory | Gap (Latent-adjusted) |
 |---|---|---|
