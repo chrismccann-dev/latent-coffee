@@ -46,6 +46,7 @@ function brewToStructured(brew: Brew): StructuredProcess {
     base_process: brew.base_process as BaseProcess,
     subprocess: (brew.subprocess as HoneySubprocess | null) ?? null,
     fermentation_modifiers: (brew.fermentation_modifiers ?? []) as readonly any[],
+    fermentation_qualifiers: (brew.fermentation_qualifiers ?? []) as readonly any[],
     drying_modifiers: (brew.drying_modifiers ?? []) as readonly any[],
     intervention_modifiers: (brew.intervention_modifiers ?? []) as readonly any[],
     experimental_modifiers: (brew.experimental_modifiers ?? []) as readonly any[],

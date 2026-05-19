@@ -22,6 +22,7 @@ import {
   type HoneySubprocess,
   FERMENTATION_LOOKUP,
   type FermentationModifier,
+  FERMENTATION_QUALIFIER_LOOKUP,
   DRYING_LOOKUP,
   type DryingModifier,
   INTERVENTION_LOOKUP,
@@ -296,6 +297,7 @@ export interface BrewPayload {
   base_process?: BaseProcess | null
   subprocess?: HoneySubprocess | null
   fermentation_modifiers?: string[] | null
+  fermentation_qualifiers?: string[] | null
   drying_modifiers?: string[] | null
   intervention_modifiers?: string[] | null
   experimental_modifiers?: string[] | null
@@ -405,6 +407,7 @@ export function seedStructuredProcess(payload: Partial<BrewPayload>): Structured
       base_process: payload.base_process,
       subprocess: payload.subprocess ?? null,
       fermentation_modifiers: (payload.fermentation_modifiers ?? []) as StructuredProcess['fermentation_modifiers'],
+      fermentation_qualifiers: (payload.fermentation_qualifiers ?? []) as StructuredProcess['fermentation_qualifiers'],
       drying_modifiers: (payload.drying_modifiers ?? []) as StructuredProcess['drying_modifiers'],
       intervention_modifiers: (payload.intervention_modifiers ?? []) as StructuredProcess['intervention_modifiers'],
       experimental_modifiers: (payload.experimental_modifiers ?? []) as StructuredProcess['experimental_modifiers'],
@@ -751,6 +754,7 @@ export function validateBrewPayload(payload: BrewPayload): ValidationResult {
   }
   for (const [axis, lookup, list] of [
     ['fermentation_modifiers', FERMENTATION_LOOKUP, payload.fermentation_modifiers],
+    ['fermentation_qualifiers', FERMENTATION_QUALIFIER_LOOKUP, payload.fermentation_qualifiers],
     ['drying_modifiers', DRYING_LOOKUP, payload.drying_modifiers],
     ['intervention_modifiers', INTERVENTION_LOOKUP, payload.intervention_modifiers],
     ['experimental_modifiers', EXPERIMENTAL_LOOKUP, payload.experimental_modifiers],
@@ -1102,6 +1106,7 @@ export const PATCH_BREW_EDITABLE_FIELDS = [
   'base_process',
   'subprocess',
   'fermentation_modifiers',
+  'fermentation_qualifiers',
   'drying_modifiers',
   'intervention_modifiers',
   'experimental_modifiers',
@@ -1244,6 +1249,7 @@ export async function patchBrew(
   }
   for (const [key, lookup] of [
     ['fermentation_modifiers', FERMENTATION_LOOKUP],
+    ['fermentation_qualifiers', FERMENTATION_QUALIFIER_LOOKUP],
     ['drying_modifiers', DRYING_LOOKUP],
     ['intervention_modifiers', INTERVENTION_LOOKUP],
     ['experimental_modifiers', EXPERIMENTAL_LOOKUP],
@@ -1370,13 +1376,14 @@ export async function patchBrew(
   // display string was never run through composeProcess). Mirrors the grind
   // recompute pattern above.
   const PROCESS_FIELDS = [
-    'base_process', 'subprocess', 'fermentation_modifiers', 'drying_modifiers',
-    'intervention_modifiers', 'experimental_modifiers', 'decaf_modifier', 'signature_method',
+    'base_process', 'subprocess', 'fermentation_modifiers', 'fermentation_qualifiers',
+    'drying_modifiers', 'intervention_modifiers', 'experimental_modifiers',
+    'decaf_modifier', 'signature_method',
   ] as const
   if (recomposeProcess || PROCESS_FIELDS.some((k) => k in patch)) {
     const { data: row } = await supabase
       .from('brews')
-      .select('base_process, subprocess, fermentation_modifiers, drying_modifiers, intervention_modifiers, experimental_modifiers, decaf_modifier, signature_method')
+      .select('base_process, subprocess, fermentation_modifiers, fermentation_qualifiers, drying_modifiers, intervention_modifiers, experimental_modifiers, decaf_modifier, signature_method')
       .eq('id', brewId)
       .eq('user_id', userId)
       .single()
@@ -1387,6 +1394,7 @@ export async function patchBrew(
       base_process: ('base_process' in patch ? patch.base_process : row.base_process) as StructuredProcess['base_process'],
       subprocess: ('subprocess' in patch ? patch.subprocess : row.subprocess) as StructuredProcess['subprocess'],
       fermentation_modifiers: ('fermentation_modifiers' in patch ? patch.fermentation_modifiers : row.fermentation_modifiers) as readonly FermentationModifier[],
+      fermentation_qualifiers: ('fermentation_qualifiers' in patch ? patch.fermentation_qualifiers : row.fermentation_qualifiers) as StructuredProcess['fermentation_qualifiers'],
       drying_modifiers: ('drying_modifiers' in patch ? patch.drying_modifiers : row.drying_modifiers) as readonly DryingModifier[],
       intervention_modifiers: ('intervention_modifiers' in patch ? patch.intervention_modifiers : row.intervention_modifiers) as readonly InterventionModifier[],
       experimental_modifiers: ('experimental_modifiers' in patch ? patch.experimental_modifiers : row.experimental_modifiers) as readonly ExperimentalModifier[],

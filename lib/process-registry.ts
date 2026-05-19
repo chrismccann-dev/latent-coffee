@@ -155,6 +155,39 @@ export const FERMENTATION_LOOKUP = makeCanonicalLookup(
 )
 
 // ---------------------------------------------------------------------------
+// Fermentation qualifiers (1) — orthogonal annotations on a fermentation
+// modifier. Added Sprint T3 / CR-5 2026-05-18, migration 059. Aggregation
+// level stays at the modifier; qualifier is record-when-known annotation, not
+// strategy-decision layer (per CONTEXT.md § Qualifier + Round 9 grilling
+// 2026-05-16). See docs/taxonomies/processes.md § Qualifiers.
+//
+// Currently a single canonical: `Anoxic` on `Anaerobic` (sealed-container,
+// no-headspace execution). The qualifier vocabulary intentionally stays
+// sparse — new qualifiers ride a 2-step deliberate edit (this file + the
+// markdown sub-section).
+// ---------------------------------------------------------------------------
+
+export const FERMENTATION_QUALIFIERS = ['Anoxic'] as const
+export type FermentationQualifier = (typeof FERMENTATION_QUALIFIERS)[number]
+
+export const FERMENTATION_QUALIFIER_ALIASES: Readonly<Record<string, string>> = {
+  // Surface inputs that resolve to the Anoxic qualifier on Anaerobic. Note these
+  // also appear in FERMENTATION_ALIASES mapping to the bare Anaerobic modifier —
+  // when one of these strings is the *only* fermentation token in a raw input,
+  // decomposition should emit `fermentation:[Anaerobic] + qualifier:[Anoxic]`,
+  // not `fermentation:[Anaerobic]` alone. The decomposeProcess fallback path
+  // and the picker's alias-resolution logic both consume this map.
+  'No Oxygen': 'Anoxic',
+  'Zero O2': 'Anoxic',
+  'Oxygen Free': 'Anoxic',
+}
+
+export const FERMENTATION_QUALIFIER_LOOKUP = makeCanonicalLookup(
+  FERMENTATION_QUALIFIERS,
+  FERMENTATION_QUALIFIER_ALIASES,
+)
+
+// ---------------------------------------------------------------------------
 // Drying modifiers (5)
 // ---------------------------------------------------------------------------
 
@@ -402,6 +435,13 @@ export interface StructuredProcess {
   base_process: BaseProcess
   subprocess: HoneySubprocess | null
   fermentation_modifiers: readonly FermentationModifier[]
+  // Orthogonal annotations on a fermentation modifier — e.g. `Anoxic` on
+  // `Anaerobic`. Aggregation stays at the modifier; qualifier is record-when-
+  // known annotation, not a strategy-decision layer (per CONTEXT.md §
+  // Qualifier + Round 9 grilling 2026-05-16, schema landed Sprint T3 / CR-5
+  // migration 059 / 2026-05-18). Strict-canonical against
+  // FERMENTATION_QUALIFIERS at save-gate via isProcessResolvable.
+  fermentation_qualifiers: readonly FermentationQualifier[]
   drying_modifiers: readonly DryingModifier[]
   intervention_modifiers: readonly InterventionModifier[]
   experimental_modifiers: readonly ExperimentalModifier[]
@@ -411,9 +451,10 @@ export interface StructuredProcess {
 
 const EMPTY_STRUCTURE: Pick<
   StructuredProcess,
-  'fermentation_modifiers' | 'drying_modifiers' | 'intervention_modifiers' | 'experimental_modifiers'
+  'fermentation_modifiers' | 'fermentation_qualifiers' | 'drying_modifiers' | 'intervention_modifiers' | 'experimental_modifiers'
 > = {
   fermentation_modifiers: [],
+  fermentation_qualifiers: [],
   drying_modifiers: [],
   intervention_modifiers: [],
   experimental_modifiers: [],
@@ -464,9 +505,14 @@ export const LEGACY_DECOMPOSITIONS: Readonly<Record<string, StructuredProcess>> 
     drying_modifiers: ['Dark Room Dried', 'Slow Dry'],
     signature_method: 'Moonshadow',
   }),
+  // Anoxic = Anaerobic + qualifier:Anoxic (sealed-container, no-headspace
+  // execution). Qualifier column added Sprint T3 / CR-5 (migration 059); the
+  // one historical row (Rosado, id fd346045) was backfilled in the same
+  // migration. See FERMENTATION_QUALIFIERS + CONTEXT.md § Qualifier.
   'Anoxic Natural': structured({
     base_process: 'Natural',
     fermentation_modifiers: ['Anaerobic'],
+    fermentation_qualifiers: ['Anoxic'],
   }),
   'Double Anaerobic Thermal Shock': structured({
     base_process: 'Washed',
@@ -525,6 +571,7 @@ export function structuredProcessColumns(s: StructuredProcess) {
     base_process: s.base_process,
     subprocess: s.subprocess,
     fermentation_modifiers: [...s.fermentation_modifiers],
+    fermentation_qualifiers: [...s.fermentation_qualifiers],
     drying_modifiers: [...s.drying_modifiers],
     intervention_modifiers: [...s.intervention_modifiers],
     experimental_modifiers: [...s.experimental_modifiers],
@@ -544,6 +591,7 @@ export function isProcessResolvable(s: StructuredProcess): boolean {
   if (s.decaf_modifier && !DECAF_MODIFIERS.includes(s.decaf_modifier)) return false
   if (s.signature_method && !SIGNATURE_LOOKUP.isResolvable(s.signature_method)) return false
   for (const m of s.fermentation_modifiers) if (!FERMENTATION_LOOKUP.isCanonical(m)) return false
+  for (const q of s.fermentation_qualifiers) if (!FERMENTATION_QUALIFIER_LOOKUP.isCanonical(q)) return false
   for (const m of s.drying_modifiers) if (!DRYING_LOOKUP.isCanonical(m)) return false
   for (const m of s.intervention_modifiers) if (!INTERVENTION_LOOKUP.isCanonical(m)) return false
   for (const m of s.experimental_modifiers) if (!EXPERIMENTAL_LOOKUP.isCanonical(m)) return false

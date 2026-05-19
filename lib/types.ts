@@ -361,6 +361,9 @@ export interface Brew {
   base_process: string
   subprocess: string | null
   fermentation_modifiers: string[]
+  // Orthogonal annotations on fermentation modifiers (e.g. Anoxic on Anaerobic).
+  // Sprint T3 / CR-5 migration 059 / 2026-05-18. Canonical today: ['Anoxic'].
+  fermentation_qualifiers: string[]
   drying_modifiers: string[]
   intervention_modifiers: string[]
   experimental_modifiers: string[]

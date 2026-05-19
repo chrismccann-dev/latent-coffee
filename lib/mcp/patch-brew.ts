@@ -26,6 +26,9 @@ export const patchBrewInputSchema = {
   base_process: z.enum(['Washed', 'Honey', 'Natural', 'Wet-hulled']).optional().nullable(),
   subprocess: z.string().optional().nullable(),
   fermentation_modifiers: z.array(z.string()).optional().nullable(),
+  fermentation_qualifiers: z.array(z.string()).optional().nullable().describe(
+    'Orthogonal annotations on fermentation_modifiers — e.g. Anoxic on Anaerobic (sealed-container, no-headspace execution). Canonical today: Anoxic. Aliases accepted (No Oxygen / Zero O2 / Oxygen Free → Anoxic). Patch is set-not-merge — supplying [] clears qualifier metadata. Record-when-known annotation; aggregation level stays at fermentation_modifiers.',
+  ),
   drying_modifiers: z.array(z.string()).optional().nullable(),
   intervention_modifiers: z.array(z.string()).optional().nullable(),
   experimental_modifiers: z.array(z.string()).optional().nullable(),

@@ -137,6 +137,9 @@ export const pushBrewInputSchema = {
   fermentation_modifiers: z.array(z.string()).optional().nullable().describe(
     `Process modifier — fermentation axis. Canonical: ${FERMENTATION_MODIFIERS.join(' | ')}. Aliases accepted (e.g. CM → Carbonic Maceration, Cryo → Cryomaceration, "Yeast Fermentation" → Yeast Inoculated). See \`canonicals://processes\` for the full alias map. ${MODIFIER_ORDER_NOTE}`,
   ),
+  fermentation_qualifiers: z.array(z.string()).optional().nullable().describe(
+    'Orthogonal annotations on a fermentation modifier — e.g. `Anoxic` on `Anaerobic` (sealed-container, no-headspace execution). Record-when-known, NOT a strategy-decision layer: aggregation stays at the modifier (Anaerobic), not the qualifier (Anoxic). Canonical: Anoxic. Aliases accepted (No Oxygen / Zero O2 / Oxygen Free → Anoxic). Populate alongside fermentation_modifiers when the producer documents fully-sealed no-headspace execution; leave empty (default) when the producer says only "Anaerobic" without qualifier detail. See `docs://taxonomies/processes.md` § Qualifiers + `canonicals://processes` for the full alias map.',
+  ),
   drying_modifiers: z.array(z.string()).optional().nullable().describe(
     `Process modifier — drying axis. Canonical: ${DRYING_MODIFIERS.join(' | ')}. Aliases accepted (DRD/LDE → Dark Room Dried, ASD → Anaerobic Slow Dry). See \`canonicals://processes\`. ${MODIFIER_ORDER_NOTE}`,
   ),
