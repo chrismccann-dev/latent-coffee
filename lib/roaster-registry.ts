@@ -2364,8 +2364,8 @@ export const ROASTERS: RoasterEntry[] = [
     displayName: 'Latent',
     location: 'Home (Roest sample roaster, 100g batches)',
     strategyTag: 'SELF-ROASTED',
-    houseStyle: 'Roast for elasticity, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
-    bmrHouseStyle: 'Roast for elasticity, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
+    houseStyle: 'Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
+    bmrHouseStyle: 'Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
   },
 ]
 

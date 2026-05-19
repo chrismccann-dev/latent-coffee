@@ -66,8 +66,8 @@ These are what the resolved-view page's Roast Character mini-card surfaces side-
 
 - **`primary_lever`**: the single variable that mattered most for this lot - the lever to move first when re-roasting. 1-2 sentences.
 - **`secondary_levers`**: smaller-impact levers that still moved the cup. Optional.
-- **`roast_window_width`**: `"Narrow"` / `"Moderate"` / `"Wide"`. The acceptable-roast-window for the primary lever - the range within which the cup stays in the desired zone. CONTEXT.md flags this column for a UI relabel to `acceptable_roast_window` - the schema field name stays as-is until the rename sprint lands.
-- **`elasticity`**: how well the roast responds to brewing variation (brewing tolerance). CONTEXT.md flags this column for rename to `brewing_tolerance` - the schema field name stays as-is until the rename sprint lands. High = cup holds up when brewing is pushed toward extremes (Full Expression / Suppression / Extraction Push); Low = cup falls in on itself when pushed. Note: Chris deprioritizes brewing tolerance in favor of expressiveness, so low-tolerance lots are acceptable provided they don't fully collapse - phrase the assessment accordingly.
+- **`roast_window_width`**: `"Narrow"` / `"Moderate"` / `"Wide"`. The **acceptable roast window** for the primary lever - the range within which the cup stays in the desired zone. UI renders this as "Acceptable Roast Window"; the schema column name stays `roast_window_width` for content-shape reasons.
+- **`brewing_tolerance`**: how well the cup holds up when brewing variables are pushed toward extremes (Full Expression / Suppression / Extraction Push). High = cup stays coherent across a wide brew range; Low = cup falls in on itself when pushed. Distinct from `roast_window_width` which captures latitude on the *roast* side. Note: Chris deprioritizes brewing tolerance in favor of expressiveness (Latent's motto: "Roast for brewing tolerance, brew for intensity" — controls-both-sides posture means the roasted bean has to hold up when pushed or pulled from either direction), so low-tolerance lots are acceptable provided they don't fully collapse - phrase the assessment accordingly. Renamed from `elasticity` in Sprint 10 (migration 060, 2026-05-19) per ADR-0007.
 
 ### Variable post-hoc promotions
 
@@ -95,11 +95,10 @@ These describe what the cup IS when roasted correctly - distinct from diagnostic
 These are the fields `start-lot.md` reads when designing V1 on a new lot with overlapping attributes. Designed to shorten time-to-reference-roast on the next similar lot.
 
 - **`cultivar_takeaway`**: what this lot taught about the cultivar generally. Cross-lot scope.
-- **`general_takeaway`**: what this lot taught about roasting generally / cross-coffee patterns. Cross-cultivar scope.
+- **`terroir_takeaway`**: what this lot taught about the terroir generally (country / admin region / macro terroir patterns). Cross-lot scope. Added Sprint 10 (migration 060, 2026-05-19) — closes the missing carry-forward axis Chris's mental model has always carried. Populate when the lot teaches something terroir-specific that future similar-terroir lots should inherit; leave NULL when the carry-forward is cultivar- or process-driven rather than terroir-driven.
+- **`general_takeaway`**: what this lot taught about roasting generally / cross-coffee patterns. Cross-cultivar / cross-terroir scope.
 - **`starting_hypothesis`**: hypothesis for the next similar coffee - what to start from. The most actionable field for future `start-lot.md` runs.
 - **`reference_roasts`**: which batches to keep in mind for replication / comparison (a string list - typically just the reference roast plus 1-2 other strong slots from the lot for benchmarking).
-
-CONTEXT.md flags a missing axis: **terroir takeaway** is in Chris's mental model but the schema is missing the column. Open follow-up: add `roast_learnings.terroir_takeaway`. For this lot, fold the terroir lesson into `general_takeaway` until the column lands.
 
 ## STAGE 4 - Push the optimized brew
 

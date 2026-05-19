@@ -1545,8 +1545,8 @@ function ResolvedView({
         <SectionCard title={`ROASTING LEARNINGS · ${bean.name || bean.lot_id}`}>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <CharacterCard label="Primary Lever" value={learnings.primary_lever} />
-            <CharacterCard label="Roast Window" value={learnings.roast_window_width} />
-            <CharacterCard label="Elasticity" value={learnings.elasticity} />
+            <CharacterCard label="Acceptable Roast Window" value={learnings.roast_window_width} />
+            <CharacterCard label="Brewing Tolerance" value={learnings.brewing_tolerance} />
           </div>
           <div className="space-y-4 font-sans text-sm leading-relaxed">
             <LearningRow label="Secondary levers" value={learnings.secondary_levers} />
@@ -1570,10 +1570,12 @@ function ResolvedView({
       {learnings && (
         <SectionCard title="ROASTING LEARNINGS · TO CARRY FORWARD">
           {learnings.cultivar_takeaway ||
+          learnings.terroir_takeaway ||
           learnings.general_takeaway ||
           learnings.starting_hypothesis ? (
             <div className="space-y-4 font-sans text-sm leading-relaxed">
               <LearningRow label="Cultivar takeaway" value={learnings.cultivar_takeaway} />
+              <LearningRow label="Terroir takeaway" value={learnings.terroir_takeaway} />
               <LearningRow label="General takeaway" value={learnings.general_takeaway} />
               <LearningRow
                 label="Starting hypothesis for similar lots"
@@ -1583,7 +1585,8 @@ function ResolvedView({
           ) : (
             <div className="font-sans text-sm italic text-latent-mid">
               Generalizations not yet drafted. patch_roast_learnings(cultivar_takeaway /
-              general_takeaway / starting_hypothesis) once cross-lot synthesis is done.
+              terroir_takeaway / general_takeaway / starting_hypothesis) once cross-lot
+              synthesis is done.
             </div>
           )}
         </SectionCard>

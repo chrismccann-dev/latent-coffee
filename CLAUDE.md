@@ -221,7 +221,10 @@ npm run dev
 Requires `.env.local` with:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (for local server-side reads + migrations check)
 - `ANTHROPIC_API_KEY`
+
+**Worktrees auto-pick up `.env.local`** (added Sprint 10, 2026-05-19): the `SessionStart` hook in [.claude/settings.json](.claude/settings.json) symlinks `/Users/chrismccann/latent-coffee/.env.local` into any `.claude/worktrees/*` working dir on session start when the source file exists. Single source of truth — rotate a key in the main repo's `.env.local` and every worktree picks it up next session. The hook is idempotent (no-op when symlink/file already exists; no-op when the main-repo source is missing — chicken-and-egg safe).
 
 ### Local Verification Fallbacks
 If `.env.local` is missing `SUPABASE_SERVICE_ROLE_KEY` or local dev has Anthropic auth shadowing, fall back to: (1) MCP `execute_sql` for DB work, (2) Vercel preview for end-to-end UI verification. Do not block the sprint waiting for local config.
