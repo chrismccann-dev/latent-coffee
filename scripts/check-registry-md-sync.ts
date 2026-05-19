@@ -486,6 +486,16 @@ const AXES: AxisCheck[] = [
     extractMd: mdGrinderCanonicals,
   },
 
+  // 8b. SWORKS valve flow (Sprint T5 / CR-7) — single canonical dripper.
+  //     Same `| **{Name}** | ... |` pattern as grinders.
+  {
+    name: 'sworks',
+    tsPath: 'lib/sworks-registry.ts',
+    mdPath: 'docs/taxonomies/sworks.md',
+    extractTs: tsRichArray('SWORKS_DRIPPERS'),
+    extractMd: mdGrinderCanonicals,
+  },
+
   // 9. Process — composable, 8 sub-axes. Each gets its own row so a drift in
   //    one axis surfaces with that axis's name.
   {
