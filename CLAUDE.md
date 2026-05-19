@@ -40,7 +40,8 @@ Per-sprint retrospectives: `~/.claude/projects/-Users-chrismccann-latent-coffee/
 
 ## Git Discipline
 
-- Only commit when explicitly asked; only push when explicitly asked (do not push on 'commit')
+- **Approved or planned work** (sprint with kickoff brief, plan-mode plan approved, explicit "go for it"): commit + push + open PR + merge autonomously as one flow when ready; no second sign-off round. End the message with the merged-PR URL + main-branch commit SHA. Per Chris reinforced 4× across 2026-04 to 2026-05 (last 2026-05-24): "usually much cleaner when you just do it." Don't end shipped-implementation messages with "Ready for commit/review" framings — push the commit step back to Chris with no actual decision-signal wastes a round-trip. See [feedback_autonomy.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_autonomy.md) for the full rule + sub-rules (destructive-decision escalation, CI gating, repo merge-style detection).
+- **Unscoped or ambiguous work**: ask first before committing.
 - Before starting work, verify branch is up to date with main; many PRs may have landed since last thread touch
 - When squash-merges happen, rebase/reset against the new main rather than the pre-merge state
 - Never reset a branch without confirming via reflog that recoverable work is preserved
