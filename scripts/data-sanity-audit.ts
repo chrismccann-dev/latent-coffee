@@ -178,6 +178,7 @@ interface BrewRow {
   base_process: string | null
   subprocess: string | null
   fermentation_modifiers: string[] | null
+  fermentation_qualifiers: string[] | null
   drying_modifiers: string[] | null
   intervention_modifiers: string[] | null
   experimental_modifiers: string[] | null
@@ -193,7 +194,7 @@ interface BrewRow {
 }
 
 const BREW_COLUMNS =
-  'id,user_id,source,coffee_name,roaster,producer,brewer,filter,grinder,grind_setting,grind,roast_level,process,base_process,subprocess,fermentation_modifiers,drying_modifiers,intervention_modifiers,experimental_modifiers,decaf_modifier,signature_method,modifiers,flavors,structure_tags,green_bean_id,terroir_id,cultivar_id,created_at'
+  'id,user_id,source,coffee_name,roaster,producer,brewer,filter,grinder,grind_setting,grind,roast_level,process,base_process,subprocess,fermentation_modifiers,fermentation_qualifiers,drying_modifiers,intervention_modifiers,experimental_modifiers,decaf_modifier,signature_method,modifiers,flavors,structure_tags,green_bean_id,terroir_id,cultivar_id,created_at'
 
 // ---------------------------------------------------------------------------
 // Dimension 1 — orphan rows
@@ -341,6 +342,7 @@ function buildStructuredProcess(b: BrewRow): StructuredProcess {
     base_process: (b.base_process ?? 'Washed') as StructuredProcess['base_process'],
     subprocess: (b.subprocess ?? null) as StructuredProcess['subprocess'],
     fermentation_modifiers: (b.fermentation_modifiers ?? []) as StructuredProcess['fermentation_modifiers'],
+    fermentation_qualifiers: (b.fermentation_qualifiers ?? []) as StructuredProcess['fermentation_qualifiers'],
     drying_modifiers: (b.drying_modifiers ?? []) as StructuredProcess['drying_modifiers'],
     intervention_modifiers: (b.intervention_modifiers ?? []) as StructuredProcess['intervention_modifiers'],
     experimental_modifiers: (b.experimental_modifiers ?? []) as StructuredProcess['experimental_modifiers'],

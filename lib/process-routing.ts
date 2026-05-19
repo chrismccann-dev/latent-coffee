@@ -188,6 +188,7 @@ export function parseModifierComboSlug(
     base_process: base,
     subprocess: null,
     fermentation_modifiers: ferment,
+    fermentation_qualifiers: [],
     drying_modifiers: drying,
     intervention_modifiers: intervention,
     experimental_modifiers: experimental,

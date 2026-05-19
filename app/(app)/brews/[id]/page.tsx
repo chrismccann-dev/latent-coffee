@@ -269,6 +269,14 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
             <div className="flex items-baseline gap-2 flex-wrap">
               <span className="text-latent-mid w-24 flex-shrink-0">Process:</span>
               <Tag>{brew.process}</Tag>
+              {Array.isArray(brew.fermentation_qualifiers) && brew.fermentation_qualifiers.length > 0 && (
+                <>
+                  <span className="text-latent-mid font-mono text-xxs uppercase opacity-70">qualifier</span>
+                  {brew.fermentation_qualifiers.map((q: string) => (
+                    <Tag key={q}>{q}</Tag>
+                  ))}
+                </>
+              )}
             </div>
           )}
           {brew.terroir && (
