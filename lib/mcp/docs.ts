@@ -15,6 +15,7 @@ const TAXONOMY_AXES = [
   'flavors',
   'grinders',
   'roast-levels',
+  'sworks',
 ] as const
 
 export type TaxonomyAxis = (typeof TAXONOMY_AXES)[number]
@@ -105,6 +106,8 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when validating grinder + grind setting — currently single canonical (EG-1) with 51 enumerated valid settings (3.0-8.0 in 0.1 steps).',
   'docs://taxonomies/roast-levels.md':
     'Use when validating roast level — 8 Agtron-anchored canonical buckets (Extremely Light → Very Dark, 10-unit ranges) + marketing-tag aliases.',
+  'docs://taxonomies/sworks.md':
+    'Use when authoring a SWORKS Bottomless Dripper recipe or interpreting a SWORKS valve-dial sequence in archive prose — single owned instrument; self-only canonical sub-taxonomy. Per-dial state names (Closed / Restricted / Half-Open / Open + Dead Zone 1-4 + Maximum Flow past-7) + per-dial flow rate calibration (Dial 5 ~60 sec/100g · Dial 6 ~45 sec/100g · Dial 7 ~30 sec/100g at EG-1 6.0 + xBloom Premium Paper). Includes adjustment logic (valve-first; grind secondary) + 5 canonical recipe patterns (slow/slow/open Sequential Hybrid · fast/fast/slow Phase-Mapped · Half-Open throughout Suppression · Restricted-then-Half-Open transition · Restricted-main-Half-Open-finish Sequential).',
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
   'docs://prompts/log-brew.md':
