@@ -27,7 +27,7 @@ Domain references in `docs/`:
 
 Per-sprint retrospectives: `~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_*.md`.
 
-**MCP server status:** 32 Tools live as of 2026-05-06 (Roest API write integration shipped `push_roast_profile` + `push_inventory` + `patch_inventory`). Auth: bearer-token (desktop MCP clients) + OAuth 2.1 + PKCE (claude.ai web). All 32 Tools, schema, and discovery surfaces documented in [SYNC_V2.md](SYNC_V2.md).
+**MCP server status:** 34 Tools live as of 2026-05-13 (Sub Pages 6.1 added `push_roast_recipe` + `patch_roast_recipe`; prior 32-Tool baseline shipped via Roest API write integration 2026-05-06 `push_roast_profile` + `push_inventory` + `patch_inventory`). Auth: bearer-token (desktop MCP clients) + OAuth 2.1 + PKCE (claude.ai web). All 34 Tools, schema, and discovery surfaces documented in [SYNC_V2.md](SYNC_V2.md).
 
 ## Living reference docs
 
@@ -297,5 +297,5 @@ Run these seven checkpoints on every non-trivial sprint:
 
 **Standing tripwires (not per-sprint, but always-on):**
 - **120KB on any root-level living doc** — when crossed, plan a split sprint. Currently: BREWING.md 188KB, PRODUCT.md ~140KB post-cleanup. PRODUCT.md's `## Scaling Watch-Items` section enumerates the broader set.
-- **Tool count crosses 50** — consider Tool consolidation (merging related `push_*` into polymorphic) or namespace grouping. Currently 32 Tools.
+- **Tool count crosses 50** — consider Tool consolidation (merging related `push_*` into polymorphic) or namespace grouping. Currently 34 Tools.
 - **MEMORY.md index size** — already at warning. Run `consolidate-memory` skill quarterly, not just when warned.

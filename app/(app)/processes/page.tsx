@@ -2,7 +2,9 @@
 //   1. Core Process Portals   — 4 base hubs (Washed / Natural / Honey / Wet-hulled)
 //                                Wet-hulled hidden until first brew lands.
 //   2. Modifier Index         — cross-base modifiers w/ ≥3 brews
-//   3. Signature Methods      — Moonshadow / Hybrid Washed / TyOxidator
+//   3. Signature Methods      — 15 canonicals post Sprint T1 / BR-1 (2026-05-18);
+//                                only those with ≥1 brewed surface here (today:
+//                                Moonshadow + TyOxidator). Hybrid Washed deprecated.
 //
 // All counts computed live from the brew corpus via lib/process-aggregation.ts.
 
