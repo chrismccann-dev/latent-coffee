@@ -77,6 +77,10 @@ export const pushRoastInputSchema = {
   fc_total_cracks: z.number().int().min(0).optional().nullable().describe(
     'Total audible cracks counted from the FC event through drop. 0 on silent-FC coffees (anaerobic naturals, heavy co-ferments). Strong audibility signal that complements fc_temp / fc_start. Phase 2 (#R61).',
   ),
+  // Sprint 11 RO-CP-3 (migration 061, 2026-05-20).
+  fc_audibility: z.enum(['audible', 'subtle', 'silent', 'ambiguous']).optional().nullable().describe(
+    'FC audibility state for this batch — one of: audible (multi-snap canonical FC, cell-wall intact) / subtle (partial detection, some snaps but not the canonical signature, treated as not-audible operationally) / silent (no audibility — heavy-ferment cellulose modification; FC structurally happened but produced no snap; inaudible is a near-synonym used when hedging on detection vs asserting bean-property silence) / ambiguous (operator-property uncertainty — couldn\'t tell whether FC happened, missed it, or it\'s still upcoming). Three of the four (subtle / silent / ambiguous) trigger the same downstream protocol stack: bean-temp end_condition_type, drop-ceiling-primary, Agtron + WB→Gnd delta as proxies. The distinction matters for cause attribution and for predicting audibility on future similar lots — track it per batch, not just on the lot. See CONTEXT.md § FC audibility state.',
+  ),
   // Prose
   what_worked: z.string().optional().nullable(),
   what_didnt: z.string().optional().nullable(),
@@ -107,7 +111,7 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
     {
       title: 'Push Roast',
       description:
-        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus the Sprint 2.5 + Phase 2 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id, roest_notes, end_condition_type/target, fc_total_cracks, worth_repeating tristate). UPSERT semantics on (user_id, green_bean_id, batch_id): safe to retry after crash - when a row already exists, the existing roast_id is returned with `created: false` and field values are NOT overwritten (use patch_roast for field-level updates). Pull from Roest via pull_roest_log first when the source is a real machine batch - that returns a normalized payload with most fields populated; augment with prose and push. Returns warnings[] when a green_bean parent has roest_inventory_id NULL but the roast is being pushed with a roest_log_id (orphan reconciliation hint per #R66 - patch_green_bean to backfill the FK).',
+        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus the Sprint 2.5 + Phase 2 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id, roest_notes, end_condition_type/target, fc_total_cracks, fc_audibility 4-value enum per Sprint 11 / migration 061 / RO-CP-3, worth_repeating tristate). UPSERT semantics on (user_id, green_bean_id, batch_id): safe to retry after crash - when a row already exists, the existing roast_id is returned with `created: false` and field values are NOT overwritten (use patch_roast for field-level updates). Pull from Roest via pull_roest_log first when the source is a real machine batch - that returns a normalized payload with most fields populated; augment with prose and push. Returns warnings[] when a green_bean parent has roest_inventory_id NULL but the roast is being pushed with a roest_log_id (orphan reconciliation hint per #R66 - patch_green_bean to backfill the FK).',
       inputSchema: pushRoastInputSchema,
     },
     withToolErrorLogging('push_roast', async (input) => {
