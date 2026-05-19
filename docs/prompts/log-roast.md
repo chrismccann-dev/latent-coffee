@@ -68,7 +68,8 @@ For each slot in V_n:
   - `hopper_load_temp` comes back as null from Roest - the API doesn't expose the bean-probe hopper-load reading. Set manually from session memory (V4 standard: 125°C).
   - `end_condition_type` + `end_condition_target` now come back populated directly from the Roest API (Round-7 capability confirmed 2026-05-14). Use these as ground truth.
   - **Operator-override check**: if `end_condition_target` (profile-set drop trigger) and `drop_temp` (where the machine actually dropped) diverge by more than ~0.5°C / a couple seconds AND the divergence isn't explained by Roest behavior (ceiling breach from session-position acceleration, dev-time timer firing slightly early/late), ASK whether the operator manually pulled the drop. If yes, override `end_condition_type: "manual"` on the push_roast payload regardless of what the profile encoded.
-  - On silent-FC coffees (anaerobic naturals, heavy co-ferments - Sudan Rume Natural is the case study), `fc_start` / `fc_temp` may be null. Don't fabricate values. Record `fc_total_cracks` (count of audible cracks from FC through drop, 0 on silent-FC) as the audibility signal.
+  - On silent-FC coffees (anaerobic naturals, heavy co-ferments - Sudan Rume Natural is the case study), `fc_start` / `fc_temp` may be null. Don't fabricate values. Record `fc_total_cracks` (count of audible cracks from FC through drop, 0 on silent-FC) as the numeric audibility signal.
+  - **`fc_audibility`** (Sprint 11 RO-CP-3 / migration 061 / 2026-05-20) — set the 4-value enum per batch: `audible` (multi-snap canonical FC, cell-wall intact) / `subtle` (partial detection, some snaps but not the canonical signature; operationally treated as not-audible) / `silent` (no audibility — heavy-ferment cellulose modification; FC structurally happened but produced no snap; "inaudible" is a near-synonym used when hedging on detection vs asserting bean-property silence) / `ambiguous` (operator-property uncertainty — couldn't tell whether FC happened, missed it, or it's still upcoming). Three of the four (subtle / silent / ambiguous) trigger the same downstream protocol stack: bean-temp `end_condition_type`, drop-ceiling-primary, Agtron + WB→Gnd delta as proxies. The distinction matters for cause attribution and for predicting audibility on future similar lots. See CONTEXT.md § FC audibility state. Historical roasts (pre-Sprint-11) are NULL; populate going forward.
 
 ## STAGE 3 - Push the V_n roasts
 
@@ -81,6 +82,7 @@ For each slot:
   - `batch_id` from Roest (the integer batch number as string - e.g. `"187"`)
   - **`recipe_id`**: FK to the matching `roast_recipes` row from the slot → recipe_id map. This is the design-intent linkage - without it the page can't render "intended vs achieved" on the resolved view. STAGE 1's fallback + inline-backfill paths produce this; if both failed in STAGE 1 we already halted there.
   - All numeric fields from Roest: fc_start, fc_temp, drop_time, drop_temp, dev_time_s, agtron, charge_temp, hopper_load_temp, end_condition_type, end_condition_target, fc_total_cracks, weight_loss_pct.
+  - `fc_audibility`: the 4-value enum from STAGE 2's silent-FC bullet (audible / subtle / silent / ambiguous). Sprint 11 RO-CP-3.
   - `roest_log_id` (cross-ref) + `roest_notes` (pass-through of the Roest UI Notes / first_comment.comment - preserve verbatim, don't fold into the prose fields).
   - `roast_profile_name` from Roest.
   - **Prose** (your synthesis, NOT operator-supplied):

@@ -12,6 +12,8 @@ type RoastReflectionLike = {
   what_worked?: string | null
   what_didnt?: string | null
   what_to_change?: string | null
+  // Sprint 11 (migration 061, 2026-05-20): RO-CP-3 4-value audibility enum.
+  fc_audibility?: 'audible' | 'subtle' | 'silent' | 'ambiguous' | null
 }
 
 type Props = {
@@ -20,7 +22,7 @@ type Props = {
 
 export function PerRoastReflections({ roasts }: Props) {
   const populated = roasts.filter(
-    (r) => r.what_worked || r.what_didnt || r.what_to_change,
+    (r) => r.what_worked || r.what_didnt || r.what_to_change || r.fc_audibility,
   )
   if (populated.length === 0) return null
 
@@ -39,6 +41,12 @@ export function PerRoastReflections({ roasts }: Props) {
               {roast.roast_date && ` · ${roast.roast_date}`}
             </div>
             <div className="space-y-3 font-sans text-sm leading-relaxed">
+              {roast.fc_audibility && (
+                <div>
+                  <div className="label">FC audibility</div>
+                  {roast.fc_audibility}
+                </div>
+              )}
               {roast.what_worked && (
                 <div>
                   <div className="label">What worked</div>

@@ -398,6 +398,9 @@ export interface RoastPayload {
   end_condition_type?: 'bean_temp' | 'dev_time' | 'manual' | null
   end_condition_target?: number | null
   fc_total_cracks?: number | null
+  // Sprint 11 (migration 061, 2026-05-20): RO-CP-3 4-value FC audibility enum.
+  // audible / subtle / silent / ambiguous. See CONTEXT.md § FC audibility state.
+  fc_audibility?: 'audible' | 'subtle' | 'silent' | 'ambiguous' | null
   // Prose (Chris-authored). worth_repeating accepts boolean for back-compat;
   // coerced to 'yes'/'no'/'pending' tristate on write per migration 044.
   what_worked?: string | null
@@ -536,6 +539,8 @@ export async function persistRoast(
       end_condition_type: payload.end_condition_type ?? null,
       end_condition_target: payload.end_condition_target ?? null,
       fc_total_cracks: payload.fc_total_cracks ?? null,
+      // Sprint 11 (migration 061, 2026-05-20): RO-CP-3.
+      fc_audibility: payload.fc_audibility ?? null,
       what_worked: payload.what_worked ?? null,
       what_didnt: payload.what_didnt ?? null,
       what_to_change: payload.what_to_change ?? null,
@@ -589,6 +594,11 @@ export interface CuppingPayload {
   // from joined roasts.agtron at insert time. wb_to_ground_delta is a
   // generated column; do NOT pass it on the payload.
   wb_agtron?: number | null
+  // Sprint 11 (migration 062, 2026-05-20): two prose axes relocated from
+  // roast_learnings per ADR-0008. They describe what a cup IS (per-tasting
+  // observation), not what a lot TAUGHT.
+  aromatic_behavior?: string | null
+  structural_behavior?: string | null
 }
 
 export type PersistCuppingResult =
@@ -695,6 +705,9 @@ export async function persistCupping(
       overall: payload.overall ?? null,
       temperature_behavior: payload.temperature_behavior ?? null,
       wb_agtron: wbAgtron,
+      // Sprint 11 (migration 062, 2026-05-20): RO-6 character relocation.
+      aromatic_behavior: payload.aromatic_behavior ?? null,
+      structural_behavior: payload.structural_behavior ?? null,
     })
     .select('id')
     .single()
@@ -865,8 +878,8 @@ export interface RoastLearningsPayload {
   // execution, not a recipe design intent.
   best_roast_id?: string | null
   why_this_roast_won?: string | null
-  aromatic_behavior?: string | null
-  structural_behavior?: string | null
+  // Sprint 11 (migration 062, 2026-05-20): aromatic_behavior + structural_behavior
+  // relocated to cuppings per ADR-0008.
   brewing_tolerance?: string | null
   roast_window_width?: string | null
   primary_lever?: string | null
@@ -971,8 +984,6 @@ export async function persistRoastLearnings(
     // Sub Pages 6.1 (migration 052): typed FK reference; coexists with text.
     best_roast_id: payload.best_roast_id ?? null,
     why_this_roast_won: payload.why_this_roast_won ?? null,
-    aromatic_behavior: payload.aromatic_behavior ?? null,
-    structural_behavior: payload.structural_behavior ?? null,
     brewing_tolerance: payload.brewing_tolerance ?? null,
     roast_window_width: payload.roast_window_width ?? null,
     primary_lever: payload.primary_lever ?? null,
@@ -1193,6 +1204,8 @@ export const ROAST_PATCH_FIELDS = [
   'fan_curve', 'inlet_curve', 'roest_log_id',
   // Phase 2 (#R57 / #R58 / #R61)
   'roest_notes', 'end_condition_type', 'end_condition_target', 'fc_total_cracks',
+  // Sprint 11 (migration 061, 2026-05-20): RO-CP-3
+  'fc_audibility',
   'what_worked', 'what_didnt', 'what_to_change', 'worth_repeating', 'is_reference',
   // Schema sprint S2 (migration 056, 2026-05-18)
   'is_reference_candidate',
@@ -1256,6 +1269,9 @@ export const CUPPING_PATCH_FIELDS = [
   // Migration 046 (2026-05-07): two prose axes added at schema layer; reachable
   // via MCP in Schema sprint S3 (2026-05-18).
   'sweetness', 'temperature_behavior',
+  // Sprint 11 (migration 062, 2026-05-20): RO-6 character relocation from
+  // roast_learnings per ADR-0008.
+  'aromatic_behavior', 'structural_behavior',
   // Schema sprint S1 (migration 055, 2026-05-18): explicit override for
   // post-hoc Agtron re-measurement. wb_to_ground_delta is a generated column,
   // NOT patchable.
@@ -1407,7 +1423,9 @@ export interface PatchRoastLearningsPayload extends Partial<Omit<RoastLearningsP
 
 export const ROAST_LEARNINGS_PATCH_FIELDS = [
   'green_bean_id', 'best_batch_id', 'why_this_roast_won',
-  'aromatic_behavior', 'structural_behavior', 'brewing_tolerance',
+  // Sprint 11 (migration 062, 2026-05-20): aromatic_behavior + structural_behavior
+  // relocated to cuppings per ADR-0008.
+  'brewing_tolerance',
   'roast_window_width', 'primary_lever', 'secondary_levers',
   'what_didnt_move_needle', 'underdevelopment_signal', 'overdevelopment_signal',
   'cultivar_takeaway', 'terroir_takeaway', 'general_takeaway', 'reference_roasts',

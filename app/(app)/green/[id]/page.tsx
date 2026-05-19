@@ -1472,6 +1472,26 @@ function ResolvedView({
                     <CupRow label="Temperature behavior" value={pourover.temperature_behavior} />
                   </div>
                 )}
+                {/* Sprint 11 (migration 062, 2026-05-20): aromatic + structural behavior
+                    relocated from roast_learnings per ADR-0008 — they render here as
+                    per-cup character. Each renders as its own labeled block; conditional
+                    on the value being present so empty cups stay clean. */}
+                {(pourover.aromatic_behavior || pourover.structural_behavior) && (
+                  <div className="mt-4 space-y-3 font-sans text-sm leading-relaxed break-words">
+                    {pourover.aromatic_behavior && (
+                      <div>
+                        <div className="label">Aromatic behavior</div>
+                        {pourover.aromatic_behavior}
+                      </div>
+                    )}
+                    {pourover.structural_behavior && (
+                      <div>
+                        <div className="label">Structural behavior</div>
+                        {pourover.structural_behavior}
+                      </div>
+                    )}
+                  </div>
+                )}
               </>
             ) : (
               <div className="font-sans text-xs italic text-latent-mid">
@@ -1553,8 +1573,9 @@ function ResolvedView({
             <LearningRow label="Underdev signal" value={learnings.underdevelopment_signal} />
             <LearningRow label="Overdev signal" value={learnings.overdevelopment_signal} />
             <LearningRow label="What didn't matter" value={learnings.what_didnt_move_needle} />
-            <LearningRow label="Aromatic behavior" value={learnings.aromatic_behavior} />
-            <LearningRow label="Structural behavior" value={learnings.structural_behavior} />
+            {/* Sprint 11 (migration 062, 2026-05-20): aromatic_behavior + structural_behavior
+                relocated to cuppings per ADR-0008 — they render in the REFERENCE CUP pourover
+                sub-card above as per-cup character, not as lot-aggregate learnings. */}
             <LearningRow label="Rest behavior" value={learnings.rest_behavior} />
           </div>
         </SectionCard>
