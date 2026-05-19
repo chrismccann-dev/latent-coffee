@@ -80,9 +80,11 @@ Run a thorough search across the existing closed-lot archive:
 
 Note: peer-roasted reference cup of THIS bean typically isn't available for auction-sample / farm-sample one-shots (the lot may not even be sold yet, cycle time to wait for a peer roast is too long). The "Pre-V_n calibration gate" concept from log-cupping.md (Untold reference cup case) does NOT apply here - the calibration anchor is carry-forward from other lots, not same-bean reference.
 
-## STAGE 2 - Design the single profile (tolerance-anchored)
+## STAGE 2 - Design the single recipe (tolerance-anchored)
 
 **This STAGE writes**: `experiments` row (V1, batch_ids NULL at design time), `roast_recipes` row × 1, Roest tablet profile × 1 (via `push_roast_profile`), `roast_recipes` patch linking Roest profile ID back.
+
+Vocabulary: **recipe** is the Latent design-intent aggregate (the `roast_recipes` row carrying curves + drop + hopper + end condition + charge + drop rules + rationale + Hypothesis prose). **Roest profile** is the machine artifact (the JSON pushed to the tablet via `push_roast_profile`). One recipe row produces one or more Roest profile pushes; the two nouns are not synonyms. See CONTEXT.md § Recipe (aggregate noun for design intent) for the three-way asymmetry (recipe / Roest profile / curve-shape names).
 
 Read ROASTING.md sections via `read_doc_section`:
 
@@ -114,7 +116,7 @@ Three writes pair up here (same discipline as start-lot.md / log-cupping.md - "d
 - `experiment_id`: `<LOT-PREFIX>-V1` (one-shot lots still use the V1 framing per CONTEXT.md "lots with batch_ids of cardinality 1 flow through the same experiment -> roast -> cupping -> learnings pipeline as V-set V1")
 - `batch_ids`: omit entirely at design time (leave NULL). STAGE 3 fills it. Do NOT pass the string `"null"`.
 - `context`: "One-shot lot, single batch. Carry-forward anchor: <prior lot Y's takeaway>. Tolerance-anchored design - middle-of-the-road, no margin for error."
-- `primary_question`: what the one-shot is asking. "Does the carry-forward anchor from <prior lot Y> transfer to this <cultivar/process/terroir> at <Z spec>?"
+- `primary_question`: what the one-shot is asking. "Does the carry-forward anchor from <prior lot Y> transfer to this <cultivar/process/terroir> at <Z recipe>?"
 - `control_baseline`: any peer reference if available (rare); usually the prior lot whose carry-forward is anchoring the design.
 - `shared_constants`: charge 117°C, hopper 125°C, preheat 210°C, fan curve (from carry-forward), RPM, drum direction. Same as V-set lots.
 - `variable_changed`: NULL or "n/a - single batch, no variable to vary". One-shot lots don't have a single-variable framing.
@@ -128,7 +130,7 @@ Three writes pair up here (same discipline as start-lot.md / log-cupping.md - "d
 - `batch_slot`: `"v1a"` (cardinality 1 V-set means the single recipe is slot a)
 - `recipe_name`: `"<Lot prefix> - v1a"` or similar - surfaces in UI
 - `parent_recipe_id`: the recipe_id of the carry-forward anchor lot's leading slot, if applicable. Makes the cross-lot anchor queryable.
-- **`rationale`**: per-batch Hypothesis prose. CRITICAL for one-shots since there's no V2 to encode the reasoning into. Capture: "Anchor: <lot Y> winning slot was <Z spec>. Adjustments for this lot: <reasoning>. Tolerance margin: <margin>°C on peak, <margin>s on total time."
+- **`rationale`**: per-batch Hypothesis prose. CRITICAL for one-shots since there's no V2 to encode the reasoning into. Capture: "Anchor: <lot Y> winning slot was <Z recipe>. Adjustments for this lot: <reasoning>. Tolerance margin: <margin>°C on peak, <margin>s on total time."
 - Curve definition: `temperature_bezier` + `fan_bezier` + `rpm_bezier` (jsonb). `power_bezier` MUST be null on INLET_TEMP profiles.
 - `end_condition_type`: `"bean_temp"` (operator-grace default for one-shots).
 - `end_condition_target`: °C target.

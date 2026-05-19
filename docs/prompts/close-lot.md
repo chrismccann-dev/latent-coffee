@@ -179,7 +179,7 @@ Print:
 - `green_bean_id`
 - Reference roast designation: `roast_id`, `batch_id`, V-set + slot, brief `why_this_roast_won` excerpt
 - `roast_learnings_id` + `created` (true on first push)
-- `brew_id` for the optimized brew + key recipe specs one-liner
+- `brew_id` for the optimized brew + key recipe summary one-liner
 - `proposal_id` from `propose_doc_changes`
 - `is_archived: true` confirmation (or "skipped: <reason>" if not on Roest)
 - Lifecycle state confirmation: "Lot closed. State flipped to **Resolved**. The lot will now surface on `/green` under Resolved with the green tile, and `/green/[id]` renders the resolved-view page shape."
