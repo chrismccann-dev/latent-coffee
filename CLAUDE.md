@@ -6,7 +6,7 @@ Latent Coffee Research is Chris's personal coffee research journal — single-te
 
 Foundational living docs (root level — first thing you read):
 - **[PRODUCT.md](PRODUCT.md)** — Vision, data model, taste profile, full Roadmap (7 sections: Active Sprints / Side Quests / Blocked and Parked / Missing and Incomplete / Bugs and Issues / Longer Term Items / Future Directions), Scaling Watch-Items, Lessons Learned.
-- **[BREWING.md](BREWING.md)** — Brewing master reference: 6 strategies (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid) + 3 modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture), Two-Axis Framework, equipment reference, archive patterns. Living doc; patched via `propose_doc_changes` MCP Tool.
+- **[BREWING.md](BREWING.md)** — Brewing master reference: 6 strategies (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid) + 3 modifiers (Output Selection / Inverted Temperature Staging / Aroma Capture), Two-Axis Framework, equipment reference, Cross-Coffee Insight Layer (brewing-side counterpart to ROASTING.md's). Living doc; patched via `propose_doc_changes` MCP Tool.
 - **[ROASTING.md](ROASTING.md)** — Roasting master reference: counterflow methodology on Roest L200 Ultra, evaluation protocol, fan/inlet curves, FC marking protocol, per-bean experiment patterns, lot knowledge, roast-to-brew translation. Sibling of BREWING.md.
 
 Shared language + decisions:
