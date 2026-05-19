@@ -1,4 +1,16 @@
 {
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ ! -e .env.local ] && [ -f /Users/chrismccann/latent-coffee/.env.local ]; then ln -sf /Users/chrismccann/latent-coffee/.env.local .env.local; fi"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "mcp__Claude_Preview__preview_screenshot",
