@@ -25,6 +25,10 @@ export type QueueAxis =
   | 'grinder'
   | 'terroir'
   | 'cultivar'
+  // Sprint 12 / MCP-1 (2026-05-21, migration 063): signature_method joins as
+  // the 8th override-eligible axis. push_brew.signature_method_override is the
+  // override-flag path; propose_canonical_addition is the manual_propose path.
+  | 'signature_method'
 
 export type QueueSourceKind = 'brew' | 'green_bean' | 'roast' | 'manual'
 

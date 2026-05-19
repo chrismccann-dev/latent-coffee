@@ -94,6 +94,16 @@ export interface RoasterEntry {
   // when richer than CSV. Used by /roasters detail HOUSE STYLE block + synthesis prompt.
   bmrHouseStyle?: string
   bmrNotes?: string
+  // Sprint 12 / CR-10 (2026-05-21): skeleton flag mirroring ProducerEntry.skeleton.
+  // True for entries with thin canonical metadata pending arbiter enrichment.
+  // Surfaces via the list_skeleton_entries MCP Tool (CR-4) during "process pending
+  // arbitration" runs. Monotonic-then-deleted — remove the flag entirely when
+  // the rich-field content lands; never deleted without backfill (the canonical
+  // still needs to exist for downstream brews to reference). Today's only
+  // instance: Latent (self-roasted, intentionally thin authored metadata).
+  // Audit-pass on the 21 sprint 1h.1 net-new roasters deferred to a future
+  // arbiter session per Sprint 12 plan.
+  skeleton?: true
 }
 
 export const ROASTERS: RoasterEntry[] = [
@@ -2366,8 +2376,18 @@ export const ROASTERS: RoasterEntry[] = [
     strategyTag: 'SELF-ROASTED',
     houseStyle: 'Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
     bmrHouseStyle: 'Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
+    // Sprint 12 / CR-10 (2026-05-21): flagged as skeleton — Latent's own
+    // entry has minimal authored content by design. The arbiter procedure
+    // surfaces it via list_skeleton_entries for collaborative enrichment.
+    skeleton: true,
   },
 ]
+
+// Sprint 12 / CR-4 (2026-05-21): typed helper for the list_skeleton_entries
+// MCP Tool. Mirrors lib/producer-registry.ts pattern.
+export function listSkeletonRoasters(): RoasterEntry[] {
+  return ROASTERS.filter((r) => r.skeleton === true)
+}
 
 // --------------------------------------------------------------------------
 // Derived exports — back-compat with the prior 21-entry registry shape.

@@ -19,6 +19,9 @@ const AXIS_VALUES = [
   'grinder',
   'terroir',
   'cultivar',
+  // Sprint 12 / MCP-1 (2026-05-21, migration 063): signature_method joins the
+  // queue as the 8th override-eligible axis.
+  'signature_method',
 ] as const
 
 export const listTaxonomyQueueInputSchema = {

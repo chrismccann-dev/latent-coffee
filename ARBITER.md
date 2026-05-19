@@ -188,15 +188,16 @@ If zero rows, surface to Chris and skip.
 
 Each axis becomes one PR (one branch, one batch commit). Registry edits are per-file, so axis grouping aligns naturally with PR scope:
 
-| axis        | Registry file                    | Markdown file                          |
-|-------------|----------------------------------|----------------------------------------|
-| `producer`  | `lib/producer-registry.ts`       | `docs/taxonomies/producers.md`         |
-| `roaster`   | `lib/roaster-registry.ts`        | `docs/taxonomies/roasters.md`          |
-| `brewer`    | `lib/brewer-registry.ts`         | `docs/taxonomies/brewers.md`           |
-| `filter`    | `lib/filter-registry.ts`         | `docs/taxonomies/filters.md`           |
-| `grinder`   | `lib/grinder-registry.ts`        | `docs/taxonomies/grinders.md`          |
-| `terroir`   | `lib/terroir-registry.ts`        | `docs/taxonomies/regions.md`           |
-| `cultivar`  | `lib/cultivar-registry.ts`       | `docs/taxonomies/varieties.md`         |
+| axis                | Registry file                    | Markdown file                          |
+|---------------------|----------------------------------|----------------------------------------|
+| `producer`          | `lib/producer-registry.ts`       | `docs/taxonomies/producers.md`         |
+| `roaster`           | `lib/roaster-registry.ts`        | `docs/taxonomies/roasters.md`          |
+| `brewer`            | `lib/brewer-registry.ts`         | `docs/taxonomies/brewers.md`           |
+| `filter`            | `lib/filter-registry.ts`         | `docs/taxonomies/filters.md`           |
+| `grinder`           | `lib/grinder-registry.ts`        | `docs/taxonomies/grinders.md`          |
+| `terroir`           | `lib/terroir-registry.ts`        | `docs/taxonomies/regions.md`           |
+| `cultivar`          | `lib/cultivar-registry.ts`       | `docs/taxonomies/varieties.md`         |
+| `signature_method`  | `lib/process-registry.ts` (SIGNATURE_METHODS) | `docs/taxonomies/processes.md` (Signature Methods section) |
 
 Small batches (≤2 axes) → one PR. Larger batches → one PR per axis.
 
@@ -269,6 +270,85 @@ Once merged + Vercel deploys: claude.ai's next push that resolves the new canoni
 | Status flip | UPDATE doc_proposals SET status='applied' (per citation) | `resolve_queue_entry` Tool call |
 | Status values | applied / rejected / superseded | promoted / aliased / rejected / duplicate |
 | Auto-supersede | Yes — per (target_doc, section_anchor) on insert | EXCLUDE constraint on (user, axis, lower(raw_value)) — second push returns existing pending row id |
+
+---
+
+## Skeleton review (Sprint 12 / CR-4, 2026-05-21)
+
+`lib/<axis>-registry.ts` entries can carry an explicit `skeleton: true` flag indicating that rich-field research is pending. Today the flag lives on `ProducerEntry` (5 entries: Miguel Estela / Nelsyn Hernández / Jannette & Kai Janson / + 2 MCP-feedback skeletons) and on `RoasterEntry` (1 entry: Latent — added Sprint 12 / CR-10). Skeleton entries are the **third arbiter queue type**, walked alongside `doc_proposals` and `taxonomy_overrides_queue` during a "process pending arbitration" run. Run AFTER (or interleaved with) the prose-proposal + taxonomy-queue passes — the same Claude Code session walks all three.
+
+The structural difference from the prior two queues: **no DB row, no status flip**. The `skeleton: true` flag flips by editing the registry source file directly during the arbiter session. Mirrors `resolve_queue_entry`'s registry-edit pattern — the Tool only surfaces the work; the registry file is the source of truth.
+
+### S1. Read pending skeleton entries
+
+Use the `list_skeleton_entries` MCP Tool (axis filter optional).
+
+```ts
+list_skeleton_entries({})              // both axes
+list_skeleton_entries({ axis: 'producer' })   // producer only
+list_skeleton_entries({ axis: 'roaster' })    // roaster only
+```
+
+If zero entries, surface to Chris and skip.
+
+### S2. Group by axis
+
+Each axis becomes one PR (one branch, one batch commit). Producer and roaster skeleton enrichments live in different registry files, so axis grouping aligns naturally with PR scope. Small batches (≤2 entries) → one PR for the lot; larger batches → one PR per axis.
+
+### S3. Per skeleton entry: present to Chris
+
+Show:
+- The `axis` + `name`
+- `country` + `location` (geography context for the arbiter)
+- `populated_fields[]` — which rich-registry fields the skeleton already has (informs the promote-vs-alias-vs-reject decision)
+- Any cross-system context — brews that reference this canonical (use `execute_sql` to count), recent docs/roasters or docs/producers prose, etc.
+
+Ask Chris one of three resolutions:
+
+- **enrich** — the canonical belongs as a separate entity AND research is now possible. The arbiter fills in the missing rich fields (collaboratively between Chris's domain knowledge and Claude Code's research drafting) + removes the `skeleton: true` flag from the registry entry.
+- **alias retroactively** — the entry was promoted as separate but should resolve to an existing canonical. The arbiter replaces the entry with an `ALIASES` map row pointing to the survivor canonical + audits any brews / green_beans referencing the dropped name (rename DB rows or count the affected rows and accept the verbatim drift).
+- **reject** — the entry was a mistake (drift / typo / over-promoted). The arbiter deletes the entry from the registry + audits any DB rows referencing it (rare; skeletons rarely have downstream referrers since they're recent promotions).
+
+### S4. Apply Chris's decision (registry edit)
+
+For `enrich`:
+1. **Edit `lib/<axis>-registry.ts`** — populate the missing rich fields on the entry. For producer: 27-field shape (tier / producerSystem / referenceRole / farmName / country / adminRegion / macroTerroir / farmingModel / processingCapability / processingStyleTags / dryingMethod / primaryCultivars / secondaryCultivars / experimentalCultivars / knownFor / typicalFlavorProfile / acidityStyle / bodyStyle / consistencyRating / marketTier / exporters / importers / roasterReferences / contact). For roaster: 29-field shape (location / country / url / roastStyle / developmentBias / restCurve / strategyTag / primaryDriver / extractionPurpose / houseStyle / brewGuideSource / brewGuideLink / brewGuideType / tempC / doseG / waterG / ratio / typicalBrewTime / agitationLevel / extractionIntent / failureMode / overExtractionTolerance / processSensitivity / primaryBrewer / filterType / confidenceLevel / brewAdjustmentMethod / calibrationRole / notes).
+2. **Remove the `skeleton: true` line entirely** — monotonic-then-deleted per CONTEXT.md § Skeleton entry. Do NOT set `skeleton: false`; the field is optional and the absence signals "fully researched."
+3. **Edit `docs/taxonomies/<axis>.md`** — add or update the corresponding section under the appropriate tier/family header.
+
+For `alias retroactively`:
+1. **Edit `lib/<axis>-registry.ts`** — delete the entry from the constant array (`PRODUCERS` / `ROASTERS`) AND add a row to the alias map (`PRODUCER_ALIASES` / `ROASTER_ALIASES`) pointing the dropped name to the survivor canonical.
+2. **Edit `docs/taxonomies/<axis>.md`** — remove the entry's section; optionally note the alias in the survivor entry's notes block.
+3. **DB audit** — `SELECT id FROM brews WHERE roaster = '<dropped>'` / `SELECT id FROM green_beans WHERE producer = '<dropped>'`. If affected rows exist, either rename them via `UPDATE` (when the alias is symmetric — same producer, just naming drift) or accept the verbatim text drift (when the canonical-resolution path on the next push will alias-resolve at write time).
+
+For `reject`:
+1. **Edit `lib/<axis>-registry.ts`** — delete the entry from the constant array.
+2. **Edit `docs/taxonomies/<axis>.md`** — remove the corresponding section.
+3. **DB audit** — `SELECT` for any rows referencing the dropped name; surface to Chris for re-identification.
+
+### S5. Commit + PR + merge
+
+Per axis grouping (S2):
+
+```bash
+git checkout -b claude/skeleton-review-<axis>-<date>
+git add docs/taxonomies/<axis>.md lib/<axis>-registry.ts
+git commit -m "$(cat <<'EOF'
+Skeleton review: enrich <N> <axis> entries
+
+Applied N skeleton resolutions for axis=<axis>:
+- enriched: <list>
+- aliased: <list>
+- rejected: <list>
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+EOF
+)"
+git push -u origin claude/<branch>:claude/<branch>
+gh pr create --title "Skeleton review: <one-line summary>" --body "..."
+```
+
+Once merged + Vercel deploys: `list_skeleton_entries` no longer surfaces the resolved entries on the next arbiter session. `getProducerEntry` / `getRoasterEntry` now return rich content for downstream synthesis prompts + page renders.
 
 ---
 

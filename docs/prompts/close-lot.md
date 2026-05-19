@@ -90,10 +90,22 @@ CONTEXT.md is strict on this distinction. Underdev / overdev signals describe wh
 
 These are the fields `start-lot.md` reads when designing V1 on a new lot with overlapping attributes. Designed to shorten time-to-reference-roast on the next similar lot.
 
-- **`cultivar_takeaway`**: what this lot taught about the cultivar generally. Cross-lot scope.
-- **`terroir_takeaway`**: what this lot taught about the terroir generally (country / admin region / macro terroir patterns). Cross-lot scope. Added Sprint 10 (migration 060, 2026-05-19) — closes the missing carry-forward axis Chris's mental model has always carried. Populate when the lot teaches something terroir-specific that future similar-terroir lots should inherit; leave NULL when the carry-forward is cultivar- or process-driven rather than terroir-driven.
-- **`general_takeaway`**: what this lot taught about roasting generally / cross-coffee patterns. Cross-cultivar / cross-terroir scope.
-- **`starting_hypothesis`**: hypothesis for the next similar coffee - what to start from. The most actionable field for future `start-lot.md` runs.
+**Scope tags (Sprint 12 / migration 064 / ADR-0009, 2026-05-21)**: each carry-forward field below has a paired `*_scope_tags text[]` array for sub-scoping. Tag the lot's takeaways with loose-canonical namespaced prefixes when the lesson only applies under specific conditions — this makes cross-lot SQL queries reliable ("which takeaways apply to washed Colombians?") rather than relying on grep against prose. The convention is **loose-canonical**: prompts describe it; write paths do NOT enforce. Conventional prefixes:
+
+- `process:washed` / `process:natural` / `process:honey` / `process:wet-hulled` (base process scope)
+- `process:xo-fermented` / `process:anaerobic` / `process:hybrid-washed` (modifier or signature-level scope, when the lesson is specifically about heavy-process behavior)
+- `variety:sudan-rume` / `variety:gesha-1931` / `variety:typica-mejorado` (within-cultivar accession scope for cultivar_takeaway)
+- `country:colombia` / `country:guatemala` / `country:ethiopia` / `terroir:macro:huila` (geography scope)
+- `altitude:high` / `altitude:low` / `density:high` / `density:low` (load-bearing physical dimensions)
+- `evaluation_method:day-7-pourover` / `evaluation_method:day-4-cupping` (when the lesson is about the gate, not the coffee)
+- `general` — catch-all for genuinely universal principles ("Fix the RoR shape before varying any other lever"); use as the sole tag when the takeaway transfers across all axes
+
+The field's name already implies the PRIMARY scope axis (cultivar / terroir / general / starting_hypothesis); scope_tags carries **sub-scoping** within or across axes. For a Sudan Rume Washed lot's `cultivar_takeaway` that doesn't transfer to natural, tag `['process:washed']` to make the constraint queryable. For a `general_takeaway` like "shaped fan curve mandatory for heavy-ferment under counterflow", tag `['process:xo-fermented','process:anaerobic']`. Leave the array empty (`[]`) when the takeaway applies broadly across the field's primary axis.
+
+- **`cultivar_takeaway`**: what this lot taught about the cultivar generally. Cross-lot scope. Pair with `cultivar_takeaway_scope_tags` when the lesson sub-scopes (e.g. only applies to washed expressions of this cultivar).
+- **`terroir_takeaway`**: what this lot taught about the terroir generally (country / admin region / macro terroir patterns). Cross-lot scope. Added Sprint 10 (migration 060, 2026-05-19) — closes the missing carry-forward axis Chris's mental model has always carried. Populate when the lot teaches something terroir-specific that future similar-terroir lots should inherit; leave NULL when the carry-forward is cultivar- or process-driven rather than terroir-driven. Pair with `terroir_takeaway_scope_tags` for sub-scoping (e.g. `['altitude:high','process:washed']`).
+- **`general_takeaway`**: what this lot taught about roasting generally / cross-coffee patterns. Cross-cultivar / cross-terroir scope. Pair with `general_takeaway_scope_tags` — this field is the most likely to need explicit tagging because "general" prose drifts across scopes (process-scoped principles vs evaluation-method scope vs universal scope all currently coexist here).
+- **`starting_hypothesis`**: hypothesis for the next similar coffee - what to start from. The most actionable field for future `start-lot.md` runs. Pair with `starting_hypothesis_scope_tags` to define which future similar-lot pattern should consume this hypothesis on STAGE 1 carry-forward search (e.g. `['variety:typica-mejorado','process:honey','altitude:high']` makes the hypothesis surface for the queued Cruz Loma TM Honey one-shot).
 - **`reference_roasts`**: which batches to keep in mind for replication / comparison (a string list - typically just the reference roast plus 1-2 other strong slots from the lot for benchmarking).
 
 ## STAGE 4 - Push the optimized brew
