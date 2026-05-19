@@ -125,5 +125,36 @@ export const roasterAdapter: EntityAdapter<RoasterAnchorContext> = {
     extraction_strategy: brew.extraction_strategy,
     extraction_confirmed: brew.extraction_confirmed,
     what_i_learned: brew.what_i_learned,
+    // SYN-6 Q5: flag heavy-process brews so the SHARED_RULE directs the
+    // model to attribute observations to the process, not the roaster style.
+    is_process_dominant: brew.is_process_dominant ?? false,
   }),
+  // SYN-6: richest cross-source row — Latent is the only roaster where this
+  // path returns data. Pulls the full lot-level structured learnings layer
+  // (primary lever / brewing tolerance / underdev / overdev / aromatic /
+  // structural / rest behaviors) plus the 4 carry-forward fields + their
+  // matching scope_tags. Other roasters receive empty roastLearnings arrays
+  // from the synthesize route (they have no associated roast_learnings rows).
+  formatRoastLearningRow: (rl) => {
+    const gb = rl.green_bean as Record<string, unknown> | undefined
+    return {
+      lot_name: gb?.name ?? null,
+      primary_lever: rl.primary_lever,
+      acceptable_roast_window: rl.acceptable_roast_window,
+      brewing_tolerance: rl.brewing_tolerance,
+      underdevelopment_signal: rl.underdevelopment_signal,
+      overdevelopment_signal: rl.overdevelopment_signal,
+      aromatic_behavior: rl.aromatic_behavior,
+      structural_behavior: rl.structural_behavior,
+      rest_behavior: rl.rest_behavior,
+      cultivar_takeaway: rl.cultivar_takeaway,
+      terroir_takeaway: rl.terroir_takeaway,
+      general_takeaway: rl.general_takeaway,
+      starting_hypothesis: rl.starting_hypothesis,
+      cultivar_takeaway_scope_tags: rl.cultivar_takeaway_scope_tags,
+      terroir_takeaway_scope_tags: rl.terroir_takeaway_scope_tags,
+      general_takeaway_scope_tags: rl.general_takeaway_scope_tags,
+      starting_hypothesis_scope_tags: rl.starting_hypothesis_scope_tags,
+    }
+  },
 }

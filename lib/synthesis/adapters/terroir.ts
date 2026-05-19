@@ -115,5 +115,23 @@ export const terroirAdapter: EntityAdapter<TerroirAnchorContext> = {
     brewer: brew.brewer,
     extraction_strategy: brew.extraction_strategy,
     what_i_learned: brew.what_i_learned,
+    // SYN-6 Q5: flag heavy-process brews so the SHARED_RULE directs the
+    // model to attribute observations to the process layer, not the terroir.
+    is_process_dominant: brew.is_process_dominant ?? false,
   }),
+  // SYN-6: cross-source roast_learnings row formatter. Pulls terroir-scoped
+  // carry-forward fields + scope_tags (Sprint 12 forward-investment; arrays
+  // are empty today on all rows but populate going forward per ADR-0009).
+  formatRoastLearningRow: (rl) => {
+    const gb = rl.green_bean as Record<string, unknown> | undefined
+    return {
+      lot_name: gb?.name ?? null,
+      terroir_takeaway: rl.terroir_takeaway,
+      general_takeaway: rl.general_takeaway,
+      starting_hypothesis: rl.starting_hypothesis,
+      terroir_takeaway_scope_tags: rl.terroir_takeaway_scope_tags,
+      general_takeaway_scope_tags: rl.general_takeaway_scope_tags,
+      starting_hypothesis_scope_tags: rl.starting_hypothesis_scope_tags,
+    }
+  },
 }

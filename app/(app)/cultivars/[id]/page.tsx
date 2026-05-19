@@ -8,6 +8,7 @@ import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
+import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import { getFamilyColor } from '@/lib/cultivar-family-colors'
 
 interface GridFieldProps {
@@ -44,6 +45,20 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
     .order('created_at', { ascending: false })
 
   const brewList = (brews || []) as Brew[]
+
+  // SYN-7: page-side content-change signal. Pull roast_learnings updated_at
+  // for lots whose green_beans.cultivar_id matches this cultivar; combined
+  // max() drives the SynthesisCard regeneration trigger when content edits
+  // arrive without changing the brew count.
+  const { data: roastLearningsUpdates } = await supabase
+    .from('roast_learnings')
+    .select('updated_at, green_beans!inner(cultivar_id)')
+    .eq('green_beans.cultivar_id', params.id)
+  const currentInputMaxUpdatedAt = computeInputMaxUpdatedAt(
+    brewList,
+    roastLearningsUpdates ?? [],
+  )
+
   const color = getFamilyColor(cultivar.genetic_family || '')
   const sortedFlavors = aggregateFlavorNotes(brewList)
 
@@ -180,6 +195,9 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
           existingSynthesis={cultivar.synthesis}
           existingBrewCount={cultivar.synthesis_brew_count}
           currentBrewCount={brewList.length}
+          existingShortForm={cultivar.short_form_capsule}
+          existingSynthesisInputUpdatedAt={cultivar.synthesis_input_max_updated_at}
+          currentInputMaxUpdatedAt={currentInputMaxUpdatedAt}
         />
       )}
 

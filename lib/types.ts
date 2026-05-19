@@ -30,6 +30,8 @@ export interface Terroir {
   typical_processing: string[] | null
   synthesis: string | null
   synthesis_brew_count: number | null
+  short_form_capsule: string | null
+  synthesis_input_max_updated_at: string | null
   created_at: string
   updated_at: string
 }
@@ -64,6 +66,8 @@ export interface Cultivar {
   market_context: string | null
   synthesis: string | null
   synthesis_brew_count: number | null
+  short_form_capsule: string | null
+  synthesis_input_max_updated_at: string | null
   created_at: string
   updated_at: string
 }

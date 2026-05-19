@@ -14,6 +14,7 @@ import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
+import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 
 interface LabelledFieldProps {
   label: string
@@ -52,7 +53,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
       .order('created_at', { ascending: false }),
     supabase
       .from('roaster_syntheses')
-      .select('synthesis, synthesis_brew_count')
+      .select('synthesis, synthesis_brew_count, short_form_capsule, synthesis_input_max_updated_at')
       .eq('roaster', roasterName)
       .maybeSingle(),
   ])
@@ -61,6 +62,18 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
   if (brewList.length === 0) notFound()
 
   const cache = cacheResult.data
+
+  // SYN-7: page-side content-change signal. The roaster adapter is cross-
+  // source only on the Latent path (other roasters have no associated
+  // roast_learnings rows); fall through to brews-only on every other roaster.
+  const { data: roastLearningsUpdates } =
+    roasterName === 'Latent'
+      ? await supabase.from('roast_learnings').select('updated_at')
+      : { data: [] as Array<{ updated_at: string | null }> }
+  const currentInputMaxUpdatedAt = computeInputMaxUpdatedAt(
+    brewList,
+    roastLearningsUpdates ?? [],
+  )
 
   const family = getRoasterFamily(roasterName)
   const color = getFamilyColor(family)
@@ -252,6 +265,9 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
         existingSynthesis={cache?.synthesis ?? null}
         existingBrewCount={cache?.synthesis_brew_count ?? null}
         currentBrewCount={brewCount}
+        existingShortForm={cache?.short_form_capsule ?? null}
+        existingSynthesisInputUpdatedAt={cache?.synthesis_input_max_updated_at ?? null}
+        currentInputMaxUpdatedAt={currentInputMaxUpdatedAt}
       />
 
       {/* Additional Information — collapsed on mobile, expanded on desktop */}
