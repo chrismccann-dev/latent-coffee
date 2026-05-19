@@ -38,6 +38,13 @@ export interface EntityAdapter<TEntity = unknown> {
   // Lets each adapter pull its own subset (cultivar includes cultivar_connection,
   // terroir includes terroir_connection, etc.).
   formatLearningRow: (brew: Record<string, unknown>) => Record<string, unknown>
+
+  // SYN-6: optional cross-source companion. When present, runSynthesis pulls
+  // roast_learnings rows joined through green_beans for the axis and passes
+  // them through this formatter into a second JSON block in the prompt.
+  // Process adapter intentionally omits this (the signature-join lift is
+  // structurally zero today; see ADR-0010).
+  formatRoastLearningRow?: (rl: Record<string, unknown>) => Record<string, unknown>
 }
 
 export interface BuildPromptInput<TEntity = unknown> {
@@ -45,4 +52,7 @@ export interface BuildPromptInput<TEntity = unknown> {
   entity: TEntity
   entityName: string
   brews: Record<string, unknown>[]
+  // SYN-6: present when the adapter is cross-source (terroir / cultivar /
+  // roaster). Omitted for process adapters and on empty axes.
+  roastLearnings?: Record<string, unknown>[]
 }

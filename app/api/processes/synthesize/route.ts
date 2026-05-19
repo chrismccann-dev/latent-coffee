@@ -137,12 +137,18 @@ export async function POST(request: Request) {
     })
 
     if (outcome.synthesis) {
+      // Sprint 13: process adapter is brews-only for SYN-6 (deferred per
+      // ADR-0010 Q2) but still persists short_form_capsule + the SYN-7
+      // content-change timestamp so /processes pages get the same mobile
+      // render + better resynthesize trigger as the other axes.
       await supabase.from('process_aggregation_syntheses').upsert({
         user_id: user.id,
         aggregation_kind: kind,
         aggregation_key: key,
         synthesis: outcome.synthesis,
         synthesis_brew_count: outcome.brewCount,
+        short_form_capsule: outcome.shortForm,
+        synthesis_input_max_updated_at: outcome.inputMaxUpdatedAt,
         updated_at: new Date().toISOString(),
       }, {
         onConflict: 'user_id,aggregation_kind,aggregation_key',
@@ -151,7 +157,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       synthesis: outcome.synthesis,
+      short_form: outcome.shortForm,
       brew_count: outcome.brewCount,
+      input_max_updated_at: outcome.inputMaxUpdatedAt,
       message: outcome.message,
     })
   } catch (err: any) {

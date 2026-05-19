@@ -12,9 +12,15 @@ const WEIGHT_LABELS: Record<WeightTier, string> = {
 // SYN-4: promoted from a single aspirational "do not summarize each coffee"
 // line to a directive + concrete anti-pattern pair so large-corpus capsules
 // don't degrade into appended per-coffee notes.
+// SYN-6 (Sprint 13): 3 new directives added below for the cross-source
+// brewing+roasting corpus — unified-narrative bridging (Q3), is_process_dominant
+// flagging (Q5), and roasting-vocab preservation. See ADR-0010.
 const SHARED_RULES = [
   'This is a re-synthesis, not a summary. Read the corpus as a whole, find the recurring patterns, and write ONE narrative voice. The output must NOT have the shape of a list of coffees with one observation per coffee. New data points get pulled in multiplicatively, not appended — each regeneration is from scratch.',
   'Anti-pattern to avoid: "In Coffee A I noticed X. In Coffee B I noticed Y. In Coffee C I noticed Z." That is appending, not synthesizing. Instead, surface the underlying pattern: "X-Y-Z reads as a single tendency for this anchor, with the C-style appearing only when the process is anaerobic."',
+  'When both a brewing corpus AND a roasting carry-forward block are present, integrate them into ONE unified narrative voice. Roasting carry-forward names what the lot teaches at the bean level (primary lever, brewing tolerance, scope-tagged generalizations); brewing observations name how that teaching shows up in the cup (extraction strategy, modifiers, peak expression). Do NOT produce two appended sections, a "brewing-side / roasting-side" split, or a list-of-sources structure. Anti-pattern to avoid: "From brewing: X. From roasting: Y." Instead: "X-Y reads as the same recurring tendency — the roast lever is what causes the cup behavior."',
+  'When a brew is flagged `is_process_dominant: true`, surface its observations with explicit attribution to the process layer rather than letting them generalize to the anchor (e.g. "this Mandela XO reads more as Anaerobic Co-ferment Natural than as Modern Hybrid cultivar character"). Heavy-process coffees are evidence about the process, not about the cultivar / terroir / roaster they happen to ride on.',
+  'Preserve roasting-side vocabulary verbatim when it appears in the carry-forward block: primary lever, brewing tolerance, acceptable roast window, underdevelopment signal, overdevelopment signal, aromatic behavior, structural behavior, rest behavior, and scope tags (e.g. `process:washed`, `variety:sudan-rume`, `terroir:western-andean-cordillera`). Do not paraphrase these into looser language.',
   'Separate entity-level rules from sibling-dimension-specific rules.',
   'Do not overfit to a single coffee. If one brew is the only evidence for a claim, flag it as a hypothesis.',
   'If the dataset is narrow by origin, cultivar, process, or roaster, say so explicitly.',
@@ -108,24 +114,36 @@ export function classifyTier(rowCount: number): TierConfig {
 export interface BuildPromptResult {
   prompt: string
   learningRows: LearningRow[]
+  roastLearningRows: LearningRow[]
   tier: TierConfig
 }
 
 export function buildSynthesisPrompt<T>(input: BuildPromptInput<T>): BuildPromptResult {
-  const { adapter, entity, entityName, brews } = input
+  const { adapter, entity, entityName, brews, roastLearnings } = input
 
   const learningRows = brews
     .map((brew) => adapter.formatLearningRow(brew))
     .filter(hasLearningSignal)
 
-  const tier = classifyTier(learningRows.length)
+  // SYN-6: cross-source corpus. Only present when the adapter declares
+  // formatRoastLearningRow AND the route passed any roast_learnings rows.
+  // Empty array on non-cross-source adapters (process) or zero-row axes.
+  const roastLearningRows: LearningRow[] =
+    adapter.formatRoastLearningRow && roastLearnings?.length
+      ? roastLearnings.map((rl) => adapter.formatRoastLearningRow!(rl))
+      : []
+
+  // Tier classifies the combined corpus size so paragraph count + max_tokens
+  // budget reflect both signals. A 3-brew axis with 2 roast_learnings is
+  // 'emerging', not 'early'.
+  const tier = classifyTier(learningRows.length + roastLearningRows.length)
   const anchor = adapter.renderAnchor(entity)
 
   const anchorBlock = anchor
     ? `Documented context for ${entityName} (treat as a working hypothesis — confirm or push back from the corpus, do not just recite):
 
 ${anchor}`
-    : `No documented registry context exists for ${entityName} yet — synthesize purely from the brew corpus below.`
+    : `No documented registry context exists for ${entityName} yet — synthesize purely from the corpus below.`
 
   const tierBlock = `\n\n${tier.confidenceHint}`
 
@@ -146,15 +164,28 @@ ${anchor}`
     .map((r) => `- ${r}`)
     .join('\n')
 
+  const brewsBlock = `Brewing corpus (${learningRows.length} ${learningRows.length === 1 ? 'coffee' : 'coffees'}):
+
+${JSON.stringify(learningRows, null, 2)}`
+
+  // SYN-6: roasting carry-forward block, conditional on rows existing. When
+  // present, the prompt's earlier SHARED_RULE directs the model to integrate
+  // both sources into a single narrative voice rather than appending sections.
+  const roastingBlock = roastLearningRows.length
+    ? `
+
+Roasting carry-forward (${roastLearningRows.length} lot${roastLearningRows.length === 1 ? '' : 's'} of self-roasted archive on this anchor — what each lot taught at the bean level, to be integrated with the brewing observations above):
+
+${JSON.stringify(roastLearningRows, null, 2)}`
+    : ''
+
   const prompt = `You are synthesizing brewing knowledge from Chris's coffee research archive into a "${adapter.capsuleNoun}" for the ${adapter.entityNoun} "${entityName}". The capsule is regenerated as the archive grows; treat it as living, not final.
 
 Chris's palate has widened beyond clean-washed-tea-like profiles — controlled naturals, co-ferments, and red-wine-structured coffees are genuinely enjoyed when well-executed. Frame patterns as "when this style delivers vs. when it goes off", not as good/bad scoring.
 
 ${anchorBlock}${tierBlock}
 
-Brewing corpus (${learningRows.length} ${learningRows.length === 1 ? 'coffee' : 'coffees'}):
-
-${JSON.stringify(learningRows, null, 2)}
+${brewsBlock}${roastingBlock}
 
 Weight the inputs roughly like this:
 ${weightingBlock}
@@ -164,5 +195,5 @@ ${outputFormatBlock}
 Rules:
 ${allRules}`
 
-  return { prompt, learningRows, tier }
+  return { prompt, learningRows, roastLearningRows, tier }
 }

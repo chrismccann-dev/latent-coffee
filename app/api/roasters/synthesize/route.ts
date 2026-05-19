@@ -24,12 +24,24 @@ export async function POST(request: Request) {
     .eq('roaster', roaster)
     .order('created_at', { ascending: false })
 
+  // SYN-6: cross-source corpus. roast_learnings has no FK to roasters (it
+  // implicitly belongs to roaster='Latent' via green_beans), so only the
+  // Latent path picks up rows. Other roasters get an empty array — their
+  // synthesis stays brews-only.
+  const { data: roastLearnings } =
+    roaster === 'Latent'
+      ? await supabase
+          .from('roast_learnings')
+          .select('*, green_beans!inner(id, name, terroir_id, cultivar_id)')
+      : { data: [] as Record<string, unknown>[] }
+
   try {
     const outcome = await runSynthesis({
       adapter: roasterAdapter,
       entity: { roaster },
       entityName: roaster,
       brews: brews ?? [],
+      roastLearnings: roastLearnings ?? [],
     })
 
     if (outcome.synthesis) {
@@ -38,13 +50,17 @@ export async function POST(request: Request) {
         roaster,
         synthesis: outcome.synthesis,
         synthesis_brew_count: outcome.brewCount,
+        short_form_capsule: outcome.shortForm,
+        synthesis_input_max_updated_at: outcome.inputMaxUpdatedAt,
         updated_at: new Date().toISOString(),
       })
     }
 
     return NextResponse.json({
       synthesis: outcome.synthesis,
+      short_form: outcome.shortForm,
       brew_count: outcome.brewCount,
+      input_max_updated_at: outcome.inputMaxUpdatedAt,
       message: outcome.message,
     })
   } catch (err: any) {
