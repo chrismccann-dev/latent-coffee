@@ -20,6 +20,7 @@ export interface SynthesisOutcome {
   synthesis: string | null
   brewCount: number
   learningRowCount: number
+  tier?: string
   message?: string
 }
 
@@ -42,7 +43,7 @@ export async function runSynthesis<T>(input: RunSynthesisInput<T>): Promise<Synt
     }
   }
 
-  const { prompt, learningRows } = buildSynthesisPrompt({
+  const { prompt, learningRows, tier } = buildSynthesisPrompt({
     adapter,
     entity,
     entityName,
@@ -60,7 +61,7 @@ export async function runSynthesis<T>(input: RunSynthesisInput<T>): Promise<Synt
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 1500,
+    max_tokens: tier.maxTokens,
     messages: [{ role: 'user', content: prompt }],
   })
 
@@ -70,6 +71,7 @@ export async function runSynthesis<T>(input: RunSynthesisInput<T>): Promise<Synt
       synthesis: null,
       brewCount: brews.length,
       learningRowCount: learningRows.length,
+      tier: tier.tier,
       message: 'Synthesis call returned no text',
     }
   }
@@ -80,5 +82,6 @@ export async function runSynthesis<T>(input: RunSynthesisInput<T>): Promise<Synt
     synthesis: polished,
     brewCount: brews.length,
     learningRowCount: learningRows.length,
+    tier: tier.tier,
   }
 }

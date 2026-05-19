@@ -7,24 +7,20 @@ const WEIGHT_LABELS: Record<WeightTier, string> = {
   low: 'Low weight',
 }
 
+// SHARED_RULES — read top-to-bottom. The first two entries (the re-synthesis
+// directive + the anti-pattern example) are the non-negotiable framing.
+// SYN-4: promoted from a single aspirational "do not summarize each coffee"
+// line to a directive + concrete anti-pattern pair so large-corpus capsules
+// don't degrade into appended per-coffee notes.
 const SHARED_RULES = [
-  'Do not summarize each coffee one by one. Extract recurring patterns across the corpus and write a human-readable field note.',
+  'This is a re-synthesis, not a summary. Read the corpus as a whole, find the recurring patterns, and write ONE narrative voice. The output must NOT have the shape of a list of coffees with one observation per coffee. New data points get pulled in multiplicatively, not appended — each regeneration is from scratch.',
+  'Anti-pattern to avoid: "In Coffee A I noticed X. In Coffee B I noticed Y. In Coffee C I noticed Z." That is appending, not synthesizing. Instead, surface the underlying pattern: "X-Y-Z reads as a single tendency for this anchor, with the C-style appearing only when the process is anaerobic."',
   'Separate entity-level rules from sibling-dimension-specific rules.',
   'Do not overfit to a single coffee. If one brew is the only evidence for a claim, flag it as a hypothesis.',
-  'Use phrases like "usually", "often", or "in my archive" where the evidence is suggestive but not universal.',
   'If the dataset is narrow by origin, cultivar, process, or roaster, say so explicitly.',
   'Preserve nuance, but make the final output concise enough to paste into a profile card.',
   'Write in a natural human field-note voice. Default to third person about the entity, with occasional first-person attribution ("in my archive", "I have found"). No headers in the output, no markdown tables.',
 ]
-
-const OUTPUT_FORMAT_PREFIX = [
-  'Write 4-6 short paragraphs in a natural, human field-note style, followed by a final bulleted list of 4-6 practical takeaways. The bullet list is the only structural element — no section headers, no inline boldface for emphasis.',
-  '',
-  'Paragraph order:',
-]
-
-const PRACTICAL_TAKEAWAYS_INSTRUCTION =
-  'After the paragraphs, end with a bulleted list (markdown `*` items) of 4-6 practical takeaways grounded in direct brewing experience. Each item is one sentence, concrete enough to act on.'
 
 interface LearningRow {
   [key: string]: unknown
@@ -50,9 +46,69 @@ function hasLearningSignal(row: LearningRow): boolean {
   })
 }
 
+// ---------------------------------------------------------------------------
+// SYN-2: corpus-size tiers. The synthesis pipeline classifies the learning-
+// row count into one of 4 tiers, each driving (a) target paragraph count,
+// (b) target takeaway count, (c) max_tokens budget, (d) confidence-language
+// hint injected into the prompt. Replaces the prior binary `earlyData` flag.
+// See CONTEXT.md § Synthesis Pipeline > Corpus tier.
+// ---------------------------------------------------------------------------
+
+export type SynthesisTier = 'early' | 'emerging' | 'established' | 'mature'
+
+export interface TierConfig {
+  tier: SynthesisTier
+  paragraphCount: string
+  takeawayCount: string
+  maxTokens: number
+  confidenceHint: string
+}
+
+export function classifyTier(rowCount: number): TierConfig {
+  if (rowCount < 3) {
+    return {
+      tier: 'early',
+      paragraphCount: '2-3',
+      takeawayCount: '2-3',
+      maxTokens: 700,
+      confidenceHint:
+        `Early data: only ${rowCount} ${rowCount === 1 ? 'lot is' : 'lots are'} archived. Frame patterns as provisional first impressions. Use phrases like "too early to call", "first impressions suggest", "one more data point would settle this". Keep the capsule short — the corpus is too narrow for confident generalization, and a long capsule overstates the signal.`,
+    }
+  }
+  if (rowCount < 8) {
+    return {
+      tier: 'emerging',
+      paragraphCount: '3-4',
+      takeawayCount: '3-4',
+      maxTokens: 1100,
+      confidenceHint:
+        `Emerging pattern: ${rowCount} lots archived. Tendencies are recurring but narrow. Use hedge language like "usually", "in my archive so far", "the pattern is recurring but the sample is still narrow". Surface real tendencies without overclaiming — there is signal but not enough volume for sweeping rules.`,
+    }
+  }
+  if (rowCount < 16) {
+    return {
+      tier: 'established',
+      paragraphCount: '4-5',
+      takeawayCount: '4-5',
+      maxTokens: 1500,
+      confidenceHint:
+        `Established pattern: ${rowCount} lots archived. Use standard hedge language ("often", "tends to", "consistently"). The corpus is broad enough to surface cup characteristics, brewing traps, and process interactions reliably.`,
+    }
+  }
+  return {
+    tier: 'mature',
+    paragraphCount: '4-6',
+    takeawayCount: '4-6',
+    maxTokens: 1500,
+    confidenceHint:
+      `Mature signal: ${rowCount} lots archived. The corpus is broad enough that recurring patterns can be stated with less hedging ("reliably", "consistently"). Surface the deep generalizations plus the specific edge-cases where the pattern breaks (cultivar override, process override, roaster override).`,
+  }
+}
+
 export interface BuildPromptResult {
   prompt: string
   learningRows: LearningRow[]
+  tier: TierConfig
 }
 
 export function buildSynthesisPrompt<T>(input: BuildPromptInput<T>): BuildPromptResult {
@@ -62,7 +118,7 @@ export function buildSynthesisPrompt<T>(input: BuildPromptInput<T>): BuildPrompt
     .map((brew) => adapter.formatLearningRow(brew))
     .filter(hasLearningSignal)
 
-  const earlyData = learningRows.length > 0 && learningRows.length < 3
+  const tier = classifyTier(learningRows.length)
   const anchor = adapter.renderAnchor(entity)
 
   const anchorBlock = anchor
@@ -71,19 +127,19 @@ export function buildSynthesisPrompt<T>(input: BuildPromptInput<T>): BuildPrompt
 ${anchor}`
     : `No documented registry context exists for ${entityName} yet — synthesize purely from the brew corpus below.`
 
-  const earlyBlock = earlyData
-    ? `\n\nEarly data: only ${learningRows.length} ${learningRows.length === 1 ? 'lot is' : 'lots are'} archived for this ${adapter.entityNoun}. Frame patterns as tentative; flag where one more data point would settle a question.`
-    : ''
+  const tierBlock = `\n\n${tier.confidenceHint}`
 
   const weightingBlock = adapter.weighting
     .map((w) => `- ${WEIGHT_LABELS[w.weight]}: ${w.label}. ${w.description}`)
     .join('\n')
 
   const outputFormatBlock = [
-    ...OUTPUT_FORMAT_PREFIX,
+    `Write ${tier.paragraphCount} short paragraphs in a natural, human field-note style, followed by a final bulleted list of ${tier.takeawayCount} practical takeaways. The bullet list is the only structural element — no section headers, no inline boldface for emphasis.`,
+    '',
+    'Paragraph order:',
     ...adapter.outputFormat.map((step, i) => `${i + 1}. ${step}`),
     '',
-    PRACTICAL_TAKEAWAYS_INSTRUCTION,
+    `After the paragraphs, end with a bulleted list (markdown \`*\` items) of ${tier.takeawayCount} practical takeaways grounded in direct brewing experience. Each item is one sentence, concrete enough to act on.`,
   ].join('\n')
 
   const allRules = [...SHARED_RULES, ...(adapter.extraRules ?? [])]
@@ -94,7 +150,7 @@ ${anchor}`
 
 Chris's palate has widened beyond clean-washed-tea-like profiles — controlled naturals, co-ferments, and red-wine-structured coffees are genuinely enjoyed when well-executed. Frame patterns as "when this style delivers vs. when it goes off", not as good/bad scoring.
 
-${anchorBlock}${earlyBlock}
+${anchorBlock}${tierBlock}
 
 Brewing corpus (${learningRows.length} ${learningRows.length === 1 ? 'coffee' : 'coffees'}):
 
@@ -108,5 +164,5 @@ ${outputFormatBlock}
 Rules:
 ${allRules}`
 
-  return { prompt, learningRows }
+  return { prompt, learningRows, tier }
 }
