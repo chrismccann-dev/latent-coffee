@@ -12,7 +12,7 @@ The app today archives *what happened* per bean — raw roasts, experiments, cup
 
 ### What "best" means
 
-"Best" is a subjective plateau, not an optimized peak. The target is **high expressiveness AND high elasticity** — a roast state where brew-side choices (push for extraction, pull back for delicate florals, land in the middle) all stay viable. Chris's thesis sentence from the guide: *"Roast for elasticity. Brew for intensity."*
+"Best" is a subjective plateau, not an optimized peak. The target is **high expressiveness AND high brewing tolerance** — a roast state where brew-side choices (push for extraction, pull back for delicate florals, land in the middle) all stay viable. Chris's thesis sentence from the guide: *"Roast for brewing tolerance. Brew for intensity."* (Original motto used "elasticity" — renamed Sprint 10 / ADR-0007 / 2026-05-19; the physics metaphor had ambiguous polarity, brewing tolerance captures the controls-both-sides posture cleanly.)
 
 The decision moment is subjective. Chris arrives at it through triangulating sets of three ("I liked the acidity of B but the complexity of C; next roast should be somewhere in the middle; then three roasts around there"), commits to a candidate, starts brew optimization around it, may test 1-3 other candidates lightly in parallel, then locks subjectively. The lock is at **commit**, not at candidate-flag.
 
@@ -84,7 +84,7 @@ Machine-specificity is a structural constraint, not a footnote:
 
 The guide's existing structure (24+ sections in V2) is the target, not a Rob-Hoo-style 5-element-chapter template. Key sections that drive cross-bean value:
 
-- **Philosophy + scope** — "Roast for elasticity. Brew for intensity." plus equipment spec, evaluation protocol, standard workflow, BBP/hopper/charge protocols, standard inlet-curve template.
+- **Philosophy + scope** — "Roast for brewing tolerance. Brew for intensity." plus equipment spec, evaluation protocol, standard workflow, BBP/hopper/charge protocols, standard inlet-curve template.
 - **Machine-specific observations** — TP artifact, FC targeting, charge temp, total-roast-time bounds, session-position effect, Agtron-delta development signal.
 - **Fan strategy** — shaped curves required, per-coffee-type fan floors, current reference curves.
 - **Process-specific frameworks** — Naturals, Washed, XO/anaerobic (expected to grow as more processes are resolved).
@@ -260,4 +260,4 @@ Process principles that should guide implementation sprints, not just the conten
 - **Citations every claim.** New cross-bean claims cite the bean(s) that drove them. Discipline preserved across edits.
 - **Authored over synthesized, where the content is evolving.** The guide is a PRODUCT.md-pattern file. The DB handles what's structural; the file handles what's distilled.
 - **Machine-specificity is a scope constraint, not a footnote.** Structural emphasis throughout.
-- **"Roast for elasticity. Brew for intensity."** is Chris's thesis sentence. Should be surfaced at the top of `/roasting-guide/` verbatim.
+- **"Roast for brewing tolerance. Brew for intensity."** is Chris's thesis sentence (post Sprint 10 / ADR-0007 rename from the original "elasticity"). Should be surfaced at the top of `/roasting-guide/` verbatim.

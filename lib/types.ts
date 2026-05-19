@@ -261,7 +261,7 @@ export interface RoastLearning {
   why_this_roast_won: string | null
   aromatic_behavior: string | null
   structural_behavior: string | null
-  elasticity: string | null
+  brewing_tolerance: string | null
   roast_window_width: string | null
   primary_lever: string | null
   secondary_levers: string | null
@@ -269,6 +269,7 @@ export interface RoastLearning {
   underdevelopment_signal: string | null
   overdevelopment_signal: string | null
   cultivar_takeaway: string | null
+  terroir_takeaway: string | null
   general_takeaway: string | null
   reference_roasts: string | null
   starting_hypothesis: string | null

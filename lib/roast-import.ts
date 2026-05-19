@@ -867,7 +867,7 @@ export interface RoastLearningsPayload {
   why_this_roast_won?: string | null
   aromatic_behavior?: string | null
   structural_behavior?: string | null
-  elasticity?: string | null
+  brewing_tolerance?: string | null
   roast_window_width?: string | null
   primary_lever?: string | null
   secondary_levers?: string | null
@@ -875,6 +875,7 @@ export interface RoastLearningsPayload {
   underdevelopment_signal?: string | null
   overdevelopment_signal?: string | null
   cultivar_takeaway?: string | null
+  terroir_takeaway?: string | null
   general_takeaway?: string | null
   reference_roasts?: string | null
   starting_hypothesis?: string | null
@@ -906,7 +907,7 @@ const ONE_SHOT_FORBIDDEN_FIELDS = [
   'primary_lever',
   'secondary_levers',
   'roast_window_width',
-  'elasticity',
+  'brewing_tolerance',
   'what_didnt_move_needle',
   'underdevelopment_signal',
   'overdevelopment_signal',
@@ -972,7 +973,7 @@ export async function persistRoastLearnings(
     why_this_roast_won: payload.why_this_roast_won ?? null,
     aromatic_behavior: payload.aromatic_behavior ?? null,
     structural_behavior: payload.structural_behavior ?? null,
-    elasticity: payload.elasticity ?? null,
+    brewing_tolerance: payload.brewing_tolerance ?? null,
     roast_window_width: payload.roast_window_width ?? null,
     primary_lever: payload.primary_lever ?? null,
     secondary_levers: payload.secondary_levers ?? null,
@@ -980,6 +981,7 @@ export async function persistRoastLearnings(
     underdevelopment_signal: payload.underdevelopment_signal ?? null,
     overdevelopment_signal: payload.overdevelopment_signal ?? null,
     cultivar_takeaway: payload.cultivar_takeaway ?? null,
+    terroir_takeaway: payload.terroir_takeaway ?? null,
     general_takeaway: payload.general_takeaway ?? null,
     reference_roasts: payload.reference_roasts ?? null,
     starting_hypothesis: payload.starting_hypothesis ?? null,
@@ -1405,10 +1407,10 @@ export interface PatchRoastLearningsPayload extends Partial<Omit<RoastLearningsP
 
 export const ROAST_LEARNINGS_PATCH_FIELDS = [
   'green_bean_id', 'best_batch_id', 'why_this_roast_won',
-  'aromatic_behavior', 'structural_behavior', 'elasticity',
+  'aromatic_behavior', 'structural_behavior', 'brewing_tolerance',
   'roast_window_width', 'primary_lever', 'secondary_levers',
   'what_didnt_move_needle', 'underdevelopment_signal', 'overdevelopment_signal',
-  'cultivar_takeaway', 'general_takeaway', 'reference_roasts',
+  'cultivar_takeaway', 'terroir_takeaway', 'general_takeaway', 'reference_roasts',
   'starting_hypothesis', 'rest_behavior',
   // Sub Pages 6.1 (migration 052)
   'best_roast_id',

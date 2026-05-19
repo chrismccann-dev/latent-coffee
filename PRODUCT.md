@@ -244,7 +244,7 @@ The app is one part of a larger system. These are the other parts:
 | **Roasting Spreadsheet** | Google Sheets (exported xlsx) | Green Beans, Roasts, Experiments, Cuppings, Overall Lessons per bean |
 | **Brewing Master Reference** | Repo — `BREWING.md` (v7.1, living doc). Archival snapshot in Dropbox (`Coffee_Brewing_Master_Reference_v7.md`) for Claude projects. | Brew prompt for Claude, roaster reference cards, Cross-Coffee Insight Layer (renamed from `Archive Patterns` in Sprint 9 2026-05-19 to match ROASTING.md), equipment reference. Migrated into repo 2026-04-21 as the working copy for Claude-authored sync V1 — compounds edit-by-edit alongside `PRODUCT.md`. |
 | **Terroir + Cultivar Ruleset** | Word doc | Data schemas, hierarchy rules, canonical registries, validation checklists |
-| **Roasting Intent** | Word doc | Roasting philosophy — "roast for elasticity, brew for intensity" |
+| **Roasting Intent** | Word doc | Roasting philosophy — "roast for brewing tolerance, brew for intensity" (canonical post Sprint 10 / ADR-0007 rename; original Word-doc archival snapshot uses "elasticity") |
 | **Claude Projects** | claude.ai | Active iteration workspaces for current coffees (not archived) |
 
 The Beans tab in the brewing spreadsheet has **93 entries** — all beans Chris has purchased. Only 56 have a best brew archived. The remaining ~37 are either still being iterated on, were not memorable enough to archive, or were consumed without formal documentation.

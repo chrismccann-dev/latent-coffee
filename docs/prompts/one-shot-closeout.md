@@ -6,7 +6,7 @@
 
 **Workflow position**: Second of two prompts in the one-shot lifecycle (`one-shot.md` -> **`one-shot-closeout.md`**). Distinct from V-set lots' `close-lot.md`.
 
-Vocabulary used in this prompt is defined in CONTEXT.md (one-shot lot, Closed without reference, carry-forward learnings, tolerance-anchored design). The structural difference from `close-lot.md`: lever-attribution fields (primary_lever / secondary_levers / roast_window_width / elasticity / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) MUST NOT be populated - schema validation rejects them on lots where `is_one_shot = true` (migration 054).
+Vocabulary used in this prompt is defined in CONTEXT.md (one-shot lot, Closed without reference, carry-forward learnings, tolerance-anchored design). The structural difference from `close-lot.md`: lever-attribution fields (primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) MUST NOT be populated - schema validation rejects them on lots where `is_one_shot = true` (migration 054). `terroir_takeaway` (added Sprint 10, migration 060) is NOT in this list - terroir attribution does not require cross-batch evidence and is populatable on one-shot lots with the same `"Low confidence - N=1"` prefix as the other carry-forward fields.
 
 ## Tools for this session
 
@@ -81,7 +81,7 @@ Forbidden on one-shots (must be NULL):
 - `primary_lever`
 - `secondary_levers`
 - `roast_window_width`
-- `elasticity`
+- `brewing_tolerance`
 - `what_didnt_move_needle`
 - `underdevelopment_signal`
 - `overdevelopment_signal`
@@ -93,7 +93,8 @@ Allowed and recommended:
   - On **Outcome A**: verdict prose. "The single attempt landed in the carry-forward target zone for <reasoning>. Cup match producer notes ballpark on <descriptors>. Roast structure clean. <Lot> joins the carry-forward anchor set for similar future one-shots in this lane."
   - On **Outcome B**: explicitly NULL. The Sprint 3.2 #18 "Closed without reference" sub-card on ResolvedView renders based on this field being NULL (NOT on `is_reference: false` — that flag was set true in STAGE 2 regardless of outcome). Don't fabricate a verdict.
 - **`cultivar_takeaway`**: prefix with `"Low confidence - N=1, verify on next similar lot. "`. Then the takeaway prose. Example: "Low confidence - N=1, verify on next similar lot. <Cultivar> at <altitude band> may want <inlet range>; this single attempt landed at <X> and produced <Y>."
-- **`general_takeaway`**: same `"Low confidence - N=1"` prefix. Cross-cultivar / cross-process patterns observed but anchored on a single observation.
+- **`terroir_takeaway`**: same `"Low confidence - N=1"` prefix. Cross-lot scope on the terroir axis (country / admin region / macro terroir patterns). Populate when the lot teaches something terroir-specific worth carrying forward to future similar-terroir lots; leave NULL when the lot's lesson is cultivar- or process-driven rather than terroir-driven. Added Sprint 10 (migration 060, 2026-05-19).
+- **`general_takeaway`**: same `"Low confidence - N=1"` prefix. Cross-cultivar / cross-terroir / cross-process patterns observed but anchored on a single observation.
 - **`starting_hypothesis`**: most actionable field for the next similar one-shot. Same `"Low confidence"` prefix; encodes "next time I'd try <Z> based on this attempt." This is what future `one-shot.md` STAGE 1 carry-forward search will consume.
 - **`reference_roasts`**: just the one batch (e.g. `"183"`).
 - **`aromatic_behavior`** / **`structural_behavior`**: single-cup observations from the Day 7 cupping. Lower confidence than V-set close-outs (one observation, no cross-rest-day comparison). OK to populate; prefix with `"Single-cup observation - "` to flag the constraint.

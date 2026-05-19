@@ -179,7 +179,7 @@ Fields stay as-is: `aroma`, `flavor`, `acidity`, `body`, `finish`, `overall`, `g
 
 ### 4.6 `roast_learnings`
 
-Unchanged structurally. Per-lot synthesis at lot close-out, 1:1 with green_bean. Fields stay as-is: `best_batch_id`, `why_this_roast_won`, `primary_lever`, `secondary_levers`, `what_didnt_move_needle`, `roast_window_width`, `underdevelopment_signal`, `overdevelopment_signal`, `aromatic_behavior`, `structural_behavior`, `elasticity`, `rest_behavior`, `cultivar_takeaway`, `general_takeaway`, `starting_hypothesis`, `reference_roasts`, etc.
+Unchanged structurally. Per-lot synthesis at lot close-out, 1:1 with green_bean. Fields stay as-is: `best_batch_id`, `why_this_roast_won`, `primary_lever`, `secondary_levers`, `what_didnt_move_needle`, `roast_window_width`, `underdevelopment_signal`, `overdevelopment_signal`, `aromatic_behavior`, `structural_behavior`, `brewing_tolerance`, `rest_behavior`, `cultivar_takeaway`, `terroir_takeaway`, `general_takeaway`, `starting_hypothesis`, `reference_roasts`, etc. (Note: `elasticity` renamed to `brewing_tolerance` and `terroir_takeaway` added in Sprint 10 / migration 060 / 2026-05-19 per ADR-0007 — the redesign series' contemporary baseline ran on the pre-rename schema.)
 
 ---
 

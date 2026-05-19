@@ -116,7 +116,7 @@ Roasters whose strategy depends on the specific coffee's process and variety. No
 
 ### Self-Roasted (1)
 
-Chris's own roast lots from the Roest sample roaster. Roast for elasticity, brew for intensity. 1 entry.
+Chris's own roast lots from the Roest sample roaster. Roast for brewing tolerance, brew for intensity. 1 entry.
 
 - **Latent**
 
@@ -1729,7 +1729,7 @@ _Tokyo, Japan_ · **BALANCED / VARIES**
 _Home (Roest sample roaster, 100g batches)_ · **SELF-ROASTED** · archive: 4 brews
 
 - **Roast style:** Variable (per-bean, sample-roast experiments)
-- **House style:** Roast for elasticity, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.
+- **House style:** Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.
 - **Notes:** Self-roasted lots only; canonical entry preserved across taxonomy refreshes.
 
 ---
