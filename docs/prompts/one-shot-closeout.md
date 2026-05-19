@@ -142,7 +142,7 @@ Print:
 - `green_bean_id` + verdict outcome (A / B)
 - Reference roast designation: `roast_id`, `batch_id`, `is_reference: true` confirmed, `worth_repeating` value, brief `why_this_roast_won` excerpt (or `"why_this_roast_won: NULL — Closed without reference"` on Outcome B)
 - `roast_learnings_id` + `created` (true on first push)
-- `brew_id` + key recipe specs one-liner
+- `brew_id` + key recipe summary one-liner
 - `proposal_id` from `propose_doc_changes`
 - `is_archived: true` confirmation (or "skipped: <reason>")
 - Lifecycle state confirmation: "Lot closed. State flipped to **Resolved**." On Outcome B add: "ResolvedView renders the 'Closed without reference' sub-card per Sprint 3.2 #18 (triggered by `why_this_roast_won = NULL`)."
