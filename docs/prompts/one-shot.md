@@ -149,13 +149,13 @@ Three writes pair up here (same discipline as start-lot.md / log-cupping.md - "d
   - `hopper_load_temp` comes back null - set manually (V4 standard: 125°C).
   - `end_condition_type` + `end_condition_target` populated directly from Roest API (Round-7 capability).
   - **Operator-override check**: if `end_condition_target` and `drop_temp` diverge by more than ~0.5°C / a couple seconds AND the divergence isn't Roest behavior, ASK whether the operator manually pulled the drop. Override `end_condition_type: "manual"` if yes.
-  - On silent-FC coffees, `fc_start` / `fc_temp` may be null. Don't fabricate. Record `fc_total_cracks` (audibility signal).
+  - On silent-FC coffees, `fc_start` / `fc_temp` may be null. Don't fabricate. Record `fc_total_cracks` (audibility count) AND `fc_audibility` (Sprint 11 RO-CP-3 / migration 061 / 2026-05-20 4-value enum: audible / subtle / silent / ambiguous). See CONTEXT.md § FC audibility state.
 
 `push_roast(payload)`:
 - `green_bean_id` from STAGE 1
 - `batch_id` from Roest (integer as string)
 - **`recipe_id`**: FK to the matching `roast_recipes` row from STAGE 2(b). NON-NEGOTIABLE - one-shot lots have a single recipe and a single roast, the linkage must be set.
-- Roest numeric fields, prose synthesis (`what_worked` / `what_didnt` / `what_to_change`), `roest_log_id`, `roest_notes`, `roast_profile_name`, `fc_total_cracks`, `worth_repeating` (tristate: typically `"pending"` until Day 7 cupping).
+- Roest numeric fields, prose synthesis (`what_worked` / `what_didnt` / `what_to_change`), `roest_log_id`, `roest_notes`, `roast_profile_name`, `fc_total_cracks`, **`fc_audibility`** (Sprint 11 RO-CP-3), `worth_repeating` (tristate: typically `"pending"` until Day 7 cupping).
 - `is_reference: false`. The lot-level reference roast designation lands at one-shot-closeout.md STAGE 2 — for one-shots, `is_reference: true` is set unconditionally at close-out regardless of outcome (single batch IS structurally the reference). Outcome A/B distinction lives on `worth_repeating` + `why_this_roast_won`, not `is_reference`.
 
 Capture `roast_id` for STAGE 4's experiment patch and STAGE 4's cupping push later.
@@ -180,7 +180,7 @@ Capture `roast_id` for STAGE 4's experiment patch and STAGE 4's cupping push lat
 - `eval_method`: `"Pourover"` for Day 7 xbloom gate
 - `recipe_variant`: `"xbloom_gate"` if you expect a real-pourover follow-up under a different recipe; NULL if confident this is the only cupping
 - `ground_agtron`: paired with `roasts.agtron` for WB-to-Ground delta. `wb_agtron` is auto-snapshot from the joined roast; `wb_to_ground_delta` is a generated column (Schema sprint S1, migration 055, 2026-05-18).
-- Eight prose fields (`aroma` / `flavor` / `acidity` / **`sweetness`** / `body` / `finish` / `overall` / **`temperature_behavior`**) sourced from Chris's transcript. **Sweetness is a distinct axis** from acidity / body — don't fold it in. **Temperature_behavior** captures direction + when + what changes across the cooling arc. Both fields are NULL-safe if the transcript doesn't address them.
+- Ten prose fields (`aroma` / `flavor` / `acidity` / **`sweetness`** / `body` / `finish` / `overall` / **`temperature_behavior`** / **`aromatic_behavior`** / **`structural_behavior`**) sourced from Chris's transcript. **Sweetness is a distinct axis** from acidity / body — don't fold it in. **Temperature_behavior** captures direction + when + what changes across the cooling arc. **Aromatic_behavior** + **structural_behavior** (Sprint 11 RO-6 / migration 062 / 2026-05-20 — relocated from roast_learnings per ADR-0008): per-tasting observations of how aromatics present in time/intensity and how acidity/body/finish shape and balance, separate from flavor. On one-shot lots flag the single-cup-observation constraint in the prose if helpful ("single-cup observation; verify on next similar lot"). All ten fields are NULL-safe if the transcript doesn't address them.
 
 `patch_experiment(experiment_pk, ...)`:
 - `delta_from_cup_a`: per-slot reconciliation of actual cup vs `updated_cup_prediction_a` (or vs `expected_outcomes` design-time prediction if `updated_cup_prediction_a` is NULL). Walk the three `taste_for_a` reference points and note which materialized as expected vs not (producer-notes ballpark / carry-forward-anchor expectation / tolerance-margin behavior).

@@ -75,20 +75,16 @@ These are what the resolved-view page's Roast Character mini-card surfaces side-
 
 ### Cup-side diagnostic signals (NOT roast-side observations)
 
-CONTEXT.md is strict on this distinction. Underdev / overdev signals describe what the CUP TASTES LIKE when development is off-target, NOT roast-side observations like "the roast stalled at the end" (those go in the per-roast prose or `additional_notes`).
+CONTEXT.md is strict on this distinction. Underdev / overdev signals describe what the CUP TASTES LIKE when development is off-target, NOT roast-side observations like "the roast stalled at the end" (those go in the per-roast prose `what_didnt` or in `additional_notes` on the experiment row).
 
 - **`underdevelopment_signal`**: what underdev tasted like for THIS lot's cup - diagnostic marker for future lots of similar cultivar / process. Lot-specific (grassy / hay / sour / underextracted-acidity vary by cultivar). Cite the specific batch slot(s) that exhibited this so the signal is anchored to evidence.
 - **`overdevelopment_signal`**: cup-side mirror. Lot-specific (roasty / nutty / ashy / muted / dark-chocolate-heavy / pronounced drying tannin / Sichuan peppercorn vary by cultivar).
 
-CONTEXT.md flags an open audit: existing roast_learnings rows may have roast-side observations intermixed in these fields. For this lot, write strictly cup-side and put any roast-side observations elsewhere (per-roast `what_didnt` or `additional_notes` on the experiment row).
+**Cup-first + labeled-roast-correlate pattern** (Sprint 11 RO-5 formalized 2026-05-20): the structure existing closed lots already use. Write the cup observation FIRST (what the cup tasted like at underdev / overdev). If a roast-side correlate is consistent across this lot — e.g. `Agtron WB above 77, ground above 74` or `FC below 200°C` or `Maillard above 50%` — append it AFTER the cup observation, explicitly framed as a roast-level correlate. Worked example from CGLE Mandela XO's underdev signal: "Aggressive alcoholic attack dominating the cup; sour-fermented pungency front-loaded with no body or integration; attack dissipates quickly. Agtron whole bean above 77, ground above 74. Seen clearly in V1 Batch 100 and V3a batches 137/138." Cup descriptors → Agtron threshold → cited batches. Do NOT replace the cup observation with a roast-side observation — that miscategorizes the field. Audit confirmed all 3 currently-populated lots follow this pattern cleanly; this rule encodes it for future writes.
 
-### Cup character (currently misplaced in schema, per CONTEXT.md)
+### Lot-level rest behavior
 
-These describe what the cup IS when roasted correctly - distinct from diagnostic signals (which describe failure modes). CONTEXT.md flags relocation to `cuppings` or a synthesized field on the reference-cup view as a follow-up; for now they live on `roast_learnings`:
-
-- **`aromatic_behavior`**: how aromatics present in time and intensity - immediate vs late-blooming, expressive vs muted, lifted vs grounded, sustained vs transient.
-- **`structural_behavior`**: shape and balance of acidity, body, and finish, separate from flavor.
-- **`rest_behavior`**: how the roast evolves across rest days (Day 4 / 7 / 10+). Frequently NULL - Chris targets Day 7 xBloom and moves on; rest-time-as-variable isn't actively measured.
+- **`rest_behavior`**: how the roast evolves across rest days (Day 4 / 7 / 10+) AND across cross-cup vehicle comparisons (April brewer vs xBloom, etc.) AND storage observations (foil-bag temperature, ambient). Three-thread content scope per the Sprint 10 RO-7 reframe. Populated rate 3 of 7 closed lots (43%); use when the lot teaches something about rest evolution worth carrying forward to similar lots. Sprint 11 (migration 062, 2026-05-20) note: `aromatic_behavior` + `structural_behavior` previously lived alongside `rest_behavior` in this section; they relocated to `cuppings.aromatic_behavior` / `cuppings.structural_behavior` per ADR-0008 because they describe what a CUP IS (per-tasting observation), not a lot-level rest-curve lesson. Push them at log-cupping.md STAGE 2 via `push_cupping` (or `patch_cupping` for corrections), NOT here.
 
 ### Carry-forward learnings (the compounding-knowledge primitive)
 
