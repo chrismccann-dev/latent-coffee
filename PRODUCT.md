@@ -392,59 +392,98 @@ The full forward-looking work surface, structured by readiness + scope. Per-spri
 
 The current ranked queue of scoped, sized sprints in flight or next up.
 
-Sprint 3.1 brainstorm shipped 2026-05-12 (this section is its output). Sprint 3.2 Cleanup-A shipped 2026-05-13. Five follow-up sprints (3.3-3.7) queued in build order below. Continuous-feedback channel for non-architectural friction continues at `memory/feedback_mcp_continuous_log.md`.
+Sprint 3.1 brainstorm shipped 2026-05-12. Sprint 3.2 Cleanup-A shipped 2026-05-13. The post-grilling-sequencing era (Sprints 0-14 + M + F) closed 2026-05-24 — Sprint F's 6-actor matrix walk confirmed clean substrate. **Sprint R restructured this queue 2026-05-25** around Chris-locked Option 1 sequence: audit cluster → architecture brainstorm → architecture implementation → roadmap re-session. Per Chris 2026-05-25, POD-1 + 3.3-3.7 + deferred candidates are demoted to **Queued post-architecture** below — they will be re-prioritized in the roadmap re-session that closes the architecture work. Continuous-feedback channel for non-architectural friction continues at `memory/feedback_mcp_continuous_log.md`.
 
-#### 1. Sprint 3.3 — Auto-supersede paired sprint
+#### 1. Audit cluster — three-surface drift check
 
-3 items, ~2-3h. 3.0.5-shape sub-sprint. #R88 adds `supersede_ids: string[]` parameter on `propose_doc_changes` for the explicit-intent path (claude.ai-side). #R89 closes the complementary implicit-intent gap arbiter-side via summary-parse `CORRECTED: ... (supersedes <UUID>)` + source-id stem detection. Promoted from debt: MCP tool-list cache visibility — improve new-tool-ship workflow visibility (so we don't ship a Tool and wonder why claude.ai doesn't see it).
+Coordinated drift check across the three surfaces driving Latent's workflows BEFORE entering the architecture brainstorm. Surface 1 (codebase + docs) already done via Sprint F. Surface 2 (claude.ai project memory + custom instructions, ~12-day delta) and Surface 3 (Chris's lived workflow vs documented baseline) audited inline using prep artifacts Sprint R produced ([claude.ai memory diff](docs/sprints/sprint-r-audit-prep-claude-ai-memory-diff-2026-05-25.md) · [roasting workflow baseline](docs/sprints/sprint-r-audit-prep-roasting-workflow-baseline-2026-05-25.md) · [brewing workflow baseline](docs/sprints/sprint-r-audit-prep-brewing-workflow-baseline-2026-05-25.md)).
 
-**Triggers when:** ships next (post Sprint 3.2 close). **Sizing:** ~2-3h. **Scoping doc:** none.
+**Triggers when:** next after Sprint R close. **Sizing:** S-M (~1-2h Chris-side execution; prep already done). **Scoping doc:** [docs/sprints/audit-cluster-kickoff-2026-05-25.md](docs/sprints/audit-cluster-kickoff-2026-05-25.md).
 
-#### 2. Sprint 3.4 — Per-batch failure_boundary breach record (plan-mode + impl)
+#### 2. Architecture brainstorm cluster — composable sub-skills + self-improving + cross-corpus
+
+Convergent brainstorm on three tightly-coupled architectural questions Chris surfaced in Sprint R's input-collection (2026-05-25): Q1 (what does "self-improving" actually mean for Latent), Q2 (cross-brewing + cross-roasting joined learning), Q3 (decompose BREWING.md + ROASTING.md into composable sub-skills + master coordinator per Chris's audio note). Three questions = one brainstorm — Q1 frames Q3, Q3 contains Q2 as a sub-skill. **Hard system trigger justifying it now:** BREWING.md is 204KB and ROASTING.md is 132KB — both past the 120KB tripwire codified in `## Scaling Watch-Items`. The tripwire fired; this is the response.
+
+**Triggers when:** after audit cluster closes. **Sizing:** L (1-2 day brainstorm session, plan-mode or `grill-with-docs` shape). **Output:** 2-3 ADRs + sub-skill decomposition spec + transition plan for BREWING.md/ROASTING.md + first-shipment subset + implementation kickoff brief. **Scoping doc:** [docs/sprints/architecture-rethink-cluster-kickoff-2026-05-25.md](docs/sprints/architecture-rethink-cluster-kickoff-2026-05-25.md).
+
+#### 3. Architecture implementation
+
+Implementation flowing from the brainstorm cluster. Scope TBD post-brainstorm — likely 2-4 sequential sprints: (a) first-shipment sub-skill subset (proof of pattern, 2-3 sub-skills), (b) master coordinator implementation, (c) BREWING.md/ROASTING.md migration to pointer-shape, (d) self-improvement primitives per shipped sub-skill.
+
+**Triggers when:** brainstorm cluster closes with ADRs + decomposition spec landed.
+
+#### 4. Roadmap re-session
+
+After architecture implementation lands, re-assess everything in Queued post-architecture (below) and the deferred candidates. Some entries may be subsumed by the architecture work (3.6 BREWING/ROASTING doc reconciliation likely is). Some may shift shape (3.7 Prompt v5 rewrites may look very different if prompts get decomposed into sub-skills). Some still need to ship as-is (3.3 auto-supersede friction is independent of architecture).
+
+**Triggers when:** architecture implementation sprints close. **Sizing:** S (single session, similar shape to Sprint R itself).
+
+### Queued post-architecture
+
+Every entry here waits behind the architecture brainstorm + implementation. Priorities re-decided in the roadmap re-session (#4 above). Content preserved verbatim from pre-Sprint-R state unless flagged otherwise.
+
+#### Sprint 3.3 — Auto-supersede paired sprint
+
+3 items, ~2-3h. 3.0.5-shape sub-sprint. #R88 adds `supersede_ids: string[]` parameter on `propose_doc_changes` for the explicit-intent path (claude.ai-side). #R89 closes the complementary implicit-intent gap arbiter-side via summary-parse `CORRECTED: ... (supersedes <UUID>)` + source-id stem detection. Promoted from debt: MCP tool-list cache visibility — improve new-tool-ship workflow visibility (so we don't ship a Tool and wonder why claude.ai doesn't see it). **Independent of architecture** — friction is real and orthogonal to the sub-skill decomposition; likely ships as-is post-architecture.
+
+**Sizing:** ~2-3h. **Scoping doc:** none. Original scoping was a Dropbox handoff from earlier session, fully captured in this entry.
+
+#### Sprint 3.4 — Per-batch failure_boundary breach record (plan-mode + impl)
 
 Plan-mode brainstorm produces JSONB shape decision + `/green/[id]` render strategy + relationship to existing `failure_boundary` text on experiments. Then impl. Inputs: #R67 (`failure_boundary` text → structured JSON), #R68 (`failure_boundary_breached` field on `push_experiment` or per-batch breach record), 2.7.5 plan-mode flag. Data points: Wush Wush V1 (all 3 batches breached) + Bean 4-6 cases. Scoping doc lands as a placeholder ahead of the plan-mode session.
 
-**Triggers when:** after Sprint 3.3. **Sizing:** ~1-2 day brainstorm + ~1-2 day impl. **Scoping doc:** [docs/features/experiments-breach-record.md](docs/features/experiments-breach-record.md).
+**Sizing:** ~1-2 day brainstorm + ~1-2 day impl. **Scoping doc:** [docs/features/experiments-breach-record.md](docs/features/experiments-breach-record.md).
 
-#### 3. Sprint 3.5 — Roest API parity Phase 3 (pull-side schema sweep)
+#### Sprint 3.5 — Roest API parity Phase 3 (pull-side schema sweep)
 
 7 items + breach cross-ref. Symmetric to the Phase 1+2 write integration shipped 2026-05-06. #R57 push_roast missing `notes` pass-through; #R59 `hopper_load_temp` missing from `pull_roest_log`; #R60 TP + yellowing temp missing; #R61 total cracks count missing; #R64 inlet curve display string as-designed vs as-recorded clarification; **#R65 — HIGH IMPACT: Roest API returns UTC dates, silently miscodes late-day batches** (rides along, not carved out as hotfix); #R66 `roest_inventory_id` orphan reconciliation. Cross-ref to Sprint 3.4 — breach detection at `push_roast` time fits here.
 
-**Triggers when:** after Sprint 3.4 (breach-record schema decisions land before pull-side schema additions). **Sizing:** ~3-4 days. **Scoping doc:** [docs/features/roest-api-parity-phase-3.md](docs/features/roest-api-parity-phase-3.md).
+**Sizing:** ~3-4 days. **Scoping doc:** [docs/features/roest-api-parity-phase-3.md](docs/features/roest-api-parity-phase-3.md).
 
-#### 4. Sprint 3.6 — BREWING/ROASTING doc reconciliation
+#### Sprint 3.6 — BREWING/ROASTING doc reconciliation
 
 Doc-content fixes bundled. ROASTING.md anchor-confidence framing in new-bean-intake template; #R52 BREWING.md subprocess spec disagrees with canonical; #R70 STAGE 8 routing for protocol-level learnings → FC Marking Protocol / Standard Workflow; #R71 Active Lots sub-anchoring per-lot (e.g. `Active Lots > COS-HIG-BOR-2026`); #R72 one-shot calibration framing as separate subsection; schema-describe micro-fixes #R45 / R48 / R51 / R69 / R86 (describe-string-only edits across `push_brew` / `push_roast` / `propose_doc_changes`).
 
-**Triggers when:** after Sprint 3.5. **Sizing:** ~1-2 days. **Scoping doc:** none.
+**⚠️ Likely subsumed by architecture brainstorm cluster** — if BREWING.md and ROASTING.md decompose into sub-skills per Chris's audio note, this reconciliation may shift shape entirely or no longer apply. Re-evaluate at roadmap re-session.
 
-#### 5. Sprint 3.7 — Prompt v5 rewrites
+**Sizing:** ~1-2 days. **Scoping doc:** none.
+
+#### Sprint 3.7 — Prompt v5 rewrites
 
 9 items — `docs/prompts/in-process-bean-incremental-sync.md` + `new-bean-intake.md` updates. #R76 add `list_roest_inventory({search})` call at intake; #R77 `hopper_load_temp` schema describe rewording; #R78 density `TBM` placeholder vs `null` clarification; #R79 STAGE 1 intake drift detection (project doc vs Roest inventory); #R80 STAGE renumbering 1-7 with no skips; #R81 `patch_*` tools mentioned; #R82 cupping composite key (`recipe_variant` added) flag; #R83 STAGE 6 prohibitive language softened; #R84 `producer_override:true` caveat surfaced earlier in flowchart.
 
-**Triggers when:** after Sprint 3.6. **Sizing:** ~1 day. **Scoping doc:** none.
+**⚠️ Likely shifts shape post-architecture** — if prompts get decomposed into sub-skills with their own coordinator, these per-prompt edits may look very different. Re-evaluate at roadmap re-session.
 
-#### 6. General cleanup sprint — 3 tracks
+**Sizing:** ~1 day. **Scoping doc:** none.
 
-Three independently-scopable cleanup tracks Chris flagged 2026-05-05 post-Phase-3. Bundle into one sprint or ship separately. Full scope in `memory/project_general_cleanup_sprint.md`.
+#### POD-1 — Pour-over discriminator gate + optimized brew lifecycle states
 
-- **Track 1 — Docs consolidation pass.** Shipped 2026-05-07 in the May 2026 doc cleanup PR (covers BREWING / ROASTING / docs/prompts / docs/taxonomies / SYNC_V2 / ARBITER / CLAUDE / PRODUCT / README + Documentation Indexes + SYNC.md + design-brief.md deletions + April Brewer registry fix + Documentation Index + Doc-touch sprint cadence rule + cuppings.sweetness + cuppings.temperature_behavior schema migration).
-- **Track 2 — Data sanity audit.** Shipped 2026-05-08. `scripts/data-sanity-audit.ts` + dry-run report at `docs/audits/track-2-2026-05-08.md`. 159 findings across 7 dirty dimensions (process recompose, producer drift, terroir orphans, roast→cupping completeness, synthesis cache staleness, provenance markers). Bucket A fixes split to a follow-up PR; Bucket B items either queued as mini-sprints or bundled with Track 3.
-- **Track 3 — Page-design refresh.** Bundle with future design sprint per Chris's call. Stale fields displayed, ordering drift, Phase 3 surfaces not yet rendered (provenance flags), mobile regressions, inconsistencies between aggregation detail pages. ~4-6h. Don't ship standalone; wait for the Claude-Design redesign window. Will also absorb the synthesis-cache-keyed-on-terroir_id architectural finding from Track 2 (see audit report § dim 12a).
+Promoted to Queued post-architecture from Longer Term Items per Sprint R Option 1 lock 2026-05-25. Chris-flagged near-term 2026-05-18 ("the system needs this to stay aligned with my actual roasting practice — operator-decided interim pour-over discriminator step + distinct optimized-brew-dial-in lifecycle state"). Two new lifecycle states model real-world workflow steps currently invented inline by claude.ai. **Deferred behind architecture per Chris 2026-05-25:** "I can delay POD-1 because I can deal with the cycle within my current claude.ai thread so not having the feature inside latent is not blocking my actual workflow." May land naturally inside the new sub-skill architecture (as a sub-skill route) instead of as a one-off feature.
 
-**Recommended order:** Track 1 (shipped 2026-05-07) → Track 2 (shipped 2026-05-08) → Track 3 bundled with redesign.
+**Sizing:** 1-2 stacked sprints; introduces new prompt(s), possibly new schema columns, new page renders. **Scoping doc:** [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md).
 
-#### 8. Per-entity directed synthesis
+#### General cleanup sprint Track 3 — page-design refresh
 
-Promoted from Longer Term Items 2026-05-08 — the next non-blocked sized sprint slot, queued behind two side-quest sessions (`latentcoffee.com` HTTPS bug + MEMORY.md consolidation, both flagged elsewhere in the roadmap and being handled in dedicated sessions).
+Three independently-scopable cleanup tracks Chris flagged 2026-05-05 post-Phase-3. Track 1 + Track 2 shipped 2026-05-07 + 2026-05-08. **Track 3** remains: page-design refresh — stale fields displayed, ordering drift, Phase 3 surfaces not yet rendered (provenance flags), mobile regressions, inconsistencies between aggregation detail pages. ~4-6h. Don't ship standalone; bundle with the Claude-Design redesign window per Chris-stated input #9 (Sprint R 2026-05-25): "I probably need to do a page-by-page walkthrough on everything before #8 [design system merge] for more minor cleanup, polishing, informational design choices, reordering of things." Full scope in `memory/project_general_cleanup_sprint.md`.
 
-Today's `cultivar` / `terroir` / `processes` / `roasters` synthesis prompts are too generic — Chris's framing: "If it's about Volcán Barú Highlands where I had 24 coffees, the insight shouldn't be 'taste the coffee cooler', it should be more directed about that specific terroir." Per-entity prompt customization that uses brew count + dimension salience + entity-specific context (e.g. terroir's macro-level processing + variety mix; roaster's BMR strategy tag) to direct the synthesis.
+### Deferred candidates (re-decided at roadmap re-session)
 
-**Sizing:** ~1-2 sprints; needs plan-mode brainstorm first since the prompt-engineering shape is interpretive. Touches `/api/{terroirs,cultivars,processes,roasters}/synthesize`.
+These were enumerated in post-grilling-sequencing.md § Deferred sprints and brought forward to Sprint R for prioritization. All wait behind architecture work; re-evaluated in roadmap re-session.
 
-**Compounds with:** the per-roaster archive page enhancement (Longer Term) — same prompt-customization machinery becomes the template for `/cultivars/[id]` + `/terroirs/[id]` + `/processes/[slug]` archive surfaces. Also compounds with `/brews/[id]` lessons rework. See `Longer Term Items § Per-entity directed synthesis` for the original framing.
-
-**Triggers when:** the two side-quest sessions wrap, OR Chris pulls the trigger sooner.
+- **DF-SCH-CAND-5** — `experiments.taste_for_validation_*` schema vs prompt-level alternative. 4 of 5 DF-SCH candidates already shipped via Schema sprints S1-S4 + Sprints 11-12; only this one undecided.
+- **CR-7-promote** — SWORKS valve flow → structured-pour-structure column. Scoping landed Sprint T5; promote when per-pour valve-dial structure earns its keep.
+- **CR-9 / WBC-4-large** — water taxonomy bootstrap. Large bottoms-up authoring sprint; trigger when Chris has bandwidth.
+- **DF-OPS1** — CGLE Sudan Rume Natural V5 recipe rows backfill (Chris-driven).
+- **DF-OPS2** — Historical end_condition backfill on roasts ≤ batch 169 (Chris-driven).
+- **BR-6** — Brewing iteration-trace recording asymmetry (forward-investment scoping).
+- **BR-7 / BR-8 / BR-9** — Re-test triggers (trigger on specified brew pattern landing).
+- **BCP-3..8** — Cross-party re-test triggers (trigger on specified pattern landing).
+- **MCP-6** — 5 SYNC_V2 decisions umbrella entry (no-strong-opinion; defer).
+- **SYN-1** — Synthesis pipeline subsystem-wide revisit umbrella (future-scope).
+- **WBC-3 / CR-8** — Filter behavior measurement OPS (Chris-physical-world).
+- **WBC-4 (experiment)** — Water Strength experiment OPS (Chris-physical-world).
+- **WBC-9** — Long-run experiment architectural review (deferred per Chris).
+- **WBC-10** — Same-green blending + Rest curve protocol OPS execution (next reference roast cycle).
 
 ### Side Quests
 
@@ -474,6 +513,7 @@ Logged but not auto-queued — promote when a trigger fires.
 - **Commit taxonomy-port generator scripts to `scripts/taxonomy-ports/`** — ~30-min task; fires when Chris wants deterministic re-porting from the source CSV.
 - **Producer research routine — option (b) auto-research subagent during arbiter** — flagged 2026-05-07 doc review. Today's arbiter manually researches each queued producer. Future enhancement: arbiter spawns a research subagent that drafts a `ProducerEntry` shape per queued producer, surfaces for Chris's sign-off. Reduces manual web-research time. Trigger: when manual cadence becomes onerous.
 - **Brew-Reveals-Roast self-coaching question on Optimized Brew Session checklist** — light prompt addition: *"Before iterating on the brew recipe, ask: am I missing something the roast can already deliver that this evaluation recipe doesn't surface?"* Chris flagged this as an ongoing skill gap.
+- **Generic feedback-handoff queue (Chris-input #4 Sprint R 2026-05-25).** Today the `process pending workflow feedback` channel is informal — Chris sees a friction point in claude.ai during a brew/roast, types it into `memory/feedback_mcp_continuous_log.md` Batch N, claude code processes the batch later. The pattern works but is one-off per friction class. Promote to a real skill/sub-skill that takes any structured feedback ("a thing claude.ai noticed during a workflow that claude code should act on") and routes it appropriately — possibly a sub-skill of the architecture brainstorm cluster output. Chris-framing: "I should probably be able to handle any generic feedback and let this skill run in parallel to anything I have going on at the time." **Trigger:** likely lands as a sub-skill in the architecture brainstorm cluster output (input #7 audio note's "learning assistant" role); promote out to its own sprint if the architecture cluster decomposes differently than expected.
 - **BREWING.md Cross-Coffee Insight Layer structural pass** — follow-up flagged at Sprint 9 kickoff 2026-05-19. Sprint 9 closed the SYN-8 naming asymmetry (rename `SECTION 3 — Archive Patterns` → `Cross-Coffee Insight Layer` to match ROASTING.md) but **deliberately did NOT touch structure**. Chris-articulated 2026-05-16: "be a little bit more structured at exactly what I'm trying to pull out here that is the most helpful for creating new recipes." Scope to land in a future sprint: (1) align BREWING.md's renamed section structure with ROASTING.md's Confirmed Patterns navigable index + Working Hypotheses (Single-Lot, Low Confidence) shape; (2) audit whether the per-strategy "Coffees That Confirmed X" subsections are the right discriminator for new-recipe design vs an alternative slice (per-process, per-variety, per-modifier-stack); (3) consider whether the brewing-side equivalent of the operational ladder (Low confidence → `additional_notes`, NOT cross-coffee insight layer) is needed. Lower-priority doc work; trigger when Chris feels the brewing-side cross-coffee surface is getting in the way of new-recipe design OR when the ARBITER.md `CCIL consolidation pass` is extended to handle the brewing side.
 - **RoR tracking fields on `roasts`** — flagged 2026-05-17 from the [Yunnan livestream extraction (Dongzhe)](docs/roasting/dongzhe-livestream-2026-05.md), Delta 2. Add three fixed-time RoR marks to the roast log: `ror_at_2_30` (drying-handoff check, the moment Dongzhe was watching when he raised drying energy on the 11% moisture Cascade), `ror_at_4_00` (approach-to-FC primary momentum signal; sits below Chris's typical FC range 4:30-4:45 so it captures pre-FC run-up), `ror_at_fc_minus_30s` (cross-lot comparable post-hoc anchor). All three extractable from Roest log data already captured - no new measurement equipment, no live-operation burden. Touches: schema migration on `roasts`, `push_roast` + `patch_roast` input_schema in [lib/mcp/push-roast.ts](lib/mcp/push-roast.ts) + [lib/mcp/patch-roast.ts](lib/mcp/patch-roast.ts), `pull_roest_log` extraction pipeline in [lib/mcp/pull-roest-log.ts](lib/mcp/pull-roest-log.ts) if auto-population is desired, plus ROASTING.md prose to describe these as canonical logged fields. The prose-only "we should track this" framing already lives in ROASTING.md - this entry is for the structural / schema work that lets the field actually be saved and surfaced. Rationale to defer: Chris explicitly punted the schema piece while Sub Pages 6 series + grilling sessions are still settling; the worry is too many structural changes to the roasting substrate at once. **Trigger to promote:** Chris's separate go-ahead, ideally after Sub Pages 6 follow-ups + grilling-related substrate changes are landed and stable.
 
@@ -512,7 +552,7 @@ Scoped, sized, and ready-to-launch when timing is right. Not currently ranked in
 
 - **Pour-structure schema migration** (scoped 2026-05-09 follow-up to PR #131). Move `brews.pour_structure` from a single text column to a structured `brews.pours jsonb` array of `{n, label?, time?, amount_g?, method?, note?}` objects. The shipped detail-page sprint already extracts this shape via `lib/pour-structure.ts`; the migration is mostly mechanical (~3-4 days). **Triggers when:** parse drift starts hurting render / downstream feature demands structured data (recipe diff, structured mobile table, per-pour aggregation queries) / MCP write reliability becomes an issue. Full scope: [docs/features/pour-structure-schema-migration.md](docs/features/pour-structure-schema-migration.md).
 
-- **Pour-over discriminator gate + optimized brew lifecycle states** (scoped 2026-05-18 from Round 7 wrap-up). **Near-term priority per Chris 2026-05-18** — not deep longer-term; the system needs this to stay aligned with Chris's actual roasting practice (operator-decided interim pour-over discriminator step + distinct optimized-brew-dial-in lifecycle state). Two new lifecycle states model real-world workflow steps currently invented inline by claude.ai (Rounds 3 + 7 Path C-1/C-2 pattern). Step 1: interim pour-over discriminator between xBloom cupping and V_(n+1) design when xBloom ranking is ambiguous or surprising. Step 2: distinct "Optimizing reference brew" state after reference roast declared but before lot fully closed. Likely 1-2 stacked sprints; introduces new prompt(s), possibly new schema columns, new page renders. **Triggers when:** the current polish PR ships (Sprints 6-8 of post-grilling-sequencing.md) + the full 14-sprint post-grilling sequence closes through Sprint R. First new sprint scheduled post-Sprint-R. Full scope: [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md).
+- **Pour-over discriminator gate + optimized brew lifecycle states** — **moved to [§ Queued post-architecture](#queued-post-architecture) as POD-1 per Sprint R 2026-05-25.** Chris-decision: "I can delay POD-1 because I can deal with the cycle within my current claude.ai thread so not having the feature inside latent is not blocking my actual workflow." May land naturally inside the new sub-skill architecture (as a sub-skill route) instead of as a one-off feature. Full scope still at [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md).
 
 - **Per-roaster archive page enhancement.** `/roasters/Hydrangea` exists but is thin. Adds "Your N brews from this roaster: pattern, top 3, where you drifted, what to try next." Half the substrate is already there (synthesis cache + brew list); adds a directed-prompt + UI rework. ~1 sprint. **Compounds with:** per-entity directed synthesis rework above. Becomes a template for the `/cultivars/[id]` + `/terroirs/[id]` + `/processes/[slug]` archive surfaces too.
 
@@ -528,7 +568,7 @@ Scoped, sized, and ready-to-launch when timing is right. Not currently ranked in
 
 #### Redesign
 
-- **Claude-Design-led redesign.** Chris finished a redesign session with claude.ai/design 2026-04-25 and the output is ready-to-launch. Waiting on app stability (post-2.7.5 punch-list resolution + post-cleanup-sprint). Probably its own large sprint; scope re-examines desktop vs mobile as a first-class consideration since the current rule "desktop-first with mobile spot-check" was set before Chris's brewing surface fully shifted to mobile claude.ai. Anything shipped between now and the redesign must stay modular (route through `<SectionCard>` / `<Tag>` / `<TagLinkList>` / `.label`; no new tokens / colors / spacing unless a canonical registry requires it). **Triggers when:** Active Sprints clear + a stable surface window opens.
+- **Claude-Design-led redesign.** Chris finished a redesign session with claude.ai/design 2026-04-25 and the output is ready-to-launch. **Updated Sprint R 2026-05-25 per Chris input #8:** Chris has been keeping the new design system in sync with all the changes via claude.ai/design and the output is ready to merge into the app, but the merge keeps getting delayed. **Updated Sprint R 2026-05-25 per Chris input #9:** before the grand redesign merge, do a page-by-page walkthrough on everything for minor cleanup, polishing, informational design choices, reordering of things — "there's a lot of small surface areas for cleanup which may make sense to do before the grand redesign." That page-polish pass becomes the General cleanup Track 3 work (now in [§ Queued post-architecture](#queued-post-architecture)). Waiting on app stability + architecture work to settle. Probably its own large sprint; scope re-examines desktop vs mobile as a first-class consideration since the current rule "desktop-first with mobile spot-check" was set before Chris's brewing surface fully shifted to mobile claude.ai. Anything shipped between now and the redesign must stay modular (route through `<SectionCard>` / `<Tag>` / `<TagLinkList>` / `.label`; no new tokens / colors / spacing unless a canonical registry requires it). **Triggers when:** (1) architecture brainstorm + implementation work closes, (2) page-by-page polish pass completes, (3) Active Sprints clear + a stable surface window opens.
 
 ---
 
@@ -601,7 +641,7 @@ Tripwires for the 1,000-brew goal — what to watch as the corpus grows. Surface
 
 ### Standing tripwires (always monitor)
 
-- **120KB threshold on any single root-level living doc.** When crossed, plan a split sprint per the CLAUDE.md sprint cadence rule. Currently: PRODUCT.md ~143KB pre-cleanup (this PR drops it), BREWING.md 188KB, ROASTING.md 130KB (crossed 2026-05-18 via the CCIL consolidation pass - net +5KB from Confirmed Patterns subsection + Working Hypotheses subsection H3 headers). All three root-level living docs are now past the tripwire. ROASTING.md split-sprint candidate carriers: per-process subdocs (Naturals / Anaerobic / XO-ferments) lifting lot-specific learnings out of ROASTING.md proper; or pulling the Cross-Coffee Insight Layer + Open Questions + Roast-to-Brew Translation sections into a sibling `docs/roasting/insight-layer.md`. Not blocking - flag-only here until a queued sprint commits to a carrier.
+- **120KB threshold on any single root-level living doc.** When crossed, plan a split sprint per the CLAUDE.md sprint cadence rule. Current (Sprint R 2026-05-25): PRODUCT.md 100KB (under, climbing), CLAUDE.md 112KB (under, climbing), **BREWING.md 204KB (170% of tripwire — PAST)**, **ROASTING.md 132KB (110% of tripwire — PAST)**. **The tripwire has fired and the response is the [Architecture brainstorm cluster](#active-sprints) sprint #2 above** — Chris's audio note (Sprint R 2026-05-25) proposes decomposing both BREWING.md and ROASTING.md into composable sub-skills with a master coordinator, which is exactly the split carrier this tripwire was waiting for. Pre-Sprint-R candidate carriers (per-process subdocs lifting lot-specific learnings out of ROASTING.md proper; pulling Cross-Coffee Insight Layer + Open Questions + Roast-to-Brew Translation into a sibling `docs/roasting/insight-layer.md`) are subsumed by the architecture brainstorm cluster output.
 - **MEMORY.md index bloat.** Already at 27.2KB / 24.4KB warning threshold. Run `consolidate-memory` skill quarterly, not just when it warns. Index entries should be one line under ~150 chars each.
 - **Drift between `lib/*-registry.ts` and `docs/taxonomies/*.md`.** No CI tooling enforces sync today; the planned `scripts/check-registry-md-sync.ts` (Active Sprints #4) is the permanent guard. Until then, manual discipline via the doc-touch sprint-cadence rule.
 - **Cross-doc reference rot.** The Sprint cadence #4 ("Doc-touch check before PR") is the primary mitigation. Calendar-triggered monthly audit via `schedule` skill is the backstop.
