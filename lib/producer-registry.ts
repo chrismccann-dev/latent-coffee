@@ -3748,6 +3748,15 @@ export const PRODUCERS: readonly ProducerEntry[] = [
 // "we know what you mean" layer for things like accents, lot vs producer,
 // outgrower-context suffixes.
 
+// Sprint 12 / CR-4 (2026-05-21): typed helper for the list_skeleton_entries
+// MCP Tool. Filters PRODUCERS to entries flagged for arbiter enrichment review.
+// Currently 5 entries: Miguel Estela, Nelsyn Hernández, Jannette & Kai Janson,
+// and 2 others surfaced during MCP feedback batches. Sibling helper in
+// lib/roaster-registry.ts (listSkeletonRoasters).
+export function listSkeletonProducers(): ProducerEntry[] {
+  return PRODUCERS.filter((p) => p.skeleton === true)
+}
+
 export const PRODUCER_ALIASES: Record<string, string> = {
   "Abel Dominguez": "Abel Domínguez",
   "Abel Dominguez, Blooms Coffee": "Abel Domínguez",

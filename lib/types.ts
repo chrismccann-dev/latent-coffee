@@ -287,6 +287,14 @@ export interface RoastLearning {
   reference_roasts: string | null
   starting_hypothesis: string | null
   rest_behavior: string | null
+  // Sprint 12 (migration 064, 2026-05-21): per-field scope_tags arrays.
+  // Loose-canonical prefix convention (process:washed / variety:sudan-rume /
+  // country:colombia / etc.) lets cross-lot queries surface "what applies to
+  // washed Colombians" without scraping prose. See ADR-0009.
+  cultivar_takeaway_scope_tags: string[]
+  terroir_takeaway_scope_tags: string[]
+  general_takeaway_scope_tags: string[]
+  starting_hypothesis_scope_tags: string[]
   created_at: string
   updated_at: string
 }

@@ -36,6 +36,21 @@ export const patchRoastLearningsInputSchema = {
   reference_roasts: z.string().optional().nullable(),
   starting_hypothesis: z.string().optional().nullable(),
   rest_behavior: z.string().optional().nullable(),
+  // Sprint 12 (migration 064, 2026-05-21): per-field scope_tags arrays. ADR-0009.
+  // See push_roast_learnings for the prefix convention. Pass [] to clear; omit
+  // to leave untouched.
+  cultivar_takeaway_scope_tags: z.array(z.string()).optional().describe(
+    'Loose-canonical scope tags for cultivar_takeaway. See ADR-0009 + push_roast_learnings.cultivar_takeaway_scope_tags for the prefix convention (process:washed / variety:gesha-1931 / altitude:high / etc.).',
+  ),
+  terroir_takeaway_scope_tags: z.array(z.string()).optional().describe(
+    'Loose-canonical scope tags for terroir_takeaway. See ADR-0009.',
+  ),
+  general_takeaway_scope_tags: z.array(z.string()).optional().describe(
+    'Loose-canonical scope tags for general_takeaway. Use tag "general" for genuinely-universal principles. See ADR-0009.',
+  ),
+  starting_hypothesis_scope_tags: z.array(z.string()).optional().describe(
+    'Loose-canonical scope tags for starting_hypothesis. Defines future similar-lot pattern for STAGE 1 carry-forward search. See ADR-0009.',
+  ),
 }
 
 export function registerPatchRoastLearningsTool(server: McpServer, auth: McpAuthContext) {
@@ -44,7 +59,7 @@ export function registerPatchRoastLearningsTool(server: McpServer, auth: McpAuth
     {
       title: 'Patch Roast Learnings',
       description:
-        'Update / save / record / push field-level changes to the per-bean roast lessons row by roast_learnings_id. Sibling of push_roast_learnings (which UPSERTs by green_bean_id, one row per closed bean). Use this for post-close-out edits — e.g. starting_hypothesis revision after a related bean lands, or correcting a prose field on the canonical "lot lessons" record without a full re-push. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_learnings_id: call get_bean_pipeline (returns the roast_learnings record). Returns { roast_learnings_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch (mirrors patch_inventory + patch_experiment pattern). **One-shot lot constraint (migration 054, 2026-05-15)**: when the parent green_beans row has is_one_shot=true, patches that populate the lever-attribution fields (primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) trigger a validation error. Use this Tool to CLEAR those fields (pass explicit null) when retroactively flagging a lot as one-shot after lever-attribution prose was previously written. **Schema notes (Sprint 10, migration 060, 2026-05-19)**: column `elasticity` renamed to `brewing_tolerance` per ADR-0007; column `terroir_takeaway` added — populatable on one-shot lots, NOT subject to the lever-attribution constraint. **Sprint 11 (migration 062, 2026-05-20)**: columns `aromatic_behavior` + `structural_behavior` REMOVED per ADR-0008 — relocated to cuppings. Use patch_cupping for those fields.',
+        'Update / save / record / push field-level changes to the per-bean roast lessons row by roast_learnings_id. Sibling of push_roast_learnings (which UPSERTs by green_bean_id, one row per closed bean). Use this for post-close-out edits — e.g. starting_hypothesis revision after a related bean lands, or correcting a prose field on the canonical "lot lessons" record without a full re-push. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_learnings_id: call get_bean_pipeline (returns the roast_learnings record). Returns { roast_learnings_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch (mirrors patch_inventory + patch_experiment pattern). **One-shot lot constraint (migration 054, 2026-05-15)**: when the parent green_beans row has is_one_shot=true, patches that populate the lever-attribution fields (primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) trigger a validation error. Use this Tool to CLEAR those fields (pass explicit null) when retroactively flagging a lot as one-shot after lever-attribution prose was previously written. **Schema notes (Sprint 10, migration 060, 2026-05-19)**: column `elasticity` renamed to `brewing_tolerance` per ADR-0007; column `terroir_takeaway` added — populatable on one-shot lots, NOT subject to the lever-attribution constraint. **Sprint 11 (migration 062, 2026-05-20)**: columns `aromatic_behavior` + `structural_behavior` REMOVED per ADR-0008 — relocated to cuppings. Use patch_cupping for those fields. **Sprint 12 (migration 064, 2026-05-21)**: 4 new `*_scope_tags text[]` columns paired to the carry-forward fields. Loose-canonical prefix convention; see push_roast_learnings + ADR-0009 for capture guidance.',
       inputSchema: patchRoastLearningsInputSchema,
     },
     withToolErrorLogging('patch_roast_learnings', async (input) => {

@@ -34,6 +34,7 @@ import { registerPatchRoastLearningsTool } from '@/lib/mcp/patch-roast-learnings
 import { registerListTaxonomyQueueTool } from '@/lib/mcp/list-taxonomy-queue'
 import { registerProposeCanonicalAdditionTool } from '@/lib/mcp/propose-canonical-addition'
 import { registerResolveQueueEntryTool } from '@/lib/mcp/resolve-queue-entry'
+import { registerListSkeletonEntriesTool } from '@/lib/mcp/list-skeleton-entries'
 import {
   assertToolDiscoverability,
   type ToolDescriptor,
@@ -83,6 +84,8 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerListTaxonomyQueueTool(server, auth)
   registerProposeCanonicalAdditionTool(server, auth)
   registerResolveQueueEntryTool(server, auth)
+  // Sprint 12 / CR-4 (2026-05-21): third arbiter queue type (skeleton entries).
+  registerListSkeletonEntriesTool(server, auth)
 
   // Discoverability guard (MCP feedback batch 4). Dev-only — fires fast on the
   // first MCP request after a tool description regresses into the "Inserts a

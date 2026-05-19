@@ -27,6 +27,10 @@ const AXIS_VALUES = [
   'grinder',
   'terroir',
   'cultivar',
+  // Sprint 12 / MCP-1 (2026-05-21, migration 063): signature_method joins the
+  // queue as the 8th override-eligible axis. Override path lives on push_brew
+  // via `signature_method_override: true`; manual_propose path lives here.
+  'signature_method',
 ] as const
 
 const evidence = z

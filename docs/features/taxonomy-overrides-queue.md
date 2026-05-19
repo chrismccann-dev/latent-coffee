@@ -14,7 +14,7 @@ The big-ticket framing: Phase 3 makes `taxonomy_overrides_queue` the canonical-s
 
 ## Non-goals
 
-- **Soften strict-canonical for terroir + cultivar.** These stay strict. The queue covers the 5 text-only override axes only. Net-new terroirs/cultivars route through `propose_canonical_addition` (model-callable) — there is no `terroir_override` / `cultivar_override` flag.
+- **Soften strict-canonical for terroir + cultivar.** These stay strict. The queue covers the 6 text-only override axes (roaster / producer / brewer / filter / grinder + signature_method, the 6th added Sprint 12 / MCP-1 2026-05-21). Net-new terroirs/cultivars route through `propose_canonical_addition` (model-callable) — there is no `terroir_override` / `cultivar_override` flag.
 - **Auto-edit `lib/{axis}-registry.ts` from the MCP server.** Promotion to canonical is a registry edit done during an arbiter session; the `resolve_queue_entry` Tool just records the decision. Mirrors `propose_doc_changes` → ARBITER.md flow.
 - **Surface drift items beyond canonical-promotion.** Bean 6's wrong-region case lands as a one-off migration patch, not a queue row. The queue is scoped to canonical-promotion in v1; a future "data-correction" submission_path can be added if drift items start accumulating.
 - **In-app review surface.** Chris-as-arbiter via Claude Code session. No new app page.
@@ -49,10 +49,11 @@ CREATE TABLE taxonomy_overrides_queue (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
 
-  -- WHICH axis the entry is for
+  -- WHICH axis the entry is for. Sprint 12 / MCP-1 (2026-05-21, migration 063)
+  -- widened the enum to 8 by adding 'signature_method'.
   axis text NOT NULL CHECK (axis IN (
     'producer', 'roaster', 'brewer', 'filter', 'grinder',
-    'terroir', 'cultivar'
+    'terroir', 'cultivar', 'signature_method'
   )),
 
   -- WHAT was submitted (canonical lookup didn't resolve, so this is verbatim)
@@ -102,7 +103,7 @@ CREATE POLICY taxonomy_overrides_queue_owner ON taxonomy_overrides_queue
   FOR ALL USING (user_id = auth.uid());
 ```
 
-**Why a single table across all 7 axes:** uniform Tool surface (`list_taxonomy_queue` doesn't need 7 different shapes) and uniform arbiter playbook (one routine handles all axes). The `axis` discriminator is enough.
+**Why a single table across all 8 axes:** uniform Tool surface (`list_taxonomy_queue` doesn't need 8 different shapes) and uniform arbiter playbook (one routine handles all axes). The `axis` discriminator is enough. **Sprint 12 / MCP-1 (2026-05-21, migration 063)** widened the enum from 7 to 8 by adding `signature_method` (Chris-locked 2026-05-15 during MCP grilling; net-new proprietary processes — Alchemy, TIM, Enzyflow, etc. — now flow through the queue rather than failing fast).
 
 **Why `EXCLUDE` not `UNIQUE`:** allow multiple resolved rows for the same `(user, axis, raw_value)` — if a producer was rejected once and surfaced again later, that's two distinct decisions to record. Only the pending row needs to be unique.
 
@@ -388,7 +389,7 @@ State the audit results in PR body per standing rule.
 - [ ] Design doc PR (this file) merges first; Chris approves shape before implementation begins.
 - [ ] Migration ships per the resolved D1 + D5 + D7 shape.
 - [ ] Bean 6 + 2 CGLE inline fixes land as part of the migration's data backfill.
-- [ ] Hook inserts at all 5 text-only override sites (Site A) + provenance writes at FK auto-create sites (Site B).
+- [ ] Hook inserts at all 6 text-only override sites (Site A — roaster / producer / brewer / filter / grinder / signature_method post Sprint 12) + provenance writes at FK auto-create sites (Site B).
 - [ ] 3 new Tools (`list_taxonomy_queue` / `resolve_queue_entry` / `propose_canonical_addition`) at `lib/mcp/`, registered in `server.ts`, passing discoverability check.
 - [ ] Tool count 26 → 29 reflected in CLAUDE.md / memory references.
 - [ ] `push_brew` / `push_green_bean` / `push_roast` responses echo `queued_for_taxonomy_review[]`.

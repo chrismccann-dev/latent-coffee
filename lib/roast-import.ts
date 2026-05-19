@@ -893,6 +893,12 @@ export interface RoastLearningsPayload {
   reference_roasts?: string | null
   starting_hypothesis?: string | null
   rest_behavior?: string | null
+  // Sprint 12 (migration 064, 2026-05-21): per-field scope_tags arrays.
+  // See ADR-0009. Loose-canonical prefix convention; write paths do NOT enforce.
+  cultivar_takeaway_scope_tags?: string[] | null
+  terroir_takeaway_scope_tags?: string[] | null
+  general_takeaway_scope_tags?: string[] | null
+  starting_hypothesis_scope_tags?: string[] | null
 }
 
 export type PersistRoastLearningsResult =
@@ -997,6 +1003,12 @@ export async function persistRoastLearnings(
     reference_roasts: payload.reference_roasts ?? null,
     starting_hypothesis: payload.starting_hypothesis ?? null,
     rest_behavior: payload.rest_behavior ?? null,
+    // Sprint 12 (migration 064): per-field scope_tags arrays. NOT NULL in DB
+    // with default '{}'::text[] — explicit empty array when caller omits.
+    cultivar_takeaway_scope_tags: payload.cultivar_takeaway_scope_tags ?? [],
+    terroir_takeaway_scope_tags: payload.terroir_takeaway_scope_tags ?? [],
+    general_takeaway_scope_tags: payload.general_takeaway_scope_tags ?? [],
+    starting_hypothesis_scope_tags: payload.starting_hypothesis_scope_tags ?? [],
   }
 
   if (created) {
@@ -1432,6 +1444,9 @@ export const ROAST_LEARNINGS_PATCH_FIELDS = [
   'starting_hypothesis', 'rest_behavior',
   // Sub Pages 6.1 (migration 052)
   'best_roast_id',
+  // Sprint 12 (migration 064, 2026-05-21): per-field scope_tags arrays. ADR-0009.
+  'cultivar_takeaway_scope_tags', 'terroir_takeaway_scope_tags',
+  'general_takeaway_scope_tags', 'starting_hypothesis_scope_tags',
 ] as const
 
 export async function patchRoastLearnings(

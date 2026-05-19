@@ -303,6 +303,14 @@ export interface BrewPayload {
   experimental_modifiers?: string[] | null
   decaf_modifier?: DecafModifier | null
   signature_method?: string | null
+  // Sprint 12 / MCP-1 (2026-05-21, migration 063): opt-out of strict
+  // signature_method canonical enforcement. Mirrors producer_override —
+  // accepts a verbatim string when the signature isn't yet in the 15-entry
+  // canonical registry, queues a taxonomy_overrides_queue row for arbiter
+  // review. Net-new proprietary processes (Alchemy, TIM, Enzyflow, etc.)
+  // emerge from producers regularly; the override is the escape hatch
+  // before the registry lands the new canonical.
+  signature_method_override?: boolean
 }
 
 // Grinder helpers. Same shape pattern as the process helpers: a structured
@@ -399,6 +407,19 @@ export function findOrCreateGrinder(
   opts: { allowOverride?: boolean } = {},
 ): FindOrCreateGrinderResult {
   return validateCanonicalText(rawName, GRINDER_LOOKUP, 'grinder', opts)
+}
+
+// Sprint 12 / MCP-1 (2026-05-21): signature_method joins the override-eligible
+// canonical-text pattern. Mirrors findOrCreateRoaster / Producer / etc. exactly.
+// SIGNATURE_LOOKUP is the 15-canonical registry from lib/process-registry.ts
+// (post Sprint T1 / BR-1 expansion from 3 to 15 entries).
+export type FindOrCreateSignatureMethodResult = CanonicalTextResult
+
+export function findOrCreateSignatureMethod(
+  rawName: string | null | undefined,
+  opts: { allowOverride?: boolean } = {},
+): FindOrCreateSignatureMethodResult {
+  return validateCanonicalText(rawName, SIGNATURE_LOOKUP, 'signature_method', opts)
 }
 
 export function seedStructuredProcess(payload: Partial<BrewPayload>): StructuredProcess {
@@ -767,9 +788,10 @@ export function validateBrewPayload(payload: BrewPayload): ValidationResult {
   if (payload.decaf_modifier && !DECAF_MODIFIERS.includes(payload.decaf_modifier)) {
     errors.push(`decaf_modifier must be one of: ${DECAF_MODIFIERS.join(', ')} (got "${payload.decaf_modifier}")`)
   }
-  if (payload.signature_method && !SIGNATURE_LOOKUP.isResolvable(payload.signature_method)) {
-    errors.push(`signature_method "${payload.signature_method}" is not in the canonical registry`)
-  }
+  // Sprint 12 / MCP-1: signature_method validation moved to persistBrew via
+  // findOrCreateSignatureMethod (mirrors roaster/producer override pattern).
+  // Strict-canonical check stays here ONLY when override is not set; the
+  // helper in persistBrew handles the override branch.
 
   if (payload.modifiers !== undefined && payload.modifiers !== null) {
     const m = cleanModifiers(payload.modifiers)
@@ -840,6 +862,11 @@ export async function persistBrew(
   if (!filterResult.ok) errors.push(filterResult.error)
   const grinderResult = findOrCreateGrinder(payload.grinder, { allowOverride: payload.grinder_override === true })
   if (!grinderResult.ok) errors.push(grinderResult.error)
+  // Sprint 12 / MCP-1: signature_method joins the override-eligible pattern.
+  const signatureMethodResult = findOrCreateSignatureMethod(payload.signature_method, {
+    allowOverride: payload.signature_method_override === true,
+  })
+  if (!signatureMethodResult.ok) errors.push(signatureMethodResult.error)
   if (
     grinderResult.ok &&
     grinderResult.canonicalName &&
@@ -877,6 +904,7 @@ export async function persistBrew(
     !brewerResult.ok ||
     !filterResult.ok ||
     !grinderResult.ok ||
+    !signatureMethodResult.ok ||
     !flavorsResult.ok ||
     !structureResult.ok
   ) {
@@ -936,6 +964,14 @@ export async function persistBrew(
   }
 
   const structured = seedStructuredProcess(payload)
+  // Sprint 12 / MCP-1: when payload.signature_method was explicitly supplied,
+  // override structured.signature_method with the canonicalized form (which
+  // also covers the override-flag passthrough where canonicalName === verbatim).
+  // Decomposed signature_method (when caller supplies legacy `process` only)
+  // bypasses this — same back-compat behavior as before.
+  if (typeof payload.signature_method === 'string') {
+    structured.signature_method = signatureMethodResult.canonicalName
+  }
   const composed = composeProcess(structured)
   const structuredGrind: StructuredGrind = {
     grinder: grinderResult.canonicalName,
@@ -1026,6 +1062,8 @@ export async function persistBrew(
       { axis: 'brewer', raw_value: brewerResult.canonicalName, needsQueue: brewerResult.needsQueue },
       { axis: 'filter', raw_value: filterResult.canonicalName, needsQueue: filterResult.needsQueue },
       { axis: 'grinder', raw_value: grinderResult.canonicalName, needsQueue: grinderResult.needsQueue },
+      // Sprint 12 / MCP-1 (migration 063): signature_method joins the queue.
+      { axis: 'signature_method', raw_value: signatureMethodResult.canonicalName, needsQueue: signatureMethodResult.needsQueue },
     ],
     { kind: 'brew', id: brew.id },
   )

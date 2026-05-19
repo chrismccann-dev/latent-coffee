@@ -153,7 +153,10 @@ export const pushBrewInputSchema = {
     `Decaffeination process. Canonical: ${DECAF_MODIFIERS.join(' | ')}. Aliases accepted (SWP → Swiss Water, MWP → Mountain Water, EA → Ethyl Acetate). See \`canonicals://processes\`.`,
   ),
   signature_method: z.string().optional().nullable().describe(
-    `Proper-name proprietary technique. Canonical: ${SIGNATURE_NAMES.join(' | ')}. Aliases accepted (Moonshadow Natural / Moonshadow Washed → Moonshadow). See \`canonicals://processes\`.`,
+    `Proper-name proprietary technique. Canonical: ${SIGNATURE_NAMES.join(' | ')}. Aliases accepted (Moonshadow Natural / Moonshadow Washed → Moonshadow). See \`canonicals://processes\`. For genuinely net-new signatures (Alchemy, TIM, Enzyflow, etc.) not yet in the registry, set \`signature_method_override: true\` to persist verbatim and queue a row in \`taxonomy_overrides_queue\` for arbiter review.`,
+  ),
+  signature_method_override: z.boolean().optional().describe(
+    'Set true to bypass canonical-signature_method validation for legitimately net-new proprietary processes. Persists the raw value verbatim and inserts a row in `taxonomy_overrides_queue` (axis="signature_method") for Chris-as-arbiter to promote / alias / reject. Mirrors `producer_override`. NOTE: until the arbiter lands the registry edit (`lib/process-registry.ts` SIGNATURE_METHODS + `docs/taxonomies/processes.md`), every brew with this signature name will need `signature_method_override: true` again. Sprint 12 / MCP-1 (2026-05-21, migration 063).',
   ),
 
   // Roast
@@ -295,7 +298,7 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
           //   - terroir / cultivar → strict, no override; suggest the registry
           //     edit path (Sprint 2.6 closed the override path on FK tables)
           const hasOverridable = result.errors.some(
-            (e) => /\b(roaster|producer|brewer|filter|grinder)\b.*not in the canonical/i.test(e),
+            (e) => /\b(roaster|producer|brewer|filter|grinder|signature_method)\b.*not in the canonical/i.test(e),
           )
           const hasRegistryGap = result.errors.some(
             (e) => /registry gap|cultivar.*not in the canonical|macro terroir.*not in the canonical/i.test(e),
@@ -303,7 +306,7 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
           const hints: string[] = []
           if (hasOverridable) {
             hints.push(
-              'For genuinely net-new entities (roaster / producer / brewer / filter / grinder), re-send with the matching `*_override: true` flag (e.g. `producer_override: true`).',
+              'For genuinely net-new entities (roaster / producer / brewer / filter / grinder / signature_method), re-send with the matching `*_override: true` flag (e.g. `producer_override: true` or `signature_method_override: true`).',
             )
           }
           if (hasRegistryGap) {
@@ -339,6 +342,8 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
         'brewer_override',
         'filter_override',
         'grinder_override',
+        // Sprint 12 / MCP-1 (2026-05-21, migration 063): signature_method joins.
+        'signature_method_override',
       ]
       const created_with_overrides = overridable
         .filter((key) => input[key] === true)
