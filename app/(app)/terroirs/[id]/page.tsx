@@ -9,6 +9,7 @@ import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
+import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import { getCountryColor } from '@/lib/country-colors'
 
 /**
@@ -102,6 +103,20 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
     .order('created_at', { ascending: false })
 
   const brewList = (brews || []) as Brew[]
+
+  // SYN-7: page-side content-change signal. We pull updated_at across the
+  // brews corpus + the roast_learnings rows that join this terroir (via
+  // green_beans.terroir_id). The page-rendered max() compares against the
+  // cache's synthesis_input_max_updated_at; mismatch triggers regen in
+  // SynthesisCard even when the brew count is unchanged.
+  const { data: roastLearningsUpdates } = await supabase
+    .from('roast_learnings')
+    .select('updated_at, green_beans!inner(terroir_id)')
+    .in('green_beans.terroir_id', terriorIds)
+  const currentInputMaxUpdatedAt = computeInputMaxUpdatedAt(
+    brewList,
+    roastLearningsUpdates ?? [],
+  )
   const color = getCountryColor(terroir.country)
 
   // Merge context across all terroirs in the macro group
@@ -272,6 +287,9 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
           existingSynthesis={terroir.synthesis}
           existingBrewCount={terroir.synthesis_brew_count}
           currentBrewCount={brewList.length}
+          existingShortForm={terroir.short_form_capsule}
+          existingSynthesisInputUpdatedAt={terroir.synthesis_input_max_updated_at}
+          currentInputMaxUpdatedAt={currentInputMaxUpdatedAt}
         />
       )}
 

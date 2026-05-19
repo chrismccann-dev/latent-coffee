@@ -20,6 +20,7 @@ import { ProcessConfidenceCard } from '@/components/ProcessConfidenceCard'
 import { ProcessCoffeesList } from '@/components/ProcessCoffeesList'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
+import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import {
   getFamilyColor,
   composeProcessDisplay,
@@ -63,7 +64,7 @@ export default async function ModifierComboPage({
   const cacheKey = modifierComboAggregationKey(base, params.combo)
   const { data: cache } = await supabase
     .from('process_aggregation_syntheses')
-    .select('synthesis, synthesis_brew_count')
+    .select('synthesis, synthesis_brew_count, short_form_capsule, synthesis_input_max_updated_at')
     .eq('aggregation_kind', 'modifier_combo')
     .eq('aggregation_key', cacheKey)
     .maybeSingle()
@@ -132,6 +133,9 @@ export default async function ModifierComboPage({
           existingSynthesis={cache?.synthesis ?? null}
           existingBrewCount={cache?.synthesis_brew_count ?? null}
           currentBrewCount={brewList.length}
+          existingShortForm={cache?.short_form_capsule ?? null}
+          existingSynthesisInputUpdatedAt={cache?.synthesis_input_max_updated_at ?? null}
+          currentInputMaxUpdatedAt={computeInputMaxUpdatedAt(brewList)}
         />
       )}
 

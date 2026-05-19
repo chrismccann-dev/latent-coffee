@@ -14,6 +14,11 @@ interface SynthesisCardProps {
   existingSynthesis: string | null
   existingBrewCount: number | null
   currentBrewCount: number
+  // Sprint 13 — SYN-3 / SYN-7 props. All three are nullable; missing values
+  // fall back to the count-based trigger and to the long-form render.
+  existingShortForm?: string | null
+  existingSynthesisInputUpdatedAt?: string | null
+  currentInputMaxUpdatedAt?: string | null
 }
 
 export default function SynthesisCard({
@@ -25,12 +30,26 @@ export default function SynthesisCard({
   existingSynthesis,
   existingBrewCount,
   currentBrewCount,
+  existingShortForm = null,
+  existingSynthesisInputUpdatedAt = null,
+  currentInputMaxUpdatedAt = null,
 }: SynthesisCardProps) {
   const [synthesis, setSynthesis] = useState(existingSynthesis)
+  const [shortForm, setShortForm] = useState<string | null>(existingShortForm)
   const [loading, setLoading] = useState(false)
 
+  // SYN-7: belt-and-suspenders trigger. The brew-count delta is the legacy
+  // signal; synthesis_input_max_updated_at catches content edits that don't
+  // change the count (e.g. rewritten what_i_learned, newly-filled
+  // roast_learnings). Either signal alone triggers regeneration. The
+  // currentInputMaxUpdatedAt check is gated on truthiness so consumers that
+  // haven't been updated yet fall back cleanly to the count signal.
   const needsUpdate =
-    currentBrewCount > 0 && (!existingSynthesis || existingBrewCount !== currentBrewCount)
+    currentBrewCount > 0 &&
+    (!existingSynthesis ||
+      existingBrewCount !== currentBrewCount ||
+      (currentInputMaxUpdatedAt != null &&
+        existingSynthesisInputUpdatedAt !== currentInputMaxUpdatedAt))
 
   useEffect(() => {
     if (needsUpdate) {
@@ -51,6 +70,12 @@ export default function SynthesisCard({
       if (data.synthesis) {
         setSynthesis(data.synthesis)
       }
+      // The short-form is best-effort in runSynthesis (Sprint 13 / SYN-3);
+      // if the 3rd call failed, data.short_form is null and the mobile view
+      // falls back to the long-form render below.
+      if (data.short_form !== undefined) {
+        setShortForm(data.short_form ?? null)
+      }
     } catch (err) {
       console.error('Failed to generate synthesis:', err)
     } finally {
@@ -59,6 +84,11 @@ export default function SynthesisCard({
   }
 
   if (!synthesis && !loading && currentBrewCount === 0) return null
+
+  // SYN-3 mobile fallback: when short_form is null (post-migration window or
+  // 3rd-call failure), render the long-form on mobile too rather than a
+  // blank state. The Regenerate button stays available either way.
+  const mobileText = shortForm ?? synthesis
 
   return (
     <SectionCard title={title}>
@@ -69,7 +99,14 @@ export default function SynthesisCard({
         </div>
       ) : synthesis ? (
         <div>
-          <SynthesisRenderer text={synthesis} />
+          {/* Mobile (<md:): short-form when available, long-form fallback */}
+          <div className="md:hidden">
+            {mobileText && <SynthesisRenderer text={mobileText} />}
+          </div>
+          {/* Desktop (md+): full long-form */}
+          <div className="hidden md:block">
+            <SynthesisRenderer text={synthesis} />
+          </div>
           <button
             onClick={generateSynthesis}
             className="font-mono text-xxs text-latent-mid hover:text-latent-fg mt-4 transition-colors"
