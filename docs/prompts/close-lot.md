@@ -132,6 +132,7 @@ Apply canonical-validation discipline from `log-brew.md` / `bundled-brewing-comp
 - Recipe: brewer / filter / dose / water / grinder / grind_setting / temperature
 - `extraction_strategy` (+ `hybrid_subform` if Hybrid) + `strategy_notes` + optional `cooling_curve_target`
 - `flavors` (structured chips) + `structure_tags`
+- `fermentation_qualifiers: ['Anoxic']` when the green bean's process detail indicates sealed-container / no-headspace / Grain-Pro-at-low-moisture fermentation execution (Sprint T3 / CR-5 / migration 059, 2026-05-18). Canonical via `FERMENTATION_QUALIFIER_LOOKUP`; aliases `No Oxygen` / `Zero O2` / `Oxygen Free` resolve to `Anoxic`. Record-when-known annotation — does not dictate strategy (aggregation stays at the `[Anaerobic]` modifier per CONTEXT.md § Qualifier). Omit (leave as `[]`) when not applicable or not knowable from the source.
 - Prose: `pour_structure`, `bloom_*`, `peak_expression`, `aroma`, `attack`, `mid_palate`, `body`, `finish`, `what_i_learned`, `terroir_connection`, `cultivar_connection`
 
 For field-level edits to a brew already pushed, prefer `patch_brew`.
