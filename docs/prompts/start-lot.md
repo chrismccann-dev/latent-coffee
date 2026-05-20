@@ -71,6 +71,8 @@ Read ROASTING.md sections via `read_doc_section(uri="docs://roasting.md", anchor
 - Cross-Coffee Insight Layer (any starting hypothesis from prior similar lots)
 - Carry-forward learnings from `roast_learnings` rows of prior lots with overlapping cultivar / terroir / process - call `get_bean_pipeline` on each relevant lot to pull the structured carry-forward.
 
+**Scope-tag-driven carry-forward search (Sprint 12 / ADR-0009 / migration 064, 2026-05-21)**: when prior lots carry populated `*_scope_tags text[]` arrays on their `roast_learnings` rows, prefer querying against tag overlap rather than free-text grep against takeaway prose. Conventional prefixes to match against the current lot's attributes: `variety:<canonical-cultivar>` / `process:<base>` / `country:<canonical>` / `altitude:<low|medium|high>` / `density:<low|medium|high>` / `evaluation_method:day-7-pourover`. Tag-matched takeaways are more reliable carry-forward than prose-grep matches. Today's scope_tags population may still be sparse (Sprint 12 is recent); fall back to `get_bean_pipeline` + prose-read on prior lots when no tag-matched results return. As the tagged-lot count grows, this becomes the primary V1 carry-forward query path.
+
 Then draft the V1 **experiment frame** - six fields, authored before any roasting happens:
 
 | Field | Content |
