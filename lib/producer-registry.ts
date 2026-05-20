@@ -3736,6 +3736,75 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     contact: null,
     skeleton: true,
   },
+  {
+    // Skeleton - promoted from override queue 2026-05-20 (raw_value
+    // "Nawin Yaesorkoo" surfaced via push_brew producer_override on the
+    // Newbery Street "Nawin Doi Chang Washed" brew, first Thailand lot
+    // landed in Latent). Pending rich research.
+    name: "Nawin Yaesorkoo",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Experimental",
+    producerType: "Smallholder",
+    farmName: null,
+    country: "Thailand",
+    adminRegion: "Chiang Rai",
+    macroTerroir: "Northern Thai Highlands",
+    farmingModel: null,
+    processingCapability: "Washed",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: [],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Newbery Street Coffee Roasters"],
+    contact: null,
+    skeleton: true,
+  },
+  {
+    // Promoted from override queue 2026-05-20 (raw_value
+    // "Gilberto Ramiro Mejia, Rancho Tio Emilio" surfaced via push_brew
+    // producer_override on Chris's self-roasted Typica Mejorado Washed
+    // lot - Taza Dorada 2024 #6 auction lot. First Ecuador competition
+    // lot in the Latent archive. Producer person Gilberto Ramiro Mejia
+    // farms Rancho Tio Emilio in La Perla / Nanegal, Pichincha.
+    name: "Rancho Tio Emilio (Gilberto Ramiro Mejia)",
+    tier: 3,
+    producerSystem: "Ecuador Mejorado + Precision Estates",
+    processingSystemTags: [],
+    referenceRole: "Experimental",
+    producerType: "Smallholder",
+    farmName: "Rancho Tio Emilio",
+    country: "Ecuador",
+    adminRegion: "Pichincha",
+    macroTerroir: "Northern Andean Highlands",
+    farmingModel: "Smallholder",
+    processingCapability: "Washed",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Typica Mejorado"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: ["Taza Dorada 2024 #6"],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: "Competition",
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Latent"],
+    contact: null,
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -3820,6 +3889,35 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Local producers surrounding Ninga washing station": "Long Miles Coffee Project",
   "Garrido Specialty Coffee": "Mama Cata Estate (Garrido Family)",
   "Mama Cata Estate / Garrido Specialty Coffee": "Mama Cata Estate (Garrido Family)",
+  // Garrido Family aliases - taxonomy queue arbitration 2026-05-20. The
+  // family operates as Garrido Specialty Coffee (umbrella brand), with
+  // sibling producers Gissell / Lily / Jose David Garrido individually
+  // crediting lots (including Ethiopian cherry processed at their
+  // Panama operation - the source row that surfaced this entry was
+  // Picolot Simba's Comp Edition Ethiopia Heirloom Cold Room Natural).
+  // Mama Cata Estate is the flagship farm. All resolve to the same
+  // canonical entity.
+  "Mama Cata": "Mama Cata Estate (Garrido Family)",
+  "Mama Cata Estate": "Mama Cata Estate (Garrido Family)",
+  "Finca Mama Cata": "Mama Cata Estate (Garrido Family)",
+  "Garrido Family": "Mama Cata Estate (Garrido Family)",
+  "Garrido's Coffee & Estates": "Mama Cata Estate (Garrido Family)",
+  "Gissell & Lily Garrido": "Mama Cata Estate (Garrido Family)",
+  "Gissell Garrido": "Mama Cata Estate (Garrido Family)",
+  "Lily Garrido": "Mama Cata Estate (Garrido Family)",
+  "Jose David Garrido": "Mama Cata Estate (Garrido Family)",
+  "José David Garrido": "Mama Cata Estate (Garrido Family)",
+  // Rancho Tio Emilio aliases - taxonomy queue arbitration 2026-05-20.
+  // Producer person Gilberto Ramiro Mejia farms Rancho Tio Emilio (also
+  // "Finca Rancho Tio Emilio") in La Perla / Nanegal, Pichincha,
+  // Ecuador. Lot/export drift surfaces the comma-joined form, the bare
+  // farm name, and shortened person variants.
+  "Gilberto Ramiro Mejia, Rancho Tio Emilio": "Rancho Tio Emilio (Gilberto Ramiro Mejia)",
+  "Rancho Tio Emilio": "Rancho Tio Emilio (Gilberto Ramiro Mejia)",
+  "Finca Rancho Tio Emilio": "Rancho Tio Emilio (Gilberto Ramiro Mejia)",
+  "Gilberto Ramiro Mejia": "Rancho Tio Emilio (Gilberto Ramiro Mejia)",
+  "Ramiro Mejia": "Rancho Tio Emilio (Gilberto Ramiro Mejia)",
+  "Gilberto Mejia": "Rancho Tio Emilio (Gilberto Ramiro Mejia)",
   "Mekuria Mergia": "Mekuria Mergia & Elias Rooba",
   "Miguel Estela": "Miguel Estela",
   "Miguel Estela, El Morito Producer's Association": "Miguel Estela",

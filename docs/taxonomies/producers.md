@@ -3559,6 +3559,38 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+### Nawin Yaesorkoo
+
+**Country:** Thailand · **Admin:** Chiang Rai · **Macro:** Northern Thai Highlands
+
+- **Tier:** 3
+- **Reference Role:** Experimental
+- **Producer Type:** Smallholder
+- **Processing Capability:** Washed
+- **Roaster References:** Newbery Street Coffee Roasters
+- **Skeleton:** true - promoted from taxonomy override queue 2026-05-20 against the Newbery Street "Nawin Doi Chang Washed" brew (first Thailand lot in the Latent archive). Pending rich research on cultivar lineup, farming model, processing styles, and acidity/body profile.
+
+---
+
+### Rancho Tio Emilio (Gilberto Ramiro Mejia)
+
+**Country:** Ecuador · **Admin:** Pichincha · **Macro:** Northern Andean Highlands
+
+- **Tier:** 3
+- **Producer System:** Ecuador Mejorado + Precision Estates
+- **Reference Role:** Experimental
+- **Producer Type:** Smallholder
+- **Farm:** Rancho Tio Emilio
+- **Farming Model:** Smallholder
+- **Processing Capability:** Washed
+- **Primary Cultivars:** Typica Mejorado
+- **Known For:** Taza Dorada 2024 #6
+- **Market Tier:** Competition
+- **Roaster References:** Latent
+- **Notes:** Producer person Gilberto Ramiro Mejia farms Rancho Tio Emilio (also "Finca Rancho Tio Emilio") in La Perla / Nanegal, Pichincha, Ecuador. First Ecuador competition lot in the Latent archive. Promoted from the taxonomy override queue on 2026-05-20.
+
+---
+
 ## Aliases (DB drift + collapses)
 
 Observed `brews.producer` strings (or common typos) → canonical name.
@@ -3613,6 +3645,22 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 | `Letty Bermudez` | `Diego Samuel Bermúdez Tapia` |
 | `Local producers surrounding Ninga washing station` | `Long Miles Coffee Project` |
 | `Mama Cata Estate / Garrido Specialty Coffee` | `Mama Cata Estate (Garrido Family)` |
+| `Mama Cata` | `Mama Cata Estate (Garrido Family)` |
+| `Mama Cata Estate` | `Mama Cata Estate (Garrido Family)` |
+| `Finca Mama Cata` | `Mama Cata Estate (Garrido Family)` |
+| `Garrido Family` | `Mama Cata Estate (Garrido Family)` |
+| `Garrido's Coffee & Estates` | `Mama Cata Estate (Garrido Family)` |
+| `Gissell & Lily Garrido` | `Mama Cata Estate (Garrido Family)` |
+| `Gissell Garrido` | `Mama Cata Estate (Garrido Family)` |
+| `Lily Garrido` | `Mama Cata Estate (Garrido Family)` |
+| `Jose David Garrido` | `Mama Cata Estate (Garrido Family)` |
+| `José David Garrido` | `Mama Cata Estate (Garrido Family)` |
+| `Gilberto Ramiro Mejia, Rancho Tio Emilio` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
+| `Rancho Tio Emilio` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
+| `Finca Rancho Tio Emilio` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
+| `Gilberto Ramiro Mejia` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
+| `Ramiro Mejia` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
+| `Gilberto Mejia` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
 | `Mekuria Mergia` | `Mekuria Mergia & Elias Rooba` |
 | `Miguel Estela` | `Miguel Estela` |
 | `Miguel Estela, El Morito Producer's Association` | `Miguel Estela` |
@@ -3644,4 +3692,5 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 ## Changelog
 
 - 2026-04-26 — Sprint 1l: structural port from 49-name flat → 118-entry rich. Migration 031 applies DB drift renames + 6 collapses (Yusuf / Alo Village → Tamiru Tadesse · Local Ninga → Long Miles · Letty + Finca El Paraiso → Diego Bermúdez · Nordic Approach → Mekuria Mergia).
+- 2026-05-20 — Taxonomy queue arbitration: aliased `Gissell & Lily Garrido` (Picolot Simba's Comp Edition Ethiopia Heirloom Cold Room Natural brew) onto the existing `Mama Cata Estate (Garrido Family)` canonical, expanding the alias surface to cover sibling-name variants (Gissell / Lily / Jose David Garrido), umbrella brands (Garrido Family, Garrido's Coffee & Estates), and farm short forms (Mama Cata, Mama Cata Estate, Finca Mama Cata). Promoted net-new `Nawin Yaesorkoo` (Tier 3 / Experimental skeleton, first Thailand lot - Newbery Street Doi Chang Washed) and `Rancho Tio Emilio (Gilberto Ramiro Mejia)` (Tier 3 / Experimental Ecuador, Typica Mejorado Washed Taza Dorada 2024 #6) with full alias coverage for the comma-joined form, bare farm name, and shortened person variants.
 - 2026-05-18 — Sprint T3 / CR-2: removed the `Nordic Approach → Mekuria Mergia & Elias Rooba` alias. Nordic Approach is a Norwegian importer, NOT a producer; the sprint 1l alias was a data error. The migration 031 collapse happened to land the one affected brew (Ethiopia Burtukaana Goro Bedesa, Substance Café roast) on the legitimate producer of that lot — Mekuria Mergia & Elias Rooba IS the Guji Highlands producer Nordic Approach imports from — so no DB re-identification was needed; the producer entry continues to record `importers: ["Nordic Approach"]` as the real relationship. Going forward, a write of `producer = "Nordic Approach"` fails canonical resolution and surfaces in the override queue rather than silently re-collapsing onto the wrong axis. See [docs/features/importer-exporter-scoping.md](../features/importer-exporter-scoping.md) for the unmodeled-importer/exporter axis decision and how it shaped this fix.
