@@ -51,9 +51,9 @@ Roasters whose default is to protect clarity. Low-agitation, conservative pour s
 - **VWI by CHADWANG**
 - **XLIII Coffee Roasters**
 
-### Balanced (15)
+### Balanced (16)
 
-Roasters who target moderate extraction (20-22% EY) as the home position. Some skew toward clarity on cooling (BALANCED → CLARITY); most are stable around the center. 15 entries.
+Roasters who target moderate extraction (20-22% EY) as the home position. Some skew toward clarity on cooling (BALANCED → CLARITY); most are stable around the center. 16 entries.
 
 - **Café Estelar**
 - **Coava Coffee Roasters**
@@ -64,6 +64,7 @@ Roasters who target moderate extraction (20-22% EY) as the home position. Some s
 - **Friedhats Coffee**
 - **Glitch Coffee**
 - **Little Wolf Coffee** — BALANCED → CLARITY
+- **Newbery Street Coffee Roasters**
 - **Olympia Coffee**
 - **Oma Coffee Roaster**
 - **Prodigal Coffee**
@@ -149,6 +150,7 @@ Migration 027 renames the 20 short-form entries to canonical full names. Aliases
 - `Olympia` → **Olympia Coffee**
 - `Oma` → **Oma Coffee Roaster**
 - `Scenery` → **Scenery Coffee**
+- `Newbery Street` → **Newbery Street Coffee Roasters**
 
 ### Structural drift / spelling variants
 
@@ -932,6 +934,21 @@ _Tokyo, Japan_ · **BALANCED**
 - **Calibration role:** Low-Temp Extraction Benchmark
 - **Confidence:** High
 - **Notes:** Core identity is using lower temperature (~85-88°C common) to control extraction; opposite of Sey/Dak approach; temp is primary dial, not grind or agitation; raising temp increases both intensity and risk quickly
+
+#### Newbery Street Coffee Roasters
+_Location pending verification_ · **BALANCED** · archive: 1 brew
+
+- **Strategy tag:** BALANCED
+- **Primary driver:** Temperature (downward control)
+- **Rest curve:** ~2-4 weeks typical (single-lot evidence; pending more brews)
+- **House style:** Light-medium roast, low-temp evaluation - sits between Glitch (Tokyo low-temp Balanced) and Hydrangea (Berkeley Clarity-First) on the Latent spectrum.
+- **Recipe baseline:** temp=91, agitation=Low-Medium
+- **Failure mode:** Above 91°C presents as over-extracted bitterness on the one tested lot; below trips toward thinness.
+- **Brew adjustment method:** Temp
+- **Confidence:** Low (single-lot evidence)
+- **BMR house style:** Low-temp light-medium roast. 91°C is the only viable evaluation temp on the lone tested lot (Nawin Doi Chang Washed, Thailand). Closer to Glitch than Hydrangea on the low-temp Balanced spectrum.
+- **BMR notes:** First Thailand lot via Newbery Street. Aromatic-landrace + SL-lineage washed coffees from this roaster confirmed to phase-separate on Orea + Sibarist FLAT FAST; April Brewer Glass + April Paper is the integration-corrective vehicle (second data point for the Sudan Rume pattern, promoted from hypothesis to working rule via this brew).
+- **Skeleton:** true - promoted from taxonomy override queue 2026-05-20 against the Newbery Street "Nawin Doi Chang Washed" brew. Pending location verification + rich-field research as more lots land.
 
 #### Little Wolf Coffee
 _Massachusetts, USA_ · **BALANCED → CLARITY**
@@ -1745,4 +1762,5 @@ _Home (Roest sample roaster, 100g batches)_ · **SELF-ROASTED** · archive: 4 br
 
 ## Changelog
 
+- **2026-05-20 (taxonomy queue arbitration):** Promoted **Newbery Street Coffee Roasters** (Boston-named, location pending verification) as a skeleton entry in the Balanced family. First evidence: Nawin Doi Chang Washed (first Thailand lot in the Latent archive). 91°C is the only viable evaluation temp on the single tested lot - positioned closer to Glitch (Tokyo low-temp Balanced) than Hydrangea (Berkeley Clarity-First) on the low-temp Balanced spectrum. Confidence Low pending more brews. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-04-24 (sprint 1h.1):** First adoption. 70 canonical roasters across 6 families. SYSTEM added as a 6th family per Chris + ChatGPT review. 4 reclassifications from prior 21-entry registry: Rose / Noma / Picky Chemist (→ SYSTEM), TM Coffee (→ CLARITY-FIRST). 20-rename migration 027 collapses short-form DB values to canonical full names. Aliases preserve short-form resolvability.
