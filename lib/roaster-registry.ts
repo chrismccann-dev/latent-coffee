@@ -1006,6 +1006,30 @@ export const ROASTERS: RoasterEntry[] = [
     notes: 'Core identity is using lower temperature (~85-88°C common) to control extraction; opposite of Sey/Dak approach; temp is primary dial, not grind or agitation; raising temp increases both intensity and risk quickly',
   },
   {
+    // Skeleton - promoted from override queue 2026-05-20 (raw_value
+    // "Newbery Street Coffee Roasters" surfaced via push_brew
+    // roaster_override on the first Newbery Street lot in the Latent
+    // archive: Nawin Doi Chang Washed, Thailand). Source brew finding:
+    // 91°C is the only viable evaluation temp - closer to Glitch
+    // (Tokyo low-temp Balanced) than Hydrangea (Berkeley Clarity-First
+    // high-temp brewer-driven). Pending location verification and
+    // rich-field research as more lots land.
+    name: 'Newbery Street Coffee Roasters',
+    displayName: 'Newbery Street',
+    strategyTag: 'BALANCED',
+    primaryDriver: 'Temperature (downward control)',
+    restCurve: '~2-4 weeks typical (single-lot evidence; pending more brews)',
+    houseStyle: 'Light-medium roast, low-temp evaluation - sits between Glitch (Tokyo low-temp Balanced) and Hydrangea (Berkeley Clarity-First) on the Latent spectrum.',
+    tempC: '91',
+    agitationLevel: 'Low-Medium',
+    failureMode: 'Above 91°C presents as over-extracted bitterness on the one tested lot; below trips toward thinness.',
+    confidenceLevel: 'Low',
+    brewAdjustmentMethod: 'Temp',
+    bmrHouseStyle: 'Low-temp light-medium roast. 91°C is the only viable evaluation temp on the lone tested lot (Nawin Doi Chang Washed, Thailand). Closer to Glitch than Hydrangea on the low-temp Balanced spectrum.',
+    bmrNotes: 'First Thailand lot via Newbery Street. Aromatic-landrace + SL-lineage washed coffees from this roaster confirmed to phase-separate on Orea + Sibarist FLAT FAST; April Brewer Glass + April Paper is the integration-corrective vehicle (second data point for the Sudan Rume pattern, promoted from hypothesis to working rule via this brew).',
+    skeleton: true,
+  },
+  {
     name: 'Prodigal Coffee',
     displayName: 'Prodigal',
     location: 'Boulder, CO',
@@ -2436,6 +2460,7 @@ export const ROASTER_REGISTRY = ROASTER_NAMES
 // Aliases: short-form / structural-drift variants → canonical full name.
 // Used by ROASTER_LOOKUP.findClosest to surface a "did you mean X?" suggestion.
 export const ROASTER_ALIASES: Record<string, string> = {
+  'Newbery Street': 'Newbery Street Coffee Roasters',
   'Moonwake': 'Moonwake Coffee Roasters',
   'Hydrangea': 'Hydrangea Coffee',
   'Strait': 'Strait Coffee',
