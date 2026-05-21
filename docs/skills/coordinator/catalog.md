@@ -2,7 +2,7 @@
 
 The 18-sub-skill registry. Each entry has I/O metadata so dispatch decisions can be made from the catalog alone without loading the full SKILL.md.
 
-**Wave status:** Wave 1 shipped Brewing Equipment Expert + Master Coordinator (2026-05-26). Wave 2 shipped 4 consolidation plays — WBC Brewing/Roasting Archivists (PR 1), Brewing Historian (PR 2), Roasting Historian (PR 3). Wave 3 PR 1 shipped 2 operator-stub Knowledge sub-skills (Peer-Learning Roasting Archivist + Roest Knowledge) + Roasting Historian R-to-B Translation extension. Wave 3 PR 2 shipped 4 Workflow Planning sub-skills (Roasting Assistant + Brewing Assistant + Learning Assistant + Sourcing Workflow Planner) — reads-only composition over Wave 1+2 Knowledge clusters, no clusters of their own per scope decision 1. **Remaining placeholders:** 5 Workflow Executing tier sub-skills (Wave 3 PR 3) + CCIL (Wave 4) + Learning Knowledge (deferred until ≥2 research tracks complete).
+**Wave status:** Wave 1 shipped Brewing Equipment Expert + Master Coordinator (2026-05-26). Wave 2 shipped 4 consolidation plays — WBC Brewing/Roasting Archivists (PR 1), Brewing Historian (PR 2), Roasting Historian (PR 3). Wave 3 PR 1 shipped 2 operator-stub Knowledge sub-skills (Peer-Learning Roasting Archivist + Roest Knowledge) + Roasting Historian R-to-B Translation extension. Wave 3 PR 2 shipped 4 Workflow Planning sub-skills (Roasting Assistant + Brewing Assistant + Learning Assistant + Sourcing Workflow Planner) — reads-only composition over Wave 1+2 Knowledge clusters, no clusters of their own per scope decision 1. **Wave 3 PR 3 shipped 5 Workflow Executing sub-skills (Roast Recorder + Brew Recorder + Cupping Specialist + Roest API Worker + Close-Lot Specialist)** — substrate-writer executors wrapping `push_*` / `patch_*` Tools; POD-1 absorbed into Cupping Specialist at SKILL.md level + bookmarked at `cluster/pod-1-routing.md` pending lived-practice trigger conditions; only Cupping Specialist has a `cluster/`. **Wave 3 closed.** **Remaining placeholders:** CCIL (Wave 4) + Learning Knowledge (deferred until ≥2 research tracks complete).
 
 ---
 
@@ -56,11 +56,11 @@ For the full roasting reference (until Wave 4 redirect-stub transition completes
 
 | Sub-skill | Domain | Wave | Status | In | Out | MCP Tools | Patterns |
 |---|---|---|---|---|---|---|---|
-| [Roast Recorder](../roast-recorder/SKILL.md) | roasting | 3 | placeholder | Roest log + batch metrics + per-batch reflections | push_roast + push_roast_recipe into corpus | push_roast, push_roast_recipe, patch_roast | A |
-| [Brew Recorder](../brew-recorder/SKILL.md) | brewing | 3 | placeholder | brew execution data + tasting observations | push_brew + bundled-brewing-completion downstream | push_brew, patch_brew | A |
-| [Cupping Specialist](../cupping-specialist/SKILL.md) | roasting | 3 | placeholder (absorbs POD-1) | Day-7 cupping data + roast + cup observations | push_cupping + V-set Path A/B/C routing (incl. POD-1 simulated-pourover path) | push_cupping, patch_cupping | A, E |
-| [Roest API Worker](../roest-api-worker/SKILL.md) | roasting | 3 | placeholder | recipe from Roasting Assistant | push_roast_profile API call + landing verification | push_roast_profile | B |
-| [Close-Lot Specialist](../close-lot-specialist/SKILL.md) | roasting | 3 | placeholder | resolved-lot completion data (reference roast + ref cup + optimized brew) | push_roast_learnings + best_roast_id writes + cross-link verification | push_roast_learnings, patch_roast_learnings | A |
+| [Roast Recorder](../roast-recorder/SKILL.md) | roasting | 3 | **ACTIVE (PR 3)** | Roest log + batch metrics + per-batch reflections | push_roast + push_roast_recipe into corpus | push_roast, push_roast_recipe, patch_roast, patch_roast_recipe | A |
+| [Brew Recorder](../brew-recorder/SKILL.md) | brewing | 3 | **ACTIVE (PR 3)** | brew execution data + tasting observations | push_brew + bundled-brewing-completion downstream | push_brew, patch_brew, propose_doc_changes | A |
+| [Cupping Specialist](../cupping-specialist/SKILL.md) | roasting | 3 | **ACTIVE (PR 3) — POD-1 absorbed (summary inline + cluster/pod-1-routing.md)** | Day-7 cupping data + roast + cup observations | push_cupping + V-set Path A/B/C routing (Path C rewrite gated on lived-practice trigger conditions) | push_cupping, patch_cupping, patch_experiment, patch_roast (co-owned), propose_doc_changes | A, E |
+| [Roest API Worker](../roest-api-worker/SKILL.md) | roasting | 3 | **ACTIVE (PR 3)** | recipe from Roasting Assistant | push_roast_profile API call + linkage patch | push_roast_profile, patch_roast_recipe (co-owned) | B |
+| [Close-Lot Specialist](../close-lot-specialist/SKILL.md) | roasting | 3 | **ACTIVE (PR 3)** | resolved-lot completion data (reference roast + ref cup + optimized brew) | push_roast_learnings + best_roast_id writes + cross-link verification | push_roast_learnings, patch_roast_learnings, patch_roast (co-owned), patch_inventory, propose_doc_changes | A |
 
 ### SPECIAL TIER (2 sub-skills)
 

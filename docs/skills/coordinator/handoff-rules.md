@@ -12,9 +12,9 @@ Cross-domain dispatch chains where a single operator workflow spans multiple sub
 
 ## Chain 1: V-set Path A → optimized brew → resolved lot
 
-**Status:** PARTIAL post Wave 3 PR 2 (Brewing Assistant ACTIVE; Cupping Specialist + Close-Lot Specialist placeholder until Wave 3 PR 3).
+**Status:** ACTIVE post Wave 3 PR 3 (Cupping Specialist + Brewing Assistant + Brew Recorder + Close-Lot Specialist all ACTIVE).
 
-Today this lives in `close-lot.md` STAGE 4 as manual paste-by-brew_id-reference. Once Cupping Specialist + Close-Lot Specialist ship in Wave 3 PR 3, this becomes an explicit dispatch path:
+Today this still lives in `close-lot.md` STAGE 4 as manual paste-by-brew_id-reference at the prompt surface; under the hood, dispatch flows through the chain below. Prompt subsumption is a future cleanup sprint per scope decision 2.
 
 ```
 Cupping Specialist (executes Day-7 cupping)
@@ -29,11 +29,11 @@ Cupping Specialist (executes Day-7 cupping)
                └─ Output: lot transitions to lifecycle state `resolved`
 ```
 
-**POD-1 resolution lands here.** The "optimized brew lifecycle states" half of POD-1's scoping draft (`docs/sprints/pod-1-scoping-draft-2026-05-26.md`) becomes this chain's explicit phases.
+**POD-1 absorption status:** POD-1's scope is absorbed into Cupping Specialist at the SKILL.md level (Wave 3 PR 3) + bookmarked at [`docs/skills/cupping-specialist/cluster/pod-1-routing.md`](../cupping-specialist/cluster/pod-1-routing.md) with trigger conditions for the future Path C rewrite + simulated-pourover schema scoping. The "optimized brew lifecycle states" half stays as DRAFT until lived-practice trigger conditions are met (2-3 V-set Path A lots observed + 1 one-shot close-out + Stefano Um / Bukure / Higuito decisions).
 
 ## Chain 2: New research track design
 
-**Status:** PARTIAL post Wave 3 PR 2 (Learning Assistant + Roasting Assistant + Brewing Assistant ACTIVE; Roast Recorder + Brew Recorder + Learning Knowledge placeholder/deferred).
+**Status:** ACTIVE-pending-Learning-Knowledge post Wave 3 PR 3 (Learning Assistant + Roasting Assistant + Brewing Assistant + Roast Recorder + Brew Recorder all ACTIVE; Learning Knowledge deferred per ADR-0011 trigger of ≥2 completed research tracks). All authoring hops ACTIVE; the archival hop sits at placeholder by design.
 
 ```
 Operator: "I want to test water side across my next 5 lots"
@@ -51,9 +51,9 @@ Operator: "I want to test water side across my next 5 lots"
 
 ## Chain 3: New lot intake → roasted batch → cupped batch → next V-set
 
-**Status:** PARTIAL post Wave 3 PR 2 (Roasting Assistant ACTIVE; Roest API Worker + Roast Recorder + Cupping Specialist placeholder until Wave 3 PR 3).
+**Status:** ACTIVE post Wave 3 PR 3 (Roasting Assistant + Roest API Worker + Roast Recorder + Cupping Specialist + Close-Lot Specialist all ACTIVE).
 
-Today this lives across `start-lot.md` STAGES 1-3 + `log-roast.md` + `log-cupping.md` as prompt-driven sequential paste. Wave 3 PR 3 lifts the substrate-writer hops to explicit sub-skill dispatch:
+Today this still lives across `start-lot.md` STAGES 1-3 + `log-roast.md` + `log-cupping.md` at the prompt surface; under the hood, each hop dispatches to its named sub-skill:
 
 ```
 Operator: opens start-lot.md OR describes new lot intake in claude.ai
@@ -82,7 +82,7 @@ Operator: opens start-lot.md OR describes new lot intake in claude.ai
 
 ## Chain 4: New brew session → optimized brew (single-coffee terminal)
 
-**Status:** PARTIAL post Wave 3 PR 2 (Brewing Assistant ACTIVE; Brew Recorder placeholder until Wave 3 PR 3).
+**Status:** ACTIVE post Wave 3 PR 3 (Brewing Assistant + Brew Recorder both ACTIVE).
 
 The single-coffee brewing terminal path — distinct from Chain 1's lot-close-out optimized brew because this fires for any coffee Chris is iterating on, not just self-roasted lots at close-out.
 
@@ -135,7 +135,7 @@ Future handoff chain TBD. Likely shape: Learning Assistant proposes the cross-po
 - **Wave 2:** Knowledge tier consolidation — no new chains introduced; chains were pre-authored anticipating Wave 3.
 - **Wave 3 PR 1:** No chain changes — operator-stub Knowledge pair + Roasting Historian R-to-B Translation extension.
 - **Wave 3 PR 2:** 4 Workflow Planning sub-skills ACTIVE → Chains 1, 2, 3, 4 move from PLACEHOLDER to PARTIAL; Chain 5 moves to ACTIVE (single-step).
-- **Wave 3 PR 3:** 5 Workflow Executing sub-skills will move Chains 1, 2, 3, 4 to ACTIVE.
+- **Wave 3 PR 3:** 5 Workflow Executing sub-skills ACTIVE → Chains 1, 3, 4 move from PARTIAL to ACTIVE; Chain 2 moves to ACTIVE-pending-Learning-Knowledge (archival hop deferred per ADR-0011 trigger of ≥2 completed research tracks). **Wave 3 closed.**
 - **Wave 4:** Chain 6 (Wölfl cross-pollination) likely activates after CCIL ships.
 
 ## Discipline

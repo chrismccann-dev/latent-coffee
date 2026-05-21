@@ -1,56 +1,90 @@
 # Cupping Specialist
 
-**Tier:** Workflow / **Sub-tier:** Executing / **Domain:** Roasting / **Wave:** 3 / **Status:** PLACEHOLDER
+**Tier:** Workflow / **Sub-tier:** Executing / **Domain:** Roasting / **Wave:** 3 / **Status:** ACTIVE (Wave 3 PR 3 shipped 2026-05-26)
 **ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
-Execute Day-7 xBloom cupping evaluation + V-set Path A/B/C routing on the resolved V-set. **Absorbs POD-1's scope** per ADR-0011 sequencing collapse — simulated-pourover-as-3rd-cup-read (per `docs/sprints/pod-1-scoping-draft-2026-05-26.md`) lands inside this sub-skill, NOT as a separate sprint.
+Execute Day-7 xBloom cupping evaluation, write cuppings + cup-side experiment patches, identify the V-set leading slot, and route the V-set forward via Path A / Path B / Path C-1 / Path C-2. **Absorbs POD-1's scope** per ADR-0011 sequencing collapse — simulated-pourover-as-3rd-cup-read concept is acknowledged here; full Path C rewrite is gated on lived-practice trigger conditions in [`cluster/pod-1-routing.md`](cluster/pod-1-routing.md).
 
 ## Workflow scope
 
-- Read Day-7 cupping data (xBloom Brian Quan recipe; comparative across V-set batches)
-- Read per-roast `is_reference_candidate` signals from Roasting Historian
-- Execute push_cupping for each cupped batch
-- Apply Path routing:
-  - **Path A** — leading slot is reference-quality → spawn cross-domain handoff Chain 1 (dispatch Brewing Assistant for optimized brew dial-in)
-  - **Path B** — design V_(n+1), iterate → dispatch Roasting Assistant for next V-set
-  - **Path C** — (currently substrate as C-1 / C-2; POD-1 rewrites this) — pre-V_(n+1) calibration OR back-to-back dual cupping; **POD-1 work: replace with "simulated pourover gate" path** when approaching reference
-- Future POD-1 path: when nearing reference (~V3+), execute simulated pourover (non-optimized pourover-shape recipe in actual brewing setup) as a 3rd cup read
+1. **Resolve lot + V_n state.** `get_green_bean` + `get_bean_pipeline`. Build the slot → `roast_id` map from `roast_recipes.batch_slot` joined to `roasts.recipe_id`. Read each V_n recipe's `predicted_cup` (design-time, frozen) AND the V_n experiment's `updated_cup_prediction_a/b/c/d` + `taste_for_a/b/c/d` (post-roast hints written by Roast Recorder).
+2. **STAGE 0 pre-rewrite-lot backfill** (when detection fires per `log-cupping.md` STAGE 0). Backfills `roast_recipes.predicted_cup` + `experiments.updated_cup_prediction_*` + `experiments.taste_for_*` from session memory; flag with `was_backfilled: true` + canonical `backfill_notes`. Halt if reconstructability fails (no fabrication).
+3. **`push_cupping` per slot.** UPSERTs on `(user_id, roast_id, cupping_date, eval_method, recipe_variant)` with NULLS NOT DISTINCT. Required: `roast_id` (not batch_id), `cupping_date`, `rest_days` (Day 6-10 window; flag drift via `additional_notes` prefix `"REST_DAYS_DRIFT: ..."`), `eval_method` (`"Pourover"` for Day-7 evaluation; `"Cupping"` for legacy Day-4 defect screen).
+4. **`recipe_variant` discipline.** Use `"xbloom_gate"` for the mechanically-consistent gate cupping that defines the reference cup; `"real_pourover"` for optimized brew at daily-consumption recipe. When pushing both, distinct labels. When pushing only one and a second is likely later, explicitly label this one (avoid retroactive patching when the second lands).
+5. **Snapshot Agtron.** `ground_agtron` paired with the joined `roasts.agtron` → `wb_agtron` snapshot at insert (Schema sprint S1 / migration 055) + `wb_to_ground_delta` generated column. Target ≤3 points; cross-lot deltas now queryable directly.
+6. **Push prose.** 10 prose fields: `aroma` / `flavor` / `acidity` / `sweetness` / `body` / `finish` / `overall` / `temperature_behavior` / `aromatic_behavior` / `structural_behavior`. `sweetness` is a distinct axis (Schema sprint S3); `aromatic_behavior` + `structural_behavior` are per-cup observations (Sprint 11 / migration 062 / ADR-0008) — relocated from `roast_learnings` because they describe what a CUP IS, not what a lot taught.
+7. **Patch the V_n experiment row** with cup-side closure: `delta_from_cup_a/b/c/d`, refined `observed_outcome_a/b/c/d`, `winner` (strictly formatted `"V<n><letter> (Batch <Roest#>)"` — slot identifier only; verdict prose belongs in `additional_notes` or `key_insight`), `key_insight` + `key_insight_confidence` (Low / Medium / Medium-High / High ladder; promotion-ready content surfaces at the ROASTING.md proposal stage), `what_changes_going_forward` (forward-looking, actionable), `open_questions` (interrogative, what V_n did NOT answer), `additional_notes` (descriptive cross-slot narrative).
+8. **Mark `is_reference_candidate`** on the leading-slot roast (Schema sprint S2, migration 056). `true` when the leading slot reads as plausible lot reference even mid-V-set; `false` when "best of the worst" (Fazenda Um V1B is the canonical case). Decoupled from `is_reference` — the candidate flag does NOT auto-flip; Close-Lot Specialist STAGE 2 makes the promotion explicit.
+9. **Route forward via Path A / B / C-1 / C-2.** See § Path routing below.
+
+## Path routing (V-set discriminator)
+
+The lot's lifecycle state transition depends on which path fires:
+
+- **Path A — Lot ready for close-out.** Leading slot is lot-level reference candidate AND no control experiment warranted. Cup matches producer-notes ballpark; diminishing returns; brewing-side confirmation. Routes to Brewing Assistant for optimized brew dial-in (cross-domain Chain 1 hop) → Close-Lot Specialist after `push_brew` lands. State: → `resolved_pending`.
+- **Path B — Design V_(n+1).** Open questions remain; clear lever identified but optimum within it not yet pinned; new variable held constant in V_1…V_n worth probing. Routes to Roasting Assistant for V_(n+1) design. Control experiments (replicating leading slot with two slight adjustments) are still Path B, not Path C. State: → `waiting_for_next_roast`.
+- **Path C-1 — Pre-V_(n+1) calibration gate: missing peer-roasted reference cup.** V_n cup landed in plausible zone but no peer-roasted version available to calibrate against; seller or peer has a roasted version. Canonical case: Fazenda Um — Untold sells a roasted version. Halts V_(n+1); state stays `waiting_for_next_cupping` until the peer cup is captured.
+- **Path C-2 — Pre-V_(n+1) calibration gate: missing cup-side discriminator.** V_n cupped at one `recipe_variant` only AND prior V-sets showed recipe_variant inversions AND V_(n+1) would be a narrowing adjustment around the currently-named leading slot. Canonical case: Higuito V3 cupped at xbloom_gate only, V2 inverted between gate and real-pourover. Halts V_(n+1); state stays `waiting_for_next_cupping` until the second-variant cupping lands.
+
+**Path C status — substrate retained pending POD-1 trigger conditions.** The DRAFT POD-1 scoping work (`docs/sprints/pod-1-scoping-draft-2026-05-26.md`) proposes replacing Path C-1/C-2 with a "simulated pourover gate" path (single concept rather than two variants) when the trigger conditions in [`cluster/pod-1-routing.md`](cluster/pod-1-routing.md) are met. **Today's substrate keeps Path C-1/C-2 intact**; the future rewrite is bookmarked, not executed. See the cluster doc for trigger conditions + the simulated-pourover concept's preliminary schema scoping.
+
+## STAGE 6 optional ROASTING.md / cluster propose_doc_changes
+
+Post-cupping is the natural moment for ROASTING.md / Roest Knowledge cluster updates — cup signal is the strongest evidence. Route by SHAPE of the insight:
+
+- **Lot-state change** → `### LOT-CODE - Description` sub-section under Active Lots (replace) in ROASTING.md
+- **Protocol-level insight** → appropriate Roest Knowledge cluster doc (`skills/roest-knowledge/cluster/protocols/fc-marking.md` / `cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal` / Standard Inlet Curve Template at `cluster/protocols/fan-strategy.md#standard-inlet-curve-template`). Between Batch Protocol still in ROASTING.md § Standard Workflow.
+- **Cross-coffee pattern** → Roasting Historian's `cluster/patterns/cross-coffee-insights.md` (append with confidence marker matching `key_insight_confidence`)
+- **Per-lot FC ceiling calibration** → FC Floor & Ceiling section (append with confidence marker)
+
+Skip when: Path C-2 fired (cup-side leading slot is provisional); V_(n+1) imminent and would directly test the insight; `key_insight_confidence` is Low (Low belongs in `additional_notes`, not in cluster docs).
 
 ## Inputs
 
-- Day-7 cupping data + roast + cup observations (per batch in the V-set)
-- Roasting Historian (is_reference_candidate signals + cross-lot patterns)
-- (Future POD-1) Brewing Assistant for simulated-pourover recipe construction
+- Day-7 cupping data + roast + cup observations (per batch in V-set)
+- [Roasting Historian](../roasting-historian/) cluster — `is_reference_candidate` signal patterns + cross-lot retrospectives
+- [Roest Knowledge](../roest-knowledge/) cluster — for protocol-stack signals (silent-FC → bean-temp end condition + Agtron proxy)
+- (Future) Brewing Assistant when POD-1's simulated-pourover-recipe-construction lands — see `cluster/pod-1-routing.md`
 
 ## Outputs
 
 - `push_cupping` row(s) per cupped batch
-- V-set routing decision: Path A → Chain 1 dispatch; Path B → Roasting Assistant dispatch; Path C (POD-1-rewritten) → simulated-pourover gate
-- (When Path A) `is_reference_candidate` and `is_reference` flags on the leading slot's roast
+- `patch_experiment` writing cup-side closure on V_n
+- `patch_roast` setting `is_reference_candidate` on the leading slot
+- V-set routing decision: Path A → cross-domain Chain 1 (Brewing Assistant); Path B → Roasting Assistant; Path C-1/C-2 → halt with calibration action
+- Optional `propose_doc_changes` proposals (multi-citation) targeting ROASTING.md / Roasting Historian / Roest Knowledge clusters
 
 ## Called by / Calls
 
-- **Called by:** Master Coordinator (via `log-cupping.md`)
-- **Calls:** Roasting Historian; Path A → Brewing Assistant; Path B → Roasting Assistant; Path C (POD-1) → Brewing Assistant for simulated-pourover construction
+- **Called by:** Master Coordinator (via `log-cupping.md`); Chain 3 mid-stage hop after Day-7 cupping event
+- **Calls:** Roasting Historian · Roest Knowledge
+- **Hands off to:** Path A → Brewing Assistant (Chain 1 cross-domain); Path B → Roasting Assistant for V_(n+1); Path C-1/C-2 → halt (operator-side calibration action; re-entry via `log-cupping.md`); future POD-1 simulated-pourover → Brewing Assistant for recipe construction (cluster/pod-1-routing.md)
 
-## MCP Tools in scope
+## MCP Tools owned
 
-- `push_cupping` — primary write
+- `push_cupping` — primary write (UPSERT on `(user_id, roast_id, cupping_date, eval_method, recipe_variant)` with NULLS NOT DISTINCT)
 - `patch_cupping` — post-push corrections
-- `patch_roast` — when setting `is_reference_candidate` or `is_reference` flag
-- (POD-1) potentially new `push_brew` shape for simulated pourover OR a new `eval_method: 'Simulated Pourover'` on `cuppings` — schema decision is a Cupping Specialist implementation concern
+- `patch_experiment` — cup-side experiment closure (`delta_from_cup_*`, `winner`, `key_insight*`, `what_changes_going_forward`, `open_questions`, `additional_notes`)
+- `patch_roast` — `is_reference_candidate` flag on leading slot (decoupled from `is_reference`)
+- `propose_doc_changes` — co-owned with arbiter; cup-signal-driven proposals (see STAGE 6 above)
+
+Tool descriptions in `lib/mcp/push-cupping.ts` / `patch-cupping.ts` / `patch-experiment.ts` carry an "Owned by Cupping Specialist per ADR-0011" pointer. (`patch_roast` is co-owned with Roast Recorder; pointer reflects that.)
 
 ## Self-improvement
 
-- **Patterns:** A (substrate-event refresh on push_cupping), E (workflow-execution refresh — Path routing accuracy measured against actual lot outcomes) — see [ADR-0013](../../adr/0013-self-improvement-primitives.md)
-- **Signal:** POD-1 landing → Path C-1/C-2 substrate revision happens inside this sub-skill's implementation; observed routing-decision overrides → Pattern E retro
+- **Patterns:** A (substrate-event refresh on `push_cupping` events feeding Roasting Historian's per-lot pattern docs) + E (workflow-execution refresh — Path routing accuracy measured against actual lot outcomes; observed routing-decision overrides → Pattern E retro)
+- **Stage:** 1 (in-loop). N=10 for Stage 1 → 2 graduation per ADR-0013 outlier rule for substrate-writers.
+- **Signal:** POD-1 trigger conditions met in lived practice (see `cluster/pod-1-routing.md`) → Path C-1/C-2 substrate revision via this sub-skill's update path. Observed routing-decision overrides logged via Pattern H against `coordinator/dispatch-override-log.md`.
 
-## Notes for Wave 3 implementation sprint
+## Wave 3 PR 3 ship notes (2026-05-26)
 
-- **POD-1 scope absorbed.** The POD-1 scoping DRAFT (`docs/sprints/pod-1-scoping-draft-2026-05-26.md`) becomes input to this sub-skill's design — specifically the Path C-1/C-2 deprecation + simulated-pourover-as-3rd-cup-read + cross-project handoff lifecycle states ("optimized brew pending / in progress / resolved").
-- **Schema decisions deferred to Cupping Specialist sprint:** whether simulated pourover earns a `cuppings.eval_method = 'Simulated Pourover'` row, OR a `brews.is_simulated_pourover` flag, OR stays in claude.ai thread context. Decision happens during sprint planning, not now.
-- **Migration source:** today's `docs/prompts/log-cupping.md` STAGES 1-4 cover the workflow. New Cupping Specialist absorbs + rewrites Path C-1/C-2 sections.
-- **Substrate-writing executor — Stage 1 longer.** N=10 for Stage 1 → 2 graduation.
-- **Cross-system audit:** Actor 6 (potential schema additions per POD-1 schema decision), Actor 4 (MCP Resource registration + potential new Tool surface for simulated pourover), Actor 5 (CLAUDE.md updates including PRODUCT.md POD-1 status — moved from "parked" to "absorbed"), Actor 2 (log-cupping.md updates), Actor 3 (catalog refresh), Actor 1 (cupping flow streamlined — operator no longer needs to remember which Path C variant).
+- **POD-1 scope absorbed at the SKILL.md level + bookmarked at cluster level.** Per scope decision at PR 3 kickoff: summary inline in this SKILL.md + full POD-1 scoping doc preserved at [`cluster/pod-1-routing.md`](cluster/pod-1-routing.md) with trigger conditions for when the Path C rewrite actually lands. Respects the scoping draft's own "Decision deferred. More cross-thread observation needed" lock — the rewrite waits for lived practice on 2-3 V-set Path A lots + at least one one-shot close-out + the Stefano Um / Bukure / Higuito lots' simulated-pourover decisions.
+- **Cluster authored.** This is the only Wave 3 PR 3 sub-skill with a `cluster/` directory — `cluster/pod-1-routing.md` ports the DRAFT scoping content + trigger conditions. Future Path C rewrite + simulated-pourover schema scoping happen in a follow-up sprint, not now.
+- **Schema decisions deferred** to the future POD-1 follow-up sprint: whether simulated pourover earns a `cuppings.eval_method = 'Simulated Pourover'` row OR a `brews.is_simulated_pourover` flag OR stays in claude.ai thread context. See `cluster/pod-1-routing.md` § Schema scoping.
+- **All Knowledge tier dependencies ACTIVE:** Roasting Historian (Wave 2 PR 3) + Roest Knowledge (Wave 3 PR 1). Brewing Assistant (Wave 3 PR 2) reachable for Chain 1 Path A handoff + future POD-1 simulated-pourover Brewing Assistant dispatch.
+- **Chain 1 + Chain 3 mid-stage hop ACTIVE.** Cupping Specialist is the named dispatcher for Chain 1 entry (Path A) and the mid-stage closer on Chain 3 (cup-side closure on V_n; routes forward). Promoted in `coordinator/handoff-rules.md` Chains 1 + 3 at PR 3 ship time.
+- **Migration source:** `docs/prompts/log-cupping.md` STAGES 1-6 cover the workflow. Sub-skill spec elevates the logic; prompt stays as operator entry surface.
+- **PRODUCT.md POD-1 status update:** roadmap entry moves from "parked" → "absorbed into Cupping Specialist; full Path-C rewrite gated on lived-practice trigger conditions per `docs/skills/cupping-specialist/cluster/pod-1-routing.md`."
+- **Cross-system audit:** Actor 6 (no schema change Wave 3 PR 3; potential schema additions land in the future POD-1 follow-up), Actor 4 (MCP Resource registration for SKILL.md + cluster/pod-1-routing.md + 4-5 Tool description pointers), Actor 5 (CLAUDE.md notes ACTIVE; PRODUCT.md POD-1 status update), Actor 2 (prompts unchanged), Actor 3 (catalog refresh), Actor 1 (cupping flow streamlined — Master Coordinator dispatch surfaces Path A/B/C routing decisions explicitly).
