@@ -140,6 +140,16 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/roest-knowledge/cluster/api/quirks.md': 'docs/skills/roest-knowledge/cluster/api/quirks.md',
   'docs://skills/roest-knowledge/cluster/firmware/README.md': 'docs/skills/roest-knowledge/cluster/firmware/README.md',
   'docs://skills/roest-knowledge/cluster/observed-quirks.md': 'docs/skills/roest-knowledge/cluster/observed-quirks.md',
+  // ----- Workflow Planning tier (Wave 3 PR 2, ADR-0011 + ADR-0012) -----------
+  // 4 reads-only composition sub-skills over Wave 1+2 Knowledge clusters; no
+  // cluster/ subdirectories per scope decision 1 (SKILL.md captures composition
+  // logic; cluster/templates/ accrue under Pattern F if templates emerge in
+  // lived use). Prompts unchanged per scope decision 2; handoff chains pre-
+  // authored in coordinator/handoff-rules.md per scope decision 3.
+  'docs://skills/roasting-assistant/SKILL.md': 'docs/skills/roasting-assistant/SKILL.md',
+  'docs://skills/brewing-assistant/SKILL.md': 'docs/skills/brewing-assistant/SKILL.md',
+  'docs://skills/learning-assistant/SKILL.md': 'docs/skills/learning-assistant/SKILL.md',
+  'docs://skills/sourcing-workflow-planner/SKILL.md': 'docs/skills/sourcing-workflow-planner/SKILL.md',
 }
 
 const DOC_FILES: Record<string, string> = {
@@ -373,6 +383,15 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when looking up per-firmware-version behavioral notes for the Roest L200 Ultra — placeholder for per-version files when firmware changes affect machine or API behavior. Empty today.',
   'docs://skills/roest-knowledge/cluster/observed-quirks.md':
     'Use when checking for machine-side anomalies that don\'t directly drive recipe construction — load-bearing machine quirks live inline in counterflow-observations.md. This doc is for non-recipe-driving anomalies. Operator-stub today.',
+  // ----- Workflow Planning tier (Wave 3 PR 2, ADR-0011) ---------------------
+  'docs://skills/roasting-assistant/SKILL.md':
+    'Roasting Assistant sub-skill (Wave 3 PR 2 shipped 2026-05-26). Workflow Planning tier; reads-only composition over Roasting Historian + WBC Roasting Archivist + Roest Knowledge + Peer-Learning Roasting Archivist clusters. Constructs roast recipe proposals before the physical roast happens — V-set design (V_n a/b/c with deliberate variance against documented variable + expected outcome) or one-shot single-batch design. Outputs a typed structure matching roast_recipes schema columns (charge_temp / hopper_load_temp / bezier curves / drop rules / predicted FC / predicted cup / rationale) pre-push; Roest API Worker pushes to Roest, Roast Recorder writes to corpus post-roast. Called by Master Coordinator via start-lot.md / one-shot.md / log-cupping.md STAGE 3 V_(n+1) design intent + Cupping Specialist Path B. No MCP Tools directly. No cluster authored at ship time per scope decision 1 (templates accrue under Pattern F if they emerge in lived use).',
+  'docs://skills/brewing-assistant/SKILL.md':
+    'Brewing Assistant sub-skill (Wave 3 PR 2 shipped 2026-05-26). Workflow Planning tier; reads-only composition over Brewing Historian + WBC Brewing Archivist + Brewing Equipment Expert clusters. Three-phase: Phase 1 (initial recipe construction — pick extraction strategy + modifiers + dose + water + grinder + grind setting + temp + pour structure) → Phase 2 (in-thread iteration on tasting notes, absorbing the Palate Evaluator role per ADR-0011 § iteration-depth asymmetry; intermediate iterations stay in claude.ai thread context, not persisted) → Phase 3 (handoff to Brew Recorder with the optimized recipe). Outputs typed shape matching brews schema. Called by Master Coordinator via start-brew.md / log-brew.md + Cupping Specialist Path A (Chain 1 optimized brew dial-in at lot resolution). No MCP Tools directly. No cluster authored at ship time per scope decision 1.',
+  'docs://skills/learning-assistant/SKILL.md':
+    'Learning Assistant sub-skill (Wave 3 PR 2 shipped 2026-05-26). Workflow Planning tier; the only cross-domain planner. Constructs research tracks — long-running cross-lot / cross-coffee studies (examples: "test water side across next 5 lots", "blending experiments", "longitudinal resting-curve study"). Vocabulary discipline: research track vs experiment (experiments are per-lot V-set rows in the experiments table). Reads-only composition over both Historians + Brewing Equipment Expert (when equipment dimension applies) + WBC Roasting Archivist § sourcing/ + CCIL (Wave 4 dependency; degrades gracefully until then) + direct green_beans table reads. Outputs research-track design + execution plan + outcome-capture template. Constituent roasts/brews flow through Roast Recorder / Brew Recorder with track-aware metadata. No MCP Tools directly. No cluster authored per scope decision 1. Learning Knowledge stays deferred until ≥2 research tracks complete per ADR-0011 trigger.',
+  'docs://skills/sourcing-workflow-planner/SKILL.md':
+    'Sourcing Workflow Planner sub-skill (Wave 3 PR 2 shipped 2026-05-26). Workflow Planning tier; reads-only composition over WBC Roasting Archivist § sourcing/ (currently merged per ADR-0011 tentative collapse; future split when sourcing book lands) + Roasting Historian closed-lot lane retros + direct green_beans table reads. Evaluates a new lot opportunity against sourcing strategy + current portfolio; outputs buy / hold / pass recommendation + lane-fit assessment ("fits Tier 2 / Lane B — Experimental Processing") + rationale prose. Sourcing decisions are physical-world events; no substrate write until the lot physically arrives via Chain 3 (start-lot.md → Roasting Assistant). Called by Master Coordinator via new-sourcing-opportunity intent (operator-initiated; no dedicated prompt today). No MCP Tools directly. No cluster authored per scope decision 1.',
   // ---------------------------------------------------------------------------
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
@@ -828,6 +847,27 @@ export function listDocs(): {
       'docs://skills/roest-knowledge/cluster/observed-quirks.md',
       'docs/skills/roest-knowledge/cluster/observed-quirks.md',
       'Roest Knowledge — Machine-Side Observed Quirks (operator-stub)',
+    ),
+    // Workflow Planning tier (Wave 3 PR 2, ADR-0011 + ADR-0012)
+    entry(
+      'docs://skills/roasting-assistant/SKILL.md',
+      'docs/skills/roasting-assistant/SKILL.md',
+      'Roasting Assistant — SKILL (Workflow Planning; V-set + one-shot recipe design)',
+    ),
+    entry(
+      'docs://skills/brewing-assistant/SKILL.md',
+      'docs/skills/brewing-assistant/SKILL.md',
+      'Brewing Assistant — SKILL (Workflow Planning; recipe construction + in-thread iteration absorbs Palate Evaluator)',
+    ),
+    entry(
+      'docs://skills/learning-assistant/SKILL.md',
+      'docs/skills/learning-assistant/SKILL.md',
+      'Learning Assistant — SKILL (Workflow Planning; cross-domain research-track design)',
+    ),
+    entry(
+      'docs://skills/sourcing-workflow-planner/SKILL.md',
+      'docs/skills/sourcing-workflow-planner/SKILL.md',
+      'Sourcing Workflow Planner — SKILL (Workflow Planning; buy/hold/pass + lane-fit assessment)',
     ),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),
