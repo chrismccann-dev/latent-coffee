@@ -1,6 +1,7 @@
 // Hybrid sub-form taxonomy — required sub-axis when extraction_strategy = 'Hybrid'
 // (v8.4 promotion, 2026-05-06). Mirrors the WBC competition-recipe taxonomy
-// (docs/brewing/wbc-recipes.md § Hybrid Systems) reduced to the 5 sub-forms
+// (docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md § Hybrid Systems —
+// migrated Wave 2 PR 1 2026-05-26 from docs/brewing/wbc-recipes.md) reduced to the 5 sub-forms
 // Chris's single-origin / SWORKS + Switch context actually exercises. The
 // remaining WBC subtypes (Alternating Phase Control, Parametric Hybrid,
 // Temperature-Sandwich Hybrid) are blend territory or competition stagecraft

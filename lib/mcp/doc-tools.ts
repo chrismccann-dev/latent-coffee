@@ -25,7 +25,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'List Docs',
       description:
-        'List / browse / discover / enumerate every prose / taxonomy / prompt doc the MCP server can read. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section` — each entry carries a one-line "use when..." description so you can route to the right doc without fetching first. Catalog covers BREWING.md, ROASTING.md, the 10 taxonomy markdown files, the 7 operational prompt files, and split-out subdocs (docs/brewing/roasters.md, docs/brewing/wbc-reference.md, docs/brewing/wbc-recipes.md, docs/roasting/archive.md). Returns { docs: [{ uri, name, title, mimeType, description }] }.',
+        'List / browse / discover / enumerate every prose / taxonomy / prompt doc the MCP server can read. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section` — each entry carries a one-line "use when..." description so you can route to the right doc without fetching first. Catalog covers BREWING.md, ROASTING.md, the 10 taxonomy markdown files, the 10 operational prompt files, the composable sub-skills (Master Coordinator + Brewing Equipment Expert from Wave 1, WBC Brewing + Roasting Archivists from Wave 2 PR 1 including the migrated WBC reference / WBC recipes / WBC roasting / sourcing strategy docs in their cluster paths under docs/skills/), and split-out subdocs (docs/brewing/roasters.md, docs/roasting/archive.md). Returns { docs: [{ uri, name, title, mimeType, description }] }.',
       inputSchema: {},
     },
     withToolErrorLogging('list_docs', async () => {

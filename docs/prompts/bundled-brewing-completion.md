@@ -5,7 +5,9 @@ At session start, fetch the Master Coordinator catalog via
 read_doc(uri="docs://skills/coordinator/catalog.md") to identify available
 knowledge clusters. For brewing equipment validation (brewer / filter / grinder /
 SWORKS dial behavior), dispatch to the Brewing Equipment Expert
-(docs://skills/brewing-equipment-expert/cluster/).
+(docs://skills/brewing-equipment-expert/cluster/). For WBC competitor recipe
+references and cross-cutting control patterns, dispatch to the WBC Brewing
+Archivist (docs://skills/wbc-brewing-archivist/cluster/ — Wave 2 PR 1, ADR-0011).
 
 Complete this brew session: push_brew first, then propose any doc updates.
 If you have feedback for Claude Code on either path, mention it.
@@ -34,7 +36,10 @@ verbatim. target_doc shapes: "brewing.md" for BREWING.md, "roaster/<Canonical
 Name>" for roaster cards (live at docs://brewing/roasters.md),
 "taxonomies/<axis>.md" for taxonomy edits (axes: regions, varieties,
 processes, roasters, producers, brewers, filters, flavors, grinders,
-roast-levels). Per-citation target_doc overrides the proposal-level default.
+roast-levels), or "skills/<path>.md" for composable sub-skill cluster docs
+(Wave 2 PR 1+ — e.g. "skills/wbc-brewing-archivist/cluster/wbc-reference.md"
+to amend the WBC reference; validated against the registered SKILL_FILES
+allow-list). Per-citation target_doc overrides the proposal-level default.
 For replace, copy current_text VERBATIM. Multi-citation + multi-target_doc
 proposals are supported.
 

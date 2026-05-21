@@ -36,11 +36,12 @@ const PROMPT_FILES = [
   'one-shot-closeout',
 ] as const
 
-// Wave 1 of the composable sub-skills architecture (2026-05-26, ADR-0011 / ADR-0012 / ADR-0013).
-// Master Coordinator catalog + Brewing Equipment Expert cluster ship as the paired
-// first sub-skills; subsequent waves add Historians, WBC Archivists, Workflow tier,
-// and CCIL. Each new skill file landing here must be (a) added below, (b) covered
-// by the `./docs/skills/**/*.md` glob in next.config.js, and (c) described in
+// Composable sub-skills architecture (2026-05-26, ADR-0011 / ADR-0012 / ADR-0013).
+// Wave 1 (2026-05-26): Master Coordinator catalog + Brewing Equipment Expert cluster.
+// Wave 2 PR 1 (2026-05-26): WBC Brewing + Roasting Archivists (paired ship).
+// Subsequent waves add Historians (Wave 2 PRs 2/3), Workflow tier (Wave 3), and CCIL (Wave 4).
+// Each new skill file landing here must be (a) added below, (b) covered by the
+// `./docs/skills/**/*.md` glob in next.config.js, and (c) described in
 // DOC_DESCRIPTIONS. Run `npm run check:mcp-bundle` before shipping.
 const SKILL_FILES: Record<string, string> = {
   // Master Coordinator (Wave 1)
@@ -56,6 +57,29 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/brewing-equipment-expert/cluster/filters.md': 'docs/skills/brewing-equipment-expert/cluster/filters.md',
   'docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md': 'docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md',
   'docs://skills/brewing-equipment-expert/cluster/sworks.md': 'docs/skills/brewing-equipment-expert/cluster/sworks.md',
+  // WBC Brewing Archivist (Wave 2 PR 1) — SKILL.md + cluster files migrated from
+  // docs/brewing/wbc-{reference,recipes}.md. Old paths above continue resolving to
+  // ~200-byte redirect stubs for back-compat.
+  'docs://skills/wbc-brewing-archivist/SKILL.md': 'docs/skills/wbc-brewing-archivist/SKILL.md',
+  'docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md': 'docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md',
+  'docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md': 'docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/suppression.md': 'docs/skills/wbc-brewing-archivist/cluster/per-strategy/suppression.md',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/clarity-first.md': 'docs/skills/wbc-brewing-archivist/cluster/per-strategy/clarity-first.md',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/balanced-intensity.md': 'docs/skills/wbc-brewing-archivist/cluster/per-strategy/balanced-intensity.md',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/full-expression.md': 'docs/skills/wbc-brewing-archivist/cluster/per-strategy/full-expression.md',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/extraction-push.md': 'docs/skills/wbc-brewing-archivist/cluster/per-strategy/extraction-push.md',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/hybrid.md': 'docs/skills/wbc-brewing-archivist/cluster/per-strategy/hybrid.md',
+  'docs://skills/wbc-brewing-archivist/cluster/canonical/wbc-tested-recipes.md': 'docs/skills/wbc-brewing-archivist/cluster/canonical/wbc-tested-recipes.md',
+  // WBC Roasting Archivist (Wave 2 PR 1) — SKILL.md + cluster files migrated from
+  // docs/roasting/wbc-{roasting,sourcing}.md. Old paths above continue resolving to
+  // ~200-byte redirect stubs for back-compat. Sourcing tentatively merged here per
+  // ADR-0011 Round 2 collapse; future split when sourcing research grows.
+  'docs://skills/wbc-roasting-archivist/SKILL.md': 'docs/skills/wbc-roasting-archivist/SKILL.md',
+  'docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md': 'docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md',
+  'docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md': 'docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md',
+  'docs://skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md': 'docs/skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md',
+  'docs://skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md': 'docs/skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md',
+  'docs://skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md': 'docs/skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md',
 }
 
 const DOC_FILES: Record<string, string> = {
@@ -92,17 +116,17 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://brewing/roasters.md':
     'Use when working with a specific roaster — per-roaster brewing lessons + house-style cards (e.g. Hydrangea El Paraíso thermal-shock guidance, Sey extraction expectations). Reference for roaster-anchored brew design.',
   'docs://brewing/wbc-reference.md':
-    'Use when looking up WBC competition technique categories — 5 foundational control axes + 8 strategy families mapped onto the Latent framework. Lean reference layer.',
+    '[MIGRATED in Wave 2 PR 1] Authoritative content lives at docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://brewing/wbc-recipes.md':
-    'Use when looking up specific competitor recipes from World Brewers Cup 2022-2025 — 102-recipe archive with subtype definitions. Reference material for the "experiment Chris wouldn\'t think of" goal.',
+    '[MIGRATED in Wave 2 PR 1] Authoritative content lives at docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://roasting.md':
     'Use when planning a roast on the Roest L200 Ultra (counterflow mode) — covers the New Coffee Onboarding Protocol (Steps 1-4), Standard Workflow, evaluation protocol (Day 7 pourover gate), fan/inlet curve templates, FC marking protocol, and per-coffee + cross-coffee insight layers.',
   'docs://roasting/archive.md':
     'Use when researching closed-lot roasting outcomes — per-lot Key Learnings, reference roast parameters, and structural takeaways from completed beans. Read before roasting a similar coffee.',
   'docs://roasting/wbc-roasting.md':
-    'Use when scoping a roast experiment or designing a V1 profile — WBC-derived lessons, Roest L200 hypotheses, blending experiment protocols, and structured rest-curve protocol. Ideas / hypotheses doc, not a recipe lookup.',
+    '[MIGRATED in Wave 2 PR 1] Authoritative content lives at docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://roasting/wbc-sourcing.md':
-    'Use when evaluating a green offer or rebalancing inventory — WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, Tier 1/2/3 priority targets, and current Latent inventory mapped to portfolio lanes (snapshot 2026-05-09).',
+    '[MIGRATED in Wave 2 PR 1] Authoritative content lives at docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://roasting/redesign.md':
     'Use when implementing or extending the roasting-side data model / pages — series-level scope doc for the 7-sub-sprint roasting rebuild (Sub Pages 6.1-6.7, scoped + shipped 2026-05-13). Covers the lifecycle states, the new roast_recipes entity, the 16 cross-batch fields on experiments, MCP-only writes (deprecating /add for roasting), and the 4-page-shape index + waiting-for-roast + waiting-for-cupping + resolved layout. Read end-to-end before working on roasting pages or MCP Tool surface.',
   'docs://roasting/dongzhe-livestream-2026-05.md':
@@ -150,6 +174,40 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when validating grinder + grind setting — single canonical (EG-1, Weber Workshop, ULTRA SSP burrs, 80mm flat) with 51 enumerated settings (3.0-8.0 in 0.1 steps); 16 carry rich D50 + zone + extraction-behavior + use-case content. Status flags: needs_fresh_measurement (6.6) and anomalous (7.0). Migrated from docs/taxonomies/grinders.md in Wave 1.',
   'docs://skills/brewing-equipment-expert/cluster/sworks.md':
     'Use when authoring a SWORKS Bottomless Dripper recipe or interpreting a valve-dial sequence — single owned instrument (office). Per-dial state names (Closed / Restricted / Half-Open / Open + Dead Zone 1-4 + Maximum Flow past-7) + per-dial flow-rate calibration (Dial 5 ~60 sec/100g · Dial 6 ~45 sec/100g · Dial 7 ~30 sec/100g at EG-1 6.0 + xBloom Premium Paper). Includes adjustment logic (valve-first; grind secondary) + 5 canonical recipe patterns (slow/slow/open Sequential Hybrid · fast/fast/slow Phase-Mapped · Half-Open throughout Suppression · Restricted-then-Half-Open transition · Restricted-main-Half-Open-finish Sequential). Migrated from docs/taxonomies/sworks.md in Wave 1.',
+  // ----- WBC Brewing Archivist (Wave 2 PR 1, ADR-0011) -----------------------
+  'docs://skills/wbc-brewing-archivist/SKILL.md':
+    'Use when claude.ai needs the WBC brewing-side knowledge cluster — sub-skill scope, cluster contents, inputs/outputs/handoffs. Wave 2 PR 1 (2026-05-26) consolidates the WBC brewing corpus (5-axis foundational map + 8 strategy families + 102-recipe archive 2022-2025) into one knowledge cluster.',
+  'docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md':
+    'Use when looking up WBC competition technique categories — 5 foundational control axes + 8 strategy families mapped onto the Latent 6+4 framework. Lean reference layer + Cross-Cutting Control Patterns playbook (water strength / agitation taper / filter behavior / pre-brew conditioning) + Practical Experiment Queue + Consciously not pursuing appendix. Migrated from docs/brewing/wbc-reference.md in Wave 2 PR 1.',
+  'docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md':
+    'Use when looking up specific competitor recipes from World Brewers Cup 2022-2025 — 102-recipe archive with subtype definitions and per-recipe detail organized by strategy family. Reference material for the "experiment Chris wouldn\'t think of" goal. Migrated from docs/brewing/wbc-recipes.md in Wave 2 PR 1.',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/suppression.md':
+    'Use when looking for WBC competitor recipes that match Latent\'s Suppression strategy (coarse + low-temp + low-agitation; co-ferment hold-back). Placeholder content today; populate as Chris\'s Suppression corpus crystallizes.',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/clarity-first.md':
+    'Use when looking for WBC competitor recipes that match Latent\'s Clarity-First strategy (coarse-to-medium-coarse + moderate-to-low-temp + low-agitation + fast papers; delicate aromatic protection). Placeholder content today; WBC corpus is heavy on this lane so this doc will grow fastest.',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/balanced-intensity.md':
+    'Use when looking for WBC competitor recipes that match Latent\'s Balanced Intensity strategy (default mid-extraction baseline before a coffee asks for a deliberate move). Placeholder content today.',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/full-expression.md':
+    'Use when looking for WBC competitor recipes that match Latent\'s Full Expression strategy (fine + high-temp + high-agitation; heavy co-ferment / natural projection). Placeholder content today.',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/extraction-push.md':
+    'Use when looking for WBC competitor recipes that match Latent\'s Extraction Push strategy (fine + high-temp + low-agitation + Melodrip; yield push on clean coffees). Wölfl 2024 / Tran / Giachgia anchors. Placeholder content today.',
+  'docs://skills/wbc-brewing-archivist/cluster/per-strategy/hybrid.md':
+    'Use when looking for WBC competitor recipes that match Latent\'s Hybrid strategy (5 sub-forms: Sequential / Phase-Mapped / Selective Bloom / Inverted / Side-by-Side). Eline Ferket 2025 Selective Bloom anchor. Placeholder content today.',
+  'docs://skills/wbc-brewing-archivist/cluster/canonical/wbc-tested-recipes.md':
+    'Use when tracking which WBC competitor recipes have been directly tested by Chris on a Latent brew (vs. reference-only in the 102-recipe corpus). Placeholder canonical sub-resource — empty today; grows via the Step 1d WBC corpus-check Named Consideration.',
+  // ----- WBC Roasting Archivist (Wave 2 PR 1, ADR-0011) ----------------------
+  'docs://skills/wbc-roasting-archivist/SKILL.md':
+    'Use when claude.ai needs the WBC roasting + sourcing knowledge cluster — sub-skill scope, cluster contents, inputs/outputs/handoffs. Wave 2 PR 1 (2026-05-26) consolidates WBC roasting lessons + sourcing strategy (tentatively merged per ADR-0011) into one knowledge cluster.',
+  'docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md':
+    'Use when scoping a roast experiment or designing a V1 profile — WBC-derived lessons, Roest L200 hypotheses, blending experiment protocols (same-green dev ladder), and structured rest-curve protocol. Ideas / hypotheses doc, not a recipe lookup. Migrated from docs/roasting/wbc-roasting.md in Wave 2 PR 1.',
+  'docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md':
+    'Use when evaluating a green offer or rebalancing inventory — WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, Tier 1/2/3 priority targets, 5-lane portfolio frame, sourcing channel classifications, and current Latent inventory mapped to portfolio lanes (snapshot 2026-05-09; Sprint T2 lane formalization 2026-05-18). Migrated from docs/roasting/wbc-sourcing.md in Wave 2 PR 1.',
+  'docs://skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md':
+    'Use when looking up the 5-lane portfolio frame for green-bean inventory balance (Reference clarity / Fruit-tea expression / Process learning / Roast-learning hybrids / Value+roast-practice). Navigational sub-resource pointing at strategy.md § 10 for substantive content.',
+  'docs://skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md':
+    'Use when looking up Tier 1/2/3 sourcing priorities and Latent-adjusted next-buy framing. Navigational sub-resource pointing at strategy.md § 7-9 for substantive content.',
+  'docs://skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md':
+    'Use when tracking which WBC-validated cultivar / process / sourcing patterns have been tested in Latent\'s lineup. Placeholder canonical sub-resource — empty today; grows via Latent buying cycles driven by the priority-targets list.',
   // ---------------------------------------------------------------------------
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
@@ -269,6 +327,88 @@ export function listDocs(): {
       'docs://skills/brewing-equipment-expert/cluster/sworks.md',
       'docs/skills/brewing-equipment-expert/cluster/sworks.md',
       'Brewing Equipment Expert — SWORKS cluster',
+    ),
+    // WBC Brewing Archivist (Wave 2 PR 1, ADR-0011)
+    entry(
+      'docs://skills/wbc-brewing-archivist/SKILL.md',
+      'docs/skills/wbc-brewing-archivist/SKILL.md',
+      'WBC Brewing Archivist — SKILL',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md',
+      'docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md',
+      'WBC Brewing Archivist — Reference (Latent mapping)',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md',
+      'docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md',
+      'WBC Brewing Archivist — 102-Recipe Archive (2022-2025)',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/per-strategy/suppression.md',
+      'docs/skills/wbc-brewing-archivist/cluster/per-strategy/suppression.md',
+      'WBC Brewing Archivist — Per-Strategy: Suppression',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/per-strategy/clarity-first.md',
+      'docs/skills/wbc-brewing-archivist/cluster/per-strategy/clarity-first.md',
+      'WBC Brewing Archivist — Per-Strategy: Clarity-First',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/per-strategy/balanced-intensity.md',
+      'docs/skills/wbc-brewing-archivist/cluster/per-strategy/balanced-intensity.md',
+      'WBC Brewing Archivist — Per-Strategy: Balanced Intensity',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/per-strategy/full-expression.md',
+      'docs/skills/wbc-brewing-archivist/cluster/per-strategy/full-expression.md',
+      'WBC Brewing Archivist — Per-Strategy: Full Expression',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/per-strategy/extraction-push.md',
+      'docs/skills/wbc-brewing-archivist/cluster/per-strategy/extraction-push.md',
+      'WBC Brewing Archivist — Per-Strategy: Extraction Push',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/per-strategy/hybrid.md',
+      'docs/skills/wbc-brewing-archivist/cluster/per-strategy/hybrid.md',
+      'WBC Brewing Archivist — Per-Strategy: Hybrid',
+    ),
+    entry(
+      'docs://skills/wbc-brewing-archivist/cluster/canonical/wbc-tested-recipes.md',
+      'docs/skills/wbc-brewing-archivist/cluster/canonical/wbc-tested-recipes.md',
+      'WBC Brewing Archivist — Canonical: WBC-Tested Recipes',
+    ),
+    // WBC Roasting Archivist (Wave 2 PR 1, ADR-0011)
+    entry(
+      'docs://skills/wbc-roasting-archivist/SKILL.md',
+      'docs/skills/wbc-roasting-archivist/SKILL.md',
+      'WBC Roasting Archivist — SKILL',
+    ),
+    entry(
+      'docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md',
+      'docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md',
+      'WBC Roasting Archivist — Roasting (lessons + open ideas)',
+    ),
+    entry(
+      'docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md',
+      'docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md',
+      'WBC Roasting Archivist — Sourcing Strategy',
+    ),
+    entry(
+      'docs://skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md',
+      'docs/skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md',
+      'WBC Roasting Archivist — Sourcing: Portfolio Lanes',
+    ),
+    entry(
+      'docs://skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md',
+      'docs/skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md',
+      'WBC Roasting Archivist — Sourcing: Priority Targets (Tier 1/2/3)',
+    ),
+    entry(
+      'docs://skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md',
+      'docs/skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md',
+      'WBC Roasting Archivist — Canonical: WBC-Tested Cultivars / Processes / Sourcing',
     ),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),

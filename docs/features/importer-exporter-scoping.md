@@ -132,7 +132,7 @@ Accept that importer / exporter is permanently a producer-card metadata field â€
 
 2. **Override-queue drift accumulates.** If the `taxonomy_overrides_queue` collects â‰¥5 importer-class entries within a year, that's evidence the drift is recurring and the override queue is doing maintenance work an axis would automate.
 
-3. **WBC sourcing structured-data need.** If [docs/roasting/wbc-sourcing.md](../roasting/wbc-sourcing.md) reaches a point where importer attribution is querying-relevant for sourcing decisions (e.g. "show me all lots that came through Red Fox in the past 2 years"), the Option A queryability becomes worth the schema cost.
+3. **WBC sourcing structured-data need.** If [docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md](../skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) (migrated from `docs/roasting/wbc-sourcing.md` in Wave 2 PR 1, 2026-05-26) reaches a point where importer attribution is querying-relevant for sourcing decisions (e.g. "show me all lots that came through Red Fox in the past 2 years"), the Option A queryability becomes worth the schema cost.
 
 4. **Cross-system audit catches a quiet drift.** If a future grilling session surfaces that producer attributions have continued drifting onto importer names even with the override queue in place (i.e. Chris is bypassing the queue and pasting through), the friction model isn't working and a hard structural separation is the right response.
 
