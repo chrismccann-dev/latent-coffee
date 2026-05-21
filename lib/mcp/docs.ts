@@ -150,6 +150,20 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/brewing-assistant/SKILL.md': 'docs/skills/brewing-assistant/SKILL.md',
   'docs://skills/learning-assistant/SKILL.md': 'docs/skills/learning-assistant/SKILL.md',
   'docs://skills/sourcing-workflow-planner/SKILL.md': 'docs/skills/sourcing-workflow-planner/SKILL.md',
+  // Wave 3 PR 3: 5 Workflow Executing tier sub-skills (substrate-writers wrapping
+  // existing push_*/patch_* MCP Tools). Cupping Specialist absorbs POD-1 at
+  // SKILL.md level + bookmarks the full rewrite at cluster/pod-1-routing.md
+  // pending lived-practice trigger conditions. Other 4 ship SKILL.md only.
+  // Tool descriptions in lib/mcp/push-*.ts / patch-*.ts carry an "Owned by
+  // <sub-skill> per ADR-0011" pointer for dispatch-time signal. Chains 1-4
+  // promoted PARTIAL → ACTIVE in coordinator/handoff-rules.md.
+  'docs://skills/roast-recorder/SKILL.md': 'docs/skills/roast-recorder/SKILL.md',
+  'docs://skills/brew-recorder/SKILL.md': 'docs/skills/brew-recorder/SKILL.md',
+  'docs://skills/cupping-specialist/SKILL.md': 'docs/skills/cupping-specialist/SKILL.md',
+  'docs://skills/cupping-specialist/cluster/pod-1-routing.md':
+    'docs/skills/cupping-specialist/cluster/pod-1-routing.md',
+  'docs://skills/roest-api-worker/SKILL.md': 'docs/skills/roest-api-worker/SKILL.md',
+  'docs://skills/close-lot-specialist/SKILL.md': 'docs/skills/close-lot-specialist/SKILL.md',
 }
 
 const DOC_FILES: Record<string, string> = {
@@ -392,6 +406,19 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Learning Assistant sub-skill (Wave 3 PR 2 shipped 2026-05-26). Workflow Planning tier; the only cross-domain planner. Constructs research tracks — long-running cross-lot / cross-coffee studies (examples: "test water side across next 5 lots", "blending experiments", "longitudinal resting-curve study"). Vocabulary discipline: research track vs experiment (experiments are per-lot V-set rows in the experiments table). Reads-only composition over both Historians + Brewing Equipment Expert (when equipment dimension applies) + WBC Roasting Archivist § sourcing/ + CCIL (Wave 4 dependency; degrades gracefully until then) + direct green_beans table reads. Outputs research-track design + execution plan + outcome-capture template. Constituent roasts/brews flow through Roast Recorder / Brew Recorder with track-aware metadata. No MCP Tools directly. No cluster authored per scope decision 1. Learning Knowledge stays deferred until ≥2 research tracks complete per ADR-0011 trigger.',
   'docs://skills/sourcing-workflow-planner/SKILL.md':
     'Sourcing Workflow Planner sub-skill (Wave 3 PR 2 shipped 2026-05-26). Workflow Planning tier; reads-only composition over WBC Roasting Archivist § sourcing/ (currently merged per ADR-0011 tentative collapse; future split when sourcing book lands) + Roasting Historian closed-lot lane retros + direct green_beans table reads. Evaluates a new lot opportunity against sourcing strategy + current portfolio; outputs buy / hold / pass recommendation + lane-fit assessment ("fits Tier 2 / Lane B — Experimental Processing") + rationale prose. Sourcing decisions are physical-world events; no substrate write until the lot physically arrives via Chain 3 (start-lot.md → Roasting Assistant). Called by Master Coordinator via new-sourcing-opportunity intent (operator-initiated; no dedicated prompt today). No MCP Tools directly. No cluster authored per scope decision 1.',
+  // ----- Workflow Executing tier (Wave 3 PR 3, ADR-0011) --------------------
+  'docs://skills/roast-recorder/SKILL.md':
+    'Roast Recorder sub-skill (Wave 3 PR 3 shipped 2026-05-26). Workflow Executing tier; substrate-writer wrapping push_roast + push_roast_recipe (when not pre-pushed by Roasting Assistant) + patch_roast + patch_roast_recipe. Writes per-batch roast execution after the physical roast completes; reads Roest log + per-batch reflections + Roest Knowledge cluster (log interpretation + protocols) + Roasting Historian cluster (retrospective comparison). Owns the slot → recipe_id map resolution including pre-rewrite-lot fallback (a) + missing-recipe-row inline backfill (b) per log-roast.md STAGE 1; halts when neither path can reconstruct design intent. Sets fc_audibility 4-value enum per batch (Sprint 11 RO-CP-3). Called by Master Coordinator via log-roast.md; Chain 3 hop after Roest API Worker + physical roast event. N=10 Stage 1 → 2 graduation per ADR-0013 substrate-writer rule. No cluster authored per PR 2/3 precedent.',
+  'docs://skills/brew-recorder/SKILL.md':
+    'Brew Recorder sub-skill (Wave 3 PR 3 shipped 2026-05-26). Workflow Executing tier; substrate-writer wrapping push_brew + patch_brew + propose_doc_changes (downstream into Brewing Historian cluster via bundled-brewing-completion pipeline). Per-coffee terminal write — brewing iterates IN-THREAD ONLY per ADR-0011 § iteration-depth asymmetry; intermediate iterations stay in claude.ai thread context and never persist, only the optimized brew lands here. Validates canonical-registry compliance against Brewing Equipment Expert + per-axis registries + fermentation_qualifiers (Sprint T3 / CR-5 Anoxic cue). Sets *_override:true to bypass canonical for net-new text-only columns (roaster / producer / brewer / filter / grinder) + queues via taxonomy_overrides_queue. Called by Master Coordinator via bundled-brewing-completion.md (purchased) or Brewing Assistant Phase 3 handoff (self-roasted); Chain 1 + Chain 4 terminal hop. N=10 Stage 1 → 2 graduation. No cluster authored per PR 2/3 precedent.',
+  'docs://skills/cupping-specialist/SKILL.md':
+    'Cupping Specialist sub-skill (Wave 3 PR 3 shipped 2026-05-26). Workflow Executing tier; substrate-writer wrapping push_cupping + patch_cupping + patch_experiment + patch_roast (is_reference_candidate flag, co-owned with Roast Recorder) + propose_doc_changes. Executes Day-7 xBloom cupping evaluation, writes cup-side experiment closure (delta_from_cup_* / winner / key_insight + key_insight_confidence Low/Medium/Medium-High/High ladder / what_changes_going_forward / open_questions / additional_notes), marks is_reference_candidate on V-set leading slot (Schema sprint S2, decoupled from is_reference), and routes the V-set forward via Path A (close-out via Chain 1) / Path B (Roasting Assistant for V_(n+1)) / Path C-1 (peer-cup calibration halt) / Path C-2 (real-pourover discriminator halt). **POD-1 absorbed at SKILL.md level + bookmarked at cluster/pod-1-routing.md** pending lived-practice trigger conditions; today\'s Path C-1/C-2 substrate kept intact, future simulated-pourover-gate rewrite deferred. Called by Master Coordinator via log-cupping.md; Chain 1 entry (Path A) + Chain 3 mid-stage closer. N=10 Stage 1 → 2 graduation.',
+  'docs://skills/cupping-specialist/cluster/pod-1-routing.md':
+    'POD-1 routing scoping draft carried forward into Cupping Specialist\'s cluster (Wave 3 PR 3). Bookmarks the simulated-pourover-as-3rd-cup-read concept + Path C-1/C-2 rewrite directions + schema scoping (cuppings.eval_method=\'Simulated Pourover\' vs brews.is_simulated_pourover flag vs hybrid) + cross-project handoff lifecycle states. **Full rewrite gated on 4 lived-practice trigger conditions:** 2-3 more V-set lots progressing through Path A; at least one one-shot close-out; Stefano Um / Bukure / Higuito decisions observed; C-2 disambiguation cases either observed or deprecated. Until then, today\'s Path C-1/C-2 substrate is canonical; this doc is the dormant scoping context for the future POD-1 follow-up sprint.',
+  'docs://skills/roest-api-worker/SKILL.md':
+    'Roest API Worker sub-skill (Wave 3 PR 3 shipped 2026-05-26). Workflow Executing tier; substrate-writer wrapping push_roast_profile + patch_roast_recipe (Roest profile linkage, co-owned with Roast Recorder). Symmetry-split from Roest Knowledge per ADR-0011 — Roest Knowledge holds machine + API docs, Roest API Worker is the executor that calls the API. Pushes roast profiles to Roest L200 Ultra; translates recipe (bezier curves + drop rules + end-condition + charge + hopper) into push_roast_profile payload; returns profile_id + share_url; patches roast_recipes with roest_profile_id linkage. Validation gap acknowledged today (returns success on API acceptance, not machine confirmation); future verify_roast_profile_landed Tool may close the gap. Called by Roasting Assistant on operator approval OR Master Coordinator via start-lot.md STAGE 3; Chain 3 hop between Roasting Assistant and Roast Recorder. Pattern B self-improvement (API drift events → Roest Knowledge refresh). N=10 Stage 1 → 2 graduation. No cluster authored.',
+  'docs://skills/close-lot-specialist/SKILL.md':
+    'Close-Lot Specialist sub-skill (Wave 3 PR 3 shipped 2026-05-26). Workflow Executing tier; **resolved-lot completion gate**. Substrate-writer wrapping push_roast_learnings + patch_roast_learnings + patch_roast (is_reference + worth_repeating, co-owned) + patch_inventory + propose_doc_changes. Handles both V-set close-out (close-lot.md; full carry-forward field discipline) and one-shot close-out (one-shot-closeout.md; 7 lever-attribution fields schema-rejected per migration 054; "Low confidence - N=1" prefix discipline; Outcome A reference-quality vs Outcome B "Closed without reference" via why_this_roast_won:NULL routing). Verifies cross-link integrity end-to-end: roasts.is_reference + roast_learnings.best_roast_id (typed FK) + best_batch_id (legacy text back-compat) + reference cup (cuppings on best_roast_id with eval_method ILIKE pourover) + optimized brew (brews.green_bean_id, ideally roast_id=best_roast_id). Scope tags discipline per Sprint 12 / ADR-0009 (loose-canonical namespaced prefixes — process:* / variety:* / country:* / altitude:* / evaluation_method:* / general). Called by Master Coordinator via close-lot.md / one-shot-closeout.md; Chain 1 terminal hop after Brew Recorder writes optimized brew (cross-domain handoff from Brewing Assistant); Chain 3 Path C close-without-reference terminal hop. N=10 Stage 1 → 2 graduation.',
   // ---------------------------------------------------------------------------
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
@@ -868,6 +895,37 @@ export function listDocs(): {
       'docs://skills/sourcing-workflow-planner/SKILL.md',
       'docs/skills/sourcing-workflow-planner/SKILL.md',
       'Sourcing Workflow Planner — SKILL (Workflow Planning; buy/hold/pass + lane-fit assessment)',
+    ),
+    // Workflow Executing tier (Wave 3 PR 3, ADR-0011)
+    entry(
+      'docs://skills/roast-recorder/SKILL.md',
+      'docs/skills/roast-recorder/SKILL.md',
+      'Roast Recorder — SKILL (Workflow Executing; push_roast + push_roast_recipe + slot→recipe map)',
+    ),
+    entry(
+      'docs://skills/brew-recorder/SKILL.md',
+      'docs/skills/brew-recorder/SKILL.md',
+      'Brew Recorder — SKILL (Workflow Executing; push_brew + canonical validation + bundled-completion)',
+    ),
+    entry(
+      'docs://skills/cupping-specialist/SKILL.md',
+      'docs/skills/cupping-specialist/SKILL.md',
+      'Cupping Specialist — SKILL (Workflow Executing; push_cupping + V-set Path A/B/C-1/C-2 routing; absorbs POD-1)',
+    ),
+    entry(
+      'docs://skills/cupping-specialist/cluster/pod-1-routing.md',
+      'docs/skills/cupping-specialist/cluster/pod-1-routing.md',
+      'Cupping Specialist — POD-1 routing scoping draft (deferred; gated on 4 trigger conditions)',
+    ),
+    entry(
+      'docs://skills/roest-api-worker/SKILL.md',
+      'docs/skills/roest-api-worker/SKILL.md',
+      'Roest API Worker — SKILL (Workflow Executing; push_roast_profile to Roest L200 Ultra)',
+    ),
+    entry(
+      'docs://skills/close-lot-specialist/SKILL.md',
+      'docs/skills/close-lot-specialist/SKILL.md',
+      'Close-Lot Specialist — SKILL (Workflow Executing; resolved-lot completion gate; push_roast_learnings + cross-link verification)',
     ),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),
