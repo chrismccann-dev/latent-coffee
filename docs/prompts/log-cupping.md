@@ -55,6 +55,13 @@ Split into three `patch_roast_recipe(recipe_id, predicted_cup: "...", was_backfi
 - v3b: `predicted_cup: "Structural target - closest to design intent."` + `was_backfilled: true` + `backfill_notes: "..."`.
 - v3c: `predicted_cup: "Heavier body, tannin emphasis - overrun hypothesis."` + `was_backfilled: true` + `backfill_notes: "..."`.
 
+**If no recipe row exists at all for a slot** (`roasts.recipe_id` IS NULL, not just `roast_recipes.predicted_cup` IS NULL — the V_n was pushed via `push_roast_profile` to Roest but `push_roast_recipe` was never called): use `push_roast_recipe` to CREATE the row instead of `patch_roast_recipe`, then link it via `patch_roast(roast_id, recipe_id: <new_recipe_id>)`. Sequence per slot:
+
+1. `push_roast_recipe(green_bean_id, experiment_id, batch_slot, recipe_name, predicted_cup: "...", was_backfilled: true, backfill_notes: "Created during V_<n> cup backfill — original push_roast_recipe missed at design time, YYYY-MM-DD", + curves/end-condition/charge/hopper reconstructed from session memory or the Roest profile)` → returns `recipe_id`.
+2. `patch_roast(roast_id: <V_n slot roast row>, recipe_id: <recipe_id from step 1>)` → links the execution row to its design-intent row.
+
+This is the "half-migrated" case observed on CGLE Sudan Rume Natural V5 (2026-05-21, first lived test of this prompt). The detection criteria above already flag it; this paragraph describes how to resolve it. If curve/end-condition/charge/hopper are unrecoverable, halt and ask Chris to ballpark before fabricating.
+
 If `expected_outcomes` is generic ("we expect the lower-peak slot to read cleaner"), it can't be cleanly split — halt and ask Chris to ballpark each slot's predicted_cup before proceeding. Do NOT fabricate a per-slot prediction from a single-blob `expected_outcomes`.
 
 **(b) `experiments.updated_cup_prediction_a/b/c/d` backfill** — one `patch_experiment` call updating all populated slots in a single payload.

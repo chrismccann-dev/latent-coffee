@@ -38,6 +38,14 @@ The scoping draft explicitly lists four observation gates. **All four should be 
 
 When the gates are met, surface a POD-1 follow-up sprint with the three rewrite-direction options below.
 
+## Lived-practice trigger fires
+
+Append-only log of trigger events as they're observed in dog-food sessions. Each entry captures date + lot + which trigger condition fired + how it shifts the rewrite-direction interpretation.
+
+- **2026-05-21 — CGLE Sudan Rume Natural V5 (batches 187/188/189)** — **Trigger #4 fired (Path C-2 proposed in real session).** First lived test of refreshed `log-cupping.md` (Sprint R Phase 4 Step 1, [PR #215](https://github.com/chrismccann-dev/latent-coffee/pull/215)) AND first lived exercise of POD-1 absorption into Cupping Specialist. V5A leading slot at xbloom_gate carried WB-to-ground delta of 15.7 vs prior reference roast 169's 3.1; combined with V4's documented xbloom-vs-real-pourover inversion on this lot, claude.ai correctly routed Path C-2 and prescribed side-by-side simulated pourover (187 vs 169) at confirmed April Glass recipe. **Inverts trigger #4's interpretation**: the framing said "if never observed, deprecate Path C-2" — now that Path C-2 has fired with sound reasoning, the framing is validated by lived practice. **Future rewrite direction**: the simulated-pourover-gate concept is the right rename target (preserves the structural intent), not a deprecation. Also advances trigger #1 (V5 is moving toward Path A pending the real-pourover discriminator) and surfaces two new substrate gaps logged separately:
+  - **Delta-threshold heuristic missing from C-2 rule** — V5A's 15.7 delta was the *primary* evidence; prior-inversion was secondary corroboration. Worth adding "OR delta-on-leading-slot exceeds N points" as a 4th independent trigger (threshold pick deferred until 2-3 more data points).
+  - **Inversion evidence requires session memory, not query** — Path C-2's "prior inversion" check relied on session context (V4 xbloom underrepresented 169) rather than a programmatic DB read. Future Tool sprint: scope `list_cuppings_by_lot` or extend `get_bean_pipeline` to group cuppings by `recipe_variant`.
+
 ## Rewrite direction options (DEFERRED — pick during follow-up sprint, not now)
 
 - **(a) Replace C-1/C-2 with a "simulated pourover gate" path** — closer to what Chris actually does, single concept rather than two variants
