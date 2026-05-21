@@ -225,11 +225,14 @@ Output:
 
 **This STAGE writes**: `experiments` row (V_{n+1}), `roast_recipes` rows × N, Roest tablet profiles × N (via `push_roast_profile`), `roast_recipes` patches linking Roest profile IDs back.
 
-Read ROASTING.md sections via `read_doc_section(uri="docs://roasting.md", anchor=...)`:
+Read cluster-migrated sections via `read_doc(uri=...)`:
 
-- Standard Inlet Curve Template (7-timestamp fixed template)
+- `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md` — Standard Inlet Curve Template + Fan Strategy (migrated from ROASTING.md in Wave 3 PR 1).
+- `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` — relevant lessons from prior similar lots (migrated in Wave 2 PR 3).
+
+Read ROASTING.md (still in-doc) via `read_doc_section`:
+
 - Active Lots `### LOT-CODE - Description` sub-section for the lot's current working hypothesis + per-lot protocol notes
-- Cross-Coffee Insight Layer (relevant lessons from prior similar lots)
 
 ### Adjustment scale rule
 
@@ -279,7 +282,7 @@ Plus `failure_boundary` (what "broken" looks like across the slots) and `variabl
 Post-cupping is the natural moment for ROASTING.md updates - cup signal is the strongest evidence. Route by SHAPE of the insight:
 
 - **Lot-state change** (new working hypothesis going into V_(n+1), narrowing confidence band) → `### LOT-CODE - Description` sub-section under Active Lots (replace).
-- **Protocol-level insight** confirmed by this V_n's cupping ("audibility count is diagnostic-primary on silent-FC lots", "anaerobic naturals tolerate drop ceiling 1°C above the Sudan-Rume-Washed-derived 207°C") → appropriate workflow / protocol section (FC Marking Protocol, Drop Temp as the Primary Drop Signal, Between Batch Protocol). REPLACE when contradictory; APPEND when additive.
+- **Protocol-level insight** confirmed by this V_n's cupping ("audibility count is diagnostic-primary on silent-FC lots", "anaerobic naturals tolerate drop ceiling 1°C above the Sudan-Rume-Washed-derived 207°C") → appropriate workflow / protocol cluster doc — FC Marking Protocol now at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md`; Drop Temp as the Primary Drop Signal subsection at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal`; Between Batch Protocol still in ROASTING.md § Standard Workflow. Use `propose_doc_changes(target_doc='skills/roest-knowledge/cluster/<file>.md', ...)` for cluster-migrated targets. REPLACE when contradictory; APPEND when additive.
 - **Cross-coffee pattern** (NOT protocol-level - e.g. "naturals from this farm carry distinctive lemongrass", "84-hour anaerobic produces silent FC") → Cross-Coffee Insight Layer (append with confidence marker matching `key_insight_confidence`).
 - **Per-lot FC ceiling calibration** confirmed by V_n → FC Floor & Ceiling section (append with confidence marker).
 

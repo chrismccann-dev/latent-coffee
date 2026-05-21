@@ -121,6 +121,25 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md': 'docs/skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md',
   'docs://skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md': 'docs/skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md',
   'docs://skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md': 'docs/skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md',
+  // Roasting Historian cluster — Wave 3 PR 1 addition (R-to-B Translation override of prior lock)
+  'docs://skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md': 'docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md',
+  // ----- Peer-Learning Roasting Archivist (Wave 3 PR 1, ADR-0011) ------------
+  'docs://skills/peer-learning-roasting-archivist/SKILL.md': 'docs/skills/peer-learning-roasting-archivist/SKILL.md',
+  'docs://skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md': 'docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md',
+  'docs://skills/peer-learning-roasting-archivist/cluster/cross-peer/patterns.md': 'docs/skills/peer-learning-roasting-archivist/cluster/cross-peer/patterns.md',
+  'docs://skills/peer-learning-roasting-archivist/cluster/source-index.md': 'docs/skills/peer-learning-roasting-archivist/cluster/source-index.md',
+  // ----- Roest Knowledge (Wave 3 PR 1, ADR-0011) -----------------------------
+  'docs://skills/roest-knowledge/SKILL.md': 'docs/skills/roest-knowledge/SKILL.md',
+  'docs://skills/roest-knowledge/cluster/machine/l200-ultra.md': 'docs/skills/roest-knowledge/cluster/machine/l200-ultra.md',
+  'docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md': 'docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md',
+  'docs://skills/roest-knowledge/cluster/protocols/evaluation.md': 'docs/skills/roest-knowledge/cluster/protocols/evaluation.md',
+  'docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md': 'docs/skills/roest-knowledge/cluster/protocols/fan-strategy.md',
+  'docs://skills/roest-knowledge/cluster/protocols/fc-marking.md': 'docs/skills/roest-knowledge/cluster/protocols/fc-marking.md',
+  'docs://skills/roest-knowledge/cluster/api/read-surface.md': 'docs/skills/roest-knowledge/cluster/api/read-surface.md',
+  'docs://skills/roest-knowledge/cluster/api/write-surface.md': 'docs/skills/roest-knowledge/cluster/api/write-surface.md',
+  'docs://skills/roest-knowledge/cluster/api/quirks.md': 'docs/skills/roest-knowledge/cluster/api/quirks.md',
+  'docs://skills/roest-knowledge/cluster/firmware/README.md': 'docs/skills/roest-knowledge/cluster/firmware/README.md',
+  'docs://skills/roest-knowledge/cluster/observed-quirks.md': 'docs/skills/roest-knowledge/cluster/observed-quirks.md',
 }
 
 const DOC_FILES: Record<string, string> = {
@@ -161,7 +180,7 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://brewing/wbc-recipes.md':
     '[MIGRATED in Wave 2 PR 1] Authoritative content lives at docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://roasting.md':
-    'Use when planning a roast on the Roest L200 Ultra (counterflow mode) — covers the New Coffee Onboarding Protocol (Steps 1-4), Standard Workflow, evaluation protocol (Day 7 pourover gate), fan/inlet curve templates, FC marking protocol, and per-coffee experiment patterns. The Cross-Coffee Insight Layer + Open Questions migrated to the Roasting Historian cluster in Wave 2 PR 3 (2026-05-26); ROASTING.md retains h1 + pointer blocks at #cross-coffee-insight-layer + #open-questions for back-compat. Pull docs://skills/roasting-historian/cluster/patterns/* for the migrated cross-lot learnings.',
+    'Use when planning a roast on the Roest L200 Ultra (counterflow mode) — covers the New Coffee Onboarding Protocol (Steps 1-4), Standard Workflow (BBP / Hopper Pre-Load), Naturals + Honey roast-direction frameworks, Lot Knowledge (Active Lots + One-Shot Calibrations + Closed Lots), Green Bean Storage, Session Debrief Template, and Archive pointer. Multiple sections migrated to sub-skill clusters: Wave 2 PR 3 moved Cross-Coffee Insight Layer + Open Questions to Roasting Historian (h1 + pointer blocks at #cross-coffee-insight-layer + #open-questions); Wave 3 PR 1 moved Equipment / Evaluation Protocol / Standard Inlet Curve Template / Fan Strategy / Key Counterflow Observations / FC Marking Protocol to Roest Knowledge cluster, Reference Roast Target + Peer Insights to Peer-Learning Roasting Archivist cluster, and Roast-to-Brew Translation to Roasting Historian cluster. All migration anchors preserved as h1 + pointer blocks for back-compat. Pull docs://skills/roest-knowledge/cluster/* + docs://skills/peer-learning-roasting-archivist/cluster/* + docs://skills/roasting-historian/cluster/* for migrated content.',
   'docs://roasting/archive.md':
     'Use when researching closed-lot roasting outcomes — per-lot Key Learnings, reference roast parameters, and structural takeaways from completed beans. Read before roasting a similar coffee.',
   'docs://roasting/wbc-roasting.md':
@@ -171,7 +190,7 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://roasting/redesign.md':
     'Use when implementing or extending the roasting-side data model / pages — series-level scope doc for the 7-sub-sprint roasting rebuild (Sub Pages 6.1-6.7, scoped + shipped 2026-05-13). Covers the lifecycle states, the new roast_recipes entity, the 16 cross-batch fields on experiments, MCP-only writes (deprecating /add for roasting), and the 4-page-shape index + waiting-for-roast + waiting-for-cupping + resolved layout. Read end-to-end before working on roasting pages or MCP Tool surface.',
   'docs://roasting/dongzhe-livestream-2026-05.md':
-    'Use when scoping a new green-bean intake or anchor profile — long-form extraction of peer roaster Dongzhe\'s operational decision tree, captured 2026-05-17 from a Yunnan-Hatchi livestream on the same Roest L200 Ultra in counterflow mode as Chris. Provenance anchor for the green-physics-first framing (moisture/density picks the energy envelope, process picks stretch-vs-compress), the momentum-into-FC > weight-loss principle, the honey-process fork (washed-direction vs natural-direction), and the low-moisture / high-moisture energy adjustment rules. Holds the five operational deltas folded back into ROASTING.md + caveats (single-batch methodology, darker cup target, specific numbers don\'t transfer). Tier 2 reference signal - directional principles transfer, his specific numbers do not.',
+    '[MIGRATED in Wave 3 PR 1] Authoritative content lives at docs://skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path. The cluster file carries Dongzhe\'s full per-peer profile (Reference Roast Target #249, Core Principles, full Yunnan-Hatchi 2026-05-17 livestream extraction, five operational deltas, caveats).',
   'docs://features/importer-exporter-scoping.md':
     'Use when discussing or scoping any future axis for coffee importers and exporters (currently unmodeled — `brews.producer` is the only supply-chain attribution today). Records the Sprint T3 / CR-3 scoping decision (Option C — unmodeled, deferred) + the four forward triggers that would re-open the question + concrete pain from the Nordic Approach alias drift that the override queue now catches. Read before authoring any importer-axis proposal so the prior decision and its reasons stay visible.',
   'docs://taxonomies/regions.md':
@@ -319,6 +338,41 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Per-lot learnings for Guatemala Libertad Aurelio del Cerro (closed pre-counterflow, Bourbon/Caturra blend). Canonical Maillard-energy-continuity inlet-shape lesson — recurring oversteeped-tea dryness resolved by smooth monotonically declining RoR into FC.',
   'docs://skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md':
     'Per-lot learnings for Rancho Tio Emilio Typica Mejorado Washed (closed 2026-05-11, one-shot calibration). Brew-anchor-transferability lesson (variety signal dominates over anchor-roast brew lineage) + altitude-as-weak-proxy-for-density on one-shots + Typica Mejorado varietal aromatic fingerprint sourced here.',
+  // Roasting Historian cluster — Wave 3 PR 1 addition (R-to-B Translation)
+  'docs://skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md':
+    'Use when designing the optimized brew for a lot reaching reference-roast declaration, or when reading the cup at any planned recipe — translates roast parameter patterns into brew predictions. Reading Roast Parameters to Predict Brew Behavior table (WB-Ground delta + Agtron WB + Maillard% + FC temp/drop → starting adjustment) + Pushed vs Standard Recipe Decision Logic + Processing Method Starting Hypotheses for Brew + Brew-Reveals-Roast Principle (with the Low-confidence Rancho Tio extension on brew-strategy-mismatch-as-false-discordance). Plus 2 working hypotheses at the tail (WB-to-Ground Agtron Delta Hypothesis Violation on Drop-Ceiling-Breached Batch; Total Time Outweighs Peak Inlet for Body Weight on Pulp-Fermentation Washed at High Moisture). Migrated from ROASTING.md § Roast-to-Brew Translation in Wave 3 PR 1 (2026-05-26).',
+  // ----- Peer-Learning Roasting Archivist (Wave 3 PR 1, ADR-0011) ------------
+  'docs://skills/peer-learning-roasting-archivist/SKILL.md':
+    'Peer-Learning Roasting Archivist sub-skill (Wave 3 PR 1 shipped 2026-05-26). Operator-curated cluster of external peer-roaster knowledge specifically for Roest L200 Ultra / counterflow practitioners. Low-volume; Chris-stubbed-Claude-integrates per Pattern I. Use when evaluating novel approaches against peer-roaster precedent.',
+  'docs://skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md':
+    'Use when scoping a new green intake or anchor profile — peer roaster Dongzhe profile (same Roest L200 Ultra in counterflow mode as Chris). Reference Roast Target #249 + Core Principles (RoR shape over dev time / Maillard + dev flavor axis / Naturals starting framework) folded from prior chat-history extractions, plus full Yunnan-Hatchi 2026-05-17 livestream extraction (three coffees roasted, intake hierarchy, five operational deltas + caveats about single-batch methodology + darker cup target). Tier 2 reference signal — directional principles transfer, his specific numbers do not. Migrated from docs/roasting/dongzhe-livestream-2026-05.md + ROASTING.md § Reference Roast Target + § Peer Insights in Wave 3 PR 1 (2026-05-26).',
+  'docs://skills/peer-learning-roasting-archivist/cluster/cross-peer/patterns.md':
+    'Use when looking for directional principles that converge across ≥3 peer-roaster profiles. Today N<3 (only Dongzhe profile authored); empty-state pointer back to per-peer/dongzhe.md. Activates when promotion criteria met.',
+  'docs://skills/peer-learning-roasting-archivist/cluster/source-index.md':
+    'Use when checking provenance + freshness of peer-roaster content in the cluster — per-peer source table (primary sources / last integrated / refresh signal) + source-type tier framework (Tier A livestream → Tier D short-form) + pending-source operator-watch list + stale-claim review log.',
+  // ----- Roest Knowledge (Wave 3 PR 1, ADR-0011) -----------------------------
+  'docs://skills/roest-knowledge/SKILL.md':
+    'Roest Knowledge sub-skill (Wave 3 PR 1 shipped 2026-05-26). Machine + API knowledge for the Roest L200 Ultra in counterflow mode. Symmetry-promoted alongside Brewing Equipment Expert per ADR-0011. Read by Roasting Assistant during recipe design and Roest API Worker during push validation. Chris-stubbed-Claude-integrates per Patterns A / B / I.',
+  'docs://skills/roest-knowledge/cluster/machine/l200-ultra.md':
+    'Use when looking up Chris\'s Roest L200 Ultra hardware + accessory stack (Roest L200 Ultra counterflow 100g batches / Lightcells CM-200 / xbloom Brian Quan evaluation recipe / EG-1 Weber Workshop grinder). Cross-links into the cluster\'s protocols + counterflow-observations for behavioral detail. Migrated from ROASTING.md § Equipment in Wave 3 PR 1 (2026-05-26).',
+  'docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md':
+    'Use when designing a roast and needing machine-specific thermal-behavior anchors — Turning Point (TP) probe artifact (Chris\'s 78-81°C vs peer 94°C), FC Temperature Targeting (200-205°C window), Charge Temperature (resolved at 117°C with probe lag explanation), Total Roast Time band (4:30-6:00 firm floor, softer ceiling), Session Position Effect (10-15s first-batch slow), Drop Temp as Primary Drop Signal (bean-temp end condition default + 4 manual-override exception rules), WB-to-Ground Agtron Delta as Development Signal (magnitude operational; sign flips by lot family). All observations machine-specific to Chris\'s L200 unit. Migrated from ROASTING.md § Key Counterflow Observations in Wave 3 PR 1 (2026-05-26).',
+  'docs://skills/roest-knowledge/cluster/protocols/evaluation.md':
+    'Use when running a Day 7 evaluation session — Current Protocol (Day 7 pourover sole gate, xbloom Brian Quan recipe, 15g dose, ≤3 batches preferred, full cup sips not spoon-only) + Ground Agtron measurement (target WB→Gnd delta ≤3 points) + Optimized brew session as separate post-winner step + Why Day 4 Cupping Was Removed rationale (Sudan Rume Hybrid Washed 20+ batches showed Day 4 misleading both directions). Cross-link into counterflow-observations.md for per-lot-family delta interpretation. Migrated from ROASTING.md § Evaluation Protocol in Wave 3 PR 1 (2026-05-26).',
+  'docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md':
+    'Use when designing a roast curve — bundles Standard Inlet Curve Template (7-timestamp fixed template for V1 experiments: 00:00 / 01:15 / 02:30 / 03:15 peak / 04:00 / 05:00 / 06:00 + V1 design rules: hold timestamps constant, vary inlet temperature values, V1 is a wide mapping pass) + Fan Strategy (counterflow-shaped curves required, never flat fan, drying 78-82% → Maillard 63-70% → development 70-75%, per-coffee-type Maillard floor variation, current reference fan curves for Sudan Rume Washed / Natural / Mandela XO). Both controls are counterflow-conditioned; the conventional drum-mode flat-fan default does not apply. Migrated from ROASTING.md § Standard Inlet Curve Template + § Fan Strategy in Wave 3 PR 1 (2026-05-26).',
+  'docs://skills/roest-knowledge/cluster/protocols/fc-marking.md':
+    'Use when interpreting or recording FC events — manual marking at first audible crack above 202°C is the standard; false positive below 202°C never marked; auto-mark accepted for high-volume crack; silent-crack coffees (Mandela XO / anaerobic naturals / XO process) log as manual-no-audio at drop temp. FC marking decoupled from drop control as of 2026-05-04 (drop is controlled by bean-temp end condition). Why dev time as end condition is retired explained. Cross-link to roasts.fc_audibility enum (Sprint 11, migration 061). Migrated from ROASTING.md § FC Marking Protocol in Wave 3 PR 1 (2026-05-26).',
+  'docs://skills/roest-knowledge/cluster/api/read-surface.md':
+    'Use when interpreting Roest log fetches or scoping a read-side API behavior — endpoint table (pull_roest_log + list_roest_inventory + list_roest_logs) with implementation pointers. Operator-stub today; Pattern A + B refresh expected as Chris accumulates same-endpoint anomalies or firmware updates change read-surface shape.',
+  'docs://skills/roest-knowledge/cluster/api/write-surface.md':
+    'Use when designing a profile push or scoping a write-side API behavior — endpoint table (push_roast_profile + push_inventory + patch_inventory) with implementation pointers + per-curve format documentation (inlet [msec, °C] / fan [msec, %] / rpm [msec, rpm] / power [msec, %] per-axis validation) + inventory write schema fields. Seeded from Sprint Roest API write Phase 1+2 (2026-05-06).',
+  'docs://skills/roest-knowledge/cluster/api/quirks.md':
+    'Use when troubleshooting a Roest API push/pull failure or scoping a workaround — observed-quirk catalog. Operator-stub today (no quirks logged); promotion criteria documented. Patterns A + B flow content here.',
+  'docs://skills/roest-knowledge/cluster/firmware/README.md':
+    'Use when looking up per-firmware-version behavioral notes for the Roest L200 Ultra — placeholder for per-version files when firmware changes affect machine or API behavior. Empty today.',
+  'docs://skills/roest-knowledge/cluster/observed-quirks.md':
+    'Use when checking for machine-side anomalies that don\'t directly drive recipe construction — load-bearing machine quirks live inline in counterflow-observations.md. This doc is for non-recipe-driving anomalies. Operator-stub today.',
   // ---------------------------------------------------------------------------
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
@@ -626,6 +680,154 @@ export function listDocs(): {
       'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md',
       'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md',
       'Brewing Historian — By Coffee Family: Thermal Shock Washed (N=3)',
+    ),
+    // Roasting Historian (Wave 2 PR 3 — listDocs entries originally missed; added retroactively in Wave 3 PR 1)
+    entry(
+      'docs://skills/roasting-historian/SKILL.md',
+      'docs/skills/roasting-historian/SKILL.md',
+      'Roasting Historian — SKILL',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md',
+      'docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md',
+      'Roasting Historian — Cross-Coffee Insights (CCIL)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/patterns/open-questions.md',
+      'docs/skills/roasting-historian/cluster/patterns/open-questions.md',
+      'Roasting Historian — Open Questions (12 research questions)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/patterns/general.md',
+      'docs/skills/roasting-historian/cluster/patterns/general.md',
+      'Roasting Historian — General (non-axis-scoped patterns)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md',
+      'docs/skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md',
+      'Roasting Historian — By Cultivar: Gesha (N=3)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/patterns/by-process/washed.md',
+      'docs/skills/roasting-historian/cluster/patterns/by-process/washed.md',
+      'Roasting Historian — By Process: Washed (N=6)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md',
+      'docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md',
+      'Roasting Historian — Roast-to-Brew Translation (Wave 3 PR 1 addition)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md',
+      'docs/skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md',
+      'Roasting Historian — Per-Lot: CGLE Mandela XO',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md',
+      'docs/skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md',
+      'Roasting Historian — Per-Lot: CGLE Sudan Rume Hybrid Washed',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md',
+      'docs/skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md',
+      'Roasting Historian — Per-Lot: Gesha Village Oma (Lot 25-035)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md',
+      'docs/skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md',
+      'Roasting Historian — Per-Lot: Gesha Village Surma (Lot 25-039)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md',
+      'docs/skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md',
+      'Roasting Historian — Per-Lot: Guatemala El Socorro Java',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md',
+      'docs/skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md',
+      'Roasting Historian — Per-Lot: Guatemala Libertad Aurelio del Cerro',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md',
+      'docs/skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md',
+      'Roasting Historian — Per-Lot: Rancho Tio Emilio (one-shot calibration)',
+    ),
+    // Peer-Learning Roasting Archivist (Wave 3 PR 1, ADR-0011)
+    entry(
+      'docs://skills/peer-learning-roasting-archivist/SKILL.md',
+      'docs/skills/peer-learning-roasting-archivist/SKILL.md',
+      'Peer-Learning Roasting Archivist — SKILL',
+    ),
+    entry(
+      'docs://skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md',
+      'docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md',
+      'Peer-Learning Roasting Archivist — Per-Peer: Dongzhe (Tier 2 same-machine peer)',
+    ),
+    entry(
+      'docs://skills/peer-learning-roasting-archivist/cluster/cross-peer/patterns.md',
+      'docs/skills/peer-learning-roasting-archivist/cluster/cross-peer/patterns.md',
+      'Peer-Learning Roasting Archivist — Cross-Peer Patterns (N<3 placeholder)',
+    ),
+    entry(
+      'docs://skills/peer-learning-roasting-archivist/cluster/source-index.md',
+      'docs/skills/peer-learning-roasting-archivist/cluster/source-index.md',
+      'Peer-Learning Roasting Archivist — Source Index (provenance + freshness)',
+    ),
+    // Roest Knowledge (Wave 3 PR 1, ADR-0011)
+    entry(
+      'docs://skills/roest-knowledge/SKILL.md',
+      'docs/skills/roest-knowledge/SKILL.md',
+      'Roest Knowledge — SKILL',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/machine/l200-ultra.md',
+      'docs/skills/roest-knowledge/cluster/machine/l200-ultra.md',
+      'Roest Knowledge — Machine: L200 Ultra (hardware + accessory stack)',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md',
+      'docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md',
+      'Roest Knowledge — Machine: Counterflow Observations (TP / FC / Charge / Drop / WB-Gnd Delta)',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/protocols/evaluation.md',
+      'docs/skills/roest-knowledge/cluster/protocols/evaluation.md',
+      'Roest Knowledge — Protocol: Day 7 Evaluation',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md',
+      'docs/skills/roest-knowledge/cluster/protocols/fan-strategy.md',
+      'Roest Knowledge — Protocol: Fan Strategy + Standard Inlet Curve Template',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/protocols/fc-marking.md',
+      'docs/skills/roest-knowledge/cluster/protocols/fc-marking.md',
+      'Roest Knowledge — Protocol: FC Marking',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/api/read-surface.md',
+      'docs/skills/roest-knowledge/cluster/api/read-surface.md',
+      'Roest Knowledge — API: Read Surface (pull_roest_log + list_roest_*)',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/api/write-surface.md',
+      'docs/skills/roest-knowledge/cluster/api/write-surface.md',
+      'Roest Knowledge — API: Write Surface (push_roast_profile + push/patch_inventory)',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/api/quirks.md',
+      'docs/skills/roest-knowledge/cluster/api/quirks.md',
+      'Roest Knowledge — API: Observed Quirks (operator-stub)',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/firmware/README.md',
+      'docs/skills/roest-knowledge/cluster/firmware/README.md',
+      'Roest Knowledge — Firmware: Per-Version Notes (operator-stub)',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/observed-quirks.md',
+      'docs/skills/roest-knowledge/cluster/observed-quirks.md',
+      'Roest Knowledge — Machine-Side Observed Quirks (operator-stub)',
     ),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),

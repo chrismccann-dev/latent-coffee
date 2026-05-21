@@ -142,7 +142,7 @@ Only if V_n's roast-side observations reveal a lot-state change worth recording 
 Route by SHAPE of the insight:
 
 - Lot-state changes → `### LOT-CODE - Description` sub-section under Active Lots (replace)
-- Protocol-level insights → workflow / protocol section (FC Marking Protocol, Drop Temp as the Primary Drop Signal, Between Batch Protocol, etc.)
+- Protocol-level insights → workflow / protocol cluster doc — FC Marking Protocol now at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md`; Drop Temp as the Primary Drop Signal at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal`; Between Batch Protocol still in ROASTING.md § Standard Workflow. Use `propose_doc_changes(target_doc='skills/roest-knowledge/cluster/<file>.md', ...)` for cluster-migrated targets.
 - Mid-iteration cross-coffee patterns → Cross-Coffee Insight Layer (append with confidence marker)
 
 Fetch live anchor via `read_doc_section(uri="docs://roasting.md", anchor="<Section Name>")` BEFORE drafting. Submit as a single multi-citation `propose_doc_changes` call with top-level `target_doc: "roasting.md"`, top-level `summary`, `citations: [{section_anchor, op, proposed_text, current_text}]`.

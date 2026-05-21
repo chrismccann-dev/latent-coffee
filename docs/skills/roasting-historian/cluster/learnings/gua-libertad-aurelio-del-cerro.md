@@ -22,7 +22,7 @@
 
 The **Maillard energy continuity** finding is the canonical pre-counterflow lesson about inlet curve shape: recurring oversteeped-tea dryness across multiple early experiment sets was diagnosed and resolved as an inlet-shape defect (mid-roast energy sag), not a dev-time or airflow issue. Everything downstream became tractable only after the underlying RoR sag was eliminated.
 
-This lesson generalized: a smooth, monotonically declining RoR into FC is now a foundational design criterion for any new V1 inlet curve. The counterflow Standard Inlet Curve Template in [ROASTING.md § Standard Inlet Curve Template](../../../../ROASTING.md#standard-inlet-curve-template) encodes this principle structurally — every shape variation tested has held this property.
+This lesson generalized: a smooth, monotonically declining RoR into FC is now a foundational design criterion for any new V1 inlet curve. The counterflow Standard Inlet Curve Template in [Roest Knowledge cluster § Standard Inlet Curve Template](../../../roest-knowledge/cluster/protocols/fan-strategy.md#standard-inlet-curve-template) (migrated from ROASTING.md in Wave 3 PR 1) encodes this principle structurally — every shape variation tested has held this property.
 
 ## Related
 

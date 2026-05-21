@@ -76,7 +76,7 @@ Run a thorough search across the existing closed-lot archive:
 2. `read_doc_section(uri="docs://roasting.md", anchor="<LOT-CODE - Description>")` for any prior lots with overlapping attributes (cultivar / terroir / process / processing-style).
 3. For each candidate prior lot, call `get_green_bean({lot_id: <code>})` -> `get_bean_pipeline({green_bean_id})` and read the `roast_learnings` row for `cultivar_takeaway` / `general_takeaway` / `starting_hypothesis` / `reference_roasts` / `aromatic_behavior` / `structural_behavior`.
 4. If similar lots exist, synthesize a starting hypothesis: "Closest prior anchors are <Lot X> (cultivar match) and <Lot Y> (process match). Their carry-forward suggests <Z>. For this one-shot the design starting point is <peak inlet> / <total time> / <drop temp> based on those anchors, adjusted by <reasoning>."
-5. If NO similar lots exist, the starting hypothesis anchors on the producer's tasting notes ballpark + ROASTING.md's Standard Inlet Curve Template + general counterflow practice. Explicitly flag the anchor weakness.
+5. If NO similar lots exist, the starting hypothesis anchors on the producer's tasting notes ballpark + the Roest Knowledge cluster's [Standard Inlet Curve Template](docs/skills/roest-knowledge/cluster/protocols/fan-strategy.md#standard-inlet-curve-template) (migrated from ROASTING.md in Wave 3 PR 1) + general counterflow practice. Explicitly flag the anchor weakness.
 
 Note: peer-roasted reference cup of THIS bean typically isn't available for auction-sample / farm-sample one-shots (the lot may not even be sold yet, cycle time to wait for a peer roast is too long). The "Pre-V_n calibration gate" concept from log-cupping.md (Untold reference cup case) does NOT apply here - the calibration anchor is carry-forward from other lots, not same-bean reference.
 
@@ -86,12 +86,15 @@ Note: peer-roasted reference cup of THIS bean typically isn't available for auct
 
 Vocabulary: **recipe** is the Latent design-intent aggregate (the `roast_recipes` row carrying curves + drop + hopper + end condition + charge + drop rules + rationale + Hypothesis prose). **Roest profile** is the machine artifact (the JSON pushed to the tablet via `push_roast_profile`). One recipe row produces one or more Roest profile pushes; the two nouns are not synonyms. See CONTEXT.md § Recipe (aggregate noun for design intent) for the three-way asymmetry (recipe / Roest profile / curve-shape names).
 
-Read ROASTING.md sections via `read_doc_section`:
+Read cluster-migrated sections via `read_doc(uri=...)`:
 
-- Standard Inlet Curve Template (7-timestamp fixed template)
-- FC Marking Protocol (especially for silent-FC coffees if cultivar/process flags risk)
-- Drop Temp as the Primary Drop Signal
-- Hopper Pre-Load Timing
+- `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md` — Standard Inlet Curve Template (7-timestamp fixed template) + Fan Strategy (migrated from ROASTING.md in Wave 3 PR 1).
+- `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md` — FC Marking Protocol (especially for silent-FC coffees if cultivar/process flags risk).
+- `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md` — Drop Temp as the Primary Drop Signal subsection.
+
+Read ROASTING.md (still in-doc) via `read_doc_section`:
+
+- Hopper Pre-Load Timing (subsection of § Standard Workflow)
 
 ### Tolerance-anchored design rule (one-shot only)
 

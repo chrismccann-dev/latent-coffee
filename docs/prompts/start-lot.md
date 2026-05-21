@@ -65,10 +65,10 @@ Capture `green_bean_id` for STAGES 2-4.
 
 ## STAGE 2 - Design the V1 experiment frame
 
-Read ROASTING.md sections via `read_doc_section(uri="docs://roasting.md", anchor=...)`:
+Read cluster-migrated sections via `read_doc(uri=...)`:
 
-- Standard Inlet Curve Template (7-timestamp fixed template)
-- Cross-Coffee Insight Layer (any starting hypothesis from prior similar lots)
+- `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md` — Standard Inlet Curve Template (7-timestamp fixed template) + Fan Strategy bundled (migrated from ROASTING.md in Wave 3 PR 1 / 2026-05-26; legacy `read_doc_section(uri="docs://roasting.md", anchor="Standard Inlet Curve Template")` resolves to back-compat pointer block).
+- `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` — any starting hypothesis from prior similar lots (migrated in Wave 2 PR 3; legacy anchor preserved).
 - Carry-forward learnings from `roast_learnings` rows of prior lots with overlapping cultivar / terroir / process - call `get_bean_pipeline` on each relevant lot to pull the structured carry-forward.
 
 For WBC-derived roasting hypotheses, sourcing-tier framing, portfolio-lane placement, and blending-experiment protocols, also consult the WBC Roasting Archivist knowledge cluster (Wave 2 PR 1, ADR-0011):
