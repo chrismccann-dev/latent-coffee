@@ -2,7 +2,7 @@
 
 The 18-sub-skill registry. Each entry has I/O metadata so dispatch decisions can be made from the catalog alone without loading the full SKILL.md.
 
-**Wave 1 status:** Brewing Equipment Expert is the only sub-skill with full content under `docs/skills/`. The other 17 sub-skills exist as placeholder SKILL.md files; Wave 2-4 implementation sprints fill them in.
+**Wave status:** Wave 1 shipped Brewing Equipment Expert + Master Coordinator (2026-05-26). Wave 2 shipped 4 consolidation plays — WBC Brewing/Roasting Archivists (PR 1), Brewing Historian (PR 2), Roasting Historian (PR 3). Wave 3 PR 1 shipped 2 operator-stub Knowledge sub-skills (Peer-Learning Roasting Archivist + Roest Knowledge) + Roasting Historian R-to-B Translation extension. Wave 3 PR 2 shipped 4 Workflow Planning sub-skills (Roasting Assistant + Brewing Assistant + Learning Assistant + Sourcing Workflow Planner) — reads-only composition over Wave 1+2 Knowledge clusters, no clusters of their own per scope decision 1. **Remaining placeholders:** 5 Workflow Executing tier sub-skills (Wave 3 PR 3) + CCIL (Wave 4) + Learning Knowledge (deferred until ≥2 research tracks complete).
 
 ---
 
@@ -47,10 +47,10 @@ For the full roasting reference (until Wave 4 redirect-stub transition completes
 
 | Sub-skill | Domain | Wave | Status | In | Out | Patterns |
 |---|---|---|---|---|---|---|
-| [Roasting Assistant](../roasting-assistant/SKILL.md) | roasting | 3 | placeholder | lot specs + Roasting Historian patterns + WBC Roasting + Roest Knowledge | roast recipe proposal (pre-push) | E |
-| [Brewing Assistant](../brewing-assistant/SKILL.md) | brewing | 3 | placeholder | brew session intent + Brewing Historian + WBC Brewing + Brewing Equipment Expert | brew recipe proposal | E |
-| [Learning Assistant](../learning-assistant/SKILL.md) | cross-domain | 3 | placeholder | open questions + observations + inventory + Historians + CCIL | research-track design + execution plan | E |
-| [Sourcing Workflow Planner](../sourcing-workflow-planner/SKILL.md) | roasting | 3 | placeholder | lot opportunity + Sourcing Knowledge + inventory | sourcing recommendation + lane-fit assessment | E |
+| [Roasting Assistant](../roasting-assistant/SKILL.md) | roasting | 3 | **ACTIVE (PR 2)** | lot specs + Roasting Historian + WBC Roasting + Roest Knowledge + Peer-Learning Roasting Archivist | roast recipe proposal (pre-push) | E |
+| [Brewing Assistant](../brewing-assistant/SKILL.md) | brewing | 3 | **ACTIVE (PR 2)** | brew session intent + Brewing Historian + WBC Brewing + Brewing Equipment Expert | brew recipe proposal + in-thread iteration | E |
+| [Learning Assistant](../learning-assistant/SKILL.md) | cross-domain | 3 | **ACTIVE (PR 2)** | hypothesis/open question + both Historians + inventory (CCIL when Wave 4) | research-track design + execution plan | E |
+| [Sourcing Workflow Planner](../sourcing-workflow-planner/SKILL.md) | roasting | 3 | **ACTIVE (PR 2)** | lot opportunity + WBC Roasting Archivist § sourcing/ + inventory + Roasting Historian | sourcing recommendation + lane-fit assessment | E |
 
 ### WORKFLOW EXECUTING TIER (5 sub-skills; writes substrate)
 
