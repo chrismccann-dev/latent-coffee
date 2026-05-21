@@ -392,27 +392,33 @@ The full forward-looking work surface, structured by readiness + scope. Per-spri
 
 The current ranked queue of scoped, sized sprints in flight or next up.
 
-Sprint 3.1 brainstorm shipped 2026-05-12. Sprint 3.2 Cleanup-A shipped 2026-05-13. The post-grilling-sequencing era (Sprints 0-14 + M + F) closed 2026-05-24 — Sprint F's 6-actor matrix walk confirmed clean substrate. **Sprint R restructured this queue 2026-05-25** around Chris-locked Option 1 sequence: audit cluster → architecture brainstorm → architecture implementation → roadmap re-session. Per Chris 2026-05-25, POD-1 + 3.3-3.7 + deferred candidates are demoted to **Queued post-architecture** below — they will be re-prioritized in the roadmap re-session that closes the architecture work. Continuous-feedback channel for non-architectural friction continues at `memory/feedback_mcp_continuous_log.md`.
+Sprint 3.1 brainstorm shipped 2026-05-12. Sprint 3.2 Cleanup-A shipped 2026-05-13. The post-grilling-sequencing era (Sprints 0-14 + M + F) closed 2026-05-24 — Sprint F's 6-actor matrix walk confirmed clean substrate. **Sprint R restructured this queue 2026-05-25** around Chris-locked Option 1 sequence: audit cluster → architecture brainstorm → architecture implementation → roadmap re-session. **Audit cluster shipped 2026-05-26** (PR #195 — claude.ai memory refactor + 3 prompt patches + POD-1 scoping draft). **Architecture brainstorm cluster shipped 2026-05-26** — 3 ADRs (0011 / 0012 / 0013) + 18 sub-skill decomposition spec stubs + master-doc transition plan + Wave 1 implementation kickoff brief. POD-1 absorbed into Cupping Specialist Wave 3. Per Chris 2026-05-25, 3.3-3.7 + deferred candidates are demoted to **Queued post-architecture** below — they will be re-prioritized in the roadmap re-session that closes the architecture implementation work. Continuous-feedback channel for non-architectural friction continues at `memory/feedback_mcp_continuous_log.md`.
 
-#### 1. Audit cluster — three-surface drift check
+#### 1. Architecture implementation — Wave 1 (Master Coordinator + Brewing Equipment Expert paired ship)
 
-Coordinated drift check across the three surfaces driving Latent's workflows BEFORE entering the architecture brainstorm. Surface 1 (codebase + docs) already done via Sprint F. Surface 2 (claude.ai project memory + custom instructions, ~12-day delta) and Surface 3 (Chris's lived workflow vs documented baseline) audited inline using prep artifacts Sprint R produced ([claude.ai memory diff](docs/sprints/sprint-r-audit-prep-claude-ai-memory-diff-2026-05-25.md) · [roasting workflow baseline](docs/sprints/sprint-r-audit-prep-roasting-workflow-baseline-2026-05-25.md) · [brewing workflow baseline](docs/sprints/sprint-r-audit-prep-brewing-workflow-baseline-2026-05-25.md)).
+Implementation flowing from the brainstorm cluster ([ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)). Wave 1 ships **Master Coordinator catalog** (markdown-only, MCP-endpoint-exposed) **+ Brewing Equipment Expert cluster** (consolidating 8 existing files — 4 `lib/{brewer,filter,grinder,sworks}-registry.ts` + 4 `docs/taxonomies/{brewers,filters,grinders,sworks}.md`) as the paired proof-of-pattern first ship. Tests catalog mechanics + lazy-loading + MCP wire-up + first sub-skill content + cross-system audit gates simultaneously.
 
-**Triggers when:** next after Sprint R close. **Sizing:** S-M (~1-2h Chris-side execution; prep already done). **Scoping doc:** [docs/sprints/audit-cluster-kickoff-2026-05-25.md](docs/sprints/audit-cluster-kickoff-2026-05-25.md).
+**Triggers when:** Next sprint after the brainstorm cluster PR merges. **Sizing:** M (~1-2 day implementation, markdown + cluster migration, no DB schema change). **Scoping doc:** [docs/sprints/architecture-wave-1-kickoff-2026-05-26.md](docs/sprints/architecture-wave-1-kickoff-2026-05-26.md).
 
-#### 2. Architecture brainstorm cluster — composable sub-skills + self-improving + cross-corpus
+#### 2. Architecture implementation — Wave 2 (4 consolidation ships)
 
-Convergent brainstorm on three tightly-coupled architectural questions Chris surfaced in Sprint R's input-collection (2026-05-25): Q1 (what does "self-improving" actually mean for Latent), Q2 (cross-brewing + cross-roasting joined learning), Q3 (decompose BREWING.md + ROASTING.md into composable sub-skills + master coordinator per Chris's audio note). Three questions = one brainstorm — Q1 frames Q3, Q3 contains Q2 as a sub-skill. **Hard system trigger justifying it now:** BREWING.md is 204KB and ROASTING.md is 132KB — both past the 120KB tripwire codified in `## Scaling Watch-Items`. The tripwire fired; this is the response.
+Brewing Historian + Roasting Historian (absorb BREWING.md / ROASTING.md "Cross-Coffee Insight Layer" sections) + WBC Brewing Archivist + WBC Roasting Archivist (with tentatively-merged Sourcing Knowledge per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md)). Biggest BREWING.md / ROASTING.md shrink event (~60-80KB each per [master-doc-transition-plan.md](docs/architecture/master-doc-transition-plan.md)).
 
-**Triggers when:** after audit cluster closes. **Sizing:** L (1-2 day brainstorm session, plan-mode or `grill-with-docs` shape). **Output:** 2-3 ADRs + sub-skill decomposition spec + transition plan for BREWING.md/ROASTING.md + first-shipment subset + implementation kickoff brief. **Scoping doc:** [docs/sprints/architecture-rethink-cluster-kickoff-2026-05-25.md](docs/sprints/architecture-rethink-cluster-kickoff-2026-05-25.md).
+**Triggers when:** Wave 1 closes.
 
-#### 3. Architecture implementation
+#### 3. Architecture implementation — Wave 3 (operator-stub clusters + workflow tier)
 
-Implementation flowing from the brainstorm cluster. Scope TBD post-brainstorm — likely 2-4 sequential sprints: (a) first-shipment sub-skill subset (proof of pattern, 2-3 sub-skills), (b) master coordinator implementation, (c) BREWING.md/ROASTING.md migration to pointer-shape, (d) self-improvement primitives per shipped sub-skill.
+Peer-Learning Roasting Archivist + Roest Knowledge (operator-stub-then-integrate clusters per Pattern I) + 9 workflow tier sub-skills (4 planning + 5 executing). **POD-1 lands here as sub-task of Cupping Specialist** — Path A/B/C routing + simulated-pourover-as-3rd-cup-read + cross-project handoff lifecycle states all become Cupping Specialist concerns. Several constituent sub-skills can ship in parallel.
 
-**Triggers when:** brainstorm cluster closes with ADRs + decomposition spec landed.
+**Triggers when:** Wave 2 closes.
 
-#### 4. Roadmap re-session
+#### 4. Architecture implementation — Wave 4 (CCIL + cross-system sync)
+
+Cross-Coffee Insight Layer (skeleton + 1-2 seed pattern docs after Historians have content) + closing cross-system sync sprint that rewrites BREWING.md + ROASTING.md as ~500-byte redirect stubs, validates the full 18-sub-skill architecture end-to-end against the 6-actor matrix, and retires legacy paths.
+
+**Triggers when:** Wave 3 closes.
+
+#### 5. Roadmap re-session
 
 After architecture implementation lands, re-assess everything in Queued post-architecture (below) and the deferred candidates. Some entries may be subsumed by the architecture work (3.6 BREWING/ROASTING doc reconciliation likely is). Some may shift shape (3.7 Prompt v5 rewrites may look very different if prompts get decomposed into sub-skills). Some still need to ship as-is (3.3 auto-supersede friction is independent of architecture).
 
@@ -456,11 +462,14 @@ Doc-content fixes bundled. ROASTING.md anchor-confidence framing in new-bean-int
 
 **Sizing:** ~1 day. **Scoping doc:** none.
 
-#### POD-1 — Pour-over discriminator gate + optimized brew lifecycle states
+#### POD-1 — ABSORBED into Cupping Specialist (Wave 3)
 
-Promoted to Queued post-architecture from Longer Term Items per Sprint R Option 1 lock 2026-05-25. Chris-flagged near-term 2026-05-18 ("the system needs this to stay aligned with my actual roasting practice — operator-decided interim pour-over discriminator step + distinct optimized-brew-dial-in lifecycle state"). Two new lifecycle states model real-world workflow steps currently invented inline by claude.ai. **Deferred behind architecture per Chris 2026-05-25:** "I can delay POD-1 because I can deal with the cycle within my current claude.ai thread so not having the feature inside latent is not blocking my actual workflow." May land naturally inside the new sub-skill architecture (as a sub-skill route) instead of as a one-off feature.
+**ABSORBED 2026-05-26** into the Cupping Specialist sub-skill per architecture brainstorm cluster outcome. POD-1 is no longer a free-standing sprint — Path A/B/C routing + simulated-pourover-as-3rd-cup-read + cross-project handoff lifecycle states are all Cupping Specialist concerns and ship inside Wave 3 of the architecture implementation. **Sequencing collapse rationale:** the architecture brainstorm surfaced that POD-1's two halves (pour-over discriminator + optimized brew lifecycle states) map cleanly onto a single sub-skill's job-to-be-done; running POD-1 as a separate sprint would duplicate work and force a substrate decision (whether simulated pourover gets a `cuppings.eval_method = 'Simulated Pourover'` row vs. a `brews` row variant) that's better made inside Cupping Specialist's sprint planning.
 
-**Sizing:** 1-2 stacked sprints; introduces new prompt(s), possibly new schema columns, new page renders. **Scoping doc:** [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md).
+**Historical scoping artifacts preserved:**
+- [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md) — original POD scoping
+- [docs/sprints/pod-1-scoping-draft-2026-05-26.md](docs/sprints/pod-1-scoping-draft-2026-05-26.md) — audit cluster DRAFT (simulated-pourover-as-3rd-cup-read finding + Path C-1/C-2 over-encoding)
+- [docs/skills/cupping-specialist/SKILL.md](docs/skills/cupping-specialist/SKILL.md) — sub-skill placeholder where POD-1 work lands
 
 #### General cleanup sprint Track 3 — page-design refresh
 
@@ -641,7 +650,7 @@ Tripwires for the 1,000-brew goal — what to watch as the corpus grows. Surface
 
 ### Standing tripwires (always monitor)
 
-- **120KB threshold on any single root-level living doc.** When crossed, plan a split sprint per the CLAUDE.md sprint cadence rule. Current (Sprint R 2026-05-25): PRODUCT.md 100KB (under, climbing), CLAUDE.md 112KB (under, climbing), **BREWING.md 204KB (170% of tripwire — PAST)**, **ROASTING.md 132KB (110% of tripwire — PAST)**. **The tripwire has fired and the response is the [Architecture brainstorm cluster](#active-sprints) sprint #2 above** — Chris's audio note (Sprint R 2026-05-25) proposes decomposing both BREWING.md and ROASTING.md into composable sub-skills with a master coordinator, which is exactly the split carrier this tripwire was waiting for. Pre-Sprint-R candidate carriers (per-process subdocs lifting lot-specific learnings out of ROASTING.md proper; pulling Cross-Coffee Insight Layer + Open Questions + Roast-to-Brew Translation into a sibling `docs/roasting/insight-layer.md`) are subsumed by the architecture brainstorm cluster output.
+- **120KB threshold on any single root-level living doc.** When crossed, plan a split sprint per the CLAUDE.md sprint cadence rule. Current (2026-05-26 post-architecture-brainstorm): PRODUCT.md 108KB (climbing toward tripwire), CLAUDE.md 111KB (climbing toward tripwire), **BREWING.md 213KB (178% of tripwire — PAST; grew +7KB during brainstorm session via PR #198)**, **ROASTING.md 147KB (122% of tripwire — PAST; grew +12KB during brainstorm session via PR #200)**. **The tripwire response is in flight via [Architecture implementation Waves 1-4](#active-sprints)** — the architecture brainstorm cluster (shipped 2026-05-26) locked the decomposition into 18 sub-skills under `docs/skills/` with master-doc transition plan per [docs/architecture/master-doc-transition-plan.md](docs/architecture/master-doc-transition-plan.md). Wave 2 is the biggest shrink event (~60-80KB each). Pre-architecture candidate carriers (per-process subdocs lifting lot-specific learnings out of ROASTING.md proper; pulling Cross-Coffee Insight Layer + Open Questions + Roast-to-Brew Translation into a sibling `docs/roasting/insight-layer.md`) are subsumed by the architecture work — those sections become per-sub-skill cluster docs. **Architecture-level tripwires added per [ADR-0013](docs/adr/0013-self-improvement-primitives.md)**: catalog > 30KB → propose domain-shard re-introduction; sub-skill cluster > 60KB → propose self-decomposition; total `docs/skills/` > 300KB → propose Wave 5 architectural retro.
 - **MEMORY.md index bloat.** Already at 27.2KB / 24.4KB warning threshold. Run `consolidate-memory` skill quarterly, not just when it warns. Index entries should be one line under ~150 chars each.
 - **Drift between `lib/*-registry.ts` and `docs/taxonomies/*.md`.** No CI tooling enforces sync today; the planned `scripts/check-registry-md-sync.ts` (Active Sprints #4) is the permanent guard. Until then, manual discipline via the doc-touch sprint-cadence rule.
 - **Cross-doc reference rot.** The Sprint cadence #4 ("Doc-touch check before PR") is the primary mitigation. Calendar-triggered monthly audit via `schedule` skill is the backstop.
