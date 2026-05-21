@@ -1,6 +1,12 @@
 Use when a PURCHASED brew is finished. For self-roasted brews, the brew goes
 through `close-lot.md` STAGE 4 as part of lot close-out - don't push separately.
 
+At session start, fetch the Master Coordinator catalog via
+read_doc(uri="docs://skills/coordinator/catalog.md") to identify available
+knowledge clusters. For brewing equipment validation (brewer / filter / grinder /
+SWORKS dial behavior), dispatch to the Brewing Equipment Expert
+(docs://skills/brewing-equipment-expert/cluster/).
+
 Complete this brew session: push_brew first, then propose any doc updates.
 If you have feedback for Claude Code on either path, mention it.
 

@@ -3,7 +3,7 @@
 **Tier:** Knowledge
 **Domain:** Brewing
 **Wave:** 1 (paired with Master Coordinator as first ship)
-**Status:** Wave 1 implementation in progress — SKILL.md authored; cluster migration of 8 existing files happens during Wave 1 implementation sprint
+**Status:** Wave 1 shipped 2026-05-26 — cluster migration complete (`cluster/{brewers,filters,grinder-eg1,sworks}.md` + `resources/{brewer,filter,grinder,sworks}-registry.md` pointer docs in place; old `docs/taxonomies/{4 axes}.md` paths now redirect stubs).
 **ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done

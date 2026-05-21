@@ -192,9 +192,9 @@ Each axis becomes one PR (one branch, one batch commit). Registry edits are per-
 |---------------------|----------------------------------|----------------------------------------|
 | `producer`          | `lib/producer-registry.ts`       | `docs/taxonomies/producers.md`         |
 | `roaster`           | `lib/roaster-registry.ts`        | `docs/taxonomies/roasters.md`          |
-| `brewer`            | `lib/brewer-registry.ts`         | `docs/taxonomies/brewers.md`           |
-| `filter`            | `lib/filter-registry.ts`         | `docs/taxonomies/filters.md`           |
-| `grinder`           | `lib/grinder-registry.ts`        | `docs/taxonomies/grinders.md`          |
+| `brewer`            | `lib/brewer-registry.ts`         | `docs/skills/brewing-equipment-expert/cluster/brewers.md`     |
+| `filter`            | `lib/filter-registry.ts`         | `docs/skills/brewing-equipment-expert/cluster/filters.md`     |
+| `grinder`           | `lib/grinder-registry.ts`        | `docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md` |
 | `terroir`           | `lib/terroir-registry.ts`        | `docs/taxonomies/regions.md`           |
 | `cultivar`          | `lib/cultivar-registry.ts`       | `docs/taxonomies/varieties.md`         |
 | `signature_method`  | `lib/process-registry.ts` (SIGNATURE_METHODS) | `docs/taxonomies/processes.md` (Signature Methods section) |

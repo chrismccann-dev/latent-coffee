@@ -1,11 +1,17 @@
 // Canonical registry of filter papers. Authored content lives in
-// [docs/taxonomies/filters.md](../docs/taxonomies/filters.md); this file
-// is the validation mirror generated from Chris's authored CSV (Registry -
-// Taxonomy - Drippers and filter papers - Papers.csv, 69 rows pre-dedupe).
+// [docs/skills/brewing-equipment-expert/cluster/filters.md](../docs/skills/brewing-equipment-expert/cluster/filters.md);
+// this file is the validation mirror generated from Chris's authored CSV
+// (Registry - Taxonomy - Drippers and filter papers - Papers.csv, 69 rows
+// pre-dedupe).
 //
 // Sprint 1f (2026-04-26): structural port + adoption. brews.filter is a
 // text-only column (no FK to a filters table). Adding a new filter is a
-// deliberate edit — add a `FilterEntry` to `FILTERS` and update filters.md.
+// deliberate edit — add a `FilterEntry` to `FILTERS` and update the
+// authored cluster doc.
+//
+// Wave 1 (2026-05-26, ADR-0011): authored doc migrated from
+// docs/taxonomies/filters.md to the Brewing Equipment Expert sub-skill
+// cluster. Old path is a redirect stub for back-compat.
 //
 // Paper sizes (S/M) and fold variants are intentionally NOT carried as
 // separate canonical entries. Sibarist FLAT FAST Size S vs Size M are the
