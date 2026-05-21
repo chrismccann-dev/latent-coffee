@@ -1625,22 +1625,22 @@ _Chaudfontaine, Belgium_ · **SYSTEM** · archive: 1 brew
 
 - **Roast style:** Ultra-light (precision-driven, lab-style roasting)
 - **Development bias:** Low external development, high internal solubility engineered through roast + process alignment
-- **Rest curve:** 3-6 weeks; designed to improve with extended rest
+- **Rest curve:** Filter: 7-10 days minimum, optimal 2-4 weeks, with oxidation-related notes emerging around 3-4 weeks (volatile aromatics fade, roast-derived heavy/brown notes become more noticeable). Back labels now carry coffee-specific aging guidance
 - **Primary driver:** Extraction mechanics (grind size + water chemistry + flow control)
 - **Extraction purpose:** Maximize extraction efficiency and repeatability through controlled variables
-- **House style:** High EY V60 with strict grind target (~450µm), controlled water chemistry, structured pours, moderate agitation
+- **House style:** High EY V60 with strict grind target (~450µm on 98mm SSP Low Uniformity burrs at 100 RPM), Mg+K mineral water spec, structured 3-pour spiral, moderate agitation
 - **Brew guide:** [Official (Product Pages + Visual Brew Cards)](https://en.thepickychemist.com/)
-- **Recipe baseline:** temp=94-96, dose=15, water=250, ratio=1:16.7, time=3:30-4:00, agitation=Medium
+- **Recipe baseline:** temp=92-95, dose=12-15, water=240-250, ratio=1:16, time=3:00-4:30, agitation=Medium
 - **Primary brewer:** V60
-- **Filter type:** Cone (Cafec Abaca; optimized for flow + uniformity)
-- **Extraction intent:** Extreme (24%+)
+- **Filter type:** Cone (Hario Stainless Steel dripper + Cafec Abaca 01; optimized for flow + uniformity)
+- **Extraction intent:** High (18-20% reported on standard 3-pour V60; framed as relatively high extraction for very light roasts)
 - **Failure mode:** Under-extraction presents as sharp, thin, or incomplete; failure occurs when grind is too coarse or temp too low to reach target EY
 - **Over-extraction tolerance:** High (but becomes drying/astringent if over-pushed beyond optimal window)
 - **Process sensitivity:** Washed: Extreme extraction; Natural: Extreme; Anaerobic/advanced process: Extreme but cleaner than Dak due to controlled variables
-- **Brew adjustment method:** Grind + water chemistry + temp
+- **Brew adjustment method:** Grind + water chemistry + temp; dose-down compensates with finer grind (15g @ 450µm to 12g @ 400µm); fast-flowing coffees go finer or shift to 4-5 pours; slow-flowing coffees use drip-assist rather than grinding coarser
 - **Calibration role:** Extraction System Benchmark
 - **Confidence:** High
-- **Notes:** Core signal is fixed grind size (~450µm) rather than grinder setting; relies on temp, agitation, and water chemistry to hit target EY; water spec (~70-80ppm hardness, low alkalinity) is part of extraction design; brew cards show tight control of time, pours, and grind; unlike Sey/Dak, variability is reduced via system rather than intuition
+- **Notes:** Core signal is fixed grind size (~450µm on 98mm SSP Low Uniformity burrs at 100 RPM) rather than grinder setting; relies on temp, agitation, and water chemistry to hit target EY. Water spec is MgCl2(H2O)6 + KHCO3 (magnesium chloride + potassium bicarbonate; potassium now preferred over sodium for buffering) targeting 70-80ppm total hardness and 20-25ppm alkalinity as CaCO3 (one published recipe shows 72ppm hardness / 18ppm alkalinity); single water composition used across all extraction methods. Standard 3-pour V60 protocol: 60g bloom in the first 10 seconds (saturate all grounds, do not disturb the bed), pour to 160g at 45 seconds (vigorous pour over center), pour to final amount at 1:30 (gentle pour, swirl at end). Dial-in protocol is opinionated: when dose drops, grind finer to maintain balance (15g @ 450µm to 12g @ 400µm); fast-flowing coffees use slightly finer grind or 4-5 pours instead of 3; slow-flowing coffees use a drip-assist device rather than grinding coarser (risks hollow cups), switching to 2 pours, or using fast filters (both blend the cup). Alternative experiments use coarser grind (~600µm) with drip-assist and 5 pours at similar brew time/extraction. V60 is preferred over cupping for evaluating very light roasts because cupping is less representative of customer brewing. QC sessions use three side-by-side blind brews with a contrasting third cup for calibration. Does not use products designed to boost or reshape flavor (avoids concentrates with undisclosed compositions). Unlike Sey/Dak, variability is reduced via system rather than intuition
 
 ---
 
