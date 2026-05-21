@@ -1,6 +1,6 @@
 # Peer-Learning Roasting Archivist
 
-**Tier:** Knowledge / **Domain:** Roasting / **Wave:** 3 / **Status:** PLACEHOLDER
+**Tier:** Knowledge / **Domain:** Roasting / **Wave:** 3 / **Status:** ACTIVE (Wave 3 PR 1 shipped 2026-05-26)
 **ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done

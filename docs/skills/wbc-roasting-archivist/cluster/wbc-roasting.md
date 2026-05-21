@@ -34,12 +34,12 @@ Things the WBC corpus does *not* tell you that show up across Chris's actual roa
 
 | What WBC data is silent on | Where Latent's answer lives |
 |---|---|
-| Rest-day cupping protocols (which days to taste, freeze decision logic) | [ROASTING.md § Evaluation Protocol](../../../../ROASTING.md) — Day 7 pourover gate; Day 4 was deliberately removed. The structured rest-curve experiment in this doc is queued as Tier 1, since Chris hasn't run a formal rest study yet. |
-| Counterflow-specific failure modes (TP / charge / FC-temp interactions on the L200) | [ROASTING.md § Key Counterflow Observations](../../../../ROASTING.md) and § Cross-Coffee Insight Layer. WBC competitors mostly use convection or drum, so their development targets and ROR shapes don't translate without a re-anchor on counterflow physics. |
-| Whole-bean vs ground Agtron deltas as a development signal | [ROASTING.md § WB-to-Ground Agtron Delta as Development Signal](../../../../ROASTING.md). WBC mentions Agtron occasionally; Chris's per-process delta norms are the actual reference. |
+| Rest-day cupping protocols (which days to taste, freeze decision logic) | [Roest Knowledge cluster § Evaluation Protocol](../../roest-knowledge/cluster/protocols/evaluation.md) — Day 7 pourover gate; Day 4 was deliberately removed. The structured rest-curve experiment in this doc is queued as Tier 1, since Chris hasn't run a formal rest study yet. (Migrated from ROASTING.md in Wave 3 PR 1.) |
+| Counterflow-specific failure modes (TP / charge / FC-temp interactions on the L200) | [Roest Knowledge cluster § Counterflow Observations](../../roest-knowledge/cluster/machine/counterflow-observations.md) and [Roasting Historian § Cross-Coffee Insights](../../roasting-historian/cluster/patterns/cross-coffee-insights.md). WBC competitors mostly use convection or drum, so their development targets and ROR shapes don't translate without a re-anchor on counterflow physics. (Migrated in Wave 3 PR 1 + Wave 2 PR 3 respectively.) |
+| Whole-bean vs ground Agtron deltas as a development signal | [Roest Knowledge cluster § WB-to-Ground Agtron Delta as Development Signal](../../roest-knowledge/cluster/machine/counterflow-observations.md#wb-to-ground-agtron-delta-as-development-signal). WBC mentions Agtron occasionally; Chris's per-process delta norms are the actual reference. (Migrated from ROASTING.md in Wave 3 PR 1.) |
 | Closed-lot reference parameters and key learnings | [docs/roasting/archive.md](../../../roasting/archive.md). |
 | Per-lot V1 → reference-roast iteration arc | ROASTING.md § Lot Knowledge (Active Lots) + the per-coffee `roast_learnings` records in the app. WBC competitors only present the final stage; the iteration history is invisible. |
-| Roast-to-brew translation logic (how a roast parameter shapes brew strategy) | [ROASTING.md § Roast-to-Brew Translation](../../../../ROASTING.md) and BREWING.md's 6-strategy framework. WBC mostly treats roast and brew as one integrated pitch; Chris's two-layer model is more useful for self-roasting. |
+| Roast-to-brew translation logic (how a roast parameter shapes brew strategy) | [Roasting Historian cluster § Roast-to-Brew Translation](../../roasting-historian/cluster/patterns/roast-to-brew-translation.md) and BREWING.md's 6-strategy framework. WBC mostly treats roast and brew as one integrated pitch; Chris's two-layer model is more useful for self-roasting. (Migrated from ROASTING.md in Wave 3 PR 1.) |
 
 If a WBC pattern in this doc conflicts with one of those in-house references, the in-house reference wins — it's calibrated against Chris's actual machine and palate.
 
@@ -252,7 +252,7 @@ Latent has not run formal rest-window experiments. The WBC corpus shows competit
 
 ### Why rest is under-modeled in current Latent practice
 
-- Most beans get evaluated at Day 7 (the canonical pourover gate per ROASTING.md § Evaluation Protocol) and frozen shortly after.
+- Most beans get evaluated at Day 7 (the canonical pourover gate per [Roest Knowledge cluster § Evaluation Protocol](../../roest-knowledge/cluster/protocols/evaluation.md)) and frozen shortly after.
 - "Frozen at peak" is the right end-state but the curve leading to it is invisible.
 - Cross-coffee comparisons of rest behavior live in ROASTING.md § Cross-Coffee Insight Layer § Rest Behavior Patterns, but are descriptive (notes from past lots) rather than the output of a structured A/B.
 
@@ -354,6 +354,6 @@ The most direct WBrC lesson for Roest work: **roast design is flavor composition
 
 - **Brewing-side WBC docs:** [wbc-reference.md](../../wbc-brewing-archivist/cluster/wbc-reference.md) (lean mapping layer) + [wbc-recipes.md](../../wbc-brewing-archivist/cluster/wbc-recipes.md) (102-recipe archive).
 - **Sourcing-side companion:** [sourcing/strategy.md](sourcing/strategy.md).
-- **Roasting practice anchors:** [ROASTING.md § Evaluation Protocol](../../../../ROASTING.md), [§ Key Counterflow Observations](../../../../ROASTING.md), [§ Cross-Coffee Insight Layer](../../../../ROASTING.md), [§ Roast-to-Brew Translation](../../../../ROASTING.md).
+- **Roasting practice anchors:** [Roest Knowledge cluster § Evaluation Protocol](../../roest-knowledge/cluster/protocols/evaluation.md), [§ Counterflow Observations](../../roest-knowledge/cluster/machine/counterflow-observations.md), [Roasting Historian § Cross-Coffee Insights](../../roasting-historian/cluster/patterns/cross-coffee-insights.md), [§ Roast-to-Brew Translation](../../roasting-historian/cluster/patterns/roast-to-brew-translation.md). All migrated from ROASTING.md across Wave 2 PR 3 + Wave 3 PR 1 (2026-05-26).
 - **Closed-lot archive:** [docs/roasting/archive.md](../../../roasting/archive.md).
 - **Operational prompts:** 4 lifecycle-mapped prompts: [docs/prompts/start-lot.md](../../../prompts/start-lot.md) (In inventory → Waiting for next roast), [docs/prompts/log-roast.md](../../../prompts/log-roast.md) (Waiting for next roast → Waiting for next cupping), [docs/prompts/log-cupping.md](../../../prompts/log-cupping.md) (Waiting for next cupping → Waiting for next roast loop OR Resolved-pending), [docs/prompts/close-lot.md](../../../prompts/close-lot.md) (Resolved-pending → Resolved).

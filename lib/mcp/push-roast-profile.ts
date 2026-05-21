@@ -115,10 +115,10 @@ export const pushRoastProfileInputSchema = {
     'Air preheat target °C — the inlet air temperature ramped to during the preheat phase, before charge. The Roest UI labels this "Preheat air temp". Distinct from the first bezier point (the inlet target at the charge moment) AND from `hopper_load_temp` on push_roast (which is the bean probe reading at hopper-load, ~125°C V4 standard — different signal). Chris\'s typical air preheat for counterflow V1/V2 profiles: 210°C.',
   ),
   temperature_bezier: TEMP_BEZIER.describe(
-    'Inlet temp curve as [msec, °C] tuples. Typically 4-7 control points covering charge → mid-drying → late drying / early Maillard → peak (late Maillard) → into FC → development → safety floor. ROASTING.md § Standard Inlet Curve Template fixes 7 timestamps for V1 experiments (00:00 / 01:15 / 02:30 / 03:15 / 04:00 / 05:00 / 06:00). First msec must be 0; msec strictly ascending; °C in [50, 300].',
+    'Inlet temp curve as [msec, °C] tuples. Typically 4-7 control points covering charge → mid-drying → late drying / early Maillard → peak (late Maillard) → into FC → development → safety floor. Roest Knowledge cluster § Standard Inlet Curve Template (docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md#standard-inlet-curve-template) fixes 7 timestamps for V1 experiments (00:00 / 01:15 / 02:30 / 03:15 / 04:00 / 05:00 / 06:00). First msec must be 0; msec strictly ascending; °C in [50, 300].',
   ),
   fan_bezier: PCT_BEZIER('fan_bezier').describe(
-    'Fan curve as [msec, %] tuples. Counterflow shaped curves required — Chris\'s pattern is high airflow during drying (75-80%), step down to 50-65% post-FC for development. ROASTING.md § Fan Strategy. First msec must be 0; msec strictly ascending; values in [0, 100].',
+    'Fan curve as [msec, %] tuples. Counterflow shaped curves required — Chris\'s pattern is high airflow during drying (75-80%), step down to 50-65% post-FC for development. Roest Knowledge cluster § Fan Strategy (docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md). First msec must be 0; msec strictly ascending; values in [0, 100].',
   ),
   rpm_bezier: PCT_BEZIER('rpm_bezier').describe(
     'Drum RPM curve as [msec, rpm] tuples. Chris\'s L200 Ultra runs flat at 65 rpm across V1/V2 profiles (confirmed in Roest UI 2026-05-06). Use [[0, 65], [720000, 65]] for a 12-minute flat curve unless specifically modulating. First msec must be 0; msec strictly ascending; values in [0, 100].',

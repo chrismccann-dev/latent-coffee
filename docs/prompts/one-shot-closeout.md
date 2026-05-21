@@ -120,7 +120,7 @@ Routing decision tree (by SHAPE of the insight, not just topic):
 - **Cross-Coffee Insight Layer**: ONLY append if a generalizable cross-coffee pattern emerged AND `key_insight_confidence` was Medium-High or High on the experiment. One-shots typically don't reach the threshold for CCIL contribution; defer to repeated observation on similar future lots. Single-lot patterns at Low confidence go to `additional_notes` on the experiment row, NOT to CCIL.
 - **One-Shot Calibrations in Process** (if the section exists, otherwise propose creating it): append a brief one-shot summary so future carry-forward searches surface this lot quickly. ROASTING.md may not have this section yet - check via `list_doc_sections`.
 
-AVOID promoting to protocol sections (FC Marking Protocol / Drop Temp as the Primary Drop Signal / Standard Inlet Curve Template) on one-shot data. Protocol changes require cross-lot evidence; N=1 isn't enough.
+AVOID promoting to protocol cluster docs (FC Marking Protocol at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md` / Drop Temp as the Primary Drop Signal at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal` / Standard Inlet Curve Template at `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md#standard-inlet-curve-template`) on one-shot data. Protocol changes require cross-lot evidence; N=1 isn't enough.
 
 Submit as a single multi-citation `propose_doc_changes` call. Required: top-level `target_doc: "roasting.md"`, top-level `summary` (one-line), `citations: [{section_anchor, op, proposed_text, current_text}]`. For replace, copy existing text VERBATIM into `current_text`. Optional `source = {kind: "session", id: "<lot_id one-shot close-out>"}`.
 

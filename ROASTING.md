@@ -44,7 +44,7 @@ A few operational notes for fetching MCP Resources and calling Tools via this Cl
 - **Re-fetch the schema before claiming a field is missing.** The deployed Tool manifest may be fresher than the model's session memory. If a field on `push_roast` or another Tool seems to have changed shape, call the Tool's introspection (or read the Tool's input_schema directly) before reporting it as missing.
 - **After a code merge, wait for Vercel deploy and start a fresh conversation.** New MCP Tools and updated schemas propagate via Vercel's auto-deploy (~30-60 seconds typical). The claude.ai conversation's tool manifest is cached at conversation start; a fresh conversation picks up the new manifest. Reusing an old conversation after a server-side change can produce stale-tool errors that look like real bugs but are cache propagation issues.
 
-For brewing-side context (extraction strategies, modifier framework, brewer / filter canonicals), see [BREWING.md](BREWING.md). The Roast-to-Brew Translation section below cross-references BREWING.md's 6+3 framework (6 extraction strategies + 3 modifiers).
+For brewing-side context (extraction strategies, modifier framework, brewer / filter canonicals), see [BREWING.md](BREWING.md). The Roast-to-Brew Translation content (cross-coffee patterns translating roast parameters into brew predictions) lives in the [Roasting Historian cluster](docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md) and cross-references BREWING.md's 6+3 framework (6 extraction strategies + 3 modifiers).
 
 For WBC-derived ideas / hypotheses on the roasting and sourcing sides, see [docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) (lessons + Roest L200 hypotheses + blending experiment protocols + structured rest-curve protocol) and [docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) (sourcing strategy + tier framing + current Latent inventory mapped to portfolio lanes). Both are open-ideas docs, not recipe lookups — consult at V1 design time and at green-shopping decision time respectively.
 
@@ -80,53 +80,13 @@ I roast exclusively in counterflow mode on the Roest L200 Ultra. Counterflow cha
 
 # Equipment
 
-- **Roaster:** Roest L200 Ultra (counterflow mode, 100g batches)
-- **Color measurement:** Lightcells CM-200 - whole bean Agtron post-roast, ground Agtron pre-brew at Day 7 evaluation
-- **Primary evaluation brewer:** xbloom (Brian Quan recipe - consistent, repeatable pourover for all evaluation sessions)
-- **Optimized brew setup:** Once a reference roast is identified, treat the roasted bean as you would a purchased bean — route through the full [BREWING.md](BREWING.md) framework (Two-Axis strategy selection, Step 1d Coffee Brief, Equipment Reference rotation). Don't hardcode a single brewer/filter combo. The xbloom evaluation recipe (Brian Quan, used during evaluation cupping) is a different tool from the optimized brew recipe.
-- **Grinder:** EG-1 (Weber Workshop) — primary grinder for both evaluation and optimized brew. Full setting taxonomy in [docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md).
+Migrated to the [Roest Knowledge cluster](docs/skills/roest-knowledge/cluster/machine/l200-ultra.md) in Wave 3 PR 1 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#equipment`. The cluster file carries the hardware + accessory stack (Roest L200 Ultra counterflow mode 100g batches / Lightcells CM-200 / xbloom Brian Quan evaluation recipe / EG-1 Weber Workshop grinder) verbatim, with cross-link to [docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md) for the EG-1 setting taxonomy.
 
 ---
 
 # Evaluation Protocol
 
-> **Simplified from prior version:** Day 4 cupping was consistently misleading across multiple lots and multiple experiment sets. The pourover gate is the only signal that matters.
-
-## Current Protocol
-
-**Day 7 pourover - this is the only evaluation gate.**
-
-- Brew method: xbloom (Brian Quan recipe) - consistent across all evaluation sessions
-- Dose: 15g per batch
-- Up to 3 batches per session (preferred maximum); 4 is possible but not ideal
-- Evaluate as full cup sips - no spoon-only tasting. The full cup consistently reveals different character than the spoon and is closer to the real-world experience
-
-**Ground Agtron measurement - required at every evaluation session:**
-
-- Grind 15g from each batch before brewing
-- Record WB Agtron (already measured post-roast) and Ground Agtron
-- Calculate WB-to-Ground delta - this is a primary internal development signal
-- Target delta ≤3 points for well-developed counterflow roasts
-- Delta above 5 points: surface development is running ahead of core - profile needs more early energy
-- Delta near zero or slightly negative: even development confirmed (this is the target)
-
-**Optimized brew session - one additional session after a winner is identified:**
-
-- Once the Day 7 evaluation identifies a winning batch, run one dedicated optimized brew session using UFO Ceramic + Sibarist Fast Cone
-- This session establishes the reference brew recipe for the lot - it is for expression maximization, not evaluation
-- The xbloom evaluation recipe and the optimized recipe are different tools for different purposes - do not conflate them
-
-## Why Day 4 Cupping Was Removed
-
-Across CGLE Sudan Rume Hybrid Washed (6 experiment sets, 20+ batches), Day 4 cupping results were wrong or misleading in both directions on multiple occasions:
-
-- Batches that looked clean and expressive at Day 4 showed lactic/cheese defects at Day 7-10 pourover (#110)
-- Batches that looked flat and underdeveloped at Day 4 revealed clean, complex character at Day 7-10 pourover (#111)
-- The cupping table protocol systematically exaggerated acidity and suppressed delicate aromatic compounds
-
-Day 4 should only be used as a catastrophic defect screen (lactic, phenolic, obvious underdevelopment). Never use Day 4 to rank batches or make advancement decisions.
-
-**For naturals and heavily fermented coffees:** Day 7 is still the correct evaluation window. The operational simplicity of a universal Day 7 protocol for all coffees outweighs any marginal benefit from evaluating naturals a day earlier.
+Migrated to the [Roest Knowledge cluster](docs/skills/roest-knowledge/cluster/protocols/evaluation.md) in Wave 3 PR 1 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#evaluation-protocol`. The cluster file carries the Current Protocol (Day 7 pourover gate, xbloom Brian Quan recipe, 15g dose, ≤3 batches per session, Ground Agtron measurement requirements with WB-Ground delta targets) + the Why Day 4 Cupping Was Removed rationale verbatim. Cross-link from the cluster to counterflow-observations.md for the WB→Gnd delta per-lot-family directional interpretation.
 
 ---
 
@@ -167,153 +127,19 @@ This is likely part of the reason a trusted peer (same machine, same mode) consi
 
 ## Standard Inlet Curve Template
 
-All V1 roast profiles on this machine use the same seven inlet stage timestamps. Only the inlet temperature values change across experimental batches. Fixing the timestamps reduces design overhead and makes A/B/C batches within an experiment set strictly comparable.
-
-| Timestamp | Phase Role | What This Point Controls |
-|---|---|---|
-| **00:00** | Charge / start inlet | Starting energy at bean contact. Default 200°C across all experiments unless there is a specific reason to vary. |
-| **01:15** | Mid-drying ramp | Drying phase aggressiveness. Earlier and higher here = faster drying, shorter overall roast. |
-| **02:30** | Late drying / early Maillard | Transition into Maillard. This is where drying phase ends and browning reactions begin. Typically 5-8°C below peak. |
-| **03:15** | **Peak inlet (late Maillard)** | **The energy lever. This is typically the primary variable in V1 experiments. Peak occurs 45-60 seconds before expected FC so the curve can decline into crack.** |
-| **04:00** | Into FC (post-peak decline) | RoR momentum into crack. Typically 4-6°C below peak. Steeper decline here compresses dev time; gentler decline extends it. |
-| **05:00** | Development phase | Continued decline through dev. Usually 8-12°C below peak. Drop typically fires before this point if managing by temp. |
-| **06:00** | Safety floor / overrun buffer | Terminal value if the roast overruns target drop time. Usually 12-16°C below peak. Drop should always fire before this. |
-
-**Design rules for V1 experiments:**
-
-- Hold all seven timestamps constant across A/B/C. Only inlet temperature values change.
-- **V1 is a mapping pass** — go wider on the inlet variance across A/B/C than feels comfortable. The point is to bracket the strategy space, not to find the answer in V1. After cupping, V2 narrows toward where the signal is.
-- When varying peak inlet, scale the full curve proportionally: the entire shape shifts up or down while preserving relative ratios between stages.
-- Later experiment sets (V2, V3) may deliberately shift timestamps to test Maillard length or post-peak decline steepness as isolated variables. When that happens, note the deviation explicitly in the Experiment record.
-- Reference for V1 batches A/B/C: 200 → [low/mid/high] → [low/mid/high] → peak → peak-4 → peak-14 → peak-20°C. The low/mid/high row is the only row that changes across batches.
+Migrated to the [Roest Knowledge cluster](docs/skills/roest-knowledge/cluster/protocols/fan-strategy.md#standard-inlet-curve-template) in Wave 3 PR 1 (2026-05-26). This h2 + pointer block preserves anchor back-compat for `#standard-inlet-curve-template`. The cluster bundles this template with § Fan Strategy under one protocols doc. The 7-timestamp template (00:00 / 01:15 / 02:30 / 03:15 / 04:00 / 05:00 / 06:00) and V1 design rules (hold timestamps constant; vary inlet temperature values; V1 is a wide mapping pass) live there verbatim.
 
 ---
 
 # Key Counterflow Observations (Machine-Specific)
 
-## Turning Point (TP)
-
-TP probe reads consistently low (78-81°C) across all sessions regardless of charge temp, BBP fan speed, or charge timing. Peer's machine reads ~94°C under similar conditions. TP is almost certainly a measurement artifact or probe placement difference specific to this unit.
-
-> **Do not use TP as a primary diagnostic signal - it is not actionable on this machine.** Use FC temp and FC timing as the primary drum-state proxies instead.
-
-## FC Temperature Targeting
-
-**Target FC at 202-205°C arriving at ~4:00-4:15.**
-
-For CGLE Sudan Rume Hybrid Washed, the confirmed FC window is 200-205°C:
-
-- Below 200°C (#134, FC 197.6°C): uniformly underdeveloped cup - nutty, grassy, flat - regardless of dev time
-- 200-205°C: correct development range - aromatic character fully expresses
-- Above 206°C: overdevelopment risk begins - dark tea, flat, loss of top-note lift
-
-This FC floor/ceiling concept is coffee-specific and should be re-established for each new lot through experimentation. Do not assume this window transfers directly.
-
-## Charge Temperature
-
-Charge at 117°C. This is the resolved charge temp for this machine based on extensive empirical testing.
-
-- Charging at 112-113°C: slow Maillard, late FC, potential stalling
-- Charging at 117°C with 125°C hopper pre-load: FC timing and phase balance on target
-- Charging at 119°C+: risk of over-energized drum, compressed dev time, early overdevelopment
-
-The logged "charge drum temp" in Roest Connect will read 113-116°C due to probe measurement lag after beans begin absorbing heat. This is normal. Your actual charge moment is when the probe reads 117°C.
-
-## Total Roast Time
-
-**Acceptable range: 4:30 – 6:00.** Below 4:30 is almost always underdeveloped (tighter tolerance on the lower end). Between 5:00 and 6:00 can still produce strong cups depending on the coffee. Above 6:30 starts to enter overdevelopment / baked territory regardless of profile. The lower bound is firm; the upper bound has more give.
-
-- Under 4:30: risk of insufficient internal development in counterflow mode regardless of surface Agtron reading
-- 4:30 – 6:00: usable window; 4:30-5:00 is the typical target, 5:00-6:00 acceptable when the coffee benefits from longer Maillard
-- Over 6:30: Maillard stall, roasty/baked notes, loss of top-note expressiveness
-
-## Session Position Effect
-
-Roast position within a session meaningfully affects FC timing. First roast in a session consistently runs 10-15 seconds slower through Maillard than second or third roast due to accumulated residual drum heat.
-
-**Practical implication:** The first roast of a session is the hardest to replicate precisely. Default behavior: do not compensate - rely on the standard thermal reset protocol (dry roast to 140°C → BBP to 120°C → charge at 117°C) and use drop temp as the primary control across all three batches. The thermal reset protocol standardizes starting drum temp batch-to-batch, so the residual session-position effect is small enough to absorb into the experiment rather than correct for. Fallback: if session-position effects are later shown to materially confound a replication session, loading the first batch at ~128°C (vs. standard 125°C) is the compensation lever - but this introduces a second variable and should not be used during V1 directional probes.
-
-## Drop Temp as the Primary Drop Signal
-
-> **Drop on temp, not on clock.** Drop temp is the primary decision gate on every roast.
-
-**Default mechanism (as of 2026-05-04): bean temp end condition on every profile.** The Roest end condition can be set to one of: total time, dev time, dev %, or **bean temp**. Setting bean temp end condition to your target drop temp (e.g. 208°C) is the cleanest mechanism: the machine auto-drops at the threshold, no manual reaction time, no "did I catch it at 207 or 208" variance.
-
-**Why this is the default now (was previously dev time as safety net + manual drop):**
-
-- Drop temp becomes a first-class controlled variable on the profile, not a manual-execution variable. Reproducibility batch-to-batch tightens.
-- For silent-FC coffees (Mandela XO, anaerobic naturals, XO-process), bean temp is the only meaningful drop signal. Setting it on the profile honors that directly instead of relying on the roaster watching the probe.
-- Confirmed reliable on the L200 Ultra: end-condition trigger fires effectively instantly at the threshold; bean temp probe reads in 0.1°C increments and clicks up to the target cleanly with no observable lag at the drop-zone range.
-
-**Manual drop is now the fallback:** if you want to override (e.g. roast is running unusually fast and you want to drop earlier than the profile threshold), the Roest UI provides a manual-override button - confirmed working in practice. After overriding, the rest of the roast is on you.
-
-**Drop temp as a per-experiment-batch design variable:** because drop is now profile-set, you can design experiments that deliberately vary drop temp across A/B/C batches (e.g. v3a 208°C / v3b 210°C / v3c 212°C drop sweep on a fixed peak inlet). This was clunky under the manual-drop regime; it's clean under bean temp end condition.
-
-**Compatibility with FC marking:** if a coffee has audible FC, mark it manually for the data record - bean temp end condition still drives the drop. If silent, do not try to mark FC; let the profile end condition do the work and log as manual-no-audio at the drop temp.
-
-**Manual-override exception rules (when to override the BEAN_TEMP end condition):**
-
-The BEAN_TEMP end condition is the default mechanism, but operator override is appropriate in four specific cases. The override button is the right tool when one of these patterns is recognized in real time.
-
-Long-end overrides (drop earlier than the auto-drop would fire):
-
-- **RoR has stalled out and the curve is flattening before the bean temp target is reached.** If RoR drifts to ~0% with bean temp still below the auto-drop threshold and the curve isn't going to recover, holding for the auto-drop just bakes the coffee. Drop manually before the bake propagates. (Example: REDPLUM v1a / batch 180 - FC at 5:07 / 203.6°C, RoR drifted to ~0% by ~5:30, drop fired manually at 5:30 / 203.6°C rather than waiting for the 207°C BEAN_TEMP target.)
-- **Past first crack but still well short of the bean temp target with no momentum.** Same shape as the stall case but framed by FC reference rather than RoR shape - if FC has happened, dev is accumulating, and bean temp isn't climbing toward the auto-drop, the dev window is going to overrun before the temp hits.
-- **Total roast is approaching the 6:00-6:30 mark.** Hard time ceiling - once total roast is in the 6:00-6:30 window, operator judgment call regardless of where bean temp is. The character of the roast at that point is determined more by the long total time than by the drop temp the auto-drop would fire at.
-
-Short-end overrides (hold past the auto-drop):
-
-- **Bean temp blows past the end condition target but the roast is too short.** Most commonly because peak inlet was too aggressive and bean temp climbed faster than FC kinetics. If FC hasn't happened yet (or just barely happened with no dev accumulation), the auto-drop will fire pre-FC or near-pre-FC and the result is baked, not roasted. Hold past the auto-drop until FC occurs and at least minimal dev accumulates. (Example: REDPLUM v1c / batch 182 - reached 207°C bean temp at 4:15 with no FC heard; should have held past 207°C rather than letting auto-drop fire. Result was Agtron 90.8 / 10.3% weight loss - nearly green-bean territory.)
-- **FC arrived hotter than expected and you want a longer development.** Less critical than the short-roast case; this is fine-tuning rather than failure-mode prevention. If FC hits the bean temp target with too little dev accumulation behind it, holding past the auto-drop for 5-10s of additional dev is a defensible operator decision.
-
-The pattern across all five rules: **the BEAN_TEMP auto-drop optimizes for the typical case where FC arrives in window and dev accumulates normally; operator override is for the edge cases where the typical assumptions break down.** When override happens, document end_condition_type as `manual` on the roast row (not `bean_temp`) so the analysis layer can distinguish operator-initiated drops from machine-initiated drops.
-
-## WB-to-Ground Agtron Delta as Development Signal
-
-The delta between whole bean (WB) Agtron and ground Agtron is one of the most sensitive internal development signals available. **Operational vocabulary tracks magnitude, not sign** — the directional interpretation (surface ahead of core vs core ahead of surface) flips by lot family, so the scalar delta is read for magnitude and the surface-vs-interior pattern is named in prose when it matters. See [CONTEXT.md § WB→Gnd Agtron delta](CONTEXT.md) for the canonical definition.
-
-| Magnitude | Reading | Action |
-|---|---|---|
-| ≤3 points | Even development - surface and core developing at similar rates | Target zone - no profile change needed |
-| 4-6 points | Working delta - surface and core out of step | Profile adjustment indicated; direction depends on lot family (see below) |
-| >7 points | Wide delta - significant surface-to-core imbalance | One layer's character dominates; the other is suppressed |
-
-**Directional interpretation by lot family.** The sign of the delta carries different meanings depending on whether fermentation cellulose is modifying the bean's outer-layer thermal behavior:
-
-- **Conventional case (washed / no fermentation insulation)** — Ground typically reads lighter than WB (positive delta in the WB-minus-Ground convention). Surface developed ahead of the less-developed interior; the larger the delta, the more the core stalled relative to the surface. Sudan Rume Hybrid Washed sits here — winning pourover batch (#119, delta 1.0) had the tightest delta in the experiment run.
-- **Heavy-ferment / fruit-layer case (anaerobic naturals, XO ferments, fruit-layer naturals)** — WB often reads lighter than Ground (negative delta in the same convention). Fermentation cellulose insulates the surface, so the interior actually develops more uniformly than the surface implies. Mandela XO #139 (WB 76 / Ground 72.4) is the case study; CGLE Sudan Rume Natural V1's 7-11-point deltas reflect the fruit layer holding the surface back rather than the core stalling.
-
-**Operational implication.** Read the magnitude against the lot's closest anchor profile (Sudan Rume Washed CF-Light #133 = 1.0 for the washed family; Mandela XO #139 = 3.6 for the heavy-ferment family) rather than against a universal threshold. A 5-point delta on a washed lot is a different signal than a 5-point delta on an anaerobic natural — the first is core lag, the second is fermentation-layer thermal insulation working as expected. The shrinking-delta convergence signal (delta tightening across successive V-sets) is reliable in both cases.
+Migrated to the [Roest Knowledge cluster](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md) in Wave 3 PR 1 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#key-counterflow-observations-machine-specific`. The cluster file carries all subsections verbatim: Turning Point (TP) probe artifact, FC Temperature Targeting, Charge Temperature, Total Roast Time, Session Position Effect, Drop Temp as the Primary Drop Signal (including the 4 manual-override exception rules), and WB-to-Ground Agtron Delta as Development Signal.
 
 ---
 
 # Fan Strategy (Counterflow - Shaped Curves Required)
 
-Flat fan is a blunt instrument in counterflow mode. Fan speed controls convective heat transfer alongside inlet temp. A shaped fan curve gives a second axis of control and meaningfully affects how the Maillard and development phases behave.
-
-> **All profiles should use a shaped fan curve, not flat fan.**
-
-## General Fan Framework
-
-- **Drying phase** (charge through yellow): 78-82% - supports moisture removal without over-driving bean temp
-- **Maillard phase** (yellow through FC): step down to 63-70% - slows convective heat transfer, extends the phase
-- **Development phase** (FC through drop): gentle step back up to 70-75% - maintains momentum through crack without spiking RoR
-
-## Fan Curves by Coffee Type
-
-- Washed / higher density / higher moisture: Maillard floor 65-70%
-- Natural / lower density / lower moisture: Maillard floor 63-67%
-- Heavy fermentation / XO process: Maillard floor 63-65%
-
-## Current Reference Fan Curves
-
-| Profile | Fan Curve |
-|---|---|
-| **Sudan Rume Washed (CF-Light - confirmed)** | 80% at 0:00 → 70% at 1:45 → 65% at 2:30 → 72% at 4:15 → 75% at 5:30 |
-| **Sudan Rume Natural (working hypothesis, V2 not confirmed)** | 80% at 0:00 → 68% at 1:45 → 63% at 2:30 → 70% at 4:15 → 73% at 5:30 |
-| **Mandela XO (confirmed - Batch 139 reference roast)** | 80% at 0:00 → 68% at 1:45 → 63% at 2:30 → 70% at 4:15 → 73% at 5:30 |
-
-Fan curve changes count as a changed variable and should be isolated in experiment design.
+Migrated to the [Roest Knowledge cluster](docs/skills/roest-knowledge/cluster/protocols/fan-strategy.md) in Wave 3 PR 1 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#fan-strategy-counterflow---shaped-curves-required`. The cluster file bundles § Fan Strategy with the Standard Inlet Curve Template (both are counterflow-specific shaped-curve discipline). General Fan Framework, Fan Curves by Coffee Type, and Current Reference Fan Curves table carried verbatim.
 
 ---
 
@@ -331,7 +157,7 @@ Use the washed profile as the starting point. Lower inlet temp for the early sta
 
 **Placeholder framework.** No resolved honey lots in the archive yet. Currently the only honey lot in inventory is the **Cruz Loma TM Honey one-shot** (Taza Dorada 2024 #15), queued behind the Rancho Tio Emilio Typica Mejorado Washed one-shot. This section is the starting framework for that roast.
 
-Honey processing produces a wide expression range depending on mucilage retention, drying speed, and fermentation length. Unlike washed (where the cup target is mostly clarity) or natural (where the cup target is mostly fruit/sweetness), honey is a **fork**: the same green can legitimately be roasted toward either expression. From the [Yunnan livestream extraction (Dongzhe, 2026-05-17)](docs/roasting/dongzhe-livestream-2026-05.md), the fork is explicit:
+Honey processing produces a wide expression range depending on mucilage retention, drying speed, and fermentation length. Unlike washed (where the cup target is mostly clarity) or natural (where the cup target is mostly fruit/sweetness), honey is a **fork**: the same green can legitimately be roasted toward either expression. From the [Yunnan livestream extraction (Dongzhe, 2026-05-17)](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md#delta-3--honey-process-is-a-fork-informational--placeholder-framework), the fork is explicit:
 
 - **Roast toward washed** if the cup target is clarity / florals / acidity. Faster profile. Compress Maillard. Avoid late development. Use the washed anchor energy envelope.
 - **Roast toward natural** if the cup target is sweetness / body / fruit. Slower profile. Slightly more Maillard time. Drop discipline still strict but with a touch more dev tolerance than a fruit-forward natural. Use the natural anchor with a gentler taper than a true natural.
@@ -431,7 +257,7 @@ Before drafting V1, Claude should ask exactly these three questions. These defin
 
 ## Step 3 - Anchor Profile Selection Logic
 
-**Green-physics-first framing.** Read the lot's moisture + density (paired) as a first-order intake signal **alongside** process and terroir/cultivar - not subordinate to process. This is a structural refinement from the [Yunnan livestream extraction (Dongzhe, 2026-05-17)](docs/roasting/dongzhe-livestream-2026-05.md): moisture/density picks the energy envelope, then process decides stretch-vs-compress within that envelope. In practice that means the priority-order list below picks the anchor *coffee* via process + variety, but the starting *energy* on that anchor profile is set by moisture/density per the Green Spec table - so a 9.3% moisture honey and an 11% moisture honey anchor on the same profile but start with different early-energy adjustments. For lots where no process-family match exists (e.g. a Daterra Laurina with unfamiliar bean shape), moisture/density alone is a defensible starting point for energy even when the anchor process is uncertain.
+**Green-physics-first framing.** Read the lot's moisture + density (paired) as a first-order intake signal **alongside** process and terroir/cultivar - not subordinate to process. This is a structural refinement from the [Yunnan livestream extraction (Dongzhe, 2026-05-17)](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md#delta-1--green-physics-first-process-second-structural): moisture/density picks the energy envelope, then process decides stretch-vs-compress within that envelope. In practice that means the priority-order list below picks the anchor *coffee* via process + variety, but the starting *energy* on that anchor profile is set by moisture/density per the Green Spec table - so a 9.3% moisture honey and an 11% moisture honey anchor on the same profile but start with different early-energy adjustments. For lots where no process-family match exists (e.g. a Daterra Laurina with unfamiliar bean shape), moisture/density alone is a defensible starting point for energy even when the anchor process is uncertain.
 
 Select the anchor profile in priority order:
 
@@ -633,45 +459,13 @@ Confirmed reference roast + reference brew per closed lot. Full per-lot prose (e
 
 # Reference Roast Target (Peer's Batch #249 - "IT simple slow 100g")
 
-The primary external reference for style and structure throughout Sudan Rume Washed experiments.
-
-| Parameter | Value |
-|---|---|
-| FC | 3:55 / 200.3°C |
-| Drop | 205°C |
-| Dev | 36s / 13.3% DTR |
-| TP | 94.3°C |
-| Charge | 112.2°C |
-| Maillard | 39.1% |
-| Drying | 47.6% |
-
-**Machine differences confirmed:** Peer's TP is 94.3°C vs. this machine's 78-81°C. Peer's charge temp is 112.2°C vs. this machine's resolved 117°C. These differences are machine-specific and do not represent different roast philosophies - directional principles transfer, specific numbers do not.
-
-**Process caveat:** Peer's #249 is a **washed** coffee. The profile shape is a great washed-counterflow benchmark to keep in mind, but naturals, anaerobics, processed lots, and high-moisture greens all behave differently. Don't transfer the inlet shape directly to non-washed lots — use it as a reference for what good development cadence looks like on washed coffee, then adapt the inlet curve per the coffee's process + green spec.
+Migrated to the [Peer-Learning Roasting Archivist cluster](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md#reference-roast-target--batch-249-it-simple-slow-100g) in Wave 3 PR 1 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#reference-roast-target-peers-batch-249---it-simple-slow-100g`. Full parameter table + machine-difference caveats + process caveat live in Dongzhe's per-peer profile.
 
 ---
 
 # Peer Insights - Counterflow L200 Ultra (Same Machine, Same Mode)
 
-Source: A peer (Dongzhe) who roasts exclusively on the Roest L200 Ultra in counterflow mode. High weight on directional principles; specific numbers don't transfer due to confirmed machine-level thermal differences (his TP ~94°C vs. my ~78-81°C, his charge 112.2°C vs. my resolved 117°C).
-
-**Long-form decision tree captured 2026-05-17 from a Yunnan-Hatchi livestream** - see [docs/roasting/dongzhe-livestream-2026-05.md](docs/roasting/dongzhe-livestream-2026-05.md) for the full extraction (three coffees roasted, his intake hierarchy, the five operational deltas folded back into this doc, and caveats about his single-batch methodology + darker cup target). Key structural framing from that capture: **green physics first, process second**. His intake order is moisture → density → bean size → process intensity → desired expression → prior reference curve. Process determines whether to stretch or compress; moisture/density set the starting energy envelope. This framing is folded into [§ Step 3 - Anchor Profile Selection Logic](#step-3---anchor-profile-selection-logic) above, and the moisture rows in the [Green Spec → Starting Hypothesis](#green-spec--starting-hypothesis) table now carry his confirmation. The Honey Process - Roast Direction Fork subsection below also sources from this livestream.
-
-## Core Insight - RoR Shape Over Dev Time as the Primary Lever
-
-Don't treat dev time as the independent variable. Instead, vary the RoR curve leading into FC (how much momentum you carry through Maillard and into crack) while holding drop temp fixed. Dev time becomes the measured output of that shape decision, not the thing you're directly setting.
-
-**Important nuance from Sudan Rume Washed resolution:** This principle governs early-stage experimentation when profile architecture is still being resolved. Once profile shape is established, dev time can be legitimately tested as the primary variable to find the ceiling and floor within a confirmed shape.
-
-## The Maillard + Dev Flavor Axis
-
-Shorter Maillard + higher momentum at crack + shorter dev → more acidity and clarity. Longer Maillard + slower momentum at crack + longer dev → more sweetness and body. These are not independent dials - they move together as a function of how energy is applied through the curve.
-
-## Naturals Starting Framework
-
-Use the washed profile as the starting point. Lower inlet for early stages - gentler start. Taper heat away earlier. Primary failure mode for naturals is overdevelopment, not underdevelopment.
-
-**Caveat from Sudan Rume Natural experience:** Sudan Rume Natural required nearly as much energy as the washed version due to the fruit layer insulating the core. Always start from the washed profile and let FC timing tell you whether to add or reduce energy.
+Migrated to the [Peer-Learning Roasting Archivist cluster](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) in Wave 3 PR 1 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#peer-insights---counterflow-l200-ultra-same-machine-same-mode`. The cluster file carries Dongzhe's full profile: Reference Roast Target #249, Core Principles (RoR shape over dev time / Maillard + dev flavor axis / Naturals starting framework), and the full Yunnan-Hatchi 2026-05-17 livestream extraction with five operational deltas + caveats. Provenance + freshness tracking lives at `cluster/source-index.md`.
 
 ---
 
@@ -687,20 +481,7 @@ Measure ground Agtron (15g) at the Day 7 evaluation session before brewing - gri
 
 # FC Marking Protocol
 
-**FC marking is now decoupled from drop control.** As of 2026-05-04, drop is controlled by bean temp end condition on the profile (see Drop Temp as the Primary Drop Signal). FC marking is a data-recording event, not a drop-trigger event.
-
-**Manual marking at first audible crack above 202°C** is the standard for the data record. This gives the earliest reliable signal and is more consistent than waiting for the Roest auto-mark (which fires after a second crack, lagging actual onset by 5-15 seconds).
-
-**Cases:**
-
-- **Audible FC above 202°C:** mark manually for the data record. Drop is controlled by the bean temp end condition on the profile, not by FC.
-- **False positive below 202°C:** a single crack below 202°C is almost certainly a defect bean - do not mark. Wait for confirmation above 202°C.
-- **High-volume crack:** if the Roest auto-marks due to a dense, vigorous crack event, accept the auto-mark.
-- **Silent crack coffees (e.g. Mandela XO, anaerobic naturals, XO process):** do not attempt to mark. Log as manual-no-audio at the drop temp (which the profile end condition will fire at automatically). FC timestamp is null; drop temp is the only meaningful event. This was previously called out as an exception requiring bean temp end condition; with bean temp end condition now the default on every profile, silent-crack coffees are no longer an exception - they're just the case where the FC mark is null.
-
-**Why dev time as end condition is retired:** dev time anchored to an inaudible or machine-estimated FC timestamp produces unpredictable Maillard overrun - confirmed across V4 of Mandela XO where Maillard reached 51-58% instead of the target 44%. Bean temp end condition removes this failure mode entirely. Dev time is now a measured output, not an end condition.
-
-Record FC method in the Roast log (manual / auto / manual-no-audio) on every batch.
+Migrated to the [Roest Knowledge cluster](docs/skills/roest-knowledge/cluster/protocols/fc-marking.md) in Wave 3 PR 1 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#fc-marking-protocol`. The cluster file carries the protocol verbatim (manual at first audible crack above 202°C; auto-mark accepted for high-volume crack; manual-no-audio for silent-crack coffees) plus cross-link to `roasts.fc_audibility` enum.
 
 ---
 
@@ -793,91 +574,6 @@ Full per-lot prose, experiment history, generalized lessons, and process learnin
 
 # Roast-to-Brew Translation
 
-*This section translates roast parameter patterns into expected brew behavior and starting recipe adjustments. It bridges the gap between the roasting reference guide and the brewing reference guide. Updated as new lots are resolved.*
+Migrated to the [Roasting Historian cluster](docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md) in Wave 3 PR 1 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#roast-to-brew-translation`. The cluster file carries the full content verbatim: Reading Roast Parameters to Predict Brew Behavior, Pushed vs. Standard Recipe Decision Logic, Processing Method Starting Hypotheses for Brew, The Brew-Reveals-Roast Principle (including the Low-confidence Rancho Tio extension), plus the two working hypotheses at the tail (WB-to-Ground Agtron Delta Hypothesis Violation on Drop-Ceiling-Breached Batch / Total Time Outweighs Peak Inlet for Body Weight on Pulp-Fermentation Washed at High Moisture). Kickoff brief proposed Roest Knowledge; Chris-locked 2026-05-26 to Roasting Historian because the content is cross-coffee pattern aggregation, not machine-specific knowledge.
 
-> The 5 brewing strategies + 4 modifiers referenced below (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push + Output Selection / Inverted Temperature Staging / Aroma Capture / Immersion) are defined in [BREWING.md § The Two-Axis Framework](BREWING.md#the-two-axis-framework). The brew-side documentation contract (Step 4 Resolved Brew Output Format) lives in [BREWING.md § Step 4](BREWING.md#step-4---resolved-brew-output-format). When proposing a brew strategy from a roast outcome, name the canonical strategy explicitly so the iteration loop matches the framework.
-
-> Core principle: The brew recipe does not fix a bad roast, but it can hide a good one. A roast that passes the Day 7 evaluation gate but feels muted is often an extraction problem, not a roast problem. Always try a pushed brew before concluding more development is needed.
-
-## Reading Roast Parameters to Predict Brew Behavior
-
-Several roast parameters directly predict how a coffee will behave at brew time, independent of cup flavor notes. These patterns have been confirmed across Sudan Rume Washed and should be applied as starting hypotheses for new lots.
-
-| Roast Signal | Brew Prediction | Starting Adjustment |
-|---|---|---|
-| WB-to-ground delta ≤2 points | Even internal development - coffee will likely respond well to extraction pressure. Flavor hidden at standard params may emerge at finer grind or lower temp. | Try 1-2 clicks finer than evaluation grind; lower temp by 2-3°C |
-| WB-to-ground delta +4 to +6 points | Surface developed faster than core - may taste bright/harsh with thin mid-palate | Lower temp to soften surface extraction; consider longer bloom |
-| Agtron WB 74-78, delta tight | Light internal development, evenness confirmed - this is the target zone for delicate washed expression | Start with pushed recipe (see below). Standard recipe likely under-extracts. |
-| Agtron WB above 79 | Very light - likely underdeveloped unless delta is tight. Nutty/grassy at standard params. | Increase extraction aggressively - finer grind, higher temp, higher concentration |
-| Agtron WB below 70 | Risk of overdevelopment - tea-like, flat. Standard recipe may be appropriate. | Back off extraction. Coarser grind, lower temp, lower concentration. |
-| Maillard above 47% | Bloated Maillard - roasty/baked character likely, reduced top-note lift | Standard or backed-off extraction. Do not push. |
-| Maillard 40-44% | Balanced phase structure - full aromatic expression available | Pushed recipe appropriate. Lower temp, higher concentration. |
-| FC temp 202-205°C, drop 206-207°C | Confirmed target zone for Sudan Rume-type coffees - full expression should be achievable at brew | Pushed recipe. See reference recipe below. |
-
-> Per-lot reference brew recipes (CGLE Sudan Rume Washed #133, CGLE Mandela XO #139) live in [§ Reference Roasts + Brews (Closed Lots)](#reference-roasts--brews-closed-lots). The decision logic + processing-method hypotheses below apply when designing the optimized brew for a new lot reaching reference-roast declaration.
-
-## Pushed vs. Standard Recipe Decision Logic
-
-For delicate washed coffees with high aromatic compound concentration (Sudan Rume, Gesha, Ethiopian landraces), the standard xbloom evaluation recipe is calibrated for consistency, not expression. The following decision logic determines when to push:
-
-| Observation at Standard Recipe | Diagnosis | Action |
-|---|---|---|
-| Muted, quiet, tea-like throughout | Under-extraction - delicate compounds not being released | Lower temp by 2-3°C AND increase concentration to 1:14. Try finer grind last. |
-| Pleasant but thin, loses character as it cools | Extraction correct, but missing body compounds | Finer grind (1-2 clicks). Lower ratio to 1:14.5. |
-| Bright, sharp attack but hollow finish | Surface extracting ahead of core | Lower temp. Longer bloom. Do not go finer. |
-| Good character at hot stage, closes at cool | Correct extraction range - just needs more concentration | Lower ratio to 1:14 only. |
-| Dark tea, flat throughout | Overdevelopment in the roast - brew recipe cannot fix this | Do not push. Standard or backed-off recipe. Flag roast as overdeveloped. |
-| Nutty, grassy, flat | Underdevelopment in the roast - confirmed by Agtron above 79 | Do not push at brew - cannot compensate for roast underdevelopment. Flag for next roast session. |
-
-## Processing Method Starting Hypotheses for Brew
-
-These starting points are derived from the brewing reference guide's extraction strategy framework, adjusted for what has been confirmed on these specific counterflow roasts.
-
-| Process Type | Evaluation Recipe Strategy | Optimized Recipe Direction | Temperature | Ratio |
-|---|---|---|---|---|
-| Washed, high-density Colombian | Standard xbloom - but expect muting. Evaluate at cool stage. | Lower temp, higher concentration, Melodrip | 91-92°C | 1:14-1:15 |
-| Natural (CGLE Sudan Rume) | Standard xbloom - expect more expressiveness than washed version | Similar to washed but possibly slightly higher temp to handle body | 92-93°C | 1:14.5-1:15.5 |
-| XO-fermented (Mandela) | Standard xbloom - fermentation character will emerge but may be front-loaded and pungent. Do not adjust based on xbloom alone - run real brew before concluding. | **Balanced Intensity, not Full Expression.** The fermentation provides all the intensity the cup needs. Use April Brewer or equivalent flat-bottom brewer, coarser grind, moderate temp. Do not use UFO/fast cone as the primary evaluation brewer - it amplifies the fermentation attack. | 93°C | 1:17 |
-| Washed Gesha (counterflow) | Standard xbloom - but start evaluation at warm stage, not hot | Very low agitation, lower temp, Melodrip critical | 90-91°C | 1:15-1:16 |
-
-## The Brew-Reveals-Roast Principle
-
-One of the most important learnings from Sudan Rume Washed: **what appears in the optimized brew cup is what was already in the roast, waiting to be unlocked.** The evaluation recipe will often miss it.
-
-Concretely: Batch #133 at the standard xbloom recipe tasted muted, tea-like, and under-extracted. At 91°C / 1:14 / EG-1 6.0, the same batch produced candied apricot, bergamot, jasmine, and lemon that matched the producer's own tasting notes exactly.
-
-The implication for the development loop:
-
-- If the evaluation recipe gives a muted or thin result but the WB-to-ground delta is tight and roast structure looks correct, the roast is likely fine - run an optimized brew before concluding that more development is needed
-- If the optimized brew also gives a muted or thin result, the roast genuinely needs more development
-- If the optimized brew gives a sharp, harsh, or disconnected result, the roast may be overdeveloped - back off extraction before concluding the roast failed
-
-**Build the optimized brew session into every lot close-out.** Do not declare a reference roast without confirming it produces the target cup through the optimized brew, not just the evaluation recipe.
-
-**Extension (Low confidence, 1 lot - ECU-TD24-RANCHOTIO-TM-WASHED):** The Brew-Reveals-Roast Principle has a third application beyond the original two (under-developed cup at standard recipe / over-extracted cup at pushed recipe). Third case: **on a structurally underdeveloped roast, the WRONG brew strategy produces a falsely-discordant cup that masquerades as a roast problem.** Batch 179 was genuinely underdeveloped (Maillard 49.4%, weight loss 11.89%) - but at the V1 design's originally-planned recipe (1:14 / EG-1 6.0 / 91°C, inherited from the #133 Sudan Rume Washed anchor lineage), the cup read "discordant", "not totally integrated", "dark Earl Grey body" - signals that look like roast underdevelopment failure but were 80% brew-strategy mismatch. Pivoting to Clarity-First (1:16 / 6.5 / 92°C, variety-appropriate strategy from brewing.md archive) recovered 5 of 8 producer descriptors and produced an integrated cup. The roast was still structurally limited (hollow back-half, narrow peak window) - but the discordance was overwhelmingly brew-driven.
-
-Operational implication for one-shot calibrations and lot close-outs: when the cup at the planned recipe reads discordant, the diagnostic question is NOT "is the roast under-developed?" but rather "is the brew strategy mismatched to the variety?" - especially when the planned recipe was inherited from an anchor roast for a different variety. Variety signal at brew time dominates over anchor-roast lineage. Cross-reference brewing.md's Process / Variety Signal Table at the brew design step, not just the roast design step. Treat as Low-confidence hypothesis pending 1-2 more lots where roast-anchor-lineage and variety-recommended brew strategy diverge.
-
-## WB-to-Ground Agtron Delta Hypothesis Violation on Drop-Ceiling-Breached Batch (working hypothesis - 1 lot, Medium confidence)
-
-Observed on Bukure Natural Lot 21 V1 (cupped 2026-05-11): WB-to-Ground deltas across the three V1 slots ordered v1a +3.4 / v1b +6.6 / v1c +1.0. The leading slot at Day 7 pourover was v1b (widest delta), and the slot with the tightest delta in the V4 target zone (v1c at +1.0) was the disliked cup. v1c was the drop-ceiling-breach batch (drop fired at 209.0°C vs 207°C ceiling).
-
-Working hypothesis: when a roast breaches the drop ceiling, the additional heat post-FC drives the core to catch up to the surface via overdevelopment rather than via even-rate energy penetration. The resulting WB-to-Ground delta tightens mechanically (core Agtron rises toward surface Agtron) without reflecting good roast structure. The delta-quality correlation in the existing CCIL is inverted in this regime.
-
-Mechanism implication: WB-to-Ground delta is a reliable internal-development signal only WHEN the drop ceiling was respected. On ceiling-breach batches, delta is non-diagnostic or actively misleading.
-
-Operational implication: when reading delta across a V1 spread, exclude ceiling-breach batches from the delta-quality inference. Validate at 2+ more lots before promoting from working hypothesis - the next ceiling breach with a Day 7 cupping is the test case.
-
-Lot data:
-- v1a (240°C peak, drop 204.5°C clean): WB 75 / Gnd 71.6 / delta +3.4 - cup ranking #2 (most aromatically complex but body-darker)
-- v1b (244°C peak, drop 206.5°C clean - leading slot): WB 82.5 / Gnd 75.9 / delta +6.6 - cup ranking #1 (most balanced/integrated)
-- v1c (248°C peak, drop 209°C BREACH): WB 81.4 / Gnd 80.4 / delta +1.0 - cup ranking #3 (disliked - discordant)
-
-## Total Time Outweighs Peak Inlet for Body Weight on Pulp-Fermentation Washed at High Moisture (working hypothesis - 1 lot, Medium-High confidence)
-
-Observed on REDPLUM-CAS-2026 V1: across a 5°C peak inlet spread (240/245/250°C), the cup ordering for body weight tracked total roast time more than peak inlet. v1a at 240°C peak produced HEAVIER body (very dark / tannic / blacker tea) than v1b at 245°C peak (lighter body, hollow on cool). The mechanism: v1a's operator stall-prevention drop fired at 5:30 (vs v1b's 5:08), giving 22s additional total roast time that amplified body weight more than the -5°C peak difference reduced it. v1c at 250°C peak with no FC and 4:15 total dropped pre-crack - body was raw/nutty/grassy from underdevelopment, but aromatic top notes from the short Maillard window survived.
-
-Working hypothesis: on washed-process lots in counterflow, post-FC total time accumulates body-weight effect faster than peak inlet does within a typical ±5°C spread. Operational implication: when invoking the long-end manual stall-prevention drop rule, do so as EARLY as the curve permits (don't wait the full 6:00-6:30 judgment window if RoR has flattened) - extending total time produces heavier body, which may or may not be desirable depending on the lot's flavor profile target. Inverse: if a lot's cup signal is hollow-body, deliberately extending total time by 10-15s past auto-drop (via short-end manual hold or +1°C drop ceiling) may rescue body weight without changing peak inlet structure.
-
-Watch for repeat pattern on next washed lot (REDPLUM V2 will partially test - moisture-aware shape change reduces total time across the spread, predicts cleaner body balance at the same peak; if V2 body is uniformly lighter than V1 the pattern confirms). Promote from working hypothesis to confirmed when seen on a second washed lot.
-
+---
