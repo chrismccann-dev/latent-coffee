@@ -139,9 +139,9 @@ Capture `cupping_id` per slot for cross-reference.
   - **Low** — interesting hypothesis. Single-V-set observation, not yet replicated. Flag in the log but don't act on it yet.
   - **Medium** — consistent with 1-2 prior data points (this lot's earlier V-sets, or a closely-similar prior lot's carry-forward). Worth weighting in V_(n+1) design but not promotion-ready.
   - **Medium-High** — strong evidence within this lot, ready to be a working assumption for the rest of the lot's V-sets and for similar-cultivar carry-forward. Survives "what would change my mind?" prompting.
-  - **High** — ready to promote to a protocol change in ROASTING.md (typically routes through STAGE 6 of THIS prompt as an APPEND or REPLACE on a protocol section). Requires either multi-V-set repetition within this lot OR strong cross-lot corroboration.
+  - **High** — ready to promote to a protocol change in the cluster docs (typically routes through STAGE 6 of THIS prompt as an APPEND or REPLACE on a protocol cluster doc). Requires either multi-V-set repetition within this lot OR strong cross-lot corroboration.
 
-  Used by downstream queries + ROASTING.md routing decisions. If you're not sure between two levels, pick the lower one and explain why in `additional_notes`.
+  Used by downstream queries + cluster-doc routing decisions. If you're not sure between two levels, pick the lower one and explain why in `additional_notes`.
 - **`what_changes_going_forward`**: lessons-applied-forward. What changes about V_(n+1) / next bean / general approach. **Field is forward-looking and actionable** — phrase as "next time / V_(n+1) does X". Don't conflate with open questions.
 - **`open_questions`**: what V_n did NOT answer. Separate field so the V_n → V_(n+1) transition is crisp - open questions inform V_(n+1)'s `primary_question`. **Field is interrogative** — phrase as questions ("does peak inlet matter above 244°C on this lot?" / "is the audibility window real or noise?").
 - **`additional_notes`**: free-text catch-all for cross-slot narrative tension that resists categorization - operator-framing prose, cup-vs-structure disconnects, reframe-the-direction observations, verdict-prose for the leading slot when it doesn't fit `key_insight`. **Field is descriptive, not directive** — if a sentence ends with "next time we should…" it belongs in `what_changes_going_forward`; if it ends in "?" it belongs in `open_questions`; if it describes something the leading slot did or didn't do, it belongs here.
@@ -230,9 +230,9 @@ Read cluster-migrated sections via `read_doc(uri=...)`:
 - `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md` — Standard Inlet Curve Template + Fan Strategy (migrated from ROASTING.md in Wave 3 PR 1).
 - `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` — relevant lessons from prior similar lots (migrated in Wave 2 PR 3).
 
-Read ROASTING.md (still in-doc) via `read_doc_section`:
+Read the lot's per-lot working hypothesis in the Roasting Historian cluster (Active Lots migrated to one file per lot in Wave 2 PR 3 / 2026-05-26):
 
-- Active Lots `### LOT-CODE - Description` sub-section for the lot's current working hypothesis + per-lot protocol notes
+- `docs://skills/roasting-historian/cluster/active-lots/<lot-slug>.md` for the current lot's working hypothesis + per-lot protocol notes. Resolve `<lot-slug>` via `list_docs` against `skills/roasting-historian/cluster/active-lots/` if uncertain.
 
 ### Adjustment scale rule
 
@@ -275,18 +275,18 @@ Plus `failure_boundary` (what "broken" looks like across the slots) and `variabl
 
 (c) `push_roast_profile(payload)` × N - same beziers, writes to Roest tablet only. `enable_share: true`. Returns `profile_id` + `share_url`. After it returns, `patch_roast_recipe` to link `roest_profile_id` + `roest_share_url` + `roest_profile_name` + `pushed_to_roest_at` on the matching recipe row.
 
-## STAGE 6 - Optional: propose ROASTING.md update
+## STAGE 6 - Optional: propose cluster-doc update
 
 **This STAGE writes**: `doc_proposals` row (one multi-citation proposal), OR nothing if skipped.
 
-Post-cupping is the natural moment for ROASTING.md updates - cup signal is the strongest evidence. Route by SHAPE of the insight:
+Post-cupping is the natural moment for cluster-doc updates - cup signal is the strongest evidence. Route by SHAPE of the insight:
 
-- **Lot-state change** (new working hypothesis going into V_(n+1), narrowing confidence band) → `### LOT-CODE - Description` sub-section under Active Lots (replace).
-- **Protocol-level insight** confirmed by this V_n's cupping ("audibility count is diagnostic-primary on silent-FC lots", "anaerobic naturals tolerate drop ceiling 1°C above the Sudan-Rume-Washed-derived 207°C") → appropriate workflow / protocol cluster doc — FC Marking Protocol now at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md`; Drop Temp as the Primary Drop Signal subsection at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal`; Between Batch Protocol still in ROASTING.md § Standard Workflow. Use `propose_doc_changes(target_doc='skills/roest-knowledge/cluster/<file>.md', ...)` for cluster-migrated targets. REPLACE when contradictory; APPEND when additive.
-- **Cross-coffee pattern** (NOT protocol-level - e.g. "naturals from this farm carry distinctive lemongrass", "84-hour anaerobic produces silent FC") → Cross-Coffee Insight Layer (append with confidence marker matching `key_insight_confidence`).
-- **Per-lot FC ceiling calibration** confirmed by V_n → FC Floor & Ceiling section (append with confidence marker).
+- **Lot-state change** (new working hypothesis going into V_(n+1), narrowing confidence band) → per-lot file at `docs/skills/roasting-historian/cluster/active-lots/<lot-slug>.md` (replace); citation `target_doc: 'skills/roasting-historian/cluster/active-lots/<lot-slug>.md'`.
+- **Protocol-level insight** confirmed by this V_n's cupping ("audibility count is diagnostic-primary on silent-FC lots", "anaerobic naturals tolerate drop ceiling 1°C above the Sudan-Rume-Washed-derived 207°C") → appropriate workflow / protocol cluster doc — FC Marking Protocol at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md`; Drop Temp as the Primary Drop Signal subsection at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal`; Between Batch Protocol at `docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md`. Use citation `target_doc: 'skills/roest-knowledge/cluster/<file>.md'`. REPLACE when contradictory; APPEND when additive.
+- **Cross-coffee pattern** (NOT protocol-level - e.g. "naturals from this farm carry distinctive lemongrass", "84-hour anaerobic produces silent FC") → Roasting Historian's Cross-Coffee Insight Layer at `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` (append with confidence marker matching `key_insight_confidence`); citation `target_doc: 'skills/roasting-historian/cluster/patterns/cross-coffee-insights.md'`.
+- **Per-lot FC ceiling calibration** confirmed by V_n → FC Floor & Ceiling subsection of Cross-Coffee Insight Layer at `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` (append with confidence marker).
 
-Fetch live anchor via `read_doc_section(uri="docs://roasting.md", anchor="<Section Name>")` BEFORE drafting. Submit as a single multi-citation `propose_doc_changes` call with top-level `target_doc: "roasting.md"`, top-level `summary`, `citations: [{section_anchor, op, proposed_text, current_text}]`.
+Fetch live anchors via `read_doc(uri="docs://skills/<cluster-path>.md")` (or `read_doc_section` against the same URI) BEFORE drafting. Submit as a single multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` matching where each insight routes (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing). Citations: `[{section_anchor, op, proposed_text, current_text, target_doc?}]`.
 
 ### When to skip and report why
 
@@ -294,7 +294,7 @@ Defer the proposal to the next round when downstream evidence is imminent and wo
 
 - **Path C-2 fired** (real-pourover discriminator pending). The cup-side leading-slot identity is provisional; doc-changes citing the provisional leading slot would need re-issuing once the second variant lands. Skip and tell Chris the proposal queues for the post-discriminator session.
 - **V_(n+1) is imminent and would directly test the insight**. E.g. "V3 hypothesized peak-inlet-is-the-lever, V4 is designed to probe drop ceiling at fixed peak — V4's cupping will confirm whether peak-inlet-is-the-lever generalizes or is only the V3-zone lever". Skip; the V_(n+1) cupping will either promote the insight to Medium-High or knock it back to Low.
-- **`key_insight_confidence` is Low**. Low-confidence insights belong in `additional_notes` on the experiment row, NOT in ROASTING.md. The CCIL append threshold is Medium minimum.
+- **`key_insight_confidence` is Low**. Low-confidence insights belong in `additional_notes` on the experiment row, NOT in cluster docs. The CCIL append threshold is Medium minimum.
 
 In all three cases, print one line: `STAGE 6: skipped - <reason>`. Don't fabricate a proposal just to fill the stage.
 
