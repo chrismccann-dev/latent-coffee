@@ -437,7 +437,7 @@ The substrate-to-substrate direction (workflow output proposes substrate edits v
 
 ## CCIL consolidation pass
 
-[ROASTING.md § Cross-Coffee Insight Layer](ROASTING.md#cross-coffee-insight-layer) (CCIL) grows append-only as each V-set close-out / lot close-out appends a new working hypothesis. Without periodic consolidation the section drifts toward 6+ working hypotheses per active lot, the High-confidence cross-lot-validated patterns get buried, and the Low-confidence single-lot observations accumulate without ever being retired or promoted. This pass cleans both ends: promotes confirmed patterns to a stable navigable index, retires stale single-lot hypotheses that haven't been corroborated.
+The [Roasting Historian cluster § Cross-Coffee Insight Layer](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) (CCIL — migrated from ROASTING.md in Wave 2 PR 3 / 2026-05-26; ROASTING.md retains back-compat anchor at `#cross-coffee-insight-layer`) grows append-only as each V-set close-out / lot close-out appends a new working hypothesis. Without periodic consolidation the section drifts toward 6+ working hypotheses per active lot, the High-confidence cross-lot-validated patterns get buried, and the Low-confidence single-lot observations accumulate without ever being retired or promoted. This pass cleans both ends: promotes confirmed patterns to a stable navigable index, retires stale single-lot hypotheses that haven't been corroborated.
 
 **Trigger phrase:** "consolidate cross-coffee insights" / "process pending CCIL consolidation" / "do a CCIL pass" (or any functionally equivalent - same routing intent as the prose-proposal / canonical-queue passes above).
 
@@ -451,11 +451,11 @@ Pair the CCIL pass with the regular prose-proposal / canonical-queue passes when
 
 ### CCIL-1. Audit current CCIL entries
 
-Read [ROASTING.md § Cross-Coffee Insight Layer](ROASTING.md#cross-coffee-insight-layer). Inventory every prose paragraph or `## H2` subsection (NOT the reference tables - see below). For each entry, record:
+Read [docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md). Inventory every prose paragraph or `## H2` subsection (NOT the reference tables - see below). For each entry, record:
 
 - **Origin date** - when authored. Recoverable from the entry's lot tag (e.g. "RWA-NOVA-NAT21-RB-2026 V1, observed 2026-05") or from `git log -- ROASTING.md` if not embedded.
 - **Confidence level** - Low / Medium / Medium-High / High per [CONTEXT.md § Key-insight confidence ladder](CONTEXT.md).
-- **Corroborating lots since authoring** - count lots that have either reinforced or contradicted the hypothesis. Cross-reference [§ Open Questions](ROASTING.md#open-questions) for tracked-validation status. Run `git log --oneline -- ROASTING.md` to spot subsequent edits that updated the hypothesis.
+- **Corroborating lots since authoring** - count lots that have either reinforced or contradicted the hypothesis. Cross-reference [Roasting Historian § Open Questions](docs/skills/roasting-historian/cluster/patterns/open-questions.md) for tracked-validation status. Run `git log --oneline -- docs/skills/roasting-historian/cluster/patterns/` to spot subsequent edits that updated the hypothesis.
 - **Parallel Open Questions row** - does the hypothesis have a question entry in the Open Questions section that tracks the next-lot test?
 
 **Out of scope for promote/retire:** the reference tables (FC Floor & Ceiling, WB-to-Ground Agtron Delta Norms, Session Position Effect, Green Spec → Starting Hypothesis, Varietal Aromatic Fingerprints, Rest Behavior Patterns) hold protocol-grade reference data with row-level mixed confidence. They are maintained inline by `propose_doc_changes` during normal sessions; the consolidation pass does not touch them.
@@ -481,7 +481,7 @@ A hypothesis is retirement-eligible when ANY of these hold:
 
 Two retirement paths:
 
-- **Open Questions retain** - if the hypothesis frames a question that's still operationally useful (Chris still wants to test it on future lots), move the question to [§ Open Questions](ROASTING.md#open-questions) (or update the existing parallel row) and delete the CCIL prose paragraph. The commit message captures what was retired.
+- **Open Questions retain** - if the hypothesis frames a question that's still operationally useful (Chris still wants to test it on future lots), move the question to [Roasting Historian § Open Questions](docs/skills/roasting-historian/cluster/patterns/open-questions.md) (or update the existing parallel row) and delete the CCIL prose paragraph. The commit message captures what was retired.
 - **Full delete** - if the hypothesis was contradicted OR no longer represents Chris's current thinking, delete entirely. The commit history is the audit trail.
 
 Surface each retirement candidate to Chris before editing. Don't auto-retire - the consolidation pass is human-in-the-loop precisely because aging is contextual (a 90-day-old hypothesis on a slow-moving cultivar class may still be active; a 30-day-old hypothesis on a contradicted observation may be ready to retire).

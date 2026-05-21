@@ -1,0 +1,31 @@
+# Gesha Village Oma — lot learnings
+
+*Coffee Research · Latent · Roasting Historian cluster · learnings*
+
+**Lot:** GV-OMA-25-035
+**Status:** Closed (counterflow incomplete — green exhausted before resolution)
+**Cultivar:** Gesha
+**Terroir:** Ethiopia / Bench Sheko Highlands (Gesha Village estate)
+**Process:** Washed
+**Density / moisture:** 760 g/L / 8.70%
+**Reference roast:** Batch 52 (pre-counterflow)
+**Reference brew:** Counterflow chapter unresolved
+
+## Substrate (DB + master-doc pointers)
+
+- **roast_learnings row:** primary lever (development time in pre-counterflow context), narrow window (~8-10s separates best from over-structured), cultivar + general takeaways present, no `why_this_roast_won` verdict (counterflow chapter unresolved). Read via MCP: `read_canonical("roast_learnings", "GV-OMA-25-035")`.
+- **Green bean detail page:** `/green/[id]` resolved-view (rendered as a "closed without reference" sub-card per ResolvedView convention).
+- **Archive prose:** [docs/roasting/archive.md § GV-OMA-25-035](../../../../docs/roasting/archive.md#gv-oma-25-035---gesha-village-oma).
+- **Legacy + incomplete lots summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — Legacy and incomplete lots](../../../../ROASTING.md#legacy-and-incomplete-lots).
+
+## Cross-lot framing — what this lot taught the Historian
+
+Gesha Village Oma anchors the **48s dev-time floor for washed Gesha in counterflow** — 3 underdeveloped batches at 24-40s dev produced flat, hollow cups missing Gesha identity. Now lives in [cross-coffee-insights.md § Green Spec → Starting Hypothesis](../patterns/cross-coffee-insights.md#green-spec--starting-hypothesis) as the "Variety = Gesha (any process, counterflow)" row (Medium confidence, active hypothesis for Gesha Clouds).
+
+Limitation: lot closed without a confirmed counterflow reference roast (green exhausted). The 48s floor is the strongest signal; the FC floor / drop ceiling row in [§ FC Floor & Ceiling by Processing Method](../patterns/cross-coffee-insights.md#fc-floor--ceiling-by-processing-method) carries Very low confidence pending a confirmed washed Gesha counterflow resolution.
+
+## Related
+
+- [gv-surma-lot-25-039.md](./gv-surma-lot-25-039.md) — sibling Gesha Village lot, also closed pre-counterflow
+- [by-cultivar/gesha.md](../patterns/by-cultivar/gesha.md) — per-cultivar roll-up
+- Active Gesha Clouds lot (CGLE-GESHA-CLOUDS-2026) — heavy anaerobic Gesha follow-on; tests the 48s floor + several other Gesha-side hypotheses

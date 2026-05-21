@@ -72,7 +72,7 @@ For V-set lots, the design anchor is multi-slot variance (V1 is exploratory; the
 
 Run a thorough search across the existing closed-lot archive:
 
-1. `read_doc_section(uri="docs://roasting.md", anchor="Cross-Coffee Insight Layer")` for cross-cultivar / cross-process / cross-terroir patterns potentially applicable.
+1. `read_doc(uri="docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md")` for cross-cultivar / cross-process / cross-terroir patterns potentially applicable (migrated from ROASTING.md in Wave 2 PR 3 / 2026-05-26; the legacy `read_doc_section(uri="docs://roasting.md", anchor="Cross-Coffee Insight Layer")` resolves to the back-compat pointer block).
 2. `read_doc_section(uri="docs://roasting.md", anchor="<LOT-CODE - Description>")` for any prior lots with overlapping attributes (cultivar / terroir / process / processing-style).
 3. For each candidate prior lot, call `get_green_bean({lot_id: <code>})` -> `get_bean_pipeline({green_bean_id})` and read the `roast_learnings` row for `cultivar_takeaway` / `general_takeaway` / `starting_hypothesis` / `reference_roasts` / `aromatic_behavior` / `structural_behavior`.
 4. If similar lots exist, synthesize a starting hypothesis: "Closest prior anchors are <Lot X> (cultivar match) and <Lot Y> (process match). Their carry-forward suggests <Z>. For this one-shot the design starting point is <peak inlet> / <total time> / <drop temp> based on those anchors, adjusted by <reasoning>."
