@@ -1,6 +1,6 @@
 **Workflow class**: one-shot lot (single-batch sample, no iteration possible).
 
-**State transitions covered**: In inventory -> Waiting for next roast -> Waiting for next cupping -> Resolved-pending. STAGES 1-4 of the one-shot workflow. STAGE 5 (close-out: brew dial-in + roast_learnings + ROASTING.md + archive) lives in `one-shot-closeout.md` (separate session, runs after the optimized brew is dialed in via the brewing-side workflow).
+**State transitions covered**: In inventory -> Waiting for next roast -> Waiting for next cupping -> Resolved-pending. STAGES 1-4 of the one-shot workflow. STAGE 5 (close-out: brew dial-in + roast_learnings + cluster-doc proposals + archive) lives in `one-shot-closeout.md` (separate session, runs after the optimized brew is dialed in via the brewing-side workflow).
 
 **Trigger**: I have a new green-bean lot that's a one-shot - sample from an auction lot pre-sale, sample set from a farm-direct sourcing conversation, rare allocation. Typically 100-120g, enough for exactly one roast. No V1/V2/V3 iteration possible - one shot, one cup, one verdict.
 
@@ -72,8 +72,8 @@ For V-set lots, the design anchor is multi-slot variance (V1 is exploratory; the
 
 Run a thorough search across the existing closed-lot archive:
 
-1. `read_doc(uri="docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md")` for cross-cultivar / cross-process / cross-terroir patterns potentially applicable (migrated from ROASTING.md in Wave 2 PR 3 / 2026-05-26; the legacy `read_doc_section(uri="docs://roasting.md", anchor="Cross-Coffee Insight Layer")` resolves to the back-compat pointer block).
-2. `read_doc_section(uri="docs://roasting.md", anchor="<LOT-CODE - Description>")` for any prior lots with overlapping attributes (cultivar / terroir / process / processing-style).
+1. `read_doc(uri="docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md")` for cross-cultivar / cross-process / cross-terroir patterns potentially applicable (migrated from ROASTING.md in Wave 2 PR 3 / 2026-05-26).
+2. `read_doc(uri="docs://skills/roasting-historian/cluster/active-lots/<lot-slug>.md")` for any prior in-flight lots with overlapping attributes (cultivar / terroir / process / processing-style). `list_docs(prefix="skills/roasting-historian/cluster/active-lots/")` to enumerate candidate slugs; also check `cluster/learnings/<lot-slug>.md` for closed-lot carry-forward.
 3. For each candidate prior lot, call `get_green_bean({lot_id: <code>})` -> `get_bean_pipeline({green_bean_id})` and read the `roast_learnings` row for `cultivar_takeaway` / `general_takeaway` / `starting_hypothesis` / `reference_roasts` / `aromatic_behavior` / `structural_behavior`.
 4. If similar lots exist, synthesize a starting hypothesis: "Closest prior anchors are <Lot X> (cultivar match) and <Lot Y> (process match). Their carry-forward suggests <Z>. For this one-shot the design starting point is <peak inlet> / <total time> / <drop temp> based on those anchors, adjusted by <reasoning>."
 5. If NO similar lots exist, the starting hypothesis anchors on the producer's tasting notes ballpark + the Roest Knowledge cluster's [Standard Inlet Curve Template](docs/skills/roest-knowledge/cluster/protocols/fan-strategy.md#standard-inlet-curve-template) (migrated from ROASTING.md in Wave 3 PR 1) + general counterflow practice. Explicitly flag the anchor weakness.
@@ -92,9 +92,9 @@ Read cluster-migrated sections via `read_doc(uri=...)`:
 - `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md` — FC Marking Protocol (especially for silent-FC coffees if cultivar/process flags risk).
 - `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md` — Drop Temp as the Primary Drop Signal subsection.
 
-Read ROASTING.md (still in-doc) via `read_doc_section`:
+Read protocol cluster docs via `read_doc`:
 
-- Hopper Pre-Load Timing (subsection of § Standard Workflow)
+- `docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md` — Between Batch Protocol + Hopper Pre-Load Timing (migrated from ROASTING.md § Standard Workflow in Wave 4 PR 4b / 2026-05-21).
 
 ### Tolerance-anchored design rule (one-shot only)
 
@@ -230,4 +230,4 @@ Print everything needed to verify the state-flip cleanly:
 - Set `is_reference: true` on the roast row. Only `one-shot-closeout.md` does that, and it sets the flag unconditionally regardless of Outcome A/B.
 - Push the optimized brew. Brewing-side workflow handles it between STAGE 4 and `one-shot-closeout.md`.
 - Archive the Roest inventory row. `one-shot-closeout.md` STAGE 5 does that.
-- Propose ROASTING.md updates. Defer to `one-shot-closeout.md` STAGE 5 - one bundled doc proposal at close-out is cleaner than mid-iteration appends on a one-shot.
+- Propose cluster-doc updates. Defer to `one-shot-closeout.md` STAGE 5 - one bundled doc proposal at close-out is cleaner than mid-iteration appends on a one-shot.

@@ -31,20 +31,22 @@ applicable or not knowable from the source.
 
 STEP 2 - propose_doc_changes for lessons from this session. source =
 {kind: "brew", id: "<brew_id from STEP 1>"}. BEFORE drafting any citation,
-fetch the live doc with read_doc_section(uri, anchor) so current_text is
-verbatim. target_doc shapes: "brewing.md" for BREWING.md, "roaster/<Canonical
-Name>" for roaster cards (live at docs://brewing/roasters.md),
-"taxonomies/<axis>.md" for taxonomy edits (axes: regions, varieties,
-processes, roasters, producers, brewers, filters, flavors, grinders,
-roast-levels), or "skills/<path>.md" for composable sub-skill cluster docs
-(Wave 2 PR 1+ — e.g. "skills/wbc-brewing-archivist/cluster/wbc-reference.md"
+fetch the live cluster doc with read_doc(uri="docs://skills/<cluster-path>.md")
+(or read_doc_section against the same URI) so current_text is verbatim.
+target_doc shapes: "skills/<path>.md" for composable sub-skill cluster docs
+(canonical post Wave 4 PR 4b — e.g. "skills/wbc-brewing-archivist/cluster/wbc-reference.md"
 to amend the WBC reference; validated against the registered SKILL_FILES
-allow-list). Per-citation target_doc overrides the proposal-level default.
-For replace, copy current_text VERBATIM. Multi-citation + multi-target_doc
-proposals are supported.
+allow-list), "roaster/<Canonical Name>" for roaster cards (live at
+docs://brewing/roasters.md), or "taxonomies/<axis>.md" for taxonomy edits
+(axes: regions, varieties, processes, roasters, producers, flavors,
+roast-levels — note: brewers, filters, grinders, sworks have migrated to
+the Brewing Equipment Expert cluster; use "skills/brewing-equipment-expert/cluster/<axis>.md").
+`'brewing.md'` as target_doc is deprecated post Wave 4 PR 4b per ARBITER.md §
+target_doc routing — BREWING.md is now a 3KB redirect stub. Per-citation
+target_doc overrides the proposal-level default. For replace, copy
+current_text VERBATIM. Multi-citation + multi-target_doc proposals supported.
 
-Most likely targets (post-Wave-2-PR-2 the brewing-side cross-coffee learnings
-live in the Brewing Historian cluster, NOT BREWING.md):
+Most likely targets (all brewing-side learnings now live in cluster docs):
 
   - target_doc="skills/brewing-historian/cluster/patterns/cross-coffee-insights.md"
     for By Process / By Variety / Cooling Behavior / Office Brewing Notes /
@@ -54,9 +56,16 @@ live in the Brewing Historian cluster, NOT BREWING.md):
     balanced-intensity / full-expression / extraction-push / hybrid)
   - target_doc="skills/brewing-historian/cluster/patterns/by-cultivar/<cultivar>.md"
     or by-coffee-family/<family>.md for per-cluster deep-dive patterns
+  - target_doc="skills/brewing-assistant/cluster/operational-guide.md" for
+    the BREW PROMPT operational guidance (Step 1-4 Coffee Brief / Recipe
+    Output / Iteration Loop / Resolved Brew Output Format)
+  - target_doc="skills/brewing-equipment-expert/cluster/operational-reference.md"
+    (or brewers.md / filters.md / grinder-eg1.md / sworks.md) for equipment-side updates
+  - target_doc="skills/wbc-brewing-archivist/cluster/wbc-reference.md" (or
+    wbc-recipes.md) for WBC reference updates
+  - target_doc="skills/ccil/cluster/coffee/<cultivar-slug>/across-roasting-and-brewing.md"
+    for cross-domain (roasting + brewing) patterns
   - target_doc="roaster/<Canonical Roaster Name>" for roaster card updates
-  - target_doc="brewing.md" only for residual BREWING.md sections (Two-Axis
-    Framework, Step 1-4 Coffee Brief, equipment reference, WBC reference pointer)
 
 Here is the completed archive entry:
 [paste the formatted archive recipe]

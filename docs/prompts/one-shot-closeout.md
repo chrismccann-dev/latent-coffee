@@ -2,7 +2,7 @@
 
 **State transition**: Resolved-pending -> Resolved.
 
-**Trigger**: A one-shot lot's STAGES 1-4 are done (intake + design + roast + Day 7 cupping captured via `one-shot.md`) AND the optimized brew has been dialed in via the brewing-side workflow (`bundled-brewing-completion.md` or sibling). I'll reference the lot by `lot_id` or `green_bean_id` + tell you whether the verdict from STAGE 4 was Outcome A (reference-quality) or Outcome B (Closed without reference). Your job: push the optimized brew, mark the reference roast (always, regardless of outcome), write the constrained `roast_learnings` row, propose ROASTING.md close-out, archive Roest inventory.
+**Trigger**: A one-shot lot's STAGES 1-4 are done (intake + design + roast + Day 7 cupping captured via `one-shot.md`) AND the optimized brew has been dialed in via the brewing-side workflow (`bundled-brewing-completion.md` or sibling). I'll reference the lot by `lot_id` or `green_bean_id` + tell you whether the verdict from STAGE 4 was Outcome A (reference-quality) or Outcome B (Closed without reference). Your job: push the optimized brew, mark the reference roast (always, regardless of outcome), write the constrained `roast_learnings` row, propose cluster-doc close-out, archive Roest inventory.
 
 **Workflow position**: Second of two prompts in the one-shot lifecycle (`one-shot.md` -> **`one-shot-closeout.md`**). Distinct from V-set lots' `close-lot.md`.
 
@@ -104,25 +104,25 @@ Allowed and recommended:
 
 `push_roast_learnings` will reject the push if any of the 7 forbidden fields are populated. The error message will name the specific field. Move the prose to additional_notes on the experiment row, or to cultivar_takeaway / general_takeaway / starting_hypothesis as documented above.
 
-## STAGE 5 - Propose ROASTING.md close-out narrative
+## STAGE 5 - Propose close-out narrative to cluster docs
 
 **This STAGE writes**: `doc_proposals` row (one multi-citation proposal).
 
-BEFORE drafting citations, fetch live doc structure via `list_doc_sections(uri="docs://roasting.md")` if anchors don't resolve.
+BEFORE drafting citations, fetch live cluster docs via `read_doc(uri="docs://skills/<cluster-path>.md")` (or `list_doc_sections` against the same URI if anchors don't resolve). Reference the [Master Coordinator catalog](docs://skills/coordinator/catalog.md) to identify the right cluster home for each insight.
 
-Routing decision tree (by SHAPE of the insight, not just topic):
+Routing decision tree (by SHAPE of the insight, not just topic). Per-citation `target_doc` is `"skills/<cluster-path>.md"` (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing):
 
-- **Active Lots `### LOT-CODE - Description` sub-section**: REMOVE the closed lot's block (`replace` op with `proposed_text: ""` against the full sub-section body). Each lot has its own `### ` anchor under Active Lots; target the lot anchor, not the parent.
-- **Recently Closed Lots**: APPEND close-out summary row. Tag explicitly as **one-shot**:
+- **Active Lots `### LOT-CODE - Description` sub-section**: REMOVE the closed lot's block by issuing a `replace` op with `proposed_text: ""` against the per-lot file at `docs/skills/roasting-historian/cluster/active-lots/<lot-slug>.md`. One file per lot post Wave 2 PR 3; citation `target_doc: 'skills/roasting-historian/cluster/active-lots/<lot-slug>.md'`.
+- **Closed-lot learnings**: APPEND or CREATE the close-out summary at `docs/skills/roasting-historian/cluster/learnings/<lot-slug>.md` (one file per closed lot). Tag explicitly as **one-shot**:
   - On Outcome A: "Reference roast set: Batch <N>. Single attempt, carry-forward anchored on <Lot Y>. One-shot lot."
   - On Outcome B: "Closed without reference. Single attempt, roast off-target. Salvaged via optimized brew (recipe ref in Reference Brew Recipes by Lot). One-shot lot."
-- **Reference Brew Recipes by Lot**: APPEND the optimized brew recipe from STAGE 3. On Outcome B include the compensation reasoning verbatim from `push_brew.what_i_learned` - that prose is the carry-forward for future one-shot brew-side decisions.
-- **Cross-Coffee Insight Layer**: ONLY append if a generalizable cross-coffee pattern emerged AND `key_insight_confidence` was Medium-High or High on the experiment. One-shots typically don't reach the threshold for CCIL contribution; defer to repeated observation on similar future lots. Single-lot patterns at Low confidence go to `additional_notes` on the experiment row, NOT to CCIL.
-- **One-Shot Calibrations in Process** (if the section exists, otherwise propose creating it): append a brief one-shot summary so future carry-forward searches surface this lot quickly. ROASTING.md may not have this section yet - check via `list_doc_sections`.
+- **Reference Brew Recipes by Lot**: APPEND the optimized brew recipe from STAGE 3 to the relevant Reference Brew section in the Roasting Historian cluster (route via the catalog if uncertain). On Outcome B include the compensation reasoning verbatim from `push_brew.what_i_learned` - that prose is the carry-forward for future one-shot brew-side decisions.
+- **Cross-Coffee Insight Layer**: ONLY append to `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` if a generalizable cross-coffee pattern emerged AND `key_insight_confidence` was Medium-High or High on the experiment. One-shots typically don't reach the threshold for CCIL contribution; defer to repeated observation on similar future lots. Single-lot patterns at Low confidence go to `additional_notes` on the experiment row, NOT to CCIL.
+- **One-Shot Calibrations in Process**: append or create a brief one-shot summary at `docs/skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md` so future carry-forward searches surface this lot quickly. Citation `target_doc: 'skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md'`.
 
 AVOID promoting to protocol cluster docs (FC Marking Protocol at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md` / Drop Temp as the Primary Drop Signal at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal` / Standard Inlet Curve Template at `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md#standard-inlet-curve-template`) on one-shot data. Protocol changes require cross-lot evidence; N=1 isn't enough.
 
-Submit as a single multi-citation `propose_doc_changes` call. Required: top-level `target_doc: "roasting.md"`, top-level `summary` (one-line), `citations: [{section_anchor, op, proposed_text, current_text}]`. For replace, copy existing text VERBATIM into `current_text`. Optional `source = {kind: "session", id: "<lot_id one-shot close-out>"}`.
+Submit as a single multi-citation `propose_doc_changes` call. Required: top-level `summary` (one-line), `citations: [{section_anchor, op, proposed_text, current_text, target_doc?}]` (per-citation `target_doc` is required when citations route to different cluster docs). For replace, copy existing text VERBATIM into `current_text`. Optional `source = {kind: "session", id: "<lot_id one-shot close-out>"}`.
 
 ## STAGE 6 - Archive the Roest inventory row
 
@@ -152,5 +152,5 @@ Print:
 
 - Push new cuppings or roasts. Those happen in `one-shot.md` STAGES 3-4.
 - Run the brew dial-in. That happens via the brewing-side workflow (`bundled-brewing-completion.md` etc.) between `one-shot.md` STAGE 4 and this prompt.
-- Promote any insight to a protocol-level section of ROASTING.md. N=1 doesn't justify protocol changes.
+- Promote any insight to a protocol cluster doc (`docs://skills/roest-knowledge/cluster/protocols/*` or `cluster/machine/*`). N=1 doesn't justify protocol changes.
 - Populate the 7 forbidden roast_learnings fields. Schema validation rejects them.

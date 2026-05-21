@@ -129,7 +129,7 @@ The `winner` field stays NULL until Day 7 cupping resolves it. `log-cupping.md` 
 
 `patch_experiment` echoes `updated_fields: [...]` so you can sanity-check which columns landed.
 
-## STAGE 6 - Optional: propose ROASTING.md mid-iteration update
+## STAGE 6 - Optional: propose cluster-doc mid-iteration update
 
 **This STAGE writes**: `doc_proposals` row (one multi-citation proposal), OR nothing if skipped.
 
@@ -137,15 +137,15 @@ Only if V_n's roast-side observations reveal a lot-state change worth recording 
 
 - Calibration shift confirmed on this lot ("Higuito drop ceiling 209°C, not the protocol-default 207°C - Medium confidence pending V_(n+1)")
 - Protocol-level insight applicable beyond this lot ("audibility count is the diagnostic primary on silent-FC lots - FC timestamp unreliable")
-- Drift detection: live ROASTING.md disagrees with what you observed in Roest data this V_n
+- Drift detection: live cluster docs disagree with what you observed in Roest data this V_n
 
 Route by SHAPE of the insight:
 
-- Lot-state changes → `### LOT-CODE - Description` sub-section under Active Lots (replace)
-- Protocol-level insights → workflow / protocol cluster doc — FC Marking Protocol now at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md`; Drop Temp as the Primary Drop Signal at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal`; Between Batch Protocol still in ROASTING.md § Standard Workflow. Use `propose_doc_changes(target_doc='skills/roest-knowledge/cluster/<file>.md', ...)` for cluster-migrated targets.
-- Mid-iteration cross-coffee patterns → Cross-Coffee Insight Layer (append with confidence marker)
+- Lot-state changes → per-lot file at `docs/skills/roasting-historian/cluster/active-lots/<lot-slug>.md` (replace); citation `target_doc: 'skills/roasting-historian/cluster/active-lots/<lot-slug>.md'`
+- Protocol-level insights → workflow / protocol cluster doc — FC Marking Protocol at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md`; Drop Temp as the Primary Drop Signal at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal`; Between Batch Protocol at `docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md`. Use citation `target_doc: 'skills/roest-knowledge/cluster/<file>.md'`.
+- Mid-iteration cross-coffee patterns → Roasting Historian's Cross-Coffee Insight Layer at `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` (append with confidence marker); citation `target_doc: 'skills/roasting-historian/cluster/patterns/cross-coffee-insights.md'`
 
-Fetch live anchor via `read_doc_section(uri="docs://roasting.md", anchor="<Section Name>")` BEFORE drafting. Submit as a single multi-citation `propose_doc_changes` call with top-level `target_doc: "roasting.md"`, top-level `summary`, `citations: [{section_anchor, op, proposed_text, current_text}]`.
+Fetch live anchors via `read_doc(uri="docs://skills/<cluster-path>.md")` (or `read_doc_section` against the same URI) BEFORE drafting. Submit as a single multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` matching where each insight routes (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing). Citations: `[{section_anchor, op, proposed_text, current_text, target_doc?}]`.
 
 **When to skip and report why**: Day 7 cupping is imminent and will either confirm or invalidate the proposed insight. Skip and tell Chris the proposal queues for the `log-cupping.md` STAGE 6 pass. Print `STAGE 6: skipped - cupping imminent, defer`.
 
