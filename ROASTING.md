@@ -46,7 +46,7 @@ A few operational notes for fetching MCP Resources and calling Tools via this Cl
 
 For brewing-side context (extraction strategies, modifier framework, brewer / filter canonicals), see [BREWING.md](BREWING.md). The Roast-to-Brew Translation section below cross-references BREWING.md's 6+3 framework (6 extraction strategies + 3 modifiers).
 
-For WBC-derived ideas / hypotheses on the roasting and sourcing sides, see [docs/roasting/wbc-roasting.md](docs/roasting/wbc-roasting.md) (lessons + Roest L200 hypotheses + blending experiment protocols + structured rest-curve protocol) and [docs/roasting/wbc-sourcing.md](docs/roasting/wbc-sourcing.md) (sourcing strategy + tier framing + current Latent inventory mapped to portfolio lanes). Both are open-ideas docs, not recipe lookups — consult at V1 design time and at green-shopping decision time respectively.
+For WBC-derived ideas / hypotheses on the roasting and sourcing sides, see [docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) (lessons + Roest L200 hypotheses + blending experiment protocols + structured rest-curve protocol) and [docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) (sourcing strategy + tier framing + current Latent inventory mapped to portfolio lanes). Both are open-ideas docs, not recipe lookups — consult at V1 design time and at green-shopping decision time respectively.
 
 ---
 
@@ -419,7 +419,7 @@ When onboarding a new coffee, paste the following into a new message:
 - Whether a reference roast of this same variety/process exists (peer, favorite roaster, competition lot) - if so, what it tasted like
 - Learning intent: is this a "find out what this coffee wants" V1 or a "optimize toward a specific expression" V1?
 
-Before scoping V1 batches, optionally cross-check the lot against [docs/roasting/wbc-sourcing.md](docs/roasting/wbc-sourcing.md) — which tier (T1/T2/T3) and portfolio lane the green falls in shapes how much experiment investment is justified, and whether the lot is a candidate for the same-green dev ladder in [docs/roasting/wbc-roasting.md § Blending experiments](docs/roasting/wbc-roasting.md).
+Before scoping V1 batches, optionally cross-check the lot against [docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) — which tier (T1/T2/T3) and portfolio lane the green falls in shapes how much experiment investment is justified, and whether the lot is a candidate for the same-green dev ladder in [docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md § Blending experiments](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md).
 
 ## Step 2 - Claude Asks These Three Questions
 
@@ -495,7 +495,7 @@ When running experiments across multiple lots in parallel:
 > 4. **Open Questions** — research questions to test on future roasts ([§ Open Questions](#open-questions)).
 > 5. **Archive** — full per-lot prose, experiment history, generalized lessons ([docs/roasting/archive.md](docs/roasting/archive.md)).
 >
-> For sourcing-tier framing (T1 / T2 / T3 portfolio mapping of every lot below) and the broader "what role does this coffee play" lens, see [docs/roasting/wbc-sourcing.md § Latent inventory mapped to tiers](docs/roasting/wbc-sourcing.md). Refresh that snapshot section on inventory change.
+> For sourcing-tier framing (T1 / T2 / T3 portfolio mapping of every lot below) and the broader "what role does this coffee play" lens, see [docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md § Latent inventory mapped to tiers](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md). Refresh that snapshot section on inventory change.
 
 ## Active Lots
 

@@ -48,8 +48,11 @@ For a small batch (≤2 groups), one PR is fine. For a larger batch (3+), one PR
 | `roasting.md`                           | `ROASTING.md`                          |
 | `roaster/{Canonical Name}`              | `docs/brewing/roasters.md` (find `## {Name}` section) |
 | `taxonomies/{axis}.md`                  | `docs/taxonomies/{axis}.md`           |
+| `skills/{path}.md`                      | `docs/skills/{path}.md` (Wave 2 PR 1+; cluster docs per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md)) |
 
 For `roaster/{Name}` proposals: open `docs/brewing/roasters.md`, locate the `## {Canonical Name}` header, and operate within that section's body.
+
+For `skills/{path}.md` proposals (Wave 2 PR 1, 2026-05-26 onward): open `docs/skills/{path}.md` (e.g. `docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md`). Validated against the registered SKILL_FILES allow-list in [lib/mcp/docs.ts](lib/mcp/docs.ts) — only declared cluster paths resolve. **WBC content edits land in the WBC Archivist clusters, not BREWING.md / ROASTING.md** — this is the routing change locked in [docs/architecture/master-doc-transition-plan.md § Risk: BREWING.md / ROASTING.md keep growing during migration](docs/architecture/master-doc-transition-plan.md). If you see a pre-Wave-2 proposal targeting `brewing.md` for content that now belongs in a cluster (e.g. WBC reference / WBC recipes), apply the cross-doc move (Step 3 below) and surface to Chris.
 
 **Multi-target_doc proposals (post Sprint 2.4 follow-up):** A single proposal may have citations that target different files (one insight from a brew debrief often touches roaster card + BREWING.md archive bullet + Open Questions). Each citation now carries its own `target_doc` field (defaults to the proposal-level value when not set). When arbitrating: **group citations by their per-citation `target_doc`**, process one group per file, but apply the entire proposal as one DB row update at the end (Step 7). The proposal-level `target_doc` is just a default — don't use it for routing if citations override it.
 

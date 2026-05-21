@@ -25,8 +25,9 @@
 // than promoting to canonical modifiers - Chris's "keep compact strategy
 // set, add separate doc layer" framing.
 //
-// Sourced from Chris's WBC research (see docs/brewing/wbc-recipes.md +
-// docs/brewing/wbc-reference.md): four orthogonal techniques. Each maps to
+// Sourced from Chris's WBC research (see docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md +
+// docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md — migrated Wave 2 PR 1
+// 2026-05-26 per ADR-0011): four orthogonal techniques. Each maps to
 // one of the WBC taxonomy's foundational axes (Output Selection /
 // Time-Distributed / External Control). Folded into one heterogeneous bucket
 // because Chris's current brewing context (single origin, home/office)

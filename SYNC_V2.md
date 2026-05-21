@@ -83,8 +83,12 @@ Resources are content endpoints claude.ai can list and fetch. Each Resource has 
 | `canonicals://{axis}` | JSON registry for one axis (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / grinders / roast-levels / extraction-strategies / modifiers) | `lib/{axis}-registry.ts` exports |
 | `docs://brewing.md` | `BREWING.md` text (full, or `#{anchor}` for one section) | Repo file |
 | `docs://brewing/roasters.md` | Per-roaster lessons + house-style cards (full, or `#{anchor}` for one card) | Repo file |
-| `docs://brewing/wbc-reference.md` | WBC 5-axis foundational map + 8 strategy families | Repo file |
-| `docs://brewing/wbc-recipes.md` | 102-recipe WBC archive (2022-2025) | Repo file |
+| `docs://brewing/wbc-reference.md` | **[MIGRATED Wave 2 PR 1]** redirect stub; authoritative at `docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md` | Repo file |
+| `docs://brewing/wbc-recipes.md` | **[MIGRATED Wave 2 PR 1]** redirect stub; authoritative at `docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md` | Repo file |
+| `docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md` | WBC 5-axis foundational map + 8 strategy families + Cross-Cutting Control Patterns | Repo file |
+| `docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md` | 102-recipe WBC archive (2022-2025) | Repo file |
+| `docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md` | WBC roasting lessons + Roest L200 hypotheses + blending experiments + rest-curve protocol | Repo file |
+| `docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md` | WBC sourcing strategy + Tier 1/2/3 priority targets + 5-lane portfolio frame + sourcing channels | Repo file |
 | `docs://roasting.md` | `ROASTING.md` text (full, or `#{anchor}` for one section) | Repo file |
 | `docs://taxonomies/{axis}.md` | Authored markdown for one of the 10 canonical taxonomies (full, or `#{anchor}`) | Repo file |
 | `docs://prompts/{name}.md` | Operational prompts (start-brew / log-brew / propose-doc-changes-from-brew / bundled-brewing-completion brewing-side; start-lot / log-roast / log-cupping / close-lot V-set roasting; one-shot / one-shot-closeout one-shot roasting) | Repo file |
@@ -125,7 +129,7 @@ For full per-Tool input schemas, see `lib/mcp/*.ts`. Each Tool's `description` f
 - `BREWING.md` lives at repo root (existing location).
 - `ROASTING.md` lives at repo root (created in Sprint 2.5, 2026-04-30).
 - Per-roaster lessons: `docs/brewing/roasters.md` (split out of BREWING.md SECTION 2 in Sprint 2.4 so each roaster card section-anchors cleanly under MCP for `propose_doc_changes`). target_doc='roaster/{Canonical Name}' resolves to a section in this file.
-- WBC reference + recipes: `docs/brewing/wbc-reference.md` + `docs/brewing/wbc-recipes.md` (Sprint 2.7 + v8.4).
+- WBC reference + recipes: `docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md` + `docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md` (Wave 2 PR 1, 2026-05-26; migrated from `docs/brewing/wbc-*.md`). WBC roasting + sourcing: `docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md` + `docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md`. Old paths resolve to redirect stubs.
 - Closed-lot archive: `docs/roasting/archive.md`.
 - Taxonomy authored content: `docs/taxonomies/<axis>.md`. Authored by Chris; `lib/<axis>-registry.ts` is the validation mirror (2-step deliberate edit when adding a new entry).
 - Prompts: `docs/prompts/<name>.md`. Operational prompts for claude.ai sessions.

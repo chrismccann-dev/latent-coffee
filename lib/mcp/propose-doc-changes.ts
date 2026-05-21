@@ -74,6 +74,10 @@ function findClosestAnchor(target: string, candidates: string[]): string | null 
 //   - 'roasting.md'                               — repo root ROASTING.md (file lands in 2.5; arbiter surfaces orphan in 2.4)
 //   - 'roaster/{Canonical Roaster Name}'          — section in docs/brewing/roasters.md (Sprint 2.4 split)
 //   - 'taxonomies/{axis}.md'                      — one of 10 canonical taxonomy MD files
+//   - 'skills/{path}.md'                          — Wave 2 PR 1: composable sub-skills cluster docs (ADR-0011).
+//                                                   Validated against isKnownDoc(`docs://skills/${path}.md`); only registered
+//                                                   cluster paths in lib/mcp/docs.ts SKILL_FILES are accepted. Routes new
+//                                                   WBC content proposals into the cluster instead of BREWING.md / ROASTING.md.
 //
 // Roaster names are canonicalized via ROASTER_LOOKUP.canonicalize on insert so
 // 'roaster/hydrangea coffee' and 'roaster/Hydrangea Coffee' converge to the
@@ -105,7 +109,7 @@ const citation = z.object({
   ),
   rationale: z.string().describe('Free-text justification — surfaced to the arbiter at apply time.'),
   target_doc: z.string().optional().describe(
-    'OPTIONAL per-citation override of the proposal-level target_doc. Accepts the same shape as the proposal-level field: `brewing.md` | `roasting.md` | `roaster/{Canonical Roaster Name}` | `taxonomies/{axis}.md`. Use when a single proposal\'s citations span multiple files (e.g. one citation targets `roaster/Dongzhe` and another targets `brewing.md`). When omitted, inherits the proposal-level target_doc.',
+    'OPTIONAL per-citation override of the proposal-level target_doc. Accepts the same shape as the proposal-level field: `brewing.md` | `roasting.md` | `roaster/{Canonical Roaster Name}` | `taxonomies/{axis}.md` | `skills/{path}.md`. Use when a single proposal\'s citations span multiple files (e.g. one citation targets `roaster/Dongzhe` and another targets `brewing.md`). When omitted, inherits the proposal-level target_doc.',
   ),
 })
 
@@ -118,7 +122,7 @@ const sourceRef = z.object({
 
 export const proposeDocChangesInputSchema = {
   target_doc: z.string().describe(
-    'Default doc identifier for citations that don\'t override it. Allowed values: "brewing.md" | "roasting.md" | "roaster/{Canonical Roaster Name}" | "taxonomies/{axis}.md". Roaster names auto-canonicalize via ROASTER_LOOKUP; unknown roasters are rejected (add to docs/taxonomies/roasters.md first). For cross-doc proposals, set per-citation target_doc on each citation that diverges from this default.',
+    'Default doc identifier for citations that don\'t override it. Allowed values: "brewing.md" | "roasting.md" | "roaster/{Canonical Roaster Name}" | "taxonomies/{axis}.md" | "skills/{path}.md". Roaster names auto-canonicalize via ROASTER_LOOKUP; unknown roasters are rejected (add to docs/taxonomies/roasters.md first). `skills/{path}.md` routes proposals into composable sub-skill cluster docs (Wave 2 PR 1+, ADR-0011) — e.g. `skills/wbc-brewing-archivist/cluster/wbc-reference.md`; validated against the registered SKILL_FILES allow-list. For cross-doc proposals, set per-citation target_doc on each citation that diverges from this default.',
   ),
   source: sourceRef.describe('What triggered the proposal — a brew log session, a roast cupping, an end-of-coffee debrief, or a general session.'),
   citations: z.array(citation).min(1).describe(
@@ -175,6 +179,7 @@ function targetDocToUri(targetDoc: string): string | null {
   if (targetDoc === 'roasting.md') return 'docs://roasting.md'
   if (targetDoc.startsWith('roaster/')) return 'docs://brewing/roasters.md'
   if (targetDoc.startsWith('taxonomies/')) return `docs://${targetDoc}`
+  if (targetDoc.startsWith('skills/')) return `docs://${targetDoc}`
   return null
 }
 
@@ -210,9 +215,23 @@ function normalizeTargetDoc(
     }
     return { ok: true, target_doc: `roaster/${canonical}` }
   }
+  if (trimmed.startsWith('skills/')) {
+    // Wave 2 PR 1 (ADR-0011): composable sub-skill cluster docs. Validated via
+    // isKnownDoc against the docs:// URI so only registered SKILL_FILES paths
+    // resolve — adding a new sub-skill requires registering it in lib/mcp/docs.ts
+    // first.
+    const uri = `docs://${trimmed}`
+    if (!isKnownDoc(uri)) {
+      return {
+        ok: false,
+        error: `Unknown skills target: '${trimmed}'. Register the path in lib/mcp/docs.ts SKILL_FILES first, then re-attempt.`,
+      }
+    }
+    return { ok: true, target_doc: trimmed }
+  }
   return {
     ok: false,
-    error: `target_doc must be 'brewing.md', 'roasting.md', 'roaster/{Canonical Name}', or 'taxonomies/{axis}.md'. Got: ${raw}`,
+    error: `target_doc must be 'brewing.md', 'roasting.md', 'roaster/{Canonical Name}', 'taxonomies/{axis}.md', or 'skills/{path}.md'. Got: ${raw}`,
   }
 }
 
