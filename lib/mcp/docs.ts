@@ -104,6 +104,23 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-natural.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-natural.md',
   'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md',
   'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md',
+  // Roasting Historian (Wave 2 PR 3) — SKILL.md + cluster files extracted from
+  // ROASTING.md § Cross-Coffee Insight Layer (lines 776-982) + § Open Questions
+  // (lines 984-1011). ROASTING.md retains h1 + pointer blocks at
+  // #cross-coffee-insight-layer + #open-questions for anchor back-compat.
+  'docs://skills/roasting-historian/SKILL.md': 'docs/skills/roasting-historian/SKILL.md',
+  'docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md': 'docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md',
+  'docs://skills/roasting-historian/cluster/patterns/open-questions.md': 'docs/skills/roasting-historian/cluster/patterns/open-questions.md',
+  'docs://skills/roasting-historian/cluster/patterns/general.md': 'docs/skills/roasting-historian/cluster/patterns/general.md',
+  'docs://skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md': 'docs/skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md',
+  'docs://skills/roasting-historian/cluster/patterns/by-process/washed.md': 'docs/skills/roasting-historian/cluster/patterns/by-process/washed.md',
+  'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md',
+  'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md',
+  'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md': 'docs/skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md',
+  'docs://skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md': 'docs/skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md',
+  'docs://skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md': 'docs/skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md',
+  'docs://skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md': 'docs/skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md',
+  'docs://skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md': 'docs/skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md',
 }
 
 const DOC_FILES: Record<string, string> = {
@@ -144,7 +161,7 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://brewing/wbc-recipes.md':
     '[MIGRATED in Wave 2 PR 1] Authoritative content lives at docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://roasting.md':
-    'Use when planning a roast on the Roest L200 Ultra (counterflow mode) — covers the New Coffee Onboarding Protocol (Steps 1-4), Standard Workflow, evaluation protocol (Day 7 pourover gate), fan/inlet curve templates, FC marking protocol, and per-coffee + cross-coffee insight layers.',
+    'Use when planning a roast on the Roest L200 Ultra (counterflow mode) — covers the New Coffee Onboarding Protocol (Steps 1-4), Standard Workflow, evaluation protocol (Day 7 pourover gate), fan/inlet curve templates, FC marking protocol, and per-coffee experiment patterns. The Cross-Coffee Insight Layer + Open Questions migrated to the Roasting Historian cluster in Wave 2 PR 3 (2026-05-26); ROASTING.md retains h1 + pointer blocks at #cross-coffee-insight-layer + #open-questions for back-compat. Pull docs://skills/roasting-historian/cluster/patterns/* for the migrated cross-lot learnings.',
   'docs://roasting/archive.md':
     'Use when researching closed-lot roasting outcomes — per-lot Key Learnings, reference roast parameters, and structural takeaways from completed beans. Read before roasting a similar coffee.',
   'docs://roasting/wbc-roasting.md':
@@ -275,6 +292,33 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when designing a recipe for Double Anaerobic Washed lots — Full Expression default (heavy-end of anaerobic-washed continuum); may benefit from Output Selection (late cut) or SWORKS Dial 5 contact-time control. N=3.',
   'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md':
     'Use when designing a recipe for Thermal Shock Washed lots — Balanced Intensity default with flavor-register-driven recipe gradient (Finca El Paraíso canonical producer; three confirmed lots: Letty / Luna / Lychee). N=3.',
+  // Roasting Historian cluster (Wave 2 PR 3)
+  'docs://skills/roasting-historian/SKILL.md':
+    'Roasting Historian sub-skill (Wave 2 PR 3 shipped 2026-05-26). Per-lot learnings + cross-lot patterns extracted from ROASTING.md § Cross-Coffee Insight Layer + § Open Questions. Knowledge-tier sub-skill consumed by Roasting Assistant during V1 design and by CCIL during cross-domain synthesis.',
+  'docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md':
+    'Use when planning a new V1 roast and seeking cross-lot starting hypotheses — Confirmed Patterns (drop ceiling, Day 7 evaluation gate, WB-to-Ground delta sensitivity, etc.) + FC Floor & Ceiling by Process + WB-to-Ground Delta Norms + Session Position Effect + Green Spec→Starting Hypothesis (Additive + Precedence tables) + Varietal Aromatic Fingerprints + Rest Behavior Patterns + FC-Temp Architectural Constraint on Naturals + xbloom Misranking + Working Hypotheses (Single-Lot, Low Confidence). The central CCIL document — read first when scoping a new lot.',
+  'docs://skills/roasting-historian/cluster/patterns/open-questions.md':
+    'Use when planning a V1 design where a relevant Open Question is in scope — 12 research questions tracked for future roast sessions. Includes FC-Temp anchoring on naturals (3rd lot pending), audible FC threshold on heavy anaerobic naturals, Day 7 cupping-table-vs-pourover reversal on heavy-anaerobic Gesha, altitude-as-density proxy on one-shot calibrations, bean-temp end condition validation. Resolved questions are deleted, not strikethrough.',
+  'docs://skills/roasting-historian/cluster/patterns/general.md':
+    'Use when no per-axis pattern doc applies but a general roasting principle is in scope. Currently sparse — forward investment for non-axis-scoped patterns that emerge in future lots.',
+  'docs://skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md':
+    'Use when designing a roast for a Gesha lot — per-cultivar roll-up + pointers. Corpus N=3 (Oma + Surma closed pre-counterflow + Gesha Clouds active). 48s dev-time floor for washed Gesha in counterflow + Gesha-Clouds Low-confidence hypotheses tracked here.',
+  'docs://skills/roasting-historian/cluster/patterns/by-process/washed.md':
+    'Use when designing a roast for a washed-process lot — per-process roll-up + pointers. Corpus N=6 closed (Sudan Rume Hybrid Washed + GV Oma + GV Surma + GUA El Socorro + GUA Libertad + Rancho Tio Emilio). Most data-rich slice of the archive; tightest FC + drop temp windows; Maillard-energy-continuity inlet-shape discipline.',
+  'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md':
+    'Per-lot learnings for CGLE Mandela XO Extended Fermentation (closed April 2026, reference batch #139). Pointer to roast_learnings DB row + cross-lot framing — XO-fermented drop ceiling ~205-206°C; silent FC the rule; fan curve shape as single most impactful variable. Canonical Heavy-Ferment / XO-Family lot anchor.',
+  'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md':
+    'Per-lot learnings for CGLE Sudan Rume Hybrid Washed (closed April 2026, reference #133 / closest replication #148). Most data-rich lot in archive (20+ batches, 6 experiment sets); empirical anchor for FC floor/ceiling, WB-to-Ground delta sensitivity, xbloom under-extraction discovery, varietal aromatic vocabulary unlock.',
+  'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md':
+    'Per-lot learnings for Gesha Village Oma (closed counterflow-incomplete, green exhausted). Anchors the 48s dev-time floor for washed Gesha in counterflow; FC floor / drop ceiling row at Very low confidence pending a complete Gesha counterflow resolution.',
+  'docs://skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md':
+    'Per-lot learnings for Gesha Village Surma (closed pre-counterflow). Pre-counterflow companion to GV Oma; same low-density/low-moisture green spec signature; dev-time-relative-to-FC primary lever.',
+  'docs://skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md':
+    'Per-lot learnings for Guatemala El Socorro Java (closed pre-counterflow). RoR-shape-not-dev-time foundational pre-counterflow lesson. Highest-moisture (11.60%) lot in the archive — high-moisture row in Green Spec→Starting Hypothesis is Medium-High confidence pending a counterflow high-moisture lot.',
+  'docs://skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md':
+    'Per-lot learnings for Guatemala Libertad Aurelio del Cerro (closed pre-counterflow, Bourbon/Caturra blend). Canonical Maillard-energy-continuity inlet-shape lesson — recurring oversteeped-tea dryness resolved by smooth monotonically declining RoR into FC.',
+  'docs://skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md':
+    'Per-lot learnings for Rancho Tio Emilio Typica Mejorado Washed (closed 2026-05-11, one-shot calibration). Brew-anchor-transferability lesson (variety signal dominates over anchor-roast brew lineage) + altitude-as-weak-proxy-for-density on one-shots + Typica Mejorado varietal aromatic fingerprint sourced here.',
   // ---------------------------------------------------------------------------
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',

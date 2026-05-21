@@ -491,8 +491,8 @@ When running experiments across multiple lots in parallel:
 >
 > 1. **Active Lots** — working hypotheses on lots currently in the V1/V2/V3 loop (this section, volatile).
 > 2. **Reference Roasts + Brews** — confirmed reference roast + reference brew per closed lot (below, stable).
-> 3. **Cross-Coffee Insight Layer** — patterns that have generalized across ≥2 lots ([§ Cross-Coffee Insight Layer](#cross-coffee-insight-layer)).
-> 4. **Open Questions** — research questions to test on future roasts ([§ Open Questions](#open-questions)).
+> 3. **Cross-Coffee Insight Layer** — patterns that have generalized across ≥2 lots ([Roasting Historian cluster](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md); back-compat anchor at `#cross-coffee-insight-layer` below).
+> 4. **Open Questions** — research questions to test on future roasts ([Roasting Historian cluster](docs/skills/roasting-historian/cluster/patterns/open-questions.md); back-compat anchor at `#open-questions` below).
 > 5. **Archive** — full per-lot prose, experiment history, generalized lessons ([docs/roasting/archive.md](docs/roasting/archive.md)).
 >
 > For sourcing-tier framing (T1 / T2 / T3 portfolio mapping of every lot below) and the broader "what role does this coffee play" lens, see [docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md § Latent inventory mapped to tiers](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md). Refresh that snapshot section on inventory change.
@@ -627,7 +627,7 @@ Confirmed reference roast + reference brew per closed lot. Full per-lot prose (e
 | GUA-LIB-ADC-2024 | Guatemala (legacy, pre-counterflow) | Batch 94 | Recipe parameters not preserved | [archive.md](docs/roasting/archive.md#gua-lib-adc-2024) |
 | GV-OMA-25-035 | Gesha Village Oma (counterflow incomplete — green exhausted before resolution) | Batch 52 (pre-counterflow) | Counterflow chapter unresolved | [archive.md](docs/roasting/archive.md#gv-oma-25-035---gesha-village-oma) |
 
-> Cross-lot patterns that have generalized are surfaced in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) below. Open research questions on these lots live in [§ Open Questions](#open-questions).
+> Cross-lot patterns that have generalized are surfaced in the [Roasting Historian cluster § Cross-Coffee Insight Layer](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md). Open research questions on these lots live in [Roasting Historian cluster § Open Questions](docs/skills/roasting-historian/cluster/patterns/open-questions.md).
 
 ---
 
@@ -775,239 +775,13 @@ Claude will then write the final brew recipe for the lot record and assess wheth
 
 # Cross-Coffee Insight Layer
 
-*This section is updated at lot close-out. It captures patterns that emerge across multiple coffees, not within a single lot. These insights reduce the number of experiments needed on future lots by providing informed starting hypotheses.*
-
-> Current data set: 2 fully resolved counterflow lots (CGLE Sudan Rume Hybrid Washed, closed April 2026; CGLE Mandela XO, closed April 2026), 1 active unresolved lot (CGLE Sudan Rume Natural), 2 pre-counterflow closed lots. Patterns below should be treated as hypotheses until confirmed across 3+ lots.
-
-## Confirmed Patterns
-
-> Cross-lot-validated patterns at High confidence per [CONTEXT.md § Key-insight confidence ladder](CONTEXT.md). These are the stable, multi-lot-tested patterns Chris's V1-design heuristics rest on. Detail and evidence live in the sections below; this is the navigable index. Promotion criterion: High confidence AND repeated across ≥2 lots OR strong cross-lot corroboration. Maintenance cadence: [ARBITER.md § CCIL consolidation pass](ARBITER.md#ccil-consolidation-pass).
-
-- **Every coffee has an FC floor and a drop-temp ceiling; drop ceilings cluster at 205-208°C across counterflow lots tested**, varying by processing method (XO-fermented lower; high-density washed higher). The FC floor is a coffee-specific architectural minimum below which the cup reads underdeveloped regardless of dev time. Evidence: 4 lots tested in counterflow (Sudan Rume Washed, Sudan Rume Natural, Mandela XO, Gesha Washed). Detail: [§ FC Floor & Ceiling by Processing Method](#fc-floor--ceiling-by-processing-method).
-- **First roast of a session runs late and hot vs. subsequent roasts on identical protocol.** Apply thermal-reset discipline (dry roast to 140°C); fall back to 128°C hopper load if replication is critical. The third roast of a session is the most structurally consistent. Evidence: multiple lots, multiple sessions. Detail: [§ Session Position Effect - Machine-Specific Data](#session-position-effect---machine-specific-data).
-- **Day 7 pourover is the only reliable evaluation gate** across washed / natural / XO-fermented lots in Chris's archive. Day 4 cupping is unreliable or actively misleading; Day 6 is directionally reliable but Day 7 remains the standard. Evidence: 20+ batches Sudan Rume Washed + 10 batches Sudan Rume Natural + 13 batches Mandela XO. Detail: [§ Rest Behavior Patterns](#rest-behavior-patterns).
-- **The xbloom evaluation recipe systematically under-extracts delicate aromatic washed coffees**; the evaluation recipe is calibrated for comparison consistency, not expression maximization. An optimized brew session (typical lever: 91°C / 1:14, ~3°C cooler and ~3 points more concentrated than the eval recipe) is required before declaring a lot resolved. Evidence: confirmed on Sudan Rume Washed, replicated on Mandela XO. Detail: [§ Rest Behavior Patterns](#rest-behavior-patterns) (Brew recipe gap).
-- **WB-to-ground Agtron delta is the most sensitive internal development signal so far.** First experiment sets on any coffee will show large deltas; shrinking delta over successive V-sets is a reliable signal that profile development is on the right track. Tight delta strongly correlates with best-cup quality at resolution. Evidence: confirmed across Sudan Rume Washed (#119 delta 1.0), Mandela XO (#139 delta 3.6), Anaerobic Dry Process Higuito v1c (delta 1.3 - winner). Detail: [§ WB-to-Ground Agtron Delta Norms by Processing Method](#wb-to-ground-agtron-delta-norms-by-processing-method).
-- **Sudan Rume aromatic vocabulary is shared across washed and natural processing** (jasmine / bergamot / lemongrass / ginger underneath sweetness, with stone-fruit tartness on washed and tart sweetness + spice on natural). "Fermented / funky" descriptors on this variety usually equal underdevelopment, not defect - cross-reference producer tasting notes and seek a reference roast before assuming a roast artifact. Evidence: Sudan Rume Washed (closed) + Sudan Rume Natural (V1-V3, 10 batches) + same farm (CGLE) shared lemongrass signature. Detail: [§ Varietal Aromatic Fingerprints](#varietal-aromatic-fingerprints).
-- **High-density washed Colombian (≥800 g/L) is energy-tolerant**; anchor V1 on CF-Light or equivalent confirmed profile and expect FC floor near 200°C, drop ceiling near 207°C. Evidence: Sudan Rume Washed (810 g/L) + Sudan Rume Natural (805 g/L). Detail: [§ Green Spec → Starting Hypothesis](#green-spec--starting-hypothesis).
-- **Producer notes including "lemongrass" / "jasmine" / "bergamot" predict that the standard evaluation recipe will under-extract**; plan a pushed brew session (91-92°C, 1:14) and evaluate at the cool stage. Do not conclude the roast failed if the cup is muted at 94°C / 1:17. Evidence: confirmed on Sudan Rume Washed; carries to delicate aromatic coffees broadly. Detail: [§ Green Spec → Starting Hypothesis](#green-spec--starting-hypothesis).
-
-> Patterns at Medium / Medium-High confidence are tracked in the detail sections below + in [§ FC-Temp Architectural Constraint on Naturals](#fc-temp-architectural-constraint-on-naturals---working-hypothesis) and [§ xbloom Evaluation Gate Misranking on Anaerobic Naturals](#xbloom-evaluation-gate-misranking-on-anaerobic-naturals---working-hypothesis). Single-lot Low-confidence working hypotheses live in [§ Working Hypotheses (Single-Lot, Low Confidence)](#working-hypotheses-single-lot-low-confidence) at the bottom of CCIL and in [§ Open Questions](#open-questions); they do not route into Confirmed Patterns until the corroboration threshold is met.
-
-## FC Floor & Ceiling by Processing Method
-
-Every coffee appears to have a minimum FC temp below which the cup is underdeveloped regardless of dev time, and a maximum drop temp above which overdevelopment suppresses aromatics. These windows are coffee-specific and must be found empirically, but processing method appears to set the rough range.
-
-| Process Type | FC Floor (est.) | Drop Ceiling (est.) | Evidence Base | Confidence |
-|---|---|---|---|---|
-| High-density washed Colombian (Sudan Rume) | ~200°C | ~208°C | CGLE-SRUME-WASHED-2026 (20+ batches) | High - confirmed empirically |
-| Natural (Sudan Rume) | ~202°C (est.) | ~207°C | CGLE-SRUME-NATURAL-2026 V1 (3 batches) | Low - V1 only, drop ceiling breached in all batches |
-| XO-fermented Colombian | ~200°C (est.) | ~205-206°C | CGLE-MANDELA-XO-2026 (13 batches, 4 experiment sets) | Medium - lot closed. FC floor estimated from RoR flattening; drop ceiling confirmed - above 208°C produces overdevelopment signal. Best results at 203-205°C drop temp with inaudible FC. |
-| Washed Gesha (counterflow) | ~200°C (est.) | Unknown | GV-OMA-25-035 (3 counterflow batches) | Very low - green exhausted before resolution |
-
-**Key pattern emerging:** Drop temp ceiling appears to sit around 205-208°C across all coffees tested in counterflow, varying by process. XO-fermented coffees appear to have a lower optimal drop temp (203-205°C) than washed high-density lots (206-207°C) - the fermentation has already done significant development work on the bean structure. FC floor on XO-fermented is difficult to establish empirically because FC is acoustically absent - manage by RoR behavior and bean temp rather than crack sound.
-
-## WB-to-Ground Agtron Delta Norms by Processing Method
-
-The WB-to-ground delta is the most sensitive internal development signal identified so far. Target ranges appear to vary meaningfully by processing method due to differences in how the bean's outer layers develop relative to the core.
-
-| Process Type | Target Delta | V1 Typical Delta | Resolution Delta | Notes |
-|---|---|---|---|---|
-| Washed (high density) | ≤3 points | 3-5 points (V1/V2) | 1.0 points (#119) | Tight delta strongly correlated with best cup quality |
-| Natural (fruit layer) | ≤5 points (est.) | 7-11 points (V1) | Not yet resolved | Fruit layer provides thermal insulation; large deltas expected early |
-| XO-fermented | ≤4 points (est.) | Not systematically measured in V1 | 3.6 points (#139, WB 76 / ground 72.4) | Fermentation layer behaves similarly to natural in early experiment sets - large deltas expected when profile is not yet dialed. Tight delta at resolution consistent with other lot types. |
-
-**Key pattern:** First experiment sets on any coffee will likely show large deltas as the profile is dialed in. Shrinking delta over successive experiment sets is a reliable signal that profile development is on the right track.
-
-**Anaerobic Dry Process (heavy fermentation, 2-3 day sealed) - hypothesis from V1 only:** Target delta <=2 points (Medium confidence). V1 deltas: 4.2 / 3.7 / 1.3 (single lot, COS-HIG-BOR-2026). v1c at delta 1.3 was the only batch in target zone and was the decisive winner. Higher peak inlet produced TIGHTER delta, opposite of intuition - heavy anaerobic fermentation + fruit-layer thermal insulation requires more energy to drive core development in step with surface. Confidence will firm as V2 results land.
-
-_Single-lot extension hypotheses (Low confidence) live in [§ Working Hypotheses (Single-Lot, Low Confidence)](#working-hypotheses-single-lot-low-confidence)._
-
-## Session Position Effect - Machine-Specific Data
-
-Confirmed across multiple lots and sessions: first roast of a session consistently runs slower and produces later, hotter FC than subsequent roasts on identical protocol. This effect is consistent enough to predict:
-
-| Session Position | FC Timing vs. Target | Recommended Correction | Notes |
-|---|---|---|---|
-| First roast of session | Late by ~10-15s, ~1-2°C hotter | None - rely on thermal reset protocol (dry roast to 140°C). Fallback: 128°C hopper load if replication-critical. | Most variable roast in any session - consider warm-up function |
-| Second roast | Close to target, slight improvement | Standard protocol (125°C hopper load) | Reliable, consistent |
-| Third roast | On target or very slightly faster | Standard protocol | Most consistent - closest to established targets |
-
-**Practical implication for experiment design:** When designing replication sessions, the third roast of the session is the most structurally consistent. When designing experiments with three A/B/C batches, batch C will naturally run slightly faster and hotter than batch A on identical protocol - factor this into interpretation of results.
-
-## Green Spec → Starting Hypothesis
-
-Translates density, moisture, processing method, and variety into directional cues for V1 design. Use this as a starting hypothesis only - every new coffee should still test energy direction through a three-batch V1 before committing to a profile.
-
-**Two distinct arbitration mechanisms operate in the same V1 design pass** ([CONTEXT.md § Signal precedence](CONTEXT.md) + [§ Multi-factor weighting](CONTEXT.md)):
-
-- The **additive table** governs continuous numerical adjustments (peak inlet hedge, fan-curve modifications, V1 spread width, Maillard % tolerance) where multiple signals contribute hedged adjustments that sum.
-- The **precedence table** governs categorical / discrete decisions (which anchor profile, which end condition mechanism, which direction the energy adjustment runs) where one signal wins outright over the others.
-
-When a precedence rule fires, it overrides the additive-table guidance on that specific decision — read the precedence table first, then walk the additive table for everything precedence didn't already decide.
-
-### Additive table — continuous adjustments
-
-| Signal | Starting Hypothesis | Confidence & Evidence |
-|---|---|---|
-| **Density ≥ 800 g/L (high density)** | More energy-tolerant. Anchor peak inlet on CF-Light or equivalent confirmed profile. Expect FC floor near 200°C. | High - confirmed on Sudan Rume Washed (810 g/L) and Sudan Rume Natural (805 g/L) |
-| **Density ≤ 760 g/L (low density)** | Taper energy earlier. Reduce peak inlet by 3-5°C vs. CF-Light. Compress Maillard slightly. Watch for overdevelopment. | Low - no directly resolved low-density counterflow lot yet. Treat as starting hypothesis only. |
-| **Moisture ≥ 11% (high moisture)** | Longer drying phase needed. Hold 01:15 and 02:30 inlet higher to complete drying before Maillard. Expect later FC if energy is normal. Critical nuance: raise *drying* energy to match the curve traced on a normal-moisture lot - **do not conflate with more development**. High moisture needs drying support; it does not automatically mean more post-crack dev. | Medium-High - counterflow has not yet seen a high-moisture lot in Chris's archive, but [peer livestream confirmation (Dongzhe, 2026-05-17)](docs/roasting/dongzhe-livestream-2026-05.md): he raised overall drying power on an ~11% moisture Cascade Fermentation to match prior-roast momentum, deliberately separated from late Maillard / development decisions. Same machine + same counterflow mode. |
-| **Moisture ≤ 10% (low moisture)** | Shorter drying phase. FC arrives faster. Gentler / slower early energy to avoid overshoot and runaway. Watch for compressed dev time. Drop ceiling more important than usual. | Medium-High - confirmed on Sudan Rume Natural (10.3%); carries to Gesha Clouds (10.4%) as active hypothesis. [Peer livestream confirmation (Dongzhe, 2026-05-17)](docs/roasting/dongzhe-livestream-2026-05.md): explicit "approach it a little bit slower" on an 8.9-9% moisture Precursor Amplification Natural to avoid overshoot. Same machine + same counterflow mode. |
-| **Natural with visible fruit layer — flavor-quality hedge** | Once FC timing is workable (see precedence table for the energy-direction decision), dial energy *back* rather than forward. Sudan Rume Natural V1-V3 (10 batches): 247°C peak was needed to get FC timing into range, but higher energy amplified an unwanted drying/astringent compound. The preferred cup came from the lowest-energy batch (Batch 152, no audible FC, Maillard 66.9%, extended total time). Do NOT assume "natural = less heat" for FC timing, but DO assume "natural = less heat" for flavor quality on Sudan Rume-type naturals. | Medium-High - confirmed on Sudan Rume Natural V1-V3 (10 batches). The energy-vs-flavor tension is now well-established for this specific variety/process combination. |
-| **Heavy anaerobic / extended fermentation (>36hr) — continuous adjustments** | Fan floor slightly lower (63-65% in Maillard). Manage drop primarily by bean temp and RoR flattening (FC mark is unreliable when audibility is silent). Maillard % tolerance widens to ~48% before flagging (per [CONTEXT.md § Maillard %](CONTEXT.md) — calculation depends on an upstream FC mark). End-condition mechanism is a categorical decision and lives in the precedence table. | Medium-High - confirmed on Mandela XO (silent crack across all 4 experiment sets), active hypothesis for Gesha Clouds (84hr anaerobic) |
-| **Variety = Gesha (any process, counterflow)** | Dev time floor of 48s minimum. Use shaped fan curve from start. Be skeptical of any batch with dev time under 40s regardless of Agtron. | Medium - GV Oma Washed 40s confirmed as floor (3 underdeveloped batches), active hypothesis for Gesha Clouds |
-| **Producer notes include "lemongrass," "jasmine," "bergamot" (delicate aromatic signals)** | Evaluation recipe will likely under-extract. Plan pushed brew for optimized session (91-92°C, 1:14 ratio). At Day 7, evaluate at cool stage, not hot. Do not conclude roast failed if muted at 94°C/1:17. | High - confirmed on Sudan Rume Washed via optimized brew session |
-
-**How to use the additive table:** Read every row whose Signal applies to the new coffee. Combine the Starting Hypotheses additively into V1 design — density / moisture / altitude contributions stack cleanly, and the resulting peak inlet hedge / fan adjustment is the operator-judgment composite of the contributing rows. Signals can stack (e.g. high density + low moisture + Gesha) and their guidance compounds. When confidence is Low or Medium, widen the A/B/C spread on peak inlet to improve the chance that one of the three batches lands in a usable zone even if the anchor hypothesis is wrong.
-
-### Precedence table — categorical decisions
-
-| Triggering Condition | Categorical Decision | Why precedence (not additive) |
-|---|---|---|
-| **Process family — heavy ferment / anaerobic / XO present** | Anchor on the heavy-ferment family profile (Mandela XO #139), NOT the washed family profile. Density-driven anchor selection subordinates to fermentation cellulose's thermal behavior. | Anchor selection is a categorical pick from a discrete set; you don't sum two anchor choices. Per [CONTEXT.md § Signal precedence](CONTEXT.md) rule #1. |
-| **FC-audibility expectation — silent / subtle / ambiguous predicted** | End condition is `bean_temp` at the expected drop target (~203-205°C for XO-type coffees, ~207°C for heavy-anaerobic Gesha), NOT `dev_time`. Dev-time end conditions assume an FC mark exists to count from; when FC is not audible the mark is unreliable and `dev_time` fires on whatever timer value was set, often past the drop ceiling (confirmed: Mandela XO V4 reached 51-58% Maillard when dev time fired at machine-estimated FC). | End-condition mechanism is a categorical choice between two discrete regimes. Per [CONTEXT.md § Signal precedence](CONTEXT.md) rule #5. |
-| **Fruit-layer presence — visible mucilage / dried fruit layer on natural** | Energy-direction adjustment **inverts** vs density prediction — fruit-layer naturals need MORE energy than density predicts to get FC timing into range, not less. The fermentation cellulose / fruit layer provides thermal insulation that requires additional energy to drive FC. (Timing fix only; the flavor-quality hedge in the additive table runs the *opposite* direction once timing is in range.) | The sign of the energy adjustment categorically flips; you can't sum "more energy" and "less energy" and average them. Per [CONTEXT.md § Signal precedence](CONTEXT.md) rule #2. |
-
-**How to use the precedence table:** When a triggering condition is present, the categorical decision wins outright — it does not stack with additive-table guidance on the same parameter. Walk the precedence table first; let it pick the anchor / end-condition / energy-direction; then walk the additive table for continuous adjustments inside that regime.
-
-_Single-lot extension hypotheses (Low confidence - altitude proxy for one-shot calibrations, etc.) live in [§ Working Hypotheses (Single-Lot, Low Confidence)](#working-hypotheses-single-lot-low-confidence)._
-
-## Varietal Aromatic Fingerprints
-
-Sudan Rume as a variety produces unusually delicate, high-compound aromatics that are shared across washed and natural processing. The flavor vocabulary took many sessions to establish correctly - this table is intended to short-circuit that process for future lots.
-
-| Variety / Lot | Expected Character (well-developed) | Underdevelopment Reads As | Overdevelopment Reads As | Source |
-|---|---|---|---|---|
-| Sudan Rume Hybrid Washed | Jasmine, bergamot, candied apricot, lemon, floral, faint mint, stone fruit tartness (malic acid) sitting underneath sweetness | Nutty, grassy, flat, lactic/fermented (misread as defect) | Dark black tea, flat, body-heavy, loss of florals | CGLE-SRUME-WASHED-2026 (confirmed) |
-| Sudan Rume Natural | Lemongrass, ginger, brown tea, blueberry, tart sweetness, cardamom/spice at cool stage. Sweetness leads hot; lemongrass/ginger emerge as cools. Sichuan peppercorn texture at finish when well-integrated (pleasant). Descriptor set confirmed via Special Guests (London) direct comparison and 3 experiment sessions (10 batches). Target expression: blended and cohesive at April Glass 92°C, not aggressive or pungent. | Flat, thin, missing lemongrass attack; grassy/hay aroma (confirmed batch 142 at 17s dev) | Dark tea (tannin-heavy), deep brown tea with drying finish; Sichuan peppercorn becomes aggressive/distracting rather than textural; lemongrass muted; spice-dominant. Correlates with higher energy input (confirmed: higher peak = more drying compound). Optimal expression requires lower-energy roast, not higher. | CGLE-SRUME-NATURAL-2026 (V1-V3 confirmed, 10 batches, 3 experiment sessions) |
-| Mandela XO | Caramelized/charred pineapple, lemongrass, barbecue caramel, milk tea body, tropical fruit, light liqueur warmth at finish. Lemongrass is varietal/terroir character from CGLE (shared with Sudan Rume Natural from same farm) - it reads as pungent/funky when underdeveloped and as an integrated complexity marker when dialed correctly. Do not try to eliminate it. | Under-integrated fermentation, alcoholic attack dominant, cup thins after attack, pungent and one-dimensional, no caramel or sweetness perceptible | Spice-dominant (cinnamon, cardamom), muted fruit, body-heavy with hollow finish, slight roast character on finish | CGLE-MANDELA-XO-2026 (confirmed - 4 experiment sets, 13 batches, lot closed) |
-| Java (Guatemala El Socorro) | Clean, structured, balanced | Thin, cereal | Roasty, baked | GUA-SOC-JAVA-2024 (closed) |
-| Typica Mejorado / Mejorado (Ecuadorian Washed) | Mandarin, faint pineapple, Earl Grey body, vanilla (creamy), nougat, silky light tea-like body. Producer descriptors include honey / passion fruit / white grape but those compounds appear to require fuller roast development to express - even on a well-developed roast, the variety leans toward citrus + Earl Grey + nougat as the dominant signature. Cup wants Clarity-First strategy at brew time (1:16 / EG-1 6.5 / 92°C / Melodrip / longer bloom); pushed extraction produces "discordant" / "dark Earl Grey" / under-developed front. | Discordant flavors that don't integrate, mandarin "wants to come out but doesn't feel fully formed", dark Earl Grey body dominant over front, hollow back-half / aftertaste separating from body. Roast underdevelopment manifests primarily as a finish problem (back-half) not a front problem (mandarin still surfaces). | (Untested at this variety - overdevelopment data point not yet in archive) | ECU-TD24-RANCHOTIO-TM-WASHED (one-shot, 1 data point on underdeveloped roast); aligned with brewing.md archive entry for Finca Soledad TyOxidator / Sydra Cold Fermented Washed DRD on the well-developed end |
-
-**Key pattern:** The "fermented/funky" descriptor that appeared throughout early Sudan Rume Washed sessions was the variety's characteristic lemongrass and ginger compounds misread as a defect due to underdevelopment. Once the correct descriptor vocabulary was established (via direct comparison with a notable roaster's version), the path to resolution accelerated dramatically. For any new lot where you consistently taste something unexpected, cross-reference with the producer's tasting notes and seek a reference roast before assuming it is a roast artifact.
-
-## Rest Behavior Patterns
-
-Universal finding: Day 7 pourover is the correct evaluation gate for all lot types so far. Day 4 cupping has been consistently unreliable or actively misleading.
-
-| Lot Type | Optimal Evaluation Window | Day 4 Reliability | Notes |
-|---|---|---|---|
-| Washed, high-density Colombian | Day 7 pourover | Unreliable - misleading in both directions | Confirmed across 20+ batches of Sudan Rume Washed. Day 6 confirmed as directionally reliable for winner selection (V6 evaluation, #148 correctly identified) - Day 7 remains standard but Day 6 is sufficient if needed. |
-| Natural | Day 7 pourover | Not tested (skipped per protocol) | No evidence to differentiate - keep Day 7 universal |
-| XO-fermented | Day 7 pourover | Not tested (skipped per protocol) | Confirmed: Day 7 is correct gate. Day 0 cuppings were directionally useful but reversed the winner in V1 (Day 0 preferred Batch 102; Day 7/10 preferred Batch 103). Day 6 evaluations were close but slightly early - coffee continues integrating between Day 6 and Day 8. Real brew session required before reference roast declaration - xbloom evaluation recipe consistently under-expressed caramel and body character that April Brewer brew revealed. |
-
-**Brew recipe gap:** There is consistently a significant delta between the Day 7 xbloom evaluation recipe and the optimized brew recipe. The evaluation recipe is calibrated for comparison consistency, not expression maximization. Always run an optimized brew session before declaring a lot resolved - the evaluation recipe will typically under-extract delicate washed coffees with unusual aromatic profiles. Lower temperature (91°C vs. 94°C) and higher concentration (1:14 vs. 1:17) were the primary levers on Sudan Rume Washed.
-
-_Single-lot extension hypotheses (Low confidence - cupping-table reversal, xbloom false-positive, silent-FC reproducibility, audible-FC threshold, bean-temp end-condition) live in [§ Working Hypotheses (Single-Lot, Low Confidence)](#working-hypotheses-single-lot-low-confidence)._
-
-**Working hypothesis added (Low confidence, 1 lot - ECU-TD24-RANCHOTIO-TM-WASHED):** Underdeveloped roasts may have a warm-shifted peak evaluation window. Batch #179 (Maillard 49.4%, weight loss 11.89%, drop 203.3°C - structurally underdeveloped) peaked at 51-53°C on the Day 7 pourover under Clarity-First. As the cup cooled past peak it "almost became not as good" - degraded rather than continuing to integrate further (the opposite of the typical Clarity-First confirmation pattern, where cups peak 45-50°C and improve as they cool through that band). Hypothesis: underdeveloped roasts lack the late-Maillard caramelization compounds that carry the cup through deep cooling, so the peak window sits in the warm-mid band where the front-and-mid aromatics that DID develop are most expressive. Operational implication for cupping evaluation: when a roast is structurally light, evaluate at 50-55°C, not 45°C. Don't conclude cup is degrading at the standard cool-window if the roast came out underdeveloped. Treat as Low confidence pending 1-2 more underdeveloped-roast data points.
-
-## FC-Temp Architectural Constraint on Naturals - Working Hypothesis
-
-**Working hypothesis (Medium confidence, 2 lots - CGLE-SRUME-NATURAL-2026 + BRA-FAZENDAUM-WUSHWUSH-NAT-2026):** On natural-process coffees in counterflow, FC temperature appears anchored to 204-206°C across a wide range of peak inlet variation (242-251°C tested), regardless of cultivar, density, moisture, or terroir. Peak inlet variation pulls FC TIME earlier when raised but does NOT pull FC TEMP lower. The result: drop ceiling discipline forces dev floor failure (drop fires immediately after FC), or dev requirement forces drop ceiling breach.
-
-Evidence:
-- CGLE-SRUME-NATURAL-2026 V2 (242-248°C peak): FC temps 204-206°C across all three batches, dev compressed to 14-40s.
-- BRA-FAZENDAUM-WUSHWUSH-NAT-2026 V1 (245-251°C peak): FC temps 204.7-205.6°C across all three batches, dev 23-42s. Replicates exact failure pattern on different cultivar (Wush Wush vs Sudan Rume), different terroir (Mantiqueira/Sul de Minas vs Western Andean Cordillera), different density (809 vs 791), different moisture (9.10% vs 10.30%), different drying (dark-room vs standard).
-
-If this pattern confirms across a 3rd natural lot, the architectural fix is to abandon the peak-inlet-as-primary-V1-variable approach for naturals and design V1 around the FC-temp ceiling directly: either (a) push FC ARRIVAL to 200-202°C via early-ramp restructuring, or (b) switch end-condition to bean-temp like Mandela XO and accept FC at ~205°C as a measurement artifact, or (c) treat the SR Natural V3/V4 low-energy slow-bake as the architectural template for naturals generally, not as a SR-Natural-flavor-specific approach. Promote from hypothesis to confirmed pattern after a third natural lot exhibits the same FC-temp anchoring.
-
-## xbloom Evaluation Gate Misranking on Anaerobic Naturals - Working Hypothesis
-
-**Medium-High confidence - two instances on one lot, both directions of failure.** COS-HIG-BOR-2026 V1 and V2 both demonstrated xbloom misranking on this lot. V1: v1b's xbloom_gate aroma carried a lactic note that suggested underdevelopment; Balanced Intensity real pourover (Orea Glass + Sibarist FAST Flat, 1:16, 92°C, EG-1 6.5) resolved cleanly with no lactic note - extraction artifact, not roast defect. V2: v2c xbloom_gate showed staying-power-through-cooling that v2b lacked, operator initially preferred v2c; Balanced Intensity real pourover REVERSED this verdict - v2b is decisive winner, v2c reads as heavier and tart-discordant. Both directions of failure (false-positive defect, false-positive winner).
-
-Pattern: on anaerobic-natural / heavy-ferment lots, xbloom (1:17.5 / 94°C) extracts in a way that misleads ranking between close candidates.
-
-Protocol implication: on anaerobic naturals / heavy-ferment lots, run Balanced Intensity real pourover on top 2 xbloom candidates BEFORE declaring outcome. Don't trust xbloom-only rankings to differentiate close candidates. Watch Mandela XO V4, El Paraíso Ginger Castillo, Bukure Anaerobic Lot 10 at Day 7 for this pattern. Promote to Confirmed Patterns when the pattern repeats on a second anaerobic-natural / heavy-ferment lot.
-
-## Working Hypotheses (Single-Lot, Low Confidence)
-
-> **Holding pen for historical Low-confidence appends from before the operational ladder was finalized (CONTEXT.md, 2026-05-18).** Per the [ladder](CONTEXT.md), going forward Low-confidence insights belong in `additional_notes` on the experiment row, NOT in CCIL. Per-session prompts (`log-cupping.md`, `close-lot.md`) do not append new entries here - this subsection should drain over time, not grow. Each entry below carries the originating lot + observation date so the next [ARBITER.md § CCIL consolidation pass](ARBITER.md#ccil-consolidation-pass) can age out entries that haven't been corroborated within the retire window (default: 90 days OR 3 similar lots without repeat). Most entries here have parallel rows in [§ Open Questions](#open-questions) that frame the question for the next applicable lot's V1 design.
-
-### Heavy anaerobic Gesha WB-to-Ground delta pattern (CGLE-GESHA-CLOUDS-2026, observed 2026-05)
-
-Heavy anaerobic Gesha may follow a similar pattern to other heavy-ferment lots - V1 typical deltas wide (4.4 / 2.5 / 10.5 across three batches), with the tightest delta (+2.5) tracking the cup that won at the Day 7 pourover. Surface Agtron values run unusually high on this coffee (84-91 WB) - significantly higher than the Sudan Rume Washed resolution range (70-78). This may be a coffee-specific surface-development signature where surface Agtron alone is unreliable but the WB-to-Ground delta still tracks internal development quality reliably. Treat as hypothesis pending 2+ more lots before promoting.
-
-### Altitude as weak proxy for density on one-shot calibrations (ECU-TD24-RANCHOTIO-TM-WASHED, observed 2026-05)
-
-When density is unmeasured, altitude is a WEAK proxy for density adjustment direction. Batch 179 (1,300m Ecuadorian washed, density unmeasured) was anchored on #133 with a -2°C peak inlet hedge applied on the assumption that low altitude implies low density. Outcome was underdevelopment - FC 40-60s late, drop 3°C below target, weight loss 11.89% (below 13-15%). The lot wanted MORE energy, not less, indicating either (a) actual density was higher than altitude predicted, or (b) the 120°C hopper pre-load standard chosen to match #133 archive parameters cost more drying-phase time than the -2°C peak inlet hedge could compensate for.
-
-Operational implication for one-shot calibrations where density cannot be measured: do NOT preemptively apply downward energy adjustments based on altitude alone. Use the anchor profile at full energy and let FC timing tell you whether to compensate next session - except there is no next session for one-shots, so the safer default is FULL anchor energy + 125°C hopper pre-load (current standard) over the matched-archive 120°C hopper pre-load. The replication discipline of matching archive parameters costs roast quality on lots where the anchor is the closest match but not an exact match. Confidence will firm only with 2+ more one-shot data points.
-
-### Cupping-table reversal of Day 7 pourover on heavy anaerobic Gesha (CGLE-GESHA-CLOUDS-2026 V1, observed 2026-05)
-
-On heavy anaerobic Gesha, the cupping table actively reversed the Day 7 pourover verdict. The cupping table preferred #163 (which fell apart under pushed extraction); the pourover identified #162 as the structurally cleanest cup. This is the strongest data point yet for the V4 principle that Day 7 pourover is the only evaluation gate. For this process type specifically, the cupping table protocol may amplify body and suppress structural defects in ways that mislead about brewing behavior. Treat as hypothesis pending 1-2 more heavy-anaerobic-Gesha lots before promoting.
-
-### xbloom false-positive underdevelopment on anaerobic naturals (COS-HIG-BOR-2026 V1, observed 2026-05)
-
-COS-HIG-BOR-2026 V1 Batch #158 (v1b) showed a lactic note in xbloom aroma that triggered an underdevelopment diagnosis. Real pourover at Balanced Intensity (Orea Glass + Sibarist FAST Flat, 1:16, 92°C, EG-1 6.5) cleanly resolved the lactic note - it was an extraction artifact at the xbloom recipe (1:17.5/94°C), not a roast defect. This is the Brew-Reveals-Roast Principle applying in the inverse direction: evaluation gate flagging false defects on coffees that need different extraction strategy.
-
-Operational implication: for heavy-anaerobic / co-ferment / anaerobic-natural lots, the optimized brew session should be elevated from "after winner identified" to "always run on top 2 candidates before declaring underdevelopment." Watch for repeat pattern on Mandela XO, Sudan Rume Natural future experiments, and other heavy-ferment lots. **Promotion path:** this hypothesis was promoted to Medium-High in [§ xbloom Evaluation Gate Misranking on Anaerobic Naturals](#xbloom-evaluation-gate-misranking-on-anaerobic-naturals---working-hypothesis) after V2 produced a parallel reversal in the opposite direction. Retained here for V1-specific lactic-note detail.
-
-### v1c silent-FC profile may not be cleanly reproducible at identical inlet curve (COS-HIG-BOR-2026, observed 2026-05)
-
-COS-HIG-BOR-2026 v2a (#164) was designed as a controlled replication of v1c (#159) at 251°C peak inlet, identical fan curve, same hopper pre-load (125°C), same charge temp protocol. Result: v2a produced AUDIBLE FC at 4:18/209.4°C; v1c produced SILENT FC at drop 208°C. v2a dropped at 210.9°C (FC + 1.5°C); v1c dropped at 208°C (post-silent-FC). Despite identical inlet/fan curves, the two roasts produced structurally different events. Possible explanations: (1) ambient/session-state factors not currently controlled (room temp, humidity, machine warm-up history), (2) subtle BBP variation, (3) drum thermal mass state, (4) genuine random variation in silent-FC bean structure. Watch for repeat pattern on V3 / next-lot replication attempts.
-
-### Audible FC threshold on heavy anaerobic naturals (COS-HIG-BOR-2026 V2, observed 2026-05)
-
-On COS-HIG-BOR-2026 V2 batches 164/165/166 (peak inlet 251 / 253 / 255°C, identical fan curve), audible FC was unlocked at 251 and 253°C peak (v2a, v2b) but suppressed again at 255°C peak (v2c). All V1 batches (243 / 247 / 251°C peak) were silent. Hypothesis: audible FC requires (a) sufficient energy to push the bean through the FC structural threshold AND (b) sufficient time at FC for bubble propagation - too little energy -> silent (V1 pattern), too much energy -> compressed time-at-FC suppresses audibility (v2c pattern). 251-253°C peak inlet sits in a window where both conditions are met. Watch for similar non-monotonic FC-audibility patterns on other heavy-anaerobic / extended-fermentation coffees.
-
-### Bean-temp end condition as safer default on silent-FC heavy-anaerobic lots (CGLE-GESHA-CLOUDS-2026 V2, observed 2026-05)
-
-On coffees with documented silent-FC risk (heavy anaerobic processing, in this lot specifically Gesha + 84hr in-cherry anaerobic), the Roest profile end condition should be set to BEAN TEMP at the target drop temp (e.g. 207°C), NOT dev time. Dev-time end conditions assume an FC mark exists to count from; on silent-FC coffees there is no FC mark, so dev-time fires on whatever timer value was set, often well past the target drop temp. CGLE-GESHA-CLOUDS-2026 V2 demonstrated this: v2b/v2c both ran with silent FC and drops at 208.0°C / 209.9°C (the latter a 1.9°C ceiling breach identical to v1c) because the 0:50 dev-time safety net couldn't fire until the timer expired. v2a (audible FC) did not have this problem - drop fired at 207.2°C as designed.
-
-Implication: bean-temp end condition is the safer default for ALL heavy-anaerobic experiments going forward; dev-time should only be used as a true safety-net fallback layered on top of bean-temp, not as the primary trigger. Treat as hypothesis pending 1-2 more heavy-anaerobic experiments.
-
-### V2 update for CGLE-GESHA-CLOUDS-2026 cupping-table reversal - aggressive-direction-may-be-recipe-dependent (observed 2026-05)
-
-V2 xbloom_gate pourover on V2 batches 170/171/172 produced a SECOND counterintuitive winner. v2c (worst roast metrics - drop 209.9°C, Maillard 56.8%, Agtron WB 95.4, WB-to-Ground delta +7.6) was the preferred cup at the gate, mirroring v1c's cupping-table preference in V1. Notably v1c had failed at PUSHED POUROVER on V1, leading to an 'aggressive direction is dead' conclusion. The V2 result raises a different hypothesis: the aggressive direction may not be dead - it may be RECIPE-DEPENDENT. v1c's pushed pourover failure may have been wrong-recipe rather than wrong-roast, and the v1c cupping-table win + v2c gate win may both be correct signals that this coffee wants more energy. Confirmation pending: a balanced-intensity-pourover round on #172 before V3 design will test whether v2c's gate win is robust to recipe (validating the aggressive direction) or repeats v1c's failure under pushed extraction (recipe-dependent only). The original V1 cupping-table-unreliable observation still stands; what's NEW is that pushed-pourover may also be unreliable on this coffee if used with the wrong extraction strategy. The pourover gate is reliable for cup ranking; the brewing recipe used at the gate is what may differ in usefulness across batches.
-
-### Session-Position Acceleration vs Drop Ceiling on High-Peak Third Batch (RWA-NOVA-NAT21-RB-2026 V1, observed 2026-05)
-
-Observed on Bukure Natural Lot 21 V1 (batch 178, third roast of session): peak inlet +4°C above v1b (248°C vs 244°C) combined with third-roast session-position acceleration produced FC 13s earlier and 1.7°C hotter than v1b on identical-shape profile. Bean temp climbed past the 207°C drop ceiling between dev-time check and operator response, drop fired at 209.0°C.
-
-Working hypothesis: when V1 spread includes a high-peak batch run third in session, the cumulative effect of session-position acceleration + the higher inlet pushes drop-trigger reaction-time below what manual drop-on-temp can reliably handle.
-
-Potential mitigation (untested): set Roest end-condition to bean temp 207°C (NOT dev time) so drop fires automatically at ceiling regardless of clock or operator. Alternative: run high-peak batch in v1b's session position (second) and middle batch third, accepting that experiment-set design becomes more complex. Confidence will firm if the pattern repeats on the next V1 with a high-peak third batch.
-
-### Dev-Time Outweighs Peak Inlet for Agtron WB at Low-Energy Spread End (RWA-NOVA-NAT21-RB-2026 V1, observed 2026-05)
-
-Observed on Bukure Natural Lot 21 V1: Agtron WB ordered 75 (v1a, 240°C peak) / 82.5 (v1b, 244°C peak) / 81.4 (v1c, 248°C peak) - inverted from expected color-by-peak-inlet ordering. The 38s dev time on v1a (vs 27s on v1b, 23s on v1c) drove enough additional surface development to invert the relationship. Maillard% tells the same story (51.3% / 48.8% / 48.6%).
-
-Working hypothesis: at the low-energy end of a peak-inlet spread, post-FC dev time accumulates more surface-development effect than the +4°C peak inlet difference contributes - because lower peak produces gentler RoR into FC, which produces longer dev when drop is held at a fixed temp.
-
-Operational implication: do not read Agtron WB ordering as a peak-inlet proxy across a spread. WB-to-ground delta and Maillard% are more reliable structural signals than WB alone when dev-time varies meaningfully across a V1 set. Validate at 2+ more lots before promoting from hypothesis - this could be a Bukure-specific quirk or a general property of natural-process spreads with held-constant drop temp.
+Migrated to the [Roasting Historian cluster](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) in Wave 2 PR 3 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#cross-coffee-insight-layer`. The cluster file carries the full CCIL content verbatim: Confirmed Patterns, FC Floor & Ceiling by Processing Method, WB-to-Ground Agtron Delta Norms, Session Position Effect, Green Spec → Starting Hypothesis (Additive + Precedence tables), Varietal Aromatic Fingerprints, Rest Behavior Patterns, FC-Temp Architectural Constraint on Naturals, xbloom Evaluation Gate Misranking on Anaerobic Naturals, and Working Hypotheses (Single-Lot, Low Confidence).
 
 ---
 
 # Open Questions
 
-Things to test on future roast sessions. **Maintenance rule:** when a question resolves, delete it (don't strikethrough). Resolved-with-strikethrough creates clutter at scale; the resolution lives in the [Cross-Coffee Insight Layer](#cross-coffee-insight-layer) (if a generalizable pattern emerged) and the commit history.
-
-- Does FC temperature anchor at 204-206°C across all naturals in counterflow regardless of cultivar / density / moisture / drying method? Two lots replicate so far (see [§ FC-Temp Architectural Constraint on Naturals](#fc-temp-architectural-constraint-on-naturals---working-hypothesis)) — need a 3rd natural lot to promote.
-
-- Is COS-HIG-BOR-2026 v1c (251°C peak, silent FC, drop 208°C) cleanly reproducible? V2a at identical inlet produced audible FC and drop 210.9°C. Watch for repeat on V3 / next-lot replication attempts.
-
-- Audible FC threshold on heavy anaerobic naturals: 251-253°C peak unlocks audible FC; 255°C suppresses again to silent (COS-HIG-BOR-2026 V2 only). Validate on next heavy-anaerobic lot before treating as a generalizable window.
-
-- Does Day 7 pourover consistently reverse the cupping-table verdict on heavy anaerobic Gesha? Confirmed once on CGLE-GESHA-CLOUDS-2026 V1 (#162 won at pourover, #163 won at cupping table). Need 1-2 more heavy-anaerobic-Gesha lots before promoting.
-
-- xbloom evaluation gate false-positive lactic on anaerobic naturals: COS-HIG-BOR-2026 V1 #158 read as defective at xbloom but cleanly resolved at Balanced Intensity pourover. Watch for repeat on Mandela XO retro / next anaerobic natural / co-ferment lot before generalizing "for heavy-ferment lots, run optimized brew on top 2 candidates before declaring underdevelopment."
-
-- Does dev-time outweigh peak inlet for Agtron WB at the low-energy end of a peak-inlet spread? Observed once on RWA-NOVA-NAT21-RB-2026 V1 (Agtron 75 / 82.5 / 81.4 inverted from peak ordering — see [§ Working Hypotheses — Dev-Time Outweighs Peak Inlet](#dev-time-outweighs-peak-inlet-for-agtron-wb-at-low-energy-spread-end-rwa-nova-nat21-rb-2026-v1-observed-2026-05)). Validate on next V1 with a low-energy floor batch.
-
-- Does session-position acceleration on a high-peak third batch need profile-end-condition (bean temp) to keep drop on target? RWA-NOVA-NAT21-RB-2026 v1c produced a 1.7°C ceiling breach (see [§ Working Hypotheses — Session-Position Acceleration vs Drop Ceiling](#session-position-acceleration-vs-drop-ceiling-on-high-peak-third-batch-rwa-nova-nat21-rb-2026-v1-observed-2026-05)). Test mitigation (bean-temp 207°C end condition) on next V1 with a high-peak third batch.
-
-- For washed Gesha in counterflow, does 48s dev-time floor hold across new lots? Confirmed once on GV-OMA-25-035 (3 underdeveloped batches at 24-40s dev). Use shaped fan from the start on future Gesha lots. Promote when next washed Gesha lot exhibits the same below-48s underdevelopment.
-
-- One-shot calibrations where density is unmeasured: is altitude alone a reliable proxy for energy direction? ECU-TD24-RANCHOTIO-TM-WASHED Batch 179 (1,300m, -2°C peak inlet hedge applied) underdeveloped. Default until 2+ more one-shot data points: full anchor energy, no altitude-based downward hedge, 125°C hopper pre-load.
-
-- Does the SR Natural V3/V4 low-energy slow-bake template generalize to other naturals as a recovery move when peak-inlet sweep fails? Reserved as architectural follow-up if the FC-Temp Architectural Constraint hypothesis promotes to confirmed.
-
-- Does the Gesha Clouds v2a-vs-#162 divergence reflect green aging? V2a at strict replication produced Agtron WB 6 points lighter on what was meant to be reproduction. Watch the next strict-replication attempt on a 2+-week-aged green to see whether this is bean-specific or a general aging effect.
-
-- Does bean-temp end condition (replacing dev-time end condition) hold up across more heavy-anaerobic lots? Working on Mandela XO V4 + CGLE-GESHA-CLOUDS-2026 V2. Promote to default for all heavy-anaerobic experiments; dev-time only as a true safety-net layered on top.
+Migrated to the [Roasting Historian cluster](docs/skills/roasting-historian/cluster/patterns/open-questions.md) in Wave 2 PR 3 (2026-05-26). This h1 + pointer block preserves anchor back-compat for `#open-questions`.
 
 ---
 
