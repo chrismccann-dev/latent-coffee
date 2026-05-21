@@ -280,9 +280,9 @@ function registerDocResources(server: McpServer) {
     'docs-brewing',
     'docs://brewing.md',
     {
-      title: 'Brewing Master Reference',
+      title: 'BREWING.md redirect stub',
       description:
-        'Full BREWING.md served live from the deploy filesystem. For one section by anchor, use docs://brewing.md#<Section%20Name>.',
+        'BREWING.md is now a ~3KB pointer-table redirect stub (Wave 4 PR 4b, 2026-05-21). All operational content migrated to sub-skill clusters under docs/skills/. See description in listDocs() for the full former-section → new-location mapping.',
       mimeType: 'text/markdown',
     },
     async (uri) => {
@@ -352,9 +352,9 @@ function registerDocResources(server: McpServer) {
     'docs-roasting',
     'docs://roasting.md',
     {
-      title: 'Roasting Master Reference',
+      title: 'ROASTING.md redirect stub',
       description:
-        'Full ROASTING.md served live from the deploy filesystem. For one section by anchor, use docs://roasting.md#<Section%20Name>. Seeded 2026-04-30 from Coffee_Roasting_Master_Reference_Guide_V4.md (~770 lines, hyphen-normalized).',
+        'ROASTING.md is now a ~6KB pointer-table redirect stub (Wave 4 PR 4b, 2026-05-21). All operational content migrated to sub-skill clusters under docs/skills/. See description in listDocs() for the full former-section → new-location mapping.',
       mimeType: 'text/markdown',
     },
     async (uri) => {

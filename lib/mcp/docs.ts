@@ -177,6 +177,38 @@ const SKILL_FILES: Record<string, string> = {
     'docs/skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md',
   'docs://skills/ccil/cluster/decomposition-log.md':
     'docs/skills/ccil/cluster/decomposition-log.md',
+  // ----- Wave 4 PR 4b additions (master-doc residual migration) --------------
+  // BREWING.md + ROASTING.md rewritten as ~500-byte redirect stubs; residual
+  // operational content migrated to these cluster files + the expanded
+  // coordinator/catalog.md § domain-principles + new coordinator/operator-guide.md.
+  // PR 4b closes the architecture implementation arc.
+  'docs://skills/coordinator/operator-guide.md': 'docs/skills/coordinator/operator-guide.md',
+  'docs://skills/brewing-assistant/cluster/operational-guide.md':
+    'docs/skills/brewing-assistant/cluster/operational-guide.md',
+  'docs://skills/brewing-equipment-expert/cluster/operational-reference.md':
+    'docs/skills/brewing-equipment-expert/cluster/operational-reference.md',
+  'docs://skills/roasting-assistant/cluster/onboarding-protocol.md':
+    'docs/skills/roasting-assistant/cluster/onboarding-protocol.md',
+  'docs://skills/roasting-historian/cluster/patterns/by-process/natural.md':
+    'docs/skills/roasting-historian/cluster/patterns/by-process/natural.md',
+  'docs://skills/roasting-historian/cluster/patterns/by-process/honey.md':
+    'docs/skills/roasting-historian/cluster/patterns/by-process/honey.md',
+  'docs://skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md':
+    'docs/skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md',
+  'docs://skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md':
+    'docs/skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md',
+  'docs://skills/roasting-historian/cluster/active-lots/cos-hig-bor-2026.md':
+    'docs/skills/roasting-historian/cluster/active-lots/cos-hig-bor-2026.md',
+  'docs://skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md':
+    'docs/skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md',
+  'docs://skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md':
+    'docs/skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md',
+  'docs://skills/roasting-historian/cluster/active-lots/redplum-cas-2026.md':
+    'docs/skills/roasting-historian/cluster/active-lots/redplum-cas-2026.md',
+  'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md':
+    'docs/skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
+  'docs://skills/roest-knowledge/cluster/protocols/green-storage.md':
+    'docs/skills/roest-knowledge/cluster/protocols/green-storage.md',
 }
 
 const DOC_FILES: Record<string, string> = {
@@ -209,7 +241,7 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://context.md':
     'Use when validating or looking up the meaning of any Latent-specific term — strict glossary across six clusters. Roasting workflow (V-set, batch slot, experiment frame, variable / lever / non-factor, roast→cup trace, taste-for, reference roast / reference cup / optimized brew, xBloom, control experiment, 3-axis Roast Character with primary lever / acceptable roast window / brewing tolerance, 4-state lifecycle, lot-close synthesis, forward design). Brewing workflow (Coffee Brief, Two-Axis Framework, extraction strategy, modifier, Named Consideration, WBC corpus check, Cooling-Curve Target, signal arbitration with variety / process / roaster signals, Strategy zone, Wrong-zone trap, Iteration loop, Iteration budget, Diminishing returns, Strategy pivot, Brewer rotation discipline, Hybrid sub-form, signature method). MCP / Sync Architecture (Latent MCP server, Tool vs Resource, dual-surface pattern, MCP-only input principle, role separation across claude.ai / Claude Code / Latent / Chris, asymmetric write trust, propose-then-apply, arbiter procedure). Canonical Registries (alias / override / lookup factory / find-or-create / canonical promotion). WBC Reference Materials (5-axis foundational map, 8 strategy families, Cross-cutting control patterns, Consciously-not-pursuing, full-map workflow accessibility). Synthesis Pipeline (entity-directed adapters, humanizer pass, aggregation eligibility). No implementation details; grown via /grill-with-docs sessions. Read this first before authoring any prose into Latent so terminology stays consistent.',
   'docs://brewing.md':
-    'Use when planning a new brew recipe — contains the 6-strategy + 4-modifier Two-Axis framework, Step 1d Coffee Brief structure, equipment reference. The Cross-Coffee Insight Layer migrated to the Brewing Historian cluster in Wave 2 PR 2 (2026-05-26); BREWING.md retains its h1 + pointer block at #cross-coffee-insight-layer for back-compat. Pull docs://skills/brewing-historian/cluster/patterns/* for the migrated cross-coffee learnings.',
+    '[REDIRECT STUB in Wave 4 PR 4b] BREWING.md is now a ~3KB pointer-only doc enumerating where each former section now lives. Authoritative brewing content lives in the sub-skills clusters: brewing-assistant/cluster/operational-guide.md (BREW PROMPT Steps 1-4), brewing-equipment-expert/cluster/operational-reference.md (Location Constraints + Equipment + Valve + Filter + Examples), brewing-historian/cluster/patterns/ (cross-coffee insights + per-strategy + per-cultivar), wbc-brewing-archivist/cluster/ (WBC reference + 102-recipe corpus), coordinator/catalog.md § brewing-domain-principles (Two-Axis framing). Brew sessions still start with docs://prompts/start-brew.md.',
   'docs://brewing/roasters.md':
     'Use when working with a specific roaster — per-roaster brewing lessons + house-style cards (e.g. Hydrangea El Paraíso thermal-shock guidance, Sey extraction expectations). Reference for roaster-anchored brew design.',
   'docs://brewing/wbc-reference.md':
@@ -217,7 +249,7 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://brewing/wbc-recipes.md':
     '[MIGRATED in Wave 2 PR 1] Authoritative content lives at docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://roasting.md':
-    'Use when planning a roast on the Roest L200 Ultra (counterflow mode) — covers the New Coffee Onboarding Protocol (Steps 1-4), Standard Workflow (BBP / Hopper Pre-Load), Naturals + Honey roast-direction frameworks, Lot Knowledge (Active Lots + One-Shot Calibrations + Closed Lots), Green Bean Storage, Session Debrief Template, and Archive pointer. Multiple sections migrated to sub-skill clusters: Wave 2 PR 3 moved Cross-Coffee Insight Layer + Open Questions to Roasting Historian (h1 + pointer blocks at #cross-coffee-insight-layer + #open-questions); Wave 3 PR 1 moved Equipment / Evaluation Protocol / Standard Inlet Curve Template / Fan Strategy / Key Counterflow Observations / FC Marking Protocol to Roest Knowledge cluster, Reference Roast Target + Peer Insights to Peer-Learning Roasting Archivist cluster, and Roast-to-Brew Translation to Roasting Historian cluster. All migration anchors preserved as h1 + pointer blocks for back-compat. Pull docs://skills/roest-knowledge/cluster/* + docs://skills/peer-learning-roasting-archivist/cluster/* + docs://skills/roasting-historian/cluster/* for migrated content.',
+    '[REDIRECT STUB in Wave 4 PR 4b] ROASTING.md is now a ~6KB pointer-only doc enumerating where each former section now lives. Authoritative roasting content lives in the sub-skills clusters: coordinator/catalog.md § roasting-domain-principles (Philosophy + What Good Looks Like + V-set methodology), coordinator/operator-guide.md (Schema + Canonical lookups + MCP server + Session Debrief), roasting-assistant/cluster/onboarding-protocol.md (Steps 1-4 + Naming + Parallel Experiments), roasting-historian/cluster/active-lots/ + cluster/learnings/ + cluster/patterns/ (per-lot + by-process + cross-coffee patterns + R-to-B translation + open questions), roest-knowledge/cluster/protocols/ + cluster/machine/ (BBP + Hopper + Fan Strategy + FC Marking + Counterflow Observations + Green Storage + Evaluation), peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md (Reference Roast Target + Peer Insights). Roast sessions still start with docs://prompts/start-lot.md (V-set) or docs://prompts/one-shot.md (one-shot).',
   'docs://roasting/archive.md':
     'Use when researching closed-lot roasting outcomes — per-lot Key Learnings, reference roast parameters, and structural takeaways from completed beans. Read before roasting a similar coffee.',
   'docs://roasting/wbc-roasting.md':
@@ -459,6 +491,35 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Operational prompt for one-shot green-bean lots (single-batch samples ~100-120g, no iteration possible — auction-lot samples, farm-direct samples, rare allocations). Covers STAGES 1-4: intake (push_green_bean with is_one_shot:true + carry-forward search across similar prior lots) + tolerance-anchored design (push_experiment with batch_ids cardinality 1, push_roast_recipe × 1, push_roast_profile × 1) + record the roast (push_roast linked to recipe_id) + record Day 7 cupping (push_cupping + verdict decision). Verdict outcomes: A (reference-quality) or B (Closed without reference). STAGE 5 close-out lives in one-shot-closeout.md. Distinct from the 4-prompt V-set lifecycle (start-lot.md / log-roast.md / log-cupping.md / close-lot.md). See CONTEXT.md "One-shot lot" + "Tolerance-anchored design" entries.',
   'docs://prompts/one-shot-closeout.md':
     'Operational prompt for one-shot lot close-out (STAGE 5 of the one-shot lifecycle, sibling of one-shot.md). Triggers state Resolved-pending → Resolved. Marks is_reference: true on the single roast (Outcome A only; Outcome B leaves it false), pushes the optimized brew via push_brew (the salvageable artifact when roast wasn\'t reference quality, with what_i_learned capturing compensation reasoning), writes the constrained roast_learnings row (schema validation rejects 7 lever-attribution fields per migration 054: primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal), proposes ROASTING.md close-out narrative (tagged as one-shot), archives Roest inventory. Carry-forward fields (cultivar_takeaway / terroir_takeaway / general_takeaway / starting_hypothesis) prefixed with "Low confidence - N=1, verify on next similar lot".',
+  // ----- Wave 4 PR 4b new cluster docs (master-doc residual migration) -------
+  'docs://skills/coordinator/operator-guide.md':
+    'Use when starting a brew session, a roast session, or a lot close-out — cross-domain operator guide replacing BREWING.md / ROASTING.md § How to Use This Document + § Schema model + § Canonical taxonomy lookups + § Working with the Latent MCP server + § Data Capture Per Step + § Per-Coffee Threads + ROASTING.md § Session Debrief Template. Covers the 4 V-set + 2 one-shot lifecycle-mapped prompt families, canonical-lookup discipline (read_canonical Tool over canonicals:// Resources for client compatibility), MCP server operational notes (Tool search ranking, schema refresh, fresh conversation after deploy), per-coffee thread discipline, session-debrief paste template (operator convenience). Migrated from BREWING.md / ROASTING.md in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/brewing-assistant/cluster/operational-guide.md':
+    'Use when planning or iterating a brew — the full BREW PROMPT operational content (Step 1 Coffee Brief + Step 2 Recipe Output + Step 3 Iteration Loop + Step 4 Resolved Brew Output Format + End-of-coffee document review). Step 1 includes the 6-strategy table + Axis 2 modifier check + Named Considerations (Cooling-Curve Design + WBC corpus check). Step 3 covers the Brew 1 / Brew 2 / Brew 3+ adjustment-width framework (wide-variance multi-variable early; single-variable convergent regime later). Step 4 is the full canonical-field schema for the resolved brew (Coffee identity + Origin + Process + Recipe + Roast level + Tasting + Flavor Notes + Learnings). Brew sessions enter via docs://prompts/start-brew.md → log-brew.md → bundled-brewing-completion.md; the prompts compose over this guide via read_doc. Migrated from BREWING.md § SECTION 1 BREW PROMPT in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/brewing-equipment-expert/cluster/operational-reference.md':
+    'Use when constructing a recipe and needing equipment-aware constraints — Location Constraints (Office Downtown Palo Alto + Home water/equipment matrix) + Equipment Reference (per-brewer cup-tendency table — UFO Ceramic / Orea Glass / Orea v4 / Hario V60 / April Brewer / Kalita Wave 155 / SWORKS Bottomless / Hario Switch / Weber Bird / XBLOOM / Chemex Funnex / Sibarist Brewing System / Oxo Rapid Brewer) + Filter System (per-filter cup-tendency table + Filter Flow Gap B3-to-FAST diagnostic) + Grinder Weber EG-1 (D50 plateau caveat + high-EY roaster physically-unreachable-D50 implication) + Valve Position Reference SWORKS (Dial 0 Closed / Dial 5 Restricted / Dial 6 Half-Open / Dial 7 Open with calibrated flow rates) + Brewer Rotation Framework + Example Outputs (Standard Home recipe + Bottomless Dripper Office recipe). Migrated from BREWING.md § Location Constraints + § Equipment Reference + § Valve Position Reference + § Filter System + § Example Outputs in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-assistant/cluster/onboarding-protocol.md':
+    'Use when designing V1 for a new lot — full New Coffee Onboarding Protocol (Step 1 Intake fields + Step 2 Three Questions Claude asks + Step 3 Anchor Profile Selection Logic with green-physics-first framing + 5-tier priority + tie-breaker + cross-coffee transfer caveat + Step 4 V1 Design Output spec) + Naming Conventions (v1a/v1b/v1c labels across Roest profile names + session notes + DB columns; v1a→A mapping) + Parallel Experiment Considerations (session rule + evaluation cadence + context handoff + bake-off planning). Operational entry surface is docs://prompts/start-lot.md (V-set) / one-shot.md (one-shot); this doc holds the methodology behind those prompts. Migrated from ROASTING.md § New Coffee Onboarding Protocol in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-historian/cluster/patterns/by-process/natural.md':
+    'Use when scoping a roast for a natural-process lot — starting framework (anchor on washed profile + lower early energy + taper heat earlier + drop discipline strict; primary failure mode is overdevelopment not underdevelopment) + key Sudan Rume Natural V1 learning (dried fruit layer thermal insulation requires more early energy than typical naturals) + cross-natural architectural constraint pointer + xbloom evaluation gate misranking pointer + per-lot deep-dive pointers (SR Natural V5 + Bukure + Wush Wush). Sibling of by-process/washed.md and by-process/honey.md. Migrated from ROASTING.md § Naturals - Roasting Framework in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-historian/cluster/patterns/by-process/honey.md':
+    'Use when scoping a roast for a honey-process lot — roast-direction fork framework (toward-washed for clarity/florals/acidity vs toward-natural for sweetness/body/fruit vs both-via-two-V1-batches) + roast-direction decision PRECEDES anchor selection + operational steps for the first honey lot (Cruz Loma TM Honey) + Typica Mejorado cross-reference to Rancho Tio learnings. Placeholder framework — N=0 closed lots, N=1 queued (Cruz Loma TM Honey). Migrated from ROASTING.md § Honey Process - Roast Direction Fork in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md':
+    'Active-lot working hypotheses for CGLE Sudan Rume Natural V5 (V5 roasts complete, Day 7 pourover pending). Reference roast candidate Batch 169 (V4C); confirmed brew recipe locked. V5 batches 187/188/189 with key protocol confirmations (242°C minimum viable peak / 207°C end condition not viable / 6:15 optimal total-time ceiling / 240°C hypothesis closed). Cross-referenced in CCIL Sudan Rume seed pattern. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md':
+    'Active-lot working hypotheses for CGLE Gesha Clouds (Forest Coffee, Milton Monroy, Tolima). V1 + V2 complete with Day 7 evaluations; V3 needed. Gentle-decline hypothesis REFUTED via V2. Aggressive-direction reframe Medium-confidence. 207°C drop ceiling may be wrong for this coffee. V3 variable: peak inlet sweep 250-254°C with bean-temp end condition at 209°C. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-historian/cluster/active-lots/cos-hig-bor-2026.md':
+    'Active-lot working hypotheses for Costa Rica Anaerobic Dry Process Higuito. V2 winner v2b (#165) decisive on real pourover; xbloom_gate produced no clean winner. xbloom inverse-direction misranking now confirmed TWICE on this lot — pattern propagated to cross-coffee-insights.md. 208°C drop ceiling confirmed too tight; v2b at 210°C is the new working drop. V3 hypothesis anchors on v2b. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md':
+    'Active-lot working hypotheses for Fazenda Um Wush Wush Natural Dark Room Dried. V1 cupped 2026-05-15 (Day 11); V2 design BLOCKED on Untold paired roasted reference cup. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah. Cup-vs-structure inversion observed; producer notes (mandarin/prune/cacao) absent. FC-Temp Architectural Constraint on Naturals reproduced. Three V2 hypothesis paths enumerated. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md':
+    'Active-lot working hypotheses for Bukure Natural Lot 21 Red Bourbon (Rwanda Northern Province, Virunga foothills). V1 complete 2026-05-11; V2 designed and pushed to Roest 2026-05-15, not yet roasted. V1 cup signal "darker than what it says" — wants STILL LOWER energy. WB-to-Ground delta surprise (leading v1b widest delta at +6.6). V2 shifts spread DOWN 6°C with bean-temp end condition 207°C. First East African Red Bourbon natural in archive. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roasting-historian/cluster/active-lots/redplum-cas-2026.md':
+    'Active-lot working hypotheses for El Paraiso Red Plum Castillo (Diego Samuel Bermúdez, Cauca). V1 closed at Day 9 pourover 2026-05-17. SR Washed CF-Light #133 anchor transferred cleanly. v1b (245°C peak, #181) leading slot — plum/cherry/raspberry. v1c (250°C, #182) ceiling-collision failure. V2 designed as moisture-aware-shape experiment with narrower peak spread 243/245/247°C. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md':
+    'Use when running a roast session — Standard Workflow (Roest preheat / dry roast thermal reset to 140°C / BBP / hopper pre-load at 125°C / charge at 117°C / preheat air temp 210°C irrelevant) + Between Batch Protocol parameters (Fan 100→60→40→25% taper / air temp 100°C flat / end condition drum 120°C / ~2:00-2:30 runtime) + Hopper Pre-Load Timing rationale (125°C ramp; V5 Sudan Rume Washed empirical 35s FC shift; Batch #134 underdevelopment caveat at <125°C). Migrated from ROASTING.md § Standard Workflow in Wave 4 PR 4b (2026-05-21).',
+  'docs://skills/roest-knowledge/cluster/protocols/green-storage.md':
+    'Use when looking up post-roast green storage protocol — 4oz kraft foil bags with resealable zipper + one-way degassing valve; zipper open 24 hours post-roast to vent initial CO2 burst then seal until Day 7 evaluation. Plastic sandwich bags incompatible (oxygen permeable across 7-day rest). Ground Agtron measurement at Day 7 evaluation before brewing. Migrated from ROASTING.md § Green Bean Storage Protocol in Wave 4 PR 4b (2026-05-21).',
 }
 
 export type Section = {
@@ -961,6 +1022,77 @@ export function listDocs(): {
       'docs://skills/ccil/cluster/decomposition-log.md',
       'docs/skills/ccil/cluster/decomposition-log.md',
       'CCIL — decomposition log (Pattern F audit trail; append-only; logs every self-decomposition event)',
+    ),
+    // Wave 4 PR 4b (master-doc residual migration)
+    entry(
+      'docs://skills/coordinator/operator-guide.md',
+      'docs/skills/coordinator/operator-guide.md',
+      'Master Coordinator — operator guide (cross-domain: 4 V-set + 2 one-shot lifecycle prompts + canonical lookups via read_canonical + MCP server how-to + per-coffee threads + Session Debrief paste template)',
+    ),
+    entry(
+      'docs://skills/brewing-assistant/cluster/operational-guide.md',
+      'docs/skills/brewing-assistant/cluster/operational-guide.md',
+      'Brewing Assistant — operational guide (Step 1 Coffee Brief + Step 2 Recipe Output + Step 3 Iteration Loop + Step 4 Resolved Brew Output Format; the full BREW PROMPT)',
+    ),
+    entry(
+      'docs://skills/brewing-equipment-expert/cluster/operational-reference.md',
+      'docs/skills/brewing-equipment-expert/cluster/operational-reference.md',
+      'Brewing Equipment Expert — operational reference (Location Constraints + Equipment + Valve Position + Filter System + Example Outputs + Brewer Rotation Framework)',
+    ),
+    entry(
+      'docs://skills/roasting-assistant/cluster/onboarding-protocol.md',
+      'docs/skills/roasting-assistant/cluster/onboarding-protocol.md',
+      'Roasting Assistant — new coffee onboarding protocol (Step 1 Intake + Step 2 Three Questions + Step 3 Anchor Profile Selection + Step 4 V1 Design Output + Naming Conventions + Parallel Experiment Considerations)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/patterns/by-process/natural.md',
+      'docs/skills/roasting-historian/cluster/patterns/by-process/natural.md',
+      'Roasting Historian — by-process / Natural (anchor-on-washed framework + Sudan Rume Natural V1 learning + FC-temp architectural constraint pointer)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/patterns/by-process/honey.md',
+      'docs/skills/roasting-historian/cluster/patterns/by-process/honey.md',
+      'Roasting Historian — by-process / Honey (roast-direction fork framework: toward-washed vs toward-natural; Cruz Loma TM Honey one-shot pending; placeholder N=0 closed)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md',
+      'docs/skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md',
+      'Roasting Historian — active-lots / CGLE Sudan Rume Natural V5 (V5 roasts complete; Day 7 pourover pending; reference candidate Batch 169)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md',
+      'docs/skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md',
+      'Roasting Historian — active-lots / CGLE Gesha Clouds (V1+V2 complete; gentle-decline refuted; aggressive-direction reframe Medium-confidence)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/active-lots/cos-hig-bor-2026.md',
+      'docs/skills/roasting-historian/cluster/active-lots/cos-hig-bor-2026.md',
+      'Roasting Historian — active-lots / Costa Rica Higuito (V2 winner v2b #165 decisive on real pourover; xbloom misranking confirmed twice; 210°C drop)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md',
+      'docs/skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md',
+      'Roasting Historian — active-lots / Fazenda Um Wush Wush Natural (V1 cupped 2026-05-15; V2 BLOCKED on Untold paired reference; cup-vs-structure inversion)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md',
+      'docs/skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md',
+      'Roasting Historian — active-lots / Bukure Natural Lot 21 Red Bourbon (V1 closed 2026-05-11; V2 pushed; V1 "darker than what it says"; shift DOWN 6°C)',
+    ),
+    entry(
+      'docs://skills/roasting-historian/cluster/active-lots/redplum-cas-2026.md',
+      'docs/skills/roasting-historian/cluster/active-lots/redplum-cas-2026.md',
+      'Roasting Historian — active-lots / El Paraiso Red Plum Castillo (V1 closed Day 9 2026-05-17; v1b #181 leading; SR Washed #133 anchor; V2 moisture-aware-shape)',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
+      'docs/skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
+      'Roest Knowledge — protocols / Between Batch Protocol + Hopper Pre-Load (Standard Workflow + BBP parameters + 125°C hopper pre-load empirical FC shift)',
+    ),
+    entry(
+      'docs://skills/roest-knowledge/cluster/protocols/green-storage.md',
+      'docs/skills/roest-knowledge/cluster/protocols/green-storage.md',
+      'Roest Knowledge — protocols / Green Bean Storage Protocol (4oz kraft foil + valve + 24h vent then seal; Ground Agtron measurement at Day 7)',
     ),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),
