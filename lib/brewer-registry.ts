@@ -1,12 +1,17 @@
 // Canonical registry of brewers (drippers). Authored content lives in
-// [docs/taxonomies/brewers.md](../docs/taxonomies/brewers.md); this file is
-// the validation mirror generated from Chris's authored CSV (Registry -
-// Taxonomy - Drippers and filter papers - Drippers.csv, 47 rows / 45
-// distinct, plus xBloom net-new = 46 canonical brewers).
+// [docs/skills/brewing-equipment-expert/cluster/brewers.md](../docs/skills/brewing-equipment-expert/cluster/brewers.md);
+// this file is the validation mirror generated from Chris's authored CSV
+// (Registry - Taxonomy - Drippers and filter papers - Drippers.csv, 47 rows
+// / 45 distinct, plus xBloom net-new = 46 canonical brewers).
 //
 // Sprint 1f (2026-04-26): structural port + adoption. brews.brewer is a
 // text-only column (no FK to a brewers table). Adding a new brewer is a
-// deliberate edit — add a `BrewerEntry` to `BREWERS` and update brewers.md.
+// deliberate edit — add a `BrewerEntry` to `BREWERS` and update the
+// authored cluster doc.
+//
+// Wave 1 (2026-05-26, ADR-0011): authored doc migrated from
+// docs/taxonomies/brewers.md to the Brewing Equipment Expert sub-skill
+// cluster. Old path is a redirect stub for back-compat.
 //
 // Material axis (Glass / Porcelain / Ceramic) is intentionally NOT carried
 // in the canonical name. Material drift in legacy DB strings ("Hario V60

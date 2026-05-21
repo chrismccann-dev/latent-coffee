@@ -36,6 +36,28 @@ const PROMPT_FILES = [
   'one-shot-closeout',
 ] as const
 
+// Wave 1 of the composable sub-skills architecture (2026-05-26, ADR-0011 / ADR-0012 / ADR-0013).
+// Master Coordinator catalog + Brewing Equipment Expert cluster ship as the paired
+// first sub-skills; subsequent waves add Historians, WBC Archivists, Workflow tier,
+// and CCIL. Each new skill file landing here must be (a) added below, (b) covered
+// by the `./docs/skills/**/*.md` glob in next.config.js, and (c) described in
+// DOC_DESCRIPTIONS. Run `npm run check:mcp-bundle` before shipping.
+const SKILL_FILES: Record<string, string> = {
+  // Master Coordinator (Wave 1)
+  'docs://skills/coordinator/SKILL.md': 'docs/skills/coordinator/SKILL.md',
+  'docs://skills/coordinator/catalog.md': 'docs/skills/coordinator/catalog.md',
+  'docs://skills/coordinator/dispatch-rules.md': 'docs/skills/coordinator/dispatch-rules.md',
+  'docs://skills/coordinator/handoff-rules.md': 'docs/skills/coordinator/handoff-rules.md',
+  // Brewing Equipment Expert (Wave 1) — SKILL.md + 4 cluster files migrated from
+  // docs/taxonomies/{brewers,filters,grinders,sworks}.md. Old taxonomy URIs above
+  // continue resolving to ~200-byte redirect stubs for back-compat.
+  'docs://skills/brewing-equipment-expert/SKILL.md': 'docs/skills/brewing-equipment-expert/SKILL.md',
+  'docs://skills/brewing-equipment-expert/cluster/brewers.md': 'docs/skills/brewing-equipment-expert/cluster/brewers.md',
+  'docs://skills/brewing-equipment-expert/cluster/filters.md': 'docs/skills/brewing-equipment-expert/cluster/filters.md',
+  'docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md': 'docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md',
+  'docs://skills/brewing-equipment-expert/cluster/sworks.md': 'docs/skills/brewing-equipment-expert/cluster/sworks.md',
+}
+
 const DOC_FILES: Record<string, string> = {
   'docs://context.md': 'CONTEXT.md',
   'docs://brewing.md': 'BREWING.md',
@@ -49,6 +71,7 @@ const DOC_FILES: Record<string, string> = {
   'docs://roasting/redesign.md': 'docs/roasting/redesign.md',
   'docs://roasting/dongzhe-livestream-2026-05.md': 'docs/roasting/dongzhe-livestream-2026-05.md',
   'docs://features/importer-exporter-scoping.md': 'docs/features/importer-exporter-scoping.md',
+  ...SKILL_FILES,
   ...Object.fromEntries(
     TAXONOMY_AXES.map((axis) => [`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`]),
   ),
@@ -97,17 +120,37 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://taxonomies/producers.md':
     'Use when validating or looking up a producer — 120 canonical producers across 6 producer systems. Tier-scoped (60-70% comprehensive); allowOverride pattern for net-new entries.',
   'docs://taxonomies/brewers.md':
-    'Use when validating or looking up a brewer — 46 canonical brewers (12 owned by Chris). Material axis dropped (model name only). allowOverride pattern.',
+    '[MIGRATED in Wave 1] Authoritative content lives at docs://skills/brewing-equipment-expert/cluster/brewers.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://taxonomies/filters.md':
-    'Use when validating or looking up a filter — 64 canonical filters (22 owned), pairs with brewer registry. allowOverride pattern.',
+    '[MIGRATED in Wave 1] Authoritative content lives at docs://skills/brewing-equipment-expert/cluster/filters.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://taxonomies/flavors.md':
     'Use when validating flavor notes or structure tags — 3-axis composable: 181 base flavors across 12 categories + 43 modifiers + 29 structure descriptors across 7 axes. Tea-base reversal rule for "Peach Tea" type chips.',
   'docs://taxonomies/grinders.md':
-    'Use when validating grinder + grind setting — currently single canonical (EG-1) with 51 enumerated valid settings (3.0-8.0 in 0.1 steps).',
+    '[MIGRATED in Wave 1] Authoritative content lives at docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
   'docs://taxonomies/roast-levels.md':
     'Use when validating roast level — 8 Agtron-anchored canonical buckets (Extremely Light → Very Dark, 10-unit ranges) + marketing-tag aliases.',
   'docs://taxonomies/sworks.md':
-    'Use when authoring a SWORKS Bottomless Dripper recipe or interpreting a SWORKS valve-dial sequence in archive prose — single owned instrument; self-only canonical sub-taxonomy. Per-dial state names (Closed / Restricted / Half-Open / Open + Dead Zone 1-4 + Maximum Flow past-7) + per-dial flow rate calibration (Dial 5 ~60 sec/100g · Dial 6 ~45 sec/100g · Dial 7 ~30 sec/100g at EG-1 6.0 + xBloom Premium Paper). Includes adjustment logic (valve-first; grind secondary) + 5 canonical recipe patterns (slow/slow/open Sequential Hybrid · fast/fast/slow Phase-Mapped · Half-Open throughout Suppression · Restricted-then-Half-Open transition · Restricted-main-Half-Open-finish Sequential).',
+    '[MIGRATED in Wave 1] Authoritative content lives at docs://skills/brewing-equipment-expert/cluster/sworks.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',
+  // ----- Composable sub-skills (Wave 1, ADR-0011) ----------------------------
+  'docs://skills/coordinator/SKILL.md':
+    'Use when claude.ai needs to identify which Workflow tier sub-skill matches the operator intent — Master Coordinator routes natural-language input to one of 18 sub-skills via the catalog + dispatch rules. Lazy-load this first; the dispatched sub-skill SKILL.md + its knowledge cluster load on demand.',
+  'docs://skills/coordinator/catalog.md':
+    'Use when looking up the full 18-sub-skill registry — Master Coordinator primary lookup table. Each entry carries I/O metadata, wave assignment, pattern tags, and status (placeholder vs. full content). Also includes the brewing + roasting domain-principles preamble extracted from the top sections of BREWING.md / ROASTING.md.',
+  'docs://skills/coordinator/dispatch-rules.md':
+    'Use when mapping operator intent or prompt context to a specific sub-skill dispatch target — Wave 1 covers Brewing Equipment Expert only; later waves populate the rest. Records the override-log convention for Pattern H dispatch-accuracy tracking.',
+  'docs://skills/coordinator/handoff-rules.md':
+    'Use when an operator workflow spans multiple sub-skills — canonical cross-domain dispatch chains (e.g. V-set Path A → optimized brew → resolved lot via Cupping Specialist → Brewing Assistant → Close-Lot Specialist; Learning Assistant research-track design). Wave 1 status: no chains active yet.',
+  'docs://skills/brewing-equipment-expert/SKILL.md':
+    'Use when surfacing equipment-aware recipe constraints (brewer + filter + grinder + grind setting) to Brewing Assistant during recipe construction, OR when authoring/maintaining the brewing equipment registry. Wave 1 consolidates 8 existing assets (4 lib/*-registry.ts validation mirrors + 4 cluster authored docs) under one sub-skill.',
+  'docs://skills/brewing-equipment-expert/cluster/brewers.md':
+    'Use when validating or looking up a brewer (dripper) — 46 canonical brewers (12 owned by Chris) + 24 aliases. Material axis dropped (model name only); Orea v3/v4 ambiguity defaults to v4. allowOverride pattern. Migrated from docs/taxonomies/brewers.md in Wave 1.',
+  'docs://skills/brewing-equipment-expert/cluster/filters.md':
+    'Use when validating or looking up a filter — 64 canonical filters (22 owned) + 34 aliases. Pairs with the brewer registry; Sibarist FAST drift is brewer-aware on canonicalize. allowOverride pattern. Migrated from docs/taxonomies/filters.md in Wave 1.',
+  'docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md':
+    'Use when validating grinder + grind setting — single canonical (EG-1, Weber Workshop, ULTRA SSP burrs, 80mm flat) with 51 enumerated settings (3.0-8.0 in 0.1 steps); 16 carry rich D50 + zone + extraction-behavior + use-case content. Status flags: needs_fresh_measurement (6.6) and anomalous (7.0). Migrated from docs/taxonomies/grinders.md in Wave 1.',
+  'docs://skills/brewing-equipment-expert/cluster/sworks.md':
+    'Use when authoring a SWORKS Bottomless Dripper recipe or interpreting a valve-dial sequence — single owned instrument (office). Per-dial state names (Closed / Restricted / Half-Open / Open + Dead Zone 1-4 + Maximum Flow past-7) + per-dial flow-rate calibration (Dial 5 ~60 sec/100g · Dial 6 ~45 sec/100g · Dial 7 ~30 sec/100g at EG-1 6.0 + xBloom Premium Paper). Includes adjustment logic (valve-first; grind secondary) + 5 canonical recipe patterns (slow/slow/open Sequential Hybrid · fast/fast/slow Phase-Mapped · Half-Open throughout Suppression · Restricted-then-Half-Open transition · Restricted-main-Half-Open-finish Sequential). Migrated from docs/taxonomies/sworks.md in Wave 1.',
+  // ---------------------------------------------------------------------------
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
   'docs://prompts/log-brew.md':
@@ -180,6 +223,52 @@ export function listDocs(): {
       'docs://features/importer-exporter-scoping.md',
       'docs/features/importer-exporter-scoping.md',
       'Importer / Exporter Axis Scoping (Sprint T3 / CR-3)',
+    ),
+    // Composable sub-skills (Wave 1, ADR-0011)
+    entry(
+      'docs://skills/coordinator/SKILL.md',
+      'docs/skills/coordinator/SKILL.md',
+      'Master Coordinator — SKILL',
+    ),
+    entry(
+      'docs://skills/coordinator/catalog.md',
+      'docs/skills/coordinator/catalog.md',
+      'Master Coordinator — 18-sub-skill Catalog',
+    ),
+    entry(
+      'docs://skills/coordinator/dispatch-rules.md',
+      'docs/skills/coordinator/dispatch-rules.md',
+      'Master Coordinator — Dispatch Rules',
+    ),
+    entry(
+      'docs://skills/coordinator/handoff-rules.md',
+      'docs/skills/coordinator/handoff-rules.md',
+      'Master Coordinator — Handoff Rules',
+    ),
+    entry(
+      'docs://skills/brewing-equipment-expert/SKILL.md',
+      'docs/skills/brewing-equipment-expert/SKILL.md',
+      'Brewing Equipment Expert — SKILL',
+    ),
+    entry(
+      'docs://skills/brewing-equipment-expert/cluster/brewers.md',
+      'docs/skills/brewing-equipment-expert/cluster/brewers.md',
+      'Brewing Equipment Expert — Brewers cluster',
+    ),
+    entry(
+      'docs://skills/brewing-equipment-expert/cluster/filters.md',
+      'docs/skills/brewing-equipment-expert/cluster/filters.md',
+      'Brewing Equipment Expert — Filters cluster',
+    ),
+    entry(
+      'docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md',
+      'docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md',
+      'Brewing Equipment Expert — Grinder (EG-1) cluster',
+    ),
+    entry(
+      'docs://skills/brewing-equipment-expert/cluster/sworks.md',
+      'docs/skills/brewing-equipment-expert/cluster/sworks.md',
+      'Brewing Equipment Expert — SWORKS cluster',
     ),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),

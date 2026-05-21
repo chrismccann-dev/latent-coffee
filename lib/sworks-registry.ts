@@ -9,8 +9,12 @@
 //
 // **Self-only canonical sub-taxonomy.** Structurally analogous to the EG-1
 // grinder registry (one owned instrument with per-setting enumerated entries).
-// Authoritative authored content: docs/taxonomies/sworks.md. This file is
-// the validation mirror.
+// Authoritative authored content: docs/skills/brewing-equipment-expert/cluster/sworks.md.
+// This file is the validation mirror.
+//
+// Wave 1 (2026-05-26, ADR-0011): authored doc migrated from
+// docs/taxonomies/sworks.md to the Brewing Equipment Expert sub-skill
+// cluster. Old path is a redirect stub for back-compat.
 //
 // **Not a comprehensive registry.** Captures only what Chris owns. Adding a
 // second valve-modulated brewer would be a deliberate registry extension.
@@ -53,7 +57,8 @@ export interface SworksEntry {
 }
 
 // Single canonical entry today. Adding entries = deliberate registry edit
-// (docs/taxonomies/sworks.md + this file) per the 2-step pattern.
+// (docs/skills/brewing-equipment-expert/cluster/sworks.md + this file)
+// per the 2-step pattern.
 export const SWORKS_DRIPPERS: SworksEntry[] = [
   {
     name: 'SWORKS Bottomless Dripper',

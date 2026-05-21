@@ -413,19 +413,21 @@ function mdStructureTags(src: string): string[] {
 
 const AXES: AxisCheck[] = [
   // 1. Brewers — H3 headers under any H2; ` — Owned` suffix stripped.
+  //    Migrated to Brewing Equipment Expert cluster in Wave 1 (ADR-0011).
   {
     name: 'brewers',
     tsPath: 'lib/brewer-registry.ts',
-    mdPath: 'docs/taxonomies/brewers.md',
+    mdPath: 'docs/skills/brewing-equipment-expert/cluster/brewers.md',
     extractTs: tsRichArray('BREWERS'),
     extractMd: (src) => mdH3HeadersForOwnable(src),
   },
 
   // 2. Filters — same shape as brewers.
+  //    Migrated to Brewing Equipment Expert cluster in Wave 1 (ADR-0011).
   {
     name: 'filters',
     tsPath: 'lib/filter-registry.ts',
-    mdPath: 'docs/taxonomies/filters.md',
+    mdPath: 'docs/skills/brewing-equipment-expert/cluster/filters.md',
     extractTs: tsRichArray('FILTERS'),
     extractMd: (src) => mdH3HeadersForOwnable(src),
   },
@@ -478,20 +480,23 @@ const AXES: AxisCheck[] = [
   },
 
   // 8. Grinders — `| **{Name}** | ... |` table rows under `## Canonical list`.
+  //    Migrated to Brewing Equipment Expert cluster in Wave 1 (ADR-0011);
+  //    file renamed to grinder-eg1.md to leave the cluster expandable.
   {
     name: 'grinders',
     tsPath: 'lib/grinder-registry.ts',
-    mdPath: 'docs/taxonomies/grinders.md',
+    mdPath: 'docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md',
     extractTs: tsRichArray('GRINDERS'),
     extractMd: mdGrinderCanonicals,
   },
 
   // 8b. SWORKS valve flow (Sprint T5 / CR-7) — single canonical dripper.
   //     Same `| **{Name}** | ... |` pattern as grinders.
+  //     Migrated to Brewing Equipment Expert cluster in Wave 1 (ADR-0011).
   {
     name: 'sworks',
     tsPath: 'lib/sworks-registry.ts',
-    mdPath: 'docs/taxonomies/sworks.md',
+    mdPath: 'docs/skills/brewing-equipment-expert/cluster/sworks.md',
     extractTs: tsRichArray('SWORKS_DRIPPERS'),
     extractMd: mdGrinderCanonicals,
   },

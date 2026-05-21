@@ -72,11 +72,11 @@ Key roasting principles (see ROASTING.md for the full reference):
 
 ### Equipment Context
 
-- **Grinder:** Weber EG-1 (one at home, one at office) — large flat burr, tight particle distribution. Grind range 6.0-6.8 is the operating window; below 6.0 hits diminishing returns. Full setting taxonomy in [docs/taxonomies/grinders.md](docs/taxonomies/grinders.md).
-- **Brewers (owned):** Orea v4, April Brewer, Kalita Wave Tsubame 155, SWORKS Bottomless Dripper (valve-controlled contact time), UFO Ceramic, Hario V60, Hario Switch, Weber Bird, xBloom, Chemex Funnex, Sibarist Brewing System, Oxo Rapid Brewer. Full taxonomy + per-entry specs in [docs/taxonomies/brewers.md](docs/taxonomies/brewers.md).
+- **Grinder:** Weber EG-1 (one at home, one at office) — large flat burr, tight particle distribution. Grind range 6.0-6.8 is the operating window; below 6.0 hits diminishing returns. Full setting taxonomy in [docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md).
+- **Brewers (owned):** Orea v4, April Brewer, Kalita Wave Tsubame 155, SWORKS Bottomless Dripper (valve-controlled contact time), UFO Ceramic, Hario V60, Hario Switch, Weber Bird, xBloom, Chemex Funnex, Sibarist Brewing System, Oxo Rapid Brewer. Full taxonomy + per-entry specs in [docs/skills/brewing-equipment-expert/cluster/brewers.md](docs/skills/brewing-equipment-expert/cluster/brewers.md).
 - **Roaster:** Roest L200 Ultra (counterflow mode, 100g batches). Roest API integration for push (profile design + inventory) and pull (roast logs).
 - **Water:** Home uses distilled + remineralized (Third Wave Water Light Roast packs); office uses Palo Alto tap.
-- **Filters:** Sibarist (FAST + B3 across cone/flat/wave/HALO sizes), xBloom Premium Paper (canonical office paper, sometimes legacy-named "Espro Bloom"), Cafec (Abaca+ + T-90/T-92/T-83), Hario, others per brewer. Full taxonomy in [docs/taxonomies/filters.md](docs/taxonomies/filters.md).
+- **Filters:** Sibarist (FAST + B3 across cone/flat/wave/HALO sizes), xBloom Premium Paper (canonical office paper, sometimes legacy-named "Espro Bloom"), Cafec (Abaca+ + T-90/T-92/T-83), Hario, others per brewer. Full taxonomy in [docs/skills/brewing-equipment-expert/cluster/filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md).
 
 ---
 
@@ -170,10 +170,10 @@ The data model enforces canonical naming through 8 registries (one per `/add` da
 | **Process** | [docs/taxonomies/processes.md](docs/taxonomies/processes.md) | [lib/process-registry.ts](lib/process-registry.ts) | 8 structured columns on `brews` (base + subprocess + 4 modifier arrays + decaf + signature) + legacy `process` text | Composable: 4 bases + 7 honey subs + 13 fermentation + 5 drying + 7 intervention + 4 experimental + 4 decaf + 3 signature + ~70 aliases | 1e.1 / 1e.2 / 1e.3 ✅ |
 | **Roaster** | [docs/taxonomies/roasters.md](docs/taxonomies/roasters.md) | [lib/roaster-registry.ts](lib/roaster-registry.ts) | text `brews.roaster` (no FK) | 70 canonicals across 6 families + 24 aliases | 1h.1 / 1h.2 ✅ |
 | **Roast Level** | [docs/taxonomies/roast-levels.md](docs/taxonomies/roast-levels.md) | [lib/roast-level-registry.ts](lib/roast-level-registry.ts) | text `brews.roast_level` (no FK) | 8 Agtron-anchored buckets + 22 aliases (5 marketing tags + 17 drift) | 1m ✅ |
-| **Grinder + Grind Setting** | [docs/taxonomies/grinders.md](docs/taxonomies/grinders.md) | [lib/grinder-registry.ts](lib/grinder-registry.ts) | text `brews.grinder` + `brews.grind_setting` (no FK) | 1 canonical (EG-1) + 51 enumerated settings (16 with rich content) + 7 aliases | 1k ✅ |
+| **Grinder + Grind Setting** | [docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md) | [lib/grinder-registry.ts](lib/grinder-registry.ts) | text `brews.grinder` + `brews.grind_setting` (no FK) | 1 canonical (EG-1) + 51 enumerated settings (16 with rich content) + 7 aliases | 1k ✅ |
 | **Producer** | [docs/taxonomies/producers.md](docs/taxonomies/producers.md) | [lib/producer-registry.ts](lib/producer-registry.ts) | text `brews.producer` (no FK) | 120 canonicals across 6 producer systems + 64 aliases | 1l ✅ |
 | **Flavor notes** | [docs/taxonomies/flavors.md](docs/taxonomies/flavors.md) | [lib/flavor-registry.ts](lib/flavor-registry.ts) | `jsonb` `brews.flavors` (array of `{base, modifiers[]}`) + `text[]` `brews.structure_tags` + `text[]` `brews.flavor_notes` (denormalized display) | 3-axis composable: 181 base flavors across 12 categories + 43 modifiers across 10 categories + 29 structure descriptors across 7 axes + 112 aliases | 1g ✅ |
-| **Brewer + Filter** | [docs/taxonomies/brewers.md](docs/taxonomies/brewers.md) + [docs/taxonomies/filters.md](docs/taxonomies/filters.md) | [lib/brewer-registry.ts](lib/brewer-registry.ts) + [lib/filter-registry.ts](lib/filter-registry.ts) | text `brews.brewer` + `brews.filter` (no FK) | 46 brewers (12 owned) + 64 filters (22 owned) + 24 brewer aliases + 34 filter aliases | 1f ✅ |
+| **Brewer + Filter** | [docs/skills/brewing-equipment-expert/cluster/brewers.md](docs/skills/brewing-equipment-expert/cluster/brewers.md) + [docs/skills/brewing-equipment-expert/cluster/filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md) | [lib/brewer-registry.ts](lib/brewer-registry.ts) + [lib/filter-registry.ts](lib/filter-registry.ts) | text `brews.brewer` + `brews.filter` (no FK) | 46 brewers (12 owned) + 64 filters (22 owned) + 24 brewer aliases + 34 filter aliases | 1f ✅ |
 
 **Shared infrastructure:**
 - [`lib/canonical-registry.ts`](lib/canonical-registry.ts) — `makeCanonicalLookup(names, aliases?)` factory used by every registry above. 3-tier classifier (exact → alias → substring → 3-char prefix) + `canonicalize()` write-path method.
@@ -392,33 +392,27 @@ The full forward-looking work surface, structured by readiness + scope. Per-spri
 
 The current ranked queue of scoped, sized sprints in flight or next up.
 
-Sprint 3.1 brainstorm shipped 2026-05-12. Sprint 3.2 Cleanup-A shipped 2026-05-13. The post-grilling-sequencing era (Sprints 0-14 + M + F) closed 2026-05-24 — Sprint F's 6-actor matrix walk confirmed clean substrate. **Sprint R restructured this queue 2026-05-25** around Chris-locked Option 1 sequence: audit cluster → architecture brainstorm → architecture implementation → roadmap re-session. **Audit cluster shipped 2026-05-26** (PR #195 — claude.ai memory refactor + 3 prompt patches + POD-1 scoping draft). **Architecture brainstorm cluster shipped 2026-05-26** — 3 ADRs (0011 / 0012 / 0013) + 18 sub-skill decomposition spec stubs + master-doc transition plan + Wave 1 implementation kickoff brief. POD-1 absorbed into Cupping Specialist Wave 3. Per Chris 2026-05-25, 3.3-3.7 + deferred candidates are demoted to **Queued post-architecture** below — they will be re-prioritized in the roadmap re-session that closes the architecture implementation work. Continuous-feedback channel for non-architectural friction continues at `memory/feedback_mcp_continuous_log.md`.
+Sprint 3.1 brainstorm shipped 2026-05-12. Sprint 3.2 Cleanup-A shipped 2026-05-13. The post-grilling-sequencing era (Sprints 0-14 + M + F) closed 2026-05-24 — Sprint F's 6-actor matrix walk confirmed clean substrate. **Sprint R restructured this queue 2026-05-25** around Chris-locked Option 1 sequence: audit cluster → architecture brainstorm → architecture implementation → roadmap re-session. **Audit cluster shipped 2026-05-26** (PR #195 — claude.ai memory refactor + 3 prompt patches + POD-1 scoping draft). **Architecture brainstorm cluster shipped 2026-05-26** — 3 ADRs (0011 / 0012 / 0013) + 18 sub-skill decomposition spec stubs + master-doc transition plan + Wave 1 implementation kickoff brief. **Wave 1 shipped 2026-05-26** — Master Coordinator catalog + Brewing Equipment Expert cluster (4 equipment taxonomies migrated from `docs/taxonomies/` to `docs/skills/brewing-equipment-expert/cluster/` with redirect stubs at the old paths). POD-1 absorbed into Cupping Specialist Wave 3. Per Chris 2026-05-25, 3.3-3.7 + deferred candidates are demoted to **Queued post-architecture** below — they will be re-prioritized in the roadmap re-session that closes the architecture implementation work. Continuous-feedback channel for non-architectural friction continues at `memory/feedback_mcp_continuous_log.md`.
 
-#### 1. Architecture implementation — Wave 1 (Master Coordinator + Brewing Equipment Expert paired ship)
-
-Implementation flowing from the brainstorm cluster ([ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)). Wave 1 ships **Master Coordinator catalog** (markdown-only, MCP-endpoint-exposed) **+ Brewing Equipment Expert cluster** (consolidating 8 existing files — 4 `lib/{brewer,filter,grinder,sworks}-registry.ts` + 4 `docs/taxonomies/{brewers,filters,grinders,sworks}.md`) as the paired proof-of-pattern first ship. Tests catalog mechanics + lazy-loading + MCP wire-up + first sub-skill content + cross-system audit gates simultaneously.
-
-**Triggers when:** Next sprint after the brainstorm cluster PR merges. **Sizing:** M (~1-2 day implementation, markdown + cluster migration, no DB schema change). **Scoping doc:** [docs/sprints/architecture-wave-1-kickoff-2026-05-26.md](docs/sprints/architecture-wave-1-kickoff-2026-05-26.md).
-
-#### 2. Architecture implementation — Wave 2 (4 consolidation ships)
+#### 1. Architecture implementation — Wave 2 (4 consolidation ships)
 
 Brewing Historian + Roasting Historian (absorb BREWING.md / ROASTING.md "Cross-Coffee Insight Layer" sections) + WBC Brewing Archivist + WBC Roasting Archivist (with tentatively-merged Sourcing Knowledge per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md)). Biggest BREWING.md / ROASTING.md shrink event (~60-80KB each per [master-doc-transition-plan.md](docs/architecture/master-doc-transition-plan.md)).
 
-**Triggers when:** Wave 1 closes.
+**Triggers when:** Wave 1 closes (closed 2026-05-26).
 
-#### 3. Architecture implementation — Wave 3 (operator-stub clusters + workflow tier)
+#### 2. Architecture implementation — Wave 3 (operator-stub clusters + workflow tier)
 
 Peer-Learning Roasting Archivist + Roest Knowledge (operator-stub-then-integrate clusters per Pattern I) + 9 workflow tier sub-skills (4 planning + 5 executing). **POD-1 lands here as sub-task of Cupping Specialist** — Path A/B/C routing + simulated-pourover-as-3rd-cup-read + cross-project handoff lifecycle states all become Cupping Specialist concerns. Several constituent sub-skills can ship in parallel.
 
 **Triggers when:** Wave 2 closes.
 
-#### 4. Architecture implementation — Wave 4 (CCIL + cross-system sync)
+#### 3. Architecture implementation — Wave 4 (CCIL + cross-system sync)
 
 Cross-Coffee Insight Layer (skeleton + 1-2 seed pattern docs after Historians have content) + closing cross-system sync sprint that rewrites BREWING.md + ROASTING.md as ~500-byte redirect stubs, validates the full 18-sub-skill architecture end-to-end against the 6-actor matrix, and retires legacy paths.
 
 **Triggers when:** Wave 3 closes.
 
-#### 5. Roadmap re-session
+#### 4. Roadmap re-session
 
 After architecture implementation lands, re-assess everything in Queued post-architecture (below) and the deferred candidates. Some entries may be subsumed by the architecture work (3.6 BREWING/ROASTING doc reconciliation likely is). Some may shift shape (3.7 Prompt v5 rewrites may look very different if prompts get decomposed into sub-skills). Some still need to ship as-is (3.3 auto-supersede friction is independent of architecture).
 

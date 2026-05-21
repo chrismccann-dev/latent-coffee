@@ -13,13 +13,18 @@
 // Settings outside Chris's typical range (5.0-7.0) carry outOfTypicalRange
 // so the picker can soften their visual weight.
 //
-// Authoritative authored content: docs/taxonomies/grinders.md. This file is
-// the validation mirror.
+// Authoritative authored content: docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md.
+// This file is the validation mirror.
 //
 // **Not a comprehensive registry.** Per Chris's framing, this taxonomy
 // captures only what he owns and uses. Adding a new grinder is a deliberate
-// edit — registry + docs/taxonomies/grinders.md + a migration if existing
+// edit — registry + the authored cluster doc + a migration if existing
 // brews need reclassification.
+//
+// Wave 1 (2026-05-26, ADR-0011): authored doc migrated from
+// docs/taxonomies/grinders.md to the Brewing Equipment Expert sub-skill
+// cluster (renamed to grinder-eg1.md to leave the cluster expandable).
+// Old path is a redirect stub for back-compat.
 
 import { makeCanonicalLookup, type CanonicalLookup } from './canonical-registry'
 

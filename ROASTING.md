@@ -84,7 +84,7 @@ I roast exclusively in counterflow mode on the Roest L200 Ultra. Counterflow cha
 - **Color measurement:** Lightcells CM-200 - whole bean Agtron post-roast, ground Agtron pre-brew at Day 7 evaluation
 - **Primary evaluation brewer:** xbloom (Brian Quan recipe - consistent, repeatable pourover for all evaluation sessions)
 - **Optimized brew setup:** Once a reference roast is identified, treat the roasted bean as you would a purchased bean — route through the full [BREWING.md](BREWING.md) framework (Two-Axis strategy selection, Step 1d Coffee Brief, Equipment Reference rotation). Don't hardcode a single brewer/filter combo. The xbloom evaluation recipe (Brian Quan, used during evaluation cupping) is a different tool from the optimized brew recipe.
-- **Grinder:** EG-1 (Weber Workshop) — primary grinder for both evaluation and optimized brew. Full setting taxonomy in [docs/taxonomies/grinders.md](docs/taxonomies/grinders.md).
+- **Grinder:** EG-1 (Weber Workshop) — primary grinder for both evaluation and optimized brew. Full setting taxonomy in [docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md).
 
 ---
 
