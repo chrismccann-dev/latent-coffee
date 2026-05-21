@@ -5,11 +5,21 @@ path, mention it.
 BEFORE drafting any citation, fetch the live document so current_text is
 verbatim from what's deployed (project-uploaded copies may have drifted):
 
-  - BREWING.md sections (By Process, By Variety, Cross-Coffee Insight Layer, Cooling
-    Behavior, Open Questions, etc.): read_doc_section(uri="docs://brewing.md",
+  - Brewing Historian cluster (post-Wave-2-PR-2 home for By Process / By Variety /
+    Cross-Coffee Insight Layer / Cooling Behavior / Office Brewing Notes / By
+    Modifier / Open Questions / per-strategy "Coffees That Confirmed X" /
+    per-cultivar / per-coffee-family content):
+      read_doc_section(uri="docs://skills/brewing-historian/cluster/patterns/cross-coffee-insights.md", anchor="<Section Name>")
+      read_doc_section(uri="docs://skills/brewing-historian/cluster/patterns/by-strategy/<strategy>.md", anchor="<Section Name>")
+      read_doc_section(uri="docs://skills/brewing-historian/cluster/patterns/by-cultivar/<cultivar>.md", anchor="<Section Name>")
+    target_doc is "skills/brewing-historian/cluster/patterns/<path>.md".
+
+  - BREWING.md residual sections (Two-Axis Framework / Step 1-4 Coffee Brief /
+    equipment reference / WBC reference pointer): read_doc_section(uri="docs://brewing.md",
     anchor="<Section Name>"). If anchor doesn't resolve, call
     list_doc_sections(uri="docs://brewing.md") to find the verbatim header.
     section_anchor must match a header verbatim (case-sensitive, no leading #).
+    target_doc is "brewing.md".
 
   - Roaster cards live in docs/brewing/roasters.md, NOT BREWING.md. Fetch
     read_doc_section(uri="docs://brewing/roasters.md", anchor="<Canonical

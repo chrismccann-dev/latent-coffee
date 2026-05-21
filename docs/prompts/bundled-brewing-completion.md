@@ -43,8 +43,20 @@ allow-list). Per-citation target_doc overrides the proposal-level default.
 For replace, copy current_text VERBATIM. Multi-citation + multi-target_doc
 proposals are supported.
 
-Most likely sections: By Process, By Variety, Cross-Coffee Insight Layer, Cooling
-Behavior, the relevant roaster card, Open Questions.
+Most likely targets (post-Wave-2-PR-2 the brewing-side cross-coffee learnings
+live in the Brewing Historian cluster, NOT BREWING.md):
+
+  - target_doc="skills/brewing-historian/cluster/patterns/cross-coffee-insights.md"
+    for By Process / By Variety / Cooling Behavior / Office Brewing Notes /
+    By Modifier / Open Questions entries
+  - target_doc="skills/brewing-historian/cluster/patterns/by-strategy/<strategy>.md"
+    for new "Coffees That Confirmed X" data points (clarity-first / suppression /
+    balanced-intensity / full-expression / extraction-push / hybrid)
+  - target_doc="skills/brewing-historian/cluster/patterns/by-cultivar/<cultivar>.md"
+    or by-coffee-family/<family>.md for per-cluster deep-dive patterns
+  - target_doc="roaster/<Canonical Roaster Name>" for roaster card updates
+  - target_doc="brewing.md" only for residual BREWING.md sections (Two-Axis
+    Framework, Step 1-4 Coffee Brief, equipment reference, WBC reference pointer)
 
 Here is the completed archive entry:
 [paste the formatted archive recipe]

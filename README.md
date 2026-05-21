@@ -17,7 +17,7 @@ Personal coffee research journal that compounds brewing and roasting knowledge o
 Foundational living docs (kept at root for visibility):
 - [PRODUCT.md](PRODUCT.md) — Product vision, data model, taste profile, full roadmap, scaling watch-items
 - [CLAUDE.md](CLAUDE.md) — Project instructions for Claude Code (sprint cadence, conventions, design system enforcement)
-- [BREWING.md](BREWING.md) — Brewing master reference: 6 strategies + 3 modifiers, Two-Axis Framework, equipment, Cross-Coffee Insight Layer
+- [BREWING.md](BREWING.md) — Brewing master reference: 6 strategies + 4 modifiers, Two-Axis Framework, equipment reference. Cross-Coffee Insight Layer migrated to the [Brewing Historian](docs/skills/brewing-historian/) cluster in Wave 2 PR 2 (2026-05-26); BREWING.md keeps the h1 pointer block for back-compat.
 - [ROASTING.md](ROASTING.md) — Roasting master reference: counterflow methodology on Roest L200 Ultra, lot knowledge, archive
 
 Architecture & operating playbooks:
