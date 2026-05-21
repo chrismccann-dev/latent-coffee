@@ -121,11 +121,28 @@ Operator: "Importer offered me a Tier 2 Gesha sample — should I buy?"
 
 Single-step chain; no downstream substrate-writer hop because sourcing decisions are physical-world events. The substrate write happens later via Chain 3 when the lot physically arrives.
 
-## Chain 6: Cross-pollination Wölfl-design brew (future)
+## Chain 6: Cross-pollination Wölfl-design brew
 
-**Status:** PLACEHOLDER (not yet sub-skill-decomposed; PRODUCT.md Future Directions item).
+**Status:** ACTIVE-pending-lived-practice post Wave 4 PR 4a (Learning Assistant + Roasting Assistant + Chain 3 + Chain 4 + CCIL all ACTIVE on paper; chain has not yet been exercised against a real cross-pollination lot). PRODUCT.md Future Directions item.
 
-Future handoff chain TBD. Likely shape: Learning Assistant proposes the cross-pollination experiment → Roasting Assistant designs the roast targeting the brew partner → Chain 3 + Chain 4 execute → CCIL synthesizes the cross-domain outcome.
+The cross-domain experiment chain: roast targeting a known competitor's brew approach (e.g. Wölfl's 2024 WBrC Extraction Push: Don Benji Gesha natural anaerobic on Orea v4 + Sibarist FAST + Melodrip at 93°C). Learning Assistant proposes the cross-pollination experiment, Roasting Assistant designs the roast targeting the brew partner's expected extraction-push behavior, Chain 3 + Chain 4 execute the physical roast and brew, CCIL synthesizes the cross-domain outcome ("did this roast respond to Wölfl-style brewing the way the original WBC lot did?") into its cluster.
+
+```
+Operator: "design a roast for a Wölfl-style brew on the next Gesha lot I source"
+   └─ Dispatch: Learning Assistant
+      └─ Inputs: cross-pollination hypothesis + WBC Brewing Archivist (Wölfl recipe) + both Historians + CCIL
+      └─ Workflow: cross-domain experiment design (roast partner + brew partner)
+      └─ Output: cross-pollination research track design
+         └─ When lot arrives: dispatch Roasting Assistant with brew-partner-aware design constraints
+            └─ Chain 3 executes: Roest API Worker → Roast Recorder → Cupping Specialist
+               └─ When ref roast resolves: dispatch Brewing Assistant with Wölfl-style recipe template
+                  └─ Chain 4 executes: Brew Recorder writes the optimized brew
+                     └─ Dispatch: CCIL synthesizes the cross-domain outcome
+                        └─ Output: new cluster/coffee/<cultivar>/<...>.md OR append to existing
+                           (Pattern A refresh event — CCIL is the terminal synthesis hop)
+```
+
+Pattern A is the load-bearing self-improvement pattern here: each cross-pollination chain that completes generates a new CCIL pattern doc OR refreshes an existing one. Pattern F decomposition fires if accumulated cross-pollination patterns push the cluster past the 120KB / 60KB tripwires.
 
 ---
 
@@ -136,7 +153,8 @@ Future handoff chain TBD. Likely shape: Learning Assistant proposes the cross-po
 - **Wave 3 PR 1:** No chain changes — operator-stub Knowledge pair + Roasting Historian R-to-B Translation extension.
 - **Wave 3 PR 2:** 4 Workflow Planning sub-skills ACTIVE → Chains 1, 2, 3, 4 move from PLACEHOLDER to PARTIAL; Chain 5 moves to ACTIVE (single-step).
 - **Wave 3 PR 3:** 5 Workflow Executing sub-skills ACTIVE → Chains 1, 3, 4 move from PARTIAL to ACTIVE; Chain 2 moves to ACTIVE-pending-Learning-Knowledge (archival hop deferred per ADR-0011 trigger of ≥2 completed research tracks). **Wave 3 closed.**
-- **Wave 4:** Chain 6 (Wölfl cross-pollination) likely activates after CCIL ships.
+- **Wave 4 PR 4a:** CCIL ACTIVE (skeleton + Sudan Rume seed pattern). Chain 6 (Wölfl cross-pollination) moves from PLACEHOLDER → ACTIVE-pending-lived-practice (every sub-skill in the chain exists; chain not yet exercised against a real cross-pollination lot). Existing CCIL synthesis hop into Chain 6 now actionable.
+- **Wave 4 PR 4b:** Master-doc residual migration + redirect-stub rewrite + CLAUDE.md compaction; no new chain activations expected. PR 4b closes the architecture implementation arc.
 
 ## Discipline
 

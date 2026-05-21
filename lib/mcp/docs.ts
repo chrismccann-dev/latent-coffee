@@ -164,6 +164,19 @@ const SKILL_FILES: Record<string, string> = {
     'docs/skills/cupping-specialist/cluster/pod-1-routing.md',
   'docs://skills/roest-api-worker/SKILL.md': 'docs/skills/roest-api-worker/SKILL.md',
   'docs://skills/close-lot-specialist/SKILL.md': 'docs/skills/close-lot-specialist/SKILL.md',
+  // ----- Cross-Coffee Insight Layer (Wave 4 PR 4a, ADR-0011 + ADR-0013) -------
+  // CCIL is the cross-domain synthesis layer above both domain Historians.
+  // Wave 4 PR 4a shipped skeleton + Sudan Rume seed pattern. Wave 4 PR 4b closes
+  // the architecture implementation arc by rewriting BREWING.md + ROASTING.md as
+  // ~500-byte redirect stubs + extracting CLAUDE.md sub-skills section to
+  // docs/architecture/sub-skills-status.md. Future cross-domain patterns accrue
+  // via Pattern A refresh events; Pattern F decomposition logged at
+  // cluster/decomposition-log.md.
+  'docs://skills/ccil/SKILL.md': 'docs/skills/ccil/SKILL.md',
+  'docs://skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md':
+    'docs/skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md',
+  'docs://skills/ccil/cluster/decomposition-log.md':
+    'docs/skills/ccil/cluster/decomposition-log.md',
 }
 
 const DOC_FILES: Record<string, string> = {
@@ -419,6 +432,12 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Roest API Worker sub-skill (Wave 3 PR 3 shipped 2026-05-26). Workflow Executing tier; substrate-writer wrapping push_roast_profile + patch_roast_recipe (Roest profile linkage, co-owned with Roast Recorder). Symmetry-split from Roest Knowledge per ADR-0011 — Roest Knowledge holds machine + API docs, Roest API Worker is the executor that calls the API. Pushes roast profiles to Roest L200 Ultra; translates recipe (bezier curves + drop rules + end-condition + charge + hopper) into push_roast_profile payload; returns profile_id + share_url; patches roast_recipes with roest_profile_id linkage. Validation gap acknowledged today (returns success on API acceptance, not machine confirmation); future verify_roast_profile_landed Tool may close the gap. Called by Roasting Assistant on operator approval OR Master Coordinator via start-lot.md STAGE 3; Chain 3 hop between Roasting Assistant and Roast Recorder. Pattern B self-improvement (API drift events → Roest Knowledge refresh). N=10 Stage 1 → 2 graduation. No cluster authored.',
   'docs://skills/close-lot-specialist/SKILL.md':
     'Close-Lot Specialist sub-skill (Wave 3 PR 3 shipped 2026-05-26). Workflow Executing tier; **resolved-lot completion gate**. Substrate-writer wrapping push_roast_learnings + patch_roast_learnings + patch_roast (is_reference + worth_repeating, co-owned) + patch_inventory + propose_doc_changes. Handles both V-set close-out (close-lot.md; full carry-forward field discipline) and one-shot close-out (one-shot-closeout.md; 7 lever-attribution fields schema-rejected per migration 054; "Low confidence - N=1" prefix discipline; Outcome A reference-quality vs Outcome B "Closed without reference" via why_this_roast_won:NULL routing). Verifies cross-link integrity end-to-end: roasts.is_reference + roast_learnings.best_roast_id (typed FK) + best_batch_id (legacy text back-compat) + reference cup (cuppings on best_roast_id with eval_method ILIKE pourover) + optimized brew (brews.green_bean_id, ideally roast_id=best_roast_id). Scope tags discipline per Sprint 12 / ADR-0009 (loose-canonical namespaced prefixes — process:* / variety:* / country:* / altitude:* / evaluation_method:* / general). Called by Master Coordinator via close-lot.md / one-shot-closeout.md; Chain 1 terminal hop after Brew Recorder writes optimized brew (cross-domain handoff from Brewing Assistant); Chain 3 Path C close-without-reference terminal hop. N=10 Stage 1 → 2 graduation.',
+  'docs://skills/ccil/SKILL.md':
+    'Cross-Coffee Insight Layer (CCIL) sub-skill (Wave 4 PR 4a shipped 2026-05-21; skeleton + Sudan Rume seed pattern). Special / cross-domain tier above both domain Historians. Synthesizes ACROSS roasting + brewing domains (e.g. "what I learned about Sudan Rume from BOTH my brewing AND my roasting of this variety") — distinct from each Historian\'s internal-to-domain cross-coffee synthesis. Reads-only consumption of Roasting Historian + Brewing Historian + WBC Archivists + Latent per-entity terminal synthesis caches; outputs cross-domain pattern docs consumed by Roasting Assistant + Brewing Assistant + Learning Assistant (the 3 cross-domain-aware planners). Does NOT call workflow tier. No MCP Tools directly. Pattern F (bloat-tripwire decomposition) is the PRIMARY self-improvement pattern — when total cluster exceeds 120KB OR a single doc exceeds 60KB, decompose into sub-domain CCILs. Pattern A also active (Historians\' patterns drift → CCIL re-synthesizes). Wave 4 PR 4b closes the architecture implementation arc by rewriting BREWING.md + ROASTING.md as ~500-byte redirect stubs + extracting CLAUDE.md sub-skills section to docs/architecture/sub-skills-status.md. Stage-1 autonomy with N=3 fast-graduation threshold per ADR-0013 outlier rules; Stage-2→3 advancement slower than default because cross-domain synthesis errors propagate further.',
+  'docs://skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md':
+    'CCIL seed pattern doc — Sudan Rume across roasting + brewing (Wave 4 PR 4a). Demonstrates the cross-domain synthesis shape: variety throughline (transparency-driven aromatic landrace, light brown-tea body, herbal-spicy register) + per-layer mechanics (roasting: FC window 200-205°C / Washed WB-Ground delta target ≤3 / Natural fruit-layer insulation needs washed-level energy / Dongzhe washed-profile-anchor caveat) + per-layer mechanics (brewing: April Brewer Glass + April Paper for naturals as vehicle-corrective / fast-cone counter-example on Latent-roasted SR Hybrid Washed / 91°C temperature ceiling / body-intuition body-not-grind rule). Flags the cross-domain tension: process-scoped vs variety-scoped vehicle-dependency rule (low-confidence working hypothesis pending second SR Washed brew). Outputs structured planner-consumable recommendations for Roasting Assistant + Brewing Assistant + Learning Assistant. N=3 across both domains (2 Latent-roasted SR lots + 1 externally-roasted SR brewing lot).',
+  'docs://skills/ccil/cluster/decomposition-log.md':
+    'CCIL Pattern F audit trail (Wave 4 PR 4a — first entry logs the skeleton + seed pattern ship). Append-only log of every CCIL self-decomposition event: when CCIL split into sub-domain CCILs, what triggered the split (bloat tripwire / dispatch-accuracy degradation / cross-pattern density). Trigger conditions enumerated at top: >120KB total cluster size; >60KB single doc; dispatch-accuracy drift below autonomy graduation threshold; cross-domain pattern density exceeds intra-pattern coherence. Decomposition procedure: move pattern docs to new sub-structure, preserve back-compat redirect stubs, update CCIL SKILL.md cluster contents, register new paths in lib/mcp/docs.ts, run cross-system audit. Historical entries are NOT edited or removed.',
   // ---------------------------------------------------------------------------
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
@@ -926,6 +945,22 @@ export function listDocs(): {
       'docs://skills/close-lot-specialist/SKILL.md',
       'docs/skills/close-lot-specialist/SKILL.md',
       'Close-Lot Specialist — SKILL (Workflow Executing; resolved-lot completion gate; push_roast_learnings + cross-link verification)',
+    ),
+    // Cross-Coffee Insight Layer (Wave 4 PR 4a)
+    entry(
+      'docs://skills/ccil/SKILL.md',
+      'docs/skills/ccil/SKILL.md',
+      'Cross-Coffee Insight Layer — SKILL (Special; cross-domain synthesis above both Historians; Pattern F decomposition)',
+    ),
+    entry(
+      'docs://skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md',
+      'docs/skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md',
+      'CCIL — Sudan Rume across roasting + brewing (seed pattern; N=3; variety throughline + per-layer mechanics + vehicle-dependency cross-domain tension)',
+    ),
+    entry(
+      'docs://skills/ccil/cluster/decomposition-log.md',
+      'docs/skills/ccil/cluster/decomposition-log.md',
+      'CCIL — decomposition log (Pattern F audit trail; append-only; logs every self-decomposition event)',
     ),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),
