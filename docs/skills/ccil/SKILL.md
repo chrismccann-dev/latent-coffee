@@ -1,18 +1,24 @@
 # Cross-Coffee Insight Layer (CCIL)
 
-**Tier:** Special / **Domain:** Cross-domain / **Wave:** 4 / **Status:** PLACEHOLDER
+**Tier:** Special / **Domain:** Cross-domain / **Wave:** 4 / **Status:** ACTIVE (skeleton + Sudan Rume seed pattern shipped Wave 4 PR 4a, 2026-05-21)
 **ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
 Synthesize across domain Historians + WBC archivists + Latent's per-entity terminal synthesis caches to produce **cross-domain knowledge** about specific coffees, cultivars, processes, terroirs, and methods. **THE main learning layer** per Chris's Round 1 framing. Distinguished from Brewing Historian / Roasting Historian by scope — those do internal-to-domain synthesis; CCIL does cross-domain.
 
-## Knowledge cluster contents (target Wave 4)
+## Knowledge cluster contents
 
-- `cluster/coffee/<cultivar>/<terroir>/<...>.md` — cross-domain pattern docs per coffee (e.g. `cluster/coffee/sudan-rume/across-roasting-and-brewing.md`)
+**Today (post Wave 4 PR 4a, 2026-05-21):**
+
+- [`cluster/coffee/sudan-rume/across-roasting-and-brewing.md`](cluster/coffee/sudan-rume/across-roasting-and-brewing.md) — seed pattern doc demonstrating cross-domain synthesis on Sudan Rume (N=3 across both domains: Latent-roasted CGLE SR Hybrid Washed + Latent-roasted CGLE SR Natural V5 active + externally-roasted CGLE Las Margaritas SR Natural brewing-only)
+- [`cluster/decomposition-log.md`](cluster/decomposition-log.md) — Pattern F audit trail; logs every CCIL self-decomposition event (per [ADR-0013](../../adr/0013-self-improvement-primitives.md) bloat tripwires)
+
+**Target shape (accrues via Pattern A refresh events + future seed pattern ships):**
+
+- `cluster/coffee/<cultivar>/<terroir>/<...>.md` — cross-domain pattern docs per coffee (Sudan Rume is the first; future seed candidates include Gesha and Mandela XO if their substrate evolves to support cross-domain reads)
 - `cluster/methods/<method>.md` — cross-method patterns (e.g. "what I learned about Anaerobic Washed across roasting + brewing")
 - `cluster/equipment/<equipment>.md` — cross-equipment patterns (rare; when cross-domain equipment patterns emerge)
-- `cluster/decomposition-log.md` — tracks every CCIL self-decomposition event: when CCIL split into sub-areas, what triggered the split (Pattern F audit trail)
 
 ## Inputs
 
@@ -49,10 +55,8 @@ None directly. CCIL is a synthesis layer; its output is cluster docs consumed by
 - **Stage 2 → 3 advancement:** override rate < 5% across 3 consecutive quarters (SLOWER than default 10% because cross-domain synthesis errors propagate further — wrong recommendation to Roasting Assistant could mis-shape downstream lots)
 - **Auto-demote:** override rate ≥ 10% in any quarter → Stage 3 → 2; ≥ 25% → Stage 2 → 1 (same as default)
 
-## Notes for Wave 4 implementation sprint
+## Wave 4 implementation status
 
-- **Chicken-and-egg dependency:** CCIL needs Brewing Historian + Roasting Historian to have content before it has anything to synthesize across. Wave 2 ships Historians; Wave 4 ships CCIL.
-- **Self-decomposition trigger is the architectural backstop** — when CCIL grows too large, it splits into sub-domain CCILs via Pattern F. This is the first time we'll exercise Pattern F end-to-end; treat as Wave-4 implementation risk.
-- **Seed corpus for Wave 4:** start with 1-2 cross-domain pattern docs as proof-of-pattern (e.g. Sudan Rume across brewing + roasting since both CGLE Sudan Rume Hybrid Washed (roasting) + future Hydrangea Sudan Rume (brewing) lots exist).
-- **Cross-system audit:** Actor 6 (new directory), Actor 4 (MCP Resource registration; CCIL Resources expose cross-domain recommendations to planners), Actor 5 (CLAUDE.md notes — CCIL becomes the explicit cross-domain layer), Actor 2 (Roasting Assistant + Brewing Assistant + Learning Assistant prompts reference CCIL for cross-domain context), Actor 3 (catalog refresh), Actor 1 (operator gets first-class cross-domain insight surface that was previously only implicit via per-entity terminal synthesis caches).
-- **Cross-system sync sprint follows Wave 4 CCIL:** the architecture cross-system sync sprint closes Wave 4 by rewriting BREWING.md + ROASTING.md as ~500-byte redirect stubs, validating the full 18-sub-skill architecture end-to-end against the 6-actor matrix.
+- **Wave 4 PR 4a shipped 2026-05-21.** Skeleton + Sudan Rume seed pattern. CCIL flipped PLACEHOLDER → ACTIVE. Chicken-and-egg Historians dependency resolved (Brewing Historian shipped Wave 2 PR 2, Roasting Historian shipped Wave 2 PR 3). Chain 6 in [coordinator/handoff-rules.md](../coordinator/handoff-rules.md) activated pending lived-practice Wölfl cross-pollination execution.
+- **Wave 4 PR 4b pending.** Master-doc residual migration (BREWING.md ~124KB → ~500-byte redirect stub; ROASTING.md ~72KB → ~500-byte redirect stub) + Naturals + Honey + 3 ambiguous ROASTING.md sections cleanup pass + CLAUDE.md sub-skills section compaction (extract to `docs/architecture/sub-skills-status.md`). PR 4b closes the architecture implementation arc.
+- **Self-decomposition trigger remains the architectural backstop.** Per [ADR-0013](../../adr/0013-self-improvement-primitives.md) Pattern F: when CCIL grows past 120KB total cluster OR any single doc past 60KB, decompose into sub-domain CCILs. First decomposition event documented in [decomposition-log.md](cluster/decomposition-log.md) when triggered.
