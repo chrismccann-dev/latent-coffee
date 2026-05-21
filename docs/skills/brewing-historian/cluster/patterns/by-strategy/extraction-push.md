@@ -1,0 +1,25 @@
+# Coffees That Confirmed Extraction Push
+
+*Coffee Research · Latent · Brewing Historian cluster · by-strategy*
+
+**Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](../../../../../../BREWING.md#axis-1---extraction-strategy) for the canonical Extraction Push definition (mechanics: 6.3-5.5 or finer grind, **low agitation (Melodrip)**, fast-flow filters - Sibarist FAST flat or cone, near-boiling water 93-98°C, 1:15-1:17, often longer total brew time than Clarity-First but cleaner cup than Full Expression; intent: push extraction yield while preserving transparency on clean coffees where Full Expression's high agitation would compress aromatic clarity).
+
+Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Extraction Push](../../../../../../BREWING.md#coffees-that-confirmed-extraction-push) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](../../../../../adr/0011-composable-sub-skills-architecture.md).
+
+---
+
+First-confirmed brew (validates the slot promoted in v8.2):
+
+- **Pepe Jijón Finca Soledad - Sidra Wave Hybrid (Moonwake, Imbabura, Ecuador, 1515m)** - confirmed Extraction Push as the reference recipe for the strategy. EG-1 5.8 / 95°C kettle on base / Orea v4 (Negotiator base) + Sibarist FLAT FAST / 15g / 240g (1:16) home remineralized / 4-pour Melodrip structure (45g bloom 45s wait -> 110g -> 165g -> 210g -> 240g at 0:57 / 1:40 / 2:10 / 2:35) / drawdown 3:10-3:25. Cup: lemon, lime, pomegranate, rose - three of four roaster targets present (red mango not at this extraction level), aromatics co-present from 50°C and integrated by 45°C, no drying tail. Body is variety-intrinsic light brown-tea (Sidra hard ceiling), not extraction-driven. Wave Hybrid is Pepe Jijón's producer-named hybrid natural-then-honey process (4-day cold-tank rest + 12-day natural dry + rehydrate-and-depulp + 3-day cold-room honey finish); modeled within current canonical taxonomy as Honey base + Cold Fermentation + Dark Room Dried, with Wave Hybrid flagged as a candidate signature_method addition for Pepe Jijón (alongside existing TyOxidator). Variety signal (transparency-driven Ethiopian-landrace lineage) dominates the novel hybrid process flag - same Clarity-First-adjacent extraction logic as the rest of the Finca Soledad archive (TyOxidator, Sidra Cold Fermented Washed DRD), with Extraction Push pushing aromatics above the Clarity-First yield ceiling without crossing Sidra's tannin ceiling. **Pour structure was the load-bearing fix** (4 pours vs 2 pours); grind and temp moves were compensations. **Drying-tail-as-unintegrated-rose diagnostic:** what reads as drying tannin in under-developed Sidra extractions is rose aromatic that hasn't extracted into the cup as a recognizable aromatic - with proper 4-pour structure, rose extracts as rose. Future Sidra showing 'drying without sweetness' is a pour-structure issue, not grind/temp. Brew ID: 15c67c4a-9bd1-4181-be52-2cd074ac2e8c.
+
+**Failure-mode signal (process learning).** The first attempt at Extraction Push on this coffee (EG-1 5.8 / 94°C / 2-pour structure) produced an 'under-extracted but bitter on the tail' cup - mid-band starved, late fraction over-extracted to compensate. This is the diagnostic shape for Extraction Push gone wrong on a transparency-driven variety: the extraction curve is the wrong shape, not the wrong yield. Restructuring to 4 pours (with +0.2 grind + 1°C temp compensations) resolved both ends in one brew. Going below 5.8 grind on Sidra at this dose risks the variety's tannin ceiling without meaningful body upside; 5.8 / 95°C / 4-pour Melodrip is the validated parameter cluster - drawdown lands ~3:10-3:25 because the bed cannot hold longer contact on this brewer/paper combination at this dose.
+
+Candidate coffees (highest leverage, untested):
+
+- Clean washed Geshas at high elevation (Panama, high-elevation Colombia washed) where Clarity-First peaks at ~21% EY and the coffee can plausibly support more without losing transparency. Wölfl 2024 reference: Don Benji Gesha natural anaerobic, OREA V4 + Sibarist FAST + 490 µm + Melodrip + 93°C.
+
+- Hacienda La Esmeralda climate-controlled ("NC") naturals - clean enough that the Clarity-First strategy reliably works, but the aromatic ceiling may go higher with Extraction Push mechanics. Pair with the Aroma Capture modifier (Paragon chilling ball on bloom + Pour 1) for full Wölfl/Vannelli-style approach.
+
+- Finca Sophia Heritage Collection or equivalent high-elevation Panama washed lots that polished as Clarity-First but where the aromatic profile suggests there's more to extract.
+
+With the first-confirmed brew on a Sidra (Ethiopian-landrace lineage, transparency-driven), candidate space expands: any clean transparency-driven variety where Clarity-First leaves yield on the table and the variety has a tannin ceiling Full Expression's high agitation would breach is now in scope.

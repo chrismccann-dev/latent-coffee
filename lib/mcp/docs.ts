@@ -80,6 +80,30 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md': 'docs/skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md',
   'docs://skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md': 'docs/skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md',
   'docs://skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md': 'docs/skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md',
+  // Brewing Historian (Wave 2 PR 2) — SKILL.md + cluster files extracted from
+  // BREWING.md "Cross-Coffee Insight Layer" section. BREWING.md retains its
+  // h1 + pointer block at #cross-coffee-insight-layer for anchor back-compat.
+  'docs://skills/brewing-historian/SKILL.md': 'docs/skills/brewing-historian/SKILL.md',
+  'docs://skills/brewing-historian/cluster/patterns/cross-coffee-insights.md': 'docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/clarity-first.md': 'docs/skills/brewing-historian/cluster/patterns/by-strategy/clarity-first.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/suppression.md': 'docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md': 'docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md': 'docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/extraction-push.md': 'docs/skills/brewing-historian/cluster/patterns/by-strategy/extraction-push.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md': 'docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md': 'docs/skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/74158.md': 'docs/skills/brewing-historian/cluster/patterns/by-cultivar/74158.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md': 'docs/skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/ethiopian-landrace-population.md': 'docs/skills/brewing-historian/cluster/patterns/by-cultivar/ethiopian-landrace-population.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/mejorado.md': 'docs/skills/brewing-historian/cluster/patterns/by-cultivar/mejorado.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md': 'docs/skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md': 'docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-washed.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-washed.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-washed.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-washed.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-natural.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-natural.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md': 'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md',
 }
 
 const DOC_FILES: Record<string, string> = {
@@ -112,7 +136,7 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://context.md':
     'Use when validating or looking up the meaning of any Latent-specific term — strict glossary across six clusters. Roasting workflow (V-set, batch slot, experiment frame, variable / lever / non-factor, roast→cup trace, taste-for, reference roast / reference cup / optimized brew, xBloom, control experiment, 3-axis Roast Character with primary lever / acceptable roast window / brewing tolerance, 4-state lifecycle, lot-close synthesis, forward design). Brewing workflow (Coffee Brief, Two-Axis Framework, extraction strategy, modifier, Named Consideration, WBC corpus check, Cooling-Curve Target, signal arbitration with variety / process / roaster signals, Strategy zone, Wrong-zone trap, Iteration loop, Iteration budget, Diminishing returns, Strategy pivot, Brewer rotation discipline, Hybrid sub-form, signature method). MCP / Sync Architecture (Latent MCP server, Tool vs Resource, dual-surface pattern, MCP-only input principle, role separation across claude.ai / Claude Code / Latent / Chris, asymmetric write trust, propose-then-apply, arbiter procedure). Canonical Registries (alias / override / lookup factory / find-or-create / canonical promotion). WBC Reference Materials (5-axis foundational map, 8 strategy families, Cross-cutting control patterns, Consciously-not-pursuing, full-map workflow accessibility). Synthesis Pipeline (entity-directed adapters, humanizer pass, aggregation eligibility). No implementation details; grown via /grill-with-docs sessions. Read this first before authoring any prose into Latent so terminology stays consistent.',
   'docs://brewing.md':
-    'Use when planning a new brew recipe — contains the 6-strategy + 3-modifier Two-Axis framework, Step 1d Coffee Brief structure, equipment reference, and Cross-Coffee Insight Layer organized by strategy/modifier/process/variety.',
+    'Use when planning a new brew recipe — contains the 6-strategy + 4-modifier Two-Axis framework, Step 1d Coffee Brief structure, equipment reference. The Cross-Coffee Insight Layer migrated to the Brewing Historian cluster in Wave 2 PR 2 (2026-05-26); BREWING.md retains its h1 + pointer block at #cross-coffee-insight-layer for back-compat. Pull docs://skills/brewing-historian/cluster/patterns/* for the migrated cross-coffee learnings.',
   'docs://brewing/roasters.md':
     'Use when working with a specific roaster — per-roaster brewing lessons + house-style cards (e.g. Hydrangea El Paraíso thermal-shock guidance, Sey extraction expectations). Reference for roaster-anchored brew design.',
   'docs://brewing/wbc-reference.md':
@@ -208,6 +232,49 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when looking up Tier 1/2/3 sourcing priorities and Latent-adjusted next-buy framing. Navigational sub-resource pointing at strategy.md § 7-9 for substantive content.',
   'docs://skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md':
     'Use when tracking which WBC-validated cultivar / process / sourcing patterns have been tested in Latent\'s lineup. Placeholder canonical sub-resource — empty today; grows via Latent buying cycles driven by the priority-targets list.',
+  // ----- Brewing Historian (Wave 2 PR 2, ADR-0011) ---------------------------
+  'docs://skills/brewing-historian/SKILL.md':
+    'Use when claude.ai needs the brewing-side cross-coffee learnings cluster — sub-skill scope, cluster contents, inputs/outputs/handoffs. Wave 2 PR 2 (2026-05-26) extracted the BREWING.md "Cross-Coffee Insight Layer" + 6 per-strategy "Coffees That Confirmed X" sub-sections into this cluster.',
+  'docs://skills/brewing-historian/cluster/patterns/cross-coffee-insights.md':
+    'Use when looking up cross-coffee brewing learnings — By Modifier (Axis 2) compatibility matrix + Output Selection / Aroma Capture / Inverted Temp Staging patterns; By Process default-strategy table (10+ process classes with observed exceptions); By Variety per-cultivar entries (Panama/Colombian Gesha sub-types, Pink Bourbon, Rosado, Pacamara, Mokka/Mokkita, Sudan Rume, Catimor, Sydra, Catuai, Thai cultivar-mix); Cooling Behavior Observations (per-cup cooling-arc patterns); Office Brewing Notes (SWORKS valve calibration + restriction timing principles + tap-water dose-aware rules); Open Questions queue. Migrated from BREWING.md § Cross-Coffee Insight Layer in Wave 2 PR 2 (2026-05-26).',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/clarity-first.md':
+    'Use when designing a Clarity-First recipe and looking for confirmed per-coffee data points — washed Gesha (Panama/Colombia highlands), Ethiopian washed landraces, Typica Mejorado / Sydra, Laurina, Esmeralda NC climate-controlled naturals, Finca Sophia standard raised-bed naturals, Lamastus DRD Geshas, Rwandan washed Red Bourbon. Migrated from BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Clarity-First in Wave 2 PR 2.',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/suppression.md':
+    'Use when designing a Suppression recipe and looking for confirmed per-coffee data points — Colombian / Ethiopian / Panamanian anaerobic naturals + cold-room dehydration naturals; temperature-primacy resolves bitter tail; SWORKS Dial 6 office template + valve-tolerance sub-rule (anaerobic-natural vs cold-room split). Migrated from BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Suppression in Wave 2 PR 2.',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md':
+    'Use when designing a Balanced Intensity recipe and looking for confirmed per-coffee data points — honey-process lots, Pacamara, Mokkita, washed Pink Bourbon, 5 yeast-inoculated subtypes (anaerobic natural / thermal shock washed / white honey / natural with washed finish / anaerobic honey), Finca El Paraíso recipe gradient, Ethiopian standard natural with brightness-forward targets, CGLE Sudan Rume Natural. Migrated from BREWING.md § Cross-Coffee Insight Layer > Coffees That Needed Balanced Intensity in Wave 2 PR 2.',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md':
+    'Use when designing a Full Expression recipe and looking for confirmed per-coffee data points — Jeferson Motta anaerobic washed Colombian Gesha (Huila/Cauca pattern), Pikudo\'s Rosado anoxic natural, Moonwake Blooms washed Catuai (Honduras), Tamarind heavy co-ferment washed, Picolot Emerald Garrido Mokka Natural (with fast/fast/slow valve), DAK Apricoast Ethiopian anaerobic washed. Migrated from BREWING.md § Cross-Coffee Insight Layer > Coffees That Needed Full Expression in Wave 2 PR 2.',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/extraction-push.md':
+    'Use when designing an Extraction Push recipe and looking for confirmed per-coffee data points — Pepe Jijón Sidra Wave Hybrid is the strategy\'s first-confirmed brew (EG-1 5.8 / 95°C / 4-pour Melodrip on Orea v4 + Sibarist FLAT FAST). Includes failure-mode diagnostic, drying-tail-as-unintegrated-rose finding, and candidate-coffee list. Migrated from BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Extraction Push in Wave 2 PR 2.',
+  'docs://skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md':
+    'Use when designing a Hybrid recipe and looking for confirmed per-coffee data points — SWORKS slow/slow/open Sequential template across three yeast-inoculated Geshas (Janson 1010 / Sebastian Ramirez White Honey / Finca La Reserva Anaerobic Honey); 4 other sub-forms (Phase-Mapped / Selective Bloom / Intensity-Clarity Split / Temperature-Staged) empty with candidate-experiment scoping. Migrated from BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Hybrid in Wave 2 PR 2.',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md':
+    'Use when designing a Gesha recipe — pointer / cross-strategy entry index for the largest single-cultivar corpus (N=34). Per-cultivar deep-dive patterns will accrue here beyond the by-variety rollup.',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/74158.md':
+    'Use when designing a recipe for cultivar 74158 (Ethiopian landrace) — pointer to the Ethiopian Landraces (74110/74112/74158) cross-rollup and the Hydrangea Basha Bekele Kokose Suppression entry. N=5.',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md':
+    'Use when designing a Sidra recipe — pointer / cross-strategy entry index, including the Pepe Jijón Wave Hybrid Extraction Push reference and the Sidra tannin-ceiling rule. N=5.',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/ethiopian-landrace-population.md':
+    'Use when designing a recipe for unspecified Ethiopian landrace population — pointer to the broader landrace rollups (74158 + 74110/74112 blend have their own deep-dives). N=4.',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/mejorado.md':
+    'Use when designing a Mejorado (Typica Mejorado) recipe — pointer to the Sydra/Sidra-family default + Finca Soledad TyOxidator Clarity-First confirmation. N=3.',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md':
+    'Use when designing a Pacamara recipe — Balanced Intensity default + Picolot Garrido Full Expression exception + bean-density grind ladder (Mokka 6.0 → Pacamara 6.1 on Picolot naturals). N=3.',
+  'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md':
+    'Use when designing a Sudan Rume recipe — CGLE Las Margaritas Balanced Intensity confirmation + April Brewer Glass + April Paper vehicle-dependency rule (two-data-point confirmed for SL-lineage / aromatic-landrace varieties on fast-cone vehicles) + temperature ceiling 91°C. N=3.',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md':
+    'Use when designing a recipe for Anaerobic Natural lots — Suppression default across 4 confirmed origins (Colombia/Ethiopia/Panama + cold-room Ethiopian). Includes SWORKS Dial 6 office template + fallback to Balanced + Inverted Temperature Staging. N=10 (largest coffee-family cluster).',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-washed.md':
+    'Use when designing a recipe for Anaerobic Washed lots — split-by-intensity defaults (clean/lighter → Balanced Intensity with Full Expression roaster-override; heavy/Colombian Huila/Cauca → Full Expression). N=5.',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-washed.md':
+    'Use when designing a recipe for Yeast-Inoculated Washed lots — Balanced Intensity default, recipe gradient tracks flavor register (rose-forward 6.3/95°C; aromatic-floral 6.3/94°C; lighter floral 6.4/94°C). N=4.',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-natural.md':
+    'Use when designing a recipe for Yeast-Inoculated Natural lots — Balanced Intensity default; honey vs anaerobic-natural finish split shifts temperature ceiling 1°C. N=3.',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md':
+    'Use when designing a recipe for Double Anaerobic Washed lots — Full Expression default (heavy-end of anaerobic-washed continuum); may benefit from Output Selection (late cut) or SWORKS Dial 5 contact-time control. N=3.',
+  'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md':
+    'Use when designing a recipe for Thermal Shock Washed lots — Balanced Intensity default with flavor-register-driven recipe gradient (Finca El Paraíso canonical producer; three confirmed lots: Letty / Luna / Lychee). N=3.',
   // ---------------------------------------------------------------------------
   'docs://prompts/start-brew.md':
     'Operational prompt for starting a new brew session in claude.ai — fetches BREWING.md and runs the Coffee Brief through Step 1d strategy confirmation.',
@@ -409,6 +476,112 @@ export function listDocs(): {
       'docs://skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md',
       'docs/skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md',
       'WBC Roasting Archivist — Canonical: WBC-Tested Cultivars / Processes / Sourcing',
+    ),
+    // Brewing Historian (Wave 2 PR 2, ADR-0011)
+    entry(
+      'docs://skills/brewing-historian/SKILL.md',
+      'docs/skills/brewing-historian/SKILL.md',
+      'Brewing Historian — SKILL',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/cross-coffee-insights.md',
+      'docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md',
+      'Brewing Historian — Cross-Coffee Insights (By Modifier / Process / Variety / Cooling / Office / Open Questions)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-strategy/clarity-first.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-strategy/clarity-first.md',
+      'Brewing Historian — By Strategy: Clarity-First',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-strategy/suppression.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md',
+      'Brewing Historian — By Strategy: Suppression',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md',
+      'Brewing Historian — By Strategy: Balanced Intensity',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md',
+      'Brewing Historian — By Strategy: Full Expression',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-strategy/extraction-push.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-strategy/extraction-push.md',
+      'Brewing Historian — By Strategy: Extraction Push',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md',
+      'Brewing Historian — By Strategy: Hybrid',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md',
+      'Brewing Historian — By Cultivar: Gesha (N=34)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-cultivar/74158.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-cultivar/74158.md',
+      'Brewing Historian — By Cultivar: 74158 (N=5)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md',
+      'Brewing Historian — By Cultivar: Sidra (N=5)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-cultivar/ethiopian-landrace-population.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-cultivar/ethiopian-landrace-population.md',
+      'Brewing Historian — By Cultivar: Ethiopian landrace population (N=4)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-cultivar/mejorado.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-cultivar/mejorado.md',
+      'Brewing Historian — By Cultivar: Mejorado (N=3)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md',
+      'Brewing Historian — By Cultivar: Pacamara (N=3)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md',
+      'Brewing Historian — By Cultivar: Sudan Rume (N=3)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md',
+      'Brewing Historian — By Coffee Family: Anaerobic Natural (N=10)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-washed.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-washed.md',
+      'Brewing Historian — By Coffee Family: Anaerobic Washed (N=5)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-washed.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-washed.md',
+      'Brewing Historian — By Coffee Family: Yeast-Inoculated Washed (N=4)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-natural.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-natural.md',
+      'Brewing Historian — By Coffee Family: Yeast-Inoculated Natural (N=3)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md',
+      'Brewing Historian — By Coffee Family: Double Anaerobic Washed (N=3)',
+    ),
+    entry(
+      'docs://skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md',
+      'docs/skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md',
+      'Brewing Historian — By Coffee Family: Thermal Shock Washed (N=3)',
     ),
     ...TAXONOMY_AXES.map((axis) =>
       entry(`docs://taxonomies/${axis}.md`, `docs/taxonomies/${axis}.md`, `Taxonomy: ${axis}`),
