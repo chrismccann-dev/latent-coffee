@@ -10,11 +10,37 @@ patch_brew to update the row, but prefer not pushing in the first place.
 ask "is this brew from a coffee Chris roasted himself?" Signals: explicit
 "self-roasted" or "Latent" framing in the user message, batch # references,
 a roast date instead of a roaster purchase date, the coffee URL pointing
-at a green-bean source (Sweet Maria's, Showroom, Untold green) rather than
-a finished-roast roaster. If self-roasted, STOP — give Chris the handoff
-context (recipe + tasting arc + brewing-side learnings worth carrying into
-the lot record), and tell him to run `close-lot.md` (or `one-shot-closeout.md`
+at a green-bean PRODUCT-PATH on a green-bean source (e.g. Sweet Maria's
+`/products/<green-bean-name>`, Showroom Coffee, Untold Coffee Lab's *green*
+product pages, JA Coffee, Forest Coffee). NOTE: some roasters sell BOTH
+green and roasted from the same domain (Untold Coffee Lab is the canonical
+example — `untoldcoffeelab.com` carries both). Discriminate by URL PATH /
+product type, NOT by bare domain: `/products/...-roasted` or `/coffee/...`
+is roasted; `/products/...-green` or `/green/...` is green. If the URL is
+ambiguous, ASK Chris (this single question survives the no-confirmation
+rule below). If self-roasted, STOP — give Chris the handoff context
+(recipe + tasting arc + brewing-side learnings worth carrying into the
+lot record), and tell him to run `close-lot.md` (or `one-shot-closeout.md`
 if `green_beans.is_one_shot=true`) in the roasting thread instead.
+
+**No-confirmation rule scope** (STEP 1 below says "Treat fields as final,
+no confirmation"): this applies to FIELD VALUES inside the push_brew payload
+(roaster name, terroir, cultivar, recipe parameters, prose) — fire push_brew
+without asking Chris to re-confirm each field. The no-confirmation rule does
+NOT override the self-roasted gate question above — when the URL or other
+signals are genuinely ambiguous, asking Chris one yes/no question to avoid
+creating an orphan row is the correct move. The gate question is the only
+exception.
+
+**Pre-warm push_brew + propose_doc_changes at session start** (do this
+BEFORE STEP 1's tool invocation): `tool_search` ranking can outrank push_brew
+behind its siblings (patch_brew / push_green_bean / push_roast_learnings /
+get_brew) when the query token matches multiple tools. To avoid an empty-recall
+loop at STEP 1, explicitly call `tool_search(query: "INSERT CREATE new brew row primary write path push_brew")`
+and `tool_search(query: "propose_doc_changes")` after the catalog fetch and
+before STEP 1. If push_brew still doesn't surface in the top-3 result set,
+fall back to invoking the tool directly by name (`push_brew`) — the discovery
+layer's ranking is advisory; the tool exists in the registry regardless.
 
 At session start (after the self-roasted gate clears), fetch the Master
 Coordinator catalog via read_doc(uri="docs://skills/coordinator/catalog.md")

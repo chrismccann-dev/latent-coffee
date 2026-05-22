@@ -112,6 +112,28 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Wush Wush start-brew (peer-roasted Untold variant as roasting-side calibration anchor) / Round 10 / item 14
     - **Suggested landing:** schema design decision; logged separately as future roadmap item in PRODUCT.md § Longer Term Items
 
+### From Round 11 Wush Wush full brewing iteration + bundled-brewing-completion (2026-05-22)
+
+18. **Switch open-drawdown coarsen-for-faster-rinse — generalizes beyond Intensity-Clarity Split?** — Wush Wush session surfaced the counterintuitive lever "coarsen the bed so the open phase drains as a true fast rinse — on Hybrid the open phase is a rinse, not an extraction." Documented in hybrid.md for Intensity-Clarity Split. Open question: does this lever apply to other Hybrid sub-forms (Sequential, Phase-Mapped, Selective Bloom) or is it specific to Intensity-Clarity Split? If general, it belongs in `brewers.md § Hario Switch` (or the broader hybrid.md operating section) as a Switch operating note rather than a per-sub-form callout.
+    - **Grade:** OBSERVING (1 lived data point on 1 sub-form; want 2-3 more brews across other sub-forms)
+    - **Source:** Round 11 / Wush Wush Brew 4
+    - **Suggested landing:** brewing-equipment-expert/cluster/brewers.md § Hario Switch operating note (if general) OR hybrid.md per-sub-form callout (if specific)
+
+19. **Strategy-pivot pivot-destination heuristics — promote to CCIL?** — operational-guide Step 3 now has a "Pivot-destination heuristics" block mapping residual-problem SHAPE to target strategy (single-axis loud → Suppression; two-opposing-goals → Hybrid Intensity-Clarity Split; aromatic-vs-structural-decoupling → Hybrid Selective Bloom; temperature-cliff → Hybrid Temperature-Staged; heavy-process-loud → Suppression; quiet-buried-under-roast → Hybrid or Extraction Push). Shipped as operational-guide content but may belong in CCIL (Cross-Coffee Insight Layer) once 2-3 more strategy pivots fire that test the heuristics.
+    - **Grade:** OBSERVING (1 lived pivot validated the heuristics; want 2-3 more pivots — across different residual-problem shapes — to confirm the mapping holds)
+    - **Source:** Round 11 / Wush Wush Brew 2 → Brew 3 pivot
+    - **Suggested landing:** brewing-historian/cluster/patterns/cross-coffee-insights.md CCIL entry; promote when threshold met
+
+20. **Medium-roast handling — load-bearing OR "named consideration"?** — Round 10 shipped a medium-roast hook in operational-guide Step 1 as a "named consideration." Round 11's Wush Wush iteration showed it should have LED strategy selection, not been a footnote. Question for grilling: is the hook prominent enough in its current form, OR should "roast level" be promoted to a Process / Variety / Roast-Level signal flag at Step 1b (parallel to the existing Process and Variety signals) so claude.ai weights it as a first-class driver rather than discretionary?
+    - **Grade:** OBSERVING (1 lot + 1 strong iteration-time validation; want 1-2 more medium-roast specialty naturals to confirm the load-bearing framing)
+    - **Source:** Round 11 / Wush Wush iteration / item 9
+    - **Suggested landing:** operational-guide Step 1b signal-table promotion OR keep as Step 1 named consideration (decision is the grill's)
+
+21. **tool_search ranking collision pattern — substrate convention?** — Round 11's BLOCKING bug surfaced a general convention question: when Tool A describes itself as "Sibling of Tool B" or otherwise embeds Tool B's name in its description, Tool A ranks for queries containing Tool B's name. Lesson: every Tool description should be SELF-CONTAINED (describe what the Tool DOES, not what its siblings do or how it relates to them). Currently shipped: patch_brew + list_canonicals descriptions de-cross-referenced from push_brew. Open question: are there other cross-references in the Tool description corpus that haven't fired yet but could? Worth a sweep + a convention lock.
+    - **Grade:** READY (one-shot description audit; convention lock is the substrate output)
+    - **Source:** Round 11 / push_brew BLOCKING bug
+    - **Suggested landing:** ARBITER.md or operator-guide.md description-writing convention + audit-pass sprint to sweep all Tool descriptions
+
 ## Resolved (append-only history)
 
 When grill items resolve, move them here with date + landing target. Format:
