@@ -53,7 +53,7 @@ export function registerCanonicalTools(server: McpServer) {
     {
       title: 'List Canonical Registries',
       description:
-        'List / lookup / browse / discover / enumerate the canonical-taxonomy registries the MCP server validates against. Returns an array of { axis, title, description } for the 12 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers). Use this BEFORE drafting a push_brew payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical. NOTE: read_canonical also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars) for symmetry with `docs://taxonomies/{axis}.md` URIs.',
+        'List / lookup / browse / discover / enumerate the canonical-taxonomy registries the MCP server validates against. Returns an array of { axis, title, description } for the 12 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers). Use this BEFORE drafting any write-tool payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical. NOTE: read_canonical also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars) for symmetry with `docs://taxonomies/{axis}.md` URIs.',
       inputSchema: {},
     },
     withToolErrorLogging('list_canonicals', async () => {
