@@ -116,6 +116,7 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/roasting-historian/cluster/patterns/by-process/washed.md': 'docs/skills/roasting-historian/cluster/patterns/by-process/washed.md',
   'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md',
   'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md',
+  'docs://skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md': 'docs/skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md',
   'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md': 'docs/skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md',
   'docs://skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md': 'docs/skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md',
   'docs://skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md': 'docs/skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md',
@@ -397,6 +398,8 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Per-lot learnings for CGLE Mandela XO Extended Fermentation (closed April 2026, reference batch #139). Pointer to roast_learnings DB row + cross-lot framing — XO-fermented drop ceiling ~205-206°C; silent FC the rule; fan curve shape as single most impactful variable. Canonical Heavy-Ferment / XO-Family lot anchor.',
   'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md':
     'Per-lot learnings for CGLE Sudan Rume Hybrid Washed (closed April 2026, reference #133 / closest replication #148). Most data-rich lot in archive (20+ batches, 6 experiment sets); empirical anchor for FC floor/ceiling, WB-to-Ground delta sensitivity, xbloom under-extraction discovery, varietal aromatic vocabulary unlock.',
+  'docs://skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md':
+    'Per-lot learnings for Costa Rica Anaerobic Dry Process Higuito (closed 2026-05-19, reference #185 v3b). First self-roasted lot to confirm the anaerobic-natural Suppression + temperature-primacy pattern on the brewing side (4th confirmed origin alongside Colombia / Ethiopia / Panama). Anchors: xbloom misranks between close candidates not by direction; replication-by-profile unreliable (FC audibility flipped + WB-to-Ground delta swung); peak inlet × dev-time non-additive; overdev is a peak/dev interaction not an Agtron threshold.',
   'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md':
     'Per-lot learnings for Gesha Village Oma (closed counterflow-incomplete, green exhausted). Anchors the 48s dev-time floor for washed Gesha in counterflow; FC floor / drop ceiling row at Very low confidence pending a complete Gesha counterflow resolution.',
   'docs://skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md':
