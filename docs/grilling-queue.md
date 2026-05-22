@@ -134,6 +134,23 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Round 11 / push_brew BLOCKING bug
     - **Suggested landing:** ARBITER.md or operator-guide.md description-writing convention + audit-pass sprint to sweep all Tool descriptions
 
+### From Round 11 continuation (2026-05-22) — Wush Wush push retry
+
+22. **Terroir resolver cross-country fuzzy-match bug** — when `push_brew` receives an unregistered `macro_terroir`, the resolver fuzzy-matches against ALL canonical macros globally rather than scoping to the supplied `country`. Round 11 continuation caught: input `macro_terroir: "Minas Gerais"` for Brazil cross-matched to `"Mindanao Highlands"` (Philippines — alphabetically adjacent "Min..." string) and the error message reported the wrong-country macro as the "did you mean?" suggestion. Fix: scope fuzzy-match candidates to (country, macro) pairs so a Brazil macro can only fuzzy-match against Brazil macros. Lib path likely `lib/brew-import.ts findOrCreateTerroir` or the underlying canonical resolver.
+    - **Grade:** READY (clear fix scope, single lib file change)
+    - **Source:** Round 11 continuation / 2026-05-22 push_brew retry on Wush Wush
+    - **Suggested landing:** lib/brew-import.ts (or wherever terroir fuzzy-match lives) + add test case for cross-country rejection + propose_canonical_addition pointer in the error message
+
+23. **Tool description vs runtime behavior accuracy convention** — push_brew's description previously said "FK-resolves terroir + cultivar via lazy find-or-create" without qualification. Runtime behavior is asymmetric per axis: terroir lazy-find-or-creates at the (admin_region, macro, meso) tuple level WHERE macro is registered; strict-canonical at the macro level. Description-vs-runtime drift confused claude.ai's expectation in Round 11 continuation. Convention candidate: every Tool description should accurately reflect the strictest validation path, not the most permissive. Audit candidate: sweep all `push_*` / `patch_*` descriptions for accuracy against the actual validation behavior in `lib/brew-import.ts` / `lib/mcp/push-*.ts` / `lib/mcp/patch-*.ts`.
+    - **Grade:** READY (audit + convention lock)
+    - **Source:** Round 11 continuation / 2026-05-22
+    - **Suggested landing:** ARBITER.md or operator-guide.md description-writing convention; sweep all 9 push_* + 9 patch_* descriptions for accuracy against runtime
+
+24. **Pre-shipped substrate during active dog-food session — coordination process** — Round 11 shipped the hybrid.md Intensity-Clarity Split entry as part of the BLOCKING-fix PR, derived from the in-progress Wush Wush session. When claude.ai later reached propose_doc_changes STAGE 2, the content was already there — claude.ai correctly paused rather than file a duplicate. Process lesson: when Claude Code pre-ships substrate updates derived from an active dog-food session (rather than waiting for claude.ai's natural propose_doc_changes path), flag the pre-populated cluster doc paths explicitly to Chris so claude.ai's session doesn't get confused at proposal time. Consider: does PR commit-message convention need a "Pre-populated substrate paths (will collide with active claude.ai proposals)" callout?
+    - **Grade:** BRAINSTORM (1 lived instance; need to see if pattern repeats before locking convention)
+    - **Source:** Round 11 continuation / 2026-05-22 hybrid.md proposal pause
+    - **Suggested landing:** commit-message / PR-description convention update OR an operational-guide note in the bundled-brewing-completion / close-lot prompts about checking propose_doc_changes targets for recent commits
+
 ## Resolved (append-only history)
 
 When grill items resolve, move them here with date + landing target. Format:
