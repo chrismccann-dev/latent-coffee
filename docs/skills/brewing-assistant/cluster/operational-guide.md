@@ -22,6 +22,22 @@ Evaluate the coffee's process and variety against the **Process / Variety Signal
 
 In 3-5 sentences: what is this coffee, what does the terroir and cultivar suggest about likely expression, what does the process tell you about extraction behavior, and what does the roaster's positioning (if known) suggest about intent?
 
+**Archive lookup paths for 1c** (explicit, not author-discretion):
+
+- **Per-cultivar prior brews** — `read_doc(uri="docs://skills/brewing-historian/cluster/patterns/by-cultivar/<cultivar-slug>.md")` if the cultivar has a cluster doc; otherwise check the By Variety section of `cross-coffee-insights.md`.
+- **Per-coffee-family prior brews** — `read_doc(uri="docs://skills/brewing-historian/cluster/patterns/by-coffee-family/<family-slug>.md")` for anaerobic-natural / co-fermented / heavy-ferment / etc. families.
+- **Per-strategy prior brews** — `read_doc(uri="docs://skills/brewing-historian/cluster/patterns/by-strategy/<strategy-slug>.md")` for "Coffees That Confirmed X" data points.
+- **Prior brew conversations** — `conversation_search` for prior threads referencing this roaster + variety + process. Useful when no cluster pattern yet exists for the specific combination.
+- **Roaster card** — `read_doc_section(uri="docs://brewing/roasters.md", anchor="<Canonical Roaster Name>")` if the roaster has a card. Net-new roasters have no card yet (flag for net-new framing per 1d below).
+
+**Net-new variety / net-new roaster framing** (apply when 1c surfaces no archive data):
+
+When the variety has no `by-cultivar/<cultivar>.md`, no by-coffee-family entry, and no prior brew conversation, the brief is in **wide-variance regime** by default — Brew 1 is exploratory, not narrowing. Explicitly state this in the brief: "First [variety] in archive — Brew 1 is wide-variance exploratory; if it's off, multi-variable jumps explicitly approved to map where the cup wants to live before isolating." Same framing applies for net-new roasters (no roaster card, no house-style data point). The single-variable-isolation discipline kicks in at Brew 2; Brew 1 is allowed to span more space.
+
+**Roaster roast-level hook** (apply when known):
+
+The brief framework defaults to ultra-light / light roasters (Sey / Substance / Moonwake / Picky Chemist / Big Sur archetypes). When the roaster roasts the coffee at **medium** or above (verify via roaster product page; some specialty naturals are roasted medium even by clarity-oriented roasters), flag the adjusted over-extraction risk profile in 1c: roast character is the over-extraction risk on a medium roast, not under-development. Pushing harder surfaces roast-derived chocolate/nut/bittering forward of the green's fruit signature; the lever is evaluate cooler + accept a chocolatier register, NOT temperature/agitation push. Pattern is currently observation-only (1 lot in archive when this hook lands); promote to a CCIL entry once 2-3 medium-roast specialty naturals confirm.
+
 **1d. Proposed extraction strategy and modifiers**
 
 Based on the above, propose one of the six extraction strategies below and explain why. Then, separately, assess whether any modifiers (Output Selection, Inverted Temperature Staging, Aroma Capture, Role-Based Pulse) are warranted for this specific coffee. Most coffees will not warrant any. If a modifier is proposed, justify it explicitly. Then pause and ask for confirmation before proceeding to the recipe.

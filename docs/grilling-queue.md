@@ -75,6 +75,43 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
 
 ---
 
+### From Round 10 dog-food haul (2026-05-22 — Sudan Rume Path A close + Higuito first full close-lot.md + Wush Wush first start-brew)
+
+11. **Slug-convention drift between active-lots/ and learnings/** — active-lots/ uses lot-code-style slugs (`cos-hig-bor-2026.md` / `cgle-srume-natural-2026.md`); learnings/ uses producer/cultivar-readable slugs (`cgle-mandela-xo.md` / `gv-oma-lot-25-035.md`). Higuito learnings landed at `cos-hig-bor-2026.md` (lot-code style, pragmatic match-the-active-lot choice). Three lock-in options: (a) lot-code across both = uniform + trivial cross-ref, (b) producer/cultivar across both = more readable + matches existing 7 learnings files, (c) formalize the split (active-lots = lot-code, learnings = producer/cultivar).
+    - **Grade:** READY (3 lock-in options, all defensible)
+    - **Source:** Round 10 / PR landing this entry
+    - **Suggested landing:** CONTEXT.md entry on slug-convention + close-lot.md STAGE 5 update + ARBITER.md routing note
+
+12. **Candidate run-off pourover concept needs a name** — between Path C-2 discriminator (resolves leading-slot identity) and close-lot.md optimized brew (full dial-in), there's an undefined intermediate "candidate run-off" step where 2-3 finalists are brewed at a confirmed-but-not-optimized recipe to break a tie. Currently both the discriminator cupping and the run-off cupping share `recipe_variant: real_pourover`. Schema scoping options: (a) `is_run_off: bool` flag on cuppings; (b) dedicated `recipe_variant: 'run_off'` value; (c) `run_off_brew_recipe text` field; (d) leave as-is (no formal concept, just thread prose).
+    - **Grade:** OBSERVING (1 lived instance — Sudan Rume V5A vs 169; want 2-3 more to lock the shape)
+    - **Source:** Sudan Rume V5A vs 169 session / Round 10
+    - **Suggested landing:** CONTEXT.md vocabulary entry + cluster/pod-1-routing.md schema scoping update + possible cuppings schema migration
+
+13. **Rest-days drift as structured field vs prose-only** — currently flagged via `additional_notes` prefix `REST_DAYS_DRIFT: ...` per protocol. Not queryable. When comparing candidates across multiple V-sets at different ages (Sudan Rume V5A Day 9 vs 169 Day 17), the rest drift becomes a confounding variable that should be filter-able in cross-lot SQL queries. Schema candidate: `cupping_age_days` (derived) + `rest_drift_flag` (boolean or magnitude) on cuppings.
+    - **Grade:** OBSERVING (1 lived instance with large drift, +10 days; want a few more before locking thresholds)
+    - **Source:** Sudan Rume V5A vs 169 session / Round 10
+    - **Suggested landing:** cuppings schema migration + close-lot.md / log-cupping.md prompt update
+
+14. **Brewer-rotation tiebreaker logic** — operational-guide's rotation table maps cup-goal categories ("balanced fruit sweetness") to multiple brewers ("April / Kalita") with no tiebreaker. Wush Wush session broke tie on rotation-debt + integration pattern (April for round mid-palate; Kalita for body+sweetness extension), which was sound but discretionary. Suggested fix: tiebreaker column or one-liner ("April when integration / round mid-palate is the goal; Kalita when body / sweetness extension is wanted").
+    - **Grade:** READY
+    - **Source:** Wush Wush start-brew / Round 10 / item 10
+    - **Suggested landing:** brewing-assistant operational-guide rotation table update OR brewing-equipment-expert operational-reference rotation framework update
+
+15. **Medium-roast specialty natural pattern promotion** — Wush Wush is the first archived medium-roast specialty natural. operational-guide now has a "Roaster roast-level hook" but the pattern is observation-only (1 lot). When 2-3 medium-roast specialty naturals confirm the over-extraction-risk-is-roast-character lever (evaluate cooler, accept chocolatier register), promote from operational-guide observation to a brewing-historian CCIL entry.
+    - **Grade:** OBSERVING (1 lot; want 2-3 confirming)
+    - **Source:** Wush Wush start-brew / Round 10 / item 8
+    - **Suggested landing:** brewing-historian/cluster/patterns/cross-coffee-insights.md new entry; promote when threshold met
+
+16. **CONTEXT.md split-or-anchor-fetch** — 437KB exceeds context window on `read_doc`; claude.ai falls back to grep. The file has a Brewing section at line 444. Two options: (a) split into context-brewing.md + context-roasting.md + shared, OR (b) update session-start prompts to use `read_doc_section` against the relevant anchor only.
+    - **Grade:** READY (option (b) is the quick mitigation; option (a) is the proper fix)
+    - **Source:** Wush Wush start-brew / Round 10 / item 9
+    - **Suggested landing:** docs sprint OR session-start prompt fix in start-brew.md / start-lot.md / log-cupping.md / log-roast.md / close-lot.md / one-shot.md / one-shot-closeout.md / bundled-brewing-completion.md / propose-doc-changes-from-brew.md
+
+17. **Roasted-variant-of-same-green workflow modeling** — Chris buys the roasted variant of ~25-30% of his green-bean lots from the same source as a calibration anchor for the roasting side. Currently lives outside the data model. His instinct: keep separate. Worth grilling once 2-3 more such pairs exist (Wush Wush is one; Untold's roasted Fazenda Um is the discriminator pair). Decision space: (a) keep fully separate (current); (b) FK link on green_beans pointing at the external roasted brew's `brew_id`; (c) a `peer_reference_brews` join table.
+    - **Grade:** BRAINSTORM (1-2 lived instances; concept still fluid)
+    - **Source:** Wush Wush start-brew (peer-roasted Untold variant as roasting-side calibration anchor) / Round 10 / item 14
+    - **Suggested landing:** schema design decision; logged separately as future roadmap item in PRODUCT.md § Longer Term Items
+
 ## Resolved (append-only history)
 
 When grill items resolve, move them here with date + landing target. Format:

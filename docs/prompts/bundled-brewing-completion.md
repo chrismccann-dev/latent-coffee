@@ -1,13 +1,29 @@
-Use when a PURCHASED brew is finished. For self-roasted brews, the brew goes
-through `close-lot.md` STAGE 4 as part of lot close-out - don't push separately.
+Use when a PURCHASED brew is finished. **HARD GATE — STOP before STEP 1
+if this brew is self-roasted.** Self-roasted brews (`roaster: "Latent"`,
+or brewed from a coffee with a `green_bean_id` in the Latent app) push via
+`close-lot.md` STAGE 4 as part of lot close-out — NOT through this prompt.
+A push_brew here on a self-roasted lot creates an orphan brew row that the
+architecture explicitly routes elsewhere. Recovery from accidental push:
+patch_brew to update the row, but prefer not pushing in the first place.
 
-At session start, fetch the Master Coordinator catalog via
-read_doc(uri="docs://skills/coordinator/catalog.md") to identify available
-knowledge clusters. For brewing equipment validation (brewer / filter / grinder /
-SWORKS dial behavior), dispatch to the Brewing Equipment Expert
-(docs://skills/brewing-equipment-expert/cluster/). For WBC competitor recipe
-references and cross-cutting control patterns, dispatch to the WBC Brewing
-Archivist (docs://skills/wbc-brewing-archivist/cluster/ — Wave 2 PR 1, ADR-0011).
+**Self-roasted detection at session start** (do this BEFORE any other STEP):
+ask "is this brew from a coffee Chris roasted himself?" Signals: explicit
+"self-roasted" or "Latent" framing in the user message, batch # references,
+a roast date instead of a roaster purchase date, the coffee URL pointing
+at a green-bean source (Sweet Maria's, Showroom, Untold green) rather than
+a finished-roast roaster. If self-roasted, STOP — give Chris the handoff
+context (recipe + tasting arc + brewing-side learnings worth carrying into
+the lot record), and tell him to run `close-lot.md` (or `one-shot-closeout.md`
+if `green_beans.is_one_shot=true`) in the roasting thread instead.
+
+At session start (after the self-roasted gate clears), fetch the Master
+Coordinator catalog via read_doc(uri="docs://skills/coordinator/catalog.md")
+to identify available knowledge clusters. For brewing equipment validation
+(brewer / filter / grinder / SWORKS dial behavior), dispatch to the
+Brewing Equipment Expert (docs://skills/brewing-equipment-expert/cluster/).
+For WBC competitor recipe references and cross-cutting control patterns,
+dispatch to the WBC Brewing Archivist
+(docs://skills/wbc-brewing-archivist/cluster/ — Wave 2 PR 1, ADR-0011).
 
 Complete this brew session: push_brew first, then propose any doc updates.
 If you have feedback for Claude Code on either path, mention it.
