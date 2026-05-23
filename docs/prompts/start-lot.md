@@ -54,6 +54,11 @@ Canonical-field decision flowchart BEFORE the push:
 - **Producer** in `PRODUCER_LOOKUP`? Verify via `read_canonical(axis: "producers")`. If NO → set `producer_override: true`. Tier-3 attribution philosophy means many small producers (especially small Colombian farms) won't be in canonical; don't let find-or-create silently create a non-canonical row.
 - **Region / department** in canonical macro_terroir? Verify via `read_canonical(axis: "terroirs")`. Roest labels meso / locality ("Caicedonia", "Las Margaritas") as "region"; the canonical macro_terroir is the BROADER area ("Western Andean Cordillera"). Locality goes in `meso_terroir`, NOT `macro_terroir`. If no canonical macro covers the actual region: HALT, report the gap, and ask whether to add the macro to the registry OR confirm a fallback. If fallback: include `TERROIR_DRIFT: <details>` in `additional_notes`.
 - **Cultivar** in canonical? Verify via `read_canonical(axis: "cultivars")`. Spanish-accent variants (Sudán Rumé) alias to canonical (Sudan Rume). If your input doesn't match canonical AND doesn't match an alias, find-or-create silently creates a non-canonical row with NULL metadata.
+- **Multi-cultivar blend with net-new members** (East African SL-blends are the canonical case — e.g. Mount Elgon Ladies' Lot is SL28 + SL14 + Nyasaland, with SL14 + Nyasaland net-new to the registry): `green_beans.cultivar` is single-value strict-canonical (no `cultivar_override` path); net-new individual cultivars require `propose_canonical_addition(axis: "cultivar")` + a deliberate registry edit before they resolve. Sanctioned blend-handling pattern (mirrored from one-shot.md):
+  1. Pick the **representative canonical member** (the one that's both in the registry AND most load-bearing for design) and set `green_beans.cultivar.cultivar_name = "<that canonical>"`.
+  2. Preserve the **full verbatim blend string** in the legacy `green_beans.variety` free-text field AND in `additional_notes`.
+  3. Push the **comma-separated string** to `roest_inventory.cultivar` (which accepts comma-separated multi-cultivar strings by design).
+  4. File `propose_canonical_addition(axis: "cultivar", name: "<member>")` for each net-new blend member.
 
 Then:
 

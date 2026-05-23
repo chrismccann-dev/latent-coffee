@@ -21,8 +21,28 @@ MCP namespace: tools surface under `Latent Coffee`.
 
 ## Routing
 
+Three resume points depending on what's already written. STAGE 0 below runs the pipeline check so you know which one you're on.
+
 - **Fresh intake (lot not in DB)**: paste a LOT SPEC block below this message with green-bean data. Run STAGES 1-4 end to end.
-- **Lot already pushed but no V1 yet (e.g. retroactive flagging of an existing lot as one-shot)**: reference the `lot_id` or `green_bean_id`. STAGE 1 calls `patch_green_bean(is_one_shot: true)` instead of `push_green_bean`. Resume at STAGE 2.
+- **Lot pushed but no V1 yet** (e.g. retroactive flagging of an existing lot as one-shot, or a prior session stopped after STAGE 1): reference the `lot_id` or `green_bean_id`. STAGE 1 calls `patch_green_bean(is_one_shot: true)` instead of `push_green_bean` (if not already flagged); skip the push paths but DO re-run the carry-forward search. Resume at STAGE 2.
+- **Lot pushed + V1 experiment frame exists + recipe row may exist (partial STAGE 2)**: a prior session got partway through STAGE 2. STAGE 0 detects this; resume by pushing only what's missing (recipe row OR Roest profile OR profile→recipe linkage). Do NOT re-push the green bean or inventory row — `push_inventory` is NOT idempotent and yields duplicate Roest rows on re-push (verified during Round 12 dog-food, 2026-05-23).
+
+## STAGE 0 - Pre-flight reconciliation (always run)
+
+**This STAGE writes**: nothing (read-only check).
+
+Before any push, call `get_bean_pipeline({lot_id: <code>})` (or `get_green_bean` if `lot_id` is unknown) to discover what's already written for this lot. Branch the rest of the session on the result:
+
+- **`green_bean` row not found**: fresh intake. Proceed to STAGE 1 normally.
+- **`green_bean` exists, `is_one_shot: false`**: lot was originally V-set framed. `patch_green_bean(is_one_shot: true)` at STAGE 1; skip the rest of STAGE 1 push paths; proceed to carry-forward search.
+- **`green_bean` exists, `is_one_shot: true`, no experiments**: STAGE 1 push paths already done. Skip the green-bean + inventory pushes. Re-run the carry-forward search (it's load-bearing for STAGE 2 design — don't trust prior session's analysis blindly). Proceed to STAGE 2.
+- **`green_bean` exists, V1 experiment exists, `roast_recipes: []`**: STAGE 1 + STAGE 2(a) done; STAGE 2(b)+(c) missing. Skip the experiment push; resume at STAGE 2(b) push_roast_recipe.
+- **`green_bean` exists, V1 experiment exists, recipe row exists, no `roest_profile_id`**: STAGE 2(b) done but profile push missing. Skip the recipe push; resume at STAGE 2(c) push_roast_profile + recipe linkage.
+- **`green_bean` exists, V1 experiment exists, recipe row exists, `roest_profile_id` set, no roasts**: STAGE 2 fully done. Lifecycle state = "Waiting for next roast". Resume at STAGE 3 when Roest log data lands (post-roast session).
+
+**Important UPSERT vs pipeline-read subtlety**: `push_roast_recipe` UPSERTs on `(user_id, experiment_id, batch_slot)` and returns `created: false` if a recipe shell exists at that key. But `get_bean_pipeline` may return `roast_recipes: []` if the shell row has no curve / end-condition / Hypothesis data populated (read-time filter on populated rows). Trust the UPSERT response over the pipeline-read on the "does a row exist" question; the pipeline-read tells you the row is *populated*, not that it doesn't exist.
+
+If detection signals contradict, halt and ask Chris which path to resume on — do NOT double-push inventory.
 
 Intake fields (paste in the LOT SPEC block when fresh):
 
@@ -57,6 +77,12 @@ Canonical-field decision flowchart BEFORE the push (same as start-lot.md):
 - **Producer** in `PRODUCER_LOOKUP`? Verify via `read_canonical(axis: "producers")`. If NO -> set `producer_override: true`.
 - **Region / department** in canonical macro_terroir? Verify via `read_canonical(axis: "terroirs")`. Locality goes in `meso_terroir`, NOT `macro_terroir`. If no canonical macro covers the region: HALT, report the gap, ask whether to add the macro OR confirm a fallback. If fallback: `TERROIR_DRIFT: <details>` in `additional_notes`.
 - **Cultivar** in canonical? Verify via `read_canonical(axis: "cultivars")`. Aliases (Sudán Rumé -> Sudan Rume) resolve at canonicalize time.
+- **Multi-cultivar blend with net-new members** (East African SL-blends are the canonical case — e.g. Mount Elgon Ladies' Lot is SL28 + SL14 + Nyasaland, with SL14 + Nyasaland net-new to the registry): `green_beans.cultivar` is single-value strict-canonical (no `cultivar_override` path); net-new individual cultivars require `propose_canonical_addition(axis: "cultivar")` + a deliberate registry edit before they resolve. The sanctioned blend-handling pattern (used in Round 12 dog-food, 2026-05-23):
+  1. Pick the **representative canonical member** (the one that's both in the registry AND most load-bearing for design — typically the most expressive variety in the blend) and set `green_beans.cultivar.cultivar_name = "<that canonical>"`.
+  2. Preserve the **full verbatim blend string** in the legacy `green_beans.variety` free-text field (e.g. `"SL28, SL14, Nyasaland"`) AND in `additional_notes` so the multi-cultivar reality is queryable + visible on the resolved page.
+  3. Push the **comma-separated string** to `roest_inventory.cultivar` (which accepts comma-separated multi-cultivar strings by design).
+  4. File `propose_canonical_addition(axis: "cultivar", name: "<member>")` for each net-new blend member so the registry catches up; future blends with the same members will resolve cleanly.
+  This pattern works for both V-set and one-shot lots; the same blend-handling applies in `start-lot.md` STAGE 1.
 
 Then:
 
@@ -85,6 +111,8 @@ Note: peer-roasted reference cup of THIS bean typically isn't available for auct
 **This STAGE writes**: `experiments` row (V1, batch_ids NULL at design time), `roast_recipes` row × 1, Roest tablet profile × 1 (via `push_roast_profile`), `roast_recipes` patch linking Roest profile ID back.
 
 Vocabulary: **recipe** is the Latent design-intent aggregate (the `roast_recipes` row carrying curves + drop + hopper + end condition + charge + drop rules + rationale + Hypothesis prose). **Roest profile** is the machine artifact (the JSON pushed to the tablet via `push_roast_profile`). One recipe row produces one or more Roest profile pushes; the two nouns are not synonyms. See CONTEXT.md § Recipe (aggregate noun for design intent) for the three-way asymmetry (recipe / Roest profile / curve-shape names).
+
+**CCIL wins on numeric conflict (one-shot-specific rule)**: when the inventory doc / project-doc roast-strategy guidance for this lot disagrees with a numeric parameter from the carry-forward CCIL or per-lot learnings (e.g. inventory says "120°C hopper" but CCIL via the most-similar prior one-shot says "125°C hopper, no altitude downhedge"), **CCIL is canonical, the inventory-doc bullets are advisory**. A one-shot has no recovery — N=1 means following stale doc guidance costs the only shot. Discovered Round 12 dog-food (2026-05-23): the Mountain Harvest Elgon Ladies' Lot inventory doc prescribed "120°C hopper, trim peak 2°C if lower-density" which directly contradicted the Rancho Tio Emilio one-shot learning (the canonical first-instance carry-forward correction: full anchor energy, no altitude downhedge, 125°C hopper). Inventory doc cleanup is a separate sprint; this rule is the runtime safeguard. Cite the specific carry-forward source in the design rationale ("anchored on #133 full energy per Rancho Tio learning, NOT the doc's −2°C hedge") so Chris can see the resolution.
 
 Read cluster-migrated sections via `read_doc(uri=...)`:
 
