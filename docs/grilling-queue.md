@@ -168,6 +168,23 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Round 12 / Mount Elgon Ladies' Lot intake (cultivar gap)
     - **Suggested landing:** lib/cultivar-registry.ts + docs/taxonomies/varieties.md when Chris runs "process pending arbitration"; can land in the same arbiter pass as Round 11's roaster/producer queue items
 
+### From Round 13 — first full V-set lifecycle close (2026-05-23, CGLE Sudan Rume Natural)
+
+28. **Temperature primacy extends to traditional natural aromatic landraces — CCIL promotion candidate** — Round 13 surfaced that the temperature-primacy pattern (originally documented for anaerobic naturals across 4 origins: Colombia / Ethiopia / Panama / Costa Rica) extended cleanly to a TRADITIONAL (non-anaerobic) natural Sudan Rume. The brewing iteration: 91°C over-extracted the aromatic fraction → 89°C single-variable resolve produced the target cup. claude.ai extracted this as a generalizable rule. Generalization candidate: temperature primacy applies wherever an aromatic landrace meets a natural process, anaerobic OR traditional. Promote to brewing-historian CCIL entry once 2-3 more traditional-natural aromatic landraces confirm (next candidates: any future SL-lineage / Ethiopian-landrace / 74-series natural lots in the brewing queue).
+    - **Grade:** OBSERVING (1 lived data point on traditional natural; want 2-3 more for confidence)
+    - **Source:** Round 13 / CGLE Sudan Rume Natural Batch 187 brewing iteration
+    - **Suggested landing:** brewing-historian/cluster/patterns/cross-coffee-insights.md § Anaerobic-Natural Suppression + Temperature-Primacy pattern (broaden the section to "Aromatic-landrace + natural process" rather than anaerobic-specific) once threshold met
+
+29. **Ground-Agtron-not-WB rule for extraction prior — documentation candidate** — Round 13's Step 1d hedged finer/warmer based on WB Agtron 78.7 (lighter-roast prior); Brew 1 over-extracted; ground Agtron at dose-out (68.1, medium-light) was the correct prior — over-extraction risk was live, not under. New rule: ground Agtron (not whole-bean) sets the over-vs-under extraction prior. Applies anywhere a brewing brief reasons about extraction direction based on roast level. Should land in brewing-assistant/cluster/operational-guide.md Step 1 OR brewing-equipment-expert/cluster/grinder-eg1.md (since Agtron measurement is dose-out equipment-side).
+    - **Grade:** READY (clear rule, single lived instance + matches the established whole-bean-vs-ground physical reality)
+    - **Source:** Round 13 / CGLE Sudan Rume Natural brewing iteration / claude.ai's own framing
+    - **Suggested landing:** brewing-assistant/cluster/operational-guide.md Step 1c Brief Summary OR Step 1d strategy gate (add to "Roaster roast-level hook" section from R10)
+
+30. **One-shot kickstart prompt symmetry — formalize the 3-prompt analog?** — V-set has 4 named kickstart prompts (Chris's pattern: New Bean - First Roasts → start-lot.md; Log Roast Prompt → log-roast.md; Log Cupping Prompt → log-cupping.md; Resolved Bean - Close Lot → close-lot.md). One-shot has 2 prompt files (one-shot.md covers STAGES 1-4; one-shot-closeout.md covers STAGE 5) but Chris's lived workflow needs 4 entry points (intake + log-roast + log-cupping + close) matching the V-set pattern. Currently Chris re-enters one-shot.md with different paste payloads per stage; STAGE 0 reconciliation (R12) auto-detects entry point. Question: should we formalize Log One-Shot Roast / Log One-Shot Cupping as separate prompt files (would mirror the V-set kickstart symmetry but duplicate one-shot.md's content) OR document the 3 kickstart messages in a README near docs/prompts/ as standing operator templates? Round 13 surfaced the gap via Chris's question "do I just use log-roast for one-shot?".
+    - **Grade:** BRAINSTORM (design decision; pros/cons of separate files vs README documentation)
+    - **Source:** Round 13 / Chris's one-shot log-roast question (2026-05-23)
+    - **Suggested landing:** docs/prompts/README.md operator template section OR separate prompt files (log-one-shot-roast.md + log-one-shot-cupping.md) with the same docs://prompts/one-shot.md fetch underneath
+
 ## Resolved (append-only history)
 
 When grill items resolve, move them here with date + landing target. Format:

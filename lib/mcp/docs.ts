@@ -115,6 +115,7 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md': 'docs/skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md',
   'docs://skills/roasting-historian/cluster/patterns/by-process/washed.md': 'docs/skills/roasting-historian/cluster/patterns/by-process/washed.md',
   'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md',
+  'docs://skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md',
   'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md',
   'docs://skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md': 'docs/skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md',
   'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md': 'docs/skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md',
@@ -396,6 +397,8 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when designing a roast for a washed-process lot — per-process roll-up + pointers. Corpus N=6 closed (Sudan Rume Hybrid Washed + GV Oma + GV Surma + GUA El Socorro + GUA Libertad + Rancho Tio Emilio). Most data-rich slice of the archive; tightest FC + drop temp windows; Maillard-energy-continuity inlet-shape discipline.',
   'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md':
     'Per-lot learnings for CGLE Mandela XO Extended Fermentation (closed April 2026, reference batch #139). Pointer to roast_learnings DB row + cross-lot framing — XO-fermented drop ceiling ~205-206°C; silent FC the rule; fan curve shape as single most impactful variable. Canonical Heavy-Ferment / XO-Family lot anchor.',
+  'docs://skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md':
+    'Per-lot learnings for CGLE Sudan Rume Natural (closed 2026-05-23, reference Batch 187 V5A). First full V-set lifecycle through the new architecture (V5 Path C-2 → real-pourover discriminator → Path A → optimized brew → close-out). Anchors: traditional-natural-Sudan-Rume aromatic profile (tropical pineapple / blueberry / caramelized brown sugar / ginger spice); ground-Agtron-not-WB rule for extraction prior (WB 78.7 misled, ground 68.1 correctly flagged over-extraction risk); temperature-primacy pattern extends beyond anaerobic naturals to traditional-natural aromatic landraces (91°C → 89°C single-variable resolve); xbloom gate underrepresents this lot at the candidate-ranking stage (real-pourover discriminator required, validating Path C-2 routing).',
   'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md':
     'Per-lot learnings for CGLE Sudan Rume Hybrid Washed (closed April 2026, reference #133 / closest replication #148). Most data-rich lot in archive (20+ batches, 6 experiment sets); empirical anchor for FC floor/ceiling, WB-to-Ground delta sensitivity, xbloom under-extraction discovery, varietal aromatic vocabulary unlock.',
   'docs://skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md':
