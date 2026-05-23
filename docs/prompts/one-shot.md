@@ -182,7 +182,9 @@ Three writes pair up here (same discipline as start-lot.md / log-cupping.md - "d
   - `hopper_load_temp` comes back null - set manually (V4 standard: 125°C).
   - `end_condition_type` + `end_condition_target` populated directly from Roest API (Round-7 capability).
   - **Operator-override check**: if `end_condition_target` and `drop_temp` diverge by more than ~0.5°C / a couple seconds AND the divergence isn't Roest behavior, ASK whether the operator manually pulled the drop. Override `end_condition_type: "manual"` if yes.
+  - **Drop-rule deterministic case (Round 14, 2026-05-23) — skip the ask when the drop matches a written rule**: if the divergence (drop_temp + drop_time) matches the recipe's `drop_rule_if_fast` or `drop_rule_if_slow` text exactly (e.g. rule says "if 4:45 elapses without BEAN_TEMP 206°C, manual-drop at 4:45" and the roast dropped at 4:45 / 204.2°C), record `end_condition_type: "manual"` directly without blocking on Chris's confirmation — the deterministic match IS the confirmation. Note in `what_didnt` prose that the drop rule fired. This is especially valuable on one-shots where the drop rules are doing real operator decision-support work.
   - On silent-FC coffees, `fc_start` / `fc_temp` may be null. Don't fabricate. Record `fc_total_cracks` (audibility count) AND `fc_audibility` (Sprint 11 RO-CP-3 / migration 061 / 2026-05-20 4-value enum: audible / subtle / silent / ambiguous). See CONTEXT.md § FC audibility state.
+  - **`end_condition_type: "manual"` + `end_condition_target: null` validation rule (Round 14)** — when end_condition is manual, target must be null/0. The design intent stays on the recipe row (e.g. `roast_recipes.end_condition_target: 206, end_condition_type: "bean_temp"`); the roast row records execution reality (manual + null). Recipe-vs-roast divergence is intentional, not contradictory. See log-roast.md STAGE 3 for the full convention.
 
 `push_roast(payload)`:
 - `green_bean_id` from STAGE 1

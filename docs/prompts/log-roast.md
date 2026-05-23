@@ -21,7 +21,7 @@ I'll reference the lot by `lot_id` or `green_bean_id` + tell you which V-set jus
 
 ## STAGE 1 - Resolve bean + V_n state, baseline pipeline
 
-**This STAGE writes**: nothing (read-only), unless the missing-recipe-row backfill in (b) fires.
+**This STAGE writes**: read-only by default. **STAGE 1(b) inline backfill writes substantively when it fires**: 1 `experiments` row (when the V_n experiment row doesn't exist — e.g. when V_n profiles were pushed to Roest via `push_roast_profile` in a prior session but `push_experiment` was never called) + N `roast_recipes` rows (one per slot). Treat 1(b) as a distinct write phase even though it lives under STAGE 1.
 
 - `get_green_bean({lot_id})` → returns `green_bean_id`.
 - `get_bean_pipeline({green_bean_id})` → returns `green_bean`, `roasts[]`, `cuppings[]`, `experiments[]`, `roast_learnings`, `brews[]`, `roast_recipes[]`.
@@ -68,6 +68,8 @@ For each slot in V_n:
   - `hopper_load_temp` comes back as null from Roest - the API doesn't expose the bean-probe hopper-load reading. Set manually from session memory (V4 standard: 125°C).
   - `end_condition_type` + `end_condition_target` now come back populated directly from the Roest API (Round-7 capability confirmed 2026-05-14). Use these as ground truth.
   - **Operator-override check**: if `end_condition_target` (profile-set drop trigger) and `drop_temp` (where the machine actually dropped) diverge by more than ~0.5°C / a couple seconds AND the divergence isn't explained by Roest behavior (ceiling breach from session-position acceleration, dev-time timer firing slightly early/late), ASK whether the operator manually pulled the drop. If yes, override `end_condition_type: "manual"` on the push_roast payload regardless of what the profile encoded.
+  - **Drop-rule deterministic case (Round 14, 2026-05-23) — skip the ask when the drop matches a written rule**: if the divergence (drop_temp + drop_time) matches the recipe's `drop_rule_if_fast` or `drop_rule_if_slow` text exactly (e.g. rule says "if 4:45 elapses without BEAN_TEMP 207°C, manual-drop at 4:45" and the roast dropped at 4:45 / 204.2°C), record `end_condition_type: "manual"` directly without blocking on Chris's confirmation — the deterministic match IS the confirmation. Note in the push_roast `what_didnt` or `what_to_change` prose that the drop rule fired (and which rule). This saves a blocking question on the canonical-known case while preserving the ASK fallback for ambiguous cases.
+  - **Consistent same-direction overshoot does NOT rule out manual pulls** (Round 14, Red Plum / Gesha Clouds). Multiple slots dropping 1-2°C above target in the same direction can read as auto-drop probe-lag overshoot — but it can ALSO indicate manual pulls to a target time (e.g. operator holding all three batches to 4:30 because the 209°C trigger was firing too early). The ASK is the right call when in doubt; don't infer auto-drop from consistency alone. Specifically check the drop-time column — if all three dropped at the same round-number wall-clock time (e.g. exactly 5:00 / 5:00 / 5:00), that's a strong manual-to-time signal.
   - On silent-FC coffees (anaerobic naturals, heavy co-ferments - Sudan Rume Natural is the case study), `fc_start` / `fc_temp` may be null. Don't fabricate values. Record `fc_total_cracks` (count of audible cracks from FC through drop, 0 on silent-FC) as the numeric audibility signal.
   - **`fc_audibility`** (Sprint 11 RO-CP-3 / migration 061 / 2026-05-20) — set the 4-value enum per batch: `audible` (multi-snap canonical FC, cell-wall intact) / `subtle` (partial detection, some snaps but not the canonical signature; operationally treated as not-audible) / `silent` (no audibility — heavy-ferment cellulose modification; FC structurally happened but produced no snap; "inaudible" is a near-synonym used when hedging on detection vs asserting bean-property silence) / `ambiguous` (operator-property uncertainty — couldn't tell whether FC happened, missed it, or it's still upcoming). Three of the four (subtle / silent / ambiguous) trigger the same downstream protocol stack: bean-temp `end_condition_type`, drop-ceiling-primary, Agtron + WB→Gnd delta as proxies. The distinction matters for cause attribution and for predicting audibility on future similar lots. See CONTEXT.md § FC audibility state. Historical roasts (pre-Sprint-11) are NULL; populate going forward.
 
@@ -91,6 +93,10 @@ For each slot:
     - `what_to_change`: what I'd adjust if re-roasting this exact recipe
   - `worth_repeating`: `"yes"` / `"no"` / `"pending"` (use `"pending"` for "yes at the structural-roast level but waiting on Day 7 cupping confirmation" - boolean true/false can't represent the conditional case).
   - `is_reference: false`. The reference-roast designation only lands at `close-lot.md` after a Day 7 cupping confirms the lot-level winner.
+
+**`end_condition_type: "manual"` validation rule (Round 14, 2026-05-23)**: when `end_condition_type` is set to `"manual"`, `end_condition_target` MUST be `null` (or `0` for NONE). The validation rule fires "end_condition_target X must be null when end_condition_type is manual" — a manual drop has no machine target by definition. **Recipe vs roast divergence is intentional, not contradictory**: the `roast_recipes` row preserves the design intent (e.g. `end_condition_target: 207, end_condition_type: "bean_temp"`); the `roasts` row records execution reality (e.g. `end_condition_target: null, end_condition_type: "manual"`). Both coexist legitimately on the same V_n slot. A naive cross-table query may read them as conflicting; the resolved-view + design-vs-achieved render handles them correctly. Pre-Sprint-14 manual roast rows that carry a non-null `end_condition_target` (grandfathered from before this rule) are inconsistent with the constraint going forward; backfill-null via `patch_roast(roast_id, end_condition_target: null)` if encountered.
+
+**"Profile trigger never fired / bean topped out below target" case (Round 14, Bukure v2a + Mt Elgon)**: when the profile sets `bean_temp` end condition but the bean never reaches the trigger temperature (e.g. peak too low, bean tops out 5-10°C below target, drops at the safety floor or a manual pull at the time cap), record `end_condition_type: "manual"` (with `end_condition_target: null` per the rule above) since the effective drop was operator-controlled (clock cap / safety floor), NOT machine-controlled (the bean-temp trigger never fired). The design-intent target (e.g. 207°C bean_temp) stays preserved on the recipe row. Document the non-fire explicitly in `what_didnt` prose: "profile set bean_temp 207°C but bean topped out at 199.9°C; drop fired at safety floor / clock cap instead". The `fc_audibility` value in this case is `ambiguous` (operator-property uncertainty — though the actual situation is "bean didn't reach FC", the 4-value enum has no sub-threshold value; `ambiguous` is the least-wrong canonical pick until the enum extends).
 
 `push_roast` UPSERTs on `(user_id, green_bean_id, batch_id)`. Re-pushing the same `batch_id` returns `created: false` and field values are NOT overwritten - use `patch_roast` for field-level corrections.
 
@@ -141,13 +147,26 @@ Only if V_n's roast-side observations reveal a lot-state change worth recording 
 
 Route by SHAPE of the insight:
 
-- Lot-state changes → per-lot file at `docs/skills/roasting-historian/cluster/active-lots/<lot-slug>.md` (replace); citation `target_doc: 'skills/roasting-historian/cluster/active-lots/<lot-slug>.md'`
+- Lot-state changes → per-lot file at `docs/skills/roasting-historian/cluster/active-lots/<lot-slug>.md` (replace); citation `target_doc: 'skills/roasting-historian/cluster/active-lots/<lot-slug>.md'`. **Lot-slug convention** (Round 14): the active-lot doc filename is the lowercased lot_id form (e.g. `rwa-nova-nat21-rb-2026.md`, `cgle-srume-natural-2026.md`, `cos-hig-bor-2026.md`), NOT a producer/cultivar name-slug. When the slug is uncertain, run `list_docs(prefix="skills/roasting-historian/cluster/active-lots/")` to enumerate before drafting the citation — saves a round-trip on the propose_doc_changes anchor resolution.
 - Protocol-level insights → workflow / protocol cluster doc — FC Marking Protocol at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md`; Drop Temp as the Primary Drop Signal at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal`; Between Batch Protocol at `docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md`. Use citation `target_doc: 'skills/roest-knowledge/cluster/<file>.md'`.
 - Mid-iteration cross-coffee patterns → Roasting Historian's Cross-Coffee Insight Layer at `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` (append with confidence marker); citation `target_doc: 'skills/roasting-historian/cluster/patterns/cross-coffee-insights.md'`
 
 Fetch live anchors via `read_doc(uri="docs://skills/<cluster-path>.md")` (or `read_doc_section` against the same URI) BEFORE drafting. Submit as a single multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` matching where each insight routes (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing). Citations: `[{section_anchor, op, proposed_text, current_text, target_doc?}]`.
 
-**When to skip and report why**: Day 7 cupping is imminent and will either confirm or invalidate the proposed insight. Skip and tell Chris the proposal queues for the `log-cupping.md` STAGE 6 pass. Print `STAGE 6: skipped - cupping imminent, defer`.
+**Partial-proposal pattern (Round 14, Bukure)**: STAGE 6 is NOT strictly binary "propose or skip-and-defer." Roast-layer-only facts that are cupping-INDEPENDENT can ship now even when cup-dependent synthesis defers. Examples of cupping-independent facts safe to propose at log-roast time:
+
+- **Energy floor / ceiling bracket** — "234°C peak inlet doesn't reach FC on this lot (v2a no-FC); 238°C marginal (v2b 18s dev); 242°C cleanly developed (v2c). V_(n+1) peak inlet floor: don't go below 238°C." This is a roast-layer fact the cup can't invalidate.
+- **End-condition timing calibration** — "209°C bean-temp target firing at 4:00-4:10 forces manual-hold to 4:30 across all slots; target mismatched to this coffee's FC timing at these peak inlets." Roast-layer mechanical observation.
+- **Lot-state status flip** — "V_n complete, lot state flipped to Waiting for next cupping" + retire stale "V_n not yet roasted" prose on the active-lot doc.
+- **Drop-rule fire events** — "drop_rule_if_slow fired on v2a + v2b (manual pull at clock cap)" documents the operational pattern even if the cup verdict is pending.
+
+What still defers to log-cupping.md STAGE 6:
+- Leading slot identity (cupping resolves it via `winner`)
+- V_(n+1) design direction (depends on which cup wins + how)
+- CCIL / Cross-Coffee Insight Layer entries that synthesize a generalizable pattern (need cup confirmation before the insight is promotion-worthy)
+- Varietal Fingerprint additions / Per-lot FC ceiling promotion (cup-side validation expected)
+
+**When to skip the whole STAGE 6 (full defer)**: Day 7 cupping is imminent AND every candidate insight depends on cup data. Skip and tell Chris the proposal queues for the `log-cupping.md` STAGE 6 pass. Print `STAGE 6: skipped - cupping imminent, defer`.
 
 AVOID editing mid-iteration: Recently Closed Lots, Reference Brew Recipes by Lot - those are close-out artifacts owned by `close-lot.md`.
 
