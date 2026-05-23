@@ -3,10 +3,24 @@
 Authoritative authored content for the filter paper canonical registry.
 Mirror file: [lib/filter-registry.ts](../../../../lib/filter-registry.ts).
 
-Total canonical filters: **64** (22 owned).
+Total canonical filters: **64** (21 owned post Research Project #1 inventory cross-check, 2026-05-23).
 Source CSV had 69 rows; 5 dropped as same-name duplicates.
 
 Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as separate canonical entries.
+
+---
+
+## Measured Drawdown Reference — Research Project #1 (2026-05-23)
+
+[Cone Filter Drawdown Characterization](../../../research-projects/cone-filter-drawdown.md) executed 2026-05-23 produced loaded-bed drawdown measurements for 8 V60-compatible cone filters, anchored at Sibarist CONE B3 (median ~60s at 15g / EG-1 6.5 / Hario V60 Glass V60-01). 8s noise floor; 3 real deltas, 4 indistinguishable. Per-paper measurements + bed-behavior axis surfaced in each entry's bullet block below; protocol + raw data in the project doc.
+
+**Key registry-contradiction finding:** The Cafec roast-specific paper pair (LC4 light, DC4 dark) inverts the registry's qualitative `flowRate` ordering. LC4 measured +20s slower than B3 (registry says "Fast"); DC4 measured indistinguishable from B3 (registry says "Slow"). Community-stated design philosophy validated empirically — light paper engineered slow → extend extraction on hard-to-extract light roasts; dark paper engineered fast → shorten extraction on easy-to-extract dark roasts. Cafec's product labels describe extraction **outcome** not flow physics; the registry transcribed those literally. **Use `measuredDrawdownSec` instead of `flowRate` for brewing decisions on this paper family.**
+
+The `FilterEntry` extension shipped in [lib/filter-registry.ts](../../../../lib/filter-registry.ts) carries 6 new fields: `measuredDrawdownSec` + `measurementDose` + `measurementBaseline` + `measurementDate` + `measurementProject` + `bedBehaviorUnderLoad` (4-value enum: `stable` / `late-forming-crater` / `pour-impact-crater` / `mixed`).
+
+Projects #2 (flat-bottom filter drawdown) and #3 (specialty/paired filter drawdown) queued.
+
+---
 
 ## April
 
@@ -89,7 +103,9 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Clarity cone
 - Location: Home
-- Primary use case: Fast clarity baseline (standard high-flow reference)
+- Primary use case: Fast clarity baseline (standard high-flow reference; owned in both 40-pack assortment and 100-pack standalone variants)
+- Measured drawdown (Research Project #1): 72s at 15g / EG-1 6.5 / Hario V60 Glass V60-01, vs B3 baseline 60s (2026-05-23). REAL slower (+12s outside 8s noise floor).
+- Bed behavior under load: `late-forming-crater`
 
 ### CAFEC Abaca Cup 4 Cone Paper Filter (brown 100)
 
@@ -196,7 +212,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Stability flat
 
-### CAFEC Abaca+ Cup 1 Cone Paper Filter — Owned
+### CAFEC Abaca+ Cup 1 Cone Paper Filter
 
 - SKU: `APC1-100W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-abaca-cup-1-cone-paper-filter-v60-01-ac1-100w>
@@ -210,8 +226,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Flow consistency: Stable
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Clarity cone
-- Location: Home
-- Primary use case: Fast clarity baseline (low clog, consistent flow)
+- *Ownership corrected 2026-05-23 (Research Project #1 inventory cross-check): not physically present in drawer. Chris owns Cup 4 Abaca+ (APC4-40W + APC4-100W standalone) not Cup 1.*
 
 ### CAFEC Abaca+ Deep 27 Coffee Filter (white) — Owned
 
@@ -262,7 +277,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Location: Home
 - Primary use case: Extraction push via resistance (increase contact time without grind change)
 
-### CAFEC T-92 - Cup 1 Light Roast Paper Filter (slow) — Owned
+### CAFEC T-92 - Cup 1 Light Roast Paper Filter (slow)
 
 - SKU: `LC1-100W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/cafec-cup-1-pour-over-coffee-paper-filter-by-roasting-type-flow-rate-differences-for-specialty-coffee-light-roast-slower-flow-rate-1-cup-size-v60-01>
@@ -276,8 +291,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Flow consistency: Stable
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Clarity cone
-- Location: Home
-- Primary use case: Controlled clarity (slightly extended contact vs LC4)
+- *Ownership corrected 2026-05-23 (Research Project #1 inventory cross-check): not physically present in drawer. Chris owns no Cup-1 CAFEC papers; killed the LC4-vs-LC1 geometry-check pair (deferred until any Cup-1 CAFEC paper enters inventory).*
 
 ### CAFEC T-90 - Cup 1 Medium Roast Paper Filter — Owned
 
@@ -296,7 +310,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Location: Home
 - Primary use case: Balanced cone extraction (softens acidity, rounds profile)
 
-### CAFEC Cup 4 Dark Roast Paper Filter
+### CAFEC Cup 4 Dark Roast Paper Filter — Owned (assortment pack)
 
 - SKU: `DC4-100W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-cup-4-dark-roast-paper-filter-v60-02-dc4-100w>
@@ -310,6 +324,11 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Flow consistency: Stable
 - Clarity / Body / Sweetness: Low / High / Muted
 - Best archetype: Immersion hybrid (cone assist)
+- Location: Home
+- Primary use case: Owned via Cafec 4-pack assortment (40-pack variant); dark-roast specific
+- Measured drawdown (Research Project #1): 68s at 15g / EG-1 6.5 / Hario V60 Glass V60-01, vs B3 baseline 60s (2026-05-23). Indistinguishable from B3 (+7-8s within 8s noise floor; reclassified REAL → indistinguishable after re-test).
+- Bed behavior under load: `late-forming-crater`
+- ⚠️ **Measurement CONTRADICTS registry `flowRate: "Slow"` + `thickness: "Thick"` cells.** Measured speed: indistinguishable from B3 (medium); paper did not feel thicker than LC4 in hand. Cafec's product labels describe extraction outcome ("Slow extraction for dark roast") not flow physics. See Research Project #1 headline finding #1.
 
 ### CAFEC T-92 - Cup 4 Light Roast Paper Filter — Owned
 
@@ -327,8 +346,11 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Best archetype: Clarity cone
 - Location: Home
 - Primary use case: Peak clarity (max separationm, high-acid coffees)
+- Measured drawdown (Research Project #1): 80s at 15g / EG-1 6.5 / Hario V60 Glass V60-01, vs B3 baseline 60s (2026-05-23). REAL slower (+20s outside 8s noise floor; 0.3 notch coarser grind compensation recommended).
+- Bed behavior under load: `late-forming-crater`
+- ⚠️ **Measurement CONTRADICTS registry `flowRate: "Fast"` + `thickness: "Thin"` cells.** Measured speed: +20s slower than B3 (real). Paper felt noticeably thinner in hand than other Cafec papers — but loaded-bed flow is slower, not faster. Cafec's product labels describe extraction outcome ("Fast extraction for light roast") not flow physics. See Research Project #1 headline finding #1.
 
-### CAFEC Cup 4 Medium Roast Paper Filter
+### CAFEC Cup 4 Medium Roast Paper Filter — Owned (assortment pack)
 
 - SKU: `MC4-100W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-cup-4-medium-roast-paper-filter-v60-02-mc4-100w-2>
@@ -342,6 +364,10 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Flow consistency: Stable
 - Clarity / Body / Sweetness: Medium / Medium / Rounded
 - Best archetype: Stability flat (cone variant)
+- Location: Home
+- Primary use case: Owned via Cafec 4-pack assortment (40-pack variant); medium-roast specific
+- Measured drawdown (Research Project #1): 60s at 15g / EG-1 6.5 / Hario V60 Glass V60-01, vs B3 baseline 60s (2026-05-23). Indistinguishable from B3 (0s delta).
+- Bed behavior under load: `mixed`
 
 ### CAFEC SFP Cup 4 Cone Paper Filter
 
@@ -500,6 +526,8 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Best archetype: Clarity cone
 - Location: Home
 - Primary use case: Improved clarity baseline (faster, more stable than standard Hario)
+- Measured drawdown (Research Project #1): 65s at 15g / EG-1 6.5 / Hario V60 Glass V60-01, vs B3 baseline 60s (2026-05-23). Indistinguishable from B3 (+4-5s within 8s noise floor).
+- Bed behavior under load: `late-forming-crater` (mild, less pronounced than Abaca+ APC4)
 
 ### Hario V60 Paper Filter 01 (Tabbed) — Owned
 
@@ -517,8 +545,10 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Best archetype: Clarity cone (classic)
 - Location: Home
 - Primary use case: Baseline cone reference (introduces variability intentionally)
+- Measured drawdown (Research Project #1): 65s at 15g / EG-1 6.5 / Hario V60 Glass V60-01, vs B3 baseline 60s (2026-05-23). Indistinguishable from B3 (+4-5s within 8s noise floor).
+- Bed behavior under load: `pour-impact-crater`
 
-### Hario V60 Paper Filter 01 (Untabbed) — Owned
+### Hario V60 Paper Filter 01 (Untabbed)
 
 - SKU: `VCF-01-100M`
 - Link: <https://www.hario-usa.com/products/copy-of-paper-filter-for-01-drippers>
@@ -532,8 +562,7 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Flow consistency: Variable
 - Clarity / Body / Sweetness: Medium / Medium / Rounded
 - Best archetype: Clarity cone (classic)
-- Location: Home
-- Primary use case: Cleaner baseline cone (reduced variability vs tabbed)
+- *Ownership corrected 2026-05-23 (Research Project #1 inventory cross-check): not physically present in drawer; never owned.*
 
 ### Hario V60 Paper Filter 03
 
@@ -647,6 +676,8 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Best archetype: Clarity cone (controlled)
 - Location: Home
 - Primary use case: Structured clarity (adds body without sacrificing cleanliness)
+- Measured drawdown (Research Project #1): 60s at 15g / EG-1 6.5 / Hario V60 Glass V60-01 (2026-05-23). **Baseline / anchor** — 3-replicate median, 8s range across pulls. Sibarist's "Extremely stable" `flowConsistency` registry cell measured up: noise floor tighter than the protocol's ≤15s forecast.
+- Bed behavior under load: `late-forming-crater`
 
 ### CONE BS B3
 
@@ -694,6 +725,8 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 - Best archetype: Clarity cone
 - Location: Home
 - Primary use case: Maximum clarity ceiling (fastest stable cone extraction)
+- Measured drawdown (Research Project #1): 45s at 15g / EG-1 6.5 / Hario V60 Glass V60-01, vs B3 baseline 60s (2026-05-23). REAL faster (-15 to -16s outside 8s noise floor; 0.3 notch finer grind compensation recommended). Only paper tested that aligned with its registry `flowRate: "Very fast"` cell.
+- Bed behavior under load: `pour-impact-crater`
 
 ### FAST Trapezoid
 
