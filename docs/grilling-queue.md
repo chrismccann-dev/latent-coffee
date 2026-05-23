@@ -151,6 +151,23 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Round 11 continuation / 2026-05-22 hybrid.md proposal pause
     - **Suggested landing:** commit-message / PR-description convention update OR an operational-guide note in the bundled-brewing-completion / close-lot prompts about checking propose_doc_changes targets for recent commits
 
+### From Round 12 — first lived one-shot lot run (2026-05-23, MH Elgon Ladies' Lot)
+
+25. **Inventory doc roast-strategy bullets vs CCIL — substrate cleanup sprint** — V5 inventory doc has roast-strategy guidance bullets for the 10 MH Paradigm Shift lots + the 3 Taza Dorada lots that prescribe stale numeric guidance (notably "120°C hopper, trim peak 2°C if lower-density" on multiple lots — directly contradicting the Rancho Tio Emilio one-shot canonical correction of "full anchor energy, no altitude downhedge, 125°C hopper"). The "CCIL wins on numeric conflict" rule landed in one-shot.md STAGE 2 (this round) is the runtime safeguard, but the inventory doc itself still carries the stale bullets. Cleanup: propose_doc_changes pass updating each lot's hopper + peak-trim guidance to match the canonical correction. **HOLD until Day 7 Mount Elgon cupping confirms** that #133-full-energy actually lands on Ugandan terroir — if the cup confirms, the propose_doc_changes pass is backed by lived evidence; if the cup misses, the doc may need terroir-scoped guidance rather than a verbatim CCIL match.
+    - **Grade:** OBSERVING (waiting on Day 7 Elgon Day 7 cup, expected ~2026-05-30)
+    - **Source:** Round 12 / Mount Elgon Ladies' Lot intake (MH Paradigm Shift 2026 Uganda sample pack)
+    - **Suggested landing:** propose_doc_changes pass on the V5 inventory doc lots (MH 10 + Taza Dorada 3) after Day 7 Elgon cup confirms direction
+
+26. **Blend-cultivar formal schema modeling** — Multi-cultivar blends with some net-new members (Mount Elgon Ladies' Lot = SL28 + SL14 + Nyasaland; common pattern for East African washed lots) currently coordinated via a 4-step operator-driven pattern (representative canonical + free-text variety + propose_canonical_addition + comma-string to Roest inventory). Convention now documented in one-shot.md + start-lot.md STAGE 1. Open schema question: should `green_beans.cultivar` evolve to support multi-cultivar arrays natively (cultivar_ids[] FK array) rather than a single FK + free-text fallback? Trade-off: cleaner data model for blends vs. complexity of cultivar-aggregation queries (the current model "1 lot → 1 representative cultivar" makes by-cultivar analytics trivial).
+    - **Grade:** BRAINSTORM (1 lived blend instance; need 2-3 more blends to see if pattern repeats often enough to warrant schema change)
+    - **Source:** Round 12 / Mount Elgon Ladies' Lot intake
+    - **Suggested landing:** schema design decision after 2-3 more blend lots accumulate; meanwhile the 4-step operator-driven convention works
+
+27. **SL14 + Nyasaland canonical promotion** — both net-new from Round 12 intake, filed to taxonomy_overrides_queue via propose_canonical_addition. Classic East African varieties (not exotic) — likely worth direct promotion to the canonical registry rather than waiting for repeat hits. The arbiter pass on the taxonomy queue could process these together with the Untold Coffee Lab roaster + Stefano Um producer entries from Round 11.
+    - **Grade:** READY (direct registry promotion via lib/cultivar-registry.ts edit + docs/taxonomies/varieties.md update)
+    - **Source:** Round 12 / Mount Elgon Ladies' Lot intake (cultivar gap)
+    - **Suggested landing:** lib/cultivar-registry.ts + docs/taxonomies/varieties.md when Chris runs "process pending arbitration"; can land in the same arbiter pass as Round 11's roaster/producer queue items
+
 ## Resolved (append-only history)
 
 When grill items resolve, move them here with date + landing target. Format:
