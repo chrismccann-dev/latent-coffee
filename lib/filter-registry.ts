@@ -63,6 +63,18 @@ export interface FilterEntry {
   owned?: boolean
   location?: string
   primaryUseCase?: string
+  // Research Project #1 (cone-filter-drawdown, 2026-05-23) extension:
+  // measured loaded-bed drawdown from controlled testing. Raw drawdown
+  // stored at measurementDose; do not normalize across doses (drawdown-vs-dose
+  // isn't linear). bedBehaviorUnderLoad is observation-time qualitative axis
+  // parallel to flowRate. See docs/research-projects/{measurementProject}.md
+  // for the protocol + raw data.
+  measuredDrawdownSec?: number
+  measurementDose?: string
+  measurementBaseline?: string
+  measurementDate?: string
+  measurementProject?: string
+  bedBehaviorUnderLoad?: 'stable' | 'late-forming-crater' | 'pour-impact-crater' | 'mixed'
 }
 
 export const FILTERS: readonly FilterEntry[] = [
@@ -140,6 +152,12 @@ export const FILTERS: readonly FilterEntry[] = [
     owned: true,
     location: "Home",
     primaryUseCase: "Peak clarity (max separationm, high-acid coffees)",
+    measuredDrawdownSec: 80,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist CONE B3 = 60s @ 15g / EG-1 6.5 / Hario V60 Glass V60-01",
+    measurementDate: "2026-05-23",
+    measurementProject: "cone-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
   },
   {
     name: "CAFEC T-90 - Cup 1 Medium Roast Paper Filter",
@@ -215,9 +233,6 @@ export const FILTERS: readonly FilterEntry[] = [
     paperTechnology: "Abaca",
     bestArchetype: "Clarity cone",
     compatibleSystems: "V60 / Origami",
-    owned: true,
-    location: "Home",
-    primaryUseCase: "Fast clarity baseline (low clog, consistent flow)",
   },
   {
     name: "CAFEC Abaca Cup 1 Cone Paper Filter",
@@ -266,7 +281,13 @@ export const FILTERS: readonly FilterEntry[] = [
     compatibleSystems: "V60 / Origami",
     owned: true,
     location: "Home",
-    primaryUseCase: "Fast clarity baseline (standard high-flow reference)",
+    primaryUseCase: "Fast clarity baseline (standard high-flow reference; owned in both 40-pack assortment and 100-pack standalone variants)",
+    measuredDrawdownSec: 72,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist CONE B3 = 60s @ 15g / EG-1 6.5 / Hario V60 Glass V60-01",
+    measurementDate: "2026-05-23",
+    measurementProject: "cone-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
   },
   {
     name: "CAFEC T-92 - Cup 1 Light Roast Paper Filter (slow)",
@@ -290,9 +311,6 @@ export const FILTERS: readonly FilterEntry[] = [
     paperTechnology: "Roast-specific",
     bestArchetype: "Clarity cone",
     compatibleSystems: "V60 / Origami",
-    owned: true,
-    location: "Home",
-    primaryUseCase: "Controlled clarity (slightly extended contact vs LC4)",
   },
   {
     name: "CAFEC Abaca+ Deep 27 Coffee Filter (white)",
@@ -365,6 +383,15 @@ export const FILTERS: readonly FilterEntry[] = [
     paperTechnology: "Roast-specific",
     bestArchetype: "Stability flat (cone variant)",
     compatibleSystems: "V60 / Origami",
+    owned: true,
+    location: "Home",
+    primaryUseCase: "Owned via Cafec 4-pack assortment (40-pack variant); medium-roast specific",
+    measuredDrawdownSec: 60,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist CONE B3 = 60s @ 15g / EG-1 6.5 / Hario V60 Glass V60-01",
+    measurementDate: "2026-05-23",
+    measurementProject: "cone-filter-drawdown",
+    bedBehaviorUnderLoad: 'mixed',
   },
   {
     name: "CAFEC Cup 4 Dark Roast Paper Filter",
@@ -388,6 +415,15 @@ export const FILTERS: readonly FilterEntry[] = [
     paperTechnology: "Roast-specific",
     bestArchetype: "Immersion hybrid (cone assist)",
     compatibleSystems: "V60 / Switch / Clever",
+    owned: true,
+    location: "Home",
+    primaryUseCase: "Owned via Cafec 4-pack assortment (40-pack variant); dark-roast specific. NOTE: measured drawdown (68s) contradicts registry flowRate 'Slow' + thickness 'Thick' cells. See cone-filter-drawdown.md for the Cafec roast-specific paper finding.",
+    measuredDrawdownSec: 68,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist CONE B3 = 60s @ 15g / EG-1 6.5 / Hario V60 Glass V60-01",
+    measurementDate: "2026-05-23",
+    measurementProject: "cone-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
   },
   {
     name: "CAFEC Abaca Trapezoid Filter 102",
@@ -785,6 +821,12 @@ export const FILTERS: readonly FilterEntry[] = [
     owned: true,
     location: "Home",
     primaryUseCase: "Baseline cone reference (introduces variability intentionally)",
+    measuredDrawdownSec: 65,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist CONE B3 = 60s @ 15g / EG-1 6.5 / Hario V60 Glass V60-01",
+    measurementDate: "2026-05-23",
+    measurementProject: "cone-filter-drawdown",
+    bedBehaviorUnderLoad: 'pour-impact-crater',
   },
   {
     name: "Hario V60 Paper Filter 01 (Untabbed)",
@@ -808,9 +850,6 @@ export const FILTERS: readonly FilterEntry[] = [
     paperTechnology: "Standard",
     bestArchetype: "Clarity cone (classic)",
     compatibleSystems: "V60 / Origami",
-    owned: true,
-    location: "Home",
-    primaryUseCase: "Cleaner baseline cone (reduced variability vs tabbed)",
   },
   {
     name: "Hario V60 Meteor Filter 02",
@@ -837,6 +876,12 @@ export const FILTERS: readonly FilterEntry[] = [
     owned: true,
     location: "Home",
     primaryUseCase: "Improved clarity baseline (faster, more stable than standard Hario)",
+    measuredDrawdownSec: 65,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist CONE B3 = 60s @ 15g / EG-1 6.5 / Hario V60 Glass V60-01",
+    measurementDate: "2026-05-23",
+    measurementProject: "cone-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
   },
   {
     name: "Hario V60 Paper Filter 03",
@@ -932,6 +977,12 @@ export const FILTERS: readonly FilterEntry[] = [
     owned: true,
     location: "Home",
     primaryUseCase: "Maximum clarity ceiling (fastest stable cone extraction)",
+    measuredDrawdownSec: 45,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist CONE B3 = 60s @ 15g / EG-1 6.5 / Hario V60 Glass V60-01",
+    measurementDate: "2026-05-23",
+    measurementProject: "cone-filter-drawdown",
+    bedBehaviorUnderLoad: 'pour-impact-crater',
   },
   {
     name: "CONE B3",
@@ -958,6 +1009,12 @@ export const FILTERS: readonly FilterEntry[] = [
     owned: true,
     location: "Home",
     primaryUseCase: "Structured clarity (adds body without sacrificing cleanliness)",
+    measuredDrawdownSec: 60,
+    measurementDose: "15g",
+    measurementBaseline: "Self (Research Project #1 baseline; 3-replicate median, 8s range across pulls)",
+    measurementDate: "2026-05-23",
+    measurementProject: "cone-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
   },
   {
     name: "CONE 28 FAST",
