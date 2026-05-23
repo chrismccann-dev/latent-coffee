@@ -185,6 +185,38 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Round 13 / Chris's one-shot log-roast question (2026-05-23)
     - **Suggested landing:** docs/prompts/README.md operator template section OR separate prompt files (log-one-shot-roast.md + log-one-shot-cupping.md) with the same docs://prompts/one-shot.md fetch underneath
 
+### From Round 14 — four log-roast sessions / Step 3 dog-food close (2026-05-23)
+
+31. **`fc_audibility` enum extension — add "no FC / sub-threshold" value** — Bukure v2a topped out at 199.9°C with 0 cracks; chose `ambiguous` as least-wrong canonical pick. Actual situation: bean demonstrably did not reach FC (well below 200-205°C FC window). The enum's `ambiguous` is about operator-property uncertainty ("couldn't tell whether FC happened"); it doesn't cover "near-certainty FC didn't happen — underdeveloped below threshold." Candidate new value: `no_fc` or `sub_threshold` or `did_not_fire`. Will recur on any underdeveloped low-energy probe.
+    - **Grade:** READY (clear semantic gap; enum extension is mechanical)
+    - **Source:** Round 14 / Bukure v2a (Batch 193) + Mt Elgon (Batch 199)
+    - **Suggested landing:** schema migration adding 5th enum value + CONTEXT.md § FC audibility state update + log-roast.md / one-shot.md STAGE 2-3 prompt updates
+
+32. **Maillard% / dev% schema rule — null when fc_start is null** — Bukure v2a: 61.4% Maillard despite no FC. Phase calculator attributes all of yellowing→end to Maillard when there's no FC marker to split dev out. Schema accepts the garbage value silently. Cross-batch Maillard% aggregations will include the artifact. Fix candidates: (a) computed/generated column that nulls Maillard%/dev% when fc_start is null; (b) check constraint preventing non-null Maillard% when fc_start is null; (c) explicit `phase_calc_validity` flag on roasts to filter analytics.
+    - **Grade:** READY (clear data-quality rule)
+    - **Source:** Round 14 / Bukure v2a
+    - **Suggested landing:** schema migration adding the null-on-no-FC rule + roasts table check constraint or generated column
+
+33. **`subtle` FC dev_time handling — trust the timestamp or null it?** — Bukure v2b: 1 crack logged, FC marked at 5:27, dev computed as 18s. Prompt frames subtle as "operationally treated as not-audible" (would imply nulling dev_time_s). But machine recorded a specific fc_start + 1 crack happened. claude.ai trusted the value; might be wrong. Clarify whether subtle FC timestamps should drive dev computation or be nulled.
+    - **Grade:** READY (clarification, not implementation)
+    - **Source:** Round 14 / Bukure v2b
+    - **Suggested landing:** log-roast.md / one-shot.md STAGE 2 fc_audibility section + CONTEXT.md § FC audibility state clarification
+
+34. **`is_reference_candidate` timing convention — log-roast or log-cupping?** — Gesha Clouds: claude.ai set `is_reference_candidate: true` on v3a (roast-structure grounds — closest to #172 control) but flagged "that was a guess." Prompt's definition ("leading slot per V-set when it's plausibly the lot reference at close-out") implies cup data. log-roast.md doesn't explicitly say whether to set the flag at roast-time (on roast-structure grounds) or defer to log-cupping (on cup grounds). Currently ambiguous.
+    - **Grade:** READY (clarification — pick one convention and document)
+    - **Source:** Round 14 / Gesha Clouds v3a
+    - **Suggested landing:** log-roast.md STAGE 3 push_roast section + log-cupping.md STAGE 3 patch_roast section — explicitly say which prompt owns setting the flag
+
+35. **Drop rules UI persistence in Latent app — view changes after roast logged** — Mt Elgon: Chris couldn't re-find the drop rules mid-session because the lot's page flipped from "waiting for next roast" view (which surfaces the design-intent panel) to "waiting for next cupping" view (which hides it). The operator needs drop rules AT the machine DURING the roast; the view that surfaces them disappears the moment the prior roast was logged. App UX issue, not prompt: `/green/[id]` page should keep drop rules accessible during active roasting OR persist them in a way the operator can grab mid-roast (Roest profile notes field already serves as durable backup, but the app's own surface should match).
+    - **Grade:** READY (Latent app feature — render drop rules persistently across lifecycle states OR add a "show recipe design intent" toggle on the resolved-pending / waiting-for-cupping views)
+    - **Source:** Round 14 / Mt Elgon batch 199 session feedback
+    - **Suggested landing:** Latent app sprint — `/green/[id]` page UX work + possibly a dedicated "active roast" view that pulls the recipe design intent + drop rules into a roast-time HUD
+
+36. **push_roast_profile + push_roast_recipe + push_experiment silently decoupled — Tool coordination gap** — Gesha Clouds: push_roast_profile pushed Roest profiles 2 sessions ago without creating paired DB experiment/recipe rows. STAGE 1(b) inline backfill handled it but the gap is structurally recurring. Fix candidates: (a) push_roast_profile optionally accepts experiment_id + batch_slot + creates paired roast_recipes row in the same call (transactional); (b) explicit note in design-time prompts (start-lot.md STAGE 4, log-cupping.md STAGE 5 V_(n+1) design) that profile pushes must be followed by push_roast_recipe to land the DB rows; (c) a dedicated push_v_set_design Tool that bundles experiment + recipes + profiles into one atomic operation.
+    - **Grade:** BRAINSTORM (3 fix options; design choice depends on architectural preference for transactional vs separated Tools)
+    - **Source:** Round 14 / Gesha Clouds STAGE 1(b) backfill
+    - **Suggested landing:** future Tool sprint scoping the right architectural answer
+
 ## Resolved (append-only history)
 
 When grill items resolve, move them here with date + landing target. Format:
