@@ -11,6 +11,7 @@
     "check:mcp-bundle": "npx -y -p tsx@4 tsx scripts/check-mcp-bundle.ts",
     "check:migrations": "npx -y -p tsx@4 tsx scripts/check-migrations.ts",
     "check:registry-sync": "npx -y -p tsx@4 tsx scripts/check-registry-md-sync.ts",
+    "check:terroir-resolver": "npx -y -p tsx@4 tsx scripts/check-terroir-resolver.ts",
     "audit:data": "npx -y -p tsx@4 tsx scripts/data-sanity-audit.ts"
   },
   "dependencies": {
