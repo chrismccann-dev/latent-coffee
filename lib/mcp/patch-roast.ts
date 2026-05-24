@@ -47,9 +47,10 @@ export const patchRoastInputSchema = {
   ),
   end_condition_target: z.number().optional().nullable(),
   fc_total_cracks: z.number().int().min(0).optional().nullable(),
-  // Sprint 11 RO-CP-3 (migration 061, 2026-05-20). See push_roast.fc_audibility for full semantics.
-  fc_audibility: z.enum(['audible', 'subtle', 'silent', 'ambiguous']).optional().nullable().describe(
-    'FC audibility state: audible / subtle / silent / ambiguous. See push_roast.fc_audibility for the full 4-value semantics + protocol-stack notes.',
+  // Sprint 11 RO-CP-3 (migration 061, 2026-05-20). 5th value did_not_fire added
+  // Group 3 / Item 31 (migration 066, 2026-05-24).
+  fc_audibility: z.enum(['audible', 'subtle', 'silent', 'ambiguous', 'did_not_fire']).optional().nullable().describe(
+    'FC audibility state: audible / subtle / silent / ambiguous / did_not_fire. See push_roast.fc_audibility for the full 5-value semantics + protocol-stack notes.',
   ),
   what_worked: z.string().optional().nullable(),
   what_didnt: z.string().optional().nullable(),

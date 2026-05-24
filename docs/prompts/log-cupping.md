@@ -161,6 +161,8 @@ Capture `cupping_id` per slot for cross-reference.
 
 After the V_n leading slot is identified, **assess reference quality** and patch `roasts.is_reference_candidate` accordingly. Distinct from `experiments.winner` (which is always the V-set leading slot, regardless of quality) and `roasts.is_reference` (lot-level final, set at close-out).
 
+**This prompt owns the flag** (Round 14 / Item 34 / 2026-05-24 convention). The candidate flag is set exclusively here — on cup grounds, after the V_n leading slot is identified — NOT at roast-time in `log-roast.md` STAGE 3 on roast-structure grounds. Round 14 surfaced the ambiguity (Gesha Clouds v3a flagged true at roast-time on closest-to-#172 reasoning; "that was a guess") — roast structure alone can mislead, late-blooming aromatic lots roast cleanly without being cup-reference quality. By definition the flag is a cup-quality judgment; wait for cupping data before setting. See CONTEXT.md § Reference candidate § Timing convention.
+
 - **Set `is_reference_candidate: true`** when the leading slot reads as a plausible lot reference at close-out — the cup is reference-quality at the V-set level, even if more V-sets are coming.
 - **Set `is_reference_candidate: false`** (or leave default false) when the leading slot is "best of the worst" — Fazenda Um V1B is the canonical case: leading slot by Chris's verdict, framed as "best of the worst, NOT a reference example."
 - The candidate flag does NOT auto-flip to `is_reference` at close-out. `close-lot.md` STAGE 2 (or `one-shot-closeout.md` STAGE 2) makes the promotion explicit via a separate `patch_roast(is_reference: true)` on the lot-level final reference.
