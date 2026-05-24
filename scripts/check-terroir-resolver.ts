@@ -60,7 +60,7 @@ const checks: Check[] = [
       const missing = Array.from(expected).filter((m) => !actual.has(m))
       const extra = Array.from(actual).filter((m) => !expected.has(m))
       if (missing.length > 0 || extra.length > 0) {
-        return `expected ${[...expected].join(', ')}; got ${[...actual].join(', ')}`
+        return `expected ${Array.from(expected).join(', ')}; got ${Array.from(actual).join(', ')}`
       }
       return null
     },
