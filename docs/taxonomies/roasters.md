@@ -106,14 +106,15 @@ Roasters who intentionally push extraction. Includes BALANCED → FULL (most), F
 - **Subtext Coffee**
 - **The Picky Chemist**
 
-### Varies (4)
+### Varies (5)
 
-Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 4 entries.
+Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 5 entries.
 
 - **Moonwake Coffee Roasters**
 - **Scenery Coffee**
 - **Strait Coffee** — BALANCED / VARIES
 - **Switch Coffee** — BALANCED / VARIES
+- **Untold Coffee Lab**
 
 ### Self-Roasted (1)
 
@@ -1737,6 +1738,28 @@ _Tokyo, Japan_ · **BALANCED / VARIES**
 - **Calibration role:** Hybrid Brewer Baseline
 - **Confidence:** Low
 - **Notes:** No official recipe; identity tied to Switch-style brewing; sits near Strait but less defined; brewing approach likely determines outcome more than roast style
+
+#### Untold Coffee Lab
+_Rochester, NY, USA_ · **VARIES** · archive: 1 brew
+
+- **Roast style:** Light (competition-lot, precision roasted)
+- **Development bias:** Moderate-low development; Stronghold platform likely gives even internal development and high aromatic preservation
+- **Rest curve:** 2-4 weeks typical inferred; frozen roasted inventory may preserve peak window
+- **Primary driver:** Green-lot quality + roast precision
+- **Extraction purpose:** Preserve auction/competition-lot character while making rare coffees accessible as roasted offerings
+- **House style:** Primarily green-bean curator with roasted variants; production on Stronghold S7X/S9; no public brew recipe
+- **Brew guide:** None (No formal guide)
+- **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:30-3:15, agitation=Low-Medium
+- **Primary brewer:** V60 / flat-bottom
+- **Filter type:** Cone + Flat
+- **Extraction intent:** Clarity to Balanced (20-22%)
+- **Failure mode:** Under-extraction presents as thin or muted; over-extraction risks flattening rare-lot aromatics
+- **Over-extraction tolerance:** Medium
+- **Process sensitivity:** Washed/Gesha/Eugenioides-style lots: clarity-first; Natural/anaerobic/competition process lots: balanced with process-sensitive temp/grind; treat each lot individually
+- **Brew adjustment method:** Grind + temp
+- **Calibration role:** Competition-Lot Preservation Benchmark
+- **Confidence:** Medium-Low
+- **Notes:** Roasted coffee is secondary to the green-bean program; use lot/process/cultivar signal first. Stronghold S7X/S9 platform suggests high repeatability and even development. Start clarity-first for washed/high-end Panama-style lots, then push only if sweetness/body is missing. Avoid assuming Dak/Sey-style extreme extraction without cup evidence. Team includes Danilo Lodi, Justin Boudeman (Longboard Specialty Coffee), Francesco Bernasconi, Julio Villasmil, and members of the Salzman family. Roasted inventory vacuum-sealed and frozen at -11°F per third-party listing. Promoted from taxonomy override queue 2026-05-23 against brew 25b4465b (first Untold lot in the Latent archive); also serves as importer/green-lot source for Chris.
 
 ---
 

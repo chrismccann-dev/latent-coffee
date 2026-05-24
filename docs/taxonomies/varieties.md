@@ -894,6 +894,40 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 
 ---
 
+### Nyasaland
+
+**Species:** Arabica  **Genetic Family:** Typica Family  **Lineage:** Typica lineage
+
+#### Genetics
+- **Genetic Background:** Historic Typica-derived cultivar introduced from Jamaica into Nyasaland (modern Malawi) in the late 19th century during colonial-era Arabica dissemination across East Africa. Considered part of the older African Typica movement rather than a modern breeding selection.
+- **Market names normalized here:** none.
+
+#### Agronomy
+- **Typical Origins:** Malawi historically; also associated with Uganda / Mount Elgon legacy plantings.
+- **Altitude Sensitivity:** 1,200-2,000 masl.
+- **Limiting Factors:** Limited modern planting base; often replaced by higher-yield or disease-resistant cultivars.
+- **Market Context:** Historical / regional legacy cultivar.
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Washed primarily; traditional naturals possible.
+- **Typical Flavor Notes:** Citrus, mild stone fruit, cocoa, tea-like sweetness, classic "old world" Arabica profile.
+- **Acidity Style:** Medium; soft citric to malic.
+- **Body Style:** Medium-light to medium.
+- **Aromatics:** Moderate floral and sweet aromatics.
+- **Terroir Transparency:** Medium-high.
+- **Extraction Sensitivity:** Moderate.
+- **Brewing Tendencies:** Balanced omni; traditional filter and espresso both workable.
+
+#### Reference Content — Roasting
+- **Roast Tolerance:** Medium.
+- **Roast Behavior:** Handles moderate development better than Gesha-type cultivars; can flatten if pushed dark.
+- **Resting Behavior:** Stable; generally not volatile.
+- **Common Pitfalls:** Expecting modern exotic intensity; can taste subtle or "classic" compared to Ethiopian-derived cultivars.
+
+**Notes:** Important historically because it represents early Typica dissemination into East Africa before later SL and hybrid breeding programs reshaped regional coffee agriculture.
+
+---
+
 ### Pache
 
 **Species:** Arabica  **Genetic Family:** Typica Family  **Lineage:** Typica lineage
@@ -1799,6 +1833,40 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 - **Common Pitfalls:** Generic cup risk.
 
 **Notes:** Often blended; less terroir-transparent than SL28 / SL34.
+
+---
+
+### SL14
+
+**Species:** Arabica  **Genetic Family:** Modern Hybrids  **Lineage:** Multi-parent hybrid lineage
+
+#### Genetics
+- **Genetic Background:** Selected in Kenya in 1936 at Scott Agricultural Laboratories from a single tree identified as "Drought Resistant II." Historical parentage remains incomplete or unresolved, so it should not be force-classified into Bourbon or Typica lineage without stronger genetic evidence.
+- **Market names normalized here:** SL-14 (hyphenated trade-name variant).
+
+#### Agronomy
+- **Typical Origins:** Kenya historically; Uganda increasingly important.
+- **Altitude Sensitivity:** 1,200-2,000 masl.
+- **Limiting Factors:** Aging plant stock; less celebrated than SL28/34; incomplete pedigree documentation.
+- **Market Context:** Historical East African cultivar / production-focused specialty.
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Washed primarily; naturals less common.
+- **Typical Flavor Notes:** Citrus, black tea, cocoa, soft berry, structured sweetness.
+- **Acidity Style:** Medium to medium-high; typically more restrained than SL28.
+- **Body Style:** Medium.
+- **Aromatics:** Moderate; less explosive aromatically than SL28/34.
+- **Terroir Transparency:** Medium.
+- **Extraction Sensitivity:** Moderate.
+- **Brewing Tendencies:** Balanced omni; traditional filter and espresso both suitable.
+
+#### Reference Content — Roasting
+- **Roast Tolerance:** Medium.
+- **Roast Behavior:** Handles moderate development well; more structurally forgiving than high-aromatic Ethiopian-derived cultivars.
+- **Resting Behavior:** Stable; generally not highly volatile.
+- **Common Pitfalls:** Expecting SL28-style florality or intensity; can present as more muted or classic.
+
+**Notes:** Safest placement is Modern Hybrids → Multi-parent hybrid lineage until stronger genetic classification is established. Scott Agricultural Laboratories is the selection source, not the lineage.
 
 ---
 
