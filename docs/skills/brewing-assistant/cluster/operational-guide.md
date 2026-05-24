@@ -38,6 +38,16 @@ When the variety has no `by-cultivar/<cultivar>.md`, no by-coffee-family entry, 
 
 The brief framework defaults to ultra-light / light roasters (Sey / Substance / Moonwake / Picky Chemist / Big Sur archetypes). When the roaster roasts the coffee at **medium** or above (verify via roaster product page; some specialty naturals are roasted medium even by clarity-oriented roasters), flag the adjusted over-extraction risk profile in 1c: roast character is the over-extraction risk on a medium roast, not under-development. Pushing harder surfaces roast-derived chocolate/nut/bittering forward of the green's fruit signature; the lever is evaluate cooler + accept a chocolatier register, NOT temperature/agitation push. Pattern is currently observation-only (1 lot in archive when this hook lands); promote to a CCIL entry once 2-3 medium-roast specialty naturals confirm.
 
+**Ground-Agtron-over-WB extraction-prior rule** (apply when ground Agtron is available):
+
+When a **ground Agtron reading at dose-out** is available, treat it as the authoritative roast-level prior for over-vs-under extraction, NOT the whole-bean (WB) Agtron from the roaster's spec sheet, the inventory step, or the roast row. Mechanism (per [roest-knowledge/cluster/machine/counterflow-observations.md § WB-to-Ground Agtron Delta as Development Signal](../../roest-knowledge/cluster/machine/counterflow-observations.md)): WB Agtron tracks **surface** development; ground Agtron tracks the **surface + core composite** that the brew water actually encounters. When the WB-to-Ground delta is wide (>7 points), the WB read can suggest a lighter roast than the brewable composite actually is — hedging finer / warmer on the lighter WB prior over-extracts. The lived case is CGLE Sudan Rume Natural brewing iteration (Round 13, 2026-05-22): WB Agtron 78.7 (read as light → finer/warmer prior) but ground Agtron at dose-out 68.1 (medium-light → over-extraction risk is the actual prior). Brew 1 over-extracted on the WB-anchored hedge; the ground reading was the correct prior.
+
+**Measurement-availability asymmetry by source** (Chris-locked at Item 29 grill, 2026-05-24):
+- **Self-roasted lots** typically have a ground Agtron reading available from the xBloom cupping step (Chris measures ground at cupping time as standard practice). Use that ground reading as the brewing-side extraction prior — the cupping row's `ground_agtron` is the authoritative read.
+- **Purchased lots** typically do NOT have a ground Agtron reading. Chris deliberately decided this is overkill for purchased roasted beans (the inventory step records WB Agtron only at the dose-and-freeze moment, no ground measurement). The extraction prior falls back to WB Agtron (when populated) or to the roaster-stated roast level. No corrective is available — the brief proceeds on the WB read and accepts the residual uncertainty.
+
+When neither WB nor ground Agtron is available, fall back to the roaster's stated roast level + the Roaster roast-level hook above. Do NOT push Chris to start measuring ground Agtron on purchased lots — the no-ground-on-purchased decision is intentional.
+
 **1d. Proposed extraction strategy and modifiers**
 
 Based on the above, propose one of the six extraction strategies below and explain why. Then, separately, assess whether any modifiers (Output Selection, Inverted Temperature Staging, Aroma Capture, Role-Based Pulse) are warranted for this specific coffee. Most coffees will not warrant any. If a modifier is proposed, justify it explicitly. Then pause and ask for confirmation before proceeding to the recipe.
@@ -79,6 +89,8 @@ Based on the above, propose one of the six extraction strategies below and expla
 ## Step 2 — Recipe Output (after strategy is confirmed)
 
 Once the extraction strategy and any modifiers are confirmed, select the brewer and filter based on the brewing location (see [brewing-equipment-expert/cluster/operational-reference.md § Location Constraints](../../brewing-equipment-expert/cluster/operational-reference.md)), then output a full recipe using the format below.
+
+**Brewer tiebreaker — when two owned brewers both fit the cup goal:** drill into the secondary register (softening / pulling-together vs preserving sharpness / structural definition) per the rule in [brewing-equipment-expert/cluster/operational-reference.md § Decision rule when two brewers fit the cup goal](../../brewing-equipment-expert/cluster/operational-reference.md). Rotation-debt is a valid follow-on tiebreaker but should not be the primary call.
 
 ### Output Format
 

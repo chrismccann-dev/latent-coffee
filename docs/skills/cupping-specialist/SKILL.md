@@ -26,9 +26,9 @@ The lot's lifecycle state transition depends on which path fires:
 - **Path A — Lot ready for close-out.** Leading slot is lot-level reference candidate AND no control experiment warranted. Cup matches producer-notes ballpark; diminishing returns; brewing-side confirmation. Routes to Brewing Assistant for optimized brew dial-in (cross-domain Chain 1 hop) → Close-Lot Specialist after `push_brew` lands. State: → `resolved_pending`.
 - **Path B — Design V_(n+1).** Open questions remain; clear lever identified but optimum within it not yet pinned; new variable held constant in V_1…V_n worth probing. Routes to Roasting Assistant for V_(n+1) design. Control experiments (replicating leading slot with two slight adjustments) are still Path B, not Path C. State: → `waiting_for_next_roast`.
 - **Path C-1 — Pre-V_(n+1) calibration gate: missing peer-roasted reference cup.** V_n cup landed in plausible zone but no peer-roasted version available to calibrate against; seller or peer has a roasted version. Canonical case: Fazenda Um — Untold sells a roasted version. Halts V_(n+1); state stays `waiting_for_next_cupping` until the peer cup is captured.
-- **Path C-2 — Pre-V_(n+1) calibration gate: missing cup-side discriminator.** V_n cupped at one `recipe_variant` only AND prior V-sets showed recipe_variant inversions AND V_(n+1) would be a narrowing adjustment around the currently-named leading slot. Canonical case: Higuito V3 cupped at xbloom_gate only, V2 inverted between gate and real-pourover. Halts V_(n+1); state stays `waiting_for_next_cupping` until the second-variant cupping lands.
+- **Simulated Pourover Gate — Pre-reference-roast decision-support cup.** (Renamed from Path C-2 at Item 7 grill, 2026-05-24 — see [CONTEXT.md § Simulated pourover gate](../../../CONTEXT.md).) End-of-V-set cup brewed on the real pourover setup (real water, real brewer, real filter) using a non-optimized recipe that's much closer in scope to what the end optimized recipe will be — close enough to give the roast a real shot at expressing the end-state cup, but explicitly NOT going through the full brewing iteration loop because no reference roast is set yet. Purpose: choose the reference roast. Typical cup-set: V_n winner + V_n secondary contender + V_(n-1) winner (the previous V-set's winner as a control baseline). Triggered whenever Chris nears the reference-roast call (typically V3+ when roasting-side optimization hits diminishing returns) OR when the V_n leading slot's identity is provisional via cup-side recipe_variant inversions on prior V-sets. A roast-quality concern (e.g. wide WB-to-ground Agtron delta signaling internal underdevelopment) can also motivate an SPG read in combination — see [`cluster/pod-1-routing.md`](cluster/pod-1-routing.md) § Lived-practice trigger fires for the lived V5 case where roast-quality concern was the motivating factor. Halts V_(n+1); state stays `waiting_for_next_cupping` until the simulated-pourover cup is captured + pushed.
 
-**Path C status — substrate retained pending POD-1 trigger conditions.** The DRAFT POD-1 scoping work (`docs/sprints/pod-1-scoping-draft-2026-05-26.md`) proposes replacing Path C-1/C-2 with a "simulated pourover gate" path (single concept rather than two variants) when the trigger conditions in [`cluster/pod-1-routing.md`](cluster/pod-1-routing.md) are met. **Today's substrate keeps Path C-1/C-2 intact**; the future rewrite is bookmarked, not executed. See the cluster doc for trigger conditions + the simulated-pourover concept's preliminary schema scoping.
+**Path C status — vocabulary rename shipped; substrate-identifier rewrite still gated.** The Item 7 grill (2026-05-24) locked the simulated-pourover-gate vocabulary + reframed Path C-2's purpose per Chris's lived shape. The DRAFT POD-1 scoping work (`docs/sprints/pod-1-scoping-draft-2026-05-26.md`) proposes further consolidating Path C-1 + Simulated Pourover Gate into a unified single-concept Path C when the trigger conditions in [`cluster/pod-1-routing.md`](cluster/pod-1-routing.md) are met. The schema scoping (whether the simulated pourover earns a `cuppings.eval_method = 'Simulated Pourover'` row vs a `brews.is_simulated_pourover` flag) remains gated on the full rewrite — Chris's preference for the cuppings-row shape is locked at the vocabulary level but the migration ships as part of the rewrite, not today.
 
 ## STAGE 6 optional ROASTING.md / cluster propose_doc_changes
 
@@ -39,7 +39,7 @@ Post-cupping is the natural moment for ROASTING.md / Roest Knowledge cluster upd
 - **Cross-coffee pattern** → Roasting Historian's `cluster/patterns/cross-coffee-insights.md` (append with confidence marker matching `key_insight_confidence`)
 - **Per-lot FC ceiling calibration** → FC Floor & Ceiling section (append with confidence marker)
 
-Skip when: Path C-2 fired (cup-side leading slot is provisional); V_(n+1) imminent and would directly test the insight; `key_insight_confidence` is Low (Low belongs in `additional_notes`, not in cluster docs).
+Skip when: Simulated Pourover Gate fired (cup-side leading slot is provisional pending the simulated-pourover cup); V_(n+1) imminent and would directly test the insight; `key_insight_confidence` is Low (Low belongs in `additional_notes`, not in cluster docs).
 
 ## Inputs
 
@@ -53,14 +53,14 @@ Skip when: Path C-2 fired (cup-side leading slot is provisional); V_(n+1) immine
 - `push_cupping` row(s) per cupped batch
 - `patch_experiment` writing cup-side closure on V_n
 - `patch_roast` setting `is_reference_candidate` on the leading slot
-- V-set routing decision: Path A → cross-domain Chain 1 (Brewing Assistant); Path B → Roasting Assistant; Path C-1/C-2 → halt with calibration action
+- V-set routing decision: Path A → cross-domain Chain 1 (Brewing Assistant); Path B → Roasting Assistant; Path C-1 / Simulated Pourover Gate → halt with calibration action
 - Optional `propose_doc_changes` proposals (multi-citation) targeting ROASTING.md / Roasting Historian / Roest Knowledge clusters
 
 ## Called by / Calls
 
 - **Called by:** Master Coordinator (via `log-cupping.md`); Chain 3 mid-stage hop after Day-7 cupping event
 - **Calls:** Roasting Historian · Roest Knowledge
-- **Hands off to:** Path A → Brewing Assistant (Chain 1 cross-domain); Path B → Roasting Assistant for V_(n+1); Path C-1/C-2 → halt (operator-side calibration action; re-entry via `log-cupping.md`); future POD-1 simulated-pourover → Brewing Assistant for recipe construction (cluster/pod-1-routing.md)
+- **Hands off to:** Path A → Brewing Assistant (Chain 1 cross-domain); Path B → Roasting Assistant for V_(n+1); Path C-1 → halt (operator-side peer-cup calibration action; re-entry via `log-cupping.md`); Simulated Pourover Gate → Brewing Assistant for simulated-pourover recipe construction on the V_n winner + secondary + V_(n-1) winner (re-entry via `log-cupping.md` once the simulated-pourover cup is captured); future POD-1 rewrite further consolidates Path C-1 + Simulated Pourover Gate into a unified path (cluster/pod-1-routing.md)
 
 ## MCP Tools owned
 
@@ -76,7 +76,7 @@ Tool descriptions in `lib/mcp/push-cupping.ts` / `patch-cupping.ts` / `patch-exp
 
 - **Patterns:** A (substrate-event refresh on `push_cupping` events feeding Roasting Historian's per-lot pattern docs) + E (workflow-execution refresh — Path routing accuracy measured against actual lot outcomes; observed routing-decision overrides → Pattern E retro)
 - **Stage:** 1 (in-loop). N=10 for Stage 1 → 2 graduation per ADR-0013 outlier rule for substrate-writers.
-- **Signal:** POD-1 trigger conditions met in lived practice (see `cluster/pod-1-routing.md`) → Path C-1/C-2 substrate revision via this sub-skill's update path. Observed routing-decision overrides logged via Pattern H against `coordinator/dispatch-override-log.md`.
+- **Signal:** POD-1 trigger conditions met in lived practice (see `cluster/pod-1-routing.md`) → Path C-1 / Simulated Pourover Gate substrate revision (unified-path rewrite + cuppings.eval_method canonical addition) via this sub-skill's update path. Observed routing-decision overrides logged via Pattern H against `coordinator/dispatch-override-log.md`.
 
 ## Wave 3 PR 3 ship notes (2026-05-26)
 

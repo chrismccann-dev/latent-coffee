@@ -47,6 +47,17 @@ Canonical brewer SKUs are in `canonicals://brewers` (46 canonicals + 24 aliases)
 | **Sibarist Brewing System**   | Cone (system-integrated) | Very Fast (HALO FAST) or Medium (HALO B3) | System-level peak clarity — eliminates fit and bypass variability | Home only. HALO holder + borosilicate brewing chamber + temperature exchanger. Pairs only with Sibarist HALO CONE FAST or HALO CONE B3 papers (perfect-seal system-specific). Use case: isolating extraction variables when the dripper/paper interface needs to be eliminated as a source of variance. Reserve for diagnostic / reference brews, not daily rotation. |
 | **Oxo Rapid Brewer**          | Pressure + Percolation | Fast                        | Very concentrated                         | Travel, co-ferments, experimental coffees. Home only.                                                                                                                                                                    |
 
+#### Decision rule when two brewers fit the cup goal
+
+The cup-tendency column above describes each brewer's primary register, but in practice two brewers will often both fit a stated cup goal — most commonly **April Brewer Glass** vs **Kalita Wave 155** when the goal is balanced fruit sweetness with mid-palate integration. The lived tiebreaker (Wush Wush brewing iteration, Round 10, 2026-05-22) is to drill into the **secondary register** rather than rely on rotation-debt alone:
+
+- **April** when integration *and softness* is the goal. The wider base geometry pulls more of the cup together — better fit when the coffee has many register signals competing for attention ("crazy flavors that need pulling together"). Round mid-palate is the dominant move.
+- **Kalita Wave 155** when integration *with preserved sharpness* is the goal. Narrower base + metal construction does less of the softening work, so coffees that aren't inherently as expressive keep more of their attack and structural definition. Body + sweetness extension is the dominant move.
+
+> **Lived-experience caveat (Chris, 2026-05-24):** the April-wider-base / Kalita-narrower-base reasoning is derived from lived sessions, not from a controlled neutral test (same coffee, same recipe, same dose, same paper, swap brewer only). Treat as a working heuristic; a future side-by-side dial-in would either confirm or refine it.
+
+**General principle.** When two brewers share a primary cup tendency, the tiebreaker is which secondary register the coffee benefits from — softening / pulling-together vs preserving sharpness / structural definition. This is a Step 2 brewer-selection move, after strategy is locked. Rotation-debt remains a valid follow-on tiebreaker when neither secondary register clearly dominates.
+
 ### Filter System
 
 Canonical filter SKUs are in `canonicals://filters` (64 canonicals + 34 aliases). Below is the rotation-relevant subset; the per-filter technical spec sheet lives in [filters.md](./filters.md).
