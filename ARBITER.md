@@ -570,6 +570,33 @@ Use this worked example as the shape template for the next pass.
 
 ---
 
+## Tool description writing convention
+
+Locked Round 11 (`patch_brew` + `list_canonicals` BLOCKING bug) + Round 14 / Sprint R Phase 4 Step 4 Group 3 / Items 21 + 23 / 2026-05-24. The MCP `tool_search` ranking algorithm uses description-text keyword matching, so embedding another Tool's name in a description makes that Tool surface for searches against the embedded name. When the surfacing Tool is unrelated to the search intent (e.g. `list_canonicals` ranking for `push_brew` queries), the operator picks the wrong Tool and the workflow breaks.
+
+The convention has four parts:
+
+**1. Vocabulary deferrals → substrate, not sibling Tools.** When a `patch_X` field shares vocabulary with the corresponding `push_X` field, do NOT write "See push_X.<field>". Restate the vocabulary inline OR point to the substrate authority (CONTEXT.md § <entry>, ADR-NNNN, schema column comment). The substrate doc is the canonical source; the Tool description is a pointer. Concrete rewrite recipe:
+
+> Before: `'FC audibility state: audible / subtle / silent / ambiguous. See push_roast.fc_audibility for the full 4-value semantics + protocol-stack notes.'`
+> After: `'FC audibility / occurrence state (5-value enum). audible / subtle / silent / ambiguous / did_not_fire. Full vocabulary + protocol-stack notes in CONTEXT.md § FC audibility state.'`
+
+**2. Sibling create-vs-update refs → descriptive language.** When a `patch_X` description must establish its workflow relationship to `push_X` (the "this is the field-level mutation companion to the INSERT path" framing), do NOT name the sibling Tool by name. Use descriptive phrasing instead:
+
+- "Sibling of push_X" → "The companion INSERT path of the same domain..."
+- "use patch_X for field updates" → "field values are not overwritten by re-INSERT — field-level updates run through the field-level mutation companion of the same domain"
+- "Use patch_cupping for those fields" → "fields are now part of the cuppings schema — write them via the cupping write path"
+
+The collision risk is real even between siblings (a search for `push_brew` surfacing `patch_brew` is less harmful than the unrelated-Tool case, but still creates expectation drift when the operator is specifically looking for the create path).
+
+**3. Workflow chain refs MAY be retained when load-bearing.** Pipeline-position references that establish call order (`push_green_bean` is STAGE 1 and required before downstream writes; the Roest log pull path returns a normalized payload `push_roast` expects) MAY remain when removing them would degrade discoverability. Prefer descriptive phrasing over Tool naming when possible (e.g. "the downstream pipeline writers — roast / cupping / experiment / roast_learnings — all require green_bean_id" rather than "push_roast / push_cupping / push_experiment / push_roast_learnings all require..."). When the Tool name itself is the only viable referent, accept the targeted collision.
+
+**4. Read-only Tools must NOT reference write Tools.** The Round 11 BLOCKING case. `list_canonicals` / `read_canonical` / `read_doc` / `read_doc_section` / `list_docs` / `list_taxonomy_queue` etc. must never name any `push_*` / `patch_*` / `propose_*` / `pull_*` Tool. The read-write asymmetry is what makes the collision semantically wrong (the operator searches for a write Tool and gets a read Tool result). Use descriptive phrasing for the workflow context (e.g. "validate a name against the canonical vocabulary BEFORE composing any write payload" instead of "before push_brew").
+
+**Accuracy convention (Item 23):** Tool descriptions should reflect the **strictest validation path**, not the most permissive. When a field's validation behavior is asymmetric per axis (e.g. `terroir` lazy find-or-creates at the (admin_region, macro, meso) level but is strict-canonical at the macro level), describe the asymmetry explicitly. Lossy summaries ("FK-resolves terroir via lazy find-or-create") create expectation drift in claude.ai sessions and surface as runtime validation errors that confuse the operator. Round 11 continuation surfaced this on `push_brew`'s terroir handling — the prior description omitted the strict-macro requirement and claude.ai's session expected unlimited lazy creation.
+
+**Substrate-change audit hook:** any sprint that adds a new Tool / extends an enum / changes a validation rule MUST re-read the affected Tool's description against this convention. Catching the violation at substrate-change time costs ~2 minutes; catching it after a session-time collision costs ~30 min + a follow-up audit PR.
+
 ## Cross-references
 
 - **Architecture:** [SYNC_V2.md § propose_doc_changes](SYNC_V2.md#propose_doc_changes) + § "Doc storage model" + § "Conflict resolution / two-store reconciliation".
