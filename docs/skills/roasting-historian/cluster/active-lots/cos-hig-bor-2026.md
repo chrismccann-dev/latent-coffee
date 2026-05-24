@@ -3,7 +3,7 @@
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
 **Lot:** COS-HIG-BOR-2026
-**Status:** Active — V1 complete, V2 dual-cupped 2026-05-11 (xbloom_gate + Balanced Intensity real pourover on v2b/v2c), V2 winner is v2b. V3 not yet designed.
+**Status:** CLOSED 2026-05-23 - reference roast v3b (#185). This active-lot working file is retired; see [learnings/cos-hig-bor-2026.md](../learnings/cos-hig-bor-2026.md) for the closed-lot deep dive.
 **Process:** Anaerobic Dry Process
 **Terroir:** Costa Rica
 
