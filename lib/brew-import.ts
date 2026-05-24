@@ -12,8 +12,9 @@ import {
 import {
   TERROIRS,
   type TerroirEntry,
-  TERROIR_MACRO_LOOKUP,
   getTerroirEntry,
+  canonicalizeMacroInCountry,
+  macrosForAdminRegion,
 } from './terroir-registry'
 import {
   BASE_PROCESSES,
@@ -638,30 +639,35 @@ export async function findOrCreateTerroir(
   }
   if (!rawMacroTrim) return { ok: true, id: null, created: false }
 
-  const canonical = TERROIR_MACRO_LOOKUP.isCanonical(rawMacroTrim)
-    ? rawMacroTrim
-    : TERROIR_MACRO_LOOKUP.findClosest(rawMacroTrim)
+  // Country-scoped canonicalize. Closes the Item 22 cross-country fuzzy-match
+  // bug where global findClosest could surface a macro from the wrong country
+  // as the suggestion (e.g. "Minas Gerais" for Brazil cross-matching to
+  // "Mindanao Highlands" because they're alphabetically adjacent globally).
+  // The resolver only ever suggests in-country candidates; the admin_region
+  // hint covers the most common lived case where the caller typed an
+  // admin_region as if it were a macro.
+  const canonical = canonicalizeMacroInCountry(countryTrim, rawMacroTrim)
   if (!canonical) {
+    const adminHintMacros = macrosForAdminRegion(countryTrim, rawMacroTrim)
+    const hint = adminHintMacros.length > 0
+      ? ` "${rawMacroTrim}" looks like an admin_region for ${countryTrim} — macros there are: ${adminHintMacros.join(', ')}.`
+      : ''
     return {
       ok: false,
       status: 400,
-      error: `macro terroir "${rawMacroTrim}" is not in the canonical registry. Add to docs/taxonomies/regions.md + lib/terroir-registry.ts before pushing.`,
+      error: `macro terroir "${rawMacroTrim}" is not in the canonical registry for country "${countryTrim}".${hint} Add to docs/taxonomies/regions.md + lib/terroir-registry.ts before pushing, or call propose_canonical_addition.`,
     }
   }
 
-  // Sprint 2.6 — country/macro pair validation. Closes the R23 Gesha Clouds
-  // failure mode where a Tolima bean was misattributed to Antioquia because
-  // findOrCreateTerroir validated `macro` against the country-agnostic
-  // TERROIR_MACRO_LOOKUP — any (country, macro) pair where the macro existed
-  // SOMEWHERE passed validation. With the rich-registry pair check, the macro
-  // must be registered for THIS country, else fail-fast pointing the caller
-  // at the registry edit path.
+  // Country-scoped resolver only returns macros registered for this country,
+  // so the pair lookup is defensive against a future drift between the
+  // country-scoped lookup cache and the rich TERROIRS table.
   const entry = getTerroirEntry(countryTrim, canonical)
   if (!entry) {
     return {
       ok: false,
-      status: 400,
-      error: `macro terroir "${canonical}" is not registered for country "${countryTrim}" — registry gap. Add to docs/taxonomies/regions.md + lib/terroir-registry.ts before pushing.`,
+      status: 500,
+      error: `internal: country-scoped resolver returned "${canonical}" but pair lookup failed for "${countryTrim}". Likely a registry sync issue.`,
     }
   }
 

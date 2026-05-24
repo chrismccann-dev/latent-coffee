@@ -411,3 +411,115 @@ export function resolveTerroirMacro(
   if (!canonical) return null
   return byMacro.get(canonical.toLowerCase()) ?? null
 }
+
+// ---------------------------------------------------------------------------
+// Country-scoped resolution (closes the cross-country fuzzy-match bug — Item 22,
+// Sprint R Phase 4 Step 4 Group 2 grill, 2026-05-24)
+//
+// Bug shape: `TERROIR_MACRO_LOOKUP.findClosest("Minas Gerais")` ran against the
+// global macro list and surfaced "Mindanao Highlands" (Philippines, alphabetic
+// "Min..." adjacency) as the suggestion when the caller's country was Brazil.
+// Country-scoped canonicalize means the resolver only ever suggests in-country
+// candidates. The admin_region hint addresses the most common lived case: the
+// caller typed an admin_region as if it were a macro.
+// ---------------------------------------------------------------------------
+
+const byCountryMacros = new Map<string, string[]>()
+for (const t of TERROIRS) {
+  const key = t.country.toLowerCase()
+  const list = byCountryMacros.get(key) ?? []
+  list.push(t.macro_terroir)
+  byCountryMacros.set(key, list)
+}
+
+const byCountryLookup = new Map<string, CountryScopedLookup>()
+
+interface CountryScopedLookup {
+  /** Macros registered for this country. Title-case. */
+  macros: readonly string[]
+  /** Country-scoped canonicalize: returns null when the input doesn't resolve to an in-country macro. */
+  canonicalize: (input: string | null | undefined) => string | null
+}
+
+/**
+ * Build (or fetch the cached) country-scoped lookup. Aliases whose target is
+ * registered for THIS country are included; cross-country aliases (e.g. an alias
+ * pointing at a non-country macro) are silently dropped. Empty country or
+ * unknown country returns null.
+ */
+function countryLookupFor(country: string): CountryScopedLookup | null {
+  const key = country.toLowerCase()
+  const cached = byCountryLookup.get(key)
+  if (cached) return cached
+  const macros = byCountryMacros.get(key)
+  if (!macros || macros.length === 0) return null
+  const inCountrySet = new Set(macros.map((m) => m.toLowerCase()))
+  const aliases: Record<string, string> = {}
+  for (const [aliasKey, target] of Object.entries(TERROIR_MACRO_ALIASES)) {
+    if (inCountrySet.has(target.toLowerCase())) aliases[aliasKey] = target
+  }
+  const lookup = makeCanonicalLookup(macros, aliases)
+  const bundle: CountryScopedLookup = {
+    macros,
+    canonicalize: lookup.canonicalize,
+  }
+  byCountryLookup.set(key, bundle)
+  return bundle
+}
+
+/**
+ * Country-scoped macro resolver. Looks up canonical macros for a specific
+ * country (registry-defined) and runs canonicalize against that subset only.
+ * Returns the canonical title-case macro when the input resolves cleanly inside
+ * the country's macro list, else null.
+ *
+ * Resolution order (per makeCanonicalLookup): case-insensitive canonical →
+ * alias (only aliases targeting in-country macros) → substring → 3-char prefix.
+ */
+export function canonicalizeMacroInCountry(
+  country: string | null | undefined,
+  macro_terroir: string | null | undefined,
+): string | null {
+  if (!country || !macro_terroir) return null
+  const lookup = countryLookupFor(country.trim())
+  if (!lookup) return null
+  return lookup.canonicalize(macro_terroir)
+}
+
+/**
+ * Distinct admin_regions registered for a country. Useful when reporting that
+ * an input resolves to an admin_region rather than a macro.
+ */
+export function adminRegionsForCountry(country: string | null | undefined): string[] {
+  if (!country) return []
+  const key = country.trim().toLowerCase()
+  const set = new Set<string>()
+  for (const t of TERROIRS) if (t.country.toLowerCase() === key) set.add(t.admin_region)
+  return Array.from(set)
+}
+
+/**
+ * When the input matches (or substring-matches) an admin_region for the given
+ * country, return the macros registered for that admin_region. Lets a resolver
+ * surface useful in-country guidance for the lived case where the caller typed
+ * an admin_region as if it were a macro (e.g. "Minas Gerais" for Brazil → macros
+ * are Cerrado Mineiro + Mantiqueira Highlands).
+ */
+export function macrosForAdminRegion(
+  country: string | null | undefined,
+  candidate: string | null | undefined,
+): string[] {
+  if (!country || !candidate) return []
+  const c = country.trim().toLowerCase()
+  const a = candidate.trim().toLowerCase()
+  if (!a) return []
+  const set = new Set<string>()
+  for (const t of TERROIRS) {
+    if (t.country.toLowerCase() !== c) continue
+    const admin = t.admin_region.toLowerCase()
+    if (admin === a || admin.includes(a) || a.includes(admin)) {
+      set.add(t.macro_terroir)
+    }
+  }
+  return Array.from(set)
+}
