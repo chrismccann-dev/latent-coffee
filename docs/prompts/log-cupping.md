@@ -171,7 +171,7 @@ After the V_n leading slot is identified, **assess reference quality** and patch
 
 **This STAGE writes**: nothing (routing decision only).
 
-Three paths. **Path C is the less-common "design blocked, hold the lot" routing** — split into two variants C-1 and C-2 since they're triggered by different missing evidence.
+Three paths. **Path C is the less-common "design blocked, hold the lot" routing** — split into two variants: **C-1** (missing peer-roasted reference cup) and **Simulated Pourover Gate** (the renamed-from-Path-C-2 path, locked at Item 7 grill 2026-05-24 — see [CONTEXT.md § Simulated pourover gate](../../CONTEXT.md) for the full definition). Both halt V_(n+1) design pending the calibration cup; the difference is which cup needs capturing.
 
 ### Path A - Lot ready for close-out
 
@@ -201,7 +201,7 @@ Halt V_(n+1) design. State stays **Waiting for next cupping**. The lot needs an 
 
 Triggered when V_n's cup landed in a plausible zone but Chris doesn't have a peer-roasted version of the same green to calibrate against, AND the seller / a peer roaster has a roasted version available. Canonical case: Fazenda Um — Untold sells a roasted version, Chris hasn't cupped it yet, V1 produced a reasonable but uncalibrated cup. Without the peer reference, V_(n+1)'s adjustment direction is operator-guesswork; with it, the cup-side delta tells you which direction to move.
 
-Distinct from a control experiment (which IS a new V-set replicating the leading slot — that's Path B). Distinct from "design more cuppings on already-roasted V_n beans" — see Path C-2 below.
+Distinct from a control experiment (which IS a new V-set replicating the leading slot — that's Path B). Distinct from "design more cuppings on already-roasted V_n beans" — see Simulated Pourover Gate below.
 
 Output:
 - Report Path C-1 fired and why.
@@ -210,23 +210,35 @@ Output:
 
 Linked CONTEXT.md entry: **Pre-V_n calibration gate**.
 
-### Path C-2 - Pre-V_(n+1) calibration gate: missing cup-side discriminator
+### Simulated Pourover Gate - Pre-reference-roast decision-support cup (renamed from Path C-2 at Item 7 grill, 2026-05-24)
 
-Halt V_(n+1) design. State stays **Waiting for next cupping**. The V_n cupping captured only one recipe_variant (typically `xbloom_gate`), and the lot's prior V-sets show recipe_variant inversions — i.e. the leading slot at one recipe_variant did NOT match the leading slot at the other.
+Halt V_(n+1) design. State stays **Waiting for next cupping**. The V_n leading slot's identity (or the lot's reference-roast call) is provisional pending a simulated-pourover cup brewed on the real pourover setup. See [CONTEXT.md § Simulated pourover gate](../../CONTEXT.md) for the full vocabulary.
 
-Triggered when ALL three hold:
-- V_n cuppings exist at one `recipe_variant` only (the other variant is missing or planned-but-not-pushed).
-- Prior V-sets on this lot logged BOTH variants AND showed at least one inversion (e.g. V2's leading slot at xbloom_gate was v2b, but at real_pourover it was v2a).
-- V_(n+1) would be a narrowing adjustment around V_n's currently-named leading slot — i.e. the design depends on the leading-slot identity being correct.
+**Two trigger shapes** — proactive and reactive — both route here:
 
-Canonical case: Higuito V3 cupped at `xbloom_gate` only, V2's leading slot inverted between gate and real-pourover. Without the V3 real-pourover, the v3-leading-slot identity is provisional and a V_(n+1) narrowed around it could narrow around the wrong slot.
+**Proactive (most common, lived end-of-V-set workflow).** Chris is nearing the reference-roast call — typically V3 or later, roasting-side optimization is hitting diminishing returns, and one of the current V-set's slots is plausibly the lot reference. The xBloom Day-7 gate gave the consistent cross-slot read, but the xBloom-vs-end-optimized-pourover delta is large enough that the gate alone isn't decisive for committing the reference. A simulated pourover step pushes the read closer to the end-state cup before the call. Triggers:
 
-Distinct from Path C-1 (which needs an EXTERNAL reference cup); Path C-2 needs a DIFFERENT BREW recipe_variant on the SAME beans (already roasted, no machine time required).
+- V_n's xBloom cup landed and at least one slot is plausibly the lot reference (Path A territory).
+- Diminishing-returns signal: the V_(n+1) design space feels like fine-tuning, not direction-finding.
+- Chris's signal in-thread: "I think these two are worth taking to the simulated pourover step" / "if either one of these go well, I might call one of these as the end reference roast."
+
+**Reactive (less common, original Path C-2 shape).** The V_n leading-slot identity is provisional because cup-side discrimination is missing — V_n was cupped at one recipe_variant only AND prior V-sets showed recipe_variant inversions. A separate **roast-quality concern** can also motivate an SPG read in combination with cup-side ambiguity — most commonly when the leading slot's WB-to-ground Agtron delta is wide enough to signal internal-development risk (per [`docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md` § WB-to-Ground Agtron Delta as Development Signal](../skills/roest-knowledge/cluster/machine/counterflow-observations.md), wide delta = surface ahead of underdeveloped core), but wide delta on its own is **primarily a roast-quality signal, not a routing-decisive SPG trigger** — it argues "the xBloom gate read may be distorted by underdevelopment, worth validating at the real pourover." Canonical lived case: CGLE Sudan Rume Natural V5 (2026-05-21) — V5A's delta 15.7 vs prior reference 169's delta 3.1 raised the roast-quality concern; the simulated pourover discriminated V5A 187 vs reference 169 at a confirmed April Glass recipe. Higuito V3 (cupped at `xbloom_gate` only, V2 showed gate-vs-pourover inversion) is the cup-side-only variant.
+
+Distinct from Path C-1 (which needs an EXTERNAL peer-roasted reference cup); Simulated Pourover Gate needs a NEW BREW of the candidate slots on the already-roasted V_n beans (no machine time required).
+
+**Cup set** — typical cup-set for the simulated-pourover step:
+- V_n winner (the leading slot from this V-set).
+- V_n secondary contender (the next-best slot in the same V-set, if there's a credible second).
+- V_(n-1) winner (the previous V-set's winner) when it's worth carrying as a control baseline.
+
+The simulated-pourover recipe is "much closer in scope to what the end optimized recipe will be" — close enough to give the roast a real shot at expressing the end-state cup, but explicitly NOT the optimized recipe (no full brewing iteration loop here; that happens AFTER reference roast is called, as a separate brewing-side dial-in flow).
 
 Output:
-- Report Path C-2 fired and why (cite the prior V-set's recipe_variant inversion as evidence).
-- List the discriminator action Chris needs to take ("brew the V_n slots at `real_pourover`, paste the second-variant cupping transcript back into a new `log-cupping.md` session pushing the second cuppings under `recipe_variant: real_pourover`").
-- Tell Chris the state stays Waiting for next cupping and the lot will re-enter this prompt when the second-variant cuppings are captured. STAGE 3's `delta_from_cup` and `winner` may need patching once the second variant lands.
+- Report Simulated Pourover Gate fired and why (proactive: nearing reference; reactive: cite the inversion evidence or delta anomaly).
+- List the simulated-pourover action Chris needs to take: which slots to brew (V_n winner + secondary + optional V_(n-1) winner), the recipe shape (real pourover setup at confirmed brewer / filter / dose / water / grinder / grind_setting, non-optimized but close-to-end-state), and where to paste the cupping transcript back ("re-enter `log-cupping.md` with the simulated-pourover cup; STAGE 3's `delta_from_cup` and `winner` may need patching once the simulated-pourover cup lands").
+- Tell Chris the state stays Waiting for next cupping and the lot will re-enter this prompt when the simulated-pourover cup is captured.
+
+**Schema note (vocabulary locked, migration deferred).** Chris's preference is for the simulated pourover to slot into the `cupping_method` / `eval_method` taxonomy on `cuppings` (it IS a cupping in Chris's mental model), rather than living outside it. The migration adding `eval_method = 'Simulated Pourover'` as a canonical value is gated on the full POD-1 rewrite sprint — see [`docs/skills/cupping-specialist/cluster/pod-1-routing.md`](../skills/cupping-specialist/cluster/pod-1-routing.md) § Schema scoping. Today's simulated-pourover cups are pushed as `cuppings` rows with the closest existing `eval_method` + `recipe_variant: real_pourover` + a free-text note flagging the simulated-pourover purpose.
 
 ## STAGE 5 - Design V_(n+1) (Path B only)
 
@@ -299,7 +311,7 @@ Fetch live anchors via `read_doc(uri="docs://skills/<cluster-path>.md")` (or `re
 
 Defer the proposal to the next round when downstream evidence is imminent and would either confirm or invalidate the insight:
 
-- **Path C-2 fired** (real-pourover discriminator pending). The cup-side leading-slot identity is provisional; doc-changes citing the provisional leading slot would need re-issuing once the second variant lands. Skip and tell Chris the proposal queues for the post-discriminator session.
+- **Simulated Pourover Gate fired** (simulated-pourover cup pending). The cup-side leading-slot identity or reference-roast call is provisional; doc-changes citing the provisional leading slot would need re-issuing once the simulated-pourover cup lands. Skip and tell Chris the proposal queues for the post-simulated-pourover session.
 - **V_(n+1) is imminent and would directly test the insight**. E.g. "V3 hypothesized peak-inlet-is-the-lever, V4 is designed to probe drop ceiling at fixed peak — V4's cupping will confirm whether peak-inlet-is-the-lever generalizes or is only the V3-zone lever". Skip; the V_(n+1) cupping will either promote the insight to Medium-High or knock it back to Low.
 - **`key_insight_confidence` is Low**. Low-confidence insights belong in `additional_notes` on the experiment row, NOT in cluster docs. The CCIL append threshold is Medium minimum.
 
@@ -320,7 +332,7 @@ Print:
   - `experiment_pk` (V_n) + `updated_fields: [...]` from patch_experiment
   - `winner` (leading slot) - phrased `"V<n><letter> (Batch <Roest#>)"`
   - `key_insight` + `key_insight_confidence`
-- **Routing decision**: Path A (close-out) or Path B (design V_(n+1)) or Path C-1 (peer-cup calibration) or Path C-2 (real-pourover discriminator).
+- **Routing decision**: Path A (close-out) or Path B (design V_(n+1)) or Path C-1 (peer-cup calibration) or Simulated Pourover Gate (pre-reference-roast decision-support cup; renamed from Path C-2 2026-05-24).
 - **If Path B**:
   - `experiment_pk` (V_(n+1)) + `experiment_id`
   - For each V_(n+1) slot: `recipe_id`, `batch_slot`, `roest_profile_id`, `roest_share_url`, end condition, design-time prediction summary
@@ -328,12 +340,12 @@ Print:
     ```
     | Slot | Profile name | End condition | Roest URL |
     ```
-- **If Path C-1 or C-2**: the calibration action Chris needs to take, plus the re-entry instruction.
+- **If Path C-1 or Simulated Pourover Gate**: the calibration action Chris needs to take (peer-cup acquisition or simulated-pourover cup respectively), plus the re-entry instruction.
 - `proposal_id` from `propose_doc_changes` (if STAGE 6 ran), or `STAGE 6: skipped - <reason>`.
 - Lifecycle state confirmation:
   - Path A: "V_n closed. Lot state: **Resolved-pending**. Next step: `close-lot.md`."
   - Path B: "V_n closed, V_(n+1) designed. Lot state flipped to **Waiting for next roast**. Next step: roast V_(n+1) at the machine, then run `log-roast.md`."
-  - Path C-1 / C-2: "V_n cuppings recorded; V_(n+1) design held pending <calibration action>. Lot state stays **Waiting for next cupping**. Next step: <calibration action>, then re-enter `log-cupping.md`."
+  - Path C-1 / Simulated Pourover Gate: "V_n cuppings recorded; V_(n+1) design held pending <calibration action>. Lot state stays **Waiting for next cupping**. Next step: <calibration action>, then re-enter `log-cupping.md`."
 
 ## What this prompt does NOT do
 
