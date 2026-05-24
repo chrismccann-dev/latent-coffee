@@ -3771,6 +3771,79 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     skeleton: true,
   },
   {
+    // Skeleton - promoted from override queue 2026-05-23 (raw_value
+    // "Stefano Um, Fazenda Um" surfaced via push_brew producer_override on
+    // brew 25b4465b (Untold Coffee Lab Brazil Fazenda Um Wush Wush Natural,
+    // first Brazil Wush Wush in the archive). Mantiqueira de Minas
+    // highland terroir, 28-day patio dry on first archived lot. Pending
+    // rich research.
+    name: "Stefano Um, Fazenda Um",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Experimental",
+    producerType: "Estate",
+    farmName: "Fazenda Um",
+    country: "Brazil",
+    adminRegion: "Sul de Minas",
+    macroTerroir: "Mantiqueira Highlands",
+    farmingModel: null,
+    processingCapability: "Natural",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Wush Wush"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Untold Coffee Lab"],
+    contact: null,
+    skeleton: true,
+  },
+  {
+    // Skeleton - promoted from override queue 2026-05-23 (raw_value
+    // "Mountain Harvest smallholders — Mount Elgon Ladies (Bukalasi)"
+    // surfaced via push_green_bean producer_override on the first Uganda
+    // lot in the archive (Mountain Harvest "Paradigm Shift" 2026 sample
+    // pack, Elgon Ladies' Lot from Bukalasi village). Smallholder women's
+    // group within the Mountain Harvest exporter network on Mount Elgon.
+    // Pending rich research.
+    name: "Mountain Harvest smallholders - Mount Elgon Ladies (Bukalasi)",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Experimental",
+    producerType: "Smallholder",
+    farmName: null,
+    country: "Uganda",
+    adminRegion: "Bukalasi (Mount Elgon)",
+    macroTerroir: "Mount Elgon Highlands",
+    farmingModel: "Smallholder cooperative (women's group)",
+    processingCapability: null,
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Nyasaland", "SL14", "SL28"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: ["Mountain Harvest"],
+    importers: [],
+    roasterReferences: [],
+    contact: null,
+    skeleton: true,
+  },
+  {
     // Promoted from override queue 2026-05-20 (raw_value
     // "Gilberto Ramiro Mejia, Rancho Tio Emilio" surfaced via push_brew
     // producer_override on Chris's self-roasted Typica Mejorado Washed
@@ -3948,6 +4021,11 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Yessica and Diego Parra": "Yessica & Diego Parra",
   "Yessica and Diego Parra, El Mirador": "Yessica & Diego Parra",
   "Yusuf": "Tamiru Tadesse",
+  // Mountain Harvest queue-row used em-dash; canonical normalizes to hyphen
+  // per Chris's house-style rule. Alias preserves the existing green_bean
+  // row's resolvability without a DB rename.
+  "Mountain Harvest smallholders — Mount Elgon Ladies (Bukalasi)":
+    "Mountain Harvest smallholders - Mount Elgon Ladies (Bukalasi)",
 }
 
 // ---------------------------------------------------------------------------

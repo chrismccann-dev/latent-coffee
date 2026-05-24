@@ -2392,6 +2392,44 @@ export const ROASTERS: RoasterEntry[] = [
     calibrationRole: 'Hybrid Brewer Baseline',
     notes: 'No official recipe; identity tied to Switch-style brewing; sits near Strait but less defined; brewing approach likely determines outcome more than roast style',
   },
+  {
+    // Promoted from override queue 2026-05-23 (raw_value "Untold Coffee Lab"
+    // surfaced via push_brew roaster_override on brew 25b4465b - Brazil
+    // Fazenda Um Wush Wush Natural, first Untold lot in the archive).
+    // Treated as roaster-lab / green-lot curator, not normal cafe roaster -
+    // sells competition-lot greens and roasted variants of the same lots
+    // from the Rochester roasting program (Stronghold S7X/S9). No public
+    // brew guide; identity tied to green-lot quality + roast precision.
+    name: 'Untold Coffee Lab',
+    displayName: 'Untold',
+    location: 'Rochester, NY',
+    country: 'USA',
+    roastStyle: 'Light (competition-lot, precision roasted)',
+    developmentBias: 'Moderate-low development; Stronghold platform likely gives even internal development and high aromatic preservation',
+    restCurve: '2-4 weeks typical inferred; frozen roasted inventory may preserve peak window',
+    strategyTag: 'VARIES',
+    primaryDriver: 'Green-lot quality + roast precision',
+    extractionPurpose: 'Preserve auction/competition-lot character while making rare coffees accessible as roasted offerings',
+    houseStyle: 'Primarily green-bean curator with roasted variants; production on Stronghold S7X/S9; no public brew recipe',
+    brewGuideSource: 'None',
+    brewGuideType: 'No formal guide',
+    tempC: '92-96',
+    doseG: '15',
+    waterG: '240',
+    ratio: '~1:16',
+    typicalBrewTime: '2:30-3:15',
+    agitationLevel: 'Low-Medium',
+    extractionIntent: 'Clarity to Balanced (20-22%)',
+    failureMode: 'Under-extraction presents as thin or muted; over-extraction risks flattening rare-lot aromatics',
+    overExtractionTolerance: 'Medium',
+    processSensitivity: 'Washed/Gesha/Eugenioides-style lots: clarity-first; Natural/anaerobic/competition process lots: balanced with process-sensitive temp/grind; treat each lot individually',
+    primaryBrewer: 'V60 / flat-bottom',
+    filterType: 'Cone + Flat',
+    confidenceLevel: 'Medium-Low',
+    brewAdjustmentMethod: 'Grind + temp',
+    calibrationRole: 'Competition-Lot Preservation Benchmark',
+    notes: 'Roasted coffee is secondary to the green-bean program; use lot/process/cultivar signal first. Stronghold S7X/S9 platform suggests high repeatability and even development. Start clarity-first for washed/high-end Panama-style lots, then push only if sweetness/body is missing. Avoid assuming Dak/Sey-style extreme extraction without cup evidence. Team includes Danilo Lodi, Justin Boudeman (Longboard Specialty Coffee), Francesco Bernasconi, Julio Villasmil, and members of the Salzman family. Roasted inventory vacuum-sealed and frozen at -11°F per third-party listing.',
+  },
   // ---- Self-Roasted ----
   {
     name: 'Latent',

@@ -89,6 +89,7 @@ export const CULTIVARS: readonly CultivarEntry[] = [
 
   // Typica Family
   { name: 'Maragogype', species: 'Arabica', family: 'Typica Family', lineage: 'Typica lineage' },
+  { name: 'Nyasaland', species: 'Arabica', family: 'Typica Family', lineage: 'Typica lineage' },
   { name: 'Pache', species: 'Arabica', family: 'Typica Family', lineage: 'Typica lineage' },
 
   // Bourbon Family — Bourbon (classic)
@@ -124,6 +125,7 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   { name: 'Mandela', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage' },
   { name: 'Mokkita', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage' },
   { name: 'Ruiru 11', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage' },
+  { name: 'SL14', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage' },
   { name: 'Ateng', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
   { name: 'Catimor (group)', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
   { name: 'Garnica', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
@@ -210,6 +212,9 @@ export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
 
   // Wush Wush
   Wushwush: 'Wush Wush',
+
+  // SL14 — hyphenated trade-name variant
+  'SL-14': 'SL14',
 
   // Bourbon color variants per Chris's call (#3) — keep Red Bourbon canonical,
   // Yellow/Orange collapse to base Bourbon (classic)

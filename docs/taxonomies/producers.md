@@ -3591,6 +3591,35 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+### Stefano Um, Fazenda Um
+
+**Country:** Brazil · **Admin:** Sul de Minas · **Macro:** Mantiqueira Highlands
+
+- **Tier:** 3
+- **Reference Role:** Experimental
+- **Producer Type:** Estate
+- **Farm:** Fazenda Um
+- **Processing Capability:** Natural
+- **Primary Cultivars:** Wush Wush
+- **Roaster References:** Untold Coffee Lab
+- **Skeleton:** true - promoted from taxonomy override queue 2026-05-23 against brew 25b4465b (Untold Coffee Lab Brazil Fazenda Um Wush Wush Natural, first Brazil Wush Wush in the Latent archive). 28-day patio dry on the first archived lot. Pending rich research on farming model, processing system membership, cultivar lineup beyond Wush Wush, and acidity/body profile.
+
+---
+
+### Mountain Harvest smallholders - Mount Elgon Ladies (Bukalasi)
+
+**Country:** Uganda · **Admin:** Bukalasi (Mount Elgon) · **Macro:** Mount Elgon Highlands
+
+- **Tier:** 3
+- **Reference Role:** Experimental
+- **Producer Type:** Smallholder
+- **Farming Model:** Smallholder cooperative (women's group)
+- **Primary Cultivars:** Nyasaland, SL14, SL28
+- **Exporters:** Mountain Harvest
+- **Skeleton:** true - promoted from taxonomy override queue 2026-05-23 against the first Uganda green_bean in the Latent archive (Mountain Harvest "Paradigm Shift" 2026 sample pack, Elgon Ladies' Lot from Bukalasi village). Smallholder women's group within the Mountain Harvest exporter network on Mount Elgon. Queue raw_value used em-dash; canonical normalizes to hyphen per house style; em-dash variant aliased to canonical.
+
+---
+
 ## Aliases (DB drift + collapses)
 
 Observed `brews.producer` strings (or common typos) → canonical name.
@@ -3681,6 +3710,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 | `Yessica and Diego Parra` | `Yessica & Diego Parra` |
 | `Yessica and Diego Parra, El Mirador` | `Yessica & Diego Parra` |
 | `Yusuf` | `Tamiru Tadesse` |
+| `Mountain Harvest smallholders — Mount Elgon Ladies (Bukalasi)` | `Mountain Harvest smallholders - Mount Elgon Ladies (Bukalasi)` |
 
 ## Sources
 
