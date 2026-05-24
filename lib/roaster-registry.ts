@@ -1006,28 +1006,48 @@ export const ROASTERS: RoasterEntry[] = [
     notes: 'Core identity is using lower temperature (~85-88°C common) to control extraction; opposite of Sey/Dak approach; temp is primary dial, not grind or agitation; raising temp increases both intensity and risk quickly',
   },
   {
-    // Skeleton - promoted from override queue 2026-05-20 (raw_value
-    // "Newbery Street Coffee Roasters" surfaced via push_brew
-    // roaster_override on the first Newbery Street lot in the Latent
-    // archive: Nawin Doi Chang Washed, Thailand). Source brew finding:
-    // 91°C is the only viable evaluation temp - closer to Glitch
-    // (Tokyo low-temp Balanced) than Hydrangea (Berkeley Clarity-First
-    // high-temp brewer-driven). Pending location verification and
-    // rich-field research as more lots land.
+    // Originally promoted from override queue 2026-05-20 against the first
+    // Newbery Street lot (Nawin Doi Chang Washed, Thailand). Enriched
+    // 2026-05-23 from Chris's authored roaster CSV. strategyTag flipped
+    // BALANCED -> CLARITY-FIRST (family Balanced -> Clarity-First) per
+    // CSV; location/country resolved (Shirley, MA, USA). Founded by Pack
+    // Katisomsakul, 2024 US Brewers Cup Champion. Latent's prior brew
+    // finding (91°C narrow window from Nawin Doi Chang) preserved as
+    // bmrNotes - tempC range widened to CSV-published 93-94°C since the
+    // CSV reflects roaster's own guide; the 91°C-only finding is
+    // Latent-specific on the one tested lot.
     name: 'Newbery Street Coffee Roasters',
     displayName: 'Newbery Street',
-    strategyTag: 'BALANCED',
-    primaryDriver: 'Temperature (downward control)',
-    restCurve: '~2-4 weeks typical (single-lot evidence; pending more brews)',
-    houseStyle: 'Light-medium roast, low-temp evaluation - sits between Glitch (Tokyo low-temp Balanced) and Hydrangea (Berkeley Clarity-First) on the Latent spectrum.',
-    tempC: '91',
+    location: 'Shirley, MA',
+    country: 'USA',
+    roastStyle: 'Light (competition-informed, approachable)',
+    developmentBias: 'Moderate-low development; designed for fast, clean extraction',
+    restCurve: '2-3 weeks typical (inferred); likely accessible earlier than Nordic-style ultra-light roasts',
+    strategyTag: 'CLARITY-FIRST',
+    primaryDriver: 'Flat-bottom flow + simplicity',
+    extractionPurpose: 'Produce clean, repeatable cups with minimal complexity and fast drawdown',
+    houseStyle: 'OREA V4 Classic with Kalita Wave 185; short 4-pour recipe; center-weighted pours after bloom; low agitation',
+    brewGuideSource: 'Official',
+    brewGuideLink: 'https://newberyst.com/blogs/coffee/how-to-brew-pour-over-coffee-with-newbery-street',
+    brewGuideType: 'Website',
+    tempC: '93-94',
+    doseG: '15',
+    waterG: '240',
+    ratio: '1:16',
+    typicalBrewTime: '1:50-2:10',
     agitationLevel: 'Low-Medium',
-    failureMode: 'Above 91°C presents as over-extracted bitterness on the one tested lot; below trips toward thinness.',
-    confidenceLevel: 'Low',
-    brewAdjustmentMethod: 'Temp',
-    bmrHouseStyle: 'Low-temp light-medium roast. 91°C is the only viable evaluation temp on the lone tested lot (Nawin Doi Chang Washed, Thailand). Closer to Glitch than Hydrangea on the low-temp Balanced spectrum.',
-    bmrNotes: 'First Thailand lot via Newbery Street. Aromatic-landrace + SL-lineage washed coffees from this roaster confirmed to phase-separate on Orea + Sibarist FLAT FAST; April Brewer Glass + April Paper is the integration-corrective vehicle (second data point for the Sudan Rume pattern, promoted from hypothesis to working rule via this brew).',
-    skeleton: true,
+    extractionIntent: 'Clarity to Balanced (20-21%)',
+    failureMode: 'Too coarse or too fast = thin/underdeveloped; too fine = stalled or compressed sweetness',
+    overExtractionTolerance: 'Medium',
+    processSensitivity: 'Washed: clarity-first; Natural: balanced; Processed: use same baseline first, then adjust grind if cup is hollow or heavy',
+    primaryBrewer: 'OREA V4 Classic',
+    filterType: 'Flat-bottom (Kalita Wave 185)',
+    confidenceLevel: 'High',
+    brewAdjustmentMethod: 'Grind + pour structure',
+    calibrationRole: 'Fast Flat-Bottom Baseline',
+    notes: 'Founded by Pack Katisomsakul, 2024 US Brewers Cup Champion; official recipe favors simplicity over technical optimization: 50g bloom, then pours to 110g, 180g, 240g; unusually short target brew time (~2:00) suggests flow-first extraction rather than high-contact extraction; water note references Boston tap with ZeroWater/TDS 000, so treat water guidance cautiously and prioritize your normal soft brew water unless testing their exact recipe',
+    bmrHouseStyle: 'Pack Katisomsakul (2024 US Brewers Cup Champion). OREA V4 + Kalita Wave 185, 15g/240g (1:16), 93-94°C, short ~2:00 brew with 50g bloom + pours to 110/180/240g. Flow-first rather than high-contact.',
+    bmrNotes: 'Latent-specific finding from Nawin Doi Chang Washed (Thailand, lone tested lot): 91°C is the only viable evaluation temp on THAT lot (sub-93°C published range), narrowing the window further than the official guide suggests. Aromatic-landrace + SL-lineage washed coffees from this roaster confirmed to phase-separate on Orea + Sibarist FLAT FAST; April Brewer Glass + April Paper is the integration-corrective vehicle (second data point for the Sudan Rume pattern, promoted from hypothesis to working rule via this brew). Watch for repeat narrow-temp-window pattern on future Newbery St. lots.',
   },
   {
     name: 'Prodigal Coffee',

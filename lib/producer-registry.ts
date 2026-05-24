@@ -44,6 +44,7 @@ export type ProducerSystem =
   | 'Peru Emerging Precision Layer'
   | 'China Experimental Processing'
   | 'Ecuador Mejorado + Precision Estates'
+  | 'Thailand Experimental Processing'
 
 export interface ProducerEntry {
   name: string
@@ -3703,72 +3704,83 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     skeleton: true,
   },
   {
-    // Skeleton — surfaced by Track 2 dry-run as producer drift on 1 brew
-    // ("Apricoast", Dak Coffee). Sidama washing station processing for
-    // smallholders in the Rumu Damo catchment. Station-as-producer per
-    // Ethiopian convention for sub-Anchor lots.
+    // Originally surfaced by Track 2 dry-run as producer drift on 1 brew
+    // ("Apricoast", Dak Coffee). Enriched 2026-05-23 from Chris's authored
+    // producer CSV. Tier promoted 2 -> 1 (Anchor reference role); the
+    // washing station is now a 2020 Ethiopia COE multi-winner and the
+    // archive's clean anaerobic washed Ethiopian landrace reference
+    // (DAK Apricoast EG-1 6.0 / 99°C confirmation lot). Station-as-producer
+    // per Ethiopian convention; Daye Bensa is the export group umbrella.
+    // Canonical kept as "Rumu Damo Washing Station" (spelling Chris used
+    // historically across brewing-historian cluster + DAK brew context);
+    // "Rumudamo Washing Station" + "Rumudamo Washing Station (Daye Bensa)"
+    // alias variants added to PRODUCER_ALIASES so the export-group form
+    // resolves to canonical.
     name: "Rumu Damo Washing Station",
-    tier: 2,
+    tier: 1,
     producerSystem: "Ethiopia High-Altitude Clarity",
-    processingSystemTags: [],
-    referenceRole: "Signal",
-    producerType: "Washing Station",
-    farmName: null,
+    processingSystemTags: ["Ethiopia Natural / Altitude System"],
+    referenceRole: "Anchor",
+    producerType: "Washing Station / Export Group",
+    farmName: "Rumudamo Washing Station",
     country: "Ethiopia",
     adminRegion: "Sidama",
-    macroTerroir: "Sidama Highlands",
-    farmingModel: "Smallholder catchment / Washing station",
-    processingCapability: null,
-    processingStyleTags: [],
-    dryingMethod: null,
-    primaryCultivars: ["Ethiopian Landrace Blend (74110/74112)"],
-    secondaryCultivars: [],
+    macroTerroir: "Arbegona Highlands (Sidama)",
+    farmingModel: "Outgrower Washing Station Network",
+    processingCapability: "Washed / Natural / Anaerobic Washed",
+    processingStyleTags: ["Extended Washed Fermentation", "Anaerobic Washed", "High-Altitude Slow Drying"],
+    dryingMethod: "African Raised Beds (8-20 days)",
+    primaryCultivars: ["74112", "74110", "74158"],
+    secondaryCultivars: ["Ethiopian landrace population"],
     experimentalCultivars: [],
-    knownFor: [],
-    typicalFlavorProfile: [],
-    acidityStyle: null,
-    bodyStyle: null,
-    consistencyRating: null,
-    marketTier: null,
-    exporters: [],
-    importers: [],
-    roasterReferences: ["Dak Coffee Roasters"],
-    contact: null,
-    skeleton: true,
+    knownFor: ["2020 Ethiopia COE multi-winner", "Extreme altitude Sidama", "600-bed drying station"],
+    typicalFlavorProfile: ["Floral + High Tone", "Tropical Fruit + Tea", "Berry + Syrupy"],
+    acidityStyle: "Citric / Floral",
+    bodyStyle: "Tea-like / Silky",
+    consistencyRating: "High",
+    marketTier: "Rare / Competition",
+    exporters: ["Daye Bensa Coffee"],
+    importers: ["The Coffee Quest", "Falcon Specialty"],
+    roasterReferences: ["Flower Child", "Sey", "Hydrangea", "Uncommon Coffee", "Dak Coffee Roasters"],
+    contact: "https://www.instagram.com/dayebensacoffee/",
   },
   {
-    // Skeleton - promoted from override queue 2026-05-20 (raw_value
+    // Originally promoted from override queue 2026-05-20 (raw_value
     // "Nawin Yaesorkoo" surfaced via push_brew producer_override on the
     // Newbery Street "Nawin Doi Chang Washed" brew, first Thailand lot
-    // landed in Latent). Pending rich research.
+    // landed in Latent). Enriched 2026-05-23 from Chris's authored
+    // producer CSV. Tier promoted 3 -> 2 (Signal); producerSystem added
+    // (Thailand Experimental Processing); known as Thailand specialty
+    // processing pioneer + Mae Suai centralized mill + Akha smallholder
+    // network. Macro terroir refined from generic "Northern Thai
+    // Highlands" to specific "Doi Chang Highlands (Mae Suai / Hua Chang)".
     name: "Nawin Yaesorkoo",
-    tier: 3,
-    producerSystem: null,
-    processingSystemTags: [],
-    referenceRole: "Experimental",
-    producerType: "Smallholder",
-    farmName: null,
+    tier: 2,
+    producerSystem: "Thailand Experimental Processing",
+    processingSystemTags: ["Experimental Fermentation System"],
+    referenceRole: "Signal",
+    producerType: "Individual / Family",
+    farmName: "Yaesorkoo Family Farm",
     country: "Thailand",
     adminRegion: "Chiang Rai",
-    macroTerroir: "Northern Thai Highlands",
-    farmingModel: null,
-    processingCapability: "Washed",
-    processingStyleTags: [],
-    dryingMethod: null,
-    primaryCultivars: [],
-    secondaryCultivars: [],
-    experimentalCultivars: [],
-    knownFor: [],
-    typicalFlavorProfile: [],
-    acidityStyle: null,
-    bodyStyle: null,
-    consistencyRating: null,
-    marketTier: null,
-    exporters: [],
-    importers: [],
+    macroTerroir: "Doi Chang Highlands (Mae Suai / Hua Chang)",
+    farmingModel: "Smallholder + Centralized Mill Network",
+    processingCapability: "Natural / Honey / Anaerobic / Yeast Fermentation",
+    processingStyleTags: ["Controlled Yeast Fermentation", "Anaerobic Natural", "Red Honey"],
+    dryingMethod: "Raised Beds / Controlled Drying",
+    primaryCultivars: ["Catuaí", "Typica"],
+    secondaryCultivars: ["Chiang Mai"],
+    experimentalCultivars: ["SJ133"],
+    knownFor: ["Thailand specialty processing pioneer", "Mae Suai centralized mill", "Akha smallholder network"],
+    typicalFlavorProfile: ["Red Fruit + Winey", "Spice + Chocolate", "Citrus + Funky"],
+    acidityStyle: "Mixed / Winey",
+    bodyStyle: "Round / Silky",
+    consistencyRating: "High",
+    marketTier: "High-End / Competition",
+    exporters: ["Beanspire Coffee"],
+    importers: ["Ally Coffee", "This Side Up"],
     roasterReferences: ["Newbery Street Coffee Roasters"],
-    contact: null,
-    skeleton: true,
+    contact: "https://www.instagram.com/nawin_yaesorkoo/",
   },
   {
     // Skeleton - promoted from override queue 2026-05-23 (raw_value
@@ -4026,6 +4038,15 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   // row's resolvability without a DB rename.
   "Mountain Harvest smallholders — Mount Elgon Ladies (Bukalasi)":
     "Mountain Harvest smallholders - Mount Elgon Ladies (Bukalasi)",
+  // Rumu Damo Washing Station — Chris's CSV uses "Rumudamo" spelling and
+  // appends the Daye Bensa export-group umbrella. Canonical kept as
+  // "Rumu Damo Washing Station" (spelling used historically across
+  // brewing-historian cluster + DAK Apricoast brew context); these aliases
+  // resolve the CSV/export-group variants to canonical without breaking
+  // existing references.
+  "Rumudamo Washing Station": "Rumu Damo Washing Station",
+  "Rumudamo Washing Station (Daye Bensa)": "Rumu Damo Washing Station",
+  "Rumu Damo Washing Station (Daye Bensa)": "Rumu Damo Washing Station",
 }
 
 // ---------------------------------------------------------------------------

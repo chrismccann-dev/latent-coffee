@@ -19,9 +19,9 @@ External claims in this doc are sourced at authoring time from the CSV; Chris's 
 
 Matches the `ROASTERS` array in [lib/roaster-registry.ts](../../lib/roaster-registry.ts) exactly. 71 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
 
-### Clarity-First (27)
+### Clarity-First (28)
 
-Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 27 entries.
+Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 28 entries.
 
 - **April Coffee**
 - **Bean & Bean Coffee Roasters**
@@ -40,6 +40,7 @@ Roasters whose default is to protect clarity. Low-agitation, conservative pour s
 - **Leaves Coffee**
 - **Market Lane Coffee**
 - **Mok Coffee**
+- **Newbery Street Coffee Roasters**
 - **normlppl/minmax**
 - **Onibus Coffee**
 - **Special Guests Coffee**
@@ -51,9 +52,9 @@ Roasters whose default is to protect clarity. Low-agitation, conservative pour s
 - **VWI by CHADWANG**
 - **XLIII Coffee Roasters**
 
-### Balanced (16)
+### Balanced (15)
 
-Roasters who target moderate extraction (20-22% EY) as the home position. Some skew toward clarity on cooling (BALANCED → CLARITY); most are stable around the center. 16 entries.
+Roasters who target moderate extraction (20-22% EY) as the home position. Some skew toward clarity on cooling (BALANCED → CLARITY); most are stable around the center. 15 entries.
 
 - **Café Estelar**
 - **Coava Coffee Roasters**
@@ -64,7 +65,6 @@ Roasters who target moderate extraction (20-22% EY) as the home position. Some s
 - **Friedhats Coffee**
 - **Glitch Coffee**
 - **Little Wolf Coffee** — BALANCED → CLARITY
-- **Newbery Street Coffee Roasters**
 - **Olympia Coffee**
 - **Oma Coffee Roaster**
 - **Prodigal Coffee**
@@ -542,6 +542,30 @@ _Addis Ababa, Ethiopia_ · **CLARITY-FIRST**
 - **Confidence:** Medium
 - **Notes:** Sits between Nordic and baseline; less extreme than Sey/Apollon’s Gold
 
+#### Newbery Street Coffee Roasters
+_Shirley, MA, USA_ · **CLARITY-FIRST** · archive: 1 brew
+
+- **Roast style:** Light (competition-informed, approachable)
+- **Development bias:** Moderate-low development; designed for fast, clean extraction
+- **Rest curve:** 2-3 weeks typical (inferred); likely accessible earlier than Nordic-style ultra-light roasts
+- **Primary driver:** Flat-bottom flow + simplicity
+- **Extraction purpose:** Produce clean, repeatable cups with minimal complexity and fast drawdown
+- **House style:** OREA V4 Classic with Kalita Wave 185; short 4-pour recipe; center-weighted pours after bloom; low agitation
+- **Brew guide:** [Official (Website)](https://newberyst.com/blogs/coffee/how-to-brew-pour-over-coffee-with-newbery-street)
+- **Recipe baseline:** temp=93-94, dose=15, water=240, ratio=1:16, time=1:50-2:10, agitation=Low-Medium
+- **Primary brewer:** OREA V4 Classic
+- **Filter type:** Flat-bottom (Kalita Wave 185)
+- **Extraction intent:** Clarity to Balanced (20-21%)
+- **Failure mode:** Too coarse or too fast = thin/underdeveloped; too fine = stalled or compressed sweetness
+- **Over-extraction tolerance:** Medium
+- **Process sensitivity:** Washed: clarity-first; Natural: balanced; Processed: use same baseline first, then adjust grind if cup is hollow or heavy
+- **Brew adjustment method:** Grind + pour structure
+- **Calibration role:** Fast Flat-Bottom Baseline
+- **Confidence:** High
+- **Notes:** Founded by Pack Katisomsakul, 2024 US Brewers Cup Champion; official recipe favors simplicity over technical optimization: 50g bloom, then pours to 110g, 180g, 240g; unusually short target brew time (~2:00) suggests flow-first extraction rather than high-contact extraction; water note references Boston tap with ZeroWater/TDS 000, so treat water guidance cautiously and prioritize your normal soft brew water unless testing their exact recipe
+- **BMR house style:** Pack Katisomsakul (2024 US Brewers Cup Champion). OREA V4 + Kalita Wave 185, 15g/240g (1:16), 93-94°C, short ~2:00 brew with 50g bloom + pours to 110/180/240g. Flow-first rather than high-contact.
+- **BMR notes:** Latent-specific finding from Nawin Doi Chang Washed (Thailand, lone tested lot): 91°C is the only viable evaluation temp on THAT lot (sub-93°C published range), narrowing the window further than the official guide suggests. Aromatic-landrace + SL-lineage washed coffees from this roaster confirmed to phase-separate on Orea + Sibarist FLAT FAST; April Brewer Glass + April Paper is the integration-corrective vehicle (second data point for the Sudan Rume pattern, promoted from hypothesis to working rule via this brew). Watch for repeat narrow-temp-window pattern on future Newbery St. lots.
+
 #### normlppl/minmax
 _Berkeley, CA, USA_ · **CLARITY-FIRST**
 
@@ -935,21 +959,6 @@ _Tokyo, Japan_ · **BALANCED**
 - **Calibration role:** Low-Temp Extraction Benchmark
 - **Confidence:** High
 - **Notes:** Core identity is using lower temperature (~85-88°C common) to control extraction; opposite of Sey/Dak approach; temp is primary dial, not grind or agitation; raising temp increases both intensity and risk quickly
-
-#### Newbery Street Coffee Roasters
-_Location pending verification_ · **BALANCED** · archive: 1 brew
-
-- **Strategy tag:** BALANCED
-- **Primary driver:** Temperature (downward control)
-- **Rest curve:** ~2-4 weeks typical (single-lot evidence; pending more brews)
-- **House style:** Light-medium roast, low-temp evaluation - sits between Glitch (Tokyo low-temp Balanced) and Hydrangea (Berkeley Clarity-First) on the Latent spectrum.
-- **Recipe baseline:** temp=91, agitation=Low-Medium
-- **Failure mode:** Above 91°C presents as over-extracted bitterness on the one tested lot; below trips toward thinness.
-- **Brew adjustment method:** Temp
-- **Confidence:** Low (single-lot evidence)
-- **BMR house style:** Low-temp light-medium roast. 91°C is the only viable evaluation temp on the lone tested lot (Nawin Doi Chang Washed, Thailand). Closer to Glitch than Hydrangea on the low-temp Balanced spectrum.
-- **BMR notes:** First Thailand lot via Newbery Street. Aromatic-landrace + SL-lineage washed coffees from this roaster confirmed to phase-separate on Orea + Sibarist FLAT FAST; April Brewer Glass + April Paper is the integration-corrective vehicle (second data point for the Sudan Rume pattern, promoted from hypothesis to working rule via this brew).
-- **Skeleton:** true - promoted from taxonomy override queue 2026-05-20 against the Newbery Street "Nawin Doi Chang Washed" brew. Pending location verification + rich-field research as more lots land.
 
 #### Little Wolf Coffee
 _Massachusetts, USA_ · **BALANCED → CLARITY**
