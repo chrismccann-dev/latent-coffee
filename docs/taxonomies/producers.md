@@ -857,22 +857,33 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Rumu Damo Washing Station *[skeleton — pending rich research]*
+### Rumu Damo Washing Station
 
-**Country:** Ethiopia · **Admin:** Sidama · **Macro:** Sidama Highlands
+**Country:** Ethiopia · **Admin:** Sidama · **Macro:** Arbegona Highlands (Sidama)
 
-- **Tier:** 2
+- **Tier:** 1
 - **Producer System:** Ethiopia High-Altitude Clarity
-- **Processing System Tags:** —
-- **Reference Role:** Signal
-- **Producer Type:** Washing Station
-- **Farm:** —
-- **Farming Model:** Smallholder catchment / Washing station
-- **Processing Capability:** —
-- **Processing Style Tags:** —
-- **Drying Method:** —
-- **Primary Cultivars:** Ethiopian Landrace Blend (74110/74112)
-- **Roaster References:** Dak Coffee Roasters
+- **Processing System Tags:** Ethiopia Natural / Altitude System
+- **Reference Role:** Anchor
+- **Producer Type:** Washing Station / Export Group
+- **Farm:** Rumudamo Washing Station
+- **Farming Model:** Outgrower Washing Station Network
+- **Processing Capability:** Washed / Natural / Anaerobic Washed
+- **Processing Style Tags:** Extended Washed Fermentation, Anaerobic Washed, High-Altitude Slow Drying
+- **Drying Method:** African Raised Beds (8-20 days)
+- **Primary Cultivars:** 74112, 74110, 74158
+- **Secondary Cultivars:** Ethiopian landrace population
+- **Known For:** 2020 Ethiopia COE multi-winner, Extreme altitude Sidama, 600-bed drying station
+- **Typical Flavor Profile:** Floral + High Tone, Tropical Fruit + Tea, Berry + Syrupy
+- **Acidity Style:** Citric / Floral
+- **Body Style:** Tea-like / Silky
+- **Consistency Rating:** High
+- **Market Tier:** Rare / Competition
+- **Exporters:** Daye Bensa Coffee
+- **Importers:** The Coffee Quest, Falcon Specialty
+- **Roaster References:** Flower Child, Sey, Hydrangea, Uncommon Coffee, Dak Coffee Roasters
+- **Contact:** https://www.instagram.com/dayebensacoffee/
+- **Notes:** Daye Bensa Coffee is the export-group umbrella over the Rumudamo Washing Station. Canonical name in the Latent registry kept as `Rumu Damo Washing Station` (spelling Chris used historically across the brewing-historian cluster + DAK Apricoast brew context); `Rumudamo Washing Station` + `Rumudamo Washing Station (Daye Bensa)` + `Rumu Damo Washing Station (Daye Bensa)` aliased to canonical so the CSV/export-group variants resolve. Tier promoted 2 -> 1 during 2026-05-23 skeleton enrichment pass; the station is the archive's clean anaerobic washed Ethiopian landrace reference via the DAK Apricoast confirmation lot (EG-1 6.0 / 99°C).
 
 ---
 
@@ -3561,14 +3572,32 @@ path; rich content gets backfilled when the producer earns it.
 
 ### Nawin Yaesorkoo
 
-**Country:** Thailand · **Admin:** Chiang Rai · **Macro:** Northern Thai Highlands
+**Country:** Thailand · **Admin:** Chiang Rai · **Macro:** Doi Chang Highlands (Mae Suai / Hua Chang)
 
-- **Tier:** 3
-- **Reference Role:** Experimental
-- **Producer Type:** Smallholder
-- **Processing Capability:** Washed
+- **Tier:** 2
+- **Producer System:** Thailand Experimental Processing
+- **Processing System Tags:** Experimental Fermentation System
+- **Reference Role:** Signal
+- **Producer Type:** Individual / Family
+- **Farm:** Yaesorkoo Family Farm
+- **Farming Model:** Smallholder + Centralized Mill Network
+- **Processing Capability:** Natural / Honey / Anaerobic / Yeast Fermentation
+- **Processing Style Tags:** Controlled Yeast Fermentation, Anaerobic Natural, Red Honey
+- **Drying Method:** Raised Beds / Controlled Drying
+- **Primary Cultivars:** Catuaí, Typica
+- **Secondary Cultivars:** Chiang Mai
+- **Experimental Cultivars:** SJ133
+- **Known For:** Thailand specialty processing pioneer, Mae Suai centralized mill, Akha smallholder network
+- **Typical Flavor Profile:** Red Fruit + Winey, Spice + Chocolate, Citrus + Funky
+- **Acidity Style:** Mixed / Winey
+- **Body Style:** Round / Silky
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Competition
+- **Exporters:** Beanspire Coffee
+- **Importers:** Ally Coffee, This Side Up
 - **Roaster References:** Newbery Street Coffee Roasters
-- **Skeleton:** true - promoted from taxonomy override queue 2026-05-20 against the Newbery Street "Nawin Doi Chang Washed" brew (first Thailand lot in the Latent archive). Pending rich research on cultivar lineup, farming model, processing styles, and acidity/body profile.
+- **Contact:** https://www.instagram.com/nawin_yaesorkoo/
+- **Notes:** Enriched from skeleton during 2026-05-23 skeleton-review pass. Tier promoted 3 -> 2; macro terroir refined from generic "Northern Thai Highlands" to specific "Doi Chang Highlands (Mae Suai / Hua Chang)"; producerSystem added (Thailand Experimental Processing). Surfaced via push_brew producer_override 2026-05-20 against the Newbery Street "Nawin Doi Chang Washed" brew (first Thailand lot in the Latent archive).
 
 ---
 
