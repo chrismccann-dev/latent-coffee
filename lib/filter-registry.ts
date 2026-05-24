@@ -75,9 +75,20 @@ export interface FilterEntry {
   measurementDate?: string
   measurementProject?: string
   bedBehaviorUnderLoad?: 'stable' | 'late-forming-crater' | 'pour-impact-crater' | 'mixed'
+  // measurementNote (Project #2, 2026-05-24): free-text context that the
+  // structured fields can't capture — size variant tested, accessory used,
+  // hand-fold provenance, size-confound flags, design-intent notes. Optional;
+  // populate when the measurement number alone would mislead without context.
+  measurementNote?: string
 }
 
 export const FILTERS: readonly FilterEntry[] = [
+  // Project #2 (flat-bottom-filter-drawdown, 2026-05-24): measurement deferred —
+  // oversized for Orea v4 (would have required forced compression), AND no peer
+  // paper in Orea brewer to compare against (cohort-of-one). Re-measurement
+  // candidate when (a) second April-fit paper enters inventory, OR (b) Project #3
+  // native-brewer protocol covers it via the April brewer. See:
+  // docs/research-projects/flat-bottom-filter-drawdown.md § Notes
   {
     name: "April Paper Filter",
     manufacturer: "April",
@@ -1054,7 +1065,7 @@ export const FILTERS: readonly FilterEntry[] = [
     material: "Specialty fiber (FAST)",
     thickness: "Ultra-thin",
     crepeStructure: "Engineered",
-    flowRate: "Very fast",
+    flowRate: "Medium (Negotiator-compressed; measurement-revised from prior 'Very fast' classification)",
     flowConsistency: "Extremely stable",
     bypassInteraction: "Neutral",
     cloggingRisk: "Very low",
@@ -1066,7 +1077,14 @@ export const FILTERS: readonly FilterEntry[] = [
     compatibleSystems: "Orea / Kalita / April",
     owned: true,
     location: "Home",
-    primaryUseCase: "Maximum clarity flat bed (fast, low bypass, high separation)",
+    primaryUseCase: "Hand-folded maximum clarity flat bed; behaviorally indistinguishable from FLAT 2 FAST factory-fold per Project #2 measurement",
+    measuredDrawdownSec: 117,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist FLAT 2 B3 (Project #2 baseline; 127.5s median)",
+    measurementDate: "2026-05-24",
+    measurementProject: "flat-bottom-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "Hand-folded by Chris (first attempt); fold scoring on paper aided execution. Paper size used in measurement: unknown — see Project #2 open data items. Cross-confirmed with FLAT 2 FAST factory-fold (both at 117s exact) — strong evidence hand-fold quality is a non-factor with paper scoring + Negotiator compression.",
   },
   {
     name: "FLAT B3",
@@ -1090,9 +1108,75 @@ export const FILTERS: readonly FilterEntry[] = [
     paperTechnology: "B3",
     bestArchetype: "Stability flat (controlled)",
     compatibleSystems: "Orea / Kalita / April",
+    // Ownership corrected 2026-05-24 (Research Project #2 Step 0): Chris owns
+    // FLAT 2 B3 (pre-folded successor), not this hand-fold variant. See FLAT 2 B3
+    // entry below.
+  },
+  {
+    name: "FLAT 2 B3",
+    manufacturer: "Sibarist",
+    sku: "FLAT2-B3",
+    link: "https://sibarist.coffee/en-es/products/flat-2",
+    paperShape: "Flat",
+    sizeStandard: "Kalita-155/185",
+    fitsBrewers: ["Orea", "Kalita", "April"],
+    sealFitType: "Tight (zero-bypass per Sibarist design intent)",
+    material: "Specialty fiber (B3)",
+    thickness: "Medium",
+    crepeStructure: "Engineered (pre-folded v2)",
+    flowRate: "Medium (Negotiator-compressed)",
+    flowConsistency: "Extremely stable",
+    bypassInteraction: "Reduces (Sibarist 'Zero-Bypass' design)",
+    cloggingRisk: "Very low",
+    clarity: "High",
+    body: "Medium",
+    sweetnessExpression: "Structured",
+    paperTechnology: "B3 (pre-folded v2)",
+    bestArchetype: "Stability flat (controlled)",
+    compatibleSystems: "Orea / Kalita / April",
     owned: true,
     location: "Home",
-    primaryUseCase: "Structured flat extraction (balance of clarity + body)",
+    primaryUseCase: "Pre-folded structured flat extraction; Chris's active workhorse flat baseline",
+    measuredDrawdownSec: 127.5,
+    measurementDose: "15g",
+    measurementBaseline: "Self (Research Project #2 baseline; 3-replicate median, 6s range across pulls)",
+    measurementDate: "2026-05-24",
+    measurementProject: "flat-bottom-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "Tested in size S with Orea Negotiator (compressed config). Size M not yet tested; size confound vs FLAT 2 FAST (tested in M) queued as audit item #9. Sibarist markets FLAT 2 as 'Zero-Bypass' design — micro-folds friction is a known tradeoff, not a defect. Exploratory Sibarist Booster 45 pull: 52s drawdown (-75.5s vs no-Booster) — Booster effectively converts B3 to free-seating-cluster speed.",
+  },
+  {
+    name: "FLAT 2 FAST",
+    manufacturer: "Sibarist",
+    sku: "FLAT2-FAST",
+    link: "https://sibarist.coffee/en-es/products/flat-2",
+    paperShape: "Flat",
+    sizeStandard: "Kalita-155/185",
+    fitsBrewers: ["Orea", "Kalita", "April"],
+    sealFitType: "Tight (zero-bypass per Sibarist design intent)",
+    material: "Specialty fiber (FAST)",
+    thickness: "Ultra-thin",
+    crepeStructure: "Engineered (pre-folded v2)",
+    flowRate: "Medium (Negotiator-compressed; measurement-revised from inherited 'Very fast' classification)",
+    flowConsistency: "Extremely stable",
+    bypassInteraction: "Neutral (Sibarist 'Zero-Bypass' design)",
+    cloggingRisk: "Very low",
+    clarity: "Very high",
+    body: "Low",
+    sweetnessExpression: "Clean",
+    paperTechnology: "FAST (pre-folded v2)",
+    bestArchetype: "Stability flat",
+    compatibleSystems: "Orea / Kalita / April",
+    owned: true,
+    location: "Home",
+    primaryUseCase: "Pre-folded clarity-forward flat extraction; FAST fiber in v2 pre-folded format",
+    measuredDrawdownSec: 117,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist FLAT 2 B3 (Project #2 baseline; 127.5s median, 6s range)",
+    measurementDate: "2026-05-24",
+    measurementProject: "flat-bottom-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "Tested in size M with Orea Negotiator (sits proud of brewer rim — see audit item #9 on size confound vs FLAT 2 B3 size S baseline); size S not yet tested. Cross-confirmed with FLAT FAST hand-fold (both at 117s exact). Exploratory Sibarist Booster 45 pull: 105s drawdown (-12s vs no-Booster) — much less Booster sensitivity than FLAT 2 B3 (which dropped -75.5s with Booster). Effect is fiber-specific OR size-specific (confounded).",
   },
   {
     name: "WAVE B3",
@@ -1106,7 +1190,7 @@ export const FILTERS: readonly FilterEntry[] = [
     material: "Specialty fiber (B3)",
     thickness: "Medium",
     crepeStructure: "Engineered",
-    flowRate: "Medium",
+    flowRate: "Medium (Negotiator-compressed) / Fast (free-seating in Orea) — context-dependent",
     flowConsistency: "Extremely stable",
     bypassInteraction: "Reduces",
     cloggingRisk: "Very low",
@@ -1118,7 +1202,14 @@ export const FILTERS: readonly FilterEntry[] = [
     compatibleSystems: "Orea / Kalita",
     owned: true,
     location: "Home",
-    primaryUseCase: "Controlled flat extraction (reduce bypass variability in wave geometry)",
+    primaryUseCase: "Controlled flat extraction; functionally a flat-bottom paper in Orea (cupcake walls free-seat without Negotiator)",
+    measuredDrawdownSec: 48.5,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist FLAT 2 B3 (Project #2 baseline; 127.5s median)",
+    measurementDate: "2026-05-24",
+    measurementProject: "flat-bottom-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "Free-seating in Orea v4 (no Negotiator); zero bypass observed. Same drawdown cluster as xBloom (48.5s vs xBloom's 50s) — geometry/compression dominates fiber. paperShape:'Wave' is misleading — functionally a flat-bottom paper with cupcake-walled geometry; see Project #2 audit item #2. flowRate is context-dependent: ~48s free-seating vs ~120-130s if Negotiator-compressed (not measured here but inferred from FLAT 2 B3 baseline behavior).",
   },
   {
     name: "UFO FAST",
@@ -1686,6 +1777,13 @@ export const FILTERS: readonly FilterEntry[] = [
     owned: true,
     location: "Home, Office",
     primaryUseCase: "Automated stability baseline (fast, consistent flat extraction)",
+    measuredDrawdownSec: 50,
+    measurementDose: "15g",
+    measurementBaseline: "Sibarist FLAT 2 B3 (Project #2 baseline; 127.5s median)",
+    measurementDate: "2026-05-24",
+    measurementProject: "flat-bottom-filter-drawdown",
+    bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "Free-seating in Orea v4 (no Negotiator); cupcake walls free-seat cleanly; zero bypass observed. Same drawdown cluster as WAVE B3 (50s vs WAVE B3's 48.5s) — geometry dominates fiber. WAVE B3 fits Orea slightly cleaner than xBloom Premium.",
   },
 ]
 
@@ -1719,8 +1817,18 @@ export const FILTER_ALIASES: Record<string, string> = {
   "Sibarist FAST Flat - Size S": "FLAT FAST",
   "Sibarist FAST - Flat (Size S)": "FLAT FAST",
   "Sibarist FAST - Flat S": "FLAT FAST",
-  "Sibarist FAST Flat 2 - Size S": "FLAT FAST",
-  "Sibarist FAST - Flat 2, Size S": "FLAT FAST",
+  // FLAT 2 aliases (Project #2, 2026-05-24): re-pointed from FLAT FAST to
+  // FLAT 2 FAST after Step 0 surfaced these were silently collapsing distinct
+  // products. Historical brew rows may need diagnostic audit — see Project #2
+  // audit item #7.
+  "Sibarist FAST Flat 2 - Size S": "FLAT 2 FAST",
+  "Sibarist FAST - Flat 2, Size S": "FLAT 2 FAST",
+  "Sibarist FAST Flat 2 - Size M": "FLAT 2 FAST",
+  "Sibarist B3 Flat 2 - Size S": "FLAT 2 B3",
+  "Sibarist B3 - Flat 2, Size S": "FLAT 2 B3",
+  "Sibarist B3 Flat 2 - Size M": "FLAT 2 B3",
+  "Sibarist Flat 2 FAST": "FLAT 2 FAST",
+  "Sibarist Flat 2 B3": "FLAT 2 B3",
   "Sibarist FAST - Flat, Size M": "FLAT FAST",
   "Sibarist FAST (flat bottom, imperfect fit)": "FLAT FAST",
   "Sibarist FAST (flat bottom)": "FLAT FAST",

@@ -3,10 +3,10 @@
 Authoritative authored content for the filter paper canonical registry.
 Mirror file: [lib/filter-registry.ts](../../../../lib/filter-registry.ts).
 
-Total canonical filters: **64** (21 owned post Research Project #1 inventory cross-check, 2026-05-23).
+Total canonical filters: **66** (22 owned, post Research Project #2 inventory cross-check 2026-05-24 — net +2 from 2 net-new FLAT 2 entries + 1 FLAT B3 ownership flip).
 Source CSV had 69 rows; 5 dropped as same-name duplicates.
 
-Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as separate canonical entries.
+Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as separate canonical entries. **Exception (Project #2 finding):** Sibarist's FLAT 2 family is a distinct paper line from FLAT (pre-folded v2 vs hand-fold v1) and IS surfaced as separate canonical entries — the pre-fold scoring + Negotiator-compressed design intent materially differentiates them.
 
 ---
 
@@ -18,13 +18,48 @@ Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as s
 
 The `FilterEntry` extension shipped in [lib/filter-registry.ts](../../../../lib/filter-registry.ts) carries 6 new fields: `measuredDrawdownSec` + `measurementDose` + `measurementBaseline` + `measurementDate` + `measurementProject` + `bedBehaviorUnderLoad` (4-value enum: `stable` / `late-forming-crater` / `pour-impact-crater` / `mixed`).
 
-Projects #2 (flat-bottom filter drawdown) and #3 (specialty/paired filter drawdown) queued.
+Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired filter drawdown) queued.
+
+---
+
+## Measured Drawdown Reference — Research Project #2 (2026-05-24)
+
+[Flat-Bottom Filter Drawdown Characterization](../../../research-projects/flat-bottom-filter-drawdown.md) executed 2026-05-24 produced loaded-bed drawdown measurements for 5 flat-bottom papers, anchored at Sibarist **FLAT 2 B3** (median 127.5s at 15g / EG-1 6.5 / Orea Type-A Glass + Negotiator). **6s noise floor** (tighter than Project #1's 8s); all 4 non-baseline deltas REAL. Per-paper measurements + Project #2-specific bullets in each entry below.
+
+**Headline finding — geometry/compression dominates fiber by far.** Two clean clusters with no overlap:
+- **Negotiator-compressed cluster (no Booster):** FLAT 2 B3 (127.5s) + FLAT 2 FAST (117s) + FLAT FAST hand-fold (117s) — 117-131s band
+- **Free-seating cluster:** xBloom Premium (50s) + WAVE B3 (48.5s) — 48.5-50s band
+
+70+ second gap between clusters. Seating-state is the dominant variable; fiber differences within the compressed cluster account for ≤14s. **The registry's `flowRate` cells understate context-dependence** — same B3 fiber family drains at 127.5s compressed vs ~48s free-seating, a 2.6× speed difference under one qualitative `flowRate: "Medium"` label.
+
+**Sibarist FLAT 2 design intent (substrate context, not noise):** Sibarist markets FLAT 2 as *"The Next Evolution in Zero-Bypass Brewing"* — paper engineered for Negotiator-compressed configuration prioritizing bypass elimination over flow speed. Micro-folds friction (~70-80s vs free-seating) is a known tradeoff of the design intent, not a defect.
+
+**Exploratory finding — Sibarist Booster 45 effect is paper-specific (or paper-size-specific; confounded):**
+- FLAT 2 B3 (size S) + Booster: 52s drawdown (-75.5s vs no-Booster) — Booster effectively converts B3 to free-seating-cluster speed
+- FLAT 2 FAST (size M) + Booster: 105s drawdown (-12s vs no-Booster) — Booster barely affects FAST
+- Cannot cleanly separate fiber vs size effect with current data (see audit item #9)
+
+**Registry-relevant findings worth surfacing:**
+- New field shipped: `measurementNote` (optional string) — captures size variants, accessory context, hand-fold provenance, size-confound flags that pure data fields can't
+- 2 net-new entries: FLAT 2 B3 + FLAT 2 FAST (Sibarist's pre-folded v2 line)
+- FLAT B3 (v1 hand-fold) flipped to `owned: false` (Chris owns FLAT 2 successor)
+- FLAT FAST (v1 hand-fold) flowRate revised from "Very fast" → "Medium (Negotiator-compressed)"
+- WAVE B3 flowRate revised to dual context-dependent ("Medium (Negotiator-compressed) / Fast (free-seating in Orea)")
+- WAVE B3 `paperShape: "Wave"` flagged for audit — functionally a flat-bottom paper with cupcake walls
+
+**Project #1 lesson #8 reproduced:** band-vs-noise-floor mismatch (tight 6s noise floor + coarse ±15s comp band) fires on BOTH FAST family papers. The ±15s "functionally equivalent" band is too coarse for tight baselines. Queued for grind-comp table revision (audit item #8).
+
+**Deferred:** April Paper Filter (cohort-of-one in Orea baseline; rolls into Project #3 native-brewer protocol). Geometry-check pair (FLAT 2 B3 size M vs FLAT 2 FAST size S) deferred to next acquisition cycle.
+
+**9 substrate-practice gap audit items queued** in the protocol doc — flowRate-as-context-dependent-triple, paperShape-vs-wallStructure decomposition, Booster-as-registry-concept, Orea variant canonicalization, alias-collapse historical audit, grind-comp table band revision, fiber-vs-size confound resolution. None blocking; surface when triggered.
 
 ---
 
 ## April
 
 ### April Paper Filter — Owned
+
+*Project #2 measurement deferred (2026-05-24): oversized for Orea v4 (would have required forced compression), AND no peer April-fit paper in the Project #2 scope to compare against (cohort-of-one problem). Re-measurement candidate when (a) second April-fit paper enters inventory, OR (b) Project #3 native-brewer protocol covers it via the April brewer with peer papers. See [docs/research-projects/flat-bottom-filter-drawdown.md](../../../research-projects/flat-bottom-filter-drawdown.md) Notes section.*
 
 - SKU: `APRIL-STD`
 - Link: <https://www.aprilcoffeeroasters.com/collections/april-brewing-accessories/products/april-paper-filter>
@@ -743,7 +778,7 @@ Projects #2 (flat-bottom filter drawdown) and #3 (specialty/paired filter drawdo
 - Clarity / Body / Sweetness: Very high / Low / Clean
 - Best archetype: Stability flat
 
-### FLAT B3 — Owned
+### FLAT B3
 
 - SKU: `FLAT-B3`
 - Link: <https://sibarist.coffee/en-es/products/flat>
@@ -757,8 +792,52 @@ Projects #2 (flat-bottom filter drawdown) and #3 (specialty/paired filter drawdo
 - Flow consistency: Extremely stable
 - Clarity / Body / Sweetness: High / Medium / Structured
 - Best archetype: Stability flat (controlled)
+- *Ownership corrected 2026-05-24 (Research Project #2 inventory cross-check): Chris owns the FLAT 2 B3 successor (pre-folded v2), not this hand-fold v1 variant. See FLAT 2 B3 entry below.*
+
+### FLAT 2 B3 — Owned
+
+- SKU: `FLAT2-B3`
+- Link: <https://sibarist.coffee/en-es/products/flat-2>
+- Paper shape: Flat
+- Size standard: Kalita-155/185 (Chris owns size S)
+- Fits brewers: Orea, Kalita, April
+- Seal/fit: Tight (zero-bypass per Sibarist design intent)
+- Material: Specialty fiber (B3)
+- Thickness: Medium
+- Flow rate: Medium (Negotiator-compressed)
+- Flow consistency: Extremely stable
+- Clarity / Body / Sweetness: High / Medium / Structured
+- Best archetype: Stability flat (controlled)
+- Paper technology: B3 (pre-folded v2)
 - Location: Home
-- Primary use case: Structured flat extraction (balance of clarity + body)
+- Primary use case: Pre-folded structured flat extraction; Chris's active workhorse flat baseline
+- Measured drawdown (Research Project #2): **127.5s** at 15g / EG-1 6.5 / Orea Type-A Glass V60-01 + Negotiator (2026-05-24). **Baseline / anchor** — 3-replicate median, 6s range across pulls (tightest noise floor in either project).
+- Bed behavior under load: `late-forming-crater`
+- ⚠️ Sibarist markets FLAT 2 as **"The Next Evolution in Zero-Bypass Brewing"** — paper engineered for Negotiator-compressed configuration; micro-folds friction is a known tradeoff of the design intent, not a defect.
+- Exploratory: + Sibarist Booster 45 → 52s drawdown (-75.5s vs no-Booster). Booster effectively converts B3 to free-seating-cluster speed. Effect is paper-specific (or paper-size-specific; confounded — see audit item #9).
+
+### FLAT 2 FAST — Owned
+
+- SKU: `FLAT2-FAST`
+- Link: <https://sibarist.coffee/en-es/products/flat-2>
+- Paper shape: Flat
+- Size standard: Kalita-155/185 (Chris owns size M)
+- Fits brewers: Orea, Kalita, April
+- Seal/fit: Tight (zero-bypass per Sibarist design intent)
+- Material: Specialty fiber (FAST)
+- Thickness: Ultra-thin
+- Flow rate: Medium (Negotiator-compressed; measurement-revised from inherited "Very fast")
+- Flow consistency: Extremely stable
+- Clarity / Body / Sweetness: Very high / Low / Clean
+- Best archetype: Stability flat
+- Paper technology: FAST (pre-folded v2)
+- Location: Home
+- Primary use case: Pre-folded clarity-forward flat extraction; FAST fiber in v2 pre-folded format
+- Measured drawdown (Research Project #2): **117s** at 15g / EG-1 6.5 / Orea Type-A Glass V60-01 + Negotiator (2026-05-24). REAL faster than FLAT 2 B3 (-10.5s outside 6s noise floor). Cross-confirmed with FLAT FAST hand-fold (both at 117s exact).
+- Bed behavior under load: `late-forming-crater`
+- ⚠️ Tested in size M; baseline FLAT 2 B3 tested in size S. The 10.5s delta cannot be cleanly attributed to fiber alone (size confound). Queued as Project #2 audit item #9.
+- Exploratory: + Sibarist Booster 45 → 105s drawdown (-12s vs no-Booster). Booster barely affects FAST — much less sensitive than FLAT 2 B3's -75.5s response. Effect is fiber-specific OR size-specific (confounded).
+- ⚠️ Band-vs-noise-floor mismatch: REAL delta by Step 2 but No-Comp recommendation by Step 3 (Δ -10.5s within ±15s "functionally equivalent" band). Project #1's APC4 edge case reproduces. See audit item #8.
 
 ### FLAT FAST — Owned
 
@@ -775,7 +854,11 @@ Projects #2 (flat-bottom filter drawdown) and #3 (specialty/paired filter drawdo
 - Clarity / Body / Sweetness: Very high / Low / Clean
 - Best archetype: Stability flat
 - Location: Home
-- Primary use case: Maximum clarity flat bed (fast, low bypass, high separation)
+- Primary use case: Hand-folded maximum clarity flat bed; behaviorally indistinguishable from FLAT 2 FAST factory-fold per Project #2 measurement
+- Measured drawdown (Research Project #2): **117s** at 15g / EG-1 6.5 / Orea Type-A Glass V60-01 + Negotiator (2026-05-24). REAL faster than FLAT 2 B3 baseline (-10.5s). Cross-confirmed with FLAT 2 FAST factory-fold (both at 117s exact) — strong evidence hand-fold quality is a non-factor with paper scoring + Negotiator compression. Chris's first hand-fold attempt.
+- Bed behavior under load: `late-forming-crater`
+- ⚠️ Paper size used in measurement: unknown — see Project #2 open data items. If size M (matching Pull 6), the 117s match is clean fiber-confirmation; if size S (matching baseline), cross-confirmation has a size component.
+- ⚠️ Flow rate revised from "Very fast" → "Medium (Negotiator-compressed)" per measurement. Like FLAT 2 papers, this paper's flowRate is context-dependent — would likely measure much faster free-seating.
 
 ### HYBRID FAST
 
@@ -993,7 +1076,11 @@ Projects #2 (flat-bottom filter drawdown) and #3 (specialty/paired filter drawdo
 - Clarity / Body / Sweetness: High / Medium / Structured
 - Best archetype: Stability flat (controlled)
 - Location: Home
-- Primary use case: Controlled flat extraction (reduce bypass variability in wave geometry)
+- Primary use case: Controlled flat extraction; functionally a flat-bottom paper in Orea (cupcake walls free-seat without Negotiator)
+- Measured drawdown (Research Project #2): **48.5s** at 15g / EG-1 6.5 / Orea Type-A Glass V60-01 (NO Negotiator — free-seating cupcake walls; zero bypass observed) (2026-05-24). REAL faster than FLAT 2 B3 baseline (-79s; 0.5 notch finer grind compensation recommended). Same drawdown cluster as xBloom Premium (48.5s vs xBloom's 50s) — geometry dominates fiber.
+- Bed behavior under load: `late-forming-crater`
+- ⚠️ Flow rate is context-dependent: ~48s free-seating in Orea vs ~120-130s if Negotiator-compressed (inferred from FLAT 2 B3 baseline). Single `flowRate: "Medium"` label understates massively.
+- ⚠️ `paperShape: "Wave"` is misleading — functionally a flat-bottom paper with cupcake-walled geometry. Wave naming describes paper wall structure (fluted) but the bottom is FLAT. Queued as Project #2 audit item #2 (paperShape vs wallStructure decomposition).
 
 ### WAVE FAST
 
@@ -1077,6 +1164,9 @@ Projects #2 (flat-bottom filter drawdown) and #3 (specialty/paired filter drawdo
 - Best archetype: Stability flat
 - Location: Home, Office
 - Primary use case: Automated stability baseline (fast, consistent flat extraction)
+- Measured drawdown (Research Project #2): **50s** at 15g / EG-1 6.5 / Orea Type-A Glass V60-01 (NO Negotiator — cupcake walls free-seat cleanly; zero bypass observed) (2026-05-24). REAL faster than FLAT 2 B3 baseline (-77.5s; 0.5 notch finer grind compensation recommended). Same drawdown cluster as WAVE B3 — geometry dominates fiber.
+- Bed behavior under load: `late-forming-crater (scaled-down due to fast drawdown)`
+- Note: tested in Orea v4 (per Project #2 protocol), not in xBloom's native semi-automated brewer. xBloom's automation may produce different drawdown when used as designed.
 
 ## Aliases
 
