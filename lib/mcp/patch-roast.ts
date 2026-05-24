@@ -40,34 +40,34 @@ export const patchRoastInputSchema = {
   roest_log_id: z.number().int().optional().nullable(),
   // Phase 2 (#R57 / #R58 / #R61)
   roest_notes: z.string().optional().nullable().describe(
-    'Pass-through Roest UI Notes. See push_roast.roest_notes - same semantics.',
+    'Pass-through Roest UI Notes (first_comment.comment text). Preserve verbatim — do NOT fold into the prose fields.',
   ),
   end_condition_type: z.enum(['bean_temp', 'dev_time', 'manual']).optional().nullable().describe(
-    'Drop trigger as set on the Roest profile. See push_roast.end_condition_type.',
+    'Drop trigger enum — bean_temp (drop at end_condition_target °C) / dev_time (drop after end_condition_target seconds post-FC) / manual (operator-controlled, no machine trigger). LOWERCASE convention on this column (the Roest API exposes ALL-CAPS BEAN_TEMP / DEV_TIME / TOTAL_TIME / DTR / NONE; the DB enum is lowercase). When manual, end_condition_target MUST be null (or 0 for NONE) — recipe-vs-roast divergence is intentional, see docs/prompts/log-roast.md STAGE 3.',
   ),
   end_condition_target: z.number().optional().nullable(),
   fc_total_cracks: z.number().int().min(0).optional().nullable(),
   // Sprint 11 RO-CP-3 (migration 061, 2026-05-20). 5th value did_not_fire added
   // Group 3 / Item 31 (migration 066, 2026-05-24).
   fc_audibility: z.enum(['audible', 'subtle', 'silent', 'ambiguous', 'did_not_fire']).optional().nullable().describe(
-    'FC audibility state: audible / subtle / silent / ambiguous / did_not_fire. See push_roast.fc_audibility for the full 5-value semantics + protocol-stack notes.',
+    'FC audibility / occurrence state for this batch (5-value enum). audible / subtle / silent / ambiguous / did_not_fire. Four of the five (subtle / silent / ambiguous / did_not_fire) trigger the same downstream protocol stack — bean-temp end condition, drop-ceiling-primary, Agtron + WB→Gnd delta as proxies. Full vocabulary + protocol-stack notes in CONTEXT.md § FC audibility state. When did_not_fire is set, fc_start / fc_temp / dev_time_s MUST be null (no event to anchor to).',
   ),
   what_worked: z.string().optional().nullable(),
   what_didnt: z.string().optional().nullable(),
   what_to_change: z.string().optional().nullable(),
   // Phase 2 (#R62) — tristate. Boolean accepted for back-compat (coerced).
   worth_repeating: z.union([z.boolean(), z.enum(['yes', 'no', 'pending'])]).optional().nullable().describe(
-    'Tristate: "yes" | "no" | "pending". See push_roast.worth_repeating - same semantics.',
+    'Tristate: "yes" | "no" | "pending". Use "pending" for "yes at the structural-roast level but waiting on Day 7 cupping confirmation" (the conditional case that boolean can\'t represent). Boolean accepted for back-compat (coerced to yes/no on write).',
   ),
   is_reference: z.boolean().optional().nullable().describe(
-    'See push_roast.is_reference for the full semantics. Quick form: structural axis (which row the resolved-view renders as the reference), decoupled from worth_repeating (judgment axis). On one-shot lots set TRUE unconditionally at close-out regardless of Outcome A/B — the "Closed without reference" sub-card on ResolvedView triggers on roast_learnings.why_this_roast_won = NULL, not on is_reference = false.',
+    'True for the lot\'s confirmed reference roast — the batch the resolved-view page renders as THE reference. Structural axis (which row the resolved-view renders), decoupled from worth_repeating (judgment axis). Set TRUE at lot close-out (NEVER auto-flipped from is_reference_candidate). On one-shot lots set TRUE unconditionally regardless of Outcome A/B — the single batch IS structurally the reference. The "Closed without reference" sub-card on ResolvedView triggers on roast_learnings.why_this_roast_won = NULL, not on is_reference = false. See CONTEXT.md § Reference roast.',
   ),
   is_reference_candidate: z.boolean().optional().nullable().describe(
-    'See push_roast.is_reference_candidate for full semantics. Quick form: forward-looking quality flag during V-set iteration, distinct from is_reference (lot-level final). Set at log-cupping.md STAGE 3 when the V_n leading slot reads as a viable lot-reference candidate; flip to is_reference at close-out via a separate patch (candidate does NOT auto-flip).',
+    'Forward-looking quality flag during V-set iteration (Schema sprint S2, migration 056). Set TRUE on the V_n leading slot when the cup reads as plausibly the lot reference at close-out. Mid-flight, not final — distinct from is_reference (lot-level final). **Cup-grounds only — NEVER set at log-roast-time on roast-structure grounds** (Round 14 / Item 34 / 2026-05-24 convention; Gesha Clouds v3a was the lived case). Set in the cupping-log flow after the V_n leading slot is identified. The flag does NOT auto-flip to is_reference at close-out — the close-out flow makes the promotion explicit. See CONTEXT.md § Reference candidate.',
   ),
   // Sub Pages 6.1 (migration 052)
   recipe_id: z.string().uuid().optional().nullable().describe(
-    'FK to roast_recipes.id — design intent. Back-fill via patch_roast when the recipe row landed after the roast (e.g. retroactively wiring up an older lot to its recipes during Phase 3).',
+    'FK to roast_recipes.id — design intent. Back-fill on this Tool when the recipe row landed after the roast (e.g. retroactively wiring up an older lot to its recipes during Phase 3).',
   ),
 }
 
@@ -77,7 +77,7 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
     {
       title: 'Patch Roast',
       description:
-        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id. Sibling of push_roast (for new batches). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] with id keyed by batch_id). Returns { roast_id, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which columns landed; canonical_values echoes the actual values of enum-validated fields (end_condition_type, worth_repeating) so the caller can confirm the vocabulary landed without a follow-up read. Co-owned by Roast Recorder (per-batch corrections) + Cupping Specialist (is_reference_candidate flag on V-set leading slot) + Close-Lot Specialist (is_reference + worth_repeating promotion at lot close-out) per ADR-0011.',
+        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id (the row must already exist). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction on a batch that\'s already been logged. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] keyed by batch_id). Returns { roast_id, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which columns landed; canonical_values echoes the actual values of enum-validated fields (end_condition_type, worth_repeating) so the caller can confirm the vocabulary landed without a follow-up read. Co-owned by Roast Recorder (per-batch corrections) + Cupping Specialist (is_reference_candidate flag on V-set leading slot) + Close-Lot Specialist (is_reference + worth_repeating promotion at lot close-out) per ADR-0011.',
       inputSchema: patchRoastInputSchema,
     },
     withToolErrorLogging('patch_roast', async (input) => {

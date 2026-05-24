@@ -45,10 +45,10 @@ export const patchRoastRecipeInputSchema = {
   pushed_to_roest_at: z.string().optional().nullable(),
   // Schema sprint S4 (migration 057, 2026-05-18)
   was_backfilled: z.boolean().optional().nullable().describe(
-    'See push_roast_recipe.was_backfilled. Patch when retroactively marking a legacy recipe as backfilled (e.g. enrichment of a migration-052 shell that\'s since been populated with design intent recovered from session memory).',
+    'True when the recipe row was populated AFTER the roast it describes, rather than designed up-front. Distinguishes design-time recipes (false) from inline-backfill / migration-052 legacy shells (true). Patch when retroactively marking a legacy recipe as backfilled (e.g. enrichment of a migration-052 shell that\'s since been populated with design intent recovered from session memory).',
   ),
   backfill_notes: z.string().optional().nullable().describe(
-    'See push_roast_recipe.backfill_notes. Standard phrasing: "Recovered from <source> at <event>, <date>".',
+    'Free-text note describing the backfill source + date when was_backfilled = true. Standard phrasing: "Recovered from <source> at <event>, <date>".',
   ),
 }
 
@@ -58,7 +58,7 @@ export function registerPatchRoastRecipeTool(server: McpServer, auth: McpAuthCon
     {
       title: 'Patch Roast Recipe',
       description:
-        'Update / save / record / push field-level changes to an existing roast_recipes row by recipe_id. Sibling of push_roast_recipe — push UPSERTs by composite (experiment_id, batch_slot) or recipe_name so iterative design works cleanly, but patch uses the PK so you can correct the batch_slot label itself, fix prose typos in rationale / notes / drop_rule_*, or backfill Roest linkage (roest_profile_id / roest_share_url) after push_roast_profile lands. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Returns { recipe_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch so you can sanity-check without a follow-up read (mirrors patch_experiment pattern). Co-owned by Roast Recorder (was_backfilled recipe rows + slot-fallback patches) + Roest API Worker (roest_profile_id / roest_share_url / roest_profile_name / pushed_to_roest_at linkage post push_roast_profile) per ADR-0011.',
+        'Update / save / record / push field-level changes to an existing roast_recipes row by recipe_id (the primary-key path). The companion INSERT path of the same domain UPSERTs by composite (experiment_id, batch_slot) or recipe_name (so iterative design works cleanly); this Tool uses the PK so you can correct the batch_slot label itself, fix prose typos in rationale / notes / drop_rule_*, or backfill Roest linkage (roest_profile_id / roest_share_url) AFTER the Roest profile push lands. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Returns { recipe_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch so you can sanity-check without a follow-up read. Co-owned by Roast Recorder (was_backfilled recipe rows + slot-fallback patches) + Roest API Worker (roest_profile_id / roest_share_url / roest_profile_name / pushed_to_roest_at linkage post Roest-profile push) per ADR-0011.',
       inputSchema: patchRoastRecipeInputSchema,
     },
     withToolErrorLogging('patch_roast_recipe', async (input) => {

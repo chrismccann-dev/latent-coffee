@@ -57,7 +57,7 @@ export const patchGreenBeanInputSchema = {
   // (e.g. Rancho Tio post-merge backfill where the one-shot framing wasn't
   // known at push time).
   is_one_shot: z.boolean().optional().nullable().describe(
-    'True for single-batch sample lots (~100-120g, no iteration). See push_green_bean.is_one_shot for the workflow class definition. Patchable post-intake when the one-shot framing is determined or corrected later. Note: changing from is_one_shot=false → true on a lot that already has roast_learnings with lever-attribution fields populated does NOT retroactively clear those fields; the validation only fires on new writes to roast_learnings. Clear them via patch_roast_learnings if needed.',
+    'True for single-batch sample lots (~100-120g, no iteration possible — no cross-batch evidence to attribute levers from). Patchable post-intake when the one-shot framing is determined or corrected later. Note: changing false → true on a lot that already has roast_learnings with lever-attribution fields populated (primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) does NOT retroactively clear those fields — the migration 054 validation only fires on new writes to roast_learnings. Clear them explicitly via the field-level mutation path on roast_learnings if needed. See CONTEXT.md § One-shot lot.',
   ),
 }
 
