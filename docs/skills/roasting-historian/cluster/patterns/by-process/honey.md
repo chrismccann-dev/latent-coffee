@@ -29,4 +29,4 @@ Cup outcome from the first lot will replace this section's hypothesis prose with
 - [washed.md](./washed.md) — sibling per-process; the "roast toward washed" branch of the fork anchors here
 - [natural.md](./natural.md) — sibling per-process; the "roast toward natural" branch anchors here
 - [peer-learning-roasting-archivist § Dongzhe — Delta 3 Honey Process Is a Fork](../../../peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md#delta-3--honey-process-is-a-fork-informational--placeholder-framework) — source of the fork framing
-- [learnings/rancho-tio-emilio.md](../../learnings/rancho-tio-emilio.md) — Typica Mejorado anchor lessons (same variety as Cruz Loma TM Honey)
+- [learnings/ecu-td24-ranchotio-tm-washed.md](../../learnings/ecu-td24-ranchotio-tm-washed.md) — Typica Mejorado anchor lessons (same variety as Cruz Loma TM Honey)

@@ -26,5 +26,5 @@ This lesson generalized: a smooth, monotonically declining RoR into FC is now a 
 
 ## Related
 
-- [gua-el-socorro-java.md](./gua-el-socorro-java.md) — sibling Guatemala pre-counterflow lot
+- [gua-soc-java-2024.md](./gua-soc-java-2024.md) — sibling Guatemala pre-counterflow lot
 - [by-process/washed.md](../patterns/by-process/washed.md) — per-process roll-up

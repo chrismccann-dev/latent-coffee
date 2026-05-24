@@ -32,5 +32,5 @@ The varietal aromatic fingerprint (caramelized pineapple / lemongrass / barbecue
 
 ## Related
 
-- [cgle-sudan-rume-hybrid-washed.md](./cgle-sudan-rume-hybrid-washed.md) — the other CGLE / closed-lot anchor; FC temp + drop temp primary lever rather than fan curve shape
+- [cgle-srume-washed-2026.md](./cgle-srume-washed-2026.md) — the other CGLE / closed-lot anchor; FC temp + drop temp primary lever rather than fan curve shape
 - [cross-coffee-insights.md § Confirmed Patterns](../patterns/cross-coffee-insights.md#confirmed-patterns) — drop ceiling, WB-to-Ground delta, and Day 7 evaluation patterns this lot helped confirm

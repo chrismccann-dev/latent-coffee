@@ -10,7 +10,7 @@ When a one-shot is in process, author a per-lot file `<lot-slug>.md` here with: 
 
 ## Current roster
 
-**(empty)** — Rancho Tio Emilio (ECU-TD24-RANCHOTIO-TM-WASHED) was the most recent one-shot, closed 2026-05-11; its lessons live at [`../learnings/rancho-tio-emilio.md`](../learnings/rancho-tio-emilio.md). The Cruz Loma TM Honey one-shot (Taza Dorada 2024 #15) is queued behind the next active-lot resolution; an in-process file will land here once it intakes.
+**(empty)** — Rancho Tio Emilio (ECU-TD24-RANCHOTIO-TM-WASHED) was the most recent one-shot, closed 2026-05-11; its lessons live at [`../learnings/ecu-td24-ranchotio-tm-washed.md`](../learnings/ecu-td24-ranchotio-tm-washed.md). The Cruz Loma TM Honey one-shot (Taza Dorada 2024 #15) is queued behind the next active-lot resolution; an in-process file will land here once it intakes.
 
 ## Related
 

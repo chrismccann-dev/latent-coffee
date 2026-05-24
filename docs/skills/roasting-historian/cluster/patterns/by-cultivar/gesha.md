@@ -13,8 +13,8 @@
 
 **Per-lot deep dives:**
 
-- [Gesha Village Oma](../../learnings/gv-oma-lot-25-035.md) — pre-counterflow + counterflow incomplete (green exhausted); 48s dev floor confirmed
-- [Gesha Village Surma](../../learnings/gv-surma-lot-25-039.md) — closed, pre-counterflow
+- [Gesha Village Oma](../../learnings/gv-oma-25-035.md) — pre-counterflow + counterflow incomplete (green exhausted); 48s dev floor confirmed
+- [Gesha Village Surma](../../learnings/gv-surma-25-039.md) — closed, pre-counterflow
 - Gesha Clouds (CGLE-GESHA-CLOUDS-2026) — active V1+V2 done; cupping-table-vs-pourover reversal twice; cluster file lands when lot closes
 
 **Open questions specific to Gesha:**

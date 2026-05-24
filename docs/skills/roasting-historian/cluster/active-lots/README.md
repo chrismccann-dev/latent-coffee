@@ -6,7 +6,9 @@ Per-lot working hypotheses for lots currently iterating through V-sets. Migrated
 
 `propose_doc_changes` citations should target one lot block (`active-lots/<lot-slug>.md`), not the whole directory.
 
-Once a lot resolves (reference roast confirmed + `roast_learnings` row pushed via `close-lot.md`), its working-hypothesis doc moves to [`../learnings/<lot>.md`](../learnings/) and the active-lots entry is deleted. The lifecycle dimensions are kept separate: **active vs one-shot vs closed = 3 directories** mirroring the lifecycle-state model in [`lib/lifecycle-state.ts`](../../../../../lib/lifecycle-state.ts) (`waiting_for_next_roast` / `waiting_for_next_cupping` route through active-lots; one-shot lots route through [`one-shot-calibrations/`](../one-shot-calibrations/); `resolved` routes through [`learnings/`](../learnings/)).
+Once a lot resolves (reference roast confirmed + `roast_learnings` row pushed via `close-lot.md`), its working-hypothesis content moves to [`../learnings/<lot>.md`](../learnings/) and the active-lots entry becomes a **redirect stub** pointing at the learnings file. The stub carries title + Status + close date + one-line reference-roast summary + redirect link (~6 lines total). Convention revised at Item 4 of Sprint R Phase 4 Step 4 grill (2026-05-23) from the prior "delete" rule — keeping stubs maintains the lifecycle audit trail (which lots closed recently visible in the dir listing) while keeping per-stub bloat minimal. See [CONTEXT.md § Per-lot directory taxonomy](../../../../../CONTEXT.md) for the full convention.
+
+The lifecycle dimensions are kept separate: **active vs one-shot vs closed = 3 directories** mirroring the lifecycle-state model in [`lib/lifecycle-state.ts`](../../../../../lib/lifecycle-state.ts) (`waiting_for_next_roast` / `waiting_for_next_cupping` route through active-lots; one-shot lots route through [`one-shot-calibrations/`](../one-shot-calibrations/); `resolved` routes through [`learnings/`](../learnings/)).
 
 ## Current roster
 
