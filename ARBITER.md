@@ -574,7 +574,7 @@ Use this worked example as the shape template for the next pass.
 
 Locked Round 11 (`patch_brew` + `list_canonicals` BLOCKING bug) + Round 14 / Sprint R Phase 4 Step 4 Group 3 / Items 21 + 23 / 2026-05-24. The MCP `tool_search` ranking algorithm uses description-text keyword matching, so embedding another Tool's name in a description makes that Tool surface for searches against the embedded name. When the surfacing Tool is unrelated to the search intent (e.g. `list_canonicals` ranking for `push_brew` queries), the operator picks the wrong Tool and the workflow breaks.
 
-The convention has four parts:
+The convention has four parts plus one narrow carve-out (#4a) added 2026-05-24:
 
 **1. Vocabulary deferrals → substrate, not sibling Tools.** When a `patch_X` field shares vocabulary with the corresponding `push_X` field, do NOT write "See push_X.<field>". Restate the vocabulary inline OR point to the substrate authority (CONTEXT.md § <entry>, ADR-NNNN, schema column comment). The substrate doc is the canonical source; the Tool description is a pointer. Concrete rewrite recipe:
 
@@ -589,9 +589,23 @@ The convention has four parts:
 
 The collision risk is real even between siblings (a search for `push_brew` surfacing `patch_brew` is less harmful than the unrelated-Tool case, but still creates expectation drift when the operator is specifically looking for the create path).
 
-**3. Workflow chain refs MAY be retained when load-bearing.** Pipeline-position references that establish call order (`push_green_bean` is STAGE 1 and required before downstream writes; the Roest log pull path returns a normalized payload `push_roast` expects) MAY remain when removing them would degrade discoverability. Prefer descriptive phrasing over Tool naming when possible (e.g. "the downstream pipeline writers — roast / cupping / experiment / roast_learnings — all require green_bean_id" rather than "push_roast / push_cupping / push_experiment / push_roast_learnings all require..."). When the Tool name itself is the only viable referent, accept the targeted collision.
+**3. Workflow chain refs MAY be retained when load-bearing — WRITE-TO-WRITE ONLY.** Pipeline-position references that establish call order between WRITE Tools (`push_green_bean` is STAGE 1 and required before downstream `push_roast` / `push_cupping` / `push_experiment` writes; the Roest log pull path returns a normalized payload `push_roast` expects) MAY remain when removing them would degrade discoverability. Prefer descriptive phrasing over Tool naming when possible (e.g. "the downstream pipeline writers — roast / cupping / experiment / roast_learnings — all require green_bean_id" rather than "push_roast / push_cupping / push_experiment / push_roast_learnings all require..."). When the Tool name itself is the only viable referent, accept the targeted collision. **This carve-out does NOT extend to read-to-write or read-to-pull workflow chains** — those are governed by #4 (with the narrow crash-recovery carve-out below).
 
-**4. Read-only Tools must NOT reference write Tools.** The Round 11 BLOCKING case. `list_canonicals` / `read_canonical` / `read_doc` / `read_doc_section` / `list_docs` / `list_taxonomy_queue` etc. must never name any `push_*` / `patch_*` / `propose_*` / `pull_*` Tool. The read-write asymmetry is what makes the collision semantically wrong (the operator searches for a write Tool and gets a read Tool result). Use descriptive phrasing for the workflow context (e.g. "validate a name against the canonical vocabulary BEFORE composing any write payload" instead of "before push_brew").
+**4. Read-only Tools must NOT reference write Tools.** The Round 11 BLOCKING case. `list_canonicals` / `read_canonical` / `read_doc` / `read_doc_section` / `list_docs` / `list_taxonomy_queue` / `list_roest_*` / `list_skeleton_entries` / `get_*` etc. must never name any `push_*` / `patch_*` / `propose_*` / `pull_*` Tool in their main description. The read-write asymmetry is what makes the collision semantically wrong (the operator searches for a write Tool and gets a read Tool result). Use descriptive phrasing for the workflow context (e.g. "validate a name against the canonical vocabulary BEFORE composing any write payload" instead of "before push_brew"; "before composing change proposals" instead of "for propose_doc_changes citations"; "before pulling per-batch logs" instead of "before pull_roest_log").
+
+**4a. Narrow crash-recovery carve-out to #4 (Sprint R Phase 4 Step 4 Group 3 follow-up, 2026-05-24).** When a read-only Tool's primary lived use case is **post-write recovery** — recovering an ID lost after an UPSERT conflict, verifying what landed after a write completed, or resuming a workflow after a crash — naming the specific write Tool that returned (or failed to return) the value is load-bearing because that IS the operator's lived mental model. Acceptable cases:
+
+> "Use AFTER a crash / cross-session retry to recover green_bean_id when push_green_bean returns 'already exists' (the UPSERT case where you lost the original ID)"
+> "Surfaces orphan brews where roast_id is null (those need patch_brew backfill)"
+> "verify what landed after push_brew completed"
+
+The carve-out does NOT extend to:
+
+- **Pre-write check refs** — "BEFORE push_X to verify the row doesn't exist" → rewrite to "BEFORE composing a write payload to verify the row doesn't exist"
+- **FK pipeline refs** — "Returns terroir_id + cultivar_id which feed into push_roast / push_experiment / push_roast_learnings as the FK chain" → rewrite to "Returns terroir_id + cultivar_id which feed into downstream writes (roast / experiment / roast_learnings) as the FK chain"
+- **General workflow-context refs** — "for propose_doc_changes citations" → rewrite to "for composing change proposals"
+
+The principle: read-to-write Tool naming is acceptable ONLY when the operator is *already* searching for the write Tool's context (the failure path returned them to the read Tool). If the operator could plausibly land on the read Tool through any search NOT involving the write Tool's name, the collision risk is real and descriptive phrasing wins.
 
 **Accuracy convention (Item 23):** Tool descriptions should reflect the **strictest validation path**, not the most permissive. When a field's validation behavior is asymmetric per axis (e.g. `terroir` lazy find-or-creates at the (admin_region, macro, meso) level but is strict-canonical at the macro level), describe the asymmetry explicitly. Lossy summaries ("FK-resolves terroir via lazy find-or-create") create expectation drift in claude.ai sessions and surface as runtime validation errors that confuse the operator. Round 11 continuation surfaced this on `push_brew`'s terroir handling — the prior description omitted the strict-macro requirement and claude.ai's session expected unlimited lazy creation.
 

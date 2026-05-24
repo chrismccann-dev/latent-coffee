@@ -22,7 +22,7 @@ export const getGreenBeanInputSchema = {
     'Stable lot identifier (e.g. CGLE-MANDELA-XO-2026, GV-OMA-25-035). Most common lookup key — every bean has a lot_id, and it\'s deterministic from the bean name.',
   ),
   roest_inventory_id: z.number().int().optional().describe(
-    'api.roestcoffee.com /inventories/{id}/. Use when seeded from list_roest_inventory + want to verify the bean is already in DB before push_green_bean.',
+    'api.roestcoffee.com /inventories/{id}/. Use when seeded from list_roest_inventory + want to verify the bean is already in DB before composing a green-bean write.',
   ),
   green_bean_id: z.string().uuid().optional().describe(
     'Direct UUID lookup. Use when you already have the ID and just need the row content (terroir_id, cultivar_id, all fields).',
@@ -35,7 +35,7 @@ export function registerGetGreenBeanTool(server: McpServer, auth: McpAuthContext
     {
       title: 'Get Green Bean',
       description:
-        'Look up / fetch / get / find / read / search an existing green coffee bean lot row by lot_id, roest_inventory_id, or green_bean_id (at least one required). Returns the full green_bean row scoped to the authenticated user. Use AFTER a crash / cross-session retry to recover green_bean_id when push_green_bean returns "already exists" (the UPSERT case where you lost the original ID), or BEFORE push_green_bean to check whether a lot is already in the DB without writing. Returns the row\'s terroir_id + cultivar_id which feed into push_roast / push_experiment / push_roast_learnings as the FK chain. Errors with not_found if no matching row exists for this user.',
+        'Look up / fetch / get / find / read / search an existing green coffee bean lot row by lot_id, roest_inventory_id, or green_bean_id (at least one required). Returns the full green_bean row scoped to the authenticated user. Use AFTER a crash / cross-session retry to recover green_bean_id when push_green_bean returns "already exists" (the UPSERT case where you lost the original ID — crash-recovery carve-out per ARBITER.md § Tool description writing convention), or BEFORE composing a green-bean write to check whether a lot is already in the DB without writing. Returns the row\'s terroir_id + cultivar_id which feed into downstream writes (roast / experiment / roast_learnings) as the FK chain. Errors with not_found if no matching row exists for this user.',
       inputSchema: getGreenBeanInputSchema,
     },
     withToolErrorLogging('get_green_bean', async (input) => {

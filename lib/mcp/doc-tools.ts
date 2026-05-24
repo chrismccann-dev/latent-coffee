@@ -42,7 +42,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'List Doc Sections',
       description:
-        'List / browse / discover / find every header anchor in a doc, in document order. Use this to discover valid `section_anchor` values for `propose_doc_changes` citations BEFORE drafting them — anchor matching is case-sensitive exact match against `## ` / `### ` headers, no fuzzy resolution. If your intended anchor isn\'t in the returned list, the section either doesn\'t exist or has been renamed. Returns { uri, anchors: string[] }.',
+        'List / browse / discover / find every header anchor in a doc, in document order. Use this to discover valid `section_anchor` values BEFORE drafting change proposals — anchor matching is case-sensitive exact match against `## ` / `### ` headers, no fuzzy resolution. If your intended anchor isn\'t in the returned list, the section either doesn\'t exist or has been renamed. Returns { uri, anchors: string[] }.',
       inputSchema: {
         uri: z.string().describe(
           'Doc URI to enumerate. One of the values returned by `list_docs` (e.g. `docs://brewing.md`, `docs://brewing/roasters.md`, `docs://taxonomies/processes.md`).',
@@ -94,7 +94,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'Read Doc Section',
       description:
-        'Read / fetch / get / load the body of one section by header text. Use this BEFORE drafting `propose_doc_changes` citations so your `current_text` (for replace ops) is verbatim from the live doc — the arbiter uses `current_text` to detect drift between when the proposal was written and when it gets applied. Anchor matching is case-sensitive exact match (no leading `#`). If the anchor doesn\'t resolve, call `list_doc_sections` to see what actually exists. Returns { uri, anchor, body } where body is the section text from below the header up to (but not including) the next header of equal or higher level.',
+        'Read / fetch / get / load the body of one section by header text. Use this BEFORE drafting change proposals so your `current_text` (for replace ops) is verbatim from the live doc — the arbiter uses `current_text` to detect drift between when the proposal was written and when it gets applied. Anchor matching is case-sensitive exact match (no leading `#`). If the anchor doesn\'t resolve, call `list_doc_sections` to see what actually exists. Returns { uri, anchor, body } where body is the section text from below the header up to (but not including) the next header of equal or higher level.',
       inputSchema: {
         uri: z.string().describe(
           'Doc URI to fetch from. One of the values returned by `list_docs`.',
