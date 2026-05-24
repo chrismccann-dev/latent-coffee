@@ -32,6 +32,6 @@ The varietal aromatic fingerprint lives in [cross-coffee-insights.md § Varietal
 
 ## Related
 
-- [cgle-mandela-xo.md](./cgle-mandela-xo.md) — sibling CGLE-farm closed lot; XO-Family rather than Washed; fan curve shape rather than FC+drop temp primary lever
+- [cgle-mandela-xo-2026.md](./cgle-mandela-xo-2026.md) — sibling CGLE-farm closed lot; XO-Family rather than Washed; fan curve shape rather than FC+drop temp primary lever
 - Active Sudan Rume Natural lot (CGLE-SRUME-NATURAL-2026) — variety-paired naturals study, V4 reference batch confirmed 2026-05-11 but lot close-out pending
 - [cross-coffee-insights.md § Rest Behavior Patterns](../patterns/cross-coffee-insights.md#rest-behavior-patterns) — Day 7 pourover as universal evaluation gate, originated here

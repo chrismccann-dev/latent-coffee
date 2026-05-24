@@ -28,6 +28,6 @@ This lot also carries the **highest moisture (11.60%)** of any lot in the archiv
 
 ## Related
 
-- [gua-libertad-aurelio-del-cerro.md](./gua-libertad-aurelio-del-cerro.md) — sibling Guatemala pre-counterflow lot
+- [gua-lib-adc-2024.md](./gua-lib-adc-2024.md) — sibling Guatemala pre-counterflow lot
 - [by-process/washed.md](../patterns/by-process/washed.md) — per-process roll-up
 - [cross-coffee-insights.md § Green Spec → Starting Hypothesis](../patterns/cross-coffee-insights.md#green-spec--starting-hypothesis) — high-moisture row pending counterflow confirmation

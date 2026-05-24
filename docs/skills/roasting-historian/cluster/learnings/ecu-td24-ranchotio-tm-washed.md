@@ -33,4 +33,4 @@ The first Ecuadorian + first Typica Mejorado + first 1,300m washed data point in
 
 - [by-process/washed.md](../patterns/by-process/washed.md) — per-process roll-up; this lot is the brew-anchor-transferability exemplar
 - [cross-coffee-insights.md § Varietal Aromatic Fingerprints](../patterns/cross-coffee-insights.md#varietal-aromatic-fingerprints) — Typica Mejorado row sourced here
-- [cgle-sudan-rume-hybrid-washed.md](./cgle-sudan-rume-hybrid-washed.md) — the anchor profile this lot inherited (correctly at roast level, incorrectly at brew level)
+- [cgle-srume-washed-2026.md](./cgle-srume-washed-2026.md) — the anchor profile this lot inherited (correctly at roast level, incorrectly at brew level)

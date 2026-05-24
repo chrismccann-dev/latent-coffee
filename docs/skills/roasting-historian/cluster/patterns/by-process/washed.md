@@ -13,12 +13,12 @@
 
 **Per-lot deep dives:**
 
-- [CGLE Sudan Rume Hybrid Washed](../../learnings/cgle-sudan-rume-hybrid-washed.md) — closed, reference roast Batch #133 (#148 closest replication); FC temp + drop temp working together as primary lever
-- [Gesha Village Oma](../../learnings/gv-oma-lot-25-035.md) — closed pre-counterflow; 48s dev-time floor on Gesha
-- [Gesha Village Surma](../../learnings/gv-surma-lot-25-039.md) — closed pre-counterflow; dev-time-relative-to-FC primary lever
-- [Guatemala El Socorro Java](../../learnings/gua-el-socorro-java.md) — closed pre-counterflow; RoR shape through Maillard primary lever
-- [Guatemala Libertad Bourbon/Caturra blend](../../learnings/gua-libertad-aurelio-del-cerro.md) — closed pre-counterflow; Maillard energy continuity primary lever (recurring oversteeped-tea defect resolved by smooth inlet shape)
-- [Rancho Tio Emilio Typica Mejorado Washed](../../learnings/rancho-tio-emilio.md) — closed one-shot calibration; brew-anchor-transferability lesson (variety signal dominates over anchor-roast brew lineage)
+- [CGLE Sudan Rume Hybrid Washed](../../learnings/cgle-srume-washed-2026.md) — closed, reference roast Batch #133 (#148 closest replication); FC temp + drop temp working together as primary lever
+- [Gesha Village Oma](../../learnings/gv-oma-25-035.md) — closed pre-counterflow; 48s dev-time floor on Gesha
+- [Gesha Village Surma](../../learnings/gv-surma-25-039.md) — closed pre-counterflow; dev-time-relative-to-FC primary lever
+- [Guatemala El Socorro Java](../../learnings/gua-soc-java-2024.md) — closed pre-counterflow; RoR shape through Maillard primary lever
+- [Guatemala Libertad Bourbon/Caturra blend](../../learnings/gua-lib-adc-2024.md) — closed pre-counterflow; Maillard energy continuity primary lever (recurring oversteeped-tea defect resolved by smooth inlet shape)
+- [Rancho Tio Emilio Typica Mejorado Washed](../../learnings/ecu-td24-ranchotio-tm-washed.md) — closed one-shot calibration; brew-anchor-transferability lesson (variety signal dominates over anchor-roast brew lineage)
 
 **Cross-lot patterns specific to washed process:**
 

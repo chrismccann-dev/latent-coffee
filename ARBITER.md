@@ -357,6 +357,43 @@ Once merged + Vercel deploys: `list_skeleton_entries` no longer surfaces the res
 
 ---
 
+## CCIL observing list review (Item 1, Sprint R Phase 4 Step 4 grill, 2026-05-23)
+
+[docs/skills/ccil/cluster/observing.md](docs/skills/ccil/cluster/observing.md) holds candidate structural concepts that were named at a grill but lack confirming N for promotion to CONTEXT.md vocabulary or a confirmed CCIL pattern. Walked as the **fourth arbiter queue type** alongside `doc_proposals` + `taxonomy_overrides_queue` + skeleton entries during a `process pending arbitration` run. Same forcing function, no separate trigger — Chris explicitly chose to fold into the existing arbiter rather than spec a new one (avoids process bloat; per-item judgment beats systematic rules at this scale).
+
+### O1. Read observing list
+
+```bash
+cat docs/skills/ccil/cluster/observing.md
+```
+
+If § Active candidates is empty, surface to Chris and skip.
+
+### O2. Per candidate: present to Chris
+
+For each candidate, show:
+- The candidate name + what it names (one line)
+- Current N + promotion trigger
+- Surfaced-date + source (which grill / lot / PR)
+- Any new observations since the candidate was last surfaced (run `git log` against relevant cluster docs to spot new patterns that might reinforce or contradict)
+
+Ask Chris one of five resolutions:
+- **promote to CONTEXT.md** — the concept earns a glossary entry. Arbiter drafts the entry inline + edits CONTEXT.md.
+- **promote to CCIL pattern** — the concept earns its own pattern file under `docs/skills/ccil/cluster/<scope>/<pattern>.md`. Arbiter drafts the file inline + adds CCIL umbrella back-link.
+- **convert to doc change** — the concept is operational (sub-skill cluster substrate update), not vocabulary. Arbiter files a `propose_doc_changes` proposal against the appropriate cluster doc.
+- **defer** — keep on the observing list, no new info worth acting on. Arbiter updates the candidate's "current N" + adds a session marker noting it was reviewed.
+- **drop** — concept didn't pan out / was contradicted / Chris no longer thinks it's useful. Arbiter moves to § Resolved with "dropped" landing target.
+
+### O3. Apply Chris's decision (file edits)
+
+For promote/convert: do the edit in this session. For defer: update observing.md inline. For drop: move to § Resolved.
+
+### O4. Commit + PR
+
+Bundle observing-list resolutions into the same PR as the prose-proposal / canonical-queue resolutions when possible (single arbiter session = single PR). Standalone PR if no other arbiter queues had pending work.
+
+---
+
 ## Stale-anchor protocol
 
 When a citation's `section_anchor` doesn't match any header in the resolved file:

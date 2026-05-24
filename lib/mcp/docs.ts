@@ -114,15 +114,15 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/roasting-historian/cluster/patterns/general.md': 'docs/skills/roasting-historian/cluster/patterns/general.md',
   'docs://skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md': 'docs/skills/roasting-historian/cluster/patterns/by-cultivar/gesha.md',
   'docs://skills/roasting-historian/cluster/patterns/by-process/washed.md': 'docs/skills/roasting-historian/cluster/patterns/by-process/washed.md',
-  'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md',
+  'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo-2026.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-mandela-xo-2026.md',
   'docs://skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md',
-  'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md',
+  'docs://skills/roasting-historian/cluster/learnings/cgle-srume-washed-2026.md': 'docs/skills/roasting-historian/cluster/learnings/cgle-srume-washed-2026.md',
   'docs://skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md': 'docs/skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md',
-  'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md': 'docs/skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md',
-  'docs://skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md': 'docs/skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md',
-  'docs://skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md': 'docs/skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md',
-  'docs://skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md': 'docs/skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md',
-  'docs://skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md': 'docs/skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md',
+  'docs://skills/roasting-historian/cluster/learnings/gv-oma-25-035.md': 'docs/skills/roasting-historian/cluster/learnings/gv-oma-25-035.md',
+  'docs://skills/roasting-historian/cluster/learnings/gv-surma-25-039.md': 'docs/skills/roasting-historian/cluster/learnings/gv-surma-25-039.md',
+  'docs://skills/roasting-historian/cluster/learnings/gua-soc-java-2024.md': 'docs/skills/roasting-historian/cluster/learnings/gua-soc-java-2024.md',
+  'docs://skills/roasting-historian/cluster/learnings/gua-lib-adc-2024.md': 'docs/skills/roasting-historian/cluster/learnings/gua-lib-adc-2024.md',
+  'docs://skills/roasting-historian/cluster/learnings/ecu-td24-ranchotio-tm-washed.md': 'docs/skills/roasting-historian/cluster/learnings/ecu-td24-ranchotio-tm-washed.md',
   // Roasting Historian cluster — Wave 3 PR 1 addition (R-to-B Translation override of prior lock)
   'docs://skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md': 'docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md',
   // ----- Peer-Learning Roasting Archivist (Wave 3 PR 1, ADR-0011) ------------
@@ -395,23 +395,23 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when designing a roast for a Gesha lot — per-cultivar roll-up + pointers. Corpus N=3 (Oma + Surma closed pre-counterflow + Gesha Clouds active). 48s dev-time floor for washed Gesha in counterflow + Gesha-Clouds Low-confidence hypotheses tracked here.',
   'docs://skills/roasting-historian/cluster/patterns/by-process/washed.md':
     'Use when designing a roast for a washed-process lot — per-process roll-up + pointers. Corpus N=6 closed (Sudan Rume Hybrid Washed + GV Oma + GV Surma + GUA El Socorro + GUA Libertad + Rancho Tio Emilio). Most data-rich slice of the archive; tightest FC + drop temp windows; Maillard-energy-continuity inlet-shape discipline.',
-  'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md':
+  'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo-2026.md':
     'Per-lot learnings for CGLE Mandela XO Extended Fermentation (closed April 2026, reference batch #139). Pointer to roast_learnings DB row + cross-lot framing — XO-fermented drop ceiling ~205-206°C; silent FC the rule; fan curve shape as single most impactful variable. Canonical Heavy-Ferment / XO-Family lot anchor.',
   'docs://skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md':
     'Per-lot learnings for CGLE Sudan Rume Natural (closed 2026-05-23, reference Batch 187 V5A). First full V-set lifecycle through the new architecture (V5 Path C-2 → real-pourover discriminator → Path A → optimized brew → close-out). Anchors: traditional-natural-Sudan-Rume aromatic profile (tropical pineapple / blueberry / caramelized brown sugar / ginger spice); ground-Agtron-not-WB rule for extraction prior (WB 78.7 misled, ground 68.1 correctly flagged over-extraction risk); temperature-primacy pattern extends beyond anaerobic naturals to traditional-natural aromatic landraces (91°C → 89°C single-variable resolve); xbloom gate underrepresents this lot at the candidate-ranking stage (real-pourover discriminator required, validating Path C-2 routing).',
-  'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md':
+  'docs://skills/roasting-historian/cluster/learnings/cgle-srume-washed-2026.md':
     'Per-lot learnings for CGLE Sudan Rume Hybrid Washed (closed April 2026, reference #133 / closest replication #148). Most data-rich lot in archive (20+ batches, 6 experiment sets); empirical anchor for FC floor/ceiling, WB-to-Ground delta sensitivity, xbloom under-extraction discovery, varietal aromatic vocabulary unlock.',
   'docs://skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md':
     'Per-lot learnings for Costa Rica Anaerobic Dry Process Higuito (closed 2026-05-19, reference #185 v3b). First self-roasted lot to confirm the anaerobic-natural Suppression + temperature-primacy pattern on the brewing side (4th confirmed origin alongside Colombia / Ethiopia / Panama). Anchors: xbloom misranks between close candidates not by direction; replication-by-profile unreliable (FC audibility flipped + WB-to-Ground delta swung); peak inlet × dev-time non-additive; overdev is a peak/dev interaction not an Agtron threshold.',
-  'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md':
+  'docs://skills/roasting-historian/cluster/learnings/gv-oma-25-035.md':
     'Per-lot learnings for Gesha Village Oma (closed counterflow-incomplete, green exhausted). Anchors the 48s dev-time floor for washed Gesha in counterflow; FC floor / drop ceiling row at Very low confidence pending a complete Gesha counterflow resolution.',
-  'docs://skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md':
+  'docs://skills/roasting-historian/cluster/learnings/gv-surma-25-039.md':
     'Per-lot learnings for Gesha Village Surma (closed pre-counterflow). Pre-counterflow companion to GV Oma; same low-density/low-moisture green spec signature; dev-time-relative-to-FC primary lever.',
-  'docs://skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md':
+  'docs://skills/roasting-historian/cluster/learnings/gua-soc-java-2024.md':
     'Per-lot learnings for Guatemala El Socorro Java (closed pre-counterflow). RoR-shape-not-dev-time foundational pre-counterflow lesson. Highest-moisture (11.60%) lot in the archive — high-moisture row in Green Spec→Starting Hypothesis is Medium-High confidence pending a counterflow high-moisture lot.',
-  'docs://skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md':
+  'docs://skills/roasting-historian/cluster/learnings/gua-lib-adc-2024.md':
     'Per-lot learnings for Guatemala Libertad Aurelio del Cerro (closed pre-counterflow, Bourbon/Caturra blend). Canonical Maillard-energy-continuity inlet-shape lesson — recurring oversteeped-tea dryness resolved by smooth monotonically declining RoR into FC.',
-  'docs://skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md':
+  'docs://skills/roasting-historian/cluster/learnings/ecu-td24-ranchotio-tm-washed.md':
     'Per-lot learnings for Rancho Tio Emilio Typica Mejorado Washed (closed 2026-05-11, one-shot calibration). Brew-anchor-transferability lesson (variety signal dominates over anchor-roast brew lineage) + altitude-as-weak-proxy-for-density on one-shots + Typica Mejorado varietal aromatic fingerprint sourced here.',
   // Roasting Historian cluster — Wave 3 PR 1 addition (R-to-B Translation)
   'docs://skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md':
@@ -850,38 +850,38 @@ export function listDocs(): {
       'Roasting Historian — Roast-to-Brew Translation (Wave 3 PR 1 addition)',
     ),
     entry(
-      'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md',
-      'docs/skills/roasting-historian/cluster/learnings/cgle-mandela-xo.md',
+      'docs://skills/roasting-historian/cluster/learnings/cgle-mandela-xo-2026.md',
+      'docs/skills/roasting-historian/cluster/learnings/cgle-mandela-xo-2026.md',
       'Roasting Historian — Per-Lot: CGLE Mandela XO',
     ),
     entry(
-      'docs://skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md',
-      'docs/skills/roasting-historian/cluster/learnings/cgle-sudan-rume-hybrid-washed.md',
+      'docs://skills/roasting-historian/cluster/learnings/cgle-srume-washed-2026.md',
+      'docs/skills/roasting-historian/cluster/learnings/cgle-srume-washed-2026.md',
       'Roasting Historian — Per-Lot: CGLE Sudan Rume Hybrid Washed',
     ),
     entry(
-      'docs://skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md',
-      'docs/skills/roasting-historian/cluster/learnings/gv-oma-lot-25-035.md',
+      'docs://skills/roasting-historian/cluster/learnings/gv-oma-25-035.md',
+      'docs/skills/roasting-historian/cluster/learnings/gv-oma-25-035.md',
       'Roasting Historian — Per-Lot: Gesha Village Oma (Lot 25-035)',
     ),
     entry(
-      'docs://skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md',
-      'docs/skills/roasting-historian/cluster/learnings/gv-surma-lot-25-039.md',
+      'docs://skills/roasting-historian/cluster/learnings/gv-surma-25-039.md',
+      'docs/skills/roasting-historian/cluster/learnings/gv-surma-25-039.md',
       'Roasting Historian — Per-Lot: Gesha Village Surma (Lot 25-039)',
     ),
     entry(
-      'docs://skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md',
-      'docs/skills/roasting-historian/cluster/learnings/gua-el-socorro-java.md',
+      'docs://skills/roasting-historian/cluster/learnings/gua-soc-java-2024.md',
+      'docs/skills/roasting-historian/cluster/learnings/gua-soc-java-2024.md',
       'Roasting Historian — Per-Lot: Guatemala El Socorro Java',
     ),
     entry(
-      'docs://skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md',
-      'docs/skills/roasting-historian/cluster/learnings/gua-libertad-aurelio-del-cerro.md',
+      'docs://skills/roasting-historian/cluster/learnings/gua-lib-adc-2024.md',
+      'docs/skills/roasting-historian/cluster/learnings/gua-lib-adc-2024.md',
       'Roasting Historian — Per-Lot: Guatemala Libertad Aurelio del Cerro',
     ),
     entry(
-      'docs://skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md',
-      'docs/skills/roasting-historian/cluster/learnings/rancho-tio-emilio.md',
+      'docs://skills/roasting-historian/cluster/learnings/ecu-td24-ranchotio-tm-washed.md',
+      'docs/skills/roasting-historian/cluster/learnings/ecu-td24-ranchotio-tm-washed.md',
       'Roasting Historian — Per-Lot: Rancho Tio Emilio (one-shot calibration)',
     ),
     // Peer-Learning Roasting Archivist (Wave 3 PR 1, ADR-0011)

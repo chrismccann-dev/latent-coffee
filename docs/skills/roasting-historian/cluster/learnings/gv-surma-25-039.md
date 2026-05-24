@@ -18,11 +18,11 @@
 
 ## Cross-lot framing — what this lot taught the Historian
 
-A pre-counterflow companion to [gv-oma-lot-25-035.md](./gv-oma-lot-25-035.md). The dev-time-relative-to-FC primary lever framing is consistent with what Oma surfaced; both lots carry the same low-density (758-760 g/L) / low-moisture (8.70%) green spec signature and the same washed-Gesha narrow-window character.
+A pre-counterflow companion to [gv-oma-25-035.md](./gv-oma-25-035.md). The dev-time-relative-to-FC primary lever framing is consistent with what Oma surfaced; both lots carry the same low-density (758-760 g/L) / low-moisture (8.70%) green spec signature and the same washed-Gesha narrow-window character.
 
 The counterflow chapter for Surma was never run (lot closed pre-machine), so this lot's contribution to cross-lot patterns is structurally bounded — it firms the pre-counterflow knowledge baseline but doesn't extend the counterflow corpus.
 
 ## Related
 
-- [gv-oma-lot-25-035.md](./gv-oma-lot-25-035.md) — sibling Gesha Village lot
+- [gv-oma-25-035.md](./gv-oma-25-035.md) — sibling Gesha Village lot
 - [by-cultivar/gesha.md](../patterns/by-cultivar/gesha.md) — per-cultivar roll-up
