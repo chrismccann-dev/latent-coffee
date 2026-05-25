@@ -67,6 +67,10 @@ export const pushGreenBeanInputSchema = {
   is_one_shot: z.boolean().optional().nullable().describe(
     'True for single-batch sample lots (~100-120g, no iteration possible). Origin: auction-lot sample sets, farm sample sets sent during sourcing negotiations, rare allocations. Routes the lot through docs/prompts/one-shot.md + one-shot-closeout.md instead of the 4-prompt V-set pipeline (start-lot / log-roast / log-cupping / close-lot). Triggers schema-validation on push_roast_learnings / patch_roast_learnings: lever-attribution fields (primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) must be NULL on one-shot close-outs (N=1 cannot populate; require cross-batch evidence). terroir_takeaway is NOT in this list — terroir attribution does not require cross-batch evidence and is populatable on one-shot lots. Defaults false. See CONTEXT.md "One-shot lot" entry for the workflow class.',
   ),
+  // Migration 069 (Phase 2 Item 17, 2026-05-24)
+  peer_reference_brew_id: z.string().uuid().optional().nullable().describe(
+    'Optional FK to a brews(id) row for the peer-roasted reference brew of the same green-bean lot. ~25-30%+ of lots have a peer-roasted variant the operator buys as a calibration anchor for the roasting side (CGLE Sudan Rume Natural / Wush Wush / every Untold Coffee Lab lot pattern). 1:1 in current practice (one green-bean lot, at most one peer reference). Typically NULL at first push and set later via the green-bean field-level mutation companion once the peer brew row exists. See CONTEXT.md § Peer-roasted reference brew.',
+  ),
 }
 
 export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContext) {
