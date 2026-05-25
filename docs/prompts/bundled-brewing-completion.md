@@ -68,7 +68,7 @@ Grain-Pro-at-low-moisture fermentation execution, set fermentation_qualifiers: [
 on push_brew (Sprint T3 / CR-5 / migration 059, 2026-05-18). Canonical via
 FERMENTATION_QUALIFIER_LOOKUP; aliases No Oxygen / Zero O2 / Oxygen Free resolve to
 Anoxic. Record-when-known annotation — does not dictate strategy (aggregation stays
-at the [Anaerobic] modifier per CONTEXT-shared.md § Qualifier). Omit (leave as []) when not
+at the [Anaerobic] modifier per docs/reference/canonical-registries.md § Qualifier). Omit (leave as []) when not
 applicable or not knowable from the source.
 
 STEP 2 - propose_doc_changes for lessons from this session. source =

@@ -162,6 +162,6 @@ ANYTHING ELSE:
 - [catalog.md](./catalog.md) — 18-sub-skill catalog + dispatch I/O metadata
 - [dispatch-rules.md](./dispatch-rules.md) — intent → executor mappings
 - [handoff-rules.md](./handoff-rules.md) — 6-chain workflow composition rules
-- [CONTEXT-roasting.md](../../../CONTEXT-roasting.md) / [CONTEXT-brewing.md](../../../CONTEXT-brewing.md) / [CONTEXT-shared.md](../../../CONTEXT-shared.md) — Latent-specific terminology glossary (zone-aligned)
+- [CONTEXT-roasting.md](../../../CONTEXT-roasting.md) / [CONTEXT-brewing.md](../../../CONTEXT-brewing.md) / [CONTEXT-shared.md](../../../CONTEXT-shared.md) — Latent-specific terminology glossary (zone-aligned). Post Pattern J pruning (2026-05-25), CONTEXT-shared.md is a thin index pointing to dedicated reference-tier docs: [docs/reference/mcp-architecture.md](../../reference/mcp-architecture.md) / [docs/reference/canonical-registries.md](../../reference/canonical-registries.md) / [docs/reference/wbc-materials.md](../../reference/wbc-materials.md) / [docs/reference/synthesis-pipeline.md](../../reference/synthesis-pipeline.md); ambiguities ledger at [docs/grilling-flagged-ambiguities.md](../../grilling-flagged-ambiguities.md). Pull a reference doc via `read_doc` when a specific term needs validation.
 - [SYNC_V2.md](../../../SYNC_V2.md) — MCP transport + auth + Resource + Tool catalog
 - [ARBITER.md](../../../ARBITER.md) — doc-proposal + canonical-queue arbiter playbook
