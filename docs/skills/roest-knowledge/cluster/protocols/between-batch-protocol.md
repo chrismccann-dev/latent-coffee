@@ -4,6 +4,8 @@
 
 Migrated from ROASTING.md § Standard Workflow > Between Batch Protocol + Hopper Pre-Load Timing in Wave 4 PR 4b (2026-05-21).
 
+> **Operator-fixed constants** (Item 25 / Group 5 grill, 2026-05-24, audio-ratified): the four constants below (10-minute warm-up dry run / BBP parameters / 125°C hopper-load alert / 117°C charge temp) are **operator-discipline constants — never varied across V-sets, beans, or roast types**. Substrate must DESIGN AROUND these, not propose varying them. Chris's muscle memory governs — he does NOT look at recipe fields for drop temp because he always charges at 117°C. If thermal-energy or input-energy change is the goal, vary recipe-level levers (peak inlet temp / temperature curve / fan / drum speed) — NOT the operator-fixed routine. See [CONTEXT.md § Operator-fixed roast constants](../../../../../CONTEXT.md) for the full glossary entry + the recipe-schema-vs-lived-practice asymmetry note.
+
 ## Standard Workflow
 
 This workflow is fixed and should be followed identically for every roast session, regardless of coffee.
