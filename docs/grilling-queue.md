@@ -127,6 +127,28 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Round 14 / Gesha Clouds STAGE 1(b) backfill
     - **Suggested landing:** future Tool sprint scoping the right architectural answer
 
+## Ratification queue
+
+Items where Claude Code (or claude.ai) made substantive substrate calls **without Chris's audio input** — typically via a kickoff brief that framed grilling work as planned-execution work, or a session that defaulted to "ship without grilling." Each entry names the specific call that needs audio-ratification, points at the shipped PR, and proposes the ratification question.
+
+**Procedure:** the next grilling session walks this list FIRST (before draining outstanding items). For each entry: ask Chris in long-form prose, wait for audio reply, then either ratify (move to § Resolved with the audio-confirmed details captured) or revert / ship a follow-up PR with the corrected substrate.
+
+**Why this section exists:** Sprint R Phase 4 Step 4 Group 3 (2026-05-24) surfaced the failure mode — kickoff briefs that reference the autonomy rule or pre-pick implementation details push grilling-grade interpretive work into ship-without-sign-off territory. The convention fix lives in [`feedback_grilling_vs_executing_distinction.md`](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_grilling_vs_executing_distinction.md); this section is the durable surface that surfaces the *consequences* of past violations so they don't compound silently.
+
+Format:
+
+```
+- **<Item> — <call made>** — shipped <YYYY-MM-DD> via [#NNN](url) without grilling. The specific substantive call: <what was decided + what alternatives existed>. Ratification question: <how to ask Chris>. Acceptable defaults landed (yes/no/partial).
+```
+
+### Open ratification entries (Sprint R Phase 4 Step 4 Group 3, 2026-05-24)
+
+- **Item 31 — `fc_audibility` 5th value name = `did_not_fire`** — shipped via [#236](https://github.com/chrismccann-dev/2026-05-24/pull/236). The grilling brief listed three candidate names (`no_fc` / `sub_threshold` / `did_not_fire`); the autonomous session picked `did_not_fire`. Defensible (most descriptive of event-vs-non-event distinction) but cosmetically inconsistent — the existing 4 values are bare words. Ratification question: ratify `did_not_fire` as the canonical 5th enum value, OR rename to `no_fc` / `sub_threshold` for bare-word consistency? If rename, a migration + Zod + CONTEXT.md + prompts edit ships as a follow-up. Acceptable default landed: yes (defensible, but worth audio-confirming).
+- **Item 32 — Maillard% reframed as prose convention, NOT schema change** — shipped via [#236](https://github.com/chrismccann-dev/2026-05-24/pull/236). The grilling brief recommended a schema migration (check constraint or generated column); pre-flight inspection found `roasts.maillard_pct` / `dev_pct` aren't stored columns — values are computed in claude.ai prose. The session reframed as a prose convention ("record 'Maillard % N/A (FC did not fire)' instead of emitting the bogus number"). Ratification question: ratify the prose-convention shape, OR add a real schema-level check constraint on the upstream `fc_start NULL → no Maillard%` rule as a follow-on? Acceptable default landed: yes (the schema change was the wrong premise; the prose convention is correct).
+- **Item 33 — `subtle` FC: trust the timestamp** — shipped via [#236](https://github.com/chrismccann-dev/2026-05-24/pull/236). The session locked "if a specific fc_start fired, record fc_start / fc_temp / dev_time_s from the timestamp; do NOT null them." Sound call (matches physical reality — a real fc_start is real data regardless of audibility quality). Ratification question: ratify trust-the-timestamp, OR null the timestamp on subtle for operational symmetry with silent / ambiguous? Acceptable default landed: yes.
+- **Item 34 — `is_reference_candidate` owned by log-cupping.md, NEVER log-roast.md** — shipped via [#236](https://github.com/chrismccann-dev/2026-05-24/pull/236). Cup-grounds-only lock, log-roast.md STAGE 3 explicitly directs "leave unset (NULL)". Sound call (the flag is by definition a cup-quality judgment). Ratification question: ratify cup-grounds-only, OR allow log-roast.md to set the flag as a non-binding initial signal based on roast structure (potentially useful as an early heuristic, refined at log-cupping)? Acceptable default landed: yes.
+- **Items 21 + 23 — Tool description hygiene 4-part convention + crash-recovery carve-out (#4a)** — shipped via [#237](https://github.com/chrismccann-dev/2026-05-24/pull/237) + [#239](https://github.com/chrismccann-dev/2026-05-24/pull/239). #237 locked the 4-part convention without grilling; #239 (the follow-up) added a #4a crash-recovery carve-out after spot-check surfaced ~10 additional violations + an internal tension between #3 and #4. Ratification questions: (a) ratify the 4-part convention's claim that ANY cross-Tool ref is collision-shaped, OR carve out additional cases beyond crash-recovery (e.g. workflow-chain refs that bridge read-to-write)? (b) ratify the crash-recovery carve-out's scope (post-write recovery / UPSERT conflict / post-write verification), OR widen / narrow? (c) ratify the descriptive-phrasing rewrites Chris hasn't seen (e.g. "before composing change proposals" / "the green-bean write path" / "the queue-entry resolution path")? Acceptable default landed: partial (4-part convention is solid; carve-out is principled; rewrites preserve runtime accuracy but reduce discoverability slightly).
+
 ## Resolved (append-only history)
 
 When grill items resolve, move them here with date + landing target. Format:
