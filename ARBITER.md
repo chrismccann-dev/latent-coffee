@@ -394,6 +394,50 @@ Bundle observing-list resolutions into the same PR as the prose-proposal / canon
 
 ---
 
+## Substrate pruning review (Item 16c, Sprint R Phase 4 Step 4 Group 5 grill, 2026-05-24) — mechanism deferred pending case studies
+
+[docs/grilling-queue.md § Substrate pruning candidates](docs/grilling-queue.md) holds lived examples of substrate that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred: the right pruning-walk shape will crystallize once 2-3-4 candidates have been worked through operator + Claude Code back-and-forth (case-study-driven generalization analog to the Learning Assistant research-project methodology). **Today this section is a placeholder** — the full arbiter procedure (P1-P4 walk steps mirroring O1-O4 for observing-list) lands once the candidate-queue has accumulated enough lived examples to derive generalized rules. Until then: when an arbitration session surfaces a candidate (a stale section, an over-detailed prose block, a sprint-time-only artifact still living in a structural doc), file it under § Substrate pruning candidates in the grilling-queue rather than acting on it inline. **Walk-cadence today**: when the grilling-queue candidate-list reaches ≥2 entries, schedule a sprint pairing operator + Claude Code on the worked examples; the third candidate becomes the test of whichever rule emerged from the first two. The mechanism direction leans toward mech-a (arbiter pass, analog to skeleton review) per Pattern J framing in ADR-0013, but won't be locked until lived case studies clarify the right shape.
+
+---
+
+## Ratification queue arbitration (Item 6, Sprint R Phase 4 Step 4 Group 5 grill, 2026-05-24)
+
+[docs/grilling-queue.md § Ratification queue](docs/grilling-queue.md) holds entries where Claude Code (or claude.ai) made substantive substrate calls **without Chris's audio input** — typically because a kickoff brief framed grilling work as planned-execution work, or a session defaulted to "ship without grilling." Each entry names the specific call, points at the shipped PR, and proposes the ratification question. Walked as the **fifth arbiter queue type** alongside `doc_proposals` + `taxonomy_overrides_queue` + skeleton entries + CCIL observing list during a `process pending arbitration` run, AND walked FIRST at the next `/grill-with-docs` session before draining outstanding queue items. The dual surfacing matters because ratification is time-sensitive — a violated substrate call left un-ratified compounds silently into the next session.
+
+### R1. Read Ratification queue
+
+```bash
+sed -n '/^## Ratification queue/,/^## Resolved/p' docs/grilling-queue.md
+```
+
+If § Open ratification entries is empty, surface to Chris and skip. Drop-to-zero is the target state (per [feedback_grilling_vs_executing_distinction.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_grilling_vs_executing_distinction.md)).
+
+### R2. Per entry: present to Chris
+
+For each entry, show:
+- The item name + the specific substantive call that was made
+- The PR that shipped the call (with link)
+- What design alternatives existed at the time + which one was picked
+- The proposed ratification question (long-form prose, named alternatives, recommendation)
+- Acceptable defaults landed (yes/no/partial) — author's pre-grill assessment
+
+Ask Chris one of three resolutions:
+- **ratify** — the shipped call stands. Arbiter moves entry to § Resolved with the audio-confirmed details captured + explicit "Audio-ratified by Chris" note (distinguishes ratified-after-the-fact from grilled-in-the-moment).
+- **revert** — the shipped call was wrong. Arbiter files a follow-up PR reverting the substrate change(s) + drops a memory entry on the lesson; § Resolved entry captures the revert.
+- **amend** — the shipped call was directionally right but needs adjustment. Arbiter ships a follow-up PR with the corrected substrate; § Resolved entry captures the amendment.
+
+### R3. Apply Chris's decision (substrate edits if revert/amend)
+
+For ratify: edit grilling-queue.md inline (move to Resolved). For revert/amend: ship the follow-up PR in this session; § Resolved entry references both the original PR and the corrective PR.
+
+### R4. Commit + PR
+
+Bundle Ratification-queue resolutions into the same PR as the prose-proposal / canonical-queue / observing-list resolutions when possible. If the standing arbiter walk is the entry path, single PR is correct. If a grilling session opened with Phase 1 = Ratification drain and Phase 2 = outstanding-queue drain, the entire session ships as one PR per the grilling-skill convention.
+
+**Why this is a separate queue type rather than rolled into observing-list or doc_proposals:** the Ratification queue is process-debt evidence — it surfaces violations of the grilling-vs-executing distinction. Trending the entry count is the value (per [feedback_grilling_vs_executing_distinction.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_grilling_vs_executing_distinction.md): "if Ratification queue grows faster than it drains, kickoff briefs are still being authored as planned-execution briefs and the rule isn't being applied"). Folding into another queue would lose the trend signal.
+
+---
+
 ## Stale-anchor protocol
 
 When a citation's `section_anchor` doesn't match any header in the resolved file:
