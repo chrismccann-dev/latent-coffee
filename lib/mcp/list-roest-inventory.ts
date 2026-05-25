@@ -29,7 +29,7 @@ export function registerListRoestInventoryTool(server: McpServer, auth: McpAuthC
     {
       title: 'List Roest Inventory',
       description:
-        'Search / browse / list / find / discover green coffee lots in Chris\'s Roest inventory (customer 2424) by name (substring) or archived status. Returns normalized push_green_bean-shaped payloads with roest_inventory_id pre-set. Use to discover inventory IDs before calling pull_roest_log on per-batch logs, or to seed push_green_bean for a new bean. Roest credentials never leave the server.',
+        'Search / browse / list / find / discover green coffee lots in Chris\'s Roest inventory (customer 2424) by name (substring) or archived status. Returns normalized green-bean-shaped payloads (matching the green-bean write path\'s expected input shape) with roest_inventory_id pre-set. Use to discover inventory IDs before pulling per-batch logs, or to seed the green-bean write path for a new bean. Roest credentials never leave the server.',
       inputSchema: listRoestInventoryInputSchema,
     },
     withToolErrorLogging('list_roest_inventory', async (input) => {

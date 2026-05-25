@@ -36,7 +36,7 @@ export function registerListRoestLogsTool(server: McpServer, auth: McpAuthContex
     {
       title: 'List Roest Logs',
       description:
-        'List / browse / discover / find / enumerate / search all Roest roast log batches for a given green coffee inventory (lot). Returns lightweight summaries (log_id + batch_no + roast_date + fc_temp + drop_temp + agtron + profile_name + share_uuid) for each batch the Roest machine recorded against this inventory_id. Use BEFORE pull_roest_log when you don\'t already know the log IDs — pull_roest_log requires a specific log_id; this Tool discovers them by inventory_id. Pairs with list_roest_inventory (which discovers inventory_id from a name search) to give a complete two-step lookup. Roest credentials never leave the server.',
+        'List / browse / discover / find / enumerate / search all Roest roast log batches for a given green coffee inventory (lot). Returns lightweight summaries (log_id + batch_no + roast_date + fc_temp + drop_temp + agtron + profile_name + share_uuid) for each batch the Roest machine recorded against this inventory_id. Use BEFORE pulling per-batch logs when you don\'t already know the log IDs — the per-batch log pull requires a specific log_id; this Tool discovers them by inventory_id. Pairs with list_roest_inventory (which discovers inventory_id from a name search) to give a complete two-step lookup. Roest credentials never leave the server.',
       inputSchema: listRoestLogsInputSchema,
     },
     withToolErrorLogging('list_roest_logs', async (input) => {
