@@ -8,7 +8,7 @@
 - Eventual: leading slot for V_n is also the lot-level reference roast candidate, and a control-experiment V-set isn't warranted → state flips to **Resolved-pending** and I run `close-lot.md` next.
 - Less common: V_(n+1) design is blocked on missing calibration data (peer-roasted reference cup) OR on a missing cup-side discriminator (a second recipe_variant on the already-roasted beans). State stays **Waiting for next cupping** — Chris executes the calibration step, then re-enters `log-cupping.md` to design V_(n+1) on the richer evidence base.
 
-Vocabulary used in this prompt is defined in CONTEXT-roasting.md (leading slot vs reference roast, adjustment, roast→cup trace, lever vs variable vs non-factor, control experiment, pre-V_n calibration gate, recipe_variant). Cross-cutting infrastructure terminology in CONTEXT-shared.md.
+Vocabulary used in this prompt is defined in CONTEXT-roasting.md (leading slot vs reference roast, adjustment, roast→cup trace, lever vs variable vs non-factor, control experiment, pre-V_n calibration gate, recipe_variant). Cross-cutting infrastructure terminology in CONTEXT-shared.md (glossary index — operational vocabulary lives in dedicated reference docs at docs/reference/mcp-architecture.md / canonical-registries.md / wbc-materials.md / synthesis-pipeline.md per the 2026-05-25 Pattern J pruning sprint; pull via `read_doc` when a specific term needs validation).
 
 ## Tools for this session
 

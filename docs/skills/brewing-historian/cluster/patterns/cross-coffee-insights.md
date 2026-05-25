@@ -2,7 +2,7 @@
 
 *Coffee Research · Latent · Brewing Historian cluster*
 
-This section captures strategy-level learnings from the brew archive. It is NOT a recipe log - the app handles that. This is about extraction strategy patterns: what approaches work for which types of coffees, and what corrections have been needed. Sibling of [ROASTING.md § Cross-Coffee Insight Layer](../../../../../ROASTING.md#cross-coffee-insight-layer); see [CONTEXT-shared.md § Cross-coffee insight layer](../../../../../CONTEXT-shared.md) for the canonical noun and how this surface complements per-anchor knowledge capsules.
+This section captures strategy-level learnings from the brew archive. It is NOT a recipe log - the app handles that. This is about extraction strategy patterns: what approaches work for which types of coffees, and what corrections have been needed. Sibling of [ROASTING.md § Cross-Coffee Insight Layer](../../../../../ROASTING.md#cross-coffee-insight-layer); see [docs/reference/synthesis-pipeline.md § Cross-coffee insight layer](../../../../../docs/reference/synthesis-pipeline.md) for the canonical noun and how this surface complements per-anchor knowledge capsules.
 
 *Rule: Don't add a pattern until you have seen it in at least 2 coffees. One coffee is a data point. Two is the beginning of a pattern.*
 

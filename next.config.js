@@ -17,7 +17,11 @@ const nextConfig = {
     // sub-skills architecture landed via ADR-0011; CONTEXT-roasting.md +
     // CONTEXT-brewing.md + CONTEXT-shared.md added 2026-05-24 Sprint R
     // Phase 4 Step 5 when CONTEXT.md split into 3 zone-aligned files —
-    // the original CONTEXT.md stays in the bundle as a redirect stub.)
+    // the original CONTEXT.md stays in the bundle as a redirect stub;
+    // docs/reference/*.md + docs/grilling-flagged-ambiguities.md added
+    // 2026-05-25 Pattern J pruning sprint when CONTEXT-shared.md split
+    // its 4 operational subsections + flagged-ambiguities ledger into
+    // sibling reference / ledger docs.)
     outputFileTracingIncludes: {
       '/api/mcp/**': [
         './CONTEXT.md',
@@ -31,6 +35,8 @@ const nextConfig = {
         './docs/taxonomies/*.md',
         './docs/prompts/*.md',
         './docs/features/*.md',
+        './docs/reference/*.md',
+        './docs/grilling-flagged-ambiguities.md',
         './docs/skills/**/*.md',
       ],
       // The 4 synthesize routes load lib/synthesis/humanizer-skill.md at

@@ -4,7 +4,7 @@
 
 ## Frame
 
-The WBC-corpus-derived 3-value classification of green-bean lots for **buying decisions** — a "soft guiding post" (Chris-locked 2026-05-16) for sourcing, NOT a canonical-validation surface. See [CONTEXT-shared.md § Sourcing tier](../../../../../CONTEXT-shared.md) for the canonical glossary entry.
+The WBC-corpus-derived 3-value classification of green-bean lots for **buying decisions** — a "soft guiding post" (Chris-locked 2026-05-16) for sourcing, NOT a canonical-validation surface. See [docs/reference/wbc-materials.md § Sourcing priority](../../../../../docs/reference/wbc-materials.md) for the canonical glossary entry.
 
 Three values, each with a heuristic green-bean shape — see [sourcing/strategy.md § 7-9](strategy.md) for the full per-tier descriptors and current Latent priority list.
 
@@ -22,4 +22,4 @@ The adjustment is per-decision and re-applied at each buying moment. Today's sna
 
 - [sourcing/strategy.md § 7-9](strategy.md) — full tier descriptors + priority targets
 - [sourcing/portfolio-lanes.md](portfolio-lanes.md) — 5-lane portfolio frame (orthogonal to tiers)
-- [CONTEXT-shared.md § Sourcing tier](../../../../../CONTEXT-shared.md) — canonical glossary
+- [docs/reference/wbc-materials.md § Sourcing priority](../../../../../docs/reference/wbc-materials.md) — canonical glossary

@@ -222,6 +222,19 @@ const DOC_FILES: Record<string, string> = {
   'docs://context-roasting.md': 'CONTEXT-roasting.md',
   'docs://context-brewing.md': 'CONTEXT-brewing.md',
   'docs://context-shared.md': 'CONTEXT-shared.md',
+  // Pattern J pruning (2026-05-25) extracted 4 operational subsections out of
+  // CONTEXT-shared.md (319 KB → 49 KB) to bring it under the ADR-0014
+  // session-load tier cap (40 KB target / 50 KB hard line). The 4 extracted
+  // docs are on-demand reference-tier (not session-load tier) and exceed the
+  // 40 KB cap by design — claude.ai pulls them via read_doc when the
+  // workflow needs a specific term, not at session start. The Flagged
+  // ambiguities ledger was split off in the same sprint (second-pass) to a
+  // sibling queue doc alongside grilling-queue.md.
+  'docs://reference/mcp-architecture.md': 'docs/reference/mcp-architecture.md',
+  'docs://reference/canonical-registries.md': 'docs/reference/canonical-registries.md',
+  'docs://reference/wbc-materials.md': 'docs/reference/wbc-materials.md',
+  'docs://reference/synthesis-pipeline.md': 'docs/reference/synthesis-pipeline.md',
+  'docs://grilling-flagged-ambiguities.md': 'docs/grilling-flagged-ambiguities.md',
   'docs://brewing.md': 'BREWING.md',
   'docs://brewing/roasters.md': 'docs/brewing/roasters.md',
   'docs://brewing/wbc-reference.md': 'docs/brewing/wbc-reference.md',
@@ -254,7 +267,17 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://context-brewing.md':
     'Use when validating or looking up the meaning of any Latent-specific BREWING term — Extraction Strategy (6 canonicals: Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid) / Two-Axis Framework / Modifier (4 canonical types) / Strategy promotion / Phase + Phase boundary + Mechanical role + Cup-side target / Coffee Brief (Step 1a-1d) / Reference brew / Signature method / Process-Dominant / Named Consideration / Cooling-Curve Target / WBC corpus check / signal arbitration (Variety signal / Process signal / Roaster signal / Signal override) / Strategy zone / Wrong-zone trap / Extraction Confirmed / Modifiers Confirmed / Resolved brew / Iteration loop / Iteration budget / Diminishing returns / Strategy pivot / Brewer rotation discipline / Hybrid sub-form (5 enum values: sequential / phase_mapped / selective_bloom / intensity_clarity_split / temperature_staged). One of three zone files split from the former CONTEXT.md on 2026-05-24. See docs://context-roasting.md for roasting terms; docs://context-shared.md for MCP / canonical registries / WBC framework / Synthesis / Relationships / Flagged ambiguities. Read this first before authoring any brewing-side prose into Latent so terminology stays consistent.',
   'docs://context-shared.md':
-    'Use when validating or looking up cross-cutting infrastructure terminology used by both roasting and brewing — MCP / Sync Architecture (Championship-mode / System self-improvement loop / Role separation / Latent MCP server / MCP-only input principle / Cross-system consistency principle / Tool vs Resource / Dual-surface pattern / Redirect stub / Cluster path / Operator-guide pattern / Sub-skill tiers + Master Coordinator + Chris\'s vocabulary aliases / Per-lot directory taxonomy / Three big levers / Pattern F + Pattern J decomposition tripwires / Asymmetric write trust / Drift / Category bloat / State bloat / Skeleton entry / Arbiter / Override flag / Canonical-strictness spectrum / Bearer + OAuth auth / Roest API integration), Canonical Registries (Aggregation level / Aggregation-eligibility / Alias / Pick-not-author / Hierarchical taxonomy / Composable taxonomy / Coverage strategy / Owned / Reference role / Producer system / Bottoms-up authoring / Substrate gap / Qualifier / Objective bucket / Marketing tag / Auto-created provenance), WBC Reference Materials (Strategy-zone completeness / Awareness vs adoption / Consciously not pursuing / Foundational control axes / Absorption status / Sourcing priority / Skill-maintenance lane / Portfolio lanes / Sourcing constraints / Risk-tier sourcing / Sourcing channel / Competition-grade access trajectory / Calibration pair / Cross-cutting control patterns / Experiment status), Synthesis Pipeline (Humanizer Pass / Knowledge capsule / Directed-Prompt Adapter / Cross-coffee Insight Layer / Variety Throughline / Resynthesize Trigger / Corpus tier), plus the Relationships map, Example dialogue, and Flagged ambiguities ledger. One of three zone files split from the former CONTEXT.md on 2026-05-24. See docs://context-roasting.md for roasting terms; docs://context-brewing.md for brewing terms. Load this alongside whichever domain-specific zone file your workflow needs.',
+    'Use as the glossary INDEX for cross-cutting infrastructure terminology used by both roasting and brewing. Pattern J pruning sprint (2026-05-25) reduced this from 319 KB to 49 KB by extracting 4 operational subsections to dedicated reference-tier docs under docs://reference/ (mcp-architecture / canonical-registries / wbc-materials / synthesis-pipeline) and the Flagged ambiguities ledger to docs://grilling-flagged-ambiguities.md. Section pointers in this file route to the right reference doc; the Relationships cardinality map + Example dialogue stay here as glossary-shaped substrate. Read this first to find the relevant reference doc for the term you need, then pull that doc via read_doc. One of three zone files split from the former CONTEXT.md on 2026-05-24. See docs://context-roasting.md for roasting terms; docs://context-brewing.md for brewing terms. Load this alongside whichever domain-specific zone file your workflow needs.',
+  'docs://reference/mcp-architecture.md':
+    'Use when validating or looking up Latent\'s MCP / Sync Architecture terminology (extracted from CONTEXT-shared.md in the Pattern J pruning sprint 2026-05-25). Covers Championship-mode / System self-improvement loop / Role separation / Latent MCP server / MCP-only input principle / Cross-system consistency principle / Tool vs Resource / Dual-surface pattern / Redirect stub / Cluster path / Operator-guide naming conventions / Sub-skill tiers + Master Coordinator + Chris\'s vocabulary aliases / Per-lot directory taxonomy / Three big levers / Pattern F + Pattern J decomposition tripwires / Asymmetric write trust / Drift / Category bloat / State bloat / Arbiter + procedure / propose_doc_changes + doc_proposals queue / taxonomy_overrides_queue + propose_canonical_addition / Override flag + Canonical-strictness spectrum / find-or-create + Canonical validation / NET-NEW / Bearer token + OAuth 2.1 + PKCE auth / Roest API integration. On-demand reference doc — pull via read_doc when claude.ai\'s workflow surfaces one of these terms; not session-load tier.',
+  'docs://reference/canonical-registries.md':
+    'Use when validating or looking up Latent\'s Canonical Registries meta-language (extracted from CONTEXT-shared.md in the Pattern J pruning sprint 2026-05-25). Covers Aggregation level / Aggregation-eligibility / Producer sourcing surface / Authoritative source + Validation mirror / 2-step deliberate edit / Alias (drift / structural / decompositional) / Pick-not-author principle / Hierarchical taxonomy + Parent level / Composable taxonomy / Coverage strategy + Owned / Reference role (Anchor / Signal / Experimental + Tier 4) + Aggregation-layer switch + Sourcing-accessibility ladder / Producer system / Bottoms-up authoring + Substrate gap / Qualifier / Objective bucket + Marketing tag + Inventory measurement workflow / Auto-created provenance / Skeleton entry / Family palette / Strategy tag. The actual canonical lists live in docs/taxonomies/*.md (authoritative) + lib/*-registry.ts (validation mirrors); this doc defines the META-LANGUAGE used across all 10 axes. On-demand reference doc.',
+  'docs://reference/wbc-materials.md':
+    'Use when validating or looking up Latent\'s WBC Reference Materials meta-language (extracted from CONTEXT-shared.md in the Pattern J pruning sprint 2026-05-25). Covers WBC reference materials / Strategy-zone completeness / Awareness vs adoption / Consciously not pursuing + Full-map workflow accessibility / Foundational control axes / Absorption status / Sourcing priority + naming-clash disambiguation against Reference role / Skill-maintenance lane / Portfolio lanes / Sourcing constraints / Risk-tier sourcing / Sourcing channel / Competition-grade access trajectory / Calibration pair / Cross-cutting control patterns / Experiment status. The actual WBC technique cookbooks + 102-recipe corpus live in docs/skills/wbc-brewing-archivist/cluster/ + docs/skills/wbc-roasting-archivist/cluster/; this doc defines the META-LANGUAGE used across both archivist clusters. On-demand reference doc.',
+  'docs://reference/synthesis-pipeline.md':
+    'Use when validating or looking up Latent\'s Synthesis Pipeline meta-language (extracted from CONTEXT-shared.md in the Pattern J pruning sprint 2026-05-25). Covers Humanizer pass / Knowledge capsule (Living-at-time-of-creation + Cross-source) / Synthesis pipeline / Directed-prompt adapter / Bottoms-up synthesis-prompt authoring / Cross-coffee insight layer / Variety throughline / Resynthesize trigger / Corpus tier. The actual synthesis code lives in lib/synthesis/ (buildPrompt.ts + runSynthesis.ts + 4 adapters); ADR-0010 records the 3-call architecture decision. On-demand reference doc.',
+  'docs://grilling-flagged-ambiguities.md':
+    'Use when looking up the resolution status of any Latent vocabulary ambiguity surfaced through past /grill-with-docs sessions. The standing ledger — items move from grilling-queue.md → grill session → here on resolution. Strikethrough + resolution date = closed; live text = still open. Distinct from docs://grilling-queue.md (forward-looking queue of concepts to grill next). Extracted from CONTEXT-shared.md in the Pattern J pruning sprint (second-pass, 2026-05-25). On-demand reference doc.',
   'docs://brewing.md':
     '[REDIRECT STUB in Wave 4 PR 4b] BREWING.md is now a ~3KB pointer-only doc enumerating where each former section now lives. Authoritative brewing content lives in the sub-skills clusters: brewing-assistant/cluster/operational-guide.md (BREW PROMPT Steps 1-4), brewing-equipment-expert/cluster/operational-reference.md (Location Constraints + Equipment + Valve + Filter + Examples), brewing-historian/cluster/patterns/ (cross-coffee insights + per-strategy + per-cultivar), wbc-brewing-archivist/cluster/ (WBC reference + 102-recipe corpus), coordinator/catalog.md § brewing-domain-principles (Two-Axis framing). Brew sessions still start with docs://prompts/start-brew.md.',
   'docs://brewing/roasters.md':
@@ -581,7 +604,32 @@ export function listDocs(): {
     entry('docs://context.md', 'docs/context.md', 'Latent Shared-Language Glossary (REDIRECT STUB — split into 3 zone files 2026-05-24)'),
     entry('docs://context-roasting.md', 'docs/context-roasting.md', 'Latent Glossary — Roasting Zone'),
     entry('docs://context-brewing.md', 'docs/context-brewing.md', 'Latent Glossary — Brewing Zone'),
-    entry('docs://context-shared.md', 'docs/context-shared.md', 'Latent Glossary — Shared / Infrastructure Zone'),
+    entry('docs://context-shared.md', 'docs/context-shared.md', 'Latent Glossary — Shared / Infrastructure Zone (index)'),
+    entry(
+      'docs://reference/mcp-architecture.md',
+      'docs/reference/mcp-architecture.md',
+      'Latent Glossary — MCP / Sync Architecture',
+    ),
+    entry(
+      'docs://reference/canonical-registries.md',
+      'docs/reference/canonical-registries.md',
+      'Latent Glossary — Canonical Registries',
+    ),
+    entry(
+      'docs://reference/wbc-materials.md',
+      'docs/reference/wbc-materials.md',
+      'Latent Glossary — WBC Reference Materials',
+    ),
+    entry(
+      'docs://reference/synthesis-pipeline.md',
+      'docs/reference/synthesis-pipeline.md',
+      'Latent Glossary — Synthesis Pipeline',
+    ),
+    entry(
+      'docs://grilling-flagged-ambiguities.md',
+      'docs/grilling-flagged-ambiguities.md',
+      'Latent Glossary — Flagged Ambiguities Ledger',
+    ),
     entry('docs://brewing.md', 'docs/brewing.md', 'Brewing Master Reference'),
     entry('docs://brewing/roasters.md', 'docs/brewing/roasters.md', 'Roaster Brewing Lessons'),
     entry('docs://brewing/wbc-reference.md', 'docs/brewing/wbc-reference.md', 'WBC Reference (Latent mapping)'),
