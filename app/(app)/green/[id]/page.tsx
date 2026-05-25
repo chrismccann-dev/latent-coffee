@@ -10,6 +10,7 @@ import { ExperimentFrameCard } from '@/components/ExperimentFrameCard'
 import { CrossBatchNotesBlock } from '@/components/CrossBatchNotesBlock'
 import { PerRoastReflections } from '@/components/PerRoastReflections'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
+import { DropRulesCard } from '@/components/DropRulesCard'
 import {
   computeLifecycleState,
   extractBatchNumber,
@@ -521,60 +522,6 @@ function HypothesisTable({ recipes }: { recipes: RoastRecipe[] }) {
   )
 }
 
-// Drop rules card — 2 rows (if running fast / slow) × N batches. Renders
-// only when at least one recipe has a rule populated; per-cell fallback to
-// em-dash when individual recipes don't. Amber-tinted (roast-emphasis token,
-// added Sub Pages 6.4) per scope doc § 5.5 — drop rules are roast-side
-// signals to watch during execution.
-function DropRulesCard({ recipes }: { recipes: RoastRecipe[] }) {
-  return (
-    <div className="bg-latent-roast-emphasis-surface border border-latent-roast-emphasis rounded p-4">
-      <div className="label mb-3">Drop Rules</div>
-      <table className="w-full text-sm">
-        <thead>
-          <tr>
-            <th className="text-left pr-4 font-sans font-normal text-latent-mid text-xs pb-2">
-              {/* row-label column — blank header */}
-            </th>
-            {recipes.map((r) => (
-              <th
-                key={r.id}
-                className="text-left px-3 font-sans font-semibold text-latent-fg text-xs pb-2"
-              >
-                {r.batch_slot ?? r.recipe_name ?? '?'}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="pr-4 font-sans text-xs text-latent-mid align-top py-2">
-              <div>If running fast</div>
-              <div className="text-latent-subtle font-normal">hits end before exp. total</div>
-            </td>
-            {recipes.map((r) => (
-              <td key={r.id} className="px-3 align-top py-2 text-xs leading-relaxed">
-                {r.drop_rule_if_fast ?? '—'}
-              </td>
-            ))}
-          </tr>
-          <tr>
-            <td className="pr-4 font-sans text-xs text-latent-mid align-top py-2">
-              <div>If running slow</div>
-              <div className="text-latent-subtle font-normal">past exp. total no end hit</div>
-            </td>
-            {recipes.map((r) => (
-              <td key={r.id} className="px-3 align-top py-2 text-xs leading-relaxed">
-                {r.drop_rule_if_slow ?? '—'}
-              </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
 // ---------------------------------------------------------------------------
 // Sub Pages 6.4 — Waiting-for-next-cupping view
 //
@@ -797,6 +744,19 @@ function WaitingForNextCuppingView({
         <SectionCard title={`ROAST ACTUALS · ${formatVLabel(latestExp.experiment_id)}`}>
           <RoastActualsTable slotInfos={slotInfos} latestExp={latestExp} />
         </SectionCard>
+      )}
+
+      {/* Recipe Design Intent disclosure (Sub Pages 6.8) — collapsed drill-in
+          surfacing drop rules from the V_n recipes for cupping-time retro
+          ("did the operator follow the rule on the v2b batch?"). Stays out
+          of foreground per redesign.md § 5.5 (amber surfaces are roast-prep
+          signal, not cupping signal); the collapsed disclosure honors the
+          lock while keeping rules consultable. Auto-hides until any recipe
+          carries a populated rule. */}
+      {recipesForLatest.some((r) => r.drop_rule_if_fast || r.drop_rule_if_slow) && (
+        <CollapsibleSection title="Recipe Design Intent">
+          <DropRulesCard recipes={recipesForLatest} />
+        </CollapsibleSection>
       )}
 
       {/* Green Bean Info — shared 6.4 component. Cleanup-actions PR #24
@@ -1437,6 +1397,21 @@ function ResolvedView({
           </div>
         )}
       </SectionCard>
+
+      {/* Reference Recipe Design Intent disclosure (Sub Pages 6.8) —
+          collapsed drill-in surfacing drop rules for the single reference
+          recipe, so the retrospective read ("what was the rule on the
+          reference roast?") stays consultable without elevating amber to
+          the resolved page's foreground (redesign.md § 5.5 lock). Renders a
+          1-column DropRulesCard (referenceRecipe wrapped in a single-
+          element array). Auto-hides until the reference recipe carries a
+          populated rule. */}
+      {referenceRecipe &&
+        (referenceRecipe.drop_rule_if_fast || referenceRecipe.drop_rule_if_slow) && (
+          <CollapsibleSection title="Reference Recipe Design Intent">
+            <DropRulesCard recipes={[referenceRecipe]} />
+          </CollapsibleSection>
+        )}
 
       {/* Reference Cup card */}
       <SectionCard title="REFERENCE CUP">
