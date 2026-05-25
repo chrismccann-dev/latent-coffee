@@ -159,7 +159,7 @@ export interface Roast {
   // Sprint 11 (migration 061, 2026-05-20): 4-value enum capturing FC audibility.
   // Three of four (subtle / silent / ambiguous) trigger the same downstream
   // protocol (bean-temp end condition + drop-ceiling-primary + Agtron as
-  // proxies); the distinction matters for cause attribution. See CONTEXT.md
+  // proxies); the distinction matters for cause attribution. See CONTEXT-roasting.md
   // § FC audibility state. Historical 135 roasts left NULL per RO-CP-3.
   fc_audibility: 'audible' | 'subtle' | 'silent' | 'ambiguous' | null
   // Sub Pages 6.1 (migration 052, 2026-05-13): FK to roast_recipes — the
@@ -259,7 +259,7 @@ export interface Cupping {
   // roast_learnings per ADR-0008. They describe what a cup IS (per-tasting
   // observation), not what a lot TAUGHT (lot-aggregate lesson). 7 closed
   // lots backfilled to the canonical pourover cupping on each lot's
-  // best_roast_id. See CONTEXT.md § Cup character.
+  // best_roast_id. See CONTEXT-roasting.md § Cup character.
   aromatic_behavior: string | null
   structural_behavior: string | null
   created_at: string

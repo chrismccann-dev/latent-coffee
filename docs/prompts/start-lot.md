@@ -6,7 +6,7 @@
 
 **Workflow position**: First of four lifecycle prompts (`start-lot.md` → `log-roast.md` ⇄ `log-cupping.md` → `close-lot.md`). This one runs once per lot.
 
-Vocabulary used in this prompt is defined in CONTEXT.md (V-set, batch slot, experiment frame, variable, lever, taste-for, leading slot, reference roast, adjustment). When the file ships, claude.ai already has CONTEXT.md in its project context - don't re-explain.
+Vocabulary used in this prompt is defined in CONTEXT-roasting.md (V-set, batch slot, experiment frame, variable, lever, taste-for, leading slot, reference roast, adjustment). When the file ships, claude.ai already has the CONTEXT-{roasting,brewing,shared}.md glossary family in its project context - don't re-explain.
 
 ## Tools for this session
 

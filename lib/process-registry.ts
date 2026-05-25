@@ -158,7 +158,7 @@ export const FERMENTATION_LOOKUP = makeCanonicalLookup(
 // Fermentation qualifiers (1) — orthogonal annotations on a fermentation
 // modifier. Added Sprint T3 / CR-5 2026-05-18, migration 059. Aggregation
 // level stays at the modifier; qualifier is record-when-known annotation, not
-// strategy-decision layer (per CONTEXT.md § Qualifier + Round 9 grilling
+// strategy-decision layer (per CONTEXT-shared.md § Qualifier + Round 9 grilling
 // 2026-05-16). See docs/taxonomies/processes.md § Qualifiers.
 //
 // Currently a single canonical: `Anoxic` on `Anaerobic` (sealed-container,
@@ -437,7 +437,7 @@ export interface StructuredProcess {
   fermentation_modifiers: readonly FermentationModifier[]
   // Orthogonal annotations on a fermentation modifier — e.g. `Anoxic` on
   // `Anaerobic`. Aggregation stays at the modifier; qualifier is record-when-
-  // known annotation, not a strategy-decision layer (per CONTEXT.md §
+  // known annotation, not a strategy-decision layer (per CONTEXT-shared.md §
   // Qualifier + Round 9 grilling 2026-05-16, schema landed Sprint T3 / CR-5
   // migration 059 / 2026-05-18). Strict-canonical against
   // FERMENTATION_QUALIFIERS at save-gate via isProcessResolvable.
@@ -508,7 +508,7 @@ export const LEGACY_DECOMPOSITIONS: Readonly<Record<string, StructuredProcess>> 
   // Anoxic = Anaerobic + qualifier:Anoxic (sealed-container, no-headspace
   // execution). Qualifier column added Sprint T3 / CR-5 (migration 059); the
   // one historical row (Rosado, id fd346045) was backfilled in the same
-  // migration. See FERMENTATION_QUALIFIERS + CONTEXT.md § Qualifier.
+  // migration. See FERMENTATION_QUALIFIERS + CONTEXT-shared.md § Qualifier.
   'Anoxic Natural': structured({
     base_process: 'Natural',
     fermentation_modifiers: ['Anaerobic'],

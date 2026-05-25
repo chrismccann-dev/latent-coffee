@@ -40,5 +40,5 @@ None directly.
 
 - **Files migrated:** `docs/brewing/wbc-reference.md` + `docs/brewing/wbc-recipes.md` → `cluster/` via `git mv`; original paths now hold ~200-byte redirect stubs.
 - **MCP Resources:** new cluster files registered in [lib/mcp/docs.ts](../../../lib/mcp/docs.ts) `DOC_FILES` + `DOC_DESCRIPTIONS` + `listDocs`. Old `docs://brewing/wbc-{reference,recipes}.md` URIs resolve to redirect stubs (URI back-compat preserved per Wave 1 pattern).
-- **Cross-system propagation:** ARBITER.md routing updated to direct new `propose_doc_changes` proposals at WBC content into the cluster; CONTEXT.md / BREWING.md / SYNC_V2.md / CLAUDE.md path refs updated to cluster paths; relevant brewing prompts (`start-brew.md`, `bundled-brewing-completion.md`) reference WBC Brewing Archivist as the lookup home.
+- **Cross-system propagation:** ARBITER.md routing updated to direct new `propose_doc_changes` proposals at WBC content into the cluster; CONTEXT-{roasting,brewing,shared}.md / BREWING.md / SYNC_V2.md / CLAUDE.md path refs updated to cluster paths; relevant brewing prompts (`start-brew.md`, `bundled-brewing-completion.md`) reference WBC Brewing Archivist as the lookup home.
 - **Subsequent waves:** Wave 4 may rewrite BREWING.md Section 4 as a redirect-stub pointer; this sub-skill becomes the authoritative home.

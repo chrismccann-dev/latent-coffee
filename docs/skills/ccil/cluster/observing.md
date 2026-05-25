@@ -1,6 +1,6 @@
 # CCIL — Observing list
 
-Candidate structural concepts that have been *named* during grilling but have insufficient N for promotion to confirmed vocabulary (CONTEXT.md entry) or a confirmed CCIL pattern. Surfaced at standard arbitration time (`process pending arbitration`) alongside doc proposals + taxonomy queue + skeleton entries. The arbiter asks per-candidate: promote / convert to CCIL pattern / convert to doc change / defer / drop. Per-item judgment, no upfront promotion rules.
+Candidate structural concepts that have been *named* during grilling but have insufficient N for promotion to confirmed vocabulary (CONTEXT-{roasting,brewing,shared}.md entry) or a confirmed CCIL pattern. Surfaced at standard arbitration time (`process pending arbitration`) alongside doc proposals + taxonomy queue + skeleton entries. The arbiter asks per-candidate: promote / convert to CCIL pattern / convert to doc change / defer / drop. Per-item judgment, no upfront promotion rules.
 
 Distinct from [docs/grilling-queue.md](../../../../grilling-queue.md): grilling-queue holds concepts to DISCUSS at the next grill; observing.md holds candidates that have BEEN discussed at a grill, were named, but lack confirming N for promotion.
 
@@ -8,7 +8,7 @@ Distinct from [docs/grilling-queue.md](../../../../grilling-queue.md): grilling-
 
 ### Process throughline
 - **Surfaced:** Item 1, Sprint R Phase 4 Step 4 grill (2026-05-23)
-- **What it names:** the shared character pattern that holds across both roasting and brewing layers when a PROCESS character is strong enough to dominate variety / terroir signal. The stronger the process, the stronger the throughline signal — heavily co-fermented beans can have a process throughline that overrides variety on both layers. Analogous structure to **Variety throughline** ([CONTEXT.md](../../../../../CONTEXT.md)) but anchored on process family (washed / natural / honey / wet-hulled / heavy-ferment) rather than variety.
+- **What it names:** the shared character pattern that holds across both roasting and brewing layers when a PROCESS character is strong enough to dominate variety / terroir signal. The stronger the process, the stronger the throughline signal — heavily co-fermented beans can have a process throughline that overrides variety on both layers. Analogous structure to **Variety throughline** ([CONTEXT-shared.md § Synthesis Pipeline](../../../../../CONTEXT-shared.md)) but anchored on process family (washed / natural / honey / wet-hulled / heavy-ferment) rather than variety.
 - **Current N:** unsystematically observed across brewing-historian/cluster/patterns/by-strategy/ + roasting-historian/cluster/patterns/by-process/washed.md
 - **Promotion trigger:** 2+ explicit CCIL patterns surface process throughline as the load-bearing axis (e.g. confirmed heavy-ferment co-ferment pattern where process throughline dominates regardless of variety).
 - **Related:** [[variety-throughline]] · [[cross-coffee-insight-layer]]
@@ -29,7 +29,7 @@ Distinct from [docs/grilling-queue.md](../../../../grilling-queue.md): grilling-
 
 ### Cross-domain tension as a CCIL section convention
 - **Surfaced:** 2026-05-21 Sudan Rume CCIL seed pattern § "Cross-domain tension to flag" / named at Item 1, Sprint R Phase 4 Step 4 grill (2026-05-23)
-- **What it names:** the structural shape inside a CCIL pattern doc where one layer's settled rule contradicts another's. The CCIL entry surfaces the contradiction explicitly, proposes a unified working hypothesis to bridge, and lists what evidence would resolve. Candidate to become a CCIL cluster authoring convention (lives in [SKILL.md](../SKILL.md) if promoted, not CONTEXT.md).
+- **What it names:** the structural shape inside a CCIL pattern doc where one layer's settled rule contradicts another's. The CCIL entry surfaces the contradiction explicitly, proposes a unified working hypothesis to bridge, and lists what evidence would resolve. Candidate to become a CCIL cluster authoring convention (lives in [SKILL.md](../SKILL.md) if promoted, not in the CONTEXT-{roasting,brewing,shared}.md glossary family).
 - **Current N:** 1 ("fast cone phase-separates on Sudan Rume" brewing rule vs Latent SR Washed reference brew on UFO Ceramic + Sibarist Fast Cone producing integrated cup)
 - **Promotion trigger:** 2-3 more CCIL patterns where cross-domain tension is the structurally interesting part — then promote to CCIL SKILL.md authoring convention.
 - **Related:** [[cross-coffee-insight-layer]] · sudan-rume seed pattern
@@ -61,7 +61,7 @@ Distinct from [docs/grilling-queue.md](../../../../grilling-queue.md): grilling-
 When the arbiter promotes a candidate, move it here with date + landing target. Format:
 
 ```
-- **<Candidate name>** — resolved YYYY-MM-DD. Landed as: <CONTEXT.md entry / CCIL pattern at <path> / CCIL SKILL.md convention / dropped>. Source PR: #NNN.
+- **<Candidate name>** — resolved YYYY-MM-DD. Landed as: <CONTEXT-{roasting,brewing,shared}.md entry / CCIL pattern at <path> / CCIL SKILL.md convention / dropped>. Source PR: #NNN.
 ```
 
 (none yet — populated as arbiter passes promote candidates)

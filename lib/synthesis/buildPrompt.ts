@@ -57,7 +57,7 @@ function hasLearningSignal(row: LearningRow): boolean {
 // row count into one of 4 tiers, each driving (a) target paragraph count,
 // (b) target takeaway count, (c) max_tokens budget, (d) confidence-language
 // hint injected into the prompt. Replaces the prior binary `earlyData` flag.
-// See CONTEXT.md § Synthesis Pipeline > Corpus tier.
+// See CONTEXT-shared.md § Synthesis Pipeline > Corpus tier.
 // ---------------------------------------------------------------------------
 
 export type SynthesisTier = 'early' | 'emerging' | 'established' | 'mature'

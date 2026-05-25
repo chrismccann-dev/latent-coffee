@@ -4,7 +4,7 @@
 
 ## Frame
 
-The 5-lane portfolio-construction frame Chris uses for **green-bean inventory balance**. Distinct from Sourcing priority (which classifies per-lot buying priority); see [CONTEXT.md § Portfolio lanes](../../../../../CONTEXT.md) for the canonical glossary entry.
+The 5-lane portfolio-construction frame Chris uses for **green-bean inventory balance**. Distinct from Sourcing priority (which classifies per-lot buying priority); see [CONTEXT-shared.md § Portfolio lanes](../../../../../CONTEXT-shared.md) for the canonical glossary entry.
 
 The 5 lanes name the **role-shape** a balanced inventory should cover, regardless of which individual lots fill each lane:
 
@@ -22,4 +22,4 @@ The 5 lanes name the **role-shape** a balanced inventory should cover, regardles
 
 - [sourcing/strategy.md § 10](strategy.md) — full lane definitions + inventory mapping
 - [sourcing/priority-targets.md](priority-targets.md) — Tier 1/2/3 priority targets (orthogonal to lanes)
-- [CONTEXT.md § Portfolio lanes](../../../../../CONTEXT.md) — canonical glossary
+- [CONTEXT-shared.md § Portfolio lanes](../../../../../CONTEXT-shared.md) — canonical glossary

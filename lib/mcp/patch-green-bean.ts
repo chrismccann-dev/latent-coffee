@@ -57,14 +57,14 @@ export const patchGreenBeanInputSchema = {
   // (e.g. Rancho Tio post-merge backfill where the one-shot framing wasn't
   // known at push time).
   is_one_shot: z.boolean().optional().nullable().describe(
-    'True for single-batch sample lots (~100-120g, no iteration possible — no cross-batch evidence to attribute levers from). Patchable post-intake when the one-shot framing is determined or corrected later. Note: changing false → true on a lot that already has roast_learnings with lever-attribution fields populated (primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) does NOT retroactively clear those fields — the migration 054 validation only fires on new writes to roast_learnings. Clear them explicitly via the field-level mutation path on roast_learnings if needed. See CONTEXT.md § One-shot lot.',
+    'True for single-batch sample lots (~100-120g, no iteration possible — no cross-batch evidence to attribute levers from). Patchable post-intake when the one-shot framing is determined or corrected later. Note: changing false → true on a lot that already has roast_learnings with lever-attribution fields populated (primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) does NOT retroactively clear those fields — the migration 054 validation only fires on new writes to roast_learnings. Clear them explicitly via the field-level mutation path on roast_learnings if needed. See CONTEXT-roasting.md § One-shot lot.',
   ),
   // Migration 069 (Phase 2 Item 17, 2026-05-24): patchable post-intake when
   // the peer-roasted variant brew row lands in the DB later (common case —
   // the peer brew is logged via push_brew after the green lot is registered,
   // then this FK gets backfilled).
   peer_reference_brew_id: z.string().uuid().optional().nullable().describe(
-    'Optional FK to a brews(id) row for the peer-roasted reference brew of the same green-bean lot. ~25-30%+ of lots have a peer-roasted variant the operator buys as a calibration anchor for the roasting side. Typically set HERE (not at green-bean push time) because the peer brew row is logged separately via the brewing-side write path, then this FK is backfilled. Pass NULL to clear an existing link. See CONTEXT.md § Peer-roasted reference brew.',
+    'Optional FK to a brews(id) row for the peer-roasted reference brew of the same green-bean lot. ~25-30%+ of lots have a peer-roasted variant the operator buys as a calibration anchor for the roasting side. Typically set HERE (not at green-bean push time) because the peer brew row is logged separately via the brewing-side write path, then this FK is backfilled. Pass NULL to clear an existing link. See CONTEXT-roasting.md § Peer-roasted reference brew.',
   ),
 }
 

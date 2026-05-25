@@ -34,7 +34,7 @@ export const pushRoastLearningsInputSchema = {
   underdevelopment_signal: z.string().optional().nullable().describe('What "underdeveloped" tasted like for this lot — the diagnostic signal to watch for.'),
   overdevelopment_signal: z.string().optional().nullable(),
   cultivar_takeaway: z.string().optional().nullable().describe('What this lot taught about the cultivar generally.'),
-  terroir_takeaway: z.string().optional().nullable().describe('What this lot taught about the terroir generally (country / admin region / macro terroir patterns). Populatable on one-shot lots (terroir attribution does not require cross-batch evidence the way primary_lever does). Added Sprint 10 (migration 060, 2026-05-19) to close the missing carry-forward axis in CONTEXT.md § Carry-forward learnings.'),
+  terroir_takeaway: z.string().optional().nullable().describe('What this lot taught about the terroir generally (country / admin region / macro terroir patterns). Populatable on one-shot lots (terroir attribution does not require cross-batch evidence the way primary_lever does). Added Sprint 10 (migration 060, 2026-05-19) to close the missing carry-forward axis in CONTEXT-roasting.md § Carry-forward learnings.'),
   general_takeaway: z.string().optional().nullable().describe('What this lot taught about roasting generally / cross-coffee patterns.'),
   reference_roasts: z.string().optional().nullable().describe('Which batches to keep in mind for replication / comparison.'),
   starting_hypothesis: z.string().optional().nullable().describe('Hypothesis for the next similar coffee — what to start from.'),

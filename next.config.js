@@ -14,10 +14,16 @@ const nextConfig = {
     // Sprint T3 / CR-3 2026-05-18 when importer-exporter-scoping.md was
     // registered as the first docs/features/ surface in DOC_FILES;
     // docs/skills/**/*.md added Wave 1 2026-05-26 when the composable
-    // sub-skills architecture landed via ADR-0011.)
+    // sub-skills architecture landed via ADR-0011; CONTEXT-roasting.md +
+    // CONTEXT-brewing.md + CONTEXT-shared.md added 2026-05-24 Sprint R
+    // Phase 4 Step 5 when CONTEXT.md split into 3 zone-aligned files —
+    // the original CONTEXT.md stays in the bundle as a redirect stub.)
     outputFileTracingIncludes: {
       '/api/mcp/**': [
         './CONTEXT.md',
+        './CONTEXT-roasting.md',
+        './CONTEXT-brewing.md',
+        './CONTEXT-shared.md',
         './BREWING.md',
         './ROASTING.md',
         './docs/brewing/*.md',

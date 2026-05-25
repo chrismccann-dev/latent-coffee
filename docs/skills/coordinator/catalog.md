@@ -35,7 +35,7 @@ Chris roasts exclusively in counterflow mode on the Roest L200 Ultra. Counterflo
 
 **V-set methodology.** Lots iterate in sets of 3 batches (V1a/V1b/V1c → V2a/V2b/V2c → ...), comparative cupped against a non-optimized xBloom Day-7 reference recipe per [roest-knowledge/cluster/protocols/evaluation.md](../roest-knowledge/cluster/protocols/evaluation.md). One-shot calibration lots (single-batch samples ~100-120g) use a separate 2-prompt pipeline; lever-attribution fields on `roast_learnings` are schema-rejected on one-shots per migration 054.
 
-**Lifecycle.** 4 states derived per row (`in_inventory` / `waiting_for_next_roast` / `waiting_for_next_cupping` / `resolved`) — never stored, always computed via `lib/lifecycle-state.ts`. See [CONTEXT.md § Lifecycle state](../../../CONTEXT.md) for the precedence rules.
+**Lifecycle.** 4 states derived per row (`in_inventory` / `waiting_for_next_roast` / `waiting_for_next_cupping` / `resolved`) — never stored, always computed via `lib/lifecycle-state.ts`. See [CONTEXT-roasting.md § Lifecycle state](../../../CONTEXT-roasting.md) for the precedence rules.
 
 **Reference-cup vs. optimized-brew distinction.** The xBloom Day-7 cup is the V-set discriminator gate; the optimized brew is the consumption-condition endpoint (full brewing-project dial-in on the reference roast). The two roles are distinct and structurally enforced by the schema (`is_reference_candidate` on `roasts` for V-set candidacy; `is_reference` flips at close-out; `optimized brew` is the brew-side row joined via `green_bean_id` + preferring `roast_id = best_roast_id`).
 

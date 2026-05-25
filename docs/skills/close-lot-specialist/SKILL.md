@@ -45,7 +45,7 @@ Two flavors of lot close-out:
 **Reference-roast explainer:**
 - `why_this_roast_won` — 3-6 sentences. Cite specific roast measurements (FC time/temp, drop temp, Agtron, WB→Gnd delta) AND specific cup descriptors. Distinguish "won the V-set comparison" from "is the lot-level reference." NULL is reserved for "Closed without reference" — see one-shot Outcome B below.
 
-**Roasted bean characteristic (3 attributes per CONTEXT.md):**
+**Roasted bean characteristic (3 attributes per CONTEXT-roasting.md):**
 - `primary_lever` — single variable that mattered most for this lot
 - `secondary_levers` — smaller-impact levers that still moved the cup
 - `roast_window_width` — `"Narrow"` / `"Moderate"` / `"Wide"` — acceptable roast window for the primary lever

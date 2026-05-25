@@ -21,7 +21,7 @@ The sourcing tiers in this doc reference producers and varieties from those regi
 ## History
 
 - **2026-05-09:** Initial draft. Authored from Chris's "Sourcing Strategy Ideas for Roasting" synthesis doc plus the underlying WBC corpus. Latent inventory mapped to tiers as a 2026-05-09 snapshot — refresh on inventory change. Two-doc split with [wbc-roasting.md](../wbc-roasting.md) covering the *how to roast* side.
-- **2026-05-18 (Sprint T2):** Three doc edits folding the 2026-05-16 grilling locks into the authored doc — § 10 portfolio formalized 4 → 5 lanes (Value / roast-practice promoted from gap-analysis-only to authored frame; WBC-6); § 11 Sourcing channels added with 6 channel kinds (Generalist retailer / Specialty importer / Competition-grade importer / Direct-from-farm / Auction-sample channel / Direct-from-auction awareness-only; WBC-8); Geisha Village classification corrected inside the new § 11 (direct-from-farm with 1kg-sample-bag sub-pattern, not generalist retailer; WBC-7). Each lock matches the canonical vocabulary already in [CONTEXT.md § WBC Reference Materials](../../../../../CONTEXT.md).
+- **2026-05-18 (Sprint T2):** Three doc edits folding the 2026-05-16 grilling locks into the authored doc — § 10 portfolio formalized 4 → 5 lanes (Value / roast-practice promoted from gap-analysis-only to authored frame; WBC-6); § 11 Sourcing channels added with 6 channel kinds (Generalist retailer / Specialty importer / Competition-grade importer / Direct-from-farm / Auction-sample channel / Direct-from-auction awareness-only; WBC-8); Geisha Village classification corrected inside the new § 11 (direct-from-farm with 1kg-sample-bag sub-pattern, not generalist retailer; WBC-7). Each lock matches the canonical vocabulary already in [CONTEXT-shared.md § WBC Reference Materials](../../../../../CONTEXT-shared.md).
 
 ## How sourcing thinking shifted post-WBC review
 
@@ -319,7 +319,7 @@ Build the green inventory around five lanes:
 
 The shift the WBC data supports: **buy coffees with clear experimental jobs**, not "buy the most interesting coffee."
 
-The **Value / roast-practice lane** was formalized 2026-05-18 (Sprint T2 / WBC-6) — the gap analysis below had been treating it as load-bearing since the 2026-05-09 snapshot, but the authored frame above lagged at 4 lanes. The 5th lane carries cheap experiment substrate (sub-$30/kg, washed Bourbon / Caturra / value-tier blends) for running 3-batch dev ladders + rest-curve experiments + green-curve calibration without burning expensive lots on basic-skill iterations. Eats fast at 100g/batch — the Roest L200 100g-per-batch capacity (see Sourcing constraints in CONTEXT.md) means even a 5-pound value lot supports ~22 practice roasts, which the iteration cadence consumes quickly enough to matter.
+The **Value / roast-practice lane** was formalized 2026-05-18 (Sprint T2 / WBC-6) — the gap analysis below had been treating it as load-bearing since the 2026-05-09 snapshot, but the authored frame above lagged at 4 lanes. The 5th lane carries cheap experiment substrate (sub-$30/kg, washed Bourbon / Caturra / value-tier blends) for running 3-batch dev ladders + rest-curve experiments + green-curve calibration without burning expensive lots on basic-skill iterations. Eats fast at 100g/batch — the Roest L200 100g-per-batch capacity (see Sourcing constraints in CONTEXT-shared.md) means even a 5-pound value lot supports ~22 practice roasts, which the iteration cadence consumes quickly enough to matter.
 
 ## 11. Sourcing channels
 
@@ -348,7 +348,7 @@ Geisha Village had been informally classified as a **generalist retailer** becau
 
 ### Direct-from-auction is awareness-only today
 
-The 6th channel is locked as awareness-only — Chris doesn't currently bid on full auction lots, and the typical 5-50kg auction-lot quantities are incompatible with the Sourcing-constraints 1-5lb window (see CONTEXT.md § Sourcing constraints for the layer). Future scope as the producer-relationship network grows and as the long-term Competition-grade-access-trajectory advances (also CONTEXT.md). The reason this channel earns documentation today rather than waiting for first-use: the awareness-floor principle of Strategy-zone completeness applies on the sourcing side too — Chris should never not-know-the-channel-exists, even when it's not currently adopted.
+The 6th channel is locked as awareness-only — Chris doesn't currently bid on full auction lots, and the typical 5-50kg auction-lot quantities are incompatible with the Sourcing-constraints 1-5lb window (see CONTEXT-shared.md § Sourcing constraints for the layer). Future scope as the producer-relationship network grows and as the long-term Competition-grade-access-trajectory advances (also CONTEXT-shared.md). The reason this channel earns documentation today rather than waiting for first-use: the awareness-floor principle of Strategy-zone completeness applies on the sourcing side too — Chris should never not-know-the-channel-exists, even when it's not currently adopted.
 
 ### Channel mix today
 
@@ -359,7 +359,7 @@ Most current inventory came in via:
 - **Competition-grade importer** — Untold Coffee Lab, Forward Coffee (the higher-end specialty lots)
 - **Direct-from-farm** — CGLE (Sudan Rume Hybrid Washed + Sudan Rume Natural, both via WhatsApp post-relationship-building), Forest Coffee (GESHA CLOUDS, Milton Monroy source)
 
-The Competition-grade-access-trajectory (CONTEXT.md) names the multi-year shift in this mix — from generalist + specialty importer dominant today toward direct-from-farm + competition-grade importer + direct-from-auction dominant at championship-mode horizon.
+The Competition-grade-access-trajectory (CONTEXT-shared.md § WBC Reference Materials) names the multi-year shift in this mix — from generalist + specialty importer dominant today toward direct-from-farm + competition-grade importer + direct-from-auction dominant at championship-mode horizon.
 
 ## Latent inventory mapped to tiers (snapshot 2026-05-09)
 
