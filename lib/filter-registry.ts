@@ -89,6 +89,14 @@ export const FILTERS: readonly FilterEntry[] = [
   // candidate when (a) second April-fit paper enters inventory, OR (b) Project #3
   // native-brewer protocol covers it via the April brewer. See:
   // docs/research-projects/flat-bottom-filter-drawdown.md § Notes
+  //
+  // PaperShape audit note (Project #3 prep 2026-05-24): April paper has flat
+  // bottom + fluted walls — same geometric pattern as Sibarist WAVE B3. Both
+  // would benefit from paperShape='flat' + wallStructure='fluted' per Project
+  // #2 audit item #3 (paperShape vs wallStructure decomposition). UNIQUE
+  // pattern: April's bottom diameter is brewer-specific large, so it
+  // operationally fits only the April brewer (like UFO paper only fits UFO
+  // dripper). Geometric class (flat-bottom-fluted) ≠ brewer-fit class.
   {
     name: "April Paper Filter",
     manufacturer: "April",
@@ -192,9 +200,11 @@ export const FILTERS: readonly FilterEntry[] = [
     paperTechnology: "Roast-specific",
     bestArchetype: "Stability flat (cone variant)",
     compatibleSystems: "V60 / Origami",
-    owned: true,
-    location: "Home",
-    primaryUseCase: "Balanced cone extraction (softens acidity, rounds profile)",
+    // Ownership corrected 2026-05-24 (Research Project #3 prep): Chris owns
+    // CAFEC papers only via the Cup 4 (V60-02) 4-pack assortment per
+    // https://cafecusa.com/products/copy-of-cafec-4p-paper-filter-assortment-v60-02-cup4-cfa4-40w-4p
+    // Cup 1 (V60-01) variants like this MC1 entry are not owned. Same Project #1
+    // SKU naming-convention drift (1/4 digit encodes paper SIZE not roast spec).
   },
   {
     name: "CAFEC T-83 - Cup 1 Dark Roast Paper Filter",
@@ -218,9 +228,10 @@ export const FILTERS: readonly FilterEntry[] = [
     paperTechnology: "Roast-specific",
     bestArchetype: "Immersion hybrid (cone assist)",
     compatibleSystems: "V60 / Switch",
-    owned: true,
-    location: "Home",
-    primaryUseCase: "Extraction push via resistance (increase contact time without grind change)",
+    // Ownership corrected 2026-05-24 (Research Project #3 prep): Chris owns
+    // CAFEC papers only via the Cup 4 (V60-02) 4-pack assortment. Cup 1 (V60-01)
+    // variants like this DC1 entry are not owned. Same Project #1 SKU
+    // naming-convention drift.
   },
   {
     name: "CAFEC Abaca+ Cup 1 Cone Paper Filter",

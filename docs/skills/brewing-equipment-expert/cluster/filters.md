@@ -61,6 +61,8 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 
 *Project #2 measurement deferred (2026-05-24): oversized for Orea v4 (would have required forced compression), AND no peer April-fit paper in the Project #2 scope to compare against (cohort-of-one problem). Re-measurement candidate when (a) second April-fit paper enters inventory, OR (b) Project #3 native-brewer protocol covers it via the April brewer with peer papers. See [docs/research-projects/flat-bottom-filter-drawdown.md](../../../research-projects/flat-bottom-filter-drawdown.md) Notes section.*
 
+*PaperShape audit note (Project #3 prep 2026-05-24): April paper has flat bottom + fluted walls — same geometric pattern as Sibarist WAVE B3. Both would benefit from `paperShape: 'flat'` + `wallStructure: 'fluted'` per Project #2 audit item #3 (paperShape vs wallStructure decomposition). UNIQUE pattern: April's bottom diameter is brewer-specific large, so it operationally fits only the April brewer (like UFO paper only fits UFO dripper). Geometric class (flat-bottom-fluted) ≠ brewer-fit class.*
+
 - SKU: `APRIL-STD`
 - Link: <https://www.aprilcoffeeroasters.com/collections/april-brewing-accessories/products/april-paper-filter>
 - Paper shape: Flat
@@ -295,7 +297,7 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Clarity / Body / Sweetness: High / Medium / Clean
 - Best archetype: Clarity cone (controlled)
 
-### CAFEC T-83 - Cup 1 Dark Roast Paper Filter — Owned
+### CAFEC T-83 - Cup 1 Dark Roast Paper Filter
 
 - SKU: `DC1-40W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/cup-1-dark-roast-paper-filter-dc1-40w>
@@ -309,8 +311,7 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Flow consistency: Stable
 - Clarity / Body / Sweetness: Low / High / Muted
 - Best archetype: Immersion hybrid (cone assist)
-- Location: Home
-- Primary use case: Extraction push via resistance (increase contact time without grind change)
+- *Ownership corrected 2026-05-24 (Research Project #3 prep): Chris owns CAFEC papers only via the [Cup 4 (V60-02) 4-pack assortment](https://cafecusa.com/products/copy-of-cafec-4p-paper-filter-assortment-v60-02-cup4-cfa4-40w-4p). Cup 1 (V60-01) variants like this DC1 entry are not owned — same Project #1 SKU naming-convention drift (1/4 digit encodes paper SIZE, not roast spec).*
 
 ### CAFEC T-92 - Cup 1 Light Roast Paper Filter (slow)
 
@@ -328,7 +329,7 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Best archetype: Clarity cone
 - *Ownership corrected 2026-05-23 (Research Project #1 inventory cross-check): not physically present in drawer. Chris owns no Cup-1 CAFEC papers; killed the LC4-vs-LC1 geometry-check pair (deferred until any Cup-1 CAFEC paper enters inventory).*
 
-### CAFEC T-90 - Cup 1 Medium Roast Paper Filter — Owned
+### CAFEC T-90 - Cup 1 Medium Roast Paper Filter
 
 - SKU: `MC1-100W`
 - Link: <https://cafecusa.com/collections/filter-papers/products/cafec-cup-1-pour-over-coffee-paper-filter-by-roasting-type-flow-rate-differences-for-specialty-coffee-medium-roast-faster-flow-rate-1-cup-size-v60-01>
@@ -337,13 +338,12 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Fits brewers: V60, Origami, Cafec
 - Seal/fit: Standard
 - Material: Wood pulp
-- Thickness: Medium
+- Thickness: Medium-fast
 - Flow rate: Medium-fast
 - Flow consistency: Stable
 - Clarity / Body / Sweetness: Medium / Medium / Rounded
 - Best archetype: Stability flat (cone variant)
-- Location: Home
-- Primary use case: Balanced cone extraction (softens acidity, rounds profile)
+- *Ownership corrected 2026-05-24 (Research Project #3 prep): Chris owns CAFEC papers only via the [Cup 4 (V60-02) 4-pack assortment](https://cafecusa.com/products/copy-of-cafec-4p-paper-filter-assortment-v60-02-cup4-cfa4-40w-4p). Cup 1 (V60-01) variants like this MC1 entry are not owned — same Project #1 SKU naming-convention drift.*
 
 ### CAFEC Cup 4 Dark Roast Paper Filter — Owned (assortment pack)
 
