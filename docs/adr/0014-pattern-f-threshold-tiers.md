@@ -60,8 +60,52 @@ ADR-0013 had two different statements of the cluster threshold in different sect
 
 **Empirical claude.ai context-window measurement** — Chris-offered cross-party session at Item 5 grill (2026-05-23): "if we need to do another claude.ai grilling session between you, Claude, and claude.ai, to figure out how much it could accurately retain and what the context scope creep is on it, I'm okay to do that." Lived measurement (instrument a typical brewing + roasting session, capture substrate-pull totals, observe degradation patterns) would replace the 50% best-guess heuristic with calibrated thresholds. Tracked as outstanding grilling-queue item.
 
+## Amendment 2026-05-25 — Empirical calibration results
+
+The Open follow-up above (cross-party claude.ai context-window measurement) was executed 2026-05-25 in a brewing-side calibration session (Chris + Claude Code + claude.ai). Findings reframe the binding constraint and surface a new tier.
+
+### Reframe: the binding constraint is per-tool-result inline cap, not aggregate %
+
+The original "no more than ~50% of claude.ai's context window" heuristic measured the wrong thing. Lived data:
+
+| Phase | Inline-loaded substrate | Spilled-to-disk | % of 1M-token window |
+|---|---|---|---|
+| Baseline (after session-start fetch) | ~94 KB | 319 KB (context-shared.md) | ~2.4% |
+| Checkpoint A (after research phase) | ~141 KB | 319 KB | ~3.5% |
+
+A typical brewing session uses ~3-12% of the context window for substrate — wildly under the 50% threshold. **Aggregate KB is not the bottleneck.** The actual constraint is the per-tool-result inline cap (empirically observed around 200 KB): any single doc over the cap spills to disk and becomes functionally a disk reference, not loaded context.
+
+### New tier: session-load living doc
+
+Docs fetched at every session start by the protocol (CONTEXT-{roasting,brewing,shared}.md, coordinator catalog + operator-guide) load on every session, not on-demand. Tighter cap than root-level living docs:
+
+| Sub-skill class | Cluster cap | Single-doc cap |
+|---|---|---|
+| **Session-load living doc** (CONTEXT-*.md, coordinator catalog + operator-guide) | N/A | **40 KB** |
+
+40KB leaves comfortable headroom under the ~200KB inline cap when ≥3 session-load docs co-fetch.
+
+### Operational finding: spilled-doc redundancy masks the gap
+
+claude.ai's retrospective surfaced that the brewing-zone and shared-zone glossaries overlap on common terms (WBC corpus check, fermentation_qualifiers, etc.). When the shared doc spills, claude.ai can still "recall" overlapping terms by pulling them from the inline-loaded brewing doc — masking the gap behaviorally. Only shared-zone-only terms (MCP/Sync architecture entries: Dual-surface pattern, Asymmetric write trust, Knowledge capsule, Directed-Prompt Adapter) reveal that the shared doc is functionally absent.
+
+**Diagnostic implication:** behavioral testing of session-start substrate loading is unreliable in isolation. Pruning by extraction (Pattern J) removes both the bloat AND the masking redundancy, enabling cleaner behavioral verification post-cleanup.
+
+### Current state vs new cap
+
+| Doc | Size | New cap | Status |
+|---|---|---|---|
+| CONTEXT-shared.md | **319 KB** | 40 KB session-load | **8x over — Pattern J pruning sprint queued** |
+| CONTEXT-roasting.md | 108 KB | 40 KB session-load | 2.7x over — pruning candidate |
+| CONTEXT-brewing.md | 59 KB | 40 KB session-load | 1.5x over — pruning candidate |
+| coordinator/catalog.md | 17 KB | 40 KB session-load | OK |
+| coordinator/operator-guide.md | 18 KB | 40 KB session-load | OK |
+
+All 3 CONTEXT-*.md files exceed the new session-load cap. Pattern J pruning sprint scoped separately (see [docs/sprints/pattern-j-context-shared-pruning-kickoff-2026-05-25.md](../sprints/pattern-j-context-shared-pruning-kickoff-2026-05-25.md)).
+
 ## Sources
 
 - Item 5, Sprint R Phase 4 Step 4 grill (2026-05-23) — Chris-locked pattern-aware framing + claude.ai-as-binding-constraint reasoning + PRODUCT.md decomposition trigger
 - Lived audit 2026-05-23: 3 over-threshold clusters under prior uniform threshold; all compliant under new pattern-aware tiers
 - Prior ADR-0013 § Pattern F + § Architecture-level bloat tripwires
+- Item 5b calibration session (2026-05-25) — cross-party brewing-side measurement with Chris + Claude Code + claude.ai; reframed binding constraint to per-tool-result inline cap; surfaced Session-load living doc tier
