@@ -84,6 +84,11 @@ export interface GreenBeanPayload {
   // one-shot-closeout.md instead of the 4-prompt V-set pipeline. See
   // CONTEXT.md "One-shot lot" entry.
   is_one_shot?: boolean | null
+  // Phase 2 Item 17 (migration 069). Optional FK to brews(id) for the
+  // peer-roasted reference brew of the same green-bean lot. Typically
+  // NULL at first push; backfilled later via patch_green_bean once the
+  // peer brew row exists. See CONTEXT.md § Peer-roasted reference brew.
+  peer_reference_brew_id?: string | null
 }
 
 export type PersistGreenBeanResult =
@@ -235,6 +240,9 @@ export async function persistGreenBean(
     // Migration 054 — workflow class flag (default false at SQL level; explicit
     // override via payload).
     is_one_shot: payload.is_one_shot ?? false,
+    // Migration 069 (Phase 2 Item 17). Optional peer-roasted reference brew
+    // FK; defaults NULL when payload omits, typically backfilled later.
+    peer_reference_brew_id: payload.peer_reference_brew_id ?? null,
   }
 
   const { data, error } = await supabase
@@ -1100,6 +1108,10 @@ export interface PatchGreenBeanPayload {
   // Migration 054 — workflow class flag, patchable for retroactive flagging
   // (Rancho Tio backfill case + future post-intake reclassification).
   is_one_shot?: boolean | null
+  // Migration 069 (Phase 2 Item 17). Patchable — typically set HERE (not at
+  // push time) because the peer brew row is logged separately via the
+  // brewing-side write path, then this FK is backfilled.
+  peer_reference_brew_id?: string | null
 }
 
 export const GREEN_BEAN_PATCH_FIELDS = [
@@ -1110,6 +1122,8 @@ export const GREEN_BEAN_PATCH_FIELDS = [
   'producer_tasting_notes', 'additional_notes', 'roest_inventory_id',
   // Migration 054
   'is_one_shot',
+  // Migration 069 (Phase 2 Item 17)
+  'peer_reference_brew_id',
 ] as const
 
 export async function patchGreenBean(

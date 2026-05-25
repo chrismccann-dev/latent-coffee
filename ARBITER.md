@@ -572,7 +572,11 @@ Use this worked example as the shape template for the next pass.
 
 ## Tool description writing convention
 
-Locked Round 11 (`patch_brew` + `list_canonicals` BLOCKING bug) + Round 14 / Sprint R Phase 4 Step 4 Group 3 / Items 21 + 23 / 2026-05-24. The MCP `tool_search` ranking algorithm uses description-text keyword matching, so embedding another Tool's name in a description makes that Tool surface for searches against the embedded name. When the surfacing Tool is unrelated to the search intent (e.g. `list_canonicals` ranking for `push_brew` queries), the operator picks the wrong Tool and the workflow breaks.
+Locked Round 11 (`patch_brew` + `list_canonicals` BLOCKING bug) + Round 14 / Sprint R Phase 4 Step 4 Group 3 / Items 21 + 23 / 2026-05-24; opening principle locked Phase 1 / Items 21+23 follow-up / 2026-05-24.
+
+**Opening principle (Chris-stated 2026-05-24 audio): Tool descriptions are claude.ai-facing, not human-readable docs.** Chris does not insert data into the app via the MCP server — the canonical write path is claude.ai sessions calling MCP Tools. Tool descriptions exist to drive correct Tool selection at session-time inside claude.ai's `tool_search` retrieval; they are NOT documentation for human readers, runbooks, or onboarding content. Optimize the prose for what claude.ai needs to see to pick the right Tool on the first search and call it with the right shape. Human readability is a non-goal; substrate docs (CONTEXT.md / ADRs / cluster docs / this file) carry the human-readable layer. This framing justifies the strict #4 rule below — Chris-as-human loses nothing from the descriptive-phrasing rewrites because Chris-as-human is not the reader; claude.ai gains the collision-avoidance benefit.
+
+The MCP `tool_search` ranking algorithm uses description-text keyword matching, so embedding another Tool's name in a description makes that Tool surface for searches against the embedded name. When the surfacing Tool is unrelated to the search intent (e.g. `list_canonicals` ranking for `push_brew` queries), claude.ai picks the wrong Tool and the workflow breaks.
 
 The convention has four parts plus one narrow carve-out (#4a) added 2026-05-24:
 

@@ -102,6 +102,11 @@ export interface GreenBean {
   // or future canonical re-resolution. NULL on rows whose canonicals have
   // not been re-resolved post-original-insert.
   canonicals_updated_at: string | null
+  // Phase 2 Item 17 (migration 069, 2026-05-24): nullable FK to brews(id)
+  // for the peer-roasted reference brew of the same green-bean lot.
+  // ~25-30%+ of lots have one (calibration anchor for the roasting side).
+  // ON DELETE SET NULL on the FK constraint.
+  peer_reference_brew_id: string | null
   created_at: string
   updated_at: string
   // Joined data
