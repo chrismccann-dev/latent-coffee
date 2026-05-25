@@ -82,12 +82,12 @@ export interface GreenBeanPayload {
   // Workflow class (migration 054). True for single-batch sample lots
   // (~100-120g, no iteration possible). Routes through one-shot.md +
   // one-shot-closeout.md instead of the 4-prompt V-set pipeline. See
-  // CONTEXT.md "One-shot lot" entry.
+  // CONTEXT-roasting.md "One-shot lot" entry.
   is_one_shot?: boolean | null
   // Phase 2 Item 17 (migration 069). Optional FK to brews(id) for the
   // peer-roasted reference brew of the same green-bean lot. Typically
   // NULL at first push; backfilled later via patch_green_bean once the
-  // peer brew row exists. See CONTEXT.md § Peer-roasted reference brew.
+  // peer brew row exists. See CONTEXT-roasting.md § Peer-roasted reference brew.
   peer_reference_brew_id?: string | null
 }
 
@@ -407,7 +407,7 @@ export interface RoastPayload {
   end_condition_target?: number | null
   fc_total_cracks?: number | null
   // Sprint 11 (migration 061, 2026-05-20): RO-CP-3 4-value FC audibility enum.
-  // audible / subtle / silent / ambiguous. See CONTEXT.md § FC audibility state.
+  // audible / subtle / silent / ambiguous. See CONTEXT-roasting.md § FC audibility state.
   fc_audibility?: 'audible' | 'subtle' | 'silent' | 'ambiguous' | null
   // Prose (Chris-authored). worth_repeating accepts boolean for back-compat;
   // coerced to 'yes'/'no'/'pending' tristate on write per migration 044.
@@ -929,7 +929,7 @@ export function validateRoastLearningsPayload(p: RoastLearningsPayload): Validat
 // feedback_mcp_only_input.md.
 //
 // See docs/sprints/one-shot-lot-framework-kickoff.md for the sprint scope +
-// CONTEXT.md "One-shot lot" entry for the workflow framing.
+// CONTEXT-roasting.md "One-shot lot" entry for the workflow framing.
 const ONE_SHOT_FORBIDDEN_FIELDS = [
   'primary_lever',
   'secondary_levers',

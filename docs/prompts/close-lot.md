@@ -4,7 +4,7 @@
 
 **Workflow position**: Fourth and final lifecycle prompt (`start-lot.md` → `log-roast.md` ⇄ `log-cupping.md` → **`close-lot.md`**). This one runs exactly once per lot, after `log-cupping.md` has flagged Path A (lot ready for close-out).
 
-Vocabulary used in this prompt is defined in CONTEXT.md (reference roast vs leading slot, reference cup, optimized brew, lot-specific learnings, carry-forward learnings, roasted bean characteristic, underdev signal / overdev signal, aromatic / structural / rest behavior). The lot-level reference roast designation is what distinguishes this prompt from `log-cupping.md`'s V-set-level leading-slot designation.
+Vocabulary used in this prompt is defined in CONTEXT-roasting.md (reference roast vs leading slot, reference cup, optimized brew, lot-specific learnings, carry-forward learnings, roasted bean characteristic, underdev signal / overdev signal, aromatic / structural / rest behavior). The lot-level reference roast designation is what distinguishes this prompt from `log-cupping.md`'s V-set-level leading-slot designation. Cross-zone vocabulary (Qualifier, Canonical Registries, etc.) in CONTEXT-shared.md.
 
 ## Tools for this session
 
@@ -60,7 +60,7 @@ The lot-level reference roast designation is distinct from any V-set's leading s
 
 - **`why_this_roast_won`**: what about this specific batch made it the lot-level reference. 3-6 sentences. The most load-bearing field - it's the verdict prose surfaced front-and-center on the resolved-view page. Cite specific roast measurements (FC time/temp, drop temp, Agtron, WB→Gnd delta) AND specific cup descriptors. Distinguish "this roast won the V-set comparison" from "this roast is the lot-level reference" - the latter is what this prompt records. Always populated on V-set close-outs (NULL is reserved for "Closed without reference" lots — see one-shot-closeout.md).
 
-### Roasted bean characteristic (3 attributes per CONTEXT.md)
+### Roasted bean characteristic (3 attributes per CONTEXT-roasting.md)
 
 These are what the resolved-view page's Roast Character mini-card surfaces side-by-side:
 
@@ -75,7 +75,7 @@ These are what the resolved-view page's Roast Character mini-card surfaces side-
 
 ### Cup-side diagnostic signals (NOT roast-side observations)
 
-CONTEXT.md is strict on this distinction. Underdev / overdev signals describe what the CUP TASTES LIKE when development is off-target, NOT roast-side observations like "the roast stalled at the end" (those go in the per-roast prose `what_didnt` or in `additional_notes` on the experiment row).
+CONTEXT-roasting.md is strict on this distinction. Underdev / overdev signals describe what the CUP TASTES LIKE when development is off-target, NOT roast-side observations like "the roast stalled at the end" (those go in the per-roast prose `what_didnt` or in `additional_notes` on the experiment row).
 
 - **`underdevelopment_signal`**: what underdev tasted like for THIS lot's cup - diagnostic marker for future lots of similar cultivar / process. Lot-specific (grassy / hay / sour / underextracted-acidity vary by cultivar). Cite the specific batch slot(s) that exhibited this so the signal is anchored to evidence.
 - **`overdevelopment_signal`**: cup-side mirror. Lot-specific (roasty / nutty / ashy / muted / dark-chocolate-heavy / pronounced drying tannin / Sichuan peppercorn vary by cultivar).
@@ -139,7 +139,7 @@ Apply canonical-validation discipline from `log-brew.md` / `bundled-brewing-comp
 - Recipe: brewer / filter / dose / water / grinder / grind_setting / temperature
 - `extraction_strategy` (+ `hybrid_subform` if Hybrid) + `strategy_notes` + optional `cooling_curve_target`
 - `flavors` (structured chips) + `structure_tags` — **`structure_tags` enum is narrower than intuition.** Body axis canonicals do NOT include "Heavy" (use "Syrupy" / "Full" / "Light"); Sweetness axis canonicals are intensity-shaped not flavor-shaped (no "Honeyed" — that's a flavor; use "High" / "Moderate" / "Low"); Acidity axis does NOT include "Tart" (use "Bright" / "Juicy" / "Soft" / "Sparkling"). Call `read_canonical(axis: "flavors")` or check the error message's enum list if unsure. Common slip: copying flavor descriptors into structure_tags.
-- `fermentation_qualifiers: ['Anoxic']` when the green bean's process detail indicates sealed-container / no-headspace / Grain-Pro-at-low-moisture fermentation execution (Sprint T3 / CR-5 / migration 059, 2026-05-18). Canonical via `FERMENTATION_QUALIFIER_LOOKUP`; aliases `No Oxygen` / `Zero O2` / `Oxygen Free` resolve to `Anoxic`. Record-when-known annotation — does not dictate strategy (aggregation stays at the `[Anaerobic]` modifier per CONTEXT.md § Qualifier). Omit (leave as `[]`) when not applicable or not knowable from the source.
+- `fermentation_qualifiers: ['Anoxic']` when the green bean's process detail indicates sealed-container / no-headspace / Grain-Pro-at-low-moisture fermentation execution (Sprint T3 / CR-5 / migration 059, 2026-05-18). Canonical via `FERMENTATION_QUALIFIER_LOOKUP`; aliases `No Oxygen` / `Zero O2` / `Oxygen Free` resolve to `Anoxic`. Record-when-known annotation — does not dictate strategy (aggregation stays at the `[Anaerobic]` modifier per CONTEXT-shared.md § Qualifier). Omit (leave as `[]`) when not applicable or not knowable from the source.
 - Prose: `pour_structure`, `bloom_*`, `peak_expression`, `aroma`, `attack`, `mid_palate`, `body`, `finish`, `what_i_learned`, `terroir_connection`, `cultivar_connection`
 
 For field-level edits to a brew already pushed, prefer `patch_brew`.

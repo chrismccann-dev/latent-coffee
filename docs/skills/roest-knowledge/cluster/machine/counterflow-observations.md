@@ -97,7 +97,7 @@ The pattern across all five rules: **the BEAN_TEMP auto-drop optimizes for the t
 
 ## WB-to-Ground Agtron Delta as Development Signal
 
-The delta between whole bean (WB) Agtron and ground Agtron is one of the most sensitive internal development signals available. **Operational vocabulary tracks magnitude, not sign** — the directional interpretation (surface ahead of core vs core ahead of surface) flips by lot family, so the scalar delta is read for magnitude and the surface-vs-interior pattern is named in prose when it matters. See [CONTEXT.md § WB→Gnd Agtron delta](../../../../../CONTEXT.md) for the canonical definition.
+The delta between whole bean (WB) Agtron and ground Agtron is one of the most sensitive internal development signals available. **Operational vocabulary tracks magnitude, not sign** — the directional interpretation (surface ahead of core vs core ahead of surface) flips by lot family, so the scalar delta is read for magnitude and the surface-vs-interior pattern is named in prose when it matters. See [CONTEXT-roasting.md § WB→Gnd Agtron delta](../../../../../CONTEXT-roasting.md) for the canonical definition.
 
 | Magnitude | Reading | Action |
 |---|---|---|

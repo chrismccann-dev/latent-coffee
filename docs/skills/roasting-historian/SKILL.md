@@ -52,7 +52,7 @@ None directly. The existing `propose_doc_changes` pipeline applies cluster updat
 - **Per-lot learnings decision (Chris-locked):** Pointer + brief synthesis style — each `cluster/learnings/<lot>.md` is ~150-250 lines; links to roast_learnings DB row + green_beans page + archive.md + ROASTING.md reference summary, plus 1-paragraph cross-lot framing. DB is substrate; cluster adds pattern context. Avoids two-home drift on the 14-field carry-forward block.
 - **scope_tags seeding gap (DB pre-flight finding):** All 4 `scope_tags` columns returned empty rows — forward-only population per Sprint 12 / ADR-0009, no historical backfill. Substituted FK-based seeding from `green_beans` for the by-cultivar / by-process stubs (Gesha at N=3, Washed at N=6).
 - **MCP Resources:** 12 new cluster files registered in [lib/mcp/docs.ts](../../../lib/mcp/docs.ts) `DOC_FILES` + `DOC_DESCRIPTIONS` + `listDocs`. Existing `./docs/skills/**/*.md` glob in [next.config.js](../../../next.config.js) covers all new paths (Wave 1 work); no glob change needed.
-- **Cross-system propagation:** CLAUDE.md Documentation Index updated; CONTEXT.md cross-refs intact; PRODUCT.md § Active Sprints Wave 2 closed; `docs/sprints/shipped.md` row added; 6 prompts referencing CCIL anchors verified (top-level anchor preserved); ARBITER.md § CCIL consolidation pass updated to point at cluster file.
+- **Cross-system propagation:** CLAUDE.md Documentation Index updated; CONTEXT-{roasting,brewing,shared}.md cross-refs intact; PRODUCT.md § Active Sprints Wave 2 closed; `docs/sprints/shipped.md` row added; 6 prompts referencing CCIL anchors verified (top-level anchor preserved); ARBITER.md § CCIL consolidation pass updated to point at cluster file.
 
 ## Subsequent waves
 

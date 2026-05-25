@@ -318,7 +318,7 @@ Ask Chris one of three resolutions:
 
 For `enrich`:
 1. **Edit `lib/<axis>-registry.ts`** — populate the missing rich fields on the entry. For producer: 27-field shape (tier / producerSystem / referenceRole / farmName / country / adminRegion / macroTerroir / farmingModel / processingCapability / processingStyleTags / dryingMethod / primaryCultivars / secondaryCultivars / experimentalCultivars / knownFor / typicalFlavorProfile / acidityStyle / bodyStyle / consistencyRating / marketTier / exporters / importers / roasterReferences / contact). For roaster: 29-field shape (location / country / url / roastStyle / developmentBias / restCurve / strategyTag / primaryDriver / extractionPurpose / houseStyle / brewGuideSource / brewGuideLink / brewGuideType / tempC / doseG / waterG / ratio / typicalBrewTime / agitationLevel / extractionIntent / failureMode / overExtractionTolerance / processSensitivity / primaryBrewer / filterType / confidenceLevel / brewAdjustmentMethod / calibrationRole / notes).
-2. **Remove the `skeleton: true` line entirely** — monotonic-then-deleted per CONTEXT.md § Skeleton entry. Do NOT set `skeleton: false`; the field is optional and the absence signals "fully researched."
+2. **Remove the `skeleton: true` line entirely** — monotonic-then-deleted per CONTEXT-shared.md § Skeleton entry. Do NOT set `skeleton: false`; the field is optional and the absence signals "fully researched."
 3. **Edit `docs/taxonomies/<axis>.md`** — add or update the corresponding section under the appropriate tier/family header.
 
 For `alias retroactively`:
@@ -359,7 +359,7 @@ Once merged + Vercel deploys: `list_skeleton_entries` no longer surfaces the res
 
 ## CCIL observing list review (Item 1, Sprint R Phase 4 Step 4 grill, 2026-05-23)
 
-[docs/skills/ccil/cluster/observing.md](docs/skills/ccil/cluster/observing.md) holds candidate structural concepts that were named at a grill but lack confirming N for promotion to CONTEXT.md vocabulary or a confirmed CCIL pattern. Walked as the **fourth arbiter queue type** alongside `doc_proposals` + `taxonomy_overrides_queue` + skeleton entries during a `process pending arbitration` run. Same forcing function, no separate trigger — Chris explicitly chose to fold into the existing arbiter rather than spec a new one (avoids process bloat; per-item judgment beats systematic rules at this scale).
+[docs/skills/ccil/cluster/observing.md](docs/skills/ccil/cluster/observing.md) holds candidate structural concepts that were named at a grill but lack confirming N for promotion to the CONTEXT-{roasting,brewing,shared}.md glossary family or a confirmed CCIL pattern. Walked as the **fourth arbiter queue type** alongside `doc_proposals` + `taxonomy_overrides_queue` + skeleton entries during a `process pending arbitration` run. Same forcing function, no separate trigger — Chris explicitly chose to fold into the existing arbiter rather than spec a new one (avoids process bloat; per-item judgment beats systematic rules at this scale).
 
 ### O1. Read observing list
 
@@ -378,7 +378,7 @@ For each candidate, show:
 - Any new observations since the candidate was last surfaced (run `git log` against relevant cluster docs to spot new patterns that might reinforce or contradict)
 
 Ask Chris one of five resolutions:
-- **promote to CONTEXT.md** — the concept earns a glossary entry. Arbiter drafts the entry inline + edits CONTEXT.md.
+- **promote to CONTEXT-{zone}.md** — the concept earns a glossary entry. Arbiter drafts the entry inline + edits the right zone file (CONTEXT-roasting.md for roasting-zone terms; CONTEXT-brewing.md for brewing-zone; CONTEXT-shared.md for cross-cutting infrastructure / canonical registries / WBC framework / synthesis pipeline).
 - **promote to CCIL pattern** — the concept earns its own pattern file under `docs/skills/ccil/cluster/<scope>/<pattern>.md`. Arbiter drafts the file inline + adds CCIL umbrella back-link.
 - **convert to doc change** — the concept is operational (sub-skill cluster substrate update), not vocabulary. Arbiter files a `propose_doc_changes` proposal against the appropriate cluster doc.
 - **defer** — keep on the observing list, no new info worth acting on. Arbiter updates the candidate's "current N" + adds a session marker noting it was reviewed.
@@ -500,7 +500,7 @@ Decision tree:
 
 ## Substrate-practice gap audit
 
-Cross-party `/grill-with-docs` sessions are the canonical mechanism for closing the **practice-to-substrate** direction: lived workflow practice diverges from substrate (schema / prompts / ROASTING.md / BREWING.md / CONTEXT.md), the cross-party audit surfaces the gap, the audit output becomes substrate updates.
+Cross-party `/grill-with-docs` sessions are the canonical mechanism for closing the **practice-to-substrate** direction: lived workflow practice diverges from substrate (schema / prompts / ROASTING.md / BREWING.md / CONTEXT-{roasting,brewing,shared}.md), the cross-party audit surfaces the gap, the audit output becomes substrate updates.
 
 The substrate-to-substrate direction (workflow output proposes substrate edits via `propose_doc_changes`, arbitrated through the procedure above) and the practice-to-substrate direction (cross-party audit catches drift between lived practice and documented substrate) are paired mechanisms. Both are subject to the six-actor cross-system audit discipline in [CLAUDE.md § Sprint cadence](CLAUDE.md#sprint-cadence-for-claude) item #4.
 
@@ -512,7 +512,7 @@ The substrate-to-substrate direction (workflow output proposes substrate edits v
 
 **Cadence:** not on a fixed schedule. Chris-driven, triggered when claude.ai's lived authoring vocabulary feels drifted from Latent's documented terminology, or when a recurring friction pattern in a workflow suggests the substrate is incomplete. **Trigger phrase**: "let's do a cross-party grill on the {cluster} side" (or functionally equivalent — "cross-party audit", "grill against claude.ai").
 
-**Output shape:** same as other grilling sessions — followup file at `docs/sprints/grilling-YYYY-MM-DD-<scope>-followups.md` + CONTEXT.md entries inline (per the "grow incrementally" rule) + optional ADR if a non-obvious decision crystallized. The session does NOT route through `doc_proposals` / `taxonomy_overrides_queue` — cross-party output is direct doc edits, not staged proposals.
+**Output shape:** same as other grilling sessions — followup file at `docs/sprints/grilling-YYYY-MM-DD-<scope>-followups.md` + CONTEXT-{zone}.md entries inline in the right zone file (per the "grow incrementally" rule) + optional ADR if a non-obvious decision crystallized. The session does NOT route through `doc_proposals` / `taxonomy_overrides_queue` — cross-party output is direct doc edits, not staged proposals.
 
 **Future ADR-0006 candidate:** if the cross-party pattern repeats across 3+ sessions, the mechanism itself earns explicit framing alongside the existing arbiter procedures. Tracked as RO-CP-9 in [docs/sprints/post-grilling-sequencing.md](docs/sprints/post-grilling-sequencing.md); deferred per Chris-confirmed 2026-05-17 to "when a 3rd cross-party audit lands."
 
@@ -530,14 +530,14 @@ The [Roasting Historian cluster § Cross-Coffee Insight Layer](docs/skills/roast
 
 Pair the CCIL pass with the regular prose-proposal / canonical-queue passes when both queues have pending work; otherwise run standalone.
 
-**Pre-conditions:** same as the prose-proposal pass - fresh branch, worktree-local `user.email`. Read [CONTEXT.md § Key-insight confidence ladder](CONTEXT.md) to refresh on the 4-level enum operational definitions; the consolidation pass applies the same ladder.
+**Pre-conditions:** same as the prose-proposal pass - fresh branch, worktree-local `user.email`. Read [CONTEXT-roasting.md § Key-insight confidence ladder](CONTEXT-roasting.md) to refresh on the 4-level enum operational definitions; the consolidation pass applies the same ladder.
 
 ### CCIL-1. Audit current CCIL entries
 
 Read [docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md). Inventory every prose paragraph or `## H2` subsection (NOT the reference tables - see below). For each entry, record:
 
 - **Origin date** - when authored. Recoverable from the entry's lot tag (e.g. "RWA-NOVA-NAT21-RB-2026 V1, observed 2026-05") or from `git log -- ROASTING.md` if not embedded.
-- **Confidence level** - Low / Medium / Medium-High / High per [CONTEXT.md § Key-insight confidence ladder](CONTEXT.md).
+- **Confidence level** - Low / Medium / Medium-High / High per [CONTEXT-roasting.md § Key-insight confidence ladder](CONTEXT-roasting.md).
 - **Corroborating lots since authoring** - count lots that have either reinforced or contradicted the hypothesis. Cross-reference [Roasting Historian § Open Questions](docs/skills/roasting-historian/cluster/patterns/open-questions.md) for tracked-validation status. Run `git log --oneline -- docs/skills/roasting-historian/cluster/patterns/` to spot subsequent edits that updated the hypothesis.
 - **Parallel Open Questions row** - does the hypothesis have a question entry in the Open Questions section that tracks the next-lot test?
 
@@ -546,7 +546,7 @@ Read [docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md](
 ### CCIL-2. Promote candidates → Confirmed Patterns subsection
 
 A hypothesis is promotion-eligible when BOTH conditions hold:
-- `key_insight_confidence = High` per the CONTEXT.md operational ladder, AND
+- `key_insight_confidence = High` per the CONTEXT-roasting.md operational ladder, AND
 - Repeated across ≥2 lots OR strong cross-lot corroboration (the pattern is invoked in V1 design for 3+ subsequent lots without contradiction; or the pattern is named explicitly in a closed lot's `roast_learnings.carry_forward_general_takeaway`; or the pattern survives an adversarial "what would change my mind?" prompting and is invoked by claude.ai during prior similar-lot V1 designs).
 
 Surface promotion candidates to Chris before editing. For each promotion Chris approves:
@@ -596,7 +596,7 @@ Per [CLAUDE.md § Sprint cadence](CLAUDE.md#sprint-cadence-for-claude) item #4, 
 
 - **Actor 6 (UI):** ROASTING.md edits applied. ✓
 - **Actor 4 (MCP):** `roasting.md` doc Resource auto-reflects file content; no Tool/Resource code change required. Verify by running `read_doc_section({ uri: "docs://roasting.md", anchor: "Cross-Coffee Insight Layer" })` after merge to confirm the section still resolves.
-- **Actor 5 (Claude Code):** CLAUDE.md / CONTEXT.md need an edit only if the operational ladder itself shifts; pure CCIL restructure does not.
+- **Actor 5 (Claude Code):** CLAUDE.md / CONTEXT-roasting.md need an edit only if the operational ladder itself shifts; pure CCIL restructure does not.
 - **Actor 2 (prompts):** `log-cupping.md` / `close-lot.md` / `start-lot.md` / `one-shot.md` / `one-shot-closeout.md` reference CCIL by top-level anchor "Cross-Coffee Insight Layer" - that anchor is unchanged, so prompts continue to resolve. If any prompt links to a specific subsection by anchor (e.g. `#fc-floor--ceiling-by-processing-method`), `grep` for those anchors and verify they still resolve after restructure.
 - **Actor 3 (claude.ai):** next session pulls fresh `roasting.md` via `docs://` MCP Resource. The Confirmed Patterns subsection's relative weight on V1-design is something Chris flags to the claude.ai project at the start of the next roasting session.
 - **Actor 1 (Chris):** rendered ROASTING.md should read coherently. Verify navigation from Confirmed Patterns bullets → detail sections works (the bullet links use markdown `[§ Section](#section-anchor)` form; section anchors are GitHub-style slugified from H2 headings).
@@ -618,16 +618,16 @@ Use this worked example as the shape template for the next pass.
 
 Locked Round 11 (`patch_brew` + `list_canonicals` BLOCKING bug) + Round 14 / Sprint R Phase 4 Step 4 Group 3 / Items 21 + 23 / 2026-05-24; opening principle locked Phase 1 / Items 21+23 follow-up / 2026-05-24.
 
-**Opening principle (Chris-stated 2026-05-24 audio): Tool descriptions are claude.ai-facing, not human-readable docs.** Chris does not insert data into the app via the MCP server — the canonical write path is claude.ai sessions calling MCP Tools. Tool descriptions exist to drive correct Tool selection at session-time inside claude.ai's `tool_search` retrieval; they are NOT documentation for human readers, runbooks, or onboarding content. Optimize the prose for what claude.ai needs to see to pick the right Tool on the first search and call it with the right shape. Human readability is a non-goal; substrate docs (CONTEXT.md / ADRs / cluster docs / this file) carry the human-readable layer. This framing justifies the strict #4 rule below — Chris-as-human loses nothing from the descriptive-phrasing rewrites because Chris-as-human is not the reader; claude.ai gains the collision-avoidance benefit.
+**Opening principle (Chris-stated 2026-05-24 audio): Tool descriptions are claude.ai-facing, not human-readable docs.** Chris does not insert data into the app via the MCP server — the canonical write path is claude.ai sessions calling MCP Tools. Tool descriptions exist to drive correct Tool selection at session-time inside claude.ai's `tool_search` retrieval; they are NOT documentation for human readers, runbooks, or onboarding content. Optimize the prose for what claude.ai needs to see to pick the right Tool on the first search and call it with the right shape. Human readability is a non-goal; substrate docs (CONTEXT-{roasting,brewing,shared}.md / ADRs / cluster docs / this file) carry the human-readable layer. This framing justifies the strict #4 rule below — Chris-as-human loses nothing from the descriptive-phrasing rewrites because Chris-as-human is not the reader; claude.ai gains the collision-avoidance benefit.
 
 The MCP `tool_search` ranking algorithm uses description-text keyword matching, so embedding another Tool's name in a description makes that Tool surface for searches against the embedded name. When the surfacing Tool is unrelated to the search intent (e.g. `list_canonicals` ranking for `push_brew` queries), claude.ai picks the wrong Tool and the workflow breaks.
 
 The convention has four parts plus one narrow carve-out (#4a) added 2026-05-24:
 
-**1. Vocabulary deferrals → substrate, not sibling Tools.** When a `patch_X` field shares vocabulary with the corresponding `push_X` field, do NOT write "See push_X.<field>". Restate the vocabulary inline OR point to the substrate authority (CONTEXT.md § <entry>, ADR-NNNN, schema column comment). The substrate doc is the canonical source; the Tool description is a pointer. Concrete rewrite recipe:
+**1. Vocabulary deferrals → substrate, not sibling Tools.** When a `patch_X` field shares vocabulary with the corresponding `push_X` field, do NOT write "See push_X.<field>". Restate the vocabulary inline OR point to the substrate authority (CONTEXT-{roasting,brewing,shared}.md § <entry>, ADR-NNNN, schema column comment). The substrate doc is the canonical source; the Tool description is a pointer. Concrete rewrite recipe:
 
 > Before: `'FC audibility state: audible / subtle / silent / ambiguous. See push_roast.fc_audibility for the full 4-value semantics + protocol-stack notes.'`
-> After: `'FC audibility / occurrence state (5-value enum). audible / subtle / silent / ambiguous / did_not_fire. Full vocabulary + protocol-stack notes in CONTEXT.md § FC audibility state.'`
+> After: `'FC audibility / occurrence state (5-value enum). audible / subtle / silent / ambiguous / did_not_fire. Full vocabulary + protocol-stack notes in CONTEXT-roasting.md § FC audibility state.'`
 
 **2. Sibling create-vs-update refs → descriptive language.** When a `patch_X` description must establish its workflow relationship to `push_X` (the "this is the field-level mutation companion to the INSERT path" framing), do NOT name the sibling Tool by name. Use descriptive phrasing instead:
 

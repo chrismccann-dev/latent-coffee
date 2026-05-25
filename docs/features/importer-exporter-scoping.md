@@ -178,4 +178,4 @@ None of these need answering today. They're the agenda for the future sprint tha
 - Migration 031 (2026-04-26) — the sprint 1l producer canonicalization that introduced the Nordic Approach alias
 - [docs/features/taxonomy-overrides-queue.md](./taxonomy-overrides-queue.md) — the override queue that catches future Nordic-Approach-class drift
 - [ARBITER.md](../../ARBITER.md) — the queue-resolution playbook
-- [CONTEXT.md](../../CONTEXT.md) § Canonical Registries — the four-way coverage strategy framing
+- [CONTEXT-shared.md](../../CONTEXT-shared.md) § Canonical Registries — the four-way coverage strategy framing

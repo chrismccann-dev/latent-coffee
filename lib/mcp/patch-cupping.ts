@@ -38,10 +38,10 @@ export const patchCuppingInputSchema = {
   ),
   // Sprint 11 RO-6 (migration 062, 2026-05-20) — character relocation from roast_learnings per ADR-0008.
   aromatic_behavior: z.string().optional().nullable().describe(
-    'How aromatics present in time and intensity for THIS cup — immediate vs late-blooming, expressive vs muted, lifted vs grounded, sustained vs transient. Per-tasting observation tied to a specific cupping event (describes what a cup IS, not what a lot TAUGHT). Relocated from roast_learnings.aromatic_behavior per ADR-0008 (Sprint 11, migration 062). Lot-aggregate carry-forward of aromatic patterns still belongs on roast_learnings.cultivar_takeaway / general_takeaway / etc. See CONTEXT.md § Aromatic behavior.',
+    'How aromatics present in time and intensity for THIS cup — immediate vs late-blooming, expressive vs muted, lifted vs grounded, sustained vs transient. Per-tasting observation tied to a specific cupping event (describes what a cup IS, not what a lot TAUGHT). Relocated from roast_learnings.aromatic_behavior per ADR-0008 (Sprint 11, migration 062). Lot-aggregate carry-forward of aromatic patterns still belongs on roast_learnings.cultivar_takeaway / general_takeaway / etc. See CONTEXT-roasting.md § Aromatic behavior.',
   ),
   structural_behavior: z.string().optional().nullable().describe(
-    'How a cup presents structurally — the shape and balance of acidity, body, and finish, separate from flavor. Per-tasting observation. Relocated from roast_learnings.structural_behavior per ADR-0008 (Sprint 11, migration 062) — same per-cup-vs-per-lot rationale as aromatic_behavior. See CONTEXT.md § Structural behavior.',
+    'How a cup presents structurally — the shape and balance of acidity, body, and finish, separate from flavor. Per-tasting observation. Relocated from roast_learnings.structural_behavior per ADR-0008 (Sprint 11, migration 062) — same per-cup-vs-per-lot rationale as aromatic_behavior. See CONTEXT-roasting.md § Structural behavior.',
   ),
   wb_agtron: z.number().optional().nullable().describe(
     'Whole-bean Agtron override (Schema sprint S1, migration 055, 2026-05-18). RARE — normally auto-snapshot from joined roasts.agtron at cupping-insert time. Use this only when the source roast row was patched post-cupping (Agtron re-measured days later, etc.) and you want to realign the cupping snapshot. wb_to_ground_delta is a generated column on (wb_agtron - ground_agtron) — it updates automatically.',

@@ -18,7 +18,7 @@ Author and maintain lessons-learned from `brews` rows; surface cross-strategy + 
 
 - Every `push_brew` execution
 - `brews` table rows (read-only)
-- Corpus tier signals (early / emerging / established / mature per CONTEXT.md § Corpus tier)
+- Corpus tier signals (early / emerging / established / mature per CONTEXT-shared.md § Corpus tier)
 
 ## Outputs
 

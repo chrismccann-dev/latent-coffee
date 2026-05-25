@@ -134,7 +134,7 @@ After the recipe table, provide three short sections:
 
 After each brew, provide tasting notes covering aroma, attack, mid-palate, body, and finish. Note how it changes as it cools.
 
-Claude will respond with adjusted parameters. **Adjustment width is scale-dependent — concretely mapped to the iteration's position in the search**, mirroring the roasting-side Adjustment rule (CONTEXT.md § Adjustment; Brew 1 is the brewing analog of V1):
+Claude will respond with adjusted parameters. **Adjustment width is scale-dependent — concretely mapped to the iteration's position in the search**, mirroring the roasting-side Adjustment rule (CONTEXT-roasting.md § Adjustment; Brew 1 is the brewing analog of V1):
 
 - **Brew 1 (and often Brew 2)**: wide-variance, multi-variable exploratory. When the response surface is unknown for this coffee (new producer, new process signature, unfamiliar cultivar at this elevation, or the Coffee Brief's Step 1d confirmation flagged anything as uncertain), it's appropriate to move two or more variables at once — e.g. dropping temperature 2°C while coarsening one grind notch — to map roughly where the cup wants to live before refining. The geography analogy applies: you have the world map, you have to pick the continent and then the country before the state and the city; in the beginning when you don't yet know what country you're in, it's fine adjusting more things. Wide-variance multi-variable does **not** mean "change everything at random" — each move is still motivated by a specific tasting signal.
 
