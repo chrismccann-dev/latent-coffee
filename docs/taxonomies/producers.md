@@ -3601,6 +3601,22 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+### Jaroon Jaipin, Khun Lao
+
+**Country:** Thailand · **Admin:** Chiang Mai · **Macro:** Khun Lao Highlands
+
+- **Tier:** 3
+- **Producer System:** Thailand Experimental Processing
+- **Reference Role:** Experimental
+- **Producer Type:** Individual / Family
+- **Farm:** Khun Lao
+- **Processing Capability:** Black Honey
+- **Primary Cultivars:** Khun Lao
+- **Roaster References:** Newbery Street Coffee Roasters
+- **Skeleton:** true - promoted from taxonomy override queue 2026-05-26 against brew 1f7d5ad1 (Newbery Street "Jaroon Khun Lao Double Honey", first Chiang Mai / Khun Lao lot in the Latent archive; Khun Lao cultivar = Catimor × SL28, Northern Thai Highlands at 1,200 masl). Distinct from Nawin Yaesorkoo (Doi Chang / Chiang Rai) but same producerSystem + same roaster (Newbery Street). Pending rich research on farming model, processing system membership, cultivar lineup beyond Khun Lao, and acidity/body profile.
+
+---
+
 ### Rancho Tio Emilio (Gilberto Ramiro Mejia)
 
 **Country:** Ecuador · **Admin:** Pichincha · **Macro:** Northern Andean Highlands

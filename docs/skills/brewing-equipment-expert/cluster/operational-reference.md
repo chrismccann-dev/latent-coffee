@@ -58,6 +58,9 @@ The cup-tendency column above describes each brewer's primary register, but in p
 
 **General principle.** When two brewers share a primary cup tendency, the tiebreaker is which secondary register the coffee benefits from — softening / pulling-together vs preserving sharpness / structural definition. This is a Step 2 brewer-selection move, after strategy is locked. Rotation-debt remains a valid follow-on tiebreaker when neither secondary register clearly dominates.
 
+
+> **Hario Switch Glass - output-selection / tail-cut note (Khun Lao Double Honey, 2026-05-26).** Beyond its canonical Hybrid-staging role, the Switch is the cleanest tail-cut hardware in the kit: when a recipe calls for Output Selection (late_cut), the Hybrid open-drain phase and the cut are the SAME physical action - close the valve (or lift the brewer off the server) at the target cup weight and the cut is done. No swapping servers mid-drain, no judging the turn by eye. This makes the Switch the preferred home brewer for any tail-cutting strategy on a roast-heavy or co-ferment-heavy lot, not just for immersion-phase staging. Practical: pair with a fast cone paper (Sibarist FAST) so the open phase drains as a true fast rinse, and cut by weight - for roast-heavy tails, cut tighter not later (200g of 240g poured clamped a smoky-bitter finish that 210g let through). See by-strategy/hybrid.md Khun Lao Double Honey entry.
+
 ### Filter System
 
 Canonical filter SKUs are in `canonicals://filters` (64 canonicals + 34 aliases). Below is the rotation-relevant subset; the per-filter technical spec sheet lives in [filters.md](./filters.md).
