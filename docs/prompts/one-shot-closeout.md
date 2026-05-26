@@ -112,6 +112,8 @@ Allowed and recommended:
 
 BEFORE drafting citations, fetch live cluster docs via `read_doc(uri="docs://skills/<cluster-path>.md")` (or `list_doc_sections` against the same URI if anchors don't resolve). Reference the [Master Coordinator catalog](docs://skills/coordinator/catalog.md) to identify the right cluster home for each insight.
 
+> **Catalog trigger discipline** (load-orchestration sprint, 2026-05-25 spec): same rule as `close-lot.md` STAGE 5 — the catalog fetch lives at this STAGE specifically because cross-domain proposal routing is the one moment in the one-shot lifecycle where intent is genuinely ambiguous. Do NOT promote this fetch to session start; do NOT duplicate it at other one-shot stages. One-shot routing explicitly AVOIDS protocol docs (per ADR-0009 + the constraint below), so the catalog cite here is primarily for active-lots / learnings / reference-brew / cross-coffee-insight surfaces, not protocol surfaces.
+
 Routing decision tree (by SHAPE of the insight, not just topic). Per-citation `target_doc` is `"skills/<cluster-path>.md"` (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing):
 
 - **Active Lots `### LOT-CODE - Description` sub-section**: REMOVE the closed lot's block by issuing a `replace` op with `proposed_text: ""` against the per-lot file at `docs/skills/roasting-historian/cluster/active-lots/<lot-slug>.md`. One file per lot post Wave 2 PR 3; citation `target_doc: 'skills/roasting-historian/cluster/active-lots/<lot-slug>.md'`.
