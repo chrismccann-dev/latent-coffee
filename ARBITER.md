@@ -485,6 +485,79 @@ LIMIT 20;
 
 Auto-supersede is per-citation: if a new proposal has 3 citations, all 3 anchors trigger separate UPDATEs, and any older proposal touching ANY of those anchors gets superseded.
 
+### Explicit supersession via `supersede_ids` (Sprint 3.3 / #R88)
+
+When claude.ai realizes mid-session that an older proposal is wrong AND the corrected fix lives at a DIFFERENT `(target_doc, section_anchor)` (or a different `target_doc` entirely), the (target_doc, section_anchor) overlap rule wonʼt fire and the older row stays `pending`. To close that gap, `propose_doc_changes` accepts an optional `supersede_ids: string[]` parameter:
+
+```jsonc
+{
+  "target_doc": "skills/wbc-brewing-archivist/cluster/wbc-reference.md",
+  "source": { "kind": "brew", "id": "brew_abc123" },
+  "summary": "Corrected: Wush Wush V2 cup notes belong on wbc-reference, not on the master roaster card",
+  "citations": [ /* ... */ ],
+  "supersede_ids": ["<uuid-of-the-V1-proposal-on-roaster/Hydrangea-Coffee>"]
+}
+```
+
+Semantics:
+- Auto-supersede via per-citation `(target_doc, section_anchor)` overlap fires first; `supersede_ids` is ADDITIVE on top of that.
+- Same RLS scope as the per-citation UPDATE (`eq user_id`); IDs owned by another user silently no-op.
+- Same `status='pending'` filter for idempotency; re-submitting an already-`superseded` UUID is a no-op rather than an error.
+- The older rowʼs `notes` field shows `Explicitly superseded by <new_id> on <timestamp> via supersede_ids` so explicit-vs-overlap supersessions are distinguishable in `SELECT notes ...` audits.
+- All explicit-supersede UUIDs that actually flipped merge into the `superseded_ids[]` return shape alongside the overlap-supersede UUIDs - one unified field for the caller.
+
+Use `supersede_ids` when: (a) the corrected fix lives at a different anchor within the same file; (b) the corrected fix lives in a different file (e.g. discovered the older proposal targeted the wrong `target_doc`); (c) closing a stale proposal that the latest read has invalidated, without filing a new one at the same anchor. For overlap on the same `(target_doc, section_anchor)`, donʼt bother - the auto-supersede already catches it.
+
+### Implicit-intent supersession detection (arbiter-walked)
+
+`supersede_ids` is the EXPLICIT path - claude.ai knows at write time. The IMPLICIT path is for cases where supersession intent surfaces only at queue-walk time: the older proposal is still `pending`, the newer one was filed without `supersede_ids`, but on reading both itʼs clear the newer one corrects the older. Two scan patterns the arbiter applies at queue-walk time:
+
+**Pattern 1: Summary-parse.** When a `pending` proposalʼs `summary` field contains any of: `CORRECTED:`, `SUPERSEDES:`, `(supersedes <UUID>)`, `(replaces <UUID>)`, or close variants (`Replaces <UUID>`, `Corrects <UUID>`, `Overrides <UUID>`), treat the cited UUIDs as supersession candidates. Manually inspect both rows; if the supersession is real, flip the older row:
+
+```sql
+UPDATE doc_proposals
+SET status = 'superseded',
+    notes = 'Implicitly superseded by <new_id> on ' || now()::text || ' via arbiter-walked summary-parse'
+WHERE id = '<old_uuid>'
+  AND user_id = '<chris_user_id>'
+  AND status = 'pending';
+```
+
+Worked example. Two proposals come in close together:
+
+| id | summary | target_doc |
+|---|---|---|
+| `aaa-...` | "Wush Wush V1: cup leans floral-forward with low-acid follow-through" | `roaster/Hydrangea Coffee` |
+| `bbb-...` | "CORRECTED: Wush Wush V2 cup notes (supersedes aaa-...) - V1 read was biased by short rest" | `roaster/Hydrangea Coffee` |
+
+The arbiter spots `CORRECTED:` + `(supersedes aaa-...)` in `bbb`ʼs summary, confirms by reading both rowsʼ citations, and runs the UPDATE above on `aaa`. If `bbb` had used `supersede_ids: ["aaa-..."]` at write time this would have auto-fired - the implicit path is the safety net.
+
+**Pattern 2: Source-id stem detection.** When two `pending` proposals share a `source.kind` and their `source.id` values share a canonical stem indicating one is a successor of the other (V2 brew on the same coffee, V3 close-lot on the same lot), AND the two proposals target overlapping clusters (e.g. both target `active-lots/<lot-slug>.md` or both target `roaster/<canonical>`), surface as a supersession candidate. Surface SQL:
+
+```sql
+SELECT id, source, summary, citations
+FROM doc_proposals
+WHERE user_id = '<chris_user_id>'
+  AND status = 'pending'
+  AND source->>'kind' = '<kind>'
+ORDER BY created_at;
+```
+
+Visually inspect the `source.id` values for stem overlap (e.g. `CGLE-SRUME-NATURAL-2026-V1` vs `CGLE-SRUME-NATURAL-2026-V2`, or `brew_abc123-v1` vs `brew_abc123-v2`). For matches, read both rowsʼ citations - if the V2-source proposal genuinely supersedes the V1-source proposal (same lot, same cluster, newer read), flip the older row using the UPDATE pattern above (substitute `via arbiter-walked source-id-stem` in the notes).
+
+Worked example. Pending queue contains:
+
+| id | source.kind | source.id | target_doc |
+|---|---|---|---|
+| `ccc-...` | `close-lot` | `CGLE-SRUME-NATURAL-2026-V1` | `skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md` |
+| `ddd-...` | `close-lot` | `CGLE-SRUME-NATURAL-2026-V2` | `skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md` |
+
+Stem `CGLE-SRUME-NATURAL-2026` matches; `target_doc` is identical; the V2 close-lot represents the latest read on the same lot. Flip `ccc` to `superseded`.
+
+**Critical:** both implicit patterns produce SUPERSESSION CANDIDATES, not auto-applied flips. The arbiter confirms each by reading both rowsʼ citations before running the UPDATE. The auto-applied path is `supersede_ids` at write time; the arbiter-walked path is a discovery surface, not an autopilot. Falsely flipping a row that wasnʼt actually superseded loses queued work.
+
+If a pattern recurs (e.g. claude.ai consistently files V2 brews on the same lot without setting `supersede_ids`), surface it back to claude.ai as a workflow-feedback entry so the explicit path becomes habitual - implicit detection is the safety net, explicit `supersede_ids` is the preferred channel.
+
 ---
 
 ## Drift policy: doc edit conflicts with current DB state

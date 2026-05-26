@@ -129,6 +129,9 @@ export const proposeDocChangesInputSchema = {
     'One or more edits, each scoped to a section_anchor + optional per-citation target_doc. Multi-citation proposals are arbitrated per-citation; partial application is supported. Multi-target_doc proposals (where citations span multiple files) are arbitrated per (target_doc, section_anchor) group.',
   ),
   summary: z.string().describe('One-line summary the arbiter sees when triaging the queue.'),
+  supersede_ids: z.array(z.string().uuid()).optional().describe(
+    'OPTIONAL explicit supersession. When the corrected fix lives at a DIFFERENT `(target_doc, section_anchor)` than the proposal being corrected, the (target_doc, section_anchor) overlap rule wonʼt fire - pass the older pending proposal IDs here to mark them `superseded` in the same call. Auto-supersede via per-citation `(target_doc, section_anchor)` overlap fires first; `supersede_ids` is ADDITIVE on top of that. Idempotent: IDs already in non-`pending` status (or owned by another user) are silently skipped. Useful for: (a) cross-anchor corrections within a session; (b) cross-target_doc corrections (e.g. discovered the older proposal targeted the wrong file).',
+  ),
 }
 
 type ProposeDocChangesInput = {
@@ -136,6 +139,7 @@ type ProposeDocChangesInput = {
   source: z.infer<typeof sourceRef>
   citations: z.infer<typeof citation>[]
   summary: string
+  supersede_ids?: string[]
 }
 
 export type CitationPreflight = {
@@ -367,6 +371,28 @@ export async function proposeDocChanges(
     }
   }
 
+  // Explicit supersession (#R88). The per-citation @> match above only catches
+  // overlap on (target_doc, section_anchor). When the corrected fix lives at a
+  // different anchor or in a different file, claude.ai passes the older IDs
+  // here so they flip in the same call. Same RLS scope + status='pending'
+  // filter as the per-citation UPDATE; idempotent on already-superseded IDs.
+  if (input.supersede_ids && input.supersede_ids.length > 0) {
+    const explicitNote = `Explicitly superseded by ${newId} on ${new Date().toISOString()} via supersede_ids`
+    const { data: explicit, error: explicitErr } = await auth.supabase
+      .from('doc_proposals')
+      .update({ status: 'superseded', notes: explicitNote })
+      .eq('user_id', auth.userId)
+      .eq('status', 'pending')
+      .neq('id', newId)
+      .in('id', input.supersede_ids)
+      .select('id')
+    if (explicitErr) {
+      console.error('[propose_doc_changes] explicit supersede UPDATE failed:', explicitErr)
+    } else if (explicit) {
+      for (const row of explicit) supersededIds.add(row.id as string)
+    }
+  }
+
   return {
     ok: true,
     proposal_id: newId,
@@ -384,7 +410,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
     {
       title: 'Propose Doc Changes',
       description:
-        'Propose / submit / save / log / archive a prose change to a brewing or roasting doc - the primary write path for living-reference markdown. EVERY citation requires section_anchor + operation + proposed_text + rationale (all four are required; the schema rejects missing fields). Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. WORKFLOW: before drafting, call `read_doc_section(uri, anchor)` to fetch the live target so `current_text` (for replace ops) is verbatim from what\'s actually in the doc - project-uploaded copies often drift behind live, especially for fields with pending-but-unapplied edits. **current_text matching is byte-for-byte; NO ASCII→Unicode normalization is applied** (see current_text field description for the common offenders — en-dashes, curly quotes, NBSP, NFC vs NFD). Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match against `## ` / `### ` headers). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal - the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor). Returns { proposal_id, status: "pending", superseded_ids[], summary, target_doc, citation_count, preflight[] } where each preflight entry echoes { target_doc, section_anchor, operation, anchor_resolved, current_text_match, closest_match? } so stale anchors / drifted current_text surface immediately, not at arbiter time.',
+        'Propose / submit / save / log / archive a prose change to a brewing or roasting doc - the primary write path for living-reference markdown. EVERY citation requires section_anchor + operation + proposed_text + rationale (all four are required; the schema rejects missing fields). Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. WORKFLOW: before drafting, call `read_doc_section(uri, anchor)` to fetch the live target so `current_text` (for replace ops) is verbatim from what\'s actually in the doc - project-uploaded copies often drift behind live, especially for fields with pending-but-unapplied edits. **current_text matching is byte-for-byte; NO ASCII→Unicode normalization is applied** (see current_text field description for the common offenders — en-dashes, curly quotes, NBSP, NFC vs NFD). Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match against `## ` / `### ` headers). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal - the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor). For cross-anchor or cross-target_doc corrections that don\'t overlap, pass `supersede_ids: ["<old_uuid>", ...]` to flip specific older proposals in the same call - additive on top of the (target_doc, section_anchor) auto-supersede; idempotent on already-superseded UUIDs. Returns { proposal_id, status: "pending", superseded_ids[], summary, target_doc, citation_count, preflight[] } where each preflight entry echoes { target_doc, section_anchor, operation, anchor_resolved, current_text_match, closest_match? } so stale anchors / drifted current_text surface immediately, not at arbiter time.',
       inputSchema: proposeDocChangesInputSchema,
     },
     withToolErrorLogging('propose_doc_changes', async (input) => {

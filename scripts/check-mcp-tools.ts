@@ -13,6 +13,8 @@
 // strings captured at register time — the auth fields are only accessed when a
 // tool's handler actually runs.
 
+import { statSync } from 'node:fs'
+import { join } from 'node:path'
 import { buildMcpServer } from '@/lib/mcp/server'
 import {
   checkToolDiscoverability,
@@ -29,6 +31,23 @@ function collectToolDescriptors(server: ReturnType<typeof buildMcpServer>): Tool
     name,
     description: tool.description ?? '',
   }))
+}
+
+// Sprint 3.3 / #R90: tool-list cache visibility. When a new Tool ships,
+// claude.aiʼs MCP client may cache its tool catalog. Print the count + each
+// toolʼs source-file mtime so the count delta + recency are visible at a
+// glance after a registration edit.
+function sourcePathForTool(name: string): string {
+  // Convention: push_brew → lib/mcp/push-brew.ts. Holds for all tools today.
+  return join(process.cwd(), 'lib', 'mcp', `${name.replace(/_/g, '-')}.ts`)
+}
+
+function fileMtime(path: string): string {
+  try {
+    return statSync(path).mtime.toISOString().slice(0, 10)
+  } catch {
+    return '????-??-??'
+  }
 }
 
 function main(): void {
@@ -49,12 +68,13 @@ function main(): void {
 
   const failures = checkToolDiscoverability(tools)
   if (failures.length === 0) {
-    console.log(
-      `MCP tool discoverability check passed for ${tools.length} tool(s):`,
-    )
+    console.log(`MCP tool discoverability check passed for ${tools.length} tool(s):`)
+    const serverMtime = fileMtime(join(process.cwd(), 'lib', 'mcp', 'server.ts'))
     for (const t of tools) {
-      console.log(`  - ${t.name}`)
+      console.log(`  - ${t.name}  (source mtime: ${fileMtime(sourcePathForTool(t.name))})`)
     }
+    console.log(`\nTOTAL: ${tools.length} tools registered.`)
+    console.log(`lib/mcp/server.ts last modified: ${serverMtime}`)
     process.exit(0)
   }
 
