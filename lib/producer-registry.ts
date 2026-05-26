@@ -3783,6 +3783,43 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     contact: "https://www.instagram.com/nawin_yaesorkoo/",
   },
   {
+    // Skeleton - promoted from override queue 2026-05-26 (raw_value
+    // "Jaroon Jaipin, Khun Lao" surfaced via push_brew producer_override on
+    // brew 1f7d5ad1 (Newbery Street "Jaroon Khun Lao Double Honey"), first
+    // Chiang Mai / Khun Lao lot in the Latent archive. Northern Thai
+    // smallholder; distinct from Nawin Yaesorkoo (Doi Chang / Chiang Rai)
+    // but same producerSystem + same roaster (Newbery Street). Pending
+    // rich research.
+    name: "Jaroon Jaipin, Khun Lao",
+    tier: 3,
+    producerSystem: "Thailand Experimental Processing",
+    processingSystemTags: [],
+    referenceRole: "Experimental",
+    producerType: "Individual / Family",
+    farmName: "Khun Lao",
+    country: "Thailand",
+    adminRegion: "Chiang Mai",
+    macroTerroir: "Khun Lao Highlands",
+    farmingModel: null,
+    processingCapability: "Black Honey",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Khun Lao"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Newbery Street Coffee Roasters"],
+    contact: null,
+    skeleton: true,
+  },
+  {
     // Skeleton - promoted from override queue 2026-05-23 (raw_value
     // "Stefano Um, Fazenda Um" surfaced via push_brew producer_override on
     // brew 25b4465b (Untold Coffee Lab Brazil Fazenda Um Wush Wush Natural,
