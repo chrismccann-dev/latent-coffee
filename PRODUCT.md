@@ -408,12 +408,6 @@ Architecture implementation arc closed 2026-05-21 with Wave 4 PR 4b. Re-assess e
 
 Every entry here waits behind the architecture brainstorm + implementation. Priorities re-decided in the roadmap re-session (#2 above). Content preserved verbatim from pre-Sprint-R state unless flagged otherwise.
 
-#### Sprint 3.3 — Auto-supersede paired sprint
-
-3 items, ~2-3h. 3.0.5-shape sub-sprint. #R88 adds `supersede_ids: string[]` parameter on `propose_doc_changes` for the explicit-intent path (claude.ai-side). #R89 closes the complementary implicit-intent gap arbiter-side via summary-parse `CORRECTED: ... (supersedes <UUID>)` + source-id stem detection. Promoted from debt: MCP tool-list cache visibility — improve new-tool-ship workflow visibility (so we don't ship a Tool and wonder why claude.ai doesn't see it). **Independent of architecture** — friction is real and orthogonal to the sub-skill decomposition; likely ships as-is post-architecture.
-
-**Sizing:** ~2-3h. **Scoping doc:** none. Original scoping was a Dropbox handoff from earlier session, fully captured in this entry.
-
 #### Sprint 3.4 — Per-batch failure_boundary breach record (plan-mode + impl)
 
 Plan-mode brainstorm produces JSONB shape decision + `/green/[id]` render strategy + relationship to existing `failure_boundary` text on experiments. Then impl. Inputs: #R67 (`failure_boundary` text → structured JSON), #R68 (`failure_boundary_breached` field on `push_experiment` or per-batch breach record), 2.7.5 plan-mode flag. Data points: Wush Wush V1 (all 3 batches breached) + Bean 4-6 cases. Scoping doc lands as a placeholder ahead of the plan-mode session.
