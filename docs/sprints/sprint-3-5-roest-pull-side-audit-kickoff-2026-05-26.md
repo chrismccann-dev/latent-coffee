@@ -1,6 +1,10 @@
 # Sprint 3.5 — Roest pull-side audit + parity cleanup — kickoff brief
 
-Sub-sprint 1 of the **Writing-path surface polish series** (PRODUCT.md § Active Sprints #3). First sprint off the post-roadmap-re-session queue (2026-05-26).
+## Series context
+
+Sub-sprint **1 of 4** in the **Writing-path surface polish series**. The series umbrella + remaining sub-sprint scopes live at [writing-path-surface-polish-series-2026-05-26.md](writing-path-surface-polish-series-2026-05-26.md). Read the umbrella's § How to use this doc before starting; this brief is self-contained for Sprint 3.5 itself, but the umbrella defines the handoff path on completion.
+
+Roadmap entry: [PRODUCT.md § Active Sprints #3](../../PRODUCT.md#active-sprints). First sprint off the post-roadmap-re-session queue (2026-05-26).
 
 ## Goal
 
@@ -96,8 +100,21 @@ Otherwise: implement, verify, push + merge per autonomy rule.
 
 ## Cross-references
 
-- [PRODUCT.md § Active Sprints #3 Writing-path surface polish series](../../PRODUCT.md#active-sprints) — the umbrella
+- [Writing-path surface polish series umbrella](writing-path-surface-polish-series-2026-05-26.md) — the series doc that this sprint is sub-sprint 1 of
+- [PRODUCT.md § Active Sprints #3 Writing-path surface polish series](../../PRODUCT.md#active-sprints) — roadmap entry surfacing the umbrella
 - [docs/features/roest-api-parity-phase-3.md](../features/roest-api-parity-phase-3.md) — original scoping (reshape against this brief)
 - [docs/skills/roest-api-worker/SKILL.md](../skills/roest-api-worker/SKILL.md) — sub-skill sync target
 - [docs/skills/roest-knowledge/cluster/api/](../skills/roest-knowledge/cluster/api/) — read-surface / write-surface / quirks docs
 - `feedback_mcp_continuous_log.md` Outstanding follow-ups — Round 15 cluster (Sub-sprint 2 of this series)
+
+## On completion — handoff to Sub-sprint 2
+
+Mechanical handoff steps. Run all of these as part of the same PR that ships Sprint 3.5:
+
+1. **Flip the umbrella status table** in [writing-path-surface-polish-series-2026-05-26.md](writing-path-surface-polish-series-2026-05-26.md) — row 1 (Sprint 3.5) moves NEXT UP → SHIPPED with the PR + retro links; row 2 (MCP ergonomics polish) moves QUEUED → NEXT UP.
+2. **Update PRODUCT.md § Active Sprints #3** — adjust the prose under "Sub-sprint 1" to reflect SHIPPED state + the retro pointer; update "Sub-sprint 2" to NEXT UP. Keep the umbrella pointer in the section opener.
+3. **shipped.md row** — append a line under today's date for "Sprint 3.5 — Roest pull-side audit + parity cleanup" with the PR landmark.
+4. **MEMORY.md index** — add the sprint retro pointer under `# Shipped sprints (chronological)`.
+5. **Closing message** — explicitly name Sub-sprint 2 (MCP ergonomics polish, Round 15 cluster) as the next session entry point + link the umbrella doc (not this brief). Next session opens the umbrella, reads the inline § for sub-sprint 2, and ships.
+
+The full series-close checklist runs only when sub-sprint 4 ships. See the umbrella's § Series completion checklist.

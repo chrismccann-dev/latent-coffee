@@ -406,6 +406,8 @@ Final phase of Sprint R's Option 1 sequence. Re-assessed every entry in the prio
 
 Mission-critical surface — the claude.ai → MCP → DB writing layer. Broken into sub-sprints that can ship as separate PRs but conceptually one surface area (per Chris-input 2026-05-26: "we should do one big sprint on all of the surface layers of the writing path"). Sequence runs BEFORE the read-path surface polish series because writing-path correctness is more critical than read-side UX.
 
+**Series umbrella + session handoff doc:** [docs/sprints/writing-path-surface-polish-series-2026-05-26.md](docs/sprints/writing-path-surface-polish-series-2026-05-26.md) — open this when starting any sub-sprint 2 / 3 / 4 (sub-sprint 1 points at the dedicated Sprint 3.5 kickoff brief). The umbrella carries the sequence + status table, inline kickoff scopes, and the series completion checklist.
+
 ##### Sub-sprint 1 — Sprint 3.5 — Roest pull-side audit + parity cleanup (NEXT UP)
 
 Reshaped from the original Phase 3 scope per Chris audio 2026-05-26 — lighter, more audit-flavored.
