@@ -1,6 +1,8 @@
 # Sprint 3.5 — Roest pull-side audit + parity cleanup — kickoff brief
 
-Sub-sprint 1 of the **Writing-path surface polish series** (PRODUCT.md § Active Sprints #3). First sprint off the post-roadmap-re-session queue (2026-05-26).
+**Sub-sprint 1 of 4** in the [Writing-path surface polish series](./writing-path-surface-polish-series-2026-05-26.md). PRODUCT.md § Active Sprints #3. First sprint off the post-roadmap-re-session queue (2026-05-26).
+
+**Series context:** the writing path (claude.ai → MCP → DB) gets a 4-sub-sprint polish pass before the Read-path series starts. This sub-sprint is the longest of the 4 (~1-2 days); the rest are smaller (~1-2h / ~30 min / ~1 day). See the [series umbrella doc](./writing-path-surface-polish-series-2026-05-26.md) for the full sequence + what comes next.
 
 ## Goal
 
@@ -94,9 +96,19 @@ Otherwise: implement, verify, push + merge per autonomy rule.
 2. R57 destination verification — is `roasts.color_description` the right semantic home? Read the column + check existing data for one or two roasts; confirm or pick a different existing column before any write-path code.
 3. Which of the 7 items have any chance of needing a brainstorm vs. ship-and-verify? Recommendation: only RoR (#7) has a real branch point; everything else is mechanical once the API behavior is observed.
 
+## On completion — handoff to Sub-sprint 2
+
+When this sub-sprint ships + merges:
+
+1. Update [writing-path-surface-polish-series-2026-05-26.md](./writing-path-surface-polish-series-2026-05-26.md) sequence table — flip Sub-sprint 1 row to SHIPPED + add PR # + merge commit.
+2. Update `shipped.md` with a row for Sprint 3.5.
+3. Update PRODUCT.md § Active Sprints #3 Sub-sprint 1 — flip to SHIPPED.
+4. Surface the next-up sub-sprint in your closing message: **Sub-sprint 2 — MCP ergonomics polish (Round 15 cluster).** ~1-2h. Full kickoff scope inline in the series umbrella doc (no separate brief needed for the smaller sub-sprints).
+
 ## Cross-references
 
-- [PRODUCT.md § Active Sprints #3 Writing-path surface polish series](../../PRODUCT.md#active-sprints) — the umbrella
+- [writing-path-surface-polish-series-2026-05-26.md](./writing-path-surface-polish-series-2026-05-26.md) — series umbrella with sequencing + next sub-sprint kickoffs
+- [PRODUCT.md § Active Sprints #3](../../PRODUCT.md#active-sprints) — canonical scope source
 - [docs/features/roest-api-parity-phase-3.md](../features/roest-api-parity-phase-3.md) — original scoping (reshape against this brief)
 - [docs/skills/roest-api-worker/SKILL.md](../skills/roest-api-worker/SKILL.md) — sub-skill sync target
 - [docs/skills/roest-knowledge/cluster/api/](../skills/roest-knowledge/cluster/api/) — read-surface / write-surface / quirks docs
