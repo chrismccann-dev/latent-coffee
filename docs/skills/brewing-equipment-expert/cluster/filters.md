@@ -3,7 +3,7 @@
 Authoritative authored content for the filter paper canonical registry.
 Mirror file: [lib/filter-registry.ts](../../../../lib/filter-registry.ts).
 
-Total canonical filters: **66** (22 owned, post Research Project #2 inventory cross-check 2026-05-24 — net +2 from 2 net-new FLAT 2 entries + 1 FLAT B3 ownership flip).
+Total canonical filters: **67** (23 owned, post Research Project #3 inventory cross-check 2026-05-25 — net +1 from FS-100 Chemex Pre-folded Squares net-new entry surfaced at Step 0).
 Source CSV had 69 rows; 5 dropped as same-name duplicates.
 
 Sizes (S/M) and Cafec roast-pack-size duplicates intentionally not surfaced as separate canonical entries. **Exception (Project #2 finding):** Sibarist's FLAT 2 family is a distinct paper line from FLAT (pre-folded v2 vs hand-fold v1) and IS surfaced as separate canonical entries — the pre-fold scoring + Negotiator-compressed design intent materially differentiates them.
@@ -52,6 +52,31 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 **Deferred:** April Paper Filter (cohort-of-one in Orea baseline; rolls into Project #3 native-brewer protocol). Geometry-check pair (FLAT 2 B3 size M vs FLAT 2 FAST size S) deferred to next acquisition cycle.
 
 **9 substrate-practice gap audit items queued** in the protocol doc — flowRate-as-context-dependent-triple, paperShape-vs-wallStructure decomposition, Booster-as-registry-concept, Orea variant canonicalization, alias-collapse historical audit, grind-comp table band revision, fiber-vs-size confound resolution. None blocking; surface when triggered.
+
+---
+
+## Measured Drawdown Reference — Research Project #3 (2026-05-25)
+
+[Specialty Cone Filter Drawdown Characterization](../../../research-projects/specialty-cone-filter-drawdown.md) executed 2026-05-25 as **two mini-projects in one session** with deliberately contrasting brewer architectures, **closing the 3-project trifecta arc**:
+
+- **#3a Funnex** (4 papers including 1 net-new): anchored at Sibarist CONE 28 FAST in Chemex Funnex glass at **10g/150g revised protocol** (per Funnex capacity ceiling, Lesson #20). **BIMODAL drawdown** — slow regime ~131s (4 reps, 36s range), fast regime ~31.5s (2 reps, 3s range), ~80/20 split empirically.
+- **#3b Sibarist Brewing System** (2 papers): anchored at Sibarist HALO CONE B3 at 15g/250g. **4s baseline range** — tightest of any project in the entire arc (Project #1 = 8s, Project #2 = 6s, Project #3a = 36s bimodal). HALO-FAST classified Moderately faster (-26s real delta, 0.3 finer grind comp). Cleanest single-paper classification of the arc.
+
+**Headline finding — paper "self-choke" is paper-brewer-interaction artifact (Lesson #36, deepest insight of arc).** Initial #3a interpretation of self-choke as paper-fiber-intrinsic was wrong. HALO-B3 paper-only test (no bed, no grounds, fresh paper held in BS, water poured) showed no choke whatsoever. The choke observed in #3a was fold mismatches + apex gaps + pinch points specific to V60-geometry-paper-in-Funnex-deep-cone, not paper property. **Paper engineered for its brewer doesn't choke.** Refines Lessons #27, #29, #30, #31 (all real phenomena, but mechanism is paper-brewer-interaction not paper-fiber).
+
+**Bed-shape from fold geometry (Lesson #26).** Same Chemex bonded pulp fiber + same thickness produced 73s drawdown spread in Funnex: CHEMEX-HM-W (manual cone-fold) 118s vs FS-100 (factory fan-fold) 45s. Fold geometry → effective bed shape → throughput. Cone-fold = deep narrow bed; fan-fold = wider shallower bed.
+
+**Manual creasing as Negotiator-equivalent (Lesson #22).** Funnex has no Negotiator-equivalent — pre-rinse seal technique itself becomes the seating mechanism. Seal-aggressiveness has 36s dynamic range on same paper (CONE28-FAST: 117s light / 132s moderate / 153s heavy). Continuous variable of large effect, not noise.
+
+**Sibarist BS as brewer-as-paper-housing architectural class (Lesson #35).** New architectural category — paper IS the dripper, brewer is just housing. No brewer walls to seal against, no Negotiator/Booster needed, system handles seating natively. Distinct from V60/cone, Orea/flat, Funnex/deep-cone.
+
+**Sibarist BS unlocks paper-only measurement methodology (Lesson #39).** By eliminating paper-brewer-fit variability, the BS functions as a "control brewer" for isolating paper-fiber-only effects. Research Project #4 (re-measure Project #1 V60 papers in BS) queued as methodology-validation project.
+
+**20 new lessons (#20-39) extracted** in the protocol doc (plus #40 — role-discipline lesson from the compile-loop process side). 7 new substrate-practice gap audit items queued (AI-1 paperFitsBrewerRim + AI-2 foldGeometry + AI-3 brewerRole + AI-4 bedBehaviorUnderLoad enum extension + AI-5 CHEMEX-HM-W flowRate revision + AI-6 ADR-0015 Funnex/Booster fit = NONE empirically + AI-7 ADR-0015 flowRate-triple mechanism via Lesson #27 → #36 refinement). AI-6 and AI-7 shipped in this PR; the rest remain queued.
+
+**Funnex/Booster compatibility empirically resolved as NONE.** None of Chris's 3 owned Sibarist Boosters (BOOSTER 45 flatbed / BOOSTER CONE V60 / BOOSTER UFO) fit Funnex deep-cone geometry. Updates ADR-0015's Implementation trigger language (AI-6).
+
+**Research Assistant SKILL.md scaffolding unlocks.** 3-project trifecta complete + 40 lessons + 16 audit items + 3 closed projects = substrate strong enough to scaffold with high confidence.
 
 ---
 
@@ -281,6 +306,9 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Best archetype: Clarity cone (deep extraction)
 - Location: Home
 - Primary use case: Deep extraction clarity (increase contact time via bed depth, not resistance)
+- Measured drawdown (Research Project #3a): **144s** at 10g / EG-1 6.5 / Funnex (Sibarist CONE 28 FAST baseline; bimodal — slow regime 131s, fast regime 31.5s) (2026-05-25). Landed in slow regime; +13s vs slow-regime baseline = FE within regime.
+- Bed behavior under load: `late-forming-crater`
+- ⚠️ All three #3a non-baseline papers were FE to baseline within their respective regimes — practical paper-paper differentiation in Funnex is which regime each lands in (paper-geometry × brewer-geometry interaction, Lesson #26 fold-geometry → bed-shape).
 
 ### CAFEC Arita Ware Paper Filter
 
@@ -527,6 +555,33 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Best archetype: Clarity cone (low bypass)
 - Location: Home
 - Primary use case: Use as immersion-like cone (max body + filtration, suppresses brightness)
+- Measured drawdown (Research Project #3a): **118s** at 10g / EG-1 6.5 / Funnex (Sibarist CONE 28 FAST baseline, bimodal) (2026-05-25). Landed in slow regime; -13s vs slow-regime baseline = FE within regime.
+- Bed behavior under load: `late-forming-crater`
+- ⚠️ **REGISTRY-DRIFT AUDIT (AI-5):** registry flowRate "Slow" but measured FE to baseline in Funnex — partial-seal confound possible (thicker paper may have produced lighter seal than CONE28-FAST baseline).
+- ⚠️ **Paper-above-brewer-rim physical constraint (Lesson #25):** paper sits ABOVE Funnex rim — hard limit, not procedural. Queued as audit item #1 (`paperFitsBrewerRim` registry field proposal).
+- 🆕 **Fold geometry contrast with FS-100 (Lesson #26):** cone-fold (manual) creates deep narrow bed in Funnex; FS-100's fan-fold (factory pre-folded squares) creates wider shallower bed and drains **73s faster (45s vs 118s) on same Chemex bonded pulp fiber**. Strongest single signal in #3 for bed-shape as underexplored axis.
+
+### Chemex Bonded Pre-folded Squares (White) — Owned
+
+*Net-new entry surfaced at Project #3 Step 0 photo confirmation (2026-05-25). Single most impactful Step 0 finding in #3.*
+
+- SKU: `FS-100`
+- Link: <https://chemexcoffeemaker.com/products/chemex-bonded-pre-folded-squares-100ct>
+- Paper shape: Square (pre-folded)
+- Size standard: Chemex
+- Fits brewers: Funnex, Chemex
+- Seal/fit: Loose (factory fan-fold; paper sits ABOVE Funnex rim per Project #3 Lesson #25 physical constraint)
+- Material: Bonded pulp
+- Thickness: Very thick
+- Flow rate: Fast (in Funnex; 73s faster than CHEMEX-HM-W cone-fold on same fiber per Project #3 Lesson #26)
+- Flow consistency: Very stable
+- Clarity / Body / Sweetness: High / Medium / Clean
+- Best archetype: Clarity cone (fast)
+- Location: Home
+- Primary use case: Fan-fold flat-bed alternative to Chemex cone-fold; faster drawdown in deep cone brewers (Funnex) due to wider/shallower bed geometry
+- Measured drawdown (Research Project #3a): **45s** at 10g / EG-1 6.5 / Funnex (Sibarist CONE 28 FAST baseline, bimodal) (2026-05-25). Landed in fast regime; +13.5s vs fast-regime baseline = FE within regime.
+- Bed behavior under load: `late-forming-crater`
+- 🆕 **Fold geometry demonstrates Lesson #26:** fan-fold factory pre-folded squares create wider shallower bed in Funnex vs CHEMEX-HM-W's manual cone-fold deep narrow bed. Same Chemex bonded pulp fiber + same thickness but 73s drawdown spread (45s vs 118s).
 
 ## Hario
 
@@ -694,6 +749,11 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Best archetype: Clarity cone
 - Location: Home
 - Primary use case: Extreme extraction clarity (deep cone + high flow, high extraction yield)
+- Measured drawdown (Research Project #3a): **131s slow regime / 31.5s fast regime** at 10g / EG-1 6.5 / Funnex (2026-05-25). **Baseline / anchor — BIMODAL** under Funnex without Negotiator-equivalent. Slow regime: 4-rep median 131s, 36s range (Pulls 1+2+4 spanning seal-aggressiveness ladder, Pull 3 reclassified outlier). Fast regime: 2-rep median 31.5s, 3s range (Pulls B1+B2). ~80/20 split empirically.
+- Bed behavior under load: `mixed` (bimodal regime selection)
+- ⚠️ **BIMODAL DRAWDOWN** — paper-brewer-interaction artifact per Lesson #36 (initially interpreted as paper-fiber-intrinsic self-choke per Lesson #27; refined post-#3b after HALO-B3 paper-only test showed no choke in Sibarist BS architecture). Regime selection driven by pour rate × bed throughput interaction (Lesson #31).
+- ⚠️ **Manual creasing as Negotiator-equivalent procedural primitive (Lesson #22):** seal-aggressiveness 36s dynamic range on same paper (117s light / 132s moderate / 153s heavy). Continuous variable, not noise.
+- ⚠️ **Funnex/Booster fit = NONE empirically** (V60-geometry Boosters don't seat on Funnex deep cone). Updates ADR-0015 Implementation trigger (AI-6).
 
 ### CONE B3 — Owned
 
@@ -1011,6 +1071,11 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Best archetype: Clarity cone (controlled system)
 - Location: Home
 - Primary use case: System-level structured clarity (max repeatability cone system)
+- Measured drawdown (Research Project #3b): **134s** at 15g / EG-1 6.5 / Sibarist Brewing System (2026-05-25). **Baseline / anchor** — 3-replicate median, **4s range across pulls — tightest of any project in the entire 3-project arc** (vs Project #1's 8s, Project #2's 6s, Project #3a's 36s bimodal).
+- Bed behavior under load: `stable` (first 'stable' entry in the arc; validates the enum value's design intent)
+- 🆕 **Sibarist Brewing System architecture (Lesson #35):** system-integrated paper-as-dripper; no Negotiator needed, no brewer walls to seal against. Distinct architectural class from V60/cone, Orea/flat, Funnex/deep-cone.
+- 🆕 **Lesson #36 (deepest insight of arc):** no-bed paper-only test (post-Pull-B5 Part Ba/Bb decomposition) showed NO self-choke whatsoever, refuting #3a's self-choke-as-paper-fiber-intrinsic hypothesis. Self-choke is paper-brewer-INTERACTION artifact, not paper-fiber property. Paper engineered for its brewer doesn't choke.
+- 🆕 **First-use brewer signal (Lesson #38):** clean baseline on Chris's never-opened-box brewer. Well-engineered brewers reproduce on first use; require-accumulated-technique brewers are flagged differently.
 
 ### Sibarist HALO CONE FAST — Owned
 
@@ -1028,6 +1093,10 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 - Best archetype: Clarity cone (system-level)
 - Location: Home
 - Primary use case: System-level peak clarity (eliminate fit + bypass variability)
+- Measured drawdown (Research Project #3b): **108s** at 15g / EG-1 6.5 / Sibarist Brewing System (HALO-B3 baseline 134s) (2026-05-25). **REAL faster (-26s vs HALO-B3 baseline, clears 4s noise floor)**. Moderately faster band (Step 3 grind comp: **0.3 finer**, EG-1 6.5 → ~6.2).
+- Bed behavior under load: `stable`
+- 🆕 **Cleanest single-paper classification of the entire 3-project arc** — small-N cohort (2 papers) with tight noise floor (4s) produces unambiguous classification.
+- 🆕 **Within-fiber-family consistency:** Same FAST fiber family as Project #1 CONE FAST + Project #2 FLAT 2 FAST. Within-fiber-family consistency holds when paper-brewer-fit is eliminated by BS architecture (Lesson #35).
 
 ### UFO B3
 
