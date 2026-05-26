@@ -3649,6 +3649,19 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+### El Placer (Huila) *[skeleton - pending rich research]*
+
+**Country:** Colombia · **Admin:** Huila · **Macro:** Huila Highlands
+
+- **Tier:** 2
+- **Reference Role:** Signal
+- **Producer Type:** Smallholder
+- **Farm:** El Placer
+- **Roaster References:** Special Guests Coffee
+- **Skeleton:** true - promoted from taxonomy override queue 2026-05-26 against a Special Guests Coffee Release 056 brew (Hybrid Intensity-Clarity Split). Disambiguated from the existing `El Placer Farms` canonical (Sebastián Ramírez's Quindío processing lab) by appending `(Huila)` - this is a different farm in Colombia's Huila Highlands (meso terroir "El Placer"). Producer person not yet attributed; Special Guests Coffee does not always disclose producer identity.
+
+---
+
 ## Aliases (DB drift + collapses)
 
 Observed `brews.producer` strings (or common typos) → canonical name.
@@ -3659,6 +3672,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 |---|---|
 | `Abel Dominguez` | `Abel Domínguez` |
 | `Abel Dominguez, Blooms Coffee` | `Abel Domínguez` |
+| `El Placer (farm)` | `El Placer (Huila)` |
 | `Aime Gahizi` | `Aimé Dusabe Gahizi` |
 | `Aime Gahizi, Gitesi Washing Station` | `Aimé Dusabe Gahizi` |
 | `Alo Coffee` | `Tamiru Tadesse` |

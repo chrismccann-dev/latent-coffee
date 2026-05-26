@@ -40,6 +40,7 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 - Caturra × Timor Hybrid lineage: Castillo
 - Multi-parent hybrid lineage: Batian, Icatu, Mandela, Mokkita, Ruiru 11
 - Timor Hybrid-derived lineage: Ateng, Catimor (group), Garnica, Marsellesa, Sarchimor (group), Sigarar Utang, Tabi
+- Catimor × SL28 cross lineage: Khun Lao
 
 **Non-Arabica (scaffolded for future lots)**
 - Eugenioides: Eugenioides
@@ -2105,6 +2106,40 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 - **Common Pitfalls:** Over-processing can dominate; can lack clarity vs Gesha.
 
 **Notes:** One of the few hybrids capable of strong specialty expression when processed well.
+
+---
+
+### Khun Lao
+
+**Species:** Arabica  **Genetic Family:** Modern Hybrids  **Lineage:** Catimor × SL28 cross lineage
+
+#### Genetics
+- **Genetic Background:** Local Thai variety from producer Jaroon Jaipin in Chiang Mai / Chiang Rai. Cross of Catimor (Timor Hybrid-derived disease resistance + density) × SL28 (Kenyan-selected citric / blackcurrant brightness). Documented by 3fe on a sibling Khun Lao lot from the same producer.
+- **Market names normalized here:** "Catimor × SL28" (the cross formula, aliased to the local cultivar name per registry convention).
+
+#### Agronomy
+- **Typical Origins:** Thailand (Chiang Mai / Chiang Rai).
+- **Altitude Sensitivity:** Pending data; Thai high-altitude.
+- **Limiting Factors:** Single-producer attribution; broader cultivation footprint unclear.
+- **Market Context:** Specialty / experimental.
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Anaerobic black honey (3fe sibling lot); double honey (Newbery Street lot).
+- **Typical Flavor Notes:** Apricot, grapefruit (SL28-side brightness); fermentation-driven complexity from anaerobic processing.
+- **Acidity Style:** Medium-high citric / blackcurrant; SL28 parentage drives the bright acidity.
+- **Body Style:** Pending data.
+- **Aromatics:** Pending data.
+- **Terroir Transparency:** Pending data.
+- **Extraction Sensitivity:** Pending data.
+- **Brewing Tendencies:** Pending data.
+
+#### Reference Content — Roasting
+- **Roast Tolerance:** Pending data.
+- **Roast Behavior:** Pending data.
+- **Resting Behavior:** Pending data.
+- **Common Pitfalls:** Pending data.
+
+**Notes:** Promoted from taxonomy override queue 2026-05-26. Attribution sourced from a sibling Khun Lao lot at the same producer (3fe's Thailand Khun Lao Anaerobic Black Honey), not the exact bag that surfaced the queue entry (Newbery Street Jaroon Khun Lao Double Honey). Confidence is directional, not bag-confirmed.
 
 ---
 
