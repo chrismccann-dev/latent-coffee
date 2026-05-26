@@ -105,3 +105,41 @@ When the trigger fires, the implementer should:
 - Project #2 handoff brief (2026-05-24): Chris-confirmed booster inventory (BOOSTER 45 / CONE / UFO)
 - Pattern precedent: SworksEntry sub-taxonomy (Sprint T5 / CR-7, 2026-05-18)
 - Chris-locked at Project #3 prep session (2026-05-24): "yes we should do this, I actually have quite a few boosters"
+
+---
+
+## Project #3 substrate updates (2026-05-25)
+
+Research Project #3 (specialty cone filter drawdown, closed 2026-05-25) produced two substrate updates to this ADR. Both queued as Project #3 audit items AI-6 + AI-7 and applied directly here while the decision shapes remain implementation-deferred:
+
+### AI-6 — Funnex/Booster fit empirically resolved as NONE
+
+The Implementation trigger section above (originally written 2026-05-24) speculated that Project #3 was "unlikely to need Booster registry per Chris's inventory (Boosters fit flatbed/V60/UFO geometry; Project #3 covers Funnex + Sibarist BS HALO, neither of which Booster-fits)." Project #3's Step 0 equipment cross-check confirmed this empirically: **none of Chris's 3 owned Sibarist Boosters (BOOSTER 45 flatbed / BOOSTER CONE V60 / BOOSTER UFO) physically fit Funnex deep-cone geometry**.
+
+For the Sibarist Brewing System, Boosters are architecturally unnecessary — the BS is a "brewer-as-paper-housing" architectural class (Project #3 Lesson #35) where the paper IS the dripper and no seating accessory is needed.
+
+**Implication for the BoosterEntry registry implementation when triggered:** the `fitsBrewers` array on each BoosterEntry should be treated as the canonical compatibility list, not a starting hint. Funnex + Sibarist BS are explicitly NOT compatible with any current Booster.
+
+### AI-7 — flowRate-triple mechanism refined via Project #3 Lesson #36
+
+The Decided shape section above frames `flowRateContexts` as a context-conditional array indexed by (brewer × seatingState × accessory). Project #3's Lesson #36 (paper "self-choke" is paper-brewer-interaction artifact, not paper-fiber-intrinsic) provides the **mechanistic underpinning** for this design choice that wasn't articulated when the ADR landed.
+
+**Original framing (2026-05-24):** flowRate varies across configuration; the schema needs to capture multiple measurements per paper because the qualitative `flowRate: "Medium"` cell can't represent a 2.6× speed difference between configurations.
+
+**Mechanistic refinement (Project #3 Lesson #36, 2026-05-25):** the configuration-dependence is **not three orthogonal dimensions** (brewer + seatingState + accessory). It's a single dimension — **paper-brewer-INTERACTION at the seating layer**. The brewer + seatingState + accessory triple is a *proxy* for the seating-layer interaction:
+
+- Funnex + V60-geometry paper + no Negotiator-equivalent = high paper-brewer-fit noise (bimodal drawdown, ~80/20 split)
+- Orea + flat paper + Negotiator = low paper-brewer-fit noise (tight unimodal drawdown)
+- Sibarist BS + system-integrated paper = paper-brewer-fit eliminated (tightest noise floor in arc, 4s range)
+
+**Implications for the `flowRateContexts` implementation:**
+
+1. The schema captured in the Decided shape section is correct — three indexable fields (brewer + seatingState + accessory) cover the visible configuration variance.
+2. But documentation accompanying the implementation should clarify that **the underlying mechanism is paper-brewer-interaction at the seating layer**, not three independent effects. This matters for:
+   - Query interpretation: a paper without a `flowRateContexts` entry for (brewer X + accessory Y) doesn't necessarily HAVE a different flow rate in that config — it might just be uncharacterized. The triple is *evidence*, not *prediction*.
+   - Future schema evolution: if a paper-brewer-fit metric ever lands (e.g. via Project #3 audit items AI-1 `paperFitsBrewerRim` + AI-3 `brewerRole`), that metric should be cross-referenced with `flowRateContexts` interpretation.
+3. The `bedBehaviorUnderLoad` enum (originally 4 values: `stable` / `late-forming-crater` / `pour-impact-crater` / `mixed`) gains its first `stable` entries via Sibarist BS measurements (HALO-B3 + HALO-FAST in Project #3) — validating the enum value's design intent. The `mixed` value is now load-bearing for capturing bimodal regimes (CONE28-FAST in Funnex).
+
+### Forward pointer
+
+Research Project #4 (re-measure Project #1 V60 papers in Sibarist BS, scope brief at end of [specialty-cone-filter-drawdown.md](../research-projects/specialty-cone-filter-drawdown.md)) is the empirical test of Lesson #36's "paper-brewer-interaction not paper-fiber" framing. If RP4 confirms V60 papers converge to HALO-B3-like flow in BS, the mechanistic refinement above is strongly validated and the `flowRateContexts` implementation can proceed with the paper-brewer-interaction framing as the operating model.
