@@ -25,14 +25,27 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'List Docs',
       description:
-        'List / browse / discover / enumerate every prose / taxonomy / prompt doc the MCP server can read. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section` — each entry carries a one-line "use when..." description so you can route to the right doc without fetching first. Catalog covers BREWING.md, ROASTING.md, the 10 taxonomy markdown files, the 10 operational prompt files, the composable sub-skills (Master Coordinator + Brewing Equipment Expert from Wave 1, WBC Brewing + Roasting Archivists from Wave 2 PR 1 including the migrated WBC reference / WBC recipes / WBC roasting / sourcing strategy docs in their cluster paths under docs/skills/), and split-out subdocs (docs/brewing/roasters.md, docs/roasting/archive.md). Returns { docs: [{ uri, name, title, mimeType, description }] }.',
-      inputSchema: {},
+        'List / browse / discover / enumerate every prose / taxonomy / prompt doc the MCP server can read. Use this first when you need to discover what `docs://` URIs are available before calling `read_doc` / `list_doc_sections` / `read_doc_section` — each entry carries a one-line "use when..." description so you can route to the right doc without fetching first. Catalog covers BREWING.md, ROASTING.md, the 10 taxonomy markdown files, the 10 operational prompt files, the composable sub-skills (Master Coordinator + Brewing Equipment Expert from Wave 1, WBC Brewing + Roasting Archivists from Wave 2 PR 1 including the migrated WBC reference / WBC recipes / WBC roasting / sourcing strategy docs in their cluster paths under docs/skills/), and split-out subdocs (docs/brewing/roasters.md, docs/roasting/archive.md). Returns { docs: [{ uri, name, title, mimeType, description }] }. Optional `prefix` parameter filters the catalog to URIs that start with the given path — accepts either bare path (`"skills/roasting-historian/cluster/active-lots/"`) or full `docs://`-prefixed URI; the bare path form is normalized to `docs://{prefix}` for matching. Use the prefix arg when you want a subset (e.g. just the active-lots files) rather than the full ~100-entry catalog.',
+      inputSchema: {
+        prefix: z
+          .string()
+          .optional()
+          .describe(
+            'Optional URI-prefix filter. Returns only docs whose URI starts with the given prefix. Accepts bare paths (`"skills/roasting-historian/cluster/active-lots/"`) — normalized to `docs://{prefix}` — or full `docs://`-prefixed URIs.',
+          ),
+      },
     },
-    withToolErrorLogging('list_docs', async () => {
+    withToolErrorLogging('list_docs', async ({ prefix }) => {
       const docs = listDocs()
+      const filtered = prefix
+        ? (() => {
+            const normalized = prefix.startsWith('docs://') ? prefix : `docs://${prefix}`
+            return docs.filter((d) => d.uri.startsWith(normalized))
+          })()
+        : docs
       return {
-        content: [{ type: 'text', text: JSON.stringify({ docs }) }],
-        structuredContent: { docs },
+        content: [{ type: 'text', text: JSON.stringify({ docs: filtered }) }],
+        structuredContent: { docs: filtered },
       }
     }),
   )
