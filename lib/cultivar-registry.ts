@@ -133,6 +133,7 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   { name: 'Sarchimor (group)', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
   { name: 'Sigarar Utang', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
   { name: 'Tabi', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
+  { name: 'Khun Lao', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Catimor × SL28 cross lineage' },
 
   // Non-Arabica species — self-referential scaffolding preserves hierarchy shape
   { name: 'Eugenioides', species: 'Eugenioides', family: 'Eugenioides', lineage: 'Eugenioides lineage' },
@@ -163,6 +164,12 @@ export const CULTIVAR_LINEAGES = Array.from(
 // ---------------------------------------------------------------------------
 
 export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
+  // Khun Lao — Thai local variety (Jaroon Jaipin, Chiang Mai/Chiang Rai); cross
+  // of Catimor × SL28. Raw cross-formula resolves to the local cultivar name
+  // per registry convention (cross stored in lineage, not in name).
+  'Catimor × SL28': 'Khun Lao',
+  'Catimor x SL28': 'Khun Lao',
+  'Catimor X SL28': 'Khun Lao',
   // Gesha — collapsed sub-selections + common misspellings per B1-c
   Geisha: 'Gesha',
   'Panama Geisha': 'Gesha',

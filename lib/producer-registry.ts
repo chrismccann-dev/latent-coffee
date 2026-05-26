@@ -3890,6 +3890,45 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     roasterReferences: ["Latent"],
     contact: null,
   },
+  {
+    // Skeleton entry - promoted from override queue 2026-05-26 (raw_value
+    // "El Placer (farm)" surfaced via push_brew producer_override on a
+    // Special Guests Coffee Release 056 brew, Hybrid extraction strategy.
+    // Disambiguated from the existing "El Placer Farms" canonical (Sebastian
+    // Ramirez's Quindio processing lab in Central Andean Cordillera) by
+    // appending "(Huila)" - this is a different farm in Colombia's Huila
+    // Highlands (meso terroir "El Placer"). Producer person not yet
+    // attributed; Special Guests Coffee does not always disclose producer
+    // identity. Enrich via producer-research routine when ready.
+    name: "El Placer (Huila)",
+    tier: 2,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Signal",
+    producerType: "Smallholder",
+    farmName: "El Placer",
+    country: "Colombia",
+    adminRegion: "Huila",
+    macroTerroir: "Huila Highlands",
+    farmingModel: null,
+    processingCapability: null,
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: [],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Special Guests Coffee"],
+    contact: null,
+    skeleton: true,
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -3914,6 +3953,7 @@ export function listSkeletonProducers(): ProducerEntry[] {
 export const PRODUCER_ALIASES: Record<string, string> = {
   "Abel Dominguez": "Abel Domínguez",
   "Abel Dominguez, Blooms Coffee": "Abel Domínguez",
+  "El Placer (farm)": "El Placer (Huila)",
   "Aime Gahizi": "Aimé Dusabe Gahizi",
   "Aime Gahizi, Gitesi Washing Station": "Aimé Dusabe Gahizi",
   "Alo Coffee": "Tamiru Tadesse",
