@@ -554,8 +554,7 @@ Per `memory/user_workflow.md`, each bean uploads to the app as a single bundle w
 
 Tiny verifications, ~30 min each, no separate sprint needed — ride along with the next writing-path sub-sprint:
 
-- **DF-OPS1** — CGLE Sudan Rume Natural V5 recipe rows backfill. Chris audio 2026-05-26: "I thought we did this? worth a quick audit at some point." Verify via DB query.
-- **DF-OPS2** — Historical end_condition backfill on roasts ≤ batch 169. Chris audio same: "I thought we did this? worth a quick audit at some point." Verify via DB query.
+- **DF-OPS2** — Historical `end_condition` backfill on roasts ≤ batch 169. Audit confirmed 2026-05-26: recipe rows themselves landed in migration 052 (116/116 historical roasts have a `roast_recipes` row, 103 marked `was_backfilled=true`), but `end_condition_type` is populated on only 6/116 (all `"manual"`) and `end_condition_target` is 0/116. The "I thought we did this" intuition matched the recipe-row backfill, not the end-condition fields. Net: ~110 historical roasts still need `end_condition_type` + `end_condition_target` populated. Chris-driven operator work; ride along with the next writing-path sub-sprint that touches `patch_roast_recipe`.
 
 ### Blocked and Parked
 
