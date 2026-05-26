@@ -88,6 +88,23 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Round 14 / Mt Elgon batch 199 session feedback
     - **Suggested landing:** Latent app sprint — `/green/[id]` page UX work + possibly a dedicated "active roast" view that pulls the recipe design intent + drop rules into a roast-time HUD
 
+### From Load orchestration verification (2026-05-25, brewing + roasting paper-walks)
+
+36. **"Strategy zone / Wrong-zone trap" terminology check** — claude.ai recognized the concepts during the brewing paper-walk but flagged that the exact labels aren't section anchors in operational-guide. The concept lives in the mechanics-vs-intent symmetry rule (Suppression/Clarity-First mechanics overlap; Full Expression/Extraction Push mechanics overlap; intent differs). Worth a grep across substrate to confirm whether these terms are anchored anywhere or just operational shorthand. If unanchored, either anchor them in operational-guide / wbc-reference / context-brewing or drop the labels from prompts that reference them as canonical.
+    - **Grade:** READY (substrate vocabulary audit + decide anchor-or-drop)
+    - **Source:** [docs/sprints/load-orchestration-verification-findings-2026-05-25.md](sprints/load-orchestration-verification-findings-2026-05-25.md) § Brewing session
+    - **Suggested landing:** vocabulary audit followed by either anchor placement or prompt-language softening
+
+37. **claude.ai project memory currency lags substrate** (second confirmation) — both brewing + roasting project memories still describe the docs://context-roasting.md / context-shared.md split as if those are load-bearing fetches. Post Pattern J pruning (2026-05-25, PR #247), CONTEXT-shared.md is a 49 KB index pointing at docs/reference/*.md reference docs. Memory descriptions of where things live are out of date. Not a load issue (memory is just descriptive, no fetch instruction left to fire after the load-orchestration sprint) but a substrate-currency drift that compounds. Banked here for the next claude.ai memory-chatbox refresh pass.
+    - **Grade:** READY (memory-chatbox edits in both projects)
+    - **Source:** [docs/sprints/load-orchestration-verification-findings-2026-05-25.md](sprints/load-orchestration-verification-findings-2026-05-25.md) § Roasting session
+    - **Suggested landing:** small memory-chatbox refresh pass touching both projects' "Purpose & context" / "Architecture" descriptions
+
+38. **Operator guide cross-reference density — architectural watch-item** — both calibration responses noted the operator guide is "studded with cross-reference links" pulling toward link-following habit. The doc is correctly doing its job as a directory but the directory shape is itself a drift vector for over-fetching. Worth tracking if session-start loads creep upward over time. Pairs with the load-orchestration spec's "operator-guide exemption is the most-likely-to-drift line" canary — if the same drift surface fires twice, that's the signal to audit the exemption itself (potentially: split operator-guide's Canonical taxonomy lookups + Schema model + Session debrief paste template into on-demand pulls, per the pre-flight audit's deferred follow-up).
+    - **Grade:** OBSERVING (watch-item; trigger is session-start load creep OR a second drift surface fire)
+    - **Source:** [docs/sprints/load-orchestration-verification-findings-2026-05-25.md](sprints/load-orchestration-verification-findings-2026-05-25.md) § Overall feel + [docs/sprints/load-orchestration-preflight-audit-2026-05-25.md](sprints/load-orchestration-preflight-audit-2026-05-25.md) § Operator-guide split-check
+    - **Suggested landing:** if triggered, operator-guide split sprint extracting 3 candidate sections (Schema model / Canonical taxonomy lookups / Session debrief paste template) per the pre-flight audit's deferred-follow-up table
+
 ## Substrate pruning candidates
 
 Lived examples of substrate sections that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred until 2-3-4 lived candidates are worked through operator + Claude Code back-and-forth (case-study-driven generalization per Chris's framing at Item 16c grill). This section accumulates candidates; each becomes a worked example. Once ≥2 candidates have been resolved, a pruning sprint scopes the generalized rule.
