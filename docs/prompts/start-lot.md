@@ -6,7 +6,7 @@
 
 **Workflow position**: First of four lifecycle prompts (`start-lot.md` → `log-roast.md` ⇄ `log-cupping.md` → `close-lot.md`). This one runs once per lot.
 
-Vocabulary used in this prompt is defined in CONTEXT-roasting.md (V-set, batch slot, experiment frame, variable, lever, taste-for, leading slot, reference roast, adjustment). When the file ships, claude.ai already has the CONTEXT-{roasting,brewing,shared}.md glossary family in its project context - don't re-explain.
+Vocabulary used in this prompt is defined in CONTEXT-roasting.md (V-set, batch slot, experiment frame, variable, lever, taste-for, leading slot, reference roast, adjustment). The first sentence is an orientation pointer to the canonical-definition home, not a residency claim — pull via `read_doc` if a specific term needs validation.
 
 ## Tools for this session
 
@@ -142,7 +142,7 @@ If the lot warrants a new entry (most do), propose creating `docs/skills/roastin
 
 Required fields: top-level `target_doc: "skills/roasting-historian/cluster/active-lots/<lot-slug>.md"` (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing), top-level `summary` (one-line, the arbiter sees this when triaging), `citations: [{section_anchor, op: "append", proposed_text}]`. Optional `source = {kind: "session", id: "<lot_id V1 intake>"}`.
 
-If unsure which `<lot-slug>` to use, run `list_docs(prefix="skills/roasting-historian/cluster/active-lots/")` to see the current naming convention. Reference the [Master Coordinator catalog](docs://skills/coordinator/catalog.md) for the canonical cluster paths.
+If unsure which `<lot-slug>` to use, run `list_docs(prefix="skills/roasting-historian/cluster/active-lots/")` to see the current naming convention. This is a targeted lookup against the existing per-lot files — don't fetch the Master Coordinator catalog for this; the catalog is reserved for cross-domain proposal-routing at lifecycle close (see `close-lot.md` STAGE 5 + `one-shot-closeout.md` STAGE 5).
 
 ## STAGE 5 - Confirmation output
 
