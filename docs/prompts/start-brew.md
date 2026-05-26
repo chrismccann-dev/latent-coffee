@@ -1,9 +1,20 @@
-New coffee. Fetch the Master Coordinator catalog via
-read_doc(uri="docs://skills/coordinator/catalog.md") to identify available
-knowledge clusters. For the full BREW PROMPT operational guidance (Step 1 Coffee
-Brief + Step 2 Recipe Output + Step 3 Iteration Loop + Step 4 Resolved Brew
-Output Format), fetch
-read_doc(uri="docs://skills/brewing-assistant/cluster/operational-guide.md").
+New coffee. For the Coffee Brief + starting-recipe construction, fetch the
+two stage-keyed sections of the BREW PROMPT operational guide via:
+read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md",
+anchor="Step 1 — Coffee Brief (Claude runs this automatically)") and
+read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md",
+anchor="Step 2 — Recipe Output (after strategy is confirmed)"). When iteration
+begins (Phase 2, the operator returns with tasting notes), pull
+read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md",
+anchor="Step 3 — Iteration Loop (Phase 2 — in-thread iteration)") at that point —
+not before. The Step 4 Resolved Brew Output Format lives in
+`bundled-brewing-completion.md`'s session start and does NOT need to be
+pre-loaded here; that prompt pulls it when the resolved brew gets composed at
+log time. The anchor strings above are the verbatim h2 headings in the
+operational-guide (em-dashes preserved). If an anchor fails to resolve, fall
+back to list_doc_sections(uri="docs://skills/brewing-assistant/cluster/operational-guide.md")
+to discover the current heading set rather than re-fetching the whole doc.
+
 For brewing equipment knowledge (brewer / filter / grinder / SWORKS dial
 behavior + Location Constraints + Equipment + Valve + Filter System + Example
 Outputs), dispatch to the Brewing Equipment Expert

@@ -42,14 +42,20 @@ before STEP 1. If push_brew still doesn't surface in the top-3 result set,
 fall back to invoking the tool directly by name (`push_brew`) — the discovery
 layer's ranking is advisory; the tool exists in the registry regardless.
 
-At session start (after the self-roasted gate clears), fetch the Master
-Coordinator catalog via read_doc(uri="docs://skills/coordinator/catalog.md")
-to identify available knowledge clusters. For brewing equipment validation
-(brewer / filter / grinder / SWORKS dial behavior), dispatch to the
-Brewing Equipment Expert (docs://skills/brewing-equipment-expert/cluster/).
-For WBC competitor recipe references and cross-cutting control patterns,
-dispatch to the WBC Brewing Archivist
-(docs://skills/wbc-brewing-archivist/cluster/ — Wave 2 PR 1, ADR-0011).
+At session start (after the self-roasted gate clears), fetch
+read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md",
+anchor="Step 4 — Resolved Brew Output Format") to load the resolved-brew
+output shape for STEP 1's push_brew composition. Step 4 is the only
+operational-guide section this prompt needs; Steps 1-3 live in start-brew.md's
+session and never load here. The anchor string above is the verbatim h2
+heading (em-dash preserved); if it fails to resolve, fall back to
+list_doc_sections(uri="docs://skills/brewing-assistant/cluster/operational-guide.md")
+rather than re-fetching the whole doc. For brewing equipment validation
+(brewer / filter / grinder / SWORKS dial behavior), dispatch to the Brewing
+Equipment Expert (docs://skills/brewing-equipment-expert/cluster/). For WBC
+competitor recipe references and cross-cutting control patterns, dispatch to
+the WBC Brewing Archivist (docs://skills/wbc-brewing-archivist/cluster/ —
+Wave 2 PR 1, ADR-0011).
 
 Complete this brew session: push_brew first, then propose any doc updates.
 If you have feedback for Claude Code on either path, mention it.
