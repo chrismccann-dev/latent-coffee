@@ -235,6 +235,28 @@ type Paginated<T> = {
   results: T[]
 }
 
+// /datapoints/?log={log_id} — raw temperature time-series per roast log.
+// Sprint 3.5 discovery (2026-05-26 via Kaffebrenner/roest-api-example OpenAPI
+// schema). Each row is either a sensor reading (`data_type === 1`) carrying
+// bt / et / inlet_temp / drum_temp + msec, or an event marker (`data_type === 0`)
+// carrying an event_type 0-8 (incl. auto-detected FC=6 / Dryend=7 / Drop=8).
+// We only consume the dense sensor stream for TP / yellowing_temp / RoR /
+// as-recorded inlet_curve compute; event markers stay sourced from
+// RoestLog.events / firstcrack_event_msec / dryend_event_msec.
+export type RoestDatapoint = {
+  data_type: 0 | 1
+  event_type: number | null
+  msec: number | null
+  bt: number | null
+  et: number | null
+  inlet_temp: number | null
+  drum_temp: number | null
+  target: number | null
+  fan: number | null
+  heat: number | null
+  rpm: number | null
+}
+
 // --- Endpoints ----------------------------------------------------------------
 
 export function getRoestLog(log_id: number): Promise<RoestLog> {
@@ -272,6 +294,127 @@ export async function searchRoestLogs(inventory_id: number, limit = 50): Promise
     `/logs/?inventory=${inventory_id}&limit=${limit}`,
   )
   return data.results
+}
+
+// Fetch every datapoint for a log, auto-paginating through the `next` URL.
+// page_size=1000 means a typical 7-minute roast (~420 sensor rows + a handful
+// of event rows at 1Hz) lands in a single round-trip; longer or higher-sample
+// roasts fall back to multi-page following. Sprint 3.5.
+export async function getRoestDatapoints(log_id: number): Promise<RoestDatapoint[]> {
+  const out: RoestDatapoint[] = []
+  let nextPath: string | null = `/datapoints/?log=${log_id}&page_size=1000`
+  while (nextPath) {
+    const page = await authedFetch<Paginated<RoestDatapoint>>(nextPath)
+    out.push(...page.results)
+    if (page.next) {
+      // Roest API returns absolute URLs in `next`; reduce to path+search so the
+      // bearer-injecting authedFetch handles it.
+      const url = new URL(page.next)
+      nextPath = `${url.pathname}${url.search}`
+    } else {
+      nextPath = null
+    }
+  }
+  return out
+}
+
+// --- Datapoint time-series helpers --------------------------------------------
+
+type TsSample = { msec: number; value: number }
+
+// Filter a datapoint array down to sensor rows with a non-null value at a
+// given field. Sorted by msec ascending.
+function filterSeries(
+  dps: RoestDatapoint[],
+  field: 'bt' | 'inlet_temp',
+): TsSample[] {
+  return dps
+    .filter((d) => d.data_type === 1 && d.msec != null && d[field] != null)
+    .map((d) => ({ msec: d.msec as number, value: d[field] as number }))
+    .sort((a, b) => a.msec - b.msec)
+}
+
+// Linear interpolation of a TsSample series at a target msec. Returns null
+// when the target falls outside the sampled range.
+function interpolateAtMsec(series: TsSample[], targetMsec: number): number | null {
+  if (series.length === 0) return null
+  if (targetMsec < series[0].msec) return null
+  if (targetMsec > series[series.length - 1].msec) return null
+  for (let i = 1; i < series.length; i++) {
+    if (series[i].msec >= targetMsec) {
+      const prev = series[i - 1]
+      const next = series[i]
+      if (next.msec === prev.msec) return prev.value
+      const t = (targetMsec - prev.msec) / (next.msec - prev.msec)
+      return prev.value + t * (next.value - prev.value)
+    }
+  }
+  return null
+}
+
+// 30-second-window RoR centered on targetMsec. Returns °C/min rounded to 2dp.
+// NULL when the window straddles charge (msec<0) or runs past the last sample.
+export function computeRoR(
+  btSeries: TsSample[],
+  targetMsec: number,
+): number | null {
+  const lowMsec = targetMsec - 15000
+  const highMsec = targetMsec + 15000
+  if (lowMsec < 0) return null
+  const low = interpolateAtMsec(btSeries, lowMsec)
+  const high = interpolateAtMsec(btSeries, highMsec)
+  if (low == null || high == null) return null
+  // (Δbt over 30 seconds) × 2 = °C/min.
+  return Number(((high - low) * 2).toFixed(2))
+}
+
+// Find the bean-temp local minimum within the early-roast window. TP is the
+// canonical "turning point" — bt cools from charge_drum heat-soak before the
+// hopper-load heats it back up. Search bound = min(dropMsec/2, 180000) — TP
+// always falls in the first ~3 minutes on a normal roast.
+export function findTurningPoint(
+  btSeries: TsSample[],
+  dropMsec: number | null,
+): { msec: number; temp: number } | null {
+  if (btSeries.length === 0) return null
+  const ceiling = dropMsec ? Math.min(dropMsec / 2, 180000) : 180000
+  let minMsec = btSeries[0].msec
+  let minVal = btSeries[0].value
+  for (const point of btSeries) {
+    if (point.msec > ceiling) break
+    if (point.value < minVal) {
+      minVal = point.value
+      minMsec = point.msec
+    }
+  }
+  return { msec: minMsec, temp: Number(minVal.toFixed(2)) }
+}
+
+// Sample the as-recorded inlet_temp series at the msec keys of the as-designed
+// bezier so the two display strings line up for visual diffing. Falls back to
+// 30-second uniform sampling when no designed bezier is supplied.
+export function buildInletCurveRecorded(
+  dps: RoestDatapoint[],
+  designedBezier: [number, number][] | null,
+): string | null {
+  const series = filterSeries(dps, 'inlet_temp')
+  if (series.length === 0) return null
+  const points: [number, number][] = []
+  if (designedBezier && designedBezier.length > 0) {
+    for (const [msec] of designedBezier) {
+      const v = interpolateAtMsec(series, msec)
+      if (v != null) points.push([msec, Number(v.toFixed(1))])
+    }
+  } else {
+    const start = Math.ceil(series[0].msec / 30000) * 30000
+    const end = series[series.length - 1].msec
+    for (let m = start; m <= end; m += 30000) {
+      const v = interpolateAtMsec(series, m)
+      if (v != null) points.push([m, Number(v.toFixed(1))])
+    }
+  }
+  if (points.length === 0) return null
+  return formatBezier(points, '°C')
 }
 
 // --- Normalizer ---------------------------------------------------------------
@@ -413,23 +556,42 @@ export type NormalizedRoastPayload = {
   fc_start: string | null
   drop_time: string | null
   yellowing_time: string | null
+  // Sprint 3.5: server-side compute from /datapoints/ bt curve. tp_time =
+  // msec of the bt local min in the first half (or first 3 min) of the roast,
+  // rendered mm:ss. tp_temp = the corresponding bt value. yellowing_temp =
+  // bt interpolated at dryend_event_msec.
+  tp_time: string | null
+  tp_temp: number | null
+  yellowing_temp: number | null
   dev_time_s: number | null
   dev_ratio: string | null
-  // Curves (display strings). Phase 2 (#R64): inlet_curve is the as-DESIGNED
-  // template (RoestProfile.temperature_bezier). Mid-roast operator overrides
-  // (manual inlet adjustments during the roast) are NOT exposed by the Roest
-  // API and therefore not captured here.
+  // Curves (display strings). inlet_curve is the as-DESIGNED template
+  // (RoestProfile.temperature_bezier). inlet_curve_recorded is sampled from
+  // /datapoints/ inlet_temp at the same msec keys as the designed bezier so
+  // the two strings line up for visual diffing (Sprint 3.5).
   fan_curve: string | null
   inlet_curve: string | null
+  inlet_curve_recorded: string | null
   // Mass / color
   batch_size_g: number | null
   roasted_weight_g: number | null
   weight_loss_pct: number | null
   agtron: number | null
-  // Phase 2 (#R57) — pass-through of Roest UI Notes / first_comment.comment.
-  // Renamed from `notes` to disambiguate from operator-prose fields. Caller
-  // sets push_roast.roest_notes from this on the augment step.
-  roest_notes: string | null
+  // R57 (Sprint 3.5): Chris uses the Roest UI Notes field to record the actual
+  // color descriptor (e.g. "very light color - whole bean") after CM200
+  // measurement. Route the Roest comment into color_description rather than
+  // a separate roest_notes pass-through. The roasts.roest_notes DB column
+  // stays in place for back-compat (migration 070 data backfill coalesces
+  // legacy rows forward) but the pull-side no longer populates it. claude.ai
+  // can re-route the value to what_didnt / what_to_change if the Roest note
+  // happens not to be a color descriptor in a given session.
+  color_description: string | null
+  // Sprint 3.5: three RoR anchors derived from /datapoints/ bt curve via a
+  // 30-second centered window. NULL when the window straddles charge / runs
+  // past drop / FC isn't marked (for fc_minus_30s).
+  ror_at_2_30: number | null
+  ror_at_4_00: number | null
+  ror_at_fc_minus_30s: number | null
   // Reference roast flag — Roest doesn't track this; caller sets it explicitly
   is_reference: boolean
   // Surface for caller to know what was inferred
@@ -473,6 +635,7 @@ export function roestLogToPushRoastPayload(
   log: RoestLog,
   profile: RoestProfile | null,
   green_bean_id: string | null,
+  datapoints: RoestDatapoint[] = [],
 ): NormalizedRoastPayload {
   const hints: string[] = []
   // Phase 2 (#R65): resolve the user's configured TZ for roast_date conversion.
@@ -488,12 +651,15 @@ export function roestLogToPushRoastPayload(
       `roast_date converted UTC ${utcSlice} -> ${tz} ${localDate}.`,
     )
   }
-  // Round-5 dogfood (2026-05-10): surface the Roest air-preheat target for
-  // trace so the caller can record it manually if they care, but DO NOT map
-  // it to hopper_load_temp on the payload (different signal).
+  // R59 (Sprint 3.5): Roest API does NOT expose hopper_load_temp anywhere —
+  // not on /logs/{id}/, not on /profiles/{id}/, not derivable from /datapoints/
+  // (the bt series starts at charge, not hopper-load). RoestProfile.preheat_temperature
+  // is the air-preheat target (inlet air during preheat phase, ~210°C in V4),
+  // a DIFFERENT signal from bean-probe hopper-load (~125°C V4 standard). The
+  // caller must augment hopper_load_temp from session memory.
   if (profile?.preheat_temperature != null) {
     hints.push(
-      `Roest profile.preheat_temperature = ${profile.preheat_temperature}°C is the air-preheat target (inlet air during preheat phase), not hopper_load_temp (bean probe at hopper-load, ~125°C V4 standard). hopper_load_temp returned as null; set manually if known.`,
+      `Roest profile.preheat_temperature = ${profile.preheat_temperature}°C is the air-preheat target (inlet air during preheat phase), not hopper_load_temp (bean probe at hopper-load, ~125°C V4 standard). hopper_load_temp returned as null; set manually from session memory.`,
     )
   }
   // Phase 2 (#R58): map RoestProfile.end_condition + end_condition_value to
@@ -527,6 +693,42 @@ export function roestLogToPushRoastPayload(
     log.start_weight != null && log.end_weight != null && log.start_weight > 0
       ? Number(((1 - log.end_weight / log.start_weight) * 100).toFixed(2))
       : null
+  // Sprint 3.5 — /datapoints/ time-series compute. R60 (TP + yellowing_temp) +
+  // R64 (as-recorded inlet) + RoR. All NULL when datapoints array is empty
+  // (caller didn't fetch or fetch failed).
+  let tp_time: string | null = null
+  let tp_temp: number | null = null
+  let yellowing_temp: number | null = null
+  let inlet_curve_recorded: string | null = null
+  let ror_at_2_30: number | null = null
+  let ror_at_4_00: number | null = null
+  let ror_at_fc_minus_30s: number | null = null
+  if (datapoints.length === 0) {
+    hints.push(
+      '/datapoints/ returned empty for this log — TP / yellowing_temp / RoR / inlet_curve_recorded omitted. If the log is recent and connect.roestcoffee.com shows a curve, this likely means a Roest API drift; otherwise the log may have no recorded sensor data.',
+    )
+  } else {
+    const btSeries = filterSeries(datapoints, 'bt')
+    if (btSeries.length === 0) {
+      hints.push('/datapoints/ rows had no non-null bt readings — TP / yellowing_temp / RoR omitted.')
+    } else {
+      const tp = findTurningPoint(btSeries, drop_msec)
+      if (tp != null) {
+        tp_time = msecToMMSS(tp.msec)
+        tp_temp = tp.temp
+      }
+      if (log.dryend_event_msec != null) {
+        const v = interpolateAtMsec(btSeries, log.dryend_event_msec)
+        if (v != null) yellowing_temp = Number(v.toFixed(2))
+      }
+      ror_at_2_30 = computeRoR(btSeries, 150_000)
+      ror_at_4_00 = computeRoR(btSeries, 240_000)
+      if (fc_msec != null) {
+        ror_at_fc_minus_30s = computeRoR(btSeries, fc_msec - 30_000)
+      }
+    }
+    inlet_curve_recorded = buildInletCurveRecorded(datapoints, profile?.temperature_bezier ?? null)
+  }
   return {
     green_bean_id,
     roest_log_id: log.id,
@@ -540,12 +742,8 @@ export function roestLogToPushRoastPayload(
     roast_profile_name: log.profile_data?.name ?? null,
     drum_direction: log.profile_data?.reversed_drum_direction ? 'Counterflow' : 'Conventional',
     charge_temp: log.charge_drum_temp,
-    // Round-5 dogfood (2026-05-10): always null. Roest's
-    // RoestProfile.preheat_temperature is the air-preheat target (~210°C),
-    // NOT the bean-probe hopper-load reading (~125°C V4 standard) — different
-    // signals; mapping them together produced misleading 210°C values on
-    // hopper_load_temp. Caller fills hopper_load_temp from session memory.
-    // The Roest air-preheat value surfaces in inference_hints for trace.
+    // R59: Roest API does not expose hopper_load_temp. Caller augments from
+    // session memory.
     hopper_load_temp: null,
     fc_temp: log.fc_temp,
     drop_temp: log.end_temp,
@@ -555,15 +753,24 @@ export function roestLogToPushRoastPayload(
     fc_start,
     drop_time,
     yellowing_time,
+    tp_time,
+    tp_temp,
+    yellowing_temp,
     dev_time_s,
     dev_ratio,
     fan_curve: profile ? formatBezier(profile.fan_bezier, '%') : null,
     inlet_curve: profile ? formatBezier(profile.temperature_bezier, '°C') : null,
+    inlet_curve_recorded,
     batch_size_g: log.start_weight,
     roasted_weight_g: log.end_weight,
     weight_loss_pct,
     agtron: log.whole_bean_color,
-    roest_notes: log.first_comment?.comment ?? null,
+    // R57 (Sprint 3.5): route Roest UI Notes / first_comment.comment into
+    // color_description rather than a separate roest_notes pass-through.
+    color_description: log.first_comment?.comment ?? null,
+    ror_at_2_30,
+    ror_at_4_00,
+    ror_at_fc_minus_30s,
     is_reference: false,
     inference_hints: hints,
   }

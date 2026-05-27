@@ -91,8 +91,9 @@ For each slot:
   - `batch_id` from Roest (the integer batch number as string - e.g. `"187"`)
   - **`recipe_id`**: FK to the matching `roast_recipes` row from the slot → recipe_id map. This is the design-intent linkage - without it the page can't render "intended vs achieved" on the resolved view. STAGE 1's fallback + inline-backfill paths produce this; if both failed in STAGE 1 we already halted there.
   - All numeric fields from Roest: fc_start, fc_temp, drop_time, drop_temp, dev_time_s, agtron, charge_temp, hopper_load_temp, end_condition_type, end_condition_target, fc_total_cracks, weight_loss_pct.
+  - **Sprint 3.5 /datapoints/ unlock** — `pull_roest_log` now also returns: `tp_time` + `tp_temp` (bt local min in first half of roast), `yellowing_temp` (bt at dryend), `inlet_curve_recorded` (as-recorded inlet, sister to as-designed `inlet_curve`), `ror_at_2_30` + `ror_at_4_00` + `ror_at_fc_minus_30s` (°C/min, 30s centered window). Pass these through verbatim from the pull payload — they're server-side computed from the Roest /datapoints/ time-series.
   - `fc_audibility`: the 5-value enum from STAGE 2's silent-FC bullet (audible / subtle / silent / ambiguous / did_not_fire). Sprint 11 RO-CP-3 + Group 3 / Item 31 / migration 066. On `did_not_fire`, `fc_start` / `fc_temp` / `dev_time_s` must all be null.
-  - `roest_log_id` (cross-ref) + `roest_notes` (pass-through of the Roest UI Notes / first_comment.comment - preserve verbatim, don't fold into the prose fields).
+  - `roest_log_id` (cross-ref) + `color_description` (Sprint 3.5 R57: the Roest UI Notes / first_comment.comment lands here — Chris uses it to record post-CM200 color descriptors; pass through verbatim from pull payload. If a given Roest note isn't a color descriptor, fold the prose into `what_didnt` or `what_to_change` instead). The legacy `roest_notes` field still accepts input for back-compat but should be left empty in new flows.
   - `roast_profile_name` from Roest.
   - **Prose** (your synthesis, NOT operator-supplied):
     - `what_worked`: structural observations on this slot's curve - what hit predictions cleanly
