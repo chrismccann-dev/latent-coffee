@@ -1394,6 +1394,17 @@ function ResolvedView({
             the recipe is enriched via patch_roast_recipe.
           </div>
         )}
+        {/* Sub-sprint 4a Bundle D: roasts.color_description surface (R57
+            rewire from Sprint 3.5 - the field now coalesces Roest UI Notes
+            content; previously rendered nowhere). Renders below the
+            Design/Achieved grid as a contextual annotation for the Agtron
+            reading. Skips silently when NULL. */}
+        {referenceRoast?.color_description && (
+          <div className="mt-4 font-sans text-sm text-latent-mid leading-relaxed">
+            <span className="label mr-2 inline-block">Color</span>
+            {referenceRoast.color_description}
+          </div>
+        )}
       </SectionCard>
 
       {/* Reference Recipe Design Intent disclosure (Sub Pages 6.8) —
@@ -1433,7 +1444,19 @@ function ResolvedView({
                   {pourover.eval_method && ` · ${pourover.eval_method}`}
                 </div>
                 {pourover.overall ? (
-                  <div className="font-sans text-sm leading-relaxed break-words">{pourover.overall}</div>
+                  <>
+                    <div className="font-sans text-sm leading-relaxed break-words">{pourover.overall}</div>
+                    {/* Sub-sprint 4a Bundle D: cuppings.sweetness as own row
+                        even when overall is populated. Schema landed Sprint S3
+                        (2026-05-18); previously only surfaced in the labeled-
+                        rows fallback below. */}
+                    {pourover.sweetness && (
+                      <div className="mt-3 font-sans text-sm leading-relaxed text-latent-mid">
+                        <span className="label mr-1 inline-block">Sweetness</span>
+                        {pourover.sweetness}
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="space-y-2 font-sans text-sm">
                     <CupRow label="Aroma" value={pourover.aroma} />
@@ -1639,6 +1662,15 @@ function ResolvedView({
                     {cup.ground_agtron != null && ` · Gnd Agtron: ${cup.ground_agtron}`}
                   </div>
                   <div className="font-sans text-sm leading-relaxed">{descriptors || '—'}</div>
+                  {/* Sub-sprint 4a Bundle D: cuppings.sweetness as own row
+                      when overall is populated (otherwise it's already
+                      joined into descriptors above). */}
+                  {cup.sweetness && cup.overall && (
+                    <div className="font-sans text-sm leading-relaxed mt-1 text-latent-mid">
+                      <span className="label mr-1 inline-block">Sweetness</span>
+                      {cup.sweetness}
+                    </div>
+                  )}
                   {cup.temperature_behavior && (
                     <div className="font-sans text-sm leading-relaxed mt-1 text-latent-mid">
                       <span className="label mr-1 inline-block">Temp behavior</span>
@@ -1879,6 +1911,14 @@ function UnresolvedView({
             the recipe is enriched via patch_roast_recipe.
           </div>
         )}
+        {/* Sub-sprint 4a Bundle D: roasts.color_description surface (parallels
+            the ResolvedView render). Skips silently when NULL. */}
+        {referenceRoast?.color_description && (
+          <div className="mt-4 font-sans text-sm text-latent-mid leading-relaxed">
+            <span className="label mr-2 inline-block">Color</span>
+            {referenceRoast.color_description}
+          </div>
+        )}
       </SectionCard>
 
       {/* Leading Recipe Design Intent disclosure — parallels ResolvedView's
@@ -1911,7 +1951,19 @@ function UnresolvedView({
                   {pourover.eval_method && ` · ${pourover.eval_method}`}
                 </div>
                 {pourover.overall ? (
-                  <div className="font-sans text-sm leading-relaxed break-words">{pourover.overall}</div>
+                  <>
+                    <div className="font-sans text-sm leading-relaxed break-words">{pourover.overall}</div>
+                    {/* Sub-sprint 4a Bundle D: cuppings.sweetness as own row
+                        even when overall is populated. Schema landed Sprint S3
+                        (2026-05-18); previously only surfaced in the labeled-
+                        rows fallback below. */}
+                    {pourover.sweetness && (
+                      <div className="mt-3 font-sans text-sm leading-relaxed text-latent-mid">
+                        <span className="label mr-1 inline-block">Sweetness</span>
+                        {pourover.sweetness}
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="space-y-2 font-sans text-sm">
                     <CupRow label="Aroma" value={pourover.aroma} />
@@ -2104,6 +2156,15 @@ function UnresolvedView({
                     {cup.ground_agtron != null && ` · Gnd Agtron: ${cup.ground_agtron}`}
                   </div>
                   <div className="font-sans text-sm leading-relaxed">{descriptors || '—'}</div>
+                  {/* Sub-sprint 4a Bundle D: cuppings.sweetness as own row
+                      when overall is populated (otherwise it's already
+                      joined into descriptors above). */}
+                  {cup.sweetness && cup.overall && (
+                    <div className="font-sans text-sm leading-relaxed mt-1 text-latent-mid">
+                      <span className="label mr-1 inline-block">Sweetness</span>
+                      {cup.sweetness}
+                    </div>
+                  )}
                   {cup.temperature_behavior && (
                     <div className="font-sans text-sm leading-relaxed mt-1 text-latent-mid">
                       <span className="label mr-1 inline-block">Temp behavior</span>
