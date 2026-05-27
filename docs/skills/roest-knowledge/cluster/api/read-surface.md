@@ -49,6 +49,17 @@ Operator-stub scope per [Roest Knowledge SKILL.md](../../SKILL.md) — Chris-stu
 
 ---
 
+## Sampling tells (artifacts, not bugs)
+
+Two cosmetic divergences between `inlet_curve_recorded` and `inlet_curve` will appear on every batch — both verified real during R64 (2026-05-26, Rwanda Nova Bukure V2 batches 193/194/195) and not sampling errors. Renderers should preserve them rather than "fix" them:
+
+- **00:00 cold start.** `inlet_curve_recorded` first sample reads ~95-100°C against the as-designed ~200°C preheat anchor. `/datapoints/` catches the inlet probe's actual physical temp at charge moment, not the designed preheat target. From 01:15 onward the recorded samples track the designed bezier within ~1°C. This is the probe-physics signal, not a sampling lag.
+- **Tail truncates at drop time.** `inlet_curve_recorded` ends at the last `/datapoints/` sample before drop, not at the designed bezier's terminal anchor. e.g. a batch with designed endpoint 06:00 that drops at 05:30 will have a recorded curve ending at the 05:00 sample. The recorded tail length reflects actual roast duration, not the designed plan.
+
+Both tells exist because `/datapoints/` is honest about what was physically measured. If Chris has never manually overridden the inlet mid-roast (true through 2026-05-26 — see [project-roasting-intervention-surface memory](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_roasting_intervention_surface.md)), these are the only systematic divergences between the two curves on his archive.
+
+---
+
 ## What the Roest API does NOT expose
 
 Audit findings from Sprint 3.5 (against the Kaffebrenner/roest-api-example OpenAPI schema as of 2026-05-26):
