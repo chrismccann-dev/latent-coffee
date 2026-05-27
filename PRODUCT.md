@@ -463,17 +463,21 @@ Read pages untouched. All canonical registries (`lib/*-registry.ts`) preserved a
 
 Per-page-family UX cleanup + informational architecture audit. Runs BEFORE the Claude-Design redesign so the redesign has the right informational scaffolding to polish, not patch. Order per Chris audio 2026-05-26 ("which ones I actually view most often naturally on my own"):
 
-##### Sub-sprint 4a — Green-bean polish bundle (FIRST in read-path series)
+##### Sub-sprint 4a — Green-bean polish bundle — SHIPPED 2026-05-27 (Bundles A + B + D)
 
-Highest-priority surface — `/green/[id]` has the most lived-practice data behind it now (architecture closed, lifecycle stable, real data exercising every state). Full audit of all 5 page shapes: waiting-for-next-roast / waiting-for-next-cupping / resolved / one-shot waiting / one-shot resolved. Bundles:
+3-phase audit (Phase 1 = Chris page-by-page audit + 2 mockups + voice memos; Phase 2 = Claude complementary pass with substrate cross-check + bug root-cause diagnosis; Phase 3 = 4-bundle implementation plan). Shipped via PRs #274 (Bundle A) + #275 (Bundle D) + #276 (Bundle B).
 
-- **Schema additions** — `cuppings.sweetness` + `cuppings.temperature_behavior` parser wiring (schema landed Sprint S3, but `handleSaveSelfRoasted` + `/green/[id]` render not yet wired).
-- **Phase 3 provenance UI** — `terroir_provenance` / `cultivar_provenance` / `canonicals_updated_at` queryable but unrendered.
-- **Reference Roasts entity** — new `reference_roasts` table replacing `roast_learnings.best_batch_id` + `roasts.is_reference`. Sprint B of [docs/features/reference-roast-and-guide.md](docs/features/reference-roast-and-guide.md).
-- **View polish** — feedback log items 11 + 12 + 13 (WaitingForNextRoastView + WaitingForNextCuppingView section reorders, recipe_variant in lightweight summary, WB→Gnd delta column).
-- **POD-1 absorption** — when promotion criteria fire, cupping-side simulated-pourover routing UI. Schema preference locked (`eval_method = 'Simulated Pourover'`). 1 of 4 triggers fired; Path C-2 framing validated 2026-05-21.
+**Bundle A — Unresolved lifecycle state + view shape + resolved-bug fix.** Collapsed two findings into one fix: the long-standing "Higuito + CGLE Sudan Rume Natural rendering as Resolved with placeholder verdict + Closed-without-reference disambiguator" bug + Chris's new Unresolved state framing. Discriminator: `roast_learnings exists AND why_this_roast_won IS NULL → unresolved` (whitespace-trim-aware). 6 lots (Higuito + SRN + Rancho Tio + GV Oma + GUA Libertad + GUA El Socorro) routed to the new state. New 5th view-shape `UnresolvedView` with "Reference → Leading" vocabulary rotation + verdict block dropped + carry-forward caution annotation + gray (`latent-mid`) tile per ratified design decision. ResolvedView's Sprint 3.2 #18 disambiguator card removed as dead code.
 
-**Sizing:** 1-2 stacked sprints. **Scoping doc:** [docs/features/reference-roast-and-guide.md](docs/features/reference-roast-and-guide.md) for the Reference Roasts entity sub-piece; full bundle scope to be authored at sprint kickoff.
+**Bundle B — V-set view reorders + Cupping Hypothesis + Roast Actuals rewrites.** Ships Chris's mockups #1 + #2 from Phase 1. WaitingForNextRoastView: Hypothesis row truncate-with-expander (pure-CSS via `<details>` + `group-open`); ExperimentFrame + RoastLogTable collapsed by default. WaitingForNextCuppingView: Cupping Hypothesis card body rewrite (2-row table Taste for / Predicted Cup; new `<CuppingReferenceBoxes>` inline Producer Notes + Previous Leading Slot Cup Notes; Anchor Cup dropped from foreground); Roast Actuals reformat (6 rows in new order, predicted → actual format every numeric cell, Maillard dropped); CrossBatchNotesBlock promoted to slot 4; ExperimentFrame + RoastLogTable collapsed.
+
+**Bundle D — color_description + sweetness render adds.** `roasts.color_description` (R57 rewire from Sprint 3.5) surfaces as inline annotation on Resolved/UnresolvedView reference/leading roast cards. `cuppings.sweetness` (Sprint S3 schema) renders as own row when `overall` populated (parallel to temperature_behavior pattern). Both dormant when data null; light up when populated.
+
+**Bundle C — log-cupping.md taste_for prompt tightening — DEFERRED.** Blocks on Chris providing 3-5 representative `taste_for_<slot>` prose examples (current verbose form + preferred tight rewrite) so the prompt patch can encode the rule. Will ship out-of-band when examples land.
+
+**Deferred (per Phase 2 complementary pass § 8-§17):** Reference Roasts entity creation (own sub-sprint), POD-1 absorption (1.x of 4 triggers fired), run-off pourover `recipe_variant` schema split, rest-days drift surface, provenance UI (`canonicals_updated_at` / `*_provenance` render — dormant by lack of trigger), Sprint 3.5 RoR + inlet_curve_recorded render (mockup doesn't show them; data dormant), phone-scope mobile pass.
+
+**Phase docs:** [kickoff](docs/sprints/sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md) (Phase 1) + [complementary pass](docs/sprints/sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md) (Phase 2).
 
 ##### Sub-sprint 4b — Roasters polish bundle
 
