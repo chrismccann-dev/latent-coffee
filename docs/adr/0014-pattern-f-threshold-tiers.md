@@ -30,7 +30,7 @@ Claude.ai's MCP client reads docs in full via `read_doc` (no streaming / chunkin
 |---|---|---|---|
 | **Historian** (Knowledge tier; Roasting Historian + Brewing Historian) | 250 KB | 80 KB | Compounding IS the desired growth pattern (per-lot / per-cultivar / per-process accumulation); ~2x workflow tier |
 | **Archivist** (Knowledge tier; WBC Roasting + Brewing, Peer-Learning Roasting) | 200 KB | 60 KB | External-source growth bounded by event cadence (WBC year drops, peer livestream additions); tighter than Historian |
-| **Knowledge — Equipment / Reference** (Brewing Equipment Expert, Roest Knowledge, Learning Knowledge) | 150 KB | 60 KB | Registry-driven; bounded by Chris's gear + Roest API surface + future research tracks |
+| **Knowledge — Equipment / Reference** (Brewing Equipment Expert, Roest Knowledge, Research Coordinator post 2026-05-27) | 150 KB | 60 KB | Registry-driven; bounded by Chris's gear + Roest API surface + research-knowledge cluster (Research Coordinator replaces the prior Learning Knowledge slot per [ADR-0017](0017-research-assistant-architecture.md)) |
 | **Workflow** (Assistants, Recorders, Specialists, Roest API Worker) | 100 KB | 60 KB | Operational guides should stay tight; growth here is a smell (workflows shouldn't accumulate state) |
 | **Coordinator** | 80 KB | 40 KB | Cross-zone meta; thinnest by design; this is the dispatch surface, not substrate |
 | **CCIL** | 150 KB | 60 KB | Moderate growth; cross-domain N=3+ patterns per coffee / process before self-decomposition fires |
@@ -44,7 +44,7 @@ ADR-0013 had two different statements of the cluster threshold in different sect
 
 ## Current state (2026-05-23 audit)
 
-**Compliant under pattern-aware tiers (13 of 19 sub-skills):** ccil (36KB), brewing-assistant (52KB), brewing-historian (188KB, under Historian 250KB), brew-recorder (8KB), close-lot-specialist (16KB), cupping-specialist (28KB), learning-assistant (8KB), learning-knowledge (4KB), peer-learning-roasting-archivist (28KB), roast-recorder (12KB), roasting-assistant (24KB), roasting-historian (192KB, under Historian 250KB), roest-api-worker (8KB), sourcing-workflow-planner (8KB), wbc-roasting-archivist (92KB)
+**Compliant under pattern-aware tiers (13 of 17 sub-skills — 2026-05-27 update):** ccil (36KB), brewing-assistant (52KB), brewing-historian (188KB, under Historian 250KB), brew-recorder (8KB), close-lot-specialist (16KB), cupping-specialist (28KB), peer-learning-roasting-archivist (28KB), research-coordinator (~26KB at Step 2 ship, under Equipment/Reference 150KB), research-assistant (~6KB at Step 2 ship, under Workflow 100KB), roast-recorder (12KB), roasting-assistant (24KB), roasting-historian (192KB, under Historian 250KB), roest-api-worker (8KB), sourcing-workflow-planner (8KB), wbc-roasting-archivist (92KB). (Pre-2026-05-27 list included learning-assistant 8KB + learning-knowledge 4KB; both retired per [ADR-0017](0017-research-assistant-architecture.md).)
 
 **Approaching (within 20% of cap, watch-item):**
 - `brewing-equipment-expert` cluster (144KB / 150KB Equipment cap — 96%)

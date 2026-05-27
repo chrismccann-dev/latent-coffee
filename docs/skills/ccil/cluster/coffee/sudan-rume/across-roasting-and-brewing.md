@@ -60,9 +60,9 @@ Confirmation needed: a second Sudan Rume Washed brew (could be SR Hybrid Washed 
 - If muted at 91°C, go 1 click finer on grind — do NOT increase temp.
 - Cool-window evaluation: best warm-to-cool; cup opens significantly cooling.
 
-**Learning Assistant — when scoping a Sudan Rume research track:**
+**Research Coordinator — when scoping a Sudan Rume research project (per [ADR-0017](../../../../../../adr/0017-research-assistant-architecture.md)):**
 - N=3 is the corpus floor for cross-process pattern promotion. Today's N=3 covers Hybrid Washed (Latent) + Natural (Latent V5 active) + Natural (external CGLE Las Margaritas brewing-only). A third Sudan Rume Washed brew or a fresh aromatic-landrace washed lot would resolve the vehicle-dependency tension flagged above.
-- Track candidate variables: process (washed / natural / hybrid) × vehicle (April vs fast cone) × roast peak inlet (washed envelope vs natural envelope). The variety throughline is the constant; the experiment maps how each layer's mechanics serve or suppress it.
+- Track candidate variables: process (washed / natural / hybrid) × vehicle (April vs fast cone) × roast peak inlet (washed envelope vs natural envelope). The variety throughline is the constant; the project maps how each layer's mechanics serve or suppress it.
 
 ## What this seed pattern is NOT
 

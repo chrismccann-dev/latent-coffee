@@ -1,8 +1,8 @@
 # Master Coordinator Catalog
 
-The 18-sub-skill registry. Each entry has I/O metadata so dispatch decisions can be made from the catalog alone without loading the full SKILL.md.
+The 17-sub-skill registry. Each entry has I/O metadata so dispatch decisions can be made from the catalog alone without loading the full SKILL.md.
 
-**Wave status:** Wave 1 shipped Brewing Equipment Expert + Master Coordinator (2026-05-26). Wave 2 shipped 4 consolidation plays — WBC Brewing/Roasting Archivists (PR 1), Brewing Historian (PR 2), Roasting Historian (PR 3). Wave 3 PR 1 shipped 2 operator-stub Knowledge sub-skills (Peer-Learning Roasting Archivist + Roest Knowledge) + Roasting Historian R-to-B Translation extension. Wave 3 PR 2 shipped 4 Workflow Planning sub-skills (Roasting Assistant + Brewing Assistant + Learning Assistant + Sourcing Workflow Planner) — reads-only composition over Wave 1+2 Knowledge clusters, no clusters of their own per scope decision 1. **Wave 3 PR 3 shipped 5 Workflow Executing sub-skills (Roast Recorder + Brew Recorder + Cupping Specialist + Roest API Worker + Close-Lot Specialist)** — substrate-writer executors wrapping `push_*` / `patch_*` Tools; POD-1 absorbed into Cupping Specialist at SKILL.md level + bookmarked at `cluster/pod-1-routing.md` pending lived-practice trigger conditions; only Cupping Specialist has a `cluster/`. **Wave 3 closed.** **Wave 4 PR 4a shipped CCIL skeleton + Sudan Rume seed pattern (2026-05-21)** — CCIL flipped PLACEHOLDER → ACTIVE; cluster/coffee/sudan-rume/across-roasting-and-brewing.md as the proof-of-pattern seed (N=3 across both domains); cluster/decomposition-log.md as Pattern F audit trail starter; Chain 6 in handoff-rules.md activated. **Wave 4 PR 4b shipped 2026-05-21 — architecture implementation arc closed.** BREWING.md + ROASTING.md rewritten as ~500-byte redirect stubs; ~196KB residual operational content migrated to brewing-assistant/cluster/operational-guide.md, brewing-equipment-expert/cluster/operational-reference.md, roasting-historian/cluster/by-process/{natural,honey}.md, roasting-historian/cluster/active-lots/ + one-shot-calibrations/, roest-knowledge/cluster/protocols/{between-batch-protocol,green-storage}.md, coordinator/operator-guide.md, and expanded brewing/roasting-domain-principles below; CLAUDE.md sub-skills section extracted to docs/architecture/sub-skills-status.md. **Remaining placeholders:** Learning Knowledge (deferred until ≥2 research tracks complete).
+**Wave status:** Wave 1 shipped Brewing Equipment Expert + Master Coordinator (2026-05-26). Wave 2 shipped 4 consolidation plays — WBC Brewing/Roasting Archivists (PR 1), Brewing Historian (PR 2), Roasting Historian (PR 3). Wave 3 PR 1 shipped 2 operator-stub Knowledge sub-skills (Peer-Learning Roasting Archivist + Roest Knowledge) + Roasting Historian R-to-B Translation extension. Wave 3 PR 2 shipped 3 Workflow Planning sub-skills (Roasting Assistant + Brewing Assistant + Sourcing Workflow Planner) — reads-only composition over Wave 1+2 Knowledge clusters, no clusters of their own per scope decision 1. **Wave 3 PR 3 shipped 5 Workflow Executing sub-skills (Roast Recorder + Brew Recorder + Cupping Specialist + Roest API Worker + Close-Lot Specialist)** — substrate-writer executors wrapping `push_*` / `patch_*` Tools; POD-1 absorbed into Cupping Specialist at SKILL.md level + bookmarked at `cluster/pod-1-routing.md` pending lived-practice trigger conditions; only Cupping Specialist has a `cluster/`. **Wave 3 closed.** **Wave 4 PR 4a shipped CCIL skeleton + Sudan Rume seed pattern (2026-05-21)** — CCIL flipped PLACEHOLDER → ACTIVE; cluster/coffee/sudan-rume/across-roasting-and-brewing.md as the proof-of-pattern seed (N=3 across both domains); cluster/decomposition-log.md as Pattern F audit trail starter; Chain 6 in handoff-rules.md activated. **Wave 4 PR 4b shipped 2026-05-21 — architecture implementation arc closed.** BREWING.md + ROASTING.md rewritten as ~500-byte redirect stubs; ~196KB residual operational content migrated to brewing-assistant/cluster/operational-guide.md, brewing-equipment-expert/cluster/operational-reference.md, roasting-historian/cluster/by-process/{natural,honey}.md, roasting-historian/cluster/active-lots/ + one-shot-calibrations/, roest-knowledge/cluster/protocols/{between-batch-protocol,green-storage}.md, coordinator/operator-guide.md, and expanded brewing/roasting-domain-principles below; CLAUDE.md sub-skills section extracted to docs/architecture/sub-skills-status.md. **Research Assistant Step 2 scaffolding shipped 2026-05-27** — Research Coordinator + Research Assistant added (cross-domain pair, Claude-Code-centric, operator-direct dispatch per [ADR-0017](../../adr/0017-research-assistant-architecture.md)); Learning Assistant + Learning Knowledge deprecated (subsumed). See [ADR-0011 Amendment 2026-05-27](../../adr/0011-composable-sub-skills-architecture.md#amendment-2026-05-27-research-assistant-step-2-scaffolding) for the enumeration diff.
 
 ---
 
@@ -52,9 +52,9 @@ Chris roasts exclusively in counterflow mode on the Roest L200 Ultra. Counterflo
 
 ---
 
-## Sub-skill catalog (18 sub-skills + 1 deferred)
+## Sub-skill catalog (17 sub-skills)
 
-### KNOWLEDGE TIER (7 active + 1 deferred)
+### KNOWLEDGE TIER (8 active)
 
 | Sub-skill | Domain | Wave | Status | In | Out | Patterns |
 |---|---|---|---|---|---|---|
@@ -65,18 +65,17 @@ Chris roasts exclusively in counterflow mode on the Roest L200 Ultra. Counterflo
 | [Brewing Equipment Expert](../brewing-equipment-expert/SKILL.md) | brewing | **1** | **full content** | new equipment · flow-rate measurements · observed quirks | equipment recommendations + constraint envelope | A, C |
 | [Peer-Learning Roasting Archivist](../peer-learning-roasting-archivist/SKILL.md) | roasting | 3 | placeholder | operator-watch list (low-volume curation) | per-peer profiles + cross-peer synthesis | B, I |
 | [Roest Knowledge](../roest-knowledge/SKILL.md) | roasting | 3 | placeholder | API drift events · firmware updates · observed quirks | machine-aware planning constraints + API quirk catalog | A, B, I |
-| [Learning Knowledge](../learning-knowledge/SKILL.md) | cross-domain | **deferred** | placeholder | research-track completion events (from Learning Assistant) | research-track retros + cross-track meta-synthesis | A |
+| [Research Coordinator](../research-coordinator/SKILL.md) | cross-domain | post-arc | **ACTIVE (Step 2)** | operator project intake + per-track handoff briefs (paste-in) | project roadmap + track protocol docs + spawn prompts + scoped execution plans + project end-documents | Manual process-retro (cross-project ratification gate) |
 
-### WORKFLOW PLANNING TIER (4 sub-skills; constructs work, no substrate writes)
+### WORKFLOW PLANNING TIER (3 sub-skills; constructs work, no substrate writes)
 
 | Sub-skill | Domain | Wave | Status | In | Out | Patterns |
 |---|---|---|---|---|---|---|
 | [Roasting Assistant](../roasting-assistant/SKILL.md) | roasting | 3 | **ACTIVE (PR 2)** | lot specs + Roasting Historian + WBC Roasting + Roest Knowledge + Peer-Learning Roasting Archivist | roast recipe proposal (pre-push) | E |
 | [Brewing Assistant](../brewing-assistant/SKILL.md) | brewing | 3 | **ACTIVE (PR 2)** | brew session intent + Brewing Historian + WBC Brewing + Brewing Equipment Expert | brew recipe proposal + in-thread iteration | E |
-| [Learning Assistant](../learning-assistant/SKILL.md) | cross-domain | 3 | **ACTIVE (PR 2)** | hypothesis/open question + both Historians + inventory + CCIL (Wave 4 PR 4a) | research-track design + execution plan | E |
 | [Sourcing Workflow Planner](../sourcing-workflow-planner/SKILL.md) | roasting | 3 | **ACTIVE (PR 2)** | lot opportunity + WBC Roasting Archivist § sourcing/ + inventory + Roasting Historian | sourcing recommendation + lane-fit assessment | E |
 
-### WORKFLOW EXECUTING TIER (5 sub-skills; writes substrate)
+### WORKFLOW EXECUTING TIER (6 sub-skills; writes substrate via MCP — except Research Assistant which writes via Execution session per [ADR-0017](../../adr/0017-research-assistant-architecture.md))
 
 | Sub-skill | Domain | Wave | Status | In | Out | MCP Tools | Patterns |
 |---|---|---|---|---|---|---|---|
@@ -85,6 +84,7 @@ Chris roasts exclusively in counterflow mode on the Roest L200 Ultra. Counterflo
 | [Cupping Specialist](../cupping-specialist/SKILL.md) | roasting | 3 | **ACTIVE (PR 3) — POD-1 absorbed (summary inline + cluster/pod-1-routing.md)** | Day-7 cupping data + roast + cup observations | push_cupping + V-set Path A/B/C routing (Path C rewrite gated on lived-practice trigger conditions) | push_cupping, patch_cupping, patch_experiment, patch_roast (co-owned), propose_doc_changes | A, E |
 | [Roest API Worker](../roest-api-worker/SKILL.md) | roasting | 3 | **ACTIVE (PR 3)** | recipe from Roasting Assistant | push_roast_profile API call + linkage patch | push_roast_profile, patch_roast_recipe (co-owned) | B |
 | [Close-Lot Specialist](../close-lot-specialist/SKILL.md) | roasting | 3 | **ACTIVE (PR 3)** | resolved-lot completion data (reference roast + ref cup + optimized brew) | push_roast_learnings + best_roast_id writes + cross-link verification | push_roast_learnings, patch_roast_learnings, patch_roast (co-owned), patch_inventory, propose_doc_changes | A |
+| [Research Assistant](../research-assistant/SKILL.md) | cross-domain | post-arc | **ACTIVE (Step 2)** | Coordinator-authored spawn prompt + protocol doc | inline protocol-doc updates + handoff brief (no MCP substrate writes per [ADR-0017](../../adr/0017-research-assistant-architecture.md) exception 1) | None (Claude-Code-centric, operator-direct) | Lesson #40 role discipline |
 
 ### SPECIAL TIER (2 sub-skills)
 

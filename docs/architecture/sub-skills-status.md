@@ -10,7 +10,7 @@ This doc summarizes wave-by-wave what shipped + when + with what. For the archit
 
 ## Sub-skill catalog summary
 
-3-tier architecture (Knowledge / Workflow / CCIL) + Master Coordinator router. 18 sub-skills + 1 deferred (Learning Knowledge, gated on ≥2 research tracks complete). Full catalog with I/O metadata + dispatch rules at [docs/skills/coordinator/catalog.md](../skills/coordinator/catalog.md).
+3-tier architecture (Knowledge / Workflow / CCIL) + Master Coordinator router. **17 sub-skills active** post Research Assistant Step 2 scaffolding ship (2026-05-27 — see [ADR-0017](../adr/0017-research-assistant-architecture.md) + [ADR-0011 Amendment 2026-05-27](../adr/0011-composable-sub-skills-architecture.md#amendment-2026-05-27-research-assistant-step-2-scaffolding)). Learning Assistant + Learning Knowledge deprecated; Research Coordinator + Research Assistant added. Full catalog with I/O metadata + dispatch rules at [docs/skills/coordinator/catalog.md](../skills/coordinator/catalog.md).
 
 | Tier | Sub-skill | Wave | Status |
 |---|---|---|---|
@@ -21,16 +21,16 @@ This doc summarizes wave-by-wave what shipped + when + with what. For the archit
 | Knowledge | [Roasting Historian](../skills/roasting-historian/) | 2 PR 3 | ACTIVE |
 | Knowledge | [Peer-Learning Roasting Archivist](../skills/peer-learning-roasting-archivist/) | 3 PR 1 | ACTIVE |
 | Knowledge | [Roest Knowledge](../skills/roest-knowledge/) | 3 PR 1 | ACTIVE |
-| Knowledge | Learning Knowledge | (deferred) | PLACEHOLDER |
+| Knowledge (with Planning collapsed in) | [Research Coordinator](../skills/research-coordinator/) | post-arc | ACTIVE (Step 2) |
 | Workflow Planning | [Roasting Assistant](../skills/roasting-assistant/) | 3 PR 2 | ACTIVE |
 | Workflow Planning | [Brewing Assistant](../skills/brewing-assistant/) | 3 PR 2 | ACTIVE |
-| Workflow Planning | [Learning Assistant](../skills/learning-assistant/) | 3 PR 2 | ACTIVE |
 | Workflow Planning | [Sourcing Workflow Planner](../skills/sourcing-workflow-planner/) | 3 PR 2 | ACTIVE |
 | Workflow Executing | [Roast Recorder](../skills/roast-recorder/) | 3 PR 3 | ACTIVE |
 | Workflow Executing | [Brew Recorder](../skills/brew-recorder/) | 3 PR 3 | ACTIVE |
 | Workflow Executing | [Cupping Specialist](../skills/cupping-specialist/) | 3 PR 3 | ACTIVE (POD-1 absorbed) |
 | Workflow Executing | [Roest API Worker](../skills/roest-api-worker/) | 3 PR 3 | ACTIVE |
 | Workflow Executing | [Close-Lot Specialist](../skills/close-lot-specialist/) | 3 PR 3 | ACTIVE |
+| Workflow Executing | [Research Assistant](../skills/research-assistant/) | post-arc | ACTIVE (Step 2) |
 | Special | [Cross-Coffee Insight Layer (CCIL)](../skills/ccil/) | 4 PR 4a | ACTIVE |
 | Coordinator | [Master Coordinator](../skills/coordinator/) | 1 | ACTIVE |
 
@@ -72,7 +72,6 @@ Also extracts **Roasting Historian's `cluster/patterns/roast-to-brew-translation
 
 - **Roasting Assistant** ([docs/skills/roasting-assistant/](../skills/roasting-assistant/)) — V-set + one-shot recipe design composing Roasting Historian + WBC Roasting Archivist + Roest Knowledge + Peer-Learning Roasting Archivist
 - **Brewing Assistant** ([docs/skills/brewing-assistant/](../skills/brewing-assistant/)) — 3-phase recipe construction + in-thread iteration absorbing Palate Evaluator per [ADR-0011 § iteration-depth asymmetry](../adr/0011-composable-sub-skills-architecture.md). Composes Brewing Historian + WBC Brewing Archivist + Brewing Equipment Expert
-- **Learning Assistant** ([docs/skills/learning-assistant/](../skills/learning-assistant/)) — the only cross-domain planner. Constructs research tracks (distinct vocabulary from per-lot `experiments` table rows). Composes both Historians + sourcing + CCIL (when Wave 4 lands)
 - **Sourcing Workflow Planner** ([docs/skills/sourcing-workflow-planner/](../skills/sourcing-workflow-planner/)) — buy/hold/pass + lane-fit assessment composing WBC Roasting Archivist § sourcing/ + Roasting Historian closed-lot retros + direct `green_beans` reads
 
 No `cluster/` subdirectories per scope decision 1 (templates accrue under Pattern F if they emerge in lived use). Prompts unchanged per scope decision 2 — `start-lot.md` / `log-roast.md` / `one-shot.md` / `start-brew.md` / `bundled-brewing-completion.md` continue as the claude.ai entry surface; sub-skills become the canonical fetch target the prompts compose over. (`log-brew.md` + `propose-doc-changes-from-brew.md` deprecated to redirect stubs in Writing-path Sub-sprint 3 / 2026-05-26 — bundled covers the full path.)
@@ -88,7 +87,7 @@ Master Coordinator handoff chains extended per scope decision 3 — `coordinator
 
 Chains 1-4 PARTIAL, Chain 5 ACTIVE, Chain 6 placeholder for Wave 4 CCIL.
 
-Learning Knowledge stays deferred per ADR-0011 trigger (≥2 completed research tracks).
+Learning Knowledge + Learning Assistant deprecated 2026-05-27 per [ADR-0017](../adr/0017-research-assistant-architecture.md) — subsumed by Research Coordinator + Research Assistant.
 
 ### Wave 3 PR 3 (shipped 2026-05-26) — Workflow Executing tier; Wave 3 closed
 
@@ -115,7 +114,7 @@ Master Coordinator: catalog flipped 5 entries placeholder → ACTIVE + wave-stat
 - [`cluster/coffee/sudan-rume/across-roasting-and-brewing.md`](../skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md) — proof-of-pattern seed synthesizing the brewing-side variety-intrinsic-light-body + aromatic-landrace-pungency-risk + vehicle-determined-integration rules with the roasting-side hopper-pre-load + counterflow-FC-window + density-vs-thermal-insulation rules. Surfaces planner-consumable cross-domain recommendations. N=3 across both domains (2 Latent-roasted SR lots + 1 externally-roasted SR brewing lot).
 - [`cluster/decomposition-log.md`](../skills/ccil/cluster/decomposition-log.md) — Pattern F audit trail starter. Append-only log of CCIL self-decomposition events triggered by 120KB total cluster / 60KB single doc / dispatch-accuracy degradation / cross-pattern density tripwires per [ADR-0013](../adr/0013-self-improvement-primitives.md).
 
-Chain 6 (Wölfl cross-pollination brew) promoted from PLACEHOLDER → ACTIVE-pending-lived-practice. Every sub-skill in the chain exists on paper (Learning Assistant → Roasting Assistant → Chain 3 + Chain 4 → CCIL synthesizes); chain not yet exercised against a real cross-pollination lot.
+Chain 6 (Wölfl cross-pollination brew) promoted from PLACEHOLDER → ACTIVE-pending-lived-practice. Every sub-skill in the chain existed on paper (then-Learning Assistant → Roasting Assistant → Chain 3 + Chain 4 → CCIL synthesizes); chain not yet exercised against a real cross-pollination lot. **Chain 6 RESCOPED 2026-05-27 per ADR-0017** — cross-pollination is now an operator-direct Research Coordinator orchestration in Claude Code; Chain 6 retains its substrate-write hops (Chains 3 + 4 fire as their normal selves; CCIL synthesizes at end) but no longer has a Master-Coordinator-dispatched orchestration layer.
 
 Master Coordinator catalog flipped CCIL entry → ACTIVE + Learning Assistant entry updated to reference CCIL as live (not "when Wave 4"). 3 new MCP Resources registered (CCIL SKILL.md + sudan-rume seed + decomposition-log; listDocs count 97 → 100).
 
@@ -141,12 +140,28 @@ CLAUDE.md sub-skills section extracted to this doc per scope decision 4 of PR 4a
 
 **Architecture implementation arc closed.** Sprint R's 4-phase Option 1 sequence (audit cluster → architecture brainstorm → architecture implementation → roadmap re-session) reaches its final phase: roadmap re-session.
 
+### Post-architecture-arc: Research Assistant Step 2 scaffolding (shipped 2026-05-27)
+
+The filter-arc research project (4 closed tracks 2026-05-21 → 2026-05-26) produced the substrate that finally unblocked Research Assistant scaffolding. Step 1 grilling locked the architecture; Step 2 ship lands:
+
+- **Research Coordinator** ([docs/skills/research-coordinator/](../skills/research-coordinator/)) — new Knowledge-tier sub-skill (with Planning collapsed in). One per project, persistent. Owns the research-knowledge cluster + roadmap + per-track protocol authoring + scoped execution plan authoring + process-retro mechanism. 6 cluster docs: `role-discipline.md` + `sharp-substrate-fold.md` + `calibration-arc.md` + `process-retro.md` + `roadmap.md` + `templates/{spawn-prompt,handoff-brief}-template.md`.
+- **Research Assistant** ([docs/skills/research-assistant/](../skills/research-assistant/)) — new Workflow-Executing tier sub-skill. Per-track ephemeral. Conducts research with operator + produces handoff brief + terminates. Lesson #40 role-discipline pre-baked in caps at top.
+- **Learning Assistant + Learning Knowledge deprecated.** Both directories hard-deleted. Subsumed by Research Coordinator + Research Assistant pair.
+- **[ADR-0017](../adr/0017-research-assistant-architecture.md)** authored — codifies the 3-actor pattern (Coordinator + Assistant + Execution sessions) + three deliberate architectural exceptions from ADR-0011 (Claude-Code-centric, planner/executor collapse, operator-direct dispatch).
+- **[ADR-0011 amended](../adr/0011-composable-sub-skills-architecture.md#amendment-2026-05-27-research-assistant-step-2-scaffolding)** — enumeration updated (18+1 → 17 active); three exceptions documented.
+- **Handoff rules** — Chain 2 (research-track design) REMOVED; Chain 6 (Wölfl cross-pollination) RESCOPED to operator-direct Research Coordinator orchestration.
+- **Dispatch rules** — research-track-design intent removed; replaced with redirect-to-Claude-Code note.
+- **No MCP Resource registration.** Research Coordinator + Assistant SKILL.md + cluster docs are deliberately NOT in `lib/mcp/docs.ts` `DOC_FILES` per ADR-0017 Exception 1 (Claude-Code-centric). `npm run check:mcp-bundle` runs unchanged.
+
+The 17-active enumeration verifies as: 8 Knowledge + 3 Workflow Planning + 6 Workflow Executing = 17. Special tier (CCIL) and Coordinator tier unchanged.
+
 ## Cross-references
 
 - [ADR-0011](../adr/0011-composable-sub-skills-architecture.md) — composable sub-skills architecture (the architectural rationale)
 - [ADR-0012](../adr/0012-master-coordinator-pattern.md) — Master Coordinator router pattern
 - [ADR-0013](../adr/0013-self-improvement-primitives.md) — self-improvement primitives (Patterns A-I)
+- [ADR-0017](../adr/0017-research-assistant-architecture.md) — Research Coordinator + Research Assistant architecture (post-arc)
 - [master-doc-transition-plan.md](./master-doc-transition-plan.md) — wave-by-wave BREWING.md + ROASTING.md migration plan
-- [docs/skills/coordinator/catalog.md](../skills/coordinator/catalog.md) — full 18-sub-skill registry + dispatch I/O metadata
+- [docs/skills/coordinator/catalog.md](../skills/coordinator/catalog.md) — full 17-sub-skill registry + dispatch I/O metadata
 - [docs/skills/coordinator/dispatch-rules.md](../skills/coordinator/dispatch-rules.md) — intent → executor mappings
 - [docs/skills/coordinator/handoff-rules.md](../skills/coordinator/handoff-rules.md) — 6-chain workflow composition rules

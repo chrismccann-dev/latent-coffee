@@ -35,7 +35,7 @@ Construct a starting brew recipe AND handle in-thread iteration on tasting notes
 - [WBC Brewing Archivist](../wbc-brewing-archivist/) cluster — 5-axis foundational map + 8 strategy families + 102-recipe corpus + per-strategy + canonical/wbc-tested-recipes
 - [Brewing Equipment Expert](../brewing-equipment-expert/) cluster — brewers / filters / grinder-eg1 / sworks registries + observed quirks
 - Tasting notes (per-iteration audio transcripts; Phase 2 only)
-- Optional: Learning Assistant track-aware metadata when the brew is part of a research track
+- (Pre-2026-05-27 the Inputs list included "Learning Assistant track-aware metadata when the brew is part of a research track." That dependency is removed — Research Coordinator + Research Assistant per [ADR-0017](../../adr/0017-research-assistant-architecture.md) do NOT write track-aware metadata onto constituent brews. If a brew is part of a research track, the cross-link is logged in the project protocol doc + handoff brief, not on the `brews` row.)
 
 ## Outputs
 
