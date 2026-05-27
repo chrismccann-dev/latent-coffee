@@ -436,17 +436,15 @@ Shipped 2026-05-26 in ~3-4h (vs ~1-2 day kickoff sizing). **Discovery mid-sprint
 
 **Sizing:** ~1-2h. **Scoping doc:** none — items are described inline in the feedback log.
 
-##### Sub-sprint 3 — Brewing-completion prompt consolidation
+##### Sub-sprint 3 — Brewing-completion prompt consolidation — SHIPPED 2026-05-26
 
 ~30 min. Chris audio 2026-05-26: doesn't use `log-brew.md` or `propose-doc-changes-from-brew.md` because `bundled-brewing-completion.md` covers the full path. Aligns with `feedback_mcp_only_input.md` direction — when a prompt has a lived-practice replacement, deprecate the dead path.
 
-- Convert `docs/prompts/log-brew.md` → redirect stub pointing at `bundled-brewing-completion.md`.
-- Convert `docs/prompts/propose-doc-changes-from-brew.md` → redirect stub same target.
-- Update `lib/mcp/docs.ts` descriptions.
-- Brew Recorder SKILL.md verification: confirm bundled is the canonical entry.
-- One grep pass for stale cross-refs.
-
-**Sizing:** ~30 min. **Scoping doc:** none.
+- ✓ Converted `docs/prompts/log-brew.md` → redirect stub pointing at `bundled-brewing-completion.md`.
+- ✓ Converted `docs/prompts/propose-doc-changes-from-brew.md` → redirect stub same target.
+- ✓ Updated `lib/mcp/docs.ts` DOC_DESCRIPTIONS for both (DEPRECATED prefix + back-pointer to bundled).
+- ✓ Brew Recorder SKILL.md + Brewing Assistant SKILL.md + Brewing Assistant operational-guide.md + coordinator/operator-guide.md + coordinator/dispatch-rules.md + close-lot.md + one-shot-closeout.md + CLAUDE.md + BREWING.md + docs/architecture/sub-skills-status.md cross-refs all updated to reference `bundled-brewing-completion.md` (and note Phase 2 brew iteration is now in-thread, no per-iteration prompt).
+- ✓ Grep pass clean — only the redirect stubs themselves + historical sprint docs + this PRODUCT.md row reference the deprecated paths.
 
 ##### Sub-sprint 4 — Human-write surface deprecation
 

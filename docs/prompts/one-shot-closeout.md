@@ -53,7 +53,7 @@ I'll tell you which verdict came out of `one-shot.md` STAGE 4:
 
 **This STAGE writes**: `brews` row (the optimized brew, source=self-roasted).
 
-This brew was dialed in via the brewing-side workflow between `one-shot.md` STAGE 4 and now. Apply canonical-validation discipline from `log-brew.md` / `bundled-brewing-completion.md`:
+This brew was dialed in via the brewing-side workflow between `one-shot.md` STAGE 4 and now. Apply canonical-validation discipline from `bundled-brewing-completion.md`:
 
 - `extraction_strategy` z.enum (6 canonicals: Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid)
 - `hybrid_subform` REQUIRED when strategy=Hybrid

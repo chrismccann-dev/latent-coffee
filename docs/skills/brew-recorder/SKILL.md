@@ -56,7 +56,7 @@ Tool descriptions in `lib/mcp/push-brew.ts` / `patch-brew.ts` carry an "Owned by
 ## Wave 3 PR 3 ship notes (2026-05-26)
 
 - **No cluster authored.** SKILL.md only per PR 2 precedent; cluster materializes later under Pattern F if validation-rule templates accrue across lived use.
-- **Prompts unchanged.** `docs/prompts/bundled-brewing-completion.md` + `docs/prompts/log-brew.md` continue as the claude.ai entry surface; Brew Recorder is the canonical fetch target. Per `feedback_mcp_only_input.md`, brewing-side `/add?type=purchased` deprecation in favor of full MCP-only input is a future sprint trigger.
+- **Prompts unchanged at PR 3 ship.** `docs/prompts/bundled-brewing-completion.md` is the canonical claude.ai entry surface; Brew Recorder is the canonical fetch target. Per `feedback_mcp_only_input.md`, brewing-side `/add?type=purchased` deprecation in favor of full MCP-only input is a future sprint trigger. (`log-brew.md` + `propose-doc-changes-from-brew.md` deprecated to redirect stubs in Writing-path Sub-sprint 3 / 2026-05-26 — bundled covers the full path.)
 - **All Knowledge tier dependencies ACTIVE:** Brewing Equipment Expert (Wave 1) + Brewing Historian (Wave 2 PR 2).
 - **Chain 1 + Chain 4 terminal hop ACTIVE.** Promoted PARTIAL → ACTIVE in `coordinator/handoff-rules.md` Chains 1 + 4 at PR 3 ship time.
 - **Migration source:** `docs/prompts/bundled-brewing-completion.md` covers the recording + downstream proposal workflow. Sub-skill spec elevates the logic; prompt stays as operator entry surface.

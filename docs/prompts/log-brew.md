@@ -1,18 +1,9 @@
-Log this brew via push_brew. Treat all fields as final - no confirmation
-before submitting. If you have feedback for Claude Code on the logging path,
-mention it so I can relay.
+# log-brew.md (deprecated — redirect stub)
 
-push_brew aggregates ALL validation errors in one response. Fix everything
-in a single retry round. For canonical lookups call read_canonical(axis:
-"<name>") with one of: cultivars, terroirs, processes, roasters, producers,
-brewers, filters, flavors, roast-levels, grinders, extraction-strategies,
-modifiers. For genuinely net-new roaster / producer / brewer / filter /
-grinder, set the matching *_override: true flag - the override path also
-queues the value for canonical promotion via taxonomy_overrides_queue (Phase 3),
-and push_brew echoes queued_for_taxonomy_review[] in the response so you can
-confirm the queue picked it up. Cultivars and terroirs are strict - no override;
-net-new requires either a registry edit OR a propose_canonical_addition call
-followed by an arbiter session. Return the brew_id on success.
+This prompt has been retired (Writing-path Sub-sprint 3, 2026-05-26). The bundled brewing-completion prompt covers the full path (push_brew + propose_doc_changes in one shot) and is the canonical entry surface for finished brews.
 
-Here is the completed archive entry:
-[paste the formatted archive recipe]
+**Use instead:** [docs/prompts/bundled-brewing-completion.md](bundled-brewing-completion.md).
+
+Per Chris audio 2026-05-26: "I don't use log-brew.md or propose-doc-changes-from-brew.md because bundled covers the full path." Aligns with [`feedback_mcp_only_input.md`](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_only_input.md) — when a prompt has a lived-practice replacement, deprecate the dead path.
+
+The pre-redirect content is preserved in git history.

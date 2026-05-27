@@ -114,7 +114,7 @@ The field's name already implies the PRIMARY scope axis (cultivar / terroir / ge
 
 The optimized brew is the daily-consumption recipe Chris dialed in for the reference roast via the brewing-side workflow. It's the **consumption-condition endpoint** of the full pipeline - post-hoc attribution traces backward from here.
 
-Apply canonical-validation discipline from `log-brew.md` / `bundled-brewing-completion.md`. Key schema-strict gates:
+Apply canonical-validation discipline from `bundled-brewing-completion.md`. Key schema-strict gates:
 
 - `extraction_strategy` z.enum, 6 strict canonicals (v8.4: Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid).
 - When `extraction_strategy = "Hybrid"`, `hybrid_subform` is REQUIRED - pick one of: sequential / phase_mapped / selective_bloom / intensity_clarity_split / temperature_staged.
