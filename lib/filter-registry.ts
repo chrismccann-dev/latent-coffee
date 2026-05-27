@@ -177,6 +177,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-23",
     measurementProject: "cone-filter-drawdown",
     bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "RP4 BS re-measurement (2026-05-26): 107s vs HALO-B3 baseline 91s = +16 REAL slow. Δ-in-deltas vs P1 V60 = -4 (P1 +20 → RP4 +16; ~80% of P1 slowness persists in paper-only context). **Test 2 HOLDS** — CAFEC family is paper-fiber-real slow, not paper-brewer-interaction artifact. P1 Headline #1 conclusion holds and extends to full CAFEC Cup 4 line. Paper buckled under load without V60 dripper support (RP4-N1 — paperShapeRetention sub-attribute candidate).",
   },
   {
     name: "CAFEC T-90 - Cup 1 Medium Roast Paper Filter",
@@ -310,6 +311,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-23",
     measurementProject: "cone-filter-drawdown",
     bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "RP4 BS re-measurement (2026-05-26): 108s vs HALO-B3 baseline 91s = +17 STRONGLY REAL slow. Δ-in-deltas vs P1 V60 = +5 (P1 +12 edge → RP4 +17 — hidden slowness was MASKED by P1's 8s noise floor; tighter BS 4s floor disambiguates). **Test 3 RESOLVED REAL** — APC4 has genuine paper-fiber slowness, not noise-floor-edge artifact. Same buckling pattern as LC4/DC4/MC4 (CAFEC family RP4-N1).",
   },
   {
     name: "CAFEC T-92 - Cup 1 Light Roast Paper Filter (slow)",
@@ -421,6 +423,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-23",
     measurementProject: "cone-filter-drawdown",
     bedBehaviorUnderLoad: 'mixed',
+    measurementNote: "RP4 BS re-measurement (2026-05-26): 98s vs HALO-B3 baseline 91s = +7 REAL slow (modest). Δ-in-deltas vs P1 V60 = +7 — third CAFEC noise-floor reveal (P1 read MC4 as 0 baseline-equivalent; BS reveals +7 paper-fiber slowness was hidden). CAFEC family slow pattern confirmed at 3-of-4 sample (DC4 +11 / MC4 +7 / APC4 +5; LC4 -4 already-classified-real in P1). RP4 AI-3 queued: add CAFEC T-code productCode field (this entry's T-code = T-90).",
   },
   {
     name: "CAFEC Cup 4 Dark Roast Paper Filter",
@@ -453,6 +456,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-23",
     measurementProject: "cone-filter-drawdown",
     bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "RP4 BS re-measurement (2026-05-26): 110s vs HALO-B3 baseline 91s = +19 REAL slow. Δ-in-deltas vs P1 V60 = +11 — **MAJOR REVEAL**: DC4 read as P1 indistinguishable (+7-8) but tighter BS floor exposed +11s of hidden paper-fiber slowness. **Test 2 REINFORCED** — CAFEC Cup 4 family uniformly paper-fiber-slow. P1 Headline #1 conclusion EXTENDS to T-83 dark roast: registry labels = extraction-engineering semantics, NOT flow-rate semantics. Lesson #36 is family-conditional, not universal (RP4-N4). RP4 AI-3: T-code = T-83.",
   },
   {
     name: "CAFEC Abaca Trapezoid Filter 102",
@@ -901,6 +905,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-23",
     measurementProject: "cone-filter-drawdown",
     bedBehaviorUnderLoad: 'pour-impact-crater',
+    measurementNote: "RP4 BS re-measurement (2026-05-26): 95s vs HALO-B3 baseline 91s = +4 indistinguishable (edge). Δ-in-deltas vs P1 V60 = -1 — tracks baseline both contexts; cross-confirms METEOR-02. Hario family validates Lesson #36 paper-brewer-INTERACTION dominance. **Egg-shape bed asymmetry observed but no flow-rate impact (RP4-N6)** — surfaces 'asymmetric-stable' enum value candidate distinct from 'stable'. Buckled under load (RP4-N1, same pattern as CAFEC family) but still baseline.",
   },
   {
     name: "Hario V60 Paper Filter 01 (Untabbed)",
@@ -956,6 +961,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-23",
     measurementProject: "cone-filter-drawdown",
     bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "RP4 BS re-measurement (2026-05-26): 93s vs HALO-B3 baseline 91s = +2 indistinguishable. Δ-in-deltas vs P1 V60 = -3 — tracks baseline both contexts (Test 1 convergence). Paper sat well above BS rim (paper edge near BS middle cylinder but NOT contacting) but no drawdown impact — strengthens RP4-N7 (above-rim seating non-impacting on flow in BS architecture) and Lesson #39 (BS as paper-only measurement platform). Hario family validates Lesson #36 paper-brewer-INTERACTION dominance.",
   },
   {
     name: "Hario V60 Paper Filter 03",
@@ -1057,6 +1063,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-23",
     measurementProject: "cone-filter-drawdown",
     bedBehaviorUnderLoad: 'pour-impact-crater',
+    measurementNote: "RP4 (2026-05-26): NOT TESTED in Sibarist BS — small size variant (Chris's owned variant) doesn't fit BS; cohort dropped 8→7 at Step 0. **RP4 AI-6 queued**: Sibarist FAST size variants (small vs large) worth registry sub-SKU treatment (`sizeVariant` field OR split SKUs).",
   },
   {
     name: "CONE B3",
@@ -1089,6 +1096,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-23",
     measurementProject: "cone-filter-drawdown",
     bedBehaviorUnderLoad: 'late-forming-crater',
+    measurementNote: "RP4 BS re-measurement (2026-05-26): 92s vs HALO-B3 baseline 91s = +1s indistinguishable. Δ-in-deltas vs P1 V60 = +1 — cleanly tracks baseline both contexts (Lesson #36 paper-brewer-INTERACTION dominance validates for Sibarist-family papers). Cleanest Test 1 (convergence) anchor in RP4. See paper-only-v60-cohort-drawdown.md.",
   },
   {
     name: "CONE 28 FAST",
@@ -1338,7 +1346,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-25",
     measurementProject: "specialty-cone-filter-drawdown",
     bedBehaviorUnderLoad: 'stable',
-    measurementNote: "Sibarist Brewing System (system-integrated; no Negotiator/Booster needed). -26s vs HALO-B3 baseline = REAL (clears 4s noise floor), Moderately faster band (Step 3 grind comp: 0.3 finer). Cleanest single-paper classification of the entire 3-project arc. Same FAST fiber family as Project #1 CONE FAST + Project #2 FLAT 2 FAST — within-fiber-family consistency holds when paper-brewer-fit is eliminated by BS architecture (Lesson #35 brewer-as-paper-housing).",
+    measurementNote: "Sibarist Brewing System (system-integrated; no Negotiator/Booster needed). -26s vs HALO-B3 baseline = REAL (clears 4s noise floor), Moderately faster band (Step 3 grind comp: 0.3 finer). Cleanest single-paper classification of the entire 3-project arc. Same FAST fiber family as Project #1 CONE FAST + Project #2 FLAT 2 FAST — within-fiber-family consistency holds when paper-brewer-fit is eliminated by BS architecture (Lesson #35 brewer-as-paper-housing). | **RP4 (2026-05-26): NOT RE-MEASURED** — RP4 focused on V60-cohort papers in BS, not HALO family re-test. HALO-B3 baseline DRIFT in RP4 (91s vs P3 134s, RP4 AI-1 unresolved) raises question of whether HALO-FAST's P3 absolute (108s) would replicate; relative Δ vs baseline within P3's session is internally consistent (108-134 = -26 REAL faster classification holds within P3 context).",
   },
   {
     name: "Sibarist HALO CONE B3",
@@ -1371,7 +1379,7 @@ export const FILTERS: readonly FilterEntry[] = [
     measurementDate: "2026-05-25",
     measurementProject: "specialty-cone-filter-drawdown",
     bedBehaviorUnderLoad: 'stable',
-    measurementNote: "Sibarist Brewing System (system-integrated; no Negotiator needed, no brewer walls to seal against — Lesson #35 'brewer-as-paper-housing' architectural class). 4s baseline range is the tightest of any project in the arc. No-bed paper-only test (post-Pull-B5, Part Ba/Bb decomposition) showed NO self-choke whatsoever, refuting #3a's self-choke-as-paper-fiber-intrinsic hypothesis — refined as paper-brewer-INTERACTION artifact (Lesson #36, deepest insight of the entire 3-project arc). First-use brewer signal: clean baseline on Chris's never-opened-box brewer (Lesson #38).",
+    measurementNote: "Sibarist Brewing System (system-integrated; no Negotiator needed, no brewer walls to seal against — Lesson #35 'brewer-as-paper-housing' architectural class). 4s baseline range is the tightest of any project in the arc. No-bed paper-only test (post-Pull-B5, Part Ba/Bb decomposition) showed NO self-choke whatsoever, refuting #3a's self-choke-as-paper-fiber-intrinsic hypothesis — refined as paper-brewer-INTERACTION artifact (Lesson #36, deepest insight of the entire 3-project arc). First-use brewer signal: clean baseline on Chris's never-opened-box brewer (Lesson #38). | **RP4 BS RE-MEASUREMENT (2026-05-26): 91s baseline** (median 90/91/94, range 4s — matches #3b 4s noise floor precedent exactly). **43s ABSOLUTE GAP from #3b's 134s measurement** with identical protocol (15g/250g, EG-1 6.5, Sudan Rume Natural blend continuity, BS). Candidate causes (RP4 AI-1, unresolved): paper batch drift / coffee blend-mix proportion / ambient state / operator technique drift between sessions. Both measurements internally consistent within session noise floors; cross-session absolute reproducibility appears non-trivial. Compile-session decision: keep #3b 134s as primary `measuredDrawdownSec` (P3 archive); relative classifications (HALO-FAST -26 REAL faster) remain valid within P3 context. **Lesson #36 PARTIALLY VALIDATED + REFINED per RP4-N4 — family-conditional, not universal.** Hario/Sibarist families validate Lesson #36; CAFEC family contradicts it (paper-fiber signal dominates).",
   },
   {
     name: "CONE 28 B3",

@@ -143,3 +143,70 @@ The Decided shape section above frames `flowRateContexts` as a context-condition
 ### Forward pointer
 
 Research Project #4 (re-measure Project #1 V60 papers in Sibarist BS, scope brief at end of [specialty-cone-filter-drawdown.md](../research-projects/specialty-cone-filter-drawdown.md)) is the empirical test of Lesson #36's "paper-brewer-interaction not paper-fiber" framing. If RP4 confirms V60 papers converge to HALO-B3-like flow in BS, the mechanistic refinement above is strongly validated and the `flowRateContexts` implementation can proceed with the paper-brewer-interaction framing as the operating model.
+
+---
+
+## Project #4 substrate updates (2026-05-26) — TRIGGER CONDITION MET
+
+Research Project #4 (paper-only V60 cohort re-measurement in Sibarist BS, closed 2026-05-26) is **the third independent context-dependence confirmation** required by the Implementation trigger section above. **The trigger condition is now fully met.** Implementation of the `flowRateContexts` schema + `BoosterEntry` registry can proceed as a separate sprint at any time.
+
+### RP4 substrate findings that refine this ADR
+
+**1. Lesson #36 mechanism is FAMILY-CONDITIONAL, not universal (RP4-N4).**
+
+The mechanistic refinement section above (AI-7 from Project #3 close-out) framed `flowRateContexts` as capturing "paper-brewer-INTERACTION at the seating layer." RP4 partially refines this:
+
+- **Hario + Sibarist families:** Lesson #36 VALIDATES. CONE-B3 / METEOR-02 / VCF-01 all converged to HALO-B3 baseline in BS (Δ +1 / +2 / +4 within 4s noise floor). Paper-brewer-interaction was the dominant variable in P1; eliminating it (BS architecture) collapses paper differences.
+- **CAFEC Cup 4 family:** Lesson #36 PARTIALLY CONTRADICTED. LC4 / APC4 / MC4 / DC4 ALL REAL slow in BS (+16 / +17 / +7 / +19) regardless of P1 classification. Paper-fiber signal dominates for this family.
+
+**Implication for ADR-0015 implementation:** the `flowRateContexts` array as decided is still the right shape. But query interpretation should be **family-conditional**: the absence of a `flowRateContexts` entry for a Hario/Sibarist paper in a new brewer context can reasonably default to "converges to baseline in BS-class brewers"; for CAFEC papers, the absence indicates uncharacterized — no convergence assumption is safe.
+
+ADR-0016 (family-conditional flow-rate classification framework) captures this as a separate architectural decision. The `flowRateContexts` schema implementation should reference both ADRs.
+
+**2. New registry fields surfaced by RP4 worth bundling with `flowRateContexts` implementation:**
+
+When the `flowRateContexts` sprint ships, also consider these RP4-queued audit items:
+
+- **`paperFamily` discriminator** (RP4 AI-5, RP4-N4) — load-bearing for query interpretation per the family-conditional finding above. Values: `'Hario'` / `'Sibarist'` / `'CAFEC-Trad'` / `'CAFEC-Abaca'` / `'Chemex'` / `'Cafec-Other'` / `'Other'` or similar. Single field on FilterEntry.
+
+- **`productCode` field for CAFEC** (RP4 AI-3, RP4-N8) — CAFEC papers have canonical T-codes (T-83 / T-90 / T-92) as identifiers separate from Cup-size encoding. Chris's preferred reference is by T-code. Populate for all CAFEC entries.
+
+- **`paperShapeRetention` sub-attribute** (RP4 AI-2, RP4-N1) — distinguishes self-supporting papers from those that buckle without brewer support. Values: `'self-supporting'` / `'needs-brewer-support'` / `'unknown'`. RP4 observed all 4 CAFEC papers + Hario VCF-01 buckle under load without V60 dripper support; HALO papers + CONE-B3 + METEOR-02 self-support.
+
+- **`bedBehaviorUnderLoad` enum extension** (RP4 AI-4 + P3 AI-4 extended) — add `'asymmetric-stable'` value (RP4-N6: VCF-01 egg-shape bed asymmetry with no flow-rate impact). Consider also `'buckles-without-brewer-support'` as a separate or composed value.
+
+**3. Backfill targets for `flowRateContexts` implementation (combined from P2 + P3 + RP4):**
+
+When the schema ships, backfill these per-context measurements:
+
+| Filter SKU | Brewer | Seating | Accessory | Drawdown | Project | Family |
+| :---- | :---- | :---- | :---- | :---- | :---- | :---- |
+| FLAT2-B3 | Orea v4 | compressed | BOOSTER-45 | 52s | flat-bottom-filter-drawdown | Sibarist |
+| FLAT2-FAST | Orea v4 | compressed | BOOSTER-45 | 105s | flat-bottom-filter-drawdown | Sibarist |
+| CONE28-FAST | Funnex | manual-crease | none | 131s slow / 31.5s fast (bimodal) | specialty-cone-filter-drawdown | Sibarist |
+| AFD27-100W | Funnex | manual-crease | none | 144s | specialty-cone-filter-drawdown | CAFEC-Abaca |
+| CHEMEX-HM-W | Funnex | manual-crease | none | 118s | specialty-cone-filter-drawdown | Chemex |
+| FS-100 | Funnex | factory-fanfold | none | 45s | specialty-cone-filter-drawdown | Chemex |
+| CONE-B3 | Sibarist BS | system-integrated | none | 92s | paper-only-v60-cohort-drawdown | Sibarist |
+| LC4-100W | Sibarist BS | system-integrated | none | 107s | paper-only-v60-cohort-drawdown | CAFEC-Trad |
+| APC4-40W | Sibarist BS | system-integrated | none | 108s | paper-only-v60-cohort-drawdown | CAFEC-Abaca |
+| METEOR-02 | Sibarist BS | system-integrated | none | 93s | paper-only-v60-cohort-drawdown | Hario |
+| VCF-01-100W | Sibarist BS | system-integrated | none | 95s | paper-only-v60-cohort-drawdown | Hario |
+| MC4-100W | Sibarist BS | system-integrated | none | 98s | paper-only-v60-cohort-drawdown | CAFEC-Trad |
+| DC4-100W | Sibarist BS | system-integrated | none | 110s | paper-only-v60-cohort-drawdown | CAFEC-Trad |
+| HALO-B3 | Sibarist BS | system-integrated | none | 91s (RP4) / 134s (P3) ⚠️ | paper-only-v60-cohort-drawdown / specialty-cone-filter-drawdown | Sibarist |
+
+HALO-B3's two recordings reflect the **43s cross-session drift documented in RP4 AI-1** (unresolved). Both entries should be carried; downstream consumers can decide which to use depending on whether they need P3-internal-consistency or RP4-internal-consistency.
+
+### Locked decision: implementation sprint can ship any time
+
+All schema decisions are now load-bearing-substantiated by P1 + P2 + P3 + RP4 data. The `flowRateContexts` + `BoosterEntry` implementation sprint is unblocked; suggested execution order is:
+
+1. Add `FilterEntry.flowRateContexts` array field + backfill from table above
+2. Add `paperFamily` discriminator + `productCode` (T-code) + `paperShapeRetention` fields
+3. Extend `bedBehaviorUnderLoad` enum with `'asymmetric-stable'`
+4. Add `BoosterEntry` type + canonical registry to `lib/booster-registry.ts` with the 3 owned Sibarist Boosters
+5. Update cluster docs + add `boosters.md` to `lib/mcp/docs.ts` `DOC_FILES`
+6. Run `npm run check:mcp-bundle`
+
+Forward-pointer: ADR-0016 (family-conditional flow-rate classification framework) is the companion ADR locking the RP4-N4 architectural decision. Both ADRs together inform the implementation sprint.
