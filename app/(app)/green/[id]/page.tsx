@@ -281,20 +281,23 @@ function WaitingForNextRoastView({
           then the experiment frame as design-time context. */}
       <GreenBeanInfoCard bean={bean} />
 
-      {/* Experiment Frame card (Sub Pages 6.7; cleanup-actions PR #23
-          demoted from slot 2 to slot 4 — design-time context is useful but
-          not load-bearing at execution prep). Auto-hides when no frame
-          fields populated. */}
+      {/* Experiment Frame card (Sub Pages 6.7). Sub-sprint 4a Bundle B
+          collapsed by default — design-time frame is useful context but
+          not consulted at roast-prep time; collapse keeps the page focused
+          on the load-bearing ROASTS · V_n card above. */}
       {latestExp && (
-        <ExperimentFrameCard
-          latestExp={latestExp}
-          title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}
-        />
+        <CollapsibleSection title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}>
+          <ExperimentFrameCard latestExp={latestExp} title="" bare />
+        </CollapsibleSection>
       )}
 
+      {/* Roast log — Sub-sprint 4a Bundle B: collapsed by default. The
+          load-bearing surface for roast prep is the ROASTS · V_n hypothesis
+          table above; the log is reference / past-roast lookup. */}
       <RoastLogTable
         roasts={roasts}
         cuppings={cuppings}
+        defaultCollapsed
         highlightedBatchIds={Array.from(currentExpBatchIds)}
       />
 
@@ -362,6 +365,27 @@ function parseBatchIdsForHighlight(raw: string | null | undefined): Set<string> 
     if (numeric) out.add(numeric[0])
   }
   return out
+}
+
+// Sub-sprint 4a Bundle B — Hypothesis row truncation helper. Returns the
+// first sentence + ellipsis when prose is long; the full string otherwise.
+// First-sentence boundary = first sentence-terminating period (with at
+// least one non-period char before it), falling back to a 70-char hard cap
+// when no boundary found within ~120 chars (covers run-on prose / fragments
+// without sentence boundaries).
+function truncateHypothesis(prose: string): string {
+  const trimmed = prose.trim()
+  if (trimmed.length <= 70) return trimmed
+  // Find first sentence boundary in the first 120 chars.
+  const window = trimmed.slice(0, 120)
+  const match = window.match(/[A-Za-z0-9)]\.\s/)
+  if (match && match.index != null && match.index > 10) {
+    return trimmed.slice(0, match.index + 1) + ' …'
+  }
+  // Hard cap fallback — trim to 70 chars at a word boundary, append …
+  const hardCap = trimmed.slice(0, 70)
+  const lastSpace = hardCap.lastIndexOf(' ')
+  return (lastSpace > 30 ? hardCap.slice(0, lastSpace) : hardCap) + ' …'
 }
 
 // Transposed batch table — attributes as rows, batches as columns. Each row
@@ -444,10 +468,30 @@ function HypothesisTable({ recipes }: { recipes: RoastRecipe[] }) {
       has: (r) => r.predicted_agtron_wb != null,
     },
     {
+      // Sub-sprint 4a Bundle B — Hypothesis row truncate-with-expander.
+      // Per Chris audit: the Hypothesis prose is the longest row in the
+      // table by far (often 100+ words per cell on V3+); collapsing keeps
+      // the load-bearing numeric rows above (Drop temp / Expected total /
+      // End Condition / Predicted Agtron WB) visible without scroll.
+      // Pure CSS via <details> + Tailwind group-open variant — no JS,
+      // no hydration flicker, per-cell independent expansion.
       label: 'Hypothesis',
       getValue: (r) =>
         r.rationale ? (
-          <span className="font-sans text-xs leading-relaxed">{r.rationale}</span>
+          <details className="group">
+            <summary className="cursor-pointer list-none">
+              <span className="font-sans text-xs leading-relaxed group-open:hidden">
+                {truncateHypothesis(r.rationale)}
+              </span>
+              <span className="hidden font-sans text-xs leading-relaxed group-open:inline">
+                {r.rationale}
+              </span>
+              <span className="ml-1 text-latent-mid text-xxs select-none">
+                <span className="inline group-open:hidden">▾</span>
+                <span className="hidden group-open:inline">▴</span>
+              </span>
+            </summary>
+          </details>
         ) : (
           '—'
         ),
@@ -706,10 +750,15 @@ function WaitingForNextCuppingView({
         </div>
       </div>
 
-      {/* Cupping Hypothesis card (cleanup-actions PR #24 reorder: now slot
-          2, was slot 3 pre-PR with ExperimentFrame above it). Foreground
-          signal for cupping prep — what claude.ai predicted + what to
-          listen for. */}
+      {/* Cupping Hypothesis card. Sub-sprint 4a Bundle B rewrite per Chris
+          mockup #1: condensed body that front-loads the 4-question framing
+          (producer notes / V_(n-1) leading slot cup notes / what to look
+          for per slot / per-slot predicted cup). Reference card chrome
+          replaced with inline Producer Notes + Previous Leading Slot Cup
+          Notes boxes; the table drops the "Original prediction" row and
+          renames "Updated prediction" → "Predicted Cup". Anchor Cup
+          dropped from this foreground surface (data still on
+          experiments.control_baseline; not displayed here). */}
       {latestExp ? (
         <SectionCard title={`CUPPING HYPOTHESIS · ${formatVLabel(latestExp.experiment_id)}`}>
           {latestExp.primary_question && (
@@ -721,18 +770,12 @@ function WaitingForNextCuppingView({
             </div>
           )}
 
+          <CuppingReferenceBoxes bean={bean} priorExp={priorExp} />
+
           <CuppingHypothesisTable
             slotInfos={slotInfos}
             latestExp={latestExp}
           />
-
-          <div className="mt-6">
-            <ReferenceSignalsCard
-              bean={bean}
-              latestExp={latestExp}
-              priorExp={priorExp}
-            />
-          </div>
         </SectionCard>
       ) : (
         <SectionCard title="CUPPING HYPOTHESIS">
@@ -752,6 +795,15 @@ function WaitingForNextCuppingView({
         </SectionCard>
       )}
 
+      {/* Cross-batch notes — Sub-sprint 4a Bundle B promoted to slot 4
+          (was slot 7 in 6.7's pre-Bundle-B layout). Reflective context
+          from V_(n-1)'s observed_outcome_a/b/c/d, placed right after Roast
+          Actuals where the cup-vs-prior comparison happens. Round 7 dog-
+          food signal (Item 13) + Phase 1 audit both surfaced that this
+          block IS consulted at cupping prep time when V_(n-1) exists.
+          Auto-hides when priorExp is null or all 4 slots are NULL. */}
+      <CrossBatchNotesBlock priorExp={priorExp} />
+
       {/* Recipe Design Intent disclosure (Sub Pages 6.8) — collapsed drill-in
           surfacing drop rules from the V_n recipes for cupping-time retro
           ("did the operator follow the rule on the v2b batch?"). Stays out
@@ -765,43 +817,40 @@ function WaitingForNextCuppingView({
         </CollapsibleSection>
       )}
 
-      {/* Green Bean Info — shared 6.4 component. Cleanup-actions PR #24
-          slot 4 (was slot 6 pre-PR). Identity / state of the bean — load-
-          bearing for orientation but not for the active cupping decision. */}
+      {/* Green Bean Info — shared 6.4 component. Sub-sprint 4a Bundle B
+          confirmed expanded (Chris audit page 6: "green bean info below
+          that and expanded by default is good"). */}
       <GreenBeanInfoCard bean={bean} />
 
-      {/* Experiment Frame card (Sub Pages 6.7). Cleanup-actions PR #24
-          demoted from slot 2 to slot 5 — design-time frame is useful
-          context but isn't consulted at cupping table time. skipControlBaseline
-          stays true because control_baseline is already surfaced inside
-          ReferenceSignalsCard as "Anchor cup"; rendering it twice would
-          duplicate the same field. */}
+      {/* Experiment Frame card. Sub-sprint 4a Bundle B collapsed by default
+          (Chris audit page 6: "experiment frame v2 I would do collapsed by
+          default"). Design-time frame is useful context but isn't consulted
+          at cupping table time; collapse keeps the page focused on the
+          load-bearing Cupping Hypothesis + Roast Actuals cards above.
+          skipControlBaseline stays true to avoid duplicating Anchor cup
+          (now removed from the cupping card foreground per Bundle B). */}
       {latestExp && (
-        <ExperimentFrameCard
-          latestExp={latestExp}
-          skipControlBaseline
-          title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}
-        />
+        <CollapsibleSection title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}>
+          <ExperimentFrameCard
+            latestExp={latestExp}
+            skipControlBaseline
+            title=""
+            bare
+          />
+        </CollapsibleSection>
       )}
 
+      {/* Roast Log — Sub-sprint 4a Bundle B: collapsed by default (Chris
+          audit page 6: "roast log I would also do collapsed by default").
+          The load-bearing surface for cupping prep is the Cupping
+          Hypothesis + Roast Actuals cards above; the log is reference
+          lookup. */}
       <RoastLogTable
         roasts={roasts}
         cuppings={cuppings}
+        defaultCollapsed
         highlightedBatchIds={Array.from(currentExpBatchIds)}
       />
-
-      {/* Cross-batch notes (Sub Pages 6.7) — collapsed details surfacing
-          observed_outcome_a/b/c/d from V_(n-1). Reflective context for the
-          cupping table, not foreground signal. Cleanup-actions PR #24
-          demoted from slot 5 (between Roast Actuals and GreenBeanInfo) to
-          the deep-archive group alongside PerRoastReflections — the 6.7
-          framing called these "reflective context, not foreground signal"
-          and the page's primary jobs (cupping prep + cupping in progress)
-          don't consult V_(n-1) memory live. If Round-8 dogfood shows
-          frequent consultation at cupping prep time, promote back to slot
-          3 (one-line move). Auto-hides when priorExp is null or all 4
-          slots are NULL. */}
-      <CrossBatchNotesBlock priorExp={priorExp} />
 
       {/* Per-roast reflections (Sub Pages 6.7) — collapsed details surfacing
           what_worked / what_didnt / what_to_change per roast. Auto-hides
@@ -854,24 +903,25 @@ function CuppingHypothesisTable({
     tint: 'muted' | 'cup'
   }
 
+  // Sub-sprint 4a Bundle B — Cupping Hypothesis table simplified per
+  // Chris mockup #1: 2 rows (Taste For / Predicted Cup), with "Taste for"
+  // moved to the top since it's the load-bearing prep signal. "Original
+  // prediction" row dropped entirely (per voice memo: "For the cupping
+  // table we just want to know how it actually went and what I should
+  // expect for the cupping. For the delta is more helpful for the
+  // roasting side"). "Updated prediction" renamed to "Predicted Cup".
   const rows: RowSpec[] = [
-    {
-      label: 'Original prediction',
-      sublabel: 'from design',
-      getValue: (info) => info.recipe?.predicted_cup ?? null,
-      tint: 'muted',
-    },
-    {
-      label: 'Updated prediction',
-      sublabel: 'given roast actuals',
-      getValue: (info) =>
-        (latestExp[`updated_cup_prediction_${info.slot}`] as string | null) ?? null,
-      tint: 'cup',
-    },
     {
       label: 'Taste for',
       sublabel: 'cupping-table question',
       getValue: (info) => (latestExp[`taste_for_${info.slot}`] as string | null) ?? null,
+      tint: 'cup',
+    },
+    {
+      label: 'Predicted Cup',
+      sublabel: 'given roast actuals',
+      getValue: (info) =>
+        (latestExp[`updated_cup_prediction_${info.slot}`] as string | null) ?? null,
       tint: 'cup',
     },
   ]
@@ -942,26 +992,31 @@ function CuppingHypothesisTable({
   )
 }
 
-// Reference signals sub-card — 3 rows surfaced for the cupping table:
-// producer notes (always-on lot reference) + V_(n-1) winner cup (prior
-// experiment's reference) + anchor cup (cross-lot reference, lives on
-// experiments.control_baseline per Sub Pages 6.4 locked decision).
-function ReferenceSignalsCard({
+// Sub-sprint 4a Bundle B — Cupping Hypothesis reference boxes.
+// Replaces the pre-Bundle-B ReferenceSignalsCard. Renders two separate
+// boxed sub-cards inline at the top of the Cupping Hypothesis card body
+// (per Chris mockup #1):
+//   1. Producer Notes — green_beans.producer_tasting_notes
+//   2. Previous Leading Slot Cup Notes — V_(n-1) winner cup, derived from
+//      priorExp.winner → priorExp.observed_outcome_<slot> with key_insight
+//      fallback
+// Anchor Cup dropped from foreground (data still on
+// experiments.control_baseline if needed by downstream tooling; not in
+// Chris's 4-question framing). Cupping cards are tinted with
+// latent-cup-emphasis tokens.
+function CuppingReferenceBoxes({
   bean,
-  latestExp,
   priorExp,
 }: {
   bean: any
-  latestExp: any
   priorExp: any | null
 }) {
   const producerNotes = bean.producer_tasting_notes ?? null
-  const anchorCup = latestExp.control_baseline ?? null
 
   // V_(n-1) winner cup: read priorExp.winner (free-text, e.g. "v2b") to
-  // figure out the slot, then read priorExp.observed_outcome_<slot>. If the
-  // winner doesn't resolve to a slot letter, fall back to priorExp.winner +
-  // priorExp.key_insight as a best-effort reference.
+  // figure out the slot, then read priorExp.observed_outcome_<slot>. If
+  // the winner doesn't resolve to a slot letter, fall back to
+  // priorExp.key_insight as best-effort reference.
   let priorWinnerCup: string | null = null
   if (priorExp?.winner) {
     const slotMatch = String(priorExp.winner).toLowerCase().match(/[a-d](?!.*[a-d])/)
@@ -976,52 +1031,35 @@ function ReferenceSignalsCard({
     }
   }
 
-  const hasAny = producerNotes || priorWinnerCup || anchorCup
-
-  if (!hasAny) {
-    return (
-      <div className="bg-latent-cup-emphasis-surface border border-latent-cup-emphasis rounded p-4">
-        <div className="label mb-2">Reference signals for the cupping table</div>
-        <div className="font-sans text-xs text-latent-mid italic">
-          No references populated. Anchor cup lives on experiments.control_baseline
-          (patch_experiment); producer notes live on green_beans.producer_tasting_notes
-          (patch_green_bean); prior winner cup auto-derives once a V_(n-1) experiment
-          synthesizes.
-        </div>
-      </div>
-    )
-  }
+  // Both boxes auto-hide when their data is missing. When NEITHER is
+  // populated, this whole block silently skips.
+  if (!producerNotes && !priorWinnerCup) return null
 
   return (
-    <div className="bg-latent-cup-emphasis-surface border border-latent-cup-emphasis rounded p-4">
-      <div className="label mb-3">Reference signals for the cupping table</div>
-      <div className="space-y-3 font-sans text-sm leading-relaxed">
-        {producerNotes && (
-          <div>
-            <div className="font-medium text-latent-fg text-xs mb-1">Producer notes</div>
-            <div className="text-latent-fg">{producerNotes}</div>
+    <div className="space-y-3 mb-6">
+      {producerNotes && (
+        <div className="bg-latent-cup-emphasis-surface border border-latent-cup-emphasis rounded p-4">
+          <div className="label mb-2">Producer Notes</div>
+          <div className="font-sans text-sm leading-relaxed text-latent-fg">
+            {producerNotes}
           </div>
-        )}
-        {priorWinnerCup && priorExp && (
-          <div>
-            <div className="font-medium text-latent-fg text-xs mb-1">
-              V_(n-1) winner cup
-              {priorExp.winner && (
-                <span className="ml-2 text-latent-mid font-normal">
-                  ({priorExp.experiment_id} · winner: {priorExp.winner})
-                </span>
-              )}
-            </div>
-            <div className="text-latent-fg">{priorWinnerCup}</div>
+        </div>
+      )}
+      {priorWinnerCup && priorExp && (
+        <div className="bg-latent-cup-emphasis-surface border border-latent-cup-emphasis rounded p-4">
+          <div className="label mb-2">
+            Previous Leading Slot Cup Notes
+            {priorExp.winner && (
+              <span className="ml-2 font-normal normal-case text-latent-mid tracking-normal">
+                ({priorExp.experiment_id} · {priorExp.winner})
+              </span>
+            )}
           </div>
-        )}
-        {anchorCup && (
-          <div>
-            <div className="font-medium text-latent-fg text-xs mb-1">Anchor cup</div>
-            <div className="text-latent-fg">{anchorCup}</div>
+          <div className="font-sans text-sm leading-relaxed text-latent-fg">
+            {priorWinnerCup}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -1069,6 +1107,46 @@ function formatDropTempDiff(info: SlotInfo): React.ReactNode {
   )
 }
 
+// Sub-sprint 4a Bundle B — Roast Actuals helpers.
+//
+// parseTimeToSeconds: "04:50" → 290. Returns null on unparseable input.
+// predictedDevSeconds: computed = predicted_total_time - predicted_fc_time
+//   when both available on the recipe. Recipe has no predicted_dev_time
+//   field so we compute it.
+// formatActualVsPredicted: generic `predicted → actual` cell render. Used
+//   by all numeric rows in Bundle B. Predicted half muted (text-latent-mid),
+//   actual half foreground; both em-dash on missing.
+function parseTimeToSeconds(t: string | null | undefined): number | null {
+  if (!t) return null
+  const m = t.match(/^(\d+):(\d+)$/)
+  if (!m) return null
+  return parseInt(m[1], 10) * 60 + parseInt(m[2], 10)
+}
+
+function predictedDevSeconds(recipe: RoastRecipe | null): number | null {
+  if (!recipe) return null
+  const fc = parseTimeToSeconds(recipe.predicted_fc_time)
+  const total = parseTimeToSeconds(recipe.predicted_total_time)
+  if (fc == null || total == null) return null
+  return total - fc
+}
+
+function formatActualVsPredicted(
+  predictedStr: string | null,
+  actualStr: string | null,
+): React.ReactNode {
+  if (predictedStr == null && actualStr == null) return '—'
+  if (predictedStr == null) return actualStr
+  if (actualStr == null) return <span className="text-latent-mid">{predictedStr} → —</span>
+  return (
+    <span>
+      <span className="text-latent-mid">{predictedStr}</span>
+      <span className="text-latent-mid"> → </span>
+      <span>{actualStr}</span>
+    </span>
+  )
+}
+
 function RoastActualsTable({
   slotInfos,
   latestExp,
@@ -1083,58 +1161,84 @@ function RoastActualsTable({
     amber?: boolean
   }
 
+  // Sub-sprint 4a Bundle B — row order + content rewrite per Chris mockup
+  // #2. 6 rows in this order: FC / Drop / Drop Temp / Dev / Agtron WB /
+  // vs Expected. "Maillard" row dropped (not in mockup). "vs expected
+  // total" renamed → "vs Expected" and moved to last position. All
+  // numeric rows render as `predicted → actual` when the recipe carries
+  // a prediction (predicted_fc_time / predicted_total_time /
+  // end_condition_target / computed predicted dev / predicted_agtron_wb);
+  // single-value actual when prediction is null. Drop temp keeps existing
+  // formatDropTempDiff (with amber divergence emphasis); other rows use
+  // the new generic formatActualVsPredicted.
   const rows: RowSpec[] = [
     {
       label: 'FC',
-      getValue: (info) => info.roast?.fc_start ?? '—',
-      has: (info) => info.roast?.fc_start != null,
+      getValue: (info) =>
+        formatActualVsPredicted(
+          info.recipe?.predicted_fc_time ?? null,
+          info.roast?.fc_start ?? null,
+        ),
+      has: (info) =>
+        info.roast?.fc_start != null || info.recipe?.predicted_fc_time != null,
     },
     {
       label: 'Drop',
-      getValue: (info) => info.roast?.drop_time ?? '—',
-      has: (info) => info.roast?.drop_time != null,
+      getValue: (info) =>
+        formatActualVsPredicted(
+          info.recipe?.predicted_total_time ?? null,
+          info.roast?.drop_time ?? null,
+        ),
+      has: (info) =>
+        info.roast?.drop_time != null || info.recipe?.predicted_total_time != null,
     },
     {
-      // Cleanup-actions PR #25: design → achieved drop_temp diff render.
-      // Surfaces operator override visually at cupping prep time. Both
-      // values come together; amber tint applies per-cell when the
-      // achieved value diverges from the design target by > 0.5°C. The
-      // design value pulls from recipe.end_condition_target when
-      // end_condition_type is bean_temp (the dominant case); other end-
-      // condition types (dev_time, manual) leave the design half blank
-      // since end_condition_target isn't in °C for those.
-      label: 'Drop temp',
+      // Cleanup-actions PR #25 + Bundle B: design → achieved drop_temp
+      // diff render. Surfaces operator override visually. Amber tint
+      // applies per-cell when the achieved value diverges from the design
+      // target by > 0.5°C. Design pulls from recipe.end_condition_target
+      // when end_condition_type is bean_temp.
+      label: 'Drop Temp',
       getValue: (info) => formatDropTempDiff(info),
       has: (info) =>
         info.roast?.drop_temp != null || isDesignDropTempApplicable(info.recipe),
-      amber: false, // per-cell amber handled inside formatDropTempDiff
     },
     {
-      label: 'vs expected total',
+      label: 'Dev',
+      getValue: (info) => {
+        const predictedSec = predictedDevSeconds(info.recipe)
+        const actualSec = info.roast?.dev_time_s ?? null
+        return formatActualVsPredicted(
+          predictedSec != null ? `${predictedSec}s` : null,
+          actualSec != null ? `${actualSec}s` : null,
+        )
+      },
+      has: (info) =>
+        info.roast?.dev_time_s != null || predictedDevSeconds(info.recipe) != null,
+    },
+    {
+      label: 'Agtron WB',
+      getValue: (info) =>
+        formatActualVsPredicted(
+          info.recipe?.predicted_agtron_wb != null
+            ? String(info.recipe.predicted_agtron_wb)
+            : null,
+          info.roast?.agtron != null ? String(info.roast.agtron) : null,
+        ),
+      has: (info) =>
+        info.roast?.agtron != null || info.recipe?.predicted_agtron_wb != null,
+    },
+    {
+      // vs Expected prose — kept at the end of the table per Chris mockup
+      // #2. Reads experiments.delta_from_roast_<slot>. Amber tint on the
+      // whole cell since this is the lever-watch row.
+      label: 'vs Expected',
       getValue: (info) => {
         const delta = latestExp[`delta_from_roast_${info.slot}`] as string | null
         return delta ?? '—'
       },
       has: (info) => (latestExp[`delta_from_roast_${info.slot}`] as string | null) != null,
       amber: true,
-    },
-    {
-      label: 'Dev time',
-      getValue: (info) =>
-        info.roast?.dev_time_s != null ? `${info.roast.dev_time_s}s` : '—',
-      has: (info) => info.roast?.dev_time_s != null,
-    },
-    {
-      label: 'Maillard',
-      getValue: (info) =>
-        info.roast?.maillard_pct != null ? `${info.roast.maillard_pct}%` : '—',
-      has: (info) => info.roast?.maillard_pct != null,
-    },
-    {
-      label: 'Agtron WB',
-      getValue: (info) =>
-        info.roast?.agtron != null ? String(info.roast.agtron) : '—',
-      has: (info) => info.roast?.agtron != null,
     },
   ]
 

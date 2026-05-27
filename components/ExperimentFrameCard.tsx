@@ -17,12 +17,19 @@ type Props = {
   latestExp: ExperimentFrameLike
   title: string
   skipControlBaseline?: boolean
+  // Sub-sprint 4a Bundle B: bare=true skips the outer SectionCard so the
+  // body can render inside a CollapsibleSection wrapper (which provides its
+  // own card chrome + title). The WaitingForNextRoastView + WaitingForNextCuppingView
+  // both pass bare=true so the frame card collapses by default — design-time
+  // context is reference, not load-bearing for the active roast/cup decision.
+  bare?: boolean
 }
 
 export function ExperimentFrameCard({
   latestExp,
   title,
   skipControlBaseline = false,
+  bare = false,
 }: Props) {
   type RowSpec = { label: string; value: string | null | undefined }
   const rows: RowSpec[] = [
@@ -39,16 +46,18 @@ export function ExperimentFrameCard({
   const visible = rows.filter((r) => r.value != null && r.value !== '')
   if (visible.length === 0) return null
 
-  return (
-    <SectionCard title={title}>
-      <div className="space-y-4 font-sans text-sm leading-relaxed">
-        {visible.map((row) => (
-          <div key={row.label}>
-            <div className="label">{row.label}</div>
-            {row.value}
-          </div>
-        ))}
-      </div>
-    </SectionCard>
+  const body = (
+    <div className="space-y-4 font-sans text-sm leading-relaxed">
+      {visible.map((row) => (
+        <div key={row.label}>
+          <div className="label">{row.label}</div>
+          {row.value}
+        </div>
+      ))}
+    </div>
   )
+
+  if (bare) return body
+
+  return <SectionCard title={title}>{body}</SectionCard>
 }
