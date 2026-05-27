@@ -94,6 +94,21 @@ target_doc routing — BREWING.md is now a 3KB redirect stub. Per-citation
 target_doc overrides the proposal-level default. For replace, copy
 current_text VERBATIM. Multi-citation + multi-target_doc proposals supported.
 
+**Auto-split when citations span multiple target_docs** (Round 15 diagnostic,
+2026-05-26 / Sub-sprint 2 Item 15(b)). If your proposal would carry citations
+targeting more than one distinct `target_doc` (e.g. a roaster-card update AND
+a brewing-historian cross-coffee-insights append), issue ONE `propose_doc_changes`
+call per `(target_doc, section_anchor)` pair instead of a single multi-citation
+bundle. The aggregate payload (proposed_text + rationale sum) across multiple
+target_docs trips claude.ai's client-side approval-gating ceiling that doesn't
+fire on single-citation calls. Each split call carries exactly one citation,
+one target_doc, one section_anchor — keeps each payload small and the approval
+flow smooth. Reuse the same `source` shape across split calls; use the same
+`summary` (or append a short `(1/N)` suffix per call). Auto-supersede operates
+per `(target_doc, section_anchor)`, so split calls remain idempotent on re-run.
+When all citations target the SAME target_doc, a single multi-citation call
+stays correct — the split rule only fires on cross-target_doc bundles.
+
 Most likely targets (all brewing-side learnings now live in cluster docs):
 
   - target_doc="skills/brewing-historian/cluster/patterns/cross-coffee-insights.md"

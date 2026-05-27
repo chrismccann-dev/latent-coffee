@@ -263,6 +263,18 @@ Read the lot's per-lot working hypothesis in the Roasting Historian cluster (Act
 
 - `docs://skills/roasting-historian/cluster/active-lots/<lot-slug>.md` for the current lot's working hypothesis + per-lot protocol notes. Resolve `<lot-slug>` via `list_docs` against `skills/roasting-historian/cluster/active-lots/` if uncertain.
 
+### Operator-fixed constants — DO NOT VARY
+
+Before drafting any V_(n+1) adjustment, lock these as fixed. **Audio-ratified at the Item 25 / Group 5 grill, 2026-05-24** — these are operator-discipline constants, never varied across V-sets, beans, or roast types. Chris's muscle memory governs the session; he does NOT consult recipe-level fields for any of these.
+
+- **Charge temp: 117°C** — never varied. Drum coasts naturally from the 120°C BBP endpoint to 117°C while beans are pre-warming in the hopper.
+- **Hopper pre-load: 125°C** — never varied. ~60-90s pre-warm window before charge. Pre-loading earlier (e.g. 113-115°C, lower drum than charge target) is NOT an option — empirical V5 Sudan Rume Washed data showed earlier pre-load produces underdevelopment (Batch #134 reference).
+- **10-minute Roest warm-up + dry-roast thermal reset to 140°C** — never varied. The thermal reset standardizes starting conditions across every batch.
+- **BBP parameters** — never varied. Fan 100→60→40→25% taper; air temp 100°C flat; end condition drum 120°C; ~2:00-2:30 runtime.
+- **Preheat air 210°C** — never varied. Effectively irrelevant given the dry-roast reset; do not propose adjusting it as a roasting lever.
+
+**If V_n's cup signal points at a thermal-energy or input-energy change**, vary recipe-level levers (peak inlet temp / temperature curve / fan curve during the active roast / drum speed / drop temp / end condition / dev-time-relative-to-FC) — NOT charge / hopper / BBP / warm-up / preheat-air. Proposing "lower charge to 113-115°C" or "vary hopper pre-load" is structurally invalid — the substrate designs AROUND these constants, not against them. See [`docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md` § Operator-fixed constants](../skills/roest-knowledge/cluster/protocols/between-batch-protocol.md) for the empirical rationale + [CONTEXT-roasting.md § Operator-fixed roast constants](../../CONTEXT-roasting.md) for the recipe-schema-vs-lived-practice asymmetry note (recipes carry `charge_temp` / `hopper_load_temp` columns for completeness; lived practice fixes both).
+
 ### Adjustment scale rule
 
 The adjustment from V_n → V_(n+1) is scale-dependent. Calibrate the spread based on V_n's V number AND what V_n's cup signal taught:

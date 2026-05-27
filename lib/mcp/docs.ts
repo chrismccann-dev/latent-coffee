@@ -581,6 +581,77 @@ type CacheEntry = {
 // on next call.
 const DOC_CACHE = new Map<string, CacheEntry>()
 
+// Redirect-stub registry. Maps a docs:// URI whose underlying file is now a
+// pointer-only stub ("Content migrated to..." / "Authoritative content moved
+// to...") to the canonical cluster destination(s) where the content actually
+// lives. Sub-sprint 2 Items 17 + 18 (2026-05-27) thread this through the
+// propose_doc_changes preflight (target_doc-resolves-to-stub warning) and
+// list_doc_sections (returns redirect_to alongside anchors). When a new
+// migration adds another redirect stub, register it here so the writing-path
+// tools surface the redirect signal rather than silently accepting a proposal
+// against a doc that can no longer carry content.
+const REDIRECT_STUBS: Record<string, string[]> = {
+  // Wave 4 PR 4b: BREWING.md + ROASTING.md split across multiple sub-skill clusters.
+  'docs://brewing.md': [
+    'docs://skills/brewing-assistant/cluster/operational-guide.md',
+    'docs://skills/brewing-equipment-expert/cluster/operational-reference.md',
+    'docs://skills/brewing-historian/cluster/patterns/cross-coffee-insights.md',
+    'docs://skills/coordinator/catalog.md',
+    'docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md',
+  ],
+  'docs://roasting.md': [
+    'docs://skills/coordinator/catalog.md',
+    'docs://skills/coordinator/operator-guide.md',
+    'docs://skills/roasting-assistant/cluster/onboarding-protocol.md',
+    'docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md',
+    'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
+  ],
+  // Sprint R Phase 4 Step 5: CONTEXT.md zone split.
+  'docs://context.md': [
+    'docs://context-roasting.md',
+    'docs://context-brewing.md',
+    'docs://context-shared.md',
+  ],
+  // Wave 1: Brewing Equipment Expert absorbed 4 taxonomy docs.
+  'docs://taxonomies/brewers.md': [
+    'docs://skills/brewing-equipment-expert/cluster/brewers.md',
+  ],
+  'docs://taxonomies/filters.md': [
+    'docs://skills/brewing-equipment-expert/cluster/filters.md',
+  ],
+  'docs://taxonomies/grinders.md': [
+    'docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md',
+  ],
+  'docs://taxonomies/sworks.md': [
+    'docs://skills/brewing-equipment-expert/cluster/sworks.md',
+  ],
+  // Wave 2 PR 1: WBC Brewing + Roasting Archivists absorbed 4 docs.
+  'docs://brewing/wbc-reference.md': [
+    'docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md',
+  ],
+  'docs://brewing/wbc-recipes.md': [
+    'docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md',
+  ],
+  'docs://roasting/wbc-roasting.md': [
+    'docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md',
+  ],
+  'docs://roasting/wbc-sourcing.md': [
+    'docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md',
+  ],
+  // Wave 3 PR 1: Peer-Learning Roasting Archivist absorbed Dongzhe livestream.
+  'docs://roasting/dongzhe-livestream-2026-05.md': [
+    'docs://skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md',
+  ],
+}
+
+export function isRedirectStub(uri: string): boolean {
+  return uri in REDIRECT_STUBS
+}
+
+export function getRedirectTargets(uri: string): string[] | null {
+  return REDIRECT_STUBS[uri] ?? null
+}
+
 export function isKnownDoc(uri: string): boolean {
   return uri in DOC_FILES
 }

@@ -1,6 +1,14 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { isKnownDoc, listDocs, listDocSections, readDoc, readDocSection } from '@/lib/mcp/docs'
+import {
+  getRedirectTargets,
+  isKnownDoc,
+  isRedirectStub,
+  listDocs,
+  listDocSections,
+  readDoc,
+  readDocSection,
+} from '@/lib/mcp/docs'
 import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
 // Doc-introspection Tools (MCP feedback batch 2, 2026-04-30).
@@ -55,7 +63,7 @@ export function registerDocTools(server: McpServer) {
     {
       title: 'List Doc Sections',
       description:
-        'List / browse / discover / find every header anchor in a doc, in document order. Use this to discover valid `section_anchor` values BEFORE drafting change proposals — anchor matching is case-sensitive exact match against `## ` / `### ` headers, no fuzzy resolution. If your intended anchor isn\'t in the returned list, the section either doesn\'t exist or has been renamed. Returns { uri, anchors: string[] }.',
+        'List / browse / discover / find every header anchor in a doc, in document order. Use this to discover valid `section_anchor` values BEFORE drafting change proposals — anchor matching is case-sensitive exact match against `## ` / `### ` headers, no fuzzy resolution. If your intended anchor isn\'t in the returned list, the section either doesn\'t exist or has been renamed. Returns { uri, anchors: string[], redirect_to?: string[] }. **`redirect_to` field** (Sub-sprint 2 Item 18, 2026-05-27): when the requested URI is a redirect-stub doc (BREWING.md / ROASTING.md / migrated taxonomy paths / CONTEXT.md / wbc-* stubs), the response also carries `redirect_to: string[]` listing the canonical destination URI(s) where content actually lives. The bare `anchors` list still returns (it parses the stub body — usually just an h1 plus the pointer table headers, which is rarely useful for routing live edits). Treat the presence of `redirect_to` as the signal to re-target your read / write at one of the listed cluster paths instead.',
       inputSchema: {
         uri: z.string().describe(
           'Doc URI to enumerate. One of the values returned by `list_docs` (e.g. `docs://brewing.md`, `docs://brewing/roasters.md`, `docs://taxonomies/processes.md`).',
@@ -69,9 +77,15 @@ export function registerDocTools(server: McpServer) {
         )
       }
       const anchors = await listDocSections(uri)
+      const redirectTo = isRedirectStub(uri) ? getRedirectTargets(uri) : null
+      const payload: { uri: string; anchors: string[]; redirect_to?: string[] } = {
+        uri,
+        anchors,
+      }
+      if (redirectTo) payload.redirect_to = redirectTo
       return {
-        content: [{ type: 'text', text: JSON.stringify({ uri, anchors }) }],
-        structuredContent: { uri, anchors },
+        content: [{ type: 'text', text: JSON.stringify(payload) }],
+        structuredContent: payload,
       }
     }),
   )
@@ -126,8 +140,17 @@ export function registerDocTools(server: McpServer) {
       const body = await readDocSection(uri, anchor)
       if (body == null) {
         const available = await listDocSections(uri)
+        const redirectTo = isRedirectStub(uri) ? getRedirectTargets(uri) : null
+        // Sub-sprint 2 Item 18 (2026-05-27): when the section-miss is against
+        // a redirect-stub doc, the "Available anchors" list is usually a
+        // dead-end (just the h1 + pointer-table headers). Front-load the
+        // redirect destinations so the caller can re-issue against the real
+        // cluster doc without an extra round-trip.
+        const redirectMsg = redirectTo
+          ? ` This URI is a redirect-stub doc — content has migrated to: ${redirectTo.join(' | ')}. Re-issue read_doc_section against one of those cluster paths instead.`
+          : ''
         throw new Error(
-          `Section not found in ${uri}: "${anchor}". Available anchors (${available.length}): ${available.join(' | ')}.`,
+          `Section not found in ${uri}: "${anchor}".${redirectMsg} Available anchors (${available.length}): ${available.join(' | ')}.`,
         )
       }
       return {

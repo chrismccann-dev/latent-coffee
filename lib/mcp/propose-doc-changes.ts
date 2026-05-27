@@ -2,7 +2,9 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { ROASTER_LOOKUP } from '@/lib/roaster-registry'
 import {
+  getRedirectTargets,
   isKnownDoc,
+  isRedirectStub,
   listDocSections,
   listTaxonomyAxes,
   readDocSection,
@@ -155,6 +157,12 @@ export type CitationPreflight = {
   // caller list_doc_sections + manually pick. null = anchor resolved cleanly,
   // or no good candidate exists.
   closest_match: string | null
+  // Sub-sprint 2 Item 17 (2026-05-27). When the citation's target_doc resolves
+  // to a redirect-stub file (e.g. `brewing.md` / `roasting.md` / migrated
+  // taxonomy paths), surface the canonical destination(s) where content
+  // actually lives. The arbiter still accepts the proposal — this is a SIGNAL
+  // to retarget, not a gate. null = target_doc is a live content doc.
+  redirect_to: string[] | null
 }
 
 export type ProposeDocChangesResult =
@@ -166,6 +174,12 @@ export type ProposeDocChangesResult =
       target_doc: string
       citation_count: number
       preflight: CitationPreflight[]
+      // Sub-sprint 2 Item 17 (2026-05-27). Human-readable warnings aggregated
+      // across all citations. Today only carries redirect-stub messages, but
+      // shape is reserved for future preflight-level warnings (e.g. anchor
+      // resolved to a deprecated section header). Empty array when nothing
+      // tripped a warning.
+      warnings: string[]
     }
   | { ok: false; error: string }
 
@@ -280,11 +294,24 @@ export async function proposeDocChanges(
   // (currently only roasting.md before Sprint 2.5 ships the file) preflight
   // to anchor_resolved: false but the proposal still queues.
   const preflight: CitationPreflight[] = []
+  const warnings: string[] = []
   for (const c of normalizedCitations) {
     const docUri = targetDocToUri(c.target_doc)
     let anchorResolved = false
     let currentTextMatch: boolean | null = null
     let closestMatch: string | null = null
+    // Sub-sprint 2 Item 17: detect redirect-stub destinations BEFORE the
+    // anchor/current_text read so the warning fires even when the stub
+    // happens to carry a coincidentally-matching anchor (e.g. the stub's
+    // # h1 line). The proposal still queues — the arbiter sees the
+    // misroute and surfaces it to Chris; this signal lets claude.ai
+    // retarget immediately in the same session.
+    const redirectTo = docUri ? getRedirectTargets(docUri) : null
+    if (redirectTo) {
+      warnings.push(
+        `target_doc "${c.target_doc}" resolves to a redirect-stub doc — content has migrated to: ${redirectTo.join(', ')}. The proposal will still queue, but the arbiter will surface this as a misroute. Retarget the citation to the canonical destination cluster path and re-submit.`,
+      )
+    }
     if (docUri && isKnownDoc(docUri)) {
       try {
         const body = await readDocSection(docUri, c.section_anchor)
@@ -312,6 +339,7 @@ export async function proposeDocChanges(
       anchor_resolved: anchorResolved,
       current_text_match: currentTextMatch,
       closest_match: closestMatch,
+      redirect_to: redirectTo,
     })
   }
 
@@ -401,6 +429,7 @@ export async function proposeDocChanges(
     target_doc: proposalTargetDoc,
     citation_count: normalizedCitations.length,
     preflight,
+    warnings,
   }
 }
 
@@ -410,7 +439,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
     {
       title: 'Propose Doc Changes',
       description:
-        'Propose / submit / save / log / archive a prose change to a brewing or roasting doc - the primary write path for living-reference markdown. EVERY citation requires section_anchor + operation + proposed_text + rationale (all four are required; the schema rejects missing fields). Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. WORKFLOW: before drafting, call `read_doc_section(uri, anchor)` to fetch the live target so `current_text` (for replace ops) is verbatim from what\'s actually in the doc - project-uploaded copies often drift behind live, especially for fields with pending-but-unapplied edits. **current_text matching is byte-for-byte; NO ASCII→Unicode normalization is applied** (see current_text field description for the common offenders — en-dashes, curly quotes, NBSP, NFC vs NFD). Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match against `## ` / `### ` headers). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal - the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor). For cross-anchor or cross-target_doc corrections that don\'t overlap, pass `supersede_ids: ["<old_uuid>", ...]` to flip specific older proposals in the same call - additive on top of the (target_doc, section_anchor) auto-supersede; idempotent on already-superseded UUIDs. Returns { proposal_id, status: "pending", superseded_ids[], summary, target_doc, citation_count, preflight[] } where each preflight entry echoes { target_doc, section_anchor, operation, anchor_resolved, current_text_match, closest_match? } so stale anchors / drifted current_text surface immediately, not at arbiter time.',
+        'Propose / submit / save / log / archive a prose change to a brewing or roasting doc - the primary write path for living-reference markdown. EVERY citation requires section_anchor + operation + proposed_text + rationale (all four are required; the schema rejects missing fields). Claude.ai writes a proposal; Claude Code arbitrates and applies asynchronously. WORKFLOW: before drafting, call `read_doc_section(uri, anchor)` to fetch the live target so `current_text` (for replace ops) is verbatim from what\'s actually in the doc - project-uploaded copies often drift behind live, especially for fields with pending-but-unapplied edits. **current_text matching is byte-for-byte; NO ASCII→Unicode normalization is applied** (see current_text field description for the common offenders — en-dashes, curly quotes, NBSP, NFC vs NFD). Each citation targets a section_anchor (header text without `#` prefix; case-sensitive exact match against `## ` / `### ` headers). Citations may optionally override the proposal-level target_doc to span multiple files in one proposal - the brew-debrief shape (one insight, multiple files) is supported natively. Multi-citation + multi-target_doc proposals are arbitrated per (target_doc, section_anchor) group; partial application is supported. Auto-supersedes older pending proposals overlapping the same per-citation (target_doc, section_anchor). For cross-anchor or cross-target_doc corrections that don\'t overlap, pass `supersede_ids: ["<old_uuid>", ...]` to flip specific older proposals in the same call - additive on top of the (target_doc, section_anchor) auto-supersede; idempotent on already-superseded UUIDs. Returns { proposal_id, status: "pending", superseded_ids[], summary, target_doc, citation_count, preflight[], warnings[] } where each preflight entry echoes { target_doc, section_anchor, operation, anchor_resolved, current_text_match, closest_match?, redirect_to? } so stale anchors / drifted current_text / redirect-stub misroutes surface immediately, not at arbiter time. **`redirect_to` field on preflight** (Sub-sprint 2 Item 17, 2026-05-27): when a citation\'s `target_doc` resolves to a redirect-stub doc (e.g. `brewing.md` / `roasting.md` / migrated taxonomy paths post Wave 4 PR 4b), `redirect_to` carries the canonical destination URI(s) where content actually lives. The matching human-readable message is also aggregated in top-level `warnings[]`. Proposals against redirect stubs still queue but the arbiter will surface them as misroutes — retarget citations to the canonical cluster path and re-submit.',
       inputSchema: proposeDocChangesInputSchema,
     },
     withToolErrorLogging('propose_doc_changes', async (input) => {
@@ -426,6 +455,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
         target_doc: result.target_doc,
         citation_count: result.citation_count,
         preflight: result.preflight,
+        warnings: result.warnings,
       }
       return {
         content: [{ type: 'text', text: JSON.stringify(responsePayload) }],
