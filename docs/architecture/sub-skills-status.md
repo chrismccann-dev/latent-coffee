@@ -75,7 +75,7 @@ Also extracts **Roasting Historian's `cluster/patterns/roast-to-brew-translation
 - **Learning Assistant** ([docs/skills/learning-assistant/](../skills/learning-assistant/)) — the only cross-domain planner. Constructs research tracks (distinct vocabulary from per-lot `experiments` table rows). Composes both Historians + sourcing + CCIL (when Wave 4 lands)
 - **Sourcing Workflow Planner** ([docs/skills/sourcing-workflow-planner/](../skills/sourcing-workflow-planner/)) — buy/hold/pass + lane-fit assessment composing WBC Roasting Archivist § sourcing/ + Roasting Historian closed-lot retros + direct `green_beans` reads
 
-No `cluster/` subdirectories per scope decision 1 (templates accrue under Pattern F if they emerge in lived use). Prompts unchanged per scope decision 2 — `start-lot.md` / `log-roast.md` / `one-shot.md` / `start-brew.md` / `log-brew.md` continue as the claude.ai entry surface; sub-skills become the canonical fetch target the prompts compose over.
+No `cluster/` subdirectories per scope decision 1 (templates accrue under Pattern F if they emerge in lived use). Prompts unchanged per scope decision 2 — `start-lot.md` / `log-roast.md` / `one-shot.md` / `start-brew.md` / `bundled-brewing-completion.md` continue as the claude.ai entry surface; sub-skills become the canonical fetch target the prompts compose over. (`log-brew.md` + `propose-doc-changes-from-brew.md` deprecated to redirect stubs in Writing-path Sub-sprint 3 / 2026-05-26 — bundled covers the full path.)
 
 Master Coordinator handoff chains extended per scope decision 3 — `coordinator/handoff-rules.md` now enumerates 6 chains:
 

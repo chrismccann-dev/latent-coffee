@@ -19,6 +19,6 @@ Content migrated to the composable sub-skills architecture per [ADR-0011](docs/a
 | Roaster Reference (Section 2) | [docs/brewing/roasters.md](docs/brewing/roasters.md) |
 | Cross-domain (roasting + brewing) patterns | [docs/skills/ccil/cluster/coffee/](docs/skills/ccil/cluster/coffee/) |
 
-**Entry surface unchanged.** Brew sessions still start with [docs/prompts/start-brew.md](docs/prompts/start-brew.md) and continue with [docs/prompts/log-brew.md](docs/prompts/log-brew.md) and [docs/prompts/bundled-brewing-completion.md](docs/prompts/bundled-brewing-completion.md). The prompts compose over the cluster docs above via `read_doc`.
+**Entry surface unchanged.** Brew sessions still start with [docs/prompts/start-brew.md](docs/prompts/start-brew.md) and complete with [docs/prompts/bundled-brewing-completion.md](docs/prompts/bundled-brewing-completion.md) (canonical entry surfaces post Writing-path Sub-sprint 3 / 2026-05-26 — `log-brew.md` + `propose-doc-changes-from-brew.md` are now back-compat redirect stubs pointing at `bundled-brewing-completion.md`). The prompts compose over the cluster docs above via `read_doc`.
 
 See [docs/skills/coordinator/catalog.md](docs/skills/coordinator/catalog.md) for the full sub-skill catalog and [docs/architecture/master-doc-transition-plan.md](docs/architecture/master-doc-transition-plan.md) for the wave-by-wave migration history. The pre-redirect content is preserved in git history.

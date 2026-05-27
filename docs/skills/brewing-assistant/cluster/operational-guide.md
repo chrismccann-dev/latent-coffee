@@ -4,7 +4,7 @@
 
 The full BREW PROMPT operational content (Steps 1-4 + Recipe Output + Iteration Loop + Resolved Brew Output Format). Migrated from BREWING.md § Section 1 BREW PROMPT in Wave 4 PR 4b (2026-05-21).
 
-Operational entry surface = [`docs/prompts/start-brew.md`](../../../prompts/start-brew.md) (Phase 1 — recipe construction) and [`docs/prompts/log-brew.md`](../../../prompts/log-brew.md) (Phase 2 — in-thread iteration). Both prompts are thin entry-surface invocations; this doc holds the substantive operational guidance the prompts compose over via `read_doc`. The Phase 1 / Phase 2 / Phase 3 framing in [SKILL.md](../SKILL.md) summarizes the role; this doc is the executable how-to.
+Operational entry surface = [`docs/prompts/start-brew.md`](../../../prompts/start-brew.md) (Phase 1 — recipe construction). Phase 2 (in-thread iteration) happens inside the active brew session with no dedicated per-iteration prompt; the prompt is a thin entry-surface invocation, while this doc holds the substantive operational guidance the session composes over via `read_doc`. The Phase 1 / Phase 2 / Phase 3 framing in [SKILL.md](../SKILL.md) summarizes the role; this doc is the executable how-to. (`log-brew.md` was the Phase 2 entry surface through 2026-05-26 / Writing-path Sub-sprint 3, then deprecated to a redirect stub since Phase 2 iteration is in-thread per ADR-0011 § iteration-depth asymmetry.)
 
 ## Step 1 — Coffee Brief (Claude runs this automatically)
 
@@ -286,5 +286,5 @@ Propose specific edits via the `propose_doc_changes` MCP Tool with citations tar
 - [brewing-historian/cluster/patterns/cross-coffee-insights.md § Process / Variety Signal Table](../../brewing-historian/cluster/patterns/cross-coffee-insights.md) — Step 1b lookup
 - [brewing-historian/cluster/patterns/by-strategy/](../../brewing-historian/cluster/patterns/by-strategy/) — per-strategy substrate
 - [wbc-brewing-archivist/cluster/](../../wbc-brewing-archivist/cluster/) — Step 1d WBC corpus check substrate
-- [docs/prompts/start-brew.md](../../../prompts/start-brew.md) + [docs/prompts/log-brew.md](../../../prompts/log-brew.md) — operational entry surface prompts (thin pointers to this doc)
+- [docs/prompts/start-brew.md](../../../prompts/start-brew.md) — operational entry surface prompt (thin pointer to this doc) for Phase 1; Phase 2 iteration is in-thread with no per-iteration prompt
 - [docs/prompts/bundled-brewing-completion.md](../../../prompts/bundled-brewing-completion.md) — Phase 3 handoff to Brew Recorder

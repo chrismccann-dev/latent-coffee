@@ -103,7 +103,7 @@ Claude works through the Coffee Brief (see [brewing-assistant/cluster/operationa
 
 **Mid-loop continuations.** Use [`log-roast.md`](../../prompts/log-roast.md) → [`log-cupping.md`](../../prompts/log-cupping.md) → (loop or close) → [`close-lot.md`](../../prompts/close-lot.md). One-shot lots close via [`one-shot-closeout.md`](../../prompts/one-shot-closeout.md).
 
-**Brewing continuation / completion.** Use [`log-brew.md`](../../prompts/log-brew.md) for in-thread iteration; [`bundled-brewing-completion.md`](../../prompts/bundled-brewing-completion.md) to push the final optimized brew + propose doc changes downstream.
+**Brewing completion.** Use [`bundled-brewing-completion.md`](../../prompts/bundled-brewing-completion.md) to push the final optimized brew + propose doc changes downstream. In-thread iteration happens inside the active brew session (Brewing Assistant Phase 2) and never persists per ADR-0011 § iteration-depth asymmetry. (`log-brew.md` deprecated to a redirect stub in Writing-path Sub-sprint 3 / 2026-05-26.)
 
 ---
 
