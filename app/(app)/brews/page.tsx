@@ -121,7 +121,9 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
           {anyActive ? (
             <Link href="/brews" className="btn btn-secondary">CLEAR ALL FILTERS</Link>
           ) : (
-            <Link href="/add?type=purchased" className="btn btn-primary">+ ADD YOUR FIRST BREW</Link>
+            <p className="font-sans text-sm text-latent-mid max-w-md mx-auto">
+              Brews land here once a brewing session in claude.ai writes via the Latent MCP server.
+            </p>
           )}
         </div>
       ) : (

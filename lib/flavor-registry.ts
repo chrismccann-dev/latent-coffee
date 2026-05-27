@@ -435,7 +435,10 @@ export function parseStructureTag(key: string): { axis: StructureAxis; descripto
 
 export const STRUCTURE_KEYS: readonly string[] = STRUCTURE_TAGS.map(structureTagKey).sort()
 
-// Group structure tags by axis for axis-grouped pickers in StructureTagsPicker.
+// Group structure tags by axis. Originally fed the StructureTagsPicker form
+// component (removed in Writing-path Sub-sprint 4 / 2026-05-27); retained
+// because per-axis grouping is still useful for MCP descriptions + future
+// read-surface rendering.
 export const STRUCTURE_BY_AXIS: Record<StructureAxis, readonly string[]> = (() => {
   const out = {} as Record<StructureAxis, string[]>
   for (const tag of STRUCTURE_TAGS) {
