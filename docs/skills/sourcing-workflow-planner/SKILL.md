@@ -21,7 +21,7 @@ Evaluate a new lot opportunity against sourcing strategy + current portfolio. Re
 - [WBC Roasting Archivist](../wbc-roasting-archivist/) cluster § sourcing/strategy.md — 5-lane portfolio + Tier 1/2/3 priority targets + tested-cultivars canonical registry
 - [Roasting Historian](../roasting-historian/) cluster — closed-lot lane-performance retros + per-cultivar + per-process patterns
 - Direct `green_beans` table read — current inventory state for portfolio-fit assessment
-- Optional: Learning Assistant track-aware context when the sourcing decision intersects an active research track
+- (Pre-2026-05-27 the Inputs list included Learning Assistant track-aware context. That dependency is removed — Research Coordinator per [ADR-0017](../../adr/0017-research-assistant-architecture.md) is operator-direct in Claude Code, not a claude.ai-side input source. If a sourcing decision intersects an active research project, the operator surfaces that context manually.)
 
 ## Outputs
 

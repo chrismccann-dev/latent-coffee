@@ -20,8 +20,15 @@ Intent → sub-skill mapping. Populated as sub-skills ship.
 | New brew session (operator opens `start-brew.md` or describes a coffee they're about to brew) | [Brewing Assistant](../brewing-assistant/SKILL.md) | `brewing-historian/cluster/` + `wbc-brewing-archivist/cluster/` + `brewing-equipment-expert/cluster/` |
 | In-thread brew iteration (operator inside the active brew session reports tasting notes, wants refinement) | Brewing Assistant | Same as new brew session; Phase 2 sub-prompt active |
 | Optimized brew dial-in on reference roast (Chain 1 mid-step) | Brewing Assistant | Same as new brew session + `roasting-historian/cluster/learnings/<this-lot>.md` for roast context |
-| Research-track design (operator: "I want to test X across the next N lots/brews") | [Learning Assistant](../learning-assistant/SKILL.md) | `roasting-historian/cluster/` + `brewing-historian/cluster/` + `brewing-equipment-expert/cluster/` (when track has equipment dimension) + `wbc-roasting-archivist/cluster/sourcing/` |
 | Sourcing opportunity evaluation (operator: "importer offered me X, should I buy?") | [Sourcing Workflow Planner](../sourcing-workflow-planner/SKILL.md) | `wbc-roasting-archivist/cluster/sourcing/` + `roasting-historian/cluster/` + direct `green_beans` table read |
+
+## Research workflow — operator-direct, NOT Coordinator-dispatched
+
+Research Coordinator + Research Assistant are deliberately **not dispatched by Master Coordinator** per [ADR-0017](../../adr/0017-research-assistant-architecture.md) Exception 3 (operator-direct). The pair runs in Claude Code sessions, not claude.ai sessions. Entry surface: operator types "I want to start a research project" (or "I want to start a research track") into a fresh Claude Code session; that session becomes the Research Coordinator. Subsequent Assistant + Execution sessions are operator-spawned via manual paste of Coordinator-authored spawn prompts + scoped execution plans. No catalog routing, no MCP catalog refresh required.
+
+The pair appears in [`catalog.md`](catalog.md) for visibility (Knowledge tier + Workflow Executing tier respectively), but dispatch-rules deliberately do NOT include them. Catalog discipline + dispatch-rule discipline are decoupled for this pair only.
+
+If a claude.ai session ever expresses research-track-design intent ("test water side across next 5 lots"), the correct response is: redirect the operator to a fresh Claude Code session — claude.ai is the wrong surface for research work because research methodology is co-authored at Step 0 + role discipline requires session-role separation.
 
 ## Wave 3 PR 3 entries (active — Workflow Executing tier)
 
