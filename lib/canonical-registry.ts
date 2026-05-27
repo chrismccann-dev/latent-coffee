@@ -116,10 +116,12 @@ export function makeCanonicalLookup(
   return { list: registry, isCanonical, findClosest, isResolvable, canonicalize }
 }
 
-// Save-gate validity for a `CanonicalTextInput` with `allowOverride`. True
-// when the value resolves through the registry, OR the user clicked "Use
-// anyway" on a non-empty value. Empty input is treated as resolvable so
-// callers can use it for an optional-field gate.
+// Save-gate validity for an overridable canonical input. True when the value
+// resolves through the registry, OR the caller explicitly opted into override
+// for a non-empty value. Empty input is treated as resolvable so callers can
+// use it for an optional-field gate. Consumed by MCP push_brew + patch_brew
+// override-flag gating; the form-side CanonicalTextInput consumer was removed
+// in Writing-path Sub-sprint 4 (2026-05-27).
 export function isOverridableValid(
   value: string | null | undefined,
   lookup: CanonicalLookup,

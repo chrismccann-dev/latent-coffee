@@ -21,7 +21,7 @@ After this series ships, the writing path is stable enough to support the Read-p
 | 1 | Sprint 3.5 — Roest pull-side audit + /datapoints/ unlock | ~3-4h actual (vs ~1-2 days kickoff sizing) | SHIPPED — [PR #263](https://github.com/chrismccann-dev/latent-coffee/pull/263) / main `451935d` | [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](./sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md) + [post-ship reshape](../features/roest-api-parity-phase-3.md) |
 | 2 | MCP ergonomics polish (Round 15 cluster) | ~1.5h actual | SHIPPED — [PR #266](https://github.com/chrismccann-dev/latent-coffee/pull/266) / main `e6eca4a` | Inline § below |
 | 3 | Brewing-completion prompt consolidation | ~30 min actual | SHIPPED — [PR #268](https://github.com/chrismccann-dev/latent-coffee/pull/268) / main `5cd9d4b` | Inline § below |
-| 4 | Human-write surface deprecation | ~1 day | NEXT UP | Inline § below |
+| 4 | Human-write surface deprecation | ~3h actual (vs ~1 day kickoff sizing) | SHIPPED — [PR #270](https://github.com/chrismccann-dev/latent-coffee/pull/270) / main `d8b30d1` | Inline § below |
 
 **Sequencing logic:**
 

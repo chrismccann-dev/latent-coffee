@@ -62,9 +62,6 @@ export function Header() {
 
         {/* Right cluster */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Link href="/add?type=purchased" className="btn btn-primary btn-sm">
-            + ADD
-          </Link>
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}

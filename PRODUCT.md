@@ -155,7 +155,7 @@ profiles (user)
 
 ### Canonical Registries — full index
 
-The data model enforces canonical naming through 8 registries (one per `/add` data axis), each backed by a **3-layer authoring pattern**:
+The data model enforces canonical naming through 9 registries (one per MCP-validated data axis), each backed by a **3-layer authoring pattern**:
 
 1. **Authored markdown** in `docs/taxonomies/<axis>.md` (or `lib/<axis>-registry.ts` source comments where no .md exists yet) — Chris's source of truth, hand-edited.
 2. **Validation registry** in `lib/<axis>-registry.ts` — TypeScript mirror, exports a `CanonicalLookup` bundle via [`makeCanonicalLookup`](lib/canonical-registry.ts).
@@ -177,16 +177,13 @@ The data model enforces canonical naming through 8 registries (one per `/add` da
 
 **Shared infrastructure:**
 - [`lib/canonical-registry.ts`](lib/canonical-registry.ts) — `makeCanonicalLookup(names, aliases?)` factory used by every registry above. 3-tier classifier (exact → alias → substring → 3-char prefix) + `canonicalize()` write-path method.
-- [`components/CanonicalTextInput.tsx`](components/CanonicalTextInput.tsx) — single-value typeahead + `<datalist>` + amber "did you mean X?" warning + optional `allowOverride` "Use anyway" link. Used identically across `/add` purchased step 6 + `/brews/[id]/edit` for every text-based axis (cultivar / terroir / process / roaster / roast level / grinder / producer / brewer / filter).
-- [`components/SaveGateWarning.tsx`](components/SaveGateWarning.tsx) — accepts `requirements: { met, message }[]` and renders the amber "CANNOT SAVE YET" block. Used on both /add and /edit.
-- [`lib/brew-import.ts`](lib/brew-import.ts) — `findOrCreate*` helpers (`findOrCreateCultivar`, `findOrCreateTerroir` for FK-backed axes; `findOrCreateRoaster`, `findOrCreateProducer`, `findOrCreateGrinder`, `findOrCreateBrewer`, `findOrCreateFilter` for text-only-with-override-escape-hatch axes — all delegate to a shared `validateCanonicalText` helper extracted in the 1f /simplify pass; rule-of-five).
-- [`lib/canonical-registry.ts`](lib/canonical-registry.ts) `isOverridableValid(value, lookup, overridden)` — save-gate validity for any `CanonicalTextInput` with `allowOverride`. Extracted in the 1f /simplify pass; rule-of-ten across /add + /edit.
-- [`app/api/brews/[id]/route.ts`](app/api/brews/[id]/route.ts) PATCH — `canonicalizeOverridable(patch, body, field, lookup, overrideKey)` helper for the 5 text-only axes that share the `allowOverride` shape (roaster + producer + grinder + brewer + filter; extracted in 1l /simplify pass when rule-of-three hit).
+- [`lib/brew-import.ts`](lib/brew-import.ts) — `findOrCreate*` helpers (`findOrCreateCultivar`, `findOrCreateTerroir` for FK-backed axes; `findOrCreateRoaster`, `findOrCreateProducer`, `findOrCreateGrinder`, `findOrCreateBrewer`, `findOrCreateFilter`, `findOrCreateSignatureMethod` for text-only-with-override-escape-hatch axes — all delegate to a shared `validateCanonicalText` helper).
+- MCP write path consumes the helpers above via `lib/mcp/push-brew.ts` + `lib/mcp/patch-brew.ts` + `lib/mcp/canonicals.ts`. The `*_override` boolean flags on `push_brew` + `patch_brew` Zod schemas carry the same "use anyway" semantics the deleted `CanonicalTextInput` / `SaveGateWarning` form components used to surface, and trigger `taxonomy_overrides_queue` rows for arbitration. Form-side components + the `/api/brews/*` REST routes were deleted in Writing-path Sub-sprint 4 (2026-05-27).
 
 **Discipline rules (apply to every registry):**
 - Adding a new canonical entry is a 2-step deliberate edit: (1) `docs/taxonomies/<axis>.md` per-entry section, (2) `lib/<axis>-registry.ts` `<AXIS>` array. If an existing DB row needs renaming, add a 3rd step: a DB migration.
 - Aliases are "we know what you mean — write the canonical form." `isCanonical` returns false on aliases; `findClosest` and `canonicalize` resolve them. Use aliases for accent / spelling drift, lot-vs-producer collapses, deprecated names → current names.
-- For text-only-no-FK axes (roaster / producer / grinder), the `allowOverride` escape hatch on `CanonicalTextInput` lets users persist a verbatim string when a canonical doesn't yet exist. The override mode is opt-in per axis (cultivar / terroir / roast level stay strict-no-override).
+- For text-only-no-FK axes (roaster / producer / grinder / brewer / filter / signature_method), the `*_override` boolean flag on `push_brew` + `patch_brew` Zod schemas lets MCP callers persist a verbatim string when a canonical doesn't yet exist. The override mode is opt-in per axis (cultivar / terroir / roast level stay strict-no-override).
 - Migrations that rename DB values (e.g. `brews.roaster = 'Moonwake' → 'Moonwake Coffee Roasters'`) must also update any `<axis>_syntheses` cache table keyed on the same string. Currently only `roaster_syntheses` and `process_syntheses` exist.
 - Macro must represent a true ecological system (elevation band + climate regime + soil base). New macros require validation: does it change extraction behavior? Would you roast differently? Meso terroirs (municipality/valley/ridge) are sub-units; admin regions are traceability-only, never ecological labels.
 
@@ -402,9 +399,9 @@ The current ranked queue of scoped, sized sprints in flight or next up.
 
 Final phase of Sprint R's Option 1 sequence. Re-assessed every entry in the prior § Queued post-architecture + § Deferred candidates + § Side Quests against current substrate. Output: this restructure + a kickoff brief for Sprint 3.5. Per-sprint retrospective in [project_roadmap_re_session_2026-05-26.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_roadmap_re_session_2026-05-26.md).
 
-#### 3. Writing-path surface polish series — ACTIVE
+#### 3. Writing-path surface polish series — CLOSED 2026-05-27
 
-Mission-critical surface — the claude.ai → MCP → DB writing layer. Broken into sub-sprints that can ship as separate PRs but conceptually one surface area (per Chris-input 2026-05-26: "we should do one big sprint on all of the surface layers of the writing path"). Sequence runs BEFORE the read-path surface polish series because writing-path correctness is more critical than read-side UX.
+Mission-critical surface — the claude.ai → MCP → DB writing layer. Broken into sub-sprints that ship as separate PRs but are conceptually one surface area (per Chris-input 2026-05-26: "we should do one big sprint on all of the surface layers of the writing path"). All 4 sub-sprints shipped between 2026-05-26 and 2026-05-27; series closed with Sub-sprint 4's deletion of all in-app human-write surfaces. Per-sub-sprint detail in [docs/sprints/shipped.md](docs/sprints/shipped.md).
 
 **Series umbrella doc:** [docs/sprints/writing-path-surface-polish-series-2026-05-26.md](docs/sprints/writing-path-surface-polish-series-2026-05-26.md) — session handoff between sub-sprints; carries lightweight inline kickoff scopes for Sub-sprints 2 / 3 / 4 and points at the dedicated kickoff brief for Sub-sprint 1.
 
@@ -446,23 +443,23 @@ Shipped 2026-05-26 in ~3-4h (vs ~1-2 day kickoff sizing). **Discovery mid-sprint
 - ✓ Brew Recorder SKILL.md + Brewing Assistant SKILL.md + Brewing Assistant operational-guide.md + coordinator/operator-guide.md + coordinator/dispatch-rules.md + close-lot.md + one-shot-closeout.md + CLAUDE.md + BREWING.md + docs/architecture/sub-skills-status.md cross-refs all updated to reference `bundled-brewing-completion.md` (and note Phase 2 brew iteration is now in-thread, no per-iteration prompt).
 - ✓ Grep pass clean — only the redirect stubs themselves + historical sprint docs + this PRODUCT.md row reference the deprecated paths.
 
-##### Sub-sprint 4 — Human-write surface deprecation
+##### Sub-sprint 4 — Human-write surface deprecation — SHIPPED 2026-05-27
 
-~1 day. Expanded from the prior "Edit-form mobile polish" + "Brewing-side `/add` + `/edit` deprecation" into one canonical pruning sprint. Per Chris audio 2026-05-26: "the app should only be orchestrated by claude.ai... I do not edit anything in the app. I do not fill out a form. I do not write anything." Single canonical writing path = claude.ai → MCP → Claude Code arbitrates.
+Final sub-sprint in the writing-path polish series. Per Chris audio 2026-05-26: "the app should only be orchestrated by claude.ai... I do not edit anything in the app. I do not fill out a form. I do not write anything." Single canonical writing path = claude.ai → MCP → Claude Code arbitrates.
 
-Surfaces to delete:
+Surfaces deleted:
 - `/add?type=purchased` flow + Step 5 review pages (`app/(app)/add/page.tsx`)
-- `EditBrewForm.tsx` + PATCH route (`app/(app)/brews/[id]/edit/`)
-- Header `+ ADD` button (removes entirely)
-- Any `/edit` surface on `/green/[id]` if surviving
-- Stale form components (`<ProcessPicker>`, `<FlavorComposer>`, `<StructureTagsPicker>`, etc. — keep the registries; delete the form chrome)
-- Cross-reference grep + cleanup
+- `EditBrewForm.tsx` + PATCH route (`app/(app)/brews/[id]/edit/` + `app/api/brews/[id]/route.ts`)
+- 3 form-fronting API routes (`/api/brews/parse`, `/api/brews/import`, `/api/brews/[id]`)
+- Header `+ ADD` button — Right cluster on `<Header>` now carries only the mobile-sheet hamburger
+- 8 form components — `ProcessPicker` / `FlavorComposer` / `StructureTagsPicker` / `ModifierComposer` / `GrindSettingInput` / `HybridSubformPicker` / `CanonicalTextInput` / `SaveGateWarning`
+- Edit button on `/brews/[id]` detail header
+- Empty-state CTA on `/brews` ("ADD YOUR FIRST BREW") swapped for MCP-routing prose
+- `lib/brew-import.ts` surgically trimmed (2099 → 1419 lines): `parseFlavorList` + `parseSpreadsheetRow` + the `detectDrift` block (TerroirDrift / CultivarDrift / DriftReport / canonicalizeMacroTerroir / canonicalizeCultivar / normalizeForMatch) + `seedStructuredGrind` + `structuredGrindColumns` + legacy grind regexes. All `findOrCreate*` + `validateCanonicalText` + `persistBrew` / `patchBrew` / clean* / compose* helpers preserved (MCP write path).
 
-Read pages untouched. Brewing-side prompts already canonical via MCP.
+Read pages untouched. All canonical registries (`lib/*-registry.ts`) preserved as the source of truth for MCP-side validation.
 
-**Sizing:** ~1 day. Mostly a deletion exercise per Chris framing. Lowers maintenance burden going forward.
-
-#### 4. Read-path surface polish series — QUEUED (after writing-path stable)
+#### 4. Read-path surface polish series — ACTIVE (writing-path closed 2026-05-27)
 
 Per-page-family UX cleanup + informational architecture audit. Runs BEFORE the Claude-Design redesign so the redesign has the right informational scaffolding to polish, not patch. Order per Chris audio 2026-05-26 ("which ones I actually view most often naturally on my own"):
 
