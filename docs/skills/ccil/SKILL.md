@@ -36,7 +36,7 @@ Synthesize across domain Historians + WBC archivists + Latent's per-entity termi
 
 ## Called by / Calls
 
-- **Called by:** Roasting Assistant, Brewing Assistant, Learning Assistant (the 3 cross-domain-aware planners)
+- **Called by:** Roasting Assistant, Brewing Assistant (cross-domain-aware planners). Research Coordinator may consult CCIL when scoping a research project per [ADR-0017](../../adr/0017-research-assistant-architecture.md), but the call is operator-direct in Claude Code rather than a Master-Coordinator-dispatched chain.
 - **Calls:** Roasting Historian · Brewing Historian · WBC Roasting Archivist · WBC Brewing Archivist (read-only synthesis input). Does NOT call workflow tier.
 
 ## MCP Tools in scope

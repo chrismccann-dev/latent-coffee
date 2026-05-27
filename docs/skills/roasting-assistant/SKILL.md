@@ -26,7 +26,7 @@ Construct a starting roast recipe before the physical roast happens. Output is a
 - [WBC Roasting Archivist](../wbc-roasting-archivist/) cluster — WBC corpus + sourcing strategy
 - [Roest Knowledge](../roest-knowledge/) cluster — machine docs + API quirks + protocols (evaluation / fan-strategy / fc-marking)
 - [Peer-Learning Roasting Archivist](../peer-learning-roasting-archivist/) cluster — per-peer profiles (Dongzhe today)
-- Optional: Learning Assistant track-aware metadata when the lot is part of a research track
+- (Pre-2026-05-27 the Inputs list included "Learning Assistant track-aware metadata when the lot is part of a research track." That dependency is removed — Research Coordinator + Research Assistant per [ADR-0017](../../adr/0017-research-assistant-architecture.md) do NOT write track-aware metadata onto constituent roasts. If a roast is part of a research track, the cross-link is logged in the project protocol doc + handoff brief, not on the `roasts` row.)
 
 ## Outputs
 

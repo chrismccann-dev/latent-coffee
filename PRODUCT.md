@@ -536,15 +536,14 @@ Per Chris audio 2026-05-26: "these could be good things to park as parallel item
 - **Claude-Design redesign sprint planning.** From Group F Round 2 audio + Sprint R input #9. Decide: multi-sprint vs mega-sprint? Mobile reconstruction concurrent or after? Desktop-first rule revisit? Authored design system → app merge sequencing? Brainstorm precedes the redesign Active sprint promotion.
 - **Doc pruning mechanism.** From Group D Round 2 audio. Brainstorm: "we are adding cumulatively to all of these docs but there is no mechanism to consolidate, split, delete... real pruning exercises on specific docs and then figure out the mechanism to apply this to all doc surfaces and then have this be part of the ongoing autonomy process." Meta-process work that affects all substrate. Outcome: defined pruning protocol + cadence (analog to `consolidate-memory` skill but for `docs/` cluster files).
 
-### Filter drawdown research experiment closeout (incoming substrate)
+### Filter drawdown research experiment closeout — CLOSED 2026-05-27
 
-Chris-driven research project (Sprint R deferred candidate, now in-flight). 4 experiments over 4 days; 3 of 4 complete as of 2026-05-26. Will compile + hand off a research-doc bundle to Claude Code post-experiment.
+Chris-driven research project (Sprint R deferred candidate). 4 tracks closed 2026-05-21 → 2026-05-26 (cone Project #1 / flat Project #2 / specialty cone Project #3 / paper-only V60 cohort RP4). The two channels both landed:
 
-**Why this is separate from "small substrate update to `lib/filter-registry.ts`"**: this is the **first real test of what a research experiment workflow looks like** (per Chris audio 2026-05-26). The output feeds two channels:
-1. **Direct substrate**: per-filter measured drawdown adds to `lib/filter-registry.ts` + `docs/skills/brewing-equipment-expert/cluster/filters.md` measured-flow column.
-2. **Meta-pattern**: how a multi-day research experiment closes back into the system. This pattern informs `Learning Assistant` + `Learning Knowledge` sub-skill design (Learning Knowledge stays deferred pending ≥2 research tracks; this is research track #1).
+1. **Direct substrate**: filter-arc-driven schema decisions captured in [ADR-0015](docs/adr/0015-accessory-aware-flowrate-and-booster-registry.md) (`FilterEntry.flowRateContexts` + `BoosterEntry` registry — trigger condition met; implementation deferred to a future sprint) + [ADR-0016](docs/adr/0016-family-conditional-flow-rate-classification.md) (family-conditional flow-rate classification framework). Per-filter measured drawdown for the 8+ papers in scope landed in [docs/skills/brewing-equipment-expert/cluster/filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md) at each project's close-out. **Step 3 (ADR-0015 + 0016 schema implementation sprint)** is now queued; trigger conditions fully met per ADR-0015 § Project #4 substrate updates.
+2. **Meta-pattern**: closed 2026-05-27 by Research Assistant Step 2 scaffolding ship per [ADR-0017](docs/adr/0017-research-assistant-architecture.md). Research Coordinator + Research Assistant subsume the originally-scoped Learning Assistant + Learning Knowledge pair. See [docs/skills/research-coordinator/cluster/roadmap.md](docs/skills/research-coordinator/cluster/roadmap.md) § Closed for the canonical filter-arc archive pointer.
 
-**Triggers when:** Chris finishes experiment 4 + compiles the handoff doc. Sprint scope at promotion time: substrate update + meta-pattern capture (what worked, what didn't, what the next research experiment's intake/closeout shape should look like).
+**Closed:** Both channels resolved. Step 3 schema implementation remains queued; the meta-pattern channel produced 9 new files + 1 new ADR + ADR-0011 amendment, hard-removed learning-assistant + learning-knowledge dirs, and re-routed the cross-system orphan references. **Next session (Chris-stated post-Step-2):** roadmap talk-through that populates [docs/skills/research-coordinator/cluster/roadmap.md](docs/skills/research-coordinator/cluster/roadmap.md) § Now / § Next / § Side quests.
 
 ### Workflow rule that bounds the sprint queue
 

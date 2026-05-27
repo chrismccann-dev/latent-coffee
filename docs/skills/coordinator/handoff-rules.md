@@ -31,23 +31,13 @@ Cupping Specialist (executes Day-7 cupping)
 
 **POD-1 absorption status:** POD-1's scope is absorbed into Cupping Specialist at the SKILL.md level (Wave 3 PR 3) + bookmarked at [`docs/skills/cupping-specialist/cluster/pod-1-routing.md`](../cupping-specialist/cluster/pod-1-routing.md) with trigger conditions for the future Path C rewrite + simulated-pourover schema scoping. The "optimized brew lifecycle states" half stays as DRAFT until lived-practice trigger conditions are met (2-3 V-set Path A lots observed + 1 one-shot close-out + Stefano Um / Bukure / Higuito decisions).
 
-## Chain 2: New research track design
+## Chain 2: New research track design — REMOVED (2026-05-27)
 
-**Status:** ACTIVE-pending-Learning-Knowledge post Wave 3 PR 3 (Learning Assistant + Roasting Assistant + Brewing Assistant + Roast Recorder + Brew Recorder all ACTIVE; Learning Knowledge deferred per ADR-0011 trigger of ≥2 completed research tracks). All authoring hops ACTIVE; the archival hop sits at placeholder by design.
+**Status:** REMOVED per [ADR-0017](../../adr/0017-research-assistant-architecture.md). Research is operator-direct in Claude Code, NOT dispatched by Master Coordinator. The Research Coordinator + Research Assistant pair runs entirely in Claude Code sessions; entry surface is "operator types 'I want to start a research project' into a fresh Claude Code session," not a claude.ai prompt that the Master Coordinator routes.
 
-```
-Operator: "I want to test water side across my next 5 lots"
-   └─ Dispatch: Learning Assistant
-      └─ Inputs: hypothesis + inventory + Historians + (CCIL when Wave 4)
-      └─ Workflow: research-track design (multi-step protocol across lots)
-      └─ Output: track design doc + execution plan
-         └─ Each constituent roast: dispatch Roasting Assistant → Roest API Worker → Roast Recorder
-            with track-aware metadata for cross-linking
-         └─ Each constituent brew: dispatch Brewing Assistant → Brew Recorder
-            with track-aware metadata for cross-linking
-   └─ Track-completion event: dispatch future Learning Knowledge worker for archival
-      (Learning Knowledge deferred per ADR-0011 trigger — ≥2 completed tracks)
-```
+If a claude.ai session expresses research-track-design intent, the correct response is to redirect the operator to a fresh Claude Code session. See [`dispatch-rules.md § Research workflow`](dispatch-rules.md#research-workflow--operator-direct-not-coordinator-dispatched).
+
+Research projects can still trigger Chains 3 + 4 + 5 as their per-track substrate writes flow through. But the orchestration above those chains is operator-side (Coordinator-scoped), not Master-Coordinator-routed.
 
 ## Chain 3: New lot intake → roasted batch → cupped batch → next V-set
 
@@ -121,28 +111,26 @@ Operator: "Importer offered me a Tier 2 Gesha sample — should I buy?"
 
 Single-step chain; no downstream substrate-writer hop because sourcing decisions are physical-world events. The substrate write happens later via Chain 3 when the lot physically arrives.
 
-## Chain 6: Cross-pollination Wölfl-design brew
+## Chain 6: Cross-pollination Wölfl-design brew — RESCOPED (2026-05-27)
 
-**Status:** ACTIVE-pending-lived-practice post Wave 4 PR 4a (Learning Assistant + Roasting Assistant + Chain 3 + Chain 4 + CCIL all ACTIVE on paper; chain has not yet been exercised against a real cross-pollination lot). PRODUCT.md Future Directions item.
+**Status:** RESCOPED post [ADR-0017](../../adr/0017-research-assistant-architecture.md). Cross-pollination is now an operator-direct research-project pattern (Research Coordinator-orchestrated in a Claude Code session), not a Master-Coordinator-dispatched chain. When the cross-pollination project arrives at substrate-write moments, Chains 3 + 4 + 5 fire as their normal selves; CCIL synthesizes at end.
 
-The cross-domain experiment chain: roast targeting a known competitor's brew approach (e.g. Wölfl's 2024 WBrC Extraction Push: Don Benji Gesha natural anaerobic on Orea v4 + Sibarist FAST + Melodrip at 93°C). Learning Assistant proposes the cross-pollination experiment, Roasting Assistant designs the roast targeting the brew partner's expected extraction-push behavior, Chain 3 + Chain 4 execute the physical roast and brew, CCIL synthesizes the cross-domain outcome ("did this roast respond to Wölfl-style brewing the way the original WBC lot did?") into its cluster.
+The cross-domain experiment shape: roast targeting a known competitor's brew approach (e.g. Wölfl's 2024 WBrC Extraction Push: Don Benji Gesha natural anaerobic on Orea v4 + Sibarist FAST + Melodrip at 93°C). The orchestrating layer is now Research Coordinator (operator-direct, Claude Code session), not Master Coordinator dispatch.
 
 ```
-Operator: "design a roast for a Wölfl-style brew on the next Gesha lot I source"
-   └─ Dispatch: Learning Assistant
-      └─ Inputs: cross-pollination hypothesis + WBC Brewing Archivist (Wölfl recipe) + both Historians + CCIL
-      └─ Workflow: cross-domain experiment design (roast partner + brew partner)
-      └─ Output: cross-pollination research track design
-         └─ When lot arrives: dispatch Roasting Assistant with brew-partner-aware design constraints
-            └─ Chain 3 executes: Roest API Worker → Roast Recorder → Cupping Specialist
-               └─ When ref roast resolves: dispatch Brewing Assistant with Wölfl-style recipe template
-                  └─ Chain 4 executes: Brew Recorder writes the optimized brew
-                     └─ Dispatch: CCIL synthesizes the cross-domain outcome
+[Research project starts in Claude Code via Research Coordinator]
+   └─ Coordinator designs the cross-pollination project's track plan
+      (track 1: source lot; track 2: roast it for the Wölfl approach; track 3: brew it Wölfl-style)
+      └─ When lot physically arrives:
+         └─ Chain 3 fires (Roasting Assistant → Roest API Worker → Roast Recorder → Cupping Specialist)
+            └─ When ref roast resolves:
+               └─ Chain 4 fires (Brewing Assistant → Brew Recorder)
+                  └─ When optimized brew lands:
+                     └─ CCIL synthesizes the cross-domain outcome (Pattern A refresh)
                         └─ Output: new cluster/coffee/<cultivar>/<...>.md OR append to existing
-                           (Pattern A refresh event — CCIL is the terminal synthesis hop)
 ```
 
-Pattern A is the load-bearing self-improvement pattern here: each cross-pollination chain that completes generates a new CCIL pattern doc OR refreshes an existing one. Pattern F decomposition fires if accumulated cross-pollination patterns push the cluster past the 120KB / 60KB tripwires.
+Pattern A is the load-bearing self-improvement pattern here: each cross-pollination project that completes generates a new CCIL pattern doc OR refreshes an existing one. Pattern F decomposition fires if accumulated cross-pollination patterns push the cluster past the 120KB / 60KB tripwires.
 
 ---
 
@@ -155,6 +143,7 @@ Pattern A is the load-bearing self-improvement pattern here: each cross-pollinat
 - **Wave 3 PR 3:** 5 Workflow Executing sub-skills ACTIVE → Chains 1, 3, 4 move from PARTIAL to ACTIVE; Chain 2 moves to ACTIVE-pending-Learning-Knowledge (archival hop deferred per ADR-0011 trigger of ≥2 completed research tracks). **Wave 3 closed.**
 - **Wave 4 PR 4a:** CCIL ACTIVE (skeleton + Sudan Rume seed pattern). Chain 6 (Wölfl cross-pollination) moves from PLACEHOLDER → ACTIVE-pending-lived-practice (every sub-skill in the chain exists; chain not yet exercised against a real cross-pollination lot). Existing CCIL synthesis hop into Chain 6 now actionable.
 - **Wave 4 PR 4b:** Master-doc residual migration + redirect-stub rewrite + CLAUDE.md compaction; no new chain activations expected. PR 4b closes the architecture implementation arc.
+- **Research Assistant Step 2 (2026-05-27):** Research Coordinator + Research Assistant shipped as operator-direct Claude-Code-centric pair per [ADR-0017](../../adr/0017-research-assistant-architecture.md). Chain 2 REMOVED + Chain 6 RESCOPED (cross-pollination is now operator-orchestrated via Research Coordinator). Chains 3/4/5 unaffected — they still fire as their normal selves when a research project arrives at substrate-write moments.
 
 ## Discipline
 
