@@ -10,6 +10,17 @@
 //     synthesis) → waiting for next cupping
 //   - Has roast_learnings → resolved
 //
+// Sub-sprint 4a (2026-05-27) — added `unresolved` as a 5th state to separate
+// "lot closed cleanly with a confirmed reference" (resolved) from "lot closed
+// but no reference identified — we learned something, but didn't reach a
+// verdict" (unresolved). The discriminator is `roast_learnings.why_this_roast_won`:
+// populated = resolved, NULL = unresolved. Surfaced during the Phase 1/2 audit
+// when Higuito + CGLE Sudan Rume Natural were both rendering on ResolvedView
+// with the "Closed without identifying a reference roast" disambiguator card —
+// internally contradictory page state. The new state-shape drops the verdict
+// block + renames "Reference" → "Leading" in the UI so the page reads
+// coherently.
+//
 // Two real-world edge cases the doc rules don't explicitly name (surfaced by
 // the pre-flight DB audit at Sub Pages 6.1 kickoff):
 //
@@ -36,6 +47,7 @@ export type LifecycleState =
   | 'waiting_for_next_roast'
   | 'waiting_for_next_cupping'
   | 'resolved'
+  | 'unresolved'
 
 // V-set batch slots — three real, fourth is rare (some V-sets run 4 batches).
 // Shared across the cupping view (page.tsx `computeSlotInfos`) and
@@ -82,8 +94,8 @@ export type LifecycleInputs = {
       }>
     | null
   roast_learnings?:
-    | { id?: string }
-    | Array<{ id?: string }>
+    | { id?: string; why_this_roast_won?: string | null }
+    | Array<{ id?: string; why_this_roast_won?: string | null }>
     | null
     | undefined
 }
@@ -91,18 +103,32 @@ export type LifecycleInputs = {
 /**
  * Compute the lifecycle state for a green bean lot.
  *
- * Order of checks matters — `resolved` wins over everything else because the
- * scope-doc framing is that a roast_learnings row IS the close-out marker.
+ * Order of checks matters — `roast_learnings` presence is the close-out
+ * marker; it wins over experiment/roast/cupping signals. Within the
+ * close-out branch, `why_this_roast_won` discriminates resolved vs
+ * unresolved (Sub-sprint 4a 2026-05-27): populated verdict prose = the
+ * lot reached a confirmed reference; NULL = the lot closed without a
+ * confirmed reference (we learned something but didn't get a verdict).
+ *
  * If a closed lot accumulates a new experiment (rare — usually means a fresh
- * V-set is being designed for a re-roast), it still reads as resolved; the
- * user can deliberately reopen by deleting the learnings row.
+ * V-set is being designed for a re-roast), it still reads as resolved/
+ * unresolved per the verdict signal; the user can deliberately reopen by
+ * deleting the learnings row.
  */
 export function computeLifecycleState(b: LifecycleInputs): LifecycleState {
-  // 1. Resolved: presence of a roast_learnings row.
-  const hasLearnings = Array.isArray(b.roast_learnings)
-    ? b.roast_learnings.length > 0
+  // 1. Close-out branch: presence of a roast_learnings row.
+  const learningsArr = Array.isArray(b.roast_learnings)
+    ? b.roast_learnings
     : b.roast_learnings != null
-  if (hasLearnings) return 'resolved'
+      ? [b.roast_learnings]
+      : []
+  if (learningsArr.length > 0) {
+    // Discriminate resolved vs unresolved on the verdict prose. Trim
+    // whitespace-only values to NULL so a stray space doesn't flip the
+    // state — defensive against drift in the prose source.
+    const verdict = learningsArr[0]?.why_this_roast_won?.trim() || null
+    return verdict ? 'resolved' : 'unresolved'
+  }
 
   const experiments = b.experiments ?? []
   const roasts = b.roasts ?? []
@@ -205,6 +231,10 @@ function parseBatchIds(raw: string): string[] {
 // Mirrors scope doc § 5.1 mockup ("Next roast" / "Next Cupping" / "Reference").
 // `referenceBatchLabel` lets the caller pass a "Batch #133" string for resolved
 // rows; falls back to the generic word otherwise.
+//
+// Sub-sprint 4a (2026-05-27) — Unresolved label is "Closed without reference"
+// (no batch number; the lot didn't reach a verdict so there's no canonical
+// reference to surface in the right column).
 export function lifecycleStageLabel(
   state: LifecycleState,
   referenceBatchLabel?: string | null,
@@ -216,6 +246,8 @@ export function lifecycleStageLabel(
       return 'Next cupping'
     case 'resolved':
       return referenceBatchLabel?.trim() ? referenceBatchLabel : 'Reference'
+    case 'unresolved':
+      return 'Closed without reference'
     case 'in_inventory':
       return 'In inventory'
   }
@@ -241,6 +273,8 @@ export function lifecycleSectionTitle(state: LifecycleState): string {
       return 'Waiting for next cupping'
     case 'resolved':
       return 'Resolved'
+    case 'unresolved':
+      return 'Unresolved'
     case 'in_inventory':
       return 'In inventory'
   }
