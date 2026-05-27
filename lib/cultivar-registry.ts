@@ -1,8 +1,7 @@
 // Canonical cultivar registry — the single source of truth for cultivar
 // names, lineages, families, species, and aliases. Consumed by:
-//   - /add + /brews/[id]/edit (enforcement via CanonicalTextInput)
-//   - MCP push_brew Tool (validation via canonicals://cultivars + push-time
-//     find-or-create through findOrCreateCultivar)
+//   - MCP push_brew + push_green_bean (validation via canonicals://cultivars
+//     + push-time find-or-create through findOrCreateCultivar)
 //   - lib/brew-import.ts (CULTIVAR_REGISTRY thin-wraps this file)
 //
 // Source: docs/taxonomies/varieties.md (authored content) + DB snapshot

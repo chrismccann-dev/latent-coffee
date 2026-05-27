@@ -110,12 +110,6 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
               >
                 {brew.source === 'self-roasted' ? 'ROASTED' : 'PURCHASED'}
               </span>
-              <Link
-                href={`/brews/${brew.id}/edit`}
-                className="font-mono text-xs text-latent-mid hover:text-latent-fg border border-latent-border rounded px-2 py-1 hover:border-latent-fg"
-              >
-                Edit
-              </Link>
             </div>
 
             <div className="space-y-1 font-sans text-sm">

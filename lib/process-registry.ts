@@ -3,7 +3,7 @@
 // Consumed by:
 //   - /processes index + detail pages (family grouping via back-compat classifier)
 //   - /brews page filters (process-family filter pill)
-//   - /add + /brews/[id]/edit (enforcement via CanonicalTextInput — lands in 1e.3)
+//   - MCP push_brew + patch_brew (Zod validation via the per-axis lookups)
 //   - sprint 1e.2 schema migration (decomposeProcess + LEGACY_DECOMPOSITIONS)
 //
 // Source: docs/taxonomies/processes.md (authored content) + Chris's Process
