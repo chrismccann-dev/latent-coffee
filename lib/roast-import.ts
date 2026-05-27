@@ -406,6 +406,11 @@ export interface RoastPayload {
   end_condition_type?: 'bean_temp' | 'dev_time' | 'manual' | null
   end_condition_target?: number | null
   fc_total_cracks?: number | null
+  // Sprint 3.5 / migration 070 — Roest /datapoints/ unlock
+  inlet_curve_recorded?: string | null
+  ror_at_2_30?: number | null
+  ror_at_4_00?: number | null
+  ror_at_fc_minus_30s?: number | null
   // Sprint 11 (migration 061, 2026-05-20): RO-CP-3 4-value FC audibility enum.
   // audible / subtle / silent / ambiguous. See CONTEXT-roasting.md § FC audibility state.
   fc_audibility?: 'audible' | 'subtle' | 'silent' | 'ambiguous' | null
@@ -547,6 +552,11 @@ export async function persistRoast(
       end_condition_type: payload.end_condition_type ?? null,
       end_condition_target: payload.end_condition_target ?? null,
       fc_total_cracks: payload.fc_total_cracks ?? null,
+      // Sprint 3.5 / migration 070 — Roest /datapoints/ unlock
+      inlet_curve_recorded: payload.inlet_curve_recorded ?? null,
+      ror_at_2_30: payload.ror_at_2_30 ?? null,
+      ror_at_4_00: payload.ror_at_4_00 ?? null,
+      ror_at_fc_minus_30s: payload.ror_at_fc_minus_30s ?? null,
       // Sprint 11 (migration 061, 2026-05-20): RO-CP-3.
       fc_audibility: payload.fc_audibility ?? null,
       what_worked: payload.what_worked ?? null,
@@ -1232,6 +1242,8 @@ export const ROAST_PATCH_FIELDS = [
   'roest_notes', 'end_condition_type', 'end_condition_target', 'fc_total_cracks',
   // Sprint 11 (migration 061, 2026-05-20): RO-CP-3
   'fc_audibility',
+  // Sprint 3.5 / migration 070 — Roest /datapoints/ unlock
+  'inlet_curve_recorded', 'ror_at_2_30', 'ror_at_4_00', 'ror_at_fc_minus_30s',
   'what_worked', 'what_didnt', 'what_to_change', 'worth_repeating', 'is_reference',
   // Schema sprint S2 (migration 056, 2026-05-18)
   'is_reference_candidate',

@@ -28,7 +28,9 @@ export const pushRoastInputSchema = {
   roasted_weight_g: z.number().optional().nullable(),
   weight_loss_pct: z.number().optional().nullable().describe('Decimal fraction (0.124 = 12.4%) OR percentage value (12.4); persistRoast accepts either.'),
   agtron: z.number().optional().nullable().describe('Whole-bean Agtron post-roast (Lightcells CM-200).'),
-  color_description: z.string().optional().nullable(),
+  color_description: z.string().optional().nullable().describe(
+    'Whole-bean color descriptor post-CM200 measurement (e.g. "Light", "very light color - whole bean"). R57 (Sprint 3.5): pull_roest_log routes the Roest UI Notes field / log.first_comment.comment HERE — Chris uses the Roest notes field for color descriptors, so the right semantic home is color_description rather than the legacy roest_notes pass-through. If a given Roest note happens not to be a color descriptor, claude.ai can re-route the prose to what_didnt / what_to_change at the augmentation step.',
+  ),
   // Times
   yellowing_time: z.string().optional().nullable().describe('mm:ss text.'),
   fc_start: z.string().optional().nullable().describe('First crack time as mm:ss text.'),
@@ -55,15 +57,31 @@ export const pushRoastInputSchema = {
     'Shaped fan curve as display string (e.g. "80% at 0:00 -> 70% at 1:45 -> 65% at 2:30 -> 72% at 4:15 -> 75% at 5:30"). Source: Roest profile fan_bezier.',
   ),
   inlet_curve: z.string().optional().nullable().describe(
-    'Shaped inlet temp curve as display string. Source: Roest profile temperature_bezier - this is the as-DESIGNED template, not the as-recorded operator-set curve. Mid-roast inlet adjustments (operator nudging the curve during the roast) are not exposed by the Roest API and therefore not captured. If you need to record divergence between designed and actual, note it in what_didnt or what_to_change.',
+    'As-DESIGNED inlet temp curve as display string. Source: RoestProfile.temperature_bezier (the recipe template). Sister field inlet_curve_recorded captures the as-RECORDED inlet sampled from /datapoints/ inlet_temp during the actual roast — compare the two when the operator nudged the curve mid-roast (Sprint 3.5).',
+  ),
+  inlet_curve_recorded: z.string().optional().nullable().describe(
+    'As-RECORDED inlet temp curve sampled from /datapoints/ inlet_temp series during the actual roast (Sprint 3.5). Display string in the same format as inlet_curve — sampled at the same msec keys as the as-designed bezier when available, falling back to 30-second uniform sampling. Diverges from inlet_curve when the operator overrode the designed inlet mid-roast. pull_roest_log auto-populates from /datapoints/; NULL when /datapoints/ data unavailable.',
+  ),
+  ror_at_2_30: z.number().optional().nullable().describe(
+    'Rate of rise in °C/min at 2:30 since charge. Sprint 3.5 server-side compute from /datapoints/ bt curve (30-second centered window: bt at 2:45 - bt at 2:15, scaled to °C/min). Drying-handoff check per Yunnan livestream (Dongzhe) Δ2 framing. pull_roest_log auto-populates; NULL when drop occurred before 2:45 or /datapoints/ unavailable.',
+  ),
+  ror_at_4_00: z.number().optional().nullable().describe(
+    'Rate of rise in °C/min at 4:00 since charge. Sprint 3.5 server-side compute (30-second window: bt at 4:15 - bt at 3:45, scaled to °C/min). Approach-to-FC check. pull_roest_log auto-populates; NULL when drop occurred before 4:15 or /datapoints/ unavailable.',
+  ),
+  ror_at_fc_minus_30s: z.number().optional().nullable().describe(
+    'Rate of rise in °C/min at FC-30s. Sprint 3.5 server-side compute (30-second window centered on firstcrack_event_msec - 30s). Cross-lot comparable post-hoc anchor that ignores when FC actually fires. pull_roest_log auto-populates; NULL when fc_start unset, the window would straddle charge, or /datapoints/ unavailable.',
   ),
   roest_log_id: z.number().int().optional().nullable().describe(
     'api.roestcoffee.com /logs/{id}/ — set when seeded from pull_roest_log.',
   ),
-  // Roest UI pass-through (Phase 2 #R57). Preserves the Roest "Notes" / comment
-  // verbatim; pull_roest_log populates this from log.first_comment.comment.
+  // R57 (Sprint 3.5) deprecation: roest_notes was the Phase 2 routing for the
+  // Roest UI comment. Chris uses Roest notes for color descriptors, so the
+  // canonical destination is color_description. Input field stays for back-
+  // compat but pull_roest_log no longer auto-populates it; migration 070
+  // backfilled legacy roest_notes content into color_description where the
+  // latter was NULL.
   roest_notes: z.string().optional().nullable().describe(
-    'Pass-through of the Roest UI Notes / first_comment.comment. pull_roest_log auto-populates this; preserve as-is rather than folding into what_worked / what_to_change (those are Chris\'s analytical prose).',
+    '**DEPRECATED (Sprint 3.5 / R57)**. The Roest UI Notes field is now routed into color_description on pull_roest_log output (Chris uses it for post-CM200 color descriptors). This field accepts input for back-compat and writes to roasts.roest_notes if set; new flows should use color_description. Migration 070 backfilled legacy roest_notes content into color_description where NULL.',
   ),
   // End-condition trigger (Phase 2 #R58) — distinct from drop_temp (where the
   // machine actually dropped). Captures what the operator SET as the trigger.
@@ -112,7 +130,7 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
     {
       title: 'Push Roast',
       description:
-        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus the Sprint 2.5 + Phase 2 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve, roest_log_id, roest_notes, end_condition_type/target, fc_total_cracks, fc_audibility 5-value enum per Sprint 11 / migration 061 / RO-CP-3 + Group 3 / migration 066 — adds did_not_fire for the underdeveloped-low-energy-probe case, worth_repeating tristate). UPSERT semantics on (user_id, green_bean_id, batch_id): safe to retry after crash — when a row already exists, the existing roast_id is returned with `created: false` and field values are NOT overwritten (field-level updates run through the roast_id-keyed mutation companion of the same domain). Pull from Roest via the Roest log pull path first when the source is a real machine batch — that returns a normalized roast-shaped payload with most fields populated; augment with prose and push. Returns warnings[] when a green_bean parent has roest_inventory_id NULL but the roast is being pushed with a roest_log_id (orphan reconciliation hint per #R66 — backfill the FK via the green-beans field-level mutation companion). Owned by Roast Recorder per ADR-0011.',
+        'Log / record / save / push / import a single roast batch (Roest log or manual entry) scoped to a green_bean_id. Mirrors the roasts table 1:1 plus the Sprint 2.5 + Phase 2 + Sprint 3.5 enrichments (roast_profile_name, tp_time/temp, yellowing_temp, hopper_load_temp, fan_curve, inlet_curve as-designed, inlet_curve_recorded as-recorded, ror_at_2_30 / ror_at_4_00 / ror_at_fc_minus_30s, roest_log_id, end_condition_type/target, fc_total_cracks, fc_audibility 5-value enum per Sprint 11 / migration 061 / RO-CP-3 + Group 3 / migration 066 — adds did_not_fire for the underdeveloped-low-energy-probe case, worth_repeating tristate, color_description). Sprint 3.5 Roest /datapoints/ unlock: TP, yellowing_temp, RoR, and as-recorded inlet_curve are computed server-side by pull_roest_log from the bt + inlet_temp time-series; on real-machine batches just push the payload pull_roest_log returns. R57 routing: the Roest UI Notes / log.first_comment.comment lands in color_description on pull_roest_log output (Chris uses Roest notes for color descriptors); roest_notes input is deprecated for back-compat. UPSERT semantics on (user_id, green_bean_id, batch_id): safe to retry after crash — when a row already exists, the existing roast_id is returned with `created: false` and field values are NOT overwritten (field-level updates run through the roast_id-keyed mutation companion of the same domain). Pull from Roest via pull_roest_log first when the source is a real machine batch — that returns a normalized roast-shaped payload with most fields populated; augment with prose (what_worked / what_didnt / what_to_change), fc_audibility, fc_total_cracks (visible in Roest UI but not the API), and hopper_load_temp (not exposed by the Roest API anywhere — set from session memory, V4 standard 125°C). Returns warnings[] when a green_bean parent has roest_inventory_id NULL but the roast is being pushed with a roest_log_id (orphan reconciliation hint per #R66 — backfill the FK via the green-beans field-level mutation companion). Owned by Roast Recorder per ADR-0011.',
       inputSchema: pushRoastInputSchema,
     },
     withToolErrorLogging('push_roast', async (input) => {

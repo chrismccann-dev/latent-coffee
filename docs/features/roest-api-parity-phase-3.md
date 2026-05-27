@@ -1,146 +1,110 @@
-# Roest API parity Phase 3 — pull-side schema sweep
+# Roest API parity Phase 3 — pull-side audit + /datapoints/ unlock
 
-Sprint 3.5 scoping doc. Output of the Sprint 3.1 architectural-queue brainstorm (2026-05-12).
+**Status**: SHIPPED via Sprint 3.5 (2026-05-26). Sub-sprint 1 of the [Writing-path surface polish series](../sprints/writing-path-surface-polish-series-2026-05-26.md).
+
+Scoping doc reshaped at sprint ship time to reflect the actual shipped scope. Pre-audit scope was 7 items + cross-ref to Sprint 3.4 breach-record (the latter was killed during the Sprint R roadmap re-session). Post-audit scope was 6 items + 1 new discovery (RoR tracking fields). Mid-sprint, the audit surfaced a major Roest API endpoint that hadn't been documented anywhere in the Roest Knowledge cluster: `/datapoints/?log={log_id}` exposes the raw bt / inlet_temp / drum_temp time-series. That unlock collapsed 3 of the 6 audit items from "documented as manual augmentation" into "server-side computable" — see § Discovery below.
 
 ## Context
 
-Phase 1 + Phase 2 of the Roest API write integration shipped 2026-05-06 (PR #110) — `push_roast_profile` + `push_inventory` + `patch_inventory`. Tool count 29 → 32. The write side is now in steady state.
+Phase 1 + Phase 2 of the Roest API write integration shipped 2026-05-06 (PR #110) — `push_roast_profile` + `push_inventory` + `patch_inventory`. Tool count 29 → 32. The write side reached steady state.
 
-The pull side — `pull_roest_log` + Roest-to-DB field mapping inside `push_roast` — has accumulated 7 schema gaps from Batch 18 of `feedback_v2_mcp_feedback_log.md` (first heavy roasting dogfood, 16 sessions across 6 beans). None of the 7 re-bit the iterations, but several are silent-data-loss bugs (R65 timezone-drift is the worst). Phase 3 closes pull-side parity with the write side.
+The pull side — `pull_roest_log` + Roest-to-DB field mapping inside `push_roast` — had accumulated 7 schema gaps from Batch 18 of `feedback_v2_mcp_feedback_log.md` (first heavy roasting dogfood, 16 sessions across 6 beans). None of the 7 re-bit the iterations, but several were silent-data-loss bugs (R65 timezone-drift the worst). Sprint 3.5 closed pull-side parity.
 
-This is **symmetric to Phase 1+2** — the same shape of work (Roest field surfacing + DB column additions + MCP Tool schema additions), just on the read path instead of the write path.
+## Discovery (mid-sprint, 2026-05-26)
 
-## Inputs (7 items + 1 cross-ref)
+Fetched the Roest OpenAPI schema from `https://raw.githubusercontent.com/Kaffebrenner/roest-api-example/main/schema.yml` for the "quick check" Chris asked for on RoR availability. Found `/datapoints/?log={log_id}` — paginated endpoint returning `Datapoint` rows with:
 
-### #R57 — push_roast missing `notes` / `roest_notes` pass-through
+- `data_type` enum: `0` = event marker, `1` = sensor reading
+- `event_type` enum 0-8 including **auto-detected** FC=6 / Dryend=7 / Drop=8 (richer than `RoestLog.events[]`)
+- `bt` (bean temp), `et`, `inlet_temp`, `drum_temp`, plus RTD/thermocouple channels, `target`, `fan`, `heat`, `rpm`
+- `msec` offset since charge
 
-`pull_roest_log` returns Roest's `notes` field (operator narrative — Bean 1 example: `"very light color - whole bean"`). `push_roast` has no field to persist this; Roest comments lost in round-trip.
+This is the time-series the Roest UI graphs but `/logs/{id}/` summary doesn't carry. **Surfaced none of the prior Sprint 2.5 / 2.7.5 / Phase 1+2 audit work** because the read-surface cluster doc was operator-stubbed (placeholder) and the sprint dogfood paths didn't probe the OpenAPI schema. Standing risk for future audits — pulling the OpenAPI schema cheap-and-early should be table stakes for any API-coverage audit.
 
-**Two paths**:
-- (a) auto-promote into `color_description` / `roast_curve_notes` if those fields are appropriate
-- (b) add a `roest_notes` pass-through field on `push_roast` + `roasts.roest_notes` column
+The Sprint 3.5 scope expanded from "describe wording fixes" to "ship server-side compute for everything /datapoints/ unlocks" per Chris audio-confirm at scope discovery.
 
-**Recommended**: Path (b). Preserves Roest's narrative as-is without inferring intent. Schema column `roasts.roest_notes text`.
+## Shipped — per-item
 
-### #R59 — `hopper_load_temp` not in `pull_roest_log`
+### R57 — Roest UI Notes routing → `color_description` ✓ SHIPPED
 
-`hopper_load_temp` is a primary control lever per ROASTING.md (the 125°C alert is machine-set). Theoretically derivable from the profile. Currently Chris adds it manually on every push.
+**Before**: `pull_roest_log.roest_notes` populated from `log.first_comment.comment`; `push_roast.roest_notes` wrote to `roasts.roest_notes` column (added migration 044).
 
-**Two paths**:
-- (a) pull from profile if available
-- (b) document as required manual augmentation in `push_roast.describe()`
+**After**: `pull_roest_log` payload field renamed to `color_description`. `push_roast.roest_notes` deprecated but still accepts input for back-compat. Migration 070 backfills historical `roasts.roest_notes` data into `color_description` where the latter was NULL. `roasts.roest_notes` column kept in place; future cleanup sprint may drop it.
 
-**Recommended**: Path (a) if Roest profile API exposes it; fall back to Path (b) explicit documentation if not. Note Round-5 fix during 2.7.5 already corrected `hopper_load_temp: null` (different signal from Roest's `preheat_temperature`) — Phase 3 should add a structured derivation, not re-introduce drift.
+**Why**: Chris uses the Roest Notes field to record the actual color descriptor after CM200 measurement. Routing it to `color_description` matches the semantic; the prior `roest_notes` pass-through treated it as generic operator prose.
 
-### #R60 — TP + yellowing temp not in `pull_roest_log`
+### R59 — `hopper_load_temp` not exposed by Roest API ✓ DOCUMENTED
 
-`yellowing_time` is returned, no `yellowing_temp`. TP (turnaround point) fields not at all. Both visible in Roest UI screenshots. Either compute server-side from profile data points OR document the manual augmentation gap.
+Confirmed via OpenAPI audit: `hopper_load_temp` is not on `/logs/{id}/`, not on `/profiles/{id}/`, not derivable from `/datapoints/` (the bt series starts at charge, not hopper-load). `RoestProfile.preheat_temperature` is the air-preheat target (~210°C), a DIFFERENT signal. `pull_roest_log` returns null with an inference hint; `pull_roest_log` Tool describe + `push_roast.hopper_load_temp` describe now state explicitly that caller must augment from session memory (V4 standard 125°C).
 
-**Recommended**: Server-side compute. Find the TP from the profile time-series (local min on bean temp curve). Find `yellowing_temp` from the time-series at `yellowing_time`. Both as additive fields on `pull_roest_log`. Existing `roasts` columns: `tp` (text), `tp_time` (text), `yellow` (text), `yellow_time` (text) — verify alignment.
+### R60 — TP + `yellowing_temp` server-side compute ✓ SHIPPED
 
-### #R61 — Total cracks count missing from `pull_roest_log`
+**Before**: documented as required manual augmentation (the assumption was that the Roest API didn't expose temperature time-series).
 
-Roest UI surfaces "Total cracks (7)" / "(3)" / "(0)". Strong audibility / silent-FC signal. Currently lives in prose only in operator notes.
+**After**: `pull_roest_log` computes both fields from `/datapoints/` bt curve. `tp_time` + `tp_temp` = (msec, bt) of the local min within the first half of the roast (cap: 180s). `yellowing_temp` = bt interpolated at `log.dryend_event_msec`. Populates the existing `roasts.tp_time` + `roasts.tp_temp` + `roasts.yellowing_temp` columns (added migration 039, NULL-only until now).
 
-**Recommended**: Add `fc_total_cracks: number | null` to `pull_roest_log` response. Add `roasts.fc_total_cracks integer` column. (NOTE: 2.7.5 retro mentions `fc_total_cracks` already landed via migration 044 — verify; if so, this item may be partially closed and only needs the `pull_roest_log` wiring.)
+### R64 — As-recorded inlet curve ✓ SHIPPED
 
-### #R64 — Inlet curve display string: as-designed vs as-recorded
+**Before**: `pull_roest_log.inlet_curve` sourced from `RoestProfile.temperature_bezier` (as-designed template); describe noted that mid-roast operator overrides weren't exposed.
 
-Bean 6's V1C designed peak-20°C = 228°C at 06:00; Roest pull showed 224°C at 06:00. Worth checking if `pull_roest_log.inlet_curve` reflects as-designed-template OR as-recorded-operator-set. If they can drift, surface explicitly.
+**After**: new `inlet_curve_recorded` field on the payload + new `roasts.inlet_curve_recorded` column (migration 070). Sampled from `/datapoints/` `inlet_temp` series at the same msec keys as the as-designed bezier so the two display strings line up for visual diffing. Falls back to 30-second uniform sampling when no designed bezier is supplied.
 
-**Recommended**: Add `inlet_curve_source: 'as_designed' | 'as_recorded'` field to `pull_roest_log` if the Roest API distinguishes them. If the API only returns one, document which in `describe()`.
+**Still pending**: Chris is pulling screenshots from his side to compare the recorded vs designed curves on a known-drift batch (Bean 6 V1C had a remembered ~4°C delta). Verification follow-up after merge.
 
-### #R65 — **HIGH IMPACT**: Roest API returns UTC dates, silently miscoding late-day batches
+### R65 — UTC date drift ✓ ALREADY MITIGATED (pre-sprint)
 
-Bean 4: `pull_roest_log` returned `2026-05-05` for all three batches; Chris's screenshots show 5/4/2026 5:00 PM local. Roest API returning UTC. Currently a strict-trust path leads to the wrong date silently.
+`pull_roest_log` already converted UTC to local timezone via `ROEST_USER_TIMEZONE` env var (added pre-Sprint-3.5). Default `'America/Los_Angeles'` matches Chris's PT. `.env.local` does not pin the env var; the default fires + an inference hint surfaces. No action needed.
 
-**Recommended**: Include both UTC + local-converted in `pull_roest_log.roast_date` response. Surface explicitly. Honor TZ hint from `green_beans.timezone_hint` OR user profile OR a server-side default. This is a real bug — fires on every roast logged when the batch happens late-day (any roast started after ~5 PM local in PT timezone).
+### R66 — Orphan reconciliation warning ✓ ALREADY SHIPPED (pre-sprint)
 
-### #R66 — `roest_inventory_id` orphan reconciliation
+`persistRoast` at [lib/roast-import.ts:493-512](../../lib/roast-import.ts) emits a warning when `roest_log_id` is supplied AND parent `green_bean.roest_inventory_id` is NULL. No auto-mutate per the `external_drift_ok_latent_canonical_required` standing rule. No code change required this sprint.
 
-Bean 4 was pushed before Roest ingested it; `green_bean.roest_inventory_id = null`. After the roast, Roest had it as 9372 but the FK was still null until Chris ran `patch_green_bean` manually.
+### R61 — `fc_total_cracks` ✓ ALREADY SHIPPED (Phase 2 / migration 044)
 
-**Two paths**:
-- (a) when `pull_roest_log` returns and matches existing green_bean by name, auto-backfill the FK if null
-- (b) emit a warning during `push_roast` when `roest_log_id` is supplied AND parent `green_bean.roest_inventory_id` is null
+`roasts.fc_total_cracks` column + `push_roast.fc_total_cracks` input shipped Phase 2. Roest API doesn't expose the count (visible in Roest UI only); operator-augmented.
 
-**Recommended**: Path (b) is lower-risk (warn rather than auto-mutate) and aligns with the `external_drift_ok_latent_canonical_required` standing rule (don't auto-write canonical FK on inferred match). Path (a) is a future enhancement if Path (b)'s warning bites repeatedly.
+### NEW — RoR tracking fields ✓ SHIPPED
 
-### Cross-ref — Sprint 3.4 breach record
+Three explicit `roasts` columns via migration 070:
 
-Sprint 3.4 (per-batch failure_boundary breach detection) lands BEFORE this sprint per the build order. The breach-detection schema decisions need to land before pull-side schema additions in case `pull_roest_log` should emit breach flags at `push_roast` time. Re-verify the cross-ref at sprint kickoff.
+- `ror_at_2_30` — drying-handoff check, 30s window centered on 2:30
+- `ror_at_4_00` — approach-to-FC check, 30s window centered on 4:00
+- `ror_at_fc_minus_30s` — cross-lot comparable anchor, 30s window centered on FC-30s
 
-## Scope
+Per Chris audio-confirm 2026-05-26: 3 explicit columns rather than a `rate_of_rise jsonb` (queryable directly without jsonb extraction; matches the Yunnan livestream Δ2 framing). All computed server-side from `/datapoints/` bt curve. NULL when the window straddles charge / runs past drop / FC isn't marked.
 
-**In scope:**
-- 7 pull-side schema additions + `roasts` column additions where applicable
-- `pull_roest_log` Tool response shape extensions
-- Schema describe() updates for each new field
-- Migration adding new `roasts` columns (additive only)
-- Roest field-mapping verification (already verified during 2.7.5 for `hopper_load_temp`)
-- Cross-ref handoff from Sprint 3.4 breach record
+## Out of scope (intentional)
 
-**Out of scope:**
-- Retroactive backfill of existing `roasts` rows from Roest API (would require re-pulling all historical batches — separate concern, not Phase 3)
+- Retroactive backfill of historical `roasts` rows from Roest API (would require re-pulling all historical batches; net-new forward only)
 - Roest write-side enhancements (Phase 4 candidate if appetite emerges)
-- New MCP Tools beyond `pull_roest_log` extensions
-- Schema describe audit beyond Phase 3 fields (#R45 / R48 / R51 / R69 / R86 are Sprint 3.6 scope)
-- `/green/[id]` UI surfacing of new fields (Sprint 3.2 surfaces provenance; Phase 3 columns surface in `/green/[id]` design refresh when Chris owns that)
+- New MCP Tools beyond `pull_roest_log` + `push_roast` extensions (Tool count 35 unchanged)
+- Schema describe audit beyond Phase 3 fields
+- `/green/[id]` UI surfacing of new fields (Read-path Sub-sprint 4a Green-bean polish absorbs)
+- Sprint 3.4's breach-record substrate (sprint killed)
 
-## Open questions for sprint kickoff
+## Files modified
 
-1. **Schema-additive vs schema-reshape on `pull_roest_log`**: All 7 fixes are additive. Confirm no breaking changes to the existing response shape (every field is optional, every consumer can ignore unknowns).
-2. **Breach-record cross-ref**: Does the breach-record JSONB shape from Sprint 3.4 require any pull-side fields beyond what's already scoped here? Re-verify after 3.4 ships.
-3. **TZ hint location**: `green_beans.timezone_hint`, `user_profiles.timezone`, server-side default, or all three? Recommend: green_bean column with user-profile fallback. New column: `green_beans.timezone_hint text` default `'America/Los_Angeles'` (Chris's PT default).
-4. **`fc_total_cracks` already shipped?**: 2.7.5 retro mentions migration 044 added this column. Verify and reduce R61 to "wire `pull_roest_log` to the column" only.
-5. **Migration drift mitigation alignment**: Sprint 3.2 ships the `npm run migrations:check` gate before this sprint runs. Pull-side migration here can be the first to use the new gate as a forcing function.
+- `supabase/migrations/070_roest_datapoints_parity.sql` — new
+- `lib/roest-client.ts` — `RoestDatapoint` type, `getRoestDatapoints` fetcher, time-series compute helpers, `NormalizedRoastPayload` 7 new fields, `roestLogToPushRoastPayload` rewrite to consume datapoints
+- `lib/mcp/pull-roest-log.ts` — Tool describe rewrite + datapoints fetch wiring
+- `lib/mcp/push-roast.ts` — 4 new Zod fields (`inlet_curve_recorded` + 3 RoR), `roest_notes` deprecation describe, `color_description` describe expansion, top-level describe rewrite
+- `lib/roast-import.ts` — `RoastPayload` interface + insert + patch whitelist
+- `docs/skills/roest-knowledge/cluster/api/read-surface.md` — full rewrite documenting `/datapoints/` shape + Sprint 3.5 server-side compute + R57 / R59 / R65 / R66 audit findings
 
-## Acceptance criteria
+## Verification
 
-Per-item:
-
-- **R57**: `roasts.roest_notes` column exists; `push_roast` accepts `roest_notes: string?`; `pull_roest_log` echoes it on retrieval.
-- **R59**: `pull_roest_log.hopper_load_temp` is populated when Roest API exposes it, else explicit `describe()` note.
-- **R60**: `pull_roest_log.tp_temp` + `pull_roest_log.yellowing_temp` populated from profile time-series.
-- **R61**: `pull_roest_log.fc_total_cracks` populated from Roest UI count.
-- **R64**: `pull_roest_log.inlet_curve_source: 'as_designed' | 'as_recorded'` populated when distinguishable.
-- **R65**: `pull_roest_log.roast_date` returns `{utc: string, local: string, tz: string}` triple (or equivalent shape). Bean 4-class late-day cases pass round-trip without date drift.
-- **R66**: `push_roast` emits a warning array entry when `green_bean.roest_inventory_id` is null AND `roest_log_id` is supplied.
-
-End-to-end: re-run a Batch-18-class dogfood (a 1-bean 3-batch session, ideally late-day) and verify all 7 items behave per acceptance criteria without manual augmentation.
-
-## Migration plan
-
-Single additive migration (target: `supabase/migrations/052_roest_api_parity_phase_3.sql`):
-
-```sql
--- Additive columns only; no destructive changes.
-ALTER TABLE roasts ADD COLUMN IF NOT EXISTS roest_notes text;
-ALTER TABLE green_beans ADD COLUMN IF NOT EXISTS timezone_hint text DEFAULT 'America/Los_Angeles';
--- fc_total_cracks already exists per migration 044 — verify before re-adding.
--- Other fields (TP temp / yellowing temp / inlet curve source) are pull_roest_log response extensions, no DB changes.
-```
-
-Per the migration-drift mitigation rule (2.7.5 retro standing rule), this migration MUST land in Supabase SQL Editor same-day as the PR, with a corresponding `migrations:check` pass.
+- `npx tsc --noEmit` exit 0 ✓
+- `npm run check:mcp` exit 0, 35 tools unchanged ✓
+- `npm run check:mcp-bundle` clean (no DOC_FILES additions) ✓
+- `npm run check:migrations` — environment-limited (schema not exposed locally); manual SQL-Editor apply required for migration 070
+- End-to-end verification gated on Chris applying migration 070 + running a real-lot dogfood pull. R64 verification gated on screenshot comparison.
 
 ## Sizing
 
-~3-4 days. Largest sprint in the 3.x queue.
+Original kickoff sizing: ~1-2 days. Actual: ~3-4h (single session) — discovery shifted scope from "describe wording fixes" to "server-side compute" but the helpers were small and the migration was additive-only.
 
-- Day 1: Roest API field mapping verification (TP / yellowing temp / inlet curve source / `hopper_load_temp` derivation)
-- Day 2: Migration + `push_roast` + `pull_roest_log` Tool changes
-- Day 3: TZ handling for R65 + warning emission for R66
-- Day 4: End-to-end dogfood + acceptance verification
+## Lessons learned
 
-## Build order placement
-
-Sprint 3.5 (4th in the 6-sprint queue). After Sprint 3.4 (breach record); before Sprint 3.6 (doc reconciliation).
-
-## Files likely modified
-
-- `supabase/migrations/052_*.sql` — new
-- `lib/mcp/push-roast.ts` — `roest_notes` field
-- `lib/mcp/pull-roest-log.ts` — 6 response-shape extensions
-- `lib/roest-api/*.ts` — field mapping for TZ / TP / yellowing / cracks / inlet source / notes
-- Tool describe() strings on `push_roast` + `pull_roest_log`
-- Verification: end-to-end dogfood
+- **Pull the OpenAPI schema cheap-and-early on any API-coverage audit**. The /datapoints/ endpoint had been there the whole time; we documented its absence twice (Sprint 2.5 + Phase 2) without ever fetching the schema. Standing tripwire for future Roest audits — add to roest-api-worker SKILL.md if a second instance lands.
+- **The original Phase 3 scoping doc held up well under the lighter scope** — even after the kickoff brief reshaped 4 of 7 items, the doc structure still mapped cleanly. Per-item recommendation + acceptance criteria scaffolding paid off.
+- **Audit items that report as ALREADY-DONE during pre-flight** (R61 + R65 + R66 here) deserve cross-checking against feedback log Round entries — Round 14 / Round 15 / etc. — to make sure the framing in the audit doc didn't lag the actual code. Saved ~half-day on this sprint.

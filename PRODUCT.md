@@ -408,20 +408,22 @@ Mission-critical surface — the claude.ai → MCP → DB writing layer. Broken 
 
 **Series umbrella doc:** [docs/sprints/writing-path-surface-polish-series-2026-05-26.md](docs/sprints/writing-path-surface-polish-series-2026-05-26.md) — session handoff between sub-sprints; carries lightweight inline kickoff scopes for Sub-sprints 2 / 3 / 4 and points at the dedicated kickoff brief for Sub-sprint 1.
 
-##### Sub-sprint 1 — Sprint 3.5 — Roest pull-side audit + parity cleanup (NEXT UP)
+##### Sub-sprint 1 — Sprint 3.5 — Roest pull-side audit + /datapoints/ unlock (SHIPPED)
 
-Reshaped from the original Phase 3 scope per Chris audio 2026-05-26 — lighter, more audit-flavored.
+Shipped 2026-05-26 in ~3-4h (vs ~1-2 day kickoff sizing). **Discovery mid-sprint** of the previously-undocumented `/datapoints/?log={log_id}` endpoint expanded scope from "audit-flavored describe wording fixes" to "ship server-side compute for everything /datapoints/ unlocks" per Chris audio-confirm. The Roest API exposes raw bt / inlet_temp time-series we'd documented as not-pullable in Sprint 2.5 + Phase 1+2 — never surfaced because no prior audit had pulled the OpenAPI schema.
 
-- **R57** — Roest `notes` field destination: route to `roasts.color_description` (Chris confirmed: that's where the actual CM200-measured color descriptor goes, distinct from Agtron reading). Saves a column vs. new `roest_notes`.
-- **R59** — `hopper_load_temp`: likely path (b), document as required manual augmentation. Chris-confirmed instinct: probably not queryable from Roest API. Verify during sprint.
-- **R60** — TP + yellowing temp: investigation item. May resolve to "Roest API doesn't expose; manual augmentation."
-- **R64** — Inlet curve as-designed vs as-recorded: quick audit, Chris pulls his screenshots to compare.
-- **R65** — UTC date drift: drop the hotfix carve-out per Chris audio. ~1-day drift is OK since cupping is 7 days out. Cheap fix bundled if it falls out of TZ handling.
-- **R66** — `roest_inventory_id` orphan reconciliation: quick audit, Chris compares his side.
-- **NEW additive item** — **RoR tracking field discovery**: confirm what Roest API exposes (`ror_at_2_30` / `ror_at_4_00` / `ror_at_fc_minus_30s` candidates per Yunnan livestream Δ2). If exposed → bundle in. If not → defer to Longer Term Items.
-- **Cross-check** — roest-api-worker sub-skill ([docs/skills/roest-api-worker/SKILL.md](docs/skills/roest-api-worker/SKILL.md)) + documentation in-sync vocabulary pass.
+- **R57** — Roest UI Notes routing → `color_description` ✓ — pull payload field renamed; `push_roast.roest_notes` deprecated for back-compat; migration 070 backfilled legacy roast.roest_notes content
+- **R59** — `hopper_load_temp` not exposed by Roest API ✓ — confirmed via OpenAPI audit; documented in Tool describe + sub-skill read-surface.md
+- **R60** — TP + `yellowing_temp` ✓ — server-side compute from /datapoints/ bt curve; populates existing `roasts.tp_time` + `roasts.tp_temp` + `roasts.yellowing_temp` columns (added migration 039, NULL-only until now)
+- **R64** — Inlet curve as-recorded ✓ — new `roasts.inlet_curve_recorded` text column sampled from /datapoints/ inlet_temp series at same msec keys as as-designed bezier (R64 final verification gated on Chris's screenshot comparison — follow-up)
+- **R65** — UTC date drift ✓ already mitigated pre-sprint via `ROEST_USER_TIMEZONE` env var; default `America/Los_Angeles` correct for Chris
+- **R66** — Orphan reconciliation warning ✓ already shipped pre-sprint at `lib/roast-import.ts:493-512`
+- **NEW** — 3 RoR columns ✓ — `ror_at_2_30` / `ror_at_4_00` / `ror_at_fc_minus_30s` (Chris audio-confirm: 3 explicit columns rather than jsonb); 30s window centered RoR via /datapoints/ bt curve
+- **Cross-check** — roest-knowledge cluster `cluster/api/read-surface.md` rewritten with /datapoints/ shape + Sprint 3.5 compute + R57/R59/R65/R66 audit findings
 
-**Sizing:** ~1-2 days (lighter than original 3-4d Phase 3 scope). **Scoping doc:** [docs/features/roest-api-parity-phase-3.md](docs/features/roest-api-parity-phase-3.md) (reshape against the new framing at sprint kickoff).
+**Migration 070** (additive only): 4 new columns on roasts + R57 data backfill. Tool count 35 unchanged. **Post-merge**: Chris applies migration 070 via Supabase SQL Editor before next dogfood pull.
+
+**Scoping doc:** [docs/features/roest-api-parity-phase-3.md](docs/features/roest-api-parity-phase-3.md) reshaped at ship time with per-item resolution table + lessons learned.
 
 ##### Sub-sprint 2 — MCP ergonomics polish (Round 15 cluster)
 
