@@ -18,17 +18,22 @@ import {
 // 1. Waiting for next roast — design landed, roasts pending
 // 2. Waiting for next cupping — roasts done, cuppings + synthesis pending
 // 3. Resolved — reference roast confirmed, archival
+// 4. Unresolved — closed without confirmed reference (we learned something
+//    but didn't reach a verdict). Sub-sprint 4a (2026-05-27).
 //
 // Row shape mirrors the scope-doc mockup: tile color + lot name + metadata
 // line + right-aligned stage label. The tile color signals state (sage =
-// active, near-black = resolved/roasted) — green-to-brown is a real hue shift
-// representing green coffee → roasted coffee, fits the design-conventions
-// "hue-not-lightness" rule.
+// active, near-black = resolved/roasted, gray = unresolved/incomplete) —
+// green-to-brown is a real hue shift representing green coffee → roasted
+// coffee; gray for unresolved signals "incomplete answer" without claiming
+// a verdict. All token choices fit the design-conventions "hue-not-lightness"
+// rule.
 
 const SECTION_ORDER: LifecycleState[] = [
   'waiting_for_next_roast',
   'waiting_for_next_cupping',
   'resolved',
+  'unresolved',
 ]
 
 type GreenBeanIndexRow = GreenBean & {
@@ -47,6 +52,7 @@ type GreenBeanIndexRow = GreenBean & {
     id: string
     best_batch_id: string | null
     best_roast_id: string | null
+    why_this_roast_won: string | null
   }>
 }
 
@@ -65,7 +71,7 @@ export default async function GreenBeansPage() {
       *,
       experiments(id, batch_ids, winner, created_at),
       roasts(id, batch_id, cuppings(id)),
-      roast_learnings(id, best_batch_id, best_roast_id)
+      roast_learnings(id, best_batch_id, best_roast_id, why_this_roast_won)
     `,
     )
     .order('created_at', { ascending: false })
@@ -130,13 +136,15 @@ export default async function GreenBeansPage() {
 }
 
 function LifecycleSection({ state, lots }: { state: LifecycleState; lots: GreenBeanIndexRow[] }) {
-  const isResolved = state === 'resolved'
   const title = lifecycleSectionTitle(state)
   // Right-column header: "Stage" for active sections, "Reference" for
-  // resolved. Scope doc § 5.1 keeps the column header even though it's
+  // resolved, "Status" for unresolved (the lot has no reference to point at;
+  // the right-column reads "Closed without reference" which is a status,
+  // not a stage). Scope doc § 5.1 keeps the column header even though it's
   // redundant with the section title — confirms the grouping at a glance
   // without scrolling back up.
-  const columnHeader = isResolved ? 'Reference' : 'Stage'
+  const columnHeader =
+    state === 'resolved' ? 'Reference' : state === 'unresolved' ? 'Status' : 'Stage'
 
   return (
     <section>
@@ -165,10 +173,17 @@ function LifecycleRow({ bean, state }: { bean: GreenBeanIndexRow; state: Lifecyc
 
   // Tile color signals lifecycle state. Sage (`latent-accent-light`) for
   // active lots (still iterating); near-black (`latent-fg`) for resolved
-  // lots (roasted + archived). Hue shift, not just darker — green-to-brown
-  // is a real semantic step. Both are existing chrome tokens, no new tokens
-  // added.
-  const tileClass = state === 'resolved' ? 'bg-latent-fg' : 'bg-latent-accent-light'
+  // lots (roasted + archived); gray (`latent-mid`) for unresolved lots
+  // (closed without a confirmed reference — incomplete answer). Hue shift
+  // from sage to brown represents green coffee → roasted coffee; gray for
+  // unresolved sits outside the green-brown axis to signal "no verdict"
+  // distinctly from both active and confirmed. All existing chrome tokens.
+  const tileClass =
+    state === 'resolved'
+      ? 'bg-latent-fg'
+      : state === 'unresolved'
+        ? 'bg-latent-mid'
+        : 'bg-latent-accent-light'
 
   // Metadata line — origin · variety · process. Skips empties so pre-
   // framework lots (e.g. Rancho Tio with no origin) don't render dangling
