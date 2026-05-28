@@ -16,6 +16,15 @@ function renderAnchor(ctx: RoasterAnchorContext): string | null {
   // Prefer authored bmrHouseStyle prose when present; supplement with CSV fields.
   const lines: string[] = []
   if (entry.strategyTag) lines.push(`- Strategy tag: ${entry.strategyTag}`)
+  // Brew guide provenance (Sub-sprint 4b Bundle B 2026-05-28): tells the model
+  // whether the recipe baseline below is roaster-verified (`official`) or
+  // community-derived best-guess (`implied`), so it can weight divergence
+  // calls accordingly. `none` skips the recipe baseline framing entirely.
+  if (entry.brewGuideStatus === 'official') {
+    lines.push(`- Brew guide status: official (recipe baseline below is roaster-authored)`)
+  } else if (entry.brewGuideStatus === 'implied') {
+    lines.push(`- Brew guide status: implied (recipe baseline below is community-derived; treat as working hypothesis)`)
+  }
   if (entry.bmrHouseStyle) lines.push(`- House style (authored): ${entry.bmrHouseStyle}`)
   else if (entry.houseStyle) lines.push(`- House style (CSV): ${entry.houseStyle}`)
   if (entry.roastStyle) lines.push(`- Roast style: ${entry.roastStyle}`)

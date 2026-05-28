@@ -5,9 +5,16 @@
 **Last adopted:** 2026-04-24
 **Adoption path:** Authored taxonomy (Chris, 2026-04-23 CSV pass + 2026-04-24 enrichment) drawing on roaster-published brew guides, BMR roaster reference cards, and the 55-brew corpus. First taxonomy port without a DB FK column — `brews.roaster` is text-only; canonical enforcement is code-and-validation only, no migration to a `roasters` table.
 
-Canonical roaster reference for the latent-coffee app. **71 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](../../lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint 1h structural port.
+Canonical roaster reference for the latent-coffee app. **73 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](../../lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint 1h structural port.
 
-**Composition:** Each roaster is a single canonical name (no nested hierarchy like Region's Country → Macro). The rich shape captures 29 fields per entry: location/country, roast style + development bias + rest curve, strategy tag + family, primary driver / extraction purpose, house style + brew guide link, recipe baseline (temp / dose / water / ratio / time / agitation), brewer + filter type, extraction intent + failure mode + tolerance, process sensitivity, brew adjustment method, calibration role, confidence level, and free-text notes. Plus optional `displayName` for tight UI surfaces (brew cards) and `bmrHouseStyle` / `bmrNotes` authored prose preserved verbatim from the prior 21-entry registry where richer than CSV.
+**Composition:** Each roaster is a single canonical name (no nested hierarchy like Region's Country → Macro). The rich shape captures 30 fields per entry: location/country, roast style + development bias + rest curve, strategy tag + family, primary driver / extraction purpose, house style + brew guide status (3-state: official / implied / none — Sub-sprint 4b Bundle B 2026-05-28) + brew guide link, recipe baseline (temp / dose / water / ratio / time / agitation), brewer + filter type, extraction intent + failure mode + tolerance, process sensitivity, brew adjustment method, calibration role, confidence level, and free-text notes. Plus optional `displayName` for tight UI surfaces (brew cards) and `bmrHouseStyle` / `bmrNotes` authored prose preserved verbatim from the prior 21-entry registry where richer than CSV.
+
+**Brew guide status (3-state, Sub-sprint 4b Bundle B 2026-05-28):**
+- **`official`** — Chris has a verified source authored by the roaster on any surface: their published website brew guide, official video / podcast appearance, social channel post they own (Instagram / YouTube), printed brew card bundled with the bag, documented competition appearance. The roaster owns the recipe.
+- **`implied`** — Chris derived a recipe from community sources: Reddit, brew-card aggregations from third parties, FAQ inferences, structural inference from the roast style + similar peers. Best estimate, not roaster-verified.
+- **`none`** — no recipe known, official or implied.
+
+Drives the BREWING PHILOSOPHY render gate on `/roasters/[slug]` per [app/(app)/roasters/[slug]/page.tsx](../../app/%28app%29/roasters/%5Bslug%5D/page.tsx). `brewGuideSource` + `brewGuideType` remain as provenance fields (where the recipe came from — YouTube / Blog / Wayback / Reddit / etc.); only the page-front gate reads `brewGuideStatus`. Distribution today: 57 official / 12 implied / 4 none. Classification ratification trail in [docs/sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md](../sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md).
 
 Additions require a 2-step edit: this doc + `lib/roaster-registry.ts` (no DB migration unless you're renaming an existing canonical, in which case a 3rd file is the migration). New canonicals are deliberate decisions, not drift. Sprint 1h.2 will land enforcement on `/add` + `/brews/[id]/edit` with an "add new" escape hatch when a roaster legitimately doesn't fit the canonical list.
 
@@ -17,7 +24,7 @@ External claims in this doc are sourced at authoring time from the CSV; Chris's 
 
 ## Canonical list
 
-Matches the `ROASTERS` array in [lib/roaster-registry.ts](../../lib/roaster-registry.ts) exactly. 71 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
+Matches the `ROASTERS` array in [lib/roaster-registry.ts](../../lib/roaster-registry.ts) exactly. 73 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
 
 ### Clarity-First (28)
 
@@ -178,6 +185,7 @@ _Copenhagen, Denmark_ · **CLARITY-FIRST**
 - **Extraction purpose:** Maximize even extraction and clarity via controlled flow and low agitation
 - **House style:** April Brewer recipes; low agitation, structured pours, designed around flat-bottom flow dynamics
 - **Brew guide:** [Official (Website)](https://www.aprilcoffeeroasters.com/pages/coffee-inf-recipes)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-95, dose=15, water=240, ratio=1:16, time=2:15-2:45, agitation=Low
 - **Primary brewer:** April Brewer
 - **Filter type:** Flat-bottom (April filters)
@@ -200,6 +208,7 @@ _New York, NY, USA_ · **CLARITY-FIRST** · archive: 1 brew
 - **Extraction purpose:** Provide simple, consistent brewing guidance for clean and balanced cups
 - **House style:** V60 baseline recipes; standard pours, moderate temp, low agitation; minimal complexity
 - **Brew guide:** [Official (Website)](https://beannbeancoffee.com/blogs/beansider/brew-guides)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-94, dose=15, water=240, ratio=~1:16, time=2:15-2:45, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -222,6 +231,7 @@ _Seoul, South Korea_ · **CLARITY-FIRST**
 - **Extraction purpose:** Maximize clean, structured clarity through controlled pours and minimal disturbance
 - **House style:** Kalita/V60 structured pours; staged pulses (40g → 80g → 80g → 50g); low agitation
 - **Brew guide:** Official
+- **Brew guide status:** official
 - **Recipe baseline:** temp=93, dose=16, water=250, ratio=~1:15.6, time=2:30-3:00, agitation=Low
 - **Primary brewer:** Kalita / V60
 - **Filter type:** Flat + Cone
@@ -244,6 +254,7 @@ _Copenhagen, Denmark_ · **CLARITY-FIRST**
 - **Extraction purpose:** Maximize clarity and balance through controlled flow and minimal agitation
 - **House style:** Kalita/V60 recipes; even pours, low agitation, stable flow, moderate temp
 - **Brew guide:** [Official (Website)](https://coffeecollective.dk/pages/brew-guide/kalita-wave)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-94, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Low
 - **Primary brewer:** Kalita / V60
 - **Filter type:** Flat + Cone
@@ -266,6 +277,7 @@ _Mountain View, CA, USA_ · **CLARITY-FIRST**
 - **Extraction purpose:** Allow coffee to express different profiles across rest phases using a stable Clarity-First baseline
 - **House style:** Simple V60 recipe; low temp (92°C), 4 even pours (30/70/70/30), minimal agitation. Default-Clarity-First mechanics: 12.5g / 200g / V60 + Sibarist B3 / EG-1 6.5 / 93–94°C confirmed across 4 brews (washed + natural).
 - **Brew guide:** Direct (brew card)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92, dose=12-15, water=200-240, ratio=~1:16, time=2:30-3:00, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -288,6 +300,7 @@ _Stockholm, Sweden_ · **CLARITY-FIRST**
 - **Extraction purpose:** Maximize clarity and sweetness through steady flow and even extraction
 - **House style:** Kalita-focused pulse pours; consistent increments; moderate-high temp
 - **Brew guide:** Official
+- **Brew guide status:** official
 - **Recipe baseline:** temp=96, dose=15, water=250, ratio=~1:16.7, time=2:45-3:00, agitation=Low-Medium
 - **Primary brewer:** Kalita
 - **Filter type:** Flat-bottom
@@ -310,6 +323,7 @@ _Singapore_ · **CLARITY-FIRST**
 - **Extraction purpose:** Achieve full aromatic expression and sweetness only after extended degassing; avoid premature extraction
 - **House style:** No fixed house recipe; expected to use clarity-first approaches post-rest
 - **Brew guide:** [Indirect (FAQ) (FAQ)](https://www.exposuretherapycoffee.com/faqs)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:30-3:15, agitation=Low
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario/Cafec)
@@ -332,6 +346,7 @@ _Seoul, South Korea_ · **CLARITY-FIRST**
 - **Extraction purpose:** Preserve clarity and delicate structure with minimal interference
 - **House style:** Likely V60/Kalita simple pours; low agitation; moderate temp; classic Korean clarity execution
 - **Brew guide:** Inferred
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=90-94, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Low
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Cone + Flat
@@ -354,6 +369,7 @@ _Chengdu, China_ · **CLARITY-FIRST**
 - **Extraction purpose:** Achieve clean, even extraction through structured multi-pour sequencing with minimal disturbance
 - **House style:** 5-pour V60 structure (30/40/40/50/40); consistent timing and flow; low agitation emphasis
 - **Brew guide:** [Official (Website + Video)](https://goutandco.com/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-96, dose=12.5, water=200, ratio=1:16, time=2:30-3:00, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -376,6 +392,7 @@ _Portland, Oregon, USA_ · **CLARITY-FIRST** · archive: 2 brews
 - **Extraction purpose:** Deliver clean, bright cups with accessible clarity and sweetness
 - **House style:** V60 recipes with simple pours, moderate temps, low agitation
 - **Brew guide:** [Official (Website)](https://www.heartroasters.com/pages/v60)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Low
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -398,6 +415,7 @@ _Berkeley, CA, USA_ · **CLARITY-FIRST → BALANCED** · archive: 7 brews
 - **Extraction purpose:** Preserve florals and clarity; selectively increase extraction to recover body when needed
 - **House style:** V60, structured 4-pour recipe, soft water (~50ppm), low agitation baseline
 - **Brew guide:** [Official (Website)](https://hydrangea.coffee/pages/faq)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-95, dose=15, water=250, ratio=1:16.7, time=2:15-2:45, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Cafec/Hario; sensitive to filter speed)
@@ -420,6 +438,7 @@ _North Canaan, CT, USA_ · **CLARITY-FIRST → BALANCED**
 - **Extraction purpose:** Highlight clarity and sweetness while maintaining drinkability across coffees
 - **House style:** V60 baseline; moderate temp, simple pours, low-to-medium agitation; not highly prescriptive
 - **Brew guide:** [Indirect (FAQ + collab) (Website + Collab)](https://ilsecoffee.com/pages/faq)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario/Cafec)
@@ -442,6 +461,7 @@ _Helsingborg, Sweden_ · **CLARITY-FIRST**
 - **Extraction purpose:** Preserve origin clarity and structure with minimal interference
 - **House style:** Simple V60/Kalita recipes; low agitation; moderate temp; classic Nordic execution
 - **Brew guide:** [Official (Website)](https://koppi.se/pages/brew-guides)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-94, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Low
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Cone + Flat-bottom
@@ -464,6 +484,7 @@ _Kyoto, Japan_ · **CLARITY-FIRST**
 - **Extraction purpose:** Provide a consistent, neutral starting point for dialing rather than optimizing extraction
 - **House style:** Simple V60/Kalita recipes; low agitation, even pours, moderate temp, standard ratios
 - **Brew guide:** [Official (Website)](https://kurasu.kyoto/blogs/recipe/kurasu-coffee-basic-recipe)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-93, dose=15, water=240, ratio=1:16, time=2:15-2:45, agitation=Low
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Cone + Flat-bottom
@@ -486,6 +507,7 @@ _Japan_ · **CLARITY-FIRST** · archive: 1 brew
 - **Extraction purpose:** Preserve clarity and separation; avoid over-extraction at all costs
 - **House style:** Low agitation, conservative pour structure, restrained extraction; minimal intervention brewing
 - **Brew guide:** [Official (Printed/Shared Recipe)](https://beanbook.app/recipes/e25c42c4-7ca8-4601-8c25-2f84d9424a70)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-92, dose=15, water=240, ratio=1:16, time=2:15-2:30, agitation=Low
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario/Cafec; sensitive to flow rate)
@@ -508,6 +530,7 @@ _Melbourne, Australia_ · **CLARITY-FIRST**
 - **Extraction purpose:** Produce clean, repeatable, balanced clarity
 - **House style:** Simple V60 / pour-over; bloom + 2-3 pours; minimal complexity
 - **Brew guide:** [Official (Website)](https://marketlane.com.au/pages/how-to-brew-pour-over-coffee)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=250, ratio=~1:16.7, time=2:30-3:00, agitation=Low-Med
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -530,6 +553,7 @@ _Addis Ababa, Ethiopia_ · **CLARITY-FIRST**
 - **Extraction purpose:** Clean clarity with light body
 - **House style:** V60-style multi-pour; moderate bloom; structured pulses
 - **Brew guide:** [Official / Secondary (Mixed)](https://mokstore.shop/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=250, ratio=~1:16.7, time=2:30-3:00, agitation=Low-Med
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -552,6 +576,7 @@ _Shirley, MA, USA_ · **CLARITY-FIRST** · archive: 1 brew
 - **Extraction purpose:** Produce clean, repeatable cups with minimal complexity and fast drawdown
 - **House style:** OREA V4 Classic with Kalita Wave 185; short 4-pour recipe; center-weighted pours after bloom; low agitation
 - **Brew guide:** [Official (Website)](https://newberyst.com/blogs/coffee/how-to-brew-pour-over-coffee-with-newbery-street)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=93-94, dose=15, water=240, ratio=1:16, time=1:50-2:10, agitation=Low-Medium
 - **Primary brewer:** OREA V4 Classic
 - **Filter type:** Flat-bottom (Kalita Wave 185)
@@ -576,6 +601,7 @@ _Berkeley, CA, USA_ · **CLARITY-FIRST**
 - **Extraction purpose:** Achieve clarity and sweetness through patience and minimal intervention rather than extraction force
 - **House style:** Small-dose V60 (12.5g), repeated pulse pours (~40g every ~30s), low agitation, coarse grind, soft-to-moderate water
 - **Brew guide:** [Archived (Wayback)](https://web.archive.org/web/20250114135008/https://minmaxcoffee.com/brew-guide/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=91-93, dose=12.5, water=200, ratio=1:16, time=2:45-4:00, agitation=Low
 - **Primary brewer:** V60
 - **Filter type:** Cone (Cafec Abaca / V60 01)
@@ -598,6 +624,7 @@ _Tokyo, Japan_ · **CLARITY-FIRST**
 - **Extraction purpose:** Achieve clean, sweet cups through controlled pours and minimal disturbance
 - **House style:** Multiple brew methods (V60, Switch, Aeropress); low agitation, structured pours, moderate temps
 - **Brew guide:** [Official (Website)](https://onibuscoffee.com/pages/brewing_guide/driphot)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-94, dose=15, water=240, ratio=~1:16, time=2:15-2:45, agitation=Low
 - **Primary brewer:** V60 / Switch / Aeropress
 - **Filter type:** Cone + Immersion
@@ -618,6 +645,7 @@ _London, UK_ · **CLARITY-FIRST**
 - **Extraction purpose:** Preserve clarity, sweetness, and place; highlight precision fermentation without distraction
 - **House style:** Orea (flat-bottom) with 40g bloom + 2 equal-mass pours; low agitation, 92°C, Fellow Ode 4.25
 - **Brew guide:** [Official (Video + Website)](https://specialguestscoffee.com/pages/our-go-to-brewing-guide)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92, dose=12, water=200, ratio=1:16.67, time=2:15-2:30, agitation=Low
 - **Primary brewer:** Orea
 - **Filter type:** Flat-bottom (Orea)
@@ -636,6 +664,7 @@ _Sweden_ · **CLARITY-FIRST**
 - **Extraction purpose:** Preserve clarity and delicate structure through minimal intervention
 - **House style:** V60/Kalita recipes; low agitation, moderate temp, simple pours; emphasis on clean cup
 - **Brew guide:** [Official (Website)](https://swerl.se/blogs/brewing-guides/hand-brewing-tips-and-trix)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-94, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Low
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Cone + Flat-bottom
@@ -658,6 +687,7 @@ _Paris, France_ · **CLARITY-FIRST**
 - **Extraction purpose:** Maximize clarity and separation by minimizing turbulence and ensuring even extraction
 - **House style:** V60/Orea recipes with even pours, no agitation, stable water column; relies on flow consistency
 - **Brew guide:** [Official (Website)](https://tanat.coffee/en/recette-extraction-orea/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-94, dose=12-15, water=200-240, ratio=~1:16, time=2:15-2:45, agitation=Low
 - **Primary brewer:** V60/Orea
 - **Filter type:** Cone + Flat-bottom
@@ -680,6 +710,7 @@ _Shanghai, China_ · **CLARITY-FIRST**
 - **Extraction purpose:** Achieve clean, even extraction through simple, repeatable multi-pour structure
 - **House style:** V60/Kalita recipes with even pours, moderate temp, low agitation
 - **Brew guide:** [Official (archived) (Website (Wayback))](https://web.archive.org/web/20260221111636/https://www.terraformcoffee.com/pages/brew-guides)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-93, dose=14-15, water=210-255, ratio=~1:16-1:17, time=2:10-2:30, agitation=Low
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Cone + Flat-bottom
@@ -702,6 +733,7 @@ _Oslo, Norway_ · **CLARITY-FIRST**
 - **Extraction purpose:** Achieve clean, sweet, structured cups through precise extraction and minimal interference
 - **House style:** V60 / filter baseline; simple pours, light agitation (stir bloom), focus on grind and dose consistency
 - **Brew guide:** [Official (Website)](https://timwendelboe.no/pages/how-to-brew-pourover-and-filter-coffee)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=1:16, time=3:00-3:30, agitation=Low (bloom stir only)
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario; standard paper filters)
@@ -724,6 +756,7 @@ _Okinawa, Japan_ · **CLARITY-FIRST** · archive: 2 brews
 - **Extraction purpose:** Clean, high clarity
 - **House style:** Minimal intervention
 - **Brew guide:** None
+- **Brew guide status:** none
 - **Recipe baseline:** temp=92-94, dose=15, water=240, ratio=1:16, time=~2:30, agitation=Low
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -746,6 +779,7 @@ _Bangkok, Thailand_ · **CLARITY-FIRST**
 - **Extraction purpose:** Maximize acidity and clarity through minimal agitation and fine grind
 - **House style:** V60 center-pour technique; minimal agitation; fast drawdown; fine grind
 - **Brew guide:** Direct / Competition
+- **Brew guide status:** official
 - **Recipe baseline:** temp=93, dose=15, water=250, ratio=~1:16.7, time=2:00-2:15, agitation=Very Low
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -768,6 +802,7 @@ _Da Nang, Vietnam_ · **CLARITY-FIRST**
 - **Extraction purpose:** Provide structured, repeatable clarity while teaching core variables (pouring, grind, timing)
 - **House style:** V60 baseline recipes; even pours, moderate bloom, standard ratios; emphasis on consistency and technique
 - **Brew guide:** [Official (Website)](https://xliiicoffee.com/en/coffee-guides/filter-2/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-94, dose=15, water=240, ratio=1:16, time=2:30-3:00, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario)
@@ -794,6 +829,7 @@ _Guadalajara, Mexico_ · **BALANCED**
 - **Extraction purpose:** Highlight fruit and acidity with moderate extraction
 - **House style:** Flat-bottom + V60; staged pours; slightly coarser grind; moderate bloom (~40s)
 - **Brew guide:** [Unofficial / Aggregated (Secondary)](https://estelar.coffee/)
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=94-96, dose=21, water=320, ratio=~1:15.2, time=3:00-4:00, agitation=Medium
 - **Primary brewer:** Stagg X / V60
 - **Filter type:** Flat + Cone
@@ -816,6 +852,7 @@ _Portland, Oregon, USA_ · **BALANCED**
 - **Extraction purpose:** Produce balanced cups with body and sweetness rather than strict clarity
 - **House style:** Kalita and V60 recipes; moderate pours, moderate agitation, slightly lower temp emphasis
 - **Brew guide:** [Official (Website)](https://coavacoffee.com/brew-methods/kalita-wave)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-94, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Medium
 - **Primary brewer:** Kalita / V60
 - **Filter type:** Flat + Cone
@@ -838,6 +875,7 @@ _Wellington, New Zealand_ · **BALANCED**
 - **Extraction purpose:** Consistent, repeatable extraction
 - **House style:** Simple brew frameworks across methods; medium grind baseline
 - **Brew guide:** [Official (PDF)](See attached PDF)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=96, dose=15, water=250, ratio=1:16.7, time=2:00-2:30, agitation=Low-Med
 - **Primary brewer:** V60 / Cone
 - **Filter type:** Cone
@@ -860,6 +898,7 @@ _Everett, WA, USA_ · **BALANCED** · archive: 2 brews
 - **Extraction purpose:** Broad accessibility
 - **House style:** Standard specialty
 - **Brew guide:** None
+- **Brew guide status:** none
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=1:16, time=~3:00, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -882,6 +921,7 @@ _Prague, Czech Republic_ · **BALANCED**
 - **Extraction purpose:** Clean, aromatic cup
 - **House style:** Simple V60/Chemex style; medium-fine grind; steady pours
 - **Brew guide:** [Unofficial / Aggregated (Secondary)](https://fathers.cz/en)
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=93-96, dose=24, water=360, ratio=1:15, time=3:30-4:00, agitation=Medium
 - **Primary brewer:** V60 / Chemex
 - **Filter type:** Cone
@@ -904,6 +944,7 @@ _Berlin, Germany_ · **BALANCED → CLARITY**
 - **Extraction purpose:** Achieve clean cups with slightly more sweetness and body than Nordic baseline
 - **House style:** V60 multi-stage pours with full drawdowns between phases; light agitation via swirl
 - **Brew guide:** Official
+- **Brew guide status:** official
 - **Recipe baseline:** temp=96, dose=14, water=250, ratio=~1:18, time=3:00-3:10, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -926,6 +967,7 @@ _Amsterdam, Netherlands_ · **BALANCED**
 - **Extraction purpose:** Deliver clean, balanced cups with repeatable, simple brewing approach
 - **House style:** V60 single main recipe; structured pours, moderate temp, low-to-medium agitation
 - **Brew guide:** [Official (Website)](https://friedhats.com/blogs/news/the-definitive-friedhats-brew-recipe)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -948,6 +990,7 @@ _Tokyo, Japan_ · **BALANCED**
 - **Extraction purpose:** Reduce harshness and highlight sweetness/clarity by lowering extraction temperature
 - **House style:** V60 with low temperature, moderate pours, controlled flow; avoids boiling water to prevent over-extraction
 - **Brew guide:** [Official (Website)](https://shop.glitchcoffee.com/en/pages/brew-guide)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=84-90, dose=15, water=260, ratio=1:17, time=2:15-2:45, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario)
@@ -970,6 +1013,7 @@ _Massachusetts, USA_ · **BALANCED → CLARITY**
 - **Extraction purpose:** Enhance sweetness and roundness while maintaining clarity
 - **House style:** V60 recipes; moderate pours, slightly higher temps, gentle agitation
 - **Brew guide:** Indirect
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=94-98, dose=15, water=240, ratio=~1:16, time=2:45-3:15, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -992,6 +1036,7 @@ _Olympia, WA, USA_ · **BALANCED** · archive: 1 brew
 - **Extraction purpose:** Sweetness + balance
 - **House style:** Structured recipes
 - **Brew guide:** [Official (Website)](https://www.olympiacoffee.com/pages/brewing)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=93-96, dose=15, water=250, ratio=~1:16-1:17, time=~3:00, agitation=Medium
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Both
@@ -1014,6 +1059,7 @@ _Hong Kong, China_ · **BALANCED** · archive: 1 brew
 - **Extraction purpose:** Enhance sweetness and body through tighter ratio and controlled pour timing
 - **House style:** Origami Wave recipes; low dose (~10g), tighter ratio (~1:15), 3-pour structure with gentle flow
 - **Brew guide:** Direct (community)
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=92-94, dose=10-15, water=150-240, ratio=~1:15, time=2:00-2:45, agitation=Low-Medium
 - **Primary brewer:** Origami
 - **Filter type:** Flat-bottom (Wave)
@@ -1036,6 +1082,7 @@ _Boulder, CO, USA_ · **BALANCED**
 - **Extraction purpose:** Maximize sweetness and balance through controlled extraction using grind, agitation, and pour technique
 - **House style:** V60 baseline with Rao-style bloom (stir), controlled pours, moderate agitation, boiling or near-boiling water acceptable
 - **Brew guide:** [Indirect (Rao) (Blog)](https://www.scottrao.com/blog/2024/2/26/how-to-approach-brewing-different-coffees)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=94-100, dose=15, water=240, ratio=1:16, time=2:45-3:15, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario/Cafec)
@@ -1058,6 +1105,7 @@ _Chicago, Illinois, USA_ · **BALANCED** · archive: 3 brews
 - **Extraction purpose:** Achieve clarity and sweetness through sufficient rest and gentle extraction rather than pushing
 - **House style:** UFO primary, small cone V60 secondary; low agitation, soft water, moderate pours
 - **Brew guide:** Unofficial
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=92-95, dose=12-15, water=200-250, ratio=~1:16-1:16.7, time=2:30-3:15, agitation=Low-Medium
 - **Primary brewer:** UFO
 - **Filter type:** Cone (small V60 / Cafec)
@@ -1080,6 +1128,7 @@ _Taipei, Taiwan_ · **BALANCED → CLARITY**
 - **Extraction purpose:** Achieve clean, expressive cups with both clarity and sweetness
 - **House style:** V60 multi-pour; balanced pours; moderate temp; controlled agitation
 - **Brew guide:** [Official (Website)](https://simplekaffa.com/journal/simple-kaffa-how-to-hand-brewed-coffee-tutorial)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:30-3:00, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -1102,6 +1151,7 @@ _Berlin, Germany_ · **BALANCED → CLARITY**
 - **Extraction purpose:** Achieve clean, expressive cups with slightly more body than strict Nordic styles
 - **House style:** V60 multi-pour; structured increments; moderate-high temp; balanced agitation
 - **Brew guide:** [Official (Website)](https://thebarn.de/blogs/the-barn-blog/v60-drip)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=94-98, dose=15, water=250, ratio=~1:16-1:17, time=2:45-3:15, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -1128,6 +1178,7 @@ _Tokyo, Japan_ · **BALANCED → FULL**
 - **Extraction purpose:** Maximize clarity and sweetness with precise, repeatable pour sequencing and controlled flow
 - **House style:** Highly structured V60 recipes; multiple pours, tight timing, careful flow control, minimal disturbance
 - **Brew guide:** [Official (Website)](https://shop.apollons-gold.com/pages/2024-pourover-guide)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=250, ratio=~1:16-1:17, time=2:30-3:30, agitation=Low-Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario)
@@ -1150,6 +1201,7 @@ _Cleveland, OH, USA_ · **BALANCED → FULL**
 - **Extraction purpose:** Achieve high clarity and articulation with flexible brewing while targeting consistent EY/TDS
 - **House style:** Flexible V60-style brewing; no strict recipe; emphasizes grind (~500µm), soft water, and extraction targets
 - **Brew guide:** [Official (Website)](https://aviary.coffee/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=255, ratio=~1:17, time=2:30-3:30, agitation=Medium
 - **Primary brewer:** V60 / multi
 - **Filter type:** Cone + Flat
@@ -1172,6 +1224,7 @@ _Shanghai, China_ · **FULL EXPRESSION**
 - **Extraction purpose:** Increase extraction to avoid thin cups while preserving clarity
 - **House style:** V60 with high temp, moderate agitation, standard ratios; simple structure with elevated temp
 - **Brew guide:** [Unofficial (Website + YouTube)](https://bigsurcafe.com/pages/brewing-tips)
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=96-100, dose=15, water=255, ratio=1:17, time=2:45-3:15, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario/Cafec)
@@ -1194,6 +1247,7 @@ _Minnesota, USA_ · **BALANCED → FULL**
 - **Extraction purpose:** Achieve consistent, optimized extraction with measurable targets
 - **House style:** Multi-brewer recipes; structured pours; explicit EY/TDS targeting; moderate-high temps
 - **Brew guide:** [Official (Website)](https://botz-coffee.com/pages/botz-brews)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=94-98, dose=15, water=240, ratio=~1:16, time=2:45-3:30, agitation=Medium
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Cone + Flat
@@ -1216,6 +1270,7 @@ _Netherlands_ · **FULL EXPRESSION**
 - **Extraction purpose:** Amplify process
 - **House style:** High extraction,  long brew, high temp; bloom-heavy,  extended contact time
 - **Brew guide:** [Unofficial (Reddit + Collab Recipes)](https://www.reddit.com/r/pourover/comments/1j89aw7/dak_recipes_on_pourovers/)
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=98-100, dose=15, water=270, ratio=1:18, time=3:30-4:30, agitation=Medium-High
 - **Primary brewer:** V60
 - **Filter type:** Cone (fast papers like T-90/T-92 preferred)
@@ -1240,6 +1295,7 @@ _Paris, France_ · **BALANCED → FULL**
 - **Extraction purpose:** Balance clarity and sweetness through controlled agitation and structured pours
 - **House style:** V60/Origami recipes; bloom + controlled pours with light agitation; slightly higher temps than strict Nordic
 - **Brew guide:** [Official (Website)](https://daturacoffee.com/blogs/recipes/pour-over-hario-v60)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=93-97, dose=15, water=240, ratio=~1:16, time=2:45-3:15, agitation=Medium
 - **Primary brewer:** V60 / Origami
 - **Filter type:** Cone + Flat-bottom
@@ -1262,6 +1318,7 @@ _Oakland, CA, USA_ · **FULL EXPRESSION** · archive: 2 brews
 - **Extraction purpose:** Maximize sweetness and saturation at very high extraction while maintaining clarity
 - **House style:** V60 with fast filters (T-92), boiling water, long brew times, heavy agitation, high ratio
 - **Brew guide:** [Official (Website)](https://flowerchildcoffee.com/blogs/brewing-tips-guides-extrapolation/brew-guides)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=98-100, dose=16, water=288, ratio=1:18, time=4:00-5:00, agitation=High
 - **Primary brewer:** V60
 - **Filter type:** Cone (Cafec T-92 fast filter preferred)
@@ -1284,6 +1341,7 @@ _Laramie, WY, USA_ · **BALANCED → FULL**
 - **Extraction purpose:** Increase extraction to recover sweetness and structure from very light roasts
 - **House style:** No official guide; community reports suggest higher temp, finer grind, and moderate agitation needed
 - **Brew guide:** Unofficial
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=94-100, dose=15, water=240, ratio=1:16, time=2:45-3:30, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario/Cafec)
@@ -1306,6 +1364,7 @@ _Las Vegas, NV, USA_ · **FULL EXPRESSION** · archive: 1 brew
 - **Extraction purpose:** Achieve high, repeatable extraction via fixed particle size and controlled pulse structure
 - **House style:** V60 multi-pour (5 pours), fixed µm range (490–575µm), moderate agitation, structured pulses
 - **Brew guide:** [Official (Website + Tool)](https://www.loveluminous.coffee/pages/coffee-extraction-calculator)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-95, dose=17, water=288, ratio=1:17, time=3:15-3:45, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (flow consistency important)
@@ -1328,6 +1387,7 @@ _Zurich, Switzerland_ · **BALANCED → FULL**
 - **Extraction purpose:** Maximize clarity and sweetness by separating extraction phases via temperature and immersion/percolation control
 - **House style:** Switch/GINA hybrid recipes; alternating low-temp immersion and high-temp percolation phases
 - **Brew guide:** [Direct (competition/official) (Collab / Competition)](https://europeancoffeetrip.com/easy-hario-switch-recipe-emi-fukahor/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=80-95, dose=17, water=220, ratio=~1:13, time=2:45-3:00, agitation=Medium
 - **Primary brewer:** Switch / GINA
 - **Filter type:** Cone (hybrid)
@@ -1350,6 +1410,7 @@ _Rotterdam, Netherlands_ · **BALANCED → HIGH**
 - **Extraction purpose:** Maximize clarity, sweetness, and intensity through higher extraction without losing structure
 - **House style:** V60 recipes with high temp, fine grind, structured pours; extraction pushed but controlled
 - **Brew guide:** [Official (Website)](https://manhattancoffeeroasters.com/brewing-guide/?v=1a13105b7e4e)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=96-100, dose=15, water=250, ratio=~1:16-1:17, time=2:45-3:30, agitation=Medium-High
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -1372,6 +1433,7 @@ _Barcelona, Spain_ · **BALANCED → HIGH**
 - **Extraction purpose:** Enhance sweetness and body slightly beyond strict clarity while maintaining cleanliness
 - **House style:** V60 recipes with structured pours, moderate agitation, slightly higher temp than Nordic baseline
 - **Brew guide:** [Official (Website)](https://nomadcoffee.es/en/blogs/at-home/v60)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=94-98, dose=15, water=240, ratio=~1:16, time=2:45-3:15, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -1394,6 +1456,7 @@ _Palo Alto, CA, USA_ · **BALANCED → FULL** · archive: 2 brews
 - **Extraction purpose:** Shape flavor progression (acidity → sweetness → clarity) through staged extraction
 - **House style:** Orea Z1 3-pour method; fast-fast-slow pours; long bloom; declining temp; water chemistry baseline
 - **Brew guide:** Official
+- **Brew guide status:** official
 - **Recipe baseline:** temp=93-96, dose=15, water=250, ratio=1:16.7, time=2:30-3:00, agitation=Medium
 - **Primary brewer:** Orea Z1
 - **Filter type:** Flat-bottom / low-bypass brewer
@@ -1416,6 +1479,7 @@ _Melbourne, Australia_ · **BALANCED → HIGH**
 - **Extraction purpose:** Drive sweetness and body while maintaining clarity
 - **House style:** V60 multi-pour; structured bloom + staged pours; moderate agitation
 - **Brew guide:** [Official (Website)](https://proudmarycoffee.com/blogs/coffee-talk/the-best-v60-brew-method)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=94-96, dose=15, water=250, ratio=~1:16.7, time=2:30-3:00, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -1438,6 +1502,7 @@ _Edmonton, AB, Canada_ · **BALANCED → FULL**
 - **Extraction purpose:** Adjust extraction based on processing style to maximize clarity or fruit expression
 - **House style:** Origami/V60 recipes; variable pours depending on process; moderate agitation; slightly longer brews for naturals
 - **Brew guide:** [Official (Website)](https://roguewavecoffee.ca/blogs/brew-guide/recipe-for-natural-processed-coffees)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:45-3:30, agitation=Medium
 - **Primary brewer:** Origami / V60
 - **Filter type:** Cone + Flat
@@ -1460,6 +1525,7 @@ _Stittsville, ON, Canada_ · **BALANCED → FULL**
 - **Extraction purpose:** Use higher agitation and temperature to unlock sweetness once coffee is sufficiently rested
 - **House style:** V60 with high agitation, moderate-to-high temp, standard ratios; extraction scaled based on rest level
 - **Brew guide:** Unofficial
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=93-98, dose=15, water=250, ratio=1:16.7, time=2:45-3:15, agitation=High
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario/Cafec)
@@ -1482,6 +1548,7 @@ _Brooklyn, NY, USA_ · **FULL EXPRESSION** · archive: 3 brews
 - **Extraction purpose:** Reveal structure
 - **House style:** Fine grind, boiling water, long bloom, high agitation; designed to push extraction ceiling
 - **Brew guide:** [Unofficial (Collab/Reddit)](https://pullandpourcoffee.com/brew-guide/victor-dota-mejorado-ecuador-sey-coffee/)
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=99-100, dose=20, water=340, ratio=1:17, time=3:30-4:30, agitation=High
 - **Primary brewer:** Aeropress
 - **Filter type:** Immersion or cone (fast filters)
@@ -1504,6 +1571,7 @@ _Paris, France_ · **BALANCED → FULL** · archive: 2 brews
 - **Extraction purpose:** Control extraction through agitation patterns and mineral composition rather than temp or grind extremes
 - **House style:** V60 with Abaca filters, multi-pour with large spiral agitation, controlled mineral water (GH/KH specific)
 - **Brew guide:** [Official (Website)](https://www.substancecafe.com/our-techniques/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-92, dose=12, water=200, ratio=1:16.7, time=3:00-3:15, agitation=High
 - **Primary brewer:** V60
 - **Filter type:** Cone (Cafec Abaca; flow consistency important)
@@ -1526,6 +1594,7 @@ _Auburn, AL, USA_ · **BALANCED → FULL**
 - **Extraction purpose:** Increase sweetness, acidity, and viscosity via long bloom and extended contact time
 - **House style:** Origami brewer with cone/flat flexibility; long bloom (1:00–2:00), Melodrip pulses, long total brew times
 - **Brew guide:** Direct (social)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=94-96, dose=18, water=284, ratio=~1:15.8, time=4:00-6:30, agitation=Medium-High
 - **Primary brewer:** Origami
 - **Filter type:** Cone + Flat-bottom
@@ -1552,6 +1621,7 @@ _Copenhagen, Denmark_ · **SYSTEM** · archive: 1 brew
 - **Extraction purpose:** High clarity + sweetness
 - **House style:** Experimental / adaptive
 - **Brew guide:** [Official (Website)](https://nomaprojects.com/blogs/journal/noma-kaffe-brew-guide)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=250, ratio=~1:16, time=~3:00, agitation=Medium
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Both
@@ -1574,6 +1644,7 @@ _Canberra, Australia_ · **SYSTEM**
 - **Extraction purpose:** Maximize sweetness + structure with clarity
 - **House style:** Highly specific recipes per coffee; varied pours, temps, agitation
 - **Brew guide:** [Official (Website)](https://onacoffee.com.au/blogs/brewguides)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-98, dose=15-20, water=240-300, ratio=Varies, time=2:30-3:30, agitation=Medium
 - **Primary brewer:** V60 / Kalita
 - **Filter type:** Cone + Flat
@@ -1596,6 +1667,7 @@ _Zurich, Switzerland_ · **SYSTEM** · archive: 2 brews
 - **Extraction purpose:** Maximize clarity + structure
 - **House style:** Competition-derived method
 - **Brew guide:** [Official (Competition/Website)](https://honestcoffeeguide.com/brew-recipes/matt-winton-v60-five-pour/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=94-96, dose=15, water=250, ratio=1:16-1:17, time=~3:00, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone
@@ -1618,6 +1690,7 @@ _Toronto, ON, Canada_ · **SYSTEM**
 - **Extraction purpose:** Hit precise extraction windows (≈21–22%) across different brewers and formats
 - **House style:** Multi-brewer recipes (V60, flat-bottom, immersion); structured pours, moderate agitation, explicit EY/TDS targets
 - **Brew guide:** [Official (Website)](https://www.subtext.coffee/en-us/pages/brew-guide)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=96-97, dose=14-16, water=230-265, ratio=Varies, time=2:50-3:30, agitation=Medium
 - **Primary brewer:** Multi
 - **Filter type:** Cone + Flat + Immersion
@@ -1640,6 +1713,7 @@ _Chaudfontaine, Belgium_ · **SYSTEM** · archive: 1 brew
 - **Extraction purpose:** Maximize extraction efficiency and repeatability through controlled variables
 - **House style:** High EY V60 with strict grind target (~450µm on 98mm SSP Low Uniformity burrs at 100 RPM), Mg+K mineral water spec, structured 3-pour spiral, moderate agitation
 - **Brew guide:** [Official (Product Pages + Visual Brew Cards)](https://en.thepickychemist.com/)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-95, dose=12-15, water=240-250, ratio=1:16, time=3:00-4:30, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario Stainless Steel dripper + Cafec Abaca 01; optimized for flow + uniformity)
@@ -1668,6 +1742,7 @@ cocoa-forward: 2 weeks minimum, ideally 3-4+ weeks
 - **Extraction purpose:** Reveal process character while preserving clarity and sweetness
 - **House style:** Clarity→Balanced house V60; multi-pour with bed exposure; process-sensitive temp guidance
 - **Brew guide:** [Official (Website)](https://moonwakecoffeeroasters.com/pages/brew-guide)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=90-96, dose=15, water=240, ratio=1:16, time=2:30-3:00, agitation=Medium
 - **Primary brewer:** V60
 - **Filter type:** Cone (Hario/Cafec)
@@ -1692,6 +1767,7 @@ _London, UK, UK_ · **VARIES** · archive: 1 brew
 - **Extraction purpose:** Match extraction approach to each coffee’s density, process, and roast behavior
 - **House style:** Low agitation baseline, long bloom, flat-bottom preference; recipes vary per lot
 - **Brew guide:** [Official (Website)](https://scenery.coffee/blogs/behind-the-scenes/the-scenery-filter-recipe)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=3:00-3:30, agitation=Low
 - **Primary brewer:** Flat-bottom brewer
 - **Filter type:** Flat-bottom (Orea / Kalita)
@@ -1714,6 +1790,7 @@ _San Jose, CA, USA_ · **BALANCED / VARIES** · archive: 6 brews
 - **Extraction purpose:** Stabilize extraction and improve consistency; use immersion to avoid uneven extraction rather than pushing intensity
 - **House style:** Switch-first approach; hybrid immersion + percolation; coarse grind, staged extraction with late agitation
 - **Brew guide:** [Direct (Shared (YouTube + site))](https://www.thestraitcoffee.com/v60)
+- **Brew guide status:** official
 - **Recipe baseline:** temp=92-95, dose=15, water=250, ratio=1:16.7, time=3:30-4:00 (Switch), agitation=Low-Medium (localized agitation during immersion)
 - **Primary brewer:** Hario Switch
 - **Filter type:** Cone (V60 filters; flow control via valve)
@@ -1736,6 +1813,7 @@ _Tokyo, Japan_ · **BALANCED / VARIES**
 - **Extraction purpose:** Leverage immersion + percolation to balance clarity and body
 - **House style:** Switch-style brewing emphasis; likely mix of immersion phases with controlled drawdown
 - **Brew guide:** Indirect
+- **Brew guide status:** implied
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:30-3:30, agitation=Low-Medium
 - **Primary brewer:** Switch
 - **Filter type:** Cone (with valve)
@@ -1758,6 +1836,7 @@ _Rochester, NY, USA_ · **VARIES** · archive: 1 brew
 - **Extraction purpose:** Preserve auction/competition-lot character while making rare coffees accessible as roasted offerings
 - **House style:** Primarily green-bean curator with roasted variants; production on Stronghold S7X/S9; no public brew recipe
 - **Brew guide:** None (No formal guide)
+- **Brew guide status:** none
 - **Recipe baseline:** temp=92-96, dose=15, water=240, ratio=~1:16, time=2:30-3:15, agitation=Low-Medium
 - **Primary brewer:** V60 / flat-bottom
 - **Filter type:** Cone + Flat
@@ -1780,6 +1859,7 @@ _Home (Roest sample roaster, 100g batches)_ · **SELF-ROASTED** · archive: 4 br
 - **Roast style:** Variable (per-bean, sample-roast experiments)
 - **House style:** Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.
 - **Notes:** Self-roasted lots only; canonical entry preserved across taxonomy refreshes.
+- **Brew guide status:** none
 
 ---
 

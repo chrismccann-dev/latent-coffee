@@ -479,16 +479,17 @@ Per-page-family UX cleanup + informational architecture audit. Runs BEFORE the C
 
 **Phase docs:** [kickoff](docs/sprints/sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md) (Phase 1) + [complementary pass](docs/sprints/sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md) (Phase 2).
 
-##### Sub-sprint 4b — Roasters polish bundle
+##### Sub-sprint 4b — Roasters polish bundle — SHIPPED 2026-05-28 (Bundles A + B)
 
-Per Chris audio: "I usually remember [a coffee] roaster first, so I usually go to the roasting page" — second most-visited surface. Includes the previously-Side-Quests "Per-roaster archive page enhancement" framing (compounds with per-entity directed synthesis; template for `/cultivars/[id]` + `/terroirs/[id]` + `/processes/[slug]` archive surfaces). Audit:
+Per Chris audio: "I usually remember [a coffee] roaster first, so I usually go to the roasting page" — second most-visited surface. 3-phase audit (Phase 1 page-by-page audit + Phase 2 Claude complementary pass + Phase 3 plan-mode bundling) shipped via 2 PRs.
 
-- Roaster index grouping + family swatches.
-- Roaster detail page surfaces ([app/(app)/roasters/[slug]/page.tsx](app/(app)/roasters/%5Bslug%5D/page.tsx)).
-- Synthesis card positioning (demoted below coffees list per Sub Pages 5; revisit if lived practice argues otherwise).
-- Information-architecture review: 24 `RoasterEntry` fields surfaced post-Sub-Pages-5; any drift or new fields to surface.
+**Bundle A — Reference Brew Recipe IA polish + producer in coffees-list meta (SHIPPED PR #281).** Locked detail page's primary job as **index into brews** (not in-app brew prep). Renamed "GENERALIZED BREWING RECIPE FOR THIS ROASTER" → "Roasters Reference Brew Recipe"; promoted `doseG` + `waterG` into the Baseline Recipe inline composition + removed from Additional Information (no duplication); added producer to coffees-list meta line below variety / country / process for frozen-tube → "find this coffee" scannability. Six defended-stay decisions from Phase 1: coffees list position (#6), sort orders (created_at DESC detail / brewCount DESC index), BMR prefix rename (deferred per Chris PDF), `url` field cleanup (deferred per Chris PDF), index page changes (none — "honestly no feedback").
 
-**Sizing:** ~1 sprint.
+**Bundle B — brewGuideStatus 3-state substrate + render gate fix (SHIPPED PR #TBD).** New required `brewGuideStatus: 'official' | 'implied' | 'none'` field on `RoasterEntry`; all 73 entries classified (57 / 12 / 4) per ratified definitions. Replaces the `brewGuideLink ? … : "No official brew guide"` render gate at [app/(app)/roasters/[slug]/page.tsx](app/(app)/roasters/%5Bslug%5D/page.tsx) (14 false-negative entries today: Drop / Picolot / Center / Five Elephant / VWI / Shoebox / Oma / Dongzhe / etc.) with a 5-branch status switch. `brewGuideSource` + `brewGuideType` retained as provenance fields; only the page-front gate reads `brewGuideStatus`. Cross-cutting touches: [docs/taxonomies/roasters.md](docs/taxonomies/roasters.md) (per-entry status row + new 3-state subsection); CLAUDE.md drift fixes (lines 99 / 148 / 150-151; 21→73 + 70→73 + 29→30 fields); [lib/synthesis/adapters/roaster.ts](lib/synthesis/adapters/roaster.ts) (anchor gains brew guide status line so synthesis weighs recipe baseline as roaster-verified vs community-derived). Classification audit trail at [docs/sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md](docs/sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md).
+
+**Phase docs:** [kickoff brief](docs/sprints/sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) + [complementary pass](docs/sprints/sub-sprint-4b-roasters-polish-complementary-pass-2026-05-28.md) + [Bundle B handoff](docs/sprints/sub-sprint-4b-bundle-b-handoff-2026-05-28.md).
+
+**Deferred (per Phase 2 § Bucket G):** B1.b coffees-list section reorder; sort-order changes; BMR prefix rename; `url` field cleanup; synthesis card position; mobile full pass; per-roaster deep archive sub-view; family color tokens System vs Varies hue proximity; B2 richer Processes Explored cross-link block (punt to Sub-sprint 4f).
 
 ##### Sub-sprint 4c — Brews polish bundle
 
