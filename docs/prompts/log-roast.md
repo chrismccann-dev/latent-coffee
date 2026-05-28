@@ -131,12 +131,36 @@ Skip slots where these fields already populated.
 - `observed_outcome_a/b/c/d`: structural roast observations per slot. Source from Roest + your push_roast prose. 1-2 sentences each covering: FC time/temp, drop time/temp, dev time, Agtron WB + (if available from a quick cupping) ground Agtron + WB→Gnd delta, Maillard %, plus one-line cup-side hypothesis (which is *not* the taste_for - see below).
 - `delta_from_roast_a/b/c/d`: reconciliation vs recipe predictions per slot. "Predicted FC 4:25 / 203°C, actual 5:11 / 202.5°C → late by ~45s, temp on target. Drop hit end_condition cleanly at 205°C / 6:00." Compare against `roast_recipes.predicted_fc_temp / predicted_fc_time / predicted_total_time / predicted_agtron_wb`.
 - `updated_cup_prediction_a/b/c/d`: **post-roast cup prediction per slot, given how each actually roasted**. Distinct from `roast_recipes.predicted_cup` (frozen at design time, stays put). Now that we've seen the curves, refine the cup prediction. E.g. design-time predicted "sweet, balanced, lemongrass-forward"; post-roast updated prediction "v3a underdeveloped - pungent attack, fast fadeout, less integration than predicted; v3b structurally sound - closest to design intent; v3c overran - body and tannin emphasized."
-- `taste_for_a/b/c/d`: **cupping-table prep, NOT a prediction**. Directional listening hints with three reference points each:
-  1. Producer tasting notes (external ballpark check - "lemongrass, ginger, brown sugar, bergamot, blueberry" for Sudan Rume Natural)
-  2. Prior V_(n-1) slot memory (where am I vs the last try on this lot - "v2c was structurally similar; tasted creamy on attack but tannin-heavy at finish")
-  3. The specific adjustment being tested this round (where the lever is supposed to move the cup - "v3a tests lower peak; expect cleaner attack but possibly hollow middle")
+- `taste_for_a/b/c/d`: **cupping-table prep, NOT a prediction**. 1-3 short sentences per slot, action-verb-led ("Listen for X" / "Check whether Y" / "Look for Z" / "Taste only to calibrate Z"). Each becomes the prompt Chris reads at the cup Day 7; the page UI surfaces it front-and-center on the Cupping Hypothesis card. **Tightening rule shipped Sub-sprint 4a Bundle C (2026-05-27):** before Bundle C the spec asked for "1-3 sentences combining three reference points (producer notes + V_(n-1) memory + adjustment tested)" with numbered citations, which produced 80+ word slots that drowned the actual taste prompts. The flat action-verb shape replaces it.
 
-  Format each `taste_for_X` as 1-3 sentences combining the three reference points. The page UI surfaces these front-and-center when the lot enters Waiting for next cupping state - front-and-center is what I see Day 7 when I sit down to cup.
+  **What goes in:**
+  - **Questions to ask at the cup** — the load-bearing job. "Does X show up?" / "Is the body Y?" / "Is the finish puckering or smooth?"
+  - **Diagnostic framing for failure-mode batches** — when a batch is intentionally below the floor (e.g. no-FC marker) or above the ceiling, frame as "Taste only to calibrate what <signature> tastes like on this lot — diagnostic data point, not a candidate." Even failed batches produce lasting signature reference material for future lots; the prose captures the underdev / overdev / off-balance signature so Chris can recognize it later in the cup notes.
+  - **Forward-looking V_(n+1) implications when load-bearing** — "If v2c still reads darker-than-it-says like all of V1, V_(n+1) must attack dev time" — surfaces the branch logic that will drive next-set design.
+  - **Brief comparators when they sharpen the question** — "closest analog cupped grassy/nutty/raw under a fruit attack" sets the prior-memory contrast in under 10 words. Cite the prior slot/batch identifier; don't re-explain the prior cup at length.
+  - **Reference-candidate criterion when applicable** — "If it's clean and balanced, it's the reference candidate" surfaces the explicit promotion gate the cup decides.
+
+  **What does NOT go in:**
+  - **Don't re-state the full producer tasting notes** — they're already on the Cupping Hypothesis card in the Producer Notes sub-card (Sub-sprint 4a Bundle B). Reference them once if pointing at ONE specific note ("does the rose-like drying tail soften?") but don't enumerate the full list every slot.
+  - **Don't use numbered citation structure** — flat 1-3 sentences with action verbs is the shape, not "(1) producer notes ... (2) V_(n-1) memory ... (3) adjustment tested ...".
+  - **Don't recap the design intent** — the recipe row already carries `rationale` + `predicted_cup` + Drop Rules; the cupping-table read doesn't need to re-explain why this batch was designed this way.
+  - **Don't write "single-cup observation" / "no second batch to disambiguate" tangents** — those are roast-side caveats that belong in `observed_outcome_*`.
+
+  **Worked examples (Phase 1 audit rewrites, 2026-05-27):**
+
+  *Diagnostic failure-mode batch (Bukure v2a — no-FC underdevelopment floor marker):*
+  > "Producer notes are almost certainly absent — don't expect them through underdevelopment. Taste only to calibrate what underdevelopment tastes like on this lot — it's a diagnostic data point, not a candidate."
+
+  *Question-led + forward-looking V_(n+1) (Bukure v2b — lowest energy that reached FC):*
+  > "This is the most interesting slot for the cranberry/honeycomb/lingonberry question — lowest energy that still reached FC, so if lower energy unlocks the bright side, the first hint shows here. If you taste brightness layered on a thin base, V_(n+1)'s job is to keep this energy but fix the development."
+
+  *Branch-logic forward-looking (Bukure v2c — adjustment 2°C below V1 winner):*
+  > "Check whether cranberry/honeycomb/lingonberry surface at all — this is the cleanest-developed V2 cup. If v2c still reads 'darker than what it says' like all of V1, the dark-tea ceiling is NOT an energy-lever problem and V_(n+1) must attack dev time."
+
+  *Reference-candidate criterion (Red Plum v2c — cleanest roast on lot):*
+  > "Best chance of the V2 set to hit the producer's notes. Structurally this is the cleanest roast on the entire lot, and this is the batch that could resolve the lot. If it's clean and balanced, it's the reference candidate."
+
+  Skip slots that genuinely weren't roasted in V_n (e.g. only v1a/v1b roasted, c skipped).
 
 Optional: also update `key_insight` / `key_insight_confidence` / `what_changes_going_forward` / `open_questions` / `additional_notes` if the roast-side actuals alone already reveal something insightful (rare at the post-roast stage; usually wait for cupping data). When set, use the `key_insight_confidence` ladder documented in `log-cupping.md` STAGE 3.
 
