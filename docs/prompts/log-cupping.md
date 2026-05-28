@@ -78,9 +78,17 @@ Each `updated_cup_prediction_<slot>` is 1-2 sentences mapping the structural roa
 
 **(c) `experiments.taste_for_a/b/c/d` backfill** — same `patch_experiment` call as (b), or a follow-up call if (b) was already issued.
 
-Each `taste_for_<slot>` is 1-3 sentences combining three reference points: producer tasting notes (external ballpark), prior V_(n-1) slot memory (where I am vs the last try), the specific adjustment being tested this round. Worked example for v3a:
+Each `taste_for_<slot>` is 1-3 short sentences per slot, action-verb-led ("Listen for X" / "Check whether Y" / "Look for Z" / "Taste only to calibrate Z"). See `log-roast.md` STAGE 5's `taste_for_a/b/c/d` rule for the full Sub-sprint 4a Bundle C (2026-05-27) tightening spec — the same shape applies on backfill. Key rules:
 
-> "Producer: lemongrass, ginger, brown sugar, bergamot, blueberry. V2A on this lot tasted creamy on attack but tannin-heavy at finish. This slot tests lower peak inlet - listen for cleaner attack, but possibly hollow middle from the compressed dev."
+- Frame each slot as questions to ask at the cup, not a recap of producer notes (those are on the page already in the Producer Notes sub-card from Bundle B).
+- Diagnostic framing on failure-mode batches: "Taste only to calibrate what underdevelopment tastes like on this lot — diagnostic data point, not a candidate." Captures the signature for future reference even when the cup itself isn't a candidate.
+- Forward-looking V_(n+1) branch logic when load-bearing.
+- Brief comparators by slot identifier; don't re-explain the prior cup.
+- Drop numbered "(1) producer notes / (2) V_(n-1) memory / (3) adjustment tested" structure — it produced 80+ word slots pre-Bundle-C. Flat is the shape.
+
+Worked example for v3a (Sudan Rume Natural V3a, post-Bundle-C tight form):
+
+> "Does the darker WB still let the producer's tasting notes through? Listen for whether the cleaner / longer dev added body at the cost of florality."
 
 Skip slots that genuinely weren't roasted in V_n (e.g. only v1a/v1b roasted, c skipped).
 
