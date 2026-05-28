@@ -32,12 +32,14 @@ function LabelledField({ label, value }: LabelledFieldProps) {
 }
 
 function composeBaselineRecipe(entry: NonNullable<ReturnType<typeof getRoasterEntry>>): string | null {
+  const dosePart = entry.doseG ? `${entry.doseG}g coffee` : null
+  const waterPart = entry.waterG ? `${entry.waterG}g water` : null
   const tempPart = entry.tempC ? `${entry.tempC}°C` : null
   const ratioPart = entry.ratio ? `${entry.ratio} ratio` : null
   const timePart = entry.typicalBrewTime ? `${entry.typicalBrewTime} drawdown` : null
   const agitationPart = entry.agitationLevel ? `${entry.agitationLevel.toLowerCase()} agitation` : null
-  const bits = [tempPart, ratioPart, timePart, agitationPart].filter(Boolean)
-  return bits.length > 0 ? bits.join(', ') : null
+  const bits = [dosePart, waterPart, tempPart, ratioPart, timePart, agitationPart].filter(Boolean)
+  return bits.length > 0 ? bits.join(' · ') : null
 }
 
 export default async function RoasterDetailPage({ params }: { params: { slug: string } }) {
@@ -126,7 +128,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
   const hasMetadata = Boolean(
     entry && (
       entry.strategyTag || entry.primaryDriver || entry.brewGuideSource ||
-      entry.brewGuideType || entry.doseG || entry.waterG || entry.calibrationRole ||
+      entry.brewGuideType || entry.calibrationRole ||
       entry.confidenceLevel || showBmrHouseStyle || entry.bmrNotes
     )
   )
@@ -196,9 +198,9 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
         </SectionCard>
       )}
 
-      {/* Job 1 (deep): Generalized Brewing Recipe */}
+      {/* Job 1 (deep): Roasters Reference Brew Recipe */}
       {hasGeneralizedRecipe && entry && (
-        <SectionCard title="GENERALIZED BREWING RECIPE FOR THIS ROASTER">
+        <SectionCard title="ROASTERS REFERENCE BREW RECIPE">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             <div>
               <LabelledField label="Primary brewer" value={entry.primaryBrewer} />
@@ -246,7 +248,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
                   {brew.coffee_name}
                 </div>
                 <div className="font-mono text-xxs text-latent-mid">
-                  {[brew.variety, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
+                  {[brew.variety, brew.producer, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
                 </div>
               </div>
               <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>
@@ -282,8 +284,6 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
               <LabelledField label="Primary driver" value={entry.primaryDriver} />
               <LabelledField label="Brew guide source" value={entry.brewGuideSource} />
               <LabelledField label="Brew guide type" value={entry.brewGuideType} />
-              <LabelledField label="Dose" value={entry.doseG ? `${entry.doseG}g` : null} />
-              <LabelledField label="Water" value={entry.waterG ? `${entry.waterG}g` : null} />
               <LabelledField label="Calibration role" value={entry.calibrationRole} />
               <LabelledField label="House-style confidence" value={entry.confidenceLevel} />
               {showBmrHouseStyle && (
