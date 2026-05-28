@@ -71,6 +71,17 @@ export interface RoasterEntry {
   primaryDriver?: string
   extractionPurpose?: string
   houseStyle?: string                     // CSV terse cell
+  // Sub-sprint 4b Bundle B (2026-05-28): 3-state substrate driving the
+  // BREWING PHILOSOPHY render gate on /roasters/[slug]. `official` = roaster
+  // authored the recipe on any surface they own (website, video, social,
+  // printed brew card, competition footage). `implied` = Chris derived it from
+  // community sources (Reddit, brew-card aggregations, FAQ structural
+  // inference). `none` = no recipe known. Required so the TS build catches any
+  // unclassified entry. `brewGuideSource` + `brewGuideType` retained as
+  // provenance fields (where the recipe came from — YouTube / Blog / Wayback /
+  // Reddit / etc.); only the page-front gate reads `brewGuideStatus`.
+  // Classifications ratified per docs/sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md.
+  brewGuideStatus: 'official' | 'implied' | 'none'
   brewGuideSource?: string
   brewGuideLink?: string
   brewGuideType?: string
@@ -110,6 +121,7 @@ export const ROASTERS: RoasterEntry[] = [
   // ---- Clarity-First ----
   {
     name: 'Hydrangea Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Hydrangea',
     location: 'Berkeley, CA',
     country: 'USA',
@@ -144,6 +156,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Leaves Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Leaves',
     location: 'Japan',
     country: 'Japan',
@@ -178,6 +191,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'April Coffee',
+    brewGuideStatus: 'official',
     displayName: 'April',
     location: 'Copenhagen',
     country: 'Denmark',
@@ -210,6 +224,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Tim Wendelboe',
+    brewGuideStatus: 'official',
     displayName: 'Tim Wendelboe',
     location: 'Oslo',
     country: 'Norway',
@@ -242,6 +257,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'normlppl/minmax',
+    brewGuideStatus: 'official',
     displayName: 'normlppl',
     location: 'Berkeley, CA',
     country: 'USA',
@@ -274,6 +290,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Tanat Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Tanat',
     location: 'Paris',
     country: 'France',
@@ -306,6 +323,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Kurasu',
+    brewGuideStatus: 'official',
     displayName: 'Kurasu',
     location: 'Kyoto',
     country: 'Japan',
@@ -338,6 +356,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Exposure Therapy Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Exposure Therapy',
     location: 'Singapore',
     country: 'Singapore',
@@ -370,6 +389,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'XLIII Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'XLIII',
     location: 'Da Nang',
     country: 'Vietnam',
@@ -402,6 +422,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Goût & Co',
+    brewGuideStatus: 'official',
     displayName: 'Goût & Co',
     location: 'Chengdu',
     country: 'China',
@@ -434,6 +455,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Terraform Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Terraform',
     location: 'Shanghai',
     country: 'China',
@@ -466,6 +488,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'ILSE Coffee',
+    brewGuideStatus: 'official',
     displayName: 'ILSE',
     location: 'North Canaan, CT',
     country: 'USA',
@@ -498,6 +521,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Bean & Bean Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Bean & Bean',
     location: 'New York, NY',
     country: 'USA',
@@ -532,6 +556,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Coffee Collective',
+    brewGuideStatus: 'official',
     displayName: 'Coffee Collective',
     location: 'Copenhagen',
     country: 'Denmark',
@@ -564,6 +589,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Onibus Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Onibus',
     location: 'Tokyo',
     country: 'Japan',
@@ -596,6 +622,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Swerl Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Swerl',
     location: 'Sweden',
     country: 'Sweden',
@@ -628,6 +655,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Drop Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Drop',
     location: 'Stockholm',
     country: 'Sweden',
@@ -659,6 +687,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Koppi Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Koppi',
     location: 'Helsingborg',
     country: 'Sweden',
@@ -691,6 +720,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Heart Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Heart',
     location: 'Portland, Oregon',
     country: 'USA',
@@ -725,6 +755,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Finca Coffee (Coffee Libre)',
+    brewGuideStatus: 'implied',
     displayName: 'Finca',
     location: 'Seoul',
     country: 'South Korea',
@@ -756,6 +787,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Center Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Center',
     location: 'Seoul',
     country: 'South Korea',
@@ -787,6 +819,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'VWI by CHADWANG',
+    brewGuideStatus: 'official',
     displayName: 'VWI',
     location: 'Bangkok',
     country: 'Thailand',
@@ -818,6 +851,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Market Lane Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Market Lane',
     location: 'Melbourne',
     country: 'Australia',
@@ -850,6 +884,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Mok Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Mok',
     location: 'Addis Ababa',
     country: 'Ethiopia',
@@ -882,6 +917,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'TM Coffee',
+    brewGuideStatus: 'none',
     displayName: 'T&M',
     location: 'Okinawa',
     country: 'Japan',
@@ -914,6 +950,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Special Guests Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Special Guests',
     location: 'London',
     country: 'UK',
@@ -942,6 +979,7 @@ export const ROASTERS: RoasterEntry[] = [
   // ---- Balanced ----
   {
     name: 'Shoebox Coffee',
+    brewGuideStatus: 'implied',
     displayName: 'Shoebox',
     location: 'Chicago, Illinois',
     country: 'USA',
@@ -975,6 +1013,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Glitch Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Glitch',
     location: 'Tokyo',
     country: 'Japan',
@@ -1017,6 +1056,7 @@ export const ROASTERS: RoasterEntry[] = [
     // CSV reflects roaster's own guide; the 91°C-only finding is
     // Latent-specific on the one tested lot.
     name: 'Newbery Street Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Newbery Street',
     location: 'Shirley, MA',
     country: 'USA',
@@ -1051,6 +1091,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Prodigal Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Prodigal',
     location: 'Boulder, CO',
     country: 'USA',
@@ -1083,6 +1124,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Oma Coffee Roaster',
+    brewGuideStatus: 'implied',
     displayName: 'Oma',
     location: 'Hong Kong',
     country: 'China',
@@ -1116,6 +1158,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Friedhats Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Friedhats',
     location: 'Amsterdam',
     country: 'Netherlands',
@@ -1148,6 +1191,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'The Barn Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'The Barn',
     location: 'Berlin',
     country: 'Germany',
@@ -1180,6 +1224,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Five Elephant Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Five Elephant',
     location: 'Berlin',
     country: 'Germany',
@@ -1211,6 +1256,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Coava Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Coava',
     location: 'Portland, Oregon',
     country: 'USA',
@@ -1243,6 +1289,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Little Wolf Coffee',
+    brewGuideStatus: 'implied',
     displayName: 'Little Wolf',
     location: 'Massachusetts',
     country: 'USA',
@@ -1274,6 +1321,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Simple Kaffa',
+    brewGuideStatus: 'official',
     displayName: 'Simple Kaffa',
     location: 'Taipei',
     country: 'Taiwan',
@@ -1306,6 +1354,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Café Estelar',
+    brewGuideStatus: 'implied',
     displayName: 'Café Estelar',
     location: 'Guadalajara',
     country: 'Mexico',
@@ -1338,6 +1387,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Coffee Supreme',
+    brewGuideStatus: 'official',
     displayName: 'Coffee Supreme',
     location: 'Wellington',
     country: 'New Zealand',
@@ -1370,6 +1420,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Father’s Coffee Roastery',
+    brewGuideStatus: 'implied',
     displayName: 'Father’s',
     location: 'Prague',
     country: 'Czech Republic',
@@ -1402,6 +1453,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Colibri Coffee Roasters',
+    brewGuideStatus: 'none',
     displayName: 'Colibri',
     location: 'Everett, WA',
     country: 'USA',
@@ -1434,6 +1486,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Olympia Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Olympia',
     location: 'Olympia, WA',
     country: 'USA',
@@ -1469,6 +1522,7 @@ export const ROASTERS: RoasterEntry[] = [
   // ---- Extraction-Forward ----
   {
     name: 'Dak Coffee Roasters',
+    brewGuideStatus: 'implied',
     displayName: 'Dak',
     location: 'Netherlands',
     country: 'Netherlands',
@@ -1501,6 +1555,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Sey Coffee',
+    brewGuideStatus: 'implied',
     displayName: 'Sey',
     location: 'Brooklyn, NY',
     country: 'USA',
@@ -1535,6 +1590,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Flower Child Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Flower Child',
     location: 'Oakland, CA',
     country: 'USA',
@@ -1569,6 +1625,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Substance Café',
+    brewGuideStatus: 'official',
     displayName: 'Substance',
     location: 'Paris',
     country: 'France',
@@ -1603,6 +1660,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Picolot (Brian Quan)',
+    brewGuideStatus: 'official',
     displayName: 'Picolot',
     location: 'Palo Alto, CA',
     country: 'USA',
@@ -1636,6 +1694,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Big Sur Coffee',
+    brewGuideStatus: 'implied',
     displayName: 'Big Sur',
     location: 'Shanghai',
     country: 'China',
@@ -1668,6 +1727,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Luminous Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Luminous',
     location: 'Las Vegas, NV',
     country: 'USA',
@@ -1702,6 +1762,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'September Coffee',
+    brewGuideStatus: 'implied',
     displayName: 'September',
     location: 'Stittsville, ON',
     country: 'Canada',
@@ -1733,6 +1794,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'H&S Coffee Roasters',
+    brewGuideStatus: 'implied',
     displayName: 'H&S',
     location: 'Laramie, WY',
     country: 'USA',
@@ -1764,6 +1826,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Datura Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Datura',
     location: 'Paris',
     country: 'France',
@@ -1796,6 +1859,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Thankfully Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Thankfully',
     location: 'Auburn, AL',
     country: 'USA',
@@ -1827,6 +1891,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Aviary',
+    brewGuideStatus: 'official',
     displayName: 'Aviary',
     location: 'Cleveland, OH',
     country: 'USA',
@@ -1859,6 +1924,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Apollon’s Gold',
+    brewGuideStatus: 'official',
     displayName: 'Apollon’s Gold',
     location: 'Tokyo',
     country: 'Japan',
@@ -1891,6 +1957,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Rogue Wave Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Rogue Wave',
     location: 'Edmonton, AB',
     country: 'Canada',
@@ -1923,6 +1990,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'MAME Coffee',
+    brewGuideStatus: 'official',
     displayName: 'MAME',
     location: 'Zurich',
     country: 'Switzerland',
@@ -1955,6 +2023,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Nomad Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Nomad',
     location: 'Barcelona',
     country: 'Spain',
@@ -1987,6 +2056,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Manhattan Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Manhattan',
     location: 'Rotterdam',
     country: 'Netherlands',
@@ -2019,6 +2089,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Botz Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Botz',
     location: 'Minnesota',
     country: 'USA',
@@ -2051,6 +2122,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Proud Mary Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Proud Mary',
     location: 'Melbourne',
     country: 'Australia',
@@ -2084,6 +2156,7 @@ export const ROASTERS: RoasterEntry[] = [
   // ---- System ----
   {
     name: 'The Picky Chemist',
+    brewGuideStatus: 'official',
     location: 'Chaudfontaine',
     country: 'Belgium',
     roastStyle: 'Ultra-light (precision-driven, lab-style roasting)',
@@ -2117,6 +2190,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Subtext Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Subtext',
     location: 'Toronto, ON',
     country: 'Canada',
@@ -2149,6 +2223,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Ona Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Ona',
     location: 'Canberra',
     country: 'Australia',
@@ -2181,6 +2256,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Rose Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Rose',
     location: 'Zurich',
     country: 'Switzerland',
@@ -2215,6 +2291,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Noma Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Noma',
     location: 'Copenhagen',
     country: 'Denmark',
@@ -2250,6 +2327,7 @@ export const ROASTERS: RoasterEntry[] = [
   // ---- Varies ----
   {
     name: 'Moonwake Coffee Roasters',
+    brewGuideStatus: 'official',
     displayName: 'Moonwake',
     location: 'San Jose, CA',
     country: 'USA',
@@ -2284,6 +2362,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Strait Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Strait',
     location: 'San Jose, CA',
     country: 'USA',
@@ -2318,6 +2397,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Scenery Coffee',
+    brewGuideStatus: 'official',
     displayName: 'Scenery',
     location: 'London, UK',
     country: 'UK',
@@ -2352,6 +2432,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Dongzhe',
+    brewGuideStatus: 'official',
     displayName: 'Dongzhe',
     location: 'Mountain View, CA',
     country: 'USA',
@@ -2383,6 +2464,7 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     name: 'Switch Coffee',
+    brewGuideStatus: 'implied',
     displayName: 'Switch',
     location: 'Tokyo',
     country: 'Japan',
@@ -2421,6 +2503,7 @@ export const ROASTERS: RoasterEntry[] = [
     // from the Rochester roasting program (Stronghold S7X/S9). No public
     // brew guide; identity tied to green-lot quality + roast precision.
     name: 'Untold Coffee Lab',
+    brewGuideStatus: 'none',
     displayName: 'Untold',
     location: 'Rochester, NY',
     country: 'USA',
@@ -2453,6 +2536,7 @@ export const ROASTERS: RoasterEntry[] = [
   // ---- Self-Roasted ----
   {
     name: 'Latent',
+    brewGuideStatus: 'none',
     displayName: 'Latent',
     location: 'Home (Roest sample roaster, 100g batches)',
     strategyTag: 'SELF-ROASTED',

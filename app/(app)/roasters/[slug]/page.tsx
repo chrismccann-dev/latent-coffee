@@ -169,20 +169,46 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
         <SectionCard title="BREWING PHILOSOPHY">
           <div className="mb-3 last:mb-0">
             <span className="font-sans text-sm font-semibold">Brew Guide: </span>
-            {entry.brewGuideLink ? (
-              <a
-                href={entry.brewGuideLink}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="font-sans text-sm underline"
-              >
-                {entry.brewGuideLink.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-              </a>
-            ) : (
-              <span className="font-sans text-sm">No official brew guide</span>
+            {entry.brewGuideStatus === 'official' && entry.brewGuideLink && (
+              <>
+                <a
+                  href={entry.brewGuideLink}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="font-sans text-sm underline"
+                >
+                  {entry.brewGuideLink.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                </a>
+                <span className="font-mono text-xxs text-latent-mid ml-2">(Official)</span>
+              </>
             )}
-            {entry.brewGuideSource && entry.brewGuideLink && (
-              <span className="font-mono text-xxs text-latent-mid ml-2">({entry.brewGuideSource})</span>
+            {entry.brewGuideStatus === 'official' && !entry.brewGuideLink && (
+              <span className="font-sans text-sm">
+                Official guide{entry.brewGuideType ? ` — ${entry.brewGuideType}` : ''}
+              </span>
+            )}
+            {entry.brewGuideStatus === 'implied' && entry.brewGuideLink && (
+              <>
+                <a
+                  href={entry.brewGuideLink}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="font-sans text-sm underline"
+                >
+                  {entry.brewGuideLink.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                </a>
+                <span className="font-mono text-xxs text-latent-mid ml-2">
+                  (Implied{entry.brewGuideType ? ` — sourced from ${entry.brewGuideType}` : ''})
+                </span>
+              </>
+            )}
+            {entry.brewGuideStatus === 'implied' && !entry.brewGuideLink && (
+              <span className="font-sans text-sm">
+                Implied recipe{entry.brewGuideType ? ` — sourced from ${entry.brewGuideType}` : ''}
+              </span>
+            )}
+            {entry.brewGuideStatus === 'none' && (
+              <span className="font-sans text-sm">No brew guide</span>
             )}
           </div>
           <LabelledField label="House Style" value={entry.houseStyle} />
