@@ -1,17 +1,36 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Brew } from '@/lib/types'
-import { getCoverColor } from '@/lib/brew-colors'
-import { SectionCard } from '@/components/SectionCard'
-import { Tag } from '@/components/Tag'
-import { StrategyPill } from '@/components/StrategyPill'
-import { RecipeTable } from '@/components/RecipeTable'
-import { PourStructureList } from '@/components/PourStructureList'
-import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import {
+  Chip,
+  StatusPill,
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  SspRecipeHead,
+  SspTimeline,
+  SspModifier,
+  SspStructure,
+  SspIdentGrid,
+  type TimelineStep,
+  type StructureRow,
+  type IdentCell,
+} from '@/components/Ssp'
 import { cleanModifiers, splitModifierLabel } from '@/lib/extraction-modifiers'
 import { composeHybridSubformLabel } from '@/lib/hybrid-subform'
-import { extractDrawdown } from '@/lib/pour-structure'
+import { extractDrawdown, parsePourSteps } from '@/lib/pour-structure'
+
+// Canonical axis order for grouping structure_tags ("Axis:Descriptor") into
+// SspStructure rows. Anything outside the list falls to the end alphabetically.
+const STRUCTURE_AXIS_ORDER = [
+  'Acidity',
+  'Body',
+  'Clarity',
+  'Finish',
+  'Sweetness',
+  'Balance',
+  'Overall',
+]
 
 export default async function BrewDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -32,323 +51,331 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
     notFound()
   }
 
-  const coverColor = getCoverColor(brew as Brew)
   const producer = brew.producer || brew.green_bean?.producer || null
   const drawdown = extractDrawdown(brew.total_time, brew.pour_structure)
 
   const modifiersResult = cleanModifiers(brew.modifiers)
   const modifiers = modifiersResult.ok ? modifiersResult.value : []
   const modifierSplits = modifiers.map((m) => splitModifierLabel(m))
-  const hasModifierDetails = modifierSplits.some((s) => s.detail)
+  const modifierHeads = modifierSplits.map((s) => s.head)
+  const detailSplits = modifierSplits.filter((s) => s.detail)
 
-  const hybridSubformLabel = brew.extraction_strategy === 'Hybrid'
-    ? composeHybridSubformLabel(brew.hybrid_subform)
-    : null
+  const hybridSubformLabel =
+    brew.extraction_strategy === 'Hybrid'
+      ? composeHybridSubformLabel(brew.hybrid_subform)
+      : null
 
   const tastedDiverged =
     !!brew.extraction_confirmed?.trim() &&
-    brew.extraction_confirmed.trim().toLowerCase() !== brew.extraction_strategy?.trim().toLowerCase()
+    brew.extraction_confirmed.trim().toLowerCase() !==
+      brew.extraction_strategy?.trim().toLowerCase()
 
-  const structureLabels = (brew.structure_tags ?? []).map((t: string) => {
-    const idx = t.indexOf(':')
-    return idx >= 0 ? t.slice(idx + 1) : t
+  // --- T1 Recipe head (6 canonical variables; always renders — page anchor) ---
+  const ratio =
+    brew.ratio ??
+    (brew.water_g != null && brew.dose_g
+      ? `1:${Math.round(brew.water_g / brew.dose_g)}`
+      : null)
+  const recipeCells = [
+    { label: 'Dose', value: brew.dose_g != null ? `${brew.dose_g}g` : '—' },
+    { label: 'Water', value: brew.water_g != null ? `${brew.water_g}g` : '—' },
+    { label: 'Ratio', value: ratio ?? '—' },
+    { label: 'Grind', value: brew.grind ?? '—' },
+    { label: 'Temp', value: brew.temp_c != null ? `${brew.temp_c}°C` : '—' },
+    { label: 'Total', value: brew.total_time ?? drawdown ?? '—' },
+  ]
+
+  // --- T1 Timeline: bloom (0:00) + parsed pour steps. ---
+  // The parser keeps `raw` intact, so a pour's raw text often re-states its own
+  // label + time ("Pour 1: 0:57 → 110g …") — both already shown in the timeline's
+  // label + time columns. Strip that leading echo so the desc reads clean.
+  const cleanPourDesc = (raw: string, time?: string): string => {
+    let s = raw.replace(/^(Pour\s*\d+(?:\s*\([^)]+\))?|Bloom|Drawdown)\s*[:.–-]?\s*/i, '')
+    if (time) {
+      s = s.replace(/^~?\d+:\d{2}(?:\s*[–-]\s*~?\d+:\d{2})?\s*[→–-]?\s*/, '')
+    }
+    return s.trim() || raw
+  }
+  const timelineSteps: TimelineStep[] = []
+  if (brew.bloom) {
+    timelineSteps.push({ t: '0:00', label: 'Bloom', desc: brew.bloom })
+  }
+  parsePourSteps(brew.pour_structure).forEach((step, i) => {
+    timelineSteps.push({
+      t: step.time ?? '·',
+      label: step.label ?? `Pour ${i + 1}`,
+      desc: cleanPourDesc(step.raw, step.time),
+    })
   })
 
-  // Full Brew Notes is a catch-all for archive detail. Render it whenever any
-  // of its 9 conditional fields is populated; suppress the section entirely
-  // for brews that have none.
+  // --- T1 Modifier detail prose (label-prefixed only when >1 detail row) ---
+  const modifierDetail =
+    detailSplits.length > 0 ? (
+      <div className="space-y-1">
+        {detailSplits.map((s, i) => (
+          <div key={i}>
+            {detailSplits.length > 1 && <span className="font-semibold">{s.head}: </span>}
+            {s.detail}
+          </div>
+        ))}
+      </div>
+    ) : null
+
+  const strategyLabel = brew.extraction_strategy
+    ? hybridSubformLabel
+      ? `${brew.extraction_strategy} · ${hybridSubformLabel}`
+      : brew.extraction_strategy
+    : null
+
+  // --- T2 Structure rows grouped by axis ---
+  const structureByAxis = new Map<string, string[]>()
+  for (const tag of (brew.structure_tags ?? []) as string[]) {
+    const idx = tag.indexOf(':')
+    const axis = idx >= 0 ? tag.slice(0, idx) : 'Other'
+    const desc = idx >= 0 ? tag.slice(idx + 1) : tag
+    const list = structureByAxis.get(axis) ?? []
+    list.push(desc)
+    structureByAxis.set(axis, list)
+  }
+  const structureRows: StructureRow[] = Array.from(structureByAxis.entries())
+    .sort(([a], [b]) => {
+      const ai = STRUCTURE_AXIS_ORDER.indexOf(a)
+      const bi = STRUCTURE_AXIS_ORDER.indexOf(b)
+      return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi) || a.localeCompare(b)
+    })
+    .map(([axis, descs]) => ({
+      lbl: axis,
+      chips: descs.map((d) => ({ name: d, tone: 'green' as const })),
+    }))
+
+  const hasFlavors = !!(brew.flavor_notes && brew.flavor_notes.length > 0)
+  const hasStructure = structureRows.length > 0
+
+  // --- T4 Coffee Overview (5-cell identity grid) ---
+  const cultivarSub = brew.cultivar
+    ? [brew.cultivar.species, brew.cultivar.genetic_family, brew.cultivar.lineage]
+        .filter(Boolean)
+        .join(' → ')
+    : null
+  const terroirSub = brew.terroir
+    ? [brew.terroir.country, brew.terroir.admin_region].filter(Boolean).join(' → ')
+    : null
+  const processSub =
+    Array.isArray(brew.fermentation_qualifiers) && brew.fermentation_qualifiers.length > 0
+      ? brew.fermentation_qualifiers.join(' · ')
+      : null
+  const identCells: IdentCell[] = [
+    { label: 'Roast Level', value: brew.roast_level ?? '—' },
+    {
+      label: 'Cultivar',
+      value: brew.cultivar?.cultivar_name ?? brew.variety ?? '—',
+      sub: cultivarSub,
+    },
+    { label: 'Process', value: brew.process ?? brew.base_process ?? '—', sub: processSub },
+    { label: 'Terroir', value: brew.terroir?.macro_terroir ?? '—', sub: terroirSub },
+    { label: 'Producer', value: producer ?? '—' },
+  ]
+
+  // --- T4 Full Brew Notes (catch-all; gated to populated fields) ---
+  const sensoryRows = (
+    [
+      ['Aroma', brew.aroma],
+      ['Attack', brew.attack],
+      ['Mid Palate', brew.mid_palate],
+      ['Body', brew.body],
+      ['Finish', brew.finish],
+    ] as const
+  ).filter(([, v]) => !!v)
+  const proseFields = (
+    [
+      ['Strategy Notes', brew.strategy_notes],
+      ['Cooling-Curve Target', brew.cooling_curve_target],
+      ['Terroir Connection', brew.terroir_connection],
+      ['Cultivar Connection', brew.cultivar_connection],
+    ] as const
+  ).filter(([, v]) => !!v)
+  const hasTakeaways = !!(brew.key_takeaways && brew.key_takeaways.length > 0)
   const showFullBrewNotes =
-    !!brew.aroma ||
-    !!brew.attack ||
-    !!brew.mid_palate ||
-    !!brew.body ||
-    !!brew.finish ||
+    sensoryRows.length > 0 ||
     !!brew.temperature_evolution ||
-    !!(brew.key_takeaways && brew.key_takeaways.length > 0) ||
-    !!brew.classification ||
-    !!brew.terroir_connection ||
-    !!brew.cultivar_connection ||
-    !!brew.strategy_notes ||
-    !!brew.cooling_curve_target ||
-    !!(brew.extraction_confirmed && !tastedDiverged)
+    hasTakeaways ||
+    proseFields.length > 0 ||
+    !!brew.classification
+
+  const meta = [
+    {
+      label: 'Variety',
+      value: brew.variety || brew.cultivar?.cultivar_name || '—',
+    },
+    { label: 'Roaster', value: brew.roaster || '—' },
+    { label: 'Producer', value: producer || '—' },
+  ]
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
         href="/brews"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
         ← Back to Brews
       </Link>
 
-      {/* 1. Header */}
-      <div className="section-card mb-6">
-        <div className="flex flex-col sm:flex-row gap-6 sm:gap-8">
-          {/* Book cover */}
-          <div
-            className="w-28 h-40 rounded flex-shrink-0 flex flex-col justify-between p-3 text-white"
-            style={{ background: coverColor }}
-          >
-            <div className="font-mono text-chip font-semibold leading-tight uppercase opacity-90">
-              {brew.coffee_name?.slice(0, 35)}
-            </div>
-            <div className="font-mono text-xs font-bold tracking-widest opacity-10 text-center">
-              LATENT
-            </div>
-          </div>
+      {/* Header */}
+      <SspTopBar
+        brewId={
+          brew.source === 'self-roasted' && brew.roast?.batch_id
+            ? `Batch #${brew.roast.batch_id}`
+            : undefined
+        }
+        date={brew.created_at?.slice(0, 10)}
+        roaster={brew.roaster?.toUpperCase()}
+        kind="Brew Detail"
+      />
+      <SspNamePlate
+        title={brew.coffee_name}
+        meta={meta}
+        pills={[
+          <StatusPill
+            key="src"
+            label={brew.source === 'self-roasted' ? 'Roasted' : 'Purchased'}
+          />,
+          ...(brew.roast_level
+            ? [<StatusPill key="roast" label={`Roast · ${brew.roast_level}`} tone="amber" />]
+            : []),
+          ...(brew.extraction_strategy
+            ? [<Chip key="strat" name={brew.extraction_strategy} tone="coral" />]
+            : []),
+        ]}
+      />
 
-          {/* Title + meta */}
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-start gap-2 sm:gap-3 mb-3">
-              <h1 className="font-sans text-2xl font-semibold w-full sm:w-auto sm:flex-1 sm:min-w-0">
-                {brew.coffee_name}
-              </h1>
-              <span
-                className={`font-mono text-xxs font-semibold px-2 py-1 rounded text-white ${
-                  brew.source === 'self-roasted' ? 'bg-latent-fg' : 'bg-latent-accent-light'
-                }`}
-              >
-                {brew.source === 'self-roasted' ? 'ROASTED' : 'PURCHASED'}
-              </span>
-            </div>
-
-            <div className="space-y-1 font-sans text-sm">
-              {(brew.variety || brew.cultivar?.cultivar_name) && (
-                <div><strong>Variety:</strong> {brew.variety || brew.cultivar?.cultivar_name}</div>
-              )}
-              {brew.roaster && <div><strong>Roaster:</strong> {brew.roaster}</div>}
-              {producer && <div><strong>Producer:</strong> {producer}</div>}
-              {brew.source === 'self-roasted' && brew.green_bean && (
-                <div className="font-mono text-xs text-latent-mid pt-1">
-                  Batch #{brew.roast?.batch_id || '?'}
-                </div>
-              )}
-            </div>
+      {/* TIER 1 — Reference Brew Recipe */}
+      <div>
+        <SspShead
+          ct={[brew.brewer, brew.filter].filter(Boolean).join(' · ') || undefined}
+        >
+          Reference Brew Recipe
+        </SspShead>
+        <SspRecipeHead items={recipeCells} />
+        {timelineSteps.length > 0 && <SspTimeline steps={timelineSteps} />}
+        {drawdown && <div className="ssp-tail">Drawdown · {drawdown}</div>}
+        {brew.water_recipe && (
+          <div className="ssp-tail">Water · {brew.water_recipe}</div>
+        )}
+        {strategyLabel && (
+          <div className="mt-2.5">
+            <SspModifier
+              strategy={strategyLabel}
+              modifiers={modifierHeads}
+              detail={modifierDetail}
+              tastedAs={tastedDiverged ? brew.extraction_confirmed : undefined}
+            />
           </div>
-        </div>
+        )}
       </div>
 
-      {/* 2. Reference Brew Recipe — page anchor */}
-      <SectionCard title="REFERENCE BREW RECIPE">
-        <RecipeTable brew={brew as Brew} />
-
-        {brew.water_recipe && (
-          <div className="mt-3 font-sans text-sm">
-            <strong>Water Recipe:</strong> {brew.water_recipe}
-          </div>
-        )}
-
-        {brew.bloom && (
-          <div className="mt-6">
-            <div className="font-sans text-sm font-semibold mb-1">Bloom</div>
-            <p className="font-sans text-sm leading-relaxed">{brew.bloom}</p>
-          </div>
-        )}
-
-        {brew.pour_structure && (
-          <div className="mt-6">
-            <div className="font-sans text-sm font-semibold mb-2">Pour Structure</div>
-            <PourStructureList pourStructure={brew.pour_structure} />
-            {drawdown && (
-              <div className="mt-2 font-sans text-sm">
-                <strong>Drawdown:</strong> {drawdown}
+      {/* TIER 2 — Presentation: Flavor Notes + Structure */}
+      {(hasFlavors || hasStructure) && (
+        <div className="ssp-card zero-pad">
+          {hasFlavors && (
+            <div className="ssp-card-sect">
+              <SspShead ct={`${brew.flavor_notes!.length} notes`}>Flavor Notes</SspShead>
+              <div className="flex flex-wrap gap-1.5">
+                {brew.flavor_notes!.map((note: string) => (
+                  <Chip key={note} name={note} tone="green" />
+                ))}
               </div>
-            )}
-          </div>
-        )}
-
-        {brew.extraction_strategy && (
-          <div className="mt-6 pt-4 border-t border-latent-border">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <div className="font-sans text-sm font-semibold mb-2">Extraction Strategy</div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <StrategyPill strategy={brew.extraction_strategy} variant="row" />
-                  {hybridSubformLabel && (
-                    <span className="font-sans text-sm text-latent-mid">{hybridSubformLabel}</span>
-                  )}
-                </div>
-              </div>
-              {modifierSplits.length > 0 && (
-                <div>
-                  <div className="font-sans text-sm font-semibold mb-2">Extraction Modifiers</div>
-                  <div className="flex flex-wrap gap-2">
-                    {modifierSplits.map((s, i) => (
-                      <span
-                        key={i}
-                        className="inline-flex items-center px-2 py-1 rounded-full border border-latent-border bg-latent-highlight text-latent-fg font-sans text-xs"
-                      >
-                        {s.head}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {tastedDiverged && (
-                <div>
-                  <div className="font-mono text-xxs text-latent-accent-light uppercase mb-1">
-                    Tasted As (differs)
-                  </div>
-                  <div className="font-sans text-sm">{brew.extraction_confirmed}</div>
-                </div>
-              )}
             </div>
+          )}
+          {hasStructure && (
+            <div className="ssp-card-sect">
+              <SspShead>Structure</SspShead>
+              <SspStructure rows={structureRows} />
+            </div>
+          )}
+        </div>
+      )}
 
-            {hasModifierDetails && (
-              <div className="mt-4">
-                <div className="font-sans text-sm font-semibold mb-1">Modifier Detail</div>
-                <div className="space-y-1 font-sans text-sm leading-relaxed">
-                  {modifierSplits.map((s, i) => s.detail && (
-                    <div key={i}>
-                      {modifierSplits.filter((x) => x.detail).length > 1 && (
-                        <span className="font-semibold">{s.head}: </span>
-                      )}
-                      {s.detail}
+      {/* TIER 3 — Peak Expression */}
+      {brew.peak_expression && (
+        <div className="ssp-peak">
+          <div className="hd">Peak Expression</div>
+          <div className="body">{brew.peak_expression}</div>
+        </div>
+      )}
+
+      {/* TIER 4 — Coffee Overview */}
+      <div>
+        <SspShead>Coffee Overview</SspShead>
+        <SspIdentGrid cells={identCells} />
+      </div>
+
+      {/* TIER 4 — What I Learned */}
+      {brew.what_i_learned && (
+        <div className="ssp-learned">
+          <div className="hd">What I Learned</div>
+          <p className="whitespace-pre-line">{brew.what_i_learned}</p>
+        </div>
+      )}
+
+      {/* TIER 4 — Full Brew Notes collapse */}
+      {showFullBrewNotes && (
+        <details className="ssp-coll">
+          <summary>
+            Additional Information
+            <span className="ct">Sensory · Temperature · Takeaways · Classification</span>
+            <span className="chev" />
+          </summary>
+          <div className="body">
+            {sensoryRows.length > 0 && (
+              <div className="ssp-sub">
+                <h3>Sensory Notes</h3>
+                <div className="ssp-sense">
+                  {sensoryRows.map(([label, value]) => (
+                    <div className="row" key={label}>
+                      <b>{label}</b>
+                      <span>{value}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
-          </div>
-        )}
-      </SectionCard>
 
-      {/* 3. Presentation Overview */}
-      {(brew.flavor_notes?.length || structureLabels.length > 0) && (
-        <SectionCard title="PRESENTATION OVERVIEW">
-          {brew.flavor_notes && brew.flavor_notes.length > 0 && (
-            <div className="mb-3">
-              <div className="font-sans text-sm font-semibold mb-2">Flavor Notes</div>
-              <div className="flex flex-wrap gap-1.5">
-                {brew.flavor_notes.map((note: string) => <Tag key={note}>{note}</Tag>)}
+            {brew.temperature_evolution && (
+              <div className="ssp-sub">
+                <h3>Temperature Evolution</h3>
+                <div className="ssp-prose">{brew.temperature_evolution}</div>
               </div>
-            </div>
-          )}
-          {structureLabels.length > 0 && (
-            <div>
-              <div className="font-sans text-sm font-semibold mb-2">Structure Notes</div>
-              <div className="flex flex-wrap gap-1.5">
-                {structureLabels.map((label: string) => <Tag key={label}>{label}</Tag>)}
-              </div>
-            </div>
-          )}
-        </SectionCard>
-      )}
+            )}
 
-      {/* 4. Peak Expression — high-contrast */}
-      {brew.peak_expression && (
-        <SectionCard dark>
-          <div className="font-mono text-xxs font-medium opacity-60 uppercase mb-3">PEAK EXPRESSION</div>
-          <p className="font-mono text-base font-semibold leading-relaxed">
-            {brew.peak_expression}
-          </p>
-        </SectionCard>
-      )}
-
-      {/* 5. Coffee Overview — appendix-style; deep hierarchies live on aggregation pages */}
-      <SectionCard title="COFFEE OVERVIEW">
-        <div className="space-y-2 font-sans text-sm">
-          {brew.roast_level && (
-            <div className="flex items-baseline gap-2 flex-wrap">
-              <span className="text-latent-mid w-24 flex-shrink-0">Roast Level:</span>
-              <Tag>{brew.roast_level}</Tag>
-            </div>
-          )}
-          {brew.cultivar && (
-            <div className="flex items-baseline gap-2 flex-wrap">
-              <span className="text-latent-mid w-24 flex-shrink-0">Cultivar:</span>
-              <span className="text-latent-mid">
-                {brew.cultivar.species}
-                {brew.cultivar.genetic_family && <> → {brew.cultivar.genetic_family}</>}
-                {' → '}
-              </span>
-              <Tag>{brew.cultivar.cultivar_name}</Tag>
-            </div>
-          )}
-          {brew.process && (
-            <div className="flex items-baseline gap-2 flex-wrap">
-              <span className="text-latent-mid w-24 flex-shrink-0">Process:</span>
-              <Tag>{brew.process}</Tag>
-              {Array.isArray(brew.fermentation_qualifiers) && brew.fermentation_qualifiers.length > 0 && (
-                <>
-                  <span className="text-latent-mid font-mono text-xxs uppercase opacity-70">qualifier</span>
-                  {brew.fermentation_qualifiers.map((q: string) => (
-                    <Tag key={q}>{q}</Tag>
+            {hasTakeaways && (
+              <div className="ssp-sub">
+                <h3>Key Takeaways · {brew.key_takeaways!.length} entries</h3>
+                <ol className="ssp-take">
+                  {brew.key_takeaways!.map((t: string, i: number) => (
+                    <li key={i}>{t}</li>
                   ))}
-                </>
-              )}
-            </div>
-          )}
-          {brew.terroir && (
-            <div className="flex items-baseline gap-2 flex-wrap">
-              <span className="text-latent-mid w-24 flex-shrink-0">Terroir:</span>
-              <span className="text-latent-mid">
-                {brew.terroir.country}
-                {brew.terroir.admin_region && <> → {brew.terroir.admin_region}</>}
-                {' → '}
-              </span>
-              <Tag>{brew.terroir.macro_terroir || brew.terroir.meso_terroir || '—'}</Tag>
-            </div>
-          )}
-        </div>
-      </SectionCard>
-
-      {/* 6. What I Learned — high-contrast */}
-      {brew.what_i_learned && (
-        <SectionCard dark title="WHAT I LEARNED">
-          <p className="font-sans text-sm leading-relaxed whitespace-pre-line">
-            {brew.what_i_learned}
-          </p>
-        </SectionCard>
-      )}
-
-      {/* 7. Full Brew Notes — mobile-collapsed catch-all */}
-      {showFullBrewNotes && (
-        <CollapsibleBlock title="FULL BREW NOTES">
-          {(brew.aroma || brew.attack || brew.mid_palate || brew.body || brew.finish) && (
-            <div className="mb-5">
-              <div className="label">SENSORY NOTES</div>
-              <div className="space-y-2 font-sans text-sm">
-                {brew.aroma && <div><span className="font-mono text-xs text-latent-mid mr-2">Aroma:</span>{brew.aroma}</div>}
-                {brew.attack && <div><span className="font-mono text-xs text-latent-mid mr-2">Attack:</span>{brew.attack}</div>}
-                {brew.mid_palate && <div><span className="font-mono text-xs text-latent-mid mr-2">Mid Palate:</span>{brew.mid_palate}</div>}
-                {brew.body && <div><span className="font-mono text-xs text-latent-mid mr-2">Body:</span>{brew.body}</div>}
-                {brew.finish && <div><span className="font-mono text-xs text-latent-mid mr-2">Finish:</span>{brew.finish}</div>}
+                </ol>
               </div>
-            </div>
-          )}
+            )}
 
-          {brew.temperature_evolution && (
-            <div className="mb-5">
-              <div className="label">TEMPERATURE EVOLUTION</div>
-              <p className="font-sans text-sm leading-relaxed">{brew.temperature_evolution}</p>
-            </div>
-          )}
+            {proseFields.map(([label, value]) => (
+              <div className="ssp-sub" key={label}>
+                <h3>{label}</h3>
+                <div className="ssp-prose">{value}</div>
+              </div>
+            ))}
 
-          {brew.key_takeaways && brew.key_takeaways.length > 0 && (
-            <div className="mb-5">
-              <div className="label">KEY TAKEAWAYS</div>
-              <ul className="list-disc list-inside space-y-2 font-sans text-sm">
-                {brew.key_takeaways.map((takeaway: string, i: number) => (
-                  <li key={i}>{takeaway}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {([
-            ['STRATEGY NOTES', brew.strategy_notes],
-            ['COOLING-CURVE TARGET', brew.cooling_curve_target],
-            ['TERROIR CONNECTION', brew.terroir_connection],
-            ['CULTIVAR CONNECTION', brew.cultivar_connection],
-            ['CLASSIFICATION', brew.classification],
-          ] as const).map(([title, value]) => value && (
-            <div key={title} className="mb-5 last:mb-0">
-              <div className="label">{title}</div>
-              <p className="font-sans text-sm leading-relaxed">{value}</p>
-            </div>
-          ))}
-        </CollapsibleBlock>
+            {brew.classification && (
+              <div className="ssp-sub">
+                <h3>Classification</h3>
+                <div className="ssp-classif">
+                  <b>Indexed</b>
+                  {brew.classification}
+                </div>
+              </div>
+            )}
+          </div>
+        </details>
       )}
     </div>
   )

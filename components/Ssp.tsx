@@ -22,6 +22,23 @@ export function Chip({ name, tone }: { name: ReactNode; tone?: AccentTone }) {
   return <span className={tone ? `chip ${tone}` : 'chip'}>{name}</span>
 }
 
+/**
+ * StatusPill — dot + mono-uppercase label. Default green; `amber` for roast,
+ * and the three lifecycle tones (lavender / resolved / archive) for the Sprint 2
+ * green pages. Deliberately distinct from {@link Chip} — a status never reads as
+ * a flavor chip.
+ */
+export type StatusTone = 'amber' | 'lavender' | 'resolved' | 'archive'
+
+export function StatusPill({ label, tone }: { label: ReactNode; tone?: StatusTone }) {
+  return (
+    <span className={tone ? `status ${tone}` : 'status'}>
+      <span className="dot" />
+      {label}
+    </span>
+  )
+}
+
 /** TopBar — black mono strip. Optional left slots; `·` only between present slots. */
 export function SspTopBar({
   brewId,
@@ -161,15 +178,23 @@ export function SspTimeline({ steps }: { steps: TimelineStep[] }) {
   )
 }
 
-/** Modifier panel — strategy chip + modifier chips + one prose detail row. */
+/**
+ * Modifier panel — strategy chip + modifier chips + optional prose detail row.
+ * `detail` and `tastedAs` are optional; their rows omit when empty so sparse
+ * brews (modifiers but no detail) don't render blank rows. `tastedAs` carries
+ * Latent's `extraction_confirmed` divergence ("planned Balanced, drank like
+ * Suppression") as a 4th row.
+ */
 export function SspModifier({
   strategy,
   modifiers,
   detail,
+  tastedAs,
 }: {
-  strategy: string
+  strategy: ReactNode
   modifiers: string[]
-  detail: ReactNode
+  detail?: ReactNode
+  tastedAs?: ReactNode
 }) {
   return (
     <div className="ssp-mod">
@@ -179,18 +204,28 @@ export function SspModifier({
           <Chip name={strategy} tone="coral" />
         </div>
       </div>
-      <div className="row">
-        <div className="lbl">Modifiers</div>
-        <div className="val">
-          {modifiers.map((m) => (
-            <Chip key={m} name={m} tone="green" />
-          ))}
+      {modifiers.length > 0 && (
+        <div className="row">
+          <div className="lbl">Modifiers</div>
+          <div className="val">
+            {modifiers.map((m) => (
+              <Chip key={m} name={m} tone="green" />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="row prose">
-        <div className="lbl">Modifier Detail</div>
-        <div className="val">{detail}</div>
-      </div>
+      )}
+      {detail ? (
+        <div className="row prose">
+          <div className="lbl">Modifier Detail</div>
+          <div className="val">{detail}</div>
+        </div>
+      ) : null}
+      {tastedAs ? (
+        <div className="row prose">
+          <div className="lbl">Tasted As (differs)</div>
+          <div className="val">{tastedAs}</div>
+        </div>
+      ) : null}
     </div>
   )
 }
