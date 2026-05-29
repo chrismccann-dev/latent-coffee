@@ -11,7 +11,7 @@ The primary input is Chris's authored design system from **claude.ai/design**, d
 1. **`Latent - Design System v2.html`** + `subpage-*.jsx` + the three `HANDOFF - *.md` docs — the full v2 system (8 sections: §01 Tokens → §08 Handoff/Roadmap). Covers nav, 5 index archetypes, brew + 4 sibling detail pages, the green 5-state lifecycle dispatcher, a component reference, and a 10-step migration order.
 2. **`Latent - Mobile Handoff (390).html`** + `mobile-handoff.css` + revised `subpage-green.jsx` — the round-trip output produced *during this brainstorm* to land the mobile-primary companion-surface artboards (see § Mobile-primary surfaces).
 
-**Housekeeping action for Chris:** both bundles currently live only in `/tmp` (ephemeral) + the claude.ai/design share URLs. Park them in the Dropbox `Latent Coffee Design System/` workspace (the canonical design workspace per PRODUCT.md § Design System — *not* mirrored into the repo). The implementation sprints depend on the `subpage-*.jsx` + CSS specs; this scope doc captures the **decisions**, the design workspace holds the **pixel specs**.
+**Bundle location (parked 2026-05-29):** `~/Documents/Latent Coffee Design System/Latent Design System - Full/project/` (exported from claude.ai/design — *not* mirrored into the repo, per the design-workspace convention in PRODUCT.md § Design System). All spec files verified present: `Latent - Design System v2.html` (§01 tokens + §07 components), `subpage-*.jsx` (the `Ssp*` family), `mobile-handoff.css` + revised `subpage-green.jsx` (verified cupping reflow), `Latent - Sub Page System v1.html` (host `.ssp-*` CSS). This scope doc captures the **decisions**; the bundle holds the **pixel specs**. (The `/tmp` copies the brainstorm fetched are ephemeral — the `~/Documents` path is canonical.)
 
 ## Governing principle (Chris-locked)
 
@@ -125,7 +125,7 @@ This redesign is substrate-touching (tokens, primitives, conventions). Per-sprin
 
 ## Open items
 
-- **Park both design bundles in Dropbox** (housekeeping, above) — implementation sprints depend on the specs.
+- Design bundle parked at `~/Documents/Latent Coffee Design System/Latent Design System - Full/project/` (verified present) — implementation sprints read the specs from there.
 - **520px crossover** — the cupping dual-subtree switches at 520px (between the 390 mobile anchor + 1024 desktop). Sensible; flagged so it's a known value, not drift.
 - **Container-query infra choice** — Tailwind `@container` plugin vs raw CSS in `globals.css`. Decide in Sprint 0 plan-mode.
 - The design's own "still open" list (producers / experiments / homepage / per-roast reflections chrome) — tracked as future work, not first-arc.
