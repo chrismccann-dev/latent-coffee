@@ -503,11 +503,15 @@ Third most-visited surface. Chris's Phase 1 audit reframed 4c from render-polish
 
 **Phase docs:** [kickoff brief](docs/sprints/sub-sprint-4c-brews-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4c-brews-polish-complementary-pass-2026-05-28.md).
 
-##### Sub-sprint 4d — Cultivars polish bundle
+##### Sub-sprint 4d — Cultivars polish bundle — SHIPPED 2026-05-28
 
-Audit per Sub Pages 3 ship state.
+Chris's Phase 1 audit framed `/cultivars/[id]` as a **reference/informational surface** (background + context to orient on a cultivar; "What I've Learned" is the most-referenced block but reads naturally where it is). The lightest bundle of the series — one ratified change, single PR, no migration.
 
-**Sizing:** ~1 sprint.
+**Bundle (single change) — index species-heading weight.** Pre-4d the index spine was inverted: the species header rendered `text-xxs` muted (smaller + quieter than the family header at `text-xs` bold dark + swatch). Bumped species to `text-lg` dark so it reads as the dominant spine tier (Species > Family > Lineage > Cultivar). Forward-looking for the multi-species future — every cultivar is Arabica today, but Liberica + Eugenioides roasted lots are coming.
+
+**Resolved no-action (Phase 1 + Phase 2):** "What I've Learned" synthesis stays at section 6 (most-referenced but reads naturally there; `short_form_capsule` noted as the lever for the future bigger redesign, not touched now). `cultivar_notes` (28/32 populated) + `cultivar_confidence` (26/32) confirmed intentionally-internal — normalization/authoring guidance + registry genetic-classification confidence respectively, neither user-facing reference; documented in CLAUDE.md so the substrate is known.
+
+**Phase docs:** [kickoff brief](docs/sprints/sub-sprint-4d-cultivars-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4d-cultivars-polish-complementary-pass-2026-05-28.md).
 
 ##### Sub-sprint 4e — Terroirs polish bundle
 
