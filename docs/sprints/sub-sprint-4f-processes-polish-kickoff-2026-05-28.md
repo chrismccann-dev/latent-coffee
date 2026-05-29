@@ -51,7 +51,7 @@ Output: `docs/sprints/sub-sprint-4f-processes-polish-complementary-pass-<date>.m
 - Routing determinism: [lib/process-routing.ts](lib/process-routing.ts) slug helpers + reverse parsers; `modifierComboSlug` alphabetization (same structural pattern → same slug).
 - Aggregation correctness: [lib/process-aggregation.ts](lib/process-aggregation.ts) — signature brews excluded from modifier-combo aggregations but included in modifier-index; `composeProcessDisplay` dedupe (the legacy `"Anaerobic Anaerobic Slow Dry…"` render-bug fix) holds across representative rows.
 - Synthesis dispatch: [lib/synthesis/adapters/process.ts](lib/synthesis/adapters/process.ts) `getProcessAdapter(kind)` (5 kinds) + `process_aggregation_syntheses` cache (migration 051, UNIQUE on `(user_id, aggregation_kind, aggregation_key)`) + the per-kind render gate.
-- Confidence thresholds: [lib/process-confidence.ts](lib/process-confidence.ts) (3+ HIGH / 2 MEDIUM / 1 LOW per Rule 5).
+- Confidence thresholds: [lib/process-confidence.ts](lib/process-confidence.ts) (5+ HIGH / 2-4 MEDIUM / 1 LOW per Rule 5 — corrected from the stale "3+" doc value in 4f Phase 2; code has been 5+ since the helper landed).
 - Render-gate audit mirroring the 4b `brewGuideLink` / 4c `Water:` / 4d species-weight / 4e collapse-default catches.
 
 Note: no `execute_sql` exposed on this MCP server (PostgREST read tools only) — run the column-population check statically against the registries + render paths, as in 4e.

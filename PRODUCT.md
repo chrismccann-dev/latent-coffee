@@ -459,7 +459,7 @@ Surfaces deleted:
 
 Read pages untouched. All canonical registries (`lib/*-registry.ts`) preserved as the source of truth for MCP-side validation.
 
-#### 4. Read-path surface polish series — ACTIVE (writing-path closed 2026-05-27)
+#### 4. Read-path surface polish series — COMPLETE 2026-05-28 (all 6 sub-sprints 4a-4f shipped)
 
 Per-page-family UX cleanup + informational architecture audit. Runs BEFORE the Claude-Design redesign so the redesign has the right informational scaffolding to polish, not patch. Order per Chris audio 2026-05-26 ("which ones I actually view most often naturally on my own"):
 
@@ -525,19 +525,28 @@ Chris's Phase 1 audit confirmed `/terroirs/[id]` as an **informational surface**
 
 **Phase docs:** [kickoff brief](docs/sprints/sub-sprint-4e-terroirs-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4e-terroirs-polish-complementary-pass-2026-05-28.md).
 
-##### Sub-sprint 4f — Processes polish bundle
+##### Sub-sprint 4f — Processes polish bundle — SHIPPED 2026-05-28 (closes the Read-path series)
 
-Audit per Sub Pages 4 ship state. Includes the previously-Side-Quests "Process qualifiers schema 1e.5 (Anoxic)" decision (whether `processes` aggregation needs structured Anoxic vs plain Anaerobic split — folds in naturally during the process surface review).
+Chris's Phase 1 audit confirmed the Sub Pages 4 information architecture **earns its keep — do not shrink.** Processes is genuinely multi-access (pure washed vs double anaerobic thermal shock yeast inoculated washed are different objects); the 3-tier nav + 5 sub-page kinds reflect the domain, not over-build. This closes the kickoff brief's central open question. Light bundle, single PR, no migration.
 
-**Sizing:** ~1 sprint.
+**Bundle (3 changes):**
+- **B1** — `ProcessCoffeesList` truncates to first 10 + pure-CSS "Show N more" expander (shared component → uniform across all 6 page kinds). Keeps high-count hubs (Washed 43 / Natural 36) from growing unbounded.
+- **B2** — honey-subprocess + modifier-combo pages wrap their cross-link blocks (flavor notes / cultivars / terroirs / roasters) in the collapsed `ADDITIONAL INFORMATION` `CollapsibleBlock`, matching base/modifier/signature pages (was rendering inline).
+- **B3** — confidence-threshold doc alignment: code renders HIGH at `>= 5`, but comment + CLAUDE.md + kickoff brief said "3+." Aligned docs to the code (5+ = HIGH); code unchanged.
 
-Producers polish DEFERRED until aggregation lands (trigger: 2+ producers at 3+ brews each; today only Pepe Jijon qualifies).
+**Anoxic decision (Q4 — folded in from the old Side-Quests "Process qualifiers schema 1e.5"): Path 1 — leave it.** Anoxic stays a recorded `fermentation_qualifiers` annotation; aggregation correctly stays at the Anaerobic modifier per the locked T3/CR-5 convention. N=1 today (below the ≥3 aggregation floor the whole processes IA runs on). Revisit only if 3+ brews carry it. No schema change — 4f stayed code-only.
+
+**Deferred (Phase 2):** F4 — no arbiter-queue reminder for unauthored process overviews (signature `overview`, base `summary`) + honey-subprocess description is a *missing field* not an unauthored one (Actor-4 / content-architecture work, out of light-series scope); `ProcessAdditionalInfo` extraction (the block is now inlined across 5 process pages — pre-existing per-page pattern). Both logged to [docs/grilling-queue.md](docs/grilling-queue.md). Producers polish DEFERRED until aggregation lands (trigger: 2+ producers at 3+ brews each; today only Pepe Jijon qualifies).
+
+**Phase docs:** [kickoff brief](docs/sprints/sub-sprint-4f-processes-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4f-processes-polish-complementary-pass-2026-05-28.md).
+
+**Read-path surface polish series (4a-4f) COMPLETE.** Redesign-brainstorm trigger condition #2 (§ 5 below) now met.
 
 #### 5. Claude-Design-led redesign — QUEUED (after both surface polish series complete)
 
 Chris has the design system ready via claude.ai/design (per Sprint R input #8). Needs its OWN brainstorm session before sprint planning per Chris audio 2026-05-26 ("whole other brainstorming session... decide if multiple sprints or one mega sprint... designed with mobile reconstruction in mind, so probably gonna end up being a much bigger thing"). The desktop-first rule re-examined as part of the redesign scope since brewing-side workflow now lives in mobile claude.ai.
 
-**Triggers when:** (1) writing-path surface polish series complete (sub-sprints 1-4); (2) read-path surface polish series complete (4a-4f); (3) Claude-Design redesign brainstorm session run (queued in § Brainstorms to schedule below).
+**Triggers when:** (1) ✅ writing-path surface polish series complete (sub-sprints 1-4, closed 2026-05-27); (2) ✅ read-path surface polish series complete (4a-4f, closed 2026-05-28); (3) ⬜ Claude-Design redesign brainstorm session run (queued in § Brainstorms to schedule below) — **the one remaining gate**.
 
 ### Brainstorms to schedule (parallel to sprint work)
 

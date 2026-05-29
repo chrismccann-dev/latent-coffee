@@ -1,9 +1,10 @@
 // Confidence-label helper shared across all /processes aggregation pages.
-// Mirrors Chris's brainstorm Rule 5 thresholds:
-//   3+   = Strong   (HIGH on the dark confidence card)
-//   2    = Emerging (MEDIUM)
+// Rule 5 thresholds (HIGH cutoff confirmed at 5+ in Sub-sprint 4f 2026-05-28 —
+// 5 is the honest "HIGH" bar; the doc was aligned to the long-standing code):
+//   5+   = Strong   (HIGH on the dark confidence card)
+//   2-4  = Emerging (MEDIUM)
 //   1    = Anecdotal (LOW)
-// Signature methods may render at 1 brew and use the same LOW label — the
+// Signature methods may render at 1 brew and use the same LOW label - the
 // "signature" badge lives on the page chrome, not the confidence card.
 
 export interface ConfidenceLabel {
