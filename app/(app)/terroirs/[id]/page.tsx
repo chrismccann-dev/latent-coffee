@@ -11,6 +11,7 @@ import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import { getCountryColor } from '@/lib/country-colors'
+import { confidenceFor } from '@/lib/confidence'
 
 /**
  * Merge terroir context fields across all terroirs in a macro terroir group.
@@ -138,10 +139,11 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   // Confidence level
   const brewCount = brewList.length
   const nonProcessCount = brewList.filter(b => !b.is_process_dominant).length
-  const confidence = brewCount >= 5 ? { emoji: '🟢', label: 'HIGH', desc: `${brewCount} coffees explored` }
-    : brewCount >= 2 ? { emoji: '🟡', label: 'MEDIUM', desc: `${nonProcessCount} non-process coffees` }
-    : brewCount >= 1 ? { emoji: '🔴', label: 'LOW', desc: `${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} explored` }
-    : { emoji: '🔴', label: 'LOW', desc: '0 coffees explored' }
+  // Shared thresholds via confidenceFor; terroir keeps its non-process-count MEDIUM desc.
+  const base = confidenceFor(brewCount)
+  const confidence = base.label === 'MEDIUM'
+    ? { ...base, desc: `${nonProcessCount} non-process coffees` }
+    : base
 
   const hasAdditionalInfo =
     sortedFlavors.length > 0 ||

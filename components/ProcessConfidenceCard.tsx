@@ -1,8 +1,8 @@
 // Shared confidence card for all 6 /processes aggregation page kinds.
-// Reads the canonical confidence label via lib/process-confidence.
+// Reads the canonical confidence label via lib/confidence.
 
 import { SectionCard } from '@/components/SectionCard'
-import { confidenceFor } from '@/lib/process-confidence'
+import { confidenceFor } from '@/lib/confidence'
 
 export function ProcessConfidenceCard({ brewCount }: { brewCount: number }) {
   const confidence = confidenceFor(brewCount)
