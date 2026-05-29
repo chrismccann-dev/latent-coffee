@@ -132,6 +132,12 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
       <SectionCard title="REFERENCE BREW RECIPE">
         <RecipeTable brew={brew as Brew} />
 
+        {brew.water_recipe && (
+          <div className="mt-3 font-sans text-sm">
+            <strong>Water Recipe:</strong> {brew.water_recipe}
+          </div>
+        )}
+
         {brew.bloom && (
           <div className="mt-6">
             <div className="font-sans text-sm font-semibold mb-1">Bloom</div>

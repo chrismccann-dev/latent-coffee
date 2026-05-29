@@ -77,6 +77,31 @@ Anoxic. Record-when-known annotation — does not dictate strategy (aggregation 
 at the [Anaerobic] modifier per docs/reference/canonical-registries.md § Qualifier). Omit (leave as []) when not
 applicable or not knowable from the source.
 
+Recipe-substrate fields (Sub-sprint 4c, 2026-05-28):
+- `water_recipe` (free-text) — the water formula / source. Set it rather than cramming
+  water into bloom / pour_structure / strategy_notes (e.g. "Third Wave Water Light Roast
+  ~1:3 concentrate:distilled", "Palo Alto office tap", "home remineralized"). No canonical
+  registry — store verbatim.
+- `modifiers` — two recipe-substrate additions. `thermal_staging` (renamed from
+  `inverted_temperature_staging`; legacy name still accepted) covers BOTH the kettle thermal
+  stance ("kettle off after bloom, natural cooling", "on-base constant") AND active ramps
+  ("86°C → 92°C across two phases") — set `{type:'thermal_staging', phases:'<free-text>'}`.
+  `equipment` captures persistent/timed gear beyond brewer+filter (Melodrip, booster,
+  Paragon ball) — set `{type:'equipment', name:'Melodrip', scope:'throughout'}` where
+  `scope` is free-text ("throughout" / "bloom + P1" / "bloom + P1, removed at P2"). Leave
+  existing Paragon-as-aroma_capture usage alone; use `equipment` going forward for
+  flow/agitation gear.
+
+Pour-structure free-text convention (until the structured `pour_structure` migration lands —
+keeps the legacy text parseable and consistent for the eventual structured backfill). Author
+`bloom` + `pour_structure` in this shape:
+- `bloom`: `<g>, <pour pattern>, hold <Ns>` (plus, for valve/switch brewers, a trailing
+  `Switch:`/`Sworks Valve:` clause stating the dial/state during the bloom).
+- `pour_structure`: one labeled line per pour — `Pour N: at <m:ss>, pour to <cumulative g>
+  over <Ns> in a <pattern> pour` (cumulative target, NOT incremental), with a trailing
+  `Switch:`/`Sworks Valve:` clause when the brewer has one (dial/state + any mid-pour
+  transition). End with a `Drawdown: <m:ss>` segment or rely on `total_time`.
+
 STEP 2 - propose_doc_changes for lessons from this session. source =
 {kind: "brew", id: "<brew_id from STEP 1>"}. BEFORE drafting any citation,
 fetch the live cluster doc with read_doc(uri="docs://skills/<cluster-path>.md")

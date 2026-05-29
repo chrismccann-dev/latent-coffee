@@ -109,17 +109,18 @@ Once the extraction strategy and any modifiers are confirmed, select the brewer 
 | **Coffee**            |                                                                                                      |
 | **Strategy**          | [Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid]      |
 | **Hybrid Sub-form**   | [only if Strategy = Hybrid: Sequential / Phase-Mapped / Selective Bloom / Intensity-Clarity Split / Temperature-Staged] |
-| **Modifiers**         | [None / Output Selection (form, including dilution) / Inverted Temperature Staging / Aroma Capture / Role-Based Pulse / multiple]            |
+| **Modifiers**         | [None / Output Selection (form, including dilution) / Thermal Staging / Aroma Capture / Role-Based Pulse / Equipment / multiple]            |
 | **Cooling-Curve Target** | [only if peak evaluation window IS the strategy, e.g. "40-45°C peak"; omit otherwise]               |
 | **Brewer**            | [brewer + valve position note if Bottomless Dripper]                                                 |
 | **Filter**            |                                                                                                      |
 | **Dose**              |                                                                                                      |
 | **Water**             | [total brew weight]                                                                                  |
+| **Water Recipe**      | [free-text water formula / source — "Third Wave Water Light Roast ~1:3 concentrate:distilled", "office tap"; omit if unknown]              |
 | **Cup Yield**         | [only if Output Selection used; specify what is kept and what is discarded]                          |
 | **Grind**             |                                                                                                      |
-| **Temp**              | [include staging if Inverted Temperature Staging modifier active]                                    |
-| **Bloom**             | [weight], [pour time], wait [time]                                                                   |
-| **Pour Structure**    | [list each pour with weight, duration, wait, and — for Bottomless Dripper — valve state per phase. If Aroma Capture modifier active, note where chilling ball is applied. If Strategy = Hybrid, note phase boundaries (lever/valve transitions) and what each phase is doing — e.g. "0:00-1:30 immersion, 1:30-3:00 percolation finish".] |
+| **Temp**              | [include staging if Thermal Staging modifier active — kettle stance or active ramp]                  |
+| **Bloom**             | [weight], [pour pattern], wait [time]. For valve/switch brewers, add a trailing `Switch:`/`Sworks Valve:` clause stating dial/state during the bloom. |
+| **Pour Structure**    | [one labeled line per pour using CUMULATIVE targets — "Pour N: at [m:ss], pour to [cumulative g] over [Ns] in a [pattern] pour", plus — for Bottomless Dripper — a trailing `Sworks Valve:` clause (dial/state + any mid-pour transition). If Aroma Capture / Equipment active, note where the gear (chilling ball / Melodrip) is applied and over which steps. If Strategy = Hybrid, note phase boundaries (lever/valve transitions) and what each phase is doing — e.g. "0:00-1:30 immersion, 1:30-3:00 percolation finish". End with a `Drawdown: [m:ss]` segment or rely on Target Total Time.] |
 | **Target Total Time** |                                                                                                      |
 
 After the recipe table, provide three short sections:
@@ -217,17 +218,18 @@ Once a recipe is confirmed as the reference brew for a coffee (iteration complet
 - **Brewer** — canonical from `read_canonical("brewers")` (e.g. `Sworks Bottomless`, `Hario V60`, `Orea v4`, `Kalita Tsubame`, `April`, `UFO`, `Hario Switch`). The brewing doc body uses descriptive forms (`SWORKS Bottomless Dripper`, `April Brewer Glass`, `Hario V60 Glass`) for readability; resolve to canonical when populating Step 4. If valve / Dial structure is part of THIS brew's recipe (e.g. SWORKS), keep that detail in the Pour Structure field, not the Brewer field — the Brewer field is equipment-only.
 - **Filter** — canonical from `read_canonical("filters")` (e.g. `xBloom Premium Paper Filters`, `CONE FAST`, `FLAT FAST`, `UFO FAST`, `WAVE B3`, `CAFEC Abaca+ Cup 1 Cone Paper Filter`). Note: legacy `Espro Bloom Flat` resolves via alias to `xBloom Premium Paper Filters`. Sibarist canonicals do NOT include the `Sibarist` brand prefix (that's manufacturer metadata, not part of the canonical name); use `CONE FAST` not `Sibarist FAST CONE`. Cafec papers: short forms (`Cafec T-92`) resolve via alias to canonical (`CAFEC T-92 - Cup 1 Light Roast Paper Filter`); use either form.
 - **Dose** — grams (e.g. `15g`, `18g`).
-- **Water** — `<weight>g (<ratio>), <type>` (e.g. `250g (1:16.7), office tap`, `288g (1:16), home remineralized`).
+- **Water** — `<weight>g (<ratio>)` (e.g. `250g (1:16.7)`, `288g (1:16)`). The water formula / source now has its own field (Water Recipe) — don't jam `office tap` into this line.
+- **Water Recipe** — free-text water formula / source (e.g. `Third Wave Water Light Roast ~1:3 concentrate:distilled`, `Palo Alto office tap`, `home remineralized`). Maps to `push_brew.water_recipe`. Omit if unknown.
 - **Cup Yield** — only if Output Selection modifier is active; specify what was kept (e.g. `kept 155g of 200g brew weight; discarded first 8g + last 37g`).
 - **Grinder** — canonical from `read_canonical("grinders")` (currently `EG-1`).
 - **Grind Setting** — must match a valid setting for the grinder; for EG-1, decimal between 3.0 and 8.0 in 0.1 steps. Format: `6.3`, not "EG-1 6.3" — Grinder + Grind Setting are separate fields.
 - **Extraction Strategy** — exactly one of `Suppression`, `Clarity-First`, `Balanced Intensity`, `Full Expression`, `Extraction Push`, `Hybrid` (v8.4). Strict canonical. Inspect via `read_canonical("extraction-strategies")`.
 - **Hybrid Sub-form** — REQUIRED when Strategy = Hybrid; null otherwise. One of: `sequential`, `phase_mapped`, `selective_bloom`, `intensity_clarity_split`, `temperature_staged`. Inspect via `read_canonical("hybrid-subforms")`. Strict canonical (5-value enum, code-side enforced).
-- **Modifiers** — JSON-style or labeled array of zero-or-more modifiers from this list: `Output Selection`, `Inverted Temperature Staging`, `Aroma Capture`, `Role-Based Pulse`. Each modifier with its sub-fields (Output Selection: form + brew_weight + cup_yield; Inverted Temp: phases; Aroma Capture: application). State `None` explicitly if no modifiers — empty is a positive signal that modifiers were considered. **v8.4 (2026-05-06):** Immersion was removed from the modifier list and absorbed into the Hybrid strategy via hybrid_subform.
+- **Modifiers** — JSON-style or labeled array of zero-or-more modifiers from this list: `Output Selection`, `Thermal Staging`, `Aroma Capture`, `Role-Based Pulse`, `Equipment`. Each modifier with its sub-fields (Output Selection: form + brew_weight + cup_yield + dilution_g; Thermal Staging: phases; Aroma Capture: application; Role-Based Pulse: roles; Equipment: name + scope). State `None` explicitly if no modifiers — empty is a positive signal that modifiers were considered. **v8.4 (2026-05-06):** Immersion was removed from the modifier list and absorbed into the Hybrid strategy via hybrid_subform. **4c (2026-05-28):** `Inverted Temperature Staging` renamed to `Thermal Staging` (covers kettle stance + active ramps; legacy name still accepted on write); `Equipment` added for persistent/timed gear (Melodrip / booster / Paragon ball) with free-text `scope`.
 - **Cooling-Curve Target** (v8.4) — free-text, optional. Set when peak evaluation window IS the strategy (e.g. `40-45°C peak`, `evaluate below 50°C`). Default null = normal cooling progression. Most brews omit; populate on El Paraíso, Garrido Mokka/Mokkita, anaerobic naturals, anoxic naturals, Picolot competition lots, and any coffee where the cooling-window discipline is part of the brief.
 - **Temp** — °C, with kettle management note (e.g. `94°C, kettle on base throughout`, `95°C, kettle off base (natural decline)`).
-- **Bloom** — weight + technique + duration + (if SWORKS) valve state.
-- **Pour Structure** — each pour with cumulative weight, duration, technique (center / spiral / Melodrip), valve state for SWORKS, chilling-ball position if Aroma Capture active, phase boundaries if Immersion active.
+- **Bloom** — weight + technique + duration + (if SWORKS / Switch) valve/lever state.
+- **Pour Structure** — one labeled line per pour with CUMULATIVE weight, start time, duration, technique (center / spiral / Melodrip), valve/lever state for SWORKS / Switch, gear position + step scope if Aroma Capture / Equipment active, phase boundaries if Strategy = Hybrid. End with a `Drawdown: [m:ss]` segment or rely on Total Time.
 - **Total Time** — e.g. `2:50-3:15`.
 
 ---

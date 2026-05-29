@@ -46,7 +46,7 @@ ${tierHint}
 
 Vocabulary preservation (HARD requirement — do NOT paraphrase these):
 - Extraction strategies: Suppression, Clarity-First, Balanced Intensity, Full Expression, Extraction Push, Hybrid.
-- Modifier types: output_selection, inverted_temperature_staging, aroma_capture, immersion.
+- Modifier types: output_selection, thermal_staging, aroma_capture, role_based_pulse, equipment.
 - Gear / proper nouns: SWORKS, Melodrip, Hario Switch, Sibarist, Orea, EG-1, Picolot, Garrido, Janson, Diego Bermúdez, etc.
 - Cultivar / process / signature-method names: Gesha, Pacamara, Sudan Rume, Moonshadow, TyOxidator, Anoxic, washed, natural, honey, anaerobic, yeast-inoculated, thermal shock, co-ferment.
 - Roasting vocabulary (when present in source): primary lever, brewing tolerance, acceptable roast window, underdevelopment signal, overdevelopment signal, aromatic behavior, structural behavior, rest behavior, scope tags (process:* / variety:* / terroir:*).

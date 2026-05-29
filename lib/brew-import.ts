@@ -236,6 +236,8 @@ export interface BrewPayload {
   grinder_override?: boolean
   grind_setting?: string | null
   temp_c?: number | null
+  // Free-text water formula / source (Sub-sprint 4c Bundle A, migration 071).
+  water_recipe?: string | null
   bloom?: string | null
   pour_structure?: string | null
   total_time?: string | null
@@ -971,6 +973,7 @@ export async function persistBrew(
     grind_setting: structuredGrind.grind_setting,
     grind: composedGrind,
     temp_c: payload.temp_c ?? null,
+    water_recipe: payload.water_recipe ?? null,
     bloom: payload.bloom ?? null,
     pour_structure: payload.pour_structure ?? null,
     total_time: payload.total_time ?? null,
@@ -1074,6 +1077,7 @@ export const PATCH_BREW_EDITABLE_FIELDS = [
   'grinder',
   'grind_setting',
   'temp_c',
+  'water_recipe',
   'bloom',
   'pour_structure',
   'total_time',
@@ -1219,6 +1223,18 @@ export async function patchBrew(
       errors.push('cooling_curve_target must be a string')
     } else {
       patch.cooling_curve_target = v.trim() || null
+    }
+  }
+
+  // water_recipe — free-text, normalize empty -> null (Sub-sprint 4c Bundle A)
+  if ('water_recipe' in patch) {
+    const v = patch.water_recipe
+    if (v === '' || v === null) {
+      patch.water_recipe = null
+    } else if (typeof v !== 'string') {
+      errors.push('water_recipe must be a string')
+    } else {
+      patch.water_recipe = v.trim() || null
     }
   }
 
