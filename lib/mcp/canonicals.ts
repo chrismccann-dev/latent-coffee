@@ -110,9 +110,10 @@ const MODIFIER_TYPE_DESCRIPTIONS: Record<ModifierType, { description: string; su
       notes: 'Free-text rationale.',
     },
   },
-  inverted_temperature_staging: {
-    description: 'Brew with temperature rising or falling across phases. E.g. 86°C bloom → 92°C late pours.',
-    subfields: { phases: 'Free-text description, e.g. "86°C → 92°C across two phases".' },
+  thermal_staging: {
+    description:
+      'Temperature variation across the brew. Covers both the kettle thermal stance (e.g. "kettle off after bloom, natural cooling", "on-base, constant 100°C") and active ramps (e.g. 86°C bloom → 92°C late pours). 4c (2026-05-28) renamed from `inverted_temperature_staging` (legacy name still accepted on input).',
+    subfields: { phases: 'Free-text description, e.g. "kettle off after bloom, natural cooling" or "86°C → 92°C across two phases".' },
   },
   aroma_capture: {
     description: 'Aromatic-distillation accessory inserted into the brew (Paragon ball, scent diffuser).',
@@ -123,6 +124,14 @@ const MODIFIER_TYPE_DESCRIPTIONS: Record<ModifierType, { description: string; su
       'Assigning each pour an explicit sensory role (saturation / body / clarity / finish) on a percolation-only brewer (V60 / Orea / Kalita / April / Chemex). v8.5 (2026-05-08) promotion. If the recipe involves immersion or a valve transition, classify under extraction_strategy="Hybrid" with hybrid_subform="phase_mapped" instead — RBP-as-modifier applies only when no immersion phase is involved. Agitation taper (high-energy early, low-energy late) is one shape of this modifier on the agitation axis.',
     subfields: {
       roles: 'Free-text per-pour role description, e.g. "Pour 1=saturation · Pour 2=body · Pour 3=clarity".',
+    },
+  },
+  equipment: {
+    description:
+      'Persistent or timed gear used beyond the base brewer + filter (Melodrip flow-restrictor, agitation booster, Paragon chilling/aroma ball). 4c (2026-05-28) addition. Per-step structured scoping is deferred to the future structured pour_structure migration; scope is free-text today.',
+    subfields: {
+      name: 'Gear name, e.g. "Melodrip", "Paragon ball", "booster".',
+      scope: 'Free-text usage window, e.g. "throughout", "bloom + P1", "bloom + P1, removed at P2".',
     },
   },
 }
@@ -179,7 +188,7 @@ export const CANONICAL_AXES: { axis: CanonicalAxis; title: string; description: 
   { axis: 'roast-levels', title: 'Roast Levels', description: '8 Agtron-anchored canonical buckets (Extremely Light → Very Dark, 10-unit ranges) + 22 aliases. Marketing tags (Nordic / Ultra Light / etc.) are aliases-only.' },
   { axis: 'grinders', title: 'Grinders', description: 'Single canonical: EG-1 with 51 valid settings (3.0-8.0 in 0.1 steps); 16 carry rich measured-D50 content. Setting axis is enumerated strict, not free-text.' },
   { axis: 'extraction-strategies', title: 'Extraction Strategies', description: '6 canonical strategies (v8.4, Hybrid promoted 2026-05-06). Five describe extraction intensity (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push); Hybrid describes extraction structure (phase boundaries with different jobs per phase). Mechanics-vs-intent symmetry holds across the 5 intensity strategies; Hybrid is orthogonal.' },
-  { axis: 'modifiers', title: 'Extraction Modifiers', description: '3 canonical modifier types (output_selection, inverted_temperature_staging, aroma_capture). Optional + stackable. v8.4 (2026-05-06): the Immersion modifier was removed and absorbed into the Hybrid strategy via hybrid_subform.' },
+  { axis: 'modifiers', title: 'Extraction Modifiers', description: '5 canonical modifier types (output_selection, thermal_staging, aroma_capture, role_based_pulse, equipment). Optional + stackable. v8.4 (2026-05-06): the Immersion modifier was removed and absorbed into the Hybrid strategy via hybrid_subform. 4c (2026-05-28): inverted_temperature_staging renamed to thermal_staging (legacy name still accepted); equipment added for persistent/timed gear.' },
   { axis: 'hybrid-subforms', title: 'Hybrid Sub-forms', description: '5 canonical sub-forms (v8.4) for the Hybrid extraction strategy: sequential | phase_mapped | selective_bloom | intensity_clarity_split | temperature_staged. Required when extraction_strategy="Hybrid". Sourced from the WBC Hybrid Systems family reduced to single-origin scope.' },
 ]
 

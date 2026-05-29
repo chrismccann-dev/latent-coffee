@@ -491,16 +491,17 @@ Per Chris audio: "I usually remember [a coffee] roaster first, so I usually go t
 
 **Deferred (per Phase 2 § Bucket G):** B1.b coffees-list section reorder; sort-order changes; BMR prefix rename; `url` field cleanup; synthesis card position; mobile full pass; per-roaster deep archive sub-view; family color tokens System vs Varies hue proximity; B2 richer Processes Explored cross-link block (punt to Sub-sprint 4f).
 
-##### Sub-sprint 4c — Brews polish bundle
+##### Sub-sprint 4c — Brews polish bundle — SHIPPED 2026-05-28 (Bundles A + B)
 
-Third most-visited surface. Audit:
+Third most-visited surface. Chris's Phase 1 audit reframed 4c from render-polish to **forward data-model design** — the pages are good as-is; the work is structuring recipe detail he already captures with no home, while avoiding over-build / future cleanup / write-surface churn. 3-phase audit (Phase 1 audit + 2 brainstorm docs; Phase 2 Claude complementary pass; Phase 3 plan-mode 2-bundle plan) shipped via 2 PRs.
 
-- `/brews` index grid + filter bar mobile boundary.
-- `/brews/[id]` detail page surfaces post-Sub-Pages-1.
-- Recipe Table + Pour Structure rendering.
-- Cross-link tag blocks.
+**Bundle A — recipe-substrate fields (SHIPPED PR #286).** `water_recipe` free-text column (migration 071) rendered as a "Water Recipe:" line under the 6-var RecipeTable (distinct from RecipeTable's "Water" grams cell). New `equipment` modifier type (5th on `brews.modifiers`) for persistent/timed gear beyond brewer+filter ({name, scope?}, scope free-text) — reuses the `modifiers[]` infra, zero schema change. `inverted_temperature_staging` → `thermal_staging` rename (ALIAS-SAFE: legacy name accepted + normalized by `cleanModifiers` via `MODIFIER_TYPE_ALIASES`; now covers kettle thermal stance + active ramps). Pour-structure free-text convention documented in the brewing prompts + operational-guide as cheap prep for the deferred structured-pour migration. Six-actor trace: schema/render + push/patch Zod + canonicals read-surface + list-recent-brews select + CLAUDE.md + brew prompts + short-form synthesis vocab.
 
-**Sizing:** ~1 sprint.
+**Bundle B — collapse /brews filters to Strategy + by-roaster (SHIPPED PR #285).** Per Chris's audit (recalls coffees roaster-first, "that Picolot coffee", not by family): collapsed the 4 family-level dimension rows to two — kept the Strategy pills, replaced the roaster-FAMILY row with a by-INDIVIDUAL-roaster `FilterPopover` (multi-select of distinct canonical `brews.roaster` with ≥1 brew, displayed via `getDisplayName`, matched on canonical; "filter by Picolot" wasn't possible before). Removed Process-family + Origin (Lineage/Macro) rows (that slicing lives on `/processes` · `/terroirs` · `/cultivars`). `FilterPopover` gained an optional `formatOption` prop. Net −87 lines.
+
+**Deferred (per Phase 2 § Bucket G):** structured `pour_structure` step-objects (Item 4 — its own future sprint; the free-text seam is already reserved in `lib/pour-structure.ts`; needs a dedicated grill on the valve enum-vs-free-text question, designed against accumulated real examples + heaviest write-surface impact); index pagination / infinite scroll (PRODUCT.md watch-item, not yet); phone-scope mobile full pass.
+
+**Phase docs:** [kickoff brief](docs/sprints/sub-sprint-4c-brews-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4c-brews-polish-complementary-pass-2026-05-28.md).
 
 ##### Sub-sprint 4d — Cultivars polish bundle
 

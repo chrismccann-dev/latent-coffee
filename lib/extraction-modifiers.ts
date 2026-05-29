@@ -39,13 +39,38 @@ export type CleanResult<T> = { ok: true; value: T } | { ok: false; error: string
 // Canonical types
 // ---------------------------------------------------------------------------
 
+// Sub-sprint 4c Bundle A (2026-05-28): MODIFIER_TYPES grew 4 -> 5.
+//   - `inverted_temperature_staging` was RENAMED to `thermal_staging`. The old
+//     name no longer fit: "inverted" implied cool->hot specifically, but the
+//     common case (kettle off after bloom, natural cooling) runs in the normal
+//     direction. `thermal_staging` now owns the whole temperature-variation
+//     axis — brew-level kettle stance (constant on-base vs off-after-bloom
+//     natural drop) AND active ramps ("86°C → 92°C across two phases"). The
+//     rename is ALIAS-SAFE: cleanModifiers() still accepts `inverted_temperature_staging`
+//     and normalizes it to `thermal_staging`, so stored rows + stale claude.ai
+//     payloads round-trip without a data migration.
+//   - `equipment` was ADDED — persistent/timed gear beyond brewer+filter
+//     (Melodrip / booster / Paragon ball). Shape: { name, scope? } where scope
+//     is free-text ("throughout" / "bloom + P1" / "bloom + P1, removed at P2").
+//     Structured per-step scoping is deferred to the future structured
+//     pour_structure migration; until that exists there's nothing to attach a
+//     structured scope to. Existing Paragon usage logged under `aroma_capture`
+//     is left as-is (arguably genuine aroma-capture intent); use `equipment`
+//     going forward for flow/agitation gear.
 export const MODIFIER_TYPES = [
   'output_selection',
-  'inverted_temperature_staging',
+  'thermal_staging',
   'aroma_capture',
   'role_based_pulse',
+  'equipment',
 ] as const
 export type ModifierType = (typeof MODIFIER_TYPES)[number]
+
+// Legacy modifier-type names accepted on input and normalized to canonical by
+// cleanModifiers(). Keeps stored rows + pre-4c claude.ai payloads valid.
+const MODIFIER_TYPE_ALIASES: Record<string, ModifierType> = {
+  inverted_temperature_staging: 'thermal_staging',
+}
 
 export const OUTPUT_SELECTION_FORMS = ['early_cut', 'late_cut', 'both', 'dilution'] as const
 export type OutputSelectionForm = (typeof OUTPUT_SELECTION_FORMS)[number]
@@ -59,9 +84,12 @@ export interface OutputSelectionModifier {
   notes?: string | null
 }
 
-export interface InvertedTemperatureStagingModifier {
-  type: 'inverted_temperature_staging'
-  phases?: string | null  // free-text e.g. "86°C → 92°C across two phases"
+export interface ThermalStagingModifier {
+  type: 'thermal_staging'
+  // free-text. Covers both the kettle thermal stance (e.g. "kettle off after
+  // bloom, natural cooling", "on-base, constant 100°C") and active ramps
+  // (e.g. "86°C → 92°C across two phases").
+  phases?: string | null
 }
 
 export interface AromaCaptureModifier {
@@ -74,11 +102,18 @@ export interface RoleBasedPulseModifier {
   roles?: string | null  // free-text e.g. "Pour 1=saturation · Pour 2=body · Pour 3=clarity"
 }
 
+export interface EquipmentModifier {
+  type: 'equipment'
+  name?: string | null   // gear name e.g. "Melodrip", "Paragon ball", "booster"
+  scope?: string | null  // free-text usage window e.g. "throughout", "bloom + P1"
+}
+
 export type Modifier =
   | OutputSelectionModifier
-  | InvertedTemperatureStagingModifier
+  | ThermalStagingModifier
   | AromaCaptureModifier
   | RoleBasedPulseModifier
+  | EquipmentModifier
 
 // ---------------------------------------------------------------------------
 // Display
@@ -86,9 +121,10 @@ export type Modifier =
 
 const TYPE_LABELS: Record<ModifierType, string> = {
   output_selection: 'Output Selection',
-  inverted_temperature_staging: 'Inverted Temperature Staging',
+  thermal_staging: 'Thermal Staging',
   aroma_capture: 'Aroma Capture',
   role_based_pulse: 'Role-Based Pulse',
+  equipment: 'Equipment',
 }
 
 const FORM_LABELS: Record<OutputSelectionForm, string> = {
@@ -120,8 +156,9 @@ export function splitModifierLabel(m: Modifier): { head: string; detail: string 
 
 /** Render a modifier as a single line for display. Examples:
  *    "Output Selection (late cut) — kept 245g of 288g"
- *    "Inverted Temperature Staging — 86°C → 92°C across two phases"
+ *    "Thermal Staging — kettle off after bloom, natural cooling"
  *    "Aroma Capture — Paragon ball on bloom + Pour 1"
+ *    "Equipment — Melodrip (throughout)"
  *    "Output Selection (late cut)"      // when no sub-data populated
  */
 export function composeModifierLabel(m: Modifier): string {
@@ -139,12 +176,18 @@ export function composeModifierLabel(m: Modifier): string {
               : ''
       return `${head} ${form}${detail}`
     }
-    case 'inverted_temperature_staging':
+    case 'thermal_staging':
       return m.phases ? `${head} — ${m.phases}` : head
     case 'aroma_capture':
       return m.application ? `${head} — ${m.application}` : head
     case 'role_based_pulse':
       return m.roles ? `${head} — ${m.roles}` : head
+    case 'equipment': {
+      const detail = m.name
+        ? `${m.name}${m.scope ? ` (${m.scope})` : ''}`
+        : m.scope || ''
+      return detail ? `${head} — ${detail}` : head
+    }
   }
 }
 
@@ -155,8 +198,13 @@ export function composeModifierLabel(m: Modifier): string {
 const MODIFIER_TYPE_SET = new Set<string>(MODIFIER_TYPES)
 const OUTPUT_FORM_SET = new Set<string>(OUTPUT_SELECTION_FORMS)
 
-function isModifierType(v: unknown): v is ModifierType {
-  return typeof v === 'string' && MODIFIER_TYPE_SET.has(v)
+/** Normalize a raw type string to its canonical ModifierType, resolving the
+ *  legacy `inverted_temperature_staging` -> `thermal_staging` alias. Returns
+ *  null when the value is neither canonical nor a known alias. */
+function normalizeModifierType(v: unknown): ModifierType | null {
+  if (typeof v !== 'string') return null
+  if (MODIFIER_TYPE_SET.has(v)) return v as ModifierType
+  return MODIFIER_TYPE_ALIASES[v] ?? null
 }
 
 function isOutputForm(v: unknown): v is OutputSelectionForm {
@@ -189,7 +237,12 @@ function nullableStr(v: unknown): string | null {
  *  v8.5 note: 'role_based_pulse' added as a 4th canonical type and 'dilution'
  *  added as a 4th OUTPUT_SELECTION_FORMS value. Pre-v8.5 clients sending
  *  payloads without these are still valid; post-v8.5 clients sending them
- *  round-trip cleanly. */
+ *  round-trip cleanly.
+ *
+ *  4c note (2026-05-28): 'inverted_temperature_staging' was renamed to
+ *  'thermal_staging' (still accepted as an alias, normalized here so stored
+ *  rows + pre-4c payloads stay valid). 'equipment' added as a 5th canonical
+ *  type for persistent/timed gear ({name, scope?}). */
 export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
   if (input == null) return { ok: true, value: [] }
   if (!Array.isArray(input)) {
@@ -202,14 +255,15 @@ export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
     if (!raw || typeof raw !== 'object') {
       return { ok: false, error: `modifiers[${i}]: expected object, got ${typeof raw}` }
     }
-    const type = (raw as { type?: unknown }).type
-    if (!isModifierType(type)) {
-      const hint = type === 'immersion'
+    const rawType = (raw as { type?: unknown }).type
+    const type = normalizeModifierType(rawType)
+    if (type === null) {
+      const hint = rawType === 'immersion'
         ? ' — the immersion modifier was removed in v8.4 (2026-05-06); use extraction_strategy="Hybrid" with hybrid_subform set instead'
         : ''
       return {
         ok: false,
-        error: `modifiers[${i}].type "${String(type)}" is not one of: ${MODIFIER_TYPES.join(', ')}${hint}`,
+        error: `modifiers[${i}].type "${String(rawType)}" is not one of: ${MODIFIER_TYPES.join(', ')}${hint}`,
       }
     }
     switch (type) {
@@ -231,9 +285,9 @@ export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
         })
         break
       }
-      case 'inverted_temperature_staging': {
+      case 'thermal_staging': {
         out.push({
-          type: 'inverted_temperature_staging',
+          type: 'thermal_staging',
           phases: nullableStr((raw as { phases?: unknown }).phases),
         })
         break
@@ -252,6 +306,14 @@ export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
         })
         break
       }
+      case 'equipment': {
+        out.push({
+          type: 'equipment',
+          name: nullableStr((raw as { name?: unknown }).name),
+          scope: nullableStr((raw as { scope?: unknown }).scope),
+        })
+        break
+      }
     }
   }
   return { ok: true, value: out }
@@ -263,11 +325,13 @@ export function emptyModifier(type: ModifierType): Modifier {
   switch (type) {
     case 'output_selection':
       return { type, form: 'late_cut', brew_weight: null, cup_yield: null, dilution_g: null, notes: null }
-    case 'inverted_temperature_staging':
+    case 'thermal_staging':
       return { type, phases: null }
     case 'aroma_capture':
       return { type, application: null }
     case 'role_based_pulse':
       return { type, roles: null }
+    case 'equipment':
+      return { type, name: null, scope: null }
   }
 }

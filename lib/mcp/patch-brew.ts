@@ -47,6 +47,9 @@ export const patchBrewInputSchema = {
   water_g: z.number().optional().nullable(),
   ratio: z.string().optional().nullable(),
   temp_c: z.number().optional().nullable(),
+  water_recipe: z.string().optional().nullable().describe(
+    'Free-text water formula / source ("Third Wave Water Light Roast ~1:3 concentrate:distilled", "Palo Alto office tap"). No canonical registry. Empty string normalizes to null. Sub-sprint 4c (2026-05-28).',
+  ),
   bloom: z.string().optional().nullable(),
   pour_structure: z.string().optional().nullable(),
   total_time: z.string().optional().nullable(),

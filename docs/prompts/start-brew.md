@@ -27,7 +27,14 @@ docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md). For canonical
 lookups, call read_canonical Tool with the axis name per
 docs://skills/coordinator/operator-guide.md § Canonical taxonomy lookups. Run
 Step 1 Coffee Brief; pause at Step 1d for strategy + modifier confirmation
-before producing the recipe.
+before producing the recipe. When you output the recipe (Step 2 Recipe Output
+format), author Bloom + Pour Structure in the labeled, CUMULATIVE-target shape
+defined in that section (one labeled line per pour; trailing `Sworks Valve:` /
+`Switch:` clause on valve/lever brewers) — this keeps the free-text parseable for
+the eventual structured-pour migration. Water formula / source goes in the Water
+Recipe field; kettle thermal stance + active temp ramps go in a `thermal_staging`
+modifier; gear beyond brewer+filter (Melodrip / booster / Paragon ball) goes in an
+`equipment` modifier with a free-text `scope`.
 
 Coffee URL:
 Dose: 15g

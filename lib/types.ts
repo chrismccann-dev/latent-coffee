@@ -415,6 +415,11 @@ export interface Brew {
   temp_c: number | null
   bloom: string | null
   pour_structure: string | null
+  // Sub-sprint 4c Bundle A (migration 071, 2026-05-28): free-text water formula
+  // / source ("Third Wave Water Light Roast ~1:3 concentrate:distilled", "office
+  // tap"). No canonical registry today; renders as a labeled line under the
+  // 6-var RecipeTable on /brews/[id].
+  water_recipe: string | null
   total_time: string | null
   extraction_strategy: string | null
   // v8.4 (migration 046, 2026-05-06): conditional sub-form. Required (text
@@ -443,6 +448,12 @@ export interface Brew {
   // type + free-text "roles" field. OUTPUT_SELECTION_FORMS also grew 3 -> 4
   // with `dilution` (post-brew dilution; carries optional `dilution_g` on
   // OutputSelectionModifier).
+  // Sub-sprint 4c Bundle A (2026-05-28): MODIFIER_TYPES grew to 5. Added
+  // `equipment` (persistent/timed gear beyond brewer+filter — Melodrip / booster
+  // / Paragon ball; {name, scope?} where scope is free-text "throughout" /
+  // "bloom + P1"). Also renamed `inverted_temperature_staging` -> `thermal_staging`
+  // (alias-safe: cleanModifiers normalizes the legacy type; it now covers both
+  // kettle thermal stance — off-after-bloom natural drop — and active ramps).
   modifiers: import('./extraction-modifiers').Modifier[]
   aroma: string | null
   attack: string | null
