@@ -139,7 +139,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   const brewCount = brewList.length
   const nonProcessCount = brewList.filter(b => !b.is_process_dominant).length
   const confidence = brewCount >= 5 ? { emoji: '🟢', label: 'HIGH', desc: `${brewCount} coffees explored` }
-    : brewCount >= 2 ? { emoji: '🟡', label: 'Medium', desc: `${nonProcessCount} non-process coffees` }
+    : brewCount >= 2 ? { emoji: '🟡', label: 'MEDIUM', desc: `${nonProcessCount} non-process coffees` }
     : brewCount >= 1 ? { emoji: '🔴', label: 'LOW', desc: `${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} explored` }
     : { emoji: '🔴', label: 'LOW', desc: '0 coffees explored' }
 
