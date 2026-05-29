@@ -27,13 +27,7 @@ import {
   signatureUrl,
 } from '@/lib/process-routing'
 import type { Brew } from '@/lib/types'
-
-const MODIFIER_AXIS_COLOR: Record<string, string> = {
-  fermentation: '#722F4B',
-  drying: '#8B6914',
-  intervention: '#5B4A6B',
-  experimental: '#5B4A6B',
-}
+import { axisColor, SIGNATURE_SWATCH_COLOR } from '@/lib/process-axis-colors'
 
 export default async function ProcessesIndexPage() {
   const supabase = createClient()
@@ -90,7 +84,7 @@ export default async function ProcessesIndexPage() {
               >
                 <div
                   className="w-4 h-4 rounded-sm flex-shrink-0"
-                  style={{ backgroundColor: MODIFIER_AXIS_COLOR[entry.axis] ?? '#5C6570' }}
+                  style={{ backgroundColor: axisColor(entry.axis) }}
                 />
                 <div className="flex-1 min-w-0">
                   <div className="font-sans text-sm font-semibold">{entry.name}</div>
@@ -133,7 +127,7 @@ export default async function ProcessesIndexPage() {
                 >
                   <div
                     className="w-4 h-4 rounded-sm flex-shrink-0"
-                    style={{ backgroundColor: '#5B4A6B' }}
+                    style={{ backgroundColor: SIGNATURE_SWATCH_COLOR }}
                   />
                   <div className="flex-1 min-w-0">
                     <div className="font-sans text-sm font-semibold">{sig.name}</div>

@@ -285,7 +285,9 @@ The framework (BREWING.md's two-axis model — extraction strategy + modifiers) 
 
 ## Design System
 
-The brand voice is **quiet research notebook**: monospace labels, book-cover cards per brew, uppercase taxonomy, a restrained sage/dark palette that lets coffee metadata do the talking. Code-level source of truth is `tailwind.config.ts` + `app/globals.css`. The Dropbox folder `Latent Coffee Design System/` is the **Claude Design skill workspace** (UI-kit prototypes, preview HTML, the mirrored `colors_and_type.css` reference) — it is not mirrored into this repo; the Tailwind config wins whenever they disagree.
+The brand voice is **quiet research notebook**: monospace labels, book-cover cards per brew, uppercase taxonomy, a restrained palette that lets coffee metadata do the talking. Code-level source of truth is `tailwind.config.ts` + `app/globals.css`. The Dropbox folder `Latent Coffee Design System/` is the **Claude Design skill workspace** (UI-kit prototypes, preview HTML, the mirrored `colors_and_type.css` reference) — it is not mirrored into this repo; the Tailwind config wins whenever they disagree.
+
+**v2 re-skin (Redesign Sprint 0, 2026-05-29).** The palette moved from cool near-white + single sage to **warm paper** (`bg #F2F1EC` / `fg #0E0E0E`) with a 5-tone flavor-accent family + a formalized lifecycle-tile gradient, and a new `.ssp-*` "lab-document" primitive family (`components/Ssp.tsx`) landed alongside the legacy `SectionCard`/`Tag` chrome. Token *names* stay `latent-*` (zero JSX churn); only values changed + new families were added. v2's CSS-var names live in `:root` (`app/globals.css`) and back the `.ssp-*` classes. Governing principle: the claude.ai/design v2 system is a **source to pull from, not adopt carte blanche** — Latent's framework (Tailwind tokens, `lib/*` source-of-truth, RSC) wins on every naming/structure divergence. The semantic palettes in `lib/*` keep **Latent's** hues (not re-derived from v2). Per-surface layout re-skins follow in Sprints 1..N; Sprint 0 propagated the look via tokens + primitives with zero layout reorganization. Full scope: [docs/features/claude-design-redesign-scope-2026-05-29.md](docs/features/claude-design-redesign-scope-2026-05-29.md).
 
 ### Voice & casing
 
@@ -295,8 +297,11 @@ The brand voice is **quiet research notebook**: monospace labels, book-cover car
 
 ### Palette
 
-- **Chrome (monochrome + sage):** `latent-bg #FAFAFA` (page), `latent-fg #1A1A1A` (ink), `latent-mid #888` (secondary text), `latent-subtle #BBB` (tertiary), `latent-border #E5E5E5` (hairline), `latent-accent #2C3E2D` (dark sage, primary-button hover + dark-card flourish), `latent-accent-light #4A7C59` (focus ring, PURCHASED badge), `latent-highlight #F8FFF0` + `latent-highlight-border #C5E1A8` (tag/chip background).
-- **Semantic palettes (out of scope for chrome sprints):**
+- **Chrome (warm paper, post v2 re-skin):** `latent-bg #F2F1EC` (page), `latent-fg #0E0E0E` (ink), `latent-mid #6B6B66` (secondary text), `latent-subtle #B4B4AE` (tertiary), `latent-border #E0DFDA` (hairline), `latent-paper #FAFAF7` (tinted card surface), `latent-surface #FFFFFF` (pure-white surface / nav bar), `latent-hairline #EDEBE5` (in-card dividers), `latent-accent #2C4A35` (dark green, primary-button hover), `latent-accent-light #4A7C59` (focus ring, sage), `latent-highlight #EDF3EC` + `latent-highlight-border #C9DBC4` (tag/chip background).
+- **Flavor accents (labels / chips / dots / swatches only):** `latent-acc-{green,coral,teal,amber,plum}` each with `-bg` + `-br` (green `#5B8A5A`, coral `#C77A5C`, teal `#5C8A8C`, amber `#A88037`, plum `#8E5A6E`). Consumed by the `Chip` primitive's 5 tones + the `SspFlavorAxis` 4-cell (teal/coral/amber/plum). Distinct from semantic chrome.
+- **Semantic chrome (workflow-state roles):** `latent-roast-emphasis` (amber `#A88037` — design intent / drop rules / predictions), `latent-cup-emphasis` (lavender `#7A6E9E` — cupping hypothesis / reference signals; was plum), `latent-resolved-emphasis` (green `#4A7C59` — resolved lots / reference roast / peak), `latent-archive-emphasis` (grey `#6B6B66` — archive / read-once provenance, **new 4th role**). Each has `-surface` + `-br` variants. Named by meaning, not color.
+- **Lifecycle tiles (green-coffee → roasted-coffee gradient):** `latent-tile-inventory` (grey `#B4B4AE`) → `latent-tile-next-roast` (sage `#4A7C59`) → `latent-tile-next-cupping` (olive-bronze `#6B5E3A`) → `latent-tile-resolved` (roasted brown `#3a2418`). The `/green` index binds states to these (resolved = brown per ratification #5, replacing the prior near-black `fg`); unresolved keeps neutral `mid` (outside the green-brown axis).
+- **Semantic palettes (Latent's hues — kept, not re-derived from v2):**
   - Book-cover colors: `lib/brew-colors.ts` — process × flavor signals (sage for Gesha/washed, burgundy for anaerobic/wine, gold for honey, brown for natural, teal for floral, slate fallback).
   - Extraction-strategy pills: `lib/extraction-strategy.ts` — Clarity-First (sage), Balanced (ochre), Full (burgundy).
   - Process families: `lib/process-registry.ts` — 5 families × per-family hue (back-compat shape; post 1e.1 the file also exports the full composable process registry).
@@ -304,6 +309,7 @@ The brand voice is **quiet research notebook**: monospace labels, book-cover car
   - Roaster families: `lib/roaster-registry.ts` — 5 BMR-mirrored families + warm-neutral per-roaster swatches.
   - Country swatches: `lib/country-colors.ts` — 12 earth-toned hues, one per producing country.
   - Cultivar family swatches: `lib/cultivar-family-colors.ts` — 6 warm/cool hues, one per genetic family.
+  - Process modifier-axis swatches: `lib/process-axis-colors.ts` — fermentation/drying/intervention/experimental + signature swatch + neutral fallback (centralized Sprint 0 from a map duplicated across two `/processes` pages).
 - **Hue-separation rule** — two colors at different saturation still read as "the same color." If a signal deserves its own color, shift hue, not lightness.
 - **One helper per visual system.** Each semantic palette has exactly one source-of-truth file. Do not copy palette maps into pages.
 
@@ -319,17 +325,20 @@ The brand voice is **quiet research notebook**: monospace labels, book-cover car
 | `text-micro` | 0.5625rem (9px) | Strategy-pill row variant, brew-cover flavor line |
 | `text-xxs` | 0.65rem (10.4px) | Labels, tags, badges, section headers, metadata |
 | `text-xs` | 0.72rem (11.5px) | Nav links, buttons, small chrome |
-| `text-sm` | 0.875rem (14px) | Body prose, inputs |
-| `text-lg` | 1.125rem (18px) | Brand wordmark |
+| `text-sm` | 0.8125rem (13px) | Body prose, inputs (v2 body 13px) |
+| `text-lg` | 1.125rem (18px) | Brand wordmark, mono card titles (ratification #2) |
 | `text-xl` | 1.25rem (20px) | Wizard step titles |
-| `text-2xl` | 1.5rem (24px) | Detail-page title (largest in-product) |
+| `text-2xl` | 1.375rem (22px) | Detail-page hero `<h1>`, sans (largest in-product) |
 
-- **Quiet hierarchy.** The loudest sans text is a brew name at 24px semibold. There is no display/hero type. Page titles are 11.5px mono uppercase labels.
+- **Quiet hierarchy.** The loudest sans text is a detail-page hero `<h1>` at 22px semibold. There is no display/hero type. Page titles are 11.5px mono uppercase labels.
+- **Card titles go mono (ratification #2).** Index card variety/lot names use mono (brew-card 18px / lot-card 17px) — a deliberate change from the prior title-case-sans convention. Detail-page hero `<h1>` stays **sans** 22px. (Sprint 0 establishes the scale + builds `.ssp-name h1` sans; the index card-title flip lands per-surface.)
 - **Letter-spacing:** `tracking-wide` (0.1em) for most mono uppercase, `tracking-widest` (0.15em) for the brand lockup.
 
 ### Spacing
 
-Tailwind defaults, used densely on a narrow set: **1 / 1.5 / 2 / 3 / 4 / 5 / 6 / 8 / 12 / 16**. Page shell is `max-w-3xl` (768px) for detail pages, `max-w-[1200px]` for the /brews grid and header. Horizontal padding `px-6`, vertical `py-8`. Header height fixed `h-14` (56px). No arbitrary `p-[17px]` anywhere — if a size isn't on the scale, it's drift.
+Tailwind defaults, used densely on a narrow set: **1 / 1.5 / 2 / 3 / 4 / 5 / 6 / 8 / 12 / 16**. Page shell is `max-w-3xl` (768px) for detail pages, `max-w-[1200px]` for the /brews grid and header. Horizontal padding `px-6`, vertical `py-8`. Header height fixed `h-14` (56px). No arbitrary `p-[17px]` anywhere — if a size isn't on the scale, it's drift. The v2 `--s1..--s8` CSS-var scale (4/8/12/16/22/32/48/64) lives in `:root` for the `.ssp-*` family's internal padding.
+
+**Responsive infra (Redesign Sprint 0, ratification #3): CSS container queries, two-point model.** The `.ssp-*` primitives are responsive via `@container ssppage (min-width: …)` (not `@media`) — wrap a page in `.ssp-page` (carries `container-type: inline-size`) to activate. Anchors are **390** (mobile) + **1024** (desktop); the hard 768 tablet breakpoint is dropped (tablet falls out of fluid container behavior + a spot-check). No new Tailwind plugin — raw CSS `@container` in `globals.css`.
 
 ### Component primitives
 
@@ -351,7 +360,9 @@ React components (in `components/`):
 - **`<FlavorNotesByFamily>`** — renders `aggregateFlavorNotes(brews)` grouped into the 8 flavor families.
 - **`<FlavorComposer>`** — chip composer for the 3-axis flavor system. Single typeahead per chip (autocomplete mixes bases + aliases); click chip to expand 3-slot inline editor (base + 2 modifier dropdowns). Tea-base modifier expansion + allowOverride. Replaces the deprecated `<FlavorNotesInput>`.
 - **`<StructureTagsPicker>`** — axis-grouped pickers for per-coffee structure descriptors (4 always-shown + 3 collapsible).
-- **`<Header>`** — sticky brand + nav + ADD + mobile hamburger.
+- **`<Header>`** — sticky brand + nav + mobile hamburger. Re-skinned Sprint 0 to the v2 centered-destinations shape (white surface bar, balanced `nav-tail` spacer, 6 destinations; `+ ADD` gone since Writing-path Sub-sprint 4).
+
+**`Ssp*` family (`components/Ssp.tsx`, Redesign Sprint 0).** The v2 "lab-document" primitive vocabulary, built as React server components driven by the `.ssp-*`/`.chip` CSS in `globals.css`. **Coexists with `SectionCard`/`Tag`/`TagLinkList` through the migration window** — each per-surface sprint swaps its page composition over; do not assume a missing `SectionCard` migration is a bug. Members: `Chip` (5 accent tones) · `SspTopBar` (black mono ID strip) · `SspNamePlate` (plum-edged plate, sans h1) · `SspShead` (hairline-prefixed section head) · `SspKVStrip` (dark mono key-value strip; alias `SspRecipeHead`) · `SspTimeline` (brew time/label/desc) · `SspModifier` (strategy + modifier chips + prose) · `SspFlavorAxis` (4-cell categorical) · `SspStructure` (label-row + chip-row) · `SspIdentGrid` (5-cell tabular metadata). Plus CSS-only `.blk`/`.blk.dark`, `.hero`, `details.ssp-coll`. Use, don't reimplement.
 
 ### Iconography
 
@@ -365,7 +376,7 @@ If a future surface genuinely needs a line-icon (e.g. a settings gear), use Luci
 
 ### Surfaces, motion, interaction
 
-- **Flat surfaces.** Page `#FAFAFA`, card `#FFF`, dark-accent card `#1A1A1A`. No gradients, no textures, no hero imagery, no photography.
+- **Flat surfaces.** Page `#F2F1EC` (warm paper), card `#FAFAF7` (paper) / `#FFF` (surface), dark-accent card `#0E0E0E`. No gradients, no textures, no hero imagery, no photography.
 - **No shadows at rest.** The only shadow in the product is brew-card hover — `shadow-lg` + `-translate-y-1 scale-[1.01]`, the book-lifts-off-the-shelf moment. Focus ring is 2px sage `outline` + 2px offset.
 - **Restrained motion.** Every transition is `transition-colors` or `transition-all duration-150` (buttons) / `duration-200` (brew-card hover). Default CSS ease. No bounces, springs, skeleton shimmer, page-load fades, or scroll-linked effects.
 - **No transparency.** No frosted glass, no backdrop-blur. `text-white/75` on book covers (dimness hierarchy) and `hover:bg-latent-highlight/30` on list rows (pale sage wash) are the only opacity uses.
@@ -374,7 +385,7 @@ If a future surface genuinely needs a line-icon (e.g. a settings gear), use Luci
 ### Discipline
 
 - **Adding a token = a deliberate decision.** Same energy as adding to the flavor-registry or roaster-registry. If a color / size / spacing isn't on the canonical list, it's drift, not creativity.
-- **Desktop is the primary design target.** Tablet spot-check on every UI sprint; phone-scope lives in its own sprint.
+- **Desktop-primary default; named mobile-primary "workflow-companion" surfaces (Q3, 2026-05-29).** Default is desktop-primary + mobile-must-not-regress for reference/study surfaces (aggregation pages, indexes, resolved lots, archive reading). **Exception:** workflow-companion surfaces are mobile-primary — pages whose moment-of-use is physically at a station with phone in hand: `/brews/[id]` recipe (brew bench), `/green/[id]` waiting-for-cupping (cupping table), and (soft) `/green/[id]` waiting-for-roast. Defensible by job, not guess. Mobile pass folds into each surface's own per-surface sprint + a light closing regression sweep (not a separate big mobile sprint). Responsive infra is container queries + 390/1024 (no 768) per ratification #3.
 - **When in doubt, match the document.** The Dropbox folder's `README.md` + `colors_and_type.css` are a high-fidelity mirror of the code. If the code disagrees with itself between two pages, the documented token wins.
 
 ---
@@ -542,11 +553,14 @@ Chris's Phase 1 audit confirmed the Sub Pages 4 information architecture **earns
 
 **Read-path surface polish series (4a-4f) COMPLETE.** Redesign-brainstorm trigger condition #2 (§ 5 below) now met.
 
-#### 5. Claude-Design-led redesign — ACTIVE (brainstorm complete 2026-05-29; Sprint 0 next)
+#### 5. Claude-Design-led redesign — ACTIVE (Sprint 0 Foundation shipped 2026-05-29; per-surface sprints next)
 
-Chris has the design system ready via claude.ai/design (per Sprint R input #8). **Brainstorm ran 2026-05-29** — all three gates met; scope locked in [docs/features/claude-design-redesign-scope-2026-05-29.md](../features/claude-design-redesign-scope-2026-05-29.md). Decomposition = **Option 2 (foundation-first + per-surface, companion surfaces ordered first)**: Sprint 0 lands the v2 tokens + the new `Ssp*` / `.blk` / `.hero` primitive family + nav re-skin + container-query infra; per-surface re-skins follow, with the mobile-primary companion surfaces (brew recipe + green cupping) first. The desktop-first rule is refined to **desktop-primary default + named mobile-primary "workflow-companion" surfaces** (pages used at a station, phone in hand). First arc re-skins existing surfaces only; `/producers` + `/experiments` + homepage deferred. Governing principle: **pull from the v2 system, don't adopt carte blanche.**
+Chris has the design system ready via claude.ai/design (per Sprint R input #8). **Brainstorm ran 2026-05-29** — all three gates met; scope locked in [docs/features/claude-design-redesign-scope-2026-05-29.md](../features/claude-design-redesign-scope-2026-05-29.md). Decomposition = **Option 2 (foundation-first + per-surface, companion surfaces ordered first)**. The desktop-first rule is refined to **desktop-primary default + named mobile-primary "workflow-companion" surfaces** (pages used at a station, phone in hand). First arc re-skins existing surfaces only; `/producers` + `/experiments` + homepage deferred. Governing principle: **pull from the v2 system, don't adopt carte blanche.**
 
-**Triggers (all met):** (1) ✅ writing-path surface polish series complete (sub-sprints 1-4, closed 2026-05-27); (2) ✅ read-path surface polish series complete (4a-4f, closed 2026-05-28); (3) ✅ Claude-Design redesign brainstorm run 2026-05-29 → scope doc. **Next: Sprint 0 (Foundation)** plan-mode sprint — kickoff brief at [docs/sprints/sprint-0-foundation-kickoff-2026-05-29.md](../sprints/sprint-0-foundation-kickoff-2026-05-29.md).
+- **Sprint 0 — Foundation — SHIPPED 2026-05-29.** v2 warm-paper tokens (re-pointed `latent-*` + new flavor-accent / lifecycle-tile / `archive-emphasis` families, `--acc-*` aliases) + the new `Ssp*` / `.blk` / `.hero` primitive family (`components/Ssp.tsx`) + nav re-skin (centered, white surface) + raw-CSS `@container` infra (390/1024, no 768) + lifecycle-tile gradient on `/green` (resolved = roasted-brown, ratification #5) + centralized `lib/process-axis-colors.ts`. Zero layout reorganization — look propagated via tokens + primitives; every route verified at 390 + 1024. Semantic `lib/*` palettes kept Latent's hues (not re-derived). See [docs/sprints/shipped.md](../sprints/shipped.md).
+- **Next: per-surface re-skins**, companion-first — brew detail + green lifecycle (mobile-primary), then roasters / cultivars / terroirs / processes, then the `/green` index — each its own plan-mode sprint, mirroring the 4a-4f cadence, on the now-stable token + primitive base.
+
+**Triggers (all met):** (1) ✅ writing-path surface polish series complete (sub-sprints 1-4, closed 2026-05-27); (2) ✅ read-path surface polish series complete (4a-4f, closed 2026-05-28); (3) ✅ Claude-Design redesign brainstorm run 2026-05-29 → scope doc.
 
 ### Brainstorms to schedule (parallel to sprint work)
 
