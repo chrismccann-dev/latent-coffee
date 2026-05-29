@@ -513,11 +513,17 @@ Chris's Phase 1 audit framed `/cultivars/[id]` as a **reference/informational su
 
 **Phase docs:** [kickoff brief](docs/sprints/sub-sprint-4d-cultivars-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4d-cultivars-polish-complementary-pass-2026-05-28.md).
 
-##### Sub-sprint 4e — Terroirs polish bundle
+##### Sub-sprint 4e — Terroirs polish bundle — SHIPPED 2026-05-28
 
-Audit per Sub Pages 2 ship state.
+Chris's Phase 1 audit confirmed `/terroirs/[id]` as an **informational surface** (like cultivars) — §1–8 + §10 Confidence right as-is, index liked as-is. The lightest bundle of the series alongside 4d — one ratified change, single PR, no migration.
 
-**Sizing:** ~1 sprint.
+**Bundle (single change) — `CollapsibleBlock` collapse-by-default.** The component rendered a dual-tree: always-open on desktop (`hidden md:block`, no toggle), collapsed only on mobile (`md:hidden <details>`). Collapsed into a single native `<details>` closed by default at every breakpoint, so "Additional Information" collapses on desktop too. Per Chris's "we should always have that bar be collapsed." One component edit propagating to all 7 consumers (terroir / cultivar / roaster "Additional Information" + /brews/[id] "Full Brew Notes" + 3× /processes/* sub-pages) — also simplifies the component (children render once, no re-mount caveat).
+
+**Resolved no-action (Phase 2):** render-path audit found NO 4d-style unrendered-column gap — every `Terroir` content column has a render path (the type is leaner than `Cultivar`; no `terroir_notes`/`terroir_confidence` analog). Macro+country merge logic drops nothing. Pre-existing synthesis-gate inconsistency noted (terroir shows at ≥1 brew, cultivar gates at ≥2) — flagged, no action.
+
+**Deferred (Phase 1):** brew-list/card unification across terroir/cultivar/roaster/process pages → § Longer Term Items / Small-opportunistic (Chris-flagged low-priority, belongs to the broader Claude-Design redesign exercise).
+
+**Phase docs:** [kickoff brief](docs/sprints/sub-sprint-4e-terroirs-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4e-terroirs-polish-complementary-pass-2026-05-28.md).
 
 ##### Sub-sprint 4f — Processes polish bundle
 
@@ -609,6 +615,8 @@ Scoped, sized, and ready-to-launch when timing is right. Not currently in Active
 - **Blend-cultivar schema modeling + future blending research framework** (Phase 2 Item 26 / 2026-05-24). Two substrate patterns currently coexist; no short-term sprint scope (Chris-confirmed: blends are "every so often"). The actual trigger is the **future WBC-inspired blending research project** — likely scope: `lot_compositions` join table or `green_beans.blend_composition jsonb` capturing structured blend metadata (cultivar + farm + roast-variant proportions) + brewing-side surface for "blend X vs single-origin A vs B" comparison. **Triggers**: Chris starts the WBC blending research project OR blend lots become >10% of inventory OR claude.ai friction breaks on a lived blend lot.
 
 #### Small / opportunistic
+
+- **Brew-list/card component unification** (Chris-flagged Sub-sprint 4e, 2026-05-28). The "coffees I've brewed" list renders differently on every aggregation page — terroir ("Coffees Brewed From This Region"), roaster ("Coffees I Have Brewed From This Roaster"), cultivar, and the /processes pages each re-implement the row markup + meta composition instead of importing one shared component. Chris: "instead of rendering it differently across each page… there should almost just be a BrewCard component so all of them pull from the same place." Low-priority — Chris flagged it as belonging to the **broader Claude-Design redesign exercise** (§5), not a standalone fix. **Triggers when:** the Claude-Design redesign window opens, OR the divergence starts causing maintenance friction.
 
 - **Signature method "what I learned" synthesis variant** — flagged 2026-05-11. Per-signature-method synthesis variant with "what I learned from this signature" framing. **Trigger:** 2nd brew lands on any signature OR Chris wants the populated signature pages filled out.
 
