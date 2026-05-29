@@ -15,6 +15,7 @@ import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
+import { confidenceFor } from '@/lib/confidence'
 
 interface LabelledFieldProps {
   label: string
@@ -103,9 +104,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
   }
 
   const brewCount = brewList.length
-  const confidence = brewCount >= 5 ? { emoji: '🟢', label: 'HIGH', desc: `${brewCount} coffees explored` }
-    : brewCount >= 2 ? { emoji: '🟡', label: 'MEDIUM', desc: `${brewCount} coffees explored` }
-    : { emoji: '🔴', label: 'LOW', desc: `${brewCount} ${brewCount === 1 ? 'coffee' : 'coffees'} explored` }
+  const confidence = confidenceFor(brewCount)
 
   const locationStr = entry?.location && entry?.country && entry.location !== entry.country
     ? `${entry.location}, ${entry.country}`
