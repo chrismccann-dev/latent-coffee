@@ -17,6 +17,7 @@ import { Brew } from '@/lib/types'
 import { SectionCard } from '@/components/SectionCard'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
+import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import { ProcessBreakdownRow } from '@/components/ProcessBreakdownRow'
 import { ProcessConfidenceCard } from '@/components/ProcessConfidenceCard'
 import { ProcessCoffeesList } from '@/components/ProcessCoffeesList'
@@ -85,6 +86,9 @@ export default async function HoneySubprocessPage({
     if (brew.roaster) roasterSet.add(brew.roaster)
   }
 
+  const hasAdditional =
+    sortedFlavors.length > 0 || terroirMap.size > 0 || cultivarMap.size > 0 || roasterSet.size > 0
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
       <Link
@@ -138,32 +142,39 @@ export default async function HoneySubprocessPage({
         brews={brewList}
       />
 
-      {/* Flavor + cross-link blocks (visible by default; page is short) */}
-      <FlavorNotesByFamily notes={sortedFlavors} />
-      <TagLinkList
-        title="CULTIVARS EXPLORED"
-        items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
-          key: name,
-          label: name,
-          href: `/cultivars/${id}`,
-        }))}
-      />
-      <TagLinkList
-        title="TERROIRS EXPLORED"
-        items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
-          key: name,
-          label: `${country} / ${name}`,
-          href: `/terroirs/${id}`,
-        }))}
-      />
-      <TagLinkList
-        title="ROASTERS EXPLORED"
-        items={Array.from(roasterSet).map((r) => ({
-          key: r,
-          label: r,
-          href: `/roasters/${encodeURIComponent(r)}`,
-        }))}
-      />
+      {/* Additional Information (collapsed; mirrors base/modifier/signature pages) */}
+      {hasAdditional && (
+        <CollapsibleBlock title="ADDITIONAL INFORMATION">
+          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" bare />
+          <TagLinkList
+            title="CULTIVARS EXPLORED"
+            bare
+            items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
+              key: name,
+              label: name,
+              href: `/cultivars/${id}`,
+            }))}
+          />
+          <TagLinkList
+            title="TERROIRS EXPLORED"
+            bare
+            items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
+              key: name,
+              label: `${country} / ${name}`,
+              href: `/terroirs/${id}`,
+            }))}
+          />
+          <TagLinkList
+            title="ROASTERS EXPLORED"
+            bare
+            items={Array.from(roasterSet).map((r) => ({
+              key: r,
+              label: r,
+              href: `/roasters/${encodeURIComponent(r)}`,
+            }))}
+          />
+        </CollapsibleBlock>
+      )}
 
       {/* Confidence */}
       <ProcessConfidenceCard brewCount={brewList.length} />
