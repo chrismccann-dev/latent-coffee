@@ -107,7 +107,7 @@ export default async function CultivarsPage() {
         <div className="space-y-10">
           {speciesGroups.map((speciesGroup) => (
             <div key={speciesGroup.species}>
-              <h2 className="font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid mb-4">
+              <h2 className="font-mono text-lg font-semibold tracking-wide uppercase text-latent-fg mb-4">
                 {speciesGroup.species}
               </h2>
 
