@@ -3,44 +3,34 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { EXTRACTION_STRATEGIES, getStrategyStyle } from '@/lib/extraction-strategy'
-import { PROCESS_FAMILIES, getFamilyColor as getProcessFamilyColor } from '@/lib/process-registry'
-import { ROASTER_FAMILIES, getFamilyColor as getRoasterFamilyColor } from '@/lib/roaster-registry'
+import { getDisplayName } from '@/lib/roaster-registry'
 
-type MultiKey = 'processes' | 'roasters' | 'lineages' | 'macros'
-type DimensionKey = 'strategy' | MultiKey
+// Sub-sprint 4c Bundle B (2026-05-28): collapsed the 4-dimension family-level
+// filter set (Strategy / Process family / Roaster family / Origin) to TWO
+// filters per Chris's audit — he doesn't filter by family, he recalls coffees
+// by the specific roaster ("that Picolot coffee"). Kept the Strategy pills
+// (already worked, cheap to keep) + replaced the roaster-FAMILY row with a
+// by-INDIVIDUAL-roaster popover. Process + Origin (Lineage/Macro) rows removed
+// — that family-level slicing lives on the aggregation pages
+// (/processes, /terroirs, /cultivars).
 
 interface BrewsFilterBarProps {
   activeStrategy: string | null
-  activeProcesses: string[]
-  activeRoasters: string[]
-  activeLineages: string[]
-  activeMacros: string[]
-  allLineages: string[]
-  allMacros: string[]
+  activeRoasters: string[]   // individual canonical roaster names
+  allRoasters: string[]      // distinct canonical roaster names with >=1 brew
   anyActive: boolean
 }
 
 export function BrewsFilterBar({
   activeStrategy,
-  activeProcesses,
   activeRoasters,
-  activeLineages,
-  activeMacros,
-  allLineages,
-  allMacros,
+  allRoasters,
   anyActive,
 }: BrewsFilterBarProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const multiActive: Record<MultiKey, string[]> = {
-    processes: activeProcesses,
-    roasters: activeRoasters,
-    lineages: activeLineages,
-    macros: activeMacros,
-  }
-
-  function updateParam(key: DimensionKey, next: string[] | string | null) {
+  function updateParam(key: 'strategy' | 'roasters', next: string[] | string | null) {
     const sp = new URLSearchParams(searchParams.toString())
     if (next === null || (Array.isArray(next) && next.length === 0) || next === '') {
       sp.delete(key)
@@ -53,25 +43,19 @@ export function BrewsFilterBar({
     router.push(qs ? `/brews?${qs}` : '/brews', { scroll: false })
   }
 
-  function toggleSingle(value: string) {
+  function toggleStrategy(value: string) {
     updateParam('strategy', activeStrategy === value ? null : value)
   }
 
-  function toggleMulti(key: MultiKey, value: string) {
-    const current = multiActive[key]
-    const next = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value]
-    updateParam(key, next)
+  function toggleRoaster(value: string) {
+    const next = activeRoasters.includes(value)
+      ? activeRoasters.filter((v) => v !== value)
+      : [...activeRoasters, value]
+    updateParam('roasters', next)
   }
 
   const [mobileOpen, setMobileOpen] = useState(false)
-  const totalActive =
-    (activeStrategy ? 1 : 0) +
-    activeProcesses.length +
-    activeRoasters.length +
-    activeLineages.length +
-    activeMacros.length
+  const totalActive = (activeStrategy ? 1 : 0) + activeRoasters.length
 
   return (
     <div className="mb-6">
@@ -97,64 +81,20 @@ export function BrewsFilterBar({
                 inactiveBg={style.bg}
                 inactiveFg={style.text}
                 borderColor={style.border}
-                onClick={() => toggleSingle(s)}
-              />
-            )
-          })}
-        </DimensionRow>
-
-        <DimensionRow label="Process">
-          {PROCESS_FAMILIES.map((p) => {
-            const color = getProcessFamilyColor(p)
-            return (
-              <FilterPill
-                key={p}
-                label={p}
-                active={activeProcesses.includes(p)}
-                activeBg={color}
-                activeFg="#fff"
-                inactiveBg="white"
-                inactiveFg={color}
-                borderColor={color}
-                onClick={() => toggleMulti('processes', p)}
+                onClick={() => toggleStrategy(s)}
               />
             )
           })}
         </DimensionRow>
 
         <DimensionRow label="Roaster">
-          {ROASTER_FAMILIES.map((r) => {
-            const color = getRoasterFamilyColor(r)
-            return (
-              <FilterPill
-                key={r}
-                label={r}
-                active={activeRoasters.includes(r)}
-                activeBg={color}
-                activeFg="#fff"
-                inactiveBg="white"
-                inactiveFg={color}
-                borderColor={color}
-                onClick={() => toggleMulti('roasters', r)}
-              />
-            )
-          })}
-        </DimensionRow>
-
-        <DimensionRow label="Origin">
           <FilterPopover
-            label="Lineage"
-            options={allLineages}
-            active={activeLineages}
-            onToggle={(v) => toggleMulti('lineages', v)}
-            onClear={() => updateParam('lineages', null)}
-          />
-          <FilterPopover
-            label="Macro"
-            options={allMacros}
-            active={activeMacros}
-            onToggle={(v) => toggleMulti('macros', v)}
-            onClear={() => updateParam('macros', null)}
+            label="Roaster"
+            options={allRoasters}
+            active={activeRoasters}
+            formatOption={(v) => getDisplayName(v) ?? v}
+            onToggle={toggleRoaster}
+            onClear={() => updateParam('roasters', null)}
           />
           {anyActive && (
             <button
@@ -248,9 +188,10 @@ interface FilterPopoverProps {
   active: string[]
   onToggle: (value: string) => void
   onClear: () => void
+  formatOption?: (value: string) => string
 }
 
-function FilterPopover({ label, options, active, onToggle, onClear }: FilterPopoverProps) {
+function FilterPopover({ label, options, active, onToggle, onClear, formatOption }: FilterPopoverProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -309,7 +250,7 @@ function FilterPopover({ label, options, active, onToggle, onClear }: FilterPopo
                         <span className="text-white text-[8px] leading-none">✓</span>
                       )}
                     </span>
-                    <span className="truncate">{opt}</span>
+                    <span className="truncate">{formatOption ? formatOption(opt) : opt}</span>
                   </button>
                 )
               })

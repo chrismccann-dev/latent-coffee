@@ -5,15 +5,11 @@ import { EXTRACTION_STRATEGIES } from '@/lib/extraction-strategy'
 import { getCoverColor } from '@/lib/brew-colors'
 import { StrategyPill } from '@/components/StrategyPill'
 import { BrewsFilterBar } from '@/components/BrewsFilterBar'
-import { PROCESS_FAMILIES, getProcessFamily } from '@/lib/process-registry'
-import { ROASTER_FAMILIES, getRoasterFamily, getDisplayName } from '@/lib/roaster-registry'
+import { getDisplayName } from '@/lib/roaster-registry'
 
 interface BrewsPageProps {
   searchParams: {
     strategy?: string
-    processes?: string
-    lineages?: string
-    macros?: string
     roasters?: string
   }
 }
@@ -30,14 +26,6 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
     searchParams.strategy && (EXTRACTION_STRATEGIES as readonly string[]).includes(searchParams.strategy)
       ? searchParams.strategy
       : null
-  const activeProcesses = parseList(searchParams.processes).filter((p) =>
-    (PROCESS_FAMILIES as readonly string[]).includes(p)
-  )
-  const activeRoasters = parseList(searchParams.roasters).filter((r) =>
-    (ROASTER_FAMILIES as readonly string[]).includes(r)
-  )
-  const activeLineages = parseList(searchParams.lineages)
-  const activeMacros = parseList(searchParams.macros)
 
   const { data: brews, error } = await supabase
     .from('brews')
@@ -55,32 +43,20 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
 
   const allBrews = (brews || []) as Brew[]
 
-  const allLineages = Array.from(
-    new Set(allBrews.map((b) => b.cultivar?.lineage).filter((v): v is string => !!v))
-  ).sort()
-  const allMacros = Array.from(
-    new Set(allBrews.map((b) => b.terroir?.macro_terroir).filter((v): v is string => !!v))
-  ).sort()
+  // Distinct individual roasters that have >=1 brew (Sub-sprint 4c Bundle B).
+  // Sorted by display name; the filter matches on the canonical brews.roaster value.
+  const allRoasters = Array.from(
+    new Set(allBrews.map((b) => b.roaster).filter((v): v is string => !!v))
+  ).sort((a, b) => (getDisplayName(a) ?? a).localeCompare(getDisplayName(b) ?? b))
 
-  const anyActive =
-    !!activeStrategy ||
-    activeProcesses.length > 0 ||
-    activeRoasters.length > 0 ||
-    activeLineages.length > 0 ||
-    activeMacros.length > 0
+  // Only keep requested roasters that actually appear in the corpus.
+  const activeRoasters = parseList(searchParams.roasters).filter((r) => allRoasters.includes(r))
+
+  const anyActive = !!activeStrategy || activeRoasters.length > 0
 
   const brewList = !anyActive ? allBrews : allBrews.filter((b) => {
     if (activeStrategy && b.extraction_strategy !== activeStrategy) return false
-    if (activeProcesses.length > 0 && !activeProcesses.includes(getProcessFamily(b.process))) return false
-    if (activeRoasters.length > 0 && !activeRoasters.includes(getRoasterFamily(b.roaster))) return false
-    if (activeLineages.length > 0) {
-      const lin = b.cultivar?.lineage
-      if (!lin || !activeLineages.includes(lin)) return false
-    }
-    if (activeMacros.length > 0) {
-      const m = b.terroir?.macro_terroir
-      if (!m || !activeMacros.includes(m)) return false
-    }
+    if (activeRoasters.length > 0 && (!b.roaster || !activeRoasters.includes(b.roaster))) return false
     return true
   })
 
@@ -101,12 +77,8 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
 
       <BrewsFilterBar
         activeStrategy={activeStrategy}
-        activeProcesses={activeProcesses}
         activeRoasters={activeRoasters}
-        activeLineages={activeLineages}
-        activeMacros={activeMacros}
-        allLineages={allLineages}
-        allMacros={allMacros}
+        allRoasters={allRoasters}
         anyActive={anyActive}
       />
 
