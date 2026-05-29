@@ -33,13 +33,7 @@ import {
   SUB_PAGE_THRESHOLD,
   baseHubUrl,
 } from '@/lib/process-routing'
-
-const AXIS_SWATCH_COLOR: Record<string, string> = {
-  fermentation: '#722F4B',
-  drying: '#8B6914',
-  intervention: '#5B4A6B',
-  experimental: '#5B4A6B',
-}
+import { axisColor } from '@/lib/process-axis-colors'
 
 export default async function ModifierIndexPage({
   params,
@@ -68,7 +62,7 @@ export default async function ModifierIndexPage({
     .maybeSingle()
 
   const entry = getModifierEntry(parsed.name)
-  const color = AXIS_SWATCH_COLOR[parsed.axis] ?? '#5C6570'
+  const color = axisColor(parsed.axis)
   const sortedFlavors = aggregateFlavorNotes(agg.all)
 
   const terroirMap = new Map<string, { id: string; country: string }>()

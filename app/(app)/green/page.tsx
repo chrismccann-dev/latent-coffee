@@ -171,19 +171,22 @@ function LifecycleRow({ bean, state }: { bean: GreenBeanIndexRow; state: Lifecyc
   const referenceLabel = stripped ? `Batch #${stripped}` : null
   const stageLabel = lifecycleStageLabel(state, referenceLabel)
 
-  // Tile color signals lifecycle state. Sage (`latent-accent-light`) for
-  // active lots (still iterating); near-black (`latent-fg`) for resolved
-  // lots (roasted + archived); gray (`latent-mid`) for unresolved lots
-  // (closed without a confirmed reference — incomplete answer). Hue shift
-  // from sage to brown represents green coffee → roasted coffee; gray for
-  // unresolved sits outside the green-brown axis to signal "no verdict"
-  // distinctly from both active and confirmed. All existing chrome tokens.
+  // Tile color signals lifecycle state via the v2 lifecycle-tile gradient
+  // (Redesign Sprint 0, 2026-05-29): green-coffee → roasted-coffee across the
+  // stages — sage (`tile-next-roast`, green bean ready to roast) → olive-bronze
+  // (`tile-next-cupping`, mid-transition between roast and cupping) → roasted
+  // brown (`tile-resolved`, finished bean — ratification #5, replaces the prior
+  // near-black `latent-fg`). Unresolved keeps neutral gray (`latent-mid`): it
+  // sits outside the green-brown axis to signal "no verdict" distinctly from
+  // both active and confirmed lots.
   const tileClass =
     state === 'resolved'
-      ? 'bg-latent-fg'
+      ? 'bg-latent-tile-resolved'
       : state === 'unresolved'
         ? 'bg-latent-mid'
-        : 'bg-latent-accent-light'
+        : state === 'waiting_for_next_cupping'
+          ? 'bg-latent-tile-next-cupping'
+          : 'bg-latent-tile-next-roast'
 
   // Metadata line — origin · variety · process. Skips empties so pre-
   // framework lots (e.g. Rancho Tio with no origin) don't render dangling
