@@ -257,6 +257,7 @@ If `.env.local` is missing `SUPABASE_SERVICE_ROLE_KEY` or local dev has Anthropi
   - `.btn` / `.btn-primary` / `.btn-secondary` / `.btn-sm` for every button-shaped element; `.input` / `.textarea` for every form field; `.label` for every mono-uppercase section header.
 - **Content on cards** — brew cards intentionally surface *all* content on the cover (no secondary text block below). Avoid "where does this data live" duplication.
 - **`next dev` does not hot-reload `tailwind.config.ts` theme-extend changes.** When adding a new token, restart the dev server before verifying in `preview_*`, or you'll see the browser default and not the token.
+- **Confidence bars use ONE canonical brew-count rule app-wide (Chris-locked 2026-05-28):** `1 = LOW · 2-4 = MEDIUM · 5+ = HIGH`, label uppercase (`LOW` / `MEDIUM` / `HIGH`). Holds on all four aggregation surfaces — process ([lib/process-confidence.ts](lib/process-confidence.ts) `confidenceFor`, the shared helper), roaster, cultivar, terroir (the last three each inline the same thresholds today; terroir keeps a `nonProcessCount`-based MEDIUM desc but the same cutoffs). Any new confidence bar follows this rule — prefer reusing `confidenceFor` over re-inlining. Do not introduce a per-surface threshold variant.
 
 ## Sprint cadence (for Claude)
 
