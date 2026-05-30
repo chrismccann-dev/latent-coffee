@@ -2,11 +2,22 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew, Terroir } from '@/lib/types'
-import { SectionCard } from '@/components/SectionCard'
-import { Tag } from '@/components/Tag'
+import {
+  Chip,
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  SspProseRows,
+  SspStructure,
+  compactRows,
+  type MetaPair,
+  type StructureRow,
+} from '@/components/Ssp'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import { CoffeesList } from '@/components/CoffeesList'
+import { ConfidenceCard } from '@/components/ConfidenceCard'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
@@ -136,14 +147,33 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
     if (brew.roaster) roasterSet.add(brew.roaster)
   }
 
-  // Confidence level
+  // Confidence — shared thresholds via confidenceFor; terroir keeps its
+  // non-process-count MEDIUM desc via the ConfidenceCard `desc` override.
   const brewCount = brewList.length
   const nonProcessCount = brewList.filter(b => !b.is_process_dominant).length
-  // Shared thresholds via confidenceFor; terroir keeps its non-process-count MEDIUM desc.
-  const base = confidenceFor(brewCount)
-  const confidence = base.label === 'MEDIUM'
-    ? { ...base, desc: `${nonProcessCount} non-process coffees` }
-    : base
+  const confidenceDesc =
+    confidenceFor(brewCount).label === 'MEDIUM' ? `${nonProcessCount} non-process coffees` : undefined
+
+  const contextRows = compactRows([
+    { label: 'Soil', value: merged.soil },
+    { label: 'Cup Profile', value: merged.cup_profile },
+    { label: 'Why It Stands Out', value: merged.why_it_stands_out },
+  ])
+
+  const characterRows = compactRows([
+    { label: 'Acidity', value: merged.acidity_character },
+    { label: 'Body', value: merged.body_character },
+    { label: 'Farming Model', value: merged.farming_model },
+  ])
+
+  const productionRows: StructureRow[] = [
+    ...(merged.dominant_varieties.length > 0
+      ? [{ lbl: 'Dominant Varieties', chips: merged.dominant_varieties.map((v) => ({ name: v })) }]
+      : []),
+    ...(merged.typical_processing.length > 0
+      ? [{ lbl: 'Typical Processing', chips: merged.typical_processing.map((p) => ({ name: p })) }]
+      : []),
+  ]
 
   const hasAdditionalInfo =
     sortedFlavors.length > 0 ||
@@ -151,192 +181,110 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
     processSet.size > 0 ||
     roasterSet.size > 0
 
+  const meta: MetaPair[] = [
+    ...(terroir.country ? [{ label: 'Country', value: terroir.country }] : []),
+    ...(terroir.admin_region ? [{ label: 'Admin Region', value: terroir.admin_region }] : []),
+    ...(merged.elevation_min && merged.elevation_max
+      ? [{ label: 'Elevation', value: `${merged.elevation_min}–${merged.elevation_max}m` }]
+      : []),
+    ...(merged.climate_stress ? [{ label: 'Climate', value: merged.climate_stress }] : []),
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
         href="/terroirs"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
-        &larr; Back to Terroirs
+        ← Back to Terroirs
       </Link>
 
-      {/* Hero (unchanged) */}
-      <div className="section-card mb-6">
-        <div className="flex gap-6 items-start">
-          <div
-            className="w-16 h-16 rounded flex-shrink-0"
-            style={{ backgroundColor: color }}
-          />
-          <div className="flex-1">
-            <h1 className="font-sans text-2xl font-semibold mb-1">
-              {macroName}
-            </h1>
-            <p className="font-mono text-xs text-latent-mid">
-              {terroir.country} &rarr; {terroir.admin_region}
-            </p>
-            <div className="font-mono text-xs text-latent-mid mt-2">
-              {merged.elevation_min && merged.elevation_max && (
-                <span>{merged.elevation_min}&ndash;{merged.elevation_max}m</span>
-              )}
-              {merged.climate_stress && (
-                <span> &middot; {merged.climate_stress}</span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Header */}
+      <SspTopBar roaster={terroir.country ?? undefined} kind="Terroir Profile" />
+      <SspNamePlate
+        title={macroName}
+        meta={meta}
+        coverColor={color}
+        edgeColor={color}
+      />
 
-      {/* High Level Summary - promoted from context row */}
+      {/* High Level Summary */}
       {merged.context && (
-        <SectionCard title="HIGH LEVEL SUMMARY">
-          <p className="font-sans text-sm leading-relaxed">{merged.context}</p>
-        </SectionCard>
+        <div className="ssp-card">
+          <SspShead>High Level Summary</SspShead>
+          <div className="ssp-prose">{merged.context}</div>
+        </div>
       )}
 
       {/* Meso Terroirs */}
       {merged.mesoTerroirs.length > 0 && (
-        <SectionCard title="MESO TERROIRS EXPLORED">
-          <div className="flex flex-wrap gap-2">
+        <div className="ssp-card">
+          <SspShead>Meso Terroirs Explored</SspShead>
+          <div className="flex flex-wrap gap-1.5">
             {merged.mesoTerroirs.map((meso) => (
-              <Tag key={meso}>{meso}</Tag>
+              <Chip key={meso} name={meso} />
             ))}
           </div>
-        </SectionCard>
+        </div>
       )}
 
-      {/* Terroir Context - context row removed (now in High Level Summary above) */}
-      {(merged.soil || merged.cup_profile || merged.why_it_stands_out) && (
-        <SectionCard title="TERROIR CONTEXT">
-          <div className="space-y-3 font-sans text-sm">
-            {merged.soil && (
-              <div>
-                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Soil:</span>
-                {merged.soil}
-              </div>
-            )}
-            {merged.cup_profile && (
-              <div>
-                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Cup Profile:</span>
-                {merged.cup_profile}
-              </div>
-            )}
-            {merged.why_it_stands_out && (
-              <div>
-                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Why It Stands Out:</span>
-                {merged.why_it_stands_out}
-              </div>
-            )}
-          </div>
-        </SectionCard>
+      {/* Terroir Context */}
+      {contextRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Terroir Context</SspShead>
+          <SspProseRows rows={contextRows} />
+        </div>
       )}
 
       {/* Terroir Character */}
-      {(merged.acidity_character || merged.body_character || merged.farming_model) && (
-        <SectionCard title="TERROIR CHARACTER">
-          <div className="space-y-3 font-sans text-sm">
-            {merged.acidity_character && (
-              <div>
-                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Acidity:</span>
-                {merged.acidity_character}
-              </div>
-            )}
-            {merged.body_character && (
-              <div>
-                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Body:</span>
-                {merged.body_character}
-              </div>
-            )}
-            {merged.farming_model && (
-              <div>
-                <span className="font-mono text-xxs font-semibold text-latent-fg uppercase mr-2">Farming Model:</span>
-                {merged.farming_model}
-              </div>
-            )}
-          </div>
-        </SectionCard>
+      {characterRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Terroir Character</SspShead>
+          <SspProseRows rows={characterRows} />
+        </div>
       )}
 
       {/* Typical Production */}
-      {(merged.dominant_varieties.length > 0 || merged.typical_processing.length > 0) && (
-        <SectionCard title="TYPICAL PRODUCTION">
-          {merged.dominant_varieties.length > 0 && (
-            <div className="mb-4">
-              <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-2">Dominant Varieties</div>
-              <div className="flex flex-wrap gap-2">
-                {merged.dominant_varieties.map((v) => <Tag key={v}>{v}</Tag>)}
-              </div>
-            </div>
-          )}
-          {merged.typical_processing.length > 0 && (
-            <div>
-              <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-2">Typical Processing</div>
-              <div className="flex flex-wrap gap-2">
-                {merged.typical_processing.map((p) => <Tag key={p}>{p}</Tag>)}
-              </div>
-            </div>
-          )}
-        </SectionCard>
+      {productionRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Typical Production</SspShead>
+          <SspStructure rows={productionRows} />
+        </div>
       )}
 
       {/* Job 2: AI Synthesis - the primary aggregation surface */}
-      {brewList.length > 0 && (
+      {brewCount > 0 && (
         <SynthesisCard
           title="WHAT I'VE LEARNED ABOUT THIS TERROIR"
           fetchKey={terriorIds.join(',')}
           endpoint="/api/terroirs/synthesize"
           requestBody={{ terriorIds }}
-          loadingText={`Synthesizing knowledge from ${brewList.length} coffees across ${macroName || terroir.country}...`}
+          loadingText={`Synthesizing knowledge from ${brewCount} coffees across ${macroName || terroir.country}...`}
           existingSynthesis={terroir.synthesis}
           existingBrewCount={terroir.synthesis_brew_count}
-          currentBrewCount={brewList.length}
+          currentBrewCount={brewCount}
           existingShortForm={terroir.short_form_capsule}
           existingSynthesisInputUpdatedAt={terroir.synthesis_input_max_updated_at}
           currentInputMaxUpdatedAt={currentInputMaxUpdatedAt}
         />
       )}
 
-      {/* Job 3: Coffees brewed from this region - promoted up from old position */}
-      {brewList.length > 0 && (
-        <SectionCard title="COFFEES BREWED FROM THIS REGION">
-          <div className="space-y-0">
-            {brewList.map((brew) => (
-              <Link
-                key={brew.id}
-                href={`/brews/${brew.id}`}
-                className="flex items-center gap-3 py-3 border border-latent-border rounded-md mb-2 last:mb-0 px-4 hover:bg-latent-bg transition-colors group"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="font-sans text-sm font-semibold flex items-center flex-wrap gap-2">
-                    <span>{brew.coffee_name}</span>
-                    {brew.is_process_dominant && (
-                      <span className="inline-flex items-center gap-1 text-xxs font-mono bg-latent-bg px-2 py-0.5 rounded">
-                        PROCESS
-                      </span>
-                    )}
-                  </div>
-                  <div className="font-mono text-xxs text-latent-mid">
-                    {[brew.variety, brew.process].filter(Boolean).join(' · ')}
-                  </div>
-                </div>
-                <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>
-              </Link>
-            ))}
-          </div>
-        </SectionCard>
+      {/* Job 3: Coffees brewed from this region */}
+      {brewCount > 0 && (
+        <CoffeesList
+          title="Coffees Brewed From This Region"
+          brews={brewList}
+          showProcessBadge
+          metaFor={(brew) => [brew.variety, brew.process].filter(Boolean).join(' · ')}
+        />
       )}
 
-      {/* Supporting context: flavor notes + cross-axis tag lists.
-          Visible on desktop, collapsed-by-default on mobile. */}
+      {/* Additional Information — collapsed by default */}
       {hasAdditionalInfo && (
         <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily
-            notes={sortedFlavors}
-            title="FLAVOR NOTES I HAVE EXPERIENCED"
-            bare
-          />
+          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
           <TagLinkList
             title="CULTIVARS I HAVE EXPLORED"
-            bare
             items={Array.from(cultivarMap.entries()).map(([name, { id }]) => ({
               key: name,
               label: name,
@@ -345,14 +293,12 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
           />
           <TagLinkList
             title="PROCESSES I HAVE EXPLORED"
-            bare
             items={Array.from(processSet).map((p) => ({
               key: p, label: p, href: `/processes/${p.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
             }))}
           />
           <TagLinkList
             title="ROASTERS EXPLORED WHO SOURCED FROM THIS REGION"
-            bare
             items={Array.from(roasterSet).map((r) => ({
               key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
             }))}
@@ -361,16 +307,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       )}
 
       {/* Confidence */}
-      <SectionCard dark>
-        <div className="font-mono text-xxs font-medium opacity-60 uppercase mb-3">CONFIDENCE</div>
-        <div className="flex items-center justify-end gap-3">
-          <span className="text-xl">{confidence.emoji}</span>
-          <div>
-            <span className="font-mono text-sm font-semibold">{confidence.label}</span>
-            <span className="font-mono text-xs opacity-60 ml-2">&mdash; {confidence.desc}</span>
-          </div>
-        </div>
-      </SectionCard>
+      <ConfidenceCard brewCount={brewCount} desc={confidenceDesc} />
     </div>
   )
 }
