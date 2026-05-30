@@ -296,6 +296,84 @@ export function SspStructure({ rows }: { rows: StructureRow[] }) {
   )
 }
 
+export type ExpCol = { label: ReactNode; winner?: boolean }
+export type ExpCell = ReactNode | { content: ReactNode; className?: string }
+export type ExpRow = {
+  label: ReactNode
+  sub?: ReactNode
+  /** Tints the row label cup-lavender / roast-amber. */
+  labelAccent?: 'cup' | 'roast'
+  /** Row-level background tint. */
+  variant?: 'highlight' | 'highlight-lav'
+  /** One cell per column. A bare ReactNode renders as `.note` (left, prose);
+   *  a `{content, className}` object lets a cell opt into `.val` (centered,
+   *  mono) + modifiers like `bold` / `warn`. */
+  cells: ExpCell[]
+  /** Render bare-ReactNode cells as centered `.val` instead of `.note`. */
+  numeric?: boolean
+}
+
+/**
+ * ExpGrid — transposed experiment table (attributes as rows, V_n slots as
+ * columns). The green lifecycle's Cupping Hypothesis + Roast Actuals chrome.
+ * Mirrors the v2 artboard `ExpGrid`; `--cols` drives the column count.
+ */
+export function SspExpGrid({ cols, rows }: { cols: ExpCol[]; rows: ExpRow[] }) {
+  return (
+    <div className="ssp-exp" style={{ ['--cols' as string]: cols.length } as React.CSSProperties}>
+      <div className="exp-hd">
+        <div />
+        {cols.map((c, i) => (
+          <div key={i} className={c.winner ? 'winner' : undefined}>
+            {c.label}
+          </div>
+        ))}
+      </div>
+      {rows.map((r, ri) => (
+        <div key={ri} className={`exp-row${r.variant ? ` ${r.variant}` : ''}`}>
+          <div className={`lbl${r.labelAccent ? ` accent-${r.labelAccent}` : ''}`}>
+            {r.label}
+            {r.sub ? <small>{r.sub}</small> : null}
+          </div>
+          {r.cells.map((cell, ci) => {
+            const base = r.numeric ? 'val' : 'note'
+            if (cell != null && typeof cell === 'object' && 'content' in (cell as object)) {
+              const c = cell as { content: ReactNode; className?: string }
+              return (
+                <div key={ci} className={c.className ? `${base} ${c.className}` : base}>
+                  {c.content}
+                </div>
+              )
+            }
+            return (
+              <div key={ci} className={base}>
+                {(cell as ReactNode) ?? '—'}
+              </div>
+            )
+          })}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export type ProseRow = { label: ReactNode; value: ReactNode }
+
+/** ProseRows — label/value rows (mono label, sans value). Stacks at narrow
+ *  container widths, two-column at ≥520px. */
+export function SspProseRows({ rows }: { rows: ProseRow[] }) {
+  return (
+    <div className="ssp-prose-rows">
+      {rows.map((r, i) => (
+        <div className="row" key={i}>
+          <div className="lbl">{r.label}</div>
+          <div className="val">{r.value}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export type IdentCell = { label: string; value: ReactNode; sub?: ReactNode }
 
 /** IdentGrid — 5-cell tabular metadata (2-col → 5-col at container width). */

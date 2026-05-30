@@ -2,6 +2,16 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { SectionCard } from '@/components/SectionCard'
+import {
+  Chip,
+  StatusPill,
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  SspExpGrid,
+  SspProseRows,
+  type ExpRow,
+} from '@/components/Ssp'
 import { GreenBeanInfoCard } from '@/components/GreenBeanInfoCard'
 import { RoastLogTable } from '@/components/RoastLogTable'
 import { StrategyPill } from '@/components/StrategyPill'
@@ -721,130 +731,227 @@ function WaitingForNextCuppingView({
   const slotInfos = latestExp ? computeSlotInfos(latestExp, recipesForLatest, roasts) : []
   const currentExpBatchIds = parseBatchIdsForHighlight(latestExp?.batch_ids)
 
+  // Redesign Sprint 2 (2026-05-29) — re-skin to the Ssp* lab-document family,
+  // mobile-first. First container-query dual-subtree in the codebase: the
+  // desktop transposed Cupping Hypothesis table (.s2-desktop) can't `order-*`
+  // into the mobile per-slot Taste-for cards (.s2-mobile), so both subtrees
+  // render and `@container ssppage` reveals one at the 520px crossover. The
+  // cupping data is the same on both — built once here, flattened per-slot for
+  // mobile. The IA (recipe-first → reference signals collapsed) is preserved
+  // from Bundle B; only the chrome + mobile composition changed. Shared
+  // components below the toggle (CrossBatchNotes / DropRules / GreenBeanInfo /
+  // ExperimentFrame / RoastLog / PerRoastReflections) stay legacy-skinned
+  // through the migration window — they're shared with the 4 un-migrated green
+  // views and re-skin on their own surface's sprint.
+  const vLabel = latestExp ? formatVLabel(latestExp.experiment_id) : null
+  const cup = latestExp ? buildCupHypoData(slotInfos, latestExp, bean, priorExp) : null
+  const actuals = latestExp ? buildRoastActualsData(slotInfos, latestExp) : null
+  const primaryQuestion = latestExp?.primary_question ?? null
+  const hasTasteCards = !!cup && cup.mobileSlots.some((s) => s.taste)
+  const hasPredictions = !!cup && cup.mobileSlots.some((s) => s.predictedCup)
+
+  const metaPairs = [
+    { label: 'Producer', value: bean.producer ?? '—' },
+    { label: 'Origin', value: bean.origin ?? bean.terroir?.country ?? '—' },
+    { label: 'Variety', value: bean.variety ?? bean.cultivar?.cultivar_name ?? '—' },
+  ]
+  const pills = [
+    <StatusPill key="state" label="Waiting · Next Cupping" tone="lavender" />,
+    ...(bean.process ? [<Chip key="proc" name={bean.process} tone="green" />] : []),
+    ...(vLabel ? [<Chip key="vset" name={`${vLabel} · awaiting cupping`} tone="plum" />] : []),
+  ]
+
+  // Roast Actuals card — identical content in both subtrees, only the section
+  // context line differs (foreground on desktop, "reference" on mobile).
+  const actualsCard = (ct: string) =>
+    actuals && actuals.rows.length > 0 ? (
+      <div className="ssp-card state-roast">
+        <SspShead ct={ct}>Roast Actuals · {vLabel}</SspShead>
+        <SspExpGrid cols={actuals.cols} rows={actuals.rows} />
+      </div>
+    ) : latestExp && slotInfos.length > 0 ? (
+      <div className="ssp-card state-roast">
+        <SspShead ct={ct}>Roast Actuals · {vLabel}</SspShead>
+        <div className="font-sans text-sm text-latent-mid italic">
+          Latest experiment&apos;s batches not yet logged as roasts. Use
+          push_roast from claude.ai to populate the actuals.
+        </div>
+      </div>
+    ) : null
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
-      {/* Back */}
+    <div className="ssp-page">
       <Link
         href="/green"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
         ← Back to Green Beans
       </Link>
 
-      {/* Lot header — same sage tile pattern as the waiting-for-next-roast
-          view (both are "active" lots, just at different lifecycle moments). */}
-      <div className="flex gap-6 mb-8">
-        <div className="w-20 h-20 bg-latent-accent-light rounded-md flex-shrink-0" />
-        <div>
-          <h1 className="font-sans text-2xl font-semibold mb-2">
-            🌱 {bean.name || bean.lot_id}
-          </h1>
-          {bean.lot_id && (
-            <div className="font-mono text-xs text-latent-mid mb-1">
-              Lot: {bean.lot_id}
+      {/* Header — lavender (cup-emphasis) cover marks the waiting-for-cupping
+          lifecycle state per the v2 artboard STATE["stage-2"]. */}
+      <SspTopBar
+        brewId={bean.lot_id ?? undefined}
+        date={`${roasts.length} ROAST${roasts.length === 1 ? '' : 'S'}`}
+        roaster="WAITING · NEXT CUPPING"
+        kind="Green Lot"
+      />
+      <SspNamePlate
+        title={bean.name || bean.lot_id}
+        coverColor="#7A6E9E"
+        edgeColor="#7A6E9E"
+        meta={metaPairs}
+        pills={pills}
+      />
+
+      {/* Cupping Hypothesis + Roast Actuals — the reflowing composition. Both
+          subtrees render; the container query reveals one at 520px. */}
+      {latestExp && cup ? (
+        <>
+          {/* DESKTOP (≥520px) — transposed table leads, byte-for-byte IA. */}
+          <div className="s2-desktop">
+            <div className="ssp-card state-cup">
+              <span className="ssp-corner">{vLabel}</span>
+              <SspShead ct={`${slotInfos.length} slots · questions for the cupping table`}>
+                Cupping Hypothesis · {vLabel}
+              </SspShead>
+              {primaryQuestion && (
+                <div className="ssp-question">
+                  <div className="lbl">Primary Question</div>
+                  <div className="body">{primaryQuestion}</div>
+                </div>
+              )}
+              {cup.rows.length > 0 ? (
+                <SspExpGrid cols={cup.cols} rows={cup.rows} />
+              ) : (
+                <div className="font-sans text-sm text-latent-mid italic">
+                  No recipes linked to this experiment yet. Predictions land when
+                  claude.ai pushes recipes + updates taste_for_a/b/c/d.
+                </div>
+              )}
+              {cup.refSignals.length > 0 && (
+                <div className="ssp-inset cup">
+                  <div className="inset-hd">Reference Signals for the Cupping Table</div>
+                  <div className="inset-stack">
+                    {cup.refSignals.map((p) => (
+                      <div className="pair" key={p.k}>
+                        <div className="k">{p.k}</div>
+                        <div className="v">{p.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-          <div className="font-mono text-sm text-latent-mid">
-            {composeLotMeta(bean)}
+            {actualsCard('Achieved vs design intent')}
           </div>
-        </div>
-      </div>
 
-      {/* Cupping Hypothesis card. Sub-sprint 4a Bundle B rewrite per Chris
-          mockup #1: condensed body that front-loads the 4-question framing
-          (producer notes / V_(n-1) leading slot cup notes / what to look
-          for per slot / per-slot predicted cup). Reference card chrome
-          replaced with inline Producer Notes + Previous Leading Slot Cup
-          Notes boxes; the table drops the "Original prediction" row and
-          renames "Updated prediction" → "Predicted Cup". Anchor Cup
-          dropped from this foreground surface (data still on
-          experiments.control_baseline; not displayed here). */}
-      {latestExp ? (
-        <SectionCard title={`CUPPING HYPOTHESIS · ${formatVLabel(latestExp.experiment_id)}`}>
-          {latestExp.primary_question && (
-            <div className="mb-6">
-              <div className="label">Primary Question</div>
-              <div className="font-sans text-sm leading-relaxed">
-                {latestExp.primary_question}
-              </div>
+          {/* MOBILE (<520px) — Taste-for slot cards lead; Roast Actuals demoted;
+              reference signals + predictions in the collapsed T3 block. */}
+          <div className="s2-mobile">
+            <div className="ssp-card state-cup s2m-lead">
+              <span className="ssp-corner">{vLabel} · cupping table</span>
+              {cup.producerNotes && (
+                <div className="ssp-why">
+                  <div className="hd">Producer notes — taste against this</div>
+                  <div className="body">{cup.producerNotes}</div>
+                </div>
+              )}
+              {hasTasteCards && (
+                <div className="ssp-tastefor">
+                  <div className="tf-lbl">Taste for · per slot</div>
+                  <div className="ssp-slotcards">
+                    {cup.mobileSlots
+                      .filter((s) => s.taste)
+                      .map((s) => (
+                        <div className="ssp-slotcard" key={s.label}>
+                          <div className="slot-lbl">{s.label}</div>
+                          <div className="slot-taste">{s.taste}</div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
 
-          <CuppingReferenceBoxes bean={bean} priorExp={priorExp} />
+            {primaryQuestion && (
+              <div className="ssp-card state-cup">
+                <SspShead ct="Lot-level · what this V-set is testing">Primary Question</SspShead>
+                <div className="ssp-question">
+                  <div className="body">{primaryQuestion}</div>
+                </div>
+              </div>
+            )}
 
-          <CuppingHypothesisTable
-            slotInfos={slotInfos}
-            latestExp={latestExp}
-          />
-        </SectionCard>
+            {actualsCard('Reference · achieved vs design intent')}
+
+            <details className="ssp-coll">
+              <summary>
+                Reference &amp; Detail
+                <span className="ct">Signals · slot predictions</span>
+                <span className="chev" />
+              </summary>
+              <div className="body">
+                {cup.otherSignals.length > 0 && (
+                  <div className="ssp-sub">
+                    <h3>Reference Signals for the Cupping Table</h3>
+                    <SspProseRows
+                      rows={cup.otherSignals.map((p) => ({ label: p.k, value: p.v }))}
+                    />
+                  </div>
+                )}
+                {hasPredictions && (
+                  <div className="ssp-sub">
+                    <h3>Predicted Cup · per slot</h3>
+                    <div className="ssp-predstack">
+                      {cup.mobileSlots
+                        .filter((s) => s.predictedCup)
+                        .map((s) => (
+                          <div key={s.label}>
+                            <div className="pred-slot">{s.label}</div>
+                            <div className="ssp-twopane">
+                              <div className="pane">
+                                <div className="lbl">Predicted Cup · given roast actuals</div>
+                                <div className="body">{s.predictedCup}</div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </details>
+          </div>
+        </>
       ) : (
-        <SectionCard title="CUPPING HYPOTHESIS">
+        <div className="ssp-card state-cup">
+          <SspShead>Cupping Hypothesis</SspShead>
           <div className="font-sans text-sm text-latent-mid italic">
             No experiments designed yet for this lot. Cupping hypothesis lands
             when claude.ai designs a V-set via push_experiment + push_roast_recipe.
           </div>
-        </SectionCard>
+        </div>
       )}
 
-      {/* Roast Actuals card (cleanup-actions PR #24: now slot 3, was slot
-          4 pre-PR — moved up alongside Cupping Hypothesis since both are
-          foreground signal for cupping prep). */}
-      {latestExp && slotInfos.length > 0 && (
-        <SectionCard title={`ROAST ACTUALS · ${formatVLabel(latestExp.experiment_id)}`}>
-          <RoastActualsTable slotInfos={slotInfos} latestExp={latestExp} />
-        </SectionCard>
-      )}
-
-      {/* Cross-batch notes — Sub-sprint 4a Bundle B promoted to slot 4
-          (was slot 7 in 6.7's pre-Bundle-B layout). Reflective context
-          from V_(n-1)'s observed_outcome_a/b/c/d, placed right after Roast
-          Actuals where the cup-vs-prior comparison happens. Round 7 dog-
-          food signal (Item 13) + Phase 1 audit both surfaced that this
-          block IS consulted at cupping prep time when V_(n-1) exists.
-          Auto-hides when priorExp is null or all 4 slots are NULL. */}
+      {/* Shared components below the toggle — rendered once, legacy chrome
+          unchanged through the migration window (see header note). */}
       <CrossBatchNotesBlock priorExp={priorExp} />
 
-      {/* Recipe Design Intent disclosure (Sub Pages 6.8) — collapsed drill-in
-          surfacing drop rules from the V_n recipes for cupping-time retro
-          ("did the operator follow the rule on the v2b batch?"). Stays out
-          of foreground per redesign.md § 5.5 (amber surfaces are roast-prep
-          signal, not cupping signal); the collapsed disclosure honors the
-          lock while keeping rules consultable. Auto-hides until any recipe
-          carries a populated rule. */}
       {recipesForLatest.some((r) => r.drop_rule_if_fast || r.drop_rule_if_slow) && (
         <CollapsibleSection title="Recipe Design Intent">
           <DropRulesCard recipes={recipesForLatest} />
         </CollapsibleSection>
       )}
 
-      {/* Green Bean Info — shared 6.4 component. Sub-sprint 4a Bundle B
-          confirmed expanded (Chris audit page 6: "green bean info below
-          that and expanded by default is good"). */}
       <GreenBeanInfoCard bean={bean} />
 
-      {/* Experiment Frame card. Sub-sprint 4a Bundle B collapsed by default
-          (Chris audit page 6: "experiment frame v2 I would do collapsed by
-          default"). Design-time frame is useful context but isn't consulted
-          at cupping table time; collapse keeps the page focused on the
-          load-bearing Cupping Hypothesis + Roast Actuals cards above.
-          skipControlBaseline stays true to avoid duplicating Anchor cup
-          (now removed from the cupping card foreground per Bundle B). */}
       {latestExp && (
-        <CollapsibleSection title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}>
-          <ExperimentFrameCard
-            latestExp={latestExp}
-            skipControlBaseline
-            title=""
-            bare
-          />
+        <CollapsibleSection title={`EXPERIMENT FRAME · ${vLabel}`}>
+          <ExperimentFrameCard latestExp={latestExp} skipControlBaseline title="" bare />
         </CollapsibleSection>
       )}
 
-      {/* Roast Log — Sub-sprint 4a Bundle B: collapsed by default (Chris
-          audit page 6: "roast log I would also do collapsed by default").
-          The load-bearing surface for cupping prep is the Cupping
-          Hypothesis + Roast Actuals cards above; the log is reference
-          lookup. */}
       <RoastLogTable
         roasts={roasts}
         cuppings={cuppings}
@@ -852,216 +959,104 @@ function WaitingForNextCuppingView({
         highlightedBatchIds={Array.from(currentExpBatchIds)}
       />
 
-      {/* Per-roast reflections (Sub Pages 6.7) — collapsed details surfacing
-          what_worked / what_didnt / what_to_change per roast. Auto-hides
-          when no roasts have any reflection field populated. */}
       <PerRoastReflections roasts={roasts} />
 
-      {/* Additional Information — collapsed placeholder, same shape as 6.3 */}
-      <details className="mt-6 group">
-        <summary className="cursor-pointer font-mono text-xs text-latent-mid hover:text-latent-fg uppercase tracking-wide">
+      <details className="ssp-coll">
+        <summary>
           Additional Information
+          <span className="ct">Full history renders on the resolved view</span>
+          <span className="chev" />
         </summary>
-        <div className="mt-4 font-sans text-sm text-latent-mid italic">
-          Deeper detail (full cupping history, all experiments archive, roast
-          learnings, related brews) renders on the resolved-lot page shape in
-          Sub Pages 6.5. The waiting-for-next-cupping view stays focused on
-          the active V_n hypothesis + actuals.
+        <div className="body">
+          <div className="ssp-sub">
+            <div className="font-sans text-sm text-latent-mid italic">
+              Deeper detail (full cupping history, all experiments archive, roast
+              learnings, related brews) renders on the resolved-lot page shape in
+              Sub Pages 6.5. The waiting-for-next-cupping view stays focused on
+              the active V_n hypothesis + actuals.
+            </div>
+          </div>
         </div>
       </details>
     </div>
   )
 }
 
-// Cupping Hypothesis transposed table — 3 rows × N batches:
-//   1. Original prediction (muted) — recipe.predicted_cup
-//   2. Updated prediction (purple) — experiments.updated_cup_prediction_*
-//   3. Taste for (purple) — experiments.taste_for_*
-// Each row auto-hides when ALL slots are NULL. If all 3 rows hide AND no
-// recipes link, fall back to a single empty-state explainer.
-function CuppingHypothesisTable({
-  slotInfos,
-  latestExp,
-}: {
-  slotInfos: SlotInfo[]
-  latestExp: any
-}) {
-  if (slotInfos.length === 0) {
-    return (
-      <div className="font-sans text-sm text-latent-mid italic">
-        Latest experiment&apos;s batch_ids aren&apos;t set yet, so there&apos;s
-        nothing to project per-batch. Use patch_experiment to populate batch_ids
-        once the V-set is designed.
-      </div>
-    )
-  }
-
-  type RowSpec = {
-    label: string
-    sublabel: string
-    getValue: (info: SlotInfo) => string | null
-    tint: 'muted' | 'cup'
-  }
-
-  // Sub-sprint 4a Bundle B — Cupping Hypothesis table simplified per
-  // Chris mockup #1: 2 rows (Taste For / Predicted Cup), with "Taste for"
-  // moved to the top since it's the load-bearing prep signal. "Original
-  // prediction" row dropped entirely (per voice memo: "For the cupping
-  // table we just want to know how it actually went and what I should
-  // expect for the cupping. For the delta is more helpful for the
-  // roasting side"). "Updated prediction" renamed to "Predicted Cup".
-  const rows: RowSpec[] = [
-    {
-      label: 'Taste for',
-      sublabel: 'cupping-table question',
-      getValue: (info) => (latestExp[`taste_for_${info.slot}`] as string | null) ?? null,
-      tint: 'cup',
-    },
-    {
-      label: 'Predicted Cup',
-      sublabel: 'given roast actuals',
-      getValue: (info) =>
-        (latestExp[`updated_cup_prediction_${info.slot}`] as string | null) ?? null,
-      tint: 'cup',
-    },
-  ]
-
-  const visibleRows = rows.filter((row) => slotInfos.some((info) => row.getValue(info) != null))
-
-  if (visibleRows.length === 0) {
-    return (
-      <div className="font-sans text-sm text-latent-mid italic">
-        No recipes linked to this experiment yet. Cupping predictions land
-        when claude.ai pushes recipes via push_roast_recipe (which freezes the
-        design-time predicted_cup) and updates the experiment via patch_experiment
-        with updated_cup_prediction_a/b/c/d + taste_for_a/b/c/d once the
-        roasts are logged.
-      </div>
-    )
-  }
-
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-latent-border">
-            <th className="text-left py-2 pr-4 font-sans font-normal text-latent-mid text-xs" />
-            {slotInfos.map((info) => (
-              <th
-                key={info.slot}
-                className="text-left py-2 px-3 font-sans font-semibold text-latent-fg text-xs"
-              >
-                {info.recipe?.batch_slot ?? info.slot.toUpperCase()}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {visibleRows.map((row) => {
-            const rowClass =
-              row.tint === 'cup'
-                ? 'bg-latent-cup-emphasis-surface border-l-2 border-latent-cup-emphasis'
-                : ''
-            const valueClass = row.tint === 'muted' ? 'text-latent-mid' : 'text-latent-fg'
-            return (
-              <tr
-                key={row.label}
-                className={`border-b border-latent-border last:border-b-0 ${rowClass}`}
-              >
-                <td className="py-3 pr-4 font-sans text-xs align-top">
-                  <div className="font-medium text-latent-fg">{row.label}</div>
-                  <div className="text-latent-subtle font-normal">{row.sublabel}</div>
-                </td>
-                {slotInfos.map((info) => {
-                  const value = row.getValue(info)
-                  return (
-                    <td
-                      key={info.slot}
-                      className={`py-3 px-3 font-sans text-sm align-top leading-relaxed ${valueClass}`}
-                    >
-                      {value ?? '—'}
-                    </td>
-                  )
-                })}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
-  )
+// Redesign Sprint 2 — cupping data builder. Flattens the experiment's per-slot
+// fields into one record per V-set slot so the desktop transposed table
+// (SspExpGrid) and the mobile slot cards (.ssp-slotcard) share a single source.
+// Replaces the pre-Sprint-2 CuppingHypothesisTable + CuppingReferenceBoxes.
+//
+// Rows preserve Bundle B's 2-row shape (Taste for / Predicted Cup, both
+// lavender), each auto-hiding when all slots are NULL. Reference signals
+// (Producer notes + Previous-leading-slot cup) feed the desktop cup .ssp-inset
+// and the mobile T1 lead / T3 collapse.
+type CupHypoData = {
+  mobileSlots: { label: string; taste: string | null; predictedCup: string | null }[]
+  cols: { label: string }[]
+  rows: ExpRow[]
+  producerNotes: string | null
+  refSignals: { k: string; v: string }[]
+  otherSignals: { k: string; v: string }[]
 }
 
-// Sub-sprint 4a Bundle B — Cupping Hypothesis reference boxes.
-// Replaces the pre-Bundle-B ReferenceSignalsCard. Renders two separate
-// boxed sub-cards inline at the top of the Cupping Hypothesis card body
-// (per Chris mockup #1):
-//   1. Producer Notes — green_beans.producer_tasting_notes
-//   2. Previous Leading Slot Cup Notes — V_(n-1) winner cup, derived from
-//      priorExp.winner → priorExp.observed_outcome_<slot> with key_insight
-//      fallback
-// Anchor Cup dropped from foreground (data still on
-// experiments.control_baseline if needed by downstream tooling; not in
-// Chris's 4-question framing). Cupping cards are tinted with
-// latent-cup-emphasis tokens.
-function CuppingReferenceBoxes({
-  bean,
-  priorExp,
-}: {
-  bean: any
-  priorExp: any | null
-}) {
-  const producerNotes = bean.producer_tasting_notes ?? null
+// V_(n-1) winner cup: read priorExp.winner (free-text, e.g. "v2b") to find the
+// slot, then read priorExp.observed_outcome_<slot>, falling back to key_insight.
+function derivePriorWinnerCup(
+  priorExp: any | null,
+): { label: string; cup: string | null } {
+  const base = 'Previous leading slot cup'
+  if (!priorExp?.winner) return { label: base, cup: null }
+  const slotMatch = String(priorExp.winner).toLowerCase().match(/[a-d](?!.*[a-d])/)
+  const slot = slotMatch?.[0]
+  const cup = slot
+    ? ((priorExp[`observed_outcome_${slot}`] as string | null) ?? priorExp.key_insight ?? null)
+    : (priorExp.key_insight ?? null)
+  const label = priorExp.experiment_id
+    ? `${base} (${priorExp.experiment_id} · ${priorExp.winner})`
+    : base
+  return { label, cup }
+}
 
-  // V_(n-1) winner cup: read priorExp.winner (free-text, e.g. "v2b") to
-  // figure out the slot, then read priorExp.observed_outcome_<slot>. If
-  // the winner doesn't resolve to a slot letter, fall back to
-  // priorExp.key_insight as best-effort reference.
-  let priorWinnerCup: string | null = null
-  if (priorExp?.winner) {
-    const slotMatch = String(priorExp.winner).toLowerCase().match(/[a-d](?!.*[a-d])/)
-    const slot = slotMatch?.[0]
-    if (slot) {
-      priorWinnerCup =
-        (priorExp[`observed_outcome_${slot}`] as string | null) ??
-        priorExp.key_insight ??
-        null
-    } else {
-      priorWinnerCup = priorExp.key_insight ?? null
-    }
+function buildCupHypoData(
+  slotInfos: SlotInfo[],
+  latestExp: any,
+  bean: any,
+  priorExp: any | null,
+): CupHypoData {
+  const mobileSlots = slotInfos.map((info) => ({
+    label: info.recipe?.batch_slot ?? info.slot.toUpperCase(),
+    taste: (latestExp[`taste_for_${info.slot}`] as string | null) ?? null,
+    predictedCup: (latestExp[`updated_cup_prediction_${info.slot}`] as string | null) ?? null,
+  }))
+  const cols = mobileSlots.map((s) => ({ label: s.label }))
+
+  const rows: ExpRow[] = []
+  if (mobileSlots.some((s) => s.taste)) {
+    rows.push({
+      label: 'Taste for',
+      sub: 'cupping-table question',
+      labelAccent: 'cup',
+      cells: mobileSlots.map((s) => s.taste ?? '—'),
+    })
+  }
+  if (mobileSlots.some((s) => s.predictedCup)) {
+    rows.push({
+      label: 'Predicted Cup',
+      sub: 'given roast actuals',
+      labelAccent: 'cup',
+      cells: mobileSlots.map((s) => s.predictedCup ?? '—'),
+    })
   }
 
-  // Both boxes auto-hide when their data is missing. When NEITHER is
-  // populated, this whole block silently skips.
-  if (!producerNotes && !priorWinnerCup) return null
+  const producerNotes = bean.producer_tasting_notes ?? null
+  const { label: priorLabel, cup: priorWinnerCup } = derivePriorWinnerCup(priorExp)
+  const refSignals: { k: string; v: string }[] = []
+  if (producerNotes) refSignals.push({ k: 'Producer notes', v: producerNotes })
+  if (priorWinnerCup) refSignals.push({ k: priorLabel, v: priorWinnerCup })
+  const otherSignals = refSignals.filter((s) => !/producer/i.test(s.k))
 
-  return (
-    <div className="space-y-3 mb-6">
-      {producerNotes && (
-        <div className="bg-latent-cup-emphasis-surface border border-latent-cup-emphasis rounded p-4">
-          <div className="label mb-2">Producer Notes</div>
-          <div className="font-sans text-sm leading-relaxed text-latent-fg">
-            {producerNotes}
-          </div>
-        </div>
-      )}
-      {priorWinnerCup && priorExp && (
-        <div className="bg-latent-cup-emphasis-surface border border-latent-cup-emphasis rounded p-4">
-          <div className="label mb-2">
-            Previous Leading Slot Cup Notes
-            {priorExp.winner && (
-              <span className="ml-2 font-normal normal-case text-latent-mid tracking-normal">
-                ({priorExp.experiment_id} · {priorExp.winner})
-              </span>
-            )}
-          </div>
-          <div className="font-sans text-sm leading-relaxed text-latent-fg">
-            {priorWinnerCup}
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  return { mobileSlots, cols, rows, producerNotes, refSignals, otherSignals }
 }
 
 // Roast Actuals transposed table — 6 rows × N batches of as-recorded facts
@@ -1147,13 +1142,14 @@ function formatActualVsPredicted(
   )
 }
 
-function RoastActualsTable({
-  slotInfos,
-  latestExp,
-}: {
-  slotInfos: SlotInfo[]
-  latestExp: any
-}) {
+// Redesign Sprint 2 — Roast Actuals data builder. Same 6 RowSpec definitions
+// as the pre-Sprint-2 RoastActualsTable (Bundle B mockup #2 order: FC / Drop /
+// Drop Temp / Dev / Agtron WB / vs Expected), re-shaped into SspExpGrid cols +
+// rows. All cells render as centered mono `.val` (matching the v2 artboard);
+// the amber "vs Expected" lever-watch row gets the `.warn` cell class.
+type RoastActualsData = { cols: { label: string }[]; rows: ExpRow[] }
+
+function buildRoastActualsData(slotInfos: SlotInfo[], latestExp: any): RoastActualsData {
   type RowSpec = {
     label: string
     getValue: (info: SlotInfo) => React.ReactNode
@@ -1244,62 +1240,27 @@ function RoastActualsTable({
 
   const visibleRows = rows.filter((row) => slotInfos.some(row.has))
 
-  if (visibleRows.length === 0) {
-    return (
-      <div className="font-sans text-sm text-latent-mid italic">
-        Latest experiment&apos;s batches not yet logged as roasts. Use
-        push_roast from claude.ai to populate the actuals.
-      </div>
-    )
-  }
+  const cols = slotInfos.map((info) => {
+    const slotLabel = info.recipe?.batch_slot ?? info.slot.toUpperCase()
+    const batchSuffix = info.roast?.batch_id
+      ? ` · #${info.roast.batch_id}`
+      : info.declaredBatchId
+        ? ` · #${info.declaredBatchId}`
+        : ''
+    return { label: `${slotLabel}${batchSuffix}` }
+  })
 
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-latent-border">
-            <th className="text-left py-2 pr-4 font-sans font-normal text-latent-mid text-xs" />
-            {slotInfos.map((info) => {
-              const slotLabel = info.recipe?.batch_slot ?? info.slot.toUpperCase()
-              const batchSuffix = info.roast?.batch_id
-                ? ` · #${info.roast.batch_id}`
-                : info.declaredBatchId
-                  ? ` · #${info.declaredBatchId}`
-                  : ''
-              return (
-                <th
-                  key={info.slot}
-                  className="text-left py-2 px-3 font-sans font-semibold text-latent-fg text-xs"
-                >
-                  {slotLabel}
-                  {batchSuffix}
-                </th>
-              )
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {visibleRows.map((row) => {
-            const cellClass = row.amber
-              ? 'py-2 px-3 font-sans text-sm align-top text-latent-roast-emphasis'
-              : 'py-2 px-3 font-sans text-sm align-top'
-            return (
-              <tr key={row.label} className="border-b border-latent-border last:border-b-0">
-                <td className="py-2 pr-4 font-sans text-xs text-latent-mid align-top">
-                  {row.label}
-                </td>
-                {slotInfos.map((info) => (
-                  <td key={info.slot} className={cellClass}>
-                    {row.getValue(info)}
-                  </td>
-                ))}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
-  )
+  const expRows: ExpRow[] = visibleRows.map((row) => ({
+    label: row.label,
+    numeric: true,
+    cells: slotInfos.map((info) =>
+      row.amber
+        ? { content: row.getValue(info), className: 'warn' }
+        : row.getValue(info),
+    ),
+  }))
+
+  return { cols, rows: expRows }
 }
 
 // ---------------------------------------------------------------------------
