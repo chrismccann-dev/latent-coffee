@@ -1,10 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
-import Link from 'next/link'
+import { IndexCap, GrlCap, GrlGroupHeader, GrlRow } from '@/components/IndexList'
 import {
   ROASTER_FAMILIES,
   getRoasterFamily,
   getFamilyColor,
   getDisplayName,
+  getRoasterEntry,
   type RoasterFamily,
 } from '@/lib/roaster-registry'
 
@@ -49,65 +50,46 @@ export default async function RoastersPage() {
   ]
   const orderedFamilies = familyOrder.filter(f => familyMap[f]?.length)
 
-  const totalRoasters = Object.values(familyMap).reduce((sum, groups) => sum + groups.length, 0)
+  const allGroups = Object.values(familyMap).flat()
+  const totalRoasters = allGroups.length
+  const totalCoffees = allGroups.reduce((sum, g) => sum + g.brewCount, 0)
+  // Per-page max for the 5-block bar — highest brew count across all rows.
+  const maxCount = Math.max(0, ...allGroups.map((g) => g.brewCount))
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-          ROASTERS
-        </h1>
-        <div className="font-mono text-xs text-latent-mid">
-          {totalRoasters} {totalRoasters === 1 ? 'ROASTER' : 'ROASTERS'}
-        </div>
-      </div>
+      <IndexCap
+        left="ROASTERS"
+        right={`${totalRoasters} ${totalRoasters === 1 ? 'ROASTER' : 'ROASTERS'} · ${orderedFamilies.length} ${orderedFamilies.length === 1 ? 'FAMILY' : 'FAMILIES'}`}
+      />
 
       {totalRoasters === 0 ? (
         <div className="text-center py-16">
           <p className="font-mono text-sm text-latent-mid">NO ROASTERS YET</p>
         </div>
       ) : (
-        <div className="space-y-8">
+        <div className="grl">
+          <GrlCap label="ROASTERS" count={totalCoffees} />
           {orderedFamilies.map((family) => {
             const groups = familyMap[family]
             const color = getFamilyColor(family)
             return (
               <div key={family}>
-                <div className="flex items-center gap-2 mb-3">
-                  <div
-                    className="w-4 h-4 rounded-sm flex-shrink-0"
-                    style={{ backgroundColor: color }}
-                  />
-                  <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-                    {family} ({groups.length})
-                  </h2>
-                </div>
-
-                <div className="space-y-0">
-                  {groups.map((group) => (
-                    <Link
+                <GrlGroupHeader swatchColor={color} name={family} count={groups.length} />
+                {groups.map((group) => {
+                  const loc = getRoasterEntry(group.roaster)?.location
+                  return (
+                    <GrlRow
                       key={group.roaster}
                       href={`/roasters/${encodeURIComponent(group.roaster)}`}
-                      className="flex items-center gap-3 py-3 border-b border-latent-border hover:bg-white transition-colors group"
-                    >
-                      <div
-                        className="w-10 h-10 rounded flex-shrink-0"
-                        style={{ backgroundColor: color }}
-                      />
-                      <div className="flex-1">
-                        <div className="font-sans text-sm font-semibold">
-                          {getDisplayName(group.roaster) || group.roaster}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="font-mono text-xs text-latent-mid">
-                          {group.brewCount} {group.brewCount === 1 ? 'coffee' : 'coffees'}
-                        </div>
-                        <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+                      tileColor={color}
+                      name={getDisplayName(group.roaster) || group.roaster}
+                      meta={loc || undefined}
+                      count={group.brewCount}
+                      max={maxCount}
+                    />
+                  )
+                })}
               </div>
             )
           })}

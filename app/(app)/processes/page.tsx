@@ -10,6 +10,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { IndexCap, GrlRow } from '@/components/IndexList'
 import {
   BASE_PROCESSES,
   getSignatureEntry,
@@ -46,22 +47,20 @@ export default async function ProcessesIndexPage() {
   const totalModifiers = modifierEntries.length
   const totalSignatures = signatures.length
 
+  // Per-list max for the 5-block bar — normalized within each section.
+  const maxModifier = modifierEntries.reduce((m, e) => Math.max(m, e.count), 0)
+  const maxSignature = signatures.reduce((m, s) => Math.max(m, s.count), 0)
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-          PROCESSES
-        </h1>
-        <div className="font-mono text-xs text-latent-mid">
-          {baseHubs.length} BASE &middot; {totalModifiers} MODIFIERS &middot; {totalSignatures} SIGNATURES &middot; {totalCoffees} COFFEES
-        </div>
-      </div>
+      <IndexCap
+        left="PROCESSES"
+        right={`${baseHubs.length} BASE · ${totalModifiers} MODIFIERS · ${totalSignatures} SIGNATURES · ${totalCoffees} COFFEES`}
+      />
 
-      {/* Section 1 — Core Process Portals */}
+      {/* Section 1 — Core Process Portals (richer portal cards, kept) */}
       <section className="mb-10">
-        <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid mb-3">
-          Core Process Portals
-        </h2>
+        <h2 className="label mb-3 mt-2">Core Process Portals</h2>
         <div className="space-y-3">
           {baseHubs.map(({ base, hub }) => (
             <CorePortalCard key={base} base={base} hub={hub} />
@@ -72,33 +71,18 @@ export default async function ProcessesIndexPage() {
       {/* Section 2 — Modifier Index */}
       {modifierEntries.length > 0 && (
         <section className="mb-10">
-          <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid mb-3">
-            Modifier Index
-          </h2>
-          <div className="space-y-0">
+          <h2 className="label mb-1">Modifier Index</h2>
+          <div className="grl">
             {modifierEntries.map((entry) => (
-              <Link
+              <GrlRow
                 key={entry.name}
                 href={modifierIndexUrl(entry.name)}
-                className="flex items-center gap-3 py-3 border-b border-latent-border hover:bg-white transition-colors group"
-              >
-                <div
-                  className="w-4 h-4 rounded-sm flex-shrink-0"
-                  style={{ backgroundColor: axisColor(entry.axis) }}
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="font-sans text-sm font-semibold">{entry.name}</div>
-                  <div className="font-mono text-xxs text-latent-mid">
-                    {byBaseLine(entry.byBase)}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="font-mono text-xs text-latent-mid">
-                    {entry.count} {entry.count === 1 ? 'coffee' : 'coffees'}
-                  </div>
-                  <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                </div>
-              </Link>
+                tileColor={axisColor(entry.axis)}
+                name={entry.name}
+                meta={byBaseLine(entry.byBase)}
+                count={entry.count}
+                max={maxModifier}
+              />
             ))}
           </div>
         </section>
@@ -107,41 +91,26 @@ export default async function ProcessesIndexPage() {
       {/* Section 3 — Signature Methods */}
       {signatures.length > 0 && (
         <section>
-          <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid mb-3">
-            Signature Methods
-          </h2>
-          <div className="space-y-0">
+          <h2 className="label mb-1">Signature Methods</h2>
+          <div className="grl">
             {signatures.map((sig) => {
               const entry = getSignatureEntry(sig.name)
-              let producerLine: string | null = null
+              let producerLine: string | undefined
               if (entry) {
                 producerLine = entry.producer && entry.country
                   ? `${entry.base} · ${entry.producer}, ${entry.country}`
                   : entry.base
               }
               return (
-                <Link
+                <GrlRow
                   key={sig.name}
                   href={signatureUrl(sig.name)}
-                  className="flex items-center gap-3 py-3 border-b border-latent-border hover:bg-white transition-colors group"
-                >
-                  <div
-                    className="w-4 h-4 rounded-sm flex-shrink-0"
-                    style={{ backgroundColor: SIGNATURE_SWATCH_COLOR }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="font-sans text-sm font-semibold">{sig.name}</div>
-                    {producerLine && (
-                      <div className="font-mono text-xxs text-latent-mid">{producerLine}</div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="font-mono text-xs text-latent-mid">
-                      {sig.count} {sig.count === 1 ? 'coffee' : 'coffees'}
-                    </div>
-                    <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                  </div>
-                </Link>
+                  tileColor={SIGNATURE_SWATCH_COLOR}
+                  name={sig.name}
+                  meta={producerLine}
+                  count={sig.count}
+                  max={maxSignature}
+                />
               )
             })}
           </div>

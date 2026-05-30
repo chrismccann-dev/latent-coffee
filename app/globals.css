@@ -698,6 +698,10 @@ body {
 .grl-row.simple { grid-template-columns: 44px 1fr auto; gap: 16px; }
 .grl-row.simple .right { font-family: var(--mono); font-size: 11px; color: var(--mid); text-align: right; }
 
+/* lineage sub-label (cultivars) — indented to align under the grl-row name
+   column (44px tile + 16px gap), so it doesn't need an arbitrary p-[Npx]. */
+.grl-lineage { font-family: var(--mono); font-size: 10.4px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--subtle); padding: 8px 0 2px calc(44px + 16px); }
+
 /* dense — smaller tile for high-cardinality lists */
 .grl-row.dense { grid-template-columns: 28px 1fr 36px 70px; gap: 14px; padding: 6px 0; }
 .grl-row.dense .tile { width: 24px; height: 24px; }
