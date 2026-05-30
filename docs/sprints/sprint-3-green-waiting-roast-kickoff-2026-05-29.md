@@ -1,6 +1,14 @@
 # Sprint 3 — Green waiting-for-roast re-skin (`/green/[id]` waiting-for-next-roast) — KICKOFF
 
-Third companion surface in the Claude-Design redesign (PRODUCT.md § Active Sprints #5). **Soft** mobile-primary per Q3 — usually consulted at the desk during V-set design, so desktop-primary with a strong mobile pass (not mobile-first like brew detail / green cupping). Execution sprint — plan-mode first (the shared-component decision is the key call), then ship autonomously after approval.
+Third companion surface in the Claude-Design redesign (PRODUCT.md § Active Sprints #5). **Soft** mobile-primary per Q3 — usually consulted at the desk during V-set design, so desktop-primary with a strong mobile pass (not mobile-first like brew detail / green cupping). Execution sprint — plan-mode first (the shared-component decision below is the key call), then ship autonomously after approval.
+
+## ⟦Decide first in plan-mode⟧ Shared-component re-skin scope
+
+After this sprint, waiting-for-roast **and** waiting-for-cupping (Sprint 2) are both `Ssp*`, while resolved / unresolved / inventory are still legacy. The shared components (`<GreenBeanInfoCard>` / `<RoastLogTable>` / `<PerRoastReflections>` / `<CrossBatchNotesBlock>` / `<ExperimentFrameCard>`) are used by all five shapes. So the question:
+
+> Re-skin the shared components now (the two migrated views lose their legacy seam) — at the cost that resolved/unresolved/inventory then render `Ssp*` shared components inside otherwise-legacy `SectionCard` views? Or keep the seam until a dedicated "green shared-components + remaining shapes" sprint?
+
+**Recommendation: keep the seam.** Re-skinning the shared components mid-way *splits* the inconsistency across all five views rather than removing it; a single later sprint that re-skins the shared components + the remaining shapes together removes it cleanly (and every green view inherits at once). Surface this to Chris in plan-mode before touching shared components — it's the one call that decides this sprint's blast radius.
 
 **Goal:** re-skin the `waiting_for_next_roast` shape of `/green/[id]` (`WaitingForNextRoastView`) to the `Ssp*` family inside `.ssp-page`. The 6.3 IA is correct (Primary Question + Roast Hypothesis transposed table with lever-row amber-highlight + Drop Rules card → green-bean info → roast log → additional info) — this is a chrome re-skin, not an IA change.
 
@@ -10,7 +18,7 @@ Third companion surface in the Claude-Design redesign (PRODUCT.md § Active Spri
 - Drop Rules card → amber `.ssp-inset` (Sprint 2 ported `.ssp-inset` + `.cup`; the roast/amber default variant is the base `.ssp-inset`).
 - Primary Question → `.ssp-question`.
 
-**Scope (out / migration-window seam, same as Sprint 2):** `<GreenBeanInfoCard>` / `<RoastLogTable>` / `<PerRoastReflections>` stay legacy-skinned below — shared with the still-un-migrated resolved / unresolved / cupping... wait, cupping is now migrated. After this sprint, only resolved / unresolved / inventory remain legacy. **Open question for plan-mode:** once waiting-for-roast + waiting-for-cupping are both `Ssp*`, is it worth re-skinning the shared components (so the two migrated views lose the seam), accepting that resolved/unresolved/inventory then show `Ssp*` shared components inside legacy `SectionCard` views? Or keep waiting until the resolved/unresolved sprint? Recommend: keep the seam until a dedicated "green shared-components + remaining shapes" sprint — re-skinning shared components mid-way splits the inconsistency rather than removing it.
+**Scope (out / migration-window seam, same as Sprint 2):** `<GreenBeanInfoCard>` / `<RoastLogTable>` / `<PerRoastReflections>` / `<CrossBatchNotesBlock>` / `<ExperimentFrameCard>` stay legacy-skinned below the re-skinned cards — per the recommendation in the ⟦Decide first⟧ callout above (keep the seam until a dedicated shared-components sprint). If Chris chooses to re-skin them now, that's a materially larger blast radius (touches all five `/green` shapes) — re-scope before proceeding.
 
 **Mobile pass (soft):** waiting-for-roast is mostly a single-column stack already (Primary Question → table → drop rules → info → log). Likely needs only `order-*`-free stacking + the `.ssp-exp` narrow-container variant (already ported, handles the transposed table at <520). No dual-subtree expected — confirm in plan-mode by checking whether the hypothesis table reflows acceptably as-is at 390 (it's design-intent reference, fewer rows than cupping actuals).
 
