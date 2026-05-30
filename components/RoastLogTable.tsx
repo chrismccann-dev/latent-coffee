@@ -1,27 +1,24 @@
-import { SectionCard } from '@/components/SectionCard'
+import { SspShead } from '@/components/Ssp'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
 
-// Sub Pages 6.4 (2026-05-13). Extracted from app/(app)/green/[id]/page.tsx
-// 6.3 inline render. Shared across the waiting-for-next-roast (6.3),
-// waiting-for-next-cupping (6.4), and resolved (6.5) page shapes — all three
-// surface the same 9-col table off the same roasts rows.
+// Sub Pages 6.4 (2026-05-13). Shared across all 5 /green lifecycle shapes —
+// the same 9-col dense roast log off the same roasts rows. Re-skinned to the
+// Ssp* `.ssp-log` mono table in Redesign Sprint 4 (2026-05-29) (artboard
+// `GreenRoastLog`).
 //
 // API:
 // - roasts: chronologically sorted Roast rows for the lot
-// - cuppings: full cupping rows (used to compute the WB-to-Ground Agtron
-//   delta — primary cupping per roast, "primary" = first by cupping_date asc
-//   per the legacy convention)
-// - highlightedBatchIds: optional list of batch_id strings to visually emphasize.
-//   6.3 + 6.4 pass the current experiment's batch_ids (for V_n highlighting);
-//   6.5 will pass a single-element [best_batch_id] for reference-roast
-//   highlighting (same mechanism, different intent).
-// - defaultCollapsed: when true, renders inside a native <details> rather
-//   than an always-expanded SectionCard. 6.5's resolved view passes true so
-//   the archival log defaults closed; 6.3 + 6.4 default to expanded.
+// - cuppings: full cupping rows (used to compute the WB-to-Ground Agtron delta
+//   — primary cupping per roast = first by cupping_date asc)
+// - highlightedBatchIds: optional batch_id strings to emphasize. Waiting views
+//   pass the current experiment's batch_ids; resolved/unresolved pass the
+//   single reference/leading batch. Rendered as `tr.winner` (green tint) — the
+//   artboard's one row-highlight treatment — plus a neutral marker on the batch
+//   cell.
+// - defaultCollapsed: when true, renders inside a `.ssp-coll` CollapsibleSection
+//   (all current callers pass true); otherwise an `.ssp-card` titled section.
 
-// Type shape kept structural so the component doesn't bind to the full Roast
-// / Cupping interfaces — caller passes whatever shape it has (joined arrays
-// from the green_beans top-level fetch).
+// Structural row shape — caller passes joined arrays from the green_beans fetch.
 type RoastRow = {
   id: string
   batch_id?: string | null
@@ -56,9 +53,8 @@ export function RoastLogTable({
 }: Props) {
   if (roasts.length === 0) return null
 
-  // Primary ground Agtron per roast — first cupping by encounter order
-  // (callers should pass cuppings sorted by cupping_date asc, which the
-  // existing page.tsx fetch does via .order('cupping_date', ascending)).
+  // Primary ground Agtron per roast — first cupping by encounter order (callers
+  // pass cuppings sorted by cupping_date asc).
   const primaryGroundAgtronByRoast: Record<string, number> = {}
   for (const cup of cuppings) {
     if (
@@ -70,12 +66,11 @@ export function RoastLogTable({
     }
   }
 
-  // O(1) highlight membership.
   const highlightSet = new Set(highlightedBatchIds ?? [])
 
   const tableBody = (
-    <div className="overflow-x-auto">
-      <table className="data-table">
+    <div className="ssp-log-wrap">
+      <table className="ssp-log">
         <thead>
           <tr>
             <th>Batch</th>
@@ -102,12 +97,10 @@ export function RoastLogTable({
             const isHighlighted =
               roast.batch_id != null && highlightSet.has(String(roast.batch_id))
             return (
-              <tr key={roast.id} className={isHighlighted ? 'highlight' : ''}>
-                <td className={isHighlighted ? 'font-semibold' : ''}>
+              <tr key={roast.id} className={isHighlighted ? 'winner' : ''}>
+                <td>
                   #{roast.batch_id}
-                  {isHighlighted && (
-                    <span className="ml-1 font-mono text-chip text-latent-mid">●</span>
-                  )}
+                  {isHighlighted && <span className="ml-1">●</span>}
                 </td>
                 <td>{roast.roast_date || '—'}</td>
                 <td>{roast.fc_start || '—'}</td>
@@ -134,7 +127,6 @@ export function RoastLogTable({
                       href={roast.profile_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-latent-mid hover:text-latent-fg"
                       title="Roest profile"
                     >
                       ↗
@@ -149,19 +141,18 @@ export function RoastLogTable({
     </div>
   )
 
-  // Collapsed-by-default uses CollapsibleSection so the archival log on 6.5's
-  // resolved view starts closed without React state.
   if (defaultCollapsed) {
     return (
-      <CollapsibleSection title={`ROAST LOG (${roasts.length} ROASTS)`}>
+      <CollapsibleSection title={`Roast Log · ${roasts.length} roasts`}>
         {tableBody}
       </CollapsibleSection>
     )
   }
 
   return (
-    <SectionCard title={`ROAST LOG (${roasts.length} ROASTS)`}>
+    <div className="ssp-card">
+      <SspShead ct="As-recorded per batch">Roast Log · {roasts.length} roasts</SspShead>
       {tableBody}
-    </SectionCard>
+    </div>
   )
 }

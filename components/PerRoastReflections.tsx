@@ -28,7 +28,8 @@ export function PerRoastReflections({ roasts }: Props) {
 
   return (
     <CollapsibleSection
-      title={`PER-ROAST REFLECTIONS (${populated.length} POPULATED)`}
+      title="Per-Roast Reflections"
+      ct={`${populated.length} populated`}
     >
       <div className="space-y-6">
         {populated.map((roast) => (

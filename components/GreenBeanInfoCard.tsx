@@ -1,17 +1,19 @@
-import { SectionCard } from '@/components/SectionCard'
+import { SspShead, SspProseRows, type ProseRow } from '@/components/Ssp'
 
-// Sub Pages 6.4 (2026-05-13). Extracted from app/(app)/green/[id]/page.tsx 6.3
-// inline render. Shared across the waiting-for-next-roast (6.3),
-// waiting-for-next-cupping (6.4), and resolved (6.5) page shapes — all three
-// surface the same 6-field grid plus producer's tasting notes prose, driven
-// by the same green_beans row.
+// Sub Pages 6.4 (2026-05-13). Shared across all 5 /green lifecycle shapes —
+// surfaces the same lot-intake spec rows + producer's tasting notes off the
+// green_beans row. Re-skinned to the Ssp* lab-document family in Redesign
+// Sprint 4 (2026-05-29): `.ssp-card` + SspShead + SspProseRows (artboard
+// `GreenBeanInfoCard`).
 //
-// Prop-driven (not self-fetching): the parent already has the green_beans row
-// from its top-level Supabase query. No duplicate round-trip.
+// Prop-driven (not self-fetching): the parent already has the green_beans row.
 //
-// producer_tasting_notes is a DB column (migration 039) but not yet typed on
-// the GreenBean interface in lib/types.ts. Reading it via a structural type
-// here keeps the component compatible until the type is updated.
+// producer_tasting_notes is a DB column (migration 039) not yet typed on the
+// GreenBean interface in lib/types.ts; read via a structural type here.
+//
+// Moisture / density store BARE numeric strings ("8.70" / "776") per the
+// post-Sprint-A convention — the single canonical unit (% / g/L) is appended
+// at render time. Preserve that here.
 
 type GreenBeanInfo = {
   producer?: string | null
@@ -43,48 +45,21 @@ export function GreenBeanInfoCard({ bean }: { bean: GreenBeanInfo }) {
   const canonicalsDate = formatProvenanceDate(bean.canonicals_updated_at)
   const showProvenanceFooter = autoTerroir || autoCultivar || canonicalsDate
 
+  const rows: ProseRow[] = []
+  if (bean.producer) rows.push({ label: 'Producer', value: bean.producer })
+  if (bean.purchase_date) rows.push({ label: 'Purchased', value: bean.purchase_date })
+  if (bean.price_per_kg) rows.push({ label: 'Price', value: `$${bean.price_per_kg} / kg` })
+  if (bean.quantity_g) rows.push({ label: 'Quantity', value: `${bean.quantity_g} g` })
+  if (bean.moisture) rows.push({ label: 'Moisture', value: `${bean.moisture}%` })
+  if (bean.density) rows.push({ label: 'Density', value: `${bean.density} g/L` })
+  if (bean.producer_tasting_notes) {
+    rows.push({ label: "Producer's notes", value: bean.producer_tasting_notes })
+  }
+
   return (
-    <SectionCard title="GREEN BEAN INFO">
-      <div className="grid grid-cols-2 gap-x-8 gap-y-3 font-sans text-sm mb-4">
-        {bean.producer && (
-          <div>
-            <strong>Producer:</strong> {bean.producer}
-          </div>
-        )}
-        {bean.purchase_date && (
-          <div>
-            <strong>Purchased:</strong> {bean.purchase_date}
-          </div>
-        )}
-        {bean.price_per_kg && (
-          <div>
-            <strong>Price:</strong> ${bean.price_per_kg}/kg
-          </div>
-        )}
-        {bean.quantity_g && (
-          <div>
-            <strong>Quantity:</strong> {bean.quantity_g}g
-          </div>
-        )}
-        {bean.moisture && (
-          <div>
-            <strong>Moisture:</strong> {bean.moisture}%
-          </div>
-        )}
-        {bean.density && (
-          <div>
-            <strong>Density:</strong> {bean.density} g/L
-          </div>
-        )}
-      </div>
-      {bean.producer_tasting_notes && (
-        <div>
-          <div className="label">Producer&apos;s Tasting Notes</div>
-          <div className="font-sans text-sm leading-relaxed">
-            {bean.producer_tasting_notes}
-          </div>
-        </div>
-      )}
+    <div className="ssp-card">
+      <SspShead ct="Lot intake data">Green Bean Info</SspShead>
+      <SspProseRows rows={rows} />
       {showProvenanceFooter && (
         <div className="mt-4 pt-3 border-t border-latent-border text-xs text-latent-mid font-sans space-y-1">
           {autoTerroir && (
@@ -93,11 +68,9 @@ export function GreenBeanInfoCard({ bean }: { bean: GreenBeanInfo }) {
           {autoCultivar && (
             <div>Cultivar was auto-created by the most recent canonical resolution.</div>
           )}
-          {canonicalsDate && (
-            <div>Canonicals last updated: {canonicalsDate}</div>
-          )}
+          {canonicalsDate && <div>Canonicals last updated: {canonicalsDate}</div>}
         </div>
       )}
-    </SectionCard>
+    </div>
   )
 }

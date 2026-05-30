@@ -357,6 +357,77 @@ export function SspExpGrid({ cols, rows }: { cols: ExpCol[]; rows: ExpRow[] }) {
   )
 }
 
+export type InsetTone = 'amber' | 'cup'
+export type InsetGridRow = { label: ReactNode; sub?: ReactNode; cells: ReactNode[] }
+export type InsetPair = { k: ReactNode; v: ReactNode }
+
+/**
+ * Inset — reference card that sits inside (or below) a state card. Amber for
+ * procedural rules (drop rules, fan curves); `cup` (lavender) for evaluation
+ * prompts (reference signals, cupping anchors). Two modes:
+ *  - `grid`: 1 + N column transposed mini-table (`cols` headers, `rows` of
+ *    label[/sub] + cells). Drives the waiting-roast Drop Rules + DropRulesCard.
+ *  - `stack`: label/value pairs. Drives the cupping Reference Signals.
+ * Mirrors the v2 artboard `Inset`; rule-of-3 extraction (Redesign Sprint 4).
+ */
+export function SspInset({
+  title,
+  tone = 'amber',
+  mode = 'grid',
+  cols,
+  rows,
+  pairs,
+}: {
+  title: ReactNode
+  tone?: InsetTone
+  mode?: 'grid' | 'stack'
+  cols?: ReactNode[]
+  rows?: InsetGridRow[]
+  pairs?: InsetPair[]
+}) {
+  return (
+    <div className={tone === 'cup' ? 'ssp-inset cup' : 'ssp-inset'}>
+      <div className="inset-hd">{title}</div>
+      {mode === 'grid' && cols && rows ? (
+        <div
+          className="inset-grid"
+          style={{ ['--cols' as string]: cols.length } as React.CSSProperties}
+        >
+          <div />
+          {cols.map((c, i) => (
+            <div className="col-hd" key={i}>
+              {c}
+            </div>
+          ))}
+          {rows.map((row, ri) => (
+            <Fragment key={ri}>
+              <div className="row-lbl">
+                {row.label}
+                {row.sub ? <small>{row.sub}</small> : null}
+              </div>
+              {row.cells.map((cell, ci) => (
+                <div className="cell" key={ci}>
+                  {cell}
+                </div>
+              ))}
+            </Fragment>
+          ))}
+        </div>
+      ) : null}
+      {mode === 'stack' && pairs ? (
+        <div className="inset-stack">
+          {pairs.map((p, i) => (
+            <div className="pair" key={i}>
+              <div className="k">{p.k}</div>
+              <div className="v">{p.v}</div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 export type ProseRow = { label: ReactNode; value: ReactNode }
 
 /** ProseRows — label/value rows (mono label, sans value). Stacks at narrow
