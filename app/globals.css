@@ -660,3 +660,52 @@ body {
 .ssp-log tbody tr.winner td:first-child { color: #2c4a35; }
 .ssp-log a { color: var(--mid); text-decoration: none; }
 .ssp-log a:hover { color: var(--fg); }
+
+/* ============================================================
+   INDEX-PAGE PRIMITIVES — v2 "legacy" family (§04 index archetypes).
+   Ported from the claude.ai/design v2 bundle (Latent - Design System v2.html
+   §07). Distinct from the .ssp-* detail-page family: composes the 6 index
+   pages (Redesign Sprint 6, 2026-05-29). React primitives live in
+   components/IndexList.tsx + components/BrewCard.tsx. Index pages are fluid
+   reference surfaces — no .ssp-page container query needed (grl rows + lot
+   rows are inherently fluid; the brew grid uses Tailwind responsive cols).
+   ============================================================ */
+
+/* Page caption — left page label + right aggregate stats */
+.cap { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 6px; gap: 12px; }
+.cap .l, .cap .r { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); }
+.cap .r { text-align: right; }
+
+/* Grouped row list — terroirs · processes · roasters · cultivars */
+.grl-cap { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0 6px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); }
+.grl-cap .r b { color: var(--fg); font-weight: 600; margin-right: 4px; }
+.grl-group-hd { display: flex; align-items: center; gap: 10px; padding: 22px 0 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); font-weight: 600; }
+.grl-group-hd .sw { width: 11px; height: 11px; display: inline-block; flex-shrink: 0; border-radius: 2px; }
+.grl-group-hd .ct { color: var(--mid); font-weight: 400; letter-spacing: 0.12em; }
+
+.grl-row { display: grid; grid-template-columns: 44px 1fr 36px 70px; gap: 16px; align-items: center; padding: 8px 0; cursor: pointer; text-decoration: none; }
+.grl-row:hover { background: var(--paper); }
+.grl-row .tile { width: 44px; height: 44px; background: var(--subtle); flex-shrink: 0; border-radius: 3px; }
+.grl-row .body { min-width: 0; }
+.grl-row .name { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--fg); line-height: 1.25; }
+.grl-row .meta { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.grl-row .cnt { font-family: var(--mono); font-size: 11px; color: var(--mid); text-align: right; font-variant-numeric: tabular-nums; }
+.grl-row .bar { display: inline-flex; gap: 2px; align-self: center; }
+.grl-row .bar i { width: 9px; height: 11px; background: var(--border); }
+.grl-row .bar i.on { background: var(--fg); }
+
+/* simple — no count/bar; right side is free meta (green stage label) */
+.grl-row.simple { grid-template-columns: 44px 1fr auto; gap: 16px; }
+.grl-row.simple .right { font-family: var(--mono); font-size: 11px; color: var(--mid); text-align: right; }
+
+/* dense — smaller tile for high-cardinality lists */
+.grl-row.dense { grid-template-columns: 28px 1fr 36px 70px; gap: 14px; padding: 6px 0; }
+.grl-row.dense .tile { width: 24px; height: 24px; }
+.grl-row.dense .name { font-size: 13px; font-weight: 500; }
+
+/* /green lifecycle section header — flat list, not the card grid */
+.lot-stage { display: flex; align-items: baseline; justify-content: space-between; padding: 28px 0 12px; margin-top: 10px; border-bottom: 1px solid var(--hairline); margin-bottom: 6px; gap: 12px; }
+.lot-stage:first-child { padding-top: 0; margin-top: 0; }
+.lot-stage .l { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--fg); }
+.lot-stage .l .ct { font-family: var(--mono); font-size: 10.5px; color: var(--mid); margin-left: 10px; font-weight: 400; letter-spacing: 0.04em; text-transform: none; }
+.lot-stage .r { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); flex-shrink: 0; }
