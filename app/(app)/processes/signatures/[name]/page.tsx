@@ -1,4 +1,5 @@
 // Sub Pages 4 (2026-05-11) — signature method page.
+// Re-skinned to the v2 Ssp* lab-document family in Redesign Sprint 5 (2026-05-29).
 //
 // URL: /processes/signatures/{name}
 // Eligibility: Rule 2 — signature methods always earn a page, even at 1 brew.
@@ -9,25 +10,25 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
-import { SectionCard } from '@/components/SectionCard'
+import {
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  SspStructure,
+  type MetaPair,
+} from '@/components/Ssp'
+import { buildBreakdownRows } from '@/lib/process-breakdown'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
-import { ProcessBreakdownRow } from '@/components/ProcessBreakdownRow'
-import { ProcessConfidenceCard } from '@/components/ProcessConfidenceCard'
-import { ProcessCoffeesList } from '@/components/ProcessCoffeesList'
+import { ConfidenceCard } from '@/components/ConfidenceCard'
+import { CoffeesList } from '@/components/CoffeesList'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
-import {
-  getSignatureEntry,
-  getFamilyColor,
-} from '@/lib/process-registry'
+import { getSignatureEntry, getFamilyColor } from '@/lib/process-registry'
 import { aggregateSignature } from '@/lib/process-aggregation'
-import {
-  parseSignatureSlug,
-  signatureAggregationKey,
-} from '@/lib/process-routing'
+import { parseSignatureSlug, signatureAggregationKey } from '@/lib/process-routing'
 
 export default async function SignaturePage({
   params,
@@ -82,75 +83,67 @@ export default async function SignaturePage({
   const hasAdditional =
     sortedFlavors.length > 0 || terroirMap.size > 0 || cultivarMap.size > 0 || roasterSet.size > 0
 
+  const breakdownRows = buildBreakdownRows([
+    { lbl: 'Base', chips: [entry.base] },
+    { lbl: 'Fermentation', chips: entry.fermentation_modifiers ?? [] },
+    { lbl: 'Drying', chips: entry.drying_modifiers ?? [] },
+    { lbl: 'Intervention', chips: entry.intervention_modifiers ?? [] },
+  ])
+
+  const meta: MetaPair[] = [
+    { label: 'Method', value: 'Signature' },
+    ...(entry.producer && entry.country
+      ? [{ label: 'Producer', value: `${entry.producer}, ${entry.country}` }]
+      : []),
+    { label: 'Coffees', value: `${brewList.length}` },
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
         href="/processes"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
-        &larr; Back to Processes
+        ← Back to Processes
       </Link>
 
-      {/* Hero */}
-      <div className="section-card mb-6">
-        <div className="flex gap-6 items-start">
-          <div className="w-16 h-16 rounded flex-shrink-0" style={{ backgroundColor: color }} />
-          <div className="flex-1">
-            <h1 className="font-sans text-2xl font-semibold mb-1">{name}</h1>
-            <p className="font-mono text-xs text-latent-mid">
-              {[
-                'Signature method',
-                entry.producer && entry.country ? `${entry.producer}, ${entry.country}` : null,
-                `${brewList.length} ${brewList.length === 1 ? 'coffee' : 'coffees'}`,
-              ]
-                .filter(Boolean)
-                .join(' · ')}
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Header */}
+      <SspTopBar roaster="Signature Method" kind="Process Profile" />
+      <SspNamePlate title={name} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Process Overview (authored Tier B prose) */}
-      {entry.overview ? (
-        <SectionCard title="PROCESS OVERVIEW">
-          {entry.overview.split(/\n\n+/).map((para, i) => (
-            <p key={i} className="font-sans text-sm leading-relaxed mb-3 last:mb-0">{para}</p>
-          ))}
-        </SectionCard>
-      ) : (
-        <SectionCard title="PROCESS OVERVIEW">
-          <p className="font-mono text-xs text-latent-mid italic">
-            Process overview pending authoring.
-          </p>
-        </SectionCard>
-      )}
+      <div className="ssp-card">
+        <SspShead>Process Overview</SspShead>
+        {entry.overview ? (
+          <div className="ssp-prose space-y-3">
+            {entry.overview.split(/\n\n+/).map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
+        ) : (
+          <p className="font-mono text-xs text-latent-mid italic">Process overview pending authoring.</p>
+        )}
+      </div>
 
       {/* Process Breakdown (from canonical SignatureEntry decomposition) */}
-      <SectionCard title="PROCESS BREAKDOWN">
-        <div className="space-y-3">
-          <ProcessBreakdownRow label="Base" chips={[entry.base]} />
-          <ProcessBreakdownRow label="Fermentation" chips={entry.fermentation_modifiers ?? []} />
-          <ProcessBreakdownRow label="Drying" chips={entry.drying_modifiers ?? []} />
-          <ProcessBreakdownRow label="Intervention" chips={entry.intervention_modifiers ?? []} />
-        </div>
-      </SectionCard>
+      <div className="ssp-card">
+        <SspShead>Process Breakdown</SspShead>
+        <SspStructure rows={breakdownRows} />
+      </div>
 
       {/* Observed Cup Profile (authored Tier B bullets) */}
-      {entry.observedCupProfile && entry.observedCupProfile.length > 0 ? (
-        <SectionCard title="OBSERVED CUP PROFILE">
-          <ul className="list-disc list-inside space-y-1 font-sans text-sm">
+      <div className="ssp-card">
+        <SspShead>Observed Cup Profile</SspShead>
+        {entry.observedCupProfile && entry.observedCupProfile.length > 0 ? (
+          <ul className="list-disc list-inside space-y-1 font-sans text-sm leading-relaxed">
             {entry.observedCupProfile.map((bullet, i) => (
               <li key={i}>{bullet}</li>
             ))}
           </ul>
-        </SectionCard>
-      ) : (
-        <SectionCard title="OBSERVED CUP PROFILE">
-          <p className="font-mono text-xs text-latent-mid italic">
-            Cup profile pending authoring.
-          </p>
-        </SectionCard>
-      )}
+        ) : (
+          <p className="font-mono text-xs text-latent-mid italic">Cup profile pending authoring.</p>
+        )}
+      </div>
 
       {/* What I Learned (synthesis) — hidden below 2 brews */}
       {brewList.length >= 2 && (
@@ -170,44 +163,35 @@ export default async function SignaturePage({
       )}
 
       {/* Coffees list */}
-      <ProcessCoffeesList title={`COFFEES (${brewList.length})`} brews={brewList} />
+      <CoffeesList title="Coffees" brews={brewList} />
 
-      {/* Additional Information (mobile-collapsed; thin on 1-brew signature pages) */}
+      {/* Additional Information */}
       {hasAdditional && (
         <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" bare />
+          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
           <TagLinkList
             title="CULTIVARS EXPLORED"
-            bare
             items={Array.from(cultivarMap.entries()).map(([n, id]) => ({
-              key: n,
-              label: n,
-              href: `/cultivars/${id}`,
+              key: n, label: n, href: `/cultivars/${id}`,
             }))}
           />
           <TagLinkList
             title="TERROIRS EXPLORED"
-            bare
             items={Array.from(terroirMap.entries()).map(([n, { id, country }]) => ({
-              key: n,
-              label: `${country} / ${n}`,
-              href: `/terroirs/${id}`,
+              key: n, label: `${country} / ${n}`, href: `/terroirs/${id}`,
             }))}
           />
           <TagLinkList
             title="ROASTERS EXPLORED"
-            bare
             items={Array.from(roasterSet).map((r) => ({
-              key: r,
-              label: r,
-              href: `/roasters/${encodeURIComponent(r)}`,
+              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
             }))}
           />
         </CollapsibleBlock>
       )}
 
       {/* Confidence */}
-      <ProcessConfidenceCard brewCount={brewList.length} />
+      <ConfidenceCard brewCount={brewList.length} />
     </div>
   )
 }

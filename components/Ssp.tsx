@@ -8,8 +8,10 @@ import { Fragment, type ReactNode } from 'react'
  * CSS, now in app/globals.css) — NOT the prototype's babel-mount structure.
  *
  * These are the stable base the per-surface redesign sprints compose against.
- * They coexist with the legacy SectionCard / Tag / TagLinkList through the
- * migration window; each per-surface sprint swaps its page composition over.
+ * As of Redesign Sprint 5 (2026-05-29) every detail surface — /brews/[id], all
+ * five /green views, and the four aggregation detail families (roaster /
+ * cultivar / terroir / processes) — is on Ssp*; the legacy SectionCard + Tag
+ * chrome was deleted. Only the index pages remain un-migrated.
  *
  * Responsive behavior is driven by CSS container queries (`@container ssppage`)
  * defined alongside the `.ssp-*` classes — wrap a page in `.ssp-page` to activate.

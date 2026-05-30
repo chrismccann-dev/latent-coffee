@@ -1,33 +1,32 @@
 // Sub Pages 4 (2026-05-11) — Honey subprocess sub-page.
+// Re-skinned to the v2 Ssp* lab-document family in Redesign Sprint 5 (2026-05-29).
 //
 // URL: /processes/honey/{subprocess}
 // Subprocesses: white / generic / yellow / red / black / purple / hydro
 // Eligibility: Rule 3 — Honey color tiers are structurally meaningful, so
 // even a 1-brew subprocess gets a page. Only Honey base supports subprocess
 // routing today; other bases return notFound.
-//
-// Tier B content scope excludes mini-pages → no authored Process Overview /
-// Cup Profile blocks. The page shows Process Breakdown chips + synthesized
-// What I Learned + coffees list + cross-link block + Confidence.
 
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
-import { SectionCard } from '@/components/SectionCard'
+import {
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  SspStructure,
+  type MetaPair,
+} from '@/components/Ssp'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
-import { ProcessBreakdownRow } from '@/components/ProcessBreakdownRow'
-import { ProcessConfidenceCard } from '@/components/ProcessConfidenceCard'
-import { ProcessCoffeesList } from '@/components/ProcessCoffeesList'
+import { ConfidenceCard } from '@/components/ConfidenceCard'
+import { CoffeesList } from '@/components/CoffeesList'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
-import {
-  getFamilyColor,
-  type HoneySubprocess,
-} from '@/lib/process-registry'
+import { getFamilyColor } from '@/lib/process-registry'
 import { aggregateHoneySubprocess } from '@/lib/process-aggregation'
 import {
   parseBaseSlug,
@@ -89,35 +88,34 @@ export default async function HoneySubprocessPage({
   const hasAdditional =
     sortedFlavors.length > 0 || terroirMap.size > 0 || cultivarMap.size > 0 || roasterSet.size > 0
 
+  const meta: MetaPair[] = [
+    { label: 'Base', value: 'Honey' },
+    { label: 'Coffees', value: `${brewList.length}` },
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
-        href={`/processes/honey`}
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        href="/processes/honey"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
-        &larr; Back to Honey
+        ← Back to Honey
       </Link>
 
-      {/* Hero */}
-      <div className="section-card mb-6">
-        <div className="flex gap-6 items-start">
-          <div className="w-16 h-16 rounded flex-shrink-0" style={{ backgroundColor: color }} />
-          <div className="flex-1">
-            <h1 className="font-sans text-2xl font-semibold mb-1">{subprocess}</h1>
-            <p className="font-mono text-xs text-latent-mid">
-              Honey family &middot; {brewList.length} {brewList.length === 1 ? 'coffee' : 'coffees'}
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Header */}
+      <SspTopBar roaster="Honey" kind="Process Variant" />
+      <SspNamePlate title={subprocess} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Process Breakdown */}
-      <SectionCard title="PROCESS BREAKDOWN">
-        <div className="space-y-3">
-          <ProcessBreakdownRow label="Base" chips={['Honey']} />
-          <ProcessBreakdownRow label="Subprocess" chips={[subprocess]} />
-        </div>
-      </SectionCard>
+      <div className="ssp-card">
+        <SspShead>Process Breakdown</SspShead>
+        <SspStructure
+          rows={[
+            { lbl: 'Base', chips: [{ name: 'Honey' }] },
+            { lbl: 'Subprocess', chips: [{ name: subprocess }] },
+          ]}
+        />
+      </div>
 
       {/* What I Learned (synthesis) */}
       {brewList.length >= 2 && (
@@ -137,47 +135,35 @@ export default async function HoneySubprocessPage({
       )}
 
       {/* Coffees list */}
-      <ProcessCoffeesList
-        title={`COFFEES I HAVE EXPERIENCED WITH THIS PROCESS (${brewList.length})`}
-        brews={brewList}
-      />
+      <CoffeesList title="Coffees I Have Experienced With This Process" brews={brewList} />
 
-      {/* Additional Information (collapsed; mirrors base/modifier/signature pages) */}
+      {/* Additional Information */}
       {hasAdditional && (
         <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" bare />
+          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
           <TagLinkList
             title="CULTIVARS EXPLORED"
-            bare
             items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
-              key: name,
-              label: name,
-              href: `/cultivars/${id}`,
+              key: name, label: name, href: `/cultivars/${id}`,
             }))}
           />
           <TagLinkList
             title="TERROIRS EXPLORED"
-            bare
             items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
-              key: name,
-              label: `${country} / ${name}`,
-              href: `/terroirs/${id}`,
+              key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
             }))}
           />
           <TagLinkList
             title="ROASTERS EXPLORED"
-            bare
             items={Array.from(roasterSet).map((r) => ({
-              key: r,
-              label: r,
-              href: `/roasters/${encodeURIComponent(r)}`,
+              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
             }))}
           />
         </CollapsibleBlock>
       )}
 
       {/* Confidence */}
-      <ProcessConfidenceCard brewCount={brewList.length} />
+      <ConfidenceCard brewCount={brewList.length} />
     </div>
   )
 }
