@@ -524,13 +524,18 @@ body {
 .ssp-inset .inset-grid > .col-hd { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); font-weight: 700; text-align: center; padding-bottom: 6px; border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
 @container ssppage (max-width: 519px) {
   .ssp-inset .inset-grid { grid-template-columns: 96px repeat(var(--cols, 3), 1fr); gap: 6px 8px; font-size: 11px; }
-  /* On narrow state-roast cards (the waiting-for-roast Roast Hypothesis card
-     carries both an absolute .ssp-corner and a right-aligned shead context
-     line) drop the context line to its own full-width line so it clears the
-     corner badge. Neutral on corner-less state-roast cards (cupping Roast
-     Actuals) — the line just stacks below the title. */
-  .ssp-card.state-roast .ssp-shead { flex-wrap: wrap; }
-  .ssp-card.state-roast .ssp-shead .ct { margin-left: 0; flex-basis: 100%; }
+  /* On narrow state cards that carry both an absolute .ssp-corner badge and a
+     right-aligned shead context line (waiting-roast Roast Hypothesis; resolved/
+     leading Reference Roast where the corner is a long "Batch #N · Reference"),
+     drop the context line to its own full-width line so it clears the corner
+     badge. Neutral on corner-less state cards — the line just stacks below the
+     title. */
+  .ssp-card.state-roast .ssp-shead,
+  .ssp-card.state-resolved .ssp-shead,
+  .ssp-card.state-archive .ssp-shead { flex-wrap: wrap; }
+  .ssp-card.state-roast .ssp-shead .ct,
+  .ssp-card.state-resolved .ssp-shead .ct,
+  .ssp-card.state-archive .ssp-shead .ct { margin-left: 0; flex-basis: 100%; }
 }
 
 /* Label/value prose rows (mobile T3 reference signals + green specs) */
