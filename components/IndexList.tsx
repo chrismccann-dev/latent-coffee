@@ -60,12 +60,12 @@ export function GrlGroupHeader({
 }
 
 /**
- * 5-block count bar fill — recomputed per page so the highest-count row in the
- * viewport always reads 5/5 (v2 spec). Any non-zero count shows at least one
- * block.
+ * 5-block count bar fill — ABSOLUTE thresholds (Chris-locked 2026-05-30), so a
+ * bar means the same thing on every index page rather than normalizing to the
+ * per-page max. Scale: 1→1 · 2-3→2 · 4-5→3 · 6-7→4 · 8+→5. Zero shows no blocks.
  */
-export function barBlocks(count: number, max: number): boolean[] {
-  const on = max > 0 ? Math.max(count > 0 ? 1 : 0, Math.round((count / max) * 5)) : 0
+export function barBlocks(count: number): boolean[] {
+  const on = count <= 0 ? 0 : count === 1 ? 1 : count <= 3 ? 2 : count <= 5 ? 3 : count <= 7 ? 4 : 5
   return Array.from({ length: 5 }, (_, i) => i < on)
 }
 
@@ -78,12 +78,12 @@ type GrlRowBase = {
 
 /**
  * Grouped-list row. Two shapes:
- *  - count + max → `.cnt` + 5-block bar (the 4 aggregation indexes).
+ *  - count → `.cnt` + 5-block bar with absolute thresholds (the 4 aggregation indexes).
  *  - right → `.simple` variant, free right-aligned meta (e.g. /green stage label).
  */
 export function GrlRow(
   props: GrlRowBase &
-    ({ count: number; max: number; right?: never } | { right: ReactNode; count?: never; max?: never }),
+    ({ count: number; right?: never } | { right: ReactNode; count?: never }),
 ) {
   const { href, tileColor, name, meta } = props
   const simple = 'right' in props
@@ -101,7 +101,7 @@ export function GrlRow(
         <>
           <span className="cnt">{props.count}</span>
           <span className="bar">
-            {barBlocks(props.count, props.max).map((on, i) => (
+            {barBlocks(props.count).map((on, i) => (
               <i key={i} className={on ? 'on' : undefined} />
             ))}
           </span>

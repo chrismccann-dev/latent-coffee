@@ -69,7 +69,6 @@ export default async function TerroirsPage() {
   const totalMacroTerroirs = allGroups.length
   const totalCoffees = allGroups.reduce((sum, g) => sum + g.brewCount, 0)
   const countryCount = Object.keys(countryMap).length
-  const maxCount = Math.max(0, ...allGroups.map((g) => g.brewCount))
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
@@ -98,7 +97,6 @@ export default async function TerroirsPage() {
                     name={group.macroTerroir}
                     meta={terroirMeta(group)}
                     count={group.brewCount}
-                    max={maxCount}
                   />
                 ))}
               </div>

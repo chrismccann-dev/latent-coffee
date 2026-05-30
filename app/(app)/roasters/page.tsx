@@ -53,8 +53,6 @@ export default async function RoastersPage() {
   const allGroups = Object.values(familyMap).flat()
   const totalRoasters = allGroups.length
   const totalCoffees = allGroups.reduce((sum, g) => sum + g.brewCount, 0)
-  // Per-page max for the 5-block bar — highest brew count across all rows.
-  const maxCount = Math.max(0, ...allGroups.map((g) => g.brewCount))
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
@@ -86,7 +84,6 @@ export default async function RoastersPage() {
                       name={getDisplayName(group.roaster) || group.roaster}
                       meta={loc || undefined}
                       count={group.brewCount}
-                      max={maxCount}
                     />
                   )
                 })}

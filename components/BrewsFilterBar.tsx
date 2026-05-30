@@ -222,8 +222,12 @@ function FilterPopover({ label, options, active, onToggle, onClear, formatOption
         onClick={() => setOpen((v) => !v)}
       />
 
+      {/* Popover is left-anchored on every breakpoint (was right-0 on mobile, which
+          pushed its left edge to ~-43px on a 390 viewport — names clipped per Chris's
+          mobile pass MB-1, 2026-05-30). The trigger sits near the left of the filter
+          row, so left-0 + the viewport width clamp keeps it on-screen. */}
       {open && (
-        <div className="absolute top-full right-0 md:right-auto md:left-0 mt-1 z-50 bg-white border border-latent-border rounded shadow-lg min-w-[220px] max-w-[calc(100vw-3rem)] max-h-[320px] flex flex-col">
+        <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-latent-border rounded shadow-lg min-w-[220px] max-w-[calc(100vw-3rem)] max-h-[320px] flex flex-col">
           <div className="flex-1 overflow-y-auto py-1">
             {options.length === 0 ? (
               <div className="px-3 py-2 font-mono text-xxs text-latent-mid">
