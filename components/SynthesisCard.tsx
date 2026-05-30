@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { SectionCard } from '@/components/SectionCard'
+import { SspShead } from '@/components/Ssp'
 import SynthesisRenderer from '@/components/SynthesisRenderer'
 
 interface SynthesisCardProps {
@@ -91,7 +91,8 @@ export default function SynthesisCard({
   const mobileText = shortForm ?? synthesis
 
   return (
-    <SectionCard title={title}>
+    <div className="ssp-card">
+      <SspShead>{title}</SspShead>
       {loading ? (
         <div className="flex items-center gap-3">
           <div className="w-4 h-4 border-2 border-latent-mid border-t-latent-fg rounded-full animate-spin" />
@@ -99,7 +100,9 @@ export default function SynthesisCard({
         </div>
       ) : synthesis ? (
         <div>
-          {/* Mobile (<md:): short-form when available, long-form fallback */}
+          {/* Mobile (<md:): short-form when available, long-form fallback. The
+              one @media split left in the migrated surfaces — kept because it's a
+              content switch (mobile gets the digest), not a layout reflow. */}
           <div className="md:hidden">
             {mobileText && <SynthesisRenderer text={mobileText} />}
           </div>
@@ -117,6 +120,6 @@ export default function SynthesisCard({
       ) : (
         <p className="font-mono text-xs text-latent-mid">Not enough data to synthesize yet.</p>
       )}
-    </SectionCard>
+    </div>
   )
 }

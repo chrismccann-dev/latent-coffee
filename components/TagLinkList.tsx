@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { SectionCard } from './SectionCard'
-import { Tag } from './Tag'
+import { Chip } from '@/components/Ssp'
 
 interface TagLinkItem {
   key: string
@@ -11,35 +10,29 @@ interface TagLinkItem {
 interface TagLinkListProps {
   title: string
   items: TagLinkItem[]
-  // When true, renders without the SectionCard wrapper - for nesting inside
-  // CollapsibleBlock or other parent chrome. Title becomes a label row,
-  // tags flex-wrap directly.
+  // Retained for back-compat with un-migrated callers; the component always
+  // renders the bare `.ssp-sub` form now (it only ever lives inside a
+  // CollapsibleBlock on the aggregation pages). Removed once every caller drops it.
   bare?: boolean
 }
 
-export function TagLinkList({ title, items, bare }: TagLinkListProps) {
+/** Cross-link chip block (CULTIVARS / TERROIRS / PROCESSES / ROASTERS EXPLORED).
+ *  Re-skinned to the v2 Ssp* lab-document family in Redesign Sprint 5
+ *  (2026-05-29) — a `.ssp-sub` block (mono `<h3>` title + flex-wrap of linked
+ *  `Chip`s). Lives inside a CollapsibleBlock `.body`. */
+export function TagLinkList({ title, items }: TagLinkListProps) {
   if (items.length === 0) return null
 
-  const body = (
-    <div className="flex flex-wrap gap-2">
-      {items.map((item) => (
-        <Link key={item.key} href={item.href}>
-          <Tag>{item.label}</Tag>
-        </Link>
-      ))}
+  return (
+    <div className="ssp-sub">
+      <h3>{title}</h3>
+      <div className="flex flex-wrap gap-1.5">
+        {items.map((item) => (
+          <Link key={item.key} href={item.href}>
+            <Chip name={item.label} />
+          </Link>
+        ))}
+      </div>
     </div>
   )
-
-  if (bare) {
-    return (
-      <div className="mb-6 last:mb-0">
-        <div className="font-mono text-xxs font-semibold tracking-wide uppercase mb-2 text-latent-mid">
-          {title}
-        </div>
-        {body}
-      </div>
-    )
-  }
-
-  return <SectionCard title={title}>{body}</SectionCard>
 }

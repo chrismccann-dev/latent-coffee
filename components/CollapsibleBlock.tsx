@@ -3,21 +3,21 @@ interface CollapsibleBlockProps {
   children: React.ReactNode
 }
 
-/** SectionCard variant collapsed by default at every breakpoint.
- *  Pure CSS — a single native <details> with a SectionCard-styled summary bar.
- *  No client component, no hydration flicker. Used for archive-style catch-all
- *  blocks (terroir / cultivar / roaster "Additional Information", /brews/[id]
- *  "Full Brew Notes", /processes/* sub-pages). Children render once, so the
- *  earlier re-mount caveat no longer applies — but keep to static prose; this
- *  isn't meant for stateful client components. */
+/** Aggregation-page "Additional Information" disclosure. Re-skinned to the v2
+ *  Ssp* lab-document family in Redesign Sprint 5 (2026-05-29) — the `.ssp-coll`
+ *  collapse (hairline-prefixed mono summary + chevron + `.body`), the direct
+ *  analog of the CollapsibleSection → `.ssp-coll` move from Sprint 4. Children
+ *  are bare `.ssp-sub` blocks (FlavorNotesByFamily / TagLinkList) that stack with
+ *  hairline dividers inside `.body`. Pure CSS, collapsed by default at every
+ *  breakpoint, no client component / hydration flicker. */
 export function CollapsibleBlock({ title, children }: CollapsibleBlockProps) {
   return (
-    <details className="rounded-md p-6 mb-4 bg-white border border-latent-border group">
-      <summary className="font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden flex items-center justify-between">
-        <span>{title}</span>
-        <span aria-hidden className="ml-2 transition-transform group-open:rotate-180">▾</span>
+    <details className="ssp-coll">
+      <summary>
+        {title}
+        <span className="chev" />
       </summary>
-      <div className="mt-4">{children}</div>
+      <div className="body">{children}</div>
     </details>
   )
 }
