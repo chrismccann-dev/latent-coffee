@@ -9,7 +9,6 @@ import {
   SspShead,
   SspExpGrid,
   SspProseRows,
-  SspInset,
   type ExpRow,
 } from '@/components/Ssp'
 import { GreenBeanInfoCard } from '@/components/GreenBeanInfoCard'
@@ -271,7 +270,15 @@ function WaitingForNextRoastView({
             </div>
           )}
 
-          {anchorLine && <div className="ssp-anchor-line">{anchorLine}</div>}
+          {/* Labelled so it doesn't read as a second font on the primary question
+              (WR-2, 2026-05-30) — this is the V_(n-1) baseline we're moving from,
+              a distinct reference field from the question above it. */}
+          {anchorLine && (
+            <div className="ssp-anchor">
+              <div className="lbl">Anchor · baseline we&apos;re moving from</div>
+              <div className="ssp-anchor-line">{anchorLine}</div>
+            </div>
+          )}
 
           {hypo && hypo.rows.length > 0 ? (
             <SspExpGrid cols={hypo.cols} rows={hypo.rows} />
@@ -794,120 +801,97 @@ function WaitingForNextCuppingView({
         pills={pills}
       />
 
-      {/* Cupping Hypothesis + Roast Actuals — the reflowing composition. Both
-          subtrees render; the container query reveals one at 520px. */}
+      {/* Cupping view — ONE canonical layout (no dual-subtree). Reshaped
+          2026-05-30 (WC-2) from Chris's live-cupping audio recount to match how
+          he actually cups: Producer notes (benchmark) → per-slot Predicted Cup
+          (the primary read before each sip) → Roast Actuals (tertiary, glanced
+          afterward, vs-Expected collapsed) → everything-else drawer (prior cup +
+          taste-for + primary question). The mobile stack WAS the better layout
+          ("I do this on my phone") so desktop adopts it; slot cards go
+          side-by-side ≥520px for cross-slot comparison via .cup-slots grid. */}
       {latestExp && cup ? (
         <>
-          {/* DESKTOP (≥520px) — transposed table leads, byte-for-byte IA. */}
-          <div className="s2-desktop">
-            <div className="ssp-card state-cup">
-              <span className="ssp-corner">{vLabel}</span>
-              <SspShead ct={`${slotInfos.length} slots · questions for the cupping table`}>
-                Cupping Hypothesis · {vLabel}
-              </SspShead>
-              {primaryQuestion && (
-                <div className="ssp-question">
-                  <div className="lbl">Primary Question</div>
-                  <div className="body">{primaryQuestion}</div>
-                </div>
-              )}
-              {cup.rows.length > 0 ? (
-                <SspExpGrid cols={cup.cols} rows={cup.rows} />
-              ) : (
-                <div className="font-sans text-sm text-latent-mid italic">
-                  No recipes linked to this experiment yet. Predictions land when
-                  claude.ai pushes recipes + updates taste_for_a/b/c/d.
-                </div>
-              )}
-              {cup.refSignals.length > 0 && (
-                <SspInset
-                  mode="stack"
-                  tone="cup"
-                  title="Reference Signals for the Cupping Table"
-                  pairs={cup.refSignals}
-                />
-              )}
-            </div>
-            {actualsCard('Achieved vs design intent')}
-          </div>
-
-          {/* MOBILE (<520px) — Taste-for slot cards lead; Roast Actuals demoted;
-              reference signals + predictions in the collapsed T3 block. */}
-          <div className="s2-mobile">
-            <div className="ssp-card state-cup s2m-lead">
-              <span className="ssp-corner">{vLabel} · cupping table</span>
-              {cup.producerNotes && (
-                <div className="ssp-why">
-                  <div className="hd">Producer notes — taste against this</div>
-                  <div className="body">{cup.producerNotes}</div>
-                </div>
-              )}
-              {hasTasteCards && (
-                <div className="ssp-tastefor">
-                  <div className="tf-lbl">Taste for · per slot</div>
-                  <div className="ssp-slotcards">
-                    {cup.mobileSlots
-                      .filter((s) => s.taste)
-                      .map((s) => (
-                        <div className="ssp-slotcard" key={s.label}>
-                          <div className="slot-lbl">{s.label}</div>
-                          <div className="slot-taste">{s.taste}</div>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {primaryQuestion && (
-              <div className="ssp-card state-cup">
-                <SspShead ct="Lot-level · what this V-set is testing">Primary Question</SspShead>
-                <div className="ssp-question">
-                  <div className="body">{primaryQuestion}</div>
-                </div>
+          {/* 1 · CUPPING — Producer notes + per-slot Predicted Cup */}
+          <div className="ssp-card state-cup">
+            <SspShead ct={`${slotInfos.length} slot${slotInfos.length === 1 ? '' : 's'} · taste against producer notes`}>
+              Cupping · {vLabel}
+            </SspShead>
+            {cup.producerNotes && (
+              <div className="ssp-why">
+                <div className="hd">Producer notes — taste against this</div>
+                <div className="body">{cup.producerNotes}</div>
               </div>
             )}
+            {hasPredictions ? (
+              <div
+                className="cup-slots"
+                style={{ ['--cup-slot-cols' as string]: cup.mobileSlots.length }}
+              >
+                {cup.mobileSlots.map((s) => (
+                  <div className="ssp-slotcard" key={s.label}>
+                    <div className="slot-lbl">{s.label}</div>
+                    <div className="slot-pred-lbl">Predicted cup · given roast actuals</div>
+                    <div className="slot-taste">{s.predictedCup ?? '—'}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="font-sans text-sm text-latent-mid italic">
+                No per-slot cup predictions yet. They land when claude.ai pushes
+                recipes + updates updated_cup_prediction_a/b/c/d.
+              </div>
+            )}
+          </div>
 
-            {actualsCard('Reference · achieved vs design intent')}
+          {/* 2 · ROAST ACTUALS — tertiary; numeric grid + collapsed vs-Expected */}
+          {actualsCard('Achieved vs design intent')}
+          {actuals && actuals.vsExpected.length > 0 && (
+            <CollapsibleSection
+              title="vs Expected"
+              ct={`${actuals.vsExpected.length} slot${actuals.vsExpected.length === 1 ? '' : 's'} · how each roast diverged`}
+            >
+              <SspProseRows
+                rows={actuals.vsExpected.map((s) => ({ label: s.label, value: s.delta }))}
+              />
+            </CollapsibleSection>
+          )}
 
-            <details className="ssp-coll">
-              <summary>
-                Reference &amp; Detail
-                <span className="ct">Signals · slot predictions</span>
-                <span className="chev" />
-              </summary>
-              <div className="body">
+          {/* 3 · Reference & detail — prior cup + taste-for + primary question.
+              Inner sections separated by hairline dividers (the All-Cuppings
+              pattern), inside CollapsibleSection's single .ssp-sub. */}
+          {(cup.otherSignals.length > 0 || hasTasteCards || primaryQuestion) && (
+            <CollapsibleSection
+              title="Reference & detail"
+              ct="Prior cup · taste-for · primary question"
+            >
+              <div className="space-y-4">
                 {cup.otherSignals.length > 0 && (
-                  <div className="ssp-sub">
-                    <h3>Reference Signals for the Cupping Table</h3>
+                  <div className="pb-4 border-b border-latent-hairline last:border-b-0 last:pb-0">
+                    <div className="label">Previous leading cup</div>
                     <SspProseRows
                       rows={cup.otherSignals.map((p) => ({ label: p.k, value: p.v }))}
                     />
                   </div>
                 )}
-                {hasPredictions && (
-                  <div className="ssp-sub">
-                    <h3>Predicted Cup · per slot</h3>
-                    <div className="ssp-predstack">
-                      {cup.mobileSlots
-                        .filter((s) => s.predictedCup)
-                        .map((s) => (
-                          <div key={s.label}>
-                            <div className="pred-slot">{s.label}</div>
-                            <div className="ssp-twopane">
-                              <div className="pane">
-                                <div className="lbl">Predicted Cup · given roast actuals</div>
-                                <div className="body">{s.predictedCup}</div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
+                {hasTasteCards && (
+                  <div className="pb-4 border-b border-latent-hairline last:border-b-0 last:pb-0">
+                    <div className="label">Taste for · cupping-table question</div>
+                    <SspProseRows
+                      rows={cup.mobileSlots
+                        .filter((s) => s.taste)
+                        .map((s) => ({ label: s.label, value: s.taste }))}
+                    />
+                  </div>
+                )}
+                {primaryQuestion && (
+                  <div className="pb-4 border-b border-latent-hairline last:border-b-0 last:pb-0">
+                    <div className="label">Primary question · what this V-set tests</div>
+                    <div className="font-sans text-sm leading-relaxed">{primaryQuestion}</div>
                   </div>
                 )}
               </div>
-            </details>
-          </div>
+            </CollapsibleSection>
+          )}
         </>
       ) : (
         <div className="ssp-card state-cup">
@@ -978,11 +962,17 @@ function WaitingForNextCuppingView({
 // and the mobile T1 lead / T3 collapse.
 type CupHypoData = {
   mobileSlots: { label: string; taste: string | null; predictedCup: string | null }[]
-  cols: { label: string }[]
-  rows: ExpRow[]
   producerNotes: string | null
-  refSignals: { k: string; v: string }[]
   otherSignals: { k: string; v: string }[]
+}
+
+// Slot label with batch number — Chris navigates by roast number, not V-slot
+// ("I always refer to them as 190/191/192, not v3a"). Mirrors the Roast Actuals
+// `slot · #batch` composition. (WC-2b, 2026-05-30.)
+function slotLabelWithBatch(info: SlotInfo): string {
+  const slotLabel = info.recipe?.batch_slot ?? info.slot.toUpperCase()
+  const batch = info.roast?.batch_id ?? info.declaredBatchId
+  return batch ? `${slotLabel} · #${batch}` : slotLabel
 }
 
 // V_(n-1) winner cup: read priorExp.winner (free-text, e.g. "v2b") to find the
@@ -1010,38 +1000,19 @@ function buildCupHypoData(
   priorExp: any | null,
 ): CupHypoData {
   const mobileSlots = slotInfos.map((info) => ({
-    label: info.recipe?.batch_slot ?? info.slot.toUpperCase(),
+    label: slotLabelWithBatch(info),
     taste: (latestExp[`taste_for_${info.slot}`] as string | null) ?? null,
     predictedCup: (latestExp[`updated_cup_prediction_${info.slot}`] as string | null) ?? null,
   }))
-  const cols = mobileSlots.map((s) => ({ label: s.label }))
-
-  const rows: ExpRow[] = []
-  if (mobileSlots.some((s) => s.taste)) {
-    rows.push({
-      label: 'Taste for',
-      sub: 'cupping-table question',
-      labelAccent: 'cup',
-      cells: mobileSlots.map((s) => s.taste ?? '—'),
-    })
-  }
-  if (mobileSlots.some((s) => s.predictedCup)) {
-    rows.push({
-      label: 'Predicted Cup',
-      sub: 'given roast actuals',
-      labelAccent: 'cup',
-      cells: mobileSlots.map((s) => s.predictedCup ?? '—'),
-    })
-  }
 
   const producerNotes = bean.producer_tasting_notes ?? null
+  // otherSignals = the non-producer reference rows (prior-winner cup). Producer
+  // notes render foreground from `producerNotes`; this feeds the collapsed drawer.
   const { label: priorLabel, cup: priorWinnerCup } = derivePriorWinnerCup(priorExp)
-  const refSignals: { k: string; v: string }[] = []
-  if (producerNotes) refSignals.push({ k: 'Producer notes', v: producerNotes })
-  if (priorWinnerCup) refSignals.push({ k: priorLabel, v: priorWinnerCup })
-  const otherSignals = refSignals.filter((s) => !/producer/i.test(s.k))
+  const otherSignals: { k: string; v: string }[] = []
+  if (priorWinnerCup) otherSignals.push({ k: priorLabel, v: priorWinnerCup })
 
-  return { mobileSlots, cols, rows, producerNotes, refSignals, otherSignals }
+  return { mobileSlots, producerNotes, otherSignals }
 }
 
 // Roast Actuals transposed table — 6 rows × N batches of as-recorded facts
@@ -1127,19 +1098,21 @@ function formatActualVsPredicted(
   )
 }
 
-// Redesign Sprint 2 — Roast Actuals data builder. Same 6 RowSpec definitions
-// as the pre-Sprint-2 RoastActualsTable (Bundle B mockup #2 order: FC / Drop /
-// Drop Temp / Dev / Agtron WB / vs Expected), re-shaped into SspExpGrid cols +
-// rows. All cells render as centered mono `.val` (matching the v2 artboard);
-// the amber "vs Expected" lever-watch row gets the `.warn` cell class.
-type RoastActualsData = { cols: { label: string }[]; rows: ExpRow[] }
+// Redesign Sprint 2 — Roast Actuals data builder. 5 numeric RowSpec definitions
+// (FC / Drop / Drop Temp / Dev / Agtron WB) re-shaped into SspExpGrid cols +
+// rows. The "vs Expected" prose (delta_from_roast_<slot>) is split out into
+// `vsExpected` so the render can collapse it by default (WC-3, 2026-05-30).
+type RoastActualsData = {
+  cols: { label: string }[]
+  rows: ExpRow[]
+  vsExpected: { label: string; delta: string | null }[]
+}
 
 function buildRoastActualsData(slotInfos: SlotInfo[], latestExp: any): RoastActualsData {
   type RowSpec = {
     label: string
     getValue: (info: SlotInfo) => React.ReactNode
     has: (info: SlotInfo) => boolean
-    amber?: boolean
   }
 
   // Sub-sprint 4a Bundle B — row order + content rewrite per Chris mockup
@@ -1209,43 +1182,32 @@ function buildRoastActualsData(slotInfos: SlotInfo[], latestExp: any): RoastActu
       has: (info) =>
         info.roast?.agtron != null || info.recipe?.predicted_agtron_wb != null,
     },
-    {
-      // vs Expected prose — kept at the end of the table per Chris mockup
-      // #2. Reads experiments.delta_from_roast_<slot>. Amber tint on the
-      // whole cell since this is the lever-watch row.
-      label: 'vs Expected',
-      getValue: (info) => {
-        const delta = latestExp[`delta_from_roast_${info.slot}`] as string | null
-        return delta ?? '—'
-      },
-      has: (info) => (latestExp[`delta_from_roast_${info.slot}`] as string | null) != null,
-      amber: true,
-    },
   ]
+  // vs Expected prose (delta_from_roast_<slot>) is split OUT of the numeric grid
+  // and returned separately so the render can collapse it by default — it's
+  // tertiary at the cupping table ("not actively staring at this while drinking",
+  // WC-3 2026-05-30). Was the amber last row of the grid.
 
   const visibleRows = rows.filter((row) => slotInfos.some(row.has))
 
-  const cols = slotInfos.map((info) => {
-    const slotLabel = info.recipe?.batch_slot ?? info.slot.toUpperCase()
-    const batchSuffix = info.roast?.batch_id
-      ? ` · #${info.roast.batch_id}`
-      : info.declaredBatchId
-        ? ` · #${info.declaredBatchId}`
-        : ''
-    return { label: `${slotLabel}${batchSuffix}` }
-  })
+  // One label per slot, shared by the numeric grid cols + the vs-Expected rows.
+  const slotLabels = slotInfos.map(slotLabelWithBatch)
+  const cols = slotLabels.map((label) => ({ label }))
 
   const expRows: ExpRow[] = visibleRows.map((row) => ({
     label: row.label,
     numeric: true,
-    cells: slotInfos.map((info) =>
-      row.amber
-        ? { content: row.getValue(info), className: 'warn' }
-        : row.getValue(info),
-    ),
+    cells: slotInfos.map((info) => row.getValue(info)),
   }))
 
-  return { cols, rows: expRows }
+  const vsExpected = slotInfos
+    .map((info, i) => ({
+      label: slotLabels[i],
+      delta: (latestExp[`delta_from_roast_${info.slot}`] as string | null) ?? null,
+    }))
+    .filter((s) => s.delta)
+
+  return { cols, rows: expRows, vsExpected }
 }
 
 // ---------------------------------------------------------------------------

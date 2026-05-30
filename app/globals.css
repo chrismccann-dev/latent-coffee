@@ -502,7 +502,9 @@ body {
 .ssp-question { margin: 4px 0 14px; }
 .ssp-question .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 5px; }
 .ssp-question .body { font-family: var(--sans); font-size: 14px; font-weight: 500; color: var(--fg); line-height: 1.5; text-wrap: pretty; letter-spacing: -0.005em; }
-.ssp-anchor-line { font-family: var(--mono); font-size: 10.5px; color: var(--mid); letter-spacing: 0.02em; margin: 0 0 12px; line-height: 1.55; }
+.ssp-anchor { margin: 0 0 12px; }
+.ssp-anchor .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 5px; }
+.ssp-anchor-line { font-family: var(--mono); font-size: 10.5px; color: var(--mid); letter-spacing: 0.02em; line-height: 1.55; }
 
 /* "Why" prose block — producer notes / verdict-style lede inside a state card */
 .ssp-why { margin: 6px 0 14px; }
@@ -567,32 +569,19 @@ body {
 .ssp-twopane .pane .body { font-family: var(--sans); font-size: 12.5px; line-height: 1.6; color: var(--fg); text-wrap: pretty; }
 
 /* ============================================================
-   Stage-2 lot detail · 390↔1024 critical-path reflow
-   Container-query only (no @media). Both subtrees render; the
-   ssppage container width reveals exactly one. Desktop = original.
+   Stage-2 lot detail · cupping view (WC-2 reshape, 2026-05-30)
+   ONE canonical layout (no dual-subtree) matching Chris's live cupping flow:
+   per-slot Predicted Cup cards lead, side-by-side ≥520px for cross-slot
+   comparison, stacked below. Container-query only (no @media).
    ============================================================ */
-.s2-desktop, .s2-mobile { display: flex; flex-direction: column; gap: 10px; }
-.s2-mobile { display: none; }
-@container ssppage (min-width: 780px) { .s2-desktop { gap: 12px; } }
-@container ssppage (max-width: 519px) {
-  .s2-desktop { display: none; }
-  .s2-mobile { display: flex; }
+.cup-slots { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 4px; }
+@container ssppage (min-width: 520px) {
+  .cup-slots { grid-template-columns: repeat(var(--cup-slot-cols, 3), 1fr); gap: 10px; }
 }
-
-/* Taste-for stacked slot cards — the mobile T1 lead (cup-emphasis chrome) */
-.ssp-card.s2m-lead { padding-top: 18px; }
-.ssp-card.s2m-lead .ssp-corner { position: static; display: inline-block; margin: 0 0 12px; white-space: nowrap; }
-.ssp-tastefor { margin: 2px 0 0; }
-.ssp-tastefor .tf-lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cup-emphasis); font-weight: 600; margin-bottom: 8px; }
-.ssp-slotcards { display: flex; flex-direction: column; gap: 8px; }
 .ssp-slotcard { background: var(--cup-emphasis-bg); border: 1px solid var(--cup-emphasis-br); padding: 11px 13px; }
 .ssp-slotcard .slot-lbl { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cup-emphasis); font-weight: 600; margin-bottom: 5px; }
+.ssp-slotcard .slot-pred-lbl { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 6px; }
 .ssp-slotcard .slot-taste { font-family: var(--sans); font-size: 13.5px; line-height: 1.5; color: var(--fg); text-wrap: pretty; font-weight: 500; }
-
-/* Slot predictions stack — per-slot prediction (mobile T3) */
-.ssp-predstack { display: flex; flex-direction: column; gap: 14px; }
-.ssp-predstack .pred-slot { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 6px; }
-.ssp-predstack .ssp-twopane { margin: 0; }
 
 /* ============================================================
    Stage-3 lot detail · resolved + archive chrome (Redesign Sprint 4)

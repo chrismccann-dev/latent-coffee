@@ -149,16 +149,48 @@ and the batching is approved. Several items are open decisions or belong to sepa
 - **WC-1 · Text overflow** (`polish`, page-local) — the transposed cupping table's V2C
   (right-most) column prose overflows its container. Fix: word-break / min-width / cell padding on
   `SspExpGrid` cells.
-- **WC-2 · Reorder cupping sections to match the cupping thought-process** (`polish`, page-local)
-  — Chris's order while cupping:
-  1. Producer notes (what producer thinks it should taste like)
-  2. Previous V-set winner cup (if any)
-  3. Predicted cup given roast actuals
-  4. Taste-for cupping-table question (what the experiment was meant to do)
-  Concretely: move "Reference Signals for the Cupping Table" **above** the V2A/V2B/V2C transposed
-  table; within the table move "Predicted Cup given roast actuals" **above** "Taste for
-  cupping-table question". (Note: this partly re-litigates the Bundle-B 2-row order; confirm it
-  doesn't conflict with the locked cupping IA.)
+- **WC-2 · Reshape the cupping view to the actual cupping flow** (`polish`→`reshape`, page-local)
+  — **REFINED via Chris's 2026-05-30 audio note (recounting two live cuppings that morning).**
+  The headline: the **mobile stack layout IS the target for desktop too** — "the mobile one has
+  actually done much better than the desktop one... I typically do this while I'm on my phone."
+  So collapse the Sprint-2 dual-subtree into ONE canonical layout = the mobile composition.
+
+  **Cupping priority order (Chris's literal mental model at the table):**
+  1. **Producer notes** — the benchmark, top/foreground ("taste against this").
+  2. **Predicted Cup given roast actuals** — per-slot, THE primary read before each sip. "It only
+     matters how it actually went in reality, not how we thought it would go."
+  3. *(far secondary)* Previous leading slot cup memory — "nice to have," dense, hard to parse.
+  4. *(tertiary)* Roast Actuals — "not actively staring at this while drinking"; vs-Expected
+     prose collapses by default (= WC-3).
+  5. *(very tertiary)* Taste-for cupping-table question — "didn't happen, so I'd rather go for
+     actuals." Demote out of the foreground.
+  6. Primary Question — lot-level framing, not read during cupping. Demote.
+
+  **Target layout (single tree, both breakpoints):**
+  - **CUPPING card:** Producer notes ("taste against this") → per-slot stack cards, each = slot
+    label **with batch number** (`V3A · #190` — Chris explicitly asked; mirror the Roast Actuals
+    `slot · #batch` format) + **Predicted Cup** as the card's primary content.
+  - Previous-leading-cup + Taste-for + Primary Question → a collapsed tertiary disclosure below.
+  - **ROAST ACTUALS card** stays below; the long `vs Expected` prose row collapses by default.
+  - Desktop: slot cards MAY go side-by-side (3-col) for comparison ("comparatively from 190 to
+    191, how is 192 reading") via a container-query grid on the slot row — ONE content def, not a
+    second DOM subtree. (Open Q below.)
+
+  **This supersedes:** Bundle-B's 2-row transposed table (Taste-for/Predicted-Cup) AND the
+  Sprint-2 `.s2-desktop`/`.s2-mobile` dual-subtree. Both are intentionally retired here — the
+  retire is the point, not a regression. WC-1 (table overflow) dissolves with the table.
+
+  **Build decisions (Chris-locked 2026-05-30, follow-up):**
+  - Desktop slot cards **side-by-side** (3-col container-query grid); mobile stacks. One content
+    def, not a second subtree.
+  - Tertiary content → **one collapsed "Reference & detail" drawer** (prior-leading-cup +
+    taste-for + primary-question together).
+  - Prior-leading-cup density → **just collapse as-is**; the rewrite is a DATA/content problem
+    (how claude.ai writes `observed_outcome_*`), punted to the `naming`/`data` bucket — NOT this PR.
+
+- **WC-2b · Batch number in slot labels** — slot cards/columns label as `V3A · #190` not bare
+  `V3A`; Chris navigates by roast number, not V-slot. Data already on `info.roast.batch_id` /
+  `info.declaredBatchId` (Roast Actuals already composes this).
 - **WC-3 · "Roast Actuals" vs-Expected cells should collapse by default** (`polish`, page-local)
   — section is liked; the long "vs Expected" prose per column should be a collapsible like the
   hypothesis collapsible. Collapse by default.
