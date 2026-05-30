@@ -418,7 +418,7 @@ export interface Brew {
   // Sub-sprint 4c Bundle A (migration 071, 2026-05-28): free-text water formula
   // / source ("Third Wave Water Light Roast ~1:3 concentrate:distilled", "office
   // tap"). No canonical registry today; renders as a labeled line under the
-  // 6-var RecipeTable on /brews/[id].
+  // 6-cell SspRecipeHead strip on /brews/[id].
   water_recipe: string | null
   total_time: string | null
   extraction_strategy: string | null
