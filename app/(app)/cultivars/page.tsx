@@ -1,7 +1,32 @@
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Cultivar } from '@/lib/types'
 import { getFamilyColor } from '@/lib/cultivar-family-colors'
-import { IndexCap, GrlCap, GrlGroupHeader, GrlRow } from '@/components/IndexList'
+import { IndexCap, GrlCap, barBlocks } from '@/components/IndexList'
+
+// CI-1 (Chris-locked 2026-05-30): the cultivar index is the one index that
+// renders a genealogical TREE spline (├ └ │ connectors) rather than the shared
+// GrlRow grouped list — Species → Family → Lineage → Cultivar, mirroring the
+// data's actual genetic shape (accepted one-off per the original redesign mock).
+// The data tree (speciesGroups) is unchanged; this just flattens it into rows
+// carrying a precomputed monospace connector prefix.
+type TreeKind = 'species' | 'family' | 'lineage' | 'cultivar'
+interface TreeRow {
+  key: string
+  prefix: string
+  kind: TreeKind
+  label: string
+  color: string | null
+  count: number
+  href: string | null
+}
+
+// Standard tree-connector algorithm: one bool per ancestor level (true = that
+// ancestor has following siblings → draw a continuation pipe), plus whether this
+// node is the last of its own siblings (└ vs ├).
+function treePrefix(ancestorsHaveMore: boolean[], isLast: boolean): string {
+  return ancestorsHaveMore.map((more) => (more ? '│  ' : '   ')).join('') + (isLast ? '└─ ' : '├─ ')
+}
 
 interface CultivarLeaf {
   cultivar: Cultivar
@@ -91,14 +116,77 @@ export default async function CultivarsPage() {
   const totalCultivars = allLeaves.length
   const totalCoffees = allLeaves.reduce((sum, leaf) => sum + leaf.brewCount, 0)
   const familyCount = speciesGroups.reduce((sum, s) => sum + s.familyGroups.length, 0)
-  // Per-page max for the 5-block bar — highest brew count across all leaves.
-  const maxCount = Math.max(0, ...allLeaves.map((leaf) => leaf.brewCount))
+  const lineageCount = speciesGroups.reduce(
+    (sum, s) => sum + s.familyGroups.reduce((fs, f) => fs + f.lineageGroups.length, 0),
+    0,
+  )
+
+  // Flatten the tree into rows with box-drawing connectors. Branch nodes
+  // (species/family/lineage) carry an aggregate brew count; cultivar leaves keep
+  // their own count + a link (per-cultivar navigation is the index's whole job,
+  // so leaves stay individually clickable rather than collapsing to one ·-line).
+  const treeRows: TreeRow[] = []
+  speciesGroups.forEach((sp, si) => {
+    const spLast = si === speciesGroups.length - 1
+    const spCount = sp.familyGroups.reduce(
+      (n, f) => n + f.lineageGroups.reduce((m, l) => m + l.leaves.reduce((k, leaf) => k + leaf.brewCount, 0), 0),
+      0,
+    )
+    treeRows.push({
+      key: `s:${sp.species}`,
+      prefix: treePrefix([], spLast),
+      kind: 'species',
+      label: sp.species,
+      color: null,
+      count: spCount,
+      href: null,
+    })
+    sp.familyGroups.forEach((fam, fi) => {
+      const famLast = fi === sp.familyGroups.length - 1
+      const famColor = getFamilyColor(fam.family)
+      const famCount = fam.lineageGroups.reduce((m, l) => m + l.leaves.reduce((k, leaf) => k + leaf.brewCount, 0), 0)
+      treeRows.push({
+        key: `f:${sp.species}:${fam.family}`,
+        prefix: treePrefix([!spLast], famLast),
+        kind: 'family',
+        label: fam.family,
+        color: famColor,
+        count: famCount,
+        href: null,
+      })
+      fam.lineageGroups.forEach((lin, li) => {
+        const linLast = li === fam.lineageGroups.length - 1
+        const linCount = lin.leaves.reduce((k, leaf) => k + leaf.brewCount, 0)
+        treeRows.push({
+          key: `l:${sp.species}:${fam.family}:${lin.lineage}`,
+          prefix: treePrefix([!spLast, !famLast], linLast),
+          kind: 'lineage',
+          label: lin.lineage,
+          color: famColor,
+          count: linCount,
+          href: null,
+        })
+        lin.leaves.forEach((leaf, ci) => {
+          const leafLast = ci === lin.leaves.length - 1
+          treeRows.push({
+            key: `c:${leaf.cultivar.id}`,
+            prefix: treePrefix([!spLast, !famLast, !linLast], leafLast),
+            kind: 'cultivar',
+            label: leaf.cultivar.cultivar_name,
+            color: famColor,
+            count: leaf.brewCount,
+            href: `/cultivars/${leaf.cultivar.id}`,
+          })
+        })
+      })
+    })
+  })
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
       <IndexCap
         left="CULTIVARS"
-        right={`${totalCultivars} ${totalCultivars === 1 ? 'CULTIVAR' : 'CULTIVARS'} · ${familyCount} ${familyCount === 1 ? 'FAMILY' : 'FAMILIES'}`}
+        right={`${lineageCount} ${lineageCount === 1 ? 'LINEAGE' : 'LINEAGES'} · ${familyCount} ${familyCount === 1 ? 'FAMILY' : 'FAMILIES'} · ${totalCoffees} ${totalCoffees === 1 ? 'BREW' : 'BREWS'}`}
       />
 
       {totalCultivars === 0 ? (
@@ -106,38 +194,32 @@ export default async function CultivarsPage() {
           <p className="font-mono text-sm text-latent-mid">NO CULTIVARS YET</p>
         </div>
       ) : (
-        <div className="grl">
+        <div className="cultivar-tree">
           <GrlCap label="CULTIVARS" count={totalCoffees} />
-          {speciesGroups.map((speciesGroup) => (
-            <div key={speciesGroup.species}>
-              <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid pt-6 pb-1">
-                {speciesGroup.species}
-              </h2>
-              {speciesGroup.familyGroups.map((familyGroup) => {
-                const color = getFamilyColor(familyGroup.family)
-                return (
-                  <div key={familyGroup.family}>
-                    <GrlGroupHeader swatchColor={color} name={familyGroup.family} count={familyGroup.lineageGroups.length} />
-                    {familyGroup.lineageGroups.map((lineageGroup) => (
-                      <div key={lineageGroup.lineage}>
-                        <div className="grl-lineage">{lineageGroup.lineage}</div>
-                        {lineageGroup.leaves.map(({ cultivar, brewCount }) => (
-                          <GrlRow
-                            key={cultivar.id}
-                            href={`/cultivars/${cultivar.id}`}
-                            tileColor={color}
-                            name={cultivar.cultivar_name}
-                            count={brewCount}
-                            max={maxCount}
-                          />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                )
-              })}
-            </div>
-          ))}
+          {treeRows.map((row) => {
+            const inner = (
+              <>
+                <span className="conn" aria-hidden>{row.prefix}</span>
+                {row.color ? <span className="sw" style={{ background: row.color }} /> : null}
+                <span className={`name ${row.kind}`}>{row.label}</span>
+                <span className="cnt">{row.count}</span>
+                <span className="bar">
+                  {barBlocks(row.count).map((on, i) => (
+                    <i key={i} className={on ? 'on' : undefined} />
+                  ))}
+                </span>
+              </>
+            )
+            return row.href ? (
+              <Link key={row.key} href={row.href} className={`tree-row ${row.kind}`}>
+                {inner}
+              </Link>
+            ) : (
+              <div key={row.key} className={`tree-row ${row.kind}`}>
+                {inner}
+              </div>
+            )
+          })}
         </div>
       )}
     </div>

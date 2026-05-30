@@ -276,6 +276,11 @@ body {
 .ssp-card.state-resolved .ssp-shead::before { background: var(--resolved-emphasis); }
 .ssp-card.state-archive .ssp-shead::before { background: var(--archive-emphasis); }
 .ssp-card .ssp-corner { position: absolute; top: 14px; right: 16px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); font-weight: 600; padding: 3px 9px; background: #fff; border: 1px solid var(--border); }
+/* The corner chip is opaque + absolutely positioned over the shead's right-aligned
+   context line, so the .ct bled out from behind it ("RECIPE" ghost text behind a
+   "BATCH #N · LEADING" chip). When a card carries a corner chip, drop the shead's
+   .ct — the chip is the right-aligned signal (Chris-locked 2026-05-30). */
+.ssp-card .ssp-corner + .ssp-shead .ct { display: none; }
 .ssp-card.state-resolved .ssp-corner { color: #2c4a35; border-color: var(--resolved-emphasis-br); background: var(--resolved-emphasis-bg); }
 .ssp-card.state-roast .ssp-corner { color: #6c5018; border-color: var(--roast-emphasis-br); background: var(--roast-emphasis-bg); }
 .ssp-card.state-cup .ssp-corner { color: #3f3654; border-color: var(--cup-emphasis-br); background: var(--cup-emphasis-bg); }
@@ -368,7 +373,13 @@ body {
 .ssp-coll > summary::-webkit-details-marker { display: none; }
 .ssp-coll > summary::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--fg); flex-shrink: 0; }
 .ssp-coll > summary .ct { margin-left: auto; font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; color: var(--mid); font-weight: 400; }
-.ssp-coll > summary .chev { display: inline-block; width: 7px; height: 7px; border-right: 1.5px solid var(--mid); border-bottom: 1.5px solid var(--mid); transform: rotate(45deg); transition: transform 0.18s ease; margin-left: 8px; }
+/* Chevron right-aligns in every collapsible summary, with or without a .ct
+   (Chris-locked 2026-05-30 — was margin-left:8px, which left the chevron mid-row
+   on no-ct summaries like EXPERIMENT FRAME / ROAST LOG while ct summaries pushed
+   it far right). When a .ct precedes, the .ct carries the auto and the chevron
+   just spaces after it. */
+.ssp-coll > summary .chev { display: inline-block; width: 7px; height: 7px; border-right: 1.5px solid var(--mid); border-bottom: 1.5px solid var(--mid); transform: rotate(45deg); transition: transform 0.18s ease; margin-left: auto; }
+.ssp-coll > summary .ct + .chev { margin-left: 8px; }
 .ssp-coll[open] > summary .chev { transform: rotate(-135deg); }
 .ssp-coll .body { padding: 0; display: flex; flex-direction: column; }
 .ssp-sub { border-top: 1px solid var(--hairline); padding: 14px 16px; }
@@ -689,18 +700,33 @@ body {
 .grl-row .body { min-width: 0; }
 .grl-row .name { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--fg); line-height: 1.25; }
 .grl-row .meta { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.grl-row .cnt { font-family: var(--mono); font-size: 11px; color: var(--mid); text-align: right; font-variant-numeric: tabular-nums; }
-.grl-row .bar { display: inline-flex; gap: 2px; align-self: center; }
-.grl-row .bar i { width: 9px; height: 11px; background: var(--border); }
-.grl-row .bar i.on { background: var(--fg); }
+/* Shared count + 5-block bar visuals — same in the grl rows and the cultivar
+   tree (the only two count-bar consumers); combined selector so they can't drift. */
+.grl-row .cnt, .cultivar-tree .cnt { font-family: var(--mono); font-size: 11px; color: var(--mid); text-align: right; font-variant-numeric: tabular-nums; }
+.grl-row .bar, .cultivar-tree .bar { display: inline-flex; gap: 2px; align-self: center; }
+.grl-row .bar i, .cultivar-tree .bar i { width: 9px; height: 11px; background: var(--border); }
+.grl-row .bar i.on, .cultivar-tree .bar i.on { background: var(--fg); }
 
 /* simple — no count/bar; right side is free meta (green stage label) */
 .grl-row.simple { grid-template-columns: 44px 1fr auto; gap: 16px; }
 .grl-row.simple .right { font-family: var(--mono); font-size: 11px; color: var(--mid); text-align: right; }
 
-/* lineage sub-label (cultivars) — indented to align under the grl-row name
-   column (44px tile + 16px gap), so it doesn't need an arbitrary p-[Npx]. */
-.grl-lineage { font-family: var(--mono); font-size: 10.4px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--subtle); padding: 8px 0 2px calc(44px + 16px); }
+/* ── Cultivar genealogy tree (CI-1, Chris-locked 2026-05-30) ──────────────────
+   The one index rendered as a ├ └ │ spline instead of GrlRow. Mono connector
+   column + small family swatch + node-kind-weighted name + the shared 5-block
+   count bar. Species/family/lineage are non-link rows; cultivar leaves link. */
+.cultivar-tree { display: flex; flex-direction: column; }
+.cultivar-tree .tree-row { display: grid; grid-template-columns: auto auto 1fr 36px 70px; gap: 10px; align-items: center; padding: 3px 0; text-decoration: none; }
+.cultivar-tree a.tree-row:hover { background: var(--paper); }
+.cultivar-tree .conn { font-family: var(--mono); font-size: 12px; line-height: 1; color: var(--border); white-space: pre; letter-spacing: 0; }
+.cultivar-tree .sw { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+/* Species rows are the only swatch-less rows — drop the swatch column. */
+.cultivar-tree .tree-row.species { grid-template-columns: auto 1fr 36px 70px; }
+.cultivar-tree .name { font-family: var(--mono); font-size: 12px; color: var(--fg); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cultivar-tree .name.species { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); font-weight: 600; }
+.cultivar-tree .name.family { font-weight: 600; letter-spacing: 0.04em; }
+.cultivar-tree .name.lineage { color: var(--mid); }
+.cultivar-tree .name.cultivar { color: var(--fg); }
 
 /* dense — smaller tile for high-cardinality lists */
 .grl-row.dense { grid-template-columns: 28px 1fr 36px 70px; gap: 14px; padding: 6px 0; }
@@ -711,14 +737,22 @@ body {
    (producer / region / roaster). The paper foot is the v2 structural change
    (Redesign Sprint 6 PR3); the grid wrapper stays Tailwind-responsive
    (1→2→3→4→5 cols) rather than v2's fixed 4-col. */
-.brew-card { background: #fff; display: flex; flex-direction: column; min-height: 200px; height: 100%; cursor: pointer; text-decoration: none; transition: transform 0.12s, box-shadow 0.12s; }
+/* min-height 248 = the tallest natural card today; with .face flex:1 + a
+   min-height on .who, every card lands at the same total height across the whole
+   grid (not just per row) and shorter cards just gain cover negative space — the
+   consistent-height + "negative space is fine" call (Chris-locked 2026-05-30). */
+.brew-card { background: #fff; display: flex; flex-direction: column; min-height: 248px; height: 100%; cursor: pointer; text-decoration: none; transition: transform 0.12s, box-shadow 0.12s; }
 .brew-card:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -10px rgba(0,0,0,0.16); }
 .brew-card .face { padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 4px; color: #F4F4F1; flex: 1; position: relative; }
 .brew-card .pill-tr { position: absolute; top: 10px; right: 10px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; padding: 3px 7px; background: rgba(255,255,255,0.92); color: #0E0E0E; line-height: 1; }
 .brew-card .variety { font-family: var(--mono); font-size: 18px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.15; margin-top: 18px; text-wrap: pretty; }
 .brew-card .process { font-family: var(--mono); font-size: 11px; color: rgba(244,244,241,0.78); margin-top: 2px; }
 .brew-card .flav { font-family: var(--mono); font-size: 11px; color: rgba(244,244,241,0.92); margin-top: auto; padding-top: 18px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.brew-card .who { padding: 10px 14px 12px; background: var(--paper); border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 1px; }
+/* min-height holds the foot at the 2-line-producer height so the face/foot split
+   line is consistent across cards (1-line producers gain a little foot padding
+   rather than raising the split). justify-content:center keeps the short case
+   visually centered in that reserved space. */
+.brew-card .who { padding: 10px 14px 12px; background: var(--paper); border-top: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; gap: 1px; min-height: 74px; }
 .brew-card .who .producer { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--fg); }
 .brew-card .who .where { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; color: var(--mid); }
 .brew-card .who .roaster { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.04em; color: var(--mid); margin-top: 2px; }

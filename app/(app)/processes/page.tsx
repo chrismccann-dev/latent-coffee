@@ -47,10 +47,6 @@ export default async function ProcessesIndexPage() {
   const totalModifiers = modifierEntries.length
   const totalSignatures = signatures.length
 
-  // Per-list max for the 5-block bar — normalized within each section.
-  const maxModifier = modifierEntries.reduce((m, e) => Math.max(m, e.count), 0)
-  const maxSignature = signatures.reduce((m, s) => Math.max(m, s.count), 0)
-
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
       <IndexCap
@@ -81,7 +77,6 @@ export default async function ProcessesIndexPage() {
                 name={entry.name}
                 meta={byBaseLine(entry.byBase)}
                 count={entry.count}
-                max={maxModifier}
               />
             ))}
           </div>
@@ -109,7 +104,6 @@ export default async function ProcessesIndexPage() {
                   name={sig.name}
                   meta={producerLine}
                   count={sig.count}
-                  max={maxSignature}
                 />
               )
             })}
