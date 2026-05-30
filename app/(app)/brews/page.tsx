@@ -2,9 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
 import { EXTRACTION_STRATEGIES } from '@/lib/extraction-strategy'
-import { getCoverColor } from '@/lib/brew-colors'
-import { StrategyPill } from '@/components/StrategyPill'
 import { BrewsFilterBar } from '@/components/BrewsFilterBar'
+import { BrewCard } from '@/components/BrewCard'
+import { IndexCap } from '@/components/IndexList'
 import { getDisplayName } from '@/lib/roaster-registry'
 
 interface BrewsPageProps {
@@ -60,20 +60,14 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
     return true
   })
 
+  const countLabel =
+    anyActive && allBrews.length !== brewList.length
+      ? `${brewList.length} / ${allBrews.length} COFFEES`
+      : `${brewList.length} ${brewList.length === 1 ? 'COFFEE' : 'COFFEES'}`
+
   return (
     <div className="max-w-[1200px] mx-auto px-6 py-8">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-          BREWS
-        </h1>
-        <div className="font-mono text-xs text-latent-mid">
-          {brewList.length} {brewList.length === 1 ? 'COFFEE' : 'COFFEES'}
-          {anyActive && allBrews.length !== brewList.length && (
-            <span className="ml-1 text-latent-subtle">/ {allBrews.length}</span>
-          )}
-        </div>
-      </div>
+      <IndexCap left="BREWS" right={countLabel} />
 
       <BrewsFilterBar
         activeStrategy={activeStrategy}
@@ -99,52 +93,10 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-0 border-t border-l border-latent-border">
-          {brewList.map((brew) => {
-            const cardColor = getCoverColor(brew)
-            const producer = brew.producer || brew.green_bean?.producer || null
-            const roaster = getDisplayName(brew.roaster)
-            const region =
-              brew.terroir?.macro_terroir ||
-              brew.terroir?.admin_region ||
-              brew.terroir?.country ||
-              null
-            const flavorLine = brew.flavor_notes && brew.flavor_notes.length > 0
-              ? brew.flavor_notes.slice(0, 4).join(' · ')
-              : null
-
-            return (
-              <Link
-                key={brew.id}
-                href={`/brews/${brew.id}`}
-                className="border-r border-b border-latent-border p-4 hover:bg-white transition-colors group"
-              >
-                <div
-                  className="w-full aspect-[3/4] rounded flex flex-col justify-between p-4 relative overflow-hidden transition-all duration-200 group-hover:-translate-y-1 group-hover:scale-[1.01] group-hover:shadow-lg"
-                  style={{ backgroundColor: cardColor }}
-                >
-                  {/* Top row: metadata stack + strategy chip */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="font-mono text-xxs leading-snug text-white/90 space-y-0.5 min-w-0">
-                      {brew.variety && <div className="font-semibold truncate">{brew.variety}</div>}
-                      {brew.process && <div className="text-white/75 truncate">{brew.process}</div>}
-                      {producer && <div className="text-white/75 truncate">{producer}</div>}
-                      {region && <div className="text-white/75 truncate">{region}</div>}
-                      {roaster && <div className="text-white/75 truncate">{roaster}</div>}
-                    </div>
-                    <StrategyPill strategy={brew.extraction_strategy} variant="card" />
-                  </div>
-
-                  {/* Bottom: flavor notes */}
-                  {flavorLine && (
-                    <div className="font-mono text-micro leading-snug text-white/70">
-                      {flavorLine}
-                    </div>
-                  )}
-                </div>
-              </Link>
-            )
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5">
+          {brewList.map((brew) => (
+            <BrewCard key={brew.id} brew={brew} />
+          ))}
         </div>
       )}
     </div>
