@@ -1,24 +1,27 @@
 // Sub Pages 4 (2026-05-11) — per-base modifier-combo mini-page.
+// Re-skinned to the v2 Ssp* lab-document family in Redesign Sprint 5 (2026-05-29).
 //
 // URL: /processes/{base}/modifiers/{combo-slug}
 // Eligibility: Rule 1 — ≥3 non-signature non-subprocess brews share the same
 // structural fingerprint within a base. Below threshold returns notFound.
-//
-// Tier B content scope excludes mini-pages → no authored Process Overview /
-// Cup Profile blocks. The page shows Process Breakdown chips + synthesized
-// What I Learned + coffees list + cross-link blocks + Confidence.
 
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
-import { SectionCard } from '@/components/SectionCard'
+import {
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  SspStructure,
+  type MetaPair,
+} from '@/components/Ssp'
+import { buildBreakdownRows } from '@/lib/process-breakdown'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
-import { ProcessBreakdownRow } from '@/components/ProcessBreakdownRow'
-import { ProcessConfidenceCard } from '@/components/ProcessConfidenceCard'
-import { ProcessCoffeesList } from '@/components/ProcessCoffeesList'
+import { ConfidenceCard } from '@/components/ConfidenceCard'
+import { CoffeesList } from '@/components/CoffeesList'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
@@ -27,9 +30,7 @@ import {
   composeProcessDisplay,
   type BaseProcess,
 } from '@/lib/process-registry'
-import {
-  aggregateModifierCombo,
-} from '@/lib/process-aggregation'
+import { aggregateModifierCombo } from '@/lib/process-aggregation'
 import {
   parseBaseSlug,
   parseModifierComboSlug,
@@ -93,38 +94,37 @@ export default async function ModifierComboPage({
   const hasAdditional =
     sortedFlavors.length > 0 || terroirMap.size > 0 || cultivarMap.size > 0 || roasterSet.size > 0
 
+  const meta: MetaPair[] = [
+    { label: 'Base', value: base },
+    { label: 'Coffees', value: `${brewList.length}` },
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
         href={baseHubUrl(base)}
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
-        &larr; Back to {base}
+        ← Back to {base}
       </Link>
 
-      {/* Hero */}
-      <div className="section-card mb-6">
-        <div className="flex gap-6 items-start">
-          <div className="w-16 h-16 rounded flex-shrink-0" style={{ backgroundColor: color }} />
-          <div className="flex-1">
-            <h1 className="font-sans text-2xl font-semibold mb-1">{label}</h1>
-            <p className="font-mono text-xs text-latent-mid">
-              {base} family &middot; {brewList.length} {brewList.length === 1 ? 'coffee' : 'coffees'}
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Header */}
+      <SspTopBar roaster={base} kind="Process Variant" />
+      <SspNamePlate title={label} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Process Breakdown */}
-      <SectionCard title="PROCESS BREAKDOWN">
-        <div className="space-y-3">
-          <ProcessBreakdownRow label="Base" chips={[base]} />
-          <ProcessBreakdownRow label="Fermentation" chips={[...structured.fermentation_modifiers]} />
-          <ProcessBreakdownRow label="Drying" chips={[...structured.drying_modifiers]} />
-          <ProcessBreakdownRow label="Intervention" chips={[...structured.intervention_modifiers]} />
-          <ProcessBreakdownRow label="Experimental" chips={[...structured.experimental_modifiers]} />
-        </div>
-      </SectionCard>
+      <div className="ssp-card">
+        <SspShead>Process Breakdown</SspShead>
+        <SspStructure
+          rows={buildBreakdownRows([
+            { lbl: 'Base', chips: [base] },
+            { lbl: 'Fermentation', chips: structured.fermentation_modifiers },
+            { lbl: 'Drying', chips: structured.drying_modifiers },
+            { lbl: 'Intervention', chips: structured.intervention_modifiers },
+            { lbl: 'Experimental', chips: structured.experimental_modifiers },
+          ])}
+        />
+      </div>
 
       {/* What I Learned (synthesis) */}
       {brewList.length >= 2 && (
@@ -144,47 +144,35 @@ export default async function ModifierComboPage({
       )}
 
       {/* Coffees list */}
-      <ProcessCoffeesList
-        title={`COFFEES I HAVE EXPERIENCED WITH THIS PROCESS (${brewList.length})`}
-        brews={brewList}
-      />
+      <CoffeesList title="Coffees I Have Experienced With This Process" brews={brewList} />
 
-      {/* Additional Information (collapsed; mirrors base/modifier/signature pages) */}
+      {/* Additional Information */}
       {hasAdditional && (
         <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" bare />
+          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
           <TagLinkList
             title="CULTIVARS EXPLORED"
-            bare
             items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
-              key: name,
-              label: name,
-              href: `/cultivars/${id}`,
+              key: name, label: name, href: `/cultivars/${id}`,
             }))}
           />
           <TagLinkList
             title="TERROIRS EXPLORED"
-            bare
             items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
-              key: name,
-              label: `${country} / ${name}`,
-              href: `/terroirs/${id}`,
+              key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
             }))}
           />
           <TagLinkList
             title="ROASTERS EXPLORED"
-            bare
             items={Array.from(roasterSet).map((r) => ({
-              key: r,
-              label: r,
-              href: `/roasters/${encodeURIComponent(r)}`,
+              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
             }))}
           />
         </CollapsibleBlock>
       )}
 
       {/* Confidence */}
-      <ProcessConfidenceCard brewCount={brewList.length} />
+      <ConfidenceCard brewCount={brewList.length} />
     </div>
   )
 }

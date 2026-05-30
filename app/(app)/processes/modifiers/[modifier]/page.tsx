@@ -1,24 +1,25 @@
 // Sub Pages 4 (2026-05-11) — cross-base Modifier Index page.
+// Re-skinned to the v2 Ssp* lab-document family in Redesign Sprint 5 (2026-05-29).
 //
 // URL: /processes/modifiers/{modifier}
 // Eligibility: Rule 1 — ≥3 brews containing this modifier in any axis,
-// across all bases (including signature brews per Chris's brainstorm example
-// "Anaerobic + Aerobic (Hybrid Washed)"). Below threshold returns notFound.
-//
-// Tier B content: authored ModifierEntry.overview prose lands here once
-// Phase A finalizes. Sections below ship with empty-state messaging until
-// then.
+// across all bases (including signature brews). Below threshold returns notFound.
 
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
-import { SectionCard } from '@/components/SectionCard'
+import {
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  type MetaPair,
+} from '@/components/Ssp'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
-import { ProcessConfidenceCard } from '@/components/ProcessConfidenceCard'
-import { ProcessCoffeesList } from '@/components/ProcessCoffeesList'
+import { ConfidenceCard } from '@/components/ConfidenceCard'
+import { CoffeesList } from '@/components/CoffeesList'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
@@ -87,62 +88,58 @@ export default async function ModifierIndexPage({
     .filter(([_, c]) => (c ?? 0) > 0)
     .sort(([, a], [, b]) => (b ?? 0) - (a ?? 0))
 
+  const meta: MetaPair[] = [
+    { label: 'Axis', value: parsed.axis },
+    { label: 'Coffees', value: `${agg.all.length}` },
+    { label: 'Bases', value: `${baseEntries.length}` },
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
         href="/processes"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
-        &larr; Back to Processes
+        ← Back to Processes
       </Link>
 
-      {/* Hero */}
-      <div className="section-card mb-6">
-        <div className="flex gap-6 items-start">
-          <div className="w-16 h-16 rounded flex-shrink-0" style={{ backgroundColor: color }} />
-          <div className="flex-1">
-            <h1 className="font-sans text-2xl font-semibold mb-1">{parsed.name}</h1>
-            <p className="font-mono text-xs text-latent-mid">
-              {parsed.axis} modifier &middot; {agg.all.length} {agg.all.length === 1 ? 'coffee' : 'coffees'} across {baseEntries.length} {baseEntries.length === 1 ? 'base' : 'bases'}
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Header */}
+      <SspTopBar roaster={`${parsed.axis} modifier`} kind="Modifier Index" />
+      <SspNamePlate title={parsed.name} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Modifier Overview (authored Tier B prose) */}
-      {entry?.overview ? (
-        <SectionCard title="MODIFIER OVERVIEW">
-          <p className="font-sans text-sm leading-relaxed">{entry.overview}</p>
-        </SectionCard>
-      ) : (
-        <SectionCard title="MODIFIER OVERVIEW">
-          <p className="font-mono text-xs text-latent-mid italic">
-            Modifier overview pending authoring.
-          </p>
-        </SectionCard>
-      )}
+      <div className="ssp-card">
+        <SspShead>Modifier Overview</SspShead>
+        {entry?.overview ? (
+          <div className="ssp-prose">{entry.overview}</div>
+        ) : (
+          <p className="font-mono text-xs text-latent-mid italic">Modifier overview pending authoring.</p>
+        )}
+      </div>
 
       {/* By Base Process */}
-      <SectionCard title="BY BASE PROCESS">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="ssp-card">
+        <SspShead>By Base Process</SspShead>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {baseEntries.map(([base, count]) => (
             <Link
               key={base}
               href={baseHubUrl(base)}
-              className="border border-latent-border rounded-md p-3 hover:bg-white transition-colors group"
+              className="border border-latent-border bg-white p-3 hover:bg-latent-bg transition-colors"
             >
               <div className="font-sans text-sm font-semibold mb-1">{base}</div>
-              <div className="font-mono text-xs text-latent-mid">
+              <div className="font-mono text-xxs text-latent-mid">
                 {count} {count === 1 ? 'coffee' : 'coffees'}
               </div>
             </Link>
           ))}
         </div>
-      </SectionCard>
+      </div>
 
       {/* Common Stacks */}
       {agg.commonStacks.length > 0 && (
-        <SectionCard title="COMMON STACKS">
+        <div className="ssp-card">
+          <SspShead>Common Stacks</SspShead>
           <ul className="space-y-2">
             {agg.commonStacks.map((stack) => (
               <li key={`${stack.base}|${stack.label}`} className="flex items-baseline justify-between gap-3">
@@ -150,13 +147,13 @@ export default async function ModifierIndexPage({
                   <span className="font-mono text-xxs text-latent-mid uppercase mr-2">{stack.base}</span>
                   {stack.label}
                 </span>
-                <span className="font-mono text-xs text-latent-mid">
+                <span className="font-mono text-xxs text-latent-mid">
                   {stack.count} {stack.count === 1 ? 'coffee' : 'coffees'}
                 </span>
               </li>
             ))}
           </ul>
-        </SectionCard>
+        </div>
       )}
 
       {/* What I've Learned (synthesis) */}
@@ -176,49 +173,40 @@ export default async function ModifierIndexPage({
         />
       )}
 
-      {/* Coffees list — meta line leads with base_process to highlight cross-base coverage */}
-      <ProcessCoffeesList
-        title={`COFFEES CONTAINING ${parsed.name.toUpperCase()} (${agg.all.length})`}
+      {/* Coffees list — meta leads with base_process to highlight cross-base coverage */}
+      <CoffeesList
+        title={`Coffees Containing ${parsed.name}`}
         brews={agg.all}
         metaFor={(brew) => [brew.base_process, brew.terroir?.country, brew.roaster].filter(Boolean).join(' · ')}
       />
 
-      {/* Additional Information (mobile-collapsed) */}
+      {/* Additional Information */}
       {hasAdditional && (
         <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" bare />
+          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
           <TagLinkList
             title="CULTIVARS EXPLORED"
-            bare
             items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
-              key: name,
-              label: name,
-              href: `/cultivars/${id}`,
+              key: name, label: name, href: `/cultivars/${id}`,
             }))}
           />
           <TagLinkList
             title="TERROIRS EXPLORED"
-            bare
             items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
-              key: name,
-              label: `${country} / ${name}`,
-              href: `/terroirs/${id}`,
+              key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
             }))}
           />
           <TagLinkList
             title="ROASTERS EXPLORED"
-            bare
             items={Array.from(roasterSet).map((r) => ({
-              key: r,
-              label: r,
-              href: `/roasters/${encodeURIComponent(r)}`,
+              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
             }))}
           />
         </CollapsibleBlock>
       )}
 
       {/* Confidence */}
-      <ProcessConfidenceCard brewCount={agg.all.length} />
+      <ConfidenceCard brewCount={agg.all.length} />
     </div>
   )
 }

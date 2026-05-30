@@ -1,10 +1,11 @@
 // Sub Pages 4 (2026-05-11) — base process hub page.
+// Re-skinned to the v2 Ssp* lab-document family in Redesign Sprint 5 (2026-05-29).
 //
 // URL: /processes/{base}
 // Bases: Washed / Natural / Honey / Wet-hulled (Wet-hulled returns notFound
 //        when no brews exist for it; hidden on the index too).
 //
-// Sections:
+// Sections (IA unchanged):
 //   1. Hero
 //   2. Process Summary (authored prose from BaseProcessEntry.summary)
 //   3. Observed Process Variants & Modifiers (chip clusters by axis)
@@ -18,12 +19,20 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
-import { SectionCard } from '@/components/SectionCard'
+import {
+  Chip,
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  SspProseRows,
+  compactRows,
+  type MetaPair,
+} from '@/components/Ssp'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
-import { ProcessConfidenceCard } from '@/components/ProcessConfidenceCard'
-import { ProcessCoffeesList } from '@/components/ProcessCoffeesList'
+import { ConfidenceCard } from '@/components/ConfidenceCard'
+import { CoffeesList } from '@/components/CoffeesList'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
@@ -31,7 +40,6 @@ import {
   BASE_PROCESSES,
   getBaseProcessEntry,
   getFamilyColor,
-  type BaseProcess,
 } from '@/lib/process-registry'
 import { aggregateBaseHub } from '@/lib/process-aggregation'
 import {
@@ -95,62 +103,62 @@ export default async function BaseHubPage({ params }: { params: { base: string }
   const hasAdditional =
     sortedFlavors.length > 0 || terroirMap.size > 0 || cultivarMap.size > 0 || roasterSet.size > 0
 
+  const archetypeRows = entry?.brewArchetype
+    ? compactRows([
+        { label: 'Best archetype', value: entry.brewArchetype.bestArchetype },
+        { label: 'Typical strength', value: entry.brewArchetype.typicalStrength },
+        { label: 'Common failure mode', value: entry.brewArchetype.commonFailureMode },
+        { label: 'What usually helps', value: entry.brewArchetype.whatUsuallyHelps },
+        { label: 'When to deviate', value: entry.brewArchetype.whenToDeviate },
+      ])
+    : []
+
+  const meta: MetaPair[] = [
+    { label: 'Base process', value: base },
+    { label: 'Coffees', value: `${brewList.length}` },
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
         href="/processes"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
-        &larr; Back to Processes
+        ← Back to Processes
       </Link>
 
-      {/* Hero */}
-      <div className="section-card mb-6">
-        <div className="flex gap-6 items-start">
-          <div className="w-16 h-16 rounded flex-shrink-0" style={{ backgroundColor: color }} />
-          <div className="flex-1">
-            <h1 className="font-sans text-2xl font-semibold mb-1">{base}</h1>
-            <p className="font-mono text-xs text-latent-mid">
-              {base} family &middot; {brewList.length} {brewList.length === 1 ? 'coffee' : 'coffees'}
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Header */}
+      <SspTopBar roaster="Base Process" kind="Process Hub" />
+      <SspNamePlate title={base} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Process Summary */}
-      {entry?.summary ? (
-        <SectionCard title="PROCESS SUMMARY">
-          <p className="font-sans text-sm leading-relaxed">{entry.summary}</p>
-        </SectionCard>
-      ) : (
-        <SectionCard title="PROCESS SUMMARY">
-          <p className="font-mono text-xs text-latent-mid italic">
-            Process summary pending authoring.
-          </p>
-        </SectionCard>
-      )}
+      <div className="ssp-card">
+        <SspShead>Process Summary</SspShead>
+        {entry?.summary ? (
+          <div className="ssp-prose">{entry.summary}</div>
+        ) : (
+          <p className="font-mono text-xs text-latent-mid italic">Process summary pending authoring.</p>
+        )}
+      </div>
 
       {/* Observed Process Variants & Modifiers */}
-      <SectionCard title="OBSERVED PROCESS VARIANTS &amp; MODIFIERS">
+      <div className="ssp-card">
+        <SspShead>Observed Process Variants &amp; Modifiers</SspShead>
         <div className="space-y-4">
-          <ChipCluster label="Base">
-            <Chip
-              clickable={false}
-              label={`Pure ${base} (${hub.pure.length})`}
-            />
-          </ChipCluster>
+          <VariantCluster label="Base">
+            <VariantChip label={`Pure ${base} (${hub.pure.length})`} />
+          </VariantCluster>
 
           {hub.honeySubprocesses.length > 0 && (
-            <ChipCluster label="Subprocess">
+            <VariantCluster label="Subprocess">
               {hub.honeySubprocesses.map((s) => (
-                <Chip
+                <VariantChip
                   key={s.name}
-                  clickable={s.eligible}
-                  href={honeySubprocessUrl(s.name)}
+                  href={s.eligible ? honeySubprocessUrl(s.name) : undefined}
                   label={`${s.name} (${s.count})`}
                 />
               ))}
-            </ChipCluster>
+            </VariantCluster>
           )}
 
           {(['fermentation', 'drying', 'intervention', 'experimental', 'multi'] as const).map((axis) => {
@@ -163,52 +171,37 @@ export default async function BaseHubPage({ params }: { params: { base: string }
               : axis === 'experimental' ? 'Experimental Modifiers'
               : 'Multi-modifier Combinations'
             return (
-              <ChipCluster key={axis} label={label}>
+              <VariantCluster key={axis} label={label}>
                 {axisCombos.map((c) => (
-                  <Chip
+                  <VariantChip
                     key={c.slug}
-                    clickable={c.eligible}
                     href={c.eligible ? modifierComboUrl(base, c.slug) : undefined}
                     label={`${c.label} (${c.count})`}
                   />
                 ))}
-              </ChipCluster>
+              </VariantCluster>
             )
           })}
 
           {hub.signatures.length > 0 && (
-            <ChipCluster label="Signature Methods">
+            <VariantCluster label="Signature Methods">
               {hub.signatures.map((s) => (
-                <Chip
-                  key={s.name}
-                  clickable
-                  href={signatureUrl(s.name)}
-                  label={`${s.name} (${s.count})`}
-                />
+                <VariantChip key={s.name} href={signatureUrl(s.name)} label={`${s.name} (${s.count})`} />
               ))}
-            </ChipCluster>
+            </VariantCluster>
           )}
         </div>
-      </SectionCard>
+      </div>
 
       {/* Brew Archetypes */}
-      {entry?.brewArchetype ? (
-        <SectionCard title={`BREW ARCHETYPES FOR ${base.toUpperCase()} COFFEES`}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-            <ArchetypeField label="Best archetype" value={entry.brewArchetype.bestArchetype} />
-            <ArchetypeField label="Typical strength" value={entry.brewArchetype.typicalStrength} />
-            <ArchetypeField label="Common failure mode" value={entry.brewArchetype.commonFailureMode} />
-            <ArchetypeField label="What usually helps" value={entry.brewArchetype.whatUsuallyHelps} />
-            <ArchetypeField label="When to deviate" value={entry.brewArchetype.whenToDeviate} />
-          </div>
-        </SectionCard>
-      ) : (
-        <SectionCard title={`BREW ARCHETYPES FOR ${base.toUpperCase()} COFFEES`}>
-          <p className="font-mono text-xs text-latent-mid italic">
-            Brew archetype framing pending authoring.
-          </p>
-        </SectionCard>
-      )}
+      <div className="ssp-card">
+        <SspShead>{`Brew Archetypes For ${base} Coffees`}</SspShead>
+        {archetypeRows.length > 0 ? (
+          <SspProseRows rows={archetypeRows} />
+        ) : (
+          <p className="font-mono text-xs text-latent-mid italic">Brew archetype framing pending authoring.</p>
+        )}
+      </div>
 
       {/* What I've Learned (synthesis) */}
       {brewList.length >= 2 && (
@@ -228,91 +221,61 @@ export default async function BaseHubPage({ params }: { params: { base: string }
       )}
 
       {/* Coffees list */}
-      <ProcessCoffeesList
-        title={`${base.toUpperCase()} COFFEES I HAVE BREWED (${brewList.length})`}
-        brews={brewList}
-      />
+      <CoffeesList title={`${base} Coffees I Have Brewed`} brews={brewList} />
 
-      {/* Additional Information (mobile-collapsed) */}
+      {/* Additional Information */}
       {hasAdditional && (
         <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" bare />
+          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
           <TagLinkList
             title="CULTIVARS EXPLORED"
-            bare
             items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
-              key: name,
-              label: name,
-              href: `/cultivars/${id}`,
+              key: name, label: name, href: `/cultivars/${id}`,
             }))}
           />
           <TagLinkList
             title="TERROIRS EXPLORED"
-            bare
             items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
-              key: name,
-              label: `${country} / ${name}`,
-              href: `/terroirs/${id}`,
+              key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
             }))}
           />
           <TagLinkList
             title="ROASTERS EXPLORED"
-            bare
             items={Array.from(roasterSet).map((r) => ({
-              key: r,
-              label: r,
-              href: `/roasters/${encodeURIComponent(r)}`,
+              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
             }))}
           />
         </CollapsibleBlock>
       )}
 
       {/* Confidence */}
-      <ProcessConfidenceCard brewCount={brewList.length} />
+      <ConfidenceCard brewCount={brewList.length} />
     </div>
   )
 }
 
 // ---------------------------------------------------------------------------
-// Local helpers
+// Local helpers — Observed Variants chip clusters (clickable when a sub-page exists)
 // ---------------------------------------------------------------------------
 
-function ChipCluster({ label, children }: { label: string; children: React.ReactNode }) {
+function VariantCluster({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="font-sans text-sm font-semibold mb-2">{label}</div>
+      <div className="font-mono text-micro font-semibold tracking-[0.18em] uppercase text-latent-mid mb-2">
+        {label}
+      </div>
       <div className="flex flex-wrap gap-1.5">{children}</div>
     </div>
   )
 }
 
-function Chip({
-  label,
-  clickable,
-  href,
-}: {
-  label: string
-  clickable: boolean
-  href?: string
-}) {
-  const className =
-    'inline-block font-mono text-chip uppercase tracking-wide bg-latent-highlight border border-latent-highlight-border text-latent-fg px-2 py-1 rounded'
-  if (clickable && href) {
+function VariantChip({ label, href }: { label: string; href?: string }) {
+  if (href) {
     return (
-      <Link href={href} className={`${className} hover:bg-latent-bg transition-colors`}>
-        {label}
+      <Link href={href}>
+        <Chip name={label} />
       </Link>
     )
   }
-  return <span className={className}>{label}</span>
-}
-
-function ArchetypeField({ label, value }: { label: string; value: string | null }) {
-  if (!value) return null
-  return (
-    <div>
-      <div className="font-mono text-xxs font-semibold text-latent-fg uppercase mb-1">{label}</div>
-      <div className="font-sans text-sm leading-relaxed">{value}</div>
-    </div>
-  )
+  return <Chip name={label} />
 }
