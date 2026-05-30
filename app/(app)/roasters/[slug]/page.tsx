@@ -2,35 +2,27 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Brew } from '@/lib/types'
-import { getCoverColor } from '@/lib/brew-colors'
 import {
   getRoasterEntry,
   getRoasterFamily,
   getFamilyColor,
 } from '@/lib/roaster-registry'
-import { SectionCard } from '@/components/SectionCard'
+import {
+  SspTopBar,
+  SspNamePlate,
+  SspShead,
+  SspProseRows,
+  compactRows,
+  type MetaPair,
+} from '@/components/Ssp'
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import { CoffeesList } from '@/components/CoffeesList'
+import { ConfidenceCard } from '@/components/ConfidenceCard'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
-import { confidenceFor } from '@/lib/confidence'
-
-interface LabelledFieldProps {
-  label: string
-  value?: string | null
-}
-
-function LabelledField({ label, value }: LabelledFieldProps) {
-  if (!value) return null
-  return (
-    <div className="mb-3 last:mb-0">
-      <span className="font-sans text-sm font-semibold">{label}: </span>
-      <span className="font-sans text-sm">{value}</span>
-    </div>
-  )
-}
 
 function composeBaselineRecipe(entry: NonNullable<ReturnType<typeof getRoasterEntry>>): string | null {
   const dosePart = entry.doseG ? `${entry.doseG}g coffee` : null
@@ -104,183 +96,161 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
   }
 
   const brewCount = brewList.length
-  const confidence = confidenceFor(brewCount)
 
   const locationStr = entry?.location && entry?.country && entry.location !== entry.country
     ? `${entry.location}, ${entry.country}`
     : entry?.location ?? entry?.country ?? null
 
-  const hasRoastingPhilosophy = Boolean(entry?.roastStyle || entry?.developmentBias)
+  // --- Brewing Philosophy: Brew Guide value (3-state render gate) ---
+  let brewGuideValue: React.ReactNode = null
+  if (entry) {
+    const linkLabel = entry.brewGuideLink?.replace(/^https?:\/\//, '').replace(/\/$/, '')
+    if (entry.brewGuideStatus === 'official' && entry.brewGuideLink) {
+      brewGuideValue = (
+        <>
+          <a href={entry.brewGuideLink} target="_blank" rel="noreferrer noopener" className="underline">
+            {linkLabel}
+          </a>
+          <span className="font-mono text-xxs text-latent-mid ml-2">(Official)</span>
+        </>
+      )
+    } else if (entry.brewGuideStatus === 'official') {
+      brewGuideValue = `Official guide${entry.brewGuideType ? ` — ${entry.brewGuideType}` : ''}`
+    } else if (entry.brewGuideStatus === 'implied' && entry.brewGuideLink) {
+      brewGuideValue = (
+        <>
+          <a href={entry.brewGuideLink} target="_blank" rel="noreferrer noopener" className="underline">
+            {linkLabel}
+          </a>
+          <span className="font-mono text-xxs text-latent-mid ml-2">
+            (Implied{entry.brewGuideType ? ` — sourced from ${entry.brewGuideType}` : ''})
+          </span>
+        </>
+      )
+    } else if (entry.brewGuideStatus === 'implied') {
+      brewGuideValue = `Implied recipe${entry.brewGuideType ? ` — sourced from ${entry.brewGuideType}` : ''}`
+    } else {
+      brewGuideValue = 'No brew guide'
+    }
+  }
+
   const baselineRecipe = entry ? composeBaselineRecipe(entry) : null
-  const hasGeneralizedRecipe = Boolean(
-    entry && (
-      entry.primaryBrewer || entry.extractionIntent || entry.brewAdjustmentMethod ||
-      entry.overExtractionTolerance || entry.filterType || baselineRecipe ||
-      entry.processSensitivity || entry.failureMode || entry.notes
-    )
-  )
-  const hasRestingInfo = Boolean(entry?.restCurve)
+  const recipeRows = entry
+    ? compactRows([
+        { label: 'Primary brewer', value: entry.primaryBrewer },
+        { label: 'Filter type', value: entry.filterType },
+        { label: 'Baseline recipe', value: baselineRecipe },
+        { label: 'Extraction intent', value: entry.extractionIntent },
+        { label: 'Brew adjustment method', value: entry.brewAdjustmentMethod },
+        { label: 'Over-extraction tolerance', value: entry.overExtractionTolerance },
+        { label: 'Process sensitivity', value: entry.processSensitivity },
+        { label: 'Failure mode', value: entry.failureMode },
+        { label: 'Other notes', value: entry.notes },
+      ])
+    : []
+
+  const brewingRows = entry
+    ? compactRows([
+        { label: 'Brew guide', value: brewGuideValue },
+        { label: 'House style', value: entry.houseStyle },
+        { label: 'Brewing intent', value: entry.extractionPurpose },
+      ])
+    : []
+
+  const roastingRows = entry
+    ? compactRows([
+        { label: 'Roast style', value: entry.roastStyle },
+        { label: 'Development bias', value: entry.developmentBias },
+      ])
+    : []
+
+  const restingRows = entry
+    ? compactRows([{ label: 'Rest curve', value: entry.restCurve }])
+    : []
 
   // Additional Information metadata sub-block — surface leftover rich fields
   // not represented in the dedicated sections above.
   const showBmrHouseStyle = entry?.bmrHouseStyle && entry.bmrHouseStyle !== entry.houseStyle
-  const hasMetadata = Boolean(
-    entry && (
-      entry.strategyTag || entry.primaryDriver || entry.brewGuideSource ||
-      entry.brewGuideType || entry.calibrationRole ||
-      entry.confidenceLevel || showBmrHouseStyle || entry.bmrNotes
-    )
-  )
+  const metadataRows = entry
+    ? compactRows([
+        { label: 'Strategy tag', value: entry.strategyTag },
+        { label: 'Primary driver', value: entry.primaryDriver },
+        { label: 'Brew guide source', value: entry.brewGuideSource },
+        { label: 'Brew guide type', value: entry.brewGuideType },
+        { label: 'Calibration role', value: entry.calibrationRole },
+        { label: 'House-style confidence', value: entry.confidenceLevel },
+        { label: 'BMR house style', value: showBmrHouseStyle ? entry.bmrHouseStyle : null },
+        { label: 'BMR notes', value: entry.bmrNotes },
+      ])
+    : []
 
-  const hasAdditionalInfo = hasMetadata || sortedFlavors.length > 0 ||
+  const hasAdditionalInfo = metadataRows.length > 0 || sortedFlavors.length > 0 ||
     cultivarMap.size > 0 || terroirMap.size > 0 || processSet.size > 0
 
+  const meta: MetaPair[] = [
+    { label: 'Family', value: family },
+    ...(locationStr ? [{ label: 'Location', value: locationStr }] : []),
+    { label: 'Coffees', value: `${brewCount}` },
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
         href="/roasters"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
-        &larr; Back to Roasters
+        ← Back to Roasters
       </Link>
 
-      {/* Hero */}
-      <div className="section-card mb-6">
-        <div className="flex gap-6 items-start">
-          <div
-            className="w-16 h-16 rounded flex-shrink-0"
-            style={{ backgroundColor: color }}
-          />
-          <div className="flex-1">
-            <h1 className="font-sans text-2xl font-semibold mb-1">
-              {entry?.name || roasterName}
-            </h1>
-            <p className="font-mono text-xs text-latent-mid">
-              {family} family &middot; {brewCount} {brewCount === 1 ? 'coffee' : 'coffees'}
-              {locationStr && ` · ${locationStr}`}
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Header */}
+      <SspTopBar roaster={`${family} family`} kind="Roaster Profile" />
+      <SspNamePlate
+        title={entry?.name || roasterName}
+        meta={meta}
+        coverColor={color}
+        edgeColor={color}
+      />
 
       {/* Job 1: Brewing Philosophy */}
       {entry && (
-        <SectionCard title="BREWING PHILOSOPHY">
-          <div className="mb-3 last:mb-0">
-            <span className="font-sans text-sm font-semibold">Brew Guide: </span>
-            {entry.brewGuideStatus === 'official' && entry.brewGuideLink && (
-              <>
-                <a
-                  href={entry.brewGuideLink}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="font-sans text-sm underline"
-                >
-                  {entry.brewGuideLink.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-                </a>
-                <span className="font-mono text-xxs text-latent-mid ml-2">(Official)</span>
-              </>
-            )}
-            {entry.brewGuideStatus === 'official' && !entry.brewGuideLink && (
-              <span className="font-sans text-sm">
-                Official guide{entry.brewGuideType ? ` — ${entry.brewGuideType}` : ''}
-              </span>
-            )}
-            {entry.brewGuideStatus === 'implied' && entry.brewGuideLink && (
-              <>
-                <a
-                  href={entry.brewGuideLink}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="font-sans text-sm underline"
-                >
-                  {entry.brewGuideLink.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-                </a>
-                <span className="font-mono text-xxs text-latent-mid ml-2">
-                  (Implied{entry.brewGuideType ? ` — sourced from ${entry.brewGuideType}` : ''})
-                </span>
-              </>
-            )}
-            {entry.brewGuideStatus === 'implied' && !entry.brewGuideLink && (
-              <span className="font-sans text-sm">
-                Implied recipe{entry.brewGuideType ? ` — sourced from ${entry.brewGuideType}` : ''}
-              </span>
-            )}
-            {entry.brewGuideStatus === 'none' && (
-              <span className="font-sans text-sm">No brew guide</span>
-            )}
-          </div>
-          <LabelledField label="House Style" value={entry.houseStyle} />
-          <LabelledField label="Brewing Intent" value={entry.extractionPurpose} />
-        </SectionCard>
+        <div className="ssp-card">
+          <SspShead>Brewing Philosophy</SspShead>
+          <SspProseRows rows={brewingRows} />
+        </div>
       )}
 
       {/* Job 2a: Roasting Philosophy */}
-      {hasRoastingPhilosophy && (
-        <SectionCard title="ROASTING PHILOSOPHY">
-          <LabelledField label="Roast Style" value={entry?.roastStyle} />
-          <LabelledField label="Development Bias" value={entry?.developmentBias} />
-        </SectionCard>
+      {roastingRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Roasting Philosophy</SspShead>
+          <SspProseRows rows={roastingRows} />
+        </div>
       )}
 
       {/* Job 1 (deep): Roasters Reference Brew Recipe */}
-      {hasGeneralizedRecipe && entry && (
-        <SectionCard title="ROASTERS REFERENCE BREW RECIPE">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-            <div>
-              <LabelledField label="Primary brewer" value={entry.primaryBrewer} />
-              <LabelledField label="Extraction intent" value={entry.extractionIntent} />
-              <LabelledField label="Brew adjustment method" value={entry.brewAdjustmentMethod} />
-              <LabelledField label="Over-extraction tolerance" value={entry.overExtractionTolerance} />
-            </div>
-            <div>
-              <LabelledField label="Filter type" value={entry.filterType} />
-              <LabelledField label="Baseline Recipe" value={baselineRecipe} />
-            </div>
-          </div>
-          {(entry.processSensitivity || entry.failureMode || entry.notes) && (
-            <div className="mt-4 pt-4 border-t border-latent-border">
-              <LabelledField label="Process sensitivity" value={entry.processSensitivity} />
-              <LabelledField label="Failure mode" value={entry.failureMode} />
-              <LabelledField label="Other Notes" value={entry.notes} />
-            </div>
-          )}
-        </SectionCard>
+      {recipeRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Roasters Reference Brew Recipe</SspShead>
+          <SspProseRows rows={recipeRows} />
+        </div>
       )}
 
       {/* Job 2b: Resting Info */}
-      {hasRestingInfo && (
-        <SectionCard title="RESTING INFO FOR THIS ROASTER">
-          <LabelledField label="Rest curve" value={entry?.restCurve} />
-        </SectionCard>
+      {restingRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Resting Info For This Roaster</SspShead>
+          <SspProseRows rows={restingRows} />
+        </div>
       )}
 
       {/* Job 3: Coffees I Have Brewed */}
-      <SectionCard title={`COFFEES I HAVE BREWED FROM THIS ROASTER (${brewCount})`}>
-        <div className="space-y-0">
-          {brewList.map((brew) => (
-            <Link
-              key={brew.id}
-              href={`/brews/${brew.id}`}
-              className="flex items-center gap-3 py-3 border-b border-latent-border last:border-b-0 hover:bg-latent-bg transition-colors group"
-            >
-              <div
-                className="w-8 h-10 rounded flex-shrink-0"
-                style={{ backgroundColor: getCoverColor(brew) }}
-              />
-              <div className="flex-1 min-w-0">
-                <div className="font-sans text-sm font-semibold">
-                  {brew.coffee_name}
-                </div>
-                <div className="font-mono text-xxs text-latent-mid">
-                  {[brew.variety, brew.producer, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')}
-                </div>
-              </div>
-              <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>
-            </Link>
-          ))}
-        </div>
-      </SectionCard>
+      <CoffeesList
+        title="Coffees I Have Brewed From This Roaster"
+        brews={brewList}
+        metaFor={(brew) =>
+          [brew.variety, brew.producer, brew.terroir?.country, brew.process].filter(Boolean).join(' · ')
+        }
+      />
 
       {/* Synthesis (demoted below coffees list per three-jobs reorder) */}
       <SynthesisCard
@@ -297,32 +267,20 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
         currentInputMaxUpdatedAt={currentInputMaxUpdatedAt}
       />
 
-      {/* Additional Information — collapsed on mobile, expanded on desktop */}
+      {/* Additional Information — collapsed by default */}
       {hasAdditionalInfo && (
         <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          {hasMetadata && entry && (
-            <div className="mb-6 last:mb-0">
-              <div className="font-mono text-xxs font-semibold tracking-wide uppercase mb-2 text-latent-mid">
-                ROASTER METADATA
-              </div>
-              <LabelledField label="Strategy tag" value={entry.strategyTag} />
-              <LabelledField label="Primary driver" value={entry.primaryDriver} />
-              <LabelledField label="Brew guide source" value={entry.brewGuideSource} />
-              <LabelledField label="Brew guide type" value={entry.brewGuideType} />
-              <LabelledField label="Calibration role" value={entry.calibrationRole} />
-              <LabelledField label="House-style confidence" value={entry.confidenceLevel} />
-              {showBmrHouseStyle && (
-                <LabelledField label="BMR house style" value={entry.bmrHouseStyle} />
-              )}
-              <LabelledField label="BMR notes" value={entry.bmrNotes} />
+          {metadataRows.length > 0 && (
+            <div className="ssp-sub">
+              <h3>ROASTER METADATA</h3>
+              <SspProseRows rows={metadataRows} />
             </div>
           )}
 
-          <FlavorNotesByFamily notes={sortedFlavors} bare />
+          <FlavorNotesByFamily notes={sortedFlavors} />
 
           <TagLinkList
             title="CULTIVARS EXPLORED"
-            bare
             items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
               key: name, label: name, href: `/cultivars/${id}`,
             }))}
@@ -330,7 +288,6 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
 
           <TagLinkList
             title="TERROIRS EXPLORED"
-            bare
             items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
               key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
             }))}
@@ -338,7 +295,6 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
 
           <TagLinkList
             title="PROCESSES EXPLORED"
-            bare
             items={Array.from(processSet).map((p) => ({
               key: p, label: p, href: `/processes/${p.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
             }))}
@@ -347,16 +303,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
       )}
 
       {/* Confidence */}
-      <SectionCard dark>
-        <div className="font-mono text-xxs font-medium opacity-60 uppercase mb-3">CONFIDENCE</div>
-        <div className="flex items-center gap-3">
-          <span className="text-xl">{confidence.emoji}</span>
-          <div>
-            <div className="font-mono text-sm font-semibold">{confidence.label}</div>
-            <div className="font-mono text-xs opacity-60">{confidence.desc}</div>
-          </div>
-        </div>
-      </SectionCard>
+      <ConfidenceCard brewCount={brewCount} />
     </div>
   )
 }

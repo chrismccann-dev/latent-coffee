@@ -430,6 +430,14 @@ export function SspInset({
 
 export type ProseRow = { label: ReactNode; value: ReactNode }
 
+/** Drop rows whose value is empty (null / undefined / ''). Aggregation detail
+ *  pages build label/value row lists from sparse registry fields and gate a
+ *  whole section on whether any row survives — so this filter feeds both the
+ *  section-visibility check and the {@link SspProseRows} render. */
+export function compactRows(rows: ProseRow[]): ProseRow[] {
+  return rows.filter((r) => r.value != null && r.value !== '')
+}
+
 /** ProseRows — label/value rows (mono label, sans value). Stacks at narrow
  *  container widths, two-column at ≥520px. */
 export function SspProseRows({ rows }: { rows: ProseRow[] }) {
