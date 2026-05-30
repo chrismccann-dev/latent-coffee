@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import Link from 'next/link'
 import { GreenBean } from '@/lib/types'
+import { IndexCap, LotStage, GrlRow } from '@/components/IndexList'
 import {
   computeLifecycleState,
   extractBatchNumber,
@@ -100,15 +100,7 @@ export default async function GreenBeansPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-          GREEN BEANS
-        </h1>
-        <div className="font-mono text-xs text-latent-mid">
-          {totalSurfaced} {totalSurfaced === 1 ? 'LOT' : 'LOTS'}
-        </div>
-      </div>
+      <IndexCap left="GREEN" right={`${totalSurfaced} ${totalSurfaced === 1 ? 'LOT' : 'LOTS'}`} />
 
       {/* Empty state. Sub Pages 6.6 (2026-05-13) — claude.ai via the Latent
        * MCP server is the sole writer for every roasting-side entity. The
@@ -123,7 +115,7 @@ export default async function GreenBeansPage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-10">
+        <div>
           {SECTION_ORDER.map((state) => {
             const lots = beansByState.get(state) ?? []
             if (lots.length === 0) return null
@@ -137,21 +129,21 @@ export default async function GreenBeansPage() {
 
 function LifecycleSection({ state, lots }: { state: LifecycleState; lots: GreenBeanIndexRow[] }) {
   const title = lifecycleSectionTitle(state)
-  // Right-column header: "Stage" for active sections, "Reference" for
+  // Right-column label: "Stage" for active sections, "Reference" for
   // resolved, "Status" for unresolved (the lot has no reference to point at;
-  // the right-column reads "Closed without reference" which is a status,
-  // not a stage). Scope doc § 5.1 keeps the column header even though it's
-  // redundant with the section title — confirms the grouping at a glance
-  // without scrolling back up.
+  // the right column reads "Closed without reference" which is a status,
+  // not a stage). Scope doc § 5.1 keeps the label even though it's redundant
+  // with the section title — confirms the grouping at a glance.
   const columnHeader =
     state === 'resolved' ? 'Reference' : state === 'unresolved' ? 'Status' : 'Stage'
 
   return (
     <section>
-      <div className="flex justify-between items-baseline mb-3">
-        <h2 className="font-sans text-sm font-semibold text-latent-fg">{title}</h2>
-        <div className="font-sans text-xs text-latent-mid">{columnHeader}</div>
-      </div>
+      <LotStage
+        title={title}
+        summary={`${lots.length} ${lots.length === 1 ? 'lot' : 'lots'}`}
+        rightLabel={columnHeader}
+      />
       <div>
         {lots.map((bean) => (
           <LifecycleRow key={bean.id} bean={bean} state={state} />
@@ -159,6 +151,19 @@ function LifecycleSection({ state, lots }: { state: LifecycleState; lots: GreenB
       </div>
     </section>
   )
+}
+
+// Lifecycle-tile gradient (Redesign Sprint 0, 2026-05-29): green-coffee →
+// roasted-coffee across the stages — sage (next-roast) → olive-bronze
+// (next-cupping) → roasted brown (resolved, ratification #5). Unresolved
+// keeps neutral gray (`--subtle`): it sits outside the green-brown axis to
+// signal "no verdict" distinctly from both active and confirmed lots.
+const TILE_COLOR: Record<LifecycleState, string> = {
+  in_inventory: 'var(--tile-inventory)',
+  waiting_for_next_roast: 'var(--tile-next-roast)',
+  waiting_for_next_cupping: 'var(--tile-next-cupping)',
+  resolved: 'var(--tile-resolved)',
+  unresolved: 'var(--subtle)',
 }
 
 function LifecycleRow({ bean, state }: { bean: GreenBeanIndexRow; state: LifecycleState }) {
@@ -171,45 +176,18 @@ function LifecycleRow({ bean, state }: { bean: GreenBeanIndexRow; state: Lifecyc
   const referenceLabel = stripped ? `Batch #${stripped}` : null
   const stageLabel = lifecycleStageLabel(state, referenceLabel)
 
-  // Tile color signals lifecycle state via the v2 lifecycle-tile gradient
-  // (Redesign Sprint 0, 2026-05-29): green-coffee → roasted-coffee across the
-  // stages — sage (`tile-next-roast`, green bean ready to roast) → olive-bronze
-  // (`tile-next-cupping`, mid-transition between roast and cupping) → roasted
-  // brown (`tile-resolved`, finished bean — ratification #5, replaces the prior
-  // near-black `latent-fg`). Unresolved keeps neutral gray (`latent-mid`): it
-  // sits outside the green-brown axis to signal "no verdict" distinctly from
-  // both active and confirmed lots.
-  const tileClass =
-    state === 'resolved'
-      ? 'bg-latent-tile-resolved'
-      : state === 'unresolved'
-        ? 'bg-latent-mid'
-        : state === 'waiting_for_next_cupping'
-          ? 'bg-latent-tile-next-cupping'
-          : 'bg-latent-tile-next-roast'
-
   // Metadata line — origin · variety · process. Skips empties so pre-
   // framework lots (e.g. Rancho Tio with no origin) don't render dangling
   // separators.
   const metaParts = [bean.origin, bean.variety, bean.process].filter(Boolean)
 
   return (
-    <Link
+    <GrlRow
       href={`/green/${bean.id}`}
-      className="flex items-center gap-5 py-4 border-b border-latent-border hover:bg-latent-highlight/30 transition-colors -mx-4 px-4"
-    >
-      <div className={`w-12 h-12 ${tileClass} rounded flex-shrink-0`} />
-      <div className="flex-1 min-w-0">
-        <h3 className="font-sans text-sm font-semibold truncate">
-          {bean.name || bean.lot_id}
-        </h3>
-        {metaParts.length > 0 && (
-          <p className="font-sans text-xs text-latent-mid truncate">
-            {metaParts.join(' · ')}
-          </p>
-        )}
-      </div>
-      <div className="font-sans text-xs text-latent-mid flex-shrink-0">{stageLabel}</div>
-    </Link>
+      tileColor={TILE_COLOR[state]}
+      name={bean.name || bean.lot_id}
+      meta={metaParts.length > 0 ? metaParts.join(' · ') : undefined}
+      right={stageLabel}
+    />
   )
 }
