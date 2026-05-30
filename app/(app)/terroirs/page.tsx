@@ -1,13 +1,26 @@
 import { createClient } from '@/lib/supabase/server'
-import Link from 'next/link'
 import { Terroir } from '@/lib/types'
 import { getCountryColor } from '@/lib/country-colors'
+import { IndexCap, GrlCap, GrlGroupHeader, GrlRow } from '@/components/IndexList'
 
 interface MacroTerroirGroup {
   macroTerroir: string
   terroirs: Terroir[]
   brewCount: number
   representativeId: string
+}
+
+// Compose the mono-uppercase meta line for a macro group: elevation range
+// (min of mins → max of maxes across the group's terroirs) · climate stress
+// (first non-null). Either part omits when absent.
+function terroirMeta(group: MacroTerroirGroup): string | undefined {
+  const mins = group.terroirs.map((t) => t.elevation_min).filter((v): v is number => v != null)
+  const maxs = group.terroirs.map((t) => t.elevation_max).filter((v): v is number => v != null)
+  const climate = group.terroirs.find((t) => t.climate_stress)?.climate_stress
+  const parts: string[] = []
+  if (mins.length && maxs.length) parts.push(`${Math.min(...mins)}–${Math.max(...maxs)}m`)
+  if (climate) parts.push(climate)
+  return parts.length ? parts.join(' · ') : undefined
 }
 
 export default async function TerroirsPage() {
@@ -52,66 +65,45 @@ export default async function TerroirsPage() {
     if (countryMap[country].length === 0) delete countryMap[country]
   }
 
-  const totalMacroTerroirs = Object.values(countryMap).reduce((sum, groups) => sum + groups.length, 0)
+  const allGroups = Object.values(countryMap).flat()
+  const totalMacroTerroirs = allGroups.length
+  const totalCoffees = allGroups.reduce((sum, g) => sum + g.brewCount, 0)
+  const countryCount = Object.keys(countryMap).length
+  const maxCount = Math.max(0, ...allGroups.map((g) => g.brewCount))
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-          TERROIRS
-        </h1>
-        <div className="font-mono text-xs text-latent-mid">
-          {totalMacroTerroirs} {totalMacroTerroirs === 1 ? 'REGION' : 'REGIONS'}
-        </div>
-      </div>
+      <IndexCap
+        left="TERROIRS"
+        right={`${totalMacroTerroirs} ${totalMacroTerroirs === 1 ? 'REGION' : 'REGIONS'} · ${countryCount} ${countryCount === 1 ? 'COUNTRY' : 'COUNTRIES'}`}
+      />
 
       {totalMacroTerroirs === 0 ? (
         <div className="text-center py-16">
           <p className="font-mono text-sm text-latent-mid">NO TERROIRS YET</p>
         </div>
       ) : (
-        <div className="space-y-8">
-          {Object.entries(countryMap).map(([country, macroGroups]) => (
-            <div key={country}>
-              {/* Country header with swatch */}
-              <div className="flex items-center gap-2 mb-3">
-                <div
-                  className="w-4 h-4 rounded-sm flex-shrink-0"
-                  style={{ backgroundColor: getCountryColor(country) }}
-                />
-                <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-                  {country} ({macroGroups.length})
-                </h2>
-              </div>
-
-              <div className="space-y-0">
+        <div className="grl">
+          <GrlCap label="TERROIRS" count={totalCoffees} />
+          {Object.entries(countryMap).map(([country, macroGroups]) => {
+            const color = getCountryColor(country)
+            return (
+              <div key={country}>
+                <GrlGroupHeader swatchColor={color} name={country} count={macroGroups.length} />
                 {macroGroups.map((group) => (
-                  <Link
+                  <GrlRow
                     key={group.macroTerroir}
                     href={`/terroirs/${group.representativeId}`}
-                    className="flex items-center gap-3 py-3 border-b border-latent-border hover:bg-white transition-colors group"
-                  >
-                    {/* Color swatch */}
-                    <div
-                      className="w-10 h-10 rounded flex-shrink-0"
-                      style={{ backgroundColor: getCountryColor(country) }}
-                    />
-                    <div className="flex-1">
-                      <div className="font-sans text-sm font-semibold">
-                        {group.macroTerroir}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="font-mono text-xs text-latent-mid">
-                        {group.brewCount} {group.brewCount === 1 ? 'coffee' : 'coffees'}
-                      </div>
-                      <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                    </div>
-                  </Link>
+                    tileColor={color}
+                    name={group.macroTerroir}
+                    meta={terroirMeta(group)}
+                    count={group.brewCount}
+                    max={maxCount}
+                  />
                 ))}
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>

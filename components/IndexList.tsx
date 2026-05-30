@@ -24,6 +24,22 @@ export function IndexCap({ left, right }: { left: ReactNode; right?: ReactNode }
   )
 }
 
+/**
+ * Secondary caption under the page cap (the 4 aggregation indexes): left =
+ * "{label} EXPLORED", right = "COFFEES REPRESENTED · {count}". Mono uppercase,
+ * matching the page-cap register.
+ */
+export function GrlCap({ label, count }: { label: string; count: number }) {
+  return (
+    <div className="grl-cap">
+      <span className="l">{label} EXPLORED</span>
+      <span className="r">
+        <b>COFFEES REPRESENTED</b>· {count}
+      </span>
+    </div>
+  )
+}
+
 /** Group header — 11px swatch + uppercase group name + dim count. */
 export function GrlGroupHeader({
   swatchColor,

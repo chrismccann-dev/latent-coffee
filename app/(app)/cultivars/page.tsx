@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import Link from 'next/link'
 import { Cultivar } from '@/lib/types'
 import { getFamilyColor } from '@/lib/cultivar-family-colors'
+import { IndexCap, GrlCap, GrlGroupHeader, GrlRow } from '@/components/IndexList'
 
 interface CultivarLeaf {
   cultivar: Cultivar
@@ -83,84 +83,59 @@ export default async function CultivarsPage() {
         })),
     }))
 
-  const totalCultivars = speciesGroups.reduce(
-    (sum, s) => sum + s.familyGroups.reduce((sm, f) => sm + f.lineageGroups.reduce((sn, l) => sn + l.leaves.length, 0), 0),
-    0
+  // Flatten the species → family → lineage → leaf tree once for the page-level
+  // aggregates (cleaner than four nested reduces per metric).
+  const allLeaves = speciesGroups.flatMap((s) =>
+    s.familyGroups.flatMap((f) => f.lineageGroups.flatMap((l) => l.leaves)),
   )
+  const totalCultivars = allLeaves.length
+  const totalCoffees = allLeaves.reduce((sum, leaf) => sum + leaf.brewCount, 0)
+  const familyCount = speciesGroups.reduce((sum, s) => sum + s.familyGroups.length, 0)
+  // Per-page max for the 5-block bar — highest brew count across all leaves.
+  const maxCount = Math.max(0, ...allLeaves.map((leaf) => leaf.brewCount))
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid">
-          CULTIVARS
-        </h1>
-        <div className="font-mono text-xs text-latent-mid">
-          {totalCultivars} {totalCultivars === 1 ? 'CULTIVAR' : 'CULTIVARS'}
-        </div>
-      </div>
+      <IndexCap
+        left="CULTIVARS"
+        right={`${totalCultivars} ${totalCultivars === 1 ? 'CULTIVAR' : 'CULTIVARS'} · ${familyCount} ${familyCount === 1 ? 'FAMILY' : 'FAMILIES'}`}
+      />
 
       {totalCultivars === 0 ? (
         <div className="text-center py-16">
           <p className="font-mono text-sm text-latent-mid">NO CULTIVARS YET</p>
         </div>
       ) : (
-        <div className="space-y-10">
+        <div className="grl">
+          <GrlCap label="CULTIVARS" count={totalCoffees} />
           {speciesGroups.map((speciesGroup) => (
             <div key={speciesGroup.species}>
-              <h2 className="font-mono text-lg font-semibold tracking-wide uppercase text-latent-fg mb-4">
+              <h2 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-mid pt-6 pb-1">
                 {speciesGroup.species}
               </h2>
-
-              <div className="space-y-8">
-                {speciesGroup.familyGroups.map((familyGroup) => (
+              {speciesGroup.familyGroups.map((familyGroup) => {
+                const color = getFamilyColor(familyGroup.family)
+                return (
                   <div key={familyGroup.family}>
-                    <div className="flex items-center gap-2 mb-4">
-                      <div
-                        className="w-4 h-4 rounded-sm flex-shrink-0"
-                        style={{ backgroundColor: getFamilyColor(familyGroup.family) }}
-                      />
-                      <h3 className="font-mono text-xs font-semibold tracking-wide uppercase text-latent-fg">
-                        {familyGroup.family} ({familyGroup.lineageGroups.length})
-                      </h3>
-                    </div>
-
-                    <div className="space-y-6">
-                      {familyGroup.lineageGroups.map((lineageGroup) => (
-                        <div key={lineageGroup.lineage}>
-                          <div className="font-mono text-xxs font-semibold tracking-wide uppercase text-latent-mid mb-2">
-                            {lineageGroup.lineage}
-                          </div>
-                          <div className="space-y-0">
-                            {lineageGroup.leaves.map(({ cultivar, brewCount }) => (
-                              <Link
-                                key={cultivar.id}
-                                href={`/cultivars/${cultivar.id}`}
-                                className="flex items-center gap-3 py-3 border-b border-latent-border hover:bg-white transition-colors group"
-                              >
-                                <div
-                                  className="w-10 h-10 rounded flex-shrink-0"
-                                  style={{ backgroundColor: getFamilyColor(familyGroup.family) }}
-                                />
-                                <div className="flex-1">
-                                  <div className="font-sans text-sm font-semibold">
-                                    {cultivar.cultivar_name}
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <div className="font-mono text-xs text-latent-mid">
-                                    {brewCount} {brewCount === 1 ? 'coffee' : 'coffees'}
-                                  </div>
-                                  <span className="font-mono text-xs text-latent-mid opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <GrlGroupHeader swatchColor={color} name={familyGroup.family} count={familyGroup.lineageGroups.length} />
+                    {familyGroup.lineageGroups.map((lineageGroup) => (
+                      <div key={lineageGroup.lineage}>
+                        <div className="grl-lineage">{lineageGroup.lineage}</div>
+                        {lineageGroup.leaves.map(({ cultivar, brewCount }) => (
+                          <GrlRow
+                            key={cultivar.id}
+                            href={`/cultivars/${cultivar.id}`}
+                            tileColor={color}
+                            name={cultivar.cultivar_name}
+                            count={brewCount}
+                            max={maxCount}
+                          />
+                        ))}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )
+              })}
             </div>
           ))}
         </div>
