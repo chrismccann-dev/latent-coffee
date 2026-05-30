@@ -12,8 +12,21 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
 - **PR2** — [#318](https://github.com/chrismccann-dev/latent-coffee/pull/318), main `8c9cbe4`:
   WC-2 cupping reshape (+ WC-1/WC-2b/WC-3/WC-5) · WR-2 anchor label.
 - **STILL OPEN (separate sessions, NOT started):** `naming` · `data-audit` · `data-model`
-  (pour-structure bug — highest-priority functional follow-up) · `side-quest` MB-6. See the
-  "Punt" list under FINAL batching below.
+  (pour-structure bug) · `side-quest` MB-6. See the "Punt" list under FINAL batching below.
+
+### Next-up sequencing (Chris-locked 2026-05-30)
+
+The four open buckets — `data-model` · `data-audit` · `naming` · `side-quest` MB-6 — can be
+taken in **any order**; Chris has no preference. Then a **product roadmap review / brainstorm**
+is the explicit capstone *after all four ship* (what comes next once polish + these buckets are
+done). The deferred **/producers · /experiments · homepage** trio is NOT the next thing — it
+stays parked behind the roadmap review.
+
+- **`data-model` pour-structure bug kickoff:** Chris will do a **full audio readout** of several
+  recipes — deliberately spanning **complex and simplistic** pour structures — to kick it off
+  (same capture-first pattern that made WC-2 land right). Do NOT start implementing the parser
+  fix before that audio lands; the storage-shape decision depends on seeing the real range of
+  pour structures he describes. Treat it as a grilling/spec session first, build second.
 
 ### Retro (what surprised us / what we'd carry forward)
 - **The single biggest lesson: capture-first paid off enormously.** WC-2 looked like a 2-row
