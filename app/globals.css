@@ -513,6 +513,25 @@ body {
   .ssp-inset .inset-stack .pair { grid-template-columns: 160px 1fr; gap: 14px; align-items: start; }
   .ssp-inset .inset-stack .pair .k { padding-top: 3px; }
 }
+/* Inset grid mode — V_n-columned procedural rules (Drop Rules on the
+   waiting-for-roast Roast Hypothesis card). Ported from the host Sub Page
+   System in Redesign Sprint 3; Sprint 2 only ported inset-stack. */
+.ssp-inset .inset-grid { display: grid; grid-template-columns: 130px repeat(var(--cols, 3), 1fr); gap: 8px 12px; font-size: 12px; line-height: 1.55; align-items: start; }
+.ssp-inset .inset-grid > .row-lbl { font-family: var(--sans); font-weight: 600; color: var(--roast-emphasis); font-size: 12px; }
+.ssp-inset.cup .inset-grid > .row-lbl { color: var(--cup-emphasis); }
+.ssp-inset .inset-grid > .row-lbl small { display: block; font-weight: 400; color: var(--mid); font-size: 10.5px; margin-top: 2px; font-family: var(--mono); }
+.ssp-inset .inset-grid > .cell { font-family: var(--sans); font-size: 12px; line-height: 1.55; color: var(--fg); }
+.ssp-inset .inset-grid > .col-hd { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); font-weight: 700; text-align: center; padding-bottom: 6px; border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
+@container ssppage (max-width: 519px) {
+  .ssp-inset .inset-grid { grid-template-columns: 96px repeat(var(--cols, 3), 1fr); gap: 6px 8px; font-size: 11px; }
+  /* On narrow state-roast cards (the waiting-for-roast Roast Hypothesis card
+     carries both an absolute .ssp-corner and a right-aligned shead context
+     line) drop the context line to its own full-width line so it clears the
+     corner badge. Neutral on corner-less state-roast cards (cupping Roast
+     Actuals) — the line just stacks below the title. */
+  .ssp-card.state-roast .ssp-shead { flex-wrap: wrap; }
+  .ssp-card.state-roast .ssp-shead .ct { margin-left: 0; flex-basis: 100%; }
+}
 
 /* Label/value prose rows (mobile T3 reference signals + green specs) */
 .ssp-prose-rows { display: flex; flex-direction: column; }

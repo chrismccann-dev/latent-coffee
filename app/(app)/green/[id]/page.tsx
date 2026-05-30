@@ -1,3 +1,4 @@
+import { Fragment, type CSSProperties } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -190,86 +191,150 @@ function WaitingForNextRoastView({
     return ad.localeCompare(bd)
   })
 
+  // Redesign Sprint 3 (2026-05-29) — re-skin to the Ssp* lab-document family.
+  // Soft mobile-primary (consulted at the desk during V-set design): single
+  // `.ssp-page` column tree, no dual-subtree (the .ssp-exp grid's <520px
+  // narrow variant handles the transposed hypothesis table; the table is
+  // design-intent reference with fewer rows than the cupping actuals, so no
+  // transposed→slot-card recomposition is needed). The 6.3 IA is preserved —
+  // Primary Question → Roast Hypothesis transposed table (variance-gated amber
+  // lever rows) → Drop Rules inset → green-bean info → experiment frame → roast
+  // log. Shared components below the re-skinned hypothesis card stay
+  // legacy-skinned through the migration window (Chris-confirmed "keep the
+  // seam" 2026-05-29) — they re-skin on a dedicated green shared-components
+  // sprint that covers the remaining 4 shapes at once.
+  const vLabel = latestExp ? formatVLabel(latestExp.experiment_id) : null
+  const hypo = recipesForLatest.length > 0 ? buildHypothesisData(recipesForLatest) : null
+  const dropRules = recipesForLatest.some((r) => r.drop_rule_if_fast || r.drop_rule_if_slow)
+    ? buildDropRulesGrid(recipesForLatest)
+    : null
+  // Anchor caption — mono line above the table. control_baseline carries the
+  // anchor/baseline reference (the same field the cupping view's "Anchor cup"
+  // reuses per the 6.4 lock). Skipped when NULL.
+  const anchorLine = latestExp?.control_baseline ?? null
+
+  const metaPairs = [
+    { label: 'Producer', value: bean.producer ?? '—' },
+    { label: 'Origin', value: bean.origin ?? bean.terroir?.country ?? '—' },
+    { label: 'Variety', value: bean.variety ?? bean.cultivar?.cultivar_name ?? '—' },
+  ]
+  const pills = [
+    <StatusPill key="state" label="Waiting · Next Roast" tone="amber" />,
+    ...(bean.process ? [<Chip key="proc" name={bean.process} tone="green" />] : []),
+    ...(vLabel ? [<Chip key="vset" name={`${vLabel} · awaiting roast`} tone="plum" />] : []),
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
-      {/* Back */}
+    <div className="ssp-page">
       <Link
         href="/green"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
         ← Back to Green Beans
       </Link>
 
-      {/* Lot header — sage tile matches the /green index "active" state.
-          Tabler ti-leaf swap (scope doc § 9) still deferred — no icon library
-          installed yet; 🌱 emoji holds until a dedicated icon-library
-          decision lands. */}
-      <div className="flex gap-6 mb-8">
-        <div className="w-20 h-20 bg-latent-accent-light rounded-md flex-shrink-0" />
-        <div>
-          <h1 className="font-sans text-2xl font-semibold mb-2">
-            🌱 {bean.name || bean.lot_id}
-          </h1>
-          {bean.lot_id && (
-            <div className="font-mono text-xs text-latent-mid mb-1">
-              Lot: {bean.lot_id}
-            </div>
-          )}
-          <div className="font-mono text-sm text-latent-mid">
-            {composeLotMeta(bean)}
-          </div>
-        </div>
-      </div>
+      {/* Header — amber (roast-emphasis) cover marks the waiting-for-roast
+          lifecycle state per the v2 artboard STATE["stage-1"]. */}
+      <SspTopBar
+        brewId={bean.lot_id ?? undefined}
+        date={`${roasts.length} ROAST${roasts.length === 1 ? '' : 'S'}`}
+        roaster="WAITING · NEXT ROAST"
+        kind="Green Lot"
+      />
+      <SspNamePlate
+        title={bean.name || bean.lot_id}
+        coverColor="#A88037"
+        edgeColor="#A88037"
+        meta={metaPairs}
+        pills={pills}
+      />
 
-      {/* Roasts · V_n card (cleanup-actions PR #23 reorder, was below
-          ExperimentFrame pre-PR). The V-label comes from experiment_id
-          when set (e.g. "MX-DEV-v3" → "V3"); falls back to the full label
-          otherwise. */}
+      {/* Roast Hypothesis card — the load-bearing surface. Primary Question +
+          transposed V_n design-intent grid + Drop Rules inset (amber). The
+          V-label comes from experiment_id when set ("MX-DEV-v3" → "V3"). */}
       {latestExp ? (
-        <SectionCard title={`ROASTS · ${formatVLabel(latestExp.experiment_id)}`}>
-          {/* Primary Question — prose */}
+        <div className="ssp-card state-roast">
+          {/* Corner is just the V-label (not "· Gold Standard" from the
+              artboard) — matches the shipped Sprint 2 cupping view and avoids
+              the long badge colliding with the shead context line at 390. */}
+          <span className="ssp-corner">{vLabel}</span>
+          <SspShead
+            ct={
+              recipesForLatest.length > 0
+                ? `${recipesForLatest.length} slot${recipesForLatest.length === 1 ? '' : 's'} · pre-roast design`
+                : 'pre-roast design'
+            }
+          >
+            Roast Hypothesis · {vLabel}
+          </SspShead>
+
           {latestExp.primary_question && (
-            <div className="mb-6">
-              <div className="label">Primary Question</div>
-              <div className="font-sans text-sm leading-relaxed">
-                {latestExp.primary_question}
-              </div>
+            <div className="ssp-question">
+              <div className="lbl">Primary Question</div>
+              <div className="body">{latestExp.primary_question}</div>
             </div>
           )}
 
-          {/* Roast Hypothesis sub-block. Header line composes anchor +
-              ceiling + window from per-recipe data when available; falls
-              back to a generic "Hypothesis" header otherwise. The
-              transposed table is the load-bearing surface. */}
-          <div>
-            <div className="label mb-2">Roast Hypothesis</div>
-            {recipesForLatest.length > 0 ? (
-              <HypothesisTable recipes={recipesForLatest} />
-            ) : (
-              <div className="font-sans text-sm text-latent-mid italic">
-                No recipes linked to this experiment yet. Recipes land when
-                claude.ai pushes them via the push_roast_recipe MCP Tool —
-                each batch (v_na / v_nb / v_nc) becomes one recipe row with
-                curves, drop rules, and design-time predictions. Today the
-                experiment frame is here ({experiments.length === 1 ? '1 experiment' : `${experiments.length} experiments`}{' '}
-                logged for this lot, latest: {latestExp.experiment_id}); the
-                per-batch design intent is pending.
-              </div>
-            )}
-          </div>
+          {anchorLine && <div className="ssp-anchor-line">{anchorLine}</div>}
 
-          {/* Drop Rules — only renders if at least one recipe has a rule.
-              Amber-tinted surface (latent-roast-emphasis tokens, added Sub
-              Pages 6.4) per scope doc § 5.5 — drop rules are roast-side
-              signals to watch during execution. */}
-          {recipesForLatest.some((r) => r.drop_rule_if_fast || r.drop_rule_if_slow) && (
-            <div className="mt-6">
-              <DropRulesCard recipes={recipesForLatest} />
+          {hypo && hypo.rows.length > 0 ? (
+            <SspExpGrid cols={hypo.cols} rows={hypo.rows} />
+          ) : recipesForLatest.length > 0 ? (
+            <div className="font-sans text-sm text-latent-mid italic">
+              Recipes exist but no predictions populated yet. Push design-time
+              fields via patch_roast_recipe (predicted_fc_temp / predicted_fc_time
+              / predicted_total_time / predicted_agtron_wb / rationale / etc.) to
+              light up this table.
+            </div>
+          ) : (
+            <div className="font-sans text-sm text-latent-mid italic">
+              No recipes linked to this experiment yet. Recipes land when
+              claude.ai pushes them via the push_roast_recipe MCP Tool — each
+              batch (v_na / v_nb / v_nc) becomes one recipe row with curves, drop
+              rules, and design-time predictions. Today the experiment frame is
+              here ({experiments.length === 1 ? '1 experiment' : `${experiments.length} experiments`}{' '}
+              logged for this lot, latest: {latestExp.experiment_id}); the
+              per-batch design intent is pending.
             </div>
           )}
-        </SectionCard>
+
+          {/* Drop Rules — inline amber .ssp-inset (grid mode) inside the
+              hypothesis card per the v2 artboard. Only renders when at least
+              one recipe has a rule. Per scope doc § 5.5 drop rules are
+              roast-side signals to watch during execution. */}
+          {dropRules && (
+            <div className="ssp-inset">
+              <div className="inset-hd">Drop Rules · {vLabel}</div>
+              <div
+                className="inset-grid"
+                style={{ ['--cols' as string]: dropRules.cols.length } as CSSProperties}
+              >
+                <div />
+                {dropRules.cols.map((c, i) => (
+                  <div className="col-hd" key={i}>
+                    {c}
+                  </div>
+                ))}
+                {dropRules.rows.map((row) => (
+                  <Fragment key={row.label}>
+                    <div className="row-lbl">
+                      {row.label}
+                      <small>{row.sub}</small>
+                    </div>
+                    {row.cells.map((cell, ci) => (
+                      <div className="cell" key={ci}>
+                        {cell}
+                      </div>
+                    ))}
+                  </Fragment>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       ) : (
-        <SectionCard title="ROASTS">
+        <div className="ssp-card state-roast">
+          <SspShead ct="pre-roast design">Roast Hypothesis</SspShead>
           {/* Rancho-Tio edge case: roasts exist but no experiments. The
               lifecycle state still routes here (pre-framework legacy upload
               gets waiting_for_next_roast per the lifecycle helper's edge
@@ -280,30 +345,21 @@ function WaitingForNextRoastView({
             V-set framing — design the first experiment in claude.ai via
             push_experiment + push_roast_recipe to populate this surface.
           </div>
-        </SectionCard>
+        </div>
       )}
 
-      {/* Green Bean Info — shared component (Sub Pages 6.4 extraction).
-          Cleanup-actions PR #23 reorder: now slot 3 (was slot 4 pre-PR,
-          below ExperimentFrame). The promotion reflects load-bearing-for-
-          page-job hierarchy: the page's primary job is "what's queued to
-          roast", so ROASTS card first, then the green-bean identity row,
-          then the experiment frame as design-time context. */}
+      {/* Shared components below — legacy chrome through the migration window
+          (Chris-confirmed "keep the seam"). GreenBeanInfoCard first (lot
+          identity), then the collapsed experiment frame, roast log, and
+          per-roast reflections. */}
       <GreenBeanInfoCard bean={bean} />
 
-      {/* Experiment Frame card (Sub Pages 6.7). Sub-sprint 4a Bundle B
-          collapsed by default — design-time frame is useful context but
-          not consulted at roast-prep time; collapse keeps the page focused
-          on the load-bearing ROASTS · V_n card above. */}
       {latestExp && (
-        <CollapsibleSection title={`EXPERIMENT FRAME · ${formatVLabel(latestExp.experiment_id)}`}>
+        <CollapsibleSection title={`EXPERIMENT FRAME · ${vLabel}`}>
           <ExperimentFrameCard latestExp={latestExp} title="" bare />
         </CollapsibleSection>
       )}
 
-      {/* Roast log — Sub-sprint 4a Bundle B: collapsed by default. The
-          load-bearing surface for roast prep is the ROASTS · V_n hypothesis
-          table above; the log is reference / past-roast lookup. */}
       <RoastLogTable
         roasts={roasts}
         cuppings={cuppings}
@@ -311,28 +367,23 @@ function WaitingForNextRoastView({
         highlightedBatchIds={Array.from(currentExpBatchIds)}
       />
 
-      {/* Per-roast reflections (Sub Pages 6.7) — collapsed details surfacing
-          what_worked / what_didnt / what_to_change per roast. Auto-hides
-          when no roasts have any reflection field populated. */}
       <PerRoastReflections roasts={roasts} />
 
-      {/* Additional Information — collapsed block for the rest. Defers the
-          deep surface (roast learnings prose / cupping history / experiments
-          archive / related brews) to 6.5 when the resolved-view shape lands.
-          For now: collapsed details summary with a hint about what's
-          deferred. Keeps the active page focused on "what's queued to
-          roast" while not erasing the existing surface. */}
-      <details className="mt-6 group">
-        <summary className="cursor-pointer font-mono text-xs text-latent-mid hover:text-latent-fg uppercase tracking-wide">
+      <details className="ssp-coll">
+        <summary>
           Additional Information
+          <span className="ct">Full history renders on the resolved view</span>
+          <span className="chev" />
         </summary>
-        <div className="mt-4 font-sans text-sm text-latent-mid italic">
-          Deeper detail (cupping history, all experiments, roast learnings,
-          related brews) renders on the resolved-lot page shape in Sub Pages
-          6.5. The waiting-for-next-roast view stays focused on what's
-          queued. To see the full archive surface today, the legacy detail
-          render is still available — it's just no longer routed to for
-          waiting-for-next-roast lots once 6.3 ships.
+        <div className="body">
+          <div className="ssp-sub">
+            <div className="font-sans text-sm text-latent-mid italic">
+              Deeper detail (cupping history, all experiments, roast learnings,
+              related brews) renders on the resolved-lot page shape. The
+              waiting-for-next-roast view stays focused on what&apos;s queued to
+              roast.
+            </div>
+          </div>
         </div>
       </details>
     </div>
@@ -398,37 +449,43 @@ function truncateHypothesis(prose: string): string {
   return (lastSpace > 30 ? hardCap.slice(0, lastSpace) : hardCap) + ' …'
 }
 
-// Transposed batch table — attributes as rows, batches as columns. Each row
-// only renders if at least one recipe has a non-null value for that field
-// (so the table stays compact when predictions are sparsely populated). The
-// "Hypothesis" row maps to roast_recipes.rationale (per-batch prose) which
-// is distinct from the freer notes catch-all.
+// Build the Roast Hypothesis transposed grid for SspExpGrid (Redesign Sprint
+// 3). Attributes as rows, V_n batches as columns. Each row only renders if at
+// least one recipe has a non-null value for that field (so the table stays
+// compact when predictions are sparsely populated). The "Hypothesis" row maps
+// to roast_recipes.rationale (per-batch prose, distinct from the freer notes
+// catch-all) and keeps the Bundle-B truncate-with-expander as a prose `.note`
+// cell.
 //
-// Lever rows (Drop temp + Peak inlet) get the roast-emphasis amber tint when
-// their values vary across batches — scope doc § 5.5 calls these out as the
-// design knobs to watch during the roast. Other rows (Expected FC / Total /
-// End Condition / Agtron / Hypothesis) are descriptive, not levers, so they
-// keep neutral treatment even when their values diverge.
-function HypothesisTable({ recipes }: { recipes: RoastRecipe[] }) {
+// Lever rows (Drop temp + Peak inlet) get the roast-emphasis amber tint
+// (variant 'highlight' + labelAccent 'roast') when their values vary across
+// batches — scope doc § 5.5 calls these out as the design knobs to watch
+// during the roast. Single-value lever rows read as a deliberate hold, not a
+// varying knob, so they stay neutral. Other rows (Expected FC / Total / End
+// Condition / Agtron / Hypothesis) are descriptive, not levers.
+function buildHypothesisData(recipes: RoastRecipe[]): { cols: { label: string }[]; rows: ExpRow[] } {
   type RowSpec = {
     label: string
     getValue: (r: RoastRecipe) => React.ReactNode
     has: (r: RoastRecipe) => boolean
     isLever?: boolean
+    numeric?: boolean
+    bold?: boolean
     // Raw value for variance detection — kept separate from getValue so the
     // React-node return of getValue doesn't have to be stringified.
     rawValue?: (r: RoastRecipe) => string | null
   }
 
-  const rows: RowSpec[] = [
+  const specs: RowSpec[] = [
     {
       label: 'Drop temp',
+      numeric: true,
+      isLever: true,
       getValue: (r) =>
         r.end_condition_type === 'bean_temp' && r.end_condition_target != null
           ? `${r.end_condition_target}°C`
           : '—',
       has: (r) => r.end_condition_type === 'bean_temp' && r.end_condition_target != null,
-      isLever: true,
       rawValue: (r) =>
         r.end_condition_type === 'bean_temp' && r.end_condition_target != null
           ? String(r.end_condition_target)
@@ -436,15 +493,17 @@ function HypothesisTable({ recipes }: { recipes: RoastRecipe[] }) {
     },
     {
       label: 'Peak inlet',
-      getValue: () => '—',
+      numeric: true,
+      isLever: true,
       // Computed from temperature_bezier max — deferred until bezier data
       // is populated. Today all backfilled recipes have NULL beziers.
+      getValue: () => '—',
       has: () => false,
-      isLever: true,
       rawValue: () => null,
     },
     {
       label: 'Expected FC',
+      numeric: true,
       getValue: (r) => {
         const parts = [r.predicted_fc_time, r.predicted_fc_temp != null ? `${r.predicted_fc_temp}°C` : null]
           .filter(Boolean)
@@ -455,36 +514,34 @@ function HypothesisTable({ recipes }: { recipes: RoastRecipe[] }) {
     },
     {
       label: 'Expected Total',
-      getValue: (r) => (r.predicted_total_time ? <strong>{r.predicted_total_time}</strong> : '—'),
+      numeric: true,
+      bold: true,
+      getValue: (r) => r.predicted_total_time ?? '—',
       has: (r) => r.predicted_total_time != null,
     },
     {
       label: 'End Condition',
+      numeric: true,
       getValue: (r) => {
         if (!r.end_condition_type) return '—'
         const unit = r.end_condition_type === 'bean_temp' ? '°C' : r.end_condition_type === 'dev_time' ? 's' : ''
-        return (
-          <span className="font-mono text-xs">
-            {r.end_condition_type.toUpperCase()}
-            {r.end_condition_target != null ? ` ${r.end_condition_target}${unit}` : ''}
-          </span>
-        )
+        return `${r.end_condition_type.toUpperCase()}${r.end_condition_target != null ? ` ${r.end_condition_target}${unit}` : ''}`
       },
       has: (r) => r.end_condition_type != null,
     },
     {
       label: 'Predicted Agtron WB',
+      numeric: true,
       getValue: (r) => (r.predicted_agtron_wb != null ? String(r.predicted_agtron_wb) : '—'),
       has: (r) => r.predicted_agtron_wb != null,
     },
     {
-      // Sub-sprint 4a Bundle B — Hypothesis row truncate-with-expander.
-      // Per Chris audit: the Hypothesis prose is the longest row in the
-      // table by far (often 100+ words per cell on V3+); collapsing keeps
-      // the load-bearing numeric rows above (Drop temp / Expected total /
-      // End Condition / Predicted Agtron WB) visible without scroll.
-      // Pure CSS via <details> + Tailwind group-open variant — no JS,
-      // no hydration flicker, per-cell independent expansion.
+      // Sub-sprint 4a Bundle B — Hypothesis row truncate-with-expander, ported
+      // verbatim into the SspExpGrid `.note` prose cell. Per Chris audit: the
+      // Hypothesis prose is the longest row by far (often 100+ words per cell
+      // on V3+); collapsing keeps the load-bearing numeric rows above visible
+      // without scroll. Pure CSS via <details> + Tailwind group-open variant —
+      // no JS, no hydration flicker, per-cell independent expansion.
       label: 'Hypothesis',
       getValue: (r) =>
         r.rationale ? (
@@ -512,74 +569,59 @@ function HypothesisTable({ recipes }: { recipes: RoastRecipe[] }) {
   // Only render rows where ANY recipe has the field populated. Empty rows
   // would just be a sea of em-dashes — collapse them so the table tracks
   // what's actually being designed.
-  const visibleRows = rows.filter((row) => recipes.some(row.has))
+  const visible = specs.filter((s) => recipes.some(s.has))
 
   // Per-row variance flag: lever rows with multiple distinct populated values
-  // across recipes get the amber highlight applied to every cell in the row.
-  // Single-value lever rows (all recipes match) read as "deliberate hold,"
-  // not a varying knob — no highlight.
-  const varyingLeverRows = new Set(
-    visibleRows
-      .filter((row) => row.isLever && row.rawValue)
-      .filter((row) => {
-        const values = recipes.map((r) => row.rawValue!(r)).filter((v) => v != null)
+  // across recipes get the amber highlight on the whole row. Single-value
+  // lever rows (all recipes match) read as "deliberate hold," not a varying
+  // knob — no highlight.
+  const varyingLevers = new Set(
+    visible
+      .filter((s) => s.isLever && s.rawValue)
+      .filter((s) => {
+        const values = recipes.map((r) => s.rawValue!(r)).filter((v) => v != null)
         return new Set(values).size > 1
       })
-      .map((row) => row.label),
+      .map((s) => s.label),
   )
 
-  if (visibleRows.length === 0) {
-    return (
-      <div className="font-sans text-sm text-latent-mid italic">
-        Recipes exist but no predictions populated yet. Push design-time
-        fields via patch_roast_recipe (predicted_fc_temp / predicted_fc_time
-        / predicted_total_time / predicted_agtron_wb / rationale / etc.) to
-        light up this table.
-      </div>
-    )
-  }
+  const cols = recipes.map((r) => ({ label: r.batch_slot ?? r.recipe_name ?? '?' }))
+  const rows: ExpRow[] = visible.map((s) => {
+    const amber = varyingLevers.has(s.label)
+    return {
+      label: s.label,
+      numeric: s.numeric,
+      ...(amber ? { variant: 'highlight' as const, labelAccent: 'roast' as const } : {}),
+      cells: recipes.map((r) =>
+        s.bold ? { content: s.getValue(r), className: 'bold' } : s.getValue(r),
+      ),
+    }
+  })
 
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-latent-border">
-            <th className="text-left py-2 pr-4 font-sans font-normal text-latent-mid text-xs">
-              {/* attribute column header — blank */}
-            </th>
-            {recipes.map((r) => (
-              <th
-                key={r.id}
-                className="text-left py-2 px-3 font-sans font-semibold text-latent-fg text-xs"
-              >
-                {r.batch_slot ?? r.recipe_name ?? '?'}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {visibleRows.map((row) => {
-            const isVaryingLever = varyingLeverRows.has(row.label)
-            const cellClass = isVaryingLever
-              ? 'py-2 px-3 font-sans text-sm align-top bg-latent-roast-emphasis-surface text-latent-roast-emphasis font-semibold'
-              : 'py-2 px-3 font-sans text-sm align-top'
-            return (
-              <tr key={row.label} className="border-b border-latent-border last:border-b-0">
-                <td className="py-2 pr-4 font-sans text-xs text-latent-mid align-top">
-                  {row.label}
-                </td>
-                {recipes.map((r) => (
-                  <td key={r.id} className={cellClass}>
-                    {row.getValue(r)}
-                  </td>
-                ))}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
-  )
+  return { cols, rows }
+}
+
+// Drop Rules grid for the amber .ssp-inset (grid mode) inside the Roast
+// Hypothesis card. 2 rows (running fast / slow) × N batches. The auto-hide
+// guard (at least one recipe has a rule) lives at the call site.
+function buildDropRulesGrid(recipes: RoastRecipe[]): {
+  cols: string[]
+  rows: { label: string; sub: string; cells: React.ReactNode[] }[]
+} {
+  const cols = recipes.map((r) => r.batch_slot ?? r.recipe_name ?? '?')
+  const rows = [
+    {
+      label: 'If running fast',
+      sub: 'hits end before exp. total',
+      cells: recipes.map((r) => r.drop_rule_if_fast ?? '—'),
+    },
+    {
+      label: 'If running slow',
+      sub: 'past exp. total no end hit',
+      cells: recipes.map((r) => r.drop_rule_if_slow ?? '—'),
+    },
+  ]
+  return { cols, rows }
 }
 
 // ---------------------------------------------------------------------------
