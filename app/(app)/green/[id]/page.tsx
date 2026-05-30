@@ -1,4 +1,3 @@
-import { Fragment, type CSSProperties } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -11,6 +10,7 @@ import {
   SspShead,
   SspExpGrid,
   SspProseRows,
+  SspInset,
   type ExpRow,
 } from '@/components/Ssp'
 import { GreenBeanInfoCard } from '@/components/GreenBeanInfoCard'
@@ -205,9 +205,7 @@ function WaitingForNextRoastView({
   // sprint that covers the remaining 4 shapes at once.
   const vLabel = latestExp ? formatVLabel(latestExp.experiment_id) : null
   const hypo = recipesForLatest.length > 0 ? buildHypothesisData(recipesForLatest) : null
-  const dropRules = recipesForLatest.some((r) => r.drop_rule_if_fast || r.drop_rule_if_slow)
-    ? buildDropRulesGrid(recipesForLatest)
-    : null
+  const showDropRules = recipesForLatest.some((r) => r.drop_rule_if_fast || r.drop_rule_if_slow)
   // Anchor caption — mono line above the table. control_baseline carries the
   // anchor/baseline reference (the same field the cupping view's "Anchor cup"
   // reuses per the 6.4 lock). Skipped when NULL.
@@ -298,38 +296,13 @@ function WaitingForNextRoastView({
             </div>
           )}
 
-          {/* Drop Rules — inline amber .ssp-inset (grid mode) inside the
-              hypothesis card per the v2 artboard. Only renders when at least
-              one recipe has a rule. Per scope doc § 5.5 drop rules are
-              roast-side signals to watch during execution. */}
-          {dropRules && (
-            <div className="ssp-inset">
-              <div className="inset-hd">Drop Rules · {vLabel}</div>
-              <div
-                className="inset-grid"
-                style={{ ['--cols' as string]: dropRules.cols.length } as CSSProperties}
-              >
-                <div />
-                {dropRules.cols.map((c, i) => (
-                  <div className="col-hd" key={i}>
-                    {c}
-                  </div>
-                ))}
-                {dropRules.rows.map((row) => (
-                  <Fragment key={row.label}>
-                    <div className="row-lbl">
-                      {row.label}
-                      <small>{row.sub}</small>
-                    </div>
-                    {row.cells.map((cell, ci) => (
-                      <div className="cell" key={ci}>
-                        {cell}
-                      </div>
-                    ))}
-                  </Fragment>
-                ))}
-              </div>
-            </div>
+          {/* Drop Rules — amber .ssp-inset (grid mode) inside the hypothesis
+              card per the v2 artboard, via the shared DropRulesCard primitive
+              (passes a V-labelled title). Only renders when at least one recipe
+              has a rule. Per scope doc § 5.5 drop rules are roast-side signals
+              to watch during execution. */}
+          {showDropRules && (
+            <DropRulesCard recipes={recipesForLatest} title={`Drop Rules · ${vLabel}`} />
           )}
         </div>
       ) : (
@@ -601,29 +574,6 @@ function buildHypothesisData(recipes: RoastRecipe[]): { cols: { label: string }[
   return { cols, rows }
 }
 
-// Drop Rules grid for the amber .ssp-inset (grid mode) inside the Roast
-// Hypothesis card. 2 rows (running fast / slow) × N batches. The auto-hide
-// guard (at least one recipe has a rule) lives at the call site.
-function buildDropRulesGrid(recipes: RoastRecipe[]): {
-  cols: string[]
-  rows: { label: string; sub: string; cells: React.ReactNode[] }[]
-} {
-  const cols = recipes.map((r) => r.batch_slot ?? r.recipe_name ?? '?')
-  const rows = [
-    {
-      label: 'If running fast',
-      sub: 'hits end before exp. total',
-      cells: recipes.map((r) => r.drop_rule_if_fast ?? '—'),
-    },
-    {
-      label: 'If running slow',
-      sub: 'past exp. total no end hit',
-      cells: recipes.map((r) => r.drop_rule_if_slow ?? '—'),
-    },
-  ]
-  return { cols, rows }
-}
-
 // ---------------------------------------------------------------------------
 // Sub Pages 6.4 — Waiting-for-next-cupping view
 //
@@ -872,17 +822,12 @@ function WaitingForNextCuppingView({
                 </div>
               )}
               {cup.refSignals.length > 0 && (
-                <div className="ssp-inset cup">
-                  <div className="inset-hd">Reference Signals for the Cupping Table</div>
-                  <div className="inset-stack">
-                    {cup.refSignals.map((p) => (
-                      <div className="pair" key={p.k}>
-                        <div className="k">{p.k}</div>
-                        <div className="v">{p.v}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <SspInset
+                  mode="stack"
+                  tone="cup"
+                  title="Reference Signals for the Cupping Table"
+                  pairs={cup.refSignals}
+                />
               )}
             </div>
             {actualsCard('Achieved vs design intent')}
@@ -2349,40 +2294,48 @@ function UnresolvedView({
 // ---------------------------------------------------------------------------
 
 function InventoryPlaceholder({ bean }: { bean: any }) {
+  const metaPairs = [
+    { label: 'Producer', value: bean.producer ?? '—' },
+    { label: 'Origin', value: bean.origin ?? bean.terroir?.country ?? '—' },
+    { label: 'Variety', value: bean.variety ?? bean.cultivar?.cultivar_name ?? '—' },
+  ]
+  const pills = [
+    <StatusPill key="state" label="In Inventory" tone="archive" />,
+    ...(bean.process ? [<Chip key="proc" name={bean.process} tone="green" />] : []),
+  ]
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="ssp-page">
       <Link
         href="/green"
-        className="font-mono text-xs text-latent-mid hover:text-latent-fg mb-6 inline-block"
+        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
       >
         ← Back to Green Beans
       </Link>
 
-      <div className="flex gap-6 mb-8">
-        <div className="w-20 h-20 bg-latent-accent rounded-md flex-shrink-0" />
-        <div>
-          <h1 className="font-sans text-2xl font-semibold mb-2">
-            🌱 {bean.name || bean.lot_id}
-          </h1>
-          {bean.lot_id && (
-            <div className="font-mono text-xs text-latent-mid mb-1">
-              Lot: {bean.lot_id}
-            </div>
-          )}
-          <div className="font-mono text-sm text-latent-mid">
-            {composeLotMeta(bean)}
-          </div>
+      {/* Grey (inventory) cover per the v2 tile palette (--tile-inventory). */}
+      <SspTopBar
+        brewId={bean.lot_id ?? undefined}
+        roaster="IN INVENTORY"
+        kind="Green Lot"
+      />
+      <SspNamePlate
+        title={bean.name || bean.lot_id}
+        coverColor="#B4B4AE"
+        edgeColor="#B4B4AE"
+        meta={metaPairs}
+        pills={pills}
+      />
+
+      <div className="ssp-card">
+        <SspShead ct="Awaiting first V-set">In Inventory</SspShead>
+        <div className="font-sans text-sm leading-relaxed text-latent-mid">
+          This lot is in inventory — no experiments designed yet. Design V1 in
+          claude.ai via push_experiment + push_roast_recipe to surface the
+          waiting-for-next-roast view here. The /green index intentionally hides
+          in-inventory lots; this page is only reachable via direct URL.
         </div>
       </div>
-
-      <SectionCard title="IN INVENTORY">
-        <div className="font-sans text-sm leading-relaxed text-latent-mid italic">
-          This lot is in inventory — no experiments designed yet. Design V1 in claude.ai
-          via push_experiment + push_roast_recipe to surface the waiting-for-next-roast
-          view here. The /green index intentionally hides in-inventory lots; this page
-          is only reachable via direct URL.
-        </div>
-      </SectionCard>
 
       <GreenBeanInfoCard bean={bean} />
     </div>

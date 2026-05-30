@@ -1,4 +1,5 @@
 import { CollapsibleSection } from '@/components/CollapsibleSection'
+import { SspProseRows } from '@/components/Ssp'
 import { SLOT_LETTERS, type PriorExperimentShape } from '@/lib/lifecycle-state'
 
 // Reads V_(n-1)'s observed_outcome_* slots — the CURRENT experiment's are
@@ -20,19 +21,14 @@ export function CrossBatchNotesBlock({ priorExp }: Props) {
   if (rows.length === 0) return null
 
   const label = priorExp.experiment_id
-    ? `CROSS-BATCH NOTES · ${priorExp.experiment_id}`
-    : 'CROSS-BATCH NOTES · V_(n-1)'
+    ? `Cross-Batch Notes · ${priorExp.experiment_id}`
+    : 'Cross-Batch Notes · V_(n-1)'
 
   return (
-    <CollapsibleSection title={`${label} (${rows.length} populated)`}>
-      <div className="space-y-4 font-sans text-sm leading-relaxed">
-        {rows.map((row) => (
-          <div key={row.slot}>
-            <div className="label">{row.slot.toUpperCase()}</div>
-            {row.value}
-          </div>
-        ))}
-      </div>
+    <CollapsibleSection title={label} ct={`${rows.length} populated`}>
+      <SspProseRows
+        rows={rows.map((row) => ({ label: row.slot.toUpperCase(), value: row.value }))}
+      />
     </CollapsibleSection>
   )
 }

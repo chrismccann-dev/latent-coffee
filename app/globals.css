@@ -577,3 +577,81 @@ body {
 .ssp-predstack { display: flex; flex-direction: column; gap: 14px; }
 .ssp-predstack .pred-slot { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 6px; }
 .ssp-predstack .ssp-twopane { margin: 0; }
+
+/* ============================================================
+   Stage-3 lot detail · resolved + archive chrome (Redesign Sprint 4)
+   Ported verbatim from the v2 artboard (`Latent - Sub Page System
+   v1.html`) for the green shared-components re-skin + remaining
+   lifecycle shapes (seam closure). Container-query only (no @media).
+   ============================================================ */
+
+/* state-archive corner — the 2px stripe + accent-dot ship already (Sprint 0);
+   this is the one missing selector so the gray corner badge matches the other
+   3 state cards. */
+.ssp-card.state-archive .ssp-corner { color: #4a4a45; border-color: var(--archive-emphasis-br); background: var(--archive-emphasis-bg); }
+
+/* Italic producer / external citation (resolved/leading Reference Cup footer). */
+.ssp-cite { font-family: var(--sans); font-style: italic; color: var(--mid); font-size: 12.5px; line-height: 1.55; padding: 8px 0 0; margin-top: 6px; border-top: 1px dashed var(--hairline); text-wrap: pretty; }
+
+/* Paper KV strip on a state card (reference-roast Design / Achieved specs).
+   2-col → 3-col at 640px. Rendered as two labelled strips (Design + Achieved)
+   per the preserved 6.5 IA, so border math runs per-grid. */
+.ssp-card .ssp-roastspec { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); background: #fff; margin: 6px 0 0; }
+.ssp-card .ssp-roastspec .c { padding: 9px 12px; border-right: 1px solid var(--hairline); border-top: 1px solid var(--hairline); }
+.ssp-card .ssp-roastspec .c:nth-child(-n+2) { border-top: 0; }
+.ssp-card .ssp-roastspec .c:nth-child(2n) { border-right: 0; }
+.ssp-card .ssp-roastspec .c b { display: block; font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 3px; }
+.ssp-card .ssp-roastspec .c span { font-family: var(--mono); font-size: 12px; color: var(--fg); font-weight: 500; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+@container ssppage (min-width: 640px) {
+  .ssp-card .ssp-roastspec { grid-template-columns: repeat(3, 1fr); }
+  .ssp-card .ssp-roastspec .c { border-top: 0; border-right: 1px solid var(--hairline); }
+  .ssp-card .ssp-roastspec .c:nth-child(2n) { border-right: 1px solid var(--hairline); }
+  .ssp-card .ssp-roastspec .c:nth-child(3n) { border-right: 0; }
+  .ssp-card .ssp-roastspec .c:last-child { border-right: 0; }
+}
+
+/* 3-up named-lever insight cards (Primary lever / Roast window / Brewing
+   tolerance). 1-col → 3-col at 640px. `.hd` short headline optional. */
+.ssp-insights { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 4px 0 14px; }
+.ssp-insights .card { background: var(--roast-emphasis-bg); border: 1px solid var(--roast-emphasis-br); padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; }
+.ssp-insights .card .lbl { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--roast-emphasis); font-weight: 600; }
+.ssp-insights .card .hd { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--fg); letter-spacing: -0.005em; line-height: 1.25; }
+.ssp-insights .card .body { font-family: var(--sans); font-size: 12.5px; line-height: 1.55; color: var(--fg); text-wrap: pretty; }
+@container ssppage (min-width: 640px) { .ssp-insights { grid-template-columns: repeat(3, 1fr); } }
+
+/* Pair-rows inside a state card body (signals / what didn't matter). */
+.ssp-pair-rows { display: flex; flex-direction: column; }
+.ssp-pair-rows .row { padding: 10px 0; border-top: 1px dashed var(--hairline); }
+.ssp-pair-rows .row:first-child { border-top: 0; padding-top: 0; }
+.ssp-pair-rows .row .hd { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--fg); margin-bottom: 3px; }
+.ssp-pair-rows .row .body { font-family: var(--sans); font-size: 12.5px; line-height: 1.6; color: var(--fg); text-wrap: pretty; }
+.ssp-pair-rows .row .body b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; font-weight: 600; }
+
+/* Carry-Forward Learnings — dark block with scope-tagged named rows. */
+.ssp-learnings { background: #0E0E0E; color: #F4F4F1; padding: 20px 22px; }
+.ssp-learnings .hd { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,244,241,0.65); font-weight: 600; margin-bottom: 14px; }
+.ssp-learnings .hd::before { content: ""; display: inline-block; width: 14px; height: 1px; background: rgba(244,244,241,0.45); }
+.ssp-learnings .hd .ct { margin-left: auto; font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; color: rgba(244,244,241,0.4); font-weight: 400; }
+.ssp-learnings .intro { font-family: var(--sans); font-size: 12.5px; line-height: 1.65; color: rgba(244,244,241,0.75); margin: 0 0 16px; text-wrap: pretty; }
+.ssp-learnings .row { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 14px 0; border-top: 1px solid rgba(244,244,241,0.12); text-wrap: pretty; }
+.ssp-learnings .row:first-child { border-top: 0; padding-top: 2px; }
+.ssp-learnings .row:last-child { padding-bottom: 2px; }
+.ssp-learnings .row .row-hd { display: flex; flex-direction: column; gap: 6px; }
+.ssp-learnings .row .row-hd .lbl { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #F4F4F1; font-weight: 600; }
+.ssp-learnings .row .scope { display: flex; flex-wrap: wrap; gap: 4px; }
+.ssp-learnings .row .scope .tag { font-family: var(--mono); font-size: 9px; color: rgba(244,244,241,0.7); background: rgba(244,244,241,0.06); border: 1px solid rgba(244,244,241,0.18); padding: 2px 7px; letter-spacing: 0.04em; line-height: 1.5; }
+.ssp-learnings .row p { font-family: var(--sans); font-size: 13px; line-height: 1.65; color: #F4F4F1; margin: 0; text-wrap: pretty; }
+@container ssppage (min-width: 640px) { .ssp-learnings .row { grid-template-columns: 220px 1fr; gap: 26px; align-items: start; } }
+
+/* Roast log — dense mono table (shared RoastLogTable, all 5 lifecycle views). */
+.ssp-log-wrap { overflow-x: auto; background: #fff; border: 1px solid var(--border); }
+.ssp-log { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; background: #fff; min-width: 560px; }
+.ssp-log thead th { padding: 9px 10px; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); font-weight: 600; text-align: left; border-bottom: 1px solid var(--border); background: var(--paper); white-space: nowrap; }
+.ssp-log tbody td { padding: 8px 10px; border-bottom: 1px solid var(--hairline); color: var(--fg); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; white-space: nowrap; }
+.ssp-log tbody tr:last-child td { border-bottom: 0; }
+.ssp-log tbody td.muted { color: var(--subtle); }
+.ssp-log tbody td:first-child { font-weight: 600; }
+.ssp-log tbody tr.winner td { background: var(--resolved-emphasis-bg); }
+.ssp-log tbody tr.winner td:first-child { color: #2c4a35; }
+.ssp-log a { color: var(--mid); text-decoration: none; }
+.ssp-log a:hover { color: var(--fg); }

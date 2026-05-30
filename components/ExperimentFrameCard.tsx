@@ -1,4 +1,4 @@
-import { SectionCard } from '@/components/SectionCard'
+import { SspShead, SspProseRows } from '@/components/Ssp'
 
 // skipControlBaseline lets the cupping view hide the field because it's
 // already surfaced inside <ReferenceSignalsCard> as "Anchor cup".
@@ -47,17 +47,15 @@ export function ExperimentFrameCard({
   if (visible.length === 0) return null
 
   const body = (
-    <div className="space-y-4 font-sans text-sm leading-relaxed">
-      {visible.map((row) => (
-        <div key={row.label}>
-          <div className="label">{row.label}</div>
-          {row.value}
-        </div>
-      ))}
-    </div>
+    <SspProseRows rows={visible.map((row) => ({ label: row.label, value: row.value }))} />
   )
 
   if (bare) return body
 
-  return <SectionCard title={title}>{body}</SectionCard>
+  return (
+    <div className="ssp-card">
+      <SspShead>{title}</SspShead>
+      {body}
+    </div>
+  )
 }
