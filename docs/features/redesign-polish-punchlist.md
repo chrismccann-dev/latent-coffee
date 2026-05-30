@@ -16,11 +16,17 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
 
 ### Next-up sequencing (Chris-locked 2026-05-30)
 
-The four open buckets — `data-model` · `data-audit` · `naming` · `side-quest` MB-6 — can be
-taken in **any order**; Chris has no preference. Then a **product roadmap review / brainstorm**
-is the explicit capstone *after all four ship* (what comes next once polish + these buckets are
-done). The deferred **/producers · /experiments · homepage** trio is NOT the next thing — it
-stays parked behind the roadmap review.
+The four open buckets run **ONE PER SESSION, SEQUENTIALLY, in this fixed order** (Chris-locked
+2026-05-30, refined from "any order"):
+
+1. **`data-audit`** ← next up
+2. **`naming`**
+3. **`data-model`** (pour-structure)
+4. **`side-quest` MB-6**
+
+Each session ends by writing the kickoff brief for the next. Then a **product roadmap review /
+brainstorm** is the explicit capstone *after all four ship*. The deferred **/producers ·
+/experiments · homepage** trio is NOT the next thing — it stays parked behind the roadmap review.
 
 - **`data-model` pour-structure bug kickoff:** Chris will do a **full audio readout** of several
   recipes — deliberately spanning **complex and simplistic** pour structures — to kick it off
