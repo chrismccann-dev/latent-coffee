@@ -4,6 +4,32 @@ Source: Chris's "New Design Feedback - Latent" doc (2026-05-30), desktop pass at
 + "Mobile - New Design Feedback" doc (2026-05-30), mobile pass at 390. Mobile section captured
 below — desktop items all still hold on mobile (Chris did not re-list them).
 
+## STATUS — both polish PRs SHIPPED (2026-05-30)
+
+- **PR1** — [#317](https://github.com/chrismccann-dev/latent-coffee/pull/317), main `b197574`:
+  T-A tick scale · T-B corner badge · T-C collapsible alignment · BI-1 brew-card heights ·
+  MB-1 mobile roaster popover · CI-1 cultivar tree spline.
+- **PR2** — [#318](https://github.com/chrismccann-dev/latent-coffee/pull/318), main `8c9cbe4`:
+  WC-2 cupping reshape (+ WC-1/WC-2b/WC-3/WC-5) · WR-2 anchor label.
+- **STILL OPEN (separate sessions, NOT started):** `naming` · `data-audit` · `data-model`
+  (pour-structure bug — highest-priority functional follow-up) · `side-quest` MB-6. See the
+  "Punt" list under FINAL batching below.
+
+### Retro (what surprised us / what we'd carry forward)
+- **The single biggest lesson: capture-first paid off enormously.** WC-2 looked like a 2-row
+  swap from the written note; Chris's *audio* recount of two live cuppings revealed it was a
+  full reshape (mobile-is-the-target, demote taste-for + primary-question, batch numbers in
+  labels). Had we implemented off the written note we'd have built the wrong thing. Audio on
+  interpretive UI work is load-bearing — ask for it.
+- **Stale `preview_logs` bit twice.** A mid-edit JSX parse error stays in the dev-server stderr
+  buffer after the fix; `preview_logs --level error` showed a PR1 error during PR2. Confirm
+  staleness by actually fetching the route (200 + expected content) rather than trusting the log.
+- **The worktree `--delete-branch` "error" on merge is benign** — `gh pr merge` tries to check
+  out main, which the sibling worktree holds; the squash-merge itself succeeds. Don't chase it.
+- **Eval double-toggle.** Driving disclosure/popover state via repeated `preview_eval` clicks
+  races itself (each call re-toggles). Drive with single clicks + check state between, or do the
+  whole open-sequence in one eval.
+
 Capture-first review session. No app edits until the punch-list is complete (desktop + mobile)
 and the batching is approved. Several items are open decisions or belong to separate sessions
 (data audits / data-model / naming) — flagged inline.
