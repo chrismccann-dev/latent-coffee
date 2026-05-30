@@ -707,6 +707,22 @@ body {
 .grl-row.dense .tile { width: 24px; height: 24px; }
 .grl-row.dense .name { font-size: 13px; font-weight: 500; }
 
+/* /brews book-cover card — colored face (identity + flavor) + warm-paper foot
+   (producer / region / roaster). The paper foot is the v2 structural change
+   (Redesign Sprint 6 PR3); the grid wrapper stays Tailwind-responsive
+   (1→2→3→4→5 cols) rather than v2's fixed 4-col. */
+.brew-card { background: #fff; display: flex; flex-direction: column; min-height: 200px; height: 100%; cursor: pointer; text-decoration: none; transition: transform 0.12s, box-shadow 0.12s; }
+.brew-card:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -10px rgba(0,0,0,0.16); }
+.brew-card .face { padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 4px; color: #F4F4F1; flex: 1; position: relative; }
+.brew-card .pill-tr { position: absolute; top: 10px; right: 10px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; padding: 3px 7px; background: rgba(255,255,255,0.92); color: #0E0E0E; line-height: 1; }
+.brew-card .variety { font-family: var(--mono); font-size: 18px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.15; margin-top: 18px; text-wrap: pretty; }
+.brew-card .process { font-family: var(--mono); font-size: 11px; color: rgba(244,244,241,0.78); margin-top: 2px; }
+.brew-card .flav { font-family: var(--mono); font-size: 11px; color: rgba(244,244,241,0.92); margin-top: auto; padding-top: 18px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.brew-card .who { padding: 10px 14px 12px; background: var(--paper); border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 1px; }
+.brew-card .who .producer { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--fg); }
+.brew-card .who .where { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; color: var(--mid); }
+.brew-card .who .roaster { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.04em; color: var(--mid); margin-top: 2px; }
+
 /* /green lifecycle section header — flat list, not the card grid */
 .lot-stage { display: flex; align-items: baseline; justify-content: space-between; padding: 28px 0 12px; margin-top: 10px; border-bottom: 1px solid var(--hairline); margin-bottom: 6px; gap: 12px; }
 .lot-stage:first-child { padding-top: 0; margin-top: 0; }
