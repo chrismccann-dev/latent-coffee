@@ -195,9 +195,10 @@ function buildCardData(bean: GreenBeanIndexRow, state: LifecycleState): GreenCar
   const bestRoastId = learnings?.best_roast_id ?? null
 
   // Authoritative reference batch: best_roast_id → roasts.batch_id. The
-  // free-text roast_learnings.best_batch_id field has drifted (e.g. CGLE Sudan
-  // Rume Natural's best_batch_id says "185" but the actual reference roast is
-  // batch 187), so the FK-derived value wins; best_batch_id is the fallback.
+  // free-text roast_learnings.best_batch_id field has historically drifted
+  // (CGLE Sudan Rume Natural's best_batch_id once said "185" while its actual
+  // reference roast was batch 187 — since corrected in the data), so the
+  // FK-derived value wins; best_batch_id is the fallback.
   const refRoast = bestRoastId ? bean.roasts?.find((r) => r.id === bestRoastId) : null
   const batchNum =
     extractBatchNumber(refRoast?.batch_id) ?? extractBatchNumber(learnings?.best_batch_id)

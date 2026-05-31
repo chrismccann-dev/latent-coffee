@@ -355,10 +355,17 @@ lifecycle state** rather than flattened with experiment-frame payload — the re
 - **Six-actor:** render-layer only — Actor 6 (UI: GreenCard + page + CSS) + Actor 5 (docs:
   CLAUDE.md § Green Index, this block, shipped.md). Actors 1-4 no-op (no MCP / prompt / schema /
   claude.ai changes).
-- **Flagged + spun off (out of scope):** two resolved lots — Higuito + GUA Libertad — both surface
-  `#185`. Either real per-lot batch numbering or pre-existing `best_batch_id` drift on the GUA lot;
-  NOT an MB-6 regression (the old flat list showed `best_batch_id` directly too). Spun off for a
-  data check.
+- **Flagged + spun off → ✅ INVESTIGATED 2026-05-31, NOT A DATA BUG.** The flag was "Higuito +
+  GUA Libertad both surface `#185`." DB check across all 9 closed lots: every lot's FK-derived
+  reference batch (`best_roast_id → roasts.batch_id`) agrees with its `best_batch_id`, and every
+  reference batch number is globally unique. Higuito = **185** (correct, sole owner of batch 185
+  globally); GUA Libertad = **94** (its roasts run 33→94, no batch 185 exists in the lot). No
+  collision, no drift, no patch. The real "second #185" lot was **CGLE Sudan Rume Natural** —
+  whose `best_batch_id` historically read "185" (per the code comment) but has since been corrected
+  to **187**; the old flat list reading `best_batch_id` directly showed both as #185. GUA Libertad
+  was a mis-ID in the original flag. Cleanup: refreshed the now-stale "drifted to 185" code comment
+  in [green/page.tsx](../../app/(app)/green/page.tsx) to past tense ("once said 185 … since
+  corrected").
 - **Verified:** tsc clean (symlink trick) + `npm run build` green; previewed `/green` @1024
   (3 columns) + 390 (1 tile). DOM-inspected all 14 cards via `preview_eval` across the 4 lifecycle
   sections — pills (`V2`/`ONE-SHOT`/`V3`/`#187`/`#133`/`#179`), identity vs flavor bottom lines,
