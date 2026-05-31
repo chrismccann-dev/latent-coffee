@@ -40,6 +40,15 @@ const COVER_TITLE_MAP: Record<string, string> = {
   // Drop geographic / sub-variety parentheticals we don't track elsewhere.
   'gesha (panama lineage)': 'Gesha',
   'laurina (bourbon pointu)': 'Laurina',
+  // Gesha variants — Geisha (spelling), Green-Tip / 1931 (phenotypic + regional
+  // markers, not separate cultivars per the registry) all collapse to Gesha.
+  geisha: 'Gesha',
+  'green-tip gesha': 'Gesha',
+  'gesha 1931': 'Gesha',
+  // JARC prefix is provenance, not part of the canonical selection number.
+  'jarc 74158': '74158',
+  // Field blend -> convention shape.
+  'sidra bourbon': 'Sidra, Bourbon (Blend)',
 }
 
 /**

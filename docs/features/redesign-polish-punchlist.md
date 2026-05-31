@@ -156,10 +156,11 @@ capture-first brief); autonomy applied only after each was signed off.
   Supabase Editor. Recommended deleting the **earlier** write (`15c67c4a`), keeping `b27afe61`:
   `DELETE FROM brews WHERE id = '15c67c4a-9bd1-4181-be52-2cd074ac2e8c';`
 - **Apply migration 073** in the Supabase SQL Editor.
-- **Unflagged cover lookalikes** (present but NOT in Chris's list — left untouched, surfaced for a
-  call): `Geisha` ×2 (Daterra, Aliyah Shah — alias of Gesha), `Green-Tip Gesha` (Janson),
-  `Gesha 1931` ×2 (Rachel Samuel/Adam Overton), `JARC 74158` (Tamiru), `Sidra Bourbon` (Julio
-  César Madrid — possible blend). Want any of these normalized? Easy add to the override map.
+- **Unflagged cover lookalikes — ✅ FIXED** (Chris approved all 6 in-thread, follow-up commit):
+  `Geisha` ×2 / `Green-Tip Gesha` / `Gesha 1931` ×2 → `Gesha`; `JARC 74158` → `74158`;
+  `Sidra Bourbon` → `Sidra, Bourbon (Blend)`. All added to the `displayVariety` override map.
+- **Migration 073 + duplicate-brew DELETE — ✅ DONE** by Chris in the Supabase SQL Editor
+  ("Success. No rows returned" on both).
 
 **Six-actor audit (canonical rename):** Actor 6 registry+migration ✓ · Actor 5 varieties.md +
 this doc ✓ · Actor 4 `read_canonical(cultivars)` serves the registry (no Tool-schema change;
@@ -186,7 +187,9 @@ brainstorm** is the explicit capstone *after all ship*. The deferred **/producer
 NEW bucket added 2026-05-30. Three "make it cleaner, mostly by *removing* things" areas, all
 **page-local polish, no data work**. **Chris will paste the full specifics into the dedicated
 cleanup session thread itself** (deliberately not captured here, to keep context clean) — treat
-those pasted comments as the spec. High-level areas only:
+those pasted comments as the spec. **Paste-ready kickoff brief:
+[cleanup-session-kickoff-2026-05-30.md](../sprints/cleanup-session-kickoff-2026-05-30.md).**
+High-level areas only:
 
 1. **`/brews` card heights** — cards still loading at inconsistent heights. This was **BI-1**,
    marked shipped in PR1 (#317) via `components/BrewCard.tsx` equal-height work — so this is a
