@@ -11,8 +11,99 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
   MB-1 mobile roaster popover · CI-1 cultivar tree spline.
 - **PR2** — [#318](https://github.com/chrismccann-dev/latent-coffee/pull/318), main `8c9cbe4`:
   WC-2 cupping reshape (+ WC-1/WC-2b/WC-3/WC-5) · WR-2 anchor label.
-- **STILL OPEN (separate sessions, NOT started):** `naming` · `data-audit` · `data-model`
+- **STILL OPEN (separate sessions):** `naming` ← **NEXT** · `data-model`
   (pour-structure bug) · `side-quest` MB-6. See the "Punt" list under FINAL batching below.
+- **`data-audit` — ✅ SHIPPED 2026-05-30** (session 1 of 4). See "Data-audit session outcomes" immediately below.
+
+## Data-audit session outcomes (2026-05-30, session 1 of 4)
+
+- **GI-1 (5 unresolved lots) — ✅ FIXED via MCP.** Root cause was uniform: each of Higuito /
+  CGLE Sudan Rume Natural / GV Oma 25/035 / GUA Libertad / GUA El Socorro had a *complete*
+  `roast_learnings` row with a flagged reference roast (`best_roast_id` set + the `roasts` row
+  `is_reference=true`) and all takeaway prose — but `why_this_roast_won` was NULL, and
+  `computeLifecycleState` keys resolved-vs-unresolved solely on that field. Not a code bug; a
+  data gap. Drafted verdicts from each lot's own winning-experiment prose, Chris approved all 5,
+  patched `why_this_roast_won` via `patch_roast_learnings`. All 5 now render Resolved
+  (Batch #185 / #187 / #52 / #94 / #88). Higuito confirmed genuinely resolved (has an optimized
+  drinking brew, correctly FK-linked).
+- **BS-1 Ruarai missing producer — ✅ FIXED.** `patch_brew(producer="Ruarai Factory (Ruthaka FCS)")`
+  from Chris's full CSV row. Also canonicalized: added the `ProducerEntry` to
+  `lib/producer-registry.ts` (registry now 121) + `docs/taxonomies/producers.md`, normalized to
+  the existing Kenya-entry convention (producerSystem null; macro "Central Kenyan Volcanic
+  Highlands"). `patch_brew` override persists verbatim (no queue row); the name resolves canonical
+  once this PR deploys.
+- **MB-5 Bourbon skeleton — ⏳ MIGRATION WRITTEN, NEEDS APPLY.** Bourbon's `cultivars` row had
+  all 18 reference fields NULL because the row was auto-created *after* migration 022 (which
+  backfilled the 26 rows existing on 2026-04-22). `varieties.md` already carries the full authored
+  `### Bourbon` block. Wrote `supabase/migrations/072_bourbon_cultivar_content_backfill.sql`
+  (mirrors 022's column set). **ACTION REQUIRED: Chris applies 072 via the Supabase SQL Editor** —
+  no MCP path exists for cultivar content. Until applied, the page stays skeleton.
+- **BI-2 Heritage variety — ⏸ DEFERRED to `naming` (session 2).** Confirmed: "Heritage Collection"
+  is a Finca Sophia *product-line* name, not a cultivar, and the brew (`06672cbf`) is wrongly
+  FK-linked to **Gesha** while Chris's own notes say it's a Bourbon/Typica/Caturra heritage field
+  blend. The correct fix needs the blend-naming convention being decided in the naming bucket, so
+  it lands there (not this session).
+
+### New roadmap items surfaced (for the post-bucket roadmap-review capstone)
+
+- **Systemic cultivar-skeleton gap.** Bourbon is the visible tip: **5 more cultivar rows with
+  brews are also skeletons** for the same post-022 reason — **Mokka · Wush Wush · SL28 · Khun Lao
+  · Mandela**. All 6 have authored `### {name}` content in `docs/taxonomies/varieties.md`. Only
+  Bourbon fixed this session (Chris scoped it to Bourbon-only). Candidate: a one-shot backfill
+  migration covering all post-022 skeletons + (longer-term) an MCP write path for cultivar content
+  so auto-created rows self-heal.
+- **"Attach resolved brew to lot" affordance.** The FK linkage exists (`brews.green_bean_id` +
+  `roast_id`) but there's no explicit UI/workflow way to *designate* "this brew IS the lot's
+  reference drinking brew." Chris flagged confusion risk about which end-brew belongs to a lot.
+- *(Out of scope, flagged only)* Finca Sophia Heritage brew lists producer "Wilton Benitez"
+  (Colombia/Granja Paraíso) on a Panama Finca Sophia lot — possible mis-attribution; not touched.
+
+### NAMING SESSION (session 2 of 4) — kickoff brief
+
+**THIS IS A NORMAL EXECUTION SESSION, but it is heavily interpretive (label/abbreviation
+conventions are Chris-taste calls). Default to capture-first + AskUserQuestion on every convention
+decision; the autonomy rule applies only AFTER Chris signs off on each convention.**
+
+- **Goal:** the `naming` bucket — index/cover title abbreviations, the standard blend-naming
+  convention, and filter-label shortening — plus the deferred Heritage variety fix that depends on
+  the blend convention.
+- **Scope (in):**
+  - **BI-2 abbreviation cleanup** (brew-cover titles): the full list is under "## Brew Index" →
+    BI-2 (e.g. "Dark Room Dried"→DRD, "El Placer (Farm)"→"El Placer", "Generic Honey"→"Honey",
+    "Ethiopian Landrace Population"→"Ethiopian Landrace", numbered-blend trims, "Gesha Panama
+    lineage Washed"→"Gesha", etc.). Keep the "…" overflow handling.
+  - **Blend-naming convention** (broader than the index): decide the canonical shape for field
+    blends ("Bourbon Caturra blend", "Red Bourbon, Mibirizi blend", "Ethiopian landraces blend").
+    This is the gating decision for the Heritage fix.
+  - **BS-1 filter-label shortening** (`naming` sub-items of BS-1): "CAFEC Abaca+ Cup 1 Cone Paper
+    Filter"→"CAFEC Abaca+ Cone"; "CAFEC T-92 - Cup 4 Light Roast Paper Filter"→"CAFEC T-92".
+    These live in `lib/filter-registry.ts` (canonical + displayName/aliases).
+  - **Heritage variety fix (carried from data-audit):** brew `06672cbf` — once the blend
+    convention is set, repoint the cultivar off Gesha to the correct heritage-blend canonical and
+    fix the `variety` text. Likely a cultivar-registry 2-step edit + a `patch_brew`. Note: blend
+    cultivars are net-new canonicals → cultivar-registry edit (no `cultivar_override` flag exists),
+    and per migration 022 precedent, NEW cultivar rows need content backfilled too.
+  - **The "naming" decisions are partly registry edits** (filter displayName, cultivar blend
+    canonicals) and partly pure display-string logic (cover-title abbreviation). Separate the two:
+    registry edits propagate via the six-actor audit; cover abbreviation may be a render-layer
+    transform (where? likely `components/BrewCard.tsx` title composition) — confirm before editing.
+- **Scope (out):** pour-structure (that's `data-model`, session 3); MB-6 (session 4); the
+  systemic cultivar-skeleton backfill + attach-resolved-brew feature (roadmap capstone).
+- **Files likely to touch:** `lib/filter-registry.ts`, `lib/cultivar-registry.ts` +
+  `docs/taxonomies/varieties.md` (blend canonicals), `components/BrewCard.tsx` (cover-title
+  abbreviation if render-layer), possibly a small naming/abbreviation helper. `patch_brew` (MCP)
+  for the Heritage row; a content-backfill migration if a new blend cultivar row needs reference
+  fields.
+- **Verification:** preview at 1024 + 390 on `/brews` (cover titles) + the affected brew/filter
+  surfaces; `/simplify`; tsc via the symlink trick; squash-merge per autonomy once conventions are
+  signed off.
+- **Open questions for Chris (ask first):** exact blend-naming convention; which abbreviations are
+  acronyms (DRD) vs trims (drop "(Farm)"); whether cover-title shortening is render-layer or stored;
+  the Heritage blend's canonical name + whether to treat it as a single blend cultivar or pick a
+  lead variety.
+- **End the naming session by writing the session-3 (`data-model` / pour-structure) kickoff brief.**
+  Reminder: Chris will do a **full audio readout of several recipes** (complex + simplistic) to
+  kick off data-model — do NOT start the parser fix before that audio lands.
 
 ### Next-up sequencing (Chris-locked 2026-05-30)
 

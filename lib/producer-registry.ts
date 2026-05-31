@@ -83,7 +83,8 @@ export interface ProducerEntry {
 
 
 // ---------------------------------------------------------------------------
-// 120-entry registry (85 CSV #1 + 33 CSV #3 + Mama Cata + Miguel Estela skeleton)
+// 121-entry registry (85 CSV #1 + 33 CSV #3 + Mama Cata + Miguel Estela skeleton
+// + Ruarai Factory (Ruthaka FCS), added 2026-05-30 data-audit session)
 // ---------------------------------------------------------------------------
 
 export const PRODUCERS: readonly ProducerEntry[] = [
@@ -3966,6 +3967,40 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     contact: null,
     skeleton: true,
   },
+  {
+    // Added 2026-05-30 (data-audit session) — Sey "Ruarai AA Separation" brew
+    // had no producer. Chris supplied the full CSV row. Normalized to the
+    // existing Kenya-entry convention: producerSystem null (no Kenya
+    // ProducerSystem canonical) + macroTerroir "Central Kenyan Volcanic
+    // Highlands" (canonical macro; CSV said "Mount Kenya Highlands").
+    name: "Ruarai Factory (Ruthaka FCS)",
+    tier: 2,
+    producerSystem: null,
+    processingSystemTags: ["Classic East African Washed System"],
+    referenceRole: "Signal",
+    producerType: "Cooperative / Washing Station",
+    farmName: "Ruarai Factory",
+    country: "Kenya",
+    adminRegion: "Nyeri County",
+    macroTerroir: "Central Kenyan Volcanic Highlands",
+    farmingModel: "Smallholder Cooperative",
+    processingCapability: "Fully Washed",
+    processingStyleTags: ["Double Fermentation", "Clean Soak", "Density Sorting"],
+    dryingMethod: "Raised Bed",
+    primaryCultivars: ["SL28", "SL34"],
+    secondaryCultivars: ["Ruiru 11", "Batian"],
+    experimentalCultivars: [],
+    knownFor: ["Nyeri Washed Clarity", "Ruthaka FCS", "High-Density Smallholder Lots"],
+    typicalFlavorProfile: ["Red Fruit + Bright", "Citrus + Clean", "Floral + Tea"],
+    acidityStyle: "Citric / Malic",
+    bodyStyle: "Silky / Tea-like",
+    consistencyRating: "High",
+    marketTier: "High-End",
+    exporters: ["Ruthaka Farmers Cooperative Society"],
+    importers: ["Sucafina", "Vollers V-Hub"],
+    roasterReferences: ["Sey", "Ethica", "Moonwake", "Verve"],
+    contact: null,
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -4009,6 +4044,11 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   // convention - more farm-name aliases likely to follow.
   Higuito: "Nelsyn Hernández",
   "Nelsyn Hernández, Fátima Micromill (Higuito Farm)": "Nelsyn Hernández",
+  // Ruarai Factory short / farm-name forms (Nyeri washing station, Ruthaka
+  // FCS). Added 2026-05-30 data-audit session alongside the canonical entry.
+  Ruarai: "Ruarai Factory (Ruthaka FCS)",
+  "Ruarai Factory": "Ruarai Factory (Ruthaka FCS)",
+  "Ruarai AA": "Ruarai Factory (Ruthaka FCS)",
   "Carlos Morera": "Carlos Fernández Morera",
   "Carlos Morera, El Diamante": "Carlos Fernández Morera",
   "Carmen Estate": "Carlos Franceschi",
