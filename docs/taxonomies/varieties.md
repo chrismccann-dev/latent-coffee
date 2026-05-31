@@ -26,8 +26,8 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 - Typica lineage: Maragogype, Pache
 
 **Arabica — Bourbon Family**
-- Bourbon (classic): Aruzi, Bourbon, Mokka, Red Bourbon, Red Bourbon / Mibirizi blend
-- Bourbon mutation lineage: Bourbon / Caturra blend, Bourbon Aji, Caturra, Laurina, Pacas, Purple Caturra, Villa Sarchi
+- Bourbon (classic): Aruzi, Bourbon, Mokka, Red Bourbon, Red Bourbon, Mibirizi (Blend)
+- Bourbon mutation lineage: Bourbon, Caturra (Blend), Bourbon Aji, Caturra, Laurina, Pacas, Purple Caturra, Villa Sarchi
 
 **Arabica — Typica × Bourbon Crosses**
 - Maragogype × Caturra lineage: Maracaturra
@@ -46,6 +46,19 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 - Eugenioides: Eugenioides
 - Liberica: Liberica, Excelsa
 - Robusta: Robusta
+
+### Blend-naming convention (NAMING session, 2026-05-30)
+
+Field-blend cultivar canonicals follow the shape **`V1, V2 (Blend)`** — varieties
+comma-separated in planting-prominence order, capitalized `(Blend)` suffix. E.g.
+`Bourbon, Caturra (Blend)`, `Red Bourbon, Mibirizi (Blend)`,
+`Purple Caturra, Bourbon (Blend)`. Author net-new blend cultivars in this shape.
+The pre-2026-05-30 slash forms (`Bourbon / Caturra blend`) are kept as back-compat
+aliases in `lib/cultivar-registry.ts` so legacy paste-ins still resolve; migration
+073 renamed the two affected DB rows. Ethiopian-landrace JARC-number blends keep
+their detailed canonical (`Ethiopian Landrace Blend (74110/74112)`) for component
+fidelity and render as the short `Ethiopian Landrace (Blend)` on the /brews cover
+only (display layer in `lib/brew-cover-title.ts`).
 
 ---
 
@@ -1097,7 +1110,7 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 
 ---
 
-### Red Bourbon / Mibirizi blend
+### Red Bourbon, Mibirizi (Blend)
 
 **Species:** Arabica  **Genetic Family:** Bourbon Family  **Lineage:** Bourbon (classic)
 
@@ -1131,7 +1144,7 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts
 
 ---
 
-### Bourbon / Caturra blend
+### Bourbon, Caturra (Blend)
 
 **Species:** Arabica  **Genetic Family:** Bourbon Family  **Lineage:** Bourbon mutation lineage
 

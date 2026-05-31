@@ -96,10 +96,10 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   { name: 'Bourbon', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon (classic)' },
   { name: 'Mokka', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon (classic)' },
   { name: 'Red Bourbon', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon (classic)' },
-  { name: 'Red Bourbon / Mibirizi blend', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon (classic)' },
+  { name: 'Red Bourbon, Mibirizi (Blend)', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon (classic)' },
 
   // Bourbon Family — Bourbon mutation lineage
-  { name: 'Bourbon / Caturra blend', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon mutation lineage' },
+  { name: 'Bourbon, Caturra (Blend)', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon mutation lineage' },
   { name: 'Bourbon Aji', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon mutation lineage' },
   { name: 'Caturra', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon mutation lineage' },
   { name: 'Laurina', species: 'Arabica', family: 'Bourbon Family', lineage: 'Bourbon mutation lineage' },
@@ -284,6 +284,14 @@ export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
   // canonicalized as "74110/74112". Now split: 74110 and 74112 are separate
   // canonicals for pure-lot cases; mixed lots use the blend form.
   '74110/74112': 'Ethiopian Landrace Blend (74110/74112)',
+
+  // Blend-naming convention (NAMING session, 2026-05-30, migration 073) —
+  // field-blend canonicals renamed to the `V1, V2 (Blend)` shape. Old slash
+  // forms keep resolving so legacy paste-ins / stale claude.ai payloads land.
+  'Bourbon / Caturra blend': 'Bourbon, Caturra (Blend)',
+  'Bourbon Caturra blend': 'Bourbon, Caturra (Blend)',
+  'Red Bourbon / Mibirizi blend': 'Red Bourbon, Mibirizi (Blend)',
+  'Red Bourbon Mibirizi blend': 'Red Bourbon, Mibirizi (Blend)',
 }
 
 // ---------------------------------------------------------------------------

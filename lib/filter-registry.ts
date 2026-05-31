@@ -148,6 +148,7 @@ export const FILTERS: readonly FilterEntry[] = [
   },
   {
     name: "CAFEC T-92 - Cup 4 Light Roast Paper Filter",
+    displayName: "CAFEC T-92",
     manufacturer: "Cafec",
     sku: "LC4-100W",
     link: "https://cafecusa.com/collections/filter-papers/products/cafec-pour-over",
@@ -236,6 +237,7 @@ export const FILTERS: readonly FilterEntry[] = [
   },
   {
     name: "CAFEC Abaca+ Cup 1 Cone Paper Filter",
+    displayName: "CAFEC Abaca+ Cone",
     manufacturer: "Cafec",
     sku: "APC1-100W",
     link: "https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-abaca-cup-1-cone-paper-filter-v60-01-ac1-100w",
