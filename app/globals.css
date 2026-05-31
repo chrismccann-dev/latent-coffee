@@ -705,14 +705,21 @@ body {
    column + small family swatch + node-kind-weighted name + the shared 5-block
    count bar. Species/family/lineage are non-link rows; cultivar leaves link. */
 .cultivar-tree { display: flex; flex-direction: column; }
-.cultivar-tree .tree-row { display: grid; grid-template-columns: auto auto 1fr 36px 70px; gap: 10px; align-items: center; padding: 3px 0; text-decoration: none; }
+/* Leaf (cultivar) rows carry the full grid: connector + swatch + name + count +
+   bar. Branch rows (species/family/lineage) drop the swatch + count + bar
+   columns entirely — just connector + name flush against the spine (cleanup
+   session 2026-05-30). Sizes nudged up ~1px so the spine reads at a weight
+   closer to the other index pages. */
+.cultivar-tree .tree-row { display: grid; grid-template-columns: auto auto 1fr 36px 70px; gap: 10px; align-items: center; padding: 4px 0; text-decoration: none; }
 .cultivar-tree a.tree-row:hover { background: var(--paper); }
-.cultivar-tree .conn { font-family: var(--mono); font-size: 12px; line-height: 1; color: var(--border); white-space: pre; letter-spacing: 0; }
-.cultivar-tree .sw { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
-/* Species rows are the only swatch-less rows — drop the swatch column. */
-.cultivar-tree .tree-row.species { grid-template-columns: auto 1fr 36px 70px; }
-.cultivar-tree .name { font-family: var(--mono); font-size: 12px; color: var(--fg); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cultivar-tree .name.species { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); font-weight: 600; }
+.cultivar-tree .conn { font-family: var(--mono); font-size: 13px; line-height: 1; color: var(--border); white-space: pre; letter-spacing: 0; }
+.cultivar-tree .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+/* Branch rows are connector + name only — no swatch, no count dial. */
+.cultivar-tree .tree-row.species,
+.cultivar-tree .tree-row.family,
+.cultivar-tree .tree-row.lineage { grid-template-columns: auto 1fr; }
+.cultivar-tree .name { font-family: var(--mono); font-size: 13px; color: var(--fg); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cultivar-tree .name.species { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); font-weight: 600; }
 .cultivar-tree .name.family { font-weight: 600; letter-spacing: 0.04em; }
 .cultivar-tree .name.lineage { color: var(--mid); }
 .cultivar-tree .name.cultivar { color: var(--fg); }
@@ -726,10 +733,13 @@ body {
    (producer / region / roaster). The paper foot is the v2 structural change
    (Redesign Sprint 6 PR3); the grid wrapper stays Tailwind-responsive
    (1→2→3→4→5 cols) rather than v2's fixed 4-col. */
-/* min-height 248 = the tallest natural card today; with .face flex:1 + a
-   min-height on .who, every card lands at the same total height across the whole
-   grid (not just per row) and shorter cards just gain cover negative space — the
-   consistent-height + "negative space is fine" call (Chris-locked 2026-05-30). */
+/* Equal-height grid (BI-1 residual, cleanup session 2026-05-30): the grid
+   wrapper carries auto-rows-fr so every ROW matches the tallest row, and .who
+   below has a FIXED height so the face/foot seam sits at one vertical position
+   on every card. Together: all cards identical height across the whole grid,
+   colored covers uniform, longer producer info sizes the whole grid up rather
+   than stretching one card. Shorter cards gain cover negative space — the
+   "negative space is fine" call (Chris-locked 2026-05-30). */
 .brew-card { background: #fff; display: flex; flex-direction: column; min-height: 248px; height: 100%; cursor: pointer; text-decoration: none; transition: transform 0.12s, box-shadow 0.12s; }
 .brew-card:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -10px rgba(0,0,0,0.16); }
 .brew-card .face { padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 4px; color: #F4F4F1; flex: 1; position: relative; }
@@ -737,11 +747,12 @@ body {
 .brew-card .variety { font-family: var(--mono); font-size: 18px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.15; margin-top: 18px; text-wrap: pretty; }
 .brew-card .process { font-family: var(--mono); font-size: 11px; color: rgba(244,244,241,0.78); margin-top: 2px; }
 .brew-card .flav { font-family: var(--mono); font-size: 11px; color: rgba(244,244,241,0.92); margin-top: auto; padding-top: 18px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-/* min-height holds the foot at the 2-line-producer height so the face/foot split
-   line is consistent across cards (1-line producers gain a little foot padding
-   rather than raising the split). justify-content:center keeps the short case
-   visually centered in that reserved space. */
-.brew-card .who { padding: 10px 14px 12px; background: var(--paper); border-top: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; gap: 1px; min-height: 74px; }
+/* Fixed height (not min-height) holds the foot at the 2-line-producer height so
+   the face/foot split line is identical across EVERY card — a 2-line producer no
+   longer grows the foot and shifts the seam. 1-line producers gain a little foot
+   padding rather than raising the split; justify-content:center keeps the short
+   case visually centered in that reserved space. */
+.brew-card .who { padding: 10px 14px 12px; background: var(--paper); border-top: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; gap: 1px; height: 86px; }
 .brew-card .who .producer { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--fg); }
 .brew-card .who .where { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; color: var(--mid); }
 .brew-card .who .roaster { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.04em; color: var(--mid); margin-top: 2px; }

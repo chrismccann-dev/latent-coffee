@@ -122,48 +122,43 @@ export default async function CultivarsPage() {
   )
 
   // Flatten the tree into rows with box-drawing connectors. Branch nodes
-  // (species/family/lineage) carry an aggregate brew count; cultivar leaves keep
-  // their own count + a link (per-cultivar navigation is the index's whole job,
-  // so leaves stay individually clickable rather than collapsing to one ·-line).
+  // (species/family/lineage) render as connector + label only — no swatch, no
+  // count dial (cleanup session 2026-05-30) — so they carry no color/count.
+  // Cultivar leaves keep their own count + swatch + a link (per-cultivar
+  // navigation is the index's whole job, so leaves stay individually clickable).
   const treeRows: TreeRow[] = []
   speciesGroups.forEach((sp, si) => {
     const spLast = si === speciesGroups.length - 1
-    const spCount = sp.familyGroups.reduce(
-      (n, f) => n + f.lineageGroups.reduce((m, l) => m + l.leaves.reduce((k, leaf) => k + leaf.brewCount, 0), 0),
-      0,
-    )
     treeRows.push({
       key: `s:${sp.species}`,
       prefix: treePrefix([], spLast),
       kind: 'species',
       label: sp.species,
       color: null,
-      count: spCount,
+      count: 0,
       href: null,
     })
     sp.familyGroups.forEach((fam, fi) => {
       const famLast = fi === sp.familyGroups.length - 1
       const famColor = getFamilyColor(fam.family)
-      const famCount = fam.lineageGroups.reduce((m, l) => m + l.leaves.reduce((k, leaf) => k + leaf.brewCount, 0), 0)
       treeRows.push({
         key: `f:${sp.species}:${fam.family}`,
         prefix: treePrefix([!spLast], famLast),
         kind: 'family',
         label: fam.family,
-        color: famColor,
-        count: famCount,
+        color: null,
+        count: 0,
         href: null,
       })
       fam.lineageGroups.forEach((lin, li) => {
         const linLast = li === fam.lineageGroups.length - 1
-        const linCount = lin.leaves.reduce((k, leaf) => k + leaf.brewCount, 0)
         treeRows.push({
           key: `l:${sp.species}:${fam.family}:${lin.lineage}`,
           prefix: treePrefix([!spLast, !famLast], linLast),
           kind: 'lineage',
           label: lin.lineage,
-          color: famColor,
-          count: linCount,
+          color: null,
+          count: 0,
           href: null,
         })
         lin.leaves.forEach((leaf, ci) => {
@@ -197,17 +192,26 @@ export default async function CultivarsPage() {
         <div className="cultivar-tree">
           <GrlCap label="CULTIVARS" count={totalCoffees} />
           {treeRows.map((row) => {
+            // Only cultivar leaves (the clickable rows) carry the swatch + count
+            // + 5-block dial. Branch rows (species / family / lineage) render just
+            // the spine connector + label — dropping their swatch and count dial
+            // declutters the tree (Chris, cleanup session 2026-05-30).
+            const isLeaf = row.kind === 'cultivar'
             const inner = (
               <>
                 <span className="conn" aria-hidden>{row.prefix}</span>
-                {row.color ? <span className="sw" style={{ background: row.color }} /> : null}
+                {isLeaf && row.color ? <span className="sw" style={{ background: row.color }} /> : null}
                 <span className={`name ${row.kind}`}>{row.label}</span>
-                <span className="cnt">{row.count}</span>
-                <span className="bar">
-                  {barBlocks(row.count).map((on, i) => (
-                    <i key={i} className={on ? 'on' : undefined} />
-                  ))}
-                </span>
+                {isLeaf ? (
+                  <>
+                    <span className="cnt">{row.count}</span>
+                    <span className="bar">
+                      {barBlocks(row.count).map((on, i) => (
+                        <i key={i} className={on ? 'on' : undefined} />
+                      ))}
+                    </span>
+                  </>
+                ) : null}
               </>
             )
             return row.href ? (
