@@ -396,6 +396,24 @@ The full forward-looking work surface, structured by readiness + scope. Per-spri
 
 **Last reorder:** 2026-05-26 (roadmap re-session — closes Sprint R Option 1 sequence; Sprints 3.4 / 3.6 / 3.7 killed; restructured into Writing-path + Read-path surface polish series + Brainstorms-to-schedule + Filter drawdown research closeout; Longer Term Items reordered per Chris audio). Prior reorder 2026-05-25 (Sprint R restructured the queue around Option 1 — audit → architecture → re-session). Prior reorder 2026-05-08 (post-v8.5 sweep).
 
+### Capstone reprioritization (2026-05-31)
+
+Set by the capstone product-roadmap-review session (ran as a product brainstorm; kickoff brief `docs/sprints/product-roadmap-review-capstone-kickoff-2026-05-30.md`). This is the authoritative near-term ordering; the detailed per-item content lives in the subsections below (Longer Term Items / Future Directions / Brainstorms to schedule). Two themes emerged:
+
+- **Cluster A — cross-domain lot↔brew scaffold.** Item 4 (cross-domain simulated-pour-over workflow + roast↔brew handoff) + MB-7 (attach reference brew) + roasted-variant-of-same-green modeling are ONE scaffold — the lot's web of linked brews (canonical reference brew / my other brews / peer-roasted variants) and keeping the roast↔brew loop intact across the claude.ai project boundary. Grill together; may split into multiple PRs. **Top of the board.**
+- **Cluster B — system-maintenance / anti-bloat layer.** Chris's insight: the Claude Code + Latent system side has had the least optimization, and nothing actively synthesizes/prunes/curates docs. Members: doc synthesis/pruning mechanism, doc-size tripwire review, operator review of CCIL/librarians, MCP continuous-feedback drain, codebase refactoring (new CC review/cleanup skills), feedback-handoff formalization. Interleave between builds.
+
+**Ordering:**
+1. **NOW** — Cluster A scaffold (after the resync grill, below).
+2. **NEXT** — (a) Predicted-vs-Actual roast delta surface (cycle-time leverage; higher value, less defined); (b) Coffee-brief / `roaster_tasting_notes` scoping.
+3. **Cluster B** — interleaved (grill-queue drain + doc-pruning mechanism + doc-size review + CCIL review + MCP feedback drain + codebase refactor + feedback-handoff formalization).
+4. **Side quests** (completionist, not gated) — surface trio (`/producers` · `/experiments` · homepage; homepage also seeds public-surface v1) · cultivar skeleton backfill (Chris authors content) + MCP cultivar-content path · experiments/cupping display polish on `/green/[id]` · auto-research surfacing on green upload · signature "what I learned" synthesis variant + **make XO a signature method** · data nits (#185 `best_batch_id` drift, `end_condition` backfill, green-helper dedup) · WBC champion corpus expansion · MEMORY.md consolidation (overdue).
+5. **North-star** — WBC-mastery feature-direction brainstorm (Latent level); rank highest once the major pieces are done.
+
+**Sequence locked:** this roadmap session → **(A) pure resync grill** (`docs/sprints/resync-grill-kickoff-2026-05-31.md` — drain grilling-queue 35-43 + doc-size check + XO-as-signature; resync glossary BEFORE the scaffold grill adds new terms) → Cluster A scaffold grill-to-spec → Cluster A build.
+
+**Stale-shipped entries to retire from the subsections below:** pour-structure schema migration (✅ migration 074) · RoR tracking fields (✅ migration 070) · filter-drawdown part 1 (✅) · recipe accelerator (✅ sub-skills) · cross-pollination pushing (✅ CCIL) · Research-Coordinator roadmap (✅) · coffee-brief-as-entity + producers-deep (folded into the items above).
+
 ### Active Sprints
 
 The current ranked queue of scoped, sized sprints in flight or next up.
