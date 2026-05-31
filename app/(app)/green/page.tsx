@@ -1,18 +1,25 @@
 import { createClient } from '@/lib/supabase/server'
 import { GreenBean } from '@/lib/types'
-import { IndexCap, LotStage, GrlRow } from '@/components/IndexList'
+import { IndexCap, LotStage } from '@/components/IndexList'
+import { GreenCard, type GreenCardData } from '@/components/GreenCard'
 import {
   computeLifecycleState,
   extractBatchNumber,
   lifecycleSectionTitle,
-  lifecycleStageLabel,
+  pickLatestExperiment,
   type LifecycleState,
 } from '@/lib/lifecycle-state'
 
-// Sub Pages 6.2 (2026-05-13). Replaces the flat card grid with 3 lifecycle-
-// state sections. State derived on read via computeLifecycleState (no stored
-// `status` column on green_beans). In-inventory lots are not surfaced — per
-// docs/roasting/redesign.md § 5.1 they wait for the eventual inventory page.
+// /green index — lifecycle-sectioned lot-card grid (side-quest MB-6,
+// 2026-05-30). Replaces the flat GrlRow list (Sub Pages 6.2) with a
+// BrewCard-style card grid, one grid per lifecycle section. Lifecycle sections
+// are preserved (Chris's MB-6 call: "yes lifecycles survive, that's one of the
+// most important things") — the v2 §04 lot-card grid that Redesign Sprint 6 PR1
+// rejected is now adopted, but grouped by state rather than flattened.
+//
+// State is derived per row on read via computeLifecycleState (no stored status
+// column). In-inventory lots are not surfaced — per docs/roasting/redesign.md
+// § 5.1 they wait for the eventual inventory page.
 //
 // Section order is the user's mental order (active work first, archive last):
 // 1. Waiting for next roast — design landed, roasts pending
@@ -21,13 +28,9 @@ import {
 // 4. Unresolved — closed without confirmed reference (we learned something
 //    but didn't reach a verdict). Sub-sprint 4a (2026-05-27).
 //
-// Row shape mirrors the scope-doc mockup: tile color + lot name + metadata
-// line + right-aligned stage label. The tile color signals state (sage =
-// active, near-black = resolved/roasted, gray = unresolved/incomplete) —
-// green-to-brown is a real hue shift representing green coffee → roasted
-// coffee; gray for unresolved signals "incomplete answer" without claiming
-// a verdict. All token choices fit the design-conventions "hue-not-lightness"
-// rule.
+// Card content is state-dependent (see GreenCard.tsx): active lots show
+// identity + lot code; resolved / unresolved lots show the reference/leading
+// brew's tasting notes + reference batch + the V-set/roast/cupping tally.
 
 const SECTION_ORDER: LifecycleState[] = [
   'waiting_for_next_roast',
@@ -36,9 +39,14 @@ const SECTION_ORDER: LifecycleState[] = [
   'unresolved',
 ]
 
+const ARCHIVE_STATES = new Set<LifecycleState>(['resolved', 'unresolved'])
+
 type GreenBeanIndexRow = GreenBean & {
+  // is_one_shot lives on the green_beans table but isn't in the GreenBean type.
+  is_one_shot: boolean | null
   experiments: Array<{
     id: string
+    experiment_id: string | null
     batch_ids: string | null
     winner: string | null
     created_at: string | null
@@ -54,24 +62,44 @@ type GreenBeanIndexRow = GreenBean & {
     best_roast_id: string | null
     why_this_roast_won: string | null
   }>
+  brews: Array<{
+    id: string
+    roast_id: string | null
+    flavor_notes: string[] | null
+    created_at: string | null
+  }>
+}
+
+// Lifecycle-tile gradient (Redesign Sprint 0, 2026-05-29): green-coffee →
+// roasted-coffee across the stages — sage (next-roast) → olive-bronze
+// (next-cupping) → roasted brown (resolved). Unresolved keeps neutral gray
+// (`--subtle`): it sits outside the green-brown axis to signal "no verdict"
+// distinctly from both active and confirmed lots. The card uses this as the
+// face background; light text reads cleanly on all four.
+const TILE_COLOR: Record<LifecycleState, string> = {
+  in_inventory: 'var(--tile-inventory)',
+  waiting_for_next_roast: 'var(--tile-next-roast)',
+  waiting_for_next_cupping: 'var(--tile-next-cupping)',
+  resolved: 'var(--tile-resolved)',
+  unresolved: 'var(--subtle)',
 }
 
 export default async function GreenBeansPage() {
   const supabase = createClient()
 
-  // Fetch shape covers everything computeLifecycleState reads + the resolved
-  // row's reference-batch label (from roast_learnings.best_batch_id).
-  // cuppings nested under roasts so the cupping-presence gate ties to its
-  // specific roast (matters when a batch_id matches the latest experiment but
-  // its cuppings haven't landed yet).
+  // Fetch shape covers computeLifecycleState's inputs + everything the card
+  // builder reads: experiment_id (V-set pill), roasts.batch_id (authoritative
+  // reference batch via best_roast_id), nested cuppings (tally + cupping gate),
+  // and brews (flavor line on archive cards, picked by roast_id = best_roast_id).
   const { data: greenBeans, error } = await supabase
     .from('green_beans')
     .select(
       `
       *,
-      experiments(id, batch_ids, winner, created_at),
+      experiments(id, experiment_id, batch_ids, winner, created_at),
       roasts(id, batch_id, cuppings(id)),
-      roast_learnings(id, best_batch_id, best_roast_id, why_this_roast_won)
+      roast_learnings(id, best_batch_id, best_roast_id, why_this_roast_won),
+      brews(id, roast_id, flavor_notes, created_at)
     `,
     )
     .order('created_at', { ascending: false })
@@ -83,7 +111,7 @@ export default async function GreenBeansPage() {
   const beans = (greenBeans || []) as GreenBeanIndexRow[]
 
   // Group by lifecycle state. In-inventory lots are computed but never
-  // rendered — the index intentionally surfaces only the 3 active states.
+  // rendered — the index intentionally surfaces only the 4 active states.
   const beansByState = new Map<LifecycleState, GreenBeanIndexRow[]>()
   for (const bean of beans) {
     const state = computeLifecycleState(bean)
@@ -99,7 +127,7 @@ export default async function GreenBeansPage() {
   )
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="max-w-6xl mx-auto px-6 py-8">
       <IndexCap left="GREEN" right={`${totalSurfaced} ${totalSurfaced === 1 ? 'LOT' : 'LOTS'}`} />
 
       {/* Empty state. Sub Pages 6.6 (2026-05-13) — claude.ai via the Latent
@@ -129,65 +157,134 @@ export default async function GreenBeansPage() {
 
 function LifecycleSection({ state, lots }: { state: LifecycleState; lots: GreenBeanIndexRow[] }) {
   const title = lifecycleSectionTitle(state)
-  // Right-column label: "Stage" for active sections, "Reference" for
-  // resolved, "Status" for unresolved (the lot has no reference to point at;
-  // the right column reads "Closed without reference" which is a status,
-  // not a stage). Scope doc § 5.1 keeps the label even though it's redundant
-  // with the section title — confirms the grouping at a glance.
-  const columnHeader =
-    state === 'resolved' ? 'Reference' : state === 'unresolved' ? 'Status' : 'Stage'
+  // Right-column label: "Stage" for active sections, "Reference" for the
+  // archive sections (resolved + unresolved) — matches Chris's MB-6 mock.
+  const columnHeader = ARCHIVE_STATES.has(state) ? 'Reference' : 'Stage'
 
   return (
-    <section>
+    <section className="mb-8">
       <LotStage
         title={title}
         summary={`${lots.length} ${lots.length === 1 ? 'lot' : 'lots'}`}
         rightLabel={columnHeader}
       />
-      <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 mt-3">
         {lots.map((bean) => (
-          <LifecycleRow key={bean.id} bean={bean} state={state} />
+          <GreenCard key={bean.id} lot={buildCardData(bean, state)} />
         ))}
       </div>
     </section>
   )
 }
 
-// Lifecycle-tile gradient (Redesign Sprint 0, 2026-05-29): green-coffee →
-// roasted-coffee across the stages — sage (next-roast) → olive-bronze
-// (next-cupping) → roasted brown (resolved, ratification #5). Unresolved
-// keeps neutral gray (`--subtle`): it sits outside the green-brown axis to
-// signal "no verdict" distinctly from both active and confirmed lots.
-const TILE_COLOR: Record<LifecycleState, string> = {
-  in_inventory: 'var(--tile-inventory)',
-  waiting_for_next_roast: 'var(--tile-next-roast)',
-  waiting_for_next_cupping: 'var(--tile-next-cupping)',
-  resolved: 'var(--tile-resolved)',
-  unresolved: 'var(--subtle)',
+// ---------------------------------------------------------------------------
+// Card data builder
+// ---------------------------------------------------------------------------
+
+// Build the presentational GreenCardData from a joined bean row + its computed
+// lifecycle state. Owns the FK joins + pick logic so GreenCard stays a dumb
+// renderer.
+//
+// NOTE: pickLatestExperiment is shared from lib/lifecycle-state.ts. formatVLabel
+// and pickRefBrew are kept local — the detail view (app/(app)/green/[id]/page.tsx)
+// has near-twins, but their contracts differ deliberately (detail's formatVLabel
+// returns "V?" on null to always render a label; here we return null to omit the
+// pill), so merging would change behavior.
+function buildCardData(bean: GreenBeanIndexRow, state: LifecycleState): GreenCardData {
+  const learnings = bean.roast_learnings?.[0]
+  const bestRoastId = learnings?.best_roast_id ?? null
+
+  // Authoritative reference batch: best_roast_id → roasts.batch_id. The
+  // free-text roast_learnings.best_batch_id field has drifted (e.g. CGLE Sudan
+  // Rume Natural's best_batch_id says "185" but the actual reference roast is
+  // batch 187), so the FK-derived value wins; best_batch_id is the fallback.
+  const refRoast = bestRoastId ? bean.roasts?.find((r) => r.id === bestRoastId) : null
+  const batchNum =
+    extractBatchNumber(refRoast?.batch_id) ?? extractBatchNumber(learnings?.best_batch_id)
+
+  const archive = ARCHIVE_STATES.has(state)
+
+  // --- Face pill ---
+  let pill: string | null = null
+  if (archive) {
+    pill = batchNum ? `#${batchNum}` : null
+  } else if (bean.is_one_shot) {
+    pill = 'ONE-SHOT'
+  } else {
+    const latestExp = pickLatestExperiment(bean.experiments ?? [])
+    pill = latestExp ? formatVLabel(latestExp.experiment_id) : null
+  }
+
+  // --- Face lines ---
+  const identityLine =
+    [bean.origin, bean.variety, bean.process].filter(Boolean).join(' · ') || null
+  const refBrew = pickRefBrew(bean.brews ?? [], bestRoastId)
+  const flavorLine =
+    refBrew?.flavor_notes && refBrew.flavor_notes.length > 0
+      ? refBrew.flavor_notes.slice(0, 6).join(' · ')
+      : null
+
+  // --- Foot ---
+  const lotCode = bean.lot_id ?? null
+  let referenceLabel: string | null = null
+  let summaryLine: string | null = null
+  if (state === 'resolved') {
+    referenceLabel = batchNum ? `Reference: Batch #${batchNum}` : null
+  } else if (state === 'unresolved') {
+    referenceLabel = batchNum ? `Leading Candidate: Batch #${batchNum}` : null
+  }
+  if (archive) {
+    summaryLine = bean.is_one_shot ? 'One-Shot Lot' : composeTally(bean)
+  }
+
+  return {
+    id: bean.id,
+    name: bean.name || bean.lot_id,
+    tileColor: TILE_COLOR[state],
+    state,
+    pill,
+    identityLine,
+    flavorLine,
+    lotCode,
+    referenceLabel,
+    summaryLine,
+  }
 }
 
-function LifecycleRow({ bean, state }: { bean: GreenBeanIndexRow; state: LifecycleState }) {
-  // best_batch_id is free text ("133" / "Batch 139" / "#94" / "Batch #25");
-  // extractBatchNumber strips the prefix so we don't double up "Batch #" on
-  // compose. Resolved-without-best_batch_id falls back to the generic
-  // "Reference" label from lifecycleStageLabel.
-  const learnings = bean.roast_learnings?.[0]
-  const stripped = extractBatchNumber(learnings?.best_batch_id)
-  const referenceLabel = stripped ? `Batch #${stripped}` : null
-  const stageLabel = lifecycleStageLabel(state, referenceLabel)
+// "5 V-Sets · 16 Roasts · 20 Cuppings". V-Sets = experiment count, Roasts =
+// roast-row count, Cuppings = cuppings nested under all roasts. Mirrors the
+// resolved detail page's tally.
+function composeTally(bean: GreenBeanIndexRow): string {
+  const nExp = bean.experiments?.length ?? 0
+  const nRoasts = bean.roasts?.length ?? 0
+  const nCuppings = (bean.roasts ?? []).reduce((sum, r) => sum + (r.cuppings?.length ?? 0), 0)
+  return [
+    `${nExp} ${nExp === 1 ? 'V-Set' : 'V-Sets'}`,
+    `${nRoasts} ${nRoasts === 1 ? 'Roast' : 'Roasts'}`,
+    `${nCuppings} ${nCuppings === 1 ? 'Cupping' : 'Cuppings'}`,
+  ].join(' · ')
+}
 
-  // Metadata line — origin · variety · process. Skips empties so pre-
-  // framework lots (e.g. Rancho Tio with no origin) don't render dangling
-  // separators.
-  const metaParts = [bean.origin, bean.variety, bean.process].filter(Boolean)
+// Parse the V-number out of an experiment_id ("...-V3" → "V3", "RANCHO-...-V1"
+// → "V1"). Mirrors the detail page's formatVLabel.
+function formatVLabel(experimentId: string | null | undefined): string | null {
+  if (!experimentId) return null
+  const match = experimentId.match(/[vV](\d+)(?!.*[vV]\d)/)
+  if (match) return `V${match[1]}`
+  return experimentId
+}
 
-  return (
-    <GrlRow
-      href={`/green/${bean.id}`}
-      tileColor={TILE_COLOR[state]}
-      name={bean.name || bean.lot_id}
-      meta={metaParts.length > 0 ? metaParts.join(' · ') : undefined}
-      right={stageLabel}
-    />
-  )
+// Reference/leading brew for the lot: prefer roast_id === bestRoastId (the
+// canonical reference-roast brew, even when the lot has several brews of other
+// batches), fall back to the first brew. Mirrors pickOptimizedBrew.
+function pickRefBrew(
+  brews: GreenBeanIndexRow['brews'],
+  bestRoastId: string | null,
+): GreenBeanIndexRow['brews'][number] | null {
+  if (brews.length === 0) return null
+  if (bestRoastId) {
+    const matched = brews.find((b) => b.roast_id === bestRoastId)
+    if (matched) return matched
+  }
+  return brews[0] ?? null
 }

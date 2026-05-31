@@ -11,8 +11,7 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
   MB-1 mobile roaster popover · CI-1 cultivar tree spline.
 - **PR2** — [#318](https://github.com/chrismccann-dev/latent-coffee/pull/318), main `8c9cbe4`:
   WC-2 cupping reshape (+ WC-1/WC-2b/WC-3/WC-5) · WR-2 anchor label.
-- **STILL OPEN (separate sessions):** `side-quest` MB-6 ← **NEXT (final bucket)**.
-  See the "Punt" list under FINAL batching below.
+- **`side-quest` MB-6 — ✅ SHIPPED 2026-05-30** (session 5 of 5, FINAL). See "MB-6 session outcomes" below. **All 5 buckets shipped — redesign-polish punch-list CLOSED.** Capstone next: product roadmap review / brainstorm.
 - **`data-audit` — ✅ SHIPPED 2026-05-30** (session 1 of 5). See "Data-audit session outcomes" immediately below.
 - **`naming` — ✅ SHIPPED 2026-05-30** (session 2 of 5). See "Naming session outcomes" below.
 - **`cleanup` — ✅ SHIPPED 2026-05-30** (session 3 of 5). See "Cleanup session outcomes" below.
@@ -178,7 +177,7 @@ The open buckets run **ONE PER SESSION, SEQUENTIALLY, in this fixed order** (Chr
 2. ~~**`naming`**~~ ✅ SHIPPED 2026-05-30 (see "Naming session outcomes" above)
 3. ~~**`cleanup`**~~ ✅ SHIPPED 2026-05-30 (see "Cleanup session outcomes" above)
 4. ~~**`data-model`** (pour-structure)~~ ✅ SHIPPED 2026-05-30 (migration 074; see "Data-model session outcomes" below)
-5. **`side-quest` MB-6** ← next up (final bucket)
+5. ~~**`side-quest` MB-6**~~ ✅ SHIPPED 2026-05-30 (green index card grid; see "MB-6 session outcomes"). **Sequence complete — punch-list CLOSED.**
 
 Each session ends by writing the kickoff brief for the next. Then a **product roadmap review /
 brainstorm** is the explicit capstone *after all ship*. The deferred **/producers ·
@@ -314,6 +313,72 @@ signed off via AskUserQuestion *before* any file edit; autonomy applied only to 
   (don't-overcomplicate + line-readable + kills the parse-ambiguity class). When the user's own
   brainstorm over-specifies, the move is still to grill it down to what the render + a real query
   actually need.
+
+### MB-6 session outcomes (2026-05-30, session 5 of 5 — FINAL)
+
+Shipped in one PR. **Capture-first** — did NOT design the card cold; built to Chris's mock + his
+answers (lifecycle sections survive · mobile collapses to 1 tile · grid-cols my call). The v2 §04
+lot-card grid that Redesign Sprint 6 PR1 deliberately rejected is now adopted, but **grouped by
+lifecycle state** rather than flattened with experiment-frame payload — the rejection's concern
+(experiment payload on the face) was avoided.
+
+- **What shipped:** new `components/GreenCard.tsx` (presentational, state-dependent face/foot) +
+  a `buildCardData(bean, state)` builder + `composeTally`/`formatVLabel`/`pickRefBrew` helpers in
+  `app/(app)/green/page.tsx` + `.green-card` in `globals.css`. Page widened `max-w-3xl` →
+  `max-w-6xl`; each lifecycle section renders a `grid-cols-1 sm:2 lg:3 gap-2.5` card grid under
+  its `<LotStage>` header (sections + headers preserved).
+- **Card face (per state):** big mono lot name + top-right pill (active: `V2`/`V3` via
+  `formatVLabel(latest experiment)` or `ONE-SHOT` when `is_one_shot`; archive: reference batch
+  `#187`) + a bottom line — `origin · variety · process` on active lots, the reference/leading
+  brew's flavor notes on archive lots. Face bg = the per-state `--tile-*` color.
+- **Card foot:** lot code (`lot_id`) on active lots; `Reference: Batch #N` /
+  `Leading Candidate: Batch #N` + `N V-Sets · N Roasts · N Cuppings` (or `One-Shot Lot`) on
+  archive lots.
+- **No schema work.** The reference/leading brew was already reachable end-to-end:
+  `best_roast_id` → the brew with `roast_id = best_roast_id` (`pickRefBrew`, mirroring the resolved
+  detail page's `pickOptimizedBrew`). The multi-brew-per-lot case Chris raised (a lot can have
+  several brews; only the reference-roast brew is canonical) is handled by the FK-match-first pick
+  — confirmed on CGLE Sudan Rume Natural. The broader "explicitly designate the lot's reference
+  drinking brew" affordance stays the parked **MB-7 / attach-resolved-brew** roadmap item.
+- **Correctness win:** the reference batch derives from `best_roast_id → roasts.batch_id`
+  (authoritative) with `best_batch_id` fallback, fixing the stale free-text `best_batch_id` the
+  old flat `<GrlRow>` list rendered directly (CGLE Sudan Rume Natural showed #185; the real
+  reference roast is batch 187, `is_reference=true`). No regression: lots whose `best_roast_id` is
+  null fall back to `best_batch_id` exactly as the old list did.
+- **`/simplify` (4-agent pass):** banked the `pickLatestExperiment` lib-export reuse (manual
+  pre-pass; Reuse agent confirmed correct). Skipped, with reason: `pickRefBrew`/`getReferenceBatch`
+  extraction + `.green-card`/`.brew-card` base class — the actual dedup targets are twins in the
+  2000-line detail page + `BrewCard` (outside the reviewed diff); extraction without rewiring those
+  is a lateral move. `formatVLabel` kept local (detail returns `V?` on null, index returns null —
+  different contracts). `ARCHIVE_STATES`/`isArchive` inline + `composeTally` single-pass — agents
+  judged current form clearer / negligible.
+- **Six-actor:** render-layer only — Actor 6 (UI: GreenCard + page + CSS) + Actor 5 (docs:
+  CLAUDE.md § Green Index, this block, shipped.md). Actors 1-4 no-op (no MCP / prompt / schema /
+  claude.ai changes).
+- **Flagged + spun off (out of scope):** two resolved lots — Higuito + GUA Libertad — both surface
+  `#185`. Either real per-lot batch numbering or pre-existing `best_batch_id` drift on the GUA lot;
+  NOT an MB-6 regression (the old flat list showed `best_batch_id` directly too). Spun off for a
+  data check.
+- **Verified:** tsc clean (symlink trick) + `npm run build` green; previewed `/green` @1024
+  (3 columns) + 390 (1 tile). DOM-inspected all 14 cards via `preview_eval` across the 4 lifecycle
+  sections — pills (`V2`/`ONE-SHOT`/`V3`/`#187`/`#133`/`#179`), identity vs flavor bottom lines,
+  active vs archive feet, and the #187 fix all confirmed; brew `723984cc`'s `flavor_notes` matched
+  the mock exactly.
+
+**Retro (what surprised us / carry forward):**
+- **Capture-first held again.** The brief framed MB-6 as a "card-treatment tweak"; Chris's mock
+  revealed it's a full `/green` migration with *state-dependent* card content (active = identity +
+  lot code; archive = flavor notes + reference batch + V-set tally) — a different build than a
+  uniform card. Designing cold would have produced a flat brew-card clone that didn't fit a green
+  lot's data model.
+- **The redesign already had the data path; the card just surfaced it.** No schema work was needed
+  because the resolved detail page (`pickOptimizedBrew`) had already proven the `best_roast_id` →
+  brew linkage. The card reused that exact pattern. Worth checking the detail page first whenever
+  an index wants to surface a relationship the detail view already renders.
+- **The #185/#187 drift was caught by deriving from the FK, not the text field.** Building the card
+  off `best_roast_id → roasts.batch_id` (rather than copying the old list's `best_batch_id` read)
+  surfaced that the free-text field had drifted on at least one lot — a correctness improvement that
+  fell out of choosing the authoritative source.
 
 ## Legend
 
@@ -549,10 +614,11 @@ Chris's mobile pass was light. Desktop items all still apply on mobile; these ar
   flagged it here) — [Bourbon](https://www.latentcoffee.com/cultivars/ddfce7fc-4595-41f9-9ee4-a788af8a792b)
   renders as a skeleton/empty page but should have full data. → folds into the `data-audit`
   bucket alongside GI-1.
-- **MB-6 · Green index mobile = brew-card treatment** (`side-quest`, optional) — Chris likes the
-  brew index card look on mobile and wonders about giving `/green` a similar card grid instead of
-  the flat lifecycle list. He'll mock it up; explicitly **"optional design sprint in side quests,
-  not critical."** → roadmap side quest, not this round.
+- **MB-6 · Green index mobile = brew-card treatment** (`side-quest`) — ✅ **SHIPPED 2026-05-30.**
+  `/green` migrated to a BrewCard-style lifecycle-sectioned card grid (Chris mocked the shape; the
+  card-cold design was deliberately NOT attempted before the mock landed). The open question —
+  does the lifecycle-list IA survive inside cards? — resolved **yes**: the 4 lifecycle sections
+  are preserved, cards grouped under each. See "MB-6 session outcomes" above.
 
 ---
 
