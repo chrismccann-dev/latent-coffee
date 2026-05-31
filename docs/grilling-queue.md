@@ -122,6 +122,18 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Grade:** OBSERVING (watch the Anoxic brew count; no action until N≥3)
     - **Source:** [docs/sprints/sub-sprint-4f-processes-polish-complementary-pass-2026-05-28.md](sprints/sub-sprint-4f-processes-polish-complementary-pass-2026-05-28.md) § Anoxic
 
+### From the redesign arc (Sprints 1-6 + polish buckets, 2026-05-29 → 05-30)
+
+42. **Per-surface mobile pattern → ADR candidate** — Redesign Sprints 1-4 locked a real responsive convention but it lives only as CLAUDE.md § Design-conventions prose: use `order-*` reordering (single tree) where mobile is a *resequence* of the same blocks; use a CSS container-query dual-subtree (`.s2-desktop`/`.s2-mobile`, both in the DOM, revealed at the **520px crossover** on `.ssp-page`'s content-box) where mobile needs a genuinely different *composition* (e.g. the cupping transposed-table → slot-cards recomposition in Sprint 2). Both are no-`@media`. The pattern was applied consistently across the green views but never formalized as a decision record, so the next surface re-derives it. Candidate: an ADR capturing the two-pattern rule + the 390/1024 two-point model + the "container queries not @media" infra choice, so future per-surface work picks the right pattern by lookup.
+    - **Grade:** READY (the convention is lived + stable across 4 sprints; just needs an ADR + a CONTEXT/CLAUDE pointer)
+    - **Source:** Redesign Sprints 1-4 (2026-05-29); CLAUDE.md § Design conventions "per-surface mobile pattern rule" + ratification #3
+    - **Suggested landing:** new ADR (per-surface mobile pattern) + a one-line CONTEXT pointer; CLAUDE.md § Design-conventions already carries the prose, so this is formalize-don't-author
+
+43. **Detail-view hero-tile reconciliation** — CLAUDE.md flags an explicit unreconciled loose end: the `--tile-*` lifecycle gradient (used by the `/green` index + the MB-6 green cards: sage `next-roast` / olive-bronze `next-cupping` / roasted-brown `resolved` / grey `unresolved`) vs the per-surface emphasis **hero tiles** on the green detail views (cupping = lavender `#7A6E9E` cup-emphasis, waiting-roast = amber `#A88037` roast-emphasis). The detail-view hero tiles "still use the old bindings — they reconcile in the green per-surface sprint" (CLAUDE.md § Design conventions, lifecycle-tile gradient note). Grill decides: reconcile the detail hero tiles onto the lifecycle gradient (consistency), OR bless the divergence (the per-surface emphasis colors are doing a different semantic job than the index state-gradient — arguably correct to differ). Small either way.
+    - **Grade:** READY (decision + possibly a small green touch-up; no new infra)
+    - **Source:** Redesign Sprints 2-3 (per-surface tile reconciliation deferred) + CLAUDE.md § Design conventions lifecycle-tile-gradient note
+    - **Suggested landing:** grill decision → either a small green-detail tile sprint (reconcile) or a CONTEXT/CLAUDE note blessing the divergence (close the open flag)
+
 ## Substrate pruning candidates
 
 Lived examples of substrate sections that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred until 2-3-4 lived candidates are worked through operator + Claude Code back-and-forth (case-study-driven generalization per Chris's framing at Item 16c grill). This section accumulates candidates; each becomes a worked example. Once ≥2 candidates have been resolved, a pruning sprint scopes the generalized rule.
