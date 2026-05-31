@@ -415,6 +415,11 @@ export interface Brew {
   temp_c: number | null
   bloom: string | null
   pour_structure: string | null
+  // data-model session (migration 074, 2026-05-30 / BS-1): structured pour
+  // steps. Canonical forward shape; /brews/[id] renders this when present,
+  // else falls back to parsing legacy bloom + pour_structure. NULL = legacy
+  // row not yet re-pushed structured. See lib/pour-structure.ts PourStep.
+  pours: import('./pour-structure').PourStep[] | null
   // Sub-sprint 4c Bundle A (migration 071, 2026-05-28): free-text water formula
   // / source ("Third Wave Water Light Roast ~1:3 concentrate:distilled", "office
   // tap"). No canonical registry today; renders as a labeled line under the

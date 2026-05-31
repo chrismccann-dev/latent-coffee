@@ -11,11 +11,12 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
   MB-1 mobile roaster popover · CI-1 cultivar tree spline.
 - **PR2** — [#318](https://github.com/chrismccann-dev/latent-coffee/pull/318), main `8c9cbe4`:
   WC-2 cupping reshape (+ WC-1/WC-2b/WC-3/WC-5) · WR-2 anchor label.
-- **STILL OPEN (separate sessions):** `data-model` (pour-structure bug) ← **NEXT** ·
-  `side-quest` MB-6. See the "Punt" list under FINAL batching below.
+- **STILL OPEN (separate sessions):** `side-quest` MB-6 ← **NEXT (final bucket)**.
+  See the "Punt" list under FINAL batching below.
 - **`data-audit` — ✅ SHIPPED 2026-05-30** (session 1 of 5). See "Data-audit session outcomes" immediately below.
 - **`naming` — ✅ SHIPPED 2026-05-30** (session 2 of 5). See "Naming session outcomes" below.
 - **`cleanup` — ✅ SHIPPED 2026-05-30** (session 3 of 5). See "Cleanup session outcomes" below.
+- **`data-model` (pour-structure) — ✅ SHIPPED 2026-05-30** (session 4 of 5). See "Data-model session outcomes" below.
 
 ## Data-audit session outcomes (2026-05-30, session 1 of 5)
 
@@ -176,8 +177,8 @@ The open buckets run **ONE PER SESSION, SEQUENTIALLY, in this fixed order** (Chr
 1. ~~**`data-audit`**~~ ✅ SHIPPED 2026-05-30 (PR #322; see "Data-audit session outcomes" above)
 2. ~~**`naming`**~~ ✅ SHIPPED 2026-05-30 (see "Naming session outcomes" above)
 3. ~~**`cleanup`**~~ ✅ SHIPPED 2026-05-30 (see "Cleanup session outcomes" above)
-4. **`data-model`** (pour-structure) ← next up
-5. **`side-quest` MB-6**
+4. ~~**`data-model`** (pour-structure)~~ ✅ SHIPPED 2026-05-30 (migration 074; see "Data-model session outcomes" below)
+5. **`side-quest` MB-6** ← next up (final bucket)
 
 Each session ends by writing the kickoff brief for the next. Then a **product roadmap review /
 brainstorm** is the explicit capstone *after all ship*. The deferred **/producers ·
@@ -257,6 +258,63 @@ Capture-first review session. No app edits until the punch-list is complete (des
 and the batching is approved. Several items are open decisions or belong to separate sessions
 (data audits / data-model / naming) — flagged inline.
 
+### Data-model session outcomes (2026-05-30, session 4 of 5)
+
+Shipped in one PR. Spec/grilling first, build second — opened with Chris's full audio readout of
+his real bench flow + 7 claude.ai recipe cards + 3 raw DB rows, so the storage-shape call was made
+against the real range (capture-first, the WC-2 pattern). The shape was an interpretive call Chris
+signed off via AskUserQuestion *before* any file edit; autonomy applied only to the build after.
+
+- **BS-1 pour-structure — ✅ FIXED via structured `brews.pours` jsonb (migration 074).** Root cause
+  was a missing **write contract**, not a parser bug: claude.ai wrote a different free-text format
+  every brew (`;`-delimited clean / prose paragraph / "Phase N" / "Steep N"), so the parser was
+  chasing an uncontracted writer — plus the page double-counted bloom (prepended `brew.bloom` AND
+  the `pour_structure` text restating it). The 3 raw rows proved each failure mode: Apricoast +
+  Ruarai double-bloom, Ruarai "manual lever-staged immersion" meta + "no Melodrip…" footer leaking
+  as pours, El Placer 2-phase collapsing to 1.
+- **Storage call (Chris-locked):** **B-light + Hybrid.** Structured `pours` array forward (claude.ai
+  writes via `push_brew`); parser kept as read-fallback for legacy NULL-`pours` rows; hand-backfill
+  only the 6 BS-1 brews + lock-reference recipes (no lossy mass-parse). Rejected: Option A
+  (parser-only — the evidence killed it) and B-heavy (the brainstorm md's nested
+  valve.transition/drain/pattern/agitation objects — Chris's "way too overkill").
+- **`PourStep` shape:** six flat keys, no nesting — `{type:"bloom"|"pour", at, to_g?, pour_s?,
+  hold_s?, valve?, detail?}`. bloom index 0 (kills double-bloom); `at` required (kills `·`); only
+  typed steps render (meta/footer → `strategy_notes`); valve transitions / drain-reclose / kettle
+  stance = prose in `detail`, NOT typed (the (a)-(d) grilling-queue Item 39 calls, all resolved
+  toward lean); valve = free-text + SWORKS vocab, not a strict enum.
+- **Verified:** all 6 BS-1 brews render correctly @1024 + 390 via a seeded render proof (structured
+  branch + `pourTimelineRows`), legacy fallback unbroken, tsc clean, console clean. The 6 backfill
+  `pours` arrays are built + ready as `patch_brew` payloads.
+- **Six-actor:** A6 migration 074 + `lib/types.ts` + render seam ✓ · A4 `push_brew`/`patch_brew`
+  Zod + descriptions + `brews.ts` RECENT_SELECT + `cleanPours` in persist/patch ✓ · A2
+  `bundled-brewing-completion.md` § "Pour structure" write contract + close-lot / one-shot-closeout
+  pointers ✓ · A3 catalog refresh on next claude.ai session (post-deploy) · A5 CLAUDE.md § Brews
+  (superseded the "don't change the storage shape" note) + SWORKS bullet + grilling-queue Item 39
+  closed ✓ · A1 rendered recipes read right ✓. Drained **grilling-queue Item 39**.
+- **⚠ Handed to Chris (not auto-done):** **apply migration 074** in the Supabase SQL Editor (072/073
+  precedent), then the 6-brew `pours` backfill runs via `patch_brew` post-deploy (it needs the
+  column + deployed Tool schema). The structured render then lights up on real data.
+- **Deferred:** the `total_time` 4:15-vs-real-~3:15 mismatch Chris flagged on Ruarai is a per-brew
+  data point, not schema — left untouched (changing recorded tasting data isn't this sprint's call).
+  CONTEXT-brewing `Pour step` glossary term waits for the next grill (CONTEXT grows grilling-first).
+
+**Retro (what surprised us / carry forward):**
+- **Capture-first earned its keep again, exactly as predicted.** The written punch-list framed BS-1
+  as "the parser is buggy." The audio + the 7 cards reframed it as "there is no write contract" —
+  a different fix entirely (the lever is the *writer*, not the *reader*). Pulling the 3 raw rows
+  turned that into proof: the parser was working as designed against input it could never win.
+- **The worktree/prod boundary makes "verify the fix on real data" a post-deploy step.** The dev
+  server reads prod Supabase, which won't have the `pours` column until Chris applies 074, and
+  `patch_brew` can't write `pours` until the code deploys — so in-session verification is a seeded
+  render proof, and the real-data backfill is gated behind the merge + SQL-apply. Same shape as the
+  072/073 cultivar migrations. Be explicit about it rather than pretending the loop closed.
+- **A "lean structured" middle beat both poles cleanly.** The brainstorm md (which Chris commissioned)
+  leaned toward a heavy nested schema; pure parser-fix was the other pole. The signed-off answer was
+  neither — flat six-key objects with prose in `detail` — and it satisfied every stated constraint
+  (don't-overcomplicate + line-readable + kills the parse-ambiguity class). When the user's own
+  brainstorm over-specifies, the move is still to grill it down to what the render + a real query
+  actually need.
+
 ## Legend
 
 - **type**: `polish` (clear design fix, batchable) · `decision` (needs Chris call) ·
@@ -321,9 +379,15 @@ and the batching is approved. Several items are open decisions or belong to sepa
 
 ## Brew Sub-Pages (`/brews/[id]`)
 
-- **BS-1 · Pour-structure rendering is wrong on multiple brews** (`data-model` — Chris notes
-  it's broader than design polish; likely the `pour_structure` free-text parser + storage shape).
-  The recipe *layout* is liked; the *data* doesn't map cleanly:
+- **BS-1 · Pour-structure rendering is wrong on multiple brews** — ✅ **FIXED (data-model session
+  2026-05-30, migration 074).** Root cause was structural, not a parser tweak: claude.ai wrote a
+  different free-text format every brew (`;`-delimited vs prose paragraph vs "Phase N"/"Steep N"),
+  so the parser was chasing an uncontracted writer — and the page double-counted bloom (prepended
+  `brew.bloom` AND the `pour_structure` text restating it). Fix = structured `brews.pours` jsonb
+  (bloom index 0, `at` required, only typed steps render) written by claude.ai via `push_brew`,
+  parser kept as legacy read-fallback. All 6 verified @1024+390 (seeded render proof — backfill is
+  a post-deploy `patch_brew` step gated on migration 074 apply). See "Data-model session outcomes"
+  below. The original symptom set (kept for the record):
   - [2026 Ruarai AA Separation](https://www.latentcoffee.com/brews/da937ce6-2877-4436-84f4-8191d93e5528)
     — timeline shows `0:00 Bloom` → `· Pour 1` (no start time) → `~3:00 Bloom` (should be the
     second POUR, not "Bloom" again). Also **no producer listed** (`data-audit`; Chris will supply).

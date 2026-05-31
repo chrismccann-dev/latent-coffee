@@ -92,15 +92,34 @@ Recipe-substrate fields (Sub-sprint 4c, 2026-05-28):
   existing Paragon-as-aroma_capture usage alone; use `equipment` going forward for
   flow/agitation gear.
 
-Pour-structure free-text convention (until the structured `pour_structure` migration lands —
-keeps the legacy text parseable and consistent for the eventual structured backfill). Author
-`bloom` + `pour_structure` in this shape:
-- `bloom`: `<g>, <pour pattern>, hold <Ns>` (plus, for valve/switch brewers, a trailing
-  `Switch:`/`Sworks Valve:` clause stating the dial/state during the bloom).
-- `pour_structure`: one labeled line per pour — `Pour N: at <m:ss>, pour to <cumulative g>
-  over <Ns> in a <pattern> pour` (cumulative target, NOT incremental), with a trailing
-  `Switch:`/`Sworks Valve:` clause when the brewer has one (dial/state + any mid-pour
-  transition). End with a `Drawdown: <m:ss>` segment or rely on `total_time`.
+Pour structure — write the STRUCTURED `pours` array (migration 074, 2026-05-30). This is now
+the canonical shape; it replaces the legacy free-text `bloom` + `pour_structure` (those still
+exist as a fallback for un-migrated rows — when you send `pours`, you may omit them). Emit ONE
+flat object per real step; `/brews/[id]` renders the array directly, so there is no parser to
+fight — getting the array right is the whole job. Shape:
+- `pours`: array of `{ type, at, to_g?, pour_s?, hold_s?, valve?, detail? }`.
+  - `type`: `"bloom"` (ALWAYS index 0) or `"pour"`.
+  - `at`: start time `"m:ss"` — REQUIRED. The next step's `at` reads as this step's end, so
+    Chris never does mental math at the bench. Number the pours by reading order.
+  - `to_g`: cumulative grams at the end of the step (cumulative, NOT incremental).
+  - `pour_s` / `hold_s`: pour duration / closed-immersion (steep) hold, in seconds. Optional;
+    these are queryable mirrors, not rendered — fill when known.
+  - `valve`: valve state for valve brewers (`"closed"` | `"open"` | `"Dial 5"` | `"Dial 6 (Half-Open)"`);
+    null for non-valve brewers (Kalita / April / Orea / V60). Queryable mirror.
+  - `detail`: the readable technique line — this is what renders. Pattern (center/spiral),
+    agitation (gentle/brisk), kettle on/off-base stance, drain-and-reclose, and valve
+    transitions ("crack to Dial 7 as bed drops below half") ALL go here as prose. Do NOT type
+    them into separate fields.
+- One-step-per-real-step discipline (this is the failure mode the structure exists to kill):
+  do NOT restate the bloom as a pour step (it is already index 0); do NOT emit a step for a
+  non-pour like "office tap water" or "kettle on base throughout" (that's `water_recipe` +
+  per-step `detail`); do NOT emit a step for technique-level meta like "manual lever-staged
+  immersion, three closed steeps" or "no Melodrip, boiling throughout" — that belongs in
+  `strategy_notes`. Drawdown is not a step; rely on `total_time`.
+- Worked example (Hario Switch, manual-lever immersion): `[{type:"bloom", at:"0:00", to_g:50,
+  hold_s:45, valve:"closed", detail:"gentle saturation + single swirl; open and drain (~10s), re-close"},
+  {type:"pour", at:"0:55", to_g:130, hold_s:60, valve:"closed", detail:"Steep 1 — pour closed, hold, ~10s drain"},
+  {type:"pour", at:"2:05", to_g:240, hold_s:75, valve:"closed → open", detail:"Steep 2 — pour closed, hold, then open and drain completely"}]`.
 
 STEP 2 - propose_doc_changes for lessons from this session. source =
 {kind: "brew", id: "<brew_id from STEP 1>"}. BEFORE drafting any citation,

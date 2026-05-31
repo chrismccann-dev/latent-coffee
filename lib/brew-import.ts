@@ -45,6 +45,7 @@ import {
   composeFlavorNotes,
 } from './flavor-registry'
 import { cleanModifiers, type Modifier } from './extraction-modifiers'
+import { cleanPours, type PourStep } from './pour-structure'
 import { HYBRID_SUBFORMS, isCanonicalHybridSubform } from './hybrid-subform'
 import { ROAST_LEVEL_LOOKUP } from './roast-level-registry'
 import { GRINDER_LOOKUP, isResolvableSetting } from './grinder-registry'
@@ -240,6 +241,9 @@ export interface BrewPayload {
   water_recipe?: string | null
   bloom?: string | null
   pour_structure?: string | null
+  // data-model session (migration 074, 2026-05-30): structured pour steps.
+  // Canonical forward shape; legacy bloom + pour_structure stay as fallback.
+  pours?: PourStep[] | null
   total_time?: string | null
 
   // Extraction strategy + modifiers (Axis 2, sprint Extraction Strategy v2;
@@ -757,6 +761,11 @@ export function validateBrewPayload(payload: BrewPayload): ValidationResult {
     if (!m.ok) errors.push(m.error)
   }
 
+  if (payload.pours !== undefined && payload.pours !== null) {
+    const p = cleanPours(payload.pours)
+    if (!p.ok) errors.push(p.error)
+  }
+
   return errors.length ? { ok: false, errors } : { ok: true }
 }
 
@@ -871,6 +880,10 @@ export async function persistBrew(
   }
   const cleanedFlavors = flavorsResult.value
   const cleanedStructureTags = structureResult.value
+  // Structured pours: NULL (not []) signals "legacy row, use the free-text
+  // fallback render". Validated above; cleanPours trims + drops unknown keys.
+  const poursResult = payload.pours == null ? null : cleanPours(payload.pours)
+  const cleanedPours: PourStep[] | null = poursResult && poursResult.ok ? poursResult.value : null
 
   // Sprint 2.6 — terroir + cultivar route through the strict-canonical
   // findOrCreate* helpers. Closes 4 silent-failure modes from the dog-food log
@@ -976,6 +989,7 @@ export async function persistBrew(
     water_recipe: payload.water_recipe ?? null,
     bloom: payload.bloom ?? null,
     pour_structure: payload.pour_structure ?? null,
+    pours: cleanedPours,
     total_time: payload.total_time ?? null,
     extraction_strategy: payload.extraction_strategy ?? null,
     hybrid_subform: payload.extraction_strategy === 'Hybrid' ? (payload.hybrid_subform ?? null) : null,
@@ -1080,6 +1094,7 @@ export const PATCH_BREW_EDITABLE_FIELDS = [
   'water_recipe',
   'bloom',
   'pour_structure',
+  'pours',
   'total_time',
   'extraction_strategy',
   'hybrid_subform',
@@ -1243,6 +1258,15 @@ export async function patchBrew(
     const result = cleanModifiers(patch.modifiers)
     if (!result.ok) errors.push(result.error)
     else patch.modifiers = result.value
+  }
+
+  // pours — structured pour steps. null passes through untouched (clears back
+  // to the legacy fallback); an array validates + normalizes via cleanPours
+  // (mirrors modifiers).
+  if ('pours' in patch && patch.pours !== null) {
+    const result = cleanPours(patch.pours)
+    if (!result.ok) errors.push(result.error)
+    else patch.pours = result.value
   }
 
   // structured process axes

@@ -1,16 +1,129 @@
-// Pour structure parser. Splits a free-text `brews.pour_structure` entry into
-// per-step segments so /brews/[id] can render them as executable bullets.
+// Pour structure: structured `brews.pours` jsonb (canonical, forward) +
+// the legacy free-text `brews.pour_structure` parser (read-fallback).
 //
-// Storage shape today: text column. Each entry follows one of ~5 separator
-// conventions Chris has used in the wild (newline / "; " / period+marker /
-// " · " / arrow chain). The parser tries them in order and falls back to a
-// single segment when no separator hits.
+// HYBRID MODEL (data-model session, 2026-05-30 / BS-1). claude.ai writes the
+// structured `pours` array via push_brew going forward; the render reads it
+// when present. Legacy rows (free-text `bloom` + `pour_structure`) still parse
+// through parsePourSteps below until they're re-pushed structured. This kills
+// the parse-ambiguity class — double-blooms, `·` missing times, meta/footer
+// sentences leaking in as phantom pours, "Steep N"/"Phase N" under-segmentation
+// — because the writer now emits one object per real step instead of prose the
+// reader has to re-segment against an uncontracted format.
 //
-// Forward compat: each segment also carries optional structured fields
-// (label / time / amount_g / method) extracted via best-effort regex. Today
-// those drive nothing in render — they're forward investment for a future
-// schema migration to brews.pours jsonb. When that lands, swap the parse
-// source from text → structured rows; the render layer stays the same.
+// Lean by design (Chris-locked): six flat keys, no nesting. `detail` is the
+// human-readable line; `to_g`/`at` drive the timeline columns; `valve`/`pour_s`/
+// `hold_s` are queryable mirrors (NOT rendered) so "every brew where P1 ran
+// closed" becomes a SQL query. Valve transitions, drain-and-reclose, and kettle
+// on/off-base stance all live as prose in `detail` — deliberately NOT typed
+// (don't-overcomplicate). bloom is always index 0.
+
+import type { CleanResult } from './extraction-modifiers'
+
+export interface PourStep {
+  type: 'bloom' | 'pour'
+  /** Start time "m:ss". Required — the next step's `at` reads as this step's end. */
+  at: string
+  /** Cumulative grams (Chris always thinks cumulative). Optional for water-free actions. */
+  to_g?: number | null
+  /** Seconds the pour itself takes. Query-only mirror; not rendered. */
+  pour_s?: number | null
+  /** Seconds of still / closed-immersion hold. Query-only mirror; not rendered. */
+  hold_s?: number | null
+  /** Valve state for valve brewers ("closed" | "open" | "Dial 5"); null otherwise. Query-only; transitions live in `detail`. */
+  valve?: string | null
+  /** The readable technique line. Pattern / agitation / kettle stance / drain-reclose all live here as prose. */
+  detail?: string | null
+}
+
+const POUR_STEP_TYPES = ['bloom', 'pour'] as const
+
+function cleanNumber(v: unknown): number | null | 'invalid' {
+  if (v === null || v === undefined || v === '') return null
+  const n = typeof v === 'number' ? v : Number(v)
+  if (!Number.isFinite(n) || n < 0) return 'invalid'
+  return n
+}
+
+/**
+ * Validate + normalize a structured pours array. Mirrors cleanModifiers /
+ * cleanFlavors (CleanResult). Drops unknown keys, coerces numerics, trims
+ * strings (empty → null), and enforces the bloom-at-index-0 invariant the
+ * render relies on. Errors aggregate into one message.
+ */
+export function cleanPours(input: unknown): CleanResult<PourStep[]> {
+  if (input === null || input === undefined) return { ok: true, value: [] }
+  if (!Array.isArray(input)) return { ok: false, error: 'pours must be an array of step objects' }
+
+  const errors: string[] = []
+  const out: PourStep[] = []
+
+  input.forEach((raw, i) => {
+    if (typeof raw !== 'object' || raw === null) {
+      errors.push(`pours[${i}] must be an object`)
+      return
+    }
+    const r = raw as Record<string, unknown>
+
+    const type = r.type
+    if (type !== 'bloom' && type !== 'pour') {
+      errors.push(`pours[${i}].type must be one of: ${POUR_STEP_TYPES.join(' | ')}`)
+      return
+    }
+    if (type === 'bloom' && i !== 0) {
+      errors.push(`pours[${i}].type='bloom' is only valid at index 0 (bloom is always the first step)`)
+    }
+
+    const at = typeof r.at === 'string' ? r.at.trim() : ''
+    if (!at) {
+      errors.push(`pours[${i}].at (start time "m:ss") is required`)
+    }
+
+    const step: PourStep = { type, at }
+
+    const toG = cleanNumber(r.to_g)
+    if (toG === 'invalid') errors.push(`pours[${i}].to_g must be a positive number or null`)
+    else if (toG !== null) step.to_g = toG
+
+    const pourS = cleanNumber(r.pour_s)
+    if (pourS === 'invalid') errors.push(`pours[${i}].pour_s must be a number ≥ 0 or null`)
+    else if (pourS !== null) step.pour_s = pourS
+
+    const holdS = cleanNumber(r.hold_s)
+    if (holdS === 'invalid') errors.push(`pours[${i}].hold_s must be a number ≥ 0 or null`)
+    else if (holdS !== null) step.hold_s = holdS
+
+    if (r.valve != null) {
+      if (typeof r.valve !== 'string') errors.push(`pours[${i}].valve must be a string or null`)
+      else if (r.valve.trim()) step.valve = r.valve.trim()
+    }
+    if (r.detail != null) {
+      if (typeof r.detail !== 'string') errors.push(`pours[${i}].detail must be a string or null`)
+      else if (r.detail.trim()) step.detail = r.detail.trim()
+    }
+
+    out.push(step)
+  })
+
+  if (errors.length) return { ok: false, error: errors.join('; ') }
+  return { ok: true, value: out }
+}
+
+/**
+ * Map a structured pours array to timeline rows for SspTimeline. bloom →
+ * "Bloom"; pours number sequentially (1-based, excluding bloom). `t` is the
+ * start time; `desc` leads with the cumulative target then the prose detail.
+ * valve / pour_s / hold_s are deliberately NOT surfaced here — query-only.
+ */
+export function pourTimelineRows(pours: PourStep[]): { t: string; label: string; desc: string }[] {
+  let pourN = 0
+  return pours.map((step) => {
+    const label = step.type === 'bloom' ? 'Bloom' : `Pour ${++pourN}`
+    const desc = [step.to_g != null ? `→ ${step.to_g}g` : null, step.detail || null]
+      .filter(Boolean)
+      .join(' · ')
+    return { t: step.at || '·', label, desc }
+  })
+}
 
 export interface ParsedPourStep {
   raw: string
