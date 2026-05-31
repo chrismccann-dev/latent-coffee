@@ -19,6 +19,7 @@ import {
 import { cleanModifiers, splitModifierLabel } from '@/lib/extraction-modifiers'
 import { composeHybridSubformLabel } from '@/lib/hybrid-subform'
 import { extractDrawdown, parsePourSteps } from '@/lib/pour-structure'
+import { getFilterDisplayName } from '@/lib/filter-registry'
 
 // Canonical axis order for grouping structure_tags ("Axis:Descriptor") into
 // SspStructure rows. Anything outside the list falls to the end alphabetically.
@@ -251,7 +252,9 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
       {/* TIER 1 — Reference Brew Recipe */}
       <div>
         <SspShead
-          ct={[brew.brewer, brew.filter].filter(Boolean).join(' · ') || undefined}
+          ct={[brew.brewer, getFilterDisplayName(brew.filter) || null]
+            .filter(Boolean)
+            .join(' · ') || undefined}
         >
           Reference Brew Recipe
         </SspShead>

@@ -11,9 +11,10 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
   MB-1 mobile roaster popover · CI-1 cultivar tree spline.
 - **PR2** — [#318](https://github.com/chrismccann-dev/latent-coffee/pull/318), main `8c9cbe4`:
   WC-2 cupping reshape (+ WC-1/WC-2b/WC-3/WC-5) · WR-2 anchor label.
-- **STILL OPEN (separate sessions):** `naming` ← **NEXT** · `cleanup` (NEW) · `data-model`
+- **STILL OPEN (separate sessions):** `cleanup` (NEW) ← **NEXT** · `data-model`
   (pour-structure bug) · `side-quest` MB-6. See the "Punt" list under FINAL batching below.
 - **`data-audit` — ✅ SHIPPED 2026-05-30** (session 1 of 5). See "Data-audit session outcomes" immediately below.
+- **`naming` — ✅ SHIPPED 2026-05-30** (session 2 of 5). See "Naming session outcomes" below.
 
 ## Data-audit session outcomes (2026-05-30, session 1 of 5)
 
@@ -111,14 +112,68 @@ decision; the autonomy rule applies only AFTER Chris signs off on each conventio
   Reminder: Chris will do a **full audio readout of several recipes** (complex + simplistic) to
   kick off data-model — do NOT start the parser fix before that audio lands.
 
+### Naming session outcomes (2026-05-30, session 2 of 5)
+
+Shipped in one PR. Conventions captured via AskUserQuestion before any edit (per the
+capture-first brief); autonomy applied only after each was signed off.
+
+**Locked conventions:**
+- **Cover abbreviation = render-layer** (Chris Q1). New `lib/brew-cover-title.ts`:
+  `displayVariety` (explicit override map keyed on the 11 known messy titles + generic
+  ` (group)` strip), `displayCoverProcess` (composes from structured columns via
+  `composeProcessDisplay` + cover-only `Dark Room Dried`→`DRD` / `Generic Honey`→`Honey`),
+  `displayProducerShort` (` (farm)` strip). Wired into `components/BrewCard.tsx`. Canonical
+  registries + DB rows untouched; only the /brews cover changes. Scope-guarded: unlisted
+  titles pass through verbatim.
+- **Blend naming = `V1, V2 (Blend)`** (Chris refined the AskUserQuestion answer in-thread —
+  capitalized `(Blend)` parenthetical, not a bare word). Chris chose to **rename canonicals**,
+  not just render: `Bourbon / Caturra blend`→`Bourbon, Caturra (Blend)`,
+  `Red Bourbon / Mibirizi blend`→`Red Bourbon, Mibirizi (Blend)` in `lib/cultivar-registry.ts`
+  + back-compat aliases + **migration 073** (`UPDATE cultivars.cultivar_name`, idempotent) +
+  `docs/taxonomies/varieties.md` (3 lines + a new "Blend-naming convention" subsection).
+  Ethiopian-landrace JARC blends keep their detailed canonical (collision-avoidance + component
+  fidelity) and render short via the cover layer. Free-text-only blends (Purple Caturra Bourbon)
+  stay render-layer. **Migration 073 needs applying in the Supabase SQL Editor** (same as 072).
+- **Process display fix (free):** switching the cover off raw `brew.process` to
+  `composeProcessDisplay` fixed the double-`Anaerobic` (Altieri Gesha →
+  `Anaerobic + Slow Dry + Raised Bed, Natural`) and the `Aerobic Anaerobic` misread (Sudan Rume
+  → `Aerobic + Anaerobic, Washed`) at the same time.
+- **Filter shortening (BS-1):** `displayName` added to the 2 CAFEC entries
+  (`CAFEC Abaca+ Cone`, `CAFEC T-92`) + `getFilterDisplayName` wired into `/brews/[id]` recipe
+  shead. Verified on both brews.
+
+**Data fixes (via `patch_brew`):**
+- **Mandela** (`a116bb9c`): `signature_method="XO"` → process recomposes to `XO` (CGLE branded
+  signature; Anaerobic + Co-ferment kept as structured backing). Verified.
+- **Heritage** (`06672cbf`, carried from data-audit): `cultivar_name="Bourbon"` (FK off Gesha,
+  Bourbon has content via migration 072) + `variety="Bourbon, Typica, Caturra (Blend)"`. Cover +
+  Coffee-Overview verified showing Bourbon. Lead-variety approach (Chris's call) avoided a new
+  blend canonical + content migration.
+
+**⚠ Handed to Chris (not auto-done):**
+- **Duplicate brew** (`b27afe61` @14:11:19 + `15c67c4a` @14:10:26 — identical "Pepe Jijón Finca
+  Soledad - Sidra Wave Hybrid", 53s apart): no MCP delete path, so removal is a SQL DELETE in the
+  Supabase Editor. Recommended deleting the **earlier** write (`15c67c4a`), keeping `b27afe61`:
+  `DELETE FROM brews WHERE id = '15c67c4a-9bd1-4181-be52-2cd074ac2e8c';`
+- **Apply migration 073** in the Supabase SQL Editor.
+- **Unflagged cover lookalikes** (present but NOT in Chris's list — left untouched, surfaced for a
+  call): `Geisha` ×2 (Daterra, Aliyah Shah — alias of Gesha), `Green-Tip Gesha` (Janson),
+  `Gesha 1931` ×2 (Rachel Samuel/Adam Overton), `JARC 74158` (Tamiru), `Sidra Bourbon` (Julio
+  César Madrid — possible blend). Want any of these normalized? Easy add to the override map.
+
+**Six-actor audit (canonical rename):** Actor 6 registry+migration ✓ · Actor 5 varieties.md +
+this doc ✓ · Actor 4 `read_canonical(cultivars)` serves the registry (no Tool-schema change;
+count unchanged — rename not add) ✓ · Actors 2/3 aliases keep old slash forms resolving on write
+✓ · Actor 1 cover + cultivar index show the new names ✓.
+
 ### Next-up sequencing (Chris-locked 2026-05-30)
 
 The open buckets run **ONE PER SESSION, SEQUENTIALLY, in this fixed order** (Chris-locked
 2026-05-30; `cleanup` bucket inserted 2026-05-30 after the data-audit session):
 
 1. ~~**`data-audit`**~~ ✅ SHIPPED 2026-05-30 (PR #322; see "Data-audit session outcomes" above)
-2. **`naming`** ← next up
-3. **`cleanup`** (NEW — inserted before data-model per Chris)
+2. ~~**`naming`**~~ ✅ SHIPPED 2026-05-30 (see "Naming session outcomes" above)
+3. **`cleanup`** (NEW — inserted before data-model per Chris) ← next up
 4. **`data-model`** (pour-structure)
 5. **`side-quest` MB-6**
 
