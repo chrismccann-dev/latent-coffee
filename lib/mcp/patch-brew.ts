@@ -52,6 +52,9 @@ export const patchBrewInputSchema = {
   ),
   bloom: z.string().optional().nullable(),
   pour_structure: z.string().optional().nullable(),
+  pours: z.array(z.unknown()).optional().nullable().describe(
+    'Structured pour steps (migration 074, 2026-05-30) — array of flat {type:"bloom"|"pour", at, to_g?, pour_s?, hold_s?, valve?, detail?} objects, bloom at index 0. Canonical forward shape; prefer over free-text bloom + pour_structure. Validated/normalized via cleanPours server-side. Send null to clear back to the legacy free-text fallback; send [] for "structured, zero steps". Most common patch_brew use: backfill a legacy brew to the structured shape so /brews/[id] stops mis-parsing it.',
+  ),
   total_time: z.string().optional().nullable(),
   extraction_strategy: z.string().optional().nullable().describe(
     "Strict 6-value enum (v8.4): Suppression | Clarity-First | Balanced Intensity | Full Expression | Extraction Push | Hybrid. When patching to 'Hybrid', also send hybrid_subform in the same patch. When patching AWAY from 'Hybrid', the server auto-clears hybrid_subform.",

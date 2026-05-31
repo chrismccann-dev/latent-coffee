@@ -88,6 +88,21 @@ const modifierEntry = z.object({
   scope: z.string().optional().nullable(),  // equipment usage window (free-text)
 })
 
+// data-model session (migration 074, 2026-05-30 / BS-1): structured pour step.
+// Lean + flat — six keys, no nesting. `detail` is the human line that renders;
+// `to_g`/`at` drive the timeline columns; `valve`/`pour_s`/`hold_s` are
+// queryable mirrors (NOT rendered). bloom is always index 0. cleanPours()
+// (lib/pour-structure.ts) validates + normalizes server-side.
+const pourStep = z.object({
+  type: z.enum(['bloom', 'pour']).describe('"bloom" is ALWAYS index 0; every other step is "pour".'),
+  at: z.string().describe('Start time "m:ss". REQUIRED — the next step\'s `at` reads as this step\'s end, so the operator never has to do mental math at the bench.'),
+  to_g: z.number().optional().nullable().describe('Cumulative grams at the end of this step (always cumulative, never incremental). Optional for water-free actions.'),
+  pour_s: z.number().optional().nullable().describe('Seconds the pour itself takes. Queryable mirror; not rendered on the timeline.'),
+  hold_s: z.number().optional().nullable().describe('Seconds of still / closed-immersion hold (bloom + steeps). Queryable mirror; not rendered.'),
+  valve: z.string().optional().nullable().describe('Valve state for valve brewers — "closed" | "open" | "Dial 5" etc. Free-text (recommended vocab from the SWORKS registry), null for non-valve brewers (Kalita / April / Orea). Queryable mirror; mid-step transitions / cracks live in `detail`, not here.'),
+  detail: z.string().optional().nullable().describe('The readable technique line — this is what renders. Pattern (center/spiral), agitation (gentle/brisk), kettle on/off-base stance, drain-and-reclose, and valve transitions ("crack to Dial 7 as bed drops below half") all go here as prose. Deliberately NOT typed into separate fields (don\'t-overcomplicate).'),
+})
+
 // Elevation + climate_stress live at the TERROIR level (canonical registry +
 // terroirs row), not per-brew. They populate at terroir-create time only and
 // are not pushable through push_brew. Lot-specific elevation gradients are
@@ -208,8 +223,15 @@ export const pushBrewInputSchema = {
   water_recipe: z.string().optional().nullable().describe(
     'Free-text water formula / source for this brew. No canonical registry — store verbatim (e.g. "Third Wave Water Light Roast ~1:3 concentrate:distilled", "Palo Alto office tap", "home remineralized"). Use this rather than cramming water into bloom / pour_structure / strategy_notes. Sub-sprint 4c (2026-05-28).',
   ),
-  bloom: z.string().optional().nullable(),
-  pour_structure: z.string().optional().nullable(),
+  bloom: z.string().optional().nullable().describe(
+    'LEGACY free-text bloom line. PREFER the structured `pours` array (bloom as index 0) for new brews. Kept as a fallback render source for rows not yet pushed structured.',
+  ),
+  pour_structure: z.string().optional().nullable().describe(
+    'LEGACY free-text pour prose. PREFER the structured `pours` array. Kept as a fallback render source for un-migrated rows.',
+  ),
+  pours: z.array(pourStep).optional().nullable().describe(
+    'CANONICAL structured pour sequence (migration 074, 2026-05-30). Array of flat step objects; bloom is ALWAYS index 0, then one object per real pour. PREFER this over free-text `bloom` + `pour_structure` — it eliminates the parse-ambiguity class entirely: double blooms, missing pour start times, technique-meta / footer sentences leaking in as phantom pours, and "Steep N" / "Phase N" under-segmentation. Rules: emit ONE object per real step; `at` (start time) required; `to_g` cumulative; keep valve transitions / drain-reclose / kettle stance as prose in `detail` (NOT typed). When you supply `pours`, you may omit `bloom` + `pour_structure`. /brews/[id] renders `pours` when present, else falls back to parsing the legacy text. Technique-level context that is NOT a step (e.g. "manual lever-staged immersion, three closed steeps", "no Melodrip, boiling throughout") belongs in `strategy_notes`, not as a pour step.',
+  ),
   total_time: z.string().optional().nullable(),
 
   // Extraction

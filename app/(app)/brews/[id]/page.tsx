@@ -18,7 +18,7 @@ import {
 } from '@/components/Ssp'
 import { cleanModifiers, splitModifierLabel } from '@/lib/extraction-modifiers'
 import { composeHybridSubformLabel } from '@/lib/hybrid-subform'
-import { extractDrawdown, parsePourSteps } from '@/lib/pour-structure'
+import { extractDrawdown, parsePourSteps, pourTimelineRows } from '@/lib/pour-structure'
 import { getFilterDisplayName } from '@/lib/filter-registry'
 
 // Canonical axis order for grouping structure_tags ("Axis:Descriptor") into
@@ -86,10 +86,14 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
     { label: 'Total', value: brew.total_time ?? drawdown ?? '—' },
   ]
 
-  // --- T1 Timeline: bloom (0:00) + parsed pour steps. ---
-  // The parser keeps `raw` intact, so a pour's raw text often re-states its own
-  // label + time ("Pour 1: 0:57 → 110g …") — both already shown in the timeline's
-  // label + time columns. Strip that leading echo so the desc reads clean.
+  // --- T1 Timeline ---
+  // Structured `brews.pours` (migration 074) is canonical: bloom is index 0,
+  // one row per real step, start times explicit. When present we render it
+  // directly — no parsing, so no double-bloom / `·` / meta-leak failure modes.
+  // Legacy rows (NULL pours) fall back to prepending `bloom` + parsing the
+  // free-text `pour_structure`. The parser keeps `raw` intact, so a pour's raw
+  // text often re-states its own label + time ("Pour 1: 0:57 → 110g …") — both
+  // already shown in the timeline columns; strip that leading echo.
   const cleanPourDesc = (raw: string, time?: string): string => {
     let s = raw.replace(/^(Pour\s*\d+(?:\s*\([^)]+\))?|Bloom|Drawdown)\s*[:.–-]?\s*/i, '')
     if (time) {
@@ -98,16 +102,20 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
     return s.trim() || raw
   }
   const timelineSteps: TimelineStep[] = []
-  if (brew.bloom) {
-    timelineSteps.push({ t: '0:00', label: 'Bloom', desc: brew.bloom })
-  }
-  parsePourSteps(brew.pour_structure).forEach((step, i) => {
-    timelineSteps.push({
-      t: step.time ?? '·',
-      label: step.label ?? `Pour ${i + 1}`,
-      desc: cleanPourDesc(step.raw, step.time),
+  if (brew.pours && brew.pours.length > 0) {
+    timelineSteps.push(...pourTimelineRows(brew.pours))
+  } else {
+    if (brew.bloom) {
+      timelineSteps.push({ t: '0:00', label: 'Bloom', desc: brew.bloom })
+    }
+    parsePourSteps(brew.pour_structure).forEach((step, i) => {
+      timelineSteps.push({
+        t: step.time ?? '·',
+        label: step.label ?? `Pour ${i + 1}`,
+        desc: cleanPourDesc(step.raw, step.time),
+      })
     })
-  })
+  }
 
   // --- T1 Modifier detail prose (label-prefixed only when >1 detail row) ---
   const modifierDetail =

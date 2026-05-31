@@ -68,7 +68,8 @@ This brew was dialed in via the brewing-side workflow between `one-shot.md` STAG
 - Recipe: brewer / filter / dose / water / grinder / grind_setting / temperature
 - `extraction_strategy` + optional `hybrid_subform` + `strategy_notes` + optional `cooling_curve_target`
 - `flavors` + `structure_tags`
-- Prose: `pour_structure`, `bloom_*`, `peak_expression`, `aroma`, `attack`, `mid_palate`, `body`, `finish`, **`what_i_learned`** (CRITICAL on one-shots - this captures the compensation reasoning when Outcome B applied; e.g. "Roast came out a touch over-developed - dialed lower temp + lower agitation to soften the tannin overhang. Brewer A + filter B specifically because their flow pattern + paper retention reads cleanest on Maillard-heavy lots."), `terroir_connection`, `cultivar_connection`
+- Pour structure: prefer the STRUCTURED `pours` array (`{type,at,to_g?,pour_s?,hold_s?,valve?,detail?}`, bloom at index 0 — migration 074, 2026-05-30) over legacy free-text `bloom` + `pour_structure`; see `bundled-brewing-completion.md` § "Pour structure" for the shape.
+- Prose: `peak_expression`, `aroma`, `attack`, `mid_palate`, `body`, `finish`, **`what_i_learned`** (CRITICAL on one-shots - this captures the compensation reasoning when Outcome B applied; e.g. "Roast came out a touch over-developed - dialed lower temp + lower agitation to soften the tannin overhang. Brewer A + filter B specifically because their flow pattern + paper retention reads cleanest on Maillard-heavy lots."), `terroir_connection`, `cultivar_connection`
 
 For Outcome B in particular, `what_i_learned` is the carry-forward primitive that future similar one-shot lots will benefit from. Don't undersell the brew-side learning - what compensation you discovered transfers across lots even when the roast didn't.
 
