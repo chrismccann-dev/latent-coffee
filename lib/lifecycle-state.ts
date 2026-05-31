@@ -182,7 +182,7 @@ export function computeLifecycleState(b: LifecycleInputs): LifecycleState {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function pickLatestExperiment<
+export function pickLatestExperiment<
   T extends { created_at?: string | null; id?: string },
 >(experiments: T[]): T {
   // Sort by created_at desc (null/missing sinks to the bottom). Stable order
