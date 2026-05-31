@@ -11,10 +11,11 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
   MB-1 mobile roaster popover · CI-1 cultivar tree spline.
 - **PR2** — [#318](https://github.com/chrismccann-dev/latent-coffee/pull/318), main `8c9cbe4`:
   WC-2 cupping reshape (+ WC-1/WC-2b/WC-3/WC-5) · WR-2 anchor label.
-- **STILL OPEN (separate sessions):** `cleanup` (NEW) ← **NEXT** · `data-model`
-  (pour-structure bug) · `side-quest` MB-6. See the "Punt" list under FINAL batching below.
+- **STILL OPEN (separate sessions):** `data-model` (pour-structure bug) ← **NEXT** ·
+  `side-quest` MB-6. See the "Punt" list under FINAL batching below.
 - **`data-audit` — ✅ SHIPPED 2026-05-30** (session 1 of 5). See "Data-audit session outcomes" immediately below.
 - **`naming` — ✅ SHIPPED 2026-05-30** (session 2 of 5). See "Naming session outcomes" below.
+- **`cleanup` — ✅ SHIPPED 2026-05-30** (session 3 of 5). See "Cleanup session outcomes" below.
 
 ## Data-audit session outcomes (2026-05-30, session 1 of 5)
 
@@ -174,34 +175,62 @@ The open buckets run **ONE PER SESSION, SEQUENTIALLY, in this fixed order** (Chr
 
 1. ~~**`data-audit`**~~ ✅ SHIPPED 2026-05-30 (PR #322; see "Data-audit session outcomes" above)
 2. ~~**`naming`**~~ ✅ SHIPPED 2026-05-30 (see "Naming session outcomes" above)
-3. **`cleanup`** (NEW — inserted before data-model per Chris) ← next up
-4. **`data-model`** (pour-structure)
+3. ~~**`cleanup`**~~ ✅ SHIPPED 2026-05-30 (see "Cleanup session outcomes" above)
+4. **`data-model`** (pour-structure) ← next up
 5. **`side-quest` MB-6**
 
 Each session ends by writing the kickoff brief for the next. Then a **product roadmap review /
 brainstorm** is the explicit capstone *after all ship*. The deferred **/producers ·
 /experiments · homepage** trio is NOT the next thing — it stays parked behind the roadmap review.
 
-### `cleanup` bucket (session 3 of 5) — placeholder
+### Cleanup session outcomes (2026-05-30, session 3 of 5)
 
-NEW bucket added 2026-05-30. Three "make it cleaner, mostly by *removing* things" areas, all
-**page-local polish, no data work**. **Chris will paste the full specifics into the dedicated
-cleanup session thread itself** (deliberately not captured here, to keep context clean) — treat
-those pasted comments as the spec. **Paste-ready kickoff brief:
-[cleanup-session-kickoff-2026-05-30.md](../sprints/cleanup-session-kickoff-2026-05-30.md).**
-High-level areas only:
+Shipped in one PR. Three "make it cleaner — mostly by *removing* things" index/card surfaces,
+all page-local render-layer polish (no data work). Capture-first: Chris pasted the specific case +
+a screenshot per area; each change signed off before edit, autonomy applied only after.
 
-1. **`/brews` card heights** — cards still loading at inconsistent heights. This was **BI-1**,
-   marked shipped in PR1 (#317) via `components/BrewCard.tsx` equal-height work — so this is a
-   **reopen / residual**, not net-new. Chris will specify the case he's seeing.
-2. **Cultivar index spine** — declutter the `├ └ │` genealogical tree (CI-1, shipped Sprint 6 /
-   PR1). Removal-oriented cleanup.
-3. **Terroir index** — small removal-oriented cleanup on the grouped-row list.
+- **BI-1 brew-card heights (reopen/residual of PR1 #317) — ✅ FIXED.** Root cause: `.who` (the
+  paper foot) used `min-height`, so a 2-line producer (Ruarai Factory / Mama Cata Estate /
+  Rigoberto & Luis Eduardo Herrera) *grew* the foot and shifted the face/foot seam — colored
+  covers misaligned within a row — and the grid had no cross-row equalization. Fix = `.who` →
+  **fixed `height: 86px`** (seam locked at one vertical position; 2-line producers fit, shorter
+  feet center with cover negative space — the "negative space is fine" call) + **`auto-rows-fr`**
+  on the [brews/page.tsx](<../../app/(app)/brews/page.tsx>) grid (every row matches the tallest →
+  all cards identical height across the whole grid). Verified: 1 distinct card height (260) + 1
+  distinct face height (174) + 0 clipped feet across all 88 cards @1024; 248/162/0 @390.
+- **CI-1 cultivar tree declutter — ✅ FIXED.** The deployed index IS the `├└│` tree (CI-1 shipped
+  PR1 #317 — the kickoff-brief caveat that it was the grl grouped-row list was stale; confirmed
+  via Chris's screenshot). Branch rows (species / family / lineage — the non-clickable nodes) now
+  **drop the swatch + count + 5-block dial entirely** (grid → `auto 1fr`), rendering connector +
+  label flush to the spine; only clickable cultivar leaves keep the dial. Whole spine **nudged
+  ~1px larger** (name 12→13px, species 11→12px, conn 12→13px, swatch 9→10px, row pad 3→4px) so it
+  reads at a weight closer to the other indexes. [cultivars/page.tsx](<../../app/(app)/cultivars/page.tsx>)
+  render gate + `.cultivar-tree` CSS. `/simplify` then removed the now-dead branch count reduces
+  (`spCount`/`famCount`/`linCount`) + branch `color` (branch rows carry `count: 0` / `color: null`).
+- **Terroir row meta (climate-clause removal — new this session, distinct from TI-1's tick
+  scale) — ✅ FIXED.** Dropped the climate-stress clause + its ` · ` dot from `terroirMeta` in
+  [terroirs/page.tsx](<../../app/(app)/terroirs/page.tsx>) — country header + macro name +
+  elevation is the clean set.
 
-Capture-first: these are interpretive "looks cleaner" calls. Wait for Chris's pasted specifics at
-session start; do not pre-decide. Session ends by writing the `data-model` (pour-structure)
-kickoff brief — reminder: Chris does a full **audio recipe readout** to kick that one off; do not
-start the parser fix before it lands.
+**Verified**: tsc clean (worktree node_modules symlink trick); previewed all 3 surfaces @1024 +
+390 (uniform card heights with no clipping, decluttered cultivar spine, terroir climate gone).
+**Six-actor**: render-layer only (Actor 6 UI + Actor 5 docs: this outcomes block + shipped.md row);
+Actors 1-4 no-op.
+
+**Retro (what surprised us / carry forward):**
+- **The kickoff-brief history caveat was stale, the screenshot resolved it instantly.** The brief
+  warned the cultivar index might still be the grl grouped-row list (Sprint 6 PR2) rather than the
+  `├└│` tree; Chris's first screenshot showed the tree is deployed (CI-1 shipped PR1 #317). Trust
+  the live screenshot over the brief's reconstructed history — the capture-first paste settled it
+  before any wrong-target editing.
+- **`min-height` on an equal-height card foot is a latent seam bug.** A foot sized with
+  `min-height` silently grows on long content and breaks the face/foot alignment the equal-height
+  work was supposed to guarantee — the original BI-1 fix (PR1) used `min-height` and that's exactly
+  why it reopened. Fixed-height + `auto-rows-fr` is the actual equal-height primitive; `min-height`
+  only equalizes the floor, not the seam.
+- **Measuring uniformity with `getBoundingClientRect` (distinct-height set + clipped-foot count)
+  beats eyeballing screenshots** for "are these all the same height" — caught the all-88-uniform
+  proof + zero-clip guarantee a screenshot can only suggest.
 
 - **`data-model` pour-structure bug kickoff:** Chris will do a **full audio readout** of several
   recipes — deliberately spanning **complex and simplistic** pour structures — to kick it off

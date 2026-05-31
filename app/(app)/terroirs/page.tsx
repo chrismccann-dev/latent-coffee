@@ -10,17 +10,15 @@ interface MacroTerroirGroup {
   representativeId: string
 }
 
-// Compose the mono-uppercase meta line for a macro group: elevation range
-// (min of mins → max of maxes across the group's terroirs) · climate stress
-// (first non-null). Either part omits when absent.
+// Compose the mono-uppercase meta line for a macro group: just the elevation
+// range (min of mins → max of maxes across the group's terroirs). The climate-
+// stress clause was dropped 2026-05-30 (cleanup session) — it read as clutter
+// on the row list; country header + macro name + elevation is the clean set.
 function terroirMeta(group: MacroTerroirGroup): string | undefined {
   const mins = group.terroirs.map((t) => t.elevation_min).filter((v): v is number => v != null)
   const maxs = group.terroirs.map((t) => t.elevation_max).filter((v): v is number => v != null)
-  const climate = group.terroirs.find((t) => t.climate_stress)?.climate_stress
-  const parts: string[] = []
-  if (mins.length && maxs.length) parts.push(`${Math.min(...mins)}–${Math.max(...maxs)}m`)
-  if (climate) parts.push(climate)
-  return parts.length ? parts.join(' · ') : undefined
+  if (mins.length && maxs.length) return `${Math.min(...mins)}–${Math.max(...maxs)}m`
+  return undefined
 }
 
 export default async function TerroirsPage() {
