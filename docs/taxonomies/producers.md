@@ -2372,6 +2372,36 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+### Ruarai Factory (Ruthaka FCS)
+
+**Country:** Kenya · **Admin:** Nyeri County · **Macro:** Central Kenyan Volcanic Highlands
+
+- **Tier:** 2
+- **Producer System:** —
+- **Processing System Tags:** Classic East African Washed System
+- **Reference Role:** Signal
+- **Producer Type:** Cooperative / Washing Station
+- **Farm:** Ruarai Factory
+- **Farming Model:** Smallholder cooperative
+- **Processing Capability:** Fully Washed
+- **Processing Style Tags:** Double Fermentation, Clean Soak, Density Sorting
+- **Drying Method:** Raised Bed
+- **Primary Cultivars:** SL28, SL34
+- **Secondary Cultivars:** Ruiru 11, Batian
+- **Known For:** Nyeri Washed Clarity, Ruthaka FCS, High-Density Smallholder Lots
+- **Typical Flavor Profile:** Red Fruit + Bright, Citrus + Clean, Floral + Tea
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Silky / Tea-like
+- **Consistency Rating:** High
+- **Market Tier:** High-End
+- **Exporters:** Ruthaka Farmers Cooperative Society
+- **Importers:** Sucafina, Vollers V-Hub
+- **Roaster References:** Sey, Ethica, Moonwake, Verve
+
+**Notes:** Added 2026-05-30 (data-audit session) from Chris's CSV row after the Sey "Ruarai AA Separation" brew surfaced with no producer. Normalized to the existing Kenya-entry convention: Producer System left null (no Kenya ProducerSystem canonical) and Macro set to the canonical "Central Kenyan Volcanic Highlands" (CSV listed "Mount Kenya Highlands").
+
+---
+
 ### Rigoberto & Luis Eduardo Herrera
 
 **Country:** Colombia · **Admin:** Valle del Cauca / Cundinamarca · **Macro:** Western Andean Cordillera
