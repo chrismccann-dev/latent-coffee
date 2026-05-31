@@ -11,11 +11,11 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
   MB-1 mobile roaster popover · CI-1 cultivar tree spline.
 - **PR2** — [#318](https://github.com/chrismccann-dev/latent-coffee/pull/318), main `8c9cbe4`:
   WC-2 cupping reshape (+ WC-1/WC-2b/WC-3/WC-5) · WR-2 anchor label.
-- **STILL OPEN (separate sessions):** `naming` ← **NEXT** · `data-model`
+- **STILL OPEN (separate sessions):** `naming` ← **NEXT** · `cleanup` (NEW) · `data-model`
   (pour-structure bug) · `side-quest` MB-6. See the "Punt" list under FINAL batching below.
-- **`data-audit` — ✅ SHIPPED 2026-05-30** (session 1 of 4). See "Data-audit session outcomes" immediately below.
+- **`data-audit` — ✅ SHIPPED 2026-05-30** (session 1 of 5). See "Data-audit session outcomes" immediately below.
 
-## Data-audit session outcomes (2026-05-30, session 1 of 4)
+## Data-audit session outcomes (2026-05-30, session 1 of 5)
 
 - **GI-1 (5 unresolved lots) — ✅ FIXED via MCP.** Root cause was uniform: each of Higuito /
   CGLE Sudan Rume Natural / GV Oma 25/035 / GUA Libertad / GUA El Socorro had a *complete*
@@ -32,12 +32,15 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
   the existing Kenya-entry convention (producerSystem null; macro "Central Kenyan Volcanic
   Highlands"). `patch_brew` override persists verbatim (no queue row); the name resolves canonical
   once this PR deploys.
-- **MB-5 Bourbon skeleton — ⏳ MIGRATION WRITTEN, NEEDS APPLY.** Bourbon's `cultivars` row had
-  all 18 reference fields NULL because the row was auto-created *after* migration 022 (which
-  backfilled the 26 rows existing on 2026-04-22). `varieties.md` already carries the full authored
-  `### Bourbon` block. Wrote `supabase/migrations/072_bourbon_cultivar_content_backfill.sql`
-  (mirrors 022's column set). **ACTION REQUIRED: Chris applies 072 via the Supabase SQL Editor** —
-  no MCP path exists for cultivar content. Until applied, the page stays skeleton.
+- **MB-5 Bourbon skeleton — ✅ FIXED + APPLIED.** Bourbon's `cultivars` row had all 18 reference
+  fields NULL because the row was auto-created *after* migration 022 (which backfilled the 26 rows
+  existing on 2026-04-22). `varieties.md` already carried the full authored `### Bourbon` block.
+  `supabase/migrations/072_bourbon_cultivar_content_backfill.sql` (mirrors 022's column set) —
+  **Chris applied it via the Supabase SQL Editor 2026-05-30; page verified rendering full content**
+  (Genetic Background + Cultivar Context + Brewing & Cup Profile + Roasting). Note: no MCP path
+  exists for cultivar content, so this axis is migration-only. **5 more cultivar rows remain
+  skeletons for the same post-022 reason** (Mokka / Wush Wush / SL28 / Khun Lao / Mandela) — logged
+  as a roadmap item below; Chris scoped this session to Bourbon-only.
 - **BI-2 Heritage variety — ⏸ DEFERRED to `naming` (session 2).** Confirmed: "Heritage Collection"
   is a Finca Sophia *product-line* name, not a cultivar, and the brew (`06672cbf`) is wrongly
   FK-linked to **Gesha** while Chris's own notes say it's a Bourbon/Typica/Caturra heritage field
@@ -58,7 +61,7 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
 - *(Out of scope, flagged only)* Finca Sophia Heritage brew lists producer "Wilton Benitez"
   (Colombia/Granja Paraíso) on a Panama Finca Sophia lot — possible mis-attribution; not touched.
 
-### NAMING SESSION (session 2 of 4) — kickoff brief
+### NAMING SESSION (session 2 of 5) — kickoff brief
 
 **THIS IS A NORMAL EXECUTION SESSION, but it is heavily interpretive (label/abbreviation
 conventions are Chris-taste calls). Default to capture-first + AskUserQuestion on every convention
@@ -87,8 +90,9 @@ decision; the autonomy rule applies only AFTER Chris signs off on each conventio
     canonicals) and partly pure display-string logic (cover-title abbreviation). Separate the two:
     registry edits propagate via the six-actor audit; cover abbreviation may be a render-layer
     transform (where? likely `components/BrewCard.tsx` title composition) — confirm before editing.
-- **Scope (out):** pour-structure (that's `data-model`, session 3); MB-6 (session 4); the
-  systemic cultivar-skeleton backfill + attach-resolved-brew feature (roadmap capstone).
+- **Scope (out):** the `cleanup` bucket (session 3 — /brews heights + cultivar spine + terroir
+  index); pour-structure (that's `data-model`, session 4); MB-6 (session 5); the systemic
+  cultivar-skeleton backfill + attach-resolved-brew feature (roadmap capstone).
 - **Files likely to touch:** `lib/filter-registry.ts`, `lib/cultivar-registry.ts` +
   `docs/taxonomies/varieties.md` (blend canonicals), `components/BrewCard.tsx` (cover-title
   abbreviation if render-layer), possibly a small naming/abbreviation helper. `patch_brew` (MCP)
@@ -101,23 +105,45 @@ decision; the autonomy rule applies only AFTER Chris signs off on each conventio
   acronyms (DRD) vs trims (drop "(Farm)"); whether cover-title shortening is render-layer or stored;
   the Heritage blend's canonical name + whether to treat it as a single blend cultivar or pick a
   lead variety.
-- **End the naming session by writing the session-3 (`data-model` / pour-structure) kickoff brief.**
+- **End the naming session by writing the session-3 (`cleanup`) kickoff brief.** (Cleanup itself
+  is lightly specified here — Chris pastes full specifics into that session's thread; the naming
+  brief just needs to hand off cleanly, noting cleanup precedes data-model.)
   Reminder: Chris will do a **full audio readout of several recipes** (complex + simplistic) to
   kick off data-model — do NOT start the parser fix before that audio lands.
 
 ### Next-up sequencing (Chris-locked 2026-05-30)
 
-The four open buckets run **ONE PER SESSION, SEQUENTIALLY, in this fixed order** (Chris-locked
-2026-05-30, refined from "any order"):
+The open buckets run **ONE PER SESSION, SEQUENTIALLY, in this fixed order** (Chris-locked
+2026-05-30; `cleanup` bucket inserted 2026-05-30 after the data-audit session):
 
-1. **`data-audit`** ← next up
-2. **`naming`**
-3. **`data-model`** (pour-structure)
-4. **`side-quest` MB-6**
+1. ~~**`data-audit`**~~ ✅ SHIPPED 2026-05-30 (PR #322; see "Data-audit session outcomes" above)
+2. **`naming`** ← next up
+3. **`cleanup`** (NEW — inserted before data-model per Chris)
+4. **`data-model`** (pour-structure)
+5. **`side-quest` MB-6**
 
 Each session ends by writing the kickoff brief for the next. Then a **product roadmap review /
-brainstorm** is the explicit capstone *after all four ship*. The deferred **/producers ·
+brainstorm** is the explicit capstone *after all ship*. The deferred **/producers ·
 /experiments · homepage** trio is NOT the next thing — it stays parked behind the roadmap review.
+
+### `cleanup` bucket (session 3 of 5) — placeholder
+
+NEW bucket added 2026-05-30. Three "make it cleaner, mostly by *removing* things" areas, all
+**page-local polish, no data work**. **Chris will paste the full specifics into the dedicated
+cleanup session thread itself** (deliberately not captured here, to keep context clean) — treat
+those pasted comments as the spec. High-level areas only:
+
+1. **`/brews` card heights** — cards still loading at inconsistent heights. This was **BI-1**,
+   marked shipped in PR1 (#317) via `components/BrewCard.tsx` equal-height work — so this is a
+   **reopen / residual**, not net-new. Chris will specify the case he's seeing.
+2. **Cultivar index spine** — declutter the `├ └ │` genealogical tree (CI-1, shipped Sprint 6 /
+   PR1). Removal-oriented cleanup.
+3. **Terroir index** — small removal-oriented cleanup on the grouped-row list.
+
+Capture-first: these are interpretive "looks cleaner" calls. Wait for Chris's pasted specifics at
+session start; do not pre-decide. Session ends by writing the `data-model` (pour-structure)
+kickoff brief — reminder: Chris does a full **audio recipe readout** to kick that one off; do not
+start the parser fix before it lands.
 
 - **`data-model` pour-structure bug kickoff:** Chris will do a **full audio readout** of several
   recipes — deliberately spanning **complex and simplistic** pour structures — to kick it off
