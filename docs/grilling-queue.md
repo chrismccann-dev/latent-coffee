@@ -33,6 +33,7 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Grade:** READY (cross-party session needed; Chris-offered, not yet scheduled)
     - **Source:** Item 5, Sprint R Phase 4 Step 4 grill (2026-05-23) — Chris-offered cross-party session
     - **Suggested landing:** dedicated cross-party grilling session — Chris + Claude Code + claude.ai instrumented; outputs ADR-0014 amendment with empirical thresholds
+    - **First data (2026-05-31, claude.ai grilling review Component 3):** roasting peak ~55-65% of the 200K window (mid-to-full arc; REDPLUM mid-V-set is a lower bound - close-out pushes higher), and the dominant category is **MCP payloads**, not docs or conversation. Session-start docs are cheap (~5-8%). The 50% heuristic isn't breached yet, but the lever is MCP-payload accumulation, not doc load - the ADR-0014 amendment should threshold against that. **Baseline is forward-only:** all pre-2026-05-21 lots (COS-HIG-BOR, RANCHOTIO) straddle the architecture change and can't be retroactively measured; REDPLUM + RANCHOTIO are the first valid data points, with a clean full-lifecycle number arriving when REDPLUM closes. Still READY for the full instrumented amendment.
 
 
 ### From CGLE Sudan Rume Natural V5 cupping (2026-05-21 — feedback log Round 9 / PR #216)
@@ -101,11 +102,13 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Grade:** READY (memory-chatbox edits in both projects)
     - **Source:** [docs/sprints/load-orchestration-verification-findings-2026-05-25.md](sprints/load-orchestration-verification-findings-2026-05-25.md) § Roasting session
     - **Suggested landing:** small memory-chatbox refresh pass touching both projects' "Purpose & context" / "Architecture" descriptions
+    - **Disposition (2026-05-31):** ✅ DRAINED in the first claude.ai grilling review. Real drift was the *opposite* of the bank note - roasting memory mislabeled context-roasting.md / context-shared.md as "stubs" (under-fetch framing), not "load-bearing fetches." 5 memory edits across both projects (roasting: RoR-shipped / active-lots slim / tool count 8 / instruments / CONTEXT-stub tidy; brewing: instruments) landed clean in a single chatbox pass. Recurring protocol (`feedback_claude_ai_grilling_review`) supersedes this one-time item going forward.
 
 38. **Operator guide cross-reference density — architectural watch-item** — both calibration responses noted the operator guide is "studded with cross-reference links" pulling toward link-following habit. The doc is correctly doing its job as a directory but the directory shape is itself a drift vector for over-fetching. Worth tracking if session-start loads creep upward over time. Pairs with the load-orchestration spec's "operator-guide exemption is the most-likely-to-drift line" canary — if the same drift surface fires twice, that's the signal to audit the exemption itself (potentially: split operator-guide's Canonical taxonomy lookups + Schema model + Session debrief paste template into on-demand pulls, per the pre-flight audit's deferred follow-up).
     - **Grade:** OBSERVING (watch-item; trigger is session-start load creep OR a second drift surface fire)
     - **Source:** [docs/sprints/load-orchestration-verification-findings-2026-05-25.md](sprints/load-orchestration-verification-findings-2026-05-25.md) § Overall feel + [docs/sprints/load-orchestration-preflight-audit-2026-05-25.md](sprints/load-orchestration-preflight-audit-2026-05-25.md) § Operator-guide split-check
     - **Suggested landing:** if triggered, operator-guide split sprint extracting 3 candidate sections (Schema model / Canonical taxonomy lookups / Session debrief paste template) per the pre-flight audit's deferred-follow-up table
+    - **Disposition (2026-05-31):** DISPROVEN by the first claude.ai grilling review context-window check. On current architecture, session-start docs are the *cheap* category (~5-8% of window on the REDPLUM thread; operator-guide wasn't even fetched upfront). Operator-guide load creep NOT confirmed - **do not pursue the operator-guide split.** The real context cost is MCP payloads: full-registry `read_canonical` (flavors ~20K tokens, ~5% used) + non-incremental `get_bean_pipeline` accumulation. Optimization redirected there (see PRODUCT.md roadmap: read_canonical name filter + get_bean_pipeline `since:`). Downgrade/close.
 
 ### From Sub-sprint 4c brews polish (2026-05-28 — deferred Item 4)
 
@@ -135,6 +138,18 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Grade:** READY (decision + possibly a small green touch-up; no new infra)
     - **Source:** Redesign Sprints 2-3 (per-surface tile reconciliation deferred) + CLAUDE.md § Design conventions lifecycle-tile-gradient note
     - **Suggested landing:** grill decision → either a small green-detail tile sprint (reconcile) or a CONTEXT/CLAUDE note blessing the divergence (close the open flag)
+
+### From the claude.ai grilling review (2026-05-31 - first run of the recurring protocol)
+
+44. **Deprecated prompts still fetchable + silently serve old content** - the 2026-05-31 context-window check found `in-process-bean-incremental-sync.md` fetched cleanly and worked, masking that it's deprecated (current lifecycle is start-lot -> log-roast -> log-cupping -> close-lot); the RANCHOTIO thread similarly loaded the old `roasting.md` monolith. A deprecated prompt should return a deprecation/redirect header (mirror the BREWING.md / ROASTING.md redirect-stub pattern) naming the supported replacement, rather than serving stale content that succeeds and hides the drift.
+    - **Grade:** READY (concrete doc/MCP fix, low risk)
+    - **Source:** claude.ai grilling review 2026-05-31, Component 3 (REDPLUM + RANCHOTIO context-window self-audit)
+    - **Suggested landing:** convert the 3 deprecated roasting prompts (new-bean-intake / in-process-bean-incremental-sync / closed-bean-full-fill) to redirect stubs in `docs/prompts/` pointing at the lifecycle replacements; verify docs.ts serves the stub
+
+45. **No write-side schema cheat-sheet doc -> trial-and-error schema discovery** - the 2026-05-31 context-window check (REDPLUM self-audit) found schema learned by trial-and-error (worth_repeating enum reject, push_experiment field-name mismatch, end_condition_target null-on-manual rule), each surprise costing 1-2 retry round-trips. claude.ai's framing: "the cumulative cost of NOT having a schema doc probably exceeds any single doc I did load." A compact `docs://schemas/<table>.md` per write-side table (roasts / roast_recipes / experiments / cuppings / brews) loaded once per session, est. 5-8 round-trips saved. Scoping question: author fresh vs. surface the existing push_* Zod schemas (which already encode this but aren't visible until the tool is called).
+    - **Grade:** READY (net-new doc set; small scoping decision on source-of-truth: author fresh vs generate from Zod)
+    - **Source:** claude.ai grilling review 2026-05-31, Component 3 (REDPLUM)
+    - **Suggested landing:** docs sprint - author or generate `docs/schemas/<table>.md` per write table + register in lib/mcp/docs.ts
 
 ## Substrate pruning candidates
 
