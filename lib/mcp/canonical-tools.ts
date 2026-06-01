@@ -27,7 +27,7 @@ import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 // The Resources stay registered for clients that DO surface them.
 //
 // Phase 2 (#R38): read_canonical accepts the docs:// aliases (regions →
-// terroirs, varieties → cultivars) in addition to the 12 canonical axis
+// terroirs, varieties → cultivars) in addition to the 13 canonical axis
 // names. The response echoes the resolved canonical axis name.
 
 const VALID_AXES = CANONICAL_AXES.map((m) => m.axis) as readonly CanonicalAxis[]
@@ -39,10 +39,10 @@ const AXIS_ALIAS_PAIRS = Object.entries(CANONICAL_AXIS_ALIASES)
 const axisInput = z
   .string()
   .refine((v) => resolveCanonicalAxis(v) != null, {
-    message: `Unknown canonical axis. Valid (12 canonical + 2 aliases): ${ACCEPTED_AXIS_NAMES.join(', ')}.`,
+    message: `Unknown canonical axis. Valid (13 canonical + 2 aliases): ${ACCEPTED_AXIS_NAMES.join(', ')}.`,
   })
   .describe(
-    `One of the 12 canonical-axis names: ${VALID_AXES.join(', ')}. ` +
+    `One of the 13 canonical-axis names: ${VALID_AXES.join(', ')}. ` +
       `Aliases also accepted (resolved server-side): ${AXIS_ALIAS_PAIRS.replace(/→/g, '->')}. ` +
       `Run list_canonicals to discover them. The response echoes the resolved canonical axis as \`axis\`.`,
   )
@@ -53,7 +53,7 @@ export function registerCanonicalTools(server: McpServer) {
     {
       title: 'List Canonical Registries',
       description:
-        'List / lookup / browse / discover / enumerate the canonical-taxonomy registries the MCP server validates against. Returns an array of { axis, title, description } for the 12 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers). Use this BEFORE drafting any write-tool payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical. NOTE: read_canonical also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars) for symmetry with `docs://taxonomies/{axis}.md` URIs.',
+        'List / lookup / browse / discover / enumerate the canonical-taxonomy registries the MCP server validates against. Returns an array of { axis, title, description } for the 13 axes (cultivars / terroirs / processes / roasters / producers / brewers / filters / flavors / roast-levels / grinders / extraction-strategies / modifiers / hybrid-subforms). Use this BEFORE drafting any write-tool payload to discover what fields are registry-validated and what their canonical / alias coverage looks like. For the actual payload of one axis, call read_canonical. NOTE: read_canonical also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars) for symmetry with `docs://taxonomies/{axis}.md` URIs.',
       inputSchema: {},
     },
     withToolErrorLogging('list_canonicals', async () => {

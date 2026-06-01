@@ -132,7 +132,7 @@ function registerCanonicalResources(server: McpServer) {
     {
       title: 'Canonical Registries',
       description:
-        'All 12 canonical-taxonomy registries served as JSON. Each axis exposes the registry list, alias map, and any structural metadata (genetic family / strategy tag / grinder valid_settings / etc.).',
+        'All 13 canonical-taxonomy registries served as JSON. Each axis exposes the registry list, alias map, and any structural metadata (genetic family / strategy tag / grinder valid_settings / etc.).',
       mimeType: 'application/json',
     },
     async (uri, variables) => {

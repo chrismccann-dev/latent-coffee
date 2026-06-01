@@ -156,7 +156,7 @@ export type CanonicalAxis =
 // data-model words (terroirs, cultivars). BREWING.md and roasting prompts
 // have been working around this for months. The alias resolves both ways:
 // `read_canonical(axis: "regions")` → terroirs, `read_canonical(axis:
-// "varieties")` → cultivars. The 12 canonical axis names remain authoritative
+// "varieties")` → cultivars. The 13 canonical axis names remain authoritative
 // for response payloads (the resolved axis is echoed back as `axis`).
 export const CANONICAL_AXIS_ALIASES: Record<string, CanonicalAxis> = {
   regions: 'terroirs',
