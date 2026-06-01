@@ -1322,7 +1322,7 @@ function ArchiveLotBody({
       : null
 
   const pourover = pickPourover(cuppings, refRoastId)
-  const optimizedBrew = pickOptimizedBrew(brewsForLot, refRoastId)
+  const optimizedBrew = pickOptimizedBrew(brewsForLot, refRoastId, bean.optimized_brew_id ?? null)
   // Primary ground Agtron for the WB→Gnd Δ display — prefer the pourover's
   // ground reading; fall back to any cupping on the reference roast.
   const primaryGroundAgtron =
@@ -1915,8 +1915,20 @@ function pickPourover(cuppings: any[], refRoastId: string | null): any | null {
 // on the lot (legacy data shape — Surma / Oma / Libertad / El Socorro have
 // roast_id=NULL on their single brew row). Returns null when the lot has no
 // brews at all.
-function pickOptimizedBrew(brewsForLot: any[], refRoastId: string | null): any | null {
+// Resolve the lot's optimized brew. Prefers the explicit green_beans
+// .optimized_brew_id FK (migration 075 / MB-7); the roast_id === refRoastId
+// heuristic survives only as a legacy fallback for lots closed before the
+// column existed (and the first-row fallback for older data). See ADR-0019.
+function pickOptimizedBrew(
+  brewsForLot: any[],
+  refRoastId: string | null,
+  optimizedBrewId: string | null,
+): any | null {
   if (brewsForLot.length === 0) return null
+  if (optimizedBrewId) {
+    const linked = brewsForLot.find((b) => b.id === optimizedBrewId)
+    if (linked) return linked
+  }
   if (refRoastId) {
     const matched = brewsForLot.find((b) => b.roast_id === refRoastId)
     if (matched) return matched

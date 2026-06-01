@@ -66,6 +66,12 @@ export const patchGreenBeanInputSchema = {
   peer_reference_brew_id: z.string().uuid().optional().nullable().describe(
     'Optional FK to a brews(id) row for the peer-roasted reference brew of the same green-bean lot. ~25-30%+ of lots have a peer-roasted variant the operator buys as a calibration anchor for the roasting side. Typically set HERE (not at green-bean push time) because the peer brew row is logged separately via the brewing-side write path, then this FK is backfilled. Pass NULL to clear an existing link. See CONTEXT-roasting.md § Peer-roasted reference brew.',
   ),
+  // Migration 075 (Cluster A / MB-7, 2026-06-01): patchable — set at close-lot
+  // from the brew_id in the optimized-brew handoff brief, or backfilled for
+  // lots closed before this column existed.
+  optimized_brew_id: z.string().uuid().optional().nullable().describe(
+    'Optional FK to a brews(id) row for the canonical optimized brew of THIS green-bean lot (the operator own daily-consumption pour-over for the reference roast). The primary set-point: at close-lot, read the brew_id from the optimized-brew handoff brief and patch it here; or backfill it for a lot closed before this column existed. Distinct from peer_reference_brew_id (external roaster version). Pass NULL to clear. See CONTEXT-roasting.md section Optimized brew + ADR-0019.',
+  ),
 }
 
 export function registerPatchGreenBeanTool(server: McpServer, auth: McpAuthContext) {

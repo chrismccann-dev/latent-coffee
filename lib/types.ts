@@ -107,6 +107,11 @@ export interface GreenBean {
   // ~25-30%+ of lots have one (calibration anchor for the roasting side).
   // ON DELETE SET NULL on the FK constraint.
   peer_reference_brew_id: string | null
+  // Cluster A / MB-7 (migration 075, 2026-06-01): nullable FK to brews(id)
+  // for the lot's own canonical optimized brew. Sibling to
+  // peer_reference_brew_id; set at close-lot, replaces the pickOptimizedBrew
+  // heuristic. ON DELETE SET NULL. See ADR-0019.
+  optimized_brew_id: string | null
   created_at: string
   updated_at: string
   // Joined data

@@ -89,6 +89,10 @@ export interface GreenBeanPayload {
   // NULL at first push; backfilled later via patch_green_bean once the
   // peer brew row exists. See CONTEXT-roasting.md § Peer-roasted reference brew.
   peer_reference_brew_id?: string | null
+  // Cluster A / MB-7 (migration 075). Optional FK to brews(id) for the lot's
+  // own optimized brew. Typically NULL at first push; set at close-lot once
+  // the optimized brew row exists. See CONTEXT-roasting.md § Optimized brew.
+  optimized_brew_id?: string | null
 }
 
 export type PersistGreenBeanResult =
@@ -243,6 +247,9 @@ export async function persistGreenBean(
     // Migration 069 (Phase 2 Item 17). Optional peer-roasted reference brew
     // FK; defaults NULL when payload omits, typically backfilled later.
     peer_reference_brew_id: payload.peer_reference_brew_id ?? null,
+    // Migration 075 (Cluster A / MB-7). Optional optimized-brew FK; defaults
+    // NULL when payload omits, typically set at close-lot.
+    optimized_brew_id: payload.optimized_brew_id ?? null,
   }
 
   const { data, error } = await supabase
@@ -1122,6 +1129,10 @@ export interface PatchGreenBeanPayload {
   // push time) because the peer brew row is logged separately via the
   // brewing-side write path, then this FK is backfilled.
   peer_reference_brew_id?: string | null
+  // Migration 075 (Cluster A / MB-7). Patchable — typically set HERE at
+  // close-lot from the brew_id in the optimized-brew handoff brief, or
+  // backfilled for lots closed before this column existed.
+  optimized_brew_id?: string | null
 }
 
 export const GREEN_BEAN_PATCH_FIELDS = [
@@ -1134,6 +1145,8 @@ export const GREEN_BEAN_PATCH_FIELDS = [
   'is_one_shot',
   // Migration 069 (Phase 2 Item 17)
   'peer_reference_brew_id',
+  // Migration 075 (Cluster A / MB-7)
+  'optimized_brew_id',
 ] as const
 
 export async function patchGreenBean(
