@@ -1,0 +1,10 @@
+# The lot's brew-web: explicit sibling FKs over heuristic and join table
+
+A green-bean lot points at up to three brew artifacts: the operator's own brews (`brews.green_bean_id`, many), the operator's canonical optimized brew, and an external peer-roasted variant. We model the two canonical pointers as two nullable sibling FKs on `green_beans` — `optimized_brew_id` (new, Cluster A / MB-7) and `peer_reference_brew_id` (shipped migration 069) — set explicitly at the earliest moment both rows exist, fed by a brewing-to-roasting handoff brief that carries the `brew_id` across the claude.ai project boundary.
+
+Rejected alternatives:
+- **The `pickOptimizedBrew` heuristic (`roast_id = best_roast_id`) as the permanent mechanism** — kept only as a legacy fallback for lots closed before `optimized_brew_id` existed. The heuristic is fragile (a lot can have several brews on the reference roast; the "first row" fallback is arbitrary) and there is no clean programmatic disambiguation from `green_bean_id` alone, which is why the backfill is operator-supplied.
+- **A `peer_reference_brews` (or unified brew-link) join table** — cardinality is 1:1 in lived practice (one optimized brew per lot; at most one peer variant per lot across N=5+ instances). A join table would over-model a product surface Chris explicitly wants kept lightweight. If many-to-many emerges (e.g. peer variants from multiple roasters of one green), migrate then; both FKs are `ON DELETE SET NULL` and additive.
+- **A live `get_brew` read instead of the handoff brief** — the bean-attributable-vs-roast-attributable judgment that makes a peer variant high- or low-information can only be made brewing-side at completion (with the Agtron in hand), not reconstructed from the raw brew row. So the cross-boundary artifact is a curated handoff doc, not a raw read.
+
+See the spec: [docs/sprints/cluster-a-scaffold-spec-2026-06-01.md](../sprints/cluster-a-scaffold-spec-2026-06-01.md). Glossary: CONTEXT-shared § Cross-domain Workflow (Brewing-to-roasting handoff brief) + § Relationships (brew-web); CONTEXT-roasting § Peer-roasted reference brew + § Optimized brew.

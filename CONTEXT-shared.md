@@ -22,6 +22,12 @@ Extracted to [docs/reference/wbc-materials.md](docs/reference/wbc-materials.md) 
 
 Extracted to [docs/reference/synthesis-pipeline.md](docs/reference/synthesis-pipeline.md) — covers Humanizer pass / Knowledge capsule (Living-at-time-of-creation + Cross-source) / Synthesis pipeline / Directed-prompt adapter / Bottoms-up synthesis-prompt authoring / Cross-coffee insight layer / Variety throughline / Resynthesize trigger / Corpus tier. Read via `docs://reference/synthesis-pipeline.md` MCP Resource.
 
+### Cross-domain Workflow
+
+**Brewing-to-roasting handoff brief** (Cluster A, 2026-06-01):
+A structured doc a brewing-project thread produces and a roasting-project thread pulls back in, carrying a brewing-side result across the claude.ai **project boundary** (claude.ai/brewing ↔ claude.ai/roasting) without loading brewing context into the roasting thread. Three instances in the lot pipeline: the **simulated-pourover recipe handoff** (ephemeral — the first-guess recipe + derivation, no brew row); the **peer-variant handoff** (the 5-field assessment of an external roaster's version — see CONTEXT-roasting § Peer-roasted reference brew); the **optimized-brew handoff** (carries the pushed `brew_id` so close-lot can link `green_beans.optimized_brew_id`). Same shape and rationale as the research coordinator ↔ assistant handoff — the boundary exists to protect the roasting thread's context window. Both projects hit the same MCP server but keep separate context windows; cross-boundary *reads* use existing Tools (`get_green_bean` / `get_brew`), so the handoff is doc-passing, not a new Tool surface.
+_Avoid_: "handoff doc" (too generic — Latent has several); conflating with the research-coordinator handoff (same shape, different domain).
+
 ## Relationships
 
 - A **V-set** belongs to exactly one green-bean lot.
@@ -30,6 +36,7 @@ Extracted to [docs/reference/synthesis-pipeline.md](docs/reference/synthesis-pip
 - Each **batch slot** corresponds to exactly one roast execution and exactly one Roest machine profile (same name everywhere).
 - A later **V-set** (e.g. V2) is informed by the outcomes of the earlier V-set on the same lot.
 - Each **V-set** has exactly one **experiment frame**, authored before any roasting happens.
+- A green-bean lot's **brew-web** (Cluster A) links up to three brew artifacts: *my brews* (`brews.green_bean_id`, many), *my optimized brew* (`green_beans.optimized_brew_id`, 0–1, the lot's canonical end-state cup), and a *peer-roasted variant* (`green_beans.peer_reference_brew_id`, 0–1, external calibration anchor). The two canonical pointers are explicit sibling FKs set at the earliest moment both rows exist, fed by a **brewing-to-roasting handoff brief** — not a join table (1:1 in lived practice), not a heuristic (the legacy `pickOptimizedBrew` fallback only). See [ADR-0019](docs/adr/0019-lot-brew-web.md).
 - An **experiment frame** predicts outcomes at both the roast layer (what the curve will look like) and the cup layer (what the brew will taste like); these predictions get compared against actuals to produce two distinct deltas per batch slot.
 - A **variable** becomes a **lever** post-hoc once cross-batch-slot or cross-V-set evidence shows it meaningfully affects the cup; if the same evidence shows no effect, it becomes a **non-factor** instead.
 - An experiment frame's `levels_tested` enumerates the values a **variable** takes across batch slots (e.g. fast / medium / slow, or 240°C / 250°C / 260°C peak inlet).
