@@ -99,7 +99,7 @@ export default async function GreenBeansPage() {
       experiments(id, experiment_id, batch_ids, winner, created_at),
       roasts(id, batch_id, cuppings(id)),
       roast_learnings(id, best_batch_id, best_roast_id, why_this_roast_won),
-      brews(id, roast_id, flavor_notes, created_at)
+      brews!green_bean_id(id, roast_id, flavor_notes, created_at)
     `,
     )
     .order('created_at', { ascending: false })

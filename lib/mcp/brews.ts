@@ -22,14 +22,14 @@ const RECENT_SELECT = `
   is_process_dominant,
   terroir:terroirs(country, admin_region, macro_terroir, meso_terroir),
   cultivar:cultivars(cultivar_name, species, genetic_family, lineage),
-  green_bean:green_beans(name, lot_id, producer)
+  green_bean:green_beans!green_bean_id(name, lot_id, producer)
 `
 
 const FULL_SELECT = `
   *,
   terroir:terroirs(*),
   cultivar:cultivars(*),
-  green_bean:green_beans(*)
+  green_bean:green_beans!green_bean_id(*)
 `
 
 export async function fetchRecentBrews(

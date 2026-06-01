@@ -40,7 +40,7 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
     .from('brews')
     .select(`
       *,
-      green_bean:green_beans(*),
+      green_bean:green_beans!green_bean_id(*),
       terroir:terroirs(*),
       cultivar:cultivars(*),
       roast:roasts(*)
