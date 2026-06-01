@@ -71,6 +71,10 @@ export const pushGreenBeanInputSchema = {
   peer_reference_brew_id: z.string().uuid().optional().nullable().describe(
     'Optional FK to a brews(id) row for the peer-roasted reference brew of the same green-bean lot. ~25-30%+ of lots have a peer-roasted variant the operator buys as a calibration anchor for the roasting side (CGLE Sudan Rume Natural / Wush Wush / every Untold Coffee Lab lot pattern). 1:1 in current practice (one green-bean lot, at most one peer reference). Typically NULL at first push and set later via the green-bean field-level mutation companion once the peer brew row exists. See CONTEXT-roasting.md § Peer-roasted reference brew.',
   ),
+  // Migration 075 (Cluster A / MB-7, 2026-06-01)
+  optimized_brew_id: z.string().uuid().optional().nullable().describe(
+    'Optional FK to a brews(id) row for the canonical optimized brew of THIS green-bean lot (the daily-consumption pour-over recipe dialed in for the reference roast). Sibling to peer_reference_brew_id; together they form the lot brew-web. Almost always NULL at green-bean push time — set later (typically at close-lot) from the brew_id carried in the optimized-brew handoff brief via the green-bean field-level mutation companion. Distinct from peer_reference_brew_id (that one is the EXTERNAL roaster version; this one is the operator self-roasted brew). See CONTEXT-roasting.md section Optimized brew + ADR-0019.',
+  ),
 }
 
 export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContext) {
