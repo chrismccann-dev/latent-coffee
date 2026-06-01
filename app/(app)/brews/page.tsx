@@ -31,7 +31,7 @@ export default async function BrewsPage({ searchParams }: BrewsPageProps) {
     .from('brews')
     .select(`
       *,
-      green_bean:green_beans(name, lot_id, producer),
+      green_bean:green_beans!green_bean_id(name, lot_id, producer),
       terroir:terroirs(country, admin_region, macro_terroir),
       cultivar:cultivars(cultivar_name, lineage)
     `)
