@@ -2,63 +2,85 @@
 // Single source of truth; the route handler registers one ResourceTemplate that
 // dispatches via this lookup.
 
+import type { CanonicalLookup } from '@/lib/canonical-registry'
 import {
   CULTIVARS,
   CULTIVAR_ALIASES,
   CULTIVAR_NAMES,
   CULTIVAR_LINEAGES,
+  CULTIVAR_LOOKUP,
   GENETIC_FAMILIES,
   CULTIVAR_SPECIES,
+  getCultivarEntry,
 } from '@/lib/cultivar-registry'
 import {
   TERROIRS,
   TERROIR_COUNTRIES,
   TERROIR_MACROS,
   TERROIR_MACRO_ALIASES,
+  TERROIR_MACRO_LOOKUP,
 } from '@/lib/terroir-registry'
 import {
   BASE_PROCESSES,
   BASE_PROCESS_ALIASES,
+  BASE_PROCESS_LOOKUP,
   HONEY_SUBPROCESSES,
   HONEY_SUBPROCESS_ALIASES,
+  HONEY_SUBPROCESS_LOOKUP,
   FERMENTATION_MODIFIERS,
   FERMENTATION_ALIASES,
+  FERMENTATION_LOOKUP,
   FERMENTATION_QUALIFIERS,
   FERMENTATION_QUALIFIER_ALIASES,
+  FERMENTATION_QUALIFIER_LOOKUP,
   DRYING_MODIFIERS,
   DRYING_ALIASES,
+  DRYING_LOOKUP,
   INTERVENTION_MODIFIERS,
   INTERVENTION_ALIASES,
+  INTERVENTION_LOOKUP,
   EXPERIMENTAL_MODIFIERS,
   EXPERIMENTAL_ALIASES,
+  EXPERIMENTAL_LOOKUP,
   DECAF_MODIFIERS,
   DECAF_ALIASES,
+  DECAF_LOOKUP,
   SIGNATURE_METHODS,
   SIGNATURE_ALIASES,
+  SIGNATURE_LOOKUP,
   LEGACY_DECOMPOSITIONS,
+  getSignatureEntry,
 } from '@/lib/process-registry'
 import {
   ROASTERS,
   ROASTER_NAMES,
   ROASTER_ALIASES,
+  ROASTER_LOOKUP,
   ROASTER_FAMILIES,
   ROASTER_STRATEGY_TAGS,
   STRATEGY_TAG_FAMILY,
+  getRoasterEntry,
 } from '@/lib/roaster-registry'
 import {
   PRODUCERS,
   PRODUCER_NAMES,
   PRODUCER_ALIASES,
+  PRODUCER_LOOKUP,
+  getProducerEntry,
 } from '@/lib/producer-registry'
 import {
   BREWERS,
   BREWER_NAMES,
   BREWER_ALIASES,
+  BREWER_LOOKUP,
+  getBrewerEntry,
 } from '@/lib/brewer-registry'
 import {
   FILTERS,
   FILTER_NAMES,
   FILTER_ALIASES,
+  FILTER_LOOKUP,
+  getFilterEntry,
 } from '@/lib/filter-registry'
 import {
   BASE_FLAVORS,
@@ -68,16 +90,23 @@ import {
   ALIAS_MAP,
   FALLBACK_ANCHORS,
   TEA_BASES,
+  composeFlavorNote,
+  decomposeFlavorNote,
+  structureTagKey,
 } from '@/lib/flavor-registry'
 import {
   ROAST_LEVELS,
   ROAST_LEVEL_NAMES,
   ROAST_LEVEL_ALIASES,
+  ROAST_LEVEL_LOOKUP,
+  getRoastLevelEntry,
 } from '@/lib/roast-level-registry'
 import {
   GRINDERS,
   GRINDER_NAMES,
   GRINDER_ALIASES,
+  GRINDER_LOOKUP,
+  getGrinderEntry,
 } from '@/lib/grinder-registry'
 import { EXTRACTION_STRATEGIES, type ExtractionStrategy } from '@/lib/brew-import'
 import { MODIFIER_TYPES, type ModifierType } from '@/lib/extraction-modifiers'
@@ -163,7 +192,7 @@ export const CANONICAL_AXIS_ALIASES: Record<string, CanonicalAxis> = {
   varieties: 'cultivars',
 }
 
-// All input names accepted by read_canonical / canonicals:// — the 12
+// All input names accepted by read_canonical / canonicals:// — the 13
 // canonical axes plus the 2 aliases above.
 export function listAcceptedCanonicalAxisNames(): string[] {
   return [...CANONICAL_AXES.map((m) => m.axis), ...Object.keys(CANONICAL_AXIS_ALIASES)]
@@ -313,4 +342,285 @@ export function getCanonicalPayload(axis: string): CanonicalPayload | null {
   const resolved = resolveCanonicalAxis(axis)
   if (!resolved) return null
   return PAYLOAD_CACHE[resolved] ?? null
+}
+
+// ---------------------------------------------------------------------------
+// Single-entry lookup (read_canonical name filter).
+//
+// The full-payload read_canonical(axis) is the #1 context-window token sink in
+// claude.ai roasting/brewing sessions — read_canonical(flavors) returns ~20K
+// tokens of which a typical session uses ~5%. When the caller already knows the
+// name(s) it wants to validate, read_canonical(axis, name) resolves just those
+// through the axis's canonical + alias lookup and returns the matched entry(ies)
+// + the aliases that point at each canonical — not the whole registry.
+//
+// Resolution per name: case-insensitive canonical → direct alias → fuzzy
+// (substring / 3-char prefix via the shared CanonicalLookup) → unresolved.
+// matchType records which rung resolved so the caller can tell "you wrote the
+// canonical form" from "I guessed". Composite axes (processes / flavors) search
+// every sub-registry and emit one match per hit, tagged with `group`.
+// ---------------------------------------------------------------------------
+
+export type CanonicalMatchType = 'canonical' | 'alias' | 'fuzzy' | 'unresolved'
+
+export type CanonicalMatch = {
+  query: string
+  /** Sub-registry for composite axes (processes / flavors); omitted otherwise. */
+  group?: string
+  /** Canonical (title-case) form the query resolved to; null when unresolved. */
+  resolved: string | null
+  matchType: CanonicalMatchType
+  /** Rich entry object for the resolved canonical, or null for name-only axes. */
+  entry: unknown
+  /** Alias keys that resolve to `resolved`. */
+  aliases: string[]
+}
+
+export type CanonicalEntryPayload = {
+  axis: CanonicalAxis
+  notes: string
+  query: string[]
+  matches: CanonicalMatch[]
+}
+
+function unresolvedMatch(query: string): CanonicalMatch {
+  return { query, resolved: null, matchType: 'unresolved', entry: null, aliases: [] }
+}
+
+function aliasesPointingTo(
+  canonical: string,
+  aliases: Readonly<Record<string, string>>,
+): string[] {
+  const lower = canonical.toLowerCase()
+  return Object.keys(aliases).filter((k) => (aliases[k] ?? '').toLowerCase() === lower)
+}
+
+function directAliasTarget(
+  name: string,
+  aliases: Readonly<Record<string, string>>,
+): string | null {
+  const lower = name.trim().toLowerCase()
+  for (const k of Object.keys(aliases)) {
+    if (k.toLowerCase() === lower) return aliases[k]
+  }
+  return null
+}
+
+// Classify a name through a CanonicalLookup + its alias map, recording which
+// resolution rung fired. canonicalize() collapses all three rungs into a single
+// title-case answer; we re-derive the rung for the caller's matchType.
+function classifyName(
+  name: string,
+  lookup: CanonicalLookup,
+  aliases: Readonly<Record<string, string>>,
+): { resolved: string | null; matchType: CanonicalMatchType } {
+  const trimmed = name.trim()
+  if (!trimmed) return { resolved: null, matchType: 'unresolved' }
+  if (lookup.isCanonical(trimmed)) {
+    return { resolved: lookup.canonicalize(trimmed) ?? trimmed, matchType: 'canonical' }
+  }
+  const aliasTarget = directAliasTarget(trimmed, aliases)
+  if (aliasTarget) return { resolved: aliasTarget, matchType: 'alias' }
+  const fuzzy = lookup.findClosest(trimmed)
+  if (fuzzy) return { resolved: fuzzy, matchType: 'fuzzy' }
+  return { resolved: null, matchType: 'unresolved' }
+}
+
+// Single-name rich-entry axes: cultivars / roasters / producers / brewers /
+// filters / roast-levels / grinders. Each resolves one name to one entry.
+type SimpleAxisResolver = {
+  lookup: CanonicalLookup
+  aliases: Readonly<Record<string, string>>
+  findEntry: (canonical: string) => unknown
+}
+
+const SIMPLE_AXIS_RESOLVERS: Partial<Record<CanonicalAxis, SimpleAxisResolver>> = {
+  cultivars: { lookup: CULTIVAR_LOOKUP, aliases: CULTIVAR_ALIASES, findEntry: (c) => getCultivarEntry(c) },
+  roasters: { lookup: ROASTER_LOOKUP, aliases: ROASTER_ALIASES, findEntry: (c) => getRoasterEntry(c) ?? null },
+  producers: { lookup: PRODUCER_LOOKUP, aliases: PRODUCER_ALIASES, findEntry: (c) => getProducerEntry(c) },
+  brewers: { lookup: BREWER_LOOKUP, aliases: BREWER_ALIASES, findEntry: (c) => getBrewerEntry(c) },
+  filters: { lookup: FILTER_LOOKUP, aliases: FILTER_ALIASES, findEntry: (c) => getFilterEntry(c) },
+  'roast-levels': { lookup: ROAST_LEVEL_LOOKUP, aliases: ROAST_LEVEL_ALIASES, findEntry: (c) => getRoastLevelEntry(c) ?? null },
+  grinders: { lookup: GRINDER_LOOKUP, aliases: GRINDER_ALIASES, findEntry: (c) => getGrinderEntry(c) ?? null },
+}
+
+function simpleMatch(query: string, r: SimpleAxisResolver): CanonicalMatch {
+  const { resolved, matchType } = classifyName(query, r.lookup, r.aliases)
+  return {
+    query,
+    resolved,
+    matchType,
+    entry: resolved ? r.findEntry(resolved) ?? null : null,
+    aliases: resolved ? aliasesPointingTo(resolved, r.aliases) : [],
+  }
+}
+
+// Terroirs is keyed on the (country, macro_terroir) compound. A name lookup may
+// be a country (→ every macro in that country, the shape close-lot.md asks for)
+// or a macro (→ every TerroirEntry row carrying it, possibly across countries).
+function terroirMatch(query: string): CanonicalMatch {
+  const lower = query.trim().toLowerCase()
+
+  const country = TERROIR_COUNTRIES.find((c) => c.toLowerCase() === lower)
+  if (country) {
+    const rows = TERROIRS.filter((t) => t.country.toLowerCase() === lower)
+    return { query, group: 'country', resolved: country, matchType: 'canonical', entry: rows, aliases: [] }
+  }
+
+  const { resolved, matchType } = classifyName(query, TERROIR_MACRO_LOOKUP, TERROIR_MACRO_ALIASES)
+  const rows = resolved
+    ? TERROIRS.filter((t) => t.macro_terroir.toLowerCase() === resolved.toLowerCase())
+    : []
+  return {
+    query,
+    group: resolved ? 'macro' : undefined,
+    resolved,
+    matchType,
+    entry: rows.length ? rows : null,
+    aliases: resolved ? aliasesPointingTo(resolved, TERROIR_MACRO_ALIASES) : [],
+  }
+}
+
+// Processes is composite: one name may be a base / honey subprocess / any of the
+// modifier axes / decaf / signature. Search every sub-axis. Prefer exact +
+// alias hits; fall back to fuzzy across axes only when nothing exact matched.
+const PROCESS_SUBAXES: {
+  group: string
+  lookup: CanonicalLookup
+  aliases: Readonly<Record<string, string>>
+  findEntry?: (c: string) => unknown
+}[] = [
+  { group: 'base', lookup: BASE_PROCESS_LOOKUP, aliases: BASE_PROCESS_ALIASES },
+  { group: 'honey_subprocess', lookup: HONEY_SUBPROCESS_LOOKUP, aliases: HONEY_SUBPROCESS_ALIASES },
+  { group: 'fermentation_modifiers', lookup: FERMENTATION_LOOKUP, aliases: FERMENTATION_ALIASES },
+  { group: 'fermentation_qualifiers', lookup: FERMENTATION_QUALIFIER_LOOKUP, aliases: FERMENTATION_QUALIFIER_ALIASES },
+  { group: 'drying_modifiers', lookup: DRYING_LOOKUP, aliases: DRYING_ALIASES },
+  { group: 'intervention_modifiers', lookup: INTERVENTION_LOOKUP, aliases: INTERVENTION_ALIASES },
+  { group: 'experimental_modifiers', lookup: EXPERIMENTAL_LOOKUP, aliases: EXPERIMENTAL_ALIASES },
+  { group: 'decaf', lookup: DECAF_LOOKUP, aliases: DECAF_ALIASES },
+  { group: 'signature', lookup: SIGNATURE_LOOKUP, aliases: SIGNATURE_ALIASES, findEntry: (c) => getSignatureEntry(c) },
+]
+
+function processMatches(query: string): CanonicalMatch[] {
+  const exact: CanonicalMatch[] = []
+  const fuzzy: CanonicalMatch[] = []
+  for (const sub of PROCESS_SUBAXES) {
+    const { resolved, matchType } = classifyName(query, sub.lookup, sub.aliases)
+    if (!resolved || matchType === 'unresolved') continue
+    const match: CanonicalMatch = {
+      query,
+      group: sub.group,
+      resolved,
+      matchType,
+      entry: sub.findEntry ? sub.findEntry(resolved) ?? null : null,
+      aliases: aliasesPointingTo(resolved, sub.aliases),
+    }
+    if (matchType === 'fuzzy') fuzzy.push(match)
+    else exact.push(match)
+  }
+  if (exact.length) return exact
+  if (fuzzy.length) return fuzzy
+  return [unresolvedMatch(query)]
+}
+
+// Flavors is composite across bases / modifiers / structure tags + the 112-entry
+// composite ALIAS_MAP (e.g. "Blueberry Muffin" → Blueberry + [Baked]).
+function flavorMatches(query: string): CanonicalMatch[] {
+  const trimmed = query.trim()
+  if (!trimmed) {
+    return [unresolvedMatch(query)]
+  }
+  const lower = trimmed.toLowerCase()
+  const matches: CanonicalMatch[] = []
+
+  const base = BASE_FLAVORS.find((b) => b.name.toLowerCase() === lower)
+  if (base) {
+    matches.push({ query, group: 'base', resolved: base.name, matchType: 'canonical', entry: base, aliases: [] })
+  }
+  const mod = FLAVOR_MODIFIERS.find((m) => m.name.toLowerCase() === lower)
+  if (mod) {
+    matches.push({ query, group: 'modifier', resolved: mod.name, matchType: 'canonical', entry: mod, aliases: [] })
+  }
+  const tag = STRUCTURE_TAGS.find(
+    (t) => t.descriptor.toLowerCase() === lower || structureTagKey(t).toLowerCase() === lower,
+  )
+  if (tag) {
+    matches.push({ query, group: 'structure_tag', resolved: structureTagKey(tag), matchType: 'canonical', entry: tag, aliases: [] })
+  }
+  const aliasKey = Object.keys(ALIAS_MAP).find((k) => k.toLowerCase() === lower)
+  if (aliasKey) {
+    const chip = ALIAS_MAP[aliasKey]
+    matches.push({ query, group: 'alias', resolved: composeFlavorNote(chip), matchType: 'alias', entry: chip, aliases: [] })
+  }
+
+  if (matches.length) return matches
+
+  // Fuzzy fallback via the shared decomposer (alias map + canonical base resolution).
+  const chip = decomposeFlavorNote(trimmed)
+  if (chip) {
+    return [{ query, group: 'base', resolved: composeFlavorNote(chip), matchType: 'fuzzy', entry: chip, aliases: [] }]
+  }
+  return [unresolvedMatch(query)]
+}
+
+// Meta axes are small literal lists — exact (case-insensitive) match only.
+function extractionStrategyMatch(query: string): CanonicalMatch {
+  const lower = query.trim().toLowerCase()
+  const hit = EXTRACTION_STRATEGIES.find((s) => s.toLowerCase() === lower)
+  return hit
+    ? { query, resolved: hit, matchType: 'canonical', entry: { name: hit, description: STRATEGY_DESCRIPTIONS[hit] ?? '' }, aliases: [] }
+    : unresolvedMatch(query)
+}
+
+function modifierTypeMatch(query: string): CanonicalMatch {
+  const lower = query.trim().toLowerCase()
+  const hit = MODIFIER_TYPES.find((t) => t.toLowerCase() === lower)
+  return hit
+    ? { query, resolved: hit, matchType: 'canonical', entry: { type: hit, ...MODIFIER_TYPE_DESCRIPTIONS[hit] }, aliases: [] }
+    : unresolvedMatch(query)
+}
+
+function hybridSubformMatch(query: string): CanonicalMatch {
+  const lower = query.trim().toLowerCase()
+  const hit = HYBRID_SUBFORM_ENTRIES.find(
+    (e) => e.id.toLowerCase() === lower || e.label.toLowerCase() === lower,
+  )
+  return hit
+    ? { query, resolved: hit.id, matchType: 'canonical', entry: hit, aliases: [] }
+    : unresolvedMatch(query)
+}
+
+function matchesForName(axis: CanonicalAxis, query: string): CanonicalMatch[] {
+  const simple = SIMPLE_AXIS_RESOLVERS[axis]
+  if (simple) return [simpleMatch(query, simple)]
+  switch (axis) {
+    case 'terroirs':
+      return [terroirMatch(query)]
+    case 'processes':
+      return processMatches(query)
+    case 'flavors':
+      return flavorMatches(query)
+    case 'extraction-strategies':
+      return [extractionStrategyMatch(query)]
+    case 'modifiers':
+      return [modifierTypeMatch(query)]
+    case 'hybrid-subforms':
+      return [hybridSubformMatch(query)]
+    default:
+      return [unresolvedMatch(query)]
+  }
+}
+
+// read_canonical(axis, name | names) — resolve specific name(s) instead of
+// returning the whole registry. Accepts the same axis aliases as
+// getCanonicalPayload (regions → terroirs, varieties → cultivars).
+export function getCanonicalEntries(
+  axis: string,
+  names: string[],
+): CanonicalEntryPayload | null {
+  const resolved = resolveCanonicalAxis(axis)
+  if (!resolved) return null
+  const meta = PAYLOAD_CACHE[resolved]
+  const matches = names.flatMap((name) => matchesForName(resolved, name))
+  return { axis: resolved, notes: meta?.notes ?? '', query: names, matches }
 }

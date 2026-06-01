@@ -3,6 +3,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import {
   CANONICAL_AXES,
   CANONICAL_AXIS_ALIASES,
+  getCanonicalEntries,
   getCanonicalPayload,
   listAcceptedCanonicalAxisNames,
   resolveCanonicalAxis,
@@ -74,12 +75,44 @@ export function registerCanonicalTools(server: McpServer) {
     {
       title: 'Read Canonical Registry',
       description:
-        'Read / lookup / validate / find / get the full canonical-registry payload for one axis (cultivars / roasters / producers / etc.). Use this to validate a name or look up an alias against the strict canonical vocabulary BEFORE composing any write payload that includes the value. The companion catalog Tool of the same domain returns just the available axes (without payloads) for discovery. Phase 2 (#R38): also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars). Returns { axis, canonicals: string[], aliases: Record<string,string>, ...structural metadata } where structural metadata varies by axis (genetic family / strategy tag / grinder valid_settings / etc.) — same content the canonicals://{axis} Resource serves.',
+        'Read / lookup / validate / find / get canonical-registry content for one axis (cultivars / roasters / producers / etc.). Use this to validate a name or look up an alias against the strict canonical vocabulary BEFORE composing any write payload that includes the value. ' +
+        'TWO MODES: ' +
+        '(1) Single-entry lookup — pass `name` (or `names: string[]`) when you already know the value(s) you want to validate. Returns ONLY the resolved entry(ies) + their aliases, not the whole registry. STRONGLY PREFER THIS — the full payload for a large axis (flavors ~20K tokens, filters, brewers) is the #1 context-window sink, and a typical session uses ~5% of it. Each match is { query, group?, resolved, matchType: canonical|alias|fuzzy|unresolved, entry, aliases[] }. `resolved` is the canonical (title-case) form; `matchType` tells you whether you wrote it canonically, hit an alias, got a fuzzy guess, or it is unknown; `group` names the sub-registry for composite axes (processes: base / fermentation_modifiers / signature / etc.; flavors: base / modifier / structure_tag / alias). A composite axis can return multiple matches per name. ' +
+        '(2) Full-registry dump — omit `name`/`names` to get the entire payload (back-compat) for browsing an axis you do not yet know the vocabulary of. ' +
+        'Phase 2 (#R38): also accepts the docs:// aliases `regions` (-> terroirs) and `varieties` (-> cultivars). Full-dump shape: { axis, notes, data: { canonicals, aliases, ...structural metadata } } — same content the canonicals://{axis} Resource serves. Single-entry shape: { axis, notes, query: string[], matches: [...] }.',
       inputSchema: {
         axis: axisInput,
+        name: z
+          .string()
+          .optional()
+          .describe(
+            'Optional single name to resolve against the axis (canonical / alias / fuzzy). When provided (alone or with `names`), the response returns only the matched entry(ies) instead of the full registry. Omit for the full-registry dump.',
+          ),
+        names: z
+          .array(z.string())
+          .max(50)
+          .optional()
+          .describe(
+            'Optional batch of names to resolve in one call (combined with `name` if both supplied). Each resolves independently; composite axes may emit multiple matches per name. Up to 50.',
+          ),
       },
     },
-    withToolErrorLogging('read_canonical', async ({ axis }) => {
+    withToolErrorLogging('read_canonical', async ({ axis, name, names }) => {
+      const queryNames = [...(name ? [name] : []), ...(names ?? [])]
+
+      if (queryNames.length > 0) {
+        const entries = getCanonicalEntries(axis, queryNames)
+        if (!entries) {
+          throw new Error(
+            `Unknown canonical axis: ${axis}. Valid: ${ACCEPTED_AXIS_NAMES.join(', ')}.`,
+          )
+        }
+        return {
+          content: [{ type: 'text', text: JSON.stringify(entries) }],
+          structuredContent: entries as unknown as { [k: string]: unknown },
+        }
+      }
+
       const payload = getCanonicalPayload(axis)
       if (!payload) {
         // Belt-and-suspenders — refine should already reject unknown values.
