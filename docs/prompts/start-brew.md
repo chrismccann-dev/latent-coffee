@@ -36,7 +36,31 @@ Recipe field; kettle thermal stance + active temp ramps go in a `thermal_staging
 modifier; gear beyond brewer+filter (Melodrip / booster / Paragon ball) goes in an
 `equipment` modifier with a free-text `scope`.
 
-Coffee URL:
+**Self-roasted optimized-brew entry (no Coffee URL — an OPTIMIZED BREW PACKET instead).**
+When the input is an `OPTIMIZED BREW PACKET` block (or the operator declares "this is
+the optimized brew for <lot>") rather than a Coffee URL, this is the lot's optimized
+brew crossing from the roasting project (emitted by `one-shot.md` STAGE 4 for one-shot
+lots, or the V-set reference-roast kickoff). Handle it as follows:
+- Pull the lot from the shared DB instead of fetching a URL: `get_green_bean({green_bean_id})`
+  for identity (origin / variety / producer / process / producer_tasting_notes) +
+  `get_bean_pipeline({green_bean_id})` for the single roast row + the Day-7 cupping. The
+  packet's `roast_id` is the batch this brew is dialed for.
+- Build the Step 1 Coffee Brief from that roast + cupping (the roasted-bean state IS the
+  "coffee"): the producer tasting notes are the target anchor, the cupping prose is what
+  the roast actually delivered, and the WB / ground Agtron + dev signals are the
+  roasted-bean characteristic. There is no roaster brew guide.
+- Seed the Step 1d strategy + modifier confirmation from the packet's `starting brewing
+  direction` (the operator's read off the cupping table — e.g. "intensity-clarity split,
+  push hard upfront"). It governs over any stale design-time hypothesis on the recipe row;
+  confirm it with the operator before producing the recipe, same as any other brief.
+- Carry the optimized-brew declaration to completion: at `bundled-brewing-completion.md`
+  this brew is the self-roasted **carve-out** (it does NOT stop at the self-roasted gate) —
+  it runs `push_brew` (`source: "self-roasted"`, `roaster: "Latent"`, `green_bean_id` +
+  the packet's `roast_id` both set, regardless of whether the roast is reference-quality)
+  and hands back the `brew_id` for the roasting thread's close-out prompt to LINK via
+  `green_beans.optimized_brew_id`. Iterate normally (Phase 2 loop) until the recipe is final.
+
+Coffee URL:  (or paste an OPTIMIZED BREW PACKET in place of the URL — see the self-roasted entry above)
 Dose: 15g
 Brewing location: [Home or Office]
 Reference experience (optional):
