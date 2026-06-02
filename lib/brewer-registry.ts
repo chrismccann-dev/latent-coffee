@@ -2,7 +2,8 @@
 // [docs/skills/brewing-equipment-expert/cluster/brewers.md](../docs/skills/brewing-equipment-expert/cluster/brewers.md);
 // this file is the validation mirror generated from Chris's authored CSV
 // (Registry - Taxonomy - Drippers and filter papers - Drippers.csv, 47 rows
-// / 45 distinct, plus xBloom net-new = 46 canonical brewers).
+// / 45 distinct, plus xBloom net-new = 46 canonical brewers; + April Hybrid
+// Brewer net-new 2026-06-01 = 47 canonical brewers).
 //
 // Sprint 1f (2026-04-26): structural port + adoption. brews.brewer is a
 // text-only column (no FK to a brewers table). Adding a new brewer is a
@@ -77,9 +78,9 @@ export const BREWERS: readonly BrewerEntry[] = [
   },
   {
     // Standard April Brewer (passive flat percolation). The April HYBRID Brewer
-    // is a separate model with an immersion base / valve / stopper system —
-    // Chris doesn't own one, so it's intentionally not in this registry.
-    // If acquired in future, add as a separate entry (don't conflate).
+    // is a separate model with an immersion valve base — kept as its own entry
+    // directly below (acquired 2026-06-01), NOT conflated with this one. Chris
+    // owns both.
     name: "April",
     manufacturer: "April",
     category: "Wave Filter Drippers",
@@ -95,6 +96,27 @@ export const BREWERS: readonly BrewerEntry[] = [
     owned: true,
     location: "Home, Office",
     primaryUseCase: "Mid-palate integration (round sweetness, controlled clarity)",
+  },
+  {
+    // April Hybrid Brewer (acquired 2026-06-01): the standard April flatbed with
+    // an added immersion valve base — switch between immersion steep and
+    // flow-rate-controlled percolation. Same flat April / Kalita-155 paper bed
+    // (April x Sibarist FAST or April Large). Separate model from "April" above.
+    name: "April Hybrid Brewer",
+    manufacturer: "April",
+    category: "Wave Filter Drippers",
+    paperType: "Flat (April small / Kalita 155 compatible)",
+    doseSize: "15g to 25g",
+    bedGeometry: "Flat / shallow",
+    bypassProfile: "Low",
+    flowControl: "Valve (immersion + percolation)",
+    restrictionSource: "Valve-controlled",
+    agitationTolerance: "Medium",
+    brewArchetype: "Immersion hybrid",
+    accessories: "Immersion valve base",
+    owned: true,
+    location: "Home",
+    primaryUseCase: "Flow-rate control + immersion/percolation switching (finer grinds, higher doses)",
   },
   {
     name: "Brewista Tornado",
@@ -768,6 +790,8 @@ export const BREWER_ALIASES: Record<string, string> = {
   "April Glass Brewer": "April",
   "April Brewer": "April",
   "April Brewer Glass": "April",
+  "April Hybrid": "April Hybrid Brewer",
+  "April Hybrid Dripper": "April Hybrid Brewer",
   "Hario V60 (glass)": "Hario V60",
   "Hario V60 Glass": "Hario V60",
   "Hario V60 glass": "Hario V60",
