@@ -189,7 +189,7 @@ Route to `close-lot.md` next, skip STAGES 5 + 6 of this prompt. The leading slot
 
 - Cup matches producer-notes ballpark check + Chris's expectations.
 - Diminishing returns: the leading slot reads close to "as good as this coffee gets" and the open_questions don't suggest a different region of the response surface would be better.
-- Brewing-side confirmation: the leading slot held up at real pourover (the `real_pourover` recipe_variant), not just at the xBloom gate.
+- Brewing-side confirmation: the leading slot held up at the Simulated Pourover Gate cup (`eval_method: 'Simulated Pourover'`), not just at the xBloom gate. (The optimized-brew dial-in proper happens AFTER the reference call, in `close-lot.md`'s brewing-side flow — the `real_pourover` recipe_variant cup.)
 - Often (but not required): a control experiment V-set (replicate of the leading slot with two slight adjustments) was already run and confirmed.
 
 **Pre-declaration discipline (Path A push-back duty)** — Phase 1 / Item 34 follow-up / 2026-05-24. Declaring `roasts.is_reference = true` is the **load-bearing cross-domain workflow-transition gate** (see [CONTEXT-roasting.md § Reference roast](../../CONTEXT-roasting.md)) — it transitions the lot from roasting-side iteration to brewing-side optimized-brew dial-in. The declaration must be definite, not ambiguous. **Before confirming Path A, push back if any of these pre-conditions are missing:**
@@ -251,12 +251,22 @@ Distinct from Path C-1 (which needs an EXTERNAL peer-roasted reference cup); Sim
 
 The simulated-pourover recipe is "much closer in scope to what the end optimized recipe will be" — close enough to give the roast a real shot at expressing the end-state cup, but explicitly NOT the optimized recipe (no full brewing iteration loop here; that happens AFTER reference roast is called, as a separate brewing-side dial-in flow).
 
+**The simulated-pourover RECIPE is no longer designed here** (Cluster A, 2026-06-01). The recipe is dialed in a dedicated **brewing thread** running `simulated-pourover.md`, so this prompt's job at the SPG gate is to emit a thin **handoff packet** and stop — NOT to spec the recipe. This keeps the recipe design where the brewing context lives and keeps the roasting thread thin (only `green_bean_id` + finalists + intent cross the boundary; the brewing side reads the green + ground-Agtron itself from the shared DB). See [`docs/prompts/simulated-pourover.md`](simulated-pourover.md) for the brewing-side contract + CONTEXT-shared.md § Brewing-to-roasting handoff brief.
+
 Output:
 - Report Simulated Pourover Gate fired and why (proactive: nearing reference; reactive: cite the inversion evidence or delta anomaly).
-- List the simulated-pourover action Chris needs to take: which slots to brew (V_n winner + secondary + optional V_(n-1) winner), the recipe shape (real pourover setup at confirmed brewer / filter / dose / water / grinder / grind_setting, non-optimized but close-to-end-state), and where to paste the cupping transcript back ("re-enter `log-cupping.md` with the simulated-pourover cup; STAGE 3's `delta_from_cup` and `winner` may need patching once the simulated-pourover cup lands").
-- Tell Chris the state stays Waiting for next cupping and the lot will re-enter this prompt when the simulated-pourover cup is captured.
+- Emit the thin **SIMULATED POUROVER PACKET** for the operator to paste into a fresh `simulated-pourover.md` brewing thread. Exactly these lines — no cupping notes, no roast data, no recipe (those stay here / the brewing side derives the recipe from the green + lot history):
+  ```
+  SIMULATED POUROVER PACKET
+  - green_bean_id: <the lot's green_bean_id>
+  - lot: <name / lot_id>
+  - finalist batches: <the cup-set's finalists, e.g. 191, 192>
+  - intent: <one line — what the SPG is meant to decide on this lot>
+  ```
+  The cup-set logic above (V_n winner + secondary + optional V_(n-1) winner) decides which finalists go in the packet; the recipe-shape spec is deleted from this prompt because the brewing side owns it now.
+- Tell Chris the state stays Waiting for next cupping and the lot will re-enter this prompt when the simulated-pourover cup is captured. On re-entry, STAGE 3's `delta_from_cup` and `winner` may need patching once the simulated-pourover cup lands.
 
-**Schema note (vocabulary locked, migration deferred).** Chris's preference is for the simulated pourover to slot into the `cupping_method` / `eval_method` taxonomy on `cuppings` (it IS a cupping in Chris's mental model), rather than living outside it. The migration adding `eval_method = 'Simulated Pourover'` as a canonical value is gated on the full POD-1 rewrite sprint — see [`docs/skills/cupping-specialist/cluster/pod-1-routing.md`](../skills/cupping-specialist/cluster/pod-1-routing.md) § Schema scoping. Today's simulated-pourover cups are pushed as `cuppings` rows with the closest existing `eval_method` + `recipe_variant: real_pourover` + a free-text note flagging the simulated-pourover purpose.
+**Schema note — SPG cup recording (Cluster A, 2026-06-01).** When the simulated-pourover cup comes back, push it as a `cuppings` row per finalist with **`eval_method: 'Simulated Pourover'`** (one row per finalist `roast_id`). `eval_method` is an unconstrained free-text column, so this value stores today — no migration needed; the empirical free-text finding (Cluster A) unblocked using the target value ahead of POD-1, which later just formalizes / canonicalizes the label. Using the distinct `eval_method` value (rather than the old interim `eval_method: 'Pourover'` + `recipe_variant: 'real_pourover'`) **disambiguates the SPG cup from the optimized-brew cup** — the optimized brew keeps `eval_method: 'Pourover'` + `recipe_variant: 'real_pourover'`, so the two no longer collide on the same `recipe_variant`. Recipe metadata for the simulated pourover (brewer / filter / dose / grinder / grind_setting / temp) goes in `additional_notes` free-text. See [`docs/skills/cupping-specialist/cluster/pod-1-routing.md`](../skills/cupping-specialist/cluster/pod-1-routing.md) § Schema scoping for the POD-1 formalization that remains future.
 
 ## STAGE 5 - Design V_(n+1) (Path B only)
 
@@ -270,6 +280,8 @@ Read cluster-migrated sections via `read_doc(uri=...)`:
 Read the lot's per-lot working hypothesis in the Roasting Historian cluster (Active Lots migrated to one file per lot in Wave 2 PR 3 / 2026-05-26):
 
 - `docs://skills/roasting-historian/cluster/active-lots/<lot-slug>.md` for the current lot's working hypothesis + per-lot protocol notes. Resolve `<lot-slug>` via `list_docs` against `skills/roasting-historian/cluster/active-lots/` if uncertain.
+
+**Peer-variant handoff consult (Cluster A, 2026-06-01).** If this lot has a `peer_reference_brew_id` set on its green_bean row (check via `get_bean_pipeline` / the green row), read its filed handoff at `docs://skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md` and fold the **roast-design takeaway** + **discount list** into the V_(n+1) design, weighted by the handoff's **information-value rating** (High = lean on it; Medium = partial, treat takeaway as hypothesis; Low = mostly a discount list, design fresh). This is the mid-cycle counterpart to `start-lot.md`'s V1 peer pickup: a peer variant linked *between* V-sets (the lived Wush Wush case — peer linked after V1, consumed at V2 design) gets picked up here automatically because the FK is set and the handoff is a `docs://` resource. Skip if no `peer_reference_brew_id`. Consumption reasoning: [`peer-learning-roasting-archivist/SKILL.md` § Peer-variant handoff consumption](../skills/peer-learning-roasting-archivist/SKILL.md).
 
 ### Operator-fixed constants — DO NOT VARY
 

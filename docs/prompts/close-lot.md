@@ -8,10 +8,14 @@ Vocabulary used in this prompt is defined in CONTEXT-roasting.md (reference roas
 
 ## Tools for this session
 
-`get_green_bean`, `get_bean_pipeline`, `patch_roast`, `push_roast_learnings`,
-`patch_roast_learnings`, `push_brew`, `patch_brew`, `patch_inventory`,
-`read_doc`, `read_doc_section`, `list_doc_sections`, `read_canonical`,
-`propose_doc_changes`.
+`get_green_bean`, `get_bean_pipeline`, `get_brew`, `patch_green_bean`,
+`patch_roast`, `push_roast_learnings`, `patch_roast_learnings`, `push_brew`,
+`patch_brew`, `patch_inventory`, `read_doc`, `read_doc_section`,
+`list_doc_sections`, `read_canonical`, `propose_doc_changes`.
+
+(`get_brew` + `patch_green_bean` added Cluster A / MB-7 2026-06-01 for the
+STAGE 4 optimized-brew LINK path - verify the handed-back brew_id, then set
+`green_beans.optimized_brew_id`.)
 
 MCP namespace: tools surface under `Latent Coffee`.
 
@@ -108,13 +112,22 @@ The field's name already implies the PRIMARY scope axis (cultivar / terroir / ge
 - **`starting_hypothesis`**: hypothesis for the next similar coffee - what to start from. The most actionable field for future `start-lot.md` runs. Pair with `starting_hypothesis_scope_tags` to define which future similar-lot pattern should consume this hypothesis on STAGE 1 carry-forward search (e.g. `['variety:typica-mejorado','process:honey','altitude:high']` makes the hypothesis surface for the queued Cruz Loma TM Honey one-shot).
 - **`reference_roasts`**: which batches to keep in mind for replication / comparison (a string list - typically just the reference roast plus 1-2 other strong slots from the lot for benchmarking).
 
-## STAGE 4 - Push the optimized brew
+## STAGE 4 - Link (or push) the optimized brew
 
-**This STAGE writes**: `brews` row (the optimized brew, source=self-roasted).
+**This STAGE writes**: `green_beans.optimized_brew_id` (the link - primary path); a `brews` row only on the legacy fallback path.
 
 The optimized brew is the daily-consumption recipe Chris dialed in for the reference roast via the brewing-side workflow. It's the **consumption-condition endpoint** of the full pipeline - post-hoc attribution traces backward from here.
 
-Apply canonical-validation discipline from `bundled-brewing-completion.md`. Key schema-strict gates:
+**Invariant: the optimized brew is pushed exactly ONCE and linked exactly ONCE.** Normally the brewing thread (the `bundled-brewing-completion.md` carve-out) pushes the brew row and this STAGE only LINKS it (`optimized_brew_id`); the inline push (fallback) fires only when no brewing thread pushed it. NEVER both - pushing here when the brew already exists creates a duplicate / orphan brew row (the exact failure the self-roasted gate guards against).
+
+**Primary path - LINK (Cluster A / MB-7, 2026-06-01).** The optimized brew is now brewed + pushed in a dedicated BREWING thread (the optimized/reference-brew carve-out in `bundled-brewing-completion.md`), which hands back the pushed `brew_id`. So the usual case is: the brew row already exists and this STAGE just LINKS it - it does NOT re-push.
+
+- Read the `brew_id` from the optimized-brew handoff line I paste in (shape: `Optimized brew pushed: brew_id=<id> for lot <...>`). If I didn't include it, ASK for it (or for the brew's identity so you can recover it via `get_brew` / `list_recent_brews`) - do NOT silently fall through to re-pushing and creating a duplicate brew row.
+- Verify with `get_brew(brew_id)` that it exists and is this lot's brew (its `green_bean_id` should match STAGE 1's, or be NULL-and-patchable).
+- `patch_green_bean(green_bean_id, optimized_brew_id: <brew_id>)` - the canonical link the resolved-view's `pickOptimizedBrew` prefers over the legacy `roast_id === best_roast_id` heuristic (which survives only as a fallback for lots closed before this column existed). **Catalog-cache caveat**: `optimized_brew_id` is a recent field on `patch_green_bean` (migration 075); if the Tool rejects it as an unknown/no-op field, your claude.ai session's tool catalog predates it - start a fresh session to re-handshake the catalog, then retry (the field IS in the deployed server). See CONTEXT-shared.md § MCP catalog cache.
+- If the brew's `roast_id` isn't already the reference roast, `patch_brew(brew_id, roast_id: <STAGE 2 reference roast_id>)` so the brew links to the batch it was dialed for.
+
+**Legacy / fallback path - PUSH inline.** Only when the optimized brew was NOT pushed in a brewing thread (I pasted the recipe inline instead of handing back a `brew_id`). Then push it here as a `brews` row (source=self-roasted), capture the returned id, and run the same `patch_green_bean(..., optimized_brew_id)` link above. Apply canonical-validation discipline from `bundled-brewing-completion.md`. Key schema-strict gates:
 
 - `extraction_strategy` z.enum, 6 strict canonicals (v8.4: Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid).
 - When `extraction_strategy = "Hybrid"`, `hybrid_subform` is REQUIRED - pick one of: sequential / phase_mapped / selective_bloom / intensity_clarity_split / temperature_staged.
