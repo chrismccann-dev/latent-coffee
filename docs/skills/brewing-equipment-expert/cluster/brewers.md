@@ -311,7 +311,7 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 
 ### April — Owned
 
-(Standard April Brewer — passive flat percolation. The April Hybrid Brewer is a separate model with an immersion base / valve / stopper; Chris doesn't own one, so not in this registry. Add as a separate entry if acquired — don't conflate.)
+(Standard April Brewer — passive flat percolation. The April Hybrid Brewer is a separate model with an immersion valve base; it's kept as its own entry directly below — Chris owns both. Don't conflate.)
 
 - Manufacturer: April
 - Paper type: Flat (April small / Kalita 155 compatible)
@@ -325,6 +325,23 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 - Accessories: None
 - Location: Home, Office
 - Primary use case: Mid-palate integration (round sweetness, controlled clarity)
+
+### April Hybrid Brewer — Owned
+
+(Acquired 2026-06-01. The standard April flatbed with an added immersion valve base — switch between immersion steep and flow-rate-controlled percolation. Same flat April / Kalita-155 paper bed as the standard April: April x Sibarist FAST or April Large. Separate model from the standard April above.)
+
+- Manufacturer: April
+- Paper type: Flat (April small / Kalita 155 compatible)
+- Dose size: 15g to 25g
+- Bed geometry: Flat / shallow
+- Bypass profile: Low
+- Flow control: Valve (immersion + percolation)
+- Restriction source: Valve-controlled
+- Agitation tolerance: Medium
+- Brew archetype: Immersion hybrid
+- Accessories: Immersion valve base
+- Location: Home
+- Primary use case: Flow-rate control + immersion/percolation switching (finer grinds, higher doses)
 
 ### Espro
 
@@ -660,6 +677,8 @@ Drift variants observed in legacy DB rows. Resolve to canonical via `BREWER_LOOK
 - `April Glass Brewer` → **April**
 - `April Brewer` → **April**
 - `April Brewer Glass` → **April**
+- `April Hybrid` → **April Hybrid Brewer**
+- `April Hybrid Dripper` → **April Hybrid Brewer**
 - `Hario V60 (glass)` → **Hario V60**
 - `Hario V60 Glass` → **Hario V60**
 - `Hario V60 glass` → **Hario V60**

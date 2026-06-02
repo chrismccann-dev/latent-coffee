@@ -51,6 +51,8 @@ Project #2 closed 2026-05-24 (see next section). Project #3 (specialty/paired fi
 
 **Deferred:** April Paper Filter (cohort-of-one in Orea baseline; rolls into Project #3 native-brewer protocol). Geometry-check pair (FLAT 2 B3 size M vs FLAT 2 FAST size S) deferred to next acquisition cycle.
 
+**Update 2026-06-01:** the cohort-of-one trigger is now satisfied — two April-fit papers are owned (April Paper Filter `APRIL-STD` + April FAST `APRIL-FAST`), so the April STD vs FAST peer comparison can run on the April brewer (standard or Hybrid). Still deferred by priority, not by blocker — Chris isn't prioritizing this measurement project yet.
+
 **9 substrate-practice gap audit items queued** in the protocol doc — flowRate-as-context-dependent-triple, paperShape-vs-wallStructure decomposition, Booster-as-registry-concept, Orea variant canonicalization, alias-collapse historical audit, grind-comp table band revision, fiber-vs-size confound resolution. None blocking; surface when triggered.
 
 ---
@@ -136,20 +138,7 @@ After RP4 close-out: 4-project filter arc CLOSED. Outstanding work covered in to
 - Location: Home
 - Primary use case: Balanced flat extraction (moderate flow, neutral profile)
 
-### April x Sibarist Filter
-
-- SKU: `APRIL-FAST`
-- Link: <https://www.aprilcoffeeroasters.com/collections/april-brewing-accessories/products/april-x-sibarist>
-- Paper shape: Flat
-- Size standard: Kalita-155
-- Fits brewers: April, Orea
-- Seal/fit: Tight (low bypass)
-- Material: Specialty fiber (FAST)
-- Thickness: Ultra-thin
-- Flow rate: Very fast
-- Flow consistency: Extremely stable
-- Clarity / Body / Sweetness: Very high / Low / Clean
-- Best archetype: Stability flat
+(The April x Sibarist FAST filter — same SKU `APRIL-FAST` — lives under **## Sibarist → April FAST**, since it's a Sibarist-manufactured collab. The former duplicate "April x Sibarist Filter" entry here was merged into it 2026-06-01.)
 
 ## Cafec
 
@@ -733,7 +722,7 @@ After RP4 close-out: 4-project filter arc CLOSED. Outstanding work covered in to
 - Link: <https://sibarist.coffee/en-es/products/april>
 - Paper shape: Flat
 - Size standard: Kalita-155
-- Fits brewers: April brewer
+- Fits brewers: April, April Hybrid Brewer
 - Seal/fit: Tight (low bypass)
 - Material: Specialty fiber (B3)
 - Thickness: Medium
@@ -742,13 +731,15 @@ After RP4 close-out: 4-project filter arc CLOSED. Outstanding work covered in to
 - Clarity / Body / Sweetness: High / Medium / Structured
 - Best archetype: Stability flat (controlled)
 
-### April FAST
+### April FAST — Owned
+
+(The April×Sibarist FAST collab — one product, two vendor pages: <https://www.aprilcoffeeroasters.com/products/april-x-sibarist> + <https://sibarist.coffee/en-es/products/april>. Acquired 2026-06-01. Merged with the former duplicate "April x Sibarist Filter" entry, same SKU `APRIL-FAST`.)
 
 - SKU: `APRIL-FAST`
 - Link: <https://sibarist.coffee/en-es/products/april>
 - Paper shape: Flat
 - Size standard: Kalita-155
-- Fits brewers: April brewer
+- Fits brewers: April, April Hybrid Brewer, Orea
 - Seal/fit: Tight (low bypass)
 - Material: Specialty fiber (FAST)
 - Thickness: Ultra-thin
@@ -756,6 +747,8 @@ After RP4 close-out: 4-project filter arc CLOSED. Outstanding work covered in to
 - Flow consistency: Extremely stable
 - Clarity / Body / Sweetness: Very high / Low / Clean
 - Best archetype: Stability flat
+- Location: Home
+- Primary use case: High-clarity flat extraction (fine grind / high dose, controlled flow)
 
 ### CONE 28 B3
 
@@ -1299,6 +1292,10 @@ Drift variants observed in legacy DB rows. Note: ambiguous Sibarist drift (e.g. 
 - `April Brewer Paper` → **April Paper Filter**
 - `April Flat Bottom Paper` → **April Paper Filter**
 - `April paper filter` → **April Paper Filter**
+- `April x Sibarist Filter` → **April FAST**
+- `April x Sibarist` → **April FAST**
+- `April Fast Filter` → **April FAST**
+- `April Fast Filters` → **April FAST**
 - `Hario V60 paper` → **Hario V60 Paper Filter 01 (Tabbed)**
 - `Hario V60 Paper` → **Hario V60 Paper Filter 01 (Tabbed)**
 - `Hario V60 white paper` → **Hario V60 Paper Filter 01 (Tabbed)**
