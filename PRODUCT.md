@@ -631,7 +631,7 @@ Tiny verifications, ~30 min each, no separate sprint needed — ride along with 
 
 ### Bugs and Issues
 
-_None._
+- **Repair the migration-drift gate** (queued 2026-06-01 grill; Cluster B / system-maintenance). The `check:migrations` script + `migrations-check` CI workflow (Sprint 3.2 #5) are non-functional on all three paths, which is why migration 069 drifted undetected for 8 days: (1) the CI secret `SUPABASE_SERVICE_ROLE_KEY` is **not configured**, so the workflow skips green and verifies nothing; (2) the workflow is **path-filtered** to PRs touching `supabase/migrations/**`, so a merged-but-unapplied migration is invisible to later non-migration PRs; (3) the local script's prod diff **errors `PGRST106`** because it reads `supabase_migrations.schema_migrations` through PostgREST (which only exposes `public`/`graphql_public`). Fixes: (a) read `schema_migrations` via a **direct Postgres connection** (`pg` client on a connection-string secret), not supabase-js; (b) configure the CI secret; (c) make secret-absent **FAIL, not skip-green**; (d) add a **daily cron**. Until repaired, the build-kickoff gate is a manual column-existence check (see `memory/feedback_migration_drift_pattern.md`).
 
 ### Longer Term Items
 

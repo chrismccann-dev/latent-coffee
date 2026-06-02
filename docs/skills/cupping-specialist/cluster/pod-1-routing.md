@@ -1,6 +1,6 @@
 # POD-1 routing — simulated pourover gate + Path C rewrite scoping
 
-**Status:** SCOPING DRAFT (carried forward from `docs/sprints/pod-1-scoping-draft-2026-05-26.md`). **Vocabulary rename shipped 2026-05-24 (Item 7 grill)** — Path C-2 → Simulated Pourover Gate, with reframed trigger shape per Chris's lived end-of-V-set workflow. The full Path C-1 + Simulated Pourover Gate consolidation rewrite + simulated-pourover schema decisions (`eval_method = 'Simulated Pourover'`) remain GATED on the lived-practice trigger conditions below.
+**Status:** SCOPING DRAFT (carried forward from `docs/sprints/pod-1-scoping-draft-2026-05-26.md`). **Vocabulary rename shipped 2026-05-24 (Item 7 grill)** — Path C-2 → Simulated Pourover Gate, with reframed trigger shape per Chris's lived end-of-V-set workflow. **Schema shape resolved + free-text write convention shipped (Cluster A, 2026-06-01)**: SPG cups record as `cuppings` rows with `eval_method = 'Simulated Pourover'` today (the column is unconstrained free-text). What remains GATED on the lived-practice trigger conditions below is the **canonicalization** of that value (lookup / validation / `cupping_method` taxonomy) + the full Path C-1 + Simulated Pourover Gate consolidation rewrite — formalization, not enablement.
 
 **Why this lives here:** Per Wave 3 PR 3 scope decision (2026-05-26), POD-1's scope is *absorbed* into Cupping Specialist at the SKILL.md level but the *implementation* (full Path C consolidation + schema decisions) waits for cross-thread observation. This cluster doc holds the scoping context + trigger conditions so a future sprint can lift it without re-grokking the original draft.
 
@@ -13,7 +13,7 @@
 - **Path C-1** — pre-V_(n+1) calibration when peer-roasted reference cup is missing
 - **Simulated Pourover Gate** — end-of-V-set decision-support cup on the real pourover setup, used to choose the reference roast OR to disambiguate a provisional V_n leading slot (renamed from Path C-2 at Item 7 grill, 2026-05-24; subsumes both the original "missing cup-side discriminator" trigger AND the lived end-of-V-set decision-support workflow Chris has been running in his head outside the app)
 
-Cupping Specialist's SKILL.md § Path routing documents all four paths as ACTIVE. Schema-side implementation (the `eval_method` canonical addition + the full Path C-1 + Simulated Pourover Gate consolidation) gated on the lived-practice trigger conditions below.
+Cupping Specialist's SKILL.md § Path routing documents all four paths as ACTIVE. The SPG write convention (`eval_method = 'Simulated Pourover'`, free-text) shipped Cluster A; what remains gated on the lived-practice trigger conditions below is the `eval_method` **canonicalization** + the full Path C-1 + Simulated Pourover Gate consolidation.
 
 ## The POD-1 framing (kept dormant)
 

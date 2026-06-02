@@ -45,10 +45,14 @@ an estimate. This single line sets how hard to discount everything that
 follows.
 
 1. PAIRING + PROVENANCE. Peer roaster; their roast level (Agtron WB + visual);
-   process / variety / origin. Same-lot confirmation is GRADED, not binary -
+   process / variety / origin. Capture provenance AT ACQUISITION (photo the bag
+   / note the edition) - some roasters' coffee pages don't persist, so the bag
+   may be the only record later. Same-lot confirmation is GRADED, not binary -
    state the level you can actually confirm: "exact crop lot confirmed" vs
    "confirmed at producer / farm / variety / process; exact crop lot pending a
-   roaster check." Then the link line:
+   roaster check" (the latter can be operator-ratified via a direct roaster
+   conversation when written provenance is impossible - a rare exception). Then
+   the link line:
    - Green lot exists -> set the FK now: patch_green_bean(green_bean_id:
      <the lot>, peer_reference_brew_id: <brew_id from STEP A>). Resolve the
      green_bean_id via get_green_bean({lot_id}) if I only gave a lot_id.
@@ -59,27 +63,37 @@ follows.
      hazard + a phantom in_inventory lot).
 
 2. INFORMATION-VALUE RATING: High / Medium / Low + a one-line reason, anchored
-   on how far their roast level sits from my light/ultra-light philosophy. An
-   edge qualifier is allowed ("Low, upper edge near Low/Medium"). Rubric:
-   - High - same lot, roast near my window: most of the cup is bean, lots to
-     transfer.
+   on how far their roast level sits from my light/ultra-light philosophy (NOT
+   on sourcing proximity - same retailer does NOT imply high transfer). The dial
+   measures CUP/FLAVOR transfer; a separate channel - a confirmed/contradicted
+   roast hypothesis or roast-behavior signal (field 4) - can fire even at Low
+   and lift the variant's real value above its flavor grade. Rubric:
+   - High - same lot, roast inside my window: most of the cup is bean, lots to
+     transfer. (No clean in-window instance yet; even at High it's a high-
+     correlation reference, not a 1:1 target.)
    - Medium - roast somewhat off my window: real but partial signal; discount
      the roast-developed register.
-   - Low - roast overtakes everything (variety / origin / process stop
-     mattering): near-zero transfer, mostly a discount list.
+   - Low, upper edge - roast is the loudest thing, but faint bean signal
+     survives AND/OR the hypothesis channel fires (e.g. it confirmed "roasts
+     fast/dark -> bias lighter"): real value despite low flavor transfer.
+   - Low, floor (roast-erased) - roast fully swamps the bean; variety / origin /
+     process stop mattering; pure discount list, no bean-attributable bucket, do
+     NOT manufacture takeaways.
    This is the dial for everything below; state it plainly.
 
-3. CUP READ - bean-attributable vs roast-attributable vs entangled. This split
-   is the whole point of the handoff. Three labeled buckets, and tag each note
-   with a confidence scaled to the info-value rating (Low -> lean skeptical,
+3. CUP READ - bean-attributable vs roast-attributable vs open questions. This
+   split is the whole point of the handoff. Three labeled buckets, and tag each
+   note with a confidence scaled to the info-value rating (Low -> lean skeptical,
    weak tags; High -> firmer):
    - Bean-attributable: notes that are the green showing through.
    - Roast-attributable: notes that are their roast development, not the lot.
-   - Entangled (flag, do NOT transfer): notes that are partly bean, partly
-     roast and cannot be cleanly separated from this single data point (e.g.
-     "deep sweetness" - partly low-elevation bean density, partly roast
-     development; "light brown sugar" - partly variety, partly caramelization).
-     Name them explicitly rather than forcing them into one bucket.
+   - Open questions (flag, do NOT transfer): notes where bean and roast are
+     *entangled* - partly bean, partly roast, and cannot be cleanly separated
+     from this single data point (e.g. "deep sweetness" - partly low-elevation
+     bean density, partly roast development; "light brown sugar" - partly
+     variety, partly caramelization). Don't force them into one bucket - name
+     them and hold them as open questions to disambiguate later (against my own
+     roast or a second data point), neither chased nor discounted.
 
 4. ROAST-DESIGN TAKEAWAY FOR MY ROAST. The actionable line(s) for how I should
    roast this green, hypothesis-flagged at Medium/Low. If transfer is minimal,
@@ -91,7 +105,9 @@ follows.
      transfers the data does not support.
    - Hypothesis confirm / contradict: if the peer cup confirms or contradicts a
      hypothesis I already hold about this green ("Untold roasts this medium,
-     bias lighter"), call it out - a confirmation is high-value even at Medium.
+     bias lighter"), call it out - a confirmation is high-value even at Low
+     (Wush Wush is the canonical case: a Low variant whose roast-behavior
+     confirmation was its single most valuable output).
      When there is no prior hypothesis (first peer brew on this green), frame
      the peer cup as a BASELINE FLOOR instead: "at <their Agtron> the green is
      already this expressive; at my lighter target it should be more so."

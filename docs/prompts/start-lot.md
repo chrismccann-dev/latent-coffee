@@ -49,7 +49,7 @@ Learning intent: [find out what this coffee wants | optimize toward specific
 
 ## STAGE 1 - Push the bean
 
-**Peer-variant pickup (Cluster A, 2026-06-01).** Before designing V1, ask: have I already brewed a peer-roasted variant of this green - an external roaster's version of the same lot? Peer variants get a 5-field Peer-Variant Handoff written brewing-side via `peer-variant-completion.md`; when the green lot didn't exist yet at brew time (the common pre-V1 case, e.g. Panama Janson) the handoff is **operator-carried** and I'll paste it here. If I bring one:
+**Peer-variant pickup (Cluster A, 2026-06-01).** Before designing V1, ask: have I already brewed a peer-roasted variant of this green - an external roaster's version of the same lot? Peer variants get a 5-field Peer-Variant Handoff written brewing-side via `peer-variant-completion.md`; when the green lot didn't exist yet at brew time (the common pre-V1 case, e.g. Panama Janson) the handoff is **courier-carried** and I'll paste it here. If I bring one:
 - Fold its **roast-design takeaway** + **discount list** into V1 design (STAGE 2/3), weighted by its **information-value rating** (High = lean on it; Medium = partial; Low = mostly a discount list, design fresh). This is the locked requirement that peer learnings reach V1 **before** the first recipes are generated.
 - Set the deferred link at push time: include `peer_reference_brew_id: <brew_id from the handoff's field 1>` on the STAGE 1 `push_green_bean` call below - this closes the DEFERRED link the handoff marked when the green row didn't yet exist.
 - If I don't bring a handoff, skip this - most lots have no peer variant.

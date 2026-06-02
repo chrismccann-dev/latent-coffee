@@ -297,7 +297,7 @@ Run these seven checkpoints on every non-trivial sprint:
 
    Trace template — use as a checklist when auditing a substrate change. Skip hops that genuinely don't apply, but be explicit about the skip:
 
-   - Actor 6 (schema/UI): does the change land in `lib/types.ts` / migration / UI render path?
+   - Actor 6 (schema/UI): does the change land in `lib/types.ts` / migration / UI render path? **Build-kickoff migration gate:** if this work rests on a prior migration's column/FK, verify it's actually applied to PROD before building (a column-existence `SELECT`, or a public-table PostgREST `.select('<col>')` that errors `42703` if missing) — `check:migrations` is currently non-functional (see `memory/feedback_migration_drift_pattern.md`; PRODUCT.md § Bugs "Repair the migration-drift gate"). Migration 069 was spec'd against a phantom column for a full grill cycle because nobody checked at kickoff.
    - Actor 4 (MCP): does the new field/value land in the Tool input schema + Tool description + matching Resource description?
    - Actor 5 (Claude Code): does CLAUDE.md / the right CONTEXT-{zone}.md / docs/ reflect the new vocabulary?
    - Actor 2 (prompts): do `docs/prompts/*.md` flows use the new field/vocabulary correctly?
