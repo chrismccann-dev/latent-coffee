@@ -21,11 +21,13 @@ const TAXONOMY_AXES = [
 export type TaxonomyAxis = (typeof TAXONOMY_AXES)[number]
 
 const PROMPT_FILES = [
-  // Brewing-side prompts (4)
+  // Brewing-side prompts (6)
   'start-brew',
   'log-brew',
   'propose-doc-changes-from-brew',
   'bundled-brewing-completion',
+  'peer-variant-completion',
+  'simulated-pourover',
   // Roasting-side prompts (4) - V-set lifecycle (2026-05-14 rewrite)
   'start-lot',
   'log-roast',
@@ -130,6 +132,7 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md': 'docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md',
   'docs://skills/peer-learning-roasting-archivist/cluster/cross-peer/patterns.md': 'docs/skills/peer-learning-roasting-archivist/cluster/cross-peer/patterns.md',
   'docs://skills/peer-learning-roasting-archivist/cluster/source-index.md': 'docs/skills/peer-learning-roasting-archivist/cluster/source-index.md',
+  'docs://skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md': 'docs/skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md',
   // ----- Roest Knowledge (Wave 3 PR 1, ADR-0011) -----------------------------
   'docs://skills/roest-knowledge/SKILL.md': 'docs/skills/roest-knowledge/SKILL.md',
   'docs://skills/roest-knowledge/cluster/machine/l200-ultra.md': 'docs/skills/roest-knowledge/cluster/machine/l200-ultra.md',
@@ -464,6 +467,8 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
     'Use when looking for directional principles that converge across ≥3 peer-roaster profiles. Today N<3 (only Dongzhe profile authored); empty-state pointer back to per-peer/dongzhe.md. Activates when promotion criteria met.',
   'docs://skills/peer-learning-roasting-archivist/cluster/source-index.md':
     'Use when checking provenance + freshness of peer-roaster content in the cluster — per-peer source table (primary sources / last integrated / refresh signal) + source-type tier framework (Tier A livestream → Tier D short-form) + pending-source operator-watch list + stale-claim review log.',
+  'docs://skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md':
+    'Use when designing V1 (start-lot.md peer-variant pickup) or setting V_n adjustment direction for a green lot that has a peer-roasted variant - the durable home for filed 5-field peer-variant handoffs (pairing+provenance / info-value rating High-Med-Low / bean-vs-roast split / roast-design takeaway / discount list), produced brewing-side via peer-variant-completion.md. Seeded Cluster A 2026-06-01 with Fazenda Um Wush Wush Natural (Low, Untold) + CGLE Sudan Rume Natural (Medium, Special Guests). Not-yet-started peer lots stay operator-carried (Panama Janson) until their green row exists; consumption reasoning lives in the SKILL.md § Peer-variant handoff consumption. See CONTEXT-roasting.md § Peer-roasted reference brew.',
   // ----- Roest Knowledge (Wave 3 PR 1, ADR-0011) -----------------------------
   'docs://skills/roest-knowledge/SKILL.md':
     'Roest Knowledge sub-skill (Wave 3 PR 1 shipped 2026-05-26). Machine + API knowledge for the Roest L200 Ultra in counterflow mode. Symmetry-promoted alongside Brewing Equipment Expert per ADR-0011. Read by Roasting Assistant during recipe design and Roest API Worker during push validation. Chris-stubbed-Claude-integrates per Patterns A / B / I.',
@@ -526,7 +531,11 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://prompts/propose-doc-changes-from-brew.md':
     'DEPRECATED (Writing-path Sub-sprint 3, 2026-05-26) — redirect stub pointing at bundled-brewing-completion.md STEP 2, which carries the propose_doc_changes flow including the Sub-sprint 2 Item 15(b) auto-split rule for multi-target_doc bundles.',
   'docs://prompts/bundled-brewing-completion.md':
-    'Operational prompt covering the full purchased-brew completion path (push_brew + propose_doc_changes) in one shot. Canonical entry surface for finished PURCHASED brews. (Self-roasted brews flow through close-lot.md STAGE 4.) Supersedes log-brew.md + propose-doc-changes-from-brew.md (both redirect stubs as of Writing-path Sub-sprint 3, 2026-05-26).',
+    'Operational prompt covering the full purchased-brew completion path (push_brew + propose_doc_changes) in one shot. Canonical entry surface for finished PURCHASED brews. Self-roasted brews flow through close-lot.md STAGE 4, with ONE carve-out (Cluster A / MB-7, 2026-06-01): the lot optimized/reference brew - dialed in its own dedicated brewing thread for an is_reference roast at Resolved-pending - completes HERE (push_brew self-roasted) and emits its brew_id in a closing handoff line so close-lot.md STAGE 4 LINKS green_beans.optimized_brew_id instead of re-pushing. Also the shared completion flow referenced by peer-variant-completion.md (peer variants are purchased, so they complete here, then add the peer handoff). Supersedes log-brew.md + propose-doc-changes-from-brew.md (both redirect stubs as of Writing-path Sub-sprint 3, 2026-05-26).',
+  'docs://prompts/simulated-pourover.md':
+    'Operational prompt for running a SIMULATED POUROVER GATE on the brewing side (Cluster A workflow 1, 2026-06-01). Input is the thin SIMULATED POUROVER PACKET (green_bean_id + finalist batches + intent) emitted by log-cupping.md\'s Simulated Pourover Gate routing - NOT a coffee URL. Pulls get_green_bean + get_bean_pipeline (ground-Agtron as the authoritative extraction prior for a self-roast + the lot\'s confirmed extraction lane + finalist roast_ids - a shared-DB read, not the roasting thread\'s context), builds the Coffee Brief via the brewing-assistant operational-guide Step 1, and outputs ONE non-iterated best-stab recipe applied IDENTICALLY across the finalists so the only cup variable is the roast. Key rule: the recipe is a lot-level STANDING recipe aimed at the lot\'s end-state (reusable across V-sets), NOT over-fit to the current V-set\'s ground-Agtron composites. Hard stops: no iteration loop, no push_brew (ephemeral - the recipe never lands in Latent), apply identically. Handoff-back tells the operator to brew identically + evaluate across the cooling arc + re-enter each finalist via log-cupping.md as its own cupping row (eval_method: \'Simulated Pourover\', one per finalist roast_id). See CONTEXT-roasting.md § Simulated pourover gate + CONTEXT-shared.md § Brewing-to-roasting handoff brief.',
+  'docs://prompts/peer-variant-completion.md':
+    'Operational prompt for completing a PEER-ROASTED VARIANT brew: an external roaster\'s version of a green-bean lot the operator holds or may roast (the ~25-30%+ of lots with a peer calibration anchor - CGLE Sudan Rume Natural / Wush Wush / every Untold Coffee Lab lot). A peer variant is PURCHASED, so it does not trip the self-roasted gate. Superset of bundled-brewing-completion.md: STEP A runs that prompt end to end (push_brew + propose_doc_changes, capturing brew_id); STEP B emits the 5-field Peer-Variant Handoff (roast-level read as the dial; field 3 = bean / roast / entangled buckets with confidence tags scaled to info-value; field 4 = takeaways + a required "what I am NOT taking" line + baseline-floor frame; graded same-lot confirmation; High/Medium/Low rating). Sets green_beans.peer_reference_brew_id when the green lot exists; else marks the link DEFERRED for start-lot.md (no skeleton row). Emits the handoff as a saveable artifact - does not write roasting-side cluster docs (project-boundary discipline). Cluster A workflow 2 (2026-06-01). See CONTEXT-roasting.md § Peer-roasted reference brew + CONTEXT-shared.md § Brewing-to-roasting handoff brief.',
   'docs://prompts/start-lot.md':
     'Operational prompt for starting a green-bean lot (V1 design at intake, or any later V-set design re-entered via log-cupping.md routing). Triggers state In inventory → Waiting for next roast. Pushes green_bean + inventory + V1 experiment frame + roast_recipes (design intent) + push_roast_profile to Roest. V1 (and often V2) is wide-variance multi-variable exploratory per CONTEXT-roasting.md § Adjustment.',
   'docs://prompts/log-roast.md':
@@ -1045,6 +1054,11 @@ export function listDocs(): {
       'docs://skills/peer-learning-roasting-archivist/cluster/source-index.md',
       'docs/skills/peer-learning-roasting-archivist/cluster/source-index.md',
       'Peer-Learning Roasting Archivist — Source Index (provenance + freshness)',
+    ),
+    entry(
+      'docs://skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md',
+      'docs/skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md',
+      'Peer-Learning Roasting Archivist — Peer-Variant Handoffs (filed calibration anchors)',
     ),
     // Roest Knowledge (Wave 3 PR 1, ADR-0011)
     entry(

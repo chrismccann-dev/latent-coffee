@@ -23,6 +23,29 @@ rule below). If self-roasted, STOP — give Chris the handoff context
 lot record), and tell him to run `close-lot.md` (or `one-shot-closeout.md`
 if `green_beans.is_one_shot=true`) in the roasting thread instead.
 
+**Optimized/reference-brew carve-out (Cluster A / MB-7, 2026-06-01).** There is
+exactly ONE self-roasted brew that completes HERE rather than via close-lot
+STAGE 4: the lot's optimized brew - the daily-consumption pour-over dialed in
+for a roast already declared `is_reference: true`, brewed in its own dedicated
+brewing thread at lot resolution. Pushing it here (not inline in the close-lot
+roasting thread) keeps the full brewing context out of the roasting thread and
+gives the optimized brew a real brewing cycle; only its `brew_id` crosses the
+project boundary. Signal for the carve-out: the operator says up front "this is
+the optimized / reference brew for <lot>" AND the green lot is at
+Resolved-pending (reference roast already chosen). When it applies, do NOT stop
+at the gate - run STEP 1 push_brew as normal (`source: "self-roasted"`,
+`roaster: "Latent"`, `green_bean_id` + `roast_id` of the reference roast both
+set), then emit the closing handoff line at the end of this prompt so
+`close-lot.md` STAGE 4 LINKS the brew via `green_beans.optimized_brew_id`
+instead of re-pushing it. All OTHER self-roasted brews still STOP at the gate
+above and route to close-lot - the carve-out is narrow and operator-declared
+(one brew, at lot resolution), so it does not reopen the orphan-row hazard the
+gate guards against; this brew is the most-linked row in the system, not an
+orphan. **Invariant: pushed exactly ONCE (here) and linked exactly ONCE
+(close-lot STAGE 4).** This thread pushes the brew row; close-lot only LINKS it
+via `optimized_brew_id` and must NOT re-push. Never push on both sides - that
+creates a duplicate brew row.
+
 **No-confirmation rule scope** (STEP 1 below says "Treat fields as final,
 no confirmation"): this applies to FIELD VALUES inside the push_brew payload
 (roaster name, terroir, cultivar, recipe parameters, prose) — fire push_brew
@@ -173,6 +196,15 @@ Most likely targets (all brewing-side learnings now live in cluster docs):
   - target_doc="skills/ccil/cluster/coffee/<cultivar-slug>/across-roasting-and-brewing.md"
     for cross-domain (roasting + brewing) patterns
   - target_doc="roaster/<Canonical Roaster Name>" for roaster card updates
+
+STEP 3 - closing handoff (optimized/reference-brew carve-out ONLY; skip for
+ordinary purchased brews). If this brew was the optimized/reference brew per the
+carve-out above, after STEP 1 + STEP 2 emit one plain-text line I can paste into
+the roasting thread: `Optimized brew pushed: brew_id=<id from STEP 1> for lot
+<green_bean_id or lot_id>. Paste into close-lot.md STAGE 4 to set
+green_beans.optimized_brew_id (link, do not re-push).` Setting the FK itself is
+close-lot's job, not this prompt's - this thread only pushes the brew and hands
+back the id, keeping the brewing/roasting project boundary clean.
 
 Here is the completed archive entry:
 [paste the formatted archive recipe]

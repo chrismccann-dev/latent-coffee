@@ -75,7 +75,7 @@ Discarded at lock time:
 - ~~`brews.is_simulated_pourover: boolean`~~ — fragments the cupping flow; the simulated pourover isn't the optimized brew.
 - ~~Hybrid (cuppings row + brews row + FK)~~ — overhead with no operational benefit.
 
-Today's interim convention (pre-migration): push simulated-pourover cups as `cuppings` rows with the closest existing `eval_method` (typically `Pourover`) + `recipe_variant: real_pourover` + a free-text `additional_notes` prefix flagging the simulated-pourover purpose so the substrate-state is recoverable when the migration ships.
+Current convention (Cluster A, 2026-06-01): push simulated-pourover cups as `cuppings` rows with **`eval_method: 'Simulated Pourover'`** directly + recipe metadata in `additional_notes`. The Cluster A dogfood empirically established that `cuppings.eval_method` is an unconstrained free-text column (no enum, no CHECK), so the target value stores TODAY — the prior interim convention (`eval_method: 'Pourover'` + `recipe_variant: 'real_pourover'` + free-text flag) was abandoned because it collided with the optimized-brew cup's `recipe_variant: 'real_pourover'` and obscured the SPG cup behind a generic label. The remaining POD-1 work is **formalization, not enablement**: canonicalizing `'Simulated Pourover'` (lookup / validation / the `cupping_method` taxonomy rethink) so it's a recognized canonical rather than a free-text string. No row migration is owed — SPG cups going forward carry the target value; there were no pre-Cluster-A SPG rows under the old convention to backfill.
 
 ## Cross-project handoff lifecycle states (DEFERRED scoping)
 
