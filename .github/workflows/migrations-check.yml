@@ -1,13 +1,21 @@
 name: migrations-check
 
-# Sprint 3.2 #5 — CI gate that runs npm run check:migrations on every PR that
-# touches supabase/migrations/**. Fails the workflow if a tracked migration
-# file is missing from the live DB's schema_migrations table (the recurring
-# drift mode flagged in memory/feedback_migration_drift_pattern.md).
+# Migration-drift gate (repairs Sprint 3.2 #5). Runs `npm run check:migrations`,
+# which diffs supabase/migrations/*.sql against public.applied_migrations (the
+# manual-apply receipt table, migration 076) on the live DB.
 #
-# Requires the SUPABASE_SERVICE_ROLE_KEY repo secret. When the secret is
-# absent the job skips with a warning rather than fails — pragmatic for the
-# initial rollout where the secret may not be configured yet.
+# Three triggers:
+#   - pull_request (migrations / script / package paths): validate new-migration
+#     PRs (self-register lint + collisions + pending/orphan).
+#   - schedule (daily): the catch-all - surfaces a migration merged to main but
+#     never pasted into the Supabase SQL Editor (the migration-069 failure mode),
+#     which a path-filtered PR trigger alone cannot see. Runs on the default
+#     branch against prod.
+#   - workflow_dispatch: manual run (useful right after applying a migration).
+#
+# Requires the SUPABASE_SERVICE_ROLE_KEY + NEXT_PUBLIC_SUPABASE_URL repo secrets.
+# When the secret is absent the script FAILS (exit 2) - it does NOT skip-green.
+# A silent skip is exactly why migration 069 drifted undetected for 8 days.
 
 on:
   pull_request:
@@ -15,6 +23,9 @@ on:
       - 'supabase/migrations/**'
       - 'scripts/check-migrations.ts'
       - 'package.json'
+  schedule:
+    - cron: '0 14 * * *' # daily ~14:00 UTC
+  workflow_dispatch:
 
 jobs:
   check-migrations:
@@ -27,12 +38,7 @@ jobs:
       - name: Install deps
         run: npm install --no-audit --no-fund --prefer-offline
       - name: Run check:migrations
-        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: npm run check:migrations
-      - name: Skip (secret not configured)
-        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY == '' }}
-        run: |
-          echo "::warning::SUPABASE_SERVICE_ROLE_KEY not set — skipping migrations:check. Configure the secret in repo settings to enable the gate."
