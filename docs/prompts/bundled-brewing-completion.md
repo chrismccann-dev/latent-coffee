@@ -32,12 +32,22 @@ roasting thread) keeps the full brewing context out of the roasting thread and
 gives the optimized brew a real brewing cycle; only its `brew_id` crosses the
 project boundary. Signal for the carve-out: the operator says up front "this is
 the optimized / reference brew for <lot>" AND the green lot is at
-Resolved-pending (reference roast already chosen). When it applies, do NOT stop
-at the gate - run STEP 1 push_brew as normal (`source: "self-roasted"`,
-`roaster: "Latent"`, `green_bean_id` + `roast_id` of the reference roast both
-set), then emit the closing handoff line at the end of this prompt so
-`close-lot.md` STAGE 4 LINKS the brew via `green_beans.optimized_brew_id`
-instead of re-pushing it. All OTHER self-roasted brews still STOP at the gate
+Resolved-pending (reference roast already chosen). **One-shot case
+(`green_beans.is_one_shot=true`):** the carve-out fires on `is_one_shot=true` +
+Resolved-pending + the operator declaration - NOT on `is_reference` being set
+yet. On one-shots the single batch is *structurally* the reference (one roast,
+one cup), but the `is_reference: true` flag doesn't land until
+`one-shot-closeout.md` STAGE 2, which runs AFTER this brew. So at brew-push time
+the roast may still read `is_reference: false` - link the brew to that single
+roast anyway. One-shots also commonly hit Outcome B (off-target roast, salvage
+brew): link regardless of cup quality. (The Optimized Brew Packet emitted by
+`one-shot.md` STAGE 4 is the operator's declaration here.) When it applies, do
+NOT stop at the gate - run STEP 1 push_brew as normal (`source:
+"self-roasted"`, `roaster: "Latent"`, `green_bean_id` + `roast_id` of the
+single/reference roast both set), then emit the closing handoff line at the end
+of this prompt so `close-lot.md` STAGE 4 (V-set) / `one-shot-closeout.md` STAGE
+3 (one-shot) LINKS the brew via `green_beans.optimized_brew_id` instead of
+re-pushing it. All OTHER self-roasted brews still STOP at the gate
 above and route to close-lot - the carve-out is narrow and operator-declared
 (one brew, at lot resolution), so it does not reopen the orphan-row hazard the
 gate guards against; this brew is the most-linked row in the system, not an
@@ -201,10 +211,11 @@ STEP 3 - closing handoff (optimized/reference-brew carve-out ONLY; skip for
 ordinary purchased brews). If this brew was the optimized/reference brew per the
 carve-out above, after STEP 1 + STEP 2 emit one plain-text line I can paste into
 the roasting thread: `Optimized brew pushed: brew_id=<id from STEP 1> for lot
-<green_bean_id or lot_id>. Paste into close-lot.md STAGE 4 to set
-green_beans.optimized_brew_id (link, do not re-push).` Setting the FK itself is
-close-lot's job, not this prompt's - this thread only pushes the brew and hands
-back the id, keeping the brewing/roasting project boundary clean.
+<green_bean_id or lot_id>. Paste into close-lot.md STAGE 4 (V-set) or
+one-shot-closeout.md STAGE 3 (one-shot) to set green_beans.optimized_brew_id
+(link, do not re-push).` Setting the FK itself is the close-out prompt's job,
+not this prompt's - this thread only pushes the brew and hands back the id,
+keeping the brewing/roasting project boundary clean.
 
 Here is the completed archive entry:
 [paste the formatted archive recipe]

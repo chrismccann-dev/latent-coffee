@@ -2,7 +2,7 @@
 
 **State transition**: Resolved-pending -> Resolved.
 
-**Trigger**: A one-shot lot's STAGES 1-4 are done (intake + design + roast + Day 7 cupping captured via `one-shot.md`) AND the optimized brew has been dialed in via the brewing-side workflow (`bundled-brewing-completion.md` or sibling). I'll reference the lot by `lot_id` or `green_bean_id` + tell you whether the verdict from STAGE 4 was Outcome A (reference-quality) or Outcome B (Closed without reference). Your job: push the optimized brew, mark the reference roast (always, regardless of outcome), write the constrained `roast_learnings` row, propose cluster-doc close-out, archive Roest inventory.
+**Trigger**: A one-shot lot's STAGES 1-4 are done (intake + design + roast + Day 7 cupping captured via `one-shot.md`) AND the optimized brew has been dialed in via the brewing-side workflow (`bundled-brewing-completion.md` or sibling). I'll reference the lot by `lot_id` or `green_bean_id` + tell you whether the verdict from STAGE 4 was Outcome A (reference-quality) or Outcome B (Closed without reference). Your job: LINK the optimized brew (pushed brewing-side; inline-push only as fallback), mark the reference roast (always, regardless of outcome), write the constrained `roast_learnings` row, propose cluster-doc close-out, archive Roest inventory.
 
 **Workflow position**: Second of two prompts in the one-shot lifecycle (`one-shot.md` -> **`one-shot-closeout.md`**). Distinct from V-set lots' `close-lot.md`.
 
@@ -10,10 +10,10 @@ Vocabulary used in this prompt is defined in CONTEXT-roasting.md (one-shot lot, 
 
 ## Tools for this session
 
-`get_green_bean`, `get_bean_pipeline`, `patch_roast`, `push_roast_learnings`,
-`patch_roast_learnings`, `push_brew`, `patch_brew`, `patch_inventory`,
-`read_doc`, `read_doc_section`, `list_doc_sections`, `read_canonical`,
-`propose_doc_changes`.
+`get_green_bean`, `get_bean_pipeline`, `get_brew`, `patch_roast`,
+`push_roast_learnings`, `patch_roast_learnings`, `push_brew`, `patch_brew`,
+`patch_green_bean`, `patch_inventory`, `read_doc`, `read_doc_section`,
+`list_doc_sections`, `read_canonical`, `propose_doc_changes`.
 
 MCP namespace: tools surface under `Latent Coffee`.
 
@@ -49,11 +49,24 @@ I'll tell you which verdict came out of `one-shot.md` STAGE 4:
 
 `patch_roast` echoes `updated_fields: [...]`.
 
-## STAGE 3 - Push the optimized brew
+## STAGE 3 - Link (or push) the optimized brew
 
-**This STAGE writes**: `brews` row (the optimized brew, source=self-roasted).
+**This STAGE writes**: `green_beans.optimized_brew_id` (the link - primary path); a `brews` row only on the legacy fallback path.
 
-This brew was dialed in via the brewing-side workflow between `one-shot.md` STAGE 4 and now. Apply canonical-validation discipline from `bundled-brewing-completion.md`:
+The optimized brew was dialed in via the brewing-side workflow between `one-shot.md` STAGE 4 (which emitted the Optimized Brew Packet) and now. It's the **consumption-condition endpoint** of the one-shot pipeline - on Outcome A it celebrates the reference-quality roast; on Outcome B (the common one-shot path) it's the salvage, dialed to compensate for an off-target roast.
+
+**Invariant: the optimized brew is pushed exactly ONCE and linked exactly ONCE.** Normally the brewing thread (the `bundled-brewing-completion.md` carve-out) pushes the brew row and this STAGE only LINKS it (`optimized_brew_id`); the inline push (fallback) fires only when no brewing thread pushed it. NEVER both - pushing here when the brew already exists creates a duplicate / orphan brew row.
+
+**One-shot link is roast-quality-independent (Chris-locked, 2026-06-02).** Link the optimized brew to the single roast **regardless of whether the roast is reference-quality**. A one-shot only gets one shot, so the brew is dialed for the roast it has - Outcome B (off-target roast, decent salvage brew) is the *common* case, not the exception. The DB makes this clean: STAGE 2 already set `is_reference: true` *structurally* (single batch IS the reference slot), so the brew's `roast_id` link and the `optimized_brew_id` link both stand on Outcome A and Outcome B identically. Don't gate the link on cup quality.
+
+**Primary path - LINK (Cluster A / MB-7, 2026-06-01).** The optimized brew is brewed + pushed in a dedicated BREWING thread (the optimized/reference-brew carve-out in `bundled-brewing-completion.md`), which hands back the pushed `brew_id`. So the usual case is: the brew row already exists and this STAGE just LINKS it - it does NOT re-push.
+
+- Read the `brew_id` from the optimized-brew handoff line I paste in (shape: `Optimized brew pushed: brew_id=<id> for lot <...>`). If I didn't include it, ASK for it (or for the brew's identity so you can recover it via `get_brew` / `list_recent_brews`) - do NOT silently fall through to re-pushing and creating a duplicate brew row.
+- Verify with `get_brew(brew_id)` that it exists and is this lot's brew (its `green_bean_id` should match STAGE 1's, or be NULL-and-patchable).
+- `patch_green_bean(green_bean_id, optimized_brew_id: <brew_id>)` - the canonical link the resolved-view's `pickOptimizedBrew` prefers over the legacy `roast_id === best_roast_id` heuristic. **Catalog-cache caveat**: `optimized_brew_id` is a recent field on `patch_green_bean` (migration 075); if the Tool rejects it as an unknown/no-op field, your claude.ai session's tool catalog predates it - start a fresh session to re-handshake the catalog, then retry (the field IS in the deployed server). See CONTEXT-shared.md § MCP catalog cache.
+- If the brew's `roast_id` isn't already the single one-shot roast, `patch_brew(brew_id, roast_id: <STAGE 1 roast_id>)` so the brew links to the batch it was dialed for.
+
+**Legacy / fallback path - PUSH inline.** Only when the optimized brew was NOT pushed in a brewing thread (I pasted the recipe inline instead of handing back a `brew_id`). Then push it here as a `brews` row, capture the returned id, and run the same `patch_green_bean(..., optimized_brew_id)` link above. Apply canonical-validation discipline from `bundled-brewing-completion.md`:
 
 - `extraction_strategy` z.enum (6 canonicals: Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid)
 - `hybrid_subform` REQUIRED when strategy=Hybrid
@@ -64,14 +77,15 @@ This brew was dialed in via the brewing-side workflow between `one-shot.md` STAG
 `push_brew(payload)`:
 - `source: "self-roasted"`
 - `green_bean_id` from STAGE 1
-- `roast_id` from STAGE 1 (the single roast — this brew either celebrates Outcome A or compensates for Outcome B)
+- `roast_id` from STAGE 1 (the single roast - this brew either celebrates Outcome A or compensates for Outcome B; link it regardless of quality per the roast-quality-independent rule above)
 - Recipe: brewer / filter / dose / water / grinder / grind_setting / temperature
 - `extraction_strategy` + optional `hybrid_subform` + `strategy_notes` + optional `cooling_curve_target`
 - `flavors` + `structure_tags`
 - Pour structure: prefer the STRUCTURED `pours` array (`{type,at,to_g?,pour_s?,hold_s?,valve?,detail?}`, bloom at index 0 — migration 074, 2026-05-30) over legacy free-text `bloom` + `pour_structure`; see `bundled-brewing-completion.md` § "Pour structure" for the shape.
 - Prose: `peak_expression`, `aroma`, `attack`, `mid_palate`, `body`, `finish`, **`what_i_learned`** (CRITICAL on one-shots - this captures the compensation reasoning when Outcome B applied; e.g. "Roast came out a touch over-developed - dialed lower temp + lower agitation to soften the tannin overhang. Brewer A + filter B specifically because their flow pattern + paper retention reads cleanest on Maillard-heavy lots."), `terroir_connection`, `cultivar_connection`
+- Then `patch_green_bean(green_bean_id, optimized_brew_id: <returned brew_id>)` to set the link.
 
-For Outcome B in particular, `what_i_learned` is the carry-forward primitive that future similar one-shot lots will benefit from. Don't undersell the brew-side learning - what compensation you discovered transfers across lots even when the roast didn't.
+For Outcome B in particular, `what_i_learned` is the carry-forward primitive that future similar one-shot lots will benefit from. Don't undersell the brew-side learning - what compensation you discovered transfers across lots even when the roast didn't. (On the LINK path, `what_i_learned` already landed when the brewing thread pushed the brew; you can refine it with `patch_brew` if close-out reflection added clarity.)
 
 ## STAGE 4 - Write the constrained roast_learnings row
 
@@ -149,7 +163,7 @@ Print:
 - `green_bean_id` + verdict outcome (A / B)
 - Reference roast designation: `roast_id`, `batch_id`, `is_reference: true` confirmed, `worth_repeating` value, brief `why_this_roast_won` excerpt (or `"why_this_roast_won: NULL — Closed without reference"` on Outcome B)
 - `roast_learnings_id` + `created` (true on first push)
-- `brew_id` + key recipe summary one-liner
+- `brew_id` + key recipe summary one-liner + `optimized_brew_id` link confirmed on the green_bean (LINK path) or "pushed inline + linked" (fallback path)
 - `proposal_id` from `propose_doc_changes`
 - `is_archived: true` confirmation (or "skipped: <reason>")
 - Lifecycle state confirmation: "Lot closed. State flipped to **Resolved**." On Outcome B add: "ResolvedView renders the 'Closed without reference' sub-card per Sprint 3.2 #18 (triggered by `why_this_roast_won = NULL`)."
@@ -158,6 +172,6 @@ Print:
 ## What this prompt does NOT do
 
 - Push new cuppings or roasts. Those happen in `one-shot.md` STAGES 3-4.
-- Run the brew dial-in. That happens via the brewing-side workflow (`bundled-brewing-completion.md` etc.) between `one-shot.md` STAGE 4 and this prompt.
+- Run the brew dial-in OR push the brew (normal case). The dial-in + push happen via the brewing-side workflow (`bundled-brewing-completion.md` carve-out) between `one-shot.md` STAGE 4 (which emits the Optimized Brew Packet) and this prompt; STAGE 3 here only LINKS the handed-back `brew_id` (inline push is a fallback only).
 - Promote any insight to a protocol cluster doc (`docs://skills/roest-knowledge/cluster/protocols/*` or `cluster/machine/*`). N=1 doesn't justify protocol changes.
 - Populate the 7 forbidden roast_learnings fields. Schema validation rejects them.

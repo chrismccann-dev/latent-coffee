@@ -236,6 +236,28 @@ Two outcomes. The distinction lives on `worth_repeating` + `why_this_roast_won` 
 
 State after STAGE 4: **Resolved-pending** in both outcomes. Brew dial-in happens via the brewing-side workflow next (`bundled-brewing-completion.md` typically), then `one-shot-closeout.md` records the final brew + writes the constrained `roast_learnings` row.
 
+### Emit the Optimized Brew Packet (always - both outcomes)
+
+**This STAGE writes**: nothing (output only - the packet is text for Chris to paste into a fresh brewing thread).
+
+A one-shot has no choice: one roast, one cup, and it ALWAYS goes to brewing - on **both** Outcome A and Outcome B. Outcome B is in fact the *common* path (the single roast is usually a little off, and the optimized brew is the salvage - dialed in to get the best daily cup the available material can give, regardless of whether the roast was reference-quality). So after the cupping is captured, emit a thin **Optimized Brew Packet** unconditionally - same logic as `is_reference` being set unconditionally for one-shots at close-out. This is the OUTBOUND kickoff that the brewing thread completes; it carries the optimized-brew dial-in across the project boundary (see CONTEXT-shared.md § Cross-domain Workflow - Optimized Brew Packet).
+
+Emit exactly these lines - no recipe design here (context-protection, mirroring the Simulated Pourover Packet in `log-cupping.md`; the brewing side owns the recipe). The brewing side reads the roast numbers, cup prose, ground Agtron, and producer notes itself from the shared DB via `green_bean_id` + `roast_id`, so only the interpretive handoff crosses the boundary:
+
+```
+OPTIMIZED BREW PACKET
+- green_bean_id: <the lot's green_bean_id>
+- lot: <name (lot_id)>
+- roast: batch <Roest#> / roast_id <uuid>  (link the optimized brew to THIS roast regardless of reference quality - one-shots link the brew to the single roast even on Outcome B / not-reference-quality)
+- outcome: <A reference-quality | B closed-without-reference likely; roast off-target, salvage job>
+- starting brewing direction: <one line - the operator's brewing read lifted from the cupping transcript, e.g. "intensity-clarity split (Hybrid), push hard upfront to pull what it has, compensate for the hollow/flat back-half". If Chris didn't state a direction at the table, fall back to the recipe's design-time brew hypothesis (`roast_recipes.predicted_cup` / `experiments.expected_outcomes` brew-side pivot note) and SAY you're falling back.>
+- intent: <one line - what the optimized brew should achieve, toward the producer tasting-notes target>
+```
+
+**The `starting brewing direction` is the load-bearing field** - it's the one thing NOT reliably in the DB. The recipe's design-time brew hypothesis (frozen at STAGE 2) can diverge from what the cup actually asks for at the table; the fresh read wins. (Live Mt Elgon dogfood, 2026-06-02: the recipe predicted a "gentler pivot," the cupping read said "push hard upfront / intensity-clarity split" - opposite directions, fresh read governs.) Lift it from Chris's cupping transcript; do NOT recycle the stale design-time hypothesis without flagging it.
+
+Then tell Chris: paste this into a fresh brewing thread (the normal archive-driven brewing flow), declaring up front "this is the optimized brew for <lot>" so it runs the full optimization and completes via `bundled-brewing-completion.md`'s optimized/reference-brew carve-out - which pushes the brew row exactly once and hands back a `brew_id`. That `brew_id` is what `one-shot-closeout.md` STAGE 3 LINKS via `green_beans.optimized_brew_id` (it does NOT re-push). State stays **Resolved-pending** until close-out.
+
 ## Confirmation output
 
 **This STAGE writes**: nothing (output only).
@@ -252,12 +274,13 @@ Print everything needed to verify the state-flip cleanly:
   - Design-time prediction summary
   - Drop rules
 - (STAGES 3-4, printed when those stages run): `batch_id` + `roast_id` + `cupping_id` + WB→Gnd delta + verdict (Outcome A or B)
-- Lifecycle state: "Lot waiting for next roast" -> "Lot waiting for next cupping" -> "Resolved-pending (route to one-shot-closeout.md)"
+- (STAGE 4, both outcomes): the emitted **Optimized Brew Packet** block (green_bean_id / lot / roast / outcome / starting brewing direction / intent), with the instruction to paste it into a fresh brewing thread.
+- Lifecycle state: "Lot waiting for next roast" -> "Lot waiting for next cupping" -> "Resolved-pending (route to one-shot-closeout.md, after the optimized brew is dialed in)"
 
 ## What this prompt does NOT do
 
 - Push roast_learnings (the constrained close-out). That's `one-shot-closeout.md`.
 - Set `is_reference: true` on the roast row. Only `one-shot-closeout.md` does that, and it sets the flag unconditionally regardless of Outcome A/B.
-- Push the optimized brew. Brewing-side workflow handles it between STAGE 4 and `one-shot-closeout.md`.
+- Design or push the optimized brew. STAGE 4 emits the kickoff **Optimized Brew Packet** (thin handoff, no recipe); the brewing-side workflow designs + pushes the brew between STAGE 4 and `one-shot-closeout.md`, then `one-shot-closeout.md` STAGE 3 LINKS it.
 - Archive the Roest inventory row. `one-shot-closeout.md` STAGE 5 does that.
 - Propose cluster-doc updates. Defer to `one-shot-closeout.md` STAGE 5 - one bundled doc proposal at close-out is cleaner than mid-iteration appends on a one-shot.

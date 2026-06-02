@@ -420,11 +420,12 @@ Set by the capstone product-roadmap-review session (ran as a product brainstorm;
 The current ranked queue of scoped, sized sprints in flight or next up.
 
 **Ordered working queue (set 2026-06-02, post-Cluster-A-grill / PR #344):**
-1. **One-shot lot — emit the Optimized Brew Packet** (+ flip `one-shot-closeout.md` STAGE 3 to LINK-not-push, closing the Cluster A pushed-once-linked-once gap on the one-shot path). Dogfood-first; kickoff brief at [docs/sprints/one-shot-optimized-brew-packet-kickoff-2026-06-02.md](docs/sprints/one-shot-optimized-brew-packet-kickoff-2026-06-02.md).
-2. **Repair the migration-drift gate** (see § Bugs and Issues — non-functional on all three paths).
-3. **CLAUDE.md root-doc compaction** (~149KB, over the 120KB tripwire — extraction candidates: the `/brews/[id]` + `/green/[id]` per-page IA blocks → `docs/architecture/page-ia.md`).
-4. **Optional grill** — only if new concepts surface during 1–3.
-5. **PRODUCT.md roadmap review** — decide the next course of action once 1–4 are complete.
+1. **Repair the migration-drift gate** (see § Bugs and Issues — non-functional on all three paths).
+2. **CLAUDE.md root-doc compaction** (~149KB, over the 120KB tripwire — extraction candidates: the `/brews/[id]` + `/green/[id]` per-page IA blocks → `docs/architecture/page-ia.md`).
+3. **Optional grill** — only if new concepts surface during 1–2.
+4. **PRODUCT.md roadmap review** — decide the next course of action once 1–3 are complete.
+
+_(Shipped 2026-06-02: ~~One-shot lot — emit the Optimized Brew Packet + flip `one-shot-closeout.md` STAGE 3 to LINK-not-push~~ → see [shipped.md](docs/sprints/shipped.md).)_
 
 **Roadmap re-session restructured this queue 2026-05-26** (closing Sprint R's Option 1 sequence). Sprint 3.3 shipped 2026-05-25; Sprints 3.4 / 3.6 / 3.7 killed (3.4 demoted to Future Direction "Predicted vs Actual roast delta surface"; 3.6 + 3.7 audit found 5 of 6 items each already shipped via architecture Waves 2-4 + lifecycle prompt restructure). Remaining work organized into **two surface polish series** (writing-path first since the writing layer is mission-critical; read-path after) + 5 brainstorms-to-schedule (parallel to sprint work) + 1 incoming substrate event (Chris's filter drawdown research) + Longer Term Items (reordered).
 
