@@ -425,7 +425,7 @@ The current ranked queue of scoped, sized sprints in flight or next up.
 3. **Optional grill** — only if new concepts surface during 1–2.
 4. **PRODUCT.md roadmap review** — decide the next course of action once 1–3 are complete.
 
-_(Shipped 2026-06-02: ~~One-shot lot — emit the Optimized Brew Packet + flip `one-shot-closeout.md` STAGE 3 to LINK-not-push~~ → see [shipped.md](docs/sprints/shipped.md).)_
+_(Shipped 2026-06-02, [#346](https://github.com/chrismccann-dev/latent-coffee/pull/346): ~~One-shot lot — emit the Optimized Brew Packet + flip `one-shot-closeout.md` STAGE 3 to LINK-not-push~~ → see [shipped.md](docs/sprints/shipped.md).)_
 
 **Roadmap re-session restructured this queue 2026-05-26** (closing Sprint R's Option 1 sequence). Sprint 3.3 shipped 2026-05-25; Sprints 3.4 / 3.6 / 3.7 killed (3.4 demoted to Future Direction "Predicted vs Actual roast delta surface"; 3.6 + 3.7 audit found 5 of 6 items each already shipped via architecture Waves 2-4 + lifecycle prompt restructure). Remaining work organized into **two surface polish series** (writing-path first since the writing layer is mission-critical; read-path after) + 5 brainstorms-to-schedule (parallel to sprint work) + 1 incoming substrate event (Chris's filter drawdown research) + Longer Term Items (reordered).
 
