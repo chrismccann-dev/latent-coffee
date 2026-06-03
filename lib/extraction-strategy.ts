@@ -45,6 +45,25 @@ export function getStrategyStyle(strategy: string | null | undefined): StrategyS
   return { bg: '#EEEEEE', text: '#555555', border: '#BBBBBB', short: strategy.slice(0, 8).toUpperCase() }
 }
 
+// Neutral slate for brews with no extraction strategy — intentionally outside
+// the 6 strategy hues so a missing-strategy cover doesn't imply a strategy it
+// doesn't have. Matches the prior brew-colors.ts fallback.
+export const STRATEGY_COVER_FALLBACK = '#5C6570'
+
+// Book-cover face color for a brew, keyed to its extraction strategy. The cover
+// face renders near-white text (`.brew-card .face`), so we use each strategy's
+// saturated signal hue — the same `border` value that outlines the strategy
+// pill — so the cover and the pill read as one hue family (Chris's intuition:
+// suppression cooler/bluer, clarity tea-green, balanced mid-gold, full bold
+// wine, push burnt-orange, hybrid purple). Single source of truth for the
+// per-strategy hue; brew-colors.ts delegates here rather than duplicating.
+export function getStrategyCoverColor(strategy: string | null | undefined): string {
+  if (strategy && (EXTRACTION_STRATEGIES as readonly string[]).includes(strategy)) {
+    return STRATEGY_STYLES[strategy as ExtractionStrategy].border
+  }
+  return STRATEGY_COVER_FALLBACK
+}
+
 export function truncateLearning(text: string | null | undefined, max = 80): string | null {
   if (!text) return null
   const clean = text.trim().replace(/\s+/g, ' ')
