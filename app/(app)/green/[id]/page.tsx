@@ -1252,7 +1252,6 @@ const ARCHIVE_VARIANTS: Record<
     roastTitle: string
     cupTitle: string
     cornerWord: string
-    cupSynthLabel: string
     star: string
     showVerdict: boolean
     carryCaution: string | null
@@ -1267,7 +1266,6 @@ const ARCHIVE_VARIANTS: Record<
     roastTitle: 'Reference Roast',
     cupTitle: 'Reference Cup',
     cornerWord: 'Reference',
-    cupSynthLabel: 'Best cup synthesis',
     star: 'reference',
     showVerdict: true,
     carryCaution: null,
@@ -1281,7 +1279,6 @@ const ARCHIVE_VARIANTS: Record<
     roastTitle: 'Leading Roast',
     cupTitle: 'Leading Cup',
     cornerWord: 'Leading',
-    cupSynthLabel: 'Leading cup synthesis',
     star: 'leading',
     showVerdict: false,
     carryCaution:
@@ -1346,10 +1343,21 @@ function ArchiveLotBody({
   )
   const roastsById = new Map<string, any>(roasts.map((r) => [r.id, r]))
 
-  // Best-cup synthesis prose: prefer the optimized brew's what_i_learned (most
-  // narrative-rich on a closed lot); fall back to the pourover's `overall`.
-  const bestCupSynthesis = optimizedBrew?.what_i_learned || pourover?.overall || null
   const refBatchLabel = batchNumber ?? rawBestBatchId ?? '?'
+
+  // Optimized-brew presentation rows (priority-stack recount Tweak 4) — flavor
+  // notes (flat chips, as on /brews/[id]) + structure tags (axis prefix stripped
+  // to the bare descriptor, matching Chris's mockup's flat chip row). The brew's
+  // what_i_learned becomes the "Learned" row inside the optimized-brew block.
+  const optFlavors: string[] = Array.isArray(optimizedBrew?.flavor_notes)
+    ? optimizedBrew.flavor_notes
+    : []
+  const optStructure: string[] = Array.isArray(optimizedBrew?.structure_tags)
+    ? optimizedBrew.structure_tags.map((t: string) => {
+        const i = t.indexOf(':')
+        return i >= 0 ? t.slice(i + 1) : t
+      })
+    : []
 
   const metaPairs = [
     { label: 'Producer', value: bean.producer ?? '—' },
@@ -1396,19 +1404,6 @@ function ArchiveLotBody({
       ),
     },
   ]
-
-  const optimizedDescriptors = optimizedBrew
-    ? optimizedBrew.peak_expression ||
-      [
-        optimizedBrew.aroma,
-        optimizedBrew.attack,
-        optimizedBrew.mid_palate,
-        optimizedBrew.body,
-        optimizedBrew.finish,
-      ]
-        .filter(Boolean)
-        .join(' · ')
-    : null
 
   // Carry-forward rows + scope tags (scope_tags are loose-canonical text[],
   // mostly empty today per CLAUDE.md "deferred follow-up" — they render as
@@ -1494,19 +1489,22 @@ function ArchiveLotBody({
         )}
       </div>
 
-      {/* Reference / Leading Cup */}
+      {/* Reference / Leading Cup — recomposed per Chris's mockup (priority-stack
+          recount Tweak 4, 2026-06-03). One vertical narrative that follows how
+          Chris reads the reference cup: (1) what the roast tasted like on the
+          CUPPING table → (2) what it tasted like in the OPTIMIZED BREW (the full
+          brew-page treatment: recipe + strategy + flavor notes + structure + the
+          brew's "Learned" synthesis, which used to float as a separate top
+          block) → (3) the original PRODUCER NOTES as the final contrast (was a
+          dashed `.ssp-cite` footer; now its own pane). */}
       <div className={`ssp-card ${v.stateClass}`}>
-        <SspShead ct="Best cup + optimized brew">{v.cupTitle}</SspShead>
-
-        {bestCupSynthesis && (
-          <div className="ssp-why">
-            <div className="hd">{v.cupSynthLabel}</div>
-            <div className="body">{bestCupSynthesis}</div>
-          </div>
-        )}
+        <span className="ssp-corner">
+          Batch #{refBatchLabel} · {v.cornerWord}
+        </span>
+        <SspShead>{v.cupTitle}</SspShead>
 
         <div className="ssp-twopane">
-          {/* Pourover cupping on the reference/leading roast */}
+          {/* 1 · Cupping — what the reference/leading roast tasted like on the table */}
           <div className="pane">
             <div className="lbl">Cupping · #{refBatchLabel}</div>
             {pourover ? (
@@ -1559,27 +1557,64 @@ function ArchiveLotBody({
             )}
           </div>
 
-          {/* Optimized brew joined via green_bean_id */}
+          {/* 2 · Optimized Brew — what it tasted like after the optimized pourover.
+              Label/value grid mirroring /brews/[id]: Recipe / Strategy / Flavor
+              Notes / Structure / Learned. Joined via green_bean_id. */}
           <div className="pane">
-            <div className="lbl">Optimized Brew · #{refBatchLabel} retasted</div>
+            <div className="lbl">Optimized Brew · #{refBatchLabel}</div>
             {optimizedBrew ? (
-              <>
-                <div className="font-mono text-xs text-latent-mid mb-2">
+              <div className="ssp-optbrew">
+                <div className="k">Recipe</div>
+                <div className="v font-mono text-xs text-latent-mid">
                   {composeBrewRecipeLine(optimizedBrew) || '— recipe not populated —'}
                 </div>
+
                 {(optimizedBrew.extraction_strategy ||
                   (optimizedBrew.modifiers && optimizedBrew.modifiers.length > 0)) && (
-                  <div className="flex flex-wrap items-center gap-1.5 mb-2">
-                    {optimizedBrew.extraction_strategy && (
-                      <Chip name={optimizedBrew.extraction_strategy} tone="coral" />
-                    )}
-                    {optimizedBrew.modifiers && optimizedBrew.modifiers.length > 0 && (
-                      <ModifierBadges modifiers={optimizedBrew.modifiers} />
-                    )}
-                  </div>
+                  <>
+                    <div className="k">Strategy</div>
+                    <div className="v flex flex-wrap items-center gap-1.5">
+                      {optimizedBrew.extraction_strategy && (
+                        <Chip name={optimizedBrew.extraction_strategy} tone="coral" />
+                      )}
+                      {optimizedBrew.modifiers && optimizedBrew.modifiers.length > 0 && (
+                        <ModifierBadges modifiers={optimizedBrew.modifiers} />
+                      )}
+                    </div>
+                  </>
                 )}
-                {optimizedDescriptors && <div className="body">{optimizedDescriptors}</div>}
-              </>
+
+                {optFlavors.length > 0 && (
+                  <>
+                    <div className="k">Flavor Notes</div>
+                    <div className="v flex flex-wrap gap-1.5">
+                      {optFlavors.map((note) => (
+                        <Chip key={note} name={note} tone="green" />
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {optStructure.length > 0 && (
+                  <>
+                    <div className="k">Structure</div>
+                    <div className="v flex flex-wrap gap-1.5">
+                      {optStructure.map((desc) => (
+                        <Chip key={desc} name={desc} tone="green" />
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {optimizedBrew.what_i_learned && (
+                  <>
+                    <div className="k">Learned</div>
+                    <div className="v font-sans text-xs leading-relaxed whitespace-pre-line">
+                      {optimizedBrew.what_i_learned}
+                    </div>
+                  </>
+                )}
+              </div>
             ) : (
               <div className="font-sans text-xs italic text-latent-mid">
                 No optimized brew logged for this lot yet. push_brew with source=&apos;self-roasted&apos;
@@ -1588,11 +1623,15 @@ function ArchiveLotBody({
               </div>
             )}
           </div>
-        </div>
 
-        {bean.producer_tasting_notes && (
-          <div className="ssp-cite">Producer notes: {bean.producer_tasting_notes}</div>
-        )}
+          {/* 3 · Producer Notes — the final contrast vs what the producer predicted. */}
+          {bean.producer_tasting_notes && (
+            <div className="pane">
+              <div className="lbl">Producers Notes</div>
+              <div className="body">{bean.producer_tasting_notes}</div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Roasting Learnings — 3-up insight cards + signal pair-rows */}
