@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { SspShead } from '@/components/Ssp'
+import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import SynthesisRenderer from '@/components/SynthesisRenderer'
 
 interface SynthesisCardProps {
@@ -19,6 +20,12 @@ interface SynthesisCardProps {
   existingShortForm?: string | null
   existingSynthesisInputUpdatedAt?: string | null
   currentInputMaxUpdatedAt?: string | null
+  // Roaster exception (2026-06-03 priority-stack recount): on /roasters/[id]
+  // the Coffees list is primary and synthesis drops to collapsible tertiary.
+  // When true, render inside a `details.ssp-coll` (collapsed by default) using
+  // `title` as the summary, instead of the always-open `.ssp-card`. Default
+  // false keeps terroir / cultivar / processes synthesis open (secondary).
+  collapsible?: boolean
 }
 
 export default function SynthesisCard({
@@ -33,6 +40,7 @@ export default function SynthesisCard({
   existingShortForm = null,
   existingSynthesisInputUpdatedAt = null,
   currentInputMaxUpdatedAt = null,
+  collapsible = false,
 }: SynthesisCardProps) {
   const [synthesis, setSynthesis] = useState(existingSynthesis)
   const [shortForm, setShortForm] = useState<string | null>(existingShortForm)
@@ -90,36 +98,47 @@ export default function SynthesisCard({
   // blank state. The Regenerate button stays available either way.
   const mobileText = shortForm ?? synthesis
 
+  const inner = loading ? (
+    <div className="flex items-center gap-3">
+      <div className="w-4 h-4 border-2 border-latent-mid border-t-latent-fg rounded-full animate-spin" />
+      <p className="font-mono text-xs text-latent-mid">{loadingText}</p>
+    </div>
+  ) : synthesis ? (
+    <div>
+      {/* Mobile (<md:): short-form when available, long-form fallback. The
+          one @media split left in the migrated surfaces — kept because it's a
+          content switch (mobile gets the digest), not a layout reflow. */}
+      <div className="md:hidden">
+        {mobileText && <SynthesisRenderer text={mobileText} />}
+      </div>
+      {/* Desktop (md+): full long-form */}
+      <div className="hidden md:block">
+        <SynthesisRenderer text={synthesis} />
+      </div>
+      <button
+        onClick={generateSynthesis}
+        className="font-mono text-xxs text-latent-mid hover:text-latent-fg mt-4 transition-colors"
+      >
+        Regenerate
+      </button>
+    </div>
+  ) : (
+    <p className="font-mono text-xs text-latent-mid">Not enough data to synthesize yet.</p>
+  )
+
+  // Roaster exception: collapse via the shared CollapsibleBlock (`details.ssp-coll`
+  // with `title` as the summary) so the collapse markup lives in one place. The
+  // synthesis still mounts (details children always render), so auto-generation
+  // + caching fire even while collapsed. `inner` carries no title — the summary
+  // is the only heading here, vs the SspShead in the always-open branch.
+  if (collapsible) {
+    return <CollapsibleBlock title={title}>{inner}</CollapsibleBlock>
+  }
+
   return (
     <div className="ssp-card">
       <SspShead>{title}</SspShead>
-      {loading ? (
-        <div className="flex items-center gap-3">
-          <div className="w-4 h-4 border-2 border-latent-mid border-t-latent-fg rounded-full animate-spin" />
-          <p className="font-mono text-xs text-latent-mid">{loadingText}</p>
-        </div>
-      ) : synthesis ? (
-        <div>
-          {/* Mobile (<md:): short-form when available, long-form fallback. The
-              one @media split left in the migrated surfaces — kept because it's a
-              content switch (mobile gets the digest), not a layout reflow. */}
-          <div className="md:hidden">
-            {mobileText && <SynthesisRenderer text={mobileText} />}
-          </div>
-          {/* Desktop (md+): full long-form */}
-          <div className="hidden md:block">
-            <SynthesisRenderer text={synthesis} />
-          </div>
-          <button
-            onClick={generateSynthesis}
-            className="font-mono text-xxs text-latent-mid hover:text-latent-fg mt-4 transition-colors"
-          >
-            Regenerate
-          </button>
-        </div>
-      ) : (
-        <p className="font-mono text-xs text-latent-mid">Not enough data to synthesize yet.</p>
-      )}
+      {inner}
     </div>
   )
 }

@@ -211,39 +211,11 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
         edgeColor={color}
       />
 
-      {/* Job 1: Brewing Philosophy */}
-      {entry && (
-        <div className="ssp-card">
-          <SspShead>Brewing Philosophy</SspShead>
-          <SspProseRows rows={brewingRows} />
-        </div>
-      )}
-
-      {/* Job 2a: Roasting Philosophy */}
-      {roastingRows.length > 0 && (
-        <div className="ssp-card">
-          <SspShead>Roasting Philosophy</SspShead>
-          <SspProseRows rows={roastingRows} />
-        </div>
-      )}
-
-      {/* Job 1 (deep): Roasters Reference Brew Recipe */}
-      {recipeRows.length > 0 && (
-        <div className="ssp-card">
-          <SspShead>Roasters Reference Brew Recipe</SspShead>
-          <SspProseRows rows={recipeRows} />
-        </div>
-      )}
-
-      {/* Job 2b: Resting Info */}
-      {restingRows.length > 0 && (
-        <div className="ssp-card">
-          <SspShead>Resting Info For This Roaster</SspShead>
-          <SspProseRows rows={restingRows} />
-        </div>
-      )}
-
-      {/* Job 3: Coffees I Have Brewed */}
+      {/* Primary — Coffees list. Roaster is the navigational spine into brews
+          (recall is by roaster + bag style, not coffee name), so the coffees
+          list is the page's gateway job and leads right after the hero. Promoted
+          to top in the 2026-06-03 priority-stack recount; see
+          docs/design-system.md § Detail-page grammar (the roaster exception). */}
       <CoffeesList
         title="Coffees I Have Brewed From This Roaster"
         brews={brewList}
@@ -252,7 +224,40 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
         }
       />
 
-      {/* Synthesis (demoted below coffees list per three-jobs reorder) */}
+      {/* Secondary — Roaster info (brewing template · philosophy · reference
+          recipe · resting). The "why" / supporting context behind a coffee from
+          this roaster; visible, below the primary coffees list. */}
+      {entry && (
+        <div className="ssp-card">
+          <SspShead>Brewing Philosophy</SspShead>
+          <SspProseRows rows={brewingRows} />
+        </div>
+      )}
+
+      {roastingRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Roasting Philosophy</SspShead>
+          <SspProseRows rows={roastingRows} />
+        </div>
+      )}
+
+      {recipeRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Roasters Reference Brew Recipe</SspShead>
+          <SspProseRows rows={recipeRows} />
+        </div>
+      )}
+
+      {restingRows.length > 0 && (
+        <div className="ssp-card">
+          <SspShead>Resting Info For This Roaster</SspShead>
+          <SspProseRows rows={restingRows} />
+        </div>
+      )}
+
+      {/* Tertiary — Synthesis, collapsed by default (the roaster exception:
+          synthesis is nice-to-have on a roaster page vs. front-and-center on
+          terroir / cultivar / processes). 2026-06-03 priority-stack recount. */}
       <SynthesisCard
         title="WHAT I'VE LEARNED ABOUT THIS ROASTER"
         fetchKey={roasterName}
@@ -265,6 +270,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
         existingShortForm={cache?.short_form_capsule ?? null}
         existingSynthesisInputUpdatedAt={cache?.synthesis_input_max_updated_at ?? null}
         currentInputMaxUpdatedAt={currentInputMaxUpdatedAt}
+        collapsible
       />
 
       {/* Additional Information — collapsed by default */}
