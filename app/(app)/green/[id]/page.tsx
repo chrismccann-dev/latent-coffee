@@ -272,12 +272,18 @@ function WaitingForNextRoastView({
 
           {/* Labelled so it doesn't read as a second font on the primary question
               (WR-2, 2026-05-30) — this is the V_(n-1) baseline we're moving from,
-              a distinct reference field from the question above it. */}
+              a distinct reference field from the question above it. Collapsed by
+              default (priority-stack recount Tweak 2, 2026-06-02) — Chris: less
+              important than the recipe/drop-rules + primary question, so it sits
+              behind a one-line disclosure in place. */}
           {anchorLine && (
-            <div className="ssp-anchor">
-              <div className="lbl">Anchor · baseline we&apos;re moving from</div>
+            <details className="ssp-anchor">
+              <summary>
+                Anchor · baseline we&apos;re moving from
+                <span className="chev" />
+              </summary>
               <div className="ssp-anchor-line">{anchorLine}</div>
-            </div>
+            </details>
           )}
 
           {hypo && hypo.rows.length > 0 ? (
