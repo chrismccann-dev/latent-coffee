@@ -1,10 +1,17 @@
-import { SspShead, SspProseRows, type ProseRow } from '@/components/Ssp'
+import { SspProseRows, type ProseRow } from '@/components/Ssp'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
 
 // Sub Pages 6.4 (2026-05-13). Shared across all 5 /green lifecycle shapes —
 // surfaces the same lot-intake spec rows + producer's tasting notes off the
 // green_beans row. Re-skinned to the Ssp* lab-document family in Redesign
 // Sprint 4 (2026-05-29): `.ssp-card` + SspShead + SspProseRows (artboard
 // `GreenBeanInfoCard`).
+//
+// Priority-stack recount follow-up (2026-06-02 / Tweak 1): now renders as a
+// collapsed `.ssp-coll` (CollapsibleSection) rather than an always-open card.
+// Chris flagged on every green surface that lot-intake data is informational —
+// it should default closed so the recipe/cup/learnings stay above the fold.
+// One change here propagates to all 5 lifecycle views.
 //
 // Prop-driven (not self-fetching): the parent already has the green_beans row.
 //
@@ -57,8 +64,7 @@ export function GreenBeanInfoCard({ bean }: { bean: GreenBeanInfo }) {
   }
 
   return (
-    <div className="ssp-card">
-      <SspShead ct="Lot intake data">Green Bean Info</SspShead>
+    <CollapsibleSection title="Green Bean Info" ct="Lot intake data">
       <SspProseRows rows={rows} />
       {showProvenanceFooter && (
         <div className="mt-4 pt-3 border-t border-latent-border text-xs text-latent-mid font-sans space-y-1">
@@ -71,6 +77,6 @@ export function GreenBeanInfoCard({ bean }: { bean: GreenBeanInfo }) {
           {canonicalsDate && <div>Canonicals last updated: {canonicalsDate}</div>}
         </div>
       )}
-    </div>
+    </CollapsibleSection>
   )
 }

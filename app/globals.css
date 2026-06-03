@@ -498,7 +498,14 @@ body {
 .ssp-question .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 5px; }
 .ssp-question .body { font-family: var(--sans); font-size: 14px; font-weight: 500; color: var(--fg); line-height: 1.5; text-wrap: pretty; letter-spacing: -0.005em; }
 .ssp-anchor { margin: 0 0 12px; }
-.ssp-anchor .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 5px; }
+/* Collapsed-by-default disclosure (priority-stack recount Tweak 2, 2026-06-02).
+   Lightweight inline summary — chevron + mono label, no card chrome, since it
+   lives inside the hypothesis card. */
+.ssp-anchor > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); font-weight: 600; }
+.ssp-anchor > summary::-webkit-details-marker { display: none; }
+.ssp-anchor > summary .chev { display: inline-block; width: 6px; height: 6px; border-right: 1.5px solid var(--mid); border-bottom: 1.5px solid var(--mid); transform: rotate(45deg); transition: transform 0.18s ease; }
+.ssp-anchor[open] > summary .chev { transform: rotate(-135deg); }
+.ssp-anchor[open] > .ssp-anchor-line { margin-top: 6px; }
 .ssp-anchor-line { font-family: var(--mono); font-size: 10.5px; color: var(--mid); letter-spacing: 0.02em; line-height: 1.55; }
 
 /* "Why" prose block — producer notes / verdict-style lede inside a state card */
