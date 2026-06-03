@@ -94,8 +94,7 @@ Chrome utilities (via `@apply` in `app/globals.css`):
 - **`.label`** — mono xxs semibold uppercase `text-latent-mid`, `mb-2 block`. The canonical section-label treatment.
 - **`.tag`** — inline-block mono xxs, sage-highlight bg + border, `rounded`, `px-2 py-1`.
 - **`.btn` / `.btn-primary` / `.btn-secondary` / `.btn-sm`** — mono xs semibold uppercase, `px-4 py-3` (default) or `px-3 py-2` (`sm`), `rounded`.
-- **`.input` / `.textarea`** — mono sm, 1px latent-border, `px-3 py-2`, sage focus ring.
-- **`.editable-field`** — sage-highlight bg + border, signals "this value is editable."
+- **`.input` / `.textarea`** — mono sm, 1px latent-border, `px-3 py-2`, sage focus ring. (Auth/login + index filter chrome only — no data-editing surface exists; see the read-only-chrome principle below.)
 - **`.coffee-card`** — list-row card with hover border shift.
 - **`.data-table`** — mono xs table with hairline row dividers + highlight-on-hover.
 
@@ -110,6 +109,58 @@ React components (in `components/`):
 - **`<Header>`** — sticky brand + nav + mobile hamburger. Re-skinned Sprint 0 to the v2 centered-destinations shape (white surface bar, balanced `nav-tail` spacer, 6 destinations; `+ ADD` gone since Writing-path Sub-sprint 4).
 
 **`Ssp*` family (`components/Ssp.tsx`, Redesign Sprint 0; grown through Sprint 5).** The v2 "lab-document" primitive vocabulary, built as React server components driven by the `.ssp-*`/`.chip` CSS in `globals.css`. **Migration window CLOSED for all detail pages (Sprint 5, 2026-05-29)** — `/brews/[id]`, all 5 `/green` views, AND the 4 aggregation detail families (roaster / cultivar / terroir / processes) are `Ssp*`; the legacy `SectionCard` + `Tag` chrome was **deleted** (zero consumers). The shared aggregation chrome lives in `CoffeesList` / `ConfidenceCard` + the re-skinned `CollapsibleBlock` / `FlavorNotesByFamily` / `TagLinkList` / `SynthesisCard`. Only the index surfaces remain un-migrated. Members: `Chip` (5 accent tones) · `StatusPill` (dot + mono label, lifecycle tones) · `SspTopBar` (black mono ID strip) · `SspNamePlate` (plum-edged plate, sans h1) · `SspShead` (hairline-prefixed section head) · `SspKVStrip` (dark mono key-value strip; alias `SspRecipeHead`) · `SspTimeline` (brew time/label/desc) · `SspModifier` (strategy + modifier chips + prose) · `SspFlavorAxis` (4-cell categorical) · `SspStructure` (label-row + chip-row) · `SspIdentGrid` (5-cell tabular metadata) · `SspExpGrid` (transposed experiment grid, Sprint 2) · `SspProseRows` (label/value rows, Sprint 2) · `SspInset` (amber/cup reference inset, grid/stack modes, Sprint 4). Plus CSS-only `.blk`/`.blk.dark`, `.hero`, `details.ssp-coll`. Use, don't reimplement.
+
+### Detail-page grammar — the priority stack
+
+`design-system.md` above documents the `Ssp*` *primitives* (the vocabulary); `docs/architecture/page-ia.md` documents each page's *concrete render* (the finished sentence). This section is the **grammar in between** — how primitives arrange into a page. Concept preserved from the claude.ai/design v2 system in the 2026-06-02 reconciliation (it had been dropped when the design system was consolidated into this doc); per-surface rankings re-derived page-by-page with Chris in the same pass, not inherited.
+
+Every detail page ranks its content into three levels of importance: **primary / secondary / tertiary**. This is the **priority stack** — *not* "tiers." "Tier" is already overloaded across corpus tiers (synthesis), canonical-strictness tiers, the 3-tier sub-skills architecture, and the 3-tier `/processes` IA; reusing it here would collide on sight. **Lineage:** this was T1–T4 in the claude.ai/design system; T3 ("concise guidance") folded into tertiary because it already merged into T4 in practice on every page except brew.
+
+The ranking is derived from the **most-constrained surface** — the 390px mobile width is the forcing function (per [ADR-0018](adr/0018-per-surface-mobile-pattern.md)): least room forces the question "what is the single most important thing, and in what order?" That same ranking is then expressed at every width.
+
+- **Primary** — the job the user came for. Leads the page; never collapses; leads on mobile.
+- **Secondary** — confirmation / the why / supporting context. Visible, below primary.
+- **Tertiary** — reference, provenance, archive, read-once metadata. **Collapsed by default** behind the Additional Information `<details>`.
+
+**Position ≠ priority.** The stack ranks *importance* — what leads on mobile, what never collapses, what's emphasized. A framing line may sit visually first for reading flow while ranking secondary (e.g. the Primary Question on `/green/[id]` waiting-for-roast leads the read but is secondary to the recipe + drop rules). Priority governs emphasis and collapse, not strictly literal DOM order.
+
+**Per-surface rankings** (`›` = "more important than" within a level):
+
+| Surface | Primary | Secondary | Tertiary (collapsed) |
+|---|---|---|---|
+| `/brews/[id]` | Reference brew recipe + pour procedure + identity | Flavor notes › Peak Expression | Coffee Overview · What I Learned · Additional Info |
+| `/green/[id]` waiting-for-roast | Roast Hypothesis table + Drop Rules | Primary Question › Anchor Baseline | green-bean info · roast log · additional |
+| `/green/[id]` waiting-for-cupping | Producer notes + Predicted cup + batch identity | Roast Actuals | everything else |
+| `/green/[id]` resolved | Reference Roast (won + why + design/achieved) | Reference Cup › Roasting Learnings + Carry-Forward | green-bean · log · cuppings · journey · additional |
+| `/green/[id]` resolved-no-ref · one-shot | *inherit resolved* (no-ref drops the verdict / leading-candidate vocab; one-shot is the constrained single-batch shape) | | |
+| `/terroirs/[id]` | Place info (one block) | Synthesis › Coffees | Additional · Confidence |
+| `/cultivars/[id]` | Cultivar info | Synthesis › Coffees | Additional · Confidence |
+| `/processes/[id]` family | Process info + observed variants + archetypes | Synthesis › Coffees | Additional · Confidence |
+| `/processes/[id]` variant | Process info | Synthesis › Coffees | Additional · Confidence |
+| **`/roasters/[id]`** | **Coffees list (gateway) + identity** | Roaster info (brewing template · philosophy · resting) | **Synthesis (collapsible)** · Additional · Confidence |
+
+Two generalizations fall out:
+- **Default aggregation stack** — info (primary) → synthesis (secondary) → coffees (low secondary) → additional + confidence (tertiary). Terroir / cultivar / process-family / process-variant all follow it.
+- **The roaster exception** — roaster is not a reference page, it's the **navigational spine into brews** (recall is by roaster, not coffee name — Chris recognizes a roaster's bag style and reaches the coffee through it). So `/roasters/[id]` inverts the default: the **Coffees list is primary** and **synthesis drops to collapsible tertiary**.
+
+A standing tension the recount surfaced: **synthesis is demoted below the info block on every aggregation page because of its *length*, not its value.** That's an intended-priority-vs-render-weight mismatch — the fix is shortening synthesis so its weight matches its secondary rank, not reordering. Tracked in the roadmap (synthesis rethink).
+
+### Information architecture — six load-bearing principles
+
+Why every page looks the way it looks. Each is load-bearing — break it on one screen and the rest stop reading as a coherent product. (Preserved from the claude.ai/design v2 §03 in the 2026-06-02 reconciliation.)
+
+1. **Read-only chrome.** claude.ai via MCP is the canonical input path. The app has no `/add`, no `/edit`, no draft / save / publish states (both human-write surfaces deprecated — Sub Pages 6.6 + Writing-path Sub-sprint 4). Every surface is a *render* of structured data, never a form. UI affordances ban anything that implies "you can type here." (`.input` / `.textarea` survive only for auth + index filters — not data editing.)
+2. **Above the fold = the job you came for.** Every detail page answers *one* primary job at the top; secondary jobs and archive context sit lower or collapse. This is the priority-stack primary, restated as an IA law.
+3. **Lifecycle drives color.** Green-coffee → roasted-coffee is the page-level metaphor (sage = waiting to roast; olive-bronze = between roast and cup; roasted-brown = resolved). The tile color is the single fastest read on any lot card — the metaphor doing the work, not a status pill.
+4. **Four semantic chrome roles, no more.** Roast-amber (design intent), cup-lavender (cupping hypothesis / reference signals), resolved-green (reference roast / cup / peak), archive-grey (read-once provenance). Every *other* accent is a flavor category, not a chrome signal. Named by meaning, not color (see Palette above).
+5. **The unit is the lot, not the roast.** No `/roasts` top-level page — individual roasts live inside the lot's detail as table rows. The `/green` card grid shows one card per lot (a V-set's three batches are a unit of inquiry, not three separate artifacts).
+6. **Tables are the gold standard for design intent.** Roast Hypothesis (one row per attribute, one column per batch slot), Cupping Hypothesis, and Roast Actuals all share one shape — same scan path, every time, so pre-roast / pre-cupping / post-roast review read identically.
+
+### Detail-page composition rules
+
+- **Dark vs light surfaces are semantic.** Dark (`#0E0E0E`) = the page's *narrative anchor* (brew recipe, peak expression, synthesis, confidence footer). Light = characterization grids and reference data. Don't dark-treat a reference grid — the surface tone signals "anchor" vs "reference," not decoration.
+- **Topbar = identity. Hero meta = differentiation. Never duplicate.** The black `SspTopBar` carries entity ID + count + category anchor (and the lot code Chris grabs constantly); the `SspNamePlate` meta carries differentiating attributes *not* already in the topbar. (Known drift: the topbar is still duplicated against the hero in places — an enforcement sweep is parked on the roadmap.)
+- **Synthesis is the cross-page unifier** — every detail page carries a "what I've learned" block (`SynthesisCard` / `SspEssay`): a few always-visible takeaways + the essay behind an expand toggle, compact by default at every width. *Held lightly* — the synthesis surface is flagged for a future rethink (it's the demotion driver noted above), so don't calcify its shape.
 
 ### Iconography
 

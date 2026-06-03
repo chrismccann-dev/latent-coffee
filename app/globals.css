@@ -145,11 +145,6 @@ body {
          rounded px-2 py-1 mr-1 mb-1;
 }
 
-/* Editable field highlight */
-.editable-field {
-  @apply bg-latent-highlight border border-latent-highlight-border rounded px-2 py-1;
-}
-
 /* Button base */
 .btn {
   @apply font-mono text-xs font-semibold tracking-wide uppercase px-4 py-3 rounded
