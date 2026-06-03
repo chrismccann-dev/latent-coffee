@@ -151,6 +151,13 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** claude.ai grilling review 2026-05-31, Component 3 (REDPLUM)
     - **Suggested landing:** docs sprint - author or generate `docs/schemas/<table>.md` per write table + register in lib/mcp/docs.ts
 
+### From the Lot Coordinator brainstorm (2026-06-02)
+
+46. **Lot Coordinator / V-Set Assistant vocabulary lock** — the 2026-06-02 brainstorm ([docs/features/lot-coordinator-brainstorm-2026-06-02.md](features/lot-coordinator-brainstorm-2026-06-02.md)) introduced new roasting-side terms that need CONTEXT-roasting anchoring before the plan sprint builds against them: **Roasting Coordinator** (persistent per-lot session holding the plan + doing design/close, never running a cycle), **V-Set Assistant** (ephemeral per-V-set session running roast→cup, emits results packet, stops), **Roasting Brief** (the Coordinator-side lot plan — mirror of the brewing Coffee Brief), **V-set Handoff Packet** (Coordinator→Assistant, design intent down), **V-set Results Packet** (Assistant→Coordinator, actuals + interpretation up). Also lock the structural framing: the Coordinator/Assistant boundary = the predicted/actual boundary (Coordinator writes `roast_recipes` + `experiments.predicted_cup`; Assistant writes `roasts` + `cuppings`). **Grill at/just before the plan sprint** (the architecture is scoped but operator-gated on a fresh lot; vocab lands when the plan firms, alongside the new ADR that captures the claude.ai-mediated + MCP-shared-state pattern breaking ADR-0017 Exception 1).
+    - **Grade:** BRAINSTORM → READY-when-plan-fires (concept converged 2026-06-02; vocab waits for the plan sprint so CONTEXT grows grilling-first, not bulk-authored ahead of the build)
+    - **Source:** Lot Coordinator brainstorm, 2026-06-02 (capstone roadmap-review session)
+    - **Suggested landing:** CONTEXT-roasting.md term entries + new ADR (claude.ai-mediated coordinator/assistant with MCP shared state), at the Lot Coordinator plan sprint
+
 ## Substrate pruning candidates
 
 Lived examples of substrate sections that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred until 2-3-4 lived candidates are worked through operator + Claude Code back-and-forth (case-study-driven generalization per Chris's framing at Item 16c grill). This section accumulates candidates; each becomes a worked example. Once ≥2 candidates have been resolved, a pruning sprint scopes the generalized rule.
