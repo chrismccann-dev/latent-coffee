@@ -204,7 +204,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Processing System Tags:** Thermal Shock System
 - **Reference Role:** Anchor
 - **Producer Type:** Individual
-- **Farm:** El Placer Farms
+- **Farm:** El Placer Farms (Quindío core + Huila Projects collaboration)
 - **Farming Model:** Processing Hub
 - **Processing Capability:** Washed / Honey / Natural
 - **Processing Style Tags:** Carbonic, Co-Fermentation, Thermal Shock
@@ -212,7 +212,8 @@ path; rich content gets backfilled when the producer earns it.
 - **Primary Cultivars:** Pink Bourbon, Castillo, Caturra
 - **Secondary Cultivars:** Gesha, Bourbon Sidra, SL28
 - **Experimental Cultivars:** Wush Wush, Laurina
-- **Known For:** Carbonic, Co-Fermentation
+- **Known For:** Carbonic, Co-Fermentation, Midnight Bloom, El Placer Huila Projects (smallholder collaboration)
+- **Note (2026-06-03):** consolidated the former "El Placer (Huila)" skeleton row into this producer per one-row-per-producer rule. The Special Guests "El Placer" Huila lots resolve here; aliases "El Placer (Huila)" / "El Placer (farm)" / "El Placer Farms - Huila Projects" → Sebastián Ramírez.
 - **Typical Flavor Profile:** Tropical Fruit + Fermented, Red Fruit + Candy, Candy + Artificial
 - **Acidity Style:** Mixed
 - **Body Style:** Round
@@ -579,22 +580,32 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Justin Boudeman *[skeleton — pending rich research]*
+### Justin Boudeman
 
 **Country:** Panama · **Admin:** Chiriquí · **Macro:** Volcán Barú Highlands
 
-- **Tier:** 2
+- **Tier:** 1
 - **Producer System:** Panama Genetic + Precision Estates
-- **Processing System Tags:** —
-- **Reference Role:** Signal
-- **Producer Type:** Smallholder
-- **Farm:** Longboard Coffee
-- **Farming Model:** —
-- **Processing Capability:** —
-- **Processing Style Tags:** —
-- **Drying Method:** —
+- **Processing System Tags:** Controlled Processing System
+- **Reference Role:** Anchor
+- **Producer Type:** Family Estate
+- **Farm:** Longboard Specialty Coffee
+- **Farming Model:** Forest-Integrated Estate
+- **Processing Capability:** Washed / Natural / Cold Fermentation
+- **Processing Style Tags:** Wild Yeast Fermentation, Cold Fermentation, Zero Fermentation
+- **Drying Method:** Raised Beds / Controlled Drying
 - **Primary Cultivars:** Gesha
-- **Roaster References:** Dongzhe
+- **Secondary Cultivars:** Caturra, Catuai
+- **Known For:** Wildynamic Farming, Forest-Integrated Gesha, Best of Panama / Private Auction Lots
+- **Typical Flavor Profile:** Floral + High Tone, Citrus + Bright, Tropical Fruit + Clean
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Tea-like / Silky
+- **Consistency Rating:** High
+- **Market Tier:** Ultra-Premium / Competition
+- **Exporters:** Longboard Specialty Coffee
+- **Importers:** Direct / auction buyers
+- **Roaster References:** Dongzhe, Proud Mary
+- **Contact:** https://www.instagram.com/longboardcoffee/
 
 ---
 
@@ -688,22 +699,32 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Pocho Gallardo *[skeleton — pending rich research]*
+### Pocho Gallardo
 
 **Country:** Panama · **Admin:** Chiriquí · **Macro:** Volcán Barú Highlands
 
-- **Tier:** 2
+*Full name: José Manuel "Pocho" Gallardo (canonical kept as "Pocho Gallardo"; full form aliased).*
+
+- **Tier:** 1
 - **Producer System:** Panama Genetic + Precision Estates
-- **Processing System Tags:** —
-- **Reference Role:** Signal
-- **Producer Type:** Smallholder
+- **Processing System Tags:** Controlled Processing System
+- **Reference Role:** Anchor
+- **Producer Type:** Individual / Family
 - **Farm:** Finca Nuguo
-- **Farming Model:** —
-- **Processing Capability:** —
-- **Processing Style Tags:** —
-- **Drying Method:** —
+- **Farming Model:** Micro-Estate / Engineering-led Precision
+- **Processing Capability:** Washed / Natural / Anaerobic
+- **Processing Style Tags:** Temperature-Controlled Fermentation, Anaerobic Dry Fermentation, Micro-Zone Separation
+- **Drying Method:** Humidity-Controlled Drying Rooms
 - **Primary Cultivars:** Gesha
-- **Roaster References:** Dongzhe, Picolot (Brian Quan)
+- **Known For:** Finca Nuguo, Best of Panama Winner, Engineering-led Micro-Zone Farming
+- **Typical Flavor Profile:** Floral + High Tone, Citrus + Bright, Tropical Fruit + Structured
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Silky / Structured
+- **Consistency Rating:** High
+- **Market Tier:** Ultra-Premium / Auction
+- **Exporters:** Finca Nuguo
+- **Importers:** Direct / private auction buyers
+- **Roaster References:** Dongzhe, Picolot (Brian Quan), Sey
 
 ---
 
@@ -1791,7 +1812,7 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Other Systems (uncategorized)  ·  62 producers
+### Other Systems (uncategorized)  ·  61 producers
 
 ### Asefa & Mulugeta Dukamo
 
@@ -3224,40 +3245,56 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Miguel Estela *[skeleton — pending rich research]*
+### Miguel Estela
 
 **Country:** Peru · **Admin:** Cajamarca · **Macro:** Northern Andean Highlands
 
 - **Tier:** 2
-- **Producer System:** —
+- **Producer System:** Peru Emerging Precision Layer
 - **Processing System Tags:** Precision Washed System
 - **Reference Role:** Signal
-- **Producer Type:** Smallholder
-- **Farm:** El Morito Producer's Association
-- **Farming Model:** —
+- **Producer Type:** Individual
+- **Farm:** Finca El Morito
+- **Farming Model:** Smallholder / Family Association
 - **Processing Capability:** Washed
-- **Processing Style Tags:** —
-- **Drying Method:** —
-- **Primary Cultivars:** Maracaturra
-- **Roaster References:** Shoebox Coffee
+- **Processing Style Tags:** Dry Fermentation, Clean Washed
+- **Drying Method:** Raised Beds
+- **Primary Cultivars:** Marshell
+- **Secondary Cultivars:** Catuai, Caturra, Catimor
+- **Known For:** Marshell Pioneer, El Morito Community, High-Altitude Peru
+- **Typical Flavor Profile:** Green Fruit + Clean, Stone Fruit + Sweet, Sugar + Soft
+- **Acidity Style:** Malic
+- **Body Style:** Silky / Round
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Specialty
+- **Exporters:** El Morito / regional exporters
+- **Roaster References:** Shoebox Coffee, Sey, Passenger
 
 ---
 
-### Nelsyn Hernández *[skeleton — pending rich research]*
+### Nelsyn Hernández
 
-**Country:** Costa Rica · **Admin:** Tarrazu (San Marcos) · **Macro:** Southern Highlands
+**Country:** Costa Rica · **Admin:** Tarrazú · **Macro:** Tarrazú Highlands
 
 - **Tier:** 2
-- **Producer System:** —
-- **Processing System Tags:** —
+- **Producer System:** — *(CSV "Costa Rica Precision Fermentation Leaders" not yet a canonical system; renders under Other Systems)*
+- **Processing System Tags:** Extended Fermentation System
 - **Reference Role:** Signal
-- **Producer Type:** Smallholder
-- **Farm:** Fátima Micromill
-- **Farming Model:** Smallholder micro-mill
-- **Processing Capability:** —
-- **Processing Style Tags:** —
-- **Drying Method:** —
-- **Primary Cultivars:** —
+- **Producer Type:** Individual / Family
+- **Farm:** Finca Fátima / Tres Milagros
+- **Farming Model:** Micro-mill / Agronomy-led Estate
+- **Processing Capability:** Washed / Honey / Natural
+- **Processing Style Tags:** Yellow Honey, Red Honey, Anaerobic Pre-Fermentation
+- **Drying Method:** Raised Beds / Patio
+- **Primary Cultivars:** Caturra, Catuai
+- **Secondary Cultivars:** Gesha
+- **Known For:** Agronomy-led Renovation, Honey Processing, Santuario Collaboration
+- **Typical Flavor Profile:** Red Fruit + Sweet, Citrus + Bright, Chocolate + Sweet
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Round / Silky
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Specialty
+- **Exporters:** Café Fátima / direct partners
 - **Importers:** Sweet Maria's
 - **Notes:** Sweet Maria's Costa Rican lots use farm-name-as-producer convention; "Higuito" is the farm/lot name (aliased to this producer in the registry).
 
@@ -3633,17 +3670,31 @@ path; rich content gets backfilled when the producer earns it.
 
 ### Jaroon Jaipin, Khun Lao
 
-**Country:** Thailand · **Admin:** Chiang Mai · **Macro:** Khun Lao Highlands
+**Country:** Thailand · **Admin:** Chiang Mai / Chiang Rai · **Macro:** Doi Chang / Northern Thai Highlands
 
-- **Tier:** 3
+*Short form "Jaroon Jaipin" aliased to canonical. Prior skeleton listed cultivar "Khun Lao" (a farm name, not a cultivar) — corrected to Chiang Mai + Bourbon/Typica/Catuai per producer CSV.*
+
+- **Tier:** 2
 - **Producer System:** Thailand Experimental Processing
-- **Reference Role:** Experimental
+- **Processing System Tags:** Experimental Fermentation System
+- **Reference Role:** Signal
 - **Producer Type:** Individual / Family
-- **Farm:** Khun Lao
-- **Processing Capability:** Black Honey
-- **Primary Cultivars:** Khun Lao
+- **Farm:** Khun Lao Farm
+- **Farming Model:** Agroforestry Smallholder + Community Collaboration
+- **Processing Capability:** Washed / Natural / Honey
+- **Processing Style Tags:** Extended Natural, Double Honey, Double Drying Natural, Kenya-Style Washed
+- **Drying Method:** Raised Beds / Controlled Drying
+- **Primary Cultivars:** Chiang Mai
+- **Secondary Cultivars:** Yellow Bourbon, Red Bourbon, Typica, Catuai
+- **Known For:** Thai Agroforestry, Extended Naturals, Khun Lao Micro-lots
+- **Typical Flavor Profile:** Red Fruit + Candy, Tropical Fruit + Clean, Tea + Sweet
+- **Acidity Style:** Mixed
+- **Body Style:** Round / Silky
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Competition
+- **Exporters:** Beanspire Coffee
+- **Importers:** Specialty importers / direct buyers
 - **Roaster References:** Newbery Street Coffee Roasters
-- **Skeleton:** true - promoted from taxonomy override queue 2026-05-26 against brew 1f7d5ad1 (Newbery Street "Jaroon Khun Lao Double Honey", first Chiang Mai / Khun Lao lot in the Latent archive; Khun Lao cultivar = Catimor × SL28, Northern Thai Highlands at 1,200 masl). Distinct from Nawin Yaesorkoo (Doi Chang / Chiang Rai) but same producerSystem + same roaster (Newbery Street). Pending rich research on farming model, processing system membership, cultivar lineup beyond Khun Lao, and acidity/body profile.
 
 ---
 
@@ -3668,43 +3719,63 @@ path; rich content gets backfilled when the producer earns it.
 
 ### Stefano Um, Fazenda Um
 
-**Country:** Brazil · **Admin:** Sul de Minas · **Macro:** Mantiqueira Highlands
+**Country:** Brazil · **Admin:** Minas Gerais · **Macro:** Mantiqueira de Minas Highlands (BR)
 
-- **Tier:** 3
-- **Reference Role:** Experimental
-- **Producer Type:** Estate
+*Short form "Stefano Um" aliased to canonical.*
+
+- **Tier:** 2
+- **Producer System:** — *(CSV "Brazil Mantiqueira Micro-lot Specialists" not yet a canonical system; renders under Other Systems)*
+- **Processing System Tags:** Controlled Natural / Drying System
+- **Reference Role:** Signal
+- **Producer Type:** Family
 - **Farm:** Fazenda Um
-- **Processing Capability:** Natural
-- **Primary Cultivars:** Wush Wush
+- **Farming Model:** Mountain Micro-lot Estate / Vertical Family Operation
+- **Processing Capability:** Washed / Natural / Pulped Natural / Anaerobic
+- **Processing Style Tags:** Multi-Stage Anaerobic, Slow Drying, Pulped Natural
+- **Drying Method:** Raised African Beds (slow drying)
+- **Primary Cultivars:** Yellow Bourbon, Mundo Novo, Catuai
+- **Secondary Cultivars:** Catucai, Wush Wush
+- **Experimental Cultivars:** Rare variety trials
+- **Known For:** Brazil Competition Micro-lots, Um Coffee Co., Handpicked Mountain Lots
+- **Typical Flavor Profile:** Chocolate + Sweet, Citrus + Bright, Tropical Fruit + Fermented
+- **Acidity Style:** Mixed
+- **Body Style:** Round / Silky
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Competition
+- **Exporters:** Fazenda Um / Um Coffee Co.
+- **Importers:** Direct / specialty buyers
 - **Roaster References:** Untold Coffee Lab
-- **Skeleton:** true - promoted from taxonomy override queue 2026-05-23 against brew 25b4465b (Untold Coffee Lab Brazil Fazenda Um Wush Wush Natural, first Brazil Wush Wush in the Latent archive). 28-day patio dry on the first archived lot. Pending rich research on farming model, processing system membership, cultivar lineup beyond Wush Wush, and acidity/body profile.
+- **Contact:** https://www.instagram.com/umcoffeeco/
 
 ---
 
 ### Mountain Harvest smallholders - Mount Elgon Ladies (Bukalasi)
 
-**Country:** Uganda · **Admin:** Bukalasi (Mount Elgon) · **Macro:** Mount Elgon Highlands
+**Country:** Uganda · **Admin:** Bududa District · **Macro:** Mount Elgon Highlands
 
-- **Tier:** 3
-- **Reference Role:** Experimental
-- **Producer Type:** Smallholder
-- **Farming Model:** Smallholder cooperative (women's group)
-- **Primary Cultivars:** Nyasaland, SL14, SL28
-- **Exporters:** Mountain Harvest
-- **Skeleton:** true - promoted from taxonomy override queue 2026-05-23 against the first Uganda green_bean in the Latent archive (Mountain Harvest "Paradigm Shift" 2026 sample pack, Elgon Ladies' Lot from Bukalasi village). Smallholder women's group within the Mountain Harvest exporter network on Mount Elgon. Queue raw_value used em-dash; canonical normalizes to hyphen per house style; em-dash variant aliased to canonical.
-
----
-
-### El Placer (Huila) *[skeleton - pending rich research]*
-
-**Country:** Colombia · **Admin:** Huila · **Macro:** Huila Highlands
+*Short form "Mount Elgon Ladies (Bukalasi)" aliased to canonical. Queue raw_value used em-dash; canonical normalizes to hyphen per house style.*
 
 - **Tier:** 2
+- **Producer System:** — *(CSV "East Africa Washing Station Systems" not yet a canonical system; renders under Other Systems)*
+- **Processing System Tags:** Classic East African Washed System
 - **Reference Role:** Signal
-- **Producer Type:** Smallholder
-- **Farm:** El Placer
-- **Roaster References:** Special Guests Coffee
-- **Skeleton:** true - promoted from taxonomy override queue 2026-05-26 against a Special Guests Coffee Release 056 brew (Hybrid Intensity-Clarity Split). Disambiguated from the existing `El Placer Farms` canonical (Sebastián Ramírez's Quindío processing lab) by appending `(Huila)` - this is a different farm in Colombia's Huila Highlands (meso terroir "El Placer"). Producer person not yet attributed; Special Guests Coffee does not always disclose producer identity.
+- **Producer Type:** Cooperative / Women Smallholder Group
+- **Farm:** Bukalasi Women's Group
+- **Farming Model:** Women-led Smallholder Agroforestry Network
+- **Processing Capability:** Washed / Centralized Eco-Processing
+- **Processing Style Tags:** Eco-Pulped, Clean Washed, Greenhouse Drying
+- **Drying Method:** Greenhouse Raised Beds
+- **Primary Cultivars:** Nyasaland
+- **Secondary Cultivars:** SL14, SL28
+- **Known For:** Women-led Ugandan Micro-lots, Mountain Harvest Tier 3, Regenerative Agroforestry
+- **Typical Flavor Profile:** Tropical Fruit + Bright, Red Fruit + Clean, Spice + Sweet
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Tea-like / Round
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Specialty
+- **Exporters:** Mountain Harvest
+- **Importers:** Specialty importers / direct buyers
+- **Contact:** https://www.instagram.com/mountainharvestcoffee/
 
 ---
 
@@ -3718,7 +3789,17 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 |---|---|
 | `Abel Dominguez` | `Abel Domínguez` |
 | `Abel Dominguez, Blooms Coffee` | `Abel Domínguez` |
-| `El Placer (farm)` | `El Placer (Huila)` |
+| `El Placer (farm)` | `Sebastián Ramírez` |
+| `El Placer (Huila)` | `Sebastián Ramírez` |
+| `El Placer Farms - Huila Projects` | `Sebastián Ramírez` |
+| `El Placer Huila Projects` | `Sebastián Ramírez` |
+| `Longboard Specialty Coffee` | `Justin Boudeman` |
+| `Justin Boudeman / Longboard Specialty Coffee` | `Justin Boudeman` |
+| `José Manuel "Pocho" Gallardo` | `Pocho Gallardo` |
+| `José Manuel Gallardo` | `Pocho Gallardo` |
+| `Jaroon Jaipin` | `Jaroon Jaipin, Khun Lao` |
+| `Stefano Um` | `Stefano Um, Fazenda Um` |
+| `Mount Elgon Ladies (Bukalasi)` | `Mountain Harvest smallholders - Mount Elgon Ladies (Bukalasi)` |
 | `Aime Gahizi` | `Aimé Dusabe Gahizi` |
 | `Aime Gahizi, Gitesi Washing Station` | `Aimé Dusabe Gahizi` |
 | `Alo Coffee` | `Tamiru Tadesse` |
