@@ -1252,7 +1252,7 @@ export const ROASTERS: RoasterEntry[] = [
     confidenceLevel: 'High',
     brewAdjustmentMethod: 'Grind',
     calibrationRole: 'European Balanced Clarity',
-    notes: 'Structured full-drawdown brewing (90g → 180g → 250g); emphasizes even extraction and sweetness; sits between Coffee Collective and The Barn; slightly more forgiving than strict Nordic styles :contentReference[oaicite:0]{index=0}',
+    notes: 'Structured full-drawdown brewing (90g → 180g → 250g); emphasizes even extraction and sweetness; sits between Coffee Collective and The Barn; slightly more forgiving than strict Nordic styles',
   },
   {
     name: 'Coava Coffee Roasters',
@@ -1416,7 +1416,7 @@ export const ROASTERS: RoasterEntry[] = [
     confidenceLevel: 'High',
     brewAdjustmentMethod: 'Grind',
     calibrationRole: 'Baseline Reference',
-    notes: 'Golden ratio anchor (60g/L) :contentReference[oaicite:0]{index=0}; simple system for consistency, not optimization',
+    notes: 'Golden ratio anchor (60g/L); simple system for consistency, not optimization',
   },
   {
     name: 'Father’s Coffee Roastery',
@@ -1688,7 +1688,7 @@ export const ROASTERS: RoasterEntry[] = [
     confidenceLevel: 'High',
     brewAdjustmentMethod: 'Pour structure + temp',
     calibrationRole: 'Pour Sequencing Reference',
-    notes: 'Fast-fast-slow structure maps to acidity (first), sweetness (second), clarity (final); final pour controls body vs extension; temperature naturally declines during brew; water is softened (diluted TWW) to allow post-brew adjustment :contentReference[oaicite:0]{index=0}',
+    notes: 'Fast-fast-slow structure maps to acidity (first), sweetness (second), clarity (final); final pour controls body vs extension; temperature naturally declines during brew; water is softened (diluted TWW) to allow post-brew adjustment',
     bmrHouseStyle: 'Orea Z1. 15g / 250g / 95°C (natural decline). Diluted Third Wave Water 1:3–1:4. 3-pour fast/fast/slow structure. Target 2:30–3:00. Grind ~300µm on M98V.',
     bmrNotes: 'Coffees described as \'loud.\' Fast/fast/slow: acidity → sweetness → clarity. Kettle-off temp management smooths finish.',
   },
