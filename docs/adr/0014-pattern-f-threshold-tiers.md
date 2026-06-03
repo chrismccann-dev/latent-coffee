@@ -36,6 +36,8 @@ Claude.ai's MCP client reads docs in full via `read_doc` (no streaming / chunkin
 | **CCIL** | 150 KB | 60 KB | Moderate growth; cross-domain N=3+ patterns per coffee / process before self-decomposition fires |
 | **Root-level living docs** (CLAUDE.md, PRODUCT.md) | 120 KB | N/A | Whole doc IS the cluster; preserved as the Claude-Code-side standing tripwire (CLAUDE.md § Sprint cadence) |
 
+**Live tripwire table relocated (2026-06-03):** the canonical, loading-profile-aware tripwire table for **all** constantly-loaded docs — root living docs, the CONTEXT-* family, the claude.ai entry prompts (new 40 KB cap), and these sub-skill cluster tiers — now lives in **[docs/architecture/doc-tripwires.md](../architecture/doc-tripwires.md)**. This ADR records the *rationale* for the cluster tiers; the registry holds the live numbers + current sizes. A firing tripwire schedules a **manual post-tripwire pruning exercise** ([protocol](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md)), not an autonomous prune.
+
 **Tripwire behavior:** when a threshold is exceeded, fire a decomposition proposal via `propose_doc_changes` or a kickoff brief. Thresholds are *tripwires*, not hard caps — content can continue accumulating during the proposal cycle. When a cluster is **within 20% of its threshold** ("approaching"), surface as a watch-item at the next arbitration session's Pattern F sweep.
 
 ## Resolves ADR-0013 ambiguity
