@@ -420,12 +420,11 @@ Set by the capstone product-roadmap-review session (ran as a product brainstorm;
 The current ranked queue of scoped, sized sprints in flight or next up.
 
 **Ordered working queue (set 2026-06-02, post-Cluster-A-grill / PR #344):**
-1. **Repair the migration-drift gate** (see § Bugs and Issues — non-functional on all three paths).
-2. **CLAUDE.md root-doc compaction** (~149KB, over the 120KB tripwire — extraction candidates: the `/brews/[id]` + `/green/[id]` per-page IA blocks → `docs/architecture/page-ia.md`).
-3. **Optional grill** — only if new concepts surface during 1–2.
-4. **PRODUCT.md roadmap review** — decide the next course of action once 1–3 are complete.
+1. **CLAUDE.md root-doc compaction** (~149KB, over the 120KB tripwire - extraction candidates: the `/brews/[id]` + `/green/[id]` per-page IA blocks → `docs/architecture/page-ia.md`).
+2. **Optional grill** - only if new concepts surface during 1.
+3. **PRODUCT.md roadmap review** - decide the next course of action once 1-2 are complete.
 
-_(Shipped 2026-06-02, [#346](https://github.com/chrismccann-dev/latent-coffee/pull/346): ~~One-shot lot — emit the Optimized Brew Packet + flip `one-shot-closeout.md` STAGE 3 to LINK-not-push~~ → see [shipped.md](docs/sprints/shipped.md).)_
+_(Shipped 2026-06-02: ~~One-shot lot - emit the Optimized Brew Packet + LINK-not-push~~ ([#346](https://github.com/chrismccann-dev/latent-coffee/pull/346)) · ~~Repair the migration-drift gate~~ ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)) → see [shipped.md](docs/sprints/shipped.md).)_
 
 **Roadmap re-session restructured this queue 2026-05-26** (closing Sprint R's Option 1 sequence). Sprint 3.3 shipped 2026-05-25; Sprints 3.4 / 3.6 / 3.7 killed (3.4 demoted to Future Direction "Predicted vs Actual roast delta surface"; 3.6 + 3.7 audit found 5 of 6 items each already shipped via architecture Waves 2-4 + lifecycle prompt restructure). Remaining work organized into **two surface polish series** (writing-path first since the writing layer is mission-critical; read-path after) + 5 brainstorms-to-schedule (parallel to sprint work) + 1 incoming substrate event (Chris's filter drawdown research) + Longer Term Items (reordered).
 
@@ -640,7 +639,7 @@ Tiny verifications, ~30 min each, no separate sprint needed — ride along with 
 
 ### Bugs and Issues
 
-- **Repair the migration-drift gate** (queued 2026-06-01 grill; Cluster B / system-maintenance). The `check:migrations` script + `migrations-check` CI workflow (Sprint 3.2 #5) are non-functional on all three paths, which is why migration 069 drifted undetected for 8 days: (1) the CI secret `SUPABASE_SERVICE_ROLE_KEY` is **not configured**, so the workflow skips green and verifies nothing; (2) the workflow is **path-filtered** to PRs touching `supabase/migrations/**`, so a merged-but-unapplied migration is invisible to later non-migration PRs; (3) the local script's prod diff **errors `PGRST106`** because it reads `supabase_migrations.schema_migrations` through PostgREST (which only exposes `public`/`graphql_public`). Fixes: (a) read `schema_migrations` via a **direct Postgres connection** (`pg` client on a connection-string secret), not supabase-js; (b) configure the CI secret; (c) make secret-absent **FAIL, not skip-green**; (d) add a **daily cron**. Until repaired, the build-kickoff gate is a manual column-existence check (see `memory/feedback_migration_drift_pattern.md`).
+- ~~**Repair the migration-drift gate**~~ - **SHIPPED 2026-06-02** ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)). Planning surfaced that the original spec's premise was wrong: migrations are applied **manually via the SQL Editor**, so `supabase_migrations.schema_migrations` (CLI-only) was always empty - the wrong baseline, beneath the `PGRST106` symptom. Repaired with a self-registering `public.applied_migrations` receipt table (migration 076) read via supabase-js (no `pg`, no connection-string secret); secret-absent now **fails** (not skip-green); **daily cron** added as the merged-but-unpasted catch-all; static lint enforces the `>= 076` self-register convention. Chris rollout: apply 076 + configure the `SUPABASE_SERVICE_ROLE_KEY` CI secret.
 
 ### Longer Term Items
 

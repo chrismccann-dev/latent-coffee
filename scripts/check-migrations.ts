@@ -1,33 +1,42 @@
-// Sprint 3.2 #5 — migration drift guard.
+// Migration-drift gate (repairs Sprint 3.2 #5).
 //
 // Run via:
 //   npm run check:migrations
 //
-// Diffs supabase/migrations/*.sql against supabase_migrations.schema_migrations
-// on the live DB. Flags drift in two directions:
+// Baseline: public.applied_migrations (migration 076). Migrations on this
+// project are applied MANUALLY via the Supabase SQL Editor, so the CLI-only
+// supabase_migrations.schema_migrations table is empty and was never a valid
+// baseline. Instead, each migration records itself in public.applied_migrations
+// as its last statement (the >= 076 self-register convention), and this script
+// diffs the files on disk against that table.
 //
-//   pending — local file with NO matching applied row (the recurring failure
+// Flags drift in two directions:
+//   pending - local file with NO matching applied row (the recurring failure
 //     mode from memory/feedback_migration_drift_pattern.md: PR lands but the
-//     migration is never run in Supabase SQL Editor)
-//   orphan  — applied row with NO matching local file (rare; happens when a
-//     SQL Editor change wasn't committed to the repo)
+//     migration is never pasted into the Supabase SQL Editor)
+//   orphan  - applied row with NO matching local file (rare; a SQL Editor change
+//     or registry row that wasn't committed to the repo)
 //
-// Match strategy is fuzzy because applied names drifted historically (some
-// were applied with the NNN_ prefix, some without). For each local file
-// NNN_<rest>.sql we check both "NNN_<rest>" and "<rest>" against the
-// applied schema_migrations.name set; either match counts as applied.
-// Numeric-prefix collisions in the local dir (two files sharing the same
-// NNN) are flagged separately — they're a different bug class.
+// Match is EXACT filename (the registry stores the literal "NNN_name.sql").
 //
-// Exits 0 when clean. Exits 1 when drift exists. Exits 2 on fatal error
-// (missing env, DB unreachable). Treat exit 1 as a soft block that the
-// author must address before merging.
+// Also runs two DB-free checks:
+//   self-register lint - every file with prefix >= 076 must contain its own
+//     `INSERT INTO public.applied_migrations ... '<filename>'` line, or it would
+//     silently produce false drift once applied. Lint failure => exit 1.
+//   prefix collisions - two files sharing the same NNN. Reported as a WARNING
+//     only (does NOT fail): a genuinely dangerous collision (an UNapplied dupe)
+//     is already caught by the pending check, and there is a grandfathered
+//     historical collision (prefix 046) that must not permanently block the gate.
+//
+// Exits 0 when clean. Exits 1 when drift / lint failure exists. Exits 2 on fatal
+// error (missing secret => cannot verify => FAIL, not skip; DB unreachable).
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 const REPO_ROOT = resolve(__dirname, '..')
 const MIGRATIONS_DIR = resolve(REPO_ROOT, 'supabase/migrations')
+const SELF_REGISTER_CONVENTION_FROM = 76 // files with prefix >= this must self-register
 
 function loadDotenvLocal(): void {
   const candidates = [
@@ -58,9 +67,7 @@ import { createServiceClient } from '../lib/supabase/service'
 
 interface LocalMigration {
   filename: string // "053_green_beans_cleanup_backfill.sql"
-  basename: string // "053_green_beans_cleanup_backfill"
-  prefix: string | null // "053"
-  withoutPrefix: string // "green_beans_cleanup_backfill"
+  prefix: number | null // 53
 }
 
 function parseLocalMigrations(): LocalMigration[] {
@@ -69,19 +76,13 @@ function parseLocalMigrations(): LocalMigration[] {
     .filter((f) => f.endsWith('.sql'))
     .sort()
     .map((filename) => {
-      const basename = filename.replace(/\.sql$/, '')
-      const m = basename.match(/^(\d+)_(.+)$/)
-      return {
-        filename,
-        basename,
-        prefix: m ? m[1] : null,
-        withoutPrefix: m ? m[2] : basename,
-      }
+      const m = filename.match(/^(\d+)_/)
+      return { filename, prefix: m ? parseInt(m[1], 10) : null }
     })
 }
 
-function findCollisions(files: LocalMigration[]): Array<{ prefix: string; filenames: string[] }> {
-  const byPrefix = new Map<string, string[]>()
+function findCollisions(files: LocalMigration[]): Array<{ prefix: number; filenames: string[] }> {
+  const byPrefix = new Map<number, string[]>()
   for (const f of files) {
     if (f.prefix == null) continue
     const list = byPrefix.get(f.prefix) ?? []
@@ -93,6 +94,20 @@ function findCollisions(files: LocalMigration[]): Array<{ prefix: string; filena
     .map(([prefix, filenames]) => ({ prefix, filenames }))
 }
 
+// Files with prefix >= 076 must contain their own self-register INSERT, or they
+// produce false "pending" drift after they're applied.
+function findMissingSelfRegister(files: LocalMigration[]): string[] {
+  const missing: string[] = []
+  for (const f of files) {
+    if (f.prefix == null || f.prefix < SELF_REGISTER_CONVENTION_FROM) continue
+    const text = readFileSync(resolve(MIGRATIONS_DIR, f.filename), 'utf8')
+    const hasInsert = /insert\s+into\s+public\.applied_migrations/i.test(text)
+    const namesItself = text.includes(`'${f.filename}'`)
+    if (!hasInsert || !namesItself) missing.push(f.filename)
+  }
+  return missing
+}
+
 async function main(): Promise<number> {
   const local = parseLocalMigrations()
   if (local.length === 0) {
@@ -100,70 +115,65 @@ async function main(): Promise<number> {
     return 2
   }
 
-  // Numeric-prefix collisions are detectable without DB access — run that
-  // check unconditionally so local pre-push runs catch them even when the
-  // service-role key isn't configured (see feedback_local_verification_fallbacks).
+  // DB-free checks run unconditionally.
   const collisions = findCollisions(local)
+  const missingSelfRegister = findMissingSelfRegister(local)
 
-  let appliedNames: Set<string> | null = null
-  if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    try {
-      const supabase = createServiceClient()
-      const { data, error } = await supabase
-        .schema('supabase_migrations' as never)
-        .from('schema_migrations')
-        .select('version, name')
-      if (error) throw error
-      appliedNames = new Set((data ?? []).map((r: { name: string }) => r.name))
-    } catch (err) {
-      console.error('Failed to query schema_migrations:', err instanceof Error ? err.message : err)
-      return 2
-    }
-  } else {
-    console.log('SUPABASE_SERVICE_ROLE_KEY not set — running prefix-collision check only.')
-    console.log('Set the env var (or rely on the CI gate in .github/workflows/migrations-check.yml) for the full drift diff.\n')
+  // Fail-not-skip: without the service key we cannot read the applied set, so we
+  // cannot verify drift. That is a FAILURE (exit 2), never a silent green skip -
+  // the previous skip-green behavior is exactly why migration 069 drifted for 8
+  // days. (See memory/feedback_migration_drift_pattern.md.)
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    console.error(
+      'FAIL: SUPABASE_SERVICE_ROLE_KEY / NEXT_PUBLIC_SUPABASE_URL not set - cannot read public.applied_migrations to verify drift.',
+    )
+    console.error('This is a hard failure, not a skip. Configure the secret (CI) or .env.local (local) and re-run.')
+    return 2
   }
 
-  const pending: LocalMigration[] = []
-  const matchedAppliedNames = new Set<string>()
-  if (appliedNames) {
-    for (const f of local) {
-      const candidates = [f.basename, f.withoutPrefix].filter(Boolean)
-      let matched: string | null = null
-      for (const c of candidates) {
-        if (appliedNames.has(c)) {
-          matched = c
-          break
-        }
-      }
-      if (!matched) pending.push(f)
-      else matchedAppliedNames.add(matched)
-    }
+  let appliedNames: Set<string>
+  try {
+    const supabase = createServiceClient()
+    const { data, error } = await supabase.from('applied_migrations').select('filename')
+    if (error) throw error
+    appliedNames = new Set((data ?? []).map((r: { filename: string }) => r.filename))
+  } catch (err) {
+    console.error('Failed to read public.applied_migrations:', err instanceof Error ? err.message : err)
+    console.error('If the table is missing, apply migration 076_applied_migrations_registry.sql first.')
+    return 2
   }
-  const orphans = appliedNames
-    ? Array.from(appliedNames).filter((n) => !matchedAppliedNames.has(n)).sort()
-    : []
 
-  const clean = pending.length === 0 && orphans.length === 0 && collisions.length === 0
-  if (clean) {
-    console.log(`migrations:check OK — ${local.length} local file(s), all applied.`)
+  const localNames = new Set(local.map((f) => f.filename))
+  const pending = local.filter((f) => !appliedNames.has(f.filename)).map((f) => f.filename)
+  const orphans = Array.from(appliedNames).filter((n) => !localNames.has(n)).sort()
+
+  // Collisions are informational only (see header) - print but don't fail.
+  if (collisions.length > 0) {
+    console.log(`\nWARNING - ${collisions.length} numeric-prefix collision(s) in supabase/migrations/ (not failing):`)
+    for (const c of collisions) console.log(`  - prefix ${String(c.prefix).padStart(3, '0')}: ${c.filenames.join(', ')}`)
+    console.log('  Renumber future colliding files; an UNapplied dupe is caught by the pending check below.')
+  }
+
+  const drift = pending.length > 0 || orphans.length > 0 || missingSelfRegister.length > 0
+  if (!drift) {
+    console.log(`migrations:check OK - ${local.length} local file(s), all applied (public.applied_migrations).`)
     return 0
   }
 
   if (pending.length > 0) {
-    console.log(`\n${pending.length} pending migration(s) — file present in git, NOT applied to DB:`)
-    for (const f of pending) console.log(`  - ${f.filename}`)
-    console.log('\nFix: open Supabase SQL Editor and apply each pending migration, then re-run.')
+    console.log(`\n${pending.length} pending migration(s) - file present in git, NOT recorded in public.applied_migrations:`)
+    for (const f of pending) console.log(`  - ${f}`)
+    console.log('\nFix: open Supabase SQL Editor and apply each pending migration (its self-register INSERT records it), then re-run.')
   }
   if (orphans.length > 0) {
-    console.log(`\n${orphans.length} orphan applied migration(s) — applied to DB, NO matching local file:`)
+    console.log(`\n${orphans.length} orphan applied row(s) - recorded in public.applied_migrations, NO matching local file:`)
     for (const name of orphans) console.log(`  - ${name}`)
-    console.log('\nFix: capture the applied DDL into supabase/migrations/ so the repo is the source of truth.')
+    console.log('\nFix: commit the missing file to supabase/migrations/, or delete the stale registry row.')
   }
-  if (collisions.length > 0) {
-    console.log(`\n${collisions.length} numeric-prefix collision(s) in supabase/migrations/:`)
-    for (const c of collisions) console.log(`  - prefix ${c.prefix}: ${c.filenames.join(', ')}`)
-    console.log('\nFix: renumber one of the colliding files to the next unused prefix.')
+  if (missingSelfRegister.length > 0) {
+    console.log(`\n${missingSelfRegister.length} migration(s) >= ${String(SELF_REGISTER_CONVENTION_FROM).padStart(3, '0')} missing the self-register INSERT:`)
+    for (const f of missingSelfRegister) console.log(`  - ${f}`)
+    console.log("\nFix: append to the file:\n  INSERT INTO public.applied_migrations (filename) VALUES ('<this-file>.sql') ON CONFLICT (filename) DO NOTHING;")
   }
 
   return 1
