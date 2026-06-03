@@ -1494,15 +1494,6 @@ function ArchiveLotBody({
         )}
       </div>
 
-      {/* Reference / Leading Recipe Design Intent — collapsed drop-rules drill-in
-          (Sub Pages 6.8). Auto-hides until the recipe carries a populated rule. */}
-      {referenceRecipe &&
-        (referenceRecipe.drop_rule_if_fast || referenceRecipe.drop_rule_if_slow) && (
-          <CollapsibleSection title={`${v.cornerWord} Recipe Design Intent`}>
-            <DropRulesCard recipes={[referenceRecipe]} />
-          </CollapsibleSection>
-        )}
-
       {/* Reference / Leading Cup */}
       <div className={`ssp-card ${v.stateClass}`}>
         <SspShead ct="Best cup + optimized brew">{v.cupTitle}</SspShead>
@@ -1683,6 +1674,20 @@ function ArchiveLotBody({
       />
 
       <PerRoastReflections roasts={roasts} />
+
+      {/* Reference / Leading Recipe Design Intent — collapsed drop-rules drill-in
+          (Sub Pages 6.8). Relocated here (priority-stack recount Tweak 3,
+          2026-06-03) from its prior spot between the Reference Roast and
+          Reference Cup cards: it's really just that roast's drop rules, so it
+          belongs down in the de-emphasized archive-detail cluster near the roast
+          log, not interrupting the roast→cup reading order. Auto-hides until the
+          recipe carries a populated rule. */}
+      {referenceRecipe &&
+        (referenceRecipe.drop_rule_if_fast || referenceRecipe.drop_rule_if_slow) && (
+          <CollapsibleSection title={`${v.cornerWord} Recipe Design Intent`}>
+            <DropRulesCard recipes={[referenceRecipe]} />
+          </CollapsibleSection>
+        )}
 
       {cuppings.length > 0 && (
         <CollapsibleSection title="All Cuppings" ct={`${cuppings.length} evaluations`}>

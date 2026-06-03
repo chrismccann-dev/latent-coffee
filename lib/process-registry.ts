@@ -330,6 +330,8 @@ export const SIGNATURE_METHODS: readonly SignatureEntry[] = [
     country: 'Ethiopia',
     base: 'Natural',
     drying_modifiers: ['Dark Room Dried', 'Slow Dry'],
+    overview:
+      'A signature natural-style process developed by Tamiru Tadesse and the team at Alo Coffee in Sidama Bensa, Ethiopia, where whole cherries are slowly dried through shade pre-drying and extended light-deprived maturation. The method is designed to preserve hyper-clean high-altitude Ethiopian terroir while building sweetness slowly and avoiding the heavy, over-fermented flavors common in some modern experimental coffees.',
   },
   {
     name: 'TyOxidator',
@@ -337,6 +339,8 @@ export const SIGNATURE_METHODS: readonly SignatureEntry[] = [
     country: 'Ecuador',
     base: 'Washed',
     fermentation_modifiers: ['Aerobic'],
+    overview:
+      'A signature hybrid washed process developed by Pepe Jijón at Finca Soledad in Ecuador with consultant Ben Morrow, combining open-air aerobic cherry fermentation with pulped anaerobic fermentation before washing and slow drying. The method is designed to maximize sweetness, clarity, acidity, and aromatic complexity while preserving the distinct terroir of the coffee.',
   },
   {
     name: 'Alchemy',
@@ -354,6 +358,8 @@ export const SIGNATURE_METHODS: readonly SignatureEntry[] = [
     country: 'Colombia',
     base: 'Natural',
     fermentation_modifiers: ['Anaerobic'],
+    overview:
+      'A signature extended natural fermentation where whole cherries are fermented in bags that are rotated every five hours, followed by slow, controlled drying. The method is designed to build deep sweetness, fruit intensity, and fermentation complexity while using frequent rotation and controlled drying to manage consistency and reduce over-fermentation risk.',
   },
   {
     name: 'Enzyflow',
@@ -917,6 +923,68 @@ const modifierEntryByName = new Map(MODIFIER_ENTRIES.map((e) => [e.name.toLowerC
 export function getModifierEntry(name: string | null | undefined): ModifierEntry | null {
   if (!name) return null
   return modifierEntryByName.get(name.trim().toLowerCase()) ?? null
+}
+
+// ---------------------------------------------------------------------------
+// Variant-page "what this process is" descriptions (priority-stack recount
+// Tweak 6, 2026-06-03). Authored by Chris. The base hubs (BASE_PROCESS_ENTRIES
+// .summary), modifier index pages (MODIFIER_ENTRIES.overview), and signature
+// pages (SignatureEntry.overview) already carried descriptions; these two maps
+// fill the remaining gap on the Honey subprocess sub-pages and the per-base
+// modifier-combo mini-pages.
+// ---------------------------------------------------------------------------
+
+// Honey subprocess descriptions, keyed by canonical HoneySubprocess name.
+// 'Generic Honey' deliberately has NO entry here — it resolves to the base
+// Honey summary via getHoneySubprocessOverview, because generic honey IS the
+// default Honey process (a coffee gets a specific honey tier only when the
+// bag / producer / roaster explicitly states one; otherwise it's generic).
+// Yellow / Red / Purple / Hydro await authoring (render the pending state).
+const HONEY_SUBPROCESS_OVERVIEWS: Partial<Record<HoneySubprocess, string>> = {
+  'White Honey':
+    'A honey process variation where only a small amount of mucilage is left on the seed during drying. White honey coffees usually sit closest to washed coffees in cup character, often showing cleaner structure, lighter body, and more restrained sweetness than yellow, red, or black honey styles.',
+  'Black Honey':
+    'A honey process variation where a large amount of mucilage is left on the seed during slow drying. Black honey coffees usually sit closest to natural coffees in cup character, often showing heavier sweetness, fuller body, deeper fruit expression, and greater fermentation risk than lighter honey styles.',
+}
+
+// Resolve the "what this process is" description for a Honey subprocess page.
+// 'Generic Honey' returns the base Honey summary (they are the same process —
+// Chris's convention); specific tiers return their authored entry; unauthored
+// tiers return null so the page renders its pending state.
+export function getHoneySubprocessOverview(
+  subprocess: HoneySubprocess | string | null | undefined,
+): string | null {
+  if (!subprocess) return null
+  if (subprocess === 'Generic Honey') {
+    return getBaseProcessEntry('Honey')?.summary ?? null
+  }
+  return HONEY_SUBPROCESS_OVERVIEWS[subprocess as HoneySubprocess] ?? null
+}
+
+// Per-base modifier-combo descriptions, keyed by the page's aggregation key
+// (`<base-slug>/<combo-slug>`, e.g. 'natural/dark-room-dried') — the same
+// string modifierComboAggregationKey(base, params.combo) produces, so the
+// combo page can look up directly without re-deriving. Keyed by literal string
+// to avoid a circular import on process-routing. Combos earn a page at
+// SUB_PAGE_THRESHOLD (3) brews; new combos render the pending state until
+// authored.
+const MODIFIER_COMBO_OVERVIEWS: Record<string, string> = {
+  'natural/dark-room-dried':
+    'A natural process variation where the whole cherry is dried with the fruit still intact around the seed, but drying occurs in a light-deprived or dark room environment. This method is usually intended to slow maturation, reduce direct sun stress, and preserve cleaner fruit expression while avoiding some of the heavy or over-fermented character common in more aggressive naturals.',
+  'natural/anaerobic':
+    'A natural process variation where whole cherries undergo sealed, oxygen-restricted fermentation before drying with the fruit still intact around the seed. This often intensifies sweetness, aromatics, and fruit expression, but carries more risk of lactic, boozy, or ferment-forward flavors when not carefully controlled.',
+  'washed/anaerobic':
+    'A washed process variation where the coffee undergoes sealed, oxygen-restricted fermentation before the mucilage is removed and the seed is dried. This usually adds sweetness, aromatic intensity, and fermentation-driven complexity while retaining more clarity and structure than anaerobic natural styles.',
+  'washed/double-anaerobic-thermal-shock-yeast-inoculated':
+    'A washed process variation where the coffee undergoes two sequential anaerobic stages, hot/cold alternation during fermentation, and the introduction of cultured or selected yeast before the mucilage is removed and the seed is dried. This is a highly directed fermentation style designed to shape sweetness, aromatics, and structure while still using a washed process as the base.',
+}
+
+// Resolve the description for a modifier-combo page by its aggregation key
+// (`<base-slug>/<combo-slug>`). Returns null for unauthored combos so the page
+// renders its pending state.
+export function getModifierComboOverview(aggregationKey: string | null | undefined): string | null {
+  if (!aggregationKey) return null
+  return MODIFIER_COMBO_OVERVIEWS[aggregationKey] ?? null
 }
 
 /**

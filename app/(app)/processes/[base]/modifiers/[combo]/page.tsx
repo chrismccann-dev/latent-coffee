@@ -22,12 +22,14 @@ import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import { ConfidenceCard } from '@/components/ConfidenceCard'
 import { CoffeesList } from '@/components/CoffeesList'
+import { ProcessDescriptionCard } from '@/components/ProcessDescriptionCard'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import {
   getFamilyColor,
   composeProcessDisplay,
+  getModifierComboOverview,
   type BaseProcess,
 } from '@/lib/process-registry'
 import { aggregateModifierCombo } from '@/lib/process-aggregation'
@@ -74,6 +76,7 @@ export default async function ModifierComboPage({
   const label = composeProcessDisplay(structured)
   const color = getFamilyColor(base === 'Wet-hulled' ? 'Other' : base)
   const sortedFlavors = aggregateFlavorNotes(brewList)
+  const overview = getModifierComboOverview(cacheKey)
 
   const terroirMap = new Map<string, { id: string; country: string }>()
   const cultivarMap = new Map<string, string>()
@@ -111,6 +114,9 @@ export default async function ModifierComboPage({
       {/* Header */}
       <SspTopBar roaster={base} kind="Process Variant" />
       <SspNamePlate title={label} meta={meta} coverColor={color} edgeColor={color} />
+
+      {/* Process Description (authored — priority-stack recount Tweak 6) */}
+      <ProcessDescriptionCard overview={overview} />
 
       {/* Process Breakdown */}
       <div className="ssp-card">

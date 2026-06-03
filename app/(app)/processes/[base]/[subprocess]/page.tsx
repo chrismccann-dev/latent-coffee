@@ -23,10 +23,11 @@ import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
 import { CollapsibleBlock } from '@/components/CollapsibleBlock'
 import { ConfidenceCard } from '@/components/ConfidenceCard'
 import { CoffeesList } from '@/components/CoffeesList'
+import { ProcessDescriptionCard } from '@/components/ProcessDescriptionCard'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
-import { getFamilyColor } from '@/lib/process-registry'
+import { getFamilyColor, getHoneySubprocessOverview } from '@/lib/process-registry'
 import { aggregateHoneySubprocess } from '@/lib/process-aggregation'
 import {
   parseBaseSlug,
@@ -68,6 +69,11 @@ export default async function HoneySubprocessPage({
 
   const color = getFamilyColor('Honey')
   const sortedFlavors = aggregateFlavorNotes(brewList)
+  const overview = getHoneySubprocessOverview(subprocess)
+  // Generic Honey IS the default Honey process (Chris's convention) — title it
+  // "Honey" rather than the canonical "Generic Honey" so the page reads as the
+  // base process it represents. Specific tiers keep their canonical name.
+  const displayTitle = subprocess === 'Generic Honey' ? 'Honey' : subprocess
 
   const terroirMap = new Map<string, { id: string; country: string }>()
   const cultivarMap = new Map<string, string>()
@@ -104,7 +110,10 @@ export default async function HoneySubprocessPage({
 
       {/* Header */}
       <SspTopBar roaster="Honey" kind="Process Variant" />
-      <SspNamePlate title={subprocess} meta={meta} coverColor={color} edgeColor={color} />
+      <SspNamePlate title={displayTitle} meta={meta} coverColor={color} edgeColor={color} />
+
+      {/* Process Description (authored — priority-stack recount Tweak 6) */}
+      <ProcessDescriptionCard overview={overview} />
 
       {/* Process Breakdown */}
       <div className="ssp-card">
