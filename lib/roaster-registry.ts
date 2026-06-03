@@ -2538,14 +2538,19 @@ export const ROASTERS: RoasterEntry[] = [
     name: 'Latent',
     brewGuideStatus: 'none',
     displayName: 'Latent',
-    location: 'Home (Roest sample roaster, 100g batches)',
+    location: 'Los Altos Hills, California',
+    country: 'USA',
+    roastStyle: 'Very light / expressive - Brewers Cup competition standard',
+    developmentBias: 'Light color endpoint, development time protected. Treats BOTH underdevelopment (pungent, one-dimensional) and overdevelopment (buried clarity) as failures. RoR shape into FC is the dial; dev time is a measured output, not a target.',
     strategyTag: 'SELF-ROASTED',
-    houseStyle: 'Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
+    primaryDriver: 'RoR shape into first crack',
+    extractionPurpose: 'Intensity / expression - roast preserves tolerance, brew pushes hard. "Roast for brewing tolerance, brew for intensity."',
+    houseStyle: 'Expressive and competition-oriented. Reference frame: Sey, Substance, Picky Chemist, Moonwake, Big Sur.',
+    agitationLevel: 'Low / controlled',
+    processSensitivity: 'High - anchors organized by process family (washed / natural / heavy-ferment); process is a first-order intake signal alongside moisture+density and terroir/cultivar.',
+    calibrationRole: 'Self / primary',
+    notes: 'Roest L200 Ultra, counterflow, 100g batches. Measurement: Lighttells CM-200 (Agtron WB+ground, grind PSD), MD-500 (moisture+density). Enriched 2026-06-03 (arbiter session) from Chris\'s roaster record; sparse by nature (self-roaster, no fixed house brew recipe).',
     bmrHouseStyle: 'Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
-    // Sprint 12 / CR-10 (2026-05-21): flagged as skeleton — Latent's own
-    // entry has minimal authored content by design. The arbiter procedure
-    // surfaces it via list_skeleton_entries for collaborative enrichment.
-    skeleton: true,
   },
 ]
 
