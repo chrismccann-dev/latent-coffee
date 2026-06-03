@@ -886,7 +886,7 @@ _Wellington, New Zealand_ · **BALANCED**
 - **Brew adjustment method:** Grind
 - **Calibration role:** Baseline Reference
 - **Confidence:** High
-- **Notes:** Golden ratio anchor (60g/L) :contentReference[oaicite:0]{index=0}; simple system for consistency, not optimization
+- **Notes:** Golden ratio anchor (60g/L); simple system for consistency, not optimization
 
 #### Colibri Coffee Roasters
 _Everett, WA, USA_ · **BALANCED** · archive: 2 brews
@@ -955,7 +955,7 @@ _Berlin, Germany_ · **BALANCED → CLARITY**
 - **Brew adjustment method:** Grind
 - **Calibration role:** European Balanced Clarity
 - **Confidence:** High
-- **Notes:** Structured full-drawdown brewing (90g → 180g → 250g); emphasizes even extraction and sweetness; sits between Coffee Collective and The Barn; slightly more forgiving than strict Nordic styles :contentReference[oaicite:0]{index=0}
+- **Notes:** Structured full-drawdown brewing (90g → 180g → 250g); emphasizes even extraction and sweetness; sits between Coffee Collective and The Barn; slightly more forgiving than strict Nordic styles
 
 #### Friedhats Coffee
 _Amsterdam, Netherlands_ · **BALANCED**
@@ -1467,7 +1467,7 @@ _Palo Alto, CA, USA_ · **BALANCED → FULL** · archive: 2 brews
 - **Brew adjustment method:** Pour structure + temp
 - **Calibration role:** Pour Sequencing Reference
 - **Confidence:** High
-- **Notes:** Fast-fast-slow structure maps to acidity (first), sweetness (second), clarity (final); final pour controls body vs extension; temperature naturally declines during brew; water is softened (diluted TWW) to allow post-brew adjustment :contentReference[oaicite:0]{index=0}
+- **Notes:** Fast-fast-slow structure maps to acidity (first), sweetness (second), clarity (final); final pour controls body vs extension; temperature naturally declines during brew; water is softened (diluted TWW) to allow post-brew adjustment
 
 #### Proud Mary Coffee
 _Melbourne, Australia_ · **BALANCED → HIGH**
