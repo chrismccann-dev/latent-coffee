@@ -569,6 +569,18 @@ body {
 .ssp-twopane .pane { padding: 11px 13px; background: #fff; border: 1px solid var(--border); }
 .ssp-twopane .pane .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); font-weight: 600; margin-bottom: 6px; }
 .ssp-twopane .pane .body { font-family: var(--sans); font-size: 12.5px; line-height: 1.6; color: var(--fg); text-wrap: pretty; }
+/* Optimized-brew label/value grid inside the Reference Cup pane (priority-stack
+   recount Tweak 4). Narrow label column + flexible value column; per-value
+   typography is set with utilities on each `.v` so it doesn't fight the grid.
+   Stacks to single column on the narrow side of the 520px crossover. */
+.ssp-optbrew { display: grid; grid-template-columns: max-content 1fr; gap: 9px 16px; align-items: start; margin-top: 2px; }
+.ssp-optbrew .k { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--fg); white-space: nowrap; }
+.ssp-optbrew .v { min-width: 0; color: var(--fg); }
+@container ssppage (max-width: 520px) {
+  .ssp-optbrew { grid-template-columns: 1fr; gap: 4px; }
+  .ssp-optbrew .k { margin-top: 9px; }
+  .ssp-optbrew .k:first-child { margin-top: 0; }
+}
 
 /* ============================================================
    Stage-2 lot detail · cupping view (WC-2 reshape, 2026-05-30)
