@@ -1,6 +1,6 @@
 # Doc-size tripwire registry
 
-**Canonical surface for every doc-size tripwire across all three load surfaces** (Claude Code, claude.ai/projects/brewing, claude.ai/projects/roasting). When a doc crosses its tripwire, fire a **post-tripwire pruning exercise** (the manual case-study process scoped in [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md)) — not an autonomous prune. Pattern J ([ADR-0013](../adr/0013-self-improvement-primitives.md)) remains a placeholder until the case-study volume justifies systematization.
+**Canonical surface for every doc-size tripwire across all three load surfaces** (Claude Code, claude.ai/projects/brewing, claude.ai/projects/roasting). When a doc crosses its tripwire, fire a **post-tripwire pruning exercise** (the manual operator-led process defined in [Pattern J, ADR-0013](../adr/0013-self-improvement-primitives.md) + scoped in [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md)) — not an autonomous prune. Pattern J was promoted from placeholder to **defined** on 2026-06-03 (light formalization) once all five pruning shapes had a worked example: the **trigger** half is automated (`npm run check:doc-sizes` + daily CI cron); the **response** half (the interpretive prune) stays operator-led by design.
 
 Created 2026-06-03 (Cluster B doc-pruning brainstorm). This table is the single canonical home for tripwire numbers; the prose tripwire in [CLAUDE.md § Standing tripwires](../../CLAUDE.md) and the cluster tiers in [ADR-0014](../adr/0014-pattern-f-threshold-tiers.md) point here rather than re-stating numbers.
 
@@ -17,23 +17,96 @@ The limit on doc size is not disk, not read latency, not Claude Code working mem
 
 This is why the entry prompts (full-read, 40 KB cap) are capped tighter than the CONTEXT-* glossaries (section-read, 120 KB cap) even though the prompts are smaller files.
 
-## Tripwire table
+## Tripwire policy (static — caps + tiers)
 
-| Tier | Doc(s) | Cap | Approaching (watch) | Loading profile | Current size (2026-06-03) | Status |
-|---|---|---|---|---|---|---|
-| **Root living docs** | CLAUDE.md | 120 KB | 96 KB | full · every Claude Code session | 37.8 KB | ✅ |
-| | PRODUCT.md | 120 KB | 96 KB | consulted, not auto-loaded | 20.9 KB | ✅ (refactored + split, case 003) |
-| **CONTEXT-\* family** | CONTEXT-roasting.md | 120 KB | 96 KB | **section-read** · claude.ai roasting | 108.2 KB | ✅ (pruned, case 002) |
-| | CONTEXT-brewing.md | 120 KB | 96 KB | section-read · claude.ai brewing | 60.1 KB | ✅ |
-| | CONTEXT-shared.md | 120 KB | 96 KB | section-read · both | 52.3 KB | ✅ |
-| **claude.ai entry prompts** | docs/prompts/*.md | **40 KB** | 32 KB | **full-read** · claude.ai session start | log-cupping **49.2 KB** | 🔴 over |
-| | | | | | one-shot 33.8 KB | ⚠️ approaching |
-| | | | | | close-lot 31.4 KB | ✅ |
-| | | | | | log-roast 29.0 KB | ✅ |
-| | | | | | (all others < 25 KB) | ✅ |
-| **Sub-skill clusters** | docs/skills/*/ | per [ADR-0014](../adr/0014-pattern-f-threshold-tiers.md) pattern-aware tiers | within 20% | full via read_doc | see ADR-0014 § Current state | (governed there) |
-| **Auto-memory** | MEMORY.md | 25 KB / 200 lines | — | auto-memory index | see consolidate-memory skill | (governed there) |
-| **Claude-Code on-demand** | ARBITER.md, SYNC_V2.md, docs/reference/* | no hard cap | — | on-demand (not every-session) | ARBITER 62.3 KB | lower priority |
+This table is the static **policy** (what's tracked + the caps + loading profile). Live sizes are NOT hand-maintained here — they drifted 3× in 3 days when they were. The live numbers live in the generated block below (`npm run check:doc-sizes`), in exactly one place, never copied by hand.
+
+| Tier | Doc(s) | Cap | Loading profile |
+|---|---|---|---|
+| **Tier 1 · root + CONTEXT** | CLAUDE.md · PRODUCT.md · docs/product/{roadmap,issues}.md · CONTEXT-{roasting,brewing,shared}.md | 120 KB (approaching 96) | full (CLAUDE) / consulted (PRODUCT) / **section-read** (CONTEXT, claude.ai) |
+| **Tier 1 · prompts** | docs/prompts/*.md | **40 KB** (approaching 32) | **full-read** · claude.ai session start |
+| **Tier 1 · skills clusters** | docs/skills/*/ | per [ADR-0014](../adr/0014-pattern-f-threshold-tiers.md) class tiers (Historian 250/80 · Archivist 200/60 · Equipment-Reference 150/60 · Workflow 100/60 · Coordinator 80/40 · CCIL 150/60) | full via read_doc · claude.ai workflow |
+| **Tier 2 · monitor** | docs/architecture/* · docs/reference/* · ARBITER.md · SYNC_V2.md | no hard cap (flag > 150 KB) | on-demand (not every-session) |
+| **Auto-memory** | MEMORY.md | 25 KB / 200 lines | governed by the consolidate-memory skill (out of scope for check:doc-sizes) |
+| **Excluded** | docs/sprints/* · docs/roasting/archive.md · docs/features/* · docs/taxonomies/* · docs/adr/* · README.md | — | archives + non-session docs: **meant to grow; capping them fights the mechanism** |
+
+### Live sizes
+
+`npm run check:doc-sizes` computes live sizes vs. the caps above and exits non-zero if any Tier-1 surface is over. `-- --write` regenerates this block:
+
+<!-- BEGIN check:doc-sizes (generated — do not edit by hand; run `npm run check:doc-sizes -- --write`) -->
+
+_Live sizes — regenerated by `npm run check:doc-sizes -- --write`. Do not hand-edit; that is exactly what drifted._
+
+**Tier 1 · root + CONTEXT**
+
+| | Doc | Size | Cap | Loading profile |
+|---|---|---|---|---|
+| ✅ | CLAUDE.md | 40.3 KB | 120 KB | full · every Claude Code session |
+| ✅ | PRODUCT.md | 20.9 KB | 120 KB | consulted (product-system index) |
+| ✅ | docs/product/roadmap.md | 16.3 KB | 120 KB | consulted (roadmap growth driver) |
+| ✅ | docs/product/issues.md | 5.6 KB | 120 KB | consulted |
+| ⚠️ | CONTEXT-roasting.md | 108.1 KB | 120 KB | section-read · claude.ai roasting |
+| ✅ | CONTEXT-brewing.md | 60.1 KB | 120 KB | section-read · claude.ai brewing |
+| ✅ | CONTEXT-shared.md | 52.3 KB | 120 KB | section-read · both |
+
+**Tier 1 · prompts (40KB full-read)**
+
+| | Doc | Size | Cap | Loading profile |
+|---|---|---|---|---|
+| ✅ | docs/prompts/bundled-brewing-completion.md | 15.3 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/close-lot.md | 31.5 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/log-brew.md | 0.7 KB | 40 KB | full-read · claude.ai |
+| 🔴 | docs/prompts/log-cupping.md | 49.3 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/log-roast.md | 29.1 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/one-shot-closeout.md | 23.6 KB | 40 KB | full-read · claude.ai |
+| ⚠️ | docs/prompts/one-shot.md | 33.9 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/peer-variant-completion.md | 7.8 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/propose-doc-changes-from-brew.md | 0.9 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/simulated-pourover.md | 4.8 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/start-brew.md | 4.7 KB | 40 KB | full-read · claude.ai |
+| ✅ | docs/prompts/start-lot.md | 15.8 KB | 40 KB | full-read · claude.ai |
+
+**Tier 1 · skills clusters (ADR-0014)**
+
+| | Doc | Size | Cap | Loading profile |
+|---|---|---|---|---|
+| ✅ | docs/skills/brew-recorder/  [Workflow] | 7.7 KB | 100 KB | claude.ai workflow |
+| ✅ | docs/skills/brewing-assistant/  [Workflow] | 56.9 KB | 100 KB | claude.ai workflow |
+| ⚠️ | ↳ largest doc: docs/skills/brewing-assistant/cluster/operational-guide.md | 49.8 KB | 60 KB | single-doc cap 60KB |
+| 🔴 | docs/skills/brewing-equipment-expert/  [EquipmentReference] | 157.8 KB | 150 KB | claude.ai workflow |
+| 🔴 | ↳ largest doc: docs/skills/brewing-equipment-expert/cluster/filters.md | 70.5 KB | 60 KB | single-doc cap 60KB |
+| ✅ | docs/skills/brewing-historian/  [Historian] | 157.2 KB | 250 KB | claude.ai workflow |
+| 🔴 | ↳ largest doc: docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md | 80.0 KB | 80 KB | single-doc cap 80KB |
+| ✅ | docs/skills/ccil/  [CCIL] | 35.3 KB | 150 KB | claude.ai workflow |
+| ✅ | docs/skills/close-lot-specialist/  [Workflow] | 12.8 KB | 100 KB | claude.ai workflow |
+| ✅ | docs/skills/coordinator/  [Coordinator] | 58.0 KB | 80 KB | claude.ai workflow |
+| ✅ | docs/skills/cupping-specialist/  [Workflow] | 33.1 KB | 100 KB | claude.ai workflow |
+| ✅ | docs/skills/peer-learning-roasting-archivist/  [Archivist] | 31.5 KB | 200 KB | claude.ai workflow |
+| ✅ | docs/skills/research-assistant/  [Workflow] | 9.8 KB | 100 KB | claude.ai workflow |
+| ✅ | docs/skills/research-coordinator/  [EquipmentReference] | 71.9 KB | 150 KB | claude.ai workflow |
+| ✅ | docs/skills/roast-recorder/  [Workflow] | 8.5 KB | 100 KB | claude.ai workflow |
+| ✅ | docs/skills/roasting-assistant/  [Workflow] | 19.8 KB | 100 KB | claude.ai workflow |
+| ✅ | docs/skills/roasting-historian/  [Historian] | 144.4 KB | 250 KB | claude.ai workflow |
+| ✅ | docs/skills/roest-api-worker/  [Workflow] | 6.7 KB | 100 KB | claude.ai workflow |
+| ✅ | docs/skills/roest-knowledge/  [EquipmentReference] | 59.4 KB | 150 KB | claude.ai workflow |
+| ✅ | docs/skills/sourcing-workflow-planner/  [Workflow] | 5.9 KB | 100 KB | claude.ai workflow |
+| ✅ | docs/skills/wbc-brewing-archivist/  [Archivist] | 86.4 KB | 200 KB | claude.ai workflow |
+| ⚠️ | ↳ largest doc: docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md | 48.8 KB | 60 KB | single-doc cap 60KB |
+| ✅ | docs/skills/wbc-roasting-archivist/  [Archivist] | 76.5 KB | 200 KB | claude.ai workflow |
+
+**Tier 2 · monitor (on-demand)**
+
+| | Doc | Size | Cap | Loading profile |
+|---|---|---|---|---|
+| ✅ | docs/architecture/data-model.md | 11.8 KB | monitor (flag >150) | on-demand · touching a column |
+| ✅ | docs/architecture/page-ia.md | 82.4 KB | monitor (flag >150) | on-demand · touching a surface |
+| ✅ | docs/architecture/registries.md | 20.0 KB | monitor (flag >150) | on-demand · touching a registry |
+| ✅ | docs/design-system.md | 34.5 KB | monitor (flag >150) | on-demand · UI work |
+| ✅ | ARBITER.md | 62.4 KB | monitor (flag >150) | on-demand · process pending arbitration |
+| ✅ | SYNC_V2.md | 22.0 KB | monitor (flag >150) | on-demand · MCP work |
+
+<!-- END check:doc-sizes -->
 
 ### Prompt cap rationale
 
@@ -45,10 +118,14 @@ The 40 KB prompt cap is deliberately tighter than the file sizes suggest. A 49 K
 - **Approaching (within 20% of cap)** → surface as a watch-item at the next grilling / arbitration session.
 - The pruning exercise produces a **structured handoff doc** in [docs/sprints/pruning-cases/](../sprints/pruning-cases/) so lessons aggregate across sessions toward eventual systematization.
 
-## Live queue (2026-06-03)
+## Live queue
 
-1. **docs/prompts/log-cupping.md (49.2 / 40 KB)** — 🔴 over the prompt cap. Live fire (next manual pruning exercise).
-2. **docs/prompts/one-shot.md (33.8 / 40 KB)** — ⚠️ approaching; watch.
+Human-curated "what to prune next, and why." Live sizes come from the generated block above (`npm run check:doc-sizes`). First populated 2026-06-03; the script's first run surfaced 3 over-cap clusters the ADR-0014 hand-audit had missed.
+
+1. **docs/prompts/log-cupping.md (49.3 / 40 KB)** — 🔴 over the prompt cap. Live fire; next manual pruning exercise (a prompt = a 4th doc-shape, but coverage is complete, so a normal prune).
+2. **docs/skills/brewing-equipment-expert/ cluster (157.8 / 150 KB)** — 🔴 over the Equipment-Reference cluster cap; `filters.md` (70.5 / 60 KB) is also over the single-doc cap. This is a **Pattern F (ADR-0014) decomposition** trigger as much as a prune — the script caught what the 2026-05-23 hand-audit logged as "144 / 150, approaching."
+3. **docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md (80.0 / 80 KB)** — 🔴 at the Historian single-doc cap; watch / split next time it's touched.
+4. **docs/prompts/one-shot.md (33.9 / 40 KB)** · **docs/skills/brewing-assistant/cluster/operational-guide.md (49.8 / 60)** · **wbc-recipes.md (48.8 / 60)** — ⚠️ approaching; watch.
 
 Cleared:
 - ~~PRODUCT.md~~ — **refactored + split 2026-06-03** (127.3 → 20.9 KB), [pruning case 003](../sprints/pruning-cases/003-product-md.md). Operator-led prototype + Claude Code synthesis: roadmap → `docs/product/roadmap.md`, issues → `docs/product/issues.md`, Lessons Learned → `docs/sprints/lessons-learned-archive.md`, closed roadmap detail ceased-duplication (already in shipped.md). **First standalone `archive` worked example — all five shapes now covered.**
@@ -56,4 +133,9 @@ Cleared:
 
 ## Maintenance
 
-Refresh the **Current size** column + **Live queue** during the doc-size check that runs at each claude.ai grilling review (the recurring 3-part protocol) and at any sprint that materially edits a tracked doc. The table is the canonical trigger surface; keep it current or the tripwires go blind.
+Live sizes are **script-generated, not hand-maintained** (the hand-maintained column drifted 3× in 3 days). Cadence for `npm run check:doc-sizes`:
+- **claude.ai grilling review** (the recurring 3-part protocol) + **arbiter sessions** — run `-- --write` to refresh the generated block.
+- **Daily CI cron** (`.github/workflows/doc-sizes-check.yml`, mirrors `migrations-check`) — the catch-all; exits non-zero when a Tier-1 surface creeps over cap, so a doc that drifts over gets caught within a day.
+- **Any sprint that materially edits a tracked doc** — run it before the cross-system audit.
+
+Only the **static policy** above (caps / tiers / loading profile / scope) is hand-edited — when a new tracked surface appears or a cap changes. The `## Live queue` narrative ("what to prune next, and why") stays human-curated; the sizes that feed it come from the generated block.

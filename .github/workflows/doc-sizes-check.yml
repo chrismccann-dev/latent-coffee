@@ -1,0 +1,36 @@
+name: doc-sizes-check
+
+# Doc-size tripwire gate (Cluster B doc-pruning, light-systematization 2026-06-03).
+# Runs `npm run check:doc-sizes`, which computes the live size of every
+# constantly-loaded doc surface (root + CONTEXT-* + docs/prompts/* + docs/skills/*
+# clusters) vs. the caps in docs/architecture/doc-tripwires.md and exits non-zero
+# if any Tier-1 surface is over its tripwire.
+#
+# Pure drift-catch (no pull_request trigger). Unlike migrations-check, a doc
+# being over cap is a "schedule a prune" signal, not a "block this PR" one — and
+# tracked docs can sit legitimately over cap for a while with a prune already
+# queued (e.g. log-cupping). A PR trigger would red-fail every unrelated docs PR
+# on that pre-existing debt. So this runs as:
+#   - schedule (daily): the catch-all — surfaces a doc that crept over cap on
+#     main (the same drift class that put the hand-maintained size column 3x
+#     stale in 3 days). A non-zero run = schedule a pruning exercise.
+#   - workflow_dispatch: manual run.
+# Run locally in any PR that touches a tracked doc (`npm run check:doc-sizes`).
+#
+# DB-free (just file sizes) — needs no secrets, unlike migrations-check.
+
+on:
+  schedule:
+    - cron: '15 14 * * *' # daily ~14:15 UTC (just after migrations-check)
+  workflow_dispatch:
+
+jobs:
+  check-doc-sizes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run check:doc-sizes
+        run: npm run check:doc-sizes
