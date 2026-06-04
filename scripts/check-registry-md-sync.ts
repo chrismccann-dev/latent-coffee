@@ -27,6 +27,12 @@ interface AxisCheck {
   tsPath: string
   /** Path to .md source, relative to repo root. */
   mdPath: string
+  /**
+   * Optional second .md source whose names are UNIONed with mdPath's. Used when
+   * one registry is mirrored across two docs — e.g. filters split into an
+   * owned-only cluster doc + a not-owned archive (pruning case 004, 2026-06-03).
+   */
+  mdPathExtra?: string
   /** Pull canonical names from the .ts source text. */
   extractTs: (src: string) => string[]
   /** Pull canonical names from the .md source text. */
@@ -232,6 +238,9 @@ function mdH3HeadersForOwnable(rootSrc: string): string[] {
     const m = /^### \s*(.+?)\s*$/.exec(line)
     if (!m) continue
     let name = m[1]
+    // Strip heading suffixes: ` — Owned` (brewers.md) and ` — \`SKU\`` (filters.md
+    // entries carry their SKU code in a trailing backtick span).
+    name = name.replace(/\s+—\s+`[^`]+`\s*$/, '')
     name = name.replace(/\s+—\s+Owned\s*$/, '')
     out.push(name.trim())
   }
@@ -428,6 +437,8 @@ const AXES: AxisCheck[] = [
     name: 'filters',
     tsPath: 'lib/filter-registry.ts',
     mdPath: 'docs/skills/brewing-equipment-expert/cluster/filters.md',
+    // Owned-only cluster doc + not-owned archive (pruning case 004); union both.
+    mdPathExtra: 'docs/taxonomies/filters-not-owned-archive.md',
     extractTs: tsRichArray('FILTERS'),
     extractMd: (src) => mdH3HeadersForOwnable(src),
   },
@@ -593,6 +604,12 @@ function diffAxis(axis: AxisCheck, repoRoot: string): AxisResult {
   const mdSrc = readFileSync(resolve(repoRoot, axis.mdPath), 'utf8')
   const tsNamesRaw = axis.extractTs(tsSrc)
   const mdNamesRaw = axis.extractMd(mdSrc)
+  // Two-doc registries (e.g. filters: owned cluster doc + not-owned archive)
+  // union the extra doc's names into the md side.
+  if (axis.mdPathExtra) {
+    const extraSrc = readFileSync(resolve(repoRoot, axis.mdPathExtra), 'utf8')
+    mdNamesRaw.push(...axis.extractMd(extraSrc))
+  }
 
   const tsNames = unique(tsNamesRaw)
   const mdNames = unique(mdNamesRaw)
