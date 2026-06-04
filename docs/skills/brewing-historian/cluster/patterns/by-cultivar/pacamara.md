@@ -4,13 +4,25 @@
 
 **Corpus:** N=3 brews.
 
-**Current rollup:** see [cross-coffee-insights.md § By Variety > Pacamara](../cross-coffee-insights.md#by-variety) — slightly larger extraction energy needed due to bean density; Balanced Intensity default with confirmed Full Expression exception on Picolot Garrido Pacamara Natural (Loud Giants PL#16) at EG-1 6.1 / 95°C kettle-off / SWORKS fast/fast/slow.
+## Variety default + density logic
 
-**Per-strategy entries:**
+Slightly larger extraction energy needed due to bean density. **Balanced Intensity default.** Large bean needs slightly more energy to extract evenly. Variety-intrinsic darker brown-tea body - heavier weight is the cultivar, not the recipe.
+
+**Full Expression exception (Picolot Garrido Pacamara Natural, Loud Giants PL#16):** EG-1 6.1 / 95°C kettle-off / SWORKS fast/fast/slow (Dial 7 → 7 → 5). Pair with roaster Full Expression guidance rather than variety ceiling logic when the lot is on a Full Expression roaster house style.
+
+**Bean-density grind ladder finding (Picolot Garrido naturals):** Pacamara sits one click coarser than Mokka on the same producer/roaster (Mokka 6.0 → Pacamara 6.1). The density adjustment tracks bean size on clean Garrido naturals.
+
+## Cooling behavior
+
+- **Picolot Garrido naturals** peak cool (<45°C). Warm window is muted - aroma reads restrained despite the 'Loud Giants' lot framing; full label profile (cherry, blackberry, sour candy on PL#16) only emerges below 50°C. Bitter drying tail at warm-window temps is acceptable on this template if it resolves cleanly by mid-cool - kettle-off natural decline manages it without intervention. Do not evaluate Garrido naturals on Picolot before mid-cool window. (The broader Picolot cooling characteristic is a roaster signature shared with Mokka, not a per-cultivar one.)
+
+## Cross-anchor router: dark-roast override
+
+**Dark-roast override caveat (2026-05-31):** the Balanced default and density logic assume a light/light-medium roast. On a medium-dark Pacamara (Untold Janson Natural, Hacienda 491, whole-bean Agtron 47.9, visibly oily) the roast level overrode the variety-density signal entirely - the cup needed Hybrid Intensity-Clarity Split (Switch, EG-1 6.8, 88°C, fast cone, tight late_cut; brew 24b39678) to relocate roast ashiness beneath the fruit. When a Pacamara reads materially darker than the light default, treat roast level as the governing signal and do not start from the variety-density Balanced/Full logic. This lot is one of the two confirmations of the roast-level-overrides-process pattern - full detail in [cross-coffee-insights.md](../cross-coffee-insights.md).
+
+## Per-strategy entries
 
 - [Balanced Intensity](../by-strategy/balanced-intensity.md) — Natural Pacamara (Rio Cristal) at 6.4 with continuous gentle spiral.
 - [Full Expression](../by-strategy/full-expression.md) — Picolot Garrido Pacamara Natural (Loud Giants PL#16) when paired with a Full Expression roaster house style.
-
-**Bean-density grind ladder finding (Picolot Garrido naturals):** Pacamara sits one click coarser than Mokka on the same producer/roaster (Mokka 6.0 → Pacamara 6.1). Variety-intrinsic darker brown-tea body - heavier weight is the cultivar, not the recipe.
 
 Patterns specific to Pacamara processing sub-types or producer-level variation will accrue here as the corpus grows.

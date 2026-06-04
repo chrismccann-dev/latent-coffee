@@ -4,7 +4,7 @@
 
 **Corpus:** N=5 brews (Finca Soledad TyOxidator, Sidra Cold Fermented Washed DRD, Sidra Wave Hybrid, others).
 
-**Current rollup:** see [cross-coffee-insights.md § By Variety > Typica Mejorado / Sydra](../cross-coffee-insights.md#by-variety) for the Sydra/Sidra-family default (Clarity-First, moderate extraction, long bloom, uninterrupted pour; savory if over-bloomed or agitation too high; variety signal overrides experimental process flag when targets are bright and citric).
+**Sydra/Sidra-family default:** Clarity-First, moderate extraction, long bloom, uninterrupted pour. Savory if bloom is too long or agitation too high. Variety signal overrides experimental process flag when flavor targets are bright and citric. (Sibling variety: [Mejorado](mejorado.md).)
 
 **Per-strategy entries referencing Sidra:**
 
