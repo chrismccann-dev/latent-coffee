@@ -48,7 +48,7 @@ The 40 KB prompt cap is deliberately tighter than the file sizes suggest. A 49 K
 ## Live queue (2026-06-03)
 
 1. **docs/prompts/log-cupping.md (49.2 / 40 KB)** — 🔴 over the prompt cap. Live fire (next manual pruning exercise).
-2. **PRODUCT.md (126.1 / 120 KB)** — 🔴 over (crossed via Roadmap growth; the "114.0 KB" measured 2026-06-03 was already stale). The Roadmap is the growth driver — likely a `## Recently shipped → shipped.md` extract + Longer-Term/Future-Directions consolidate. Queue as a pruning exercise alongside log-cupping.
+2. **PRODUCT.md (127.3 / 120 KB)** — 🔴 over (crossed via Roadmap growth; drifted 114.0→126.1→127.3 in 3 days). **Queued as pruning case 003**, framed to land the missing `archive` shape (closed/shipped roadmap sections → archival surface) + consolidate the living roadmap. Kickoff: [docs/sprints/product-md-prune-kickoff-2026-06-03.md](../sprints/product-md-prune-kickoff-2026-06-03.md).
 3. **docs/prompts/one-shot.md (33.8 / 40 KB)** — ⚠️ approaching; watch.
 
 Cleared:

@@ -74,6 +74,8 @@ Only then do we evaluate whether to build the mechanism (a consolidate-memory-st
 3. Cadence relative to the ADD-side patterns — how often must pruning fire to keep substrate net-flat rather than net-growing?
 4. Does the prompt 40 KB cap hold, or loosen once we have prompt-side pruning evidence?
 5. Does the structured-handoff format need richer fields once we have non-extract cases to compare?
+6. **Registry-drift / size automation.** The tripwire registry's "Current size" column is hand-maintained and has drifted **3× in 3 days** (CONTEXT-roasting 105→116, PRODUCT 114→126→127). "Keep it current or the tripwires go blind" is a real failure mode. Candidate: a tiny `npm run check:doc-sizes` script (analog to `check:mcp-bundle`) that prints each tracked doc's live size vs cap and flags over/approaching — could ship *before* full systematization as the trigger half of the mechanism, with the manual exercise staying the response half.
+7. **Autonomous-delete rule for provenance-class content** (from case 002): provenance shrapnel + deferred-future TODOs are git-recoverable with zero downstream consumers — the lowest-risk delete class and the candidate for the *first* autonomous-delete rule, kept distinct from concept-bearing deletes (which stay flag-only).
 
 ## New vocabulary to queue for a CONTEXT-shared grill (not authored yet — premature)
 
@@ -89,4 +91,4 @@ The pruning-op vocabulary is still forming; queue for a CONTEXT-shared grill onc
 - [docs/sprints/context-roasting-prune-kickoff-2026-06-03.md](../sprints/context-roasting-prune-kickoff-2026-06-03.md) — kickoff for the next dogfood (CONTEXT-roasting; the first deliberate consolidate/delete hunt).
 - grilling-queue § Substrate pruning candidates — worked examples filed (#244, #352); procedure points here.
 - ADR-0014 — pointer note: live tripwire table now lives in the registry.
-- **Decision: does NOT graduate to a build sprint.** Needs `consolidate` + `delete` worked examples first.
+- **Decision (revised after case 002, 2026-06-03):** `consolidate` + `delete` now have worked examples; **only `archive`-as-standalone remains thin** (redirect-stub precedent only). One shape from the full-coverage gate. PRODUCT.md is over its tripwire (127 KB) and must be pruned regardless — queued as **case 003, framed to land the `archive` shape** (closed/shipped roadmap sections → an archival surface) and complete coverage. Systematization decision deferred to *after* case 003, when all five shapes have a standalone worked example across three distinct doc-shapes (reference-doc 001 / glossary 002 / roadmap 003).
