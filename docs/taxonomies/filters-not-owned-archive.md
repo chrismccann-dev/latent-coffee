@@ -10,10 +10,27 @@ selects from the owned registry in `filters.md`. Use this archive only when the
 operator explicitly asks about a not-owned paper, or buys one and wants it
 promoted.
 
-`lib/filter-registry.ts` remains the full canonical validator for **all** 67
+`lib/filter-registry.ts` remains the full canonical validator for **all** 58
 filter papers (owned + not-owned), so every value below still resolves for
 `brews.filter`. This archive is the *prose* home for the not-owned rows — the
 doc↔registry mirror is preserved across the two doc files.
+
+**Changelog**
+
+- **2026-06-04 (filter reconciliation, case-004 follow-up):** registry collapsed
+  67→58 canonical filters (35 not-owned remain here). Removed from this archive:
+  the 3 pure duplicate-SKU rows (`AC4-100W` variant, `AB-101-100W` variant,
+  `AB-102-100W` Alt SKU → aliased to their survivors); the `AC4-40B` brown 40-pack
+  (pack-size collapse → brown 100); and the 5 CAFEC Cup-1 rows (Abaca / Abaca+ /
+  T-83 / T-90 / T-92) — Chris brews single cups only, so Cup-1 vs Cup-4 is paper
+  SIZE he treats as functionally identical; each collapsed into its Cup-4 twin
+  (T-codes preserved across twins). The Abaca+ Cup-1 (`APC1-100W`) collapsed into
+  the owned **Abaca+ Cup 4** paper, which was simultaneously renamed from the
+  mislabeled "CAFEC Abaca Cup 4 ... (40 pack)" / `APC4-40W` to
+  `CAFEC Abaca+ Cup 4 Cone Paper Filter` / `APC4-100W` (its true SKU + line). The
+  2 legacy "Abaca+ Cup 1" brews were really that Abaca+ Cup-4 paper — remapped via
+  migration 077. `CAFEC Traditional Cup 1 Filter` (CC1) stays distinct (no Cup-4
+  twin).
 
 **Promotion procedure** (a not-owned paper enters inventory): set `owned: true`
 on its `lib/filter-registry.ts` row, move the entry from here into `filters.md`
@@ -24,21 +41,6 @@ measured-drawdown line if measured, and remove it from this archive. Aliases in
 ---
 
 ## Cafec
-
-### CAFEC Abaca Cup 1 Cone Paper Filter
-
-- SKU: `AC1-100W`
-- Link: <https://cafecusa.com/collections/filter-papers/products/cafec-abaca-coffee-paper-filter-for-specialty-coffee-1-cup>
-- Paper shape: Conical
-- Size standard: V60-01
-- Fits brewers: V60, Origami, Cafec
-- Seal/fit: Standard
-- Material: Abaca + pulp
-- Thickness: Thin
-- Flow rate: Fast
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: High / Low / Clean
-- Best archetype: Clarity cone
 
 ### CAFEC Abaca Cup 4 Cone Paper Filter
 
@@ -70,37 +72,6 @@ measured-drawdown line if measured, and remove it from this archive. Aliases in
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Clarity cone
 
-### CAFEC Abaca Cup 4 Cone Paper Filter (brown 40)
-
-- SKU: `AC4-40B`
-- Link: <https://cafecusa.com/collections/filter-papers/products/abaca-cup-4-cone-paper-filter-ac4-40b>
-- Paper shape: Conical
-- Size standard: V60-02
-- Fits brewers: V60, Origami, Cafec
-- Seal/fit: Standard
-- Material: Abaca + pulp (unbleached)
-- Thickness: Thin
-- Flow rate: Fast
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: High / Low / Clean
-- Best archetype: Clarity cone
-
-### CAFEC Abaca Cup 4 Cone Paper Filter (variant)
-
-- SKU: `AC4-100W`
-- Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-abaca-cup-4-cone-paper-filter-v60-02-ac4-100w-3>
-- Paper shape: Conical
-- Size standard: V60-02
-- Fits brewers: V60, Origami, Cafec
-- Seal/fit: Standard
-- Material: Abaca + pulp
-- Thickness: Thin
-- Flow rate: Fast
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: High / Low / Clean
-- Best archetype: Clarity cone
-- *Duplicate SKU of "CAFEC Abaca Cup 4 Cone Paper Filter" above (both `AC4-100W`, differ only by storefront link). Flagged for registry dedup — see pruning case 004 delete-flag list.*
-
 ### CAFEC Abaca Trapezoid Filter 101
 
 - SKU: `AB-101-100W`
@@ -115,22 +86,6 @@ measured-drawdown line if measured, and remove it from this archive. Aliases in
 - Flow consistency: Stable
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Stability flat
-
-### CAFEC Abaca Trapezoid Filter 101 (variant)
-
-- SKU: `AB-101-100W`
-- Link: <https://cafecusa.com/collections/filter-papers/products/cafec-trapezoid-101-abaca-trapezoid-paper-filter-for-1-2-cups-100pcs-pack-ab-101-100w-copy>
-- Paper shape: Trapezoid
-- Size standard: 101
-- Fits brewers: Clever, Melitta (small), Cafec Oval
-- Seal/fit: Standard
-- Material: Abaca + pulp
-- Thickness: Thin
-- Flow rate: Fast
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: High / Low / Clean
-- Best archetype: Stability flat
-- *Duplicate SKU of "CAFEC Abaca Trapezoid Filter 101" above (both `AB-101-100W`). Flagged for registry dedup — see pruning case 004.*
 
 ### CAFEC Abaca Trapezoid Filter 102
 
@@ -147,38 +102,6 @@ measured-drawdown line if measured, and remove it from this archive. Aliases in
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Stability flat
 
-### CAFEC Abaca Trapezoid Filter 102 (Alt SKU)
-
-- SKU: `AB-102-100W`
-- Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-trapezoid-102-cup-3-5-abaca-trapezoid-paper-filter-ab-102-100w>
-- Paper shape: Trapezoid
-- Size standard: 102
-- Fits brewers: Clever, Melitta, OXO, Cafec Oval
-- Seal/fit: Standard
-- Material: Abaca + pulp
-- Thickness: Thin
-- Flow rate: Fast
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: High / Low / Clean
-- Best archetype: Stability flat
-- *Duplicate SKU of "CAFEC Abaca Trapezoid Filter 102" above (both `AB-102-100W`). Flagged for registry dedup — see pruning case 004.*
-
-### CAFEC Abaca+ Cup 1 Cone Paper Filter
-
-- SKU: `APC1-100W`
-- Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-abaca-cup-1-cone-paper-filter-v60-01-ac1-100w>
-- Paper shape: Conical
-- Size standard: V60-01
-- Fits brewers: V60, Origami, Cafec
-- Seal/fit: Standard
-- Material: Abaca + pulp
-- Thickness: Thin
-- Flow rate: Fast
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: High / Low / Clean
-- Best archetype: Clarity cone
-- *Ownership corrected 2026-05-23 (Research Project #1 inventory cross-check): not physically present in drawer. Chris owns Cup 4 Abaca+ (APC4-40W) not Cup 1.*
-
 ### CAFEC Arita Ware Paper Filter
 
 - SKU: `DDF-100W`
@@ -193,54 +116,6 @@ measured-drawdown line if measured, and remove it from this archive. Aliases in
 - Flow consistency: Very stable
 - Clarity / Body / Sweetness: High / Medium / Clean
 - Best archetype: Clarity cone (controlled)
-
-### CAFEC T-83 - Cup 1 Dark Roast Paper Filter
-
-- SKU: `DC1-40W`
-- Link: <https://cafecusa.com/collections/filter-papers/products/cup-1-dark-roast-paper-filter-dc1-40w>
-- Paper shape: Conical
-- Size standard: V60-01
-- Fits brewers: V60, Origami, Cafec
-- Seal/fit: Standard
-- Material: Wood pulp
-- Thickness: Thick
-- Flow rate: Slow
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: Low / High / Muted
-- Best archetype: Immersion hybrid (cone assist)
-- *Ownership corrected 2026-05-24 (Research Project #3 prep): Chris owns CAFEC papers only via the Cup 4 (V60-02) 4-pack assortment. Cup 1 (V60-01) variants like this DC1 entry are not owned — Cup 1 vs Cup 4 differs only by paper SIZE.*
-
-### CAFEC T-92 - Cup 1 Light Roast Paper Filter (slow)
-
-- SKU: `LC1-100W`
-- Link: <https://cafecusa.com/collections/filter-papers/products/cafec-cup-1-pour-over-coffee-paper-filter-by-roasting-type-flow-rate-differences-for-specialty-coffee-light-roast-slower-flow-rate-1-cup-size-v60-01>
-- Paper shape: Conical
-- Size standard: V60-01
-- Fits brewers: V60, Origami, Cafec
-- Seal/fit: Standard
-- Material: Wood pulp
-- Thickness: Thin
-- Flow rate: Medium
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: High / Low / Clean
-- Best archetype: Clarity cone
-- *Ownership corrected 2026-05-23 (Research Project #1 inventory cross-check): not physically present in drawer. Chris owns no Cup-1 CAFEC papers.*
-
-### CAFEC T-90 - Cup 1 Medium Roast Paper Filter
-
-- SKU: `MC1-100W`
-- Link: <https://cafecusa.com/collections/filter-papers/products/cafec-cup-1-pour-over-coffee-paper-filter-by-roasting-type-flow-rate-differences-for-specialty-coffee-medium-roast-faster-flow-rate-1-cup-size-v60-01>
-- Paper shape: Conical
-- Size standard: V60-01
-- Fits brewers: V60, Origami, Cafec
-- Seal/fit: Standard
-- Material: Wood pulp
-- Thickness: Medium-fast
-- Flow rate: Medium-fast
-- Flow consistency: Stable
-- Clarity / Body / Sweetness: Medium / Medium / Rounded
-- Best archetype: Stability flat (cone variant)
-- *Ownership corrected 2026-05-24 (Research Project #3 prep): Chris owns CAFEC papers only via the Cup 4 (V60-02) 4-pack assortment. Cup 1 (V60-01) variants like this MC1 entry are not owned.*
 
 ### CAFEC SFP Cup 4 Cone Paper Filter
 

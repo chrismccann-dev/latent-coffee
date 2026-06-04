@@ -16,6 +16,8 @@ Coverage was already complete after cases 001-003, so this was a normal prune re
 
 ## Delete flags (for the follow-up registry-reconciliation pass)
 
+> **RESOLVED 2026-06-04 — filter reconciliation pass executed all three flag groups.** Registry collapsed 67→58 (23 owned unchanged; 44→35 not-owned). DB cross-check (`SELECT filter, count(*) FROM brews GROUP BY filter`, 14 distinct values) confirmed only the Abaca+ Cup-1 (`APC1-100W`) candidate had live brews (2); those were remapped via migration 077 (they were really the owned Abaca+ Cup-4 paper). All collapsed names aliased to survivors; the owned Abaca+ Cup-4 row renamed from the mislabeled "Abaca Cup 4 (40 pack)" / APC4-40W → `CAFEC Abaca+ Cup 4 Cone Paper Filter` / APC4-100W per Chris's photo confirmation. `CAFEC Traditional Cup 1 Filter` (CC1) kept distinct (no Cup-4 twin); pack-size collapse kept white/brown separate per Chris (bleach is a real axis, pack size is noise). See `lib/filter-registry.ts` + `docs/taxonomies/filters-not-owned-archive.md` changelog.
+
 `lib/filter-registry.ts` was NOT pruned (delete stays flag-only). Candidates for a dedicated pass with a DB `brews.filter` usage cross-check + alias additions:
 
 1. **3 pure duplicate-SKU rows** (same SKU as a sibling, differ only by storefront link): `AC4-100W` "CAFEC Abaca Cup 4 Cone Paper Filter (variant)", `AB-101-100W` "...Trapezoid 101 (variant)", `AB-102-100W` "...Trapezoid 102 (Alt SKU)". Safe dedup candidates once no brew references the to-be-removed name.

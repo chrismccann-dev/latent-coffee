@@ -122,15 +122,15 @@ Measured-drawdown provenance + full research is in the
 - Measured drawdown: 68s @ 15g (Project #1, ~CONE B3) — measured near-baseline despite the "Slow" + "Thick" labels; CAFEC label = extraction intent, not flow. Bed: late-forming-crater.
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-cup-4-dark-roast-paper-filter-v60-02-dc4-100w>
 
-### CAFEC Abaca Cup 4 Cone Paper Filter (40 pack) — `APC4-40W`
+### CAFEC Abaca+ Cup 4 Cone Paper Filter — `APC4-100W`
 
 - Fits: V60 (-02), Origami, Cafec
 - Shape / size: Conical / V60-02
-- Material / thickness: Abaca + pulp / Thin
+- Material / thickness: Abaca+ (refined blend) / Thin
 - Flow rate (label) / consistency: Fast / Stable
 - Clarity / Body / Sweetness: High / Low / Clean
 - Best archetype: Clarity cone
-- Use case: Fast clarity baseline (owned in both the 40-pack assortment and the 100-pack standalone — same paper)
+- Use case: Fast clarity baseline — Chris's workhorse Abaca+ cone ("the Abaca+ filter by Cafec"). Owns the 100-sheet standalone (APC4-100W, in use) + the Cup-4 variety-pack copy (APC1-40W); same paper, pack quantity is the only difference. Chris brews single cups only, so Cup-1 vs Cup-4 SIZE is functionally identical to him.
 - Measured drawdown: 72s @ 15g (Project #1, +12s vs CONE B3) — REAL slower than its "Fast" label; select by measured drawdown. Bed: late-forming-crater.
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-abaca-cup-4-cone-paper-filter-v60-02-apc4-40w>
 
@@ -369,7 +369,19 @@ the [archive](../../../taxonomies/filters-not-owned-archive.md)).
 - `Hario V60 paper` → **Hario V60 Paper Filter 01 (Tabbed)**
 - `Hario V60 Paper` → **Hario V60 Paper Filter 01 (Tabbed)**
 - `Hario V60 white paper` → **Hario V60 Paper Filter 01 (Tabbed)**
-- `CAFEC Abaca Plus` → **CAFEC Abaca+ Cup 1 Cone Paper Filter**
+- `CAFEC Abaca Plus` → **CAFEC Abaca+ Cup 4 Cone Paper Filter**
+- `CAFEC Abaca+ Cup 1 Cone Paper Filter` → **CAFEC Abaca+ Cup 4 Cone Paper Filter** *(Cup-1→Cup-4 collapse 2026-06-04; Chris brews single cups, treats both sizes as the same paper)*
+- `CAFEC Abaca+` → **CAFEC Abaca+ Cup 4 Cone Paper Filter**
+- `CAFEC Abaca+ filter` → **CAFEC Abaca+ Cup 4 Cone Paper Filter**
+- `Abaca+ filter` → **CAFEC Abaca+ Cup 4 Cone Paper Filter**
+- `CAFEC Abaca Cup 1 Cone Paper Filter` → **CAFEC Abaca Cup 4 Cone Paper Filter** *(Cup-1→Cup-4 collapse 2026-06-04; not-owned)*
+- `CAFEC T-83 - Cup 1 Dark Roast Paper Filter` → **CAFEC Cup 4 Dark Roast Paper Filter** *(=T-83)*
+- `CAFEC T-90 - Cup 1 Medium Roast Paper Filter` → **CAFEC Cup 4 Medium Roast Paper Filter** *(=T-90)*
+- `CAFEC T-92 - Cup 1 Light Roast Paper Filter (slow)` → **CAFEC T-92 - Cup 4 Light Roast Paper Filter**
+- `CAFEC Abaca Cup 4 Cone Paper Filter (variant)` → **CAFEC Abaca Cup 4 Cone Paper Filter** *(dup SKU AC4-100W)*
+- `CAFEC Abaca Trapezoid Filter 101 (variant)` → **CAFEC Abaca Trapezoid Filter 101** *(dup SKU AB-101-100W)*
+- `CAFEC Abaca Trapezoid Filter 102 (Alt SKU)` → **CAFEC Abaca Trapezoid Filter 102** *(dup SKU AB-102-100W)*
+- `CAFEC Abaca Cup 4 Cone Paper Filter (brown 40)` → **CAFEC Abaca Cup 4 Cone Paper Filter (brown 100)** *(pack-size collapse)*
 - `Standard flat filter (no puck screen)` → **xBloom Premium Paper Filters**
 - `Sibarist FAST Flat` → **FLAT FAST**
 - `Sibarist FAST flat` → **FLAT FAST**
@@ -399,6 +411,7 @@ the [archive](../../../taxonomies/filters-not-owned-archive.md)).
 
 ## Changelog
 
+- 2026-06-04 — **filter reconciliation** (case-004 follow-up). Registry collapsed 67→58 canonical filters (23 owned unchanged; 35 not-owned). Executed the dedups case 004 flagged: 3 pure duplicate-SKU rows (AC4-100W variant / AB-101-100W variant / AB-102-100W Alt SKU), the AC4-40B brown pack-size variant, and the 5 CAFEC Cup-1 papers (Abaca / Abaca+ / T-83 / T-90 / T-92) collapsed into their Cup-4 twins (Chris brews single cups → Cup-1 vs Cup-4 is paper SIZE he treats as identical; T-codes preserved across twins). The owned Abaca+ Cup-4 paper was renamed from the mislabeled "CAFEC Abaca Cup 4 ... (40 pack)" / APC4-40W → **CAFEC Abaca+ Cup 4 Cone Paper Filter** / APC4-100W (its true SKU + line); the 2 legacy "Abaca+ Cup 1" brews were really this paper (migration 077 remap). All collapsed names aliased to survivors. `CAFEC Traditional Cup 1 Filter` (CC1) kept distinct (no Cup-4 twin). 56 aliases total.
 - 2026-06-03 — **pruning case 004** (70.4 KB → owned-only). Added Purpose + agent selection-rules; moved the four `## Measured Drawdown Reference` research blocks + per-entry RP/lesson citation chains out to the [research appendix](#research-measurement-appendix) (full data already in `docs/research-projects/*.md`); pruned the live doc to the **23 owned** papers, grouped by fit geometry (V60 cone / Flat-bottom + wave / Specialty + paired); moved the **44 not-owned** papers to [docs/taxonomies/filters-not-owned-archive.md](../../../taxonomies/filters-not-owned-archive.md); corrected April Paper Filter fit to **April-only**. `lib/filter-registry.ts` unchanged except the April fit fix (still the full 67-entry validator). Pack-size / cup-size / duplicate-SKU registry dedups flagged for a follow-up reconciliation pass (see pruning case 004 handoff).
 - 2026-04-27 — Cafec packaging-name update (migration 034). Owned Cup 4 papers gain T-XX codes printed on packaging: T-92 (light, LC4), T-90 (medium, MC4), T-83 (dark, DC4), plus the "+" on Abaca+ (APC4). (The not-owned Cup 1 T-code variants now live in the archive.)
 - 2026-04-26 — initial registry built from authored CSV (Sprint 1f). Same-name dedupes (5) recorded at build.

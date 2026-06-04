@@ -80,9 +80,11 @@ decision; the autonomy rule applies only AFTER Chris signs off on each conventio
   - **Blend-naming convention** (broader than the index): decide the canonical shape for field
     blends ("Bourbon Caturra blend", "Red Bourbon, Mibirizi blend", "Ethiopian landraces blend").
     This is the gating decision for the Heritage fix.
-  - **BS-1 filter-label shortening** (`naming` sub-items of BS-1): "CAFEC Abaca+ Cup 1 Cone Paper
+  - **BS-1 filter-label shortening** (`naming` sub-items of BS-1): "CAFEC Abaca+ Cup 4 Cone Paper
     Filter"→"CAFEC Abaca+ Cone"; "CAFEC T-92 - Cup 4 Light Roast Paper Filter"→"CAFEC T-92".
-    These live in `lib/filter-registry.ts` (canonical + displayName/aliases).
+    These live in `lib/filter-registry.ts` (canonical + displayName/aliases). NOTE: the Abaca+
+    `displayName` ("CAFEC Abaca+ Cone") was added in the 2026-06-04 filter reconciliation, so that
+    half is already done; remaining work is whichever UI surfaces still render the long canonical.
   - **Heritage variety fix (carried from data-audit):** brew `06672cbf` — once the blend
     convention is set, repoint the cultivar off Gesha to the correct heritage-blend canonical and
     fix the `variety` text. Likely a cultivar-registry 2-step edit + a `patch_brew`. Note: blend
@@ -468,8 +470,8 @@ lifecycle state** rather than flattened with experiment-frame payload — the re
     dial change at the end of pour 2.
   - [Release 056 - El Placer](https://www.latentcoffee.com/brews/71c1d610-5a13-4dbc-ad73-cb211a455f0f)
     — 2-pour brew showing only 1 pour (Pours 3/4 are "Office tap water" / "Kettle on base
-    throughout" with "·" times). Also filter label "CAFEC Abaca+ Cup 1 Cone Paper Filter" →
-    **"CAFEC Abaca+ Cone"** (`naming`).
+    throughout" with "·" times). Also filter label "CAFEC Abaca+ Cup 4 Cone Paper Filter" →
+    **"CAFEC Abaca+ Cone"** (`naming`; displayName now set per 2026-06-04 reconciliation).
   - [Ethiopia Heirloom Cold Room Natural](https://www.latentcoffee.com/brews/0d93118c-555e-4778-905f-17d166e33a8f)
     — pour structure not represented correctly.
   - [Altieri Gesha CHOMBI Natural Dry Fermentation](https://www.latentcoffee.com/brews/4fc7e914-095d-4d1e-9af6-3a6c7c556c9b)

@@ -17,7 +17,7 @@ Author and maintain the brewing equipment registry across drippers / filters / g
 | Existing asset | Wave 1 migration target | Content |
 |---|---|---|
 | `lib/brewer-registry.ts` | `cluster/brewers.md` (pointer) + `resources/brewer-registry.ts` (symlink/reference) | 46 canonical brewers, 12 owned, 24 aliases |
-| `lib/filter-registry.ts` | `cluster/filters.md` (23 owned only) + `docs/taxonomies/filters-not-owned-archive.md` (44 not-owned) + `resources/filter-registry.ts` (reference) | 67 canonical filters (23 owned), 44 aliases. Doc split owned/not-owned in pruning case 004 (2026-06-03); registry stays the full validator |
+| `lib/filter-registry.ts` | `cluster/filters.md` (23 owned only) + `docs/taxonomies/filters-not-owned-archive.md` (35 not-owned) + `resources/filter-registry.ts` (reference) | 58 canonical filters (23 owned), 56 aliases. Reconciled 67→58 (Cup-1→Cup-4 size collapse + dup-SKU/pack-size collapses; APC4→Abaca+ Cup-4 rename) 2026-06-04; doc split owned/not-owned in pruning case 004 (2026-06-03); registry stays the full validator |
 | `lib/grinder-registry.ts` | `cluster/grinder-eg1.md` + `resources/grinder-registry.ts` (symlink/reference) | EG-1 only (single canonical), 51 enumerated settings, 16 with rich content |
 | `lib/sworks-registry.ts` | `cluster/sworks.md` + `resources/sworks-registry.ts` (symlink/reference) | SWORKS Bottomless Dripper, 5 useful dials (0/5/6/7/past-7), dial state vocabulary |
 | `docs/taxonomies/brewers.md` | `cluster/brewers.md` (target — extended from authored content) | Authoritative brewers taxonomy authored by Chris |
