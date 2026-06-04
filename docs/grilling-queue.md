@@ -158,6 +158,18 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Lot Coordinator brainstorm, 2026-06-02 (capstone roadmap-review session)
     - **Suggested landing:** CONTEXT-roasting.md term entries + new ADR (claude.ai-mediated coordinator/assistant with MCP shared state), at the Lot Coordinator plan sprint
 
+### From the doc-pruning arc (cases 001-007, 2026-06-03 → 06-04)
+
+47. **Doc-pruning op vocabulary lock (CONTEXT-shared grill)** — the doc-pruning arc stabilized a vocabulary of pruning ops that is now used across CLAUDE.md / ADR-0013 / doc-tripwires.md / the pruning-cases but never grilled into a CONTEXT headword set: the **six shapes** (extract / split / consolidate / archive / delete / **re-home (re-scope)** — the last surfaced by case 007 when the CCIL's *job* was re-tightened, not just its size cut), plus "tripwire registry," "post-tripwire pruning exercise," "loading-profile-aware tiering," "destinations-first / index-last ordering," "preserve the append target," "uniform n-threshold graduation." Now that 7 cases have stabilized the terms (the deferral the vocab was waiting on), grill them into CONTEXT-shared as a pruning-ops glossary cluster.
+    - **Grade:** READY (vocab is lived + stable across 7 cases; needs a CONTEXT-shared grill, not authoring)
+    - **Source:** doc-pruning cases 001-007; scope doc `docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md`
+    - **Suggested landing:** CONTEXT-shared.md pruning-ops headwords (grill-first, not bulk-authored)
+
+48. **MCP SKILL.md description drift: cupping-specialist + roasting-assistant vs the live prompt** — case 006 (log-cupping prune) flagged a *pre-existing* drift (not introduced by the prune): the `cupping-specialist` + `roasting-assistant` SKILL.md descriptions in `lib/mcp/docs.ts` still say "Path C-2 / real-pourover discriminator" and "STAGE 3 V_(n+1) design intent" — both already loose vs the current prompt. Reconcile against the live log-cupping.md flow.
+    - **Grade:** READY (concrete MCP-description fix, low risk) — but **best folded into the roasting-coordinator grill** (the STAGE 5/6 design-ownership boundary that case 006 deferred there is the same surface; reconcile descriptions when that boundary firms rather than twice)
+    - **Source:** [pruning case 006](sprints/pruning-cases/006-log-cupping.md) § Six-actor (Actor 3 pre-existing drift)
+    - **Suggested landing:** `lib/mcp/docs.ts` description reconcile, at the roasting-coordinator / Lot Coordinator plan sprint
+
 ## Substrate pruning candidates
 
 Lived examples of substrate sections that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred until lived candidates covering all five shapes are worked through operator + Claude Code back-and-forth (case-study-driven generalization per Chris's framing at Item 16c grill). This section accumulates candidates; each becomes a worked example. **Systematization is deferred until all five shapes have a worked example** — full protocol at [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](features/doc-pruning-mechanism-brainstorm-2026-06-03.md).
