@@ -57,6 +57,10 @@ const SKILL_FILES: Record<string, string> = {
   'docs://skills/brewing-equipment-expert/SKILL.md': 'docs/skills/brewing-equipment-expert/SKILL.md',
   'docs://skills/brewing-equipment-expert/cluster/brewers.md': 'docs/skills/brewing-equipment-expert/cluster/brewers.md',
   'docs://skills/brewing-equipment-expert/cluster/filters.md': 'docs/skills/brewing-equipment-expert/cluster/filters.md',
+  // Not-owned filter archive (pruning case 004, 2026-06-03) — promotion pool.
+  // Lives in docs/taxonomies/ (outside the cluster dir) so it doesn't count
+  // against the cluster size cap. On-demand only; not for live brewing selection.
+  'docs://taxonomies/filters-not-owned-archive.md': 'docs/taxonomies/filters-not-owned-archive.md',
   'docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md': 'docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md',
   'docs://skills/brewing-equipment-expert/cluster/sworks.md': 'docs/skills/brewing-equipment-expert/cluster/sworks.md',
   // WBC Brewing Archivist (Wave 2 PR 1) — SKILL.md + cluster files migrated from
@@ -342,7 +346,9 @@ const DOC_DESCRIPTIONS: Record<string, string> = {
   'docs://skills/brewing-equipment-expert/cluster/brewers.md':
     'Use when validating or looking up a brewer (dripper) — 46 canonical brewers (12 owned by Chris) + 24 aliases. Material axis dropped (model name only); Orea v3/v4 ambiguity defaults to v4. allowOverride pattern. Migrated from docs/taxonomies/brewers.md in Wave 1.',
   'docs://skills/brewing-equipment-expert/cluster/filters.md':
-    'Use when validating or looking up a filter — 64 canonical filters (22 owned) + 34 aliases. Pairs with the brewer registry; Sibarist FAST drift is brewer-aware on canonicalize. allowOverride pattern. Migrated from docs/taxonomies/filters.md in Wave 1.',
+    'Use when validating or looking up a filter for brewing selection — the 23 OWNED filter papers, grouped by fit geometry (V60 cone / Flat-bottom + wave / Specialty + paired-brewer), each with measured loaded-bed drawdown. Not-owned candidates (44) live in docs://taxonomies/filters-not-owned-archive.md. lib/filter-registry.ts is the full 67-paper validator + 38 aliases (Sibarist FAST drift is brewer-aware on canonicalize; allowOverride pattern). Pruned to owned-only in case 004 (2026-06-03); migrated from docs/taxonomies/filters.md in Wave 1.',
+  'docs://taxonomies/filters-not-owned-archive.md':
+    'Promotion pool — the 44 NOT-owned filter papers split out of the filters cluster doc in pruning case 004 (2026-06-03). Do NOT use for live brewing selection; consult only when the operator asks about a not-owned paper or buys one and wants it promoted. Full canonical validation still lives in lib/filter-registry.ts.',
   'docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md':
     'Use when validating grinder + grind setting — single canonical (EG-1, Weber Workshop, ULTRA SSP burrs, 80mm flat) with 51 enumerated settings (3.0-8.0 in 0.1 steps); 16 carry rich D50 + zone + extraction-behavior + use-case content. Status flags: needs_fresh_measurement (6.6) and anomalous (7.0). Migrated from docs/taxonomies/grinders.md in Wave 1.',
   'docs://skills/brewing-equipment-expert/cluster/sworks.md':
@@ -763,7 +769,12 @@ export function listDocs(): {
     entry(
       'docs://skills/brewing-equipment-expert/cluster/filters.md',
       'docs/skills/brewing-equipment-expert/cluster/filters.md',
-      'Brewing Equipment Expert — Filters cluster',
+      'Brewing Equipment Expert — Filters cluster (owned)',
+    ),
+    entry(
+      'docs://taxonomies/filters-not-owned-archive.md',
+      'docs/taxonomies/filters-not-owned-archive.md',
+      'Filter Paper Archive — not-owned candidates (promotion pool)',
     ),
     entry(
       'docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md',
