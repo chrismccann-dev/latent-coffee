@@ -80,6 +80,28 @@ When dialing in a SWORKS recipe, valve is the primary lever; grind is secondary.
 - **Bitter finish** → shorten contact time by opening valve sooner in the final pour
 - **Adjust grind only after valve position is optimized** — finer grind compounds the valve-restriction effect; valve-first dialing keeps grind as a single-direction lever
 
+## Valve restriction timing principles
+
+When to restrict is as load-bearing as how much. These three principles (re-homed from the brewing-historian Office Brewing Notes, pruning case 007b) govern valve *sequencing* across the brew, beyond the per-dial flow rates above.
+
+### Mid-pour restriction can starve the bed (Picolot Garrido Mokka Natural)
+
+Restricting the valve to Dial 5 during mid-extraction pours (Pours 1-2) can REDUCE fruit and sugar development by starving the bed of fresh water. Extraction depends on the concentration gradient of fresh water meeting saturated grounds, not just contact time. Reserve Dial 5 restriction for the final integration pour. For fast/fast/slow roaster structures (e.g. Picolot): Dial 7 Open → Dial 7 Open → Dial 5 Restricted, not Dial 5 throughout.
+
+- **Exception — heavy co-ferment washed** (e.g. Moonwake El Eden Tamarind) needs Dial 5 through all main pours because the extraction ceiling is much higher; valve timing for those lots is about WHEN to crack open, not whether to restrict.
+- **Diagnostic:** tea-like body with subtle attack + no sweetness = under-extraction from over-restriction of mid-pours. Fix by opening Pours 1-2 and going finer on grind, not by restricting more.
+
+### Small-dose Clarity-First inverts the Mokka principle (Lovely Vuelta)
+
+SWORKS valve restriction on small-dose Clarity-First office brews behaves OPPOSITE to the Mokka principle. Garrido Mokka (18g, Full Expression, fast/fast/slow) needed Dial 5 only on the final integration pour. Lovely Vuelta (15g, Clarity-First, Panama Gesha washed DRD) needed Dial 5 through both Pours 1 & 2 — shallower bed + lighter extraction-capable roast + tap water together require more contact time across the extraction window, not less.
+
+- **Rule:** on 15g office Clarity-First brews with tap water, start Dial 5 through the extraction-critical pours and open to Dial 7 on the tail to cut tannins.
+- **Final-pour tail management is a distinct lever:** closing further (Dial 6 → Dial 5) at integration extends the drying tail; opening to Dial 7 at completion of Pour 2 cuts a tannic finish cleanly.
+
+### Valve transition timing is a co-lever with temperature (Project One Blue Iris)
+
+On Moonwake Blue Iris (yeast-anaerobic honey Catimor) at EG-1 6.3, the same temperature (95°C) that produced flattened florals + a bitter tail with a late Dial 5 → 6 transition produced the reference cup with the transition moved to ~halfway through Pour 2. Earlier valve-open shortens contact time on the tail, clearing bitter finish artifacts and creating headroom to push temperature higher for aromatic unlock. If a Balanced Intensity recipe has the right grind and temperature ceiling but the finish reads bitter, move the Dial 5 → 6 transition earlier in Pour 2 before dropping temperature. Confirmed once; retest on the next yeast-inoculated lot at the office. (Captured as the "Restricted main + late half-open transition" row in the table below.)
+
 ## Canonical recipe patterns
 
 The SWORKS valve has produced canonical reference recipes for multiple strategies — each with a distinct dial sequence. These pattern names live in BREWING.md archive but the vocabulary is canonical here:

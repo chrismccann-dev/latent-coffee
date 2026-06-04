@@ -4,7 +4,7 @@
 
 **Corpus:** N=4 brews on Washed base + Yeast Inoculated fermentation modifier.
 
-**Current rollup:** see [cross-coffee-insights.md § By Process > Experimental (thermal shock, yeast-inoculated)](../cross-coffee-insights.md#by-process) for the cross-experimental default-strategy table entry. Confirmed Balanced Intensity across 5 yeast-inoculated subtypes (anaerobic natural, thermal shock washed, white honey, natural with washed finish, anaerobic honey).
+**Current rollup:** default strategy + key levers below. Confirmed Balanced Intensity across 5 yeast-inoculated subtypes (anaerobic natural, thermal shock washed, white honey, natural with washed finish, anaerobic honey); cross-experimental context in [cross-coffee-insights.md](../cross-coffee-insights.md).
 
 **Default strategy:** Balanced Intensity. Don't assume Full Expression — yeast engineering carries the expressive weight; extraction strategy is about not getting in the way.
 
@@ -15,5 +15,7 @@
 - Recipe position within Balanced Intensity tracks flavor register, not just variety: rose-forward → 6.3 / 95°C; aromatic-floral without rose → 6.3 / 94°C; lighter floral → 6.4 / 94°C.
 - Start 6.4 / 94°C; push grind to 6.3 first (hold temp at 94°C) if thin. Push temperature to 95°C only for rose-forward targets.
 - Temperature is the surgical lever for bitter tail on Colombian yeast-inoculated Geshas (Inmaculada / Luna pattern - drop 1°C before any other adjustment).
+
+**Cooling:** yeast-inoculated white honey Gesha (Moonwake Sebastian Ramirez El Placer, Quindío) peaks cool (~45-50°C). What reads as a bitter finish when hot is the cardamom/spice note resolving; the cup integrates and sweetness increases significantly below 50°C.
 
 Patterns specific to yeast-inoculated-washed sub-types (thermal shock vs straight yeast-inoculated washed vs hybrid finishes) will accrue here as the corpus grows.

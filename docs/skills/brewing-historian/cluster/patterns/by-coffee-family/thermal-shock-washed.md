@@ -4,7 +4,7 @@
 
 **Corpus:** N=3 brews on Washed base + Thermal Shock intervention modifier. Finca El Paraíso (Diego Bermúdez, Cauca, Colombia) is the canonical producer.
 
-**Current rollup:** see [cross-coffee-insights.md § By Process > Experimental (thermal shock, yeast-inoculated)](../cross-coffee-insights.md#by-process) for the cross-experimental default-strategy table entry, and [cross-coffee-insights.md § By Variety > Finca El Paraíso thermal shock lots](../cross-coffee-insights.md#by-variety) for the cultivar-aware recipe gradient.
+**Current rollup:** the full recipe gradient + cooling behavior live below (graduated from the cross-coffee-insights.md rollup in pruning cases 007a/007b). The cross-experimental default-strategy context (thermal shock + yeast-inoculated → Balanced Intensity) sits with the yeast-inoculated capsules + [cross-coffee-insights.md](../cross-coffee-insights.md).
 
 **Default strategy:** Balanced Intensity (confirmed across three Finca El Paraíso lots — Letty Bermúdez Gesha, Luna Bermúdez Gesha, Lychee Castillo). Don't apply the Huila/Cauca Full Expression pattern to these lots — flavor targets are aromatic and transparency-driven.
 
