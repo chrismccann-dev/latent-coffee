@@ -38,7 +38,7 @@ When work is **not** product-side: research experiments go to the Research Coord
 
 Complete the theme before the Lot Coordinator restructure. The most-neglected surface area.
 
-**Shipped members:** migration-drift gate ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)) · CLAUDE.md compaction ([#352](https://github.com/chrismccann-dev/latent-coffee/pull/352)) · doc-pruning *mechanism* scoped + tripwire registry placed ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md), [tripwires](../architecture/doc-tripwires.md)) with worked pruning cases 001 (CLAUDE.md) / 002 (CONTEXT-roasting) / 003 (this PRODUCT.md split).
+**Shipped members:** migration-drift gate ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)) · CLAUDE.md compaction ([#352](https://github.com/chrismccann-dev/latent-coffee/pull/352)) · doc-pruning *mechanism* scoped + tripwire registry placed ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md), [tripwires](../architecture/doc-tripwires.md)) with worked pruning cases 001 (CLAUDE.md) / 002 (CONTEXT-roasting) / 003 (PRODUCT.md split) / 004 (filters.md owned/not-owned split — also cleared the brewing-equipment-expert cluster cap, mooting the conditional case 005).
 
 **Remaining members:**
 - Operator review of CCIL / librarians.

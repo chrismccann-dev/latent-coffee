@@ -104,7 +104,12 @@ export const FILTERS: readonly FilterEntry[] = [
     link: "https://www.aprilcoffeeroasters.com/collections/april-brewing-accessories/products/april-paper-filter",
     paperShape: "Flat",
     sizeStandard: "Kalita-155",
-    fitsBrewers: ["April", "Orea", "Kalita"],
+    // Fit corrected 2026-06-03 (pruning case 004): the April paper's bottom
+    // diameter is brewer-specific large, so it operationally fits ONLY the April
+    // brewer (not Orea/Kalita despite the shared Kalita-155 size standard) — same
+    // pattern as UFO paper only fitting the UFO dripper. Prior
+    // ["April","Orea","Kalita"] was wrong.
+    fitsBrewers: ["April"],
     sealFitType: "Standard",
     material: "Wood pulp",
     thickness: "Medium",
@@ -118,7 +123,7 @@ export const FILTERS: readonly FilterEntry[] = [
     sweetnessExpression: "Rounded",
     paperTechnology: "Standard",
     bestArchetype: "Stability flat",
-    compatibleSystems: "April / Orea / Kalita",
+    compatibleSystems: "April",
     owned: true,
     location: "Home",
     primaryUseCase: "Balanced flat extraction (moderate flow, neutral profile)",
