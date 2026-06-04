@@ -1,397 +1,303 @@
-**State transition**: Waiting for next cupping → Waiting for next roast (loop continues, V_(n+1) designed) OR → Resolved-pending (lot ready for close-out, routes to `close-lot.md`) OR → Waiting for next cupping (held, pre-V_(n+1) calibration gate fires — Path C).
+# log-cupping.md
 
-**Trigger**: I just cupped V_n at Day 7 and have the cupping transcript. I'll paste the per-slot tasting notes below this message. Your job is two moves rolled into one session: (a) close out V_n - push the cuppings, compute cup deltas, name the leading slot, capture key insight; and (b) decide whether the lot is ready for close-out OR design the next adjustment as V_(n+1) OR halt for a pre-V_(n+1) calibration step.
+## Purpose
 
-**Workflow position**: Third of four lifecycle prompts (`start-lot.md` → `log-roast.md` ⇄ **`log-cupping.md`** → `close-lot.md`). This one is the loop step - runs once per V-set's Day 7 cupping. Three outcomes:
+This prompt runs when Chris starts the cupping portion of a V-set roast cycle.
 
-- Most common: design V_(n+1) inline → state flips to **Waiting for next roast** → I roast V_(n+1) and we re-enter `log-roast.md`.
-- Eventual: leading slot for V_n is also the lot-level reference roast candidate, and a control-experiment V-set isn't warranted → state flips to **Resolved-pending** and I run `close-lot.md` next.
-- Less common: V_(n+1) design is blocked on missing calibration data (peer-roasted reference cup) OR on a missing cup-side discriminator (a second recipe_variant on the already-roasted beans). State stays **Waiting for next cupping** — Chris executes the calibration step, then re-enters `log-cupping.md` to design V_(n+1) on the richer evidence base.
+Chris has already roasted a V-set, usually three slots such as V2a / V2b / V2c. The roasts have rested around the Day 7 gate. Chris then cups the slots side-by-side, usually on the xBloom gate recipe, while looking at the Latent app's **Taste For** section. He records an audio note that references the batch numbers written on the bags. This prompt receives that transcript and turns it into structured Latent records, then decides and sets up the next step.
 
-Vocabulary used in this prompt is defined in CONTEXT-roasting.md (leading slot vs reference roast, adjustment, roast→cup trace, lever vs variable vs non-factor, control experiment, pre-V_n calibration gate, recipe_variant). Cross-cutting infrastructure terminology in CONTEXT-shared.md (glossary index — operational vocabulary lives in dedicated reference docs at docs/reference/mcp-architecture.md / canonical-registries.md / wbc-materials.md / synthesis-pipeline.md per the 2026-05-25 Pattern J pruning sprint; pull via `read_doc` when a specific term needs validation).
+This file owns the **cupping procedure**:
+
+1. Resolve the lot, V-set, slots, batches, roasts, recipes, prior predictions, and Taste For prompts.
+2. Push one cupping row per cupped slot.
+3. Patch the just-cupped experiment row with cup deltas, observed outcomes, leading slot, key insight, open questions, and next-step implications.
+4. Route the lot: close-out (-> `close-lot.md`), design the next V-set inline, or hold for a calibration cup.
+
+This file does **not** re-define roasting concepts. Those live in `CONTEXT-roasting.md`. When a concept is needed, read the relevant section there and keep this prompt procedural.
+
+> **Forward note (roasting-coordinator workflow, roadmap).** STAGE 6 (design V_(n+1)) and STAGE 7 (propose doc changes) currently run inline here. Whether they should move out into a dedicated roast-design skill + docs workflow is a real question — but it must be designed against the *whole* roast flow, not just the cupping side, so it lives on the product roadmap, not in this prune. Today's behavior is unchanged: this prompt still designs the next V-set and proposes doc changes inline.
+
+## Workflow position
+
+Lifecycle:
+
+```text
+start-lot.md -> log-roast.md <-> log-cupping.md -> close-lot.md
+```
+
+This prompt runs once per V-set cupping session, looping with `log-roast.md` (roast -> cup -> roast -> cup) and incrementing V-sets until a reference roast is reached.
+
+State transition after this prompt:
+
+- **Waiting for next roast** when the result routes to another V-set (V_(n+1) designed inline).
+- **Resolved-pending** when the lot should move to `close-lot.md`.
+- **Waiting for next cupping** when a calibration cup or Simulated Pourover Gate is needed before designing the next V-set.
+
+## Required context pointers
+
+`CONTEXT-roasting.md` is the source of truth for terminology and conceptual rules. Read these sections as needed (do not re-derive them here):
+
+- **Reading order for agents -> Task-based path -> Logging a cupping** (and -> Designing V_n+1 after cupping)
+- **Cupping and cup-character interpretation**
+- **V-set close synthesis** (+ **Key-insight confidence ladder**)
+- **Reference designation terms** (+ **Reference candidate**, **Reference Cup**, **Leading Slot**)
+- **Rest-days drift**
+- **Pre-V_n calibration gate**
+- **Simulated Pourover Gate system** (+ **Simulated Pourover Packet**, **SPG standing recipe**, **`eval_method: 'Simulated Pourover'`**)
+- **Adjustment** (+ **Operator-fixed constants**, **Control experiment**, **Acceptable roast window**)
+- **Schema notes -> Backfilled recipe**
+
+High-risk pairs to keep straight (full definitions in `CONTEXT-roasting.md -> High-risk term pairs`):
+
+- leading slot vs reference candidate vs reference roast
+- reference cup vs optimized brew
+- variable vs lever vs non-factor
+- Simulated Pourover Packet vs Simulated Pourover Gate vs SPG standing recipe
+- rest behavior vs rest-days drift
+- recipe vs Roest profile
+
+## Inputs Chris typically provides
+
+All or some of: `lot_id` or `green_bean_id`; the V-set being cupped (e.g. `V3`); batch numbers for the slots (e.g. `187 / 188 / 189`); cupping date; roast date or stated rest days; the cupping transcript; whether the session was the standard xBloom gate, a real pourover, a Simulated Pourover Gate, or a peer-roasted reference cup; an optional explicit candidate / route preference.
+
+If batch numbers are present, use them to map notes back to slots. Do not rely on slot order alone when batch numbers are available.
 
 ## Tools for this session
 
-`get_green_bean`, `get_bean_pipeline`, `push_cupping`, `patch_cupping`,
-`push_experiment`, `patch_experiment`, `push_roast_recipe`, `patch_roast_recipe`,
-`push_roast_profile`, `read_doc`, `read_doc_section`, `list_doc_sections`,
-`read_canonical`, `propose_doc_changes`.
+```text
+get_green_bean        get_bean_pipeline
+push_cupping          patch_cupping
+patch_experiment      patch_roast
+push_experiment       push_roast_recipe      patch_roast_recipe
+push_roast_profile
+read_doc              read_doc_section        list_doc_sections        read_canonical
+propose_doc_changes
+```
 
 MCP namespace: tools surface under `Latent Coffee`.
 
-## Routing
+## Operating principles
 
-I'll reference the lot by `lot_id` or `green_bean_id` + tell you which V-set just got cupped (e.g. "Sudan Rume Natural V5 cupped, batches 187/188/189"). You decide downstream whether the lot is ready for close-out, whether V_(n+1) needs to be designed, or whether a pre-V_(n+1) calibration gate fires.
+- Transcript first. Preserve Chris's tasting language where it is clear.
+- Taste For is a guide, not a script. Use it to reconcile the cup, not to force descriptors Chris did not taste.
+- No fabrication. If a required slot, batch, roast, recipe, date, or prediction is missing and cannot be recovered from the pipeline or transcript, halt and report the missing piece.
+- Keep concepts single-sourced. Point to `CONTEXT-roasting.md` instead of copying long definitions here.
+- Keep writes narrow. Each stage writes only the fields it owns.
 
-## STAGE 0 - State-shape migration (pre-rewrite lot detection)
+---
 
-**This STAGE writes**: `experiments.updated_cup_prediction_a/b/c/d`, `experiments.taste_for_a/b/c/d`, `roast_recipes.predicted_cup` (one-pass backfill, ONLY when the lot was authored under pre-rewrite prompts). SKIP STAGE 0 entirely on fresh-from-rewrite lots.
+## STAGE 0 - Optional state-shape migration (pre-rewrite lots only)
 
-**Why this exists**: V-set lots authored before the 4-prompt rewrite (PR #157) lack the post-roast / pre-cupping prediction fields that STAGE 3 reconciles against. Without backfill, the delta_from_cup_* fields have nothing to compare to and the leading-slot prose becomes fuzzy. Detect once, backfill once, then proceed.
+**Writes:** `roast_recipes.predicted_cup`, `experiments.updated_cup_prediction_*`, `experiments.taste_for_*`, and (only for missing-recipe-row cases) `roasts.recipe_id`.
 
-### Detection
+Almost always skipped — every live lot is post-rewrite. Run a minimal `get_bean_pipeline` read and check the V_n being cupped. Detection fires only when ALL hold:
 
-Run a minimal `get_bean_pipeline` read first to evaluate:
+- V_n experiment row exists with `batch_ids` populated.
+- `updated_cup_prediction_a` IS NULL.
+- One or more V_n recipe rows have `predicted_cup` NULL, OR the V_n roast rows lack linked recipe rows.
 
-A V_n is **pre-rewrite** when ALL three hold:
-- `experiments` row for V_n exists with `batch_ids` populated (V_n was roasted)
-- `experiments.updated_cup_prediction_a` IS NULL (no post-roast prediction was captured at log-roast time)
-- One or more V_n `roast_recipes` rows have `predicted_cup IS NULL` OR no recipe rows exist for the experiment at all
+If detection does NOT fire, print `STAGE 0: skipped - fresh-from-rewrite lot` and continue to STAGE 1.
 
-If detection does NOT fire (any of the three are false), skip STAGE 0 entirely and start at STAGE 1.
+If it DOES fire (a pre-rewrite lot is being re-cupped), the full backfill procedure is archived at [`log-cupping-stage0-migration.md`](log-cupping-stage0-migration.md) — pull it in, run the backfill (one-pass, evidence-only, no fabrication), print `STAGE 0: backfilled <N> recipe rows + <M> experiment-slot fields`, then continue.
 
-### Inline backfill (when detection fires)
+---
 
-Three writes, in order. Each call's payload is reconstructed from session memory + the existing DB state — no fabrication. If a piece is genuinely unknowable from what's in front of you, halt and report which slot's which field is missing, do NOT guess.
+## STAGE 1 - Resolve lot, V-set, and comparison frame
 
-**(a) `roast_recipes.predicted_cup` backfill** — one `patch_roast_recipe` call per recipe row missing the field. **Always include `was_backfilled: true` + `backfill_notes: "..."`** on these calls (Schema sprint S4, migration 057, 2026-05-18) — the recipe row's design intent is being recovered post-roast, not captured at design time. Standard `backfill_notes` phrasing: `"Recovered from <source> at V_<n> cup, YYYY-MM-DD"` where source is "session chat memory" / "expected_outcomes per-slot split" / "log-roast.md prose".
+**Writes:** nothing.
 
-Reconstruct from `experiments.expected_outcomes` (the design-time per-slot cup hypothesis prose) when it's per-slot-shaped. Worked example:
+1. If Chris gave `lot_id`, call `get_green_bean({ lot_id })` to get `green_bean_id`.
+2. Call `get_bean_pipeline({ green_bean_id })`.
 
-> `expected_outcomes` reads: "v3a underdev hypothesis: clean attack, possibly hollow middle; v3b structural target — closest to design intent; v3c overrun hypothesis: heavier body, tannin emphasis."
+Build a session work packet: `green_bean`; the V_n experiment row; per slot the roast row, batch number, recipe row, recipe `predicted_cup`, experiment `updated_cup_prediction_*`, and `taste_for_*`; prior V-set leading slots / reference candidates when relevant; prior cuppings needed for comparison or SPG routing.
 
-Split into three `patch_roast_recipe(recipe_id, predicted_cup: "...", was_backfilled: true, backfill_notes: "...")` calls:
-- v3a: `predicted_cup: "Clean attack, possibly hollow middle - underdev hypothesis."` + `was_backfilled: true` + `backfill_notes: "Recovered from expected_outcomes per-slot split at V3 cup, 2026-05-19"`.
-- v3b: `predicted_cup: "Structural target - closest to design intent."` + `was_backfilled: true` + `backfill_notes: "..."`.
-- v3c: `predicted_cup: "Heavier body, tannin emphasis - overrun hypothesis."` + `was_backfilled: true` + `backfill_notes: "..."`.
+Validation (halt on failure):
 
-**If no recipe row exists at all for a slot** (`roasts.recipe_id` IS NULL, not just `roast_recipes.predicted_cup` IS NULL — the V_n was pushed via `push_roast_profile` to Roest but `push_roast_recipe` was never called): use `push_roast_recipe` to CREATE the row instead of `patch_roast_recipe`, then link it via `patch_roast(roast_id, recipe_id: <new_recipe_id>)`. Sequence per slot:
+- V_n exists.
+- V_n `batch_ids` is populated — if not, `log-roast.md` has not completed; halt and report.
+- Each cupped batch maps to exactly one roast row — if ambiguous, halt and list the candidates.
+- Recipe linkage exists, unless STAGE 0 recovered it.
+- Dates are sufficient to compute `rest_days`, or mark date/rest ambiguity in the confirmation output.
 
-1. `push_roast_recipe(green_bean_id, experiment_id, batch_slot, recipe_name, predicted_cup: "...", was_backfilled: true, backfill_notes: "Created during V_<n> cup backfill — original push_roast_recipe missed at design time, YYYY-MM-DD", + curves/end-condition/charge/hopper reconstructed from session memory or the Roest profile)` → returns `recipe_id`.
-2. `patch_roast(roast_id: <V_n slot roast row>, recipe_id: <recipe_id from step 1>)` → links the execution row to its design-intent row.
+---
 
-This is the "half-migrated" case observed on CGLE Sudan Rume Natural V5 (2026-05-21, first lived test of this prompt). The detection criteria above already flag it; this paragraph describes how to resolve it. If curve/end-condition/charge/hopper are unrecoverable, halt and ask Chris to ballpark before fabricating.
+## STAGE 2 - Parse transcript into slot notes
 
-If `expected_outcomes` is generic ("we expect the lower-peak slot to read cleaner"), it can't be cleanly split — halt and ask Chris to ballpark each slot's predicted_cup before proceeding. Do NOT fabricate a per-slot prediction from a single-blob `expected_outcomes`.
+**Writes:** nothing.
 
-**(b) `experiments.updated_cup_prediction_a/b/c/d` backfill** — one `patch_experiment` call updating all populated slots in a single payload.
+Map transcript references to slots: prefer explicit batch numbers; use slot names (V2a/b/c) if stated; use order only when the transcript clearly states it and no batch numbers exist.
 
-Reconstruct from the V_n roast rows' `what_worked` / `what_didnt` / `what_to_change` prose (the post-roast structural observations log-roast.md captured) plus session memory of what Chris said after the roasting session. Worked example:
+For each slot, extract: aroma, flavor, acidity, sweetness, body, finish, overall, temperature behavior, aromatic behavior, structural behavior; plus defect / underdevelopment / overdevelopment signs, direct comparison statements, preference / ranking, and uncertainty language.
 
-> roast row for v3a: `what_worked = "structurally sound through Maillard"`, `what_didnt = "FC fired 45s late, dev phase compressed by ~30s"`, `what_to_change = "lower peak inlet 1-2°C next iteration"`.
+Rules:
 
-Compose `updated_cup_prediction_a`:
+- Use Chris's language where possible; synthesize only when the transcript is fragmentary but the meaning is clear.
+- Leave a field NULL when the transcript does not support it.
+- Do not collapse sweetness into acidity or body (it is a distinct axis; collapsing it makes it uncross-queryable).
+- Do not turn a Taste For prompt into observed cup notes unless Chris tasted it.
 
-> "v3a likely reads developed-but-compressed - attack clean from the Maillard-through-FC structure, but mid-palate may collapse from the FC-late dev squeeze. Watch for hollow middle; brightness OK."
+---
 
-Each `updated_cup_prediction_<slot>` is 1-2 sentences mapping the structural roast observation to a cup-side hypothesis. If the roast prose is sparse (one-line per field), keep the prediction equally sparse — don't pad.
+## STAGE 3 - Push cupping rows
 
-**(c) `experiments.taste_for_a/b/c/d` backfill** — same `patch_experiment` call as (b), or a follow-up call if (b) was already issued.
+**Writes:** `cuppings` rows via `push_cupping`, one per cupped slot.
 
-Each `taste_for_<slot>` is 1-3 short sentences per slot, action-verb-led ("Listen for X" / "Check whether Y" / "Look for Z" / "Taste only to calibrate Z"). See `log-roast.md` STAGE 5's `taste_for_a/b/c/d` rule for the full Sub-sprint 4a Bundle C (2026-05-27) tightening spec — the same shape applies on backfill. Key rules:
+Required mapping per slot:
 
-- Frame each slot as questions to ask at the cup, not a recap of producer notes (those are on the page already in the Producer Notes sub-card from Bundle B).
-- Diagnostic framing on failure-mode batches: "Taste only to calibrate what underdevelopment tastes like on this lot — diagnostic data point, not a candidate." Captures the signature for future reference even when the cup itself isn't a candidate.
-- Forward-looking V_(n+1) branch logic when load-bearing.
-- Brief comparators by slot identifier; don't re-explain the prior cup.
-- Drop numbered "(1) producer notes / (2) V_(n-1) memory / (3) adjustment tested" structure — it produced 80+ word slots pre-Bundle-C. Flat is the shape.
+- `roast_id`: from STAGE 1 (NEVER the batch number).
+- `cupping_date`: `YYYY-MM-DD`.
+- `rest_days`: integer from roast date to cupping date.
+- `eval_method`: `"Pourover"` for the standard Day 7 xBloom gate; `"Cupping"` for the legacy bowl defect-screen; `"Simulated Pourover"` for an SPG cup.
+- `recipe_variant`: `"xbloom_gate"` when this is the standardized gate and a later real-pourover/SPG comparison is plausible; `"real_pourover"` for an optimized daily-consumption cup; a clear SPG label only to disambiguate variants (keep `eval_method: "Simulated Pourover"`); leave NULL only when a second same-day/same-method variant is unlikely. The composite key is NULLS NOT DISTINCT, so two unlabeled cuppings collapse into one row.
+- The ten prose fields: `aroma`, `flavor`, `acidity`, `sweetness`, `body`, `finish`, `overall`, `temperature_behavior`, `aromatic_behavior`, `structural_behavior`. (Definitions: `CONTEXT-roasting.md -> Cupping and cup-character interpretation`.)
+- `ground_agtron` when Chris provides it. `wb_agtron` is auto-snapshot from the joined roast; `wb_to_ground_delta` is generated — report it in confirmation when available.
 
-Worked example for v3a (Sudan Rume Natural V3a, post-Bundle-C tight form):
+Rest-days drift (apply the row-level prose flag only; interpretation lives in `CONTEXT-roasting.md -> Rest-days drift`):
 
-> "Does the darker WB still let the producer's tasting notes through? Listen for whether the cleaner / longer dev added body at the cost of florality."
+- Day 7 target; Day 6-10 acceptable.
+- If `rest_days` is outside 6-10, or stated rest days don't match the dates, prefix `additional_notes`: `REST_DAYS_DRIFT: cupped Day <N>, off the Day 7 gate by <delta>`.
+- For cross-V-set SPG / runoff comparisons where an older candidate is structurally disadvantaged, also prefix the older row's `additional_notes`: `REST_DAYS_DRIFT_COMPARISON: SPG / candidate-runoff vs V_n at Day <N>, +<delta> days older`.
 
-Skip slots that genuinely weren't roasted in V_n (e.g. only v1a/v1b roasted, c skipped).
+UPSERT behavior: `push_cupping` UPSERTs on `(user_id, roast_id, cupping_date, eval_method, recipe_variant)`. Re-pushing is safe (`created: false`, fields NOT overwritten); use `patch_cupping` for corrections. Capture `cupping_id` + echoed `composite_key` per slot.
 
-### Confirmation
+---
 
-After the three writes, print a one-line `STAGE 0: backfilled <N> recipe rows + <M> experiment-slot fields` summary, then proceed to STAGE 1.
+## STAGE 4 - Patch the V_n experiment close-out
 
-## STAGE 1 - Resolve bean + V_n state, baseline pipeline
+**Writes:** V_n experiment fields via `patch_experiment`, plus the leading-slot reference-candidate flag via `patch_roast`. Writing model: `CONTEXT-roasting.md -> V-set close synthesis`.
 
-**This STAGE writes**: nothing (read-only).
+**4.1 Per-slot cup deltas** — patch `delta_from_cup_a/b/c/d` for cupped slots. Each reconciles: actual cup vs `updated_cup_prediction_*`; vs `taste_for_*`; vs prior V-set memory (when relevant); vs the specific adjustment tested in V_n; and a producer-notes ballpark check. Keep it compact — the goal is an accurate roast-prediction -> cup-evidence trace, not an essay.
 
-- `get_green_bean({lot_id})` → returns `green_bean_id`.
-- `get_bean_pipeline({green_bean_id})` → full state: `green_bean`, `roasts[]`, `cuppings[]`, `experiments[]`, `roast_recipes[]`, `brews[]`, `roast_learnings`.
-- Identify V_n experiment row (most recent by `created_at` matching `<LOT-PREFIX>-V<n>`). Confirm `batch_ids` is populated (otherwise `log-roast.md` didn't run - halt and report).
-- Build the slot → roast_id map from `roast_recipes.batch_slot` joined to `roasts.recipe_id`.
-- Read each V_n recipe's `predicted_cup` (design-time prediction, frozen) and the V_n experiment's `updated_cup_prediction_a/b/c/d` (post-roast, pre-cupping prediction) + `taste_for_a/b/c/d` - these are the two predictions you'll compute deltas against in STAGE 3. STAGE 0's backfill should have populated all three if the lot was pre-rewrite.
+**4.2 Observed outcomes** — patch `observed_outcome_a/b/c/d`. EXTEND existing roast-side observations from `log-roast.md`; do not overwrite. The same field carries both layers.
 
-## STAGE 2 - Push the cuppings
+**4.3 Leading slot** — patch `experiments.winner`, formatted strictly `V<n><letter> (Batch <Roest#>)` (e.g. `V5C (Batch 189)`). Do NOT append verdict prose to `winner` — rationale goes in `key_insight` / `additional_notes` / `what_changes_going_forward`. (Leading slot = winner of this V-set's comparison; distinct from reference candidate and reference roast — see `CONTEXT-roasting.md -> Reference designation terms`.)
 
-**This STAGE writes**: `cuppings` rows (one per slot cupped, via UPSERT on `(user_id, roast_id, cupping_date, eval_method, recipe_variant)`).
+**4.4 V-set insight fields** — patch:
 
-For each slot Chris cupped (typically all V_n slots; sometimes one or two are skipped):
+- `key_insight`: 2-4 sentences on what V_n taught.
+- `key_insight_confidence`: the enum from `CONTEXT-roasting.md -> Key-insight confidence ladder`. If unsure between two levels, pick the lower and explain in `additional_notes`.
+- `what_changes_going_forward`: forward-looking + actionable ("V_(n+1) should...").
+- `open_questions`: interrogative (questions V_n did not answer; these inform V_(n+1)'s `primary_question`).
+- `additional_notes`: descriptive cross-slot narrative that fits nowhere else.
 
-- `push_cupping(payload)`:
-  - `roast_id` from STAGE 1's map (NOT batch_id).
-  - `cupping_date`: YYYY-MM-DD of the cupping session.
-  - `rest_days`: integer. V4 evaluation gate is Day 7; Day 6-10 is the acceptance window. **If `rest_days` is outside [6,10] OR the implied `cupping_date - roast_date` doesn't match the reported `rest_days`, flag it explicitly** in the same line: prefix `additional_notes` (or `overall` if `additional_notes` isn't a field on cuppings) with `"REST_DAYS_DRIFT: cupped Day <N>, off the Day 7 gate by <delta>"` so cross-lot rest-curve analysis can filter on the flag later. Common cause is a multi-day cupping push that drifted: Chris said "I cupped V3 on the 14th" but the roast was on the 5th → `rest_days: 9`, not 7. **Two structural sources** (Phase 2 / Item 13 audio elaboration / 2026-05-24, see [CONTEXT-roasting.md § Rest-days drift](../../CONTEXT-roasting.md)): (1) **within-V-set scheduling drift** (~1-2 days, managed) — Chris can't do 3-5 cuppings in one day, so the assistant spaces them (e.g. 3 same-day roasts → cupped Day 6 / 7 / 8); this is the case the existing prefix is designed for. (2) **cross-V-set comparison drift** (7+ days, structural) — in a Simulated Pourover Gate / candidate-runoff cup-set, V_n's candidate is brewed alongside V_(n-1)'s candidate, and V_(n-1) has typically rested 7+ extra days because the roasting cycle is long. When the drift is the cross-V-set variant, **add a second prefix** on the V_(n-1) cupping row's `additional_notes`: `"REST_DAYS_DRIFT_COMPARISON: SPG / candidate-runoff vs V_n at Day <N>, +<delta> days older"`. This denotes that the drift here is structural unfairness in the comparison frame, not a scheduling miss — important for the comparison interpretation because no structured experiments yet exist on rest-days effects across this magnitude.
-  - `eval_method`: `"Pourover"` for Day 7 evaluation. `"Cupping"` (table bowl) is the legacy Day 4 defect-screen - deprecated as a primary evaluation per CONTEXT-roasting.md § Reference cup, but still accepted if you ran one.
-  - **`recipe_variant`**: distinguishes multiple cuppings of the same `(roast_id, cupping_date, eval_method)` under different brewing recipes. Examples: `"xbloom_gate"` (mechanically-consistent gate cupping that defines the reference cup), `"real_pourover"` (optimized brew at Chris's daily-consumption recipe). When pushing both for the same slot on the same day, use distinct labels. When pushing only one and you know a second is unlikely, leave NULL - but if a second is *likely* later (the "first of likely two" case), explicitly label this one (e.g. `"xbloom_gate"`) to avoid retroactive patching when the second lands. The NULLS NOT DISTINCT composite key collapses two unlabeled cuppings into one row.
-  - `ground_agtron`: paired with `roasts.agtron` for the WB→Ground delta - V4 primary internal-development signal (target ≤3 points). `wb_agtron` is auto-snapshot from the joined roast row at insert time per Schema sprint S1 (migration 055); `wb_to_ground_delta` is a generated column you can later query directly for cross-lot analysis.
-  - The ten prose fields: `aroma`, `flavor`, `acidity`, **`sweetness`**, `body`, `finish`, `overall`, **`temperature_behavior`**, **`aromatic_behavior`**, **`structural_behavior`**. Source from Chris's transcript verbatim where possible, your synthesis only where the transcript is fragmentary.
-    - **`sweetness` is a distinct axis from acidity and body** (Schema sprint S3, 2026-05-18) — do NOT fold "sweet citrus" into acidity or "syrupy sweetness" into body. The axis stays implicit and uncross-queryable when you do. Examples: "Moderate, structurally honey-like" / "Hidden behind acidity; emerges at 50°C" / "Layered cane sugar → maple as it cools" / NULL if Chris's transcript genuinely doesn't address sweetness.
-    - **`temperature_behavior`** captures direction + when + what changes across the cooling arc (parallel to brews.temperature_evolution). Examples: "Rose emerges below 50°C" / "Bitter tail resolves on cooling" / "Flattens cooler — V3a pattern" / NULL if cup didn't materially evolve.
-    - **`aromatic_behavior`** (Sprint 11 RO-6 / migration 062 / 2026-05-20 — relocated from roast_learnings per ADR-0008): how aromatics present in time and intensity for THIS cup — immediate vs late-blooming, expressive vs muted, lifted vs grounded, sustained vs transient. Per-tasting observation tied to this specific cupping event, NOT a lot-aggregate carry-forward (lot-aggregate lessons live on `roast_learnings.cultivar_takeaway` / `general_takeaway` / etc.). On lots with multiple cuppings, populate the canonical pourover cupping on the reference roast (the row /green/[id] ResolvedView surfaces); patch_cupping later if a second variant evaluation lands.
-    - **`structural_behavior`** (Sprint 11 RO-6 / migration 062 / ADR-0008): shape and balance of acidity, body, and finish for THIS cup, separate from flavor. Per-tasting observation. Same per-cup framing as aromatic_behavior.
+Field split: forward + actionable -> `what_changes_going_forward`; interrogative -> `open_questions`; descriptive / comparative / verdict rationale -> `additional_notes`. Apparent variable -> lever / non-factor signals may be described in `key_insight`, but the final lot-level promotion belongs in close-out synthesis, not here.
 
-`push_cupping` UPSERTs on `(user_id, roast_id, cupping_date, eval_method, recipe_variant)` with NULLS NOT DISTINCT. Re-pushing is safe - returns `created: false` and field values are NOT overwritten. Use `patch_cupping` for field-level corrections after the first push.
+`patch_experiment` echoes `updated_fields` + `canonical_values: { key_insight_confidence }` — confirm the enum landed.
 
-The response echoes `composite_key: {roast_id, cupping_date, eval_method, recipe_variant}` - sanity-check the row landed under the intended tuple.
+**4.5 Reference-candidate flag** — after identifying the leading slot, assess reference quality and patch the leading-slot roast: `patch_roast(roast_id: <leading_slot_roast_id>, is_reference_candidate: true|false)`. This prompt OWNS this flag (it is a cup-quality judgment, set here on cup grounds — not at roast time). `true` when the leading slot is plausibly lot-reference quality; `false` (or leave default) when it is only "best of the set." Do NOT set `roasts.is_reference` — that is `close-lot.md`'s at close-out. Multiple V-sets can each carry a candidate; only one becomes `is_reference` at close-out.
 
-Capture `cupping_id` per slot for cross-reference.
+---
 
-## STAGE 3 - Patch the V_n experiment row with cup deltas + leading slot
+## STAGE 5 - Route decision
 
-**This STAGE writes**: `experiments.delta_from_cup_a/b/c/d`, `experiments.observed_outcome_a/b/c/d` (refine), `experiments.winner`, `experiments.key_insight`, `experiments.key_insight_confidence`, `experiments.what_changes_going_forward`, `experiments.open_questions`, `experiments.additional_notes`. Optionally also: **`roasts.is_reference_candidate = true` on the leading-slot roast** when the cup is reference-quality at the V-set level (see "Mark the leading slot as a reference candidate" below).
+**Writes:** nothing (routing only).
 
-`patch_experiment(experiment_pk, ...)`:
+Choose exactly one path. (Conceptual definitions for all paths: `CONTEXT-roasting.md -> Pre-V_n calibration gate` and `-> Simulated Pourover Gate system`.)
 
-- **`delta_from_cup_a/b/c/d`**: per-slot reconciliation of actual cup vs `updated_cup_prediction_*` (the post-roast prediction). Then **walk the three taste_for_* reference points and note which materialized as expected vs not**:
-  1. Producer notes ballpark — did this slot land in the producer's descriptor zone? Cite specifics.
-  2. Prior V_(n-1) memory — where did this slot land vs the corresponding prior-V-set slot? (e.g. "v3a was cleaner on attack than v2a, confirming the lower-peak hypothesis.")
-  3. Specific adjustment tested — did the lever move the cup as predicted, partly, or not at all?
+### Path A - Ready for close-out
 
-  Worked example: "v3a updated prediction said 'pungent attack, fast fadeout'; actual cup *was* pungent on attack but held expressiveness through cool stage longer than predicted - the hard cliff produced an accidental slow-bake that integrated flavor compounds more thoroughly than expected. **Taste-for reconciliation**: producer notes (lemongrass / ginger / brown sugar) all present and forward — matched. V2A memory (tannin-heavy finish) did NOT recur — improved. Adjustment hypothesis (lower peak → cleaner attack but possibly hollow middle) — attack confirmed clean, middle did NOT hollow, instead integrated more thoroughly than predicted." Both layers of the roast→cup trace become tasteable across slots: roast-delta (already captured in `log-roast.md`) + cup-delta (this field) + taste_for-reconciliation (this field's extension).
-- `observed_outcome_a/b/c/d` (refine): if `log-roast.md` populated these with roast-side observations, **extend** them with the cupping observations rather than overwriting. The same observed_outcome field carries both layers' findings.
-- **`winner`** (post-cupping resolution): the **leading slot** for V_n - which slot won this V-set's comparison. Format strictly as `"V<n><letter> (Batch <Roest#>)"` — for example `"V5C (Batch 189)"`. **Everything past that string goes in `additional_notes`, not in `winner`** — the field is a slot identifier, not a verdict prose blob. Distinct terms:
-  - **Leading slot** = winner of one V-set's comparison. Lives in `experiments.winner`. Changes V-set to V-set.
-  - **Reference roast** = lot-level final designation. Lives in `roast_learnings.best_roast_id`. Set exactly once per lot at close-out.
+Route to `close-lot.md` (skip STAGES 6-7). Signals: the leading slot is a plausible lot-level reference roast; producer-notes ballpark + Chris's expectations are satisfied; diminishing returns (open questions don't point at a better region of the response surface); the leading slot held up at the Simulated Pourover Gate; often (not required) a control experiment already confirmed it.
 
-  Verdict prose ("V5C won because the lower peak resolved the tannin overhang while preserving body") belongs in `additional_notes` or `key_insight`, not appended to `winner`.
-- **`key_insight`**: what V_n taught - Chris's post-hoc framing. 2-4 sentences. Variable → lever / non-factor promotions belong here. ("Peak inlet height is the lever for this lot; post-peak decline rate was tested but produced no clear cup difference - non-factor.")
-- **`key_insight_confidence`**: enum `Low` / `Medium` / `Medium-High` / `High`. The operational ladder (apply consistently across sessions; mirrors Cross-Coffee Insight Layer marker language):
-  - **Low** — interesting hypothesis. Single-V-set observation, not yet replicated. Flag in the log but don't act on it yet.
-  - **Medium** — consistent with 1-2 prior data points (this lot's earlier V-sets, or a closely-similar prior lot's carry-forward). Worth weighting in V_(n+1) design but not promotion-ready.
-  - **Medium-High** — strong evidence within this lot, ready to be a working assumption for the rest of the lot's V-sets and for similar-cultivar carry-forward. Survives "what would change my mind?" prompting.
-  - **High** — ready to promote to a protocol change in the cluster docs (typically routes through STAGE 6 of THIS prompt as an APPEND or REPLACE on a protocol cluster doc). Requires either multi-V-set repetition within this lot OR strong cross-lot corroboration.
+**Pre-declaration discipline (push-back duty).** Declaring `roasts.is_reference = true` is the load-bearing cross-domain workflow-transition gate (`CONTEXT-roasting.md -> Cross-domain workflow-transition gate`). Before confirming Path A, push back if any precondition is missing: (1) multiple V-set iterations done (Path A on V1 is suspect); (2) full Day 7 xBloom cupping done; (3) Simulated Pourover Gate cup-set done. If SPG hasn't run, push back: *"If you really want to declare this a reference roast, I suggest we do a simulated pourover recipe first,"* and re-route to the SPG path below. **One-shot exemption:** this push-back does NOT apply to one-shot lots.
 
-  Used by downstream queries + cluster-doc routing decisions. If you're not sure between two levels, pick the lower one and explain why in `additional_notes`.
-- **`what_changes_going_forward`**: lessons-applied-forward. What changes about V_(n+1) / next bean / general approach. **Field is forward-looking and actionable** — phrase as "next time / V_(n+1) does X". Don't conflate with open questions.
-- **`open_questions`**: what V_n did NOT answer. Separate field so the V_n → V_(n+1) transition is crisp - open questions inform V_(n+1)'s `primary_question`. **Field is interrogative** — phrase as questions ("does peak inlet matter above 244°C on this lot?" / "is the audibility window real or noise?").
-- **`additional_notes`**: free-text catch-all for cross-slot narrative tension that resists categorization - operator-framing prose, cup-vs-structure disconnects, reframe-the-direction observations, verdict-prose for the leading slot when it doesn't fit `key_insight`. **Field is descriptive, not directive** — if a sentence ends with "next time we should…" it belongs in `what_changes_going_forward`; if it ends in "?" it belongs in `open_questions`; if it describes something the leading slot did or didn't do, it belongs here.
-
-  Quick disambiguation rule: forward + actionable → `what_changes_going_forward`. Interrogative → `open_questions`. Everything else cross-slot narrative-shaped → `additional_notes`.
-
-`patch_experiment` echoes `updated_fields: [...]` + `canonical_values: { key_insight_confidence }` so you can confirm enum vocabulary landed cleanly.
-
-### Mark the leading slot as a reference candidate (Schema sprint S2, 2026-05-18)
-
-After the V_n leading slot is identified, **assess reference quality** and patch `roasts.is_reference_candidate` accordingly. Distinct from `experiments.winner` (which is always the V-set leading slot, regardless of quality) and `roasts.is_reference` (lot-level final, set at close-out).
-
-**This prompt owns the flag** (Round 14 / Item 34 / 2026-05-24 convention). The candidate flag is set exclusively here — on cup grounds, after the V_n leading slot is identified — NOT at roast-time in `log-roast.md` STAGE 3 on roast-structure grounds. Round 14 surfaced the ambiguity (Gesha Clouds v3a flagged true at roast-time on closest-to-#172 reasoning; "that was a guess") — roast structure alone can mislead, late-blooming aromatic lots roast cleanly without being cup-reference quality. By definition the flag is a cup-quality judgment; wait for cupping data before setting. See CONTEXT-roasting.md § Reference candidate § Timing convention.
-
-- **Set `is_reference_candidate: true`** when the leading slot reads as a plausible lot reference at close-out — the cup is reference-quality at the V-set level, even if more V-sets are coming.
-- **Set `is_reference_candidate: false`** (or leave default false) when the leading slot is "best of the worst" — Fazenda Um V1B is the canonical case: leading slot by Chris's verdict, framed as "best of the worst, NOT a reference example."
-- The candidate flag does NOT auto-flip to `is_reference` at close-out. `close-lot.md` STAGE 2 (or `one-shot-closeout.md` STAGE 2) makes the promotion explicit via a separate `patch_roast(is_reference: true)` on the lot-level final reference.
-
-`patch_roast(roast_id: <leading_slot_roast_id>, is_reference_candidate: true|false)`. Multiple V-sets on one lot can each have a candidate; only one batch ultimately gets `is_reference=true` at close-out.
-
-## STAGE 4 - Decide: close out, design V_(n+1), or run a pre-V_(n+1) calibration step?
-
-**This STAGE writes**: nothing (routing decision only).
-
-Three paths. **Path C is the less-common "design blocked, hold the lot" routing** — split into two variants: **C-1** (missing peer-roasted reference cup) and **Simulated Pourover Gate** (the renamed-from-Path-C-2 path, locked at Item 7 grill 2026-05-24 — see [CONTEXT-roasting.md § Simulated pourover gate](../../CONTEXT-roasting.md) for the full definition). Both halt V_(n+1) design pending the calibration cup; the difference is which cup needs capturing.
-
-### Path A - Lot ready for close-out
-
-Route to `close-lot.md` next, skip STAGES 5 + 6 of this prompt. The leading slot is the lot-level reference roast candidate AND no control experiment is warranted. Signals:
-
-- Cup matches producer-notes ballpark check + Chris's expectations.
-- Diminishing returns: the leading slot reads close to "as good as this coffee gets" and the open_questions don't suggest a different region of the response surface would be better.
-- Brewing-side confirmation: the leading slot held up at the Simulated Pourover Gate cup (`eval_method: 'Simulated Pourover'`), not just at the xBloom gate. (The optimized-brew dial-in proper happens AFTER the reference call, in `close-lot.md`'s brewing-side flow — the `real_pourover` recipe_variant cup.)
-- Often (but not required): a control experiment V-set (replicate of the leading slot with two slight adjustments) was already run and confirmed.
-
-**Pre-declaration discipline (Path A push-back duty)** — Phase 1 / Item 34 follow-up / 2026-05-24. Declaring `roasts.is_reference = true` is the **load-bearing cross-domain workflow-transition gate** (see [CONTEXT-roasting.md § Reference roast](../../CONTEXT-roasting.md)) — it transitions the lot from roasting-side iteration to brewing-side optimized-brew dial-in. The declaration must be definite, not ambiguous. **Before confirming Path A, push back if any of these pre-conditions are missing:**
-
-1. **Multiple V-set iterations done** (at least V2 or V3) — Path A on V1 is suspect.
-2. **Full Day 7 xBloom cupping done** (`recipe_variant: xbloom_gate` on the candidate batch).
-3. **Simulated Pourover Gate cup-set done** — V_n winner + secondary contender + V_(n-1) winner brewed on the real pourover setup with a non-optimized recipe close to end-state.
-
-If SPG hasn't been done, push back with the standard language: *"If you really want to declare this a reference roast, I suggest we do a simulated pourover recipe first."* Re-route to the Simulated Pourover Gate path (see § Simulated Pourover Gate below) and wait for the SPG cup before confirming Path A. Only after the operator has run SPG, compared the cup-set against a couple of contenders, and still wants the designation does Path A proceed to close-out. See [docs/skills/cupping-specialist/SKILL.md § Pre-declaration discipline (Path A push-back duty)](../skills/cupping-specialist/SKILL.md) for the sub-skill spec. **One-shot exemption**: this push-back does NOT apply to one-shot lots (single roast / single cup read; `one-shot-closeout.md` STAGE 2 sets `is_reference = true` directly).
-
-If routing to close-out (post-push-back-cleared), halt this prompt and tell Chris to run `close-lot.md` next. Report STAGE 5 as "skipped - routing to close-out".
+If routing to close-out (post-push-back-cleared): halt and tell Chris to run `close-lot.md`. Report STAGES 6-7 as "skipped - routing to close-out".
 
 ### Path B - Design V_(n+1)
 
-Continue to STAGE 5. V_(n+1) is warranted when:
+Continue to STAGE 6. Warranted when: open questions remain that V_(n+1) can answer; a lever was identified but its optimum isn't pinned; a new variable is worth probing now the primary lever is understood; or this is V2/V3 still in search space. A V_(n+1) at the same lever with two slight adjustments around the leading slot IS a control experiment — still Path B.
 
-- Open questions remain that V_(n+1) can answer.
-- A clear lever was identified but the optimum within it isn't yet pinned down.
-- A new variable (held constant in V_1…V_n) is worth probing now that the primary lever is understood.
-- Or: this is V_2 / V_3 and you're still in the search space - the adjustment is informed by V_n's cup observations.
+### Path C-1 - Pre-V_(n+1) calibration gate (missing peer-roasted reference cup)
 
-V_(n+1) at the same lever with two slight adjustments around the leading slot **is** a control experiment — that's still Path B (a new V-set), not Path C. Control experiments lock in a candidate reference roast within a V-set frame; Path C halts on missing evidence external to a new V-set.
+Halt V_(n+1) design; state stays **Waiting for next cupping**. Fires when V_n landed in a plausible but uncalibrated zone, Chris lacks a peer-roasted version of the same green, and the seller / a peer roaster has one available (canonical case: Fazenda Um). Distinct from a control experiment (Path B) and from the SPG (needs a NEW brew of already-roasted beans, not an external cup).
 
-### Path C-1 - Pre-V_(n+1) calibration gate: missing peer-roasted reference cup
+Output: report Path C-1 fired + why; list the calibration action ("buy the peer-roasted version, run a Day 7 pourover, paste the transcript into a new `log-cupping.md` session"); state stays Waiting for next cupping; lot re-enters this prompt when the peer cup is captured.
 
-Halt V_(n+1) design. State stays **Waiting for next cupping**. The lot needs an external reference cup before V_(n+1)'s design can be calibrated.
+### Path C-2 - Simulated Pourover Gate
 
-Triggered when V_n's cup landed in a plausible zone but Chris doesn't have a peer-roasted version of the same green to calibrate against, AND the seller / a peer roaster has a roasted version available. Canonical case: Fazenda Um — Untold sells a roasted version, Chris hasn't cupped it yet, V1 produced a reasonable but uncalibrated cup. Without the peer reference, V_(n+1)'s adjustment direction is operator-guesswork; with it, the cup-side delta tells you which direction to move.
+Halt V_(n+1) design; state stays **Waiting for next cupping**. The leading-slot identity (or the reference-roast call) is provisional pending a simulated-pourover cup on the real pourover setup. Full definition + trigger shapes (proactive: nearing the reference call, xBloom-vs-end-optimized delta too large to commit; reactive: cup-side discrimination missing or a wide WB->Ground delta raises a roast-quality concern): `CONTEXT-roasting.md -> Simulated Pourover Gate system`.
 
-Distinct from a control experiment (which IS a new V-set replicating the leading slot — that's Path B). Distinct from "design more cuppings on already-roasted V_n beans" — see Simulated Pourover Gate below.
+The SPG **recipe is not designed here** — it is dialed in a dedicated brewing thread running `simulated-pourover.md`. This prompt emits a thin handoff packet and stops. Cup-set logic (V_n winner + secondary contender + optional V_(n-1) winner) decides the finalists.
 
-Output:
-- Report Path C-1 fired and why.
-- List the calibration action Chris needs to take ("buy Untold's roasted Fazenda Um, run a Day 7 pourover, paste the cupping transcript back into a new `log-cupping.md` session referencing the peer-roasted cup").
-- Tell Chris the state stays Waiting for next cupping and the lot will re-enter this prompt when the peer cup is captured.
+Emit the **SIMULATED POUROVER PACKET** for the operator to paste into a fresh `simulated-pourover.md` thread — exactly these lines, no cupping notes / roast data / recipe (the brewing side derives the recipe from the green + lot history):
 
-Linked CONTEXT-roasting.md entry: **Pre-V_n calibration gate**.
+```text
+SIMULATED POUROVER PACKET
+- green_bean_id: <the lot's green_bean_id>
+- lot: <name / lot_id>
+- finalist batches: <finalists, e.g. 191, 192>
+- intent: <one line — what the SPG is meant to decide on this lot>
+```
 
-### Simulated Pourover Gate - Pre-reference-roast decision-support cup (renamed from Path C-2 at Item 7 grill, 2026-05-24)
+State stays Waiting for next cupping; the lot re-enters this prompt when the SPG cup is captured (on re-entry, STAGE 4's `delta_from_cup` / `winner` may need patching). When the SPG cup returns, push it per finalist with `eval_method: 'Simulated Pourover'` (one row per finalist `roast_id`); recipe metadata goes in `additional_notes` free-text. See `CONTEXT-roasting.md -> eval_method: 'Simulated Pourover'`.
 
-Halt V_(n+1) design. State stays **Waiting for next cupping**. The V_n leading slot's identity (or the lot's reference-roast call) is provisional pending a simulated-pourover cup brewed on the real pourover setup. See [CONTEXT-roasting.md § Simulated pourover gate](../../CONTEXT-roasting.md) for the full vocabulary.
+---
 
-**Two trigger shapes** — proactive and reactive — both route here:
+## STAGE 6 - Design V_(n+1) (Path B only)
 
-**Proactive (most common, lived end-of-V-set workflow).** Chris is nearing the reference-roast call — typically V3 or later, roasting-side optimization is hitting diminishing returns, and one of the current V-set's slots is plausibly the lot reference. The xBloom Day-7 gate gave the consistent cross-slot read, but the xBloom-vs-end-optimized-pourover delta is large enough that the gate alone isn't decisive for committing the reference. A simulated pourover step pushes the read closer to the end-state cup before the call. Triggers:
+**Writes:** `experiments` row (V_{n+1}); `roast_recipes` rows × N; Roest tablet profiles × N (via `push_roast_profile`); `roast_recipes` patches linking the Roest profile IDs back.
 
-- V_n's xBloom cup landed and at least one slot is plausibly the lot reference (Path A territory).
-- Diminishing-returns signal: the V_(n+1) design space feels like fine-tuning, not direction-finding.
-- Chris's signal in-thread: "I think these two are worth taking to the simulated pourover step" / "if either one of these go well, I might call one of these as the end reference roast."
+Read before designing:
 
-**Reactive (less common, original Path C-2 shape).** The V_n leading-slot identity is provisional because cup-side discrimination is missing — V_n was cupped at one recipe_variant only AND prior V-sets showed recipe_variant inversions. A separate **roast-quality concern** can also motivate an SPG read in combination with cup-side ambiguity — most commonly when the leading slot's WB-to-ground Agtron delta is wide enough to signal internal-development risk (per [`docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md` § WB-to-Ground Agtron Delta as Development Signal](../skills/roest-knowledge/cluster/machine/counterflow-observations.md), wide delta = surface ahead of underdeveloped core), but wide delta on its own is **primarily a roast-quality signal, not a routing-decisive SPG trigger** — it argues "the xBloom gate read may be distorted by underdevelopment, worth validating at the real pourover." Canonical lived case: CGLE Sudan Rume Natural V5 (2026-05-21) — V5A's delta 15.7 vs prior reference 169's delta 3.1 raised the roast-quality concern; the simulated pourover discriminated V5A 187 vs reference 169 at a confirmed April Glass recipe. Higuito V3 (cupped at `xbloom_gate` only, V2 showed gate-vs-pourover inversion) is the cup-side-only variant.
+- `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md` — Standard Inlet Curve Template + Fan Strategy.
+- `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` — lessons from prior similar lots.
+- `docs://skills/roasting-historian/cluster/active-lots/<lot-slug>.md` — the current lot's working hypothesis + per-lot protocol notes (resolve `<lot-slug>` via `list_docs` if uncertain).
+- **Peer-variant handoff:** if the green row has `peer_reference_brew_id` set, read `docs://skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md` and fold the roast-design takeaway + discount list into the design, weighted by the handoff's information-value rating. Skip if no `peer_reference_brew_id`.
 
-Distinct from Path C-1 (which needs an EXTERNAL peer-roasted reference cup); Simulated Pourover Gate needs a NEW BREW of the candidate slots on the already-roasted V_n beans (no machine time required).
+**Operator-fixed constants:** do NOT vary charge / hopper pre-load / BBP / warm-up / preheat air — these are operator-discipline constants, never varied. Vary only recipe-level levers (peak inlet / temperature curve / fan curve / drum speed / drop temp / end condition / dev-time-relative-to-FC). Full list + empirical rationale: `CONTEXT-roasting.md -> Operator-fixed constants` (+ `docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md`). Proposing a charge/hopper/BBP change is structurally invalid.
 
-**Cup set** — typical cup-set for the simulated-pourover step:
-- V_n winner (the leading slot from this V-set).
-- V_n secondary contender (the next-best slot in the same V-set, if there's a credible second).
-- V_(n-1) winner (the previous V-set's winner) when it's worth carrying as a control baseline.
+**Adjustment scale:** calibrate the V_n -> V_(n+1) spread by V number + what V_n's cup taught, per `CONTEXT-roasting.md -> Adjustment` (V1->V2 wide/multi-variable; V2->V3 narrow/single-variable or control experiment; V3->V4+ probe a new variable or lock the reference). Override and widen if `open_questions` demand re-bracketing.
 
-The simulated-pourover recipe is "much closer in scope to what the end optimized recipe will be" — close enough to give the roast a real shot at expressing the end-state cup, but explicitly NOT the optimized recipe (no full brewing iteration loop here; that happens AFTER reference roast is called, as a separate brewing-side dial-in flow).
+**V_(n+1) experiment frame** — draft: `context` (cites V_n's resolved finding + the chosen open_question), `primary_question`, `control_baseline` (V_n's leading slot with its peak inlet / drop temp / profile name), `shared_constants` (recover from V_n's recipes), `levels_tested` (the values across a/b/c), `expected_outcomes` (predicted roast-layer AND cup-layer per slot — both required). Plus `failure_boundary` and `variable_changed`.
 
-**The simulated-pourover RECIPE is no longer designed here** (Cluster A, 2026-06-01). The recipe is dialed in a dedicated **brewing thread** running `simulated-pourover.md`, so this prompt's job at the SPG gate is to emit a thin **handoff packet** and stop — NOT to spec the recipe. This keeps the recipe design where the brewing context lives and keeps the roasting thread thin (only `green_bean_id` + finalists + intent cross the boundary; the brewing side reads the green + ground-Agtron itself from the shared DB). See [`docs/prompts/simulated-pourover.md`](simulated-pourover.md) for the brewing-side contract + CONTEXT-shared.md § Brewing-to-roasting handoff brief.
+**Write — three calls, do all three:**
 
-Output:
-- Report Simulated Pourover Gate fired and why (proactive: nearing reference; reactive: cite the inversion evidence or delta anomaly).
-- Emit the thin **SIMULATED POUROVER PACKET** for the operator to paste into a fresh `simulated-pourover.md` brewing thread. Exactly these lines — no cupping notes, no roast data, no recipe (those stay here / the brewing side derives the recipe from the green + lot history):
-  ```
-  SIMULATED POUROVER PACKET
-  - green_bean_id: <the lot's green_bean_id>
-  - lot: <name / lot_id>
-  - finalist batches: <the cup-set's finalists, e.g. 191, 192>
-  - intent: <one line — what the SPG is meant to decide on this lot>
-  ```
-  The cup-set logic above (V_n winner + secondary + optional V_(n-1) winner) decides which finalists go in the packet; the recipe-shape spec is deleted from this prompt because the brewing side owns it now.
-- Tell Chris the state stays Waiting for next cupping and the lot will re-enter this prompt when the simulated-pourover cup is captured. On re-entry, STAGE 3's `delta_from_cup` and `winner` may need patching once the simulated-pourover cup lands.
+(a) `push_experiment`: `green_bean_id`; `experiment_id` = `<LOT-PREFIX>-V<n+1>`; omit `batch_ids` at design time (NULL; `log-roast.md` populates — do not pass `"null"`); frame fields from above.
 
-**Schema note — SPG cup recording (Cluster A, 2026-06-01).** When the simulated-pourover cup comes back, push it as a `cuppings` row per finalist with **`eval_method: 'Simulated Pourover'`** (one row per finalist `roast_id`). `eval_method` is an unconstrained free-text column, so this value stores today — no migration needed; the empirical free-text finding (Cluster A) unblocked using the target value ahead of POD-1, which later just formalizes / canonicalizes the label. Using the distinct `eval_method` value (rather than the old interim `eval_method: 'Pourover'` + `recipe_variant: 'real_pourover'`) **disambiguates the SPG cup from the optimized-brew cup** — the optimized brew keeps `eval_method: 'Pourover'` + `recipe_variant: 'real_pourover'`, so the two no longer collide on the same `recipe_variant`. Recipe metadata for the simulated pourover (brewer / filter / dose / grinder / grind_setting / temp) goes in `additional_notes` free-text. See [`docs/skills/cupping-specialist/cluster/pod-1-routing.md`](../skills/cupping-specialist/cluster/pod-1-routing.md) § Schema scoping for the POD-1 formalization that remains future.
+(b) `push_roast_recipe` × N: `green_bean_id`, `experiment_id` (UUID from the `push_experiment` response), `batch_slot` (`v<n+1>a/b/c`), `recipe_name`, optional `parent_recipe_id` (set to V_n's recipe_id when the slot is informed by it — including a shifted spread anchored on it — to keep lineage queryable); `rationale` (per-batch hypothesis); curves `temperature_bezier` / `fan_bezier` / `rpm_bezier` (jsonb — `power_bezier` MUST be null on INLET_TEMP profiles); `end_condition_type` + `end_condition_target`, `charge_temp`, `hopper_load_temp`, `preheat_temperature_c`; design-time predictions `predicted_fc_temp` / `predicted_fc_time` / `predicted_total_time` / `predicted_maillard_pct` / `predicted_agtron_wb` / `predicted_cup` (frozen at creation); drop rules `drop_rule_if_fast` / `drop_rule_if_slow`.
 
-## STAGE 5 - Design V_(n+1) (Path B only)
+(c) `push_roast_profile` × N: same beziers, writes to the Roest tablet only, `enable_share: true`. Returns `profile_id` + `share_url`. After it returns, `patch_roast_recipe` to link `roest_profile_id` + `roest_share_url` + `roest_profile_name` + `pushed_to_roest_at` on the matching recipe row.
 
-**This STAGE writes**: `experiments` row (V_{n+1}), `roast_recipes` rows × N, Roest tablet profiles × N (via `push_roast_profile`), `roast_recipes` patches linking Roest profile IDs back.
+---
 
-Read cluster-migrated sections via `read_doc(uri=...)`:
+## STAGE 7 - Propose cluster-doc update (optional)
 
-- `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md` — Standard Inlet Curve Template + Fan Strategy (migrated from ROASTING.md in Wave 3 PR 1).
-- `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` — relevant lessons from prior similar lots (migrated in Wave 2 PR 3).
+**Writes:** one multi-citation `doc_proposals` row, OR nothing if skipped.
 
-Read the lot's per-lot working hypothesis in the Roasting Historian cluster (Active Lots migrated to one file per lot in Wave 2 PR 3 / 2026-05-26):
+Post-cupping is the natural moment for cluster-doc updates — cup signal is the strongest evidence. Route by the SHAPE of the insight:
 
-- `docs://skills/roasting-historian/cluster/active-lots/<lot-slug>.md` for the current lot's working hypothesis + per-lot protocol notes. Resolve `<lot-slug>` via `list_docs` against `skills/roasting-historian/cluster/active-lots/` if uncertain.
+- **Lot-state change** (new working hypothesis going into V_(n+1), narrowing band) -> per-lot file `skills/roasting-historian/cluster/active-lots/<lot-slug>.md` (REPLACE).
+- **Protocol-level insight** confirmed by this cup -> the matching `skills/roest-knowledge/cluster/...` doc (FC marking / drop-temp / between-batch). REPLACE when contradictory; APPEND when additive.
+- **Cross-coffee pattern** (not protocol-level) -> `skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` (APPEND with a confidence marker matching `key_insight_confidence`).
+- **Per-lot FC ceiling calibration** -> the FC Floor & Ceiling subsection of the same cross-coffee-insights doc (APPEND with marker).
 
-**Peer-variant handoff consult (Cluster A, 2026-06-01).** If this lot has a `peer_reference_brew_id` set on its green_bean row (check via `get_bean_pipeline` / the green row), read its filed handoff at `docs://skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md` and fold the **roast-design takeaway** + **discount list** into the V_(n+1) design, weighted by the handoff's **information-value rating** (High = lean on it; Medium = partial, treat takeaway as hypothesis; Low = mostly a discount list, design fresh). This is the mid-cycle counterpart to `start-lot.md`'s V1 peer pickup: a peer variant linked *between* V-sets (the lived Wush Wush case — peer linked after V1, consumed at V2 design) gets picked up here automatically because the FK is set and the handoff is a `docs://` resource. Skip if no `peer_reference_brew_id`. Consumption reasoning: [`peer-learning-roasting-archivist/SKILL.md` § Peer-variant handoff consumption](../skills/peer-learning-roasting-archivist/SKILL.md).
+Fetch live anchors via `read_doc` (or `read_doc_section`) BEFORE drafting. Submit ONE multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` (the `'roasting.md'` target is deprecated). Citations: `[{section_anchor, op, proposed_text, current_text, target_doc?}]`.
 
-### Operator-fixed constants — DO NOT VARY
+**Skip** and report why when downstream evidence is imminent: SPG fired (leading-slot identity provisional); V_(n+1) is designed to directly test the insight; or `key_insight_confidence` is Low (Low belongs in `additional_notes`, not cluster docs — the CCIL append threshold is Medium minimum). Print `STAGE 7: skipped - <reason>`. Don't fabricate a proposal to fill the stage. AVOID editing close-out artifacts (Recently Closed Lots, Reference Brew Recipes) — those are `close-lot.md`'s.
 
-Before drafting any V_(n+1) adjustment, lock these as fixed. **Audio-ratified at the Item 25 / Group 5 grill, 2026-05-24** — these are operator-discipline constants, never varied across V-sets, beans, or roast types. Chris's muscle memory governs the session; he does NOT consult recipe-level fields for any of these.
+---
 
-- **Charge temp: 117°C** — never varied. Drum coasts naturally from the 120°C BBP endpoint to 117°C while beans are pre-warming in the hopper.
-- **Hopper pre-load: 125°C** — never varied. ~60-90s pre-warm window before charge. Pre-loading earlier (e.g. 113-115°C, lower drum than charge target) is NOT an option — empirical V5 Sudan Rume Washed data showed earlier pre-load produces underdevelopment (Batch #134 reference).
-- **10-minute Roest warm-up + dry-roast thermal reset to 140°C** — never varied. The thermal reset standardizes starting conditions across every batch.
-- **BBP parameters** — never varied. Fan 100→60→40→25% taper; air temp 100°C flat; end condition drum 120°C; ~2:00-2:30 runtime.
-- **Preheat air 210°C** — never varied. Effectively irrelevant given the dry-roast reset; do not propose adjusting it as a roasting lever.
+## STAGE 8 - Confirmation output
 
-**If V_n's cup signal points at a thermal-energy or input-energy change**, vary recipe-level levers (peak inlet temp / temperature curve / fan curve during the active roast / drum speed / drop temp / end condition / dev-time-relative-to-FC) — NOT charge / hopper / BBP / warm-up / preheat-air. Proposing "lower charge to 113-115°C" or "vary hopper pre-load" is structurally invalid — the substrate designs AROUND these constants, not against them. See [`docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md` § Operator-fixed constants](../skills/roest-knowledge/cluster/protocols/between-batch-protocol.md) for the empirical rationale + [CONTEXT-roasting.md § Operator-fixed roast constants](../../CONTEXT-roasting.md) for the recipe-schema-vs-lived-practice asymmetry note (recipes carry `charge_temp` / `hopper_load_temp` columns for completeness; lived practice fixes both).
+**Writes:** nothing.
 
-### Adjustment scale rule
+Print a compact confirmation:
 
-The adjustment from V_n → V_(n+1) is scale-dependent. Calibrate the spread based on V_n's V number AND what V_n's cup signal taught:
+- `green_bean_id`, `lot_id`, `v_set`.
+- STAGE 0: backfill summary, or `skipped - fresh-from-rewrite lot`.
+- **V_n close-out:** per cupped slot — `cupping_id`, `composite_key`, `ground_agtron` + WB->Gnd delta, leading-slot one-liner; the `experiment_pk` + `updated_fields`; `winner` (`V<n><letter> (Batch <Roest#>)`); `key_insight` + `key_insight_confidence`; reference-candidate patch (`roast_id`, `is_reference_candidate`).
+- **Route:** Path A / Path B / Path C-1 / Path C-2.
+- **If Path B:** `experiment_pk` (V_(n+1)) + `experiment_id`; per slot `recipe_id` / `batch_slot` / `roest_profile_id` / `roest_share_url` / end condition / design prediction; a Roest tablet name table (`| Slot | Profile name | End condition | Roest URL |`).
+- **If Path C-1 / C-2:** the calibration action + re-entry instruction (and, for C-2, the SIMULATED POUROVER PACKET).
+- STAGE 7: `proposal_id`, or `skipped - <reason>`.
+- Lifecycle state confirmation: Path A -> "Resolved-pending. Next: `close-lot.md`." Path B -> "Waiting for next roast. Next: roast V_(n+1), then `log-roast.md`." Path C -> "Waiting for next cupping. Next: <calibration action>, then re-enter `log-cupping.md`."
+- Any missing data / assumptions, rest-days-drift flags applied, skipped cuppings, and fields left NULL for weak transcript evidence.
 
-- **V1 → V2**: typically still wide, often multi-variable. V1 was exploratory; V2 narrows on V1's signal but stays wide-ish when V1's leading slot wasn't unambiguous. Don't force narrow when the response surface still feels under-explored.
-- **V2 → V3**: narrow on V2's leading slot, usually single-variable. 1-2°C peak spread is typical, or replicate V2's leading slot with two slight adjustments (a control experiment).
-- **V3 → V4+**: probe a NEW variable held constant in V_1…V_3 (fan curve through development, drop temp ceiling at fixed peak inlet, charge temperature, hopper pre-load), or run a control experiment to lock in the reference roast.
-
-Override: if V_n's `open_questions` explicitly demand re-bracketing ("we don't know if the window is in this range at all"), widen the spread regardless of V number.
-
-### V_(n+1) experiment frame
-
-Draft six fields:
-
-- `context`: cites V_n's resolved finding + the chosen open_question that V_(n+1) addresses.
-- `primary_question`: what V_(n+1) is asking. Usually frames the chosen open_question + the lever being probed.
-- `control_baseline`: V_n's leading slot, cited with its peak inlet / drop temp / profile name so V_(n+1) has a comparison anchor.
-- `shared_constants`: hopper pre-load 125°C, charge 117°C, preheat air 210°C, fan curve, RPM, drum direction - recover from V_n's recipes via `get_bean_pipeline`. Sanity-check that you're holding the lot's existing protocol constant.
-- `levels_tested`: the values the variable takes across V_(n+1)a / b / c (or just a / b for a 2-slot control experiment).
-- `expected_outcomes`: predicted roast-layer outcomes (FC / total / Agtron) AND predicted cup-layer outcomes per slot. Both layers required.
-
-Plus `failure_boundary` (what "broken" looks like across the slots) and `variable_changed` (the primary axis being probed).
-
-### Write V_(n+1) - three calls pair up, do all three
-
-(a) `push_experiment(payload)`:
-- `green_bean_id` from STAGE 1
-- `experiment_id`: `<LOT-PREFIX>-V<n+1>` (same prefix as V_n, increment V number)
-- `batch_ids`: omit entirely at design time (leave NULL). `log-roast.md` populates when V_(n+1) is roasted. Do NOT pass the string `"null"`.
-- Frame fields from above.
-
-(b) `push_roast_recipe(payload)` × N:
-- `green_bean_id`, `experiment_id` (UUID from `push_experiment`'s `experiment_pk` response), `batch_slot` (`v<n+1>a`, `v<n+1>b`, `v<n+1>c`), `recipe_name`, optional `parent_recipe_id` (when V_(n+1) slot is directly informed by V_n's slot — including a shifted spread anchored on that slot, not only strict replication; set parent to V_n's recipe_id to make the lineage queryable).
-- `rationale`: per-batch Hypothesis prose.
-- Curve definition: `temperature_bezier`, `fan_bezier`, `rpm_bezier` (jsonb). `power_bezier` MUST be null on INLET_TEMP profiles.
-- `end_condition_type` + `end_condition_target`, `charge_temp`, `hopper_load_temp`, `preheat_temperature_c`.
-- Design-time predictions: `predicted_fc_temp`, `predicted_fc_time`, `predicted_total_time`, `predicted_maillard_pct`, `predicted_agtron_wb`, `predicted_cup` (1-2 sentences). These are frozen at recipe-creation time.
-- Drop rules: `drop_rule_if_fast`, `drop_rule_if_slow`.
-
-(c) `push_roast_profile(payload)` × N - same beziers, writes to Roest tablet only. `enable_share: true`. Returns `profile_id` + `share_url`. After it returns, `patch_roast_recipe` to link `roest_profile_id` + `roest_share_url` + `roest_profile_name` + `pushed_to_roest_at` on the matching recipe row.
-
-## STAGE 6 - Optional: propose cluster-doc update
-
-**This STAGE writes**: `doc_proposals` row (one multi-citation proposal), OR nothing if skipped.
-
-Post-cupping is the natural moment for cluster-doc updates - cup signal is the strongest evidence. Route by SHAPE of the insight:
-
-- **Lot-state change** (new working hypothesis going into V_(n+1), narrowing confidence band) → per-lot file at `docs/skills/roasting-historian/cluster/active-lots/<lot-slug>.md` (replace); citation `target_doc: 'skills/roasting-historian/cluster/active-lots/<lot-slug>.md'`.
-- **Protocol-level insight** confirmed by this V_n's cupping ("audibility count is diagnostic-primary on silent-FC lots", "anaerobic naturals tolerate drop ceiling 1°C above the Sudan-Rume-Washed-derived 207°C") → appropriate workflow / protocol cluster doc — FC Marking Protocol at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md`; Drop Temp as the Primary Drop Signal subsection at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal`; Between Batch Protocol at `docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md`. Use citation `target_doc: 'skills/roest-knowledge/cluster/<file>.md'`. REPLACE when contradictory; APPEND when additive.
-- **Cross-coffee pattern** (NOT protocol-level - e.g. "naturals from this farm carry distinctive lemongrass", "84-hour anaerobic produces silent FC") → Roasting Historian's Cross-Coffee Insight Layer at `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` (append with confidence marker matching `key_insight_confidence`); citation `target_doc: 'skills/roasting-historian/cluster/patterns/cross-coffee-insights.md'`.
-- **Per-lot FC ceiling calibration** confirmed by V_n → FC Floor & Ceiling subsection of Cross-Coffee Insight Layer at `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` (append with confidence marker).
-
-Fetch live anchors via `read_doc(uri="docs://skills/<cluster-path>.md")` (or `read_doc_section` against the same URI) BEFORE drafting. Submit as a single multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` matching where each insight routes (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing). Citations: `[{section_anchor, op, proposed_text, current_text, target_doc?}]`.
-
-### When to skip and report why
-
-Defer the proposal to the next round when downstream evidence is imminent and would either confirm or invalidate the insight:
-
-- **Simulated Pourover Gate fired** (simulated-pourover cup pending). The cup-side leading-slot identity or reference-roast call is provisional; doc-changes citing the provisional leading slot would need re-issuing once the simulated-pourover cup lands. Skip and tell Chris the proposal queues for the post-simulated-pourover session.
-- **V_(n+1) is imminent and would directly test the insight**. E.g. "V3 hypothesized peak-inlet-is-the-lever, V4 is designed to probe drop ceiling at fixed peak — V4's cupping will confirm whether peak-inlet-is-the-lever generalizes or is only the V3-zone lever". Skip; the V_(n+1) cupping will either promote the insight to Medium-High or knock it back to Low.
-- **`key_insight_confidence` is Low**. Low-confidence insights belong in `additional_notes` on the experiment row, NOT in cluster docs. The CCIL append threshold is Medium minimum.
-
-In all three cases, print one line: `STAGE 6: skipped - <reason>`. Don't fabricate a proposal just to fill the stage.
-
-AVOID editing mid-iteration: Recently Closed Lots, Reference Brew Recipes by Lot - close-out artifacts owned by `close-lot.md`.
-
-## STAGE 7 - Confirmation output
-
-**This STAGE writes**: nothing (output only).
-
-Print:
-
-- `green_bean_id`
-- STAGE 0 backfill summary (if it ran): "Backfilled <N> recipe rows + <M> experiment-slot fields" OR "STAGE 0: skipped - fresh-from-rewrite lot".
-- **V_n close-out summary**:
-  - For each cupped slot: `cupping_id`, `composite_key`, ground_agtron + WB→Gnd delta, leading-slot determination one-liner
-  - `experiment_pk` (V_n) + `updated_fields: [...]` from patch_experiment
-  - `winner` (leading slot) - phrased `"V<n><letter> (Batch <Roest#>)"`
-  - `key_insight` + `key_insight_confidence`
-- **Routing decision**: Path A (close-out) or Path B (design V_(n+1)) or Path C-1 (peer-cup calibration) or Simulated Pourover Gate (pre-reference-roast decision-support cup; renamed from Path C-2 2026-05-24).
-- **If Path B**:
-  - `experiment_pk` (V_(n+1)) + `experiment_id`
-  - For each V_(n+1) slot: `recipe_id`, `batch_slot`, `roest_profile_id`, `roest_share_url`, end condition, design-time prediction summary
-  - Roest tablet name table:
-    ```
-    | Slot | Profile name | End condition | Roest URL |
-    ```
-- **If Path C-1 or Simulated Pourover Gate**: the calibration action Chris needs to take (peer-cup acquisition or simulated-pourover cup respectively), plus the re-entry instruction.
-- `proposal_id` from `propose_doc_changes` (if STAGE 6 ran), or `STAGE 6: skipped - <reason>`.
-- Lifecycle state confirmation:
-  - Path A: "V_n closed. Lot state: **Resolved-pending**. Next step: `close-lot.md`."
-  - Path B: "V_n closed, V_(n+1) designed. Lot state flipped to **Waiting for next roast**. Next step: roast V_(n+1) at the machine, then run `log-roast.md`."
-  - Path C-1 / Simulated Pourover Gate: "V_n cuppings recorded; V_(n+1) design held pending <calibration action>. Lot state stays **Waiting for next cupping**. Next step: <calibration action>, then re-enter `log-cupping.md`."
+---
 
 ## What this prompt does NOT do
 
-- Push roast learnings (`push_roast_learnings`). That's `close-lot.md` - happens once at lot close-out after the lot-level reference roast is declared.
-- Declare a lot-level reference roast (set `roast_learnings.best_roast_id`). That's `close-lot.md`. The V-set-level `experiments.winner` (leading slot) is what this prompt sets.
-- Dial in the optimized brew. That's part of `close-lot.md`'s flow.
-- Archive the Roest inventory row. `close-lot.md` does that at lot close-out.
+- Does not define roasting vocabulary — use `CONTEXT-roasting.md`.
+- Does not declare the lot-level reference roast — `close-lot.md` owns `roasts.is_reference` + `roast_learnings.best_roast_id`. This prompt sets the V-set-level `experiments.winner` (leading slot) + the `is_reference_candidate` flag.
+- Does not push lot-level roast learnings (`push_roast_learnings`) — `close-lot.md`, once at close-out.
+- Does not dial in the optimized brew — the brewing workflow, after reference designation.
+- Does not archive the Roest inventory row — `close-lot.md`.
