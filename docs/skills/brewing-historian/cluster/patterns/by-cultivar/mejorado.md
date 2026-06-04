@@ -4,7 +4,7 @@
 
 **Corpus:** N=3 brews. Typica Mejorado is a sibling of Sidra in the Finca Soledad portfolio.
 
-**Current rollup:** see [cross-coffee-insights.md § By Variety > Typica Mejorado / Sydra](../cross-coffee-insights.md#by-variety) — the variety-family default applies (Clarity-First, moderate extraction, long bloom, uninterrupted pour; savory if over-bloomed or agitation too high; variety signal overrides experimental process flag when targets are bright and citric).
+**Sydra/Sidra-family default** (applies to Mejorado): Clarity-First, moderate extraction, long bloom, uninterrupted pour. Savory if bloom is too long or agitation too high. Variety signal overrides experimental process flag when flavor targets are bright and citric. (Sibling variety: [Sidra](sidra.md).)
 
 **Per-strategy entries:**
 
