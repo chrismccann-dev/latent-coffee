@@ -22,7 +22,7 @@ This is why the entry prompts (full-read, 40 KB cap) are capped tighter than the
 | Tier | Doc(s) | Cap | Approaching (watch) | Loading profile | Current size (2026-06-03) | Status |
 |---|---|---|---|---|---|---|
 | **Root living docs** | CLAUDE.md | 120 KB | 96 KB | full · every Claude Code session | 37.8 KB | ✅ |
-| | PRODUCT.md | 120 KB | 96 KB | consulted, not auto-loaded | 126.1 KB | 🔴 over (Roadmap growth) |
+| | PRODUCT.md | 120 KB | 96 KB | consulted, not auto-loaded | 20.9 KB | ✅ (refactored + split, case 003) |
 | **CONTEXT-\* family** | CONTEXT-roasting.md | 120 KB | 96 KB | **section-read** · claude.ai roasting | 108.2 KB | ✅ (pruned, case 002) |
 | | CONTEXT-brewing.md | 120 KB | 96 KB | section-read · claude.ai brewing | 60.1 KB | ✅ |
 | | CONTEXT-shared.md | 120 KB | 96 KB | section-read · both | 52.3 KB | ✅ |
@@ -48,10 +48,10 @@ The 40 KB prompt cap is deliberately tighter than the file sizes suggest. A 49 K
 ## Live queue (2026-06-03)
 
 1. **docs/prompts/log-cupping.md (49.2 / 40 KB)** — 🔴 over the prompt cap. Live fire (next manual pruning exercise).
-2. **PRODUCT.md (127.3 / 120 KB)** — 🔴 over (crossed via Roadmap growth; drifted 114.0→126.1→127.3 in 3 days). **Queued as pruning case 003**, framed to land the missing `archive` shape (closed/shipped roadmap sections → archival surface) + consolidate the living roadmap. Kickoff: [docs/sprints/product-md-prune-kickoff-2026-06-03.md](../sprints/product-md-prune-kickoff-2026-06-03.md).
-3. **docs/prompts/one-shot.md (33.8 / 40 KB)** — ⚠️ approaching; watch.
+2. **docs/prompts/one-shot.md (33.8 / 40 KB)** — ⚠️ approaching; watch.
 
 Cleared:
+- ~~PRODUCT.md~~ — **refactored + split 2026-06-03** (127.3 → 20.9 KB), [pruning case 003](../sprints/pruning-cases/003-product-md.md). Operator-led prototype + Claude Code synthesis: roadmap → `docs/product/roadmap.md`, issues → `docs/product/issues.md`, Lessons Learned → `docs/sprints/lessons-learned-archive.md`, closed roadmap detail ceased-duplication (already in shipped.md). **First standalone `archive` worked example — all five shapes now covered.**
 - ~~CONTEXT-roasting.md~~ — **pruned 2026-06-03** (115.8 → 108.2 KB), [pruning case 002](../sprints/pruning-cases/002-context-roasting.md). Operator-led reorganization (cluster regrouping + agent navigation scaffolding) + Claude Code prune (`consolidate` + `delete` + one `extract` of FC operational detail to fc-marking.md). First worked examples of `consolidate` and `delete`.
 
 ## Maintenance
