@@ -23,7 +23,7 @@ This is why the entry prompts (full-read, 40 KB cap) are capped tighter than the
 |---|---|---|---|---|---|---|
 | **Root living docs** | CLAUDE.md | 120 KB | 96 KB | full · every Claude Code session | 37.8 KB | ✅ |
 | | PRODUCT.md | 120 KB | 96 KB | consulted, not auto-loaded | 114.0 KB | ⚠️ approaching |
-| **CONTEXT-\* family** | CONTEXT-roasting.md | 120 KB | 96 KB | **section-read** · claude.ai roasting | **115.8 KB** | 🔴 live fire (96%) |
+| **CONTEXT-\* family** | CONTEXT-roasting.md | 120 KB | 96 KB | **section-read** · claude.ai roasting | 108.2 KB | ✅ (pruned, case 002) |
 | | CONTEXT-brewing.md | 120 KB | 96 KB | section-read · claude.ai brewing | 60.1 KB | ✅ |
 | | CONTEXT-shared.md | 120 KB | 96 KB | section-read · both | 52.3 KB | ✅ |
 | **claude.ai entry prompts** | docs/prompts/*.md | **40 KB** | 32 KB | **full-read** · claude.ai session start | log-cupping **49.2 KB** | 🔴 over |
@@ -47,10 +47,12 @@ The 40 KB prompt cap is deliberately tighter than the file sizes suggest. A 49 K
 
 ## Live queue (2026-06-03)
 
-1. **CONTEXT-roasting.md (115.8 / 120 KB, 96%)** — 🔴 the live fire. Queued as the next manual pruning exercise; kickoff at [docs/sprints/context-roasting-prune-kickoff-2026-06-03.md](../sprints/context-roasting-prune-kickoff-2026-06-03.md). Living-glossary shape → deliberately hunt `consolidate`/`delete` (the shapes we have no worked example of yet), not reflex-`extract`.
-2. **docs/prompts/log-cupping.md (49.2 / 40 KB)** — 🔴 over the new prompt cap. Queued behind CONTEXT-roasting.
-3. **PRODUCT.md (114.0 / 120 KB)** — ⚠️ approaching; watch.
-4. **docs/prompts/one-shot.md (33.8 / 40 KB)** — ⚠️ approaching; watch.
+1. **docs/prompts/log-cupping.md (49.2 / 40 KB)** — 🔴 over the prompt cap. Now the live fire (next manual pruning exercise).
+2. **PRODUCT.md (114.0 / 120 KB)** — ⚠️ approaching; watch.
+3. **docs/prompts/one-shot.md (33.8 / 40 KB)** — ⚠️ approaching; watch.
+
+Cleared:
+- ~~CONTEXT-roasting.md~~ — **pruned 2026-06-03** (115.8 → 108.2 KB), [pruning case 002](../sprints/pruning-cases/002-context-roasting.md). Operator-led reorganization (cluster regrouping + agent navigation scaffolding) + Claude Code prune (`consolidate` + `delete` + one `extract` of FC operational detail to fc-marking.md). First worked examples of `consolidate` and `delete`.
 
 ## Maintenance
 
