@@ -22,7 +22,7 @@ This is why the entry prompts (full-read, 40 KB cap) are capped tighter than the
 | Tier | Doc(s) | Cap | Approaching (watch) | Loading profile | Current size (2026-06-03) | Status |
 |---|---|---|---|---|---|---|
 | **Root living docs** | CLAUDE.md | 120 KB | 96 KB | full · every Claude Code session | 37.8 KB | ✅ |
-| | PRODUCT.md | 120 KB | 96 KB | consulted, not auto-loaded | 114.0 KB | ⚠️ approaching |
+| | PRODUCT.md | 120 KB | 96 KB | consulted, not auto-loaded | 126.1 KB | 🔴 over (Roadmap growth) |
 | **CONTEXT-\* family** | CONTEXT-roasting.md | 120 KB | 96 KB | **section-read** · claude.ai roasting | 108.2 KB | ✅ (pruned, case 002) |
 | | CONTEXT-brewing.md | 120 KB | 96 KB | section-read · claude.ai brewing | 60.1 KB | ✅ |
 | | CONTEXT-shared.md | 120 KB | 96 KB | section-read · both | 52.3 KB | ✅ |
@@ -47,8 +47,8 @@ The 40 KB prompt cap is deliberately tighter than the file sizes suggest. A 49 K
 
 ## Live queue (2026-06-03)
 
-1. **docs/prompts/log-cupping.md (49.2 / 40 KB)** — 🔴 over the prompt cap. Now the live fire (next manual pruning exercise).
-2. **PRODUCT.md (114.0 / 120 KB)** — ⚠️ approaching; watch.
+1. **docs/prompts/log-cupping.md (49.2 / 40 KB)** — 🔴 over the prompt cap. Live fire (next manual pruning exercise).
+2. **PRODUCT.md (126.1 / 120 KB)** — 🔴 over (crossed via Roadmap growth; the "114.0 KB" measured 2026-06-03 was already stale). The Roadmap is the growth driver — likely a `## Recently shipped → shipped.md` extract + Longer-Term/Future-Directions consolidate. Queue as a pruning exercise alongside log-cupping.
 3. **docs/prompts/one-shot.md (33.8 / 40 KB)** — ⚠️ approaching; watch.
 
 Cleared:
