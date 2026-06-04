@@ -24,7 +24,7 @@ When the machine confirms a two-snap event, it renders a **band** on the graph s
 
 **Recipe-construction implication:** dev-time-anchored recipes (where drop fires N seconds after FC) depend on a reliable FC mark to count dev from. On `did_not_fire` lots, the dev-time end condition produces an unanchored count and the drop fires at an arbitrary time. Drop-at-bean-temp recipes (Latent's current default per [counterflow-observations.md § Drop Temp as the Primary Drop Signal](../machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal)) are robust to FC-detection failures because the drop trigger is independent of the FC mark — the bean-temp end condition fires whether or not FC was detected.
 
-**Roest UI behavior on no-FC batches:** when neither the machine auto-detect nor the operator marks FC, the Roest log UI displays the FC-related fields as N/A — First crack time: N/A / N/A, Dev time: N/A — and the phase breakdown bar at the bottom of the graph shows only **drying + Maillard** segments summing to 100%, with no development segment (lived example: Red Plum v2a batch #196, 2026-05-23, 02:05 drying 41.7% + 02:55 Maillard 58.3% + no dev). The Roest machine's own UI behavior is the model the Latent data layer mirrors — the `did_not_fire` enum value + triple-null co-rule on `fc_start` / `fc_temp` / `dev_time_s` (enforced via [migration 068](../../../../../supabase/migrations/068_did_not_fire_null_co_rule.sql) DB CHECK constraint `roasts_did_not_fire_nulls_check`) keeps the DB read in lockstep with what the Roest machine itself recorded. The Maillard %-N/A prose convention on did_not_fire batches (see [CONTEXT-roasting.md § Maillard % § Computation rule on `did_not_fire` batches](../../../../../CONTEXT-roasting.md)) mirrors the same — the Roest UI shows no dev % on these batches because there is no dev phase to attribute time to.
+**Roest UI behavior on no-FC batches:** when neither the machine auto-detect nor the operator marks FC, the Roest log UI displays the FC-related fields as N/A — First crack time: N/A / N/A, Dev time: N/A — and the phase breakdown bar at the bottom of the graph shows only **drying + Maillard** segments summing to 100%, with no development segment (lived example: Red Plum v2a batch #196, 2026-05-23, 02:05 drying 41.7% + 02:55 Maillard 58.3% + no dev). The Roest machine's own UI behavior is the model the Latent data layer mirrors — the `did_not_fire` enum value + triple-null co-rule on `fc_start` / `fc_temp` / `dev_time_s` (enforced via [migration 068](../../../../../supabase/migrations/068_did_not_fire_null_co_rule.sql) DB CHECK constraint `roasts_did_not_fire_nulls_check`) keeps the DB read in lockstep with what the Roest machine itself recorded. The Maillard %-N/A prose convention on did_not_fire batches (see [CONTEXT-roasting.md § Maillard %](../../../../../CONTEXT-roasting.md) and the protocol stack below) mirrors the same — the Roest UI shows no dev % on these batches because there is no dev phase to attribute time to.
 
 ---
 
@@ -47,4 +47,37 @@ Record FC method in the Roast log (manual / auto / manual-no-audio) on every bat
 
 ## Related fields
 
-- `roasts.fc_audibility` (Sprint 11, migration 061; 5th value `did_not_fire` added Group 3 / Item 31 / migration 066 / 2026-05-24) — 5-value enum (audible / subtle / silent / ambiguous / did_not_fire). Four of five values (subtle / silent / ambiguous / did_not_fire) trigger the same downstream protocol (bean-temp end condition + drop-ceiling-primary + Agtron as proxies); the distinction matters for cause attribution and for predicting audibility on future similar lots. See [CONTEXT-roasting.md § FC audibility state](../../../../../CONTEXT-roasting.md) for the full 5-value semantics + disambiguation rule + protocol-stack notes.
+- `roasts.fc_audibility` (migration 061; 5th value `did_not_fire` added migration 066) — 5-value enum (audible / subtle / silent / ambiguous / did_not_fire). Four of five values (subtle / silent / ambiguous / did_not_fire) trigger the same downstream protocol (bean-temp end condition + drop-ceiling-primary + Agtron as proxies); the distinction matters for cause attribution and for predicting audibility on future similar lots. See [CONTEXT-roasting.md § FC audibility state](../../../../../CONTEXT-roasting.md) for the conceptual 5-value semantics + disambiguation rule; the protocol stack, coverage map, and audibility-window hypothesis are below.
+- Schema: `roasts.fc_audibility` text CHECK enum (`audible | subtle | silent | ambiguous | did_not_fire`), added migration 061; 5th value `did_not_fire` added migration 066. New writes via `push_roast` / `patch_roast`; historical roasts left NULL (too sparse to backfill reliably). Rendered on `/green/[id]` ResolvedView inside `<PerRoastReflections>` (per-roast drill-down, not a per-row column on RoastLogTable).
+
+---
+
+## Protocol stack when FC is not audible or did not fire
+
+When `fc_audibility` is `subtle`, `silent`, `ambiguous`, or `did_not_fire`, the same downstream protocol response fires (the conceptual semantics + disambiguation rule live in [CONTEXT-roasting.md § FC audibility state](../../../../../CONTEXT-roasting.md)):
+
+1. **End condition: `dev_time` → `bean_temp`** — the single biggest change. Dev-time end conditions assume an FC mark exists to count from; on not-audible lots that mark is unreliable.
+2. **Drop ceiling becomes more important** — the primary mechanism preventing overdevelopment.
+3. **Manual FC mark at 208°C** as a record-keeping fallback (a downstream timestamp, NOT physical-event detection).
+4. **WB→Gnd Agtron delta + Agtron WB** become the primary development proxies.
+5. **Maillard % tolerance widens** (40-44% target → ~48% before flagging, because the Maillard % calculation carries upstream FC-mark error). On `did_not_fire` batches do not compute Maillard % at all — record "Maillard % N/A (FC did not fire)" (see [CONTEXT-roasting.md § Maillard %](../../../../../CONTEXT-roasting.md)).
+6. **Audibility tracked per-batch** as the audibility-state value (not just yes/no).
+7. **Peak inlet hedging** when audibility is structurally critical — the audibility-window hypothesis (below) suggests moderate peak inlet preserves audibility better than very high peak inlet on heavy-ferment lots.
+8. **Anchor confidence drops one level** when silent FC is expected on a new lot — the audibility pattern on the new lot may not match the anchor's.
+
+## Coverage map by lot family
+
+From active-lot data:
+
+- **Heavy fermentation** (Mandela XO) — confirmed silent.
+- **Anaerobic naturals** (Sudan Rume Natural) — subtle / silent / ambiguous mix, unreliable.
+- **Heavy-anaerobic Gesha** (Gesha Clouds V2) — non-monotonic across peak inlet (the "audibility window" pattern: audible at moderate peak, silent at high peak).
+- **Anaerobic dry** (Higuito) — silent.
+- **Carbonic maceration** (Cofradia Sidra) — hypothesized silent from XO anchoring.
+- **Spice co-ferment** (Ginger Castillo) — hypothesized silent.
+- **Honey-processed** — retains audible FC (mucilage is thermal insulation, not structural cell-wall modification).
+- **Washed** — almost never goes silent.
+
+## Audibility-window hypothesis
+
+(Gesha Clouds V2) Silent-FC is at least two-causal: (i) cellulose modification sets the threshold for whether audibility is achievable at all; (ii) the energy curve modulates whether the achievable audibility actually fires. Heavy ferment + high peak inlet → often silent; heavy ferment + moderate peak inlet → sometimes audible.

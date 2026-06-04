@@ -30,11 +30,13 @@ Carried from ADR-0013 / grilling-queue, now treated as the coverage checklist:
 
 | Shape | What it does | Worked example? |
 |---|---|---|
-| **extract** | move a block verbatim to a sub-doc + leave a pointer | ✅ ×4 |
+| **extract** | move a block verbatim to a sub-doc + leave a pointer | ✅ ×4 (+ FC operational detail → fc-marking.md, [case 002](../sprints/pruning-cases/002-context-roasting.md)) |
 | **split** | divide one doc into multiple zone/topic docs | ✅ (CONTEXT zone split) — often co-occurs with extract |
-| **consolidate** | merge multiple sections into something more concise (synthesis, not move) | ❌ none yet |
-| **archive** | move stale-but-historical content to an archival surface (or redirect stub) | ◻️ partial (redirect stubs) |
-| **delete** | true removal of content that exists nowhere else | ❌ none yet — **stays flag-only** |
+| **consolidate** | merge multiple sections into something more concise (synthesis, not move) | ✅ first example: [case 002](../sprints/pruning-cases/002-context-roasting.md) (operator cluster-regroup + definition-tightening + concept relocation) |
+| **archive** | move stale-but-historical content to an archival surface (or redirect stub) | ◻️ partial (redirect stubs) — **only shape still without a standalone worked example** |
+| **delete** | true removal of content that exists nowhere else | ✅ first example: [case 002](../sprints/pruning-cases/002-context-roasting.md) — two operator-authorized sub-categories (provenance shrapnel + deferred-future TODOs). Concept-bearing delete **stays flag-only** |
+
+**Status update (2026-06-03, after case 002):** `consolidate` and `delete` now both have worked examples — **only `archive`-as-standalone remains** without one (redirect stubs are the partial precedent). The deferral gate ("lock the mechanism once all five shapes are worked through") is one shape away. Two systematization inputs case 002 surfaced: (1) `delete` splits into a low-risk class (provenance + deferred-future TODOs — git-recoverable, zero downstream consumers, candidate for the *first autonomous-delete rule*) vs. a concept-bearing class (must stay flag-only); (2) **always run a concept-set diff after a structural reorg** — case 002's operator reorg silently dropped a concept (Pre-V_n calibration gate) that a prompt cross-referenced.
 
 ## The protocol (what we do now and going forward)
 
