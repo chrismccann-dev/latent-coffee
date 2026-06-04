@@ -58,6 +58,8 @@ Roasting-only restructure mirroring the Research Coordinator / Research Assistan
 
 **Likely scope:** own ADR · CONTEXT-roasting grill · three packet/brief templates · lifecycle-state model updates for brew-side handoff waits · MCP context-efficiency prerequisites (`read_canonical(axis, name)` + `get_bean_pipeline(since:)` — both in [issues.md](issues.md)).
 
+**Surfaced by the log-cupping prune (case 006, 2026-06-04):** `log-cupping.md` currently does too much in one prompt — beyond recording the cupping it also (a) designs V_(n+1) inline (STAGE 6: `push_experiment` + `push_roast_recipe` × N + `push_roast_profile` × N) and (b) proposes cluster-doc changes inline (STAGE 7). Both arguably belong in a dedicated roast-design skill + a docs workflow, leaving the cupping prompt to record-the-cup-and-emit-a-handoff-packet. **Deliberately NOT changed in the prune** (it would alter how the live cupping cycle works, and the right boundary depends on the whole roast flow, not just the cupping side). Decide the boundary here, against the full Coordinator/Assistant design — the cupping prompt's prototype packet-handoff shape (`Next Roast Design Packet` / `Doc Maintenance Packet`) is the candidate target. See [pruning case 006](../sprints/pruning-cases/006-log-cupping.md).
+
 ### Workflow rule that bounds the queue
 
 Per `memory/user_workflow.md`, each bean uploads to the app as a single bundle when its full cycle resolves. Mid-iteration beans not yet in the DB are **not** a backlog — they land event-driven. **Do not propose a "backfill the missing beans" sprint.**
