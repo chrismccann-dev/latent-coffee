@@ -118,7 +118,7 @@ The full Tool list (with input schemas) is the source of truth — see `lib/mcp/
 
 **Why doc + canonical reads are Tools, not just Resources:** SYNC_V2's original design assumed `docs://` and `canonicals://` Resources would be model-callable from claude.ai. Sprint 2.4 dog-food (2026-04-29) surfaced that claude.ai's MCP client surfaces Tools as the on-demand model surface; Resources are catalog/context but not reliably reachable as "fetch X now" by the model. Without Tool-shaped reads, `propose_doc_changes` citations couldn't be drafted against verbatim live-doc text and `push_brew` callers had to read full taxonomy markdown (133 anchors for producers!) to validate single canonical names. The introspection Tools close that gap. Resources stay registered for clients that DO surface them.
 
-For full per-Tool input schemas, see `lib/mcp/*.ts`. Each Tool's `description` field is what claude.ai's `tool_search` ranks against; an audit pass on Tool descriptions for clarity + searchability is queued as its own sprint (see PRODUCT.md § Longer Term Items § Newly queued).
+For full per-Tool input schemas, see `lib/mcp/*.ts`. Each Tool's `description` field is what claude.ai's `tool_search` ranks against; the audit pass on Tool descriptions for clarity + searchability shipped (MCP Tool descriptions audit, PRs #114/#115).
 
 ---
 

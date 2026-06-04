@@ -84,7 +84,7 @@ In Vercel:
 1. Go to **Settings > Domains**
 2. Add `latentcoffee.com`
 3. Update DNS records as instructed
-4. Verify HTTPS redirect on the apex domain (known bug: apex over HTTP currently — see PRODUCT.md § Bugs and Issues)
+4. Verify HTTPS redirect on the apex domain (known bug: apex over HTTP currently — see [docs/product/issues.md](docs/product/issues.md))
 
 ## Project Structure
 
