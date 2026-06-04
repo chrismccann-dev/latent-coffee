@@ -77,6 +77,5 @@ Confirmation needed: a second Sudan Rume Washed brew (could be SR Hybrid Washed 
 - [Roest Knowledge § Counterflow Observations](../../../../../roest-knowledge/cluster/machine/counterflow-observations.md) — FC window targeting, drop temp discipline, WB-Ground delta as development signal
 - [Roest Knowledge § Fan Strategy](../../../../../roest-knowledge/cluster/protocols/fan-strategy.md) — fan curves for SR Washed (confirmed) and SR Natural (V2 hypothesis)
 - [Peer-Learning Roasting Archivist § Dongzhe](../../../../../peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) — "start from washed profile and let FC timing tell you" principle + SR Natural energy caveat
-- [Brewing Historian § By Variety > Sudan Rume](../../../../../brewing-historian/cluster/patterns/cross-coffee-insights.md#by-variety) — full brewing-side variety entry
-- [Brewing Historian § by-cultivar/sudan-rume.md](../../../../../brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — vehicle-dependency rule + body intuition rule + temperature ceiling
+- [Brewing Historian § by-cultivar/sudan-rume.md](../../../../../brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — full brewing-side variety entry: vehicle-dependency rule + body intuition rule + temperature ceiling
 - [CCIL § decomposition-log.md](../../decomposition-log.md) — Pattern F audit trail (logs every CCIL self-decomposition event)

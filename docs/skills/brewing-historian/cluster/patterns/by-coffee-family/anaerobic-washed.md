@@ -4,7 +4,7 @@
 
 **Corpus:** N=5 brews on Washed base + Anaerobic fermentation modifier.
 
-**Current rollup:** see [cross-coffee-insights.md § By Process > Anaerobic Washed (clean / lighter) and § Anaerobic Washed (heavy / Colombian Huila / Cauca)](../cross-coffee-insights.md#by-process) for the split-by-intensity default-strategy table entries.
+**Current rollup:** the split-by-intensity default strategies are captured below; per-coffee evidence in [by-strategy/full-expression.md](../by-strategy/full-expression.md). The cross-anchor roaster-override rule (clean anaerobic washed + Full-Expression roaster) lives as Active Pattern #3 in [cross-coffee-insights.md](../cross-coffee-insights.md).
 
 **Default strategy:** Split by intensity / origin:
 
@@ -13,6 +13,6 @@
 
 **Per-strategy entries:** [Full Expression](../by-strategy/full-expression.md) (Jeferson Motta + DAK Apricoast).
 
-**Key risk:** Phenolic sharpness if over-extracted; sour if too coarse. For Full Expression roasters, follow the roaster on clean anaerobic washed lots.
+**Key risk:** Phenolic sharpness if over-extracted; sour if too coarse. On heavy lots, sour if under-extracted and the roast/bitter that shows at high temp resolves on cooling. For Full Expression roasters, follow the roaster on clean anaerobic washed lots.
 
 Patterns specific to anaerobic-washed sub-types (Colombian Huila/Cauca vs Ethiopian Arbegona vs other origins) will accrue here as the corpus grows.

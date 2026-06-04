@@ -15,6 +15,7 @@ Slightly larger extraction energy needed due to bean density. **Balanced Intensi
 ## Cooling behavior
 
 - **Picolot Garrido naturals** peak cool (<45°C). Warm window is muted - aroma reads restrained despite the 'Loud Giants' lot framing; full label profile (cherry, blackberry, sour candy on PL#16) only emerges below 50°C. Bitter drying tail at warm-window temps is acceptable on this template if it resolves cleanly by mid-cool - kettle-off natural decline manages it without intervention. Do not evaluate Garrido naturals on Picolot before mid-cool window. (The broader Picolot cooling characteristic is a roaster signature shared with Mokka, not a per-cultivar one.)
+- **Medium-dark natural Pacamara** (Untold Janson Pacamara Natural, Hacienda 491, whole-bean Agtron 47.9) - smokiness/ashiness recedes on cooling and the buried guava/passion-fruit + a lightly-steeped-black-tea quality come forward. Assessable from ~55°C, best near 45°C and below. On a roast this dark the cooling arc is doing damage control (pulling the roast register back) rather than revealing delicate aromatics - a roast-driven cooling benefit, distinct from the process/variety-driven cool-peak behavior above. (Same lot drives the dark-roast override router below + [cross-coffee-insights.md](../cross-coffee-insights.md) Active Pattern #1.)
 
 ## Cross-anchor router: dark-roast override
 

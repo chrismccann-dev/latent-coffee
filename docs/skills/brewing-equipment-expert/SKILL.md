@@ -25,6 +25,8 @@ Author and maintain the brewing equipment registry across drippers / filters / g
 | `docs/taxonomies/grinders.md` | `cluster/grinder-eg1.md` (target — extended from authored content) | Authoritative grinders taxonomy authored by Chris |
 | `docs/taxonomies/sworks.md` | `cluster/sworks.md` (target — extended from authored content) | Authoritative sworks taxonomy authored by Chris |
 
+**Cross-cluster absorptions:** pruning case 007b (2026-06-04) re-homed the brewing-historian Office Brewing Notes into this cluster — `cluster/sworks.md` gained the **valve restriction-timing principles** (mid-pour Dial 5 starves the bed; small-dose Clarity-First inverts the Mokka principle; valve-transition timing as a temperature co-lever), and `cluster/operational-reference.md` gained the **office-tap-amplifies-roast-forward-body** finding in § Location Constraints. The SWORKS Dial 0-7 calibration table was already present (no duplicate added).
+
 **Future cluster additions (operator TODO; Wave 1 doesn't include):**
 - `cluster/filter-flow-rates.md` — Chris's planned project measuring flow rates across all owned filters (Pattern I — operator-initiated resource integration)
 - Per-machine deep knowledge docs as observed quirks accumulate (e.g. `cluster/xbloom-recipes.md`, `cluster/comandante-burr-wear.md`)
