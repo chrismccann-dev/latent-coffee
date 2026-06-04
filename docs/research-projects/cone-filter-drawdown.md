@@ -109,6 +109,8 @@ In-scope for this project (V60-compatible cone filter registry hygiene):
    - `DC4-100W` (Cup 4 Dark Roast) — owned via 4-pack assortment (40-pack variant)
 3. **Assortment-pack handling decision:** one registry row per paper formulation; pack-size is metadata in `primaryUseCase` note. Did NOT create separate `*-40W` rows for the assortment-pack constituents. APC4-40W's `primaryUseCase` updated to flag "Owned in both 40-pack assortment and 100-pack standalone."
 
+> **Superseded by the 2026-06-04 filter reconciliation (PR #373).** The Cup-1 rows referenced above (`APC1-100W` Abaca+ Cup 1, `LC1-100W` T-92 Cup 1) no longer exist as canonicals — Chris brews single cups only, so Cup-1 vs Cup-4 is paper SIZE treated as identical, and all Cup-1 papers were collapsed into their Cup-4 twins (aliased). The owned Abaca+ paper was renamed `CAFEC Abaca Cup 4 (40 pack)` / `APC4-40W` → **`CAFEC Abaca+ Cup 4 Cone Paper Filter`** / `APC4-100W` (its true Abaca+ identity, per Chris's bag photo). The "registry was wrong" observations above were correct at Project #1 time and drove that later fix. See `lib/filter-registry.ts` + `docs/taxonomies/filters-not-owned-archive.md` changelogs.
+
 Out-of-scope for this project (queued for separate follow-up PR):
 
 4. Add `FS-100` (Chemex Bonded Pre-folded Squares) — surfaced by Chris's inventory cleanup
