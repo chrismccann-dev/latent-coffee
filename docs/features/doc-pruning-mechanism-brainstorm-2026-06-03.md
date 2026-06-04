@@ -58,9 +58,12 @@ When a doc trips, run a manual session (operator + Claude Code back-and-forth, t
 
 Claude Code **flags** delete candidates for operator review; it never deletes content that exists nowhere else autonomously. Revisit autonomy on delete only after several delete cases where Chris agreed each time. (Same posture as the autonomy ladder for irreversible writes in ADR-0013.)
 
-### 4. After all 5 shapes have a worked example → decide on systematization
+### 4. After all 5 shapes have a worked example → decide on systematization — DONE (light formalization, 2026-06-03)
 
-Only then do we evaluate whether to build the mechanism (a consolidate-memory-style skill for docs/, a recurring schedule, an arbiter step, or a standing cadence rule). The third+ candidate of each shape tests whichever rule the first two suggested.
+All five shapes covered (cases 001/002/003). Decision: **light formalization, not a full mechanism build** — the interpretive prune resists automation (operator-led restructure was load-bearing in all three cases), so only the trigger + scaffolding were automated; the judgment stays manual. Shipped:
+- **Trigger:** `npm run check:doc-sizes` ([scripts/check-doc-sizes.ts](../../scripts/check-doc-sizes.ts)) + a daily CI cron — computes live sizes vs. the [doc-tripwires.md](../architecture/doc-tripwires.md) caps across both load surfaces, exits non-zero on any Tier-1 over-cap, and regenerates the registry's live-size block (killing the hand-maintained-column drift). First run caught `brewing-equipment-expert` over its ADR-0014 cluster cap.
+- **Pattern J promoted placeholder → defined** in [ADR-0013 Amendment 2026-06-03](../adr/0013-self-improvement-primitives.md): doc-shape→prune-shape routing, the four safety steps, cap-working-surfaces-never-archives, the provenance-class autonomous-delete carve-out.
+- **Deferred:** a heavier `prune-doc` skill (mirror of grill-with-docs) — until the manual kickoff-writing shows friction. The accumulating `pruning-cases/` corpus is its eventual input.
 
 ## Heuristics learned so far
 
