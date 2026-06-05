@@ -4,7 +4,7 @@
 
 ## Latent strategy framing
 
-Full Expression = fine grind + high temperature + high agitation, deployed to develop a heavy co-ferment or natural where the cup wants to be loud. Mechanically symmetric with Extraction Push but differs in agitation discipline (Full Expression is high, Extraction Push uses Melodrip / low agitation). See [BREWING.md § Full Expression](BREWING.md).
+Full Expression = fine grind + high temperature + high agitation, deployed to develop a heavy co-ferment or natural where the cup wants to be loud. Mechanically symmetric with Extraction Push but differs in agitation discipline (Full Expression is high, Extraction Push uses Melodrip / low agitation). See [BREWING.md § Full Expression](docs/skills/coordinator/catalog.md#brewing-domain-principles).
 
 ## WBC anchors observed
 
@@ -19,4 +19,4 @@ Full Expression = fine grind + high temperature + high agitation, deployed to de
 
 - [wbc-reference.md § Full Expression family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
 - [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
-- [BREWING.md § Full Expression](BREWING.md)
+- [BREWING.md § Full Expression](docs/skills/coordinator/catalog.md#brewing-domain-principles)

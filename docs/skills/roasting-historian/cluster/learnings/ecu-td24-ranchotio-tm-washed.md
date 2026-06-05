@@ -15,7 +15,7 @@
 
 - **roast_learnings row:** primary_lever NULL (one-shot calibration; structurally underdeveloped Batch #179 didn't earn a primary lever attribution), cultivar takeaway + general takeaway + starting hypothesis populated. Read via MCP: `read_canonical("roast_learnings", "ECU-TD24-RANCHOTIO-TM-WASHED")`.
 - **Green bean detail page:** `/green/[id]` resolved-view.
-- **Reference roast + brew summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — ECU-TD24-RANCHOTIO-TM-WASHED](ROASTING.md).
+- **Reference roast + brew summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — ECU-TD24-RANCHOTIO-TM-WASHED](docs/roasting/archive.md).
 
 ## Cross-lot framing — what this lot taught the Historian
 

@@ -16,7 +16,7 @@
 - **roast_learnings row:** primary lever (FC temp + drop temp working together), narrow roast window (FC ~201-205°C / drop 205-207°C), 532-character `why_this_roast_won` verdict, full cultivar + general takeaways + starting hypothesis. Read via MCP: `read_canonical("roast_learnings", "CGLE-SRUME-WASHED-2026")`.
 - **Green bean detail page:** `/green/[id]` resolved-view.
 - **Archive prose:** [docs/roasting/archive.md § CGLE-SRUME-WASHED-2026](docs/roasting/archive.md#cgle-srume-washed-2026---sudan-rume-hybrid-washed).
-- **Reference roast + brew summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — CGLE-SRUME-WASHED-2026](ROASTING.md).
+- **Reference roast + brew summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — CGLE-SRUME-WASHED-2026](docs/roasting/archive.md).
 
 ## Cross-lot framing — what this lot taught the Historian
 

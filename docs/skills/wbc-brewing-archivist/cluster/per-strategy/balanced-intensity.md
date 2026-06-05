@@ -4,7 +4,7 @@
 
 ## Latent strategy framing
 
-Balanced Intensity = the default mid-extraction strategy — moderate grind, moderate temperature, moderate agitation, ratio 1:15-1:16. The "no strong opinion" baseline before a coffee asks for a deliberate move. See [BREWING.md § Balanced Intensity](BREWING.md).
+Balanced Intensity = the default mid-extraction strategy — moderate grind, moderate temperature, moderate agitation, ratio 1:15-1:16. The "no strong opinion" baseline before a coffee asks for a deliberate move. See [BREWING.md § Balanced Intensity](docs/skills/coordinator/catalog.md#brewing-domain-principles).
 
 ## WBC anchors observed
 
@@ -19,4 +19,4 @@ Balanced Intensity = the default mid-extraction strategy — moderate grind, mod
 
 - [wbc-reference.md § Balanced Intensity family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
 - [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
-- [BREWING.md § Balanced Intensity](BREWING.md)
+- [BREWING.md § Balanced Intensity](docs/skills/coordinator/catalog.md#brewing-domain-principles)

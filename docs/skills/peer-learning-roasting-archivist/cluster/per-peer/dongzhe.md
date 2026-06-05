@@ -87,7 +87,7 @@ These are the actionable extracts. The full transcript has more texture, but the
 
 Promote moisture + density (paired) to first-order intake signal alongside process and terroir/cultivar. Equal-weight four-input check at the New Coffee Onboarding Protocol Step 3, not a process-first hierarchy.
 
-Status: Cross-referenced from [ROASTING.md § Step 3 - Anchor Profile Selection Logic](ROASTING.md).
+Status: Cross-referenced from [ROASTING.md § Step 3 - Anchor Profile Selection Logic](docs/skills/roasting-assistant/cluster/onboarding-protocol.md).
 
 #### Delta 2 — Momentum into FC > weight loss (CONFIRMATORY + adds proposed logged fields)
 
@@ -117,7 +117,7 @@ Honey coffees can be roasted "as a washed process or as a natural process," depe
 
 Chris has no resolved honey lots in the archive. Currently the only honey lot in inventory is the **Cruz Loma TM Honey one-shot** (Taza Dorada 2024 #15), queued behind the Rancho Tio Emilio Typica Mejorado Washed one-shot. Useful framing to have when that lot comes up for roast.
 
-Status: Cross-referenced from [ROASTING.md § Honey Process - Roast Direction Fork](ROASTING.md). Placeholder framework until the first honey lot resolves; then converted to lot-knowledge.
+Status: Cross-referenced from [ROASTING.md § Honey Process - Roast Direction Fork](docs/skills/roasting-historian/cluster/patterns/by-process/honey.md). Placeholder framework until the first honey lot resolves; then converted to lot-knowledge.
 
 #### Delta 4 — Low-moisture and high-moisture rules (CONFIRMATORY → upgrades confidence)
 

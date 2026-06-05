@@ -4,7 +4,7 @@
 
 **Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the canonical Suppression definition (mechanics: lower temperature 88-92°C primary lever, coarser grind 6.7-6.5, low agitation, low-moderate ppm water, often pulse-pour with kettle held off-base or actively cooled; intent: deliberately limit extraction on coffees with more expressive material than is desirable to fully extract).
 
-Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Suppression](BREWING.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
+Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Suppression](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
 
 ---
 

@@ -18,7 +18,7 @@ The verdict-rich detail lives in substrate, not duplicated here:
 - **roast_learnings row:** primary lever (fan curve shape), roast window width (Agtron WB 74-77 / Maillard 42-46%), 822-character `why_this_roast_won` verdict, full cultivar + general takeaways + starting-hypothesis. Read via MCP: `read_canonical("roast_learnings", "CGLE-MANDELA-XO-2026")` or query DB directly.
 - **Green bean detail page:** `/green/[id]` resolved-view renders the reference roast recipe + reference cup + 14-field roast learnings block.
 - **Archive prose:** [docs/roasting/archive.md § CGLE-MANDELA-XO-2026](docs/roasting/archive.md#cgle-mandela-xo-2026---mandela-variety-xo-extended-fermentation) — full per-lot history, experiment-by-experiment narrative.
-- **Reference roast + brew summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — CGLE-MANDELA-XO-2026](ROASTING.md).
+- **Reference roast + brew summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — CGLE-MANDELA-XO-2026](docs/roasting/archive.md).
 
 ## Cross-lot framing — what this lot taught the Historian
 

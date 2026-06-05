@@ -4,7 +4,7 @@
 
 ## Latent strategy framing
 
-Suppression = coarse grind + low temperature + low agitation + clean papers, deployed to hold an over-expressive co-ferment back so the cup is balanced. See [BREWING.md § Suppression](BREWING.md) for the full canonical definition.
+Suppression = coarse grind + low temperature + low agitation + clean papers, deployed to hold an over-expressive co-ferment back so the cup is balanced. See [BREWING.md § Suppression](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the full canonical definition.
 
 ## WBC anchors observed
 
@@ -22,4 +22,4 @@ To be populated as Latent's Suppression corpus grows (~16 brews today). Initial 
 
 - [wbc-reference.md § Suppression family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
 - [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — full 102-recipe archive
-- [BREWING.md § Suppression](BREWING.md)
+- [BREWING.md § Suppression](docs/skills/coordinator/catalog.md#brewing-domain-principles)

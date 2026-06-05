@@ -16,7 +16,7 @@
 - **roast_learnings row:** primary lever (RoR shape through Maillard — flatness and roast character were Maillard energy distribution problems, not dev-time problems), narrow weight-loss window (10.5-11.5%), cultivar + general takeaways present, no `why_this_roast_won` verdict (pre-counterflow legacy). Read via MCP: `read_canonical("roast_learnings", "GUA-SOC-JAVA-2024")`.
 - **Green bean detail page:** `/green/[id]` resolved-view.
 - **Archive prose:** [docs/roasting/archive.md § GUA-SOC-JAVA-2024](docs/roasting/archive.md#gua-soc-java-2024).
-- **Legacy lots summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — Legacy and incomplete lots](ROASTING.md).
+- **Legacy lots summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — Legacy and incomplete lots](docs/roasting/archive.md).
 
 ## Cross-lot framing — what this lot taught the Historian
 

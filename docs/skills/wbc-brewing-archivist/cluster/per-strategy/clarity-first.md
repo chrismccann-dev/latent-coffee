@@ -4,7 +4,7 @@
 
 ## Latent strategy framing
 
-Clarity-First = coarse to medium-coarse grind + moderate-to-low temperature + low agitation + fast papers, deployed to protect a delicate aromatic cup (washed Gesha, light-roasted Ethiopian, naturals where the goal is precision over expression). See [BREWING.md § Clarity-First](BREWING.md) for the canonical definition.
+Clarity-First = coarse to medium-coarse grind + moderate-to-low temperature + low agitation + fast papers, deployed to protect a delicate aromatic cup (washed Gesha, light-roasted Ethiopian, naturals where the goal is precision over expression). See [BREWING.md § Clarity-First](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the canonical definition.
 
 ## WBC anchors observed
 
@@ -20,4 +20,4 @@ Clarity-First = coarse to medium-coarse grind + moderate-to-low temperature + lo
 
 - [wbc-reference.md § Clarity-First family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
 - [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
-- [BREWING.md § Clarity-First](BREWING.md)
+- [BREWING.md § Clarity-First](docs/skills/coordinator/catalog.md#brewing-domain-principles)
