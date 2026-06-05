@@ -9,7 +9,6 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import { Brew } from '@/lib/types'
 import {
   SspTopBar,
@@ -18,13 +17,13 @@ import {
   SspStructure,
   type MetaPair,
 } from '@/components/Ssp'
-import { TagLinkList } from '@/components/TagLinkList'
-import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
-import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import { AdditionalInfo } from '@/components/AdditionalInfo'
+import { DetailBackLink } from '@/components/DetailBackLink'
 import { ConfidenceCard } from '@/components/ConfidenceCard'
 import { CoffeesList } from '@/components/CoffeesList'
 import { ProcessDescriptionCard } from '@/components/ProcessDescriptionCard'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
+import { extractCrossLinks } from '@/lib/cross-links'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import { getFamilyColor, getHoneySubprocessOverview } from '@/lib/process-registry'
@@ -74,25 +73,7 @@ export default async function HoneySubprocessPage({
   // "Honey" rather than the canonical "Generic Honey" so the page reads as the
   // base process it represents. Specific tiers keep their canonical name.
   const displayTitle = subprocess === 'Generic Honey' ? 'Honey' : subprocess
-
-  const terroirMap = new Map<string, { id: string; country: string }>()
-  const cultivarMap = new Map<string, string>()
-  const roasterSet = new Set<string>()
-  for (const brew of brewList) {
-    if (brew.terroir?.country && brew.terroir.id) {
-      const key = brew.terroir.macro_terroir || brew.terroir.admin_region || brew.terroir.country
-      if (!terroirMap.has(key)) {
-        terroirMap.set(key, { id: brew.terroir.id, country: brew.terroir.country })
-      }
-    }
-    if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
-      cultivarMap.set(brew.cultivar.cultivar_name, brew.cultivar.id)
-    }
-    if (brew.roaster) roasterSet.add(brew.roaster)
-  }
-
-  const hasAdditional =
-    sortedFlavors.length > 0 || terroirMap.size > 0 || cultivarMap.size > 0 || roasterSet.size > 0
+  const links = extractCrossLinks(brewList)
 
   const meta: MetaPair[] = [
     { label: 'Base', value: 'Honey' },
@@ -101,12 +82,7 @@ export default async function HoneySubprocessPage({
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/processes/honey"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Honey
-      </Link>
+      <DetailBackLink href="/processes/honey">Honey</DetailBackLink>
 
       {/* Header */}
       <SspTopBar roaster="Honey" kind="Process Variant" />
@@ -147,29 +123,15 @@ export default async function HoneySubprocessPage({
       <CoffeesList title="Coffees I Have Experienced With This Process" brews={brewList} />
 
       {/* Additional Information */}
-      {hasAdditional && (
-        <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
-          <TagLinkList
-            title="CULTIVARS EXPLORED"
-            items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
-              key: name, label: name, href: `/cultivars/${id}`,
-            }))}
-          />
-          <TagLinkList
-            title="TERROIRS EXPLORED"
-            items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
-              key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
-            }))}
-          />
-          <TagLinkList
-            title="ROASTERS EXPLORED"
-            items={Array.from(roasterSet).map((r) => ({
-              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
-            }))}
-          />
-        </CollapsibleBlock>
-      )}
+      <AdditionalInfo
+        flavors={sortedFlavors}
+        links={links}
+        sections={[
+          { dimension: 'cultivars' },
+          { dimension: 'terroirs' },
+          { dimension: 'roasters' },
+        ]}
+      />
 
       {/* Confidence */}
       <ConfidenceCard brewCount={brewList.length} />

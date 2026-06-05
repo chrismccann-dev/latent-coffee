@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import { Brew, Terroir } from '@/lib/types'
 import {
   Chip,
@@ -13,12 +12,12 @@ import {
   type MetaPair,
   type StructureRow,
 } from '@/components/Ssp'
-import { TagLinkList } from '@/components/TagLinkList'
-import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
-import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import { AdditionalInfo } from '@/components/AdditionalInfo'
+import { DetailBackLink } from '@/components/DetailBackLink'
 import { CoffeesList } from '@/components/CoffeesList'
 import { ConfidenceCard } from '@/components/ConfidenceCard'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
+import { extractCrossLinks } from '@/lib/cross-links'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import { getCountryColor } from '@/lib/country-colors'
@@ -135,17 +134,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
   const merged = mergeMacroTerroirContext(allTerroirs)
 
   const sortedFlavors = aggregateFlavorNotes(brewList)
-
-  const cultivarMap = new Map<string, { id: string }>()
-  const processSet = new Set<string>()
-  const roasterSet = new Set<string>()
-  for (const brew of brewList) {
-    if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
-      cultivarMap.set(brew.cultivar.cultivar_name, { id: brew.cultivar.id })
-    }
-    if (brew.base_process) processSet.add(brew.base_process)
-    if (brew.roaster) roasterSet.add(brew.roaster)
-  }
+  const links = extractCrossLinks(brewList)
 
   // Confidence — shared thresholds via confidenceFor; terroir keeps its
   // non-process-count MEDIUM desc via the ConfidenceCard `desc` override.
@@ -175,12 +164,6 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       : []),
   ]
 
-  const hasAdditionalInfo =
-    sortedFlavors.length > 0 ||
-    cultivarMap.size > 0 ||
-    processSet.size > 0 ||
-    roasterSet.size > 0
-
   const meta: MetaPair[] = [
     ...(terroir.country ? [{ label: 'Country', value: terroir.country }] : []),
     ...(terroir.admin_region ? [{ label: 'Admin Region', value: terroir.admin_region }] : []),
@@ -192,12 +175,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/terroirs"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Terroirs
-      </Link>
+      <DetailBackLink href="/terroirs">Terroirs</DetailBackLink>
 
       {/* Header */}
       <SspTopBar roaster={terroir.country ?? undefined} kind="Terroir Profile" />
@@ -280,31 +258,15 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       )}
 
       {/* Additional Information — collapsed by default */}
-      {hasAdditionalInfo && (
-        <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
-          <TagLinkList
-            title="CULTIVARS I HAVE EXPLORED"
-            items={Array.from(cultivarMap.entries()).map(([name, { id }]) => ({
-              key: name,
-              label: name,
-              href: `/cultivars/${id}`,
-            }))}
-          />
-          <TagLinkList
-            title="PROCESSES I HAVE EXPLORED"
-            items={Array.from(processSet).map((p) => ({
-              key: p, label: p, href: `/processes/${p.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
-            }))}
-          />
-          <TagLinkList
-            title="ROASTERS EXPLORED WHO SOURCED FROM THIS REGION"
-            items={Array.from(roasterSet).map((r) => ({
-              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
-            }))}
-          />
-        </CollapsibleBlock>
-      )}
+      <AdditionalInfo
+        flavors={sortedFlavors}
+        links={links}
+        sections={[
+          { dimension: 'cultivars' },
+          { dimension: 'processes' },
+          { dimension: 'roasters', title: 'ROASTERS EXPLORED WHO SOURCED FROM THIS REGION' },
+        ]}
+      />
 
       {/* Confidence */}
       <ConfidenceCard brewCount={brewCount} desc={confidenceDesc} />
