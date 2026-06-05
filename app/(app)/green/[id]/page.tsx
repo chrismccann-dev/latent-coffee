@@ -26,7 +26,70 @@ import {
   type SlotLetter,
   type PriorExperimentShape,
 } from '@/lib/lifecycle-state'
-import type { RoastRecipe } from '@/lib/types'
+import type {
+  GreenBean,
+  Roast,
+  Experiment,
+  Cupping,
+  RoastLearning,
+  RoastRecipe,
+  Brew,
+} from '@/lib/types'
+
+// The fully-typed shape of the `green_beans` detail fetch below (the
+// `*, terroir, cultivar, roasts(*, cuppings(id)), experiments,
+// roast_learnings, recipes` row). Adopt-not-author: every constituent is an
+// existing lib/types.ts interface — this only names the join shape so the 5
+// lifecycle views stop threading `bean: any`. roast_learnings is an array here
+// (PostgREST one-to-many) even though a lot has 0-or-1; the views read [0].
+// (Architecture audit 02 / candidate C1.)
+type GreenLotDetail = Omit<GreenBean, 'roasts' | 'roast_learnings'> & {
+  roasts: (Roast & { cuppings: { id: string }[] })[]
+  experiments: Experiment[]
+  roast_learnings: RoastLearning[]
+  recipes: RoastRecipe[]
+}
+
+// Brews-on-this-lot are fetched with an explicit partial projection (see the
+// `.from('brews').select(...)` below), so the row is a strict subset of Brew —
+// Pick exactly those columns rather than over-declaring `Brew[]` (which would
+// let an unselected field read as a silent `undefined`). Audit 02 / C1.
+type LotBrew = Pick<
+  Brew,
+  | 'id'
+  | 'coffee_name'
+  | 'roast_id'
+  | 'source'
+  | 'extraction_strategy'
+  | 'hybrid_subform'
+  | 'modifiers'
+  | 'strategy_notes'
+  | 'cooling_curve_target'
+  | 'brewer'
+  | 'filter'
+  | 'dose_g'
+  | 'water_g'
+  | 'ratio'
+  | 'grind'
+  | 'grinder'
+  | 'grind_setting'
+  | 'temp_c'
+  | 'bloom'
+  | 'pour_structure'
+  | 'total_time'
+  | 'aroma'
+  | 'attack'
+  | 'mid_palate'
+  | 'body'
+  | 'finish'
+  | 'peak_expression'
+  | 'flavor_notes'
+  | 'flavors'
+  | 'structure_tags'
+  | 'key_takeaways'
+  | 'what_i_learned'
+  | 'created_at'
+>
 
 // Sprint 3.2 #14 — lot-header meta with FK fallback. Belt-and-suspenders
 // against future rows where bean.origin / bean.variety might land NULL
@@ -57,7 +120,7 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
   // Recipes-per-experiment join (`recipes:roast_recipes(...)`) is what the new
   // waiting-for-next-roast shape needs — it surfaces the design intent for
   // the latest V_n separate from the roast log's as-recorded facts.
-  const { data: bean, error } = await supabase
+  const { data, error } = await supabase
     .from('green_beans')
     .select(`
       *,
@@ -71,15 +134,19 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
     .eq('id', params.id)
     .single()
 
-  if (error || !bean) {
+  if (error || !data) {
     notFound()
   }
+
+  // The untyped Supabase client returns `data: any`; adopt the GreenLotDetail
+  // shape here so the 5 views below get a typed `bean` contract (audit 02 / C1).
+  const bean: GreenLotDetail = data as GreenLotDetail
 
   // Get cuppings for each roast (top-level fetch, full records). The nested
   // cuppings(id) join above is just for lifecycle-state cupping-presence
   // signal; the legacy render below needs full cupping rows.
-  const roastIds = bean.roasts?.map((r: any) => r.id) || []
-  let cuppings: any[] = []
+  const roastIds = bean.roasts?.map((r) => r.id) || []
+  let cuppings: Cupping[] = []
   if (roastIds.length > 0) {
     const { data } = await supabase
       .from('cuppings')
@@ -153,14 +220,14 @@ function WaitingForNextRoastView({
   bean,
   cuppings,
 }: {
-  bean: any
-  cuppings: any[]
+  bean: GreenLotDetail
+  cuppings: Cupping[]
 }) {
   // Latest experiment by created_at desc (matches lifecycle-state derivation
   // for "current V_n"). If no experiments yet (pre-framework legacy lot,
   // e.g. Rancho Tio with 1 roast and 0 experiments), surface a placeholder
   // explaining the next move.
-  const experiments = (bean.experiments ?? []) as any[]
+  const experiments = bean.experiments
   const latestExp = experiments.length
     ? [...experiments].sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''))[0]
     : null
@@ -168,7 +235,7 @@ function WaitingForNextRoastView({
   // Recipes for the latest experiment, sorted by batch_slot. When recipes
   // have explicit batch_slot values (v1a/v1b/v1c) we sort by them; otherwise
   // fall back to created_at order so the table columns stay deterministic.
-  const allRecipes = (bean.recipes ?? []) as RoastRecipe[]
+  const allRecipes = bean.recipes
   const recipesForLatest = latestExp
     ? allRecipes
         .filter((r) => r.experiment_id === latestExp.id)
@@ -182,7 +249,7 @@ function WaitingForNextRoastView({
   const currentExpBatchIds = parseBatchIdsForHighlight(latestExp?.batch_ids)
 
   // Roasts ordered by date ascending (chronological reading order in the log).
-  const roasts = ((bean.roasts ?? []) as any[]).slice().sort((a, b) => {
+  const roasts = bean.roasts.slice().sort((a, b) => {
     const ad = a.roast_date ?? a.created_at ?? ''
     const bd = b.roast_date ?? b.created_at ?? ''
     return ad.localeCompare(bd)
@@ -610,7 +677,7 @@ function buildHypothesisData(recipes: RoastRecipe[]): { cols: { label: string }[
 type SlotInfo = {
   slot: SlotLetter
   recipe: RoastRecipe | null
-  roast: any | null
+  roast: Roast | null
   declaredBatchId: string | null
 }
 
@@ -648,7 +715,7 @@ function parseDeclaredBatchOrder(raw: string | null | undefined): string[] {
 function computeSlotInfos(
   latestExp: { batch_ids?: string | null } | null,
   recipesForLatest: RoastRecipe[],
-  roasts: any[],
+  roasts: Roast[],
 ): SlotInfo[] {
   const declared = parseDeclaredBatchOrder(latestExp?.batch_ids)
   const findRoastByBatchId = (batchId: string | null | undefined) =>
@@ -660,7 +727,7 @@ function computeSlotInfos(
     return recipesForLatest.slice(0, 4).map((recipe, i) => {
       const slot = SLOT_LETTERS[i]
       // Match by recipe_id FK first; fallback to declared batch_ids position.
-      let roast: any | null =
+      let roast: Roast | null =
         roasts.find((r) => r.recipe_id != null && r.recipe_id === recipe.id) ?? null
       if (!roast && declared[i]) {
         roast = findRoastByBatchId(declared[i])
@@ -706,16 +773,16 @@ function WaitingForNextCuppingView({
   bean,
   cuppings,
 }: {
-  bean: any
-  cuppings: any[]
+  bean: GreenLotDetail
+  cuppings: Cupping[]
 }) {
-  const experiments = (bean.experiments ?? []) as any[]
+  const experiments = bean.experiments
   const latestExp = experiments.length
     ? [...experiments].sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''))[0]
     : null
   const priorExp = pickPriorExperiment(experiments, latestExp)
 
-  const allRecipes = (bean.recipes ?? []) as RoastRecipe[]
+  const allRecipes = bean.recipes
   const recipesForLatest = latestExp
     ? allRecipes
         .filter((r) => r.experiment_id === latestExp.id)
@@ -725,7 +792,7 @@ function WaitingForNextCuppingView({
         })
     : []
 
-  const roasts = ((bean.roasts ?? []) as any[]).slice().sort((a, b) => {
+  const roasts = bean.roasts.slice().sort((a, b) => {
     const ad = a.roast_date ?? a.created_at ?? ''
     const bd = b.roast_date ?? b.created_at ?? ''
     return ad.localeCompare(bd)
@@ -984,7 +1051,7 @@ function slotLabelWithBatch(info: SlotInfo): string {
 // V_(n-1) winner cup: read priorExp.winner (free-text, e.g. "v2b") to find the
 // slot, then read priorExp.observed_outcome_<slot>, falling back to key_insight.
 function derivePriorWinnerCup(
-  priorExp: any | null,
+  priorExp: PriorExperimentShape | null,
 ): { label: string; cup: string | null } {
   const base = 'Previous leading slot cup'
   if (!priorExp?.winner) return { label: base, cup: null }
@@ -1001,14 +1068,17 @@ function derivePriorWinnerCup(
 
 function buildCupHypoData(
   slotInfos: SlotInfo[],
-  latestExp: any,
-  bean: any,
-  priorExp: any | null,
+  latestExp: Experiment,
+  bean: GreenLotDetail,
+  priorExp: PriorExperimentShape | null,
 ): CupHypoData {
+  // info.slot is a SlotLetter ('a'|'b'|'c'|'d'), so the template-literal key
+  // resolves to the typed `taste_for_a..d` / `updated_cup_prediction_a..d`
+  // fields on Experiment — the compiler now covers these dynamic reads.
   const mobileSlots = slotInfos.map((info) => ({
     label: slotLabelWithBatch(info),
-    taste: (latestExp[`taste_for_${info.slot}`] as string | null) ?? null,
-    predictedCup: (latestExp[`updated_cup_prediction_${info.slot}`] as string | null) ?? null,
+    taste: latestExp[`taste_for_${info.slot}`] ?? null,
+    predictedCup: latestExp[`updated_cup_prediction_${info.slot}`] ?? null,
   }))
 
   const producerNotes = bean.producer_tasting_notes ?? null
@@ -1114,7 +1184,7 @@ type RoastActualsData = {
   vsExpected: { label: string; delta: string | null }[]
 }
 
-function buildRoastActualsData(slotInfos: SlotInfo[], latestExp: any): RoastActualsData {
+function buildRoastActualsData(slotInfos: SlotInfo[], latestExp: Experiment): RoastActualsData {
   type RowSpec = {
     label: string
     getValue: (info: SlotInfo) => React.ReactNode
@@ -1209,7 +1279,7 @@ function buildRoastActualsData(slotInfos: SlotInfo[], latestExp: any): RoastActu
   const vsExpected = slotInfos
     .map((info, i) => ({
       label: slotLabels[i],
-      delta: (latestExp[`delta_from_roast_${info.slot}`] as string | null) ?? null,
+      delta: latestExp[`delta_from_roast_${info.slot}`] ?? null,
     }))
     .filter((s) => s.delta)
 
@@ -1286,11 +1356,11 @@ const ARCHIVE_VARIANTS: Record<
   },
 }
 
-function ResolvedView(props: { bean: any; cuppings: any[]; brewsForLot: any[] }) {
+function ResolvedView(props: { bean: GreenLotDetail; cuppings: Cupping[]; brewsForLot: LotBrew[] }) {
   return <ArchiveLotBody {...props} variant="resolved" />
 }
 
-function UnresolvedView(props: { bean: any; cuppings: any[]; brewsForLot: any[] }) {
+function UnresolvedView(props: { bean: GreenLotDetail; cuppings: Cupping[]; brewsForLot: LotBrew[] }) {
   return <ArchiveLotBody {...props} variant="unresolved" />
 }
 
@@ -1300,9 +1370,9 @@ function ArchiveLotBody({
   brewsForLot,
   variant,
 }: {
-  bean: any
-  cuppings: any[]
-  brewsForLot: any[]
+  bean: GreenLotDetail
+  cuppings: Cupping[]
+  brewsForLot: LotBrew[]
   variant: ArchiveVariant
 }) {
   const v = ARCHIVE_VARIANTS[variant]
@@ -1313,7 +1383,7 @@ function ArchiveLotBody({
   const batchNumber = extractBatchNumber(rawBestBatchId)
   const refRoastId: string | null = learnings?.best_roast_id ?? null
 
-  const roasts = ((bean.roasts ?? []) as any[]).slice().sort((a, b) => {
+  const roasts = bean.roasts.slice().sort((a, b) => {
     const ad = a.roast_date ?? a.created_at ?? ''
     const bd = b.roast_date ?? b.created_at ?? ''
     return ad.localeCompare(bd)
@@ -1321,7 +1391,7 @@ function ArchiveLotBody({
   const referenceRoast = refRoastId ? roasts.find((r) => r.id === refRoastId) ?? null : null
   const referenceRecipe =
     referenceRoast?.recipe_id
-      ? ((bean.recipes ?? []) as RoastRecipe[]).find((r) => r.id === referenceRoast.recipe_id) ?? null
+      ? bean.recipes.find((r) => r.id === referenceRoast.recipe_id) ?? null
       : null
 
   const pourover = pickPourover(cuppings, refRoastId)
@@ -1338,10 +1408,10 @@ function ArchiveLotBody({
       ? Number((referenceRoast.agtron - primaryGroundAgtron).toFixed(1))
       : null
 
-  const experimentsChrono = ((bean.experiments ?? []) as any[]).slice().sort((a, b) =>
+  const experimentsChrono = bean.experiments.slice().sort((a, b) =>
     (a.created_at ?? '').localeCompare(b.created_at ?? ''),
   )
-  const roastsById = new Map<string, any>(roasts.map((r) => [r.id, r]))
+  const roastsById = new Map<string, Roast>(roasts.map((r) => [r.id, r]))
 
   const refBatchLabel = batchNumber ?? rawBestBatchId ?? '?'
 
@@ -1898,7 +1968,7 @@ function PairRow({ label, value }: { label: string; value?: string | null }) {
 // dedicated inventory page is punted to a later sprint per scope doc § 6.
 // ---------------------------------------------------------------------------
 
-function InventoryPlaceholder({ bean }: { bean: any }) {
+function InventoryPlaceholder({ bean }: { bean: GreenLotDetail }) {
   const metaPairs = [
     { label: 'Producer', value: bean.producer ?? '—' },
     { label: 'Origin', value: bean.origin ?? bean.terroir?.country ?? '—' },
@@ -1954,7 +2024,7 @@ function InventoryPlaceholder({ bean }: { bean: any }) {
 // Latest pourover cupping on the reference roast. Falls back to any cupping
 // on that roast if no pourover exists. Returns null when refRoastId is null
 // or no cuppings match.
-function pickPourover(cuppings: any[], refRoastId: string | null): any | null {
+function pickPourover(cuppings: Cupping[], refRoastId: string | null): Cupping | null {
   if (!refRoastId) return null
   const onRef = cuppings.filter((c) => c.roast_id === refRoastId)
   if (onRef.length === 0) return null
@@ -1977,10 +2047,10 @@ function pickPourover(cuppings: any[], refRoastId: string | null): any | null {
 // heuristic survives only as a legacy fallback for lots closed before the
 // column existed (and the first-row fallback for older data). See ADR-0019.
 function pickOptimizedBrew(
-  brewsForLot: any[],
+  brewsForLot: LotBrew[],
   refRoastId: string | null,
   optimizedBrewId: string | null,
-): any | null {
+): LotBrew | null {
   if (brewsForLot.length === 0) return null
   if (optimizedBrewId) {
     const linked = brewsForLot.find((b) => b.id === optimizedBrewId)
@@ -1996,7 +2066,7 @@ function pickOptimizedBrew(
 // Compose a compact brew recipe line: brewer · filter · dose:water (ratio) ·
 // temp · grinder + setting. Pieces that are null skip silently. Returns null
 // when nothing is populated so the caller can render an em-dash fallback.
-function composeBrewRecipeLine(brew: any): string | null {
+function composeBrewRecipeLine(brew: LotBrew): string | null {
   const parts: string[] = []
   if (brew.brewer) parts.push(brew.brewer)
   if (brew.filter) parts.push(brew.filter)
