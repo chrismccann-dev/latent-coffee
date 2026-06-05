@@ -12,9 +12,9 @@ The lifecycle dimensions are kept separate: **active vs one-shot vs closed = 3 d
 
 ## Current roster
 
-- [cgle-srume-natural-2026.md](./cgle-srume-natural-2026.md) — CGLE Sudan Rume Natural V5 (V5 roasts complete, Day 7 pourover pending)
+- [cgle-srume-natural-2026.md](./cgle-srume-natural-2026.md) — CGLE Sudan Rume Natural — **CLOSED 2026-05-23** (ref roast #187 / V5A); deep dive at [learnings/cgle-srume-natural-2026.md](../learnings/cgle-srume-natural-2026.md). Entry is now a redirect stub.
 - [cgle-gesha-clouds-2026.md](./cgle-gesha-clouds-2026.md) — CGLE Gesha Clouds (V1+V2 complete, V3 needed)
-- [cos-hig-bor-2026.md](./cos-hig-bor-2026.md) — Costa Rica Anaerobic Dry Process Higuito (V2 winner v2b, V3 not yet designed)
+- [cos-hig-bor-2026.md](./cos-hig-bor-2026.md) — Costa Rica Anaerobic Dry Process Higuito — **CLOSED 2026-05-23** (ref roast v3b / #185); deep dive at [learnings/cos-hig-bor-2026.md](../learnings/cos-hig-bor-2026.md). Entry is now a redirect stub.
 - [bra-fazendaum-wushwush-nat-2026.md](./bra-fazendaum-wushwush-nat-2026.md) — Fazenda Um Wush Wush Natural Dark Room Dried (V1 cupped, V2 blocked on reference cup)
 - [rwa-nova-nat21-rb-2026.md](./rwa-nova-nat21-rb-2026.md) — Bukure Natural Lot 21 Red Bourbon (V2 pushed to Roest, not yet roasted)
 - [redplum-cas-2026.md](./redplum-cas-2026.md) — El Paraiso Red Plum Castillo (V2 designed and pushed)

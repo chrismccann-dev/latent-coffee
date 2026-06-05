@@ -4,7 +4,7 @@
 
 **Cardinality:** N=3 across both domains (2 roasting lots + 1 brewing lot at this writing).
 
-- **Roasting:** [CGLE Sudan Rume Hybrid Washed (CGLE-SRUME-WASHED-2026)](../../../../../../ROASTING.md#cgle-srume-washed-2026---sudan-rume-hybrid-washed) (closed, reference roast batch #133) · [CGLE Sudan Rume Natural V1 (CGLE-SRUME-NATURAL-2026)](../../../../../../ROASTING.md#cgle-srume-natural-2026---sudan-rume-natural) (V5 active, reference roast batch #169)
+- **Roasting:** [CGLE Sudan Rume Hybrid Washed (CGLE-SRUME-WASHED-2026)](../../../../../../ROASTING.md#cgle-srume-washed-2026---sudan-rume-hybrid-washed) (closed, reference roast batch #133) · [CGLE Sudan Rume Natural (CGLE-SRUME-NATURAL-2026)](../../../../../../ROASTING.md#cgle-srume-natural-2026---sudan-rume-natural) (closed 2026-05-23, reference roast batch #187 / V5A)
 - **Brewing:** [CGLE Las Margaritas Sudan Rume Natural (Special Guests Edition 0326-42)](../../../../../brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — one data point on the brewing-only side (different roaster, not Latent-roasted)
 
 This is the **first CCIL seed pattern** authored in Wave 4 PR 4a. Its job is to demonstrate the shape of cross-domain synthesis on a coffee where both a Latent-roasted lot AND an externally-roasted brewing lot of the same variety exist. Pattern F's archetype: the same variety throughline expresses differently on each layer; CCIL surfaces the cross-layer tension and proposes the unified working hypothesis.
@@ -17,9 +17,9 @@ Sudan Rume is an ancient Ethiopian landrace from the Boma Plateau — parent of 
 
 ## Roasting layer — what we've learned
 
-**Hybrid Washed (closed, ref batch #133, Diego Bermúdez Cauca Colombia 1900m).** FC window confirmed at 200-205°C arriving ~4:00-4:15; below 200°C is uniformly underdeveloped (nutty, grassy, flat) regardless of dev time. Charge 117°C / hopper pre-load 125°C / bean-temp end condition. WB-to-Ground Agtron delta on winning pourover batch #119 was 1.0 (tight = even development = target). Fan curve confirmed at `80% → 70% → 65% → 72% → 75%` across BBP / Maillard / pre-FC / dev / drop.
+**Hybrid Washed (closed, ref batch #133, Las Margaritas / Herrera, Caicedonia, Valle del Cauca, Colombia, 1710m).** FC window confirmed at 200-205°C arriving ~4:00-4:15; below 200°C is uniformly underdeveloped (nutty, grassy, flat) regardless of dev time. Charge 117°C / hopper pre-load 125°C / bean-temp end condition. WB-to-Ground Agtron delta on winning pourover batch #119 was 1.0 (tight = even development = target). Fan curve confirmed at `80% → 70% → 65% → 72% → 75%` across BBP / Maillard / pre-FC / dev / drop.
 
-**Natural V1 (active, ref roast batch #169, ~6:00 total, peak inlet 242°C with hard post-peak cliff).** Density 791 g/L / moisture 10.3%. The fruit layer thermally insulates the bean surface, so **WB-to-Ground deltas run wide (7-11 points)** — the negative reading reflects surface-suppressed-by-fruit-layer rather than core stall, and the magnitude is normal for this lot family. V5 session (2026-05-12) closed two protocol hypotheses: 240°C peak inlet definitively insufficient on this cliff shape (cannot reach 205°C bean temp within 6:00); 207°C end condition not viable (bean cannot reach within practical total time). Optimal total-time ceiling 6:15 (not 6:00).
+**Natural (closed 2026-05-23, ref roast batch #187 / V5A, ~6:00-6:15 total, peak inlet 242°C with hard post-peak cliff).** Density 791 g/L / moisture 10.3%. The fruit layer thermally insulates the bean surface, so **WB-to-Ground deltas run wide (7-11 points)** — the negative reading reflects surface-suppressed-by-fruit-layer rather than core stall, and the magnitude is normal for this lot family. V5 session (2026-05-12) closed two protocol hypotheses: 240°C peak inlet definitively insufficient on this cliff shape (cannot reach 205°C bean temp within 6:00); 207°C end condition not viable (bean cannot reach within practical total time). Optimal total-time ceiling 6:15 (not 6:00).
 
 **Cross-process roasting takeaway.** Dongzhe's "always start from the washed profile and let FC timing tell you whether to add or reduce energy" applies, **with the caveat from SR Natural's lived experience: Sudan Rume Natural required nearly as much energy as the washed version because the fruit layer insulates the surface.** Do NOT default to "natural = less heat" on Sudan Rume — the variety's density + the natural process's fruit layer combine to need washed-level energy. Fan curve hypothesis for SR Natural (V2 not confirmed): slightly lower mid-curve fan than washed (`80% → 68% → 63% → 70% → 73%`) to keep more heat in the drum through Maillard.
 
@@ -39,7 +39,7 @@ Confirmation needed: a second Sudan Rume Washed brew (could be SR Hybrid Washed 
 
 ## Recommendations consumable by planners
 
-**Roasting Assistant — when you see Sudan Rume + Washed + medium-altitude origin (≥1900m):**
+**Roasting Assistant — when you see Sudan Rume + Washed + medium-altitude origin (~1700m):**
 - Anchor profile: SR Hybrid Washed batch #133 fan curve + 242-247°C peak inlet + charge 117°C + hopper 125°C + bean-temp end condition 205°C.
 - FC window 200-205°C; below 200°C is uniformly underdeveloped. WB-Ground delta target ≤3 (tight = even development).
 - Target dev time: leave the bean-temp end condition to fire (typically 5:30-6:00 total).
@@ -61,7 +61,7 @@ Confirmation needed: a second Sudan Rume Washed brew (could be SR Hybrid Washed 
 - Cool-window evaluation: best warm-to-cool; cup opens significantly cooling.
 
 **Research Coordinator — when scoping a Sudan Rume research project (per [ADR-0017](../../../../../../adr/0017-research-assistant-architecture.md)):**
-- N=3 is the corpus floor for cross-process pattern promotion. Today's N=3 covers Hybrid Washed (Latent) + Natural (Latent V5 active) + Natural (external CGLE Las Margaritas brewing-only). A third Sudan Rume Washed brew or a fresh aromatic-landrace washed lot would resolve the vehicle-dependency tension flagged above.
+- N=3 is the corpus floor for cross-process pattern promotion. Today's N=3 covers Hybrid Washed (Latent) + Natural (Latent, resolved) + Natural (external CGLE Las Margaritas brewing-only). A third Sudan Rume Washed brew or a fresh aromatic-landrace washed lot would resolve the vehicle-dependency tension flagged above.
 - Track candidate variables: process (washed / natural / hybrid) × vehicle (April vs fast cone) × roast peak inlet (washed envelope vs natural envelope). The variety throughline is the constant; the project maps how each layer's mechanics serve or suppress it.
 
 ## What this seed pattern is NOT

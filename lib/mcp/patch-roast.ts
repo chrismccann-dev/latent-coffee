@@ -77,7 +77,7 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
     {
       title: 'Patch Roast',
       description:
-        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id (the row must already exist). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction on a batch that\'s already been logged. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] keyed by batch_id). Returns { roast_id, updated_fields: [...], canonical_values: { ... } } — updated_fields echoes which columns landed; canonical_values echoes the actual values of enum-validated fields (end_condition_type, worth_repeating) so the caller can confirm the vocabulary landed without a follow-up read. Co-owned by Roast Recorder (per-batch corrections) + Cupping Specialist (is_reference_candidate flag on V-set leading slot) + Close-Lot Specialist (is_reference + worth_repeating promotion at lot close-out) per ADR-0011.',
+        'Update / mark / fix / save / record / push field-level changes to an existing roast batch by roast_id (the row must already exist). Use this to mark a batch as the lot reference (`is_reference: true`) once Day-7 cupping confirms the winner, for post-hoc enrichment (fan_curve / inlet_curve / agtron added after the initial Roest pull, prose fields filled in days later), or any field-level correction on a batch that\'s already been logged. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find roast_id: call get_bean_pipeline (returns roasts[] keyed by batch_id). Returns { roast_id, updated_fields: [...], canonical_values? } — updated_fields echoes which columns landed; canonical_values echoes the actual values of enum-validated fields (end_condition_type, worth_repeating) so the caller can confirm the vocabulary landed without a follow-up read, and is OMITTED entirely when neither enum field was supplied (treat it as optional, mirroring patch_experiment). Co-owned by Roast Recorder (per-batch corrections) + Cupping Specialist (is_reference_candidate flag on V-set leading slot) + Close-Lot Specialist (is_reference + worth_repeating promotion at lot close-out) per ADR-0011.',
       inputSchema: patchRoastInputSchema,
     },
     withToolErrorLogging('patch_roast', async (input) => {
@@ -110,7 +110,18 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
       if (payloadObj.worth_repeating !== undefined) {
         canonical_values.worth_repeating = payloadObj.worth_repeating
       }
-      const out = { roast_id: result.roast_id, updated_fields, canonical_values }
+      // Cleanup-actions (Round-2 #7 consistency / 2026-06-04): omit
+      // canonical_values entirely when no enum-validated field was touched —
+      // matches patch_experiment's lean-response shape (it was already doing
+      // this; patch_roast was the inconsistent sibling always emitting {}).
+      const out: {
+        roast_id: string
+        updated_fields: typeof updated_fields
+        canonical_values?: Record<string, unknown>
+      } = { roast_id: result.roast_id, updated_fields }
+      if (Object.keys(canonical_values).length > 0) {
+        out.canonical_values = canonical_values
+      }
       return {
         content: [{ type: 'text', text: JSON.stringify(out) }],
         structuredContent: out,

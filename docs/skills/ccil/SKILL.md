@@ -11,7 +11,7 @@ Synthesize across domain Historians + WBC archivists + Latent's per-entity termi
 
 **Today (post Wave 4 PR 4a, 2026-05-21):**
 
-- [`cluster/coffee/sudan-rume/across-roasting-and-brewing.md`](cluster/coffee/sudan-rume/across-roasting-and-brewing.md) — seed pattern doc demonstrating cross-domain synthesis on Sudan Rume (N=3 across both domains: Latent-roasted CGLE SR Hybrid Washed + Latent-roasted CGLE SR Natural V5 active + externally-roasted CGLE Las Margaritas SR Natural brewing-only)
+- [`cluster/coffee/sudan-rume/across-roasting-and-brewing.md`](cluster/coffee/sudan-rume/across-roasting-and-brewing.md) — seed pattern doc demonstrating cross-domain synthesis on Sudan Rume (N=3 across both domains: Latent-roasted CGLE SR Hybrid Washed + Latent-roasted CGLE SR Natural (resolved, ref #187) + externally-roasted CGLE Las Margaritas SR Natural brewing-only)
 - [`cluster/decomposition-log.md`](cluster/decomposition-log.md) — Pattern F audit trail; logs every CCIL self-decomposition event (per [ADR-0013](../../adr/0013-self-improvement-primitives.md) bloat tripwires)
 
 **Target shape (accrues via Pattern A refresh events + future seed pattern ships):**

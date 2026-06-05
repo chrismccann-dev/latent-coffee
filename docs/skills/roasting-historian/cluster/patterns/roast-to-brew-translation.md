@@ -6,7 +6,7 @@ Migrated from ROASTING.md § Roast-to-Brew Translation in Wave 3 PR 1 (2026-05-2
 
 ---
 
-> The 5 brewing strategies + 4 modifiers referenced below (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push + Output Selection / Inverted Temperature Staging / Aroma Capture / Immersion) are defined in [BREWING.md § The Two-Axis Framework](../../../../../BREWING.md#the-two-axis-framework). The brew-side documentation contract (Step 4 Resolved Brew Output Format) lives in [BREWING.md § Step 4](../../../../../BREWING.md#step-4---resolved-brew-output-format). When proposing a brew strategy from a roast outcome, name the canonical strategy explicitly so the iteration loop matches the framework.
+> The 6 brewing strategies + 5 modifiers referenced below (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid + Output Selection / Thermal Staging / Aroma Capture / Role-Based Pulse / Equipment) are defined in [BREWING.md § The Two-Axis Framework](../../../../../BREWING.md#the-two-axis-framework). The brew-side documentation contract (Step 4 Resolved Brew Output Format) lives in [BREWING.md § Step 4](../../../../../BREWING.md#step-4---resolved-brew-output-format). When proposing a brew strategy from a roast outcome, name the canonical strategy explicitly so the iteration loop matches the framework.
 
 > Core principle: The brew recipe does not fix a bad roast, but it can hide a good one. A roast that passes the Day 7 evaluation gate but feels muted is often an extraction problem, not a roast problem. Always try a pushed brew before concluding more development is needed.
 
