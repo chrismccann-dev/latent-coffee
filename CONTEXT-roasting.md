@@ -494,6 +494,10 @@ Aromatic behavior: How a cup's aromatics present in time and intensity — immed
 
 Structural behavior: How a cup presents structurally — the shape and balance of acidity, body, and finish, separate from flavor. Per-tasting observation. Stored on cuppings.structural_behavior (migration 062, ADR-0008) — same relocation rationale as Aromatic behavior. *Avoid*: "mouthfeel" (too narrow — that's just body), "cup structure"
 
+### Cooling arc pattern
+
+Cooling arc pattern: A canonical 4-value enum for the SHAPE of how a cup changes across its cooling arc — `degrade` (cools worse: loses balance / turns bitter / flattens), `hold` (good and steady, no meaningful change), `improve` (opens up / gains sweetness / integrates better as it cools), `flat` (low-amplitude / muted, little movement either way — distinct from `hold`: flat is the absence of amplitude, hold is good-and-steady). Stored on cuppings.cooling_arc_pattern (migration 078). The queryable mirror of the Temperature behavior PROSE (which carries direction + when + what changes) — the enum exists so cross-lot "which lots cooling-arc degrade vs hold" is canonical-queryable instead of regex-on-prose. Per-cupping observation; one value per cupping row; set alongside temperature_behavior, not instead of it. *Avoid*: folding it into temperature_behavior (the prose stays — the enum is additive); "cooling curve" (collides with Cooling-Curve Target on the brewing side — different concept); using `flat` and `hold` interchangeably.
+
 ### Rest behavior
 
 Rest behavior: How a roasted lot evolves across post-roast rest days (Day 4 / 7 / 10+) AND across cross-cup vehicle comparisons (April brewer vs xBloom) AND storage observations (foil-bag temperature, ambient). Three-thread content scope. Lot-level pattern, not per-cup observation — correctly placed on roast_learnings.rest_behavior (not relocated to cuppings; that relocation was specific to aromatic + structural behavior per ADR-0008). Use when the lot teaches something about rest evolution worth carrying forward. *Avoid*: "rest curve" (already used elsewhere as RoasterEntry.restCurve — different concept), "aging behavior"

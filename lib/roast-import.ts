@@ -23,6 +23,21 @@ import {
   type CultivarCandidate,
 } from '@/lib/brew-import'
 import { fireQueueInserts, type QueuedEntry } from '@/lib/taxonomy-queue'
+import { checkCuppingDateConsistency } from '@/lib/mcp/cupping-date-bounds'
+
+// Cluster 2 (#27) — canonical cooling-arc shape enum, independent of the
+// temperature_behavior prose. Migration 078 CHECK constraint mirrors this.
+export const COOLING_ARC_PATTERNS = ['degrade', 'hold', 'improve', 'flat'] as const
+export type CoolingArcPattern = (typeof COOLING_ARC_PATTERNS)[number]
+
+// Single source of truth for the lib-level enum guard (the readable-error layer
+// beneath the z.enum MCP schema + the DB CHECK). Returns an error string or null
+// so push (errors[].push) and patch (early return) can each shape their result.
+function coolingArcPatternError(value: CoolingArcPattern | null | undefined): string | null {
+  if (value == null) return null
+  if ((COOLING_ARC_PATTERNS as readonly string[]).includes(value)) return null
+  return `cooling_arc_pattern "${value}" is not canonical — use one of ${COOLING_ARC_PATTERNS.join(' / ')}.`
+}
 
 // ---------------------------------------------------------------------------
 // Shared types
@@ -629,6 +644,10 @@ export interface CuppingPayload {
   // observation), not what a lot TAUGHT.
   aromatic_behavior?: string | null
   structural_behavior?: string | null
+  // Cluster 2 (migration 078, 2026-06-04): canonical cooling-arc shape enum,
+  // independent of the temperature_behavior prose. degrade / hold / improve /
+  // flat. Lets cross-lot "which lots cooling-arc degrade vs hold" be queryable.
+  cooling_arc_pattern?: CoolingArcPattern | null
 }
 
 export type PersistCuppingResult =
@@ -644,6 +663,10 @@ export type PersistCuppingResult =
 export function validateCuppingPayload(p: CuppingPayload): ValidationResult {
   const errors: string[] = []
   if (!p.roast_id?.trim()) errors.push('roast_id is required')
+  // Cluster 2 (#27): enum guard on cooling_arc_pattern (readable error beneath
+  // the migration 078 CHECK constraint).
+  const coolingArcErr = coolingArcPatternError(p.cooling_arc_pattern)
+  if (coolingArcErr) errors.push(coolingArcErr)
   return errors.length ? { ok: false, errors } : { ok: true }
 }
 
@@ -699,20 +722,29 @@ export async function persistCupping(
     return { ok: true, cupping_id: existing.id as string, created: false }
   }
 
-  // Schema sprint S1 (migration 055, 2026-05-18): snapshot roasts.agtron into
-  // cuppings.wb_agtron at insert time so the generated wb_to_ground_delta
-  // column populates. Explicit payload override wins; otherwise join roast.
+  // Fetch the parent roast once — its agtron snapshots into cuppings.wb_agtron
+  // (Schema sprint S1, migration 055) and its roast_date anchors the cupping_date
+  // / rest_days consistency guard (Cluster 2 #31, migration 078).
+  const { data: parentRoast } = await supabase
+    .from('roasts')
+    .select('agtron, roast_date')
+    .eq('user_id', userId)
+    .eq('id', payload.roast_id)
+    .maybeSingle()
+
+  // Cluster 2 (#31): reject voice-to-text date slips (cupping_date before/at the
+  // roast, or a rest_days that disagrees with the dates) before they land.
+  const dateErr = checkCuppingDateConsistency(
+    parentRoast?.roast_date as string | null | undefined,
+    payload.cupping_date,
+    payload.rest_days,
+  )
+  if (dateErr) return { ok: false, code: 'validation', errors: [dateErr] }
+
+  // Explicit payload override wins; otherwise snapshot the joined roast's agtron.
   let wbAgtron = payload.wb_agtron ?? null
-  if (wbAgtron == null) {
-    const { data: parentRoast } = await supabase
-      .from('roasts')
-      .select('agtron')
-      .eq('user_id', userId)
-      .eq('id', payload.roast_id)
-      .maybeSingle()
-    if (parentRoast && typeof parentRoast.agtron === 'number') {
-      wbAgtron = parentRoast.agtron
-    }
+  if (wbAgtron == null && parentRoast && typeof parentRoast.agtron === 'number') {
+    wbAgtron = parentRoast.agtron
   }
 
   const { data, error } = await supabase
@@ -738,6 +770,8 @@ export async function persistCupping(
       // Sprint 11 (migration 062, 2026-05-20): RO-6 character relocation.
       aromatic_behavior: payload.aromatic_behavior ?? null,
       structural_behavior: payload.structural_behavior ?? null,
+      // Cluster 2 (migration 078, 2026-06-04): cooling-arc shape enum.
+      cooling_arc_pattern: payload.cooling_arc_pattern ?? null,
     })
     .select('id')
     .single()
@@ -1332,6 +1366,8 @@ export const CUPPING_PATCH_FIELDS = [
   // post-hoc Agtron re-measurement. wb_to_ground_delta is a generated column,
   // NOT patchable.
   'wb_agtron',
+  // Cluster 2 (migration 078, 2026-06-04): cooling-arc shape enum.
+  'cooling_arc_pattern',
 ] as const
 
 // patch_cupping uses the migration-041 composite key for lookup
@@ -1362,11 +1398,15 @@ export async function patchCupping(
   if (!payload.roast_id?.trim()) {
     return { ok: false, code: 'validation', errors: ['roast_id is required'] }
   }
+  // Cluster 2 (#27): enum guard on cooling_arc_pattern (shared with persistCupping).
+  const coolingArcErr = coolingArcPatternError(payload.cooling_arc_pattern)
+  if (coolingArcErr) return { ok: false, code: 'validation', errors: [coolingArcErr] }
 
-  // Composite-key lookup with NULLS NOT DISTINCT semantics.
+  // Composite-key lookup with NULLS NOT DISTINCT semantics. Pull rest_days too so
+  // the date guard can validate a rest_days-only patch against the existing date.
   let lookup = supabase
     .from('cuppings')
-    .select('id')
+    .select('id, cupping_date, rest_days')
     .eq('user_id', userId)
     .eq('roast_id', payload.roast_id)
   lookup = payload.cupping_date != null
@@ -1383,6 +1423,28 @@ export async function patchCupping(
   if (!existing) {
     const desc = `(roast_id="${payload.roast_id}", cupping_date=${payload.cupping_date ?? 'NULL'}, eval_method=${payload.eval_method ?? 'NULL'}, recipe_variant=${payload.recipe_variant ?? 'NULL'})`
     return { ok: false, code: 'not_found', message: `cupping ${desc} not found` }
+  }
+
+  // Cluster 2 (#31): when a patch touches cupping_date or rest_days, re-run the
+  // consistency guard against the parent roast's roast_date. Effective values =
+  // the patched field if supplied, else the row's current value.
+  if (payload.cupping_date !== undefined || payload.rest_days !== undefined) {
+    const { data: parentRoast } = await supabase
+      .from('roasts')
+      .select('roast_date')
+      .eq('user_id', userId)
+      .eq('id', payload.roast_id)
+      .maybeSingle()
+    const effCuppingDate =
+      payload.cupping_date !== undefined ? payload.cupping_date : (existing.cupping_date as string | null)
+    const effRestDays =
+      payload.rest_days !== undefined ? payload.rest_days : (existing.rest_days as number | null)
+    const dateErr = checkCuppingDateConsistency(
+      parentRoast?.roast_date as string | null | undefined,
+      effCuppingDate,
+      effRestDays,
+    )
+    if (dateErr) return { ok: false, code: 'validation', errors: [dateErr] }
   }
 
   // Patchable fields — every cuppings column EXCEPT the lookup key. The key

@@ -1524,6 +1524,7 @@ function ArchiveLotBody({
                     <CupRow label="Body" value={pourover.body} />
                     <CupRow label="Finish" value={pourover.finish} />
                     <CupRow label="Temperature behavior" value={pourover.temperature_behavior} />
+                    <CupRow label="Cooling arc" value={pourover.cooling_arc_pattern} />
                   </div>
                 )}
                 {pourover.sweetness && pourover.overall && (
@@ -1768,6 +1769,12 @@ function ArchiveLotBody({
                     <div className="font-sans text-sm leading-relaxed mt-1 text-latent-mid">
                       <span className="label mr-1 inline-block">Temp behavior</span>
                       {cup.temperature_behavior}
+                    </div>
+                  )}
+                  {cup.cooling_arc_pattern && (
+                    <div className="font-sans text-sm leading-relaxed mt-1 text-latent-mid">
+                      <span className="label mr-1 inline-block">Cooling arc</span>
+                      {cup.cooling_arc_pattern}
                     </div>
                   )}
                   {cup.wb_to_ground_delta != null && (

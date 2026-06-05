@@ -267,6 +267,10 @@ export interface Cupping {
   // best_roast_id. See CONTEXT-roasting.md § Cup character.
   aromatic_behavior: string | null
   structural_behavior: string | null
+  // Cluster 2 (migration 078, 2026-06-04): canonical cooling-arc shape enum,
+  // independent of the temperature_behavior prose. Lets cross-lot "which lots
+  // cooling-arc degrade vs hold" be queryable. Historical cuppings left NULL.
+  cooling_arc_pattern: 'degrade' | 'hold' | 'improve' | 'flat' | null
   created_at: string
   updated_at: string
 }
