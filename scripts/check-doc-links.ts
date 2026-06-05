@@ -147,7 +147,7 @@ function anchorsFor(absPath: string): Set<string> {
       set.add(slug)
     }
     // explicit HTML anchors anywhere in the line
-    for (const m of line.matchAll(/<a\s+(?:name|id)=["']([\w-]+)["']/g)) set.add(m[1])
+    for (const m of Array.from(line.matchAll(/<a\s+(?:name|id)=["']([\w-]+)["']/g))) set.add(m[1])
   }
   anchorCache.set(absPath, set)
   return set
@@ -162,7 +162,7 @@ function buildDocsUriSet(): Set<string> {
   const src = readFileSync(resolve(repoRoot, 'lib/mcp/docs.ts'), 'utf-8')
   // Literal registered keys: 'docs://…': '…'  (also covers DOC_DESCRIPTIONS keys,
   // which are the same URI namespace — a superset is fine for "is it registered").
-  for (const m of src.matchAll(/'(docs:\/\/[^']+)'/g)) set.add(m[1])
+  for (const m of Array.from(src.matchAll(/'(docs:\/\/[^']+)'/g))) set.add(m[1])
   // Spread-template registrations expand 1:1 over their source dirs.
   for (const f of readdirSync(resolve(repoRoot, 'docs/taxonomies')).filter((n) => n.endsWith('.md'))) {
     set.add(`docs://taxonomies/${basename(f, '.md')}.md`)

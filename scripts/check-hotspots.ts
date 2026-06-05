@@ -194,7 +194,7 @@ function fanoutByFile(files: string[], srcByFile: Map<string, string>): Map<stri
     }
   }
   const out = new Map<string, number>()
-  for (const [target, set] of importers) out.set(target, set.size)
+  for (const [target, set] of Array.from(importers)) out.set(target, set.size)
   return out
 }
 
