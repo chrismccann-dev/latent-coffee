@@ -8,7 +8,7 @@
 
 - [§ FC Floor & Ceiling by Processing Method](../cross-coffee-insights.md#fc-floor--ceiling-by-processing-method) — High-density washed Colombian (Sudan Rume): FC floor ~200°C, drop ceiling ~208°C (High confidence, 20+ batches)
 - [§ WB-to-Ground Agtron Delta Norms by Processing Method](../cross-coffee-insights.md#wb-to-ground-agtron-delta-norms-by-processing-method) — Washed (high density): target ≤3 points; V1 typical 3-5; resolution 1.0 (#119)
-- [§ Green Spec → Starting Hypothesis](../cross-coffee-insights.md#green-spec--starting-hypothesis) — Density ≥800 g/L row (High confidence, confirmed on Sudan Rume Washed 810 g/L + Sudan Rume Natural 805 g/L); producer-notes-include-"lemongrass"/"jasmine"/"bergamot" row (High confidence, confirmed on Sudan Rume Washed via optimized brew session)
+- [§ Green Spec → Starting Hypothesis](../cross-coffee-insights.md#green-spec--starting-hypothesis) — Density ≥800 g/L row (High confidence, confirmed on Sudan Rume Washed 809 g/L; Sudan Rume Natural at 791 g/L is below the threshold and natural-processed, so not corroborating evidence); producer-notes-include-"lemongrass"/"jasmine"/"bergamot" row (High confidence, confirmed on Sudan Rume Washed via optimized brew session)
 - [§ Rest Behavior Patterns](../cross-coffee-insights.md#rest-behavior-patterns) — Washed, high-density Colombian: Day 7 pourover correct gate (Confirmed across 20+ batches); Day 6 directionally reliable as fallback
 
 **Per-lot deep dives:**
