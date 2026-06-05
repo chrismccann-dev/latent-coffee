@@ -44,6 +44,8 @@ Ordered by cross-session weight. Each is a v0→v1 rubric change.
 
 **R12 — Doc-substrate audits need their own mode (the Latent extension).** [04-F1…F8] "Broken" is per-renderer (agent-cwd-root vs GitHub-file-relative vs `docs://` MCP catalog vs claude.ai-doesn't-follow-links) — lead with the consumer/renderer matrix, not a raw count. The naive checker's ~8% FP rate **is the deliverable** (the gate skip-list). Stale-pointer (dead-AND-misleading, e.g. page-ia.md → deleted SectionCard) ranks *above* merely-dead. Live-vs-archive segmentation is load-bearing (reuse `check:doc-sizes` Tier-1 manifest). `docs://` is a third address space. **Rule:** the skill has a doc-substrate mode that swaps the before/after-seam card slot for "resolution base + sample dead targets," hunts for the declared link convention first, and delegates detection to the spun-out `check:doc-links` gate while keeping the live-vs-archive + stale-vs-dead judgment.
 
+**R13 — Be decisive: push the must-dos, don't just enumerate them.** [Chris, 2026-06-04] The positive complement of R8. R8 makes the skill opinionated about *killing* bad ideas; R13 makes it equally opinionated about *pushing* the real ones. The report must not read as a neutral menu — for genuine wins it **actively recommends action and states the cost of inaction**. **Rule:** (a) the report **leads** with a clear "do this now" lead recommendation, not a sorted table the operator has to interpret; (b) `Strong` recommendation-strength is a stance — it means "you should do this, and here's the consequence of leaving it" — and every `Strong` card carries an explicit *cost-of-inaction* line (what future change this taxes, what's actively rotting, e.g. Session 01's live drift bug); (c) decisiveness lives *between* the two guardrails — the R6 risk-gate still caps over-abstraction, R8 still kills bad ideas, but for the candidates that survive both, the skill takes a side rather than hedging. The skill scopes the work, pushes what needs doing, and *then* hands off the packets — it never silently executes (the push is in the recommendation, not the keyboard).
+
 ---
 
 ## Locked smell taxonomy (v1)
@@ -77,9 +79,10 @@ Fired ✓ / didn't ✗ / added ⊕ relative to the v0 brainstorm list.
 - Depends on: <other candidates that must land first | none> (R7)
 - Verification matrix: <named live rows / URLs / tsc / execute_sql checks> (R9)
 - Size: S|M|L · Risk: Low|Med|High  (risk ≥4 → caps at Worth-exploring, R6)
+- Cost of inaction: <what this taxes / what's actively rotting — mandatory on every Strong card> (R13)
 - Why first / later: <1 sentence>
 ```
-Plus a mandatory **Considered-and-rejected** section (R8) and a **dependency sequence** (R7) at report end.
+The report **opens** with a decisive lead recommendation ("do this now: …", R13), then the candidate list, then a mandatory **Considered-and-rejected** section (R8) and a **dependency sequence** (R7) at the end. Opinionated in both directions — pushes the must-dos, kills the bad ideas.
 
 ---
 
@@ -100,7 +103,7 @@ Plus a mandatory **Considered-and-rejected** section (R8) and a **dependency seq
 
 Authoring is execution work for a fresh build session — this derive doc is its spec.
 
-1. **`.claude/skills/architecture-review/SKILL.md`** — on-demand, takes a surface arg, runs the v1 rubric (R1-R11) read-only, emits candidate-cards-v1 + considered-and-rejected + dependency sequence. Carries the doc-substrate mode (R12). These 5 handoffs are its worked-example corpus (`docs/audits/architecture/01..05`). The skill **delegates** detection to the two gates and keeps the judgment (live-vs-archive, stale-vs-dead, adoption-gap fork) — per 04-Q5.
+1. **`.claude/skills/architecture-review/SKILL.md`** — on-demand, takes a surface arg, runs the v1 rubric (R1-R13) read-only, emits a decisive lead recommendation + candidate-cards-v1 + considered-and-rejected + dependency sequence. Opinionated in both directions: pushes the must-dos with a cost-of-inaction line (R13), kills the bad ideas (R8). Carries the doc-substrate mode (R12). These 5 handoffs are its worked-example corpus (`docs/audits/architecture/01..05`). The skill **delegates** detection to the two gates and keeps the judgment (live-vs-archive, stale-vs-dead, adoption-gap fork) — per 04-Q5. **Stops at the report — never edits code** (the push is in the recommendation, not the keyboard).
 2. **`scripts/check-hotspots.ts`** (`check:hotspots`) — the mechanical-scan layer (R2). Lowest-risk, most-reused; can land first as a standalone.
 3. **`scripts/check-doc-links.ts`** (`check:doc-links`) — root-relative resolution base (ADR-0021), anchor-set generation for redirect-stub anchors, skip-list from Session 04's 33-FP taxonomy. Daily CI cron.
 4. **Doc-substrate remediation sprint** — Session 04 Candidates 1/3/4 (the `../../` + stale-pointer + off-by-one fixes) under the now-locked root-relative convention; this is where the 169-link migration lands.
