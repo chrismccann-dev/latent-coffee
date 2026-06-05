@@ -13,7 +13,7 @@
 - Temperature is the surgical lever for bitter tail; coarsening grind is the wrong move (coarsening strips fruit before it solves the finish).
 - Office SWORKS template: Dial 6 (Half-Open) through main pours = canonical anaerobic-natural Suppression valve template. Distinct from Dial 5 Restricted slow/slow/open (yeast-anaerobic Hybrid Sequential).
 - Kettle-on-base at 92°C is acceptable on the Altieri NASD lot.
-- Fallback if Suppression doesn't resolve: Balanced + Inverted Temperature Staging (88°C → 94°C across two phases). Not Balanced at higher temp.
+- Fallback if Suppression doesn't resolve: Balanced + Thermal Staging (88°C → 94°C across two phases). Not Balanced at higher temp.
 
 **Key risk:** Bitter finish is temperature-driven, not grind-driven.
 
