@@ -38,15 +38,14 @@ When work is **not** product-side: research experiments go to the Research Coord
 
 Complete the theme before the Lot Coordinator restructure. The most-neglected surface area.
 
-**Shipped members:** migration-drift gate ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)) · CLAUDE.md compaction ([#352](https://github.com/chrismccann-dev/latent-coffee/pull/352)) · doc-pruning *mechanism* scoped + tripwire registry placed ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md), [tripwires](../architecture/doc-tripwires.md)) with worked pruning cases 001 (CLAUDE.md) / 002 (CONTEXT-roasting) / 003 (PRODUCT.md split) / 004 (filters.md owned/not-owned split — also cleared the brewing-equipment-expert cluster cap, mooting the conditional case 005).
+**Shipped members:** migration-drift gate ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)) · CLAUDE.md compaction ([#352](https://github.com/chrismccann-dev/latent-coffee/pull/352)) · **doc-pruning mechanism — COMPLETE** ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md), [tripwires](../architecture/doc-tripwires.md)): Pattern J promoted placeholder→defined via light formalization ([#369](https://github.com/chrismccann-dev/latent-coffee/pull/369) — `check:doc-sizes` script + daily CI cron as the automated trigger, manual operator-led prune as the response), **six shapes** worked across 7 cases (001 CLAUDE.md / 002 CONTEXT-roasting / 003 PRODUCT.md / 004 filters.md / 006 log-cupping / 007 cross-coffee-insights — the last surfaced the `re-home` shape; 005 mooted), **over-cap backlog fully drained** (all Tier-1 surfaces within cap as of 2026-06-04).
 
 **Remaining members:**
-- Operator review of CCIL / librarians.
-- MCP continuous-feedback drain (`feedback_mcp_continuous_log.md`).
-- Codebase-refactor / cleanup skills.
-- Feedback-handoff formalization (a skill that routes structured workflow feedback back into Claude Code continuously).
-- MEMORY.md consolidation (overdue — index over its warning threshold).
-- Doc-pruning **systematization decision** — now unblocked: all 5 shapes (extract / split / consolidate / archive / delete) have a worked example. Decide whether to build the mechanism (skill / schedule / arbiter step / cadence rule).
+- **MEMORY.md consolidation** (overdue — index over its warning threshold; `consolidate-memory` skill exists, so a quick hygiene pass).
+- **MCP continuous-feedback drain** (`feedback_mcp_continuous_log.md` — trigger: "process pending workflow feedback"; scope depends on the live backlog).
+- **Operator review of CCIL / librarians** (a review pass over the cross-coffee insight layer + the historian/archivist clusters for staleness / accuracy).
+- **Feedback-handoff formalization** (a skill that routes structured workflow feedback from a claude.ai session back into Claude Code continuously — a skill *build*).
+- **Codebase-refactor / cleanup skills** (new Claude Code review/cleanup skills — a skill *build*).
 
 ### 2. Lot Coordinator + V-Set Assistant — NEXT, operator-gated
 
