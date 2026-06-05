@@ -40,11 +40,12 @@ Complete the theme before the Lot Coordinator restructure. The most-neglected su
 
 **Shipped members:** migration-drift gate ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)) · CLAUDE.md compaction ([#352](https://github.com/chrismccann-dev/latent-coffee/pull/352)) · **doc-pruning mechanism — COMPLETE** ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md), [tripwires](../architecture/doc-tripwires.md)): Pattern J promoted placeholder→defined via light formalization ([#369](https://github.com/chrismccann-dev/latent-coffee/pull/369) — `check:doc-sizes` script + daily CI cron as the automated trigger, manual operator-led prune as the response), **six shapes** worked across 7 cases (001 CLAUDE.md / 002 CONTEXT-roasting / 003 PRODUCT.md / 004 filters.md / 006 log-cupping / 007 cross-coffee-insights — the last surfaced the `re-home` shape; 005 mooted), **over-cap backlog fully drained** (all Tier-1 surfaces within cap as of 2026-06-04).
 
+**Shipped members (cont.):** **feedback-handoff formalization — COMPLETE** ([ADR-0020](../adr/0020-feedback-handoff-pipeline.md)): the route→plan→[implement] pipeline — `route-feedback` + `plan-feedback` skills + the [feedback-backlog](feedback-backlog.md) seam (master-log reframe + recurrence-counted routing); proven by dogfooding `plan-feedback` over the real Round-19 backlog. Implementer skill deferred (spawned sub-agent for now), per the doc-pruning light-formalization posture.
+
 **Remaining members:**
 - **MEMORY.md consolidation** (overdue — index over its warning threshold; `consolidate-memory` skill exists, so a quick hygiene pass).
-- **MCP continuous-feedback drain** (`feedback_mcp_continuous_log.md` — trigger: "process pending workflow feedback"; scope depends on the live backlog).
+- **MCP continuous-feedback drain** (`feedback_mcp_continuous_log.md` — trigger: "process pending workflow feedback"; scope depends on the live backlog). **Note:** the *intake mechanism* is now the `route-feedback` skill; the remaining drain work is acting on the routed backlog via `plan-feedback`.
 - **Operator review of CCIL / librarians** (a review pass over the cross-coffee insight layer + the historian/archivist clusters for staleness / accuracy).
-- **Feedback-handoff formalization** (a skill that routes structured workflow feedback from a claude.ai session back into Claude Code continuously — a skill *build*).
 - **Codebase-refactor / cleanup skills** (new Claude Code review/cleanup skills — a skill *build*).
 
 ### 2. Lot Coordinator + V-Set Assistant — NEXT, operator-gated
@@ -104,7 +105,6 @@ These came out of the 2026-06-02 priority-stack recount but are bigger than twea
 Each is its own session, sized small-to-medium, output is a scoping doc that feeds a future sprint. Opportunistic order — Chris triggers when bandwidth lines up.
 
 - **Coffee brief / `brews.roaster_tasting_notes` scoping.** Roasting captures expected→actual at both stages; brewing only captures actual. The Coffee Brief is the missing "expected" half. Outcome could be a full entity, a column-only first sprint, or deferred ("could conclude we don't need to do anything").
-- **Generic feedback-handoff queue formalization** (also a Cluster B member). Formalize today's "WORKFLOW FEEDBACK INTAKE" prompt + `feedback_mcp_continuous_log.md` into a real skill that routes structured feedback from a workflow session back to Claude Code continuously.
 - **WBC-mastery long-term feature direction.** "What do I need to do to get closer to entering, competing, and winning the World Brewers Cup — not just making the app nicer?" Strategic vision brainstorm; output is longer-term roadmap themes ranked against the mastery goal.
 
 ---
