@@ -86,6 +86,19 @@ SESSION. DO NOT EXECUTE." and do NOT invoke the autonomy rule. If it's concrete 
 work (a known prompt fix, a clear validation guard), it's an execution brief. Most
 high-recurrence architectural clusters are grilling work — don't pre-pick the implementation.
 
+**Always end the brief with a "Completion handoff" section** — this is what closes the
+pipeline loop. Instruct the implementer session that when the work is done and merged, it must
+write a completion report to `docs/sprints/<cluster-slug>-completion.md` that (1) restates the
+plan so the report stands alone, (2) recaps what shipped per item incl. divergences + why,
+(3) gives the PR URL + merge SHA, (4) reports actual verification results (what was run/seen,
+not "should work"), and (5) flags anything deferred, surprising, or newly surfaced. Then it
+tells Chris the report is ready to bring back here. Chris pastes it into a Claude Code session
+to close out: flip the cluster's backlog items `open → shipped`, confirm the `shipped.md` row,
+and `route-feedback` any new friction the build surfaced. Without this section the loop dangles
+— a build ships but the backlog never learns it shipped, and friction the build exposed is
+lost. See [the first such brief](../../../docs/sprints/cupping-schema-guardrails-kickoff.md)
+for the shape.
+
 ### 6. Mark planned items + hand off
 
 Flip the chosen items' `Status: open → planned` in the backlog (so the next route-feedback /
