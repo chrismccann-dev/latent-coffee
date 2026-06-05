@@ -164,7 +164,7 @@ Rule:
 - Evaluate below 50°C before deciding the finish is structural; cup integrates significantly below 50°C.
 - Use Suppression as the default strategy for anaerobic naturals.
 - For cold-room dehydration lots, use the Suppression logic but expect a slightly higher useful temperature band (push +1°C from 92°C to 93°C).
-- If Suppression does not resolve the cup, **Balanced Intensity + Inverted Temperature Staging** (88°C → 94°C) is the experimental fallback.
+- If Suppression does not resolve the cup, **Balanced Intensity + Thermal Staging** (88°C → 94°C) is the experimental fallback.
 
 This stays here because the pattern crosses origin, cultivar, and drying / fermentation modifier. Lot-specific notes + the office SWORKS valve template live in [by-strategy/suppression.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md) and [by-coffee-family/anaerobic-natural.md](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md).
 
@@ -280,7 +280,7 @@ Modifiers are Axis 2. They do not replace strategy selection - use them only aft
 - **Early cut** is a candidate only when the front of the cup reads sharp / saline / off rather than expressive.
 - Candidate (untested): heavy anaerobic washed Colombian Geshas from Huila/Cauca (Jeferson Motta family) - same heavy-tail mechanics; late cut is a plausible refinement to the existing Full Expression reference.
 
-### Inverted Temperature Staging
+### Thermal Staging
 
 **Status:** Experimental fallback. No confirmed data points yet.
 
@@ -299,7 +299,7 @@ Validated reference - **Pepe Jijón Finca Soledad Sidra Wave Hybrid (Moonwake, E
 
 ### Modifier Compatibility Matrix
 
-| Strategy | Output Selection | Inverted Temperature Staging | Aroma Capture |
+| Strategy | Output Selection | Thermal Staging | Aroma Capture |
 |---|---|---|---|
 | Suppression | Possible but rare | **Counterproductive** - high-temp finish defeats the suppression intent | Possible |
 | Clarity-First | Possible but rare | **Counterproductive** - already-light coffees do not benefit | Likely useful for highly aromatic coffees |
@@ -329,7 +329,7 @@ Things to test across future brews. **Maintenance rule:** when a question resolv
 ### Modifier Tests
 
 - Formalize late-cut Output Selection on the next heavy co-ferment washed lot: full-yield reference vs ~85% target-weight cut. If the kept fraction exceeds the full-yield brew, late cut is promoted to a confirmed modifier on heavy co-ferment washed.
-- Test Inverted Temperature Staging (88°C → 94°C) on the next anaerobic natural that Suppression cannot resolve. No suitable test coffee yet.
+- Test Thermal Staging (88°C → 94°C) on the next anaerobic natural that Suppression cannot resolve. No suitable test coffee yet.
 - Test Aroma Capture on Esmeralda climate-controlled natural or clean washed Panama Gesha to confirm whether the warmer-peak artifact generalizes beyond Sidra.
 - Hybrid (Selective Bloom) first test (Eline Ferket 2025 pattern): bloom on the Switch with valve closed, drain bloom liquid separately, evaluate alone, recombine if complete / discard if harsh. Highest-leverage on an aromatic Clarity-First lot.
 
