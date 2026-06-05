@@ -90,10 +90,20 @@ export interface GreenBean {
   quantity_g: number | null
   moisture: string | null
   density: string | null
-  // Producer/seller-supplied tasting notes (migration 039). Other 039 intake
-  // columns (seller / exporter / elevation_m / additional_notes /
-  // roest_inventory_id) remain untyped here — add as consumers adopt them.
+  // Producer/seller-supplied intake fields (migration 039). All typed here as
+  // of the 2026-06-05 schema-vs-type drift scan; previously only
+  // producer_tasting_notes was surfaced and the siblings were left "type as a
+  // consumer adopts them", which is the drift class this scan closed.
   producer_tasting_notes: string | null
+  seller: string | null
+  exporter: string | null
+  elevation_m: number | null
+  additional_notes: string | null
+  roest_inventory_id: number | null
+  // One-shot lot flag (migration 054): single-batch sample (~100-120g, no
+  // iteration possible). Drives the one-shot prompt family + the
+  // lever-attribution guardrails on roast_learnings. NOT NULL, defaults false.
+  is_one_shot: boolean
   terroir_id: string | null
   cultivar_id: string | null
   // Phase 3 (migration 045): canonical-vs-auto_created flag for FK rows.
@@ -175,6 +185,23 @@ export interface Roast {
   // design intent that this roast executed. Nullable through Phase 3 of the
   // roasting-redesign migration plan. See docs/roasting/redesign.md § 4.4.
   recipe_id: string | null
+  // Roest-pull server-populated curves + timeline, written by pull_roest_log.
+  // Typed here as of the 2026-06-05 schema-vs-type drift scan. fan_curve /
+  // inlet_curve / tp_temp / tp_time / yellowing_temp / roest_log_id /
+  // roast_profile_name / hopper_load_temp = migration 039; inlet_curve_recorded
+  // + the three ror_at_* sample points = migration 070 (Roest datapoints parity).
+  fan_curve: string | null
+  inlet_curve: string | null
+  inlet_curve_recorded: string | null
+  roast_profile_name: string | null
+  roest_log_id: number | null
+  hopper_load_temp: number | null
+  tp_temp: number | null
+  tp_time: string | null
+  yellowing_temp: number | null
+  ror_at_2_30: number | null
+  ror_at_4_00: number | null
+  ror_at_fc_minus_30s: number | null
   created_at: string
   updated_at: string
   // Joined data
