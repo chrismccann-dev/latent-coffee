@@ -8,7 +8,7 @@ Scope is concrete (this brief + the scope doc + the design bundle). Plan-mode fi
 
 ## Read first
 
-- **[docs/features/claude-design-redesign-scope-2026-05-29.md](../features/claude-design-redesign-scope-2026-05-29.md)** — § "Mobile-primary companion surfaces" says `/brews/[id]` is **already aligned, no round-trip needed**: `BrewDetailPolished` stacks recipe-first in tier order at every viewport; **mobile = `order-*` reordering of the same blocks** (single tree — NOT a dual-subtree; that's only for the cupping surface).
+- **[docs/features/claude-design-redesign-scope-2026-05-29.md](docs/features/claude-design-redesign-scope-2026-05-29.md)** — § "Mobile-primary companion surfaces" says `/brews/[id]` is **already aligned, no round-trip needed**: `BrewDetailPolished` stacks recipe-first in tier order at every viewport; **mobile = `order-*` reordering of the same blocks** (single tree — NOT a dual-subtree; that's only for the cupping surface).
 - **The design bundle** at `~/Documents/Latent Coffee Design System/Latent Design System - Full/project/`:
   - `subpage-system.jsx` → `BrewDetailPolished` (the exact tier composition + which `Ssp*` each block uses) + the `Ssp*` component bodies. Anchor data = **Pepe Jijón Finca Soledad — Sidra Wave Hybrid (Brew #143)** — use it as the visual reference.
   - `Latent - Sub Page System v1.html` `<style>` block — the `.ssp-*` CSS (already ported to `app/globals.css` in Sprint 0; only port additions if a primitive is missing chrome — see Open Q3 `.status`).

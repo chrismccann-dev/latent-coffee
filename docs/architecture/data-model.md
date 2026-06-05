@@ -1,6 +1,6 @@
 # Data model reference (per-column histories + relationship detail)
 
-Per-column schema histories (migration provenance, populate-side notes) for the core entities, plus the full relationship-pattern detail. **Claude-Code-facing reference — read on demand when touching a column / migration; not MCP-registered.** The tight entity roster + key FK rules live in CLAUDE.md § Data Model. Canonical-registry implementation rules live in [registries.md](registries.md). Extracted from CLAUDE.md 2026-06-02 (root-doc compaction) — move-never-delete.
+Per-column schema histories (migration provenance, populate-side notes) for the core entities, plus the full relationship-pattern detail. **Claude-Code-facing reference — read on demand when touching a column / migration; not MCP-registered.** The tight entity roster + key FK rules live in CLAUDE.md § Data Model. Canonical-registry implementation rules live in [registries.md](docs/architecture/registries.md). Extracted from CLAUDE.md 2026-06-02 (root-doc compaction) — move-never-delete.
 
 ## Core entities
 - **brews** — individual coffee tastings (purchased or self-roasted). 79 records as of 2026-05-09. Has distinct `roaster` and `producer` columns; don't conflate them. Self-roasted brews carry `roaster = 'Latent'`.

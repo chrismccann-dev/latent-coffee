@@ -8,11 +8,11 @@ Ancient Ethiopian landrace, Boma Plateau origin; parent of SL-28. Transparency-d
 
 ## Reference recipe + default
 
-Confirmed Balanced Intensity at light end: CGLE Las Margaritas Sudan Rume Natural (Special Guests, Edition 0326-42) at EG-1 6.5 / 91°C / April Brewer Glass + April Paper / 15g / 240g (1:16) / three-pour structure. Variety transparency drives the position within Balanced. See also [by-strategy/balanced-intensity.md](../by-strategy/balanced-intensity.md).
+Confirmed Balanced Intensity at light end: CGLE Las Margaritas Sudan Rume Natural (Special Guests, Edition 0326-42) at EG-1 6.5 / 91°C / April Brewer Glass + April Paper / 15g / 240g (1:16) / three-pour structure. Variety transparency drives the position within Balanced. See also [by-strategy/balanced-intensity.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md).
 
 ## Vehicle-dependency rule (two-data-point confirmed 2026-05-17)
 
-SL-lineage and aromatic-landrace varieties on fast-cone vehicles (Orea Glass + Sibarist FAST or B3 Cone) produce phase-separated cups - pungent lemongrass / dominant ginger / sweetness sitting adjacent rather than woven through. April Brewer Glass + April Paper (flat bed, medium-slow drain) is the corrective vehicle. Promoted from one-data-point hypothesis to working rule with the Newbery Street Nawin Doi Chang Washed second data point. Original three Ethiopian-landrace candidates (74110/74112, SL-28, Wush Wush) remain individually untested - confirm on a lot from each before treating the pattern as fully generalized. (The cross-cultivar vehicle-integration pattern is also tracked in [cross-coffee-insights.md](../cross-coffee-insights.md) as a cultivar × equipment interaction.)
+SL-lineage and aromatic-landrace varieties on fast-cone vehicles (Orea Glass + Sibarist FAST or B3 Cone) produce phase-separated cups - pungent lemongrass / dominant ginger / sweetness sitting adjacent rather than woven through. April Brewer Glass + April Paper (flat bed, medium-slow drain) is the corrective vehicle. Promoted from one-data-point hypothesis to working rule with the Newbery Street Nawin Doi Chang Washed second data point. Original three Ethiopian-landrace candidates (74110/74112, SL-28, Wush Wush) remain individually untested - confirm on a lot from each before treating the pattern as fully generalized. (The cross-cultivar vehicle-integration pattern is also tracked in [cross-coffee-insights.md](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md) as a cultivar × equipment interaction.)
 
 ## Body intuition rule
 

@@ -1,8 +1,8 @@
 # Reference Taxonomies — Process
 
-Per-taxonomy feature doc for the Process taxonomy. Part of the [Reference Taxonomies umbrella](reference-taxonomies-attribution.md). **Phylum A2 (author new ruleset, same discipline).** Third sprint after Variety + Region.
+Per-taxonomy feature doc for the Process taxonomy. Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md). **Phylum A2 (author new ruleset, same discipline).** Third sprint after Variety + Region.
 
-Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md) for shared conventions.
+Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md) for shared conventions.
 
 ---
 
@@ -38,7 +38,7 @@ Unlike Variety + Region, Process has **no existing authored ruleset in Chris's G
 
 ## Canonical adoption workflow (for this sprint)
 
-Per [attribution § Canonical adoption workflow](reference-taxonomies-attribution.md#canonical-adoption-workflow):
+Per [attribution § Canonical adoption workflow](docs/features/reference-taxonomies-attribution.md#canonical-adoption-workflow):
 
 1. **Research (Chris).** Chris:
    - Audits Sami's process taxonomy for coverage + framing.
@@ -140,7 +140,7 @@ Each canonical process in `docs/taxonomies/processes.md` gets a structured block
 
 ## Sources (for this feature doc)
 
-- [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md)
+- [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md)
 - `lib/process-families.ts` (existing canonical starting point)
 - Roberta Sami, process taxonomy: https://www.robertasami.com/processes
 - Chris's 55-brew corpus (brews table)

@@ -5,7 +5,7 @@
 Fifth `/grill-with-docs` session, audit-grilling the WBC reference materials cluster — the four research-derived docs (`docs/brewing/wbc-reference.md` + `docs/brewing/wbc-recipes.md` + `docs/roasting/wbc-roasting.md` + `docs/roasting/wbc-sourcing.md`) that project the World Brewers Cup competitor corpus onto Latent's worldview. Second `/grill-with-docs` session run on 2026-05-16 (after the canonical-registries cluster earlier the same day). 8 grilling rounds; sourcing-side concepts dominated mid-session because Chris's audio context surfaced operational frames the docs hadn't articulated explicitly.
 
 Outputs:
-- [CONTEXT.md](../../CONTEXT.md) — **19 new glossary entries** under a new "WBC Reference Materials" sub-section (peer to "Roasting", "Brewing", "MCP / Sync Architecture", "Canonical Registries"). CONTEXT.md now ~123 entries total (31 roasting + 23 brewing + 27 MCP + 23 canonical registries + 19 WBC).
+- [CONTEXT.md](CONTEXT.md) — **19 new glossary entries** under a new "WBC Reference Materials" sub-section (peer to "Roasting", "Brewing", "MCP / Sync Architecture", "Canonical Registries"). CONTEXT.md now ~123 entries total (31 roasting + 23 brewing + 27 MCP + 23 canonical registries + 19 WBC).
 
 The 19 new entries fall into 5 thematic groups:
 

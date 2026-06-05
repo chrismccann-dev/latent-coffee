@@ -1,8 +1,8 @@
 # Reference Taxonomies — Dripper
 
-Per-taxonomy feature doc for the Dripper taxonomy. Part of the [Reference Taxonomies umbrella](reference-taxonomies-attribution.md). **Phylum A2 (author new ruleset).** Fourth sprint after Variety + Region + Process.
+Per-taxonomy feature doc for the Dripper taxonomy. Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md). **Phylum A2 (author new ruleset).** Fourth sprint after Variety + Region + Process.
 
-Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md) for shared conventions.
+Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md) for shared conventions.
 
 ---
 
@@ -43,7 +43,7 @@ Starting points:
 
 ## Canonical adoption workflow (for this sprint)
 
-Per [attribution § Canonical adoption workflow](reference-taxonomies-attribution.md#canonical-adoption-workflow):
+Per [attribution § Canonical adoption workflow](docs/features/reference-taxonomies-attribution.md#canonical-adoption-workflow):
 
 1. **Research (Chris).** Chris:
    - Drafts the canonical dripper list — the 5 he uses + reference drippers worth preloading (likely V60, Origami, Tricolate, Flower Dripper, April Plastic).
@@ -137,7 +137,7 @@ Each canonical dripper in BREWING.md gets a structured block.
 
 ## Sources (for this feature doc)
 
-- [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md)
+- [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md)
 - Roberta Sami, dripper taxonomy: https://www.robertasami.com/drippers
 - BREWING.md (existing Equipment Reference section)
 - `memory/user_workflow.md` (Chris's brewer inventory)

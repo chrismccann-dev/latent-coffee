@@ -25,7 +25,7 @@ Invoke `/grill-with-docs`. It updates CONTEXT-{brewing,roasting,shared}.md + ADR
 inline as calls firm up.
 
 ## Scope — IN
-Drain the grilling-queue ([docs/grilling-queue.md](../grilling-queue.md)):
+Drain the grilling-queue ([docs/grilling-queue.md](docs/grilling-queue.md)):
 - **Item 42** — per-surface mobile pattern → ADR candidate (`order-*` single-tree
   vs container-query dual-subtree at the 520px crossover). READY → likely a new ADR.
 - **Item 43** — detail-view hero-tile reconciliation (lifecycle `--tile-*`

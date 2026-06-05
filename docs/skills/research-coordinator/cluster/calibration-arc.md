@@ -111,12 +111,12 @@ Refined from "count-out-loud" pacing in the first protocol drafts (Project #1 v1
 
 Filter-arc Step 0 primitives covered: physical-photo / SKU / capacity / alias-map / vendor-intent / pre-pull-1 calibration / bimodality screen. That set held across 4 projects.
 
-If a future research track surfaces a class of Step 0 failure that doesn't map to any current primitive, the Coordinator updates this doc — but only after the failure repeats in a second track (per the cross-project ratification gate at [`process-retro.md`](process-retro.md)). Single-project pattern-spotting is not enough to graduate a primitive into this cluster.
+If a future research track surfaces a class of Step 0 failure that doesn't map to any current primitive, the Coordinator updates this doc — but only after the failure repeats in a second track (per the cross-project ratification gate at [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md)). Single-project pattern-spotting is not enough to graduate a primitive into this cluster.
 
 ---
 
 ## Related primitives
 
-- [`role-discipline.md`](role-discipline.md) — the Step 0 + scoring + handoff sequence runs entirely inside the Assistant session
-- [`process-retro.md`](process-retro.md) — Step 0 friction captured during a track is retro fodder; primitive updates land post-retro
-- [`templates/spawn-prompt-template.md`](templates/spawn-prompt-template.md) — the spawn prompt's "numbered job sequence" section enumerates the calibration-arc primitives that apply to the track
+- [`role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md) — the Step 0 + scoring + handoff sequence runs entirely inside the Assistant session
+- [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md) — Step 0 friction captured during a track is retro fodder; primitive updates land post-retro
+- [`templates/spawn-prompt-template.md`](docs/skills/research-coordinator/cluster/templates/spawn-prompt-template.md) — the spawn prompt's "numbered job sequence" section enumerates the calibration-arc primitives that apply to the track

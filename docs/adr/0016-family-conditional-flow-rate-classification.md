@@ -1,6 +1,6 @@
 # 0016 — Family-conditional flow-rate classification framework
 
-Refines Lesson #36 from the filter-arc trifecta (cone Project #1 → flat Project #2 → specialty cone Project #3) to its post-RP4 empirically-validated form. Companion to [ADR-0015](0015-accessory-aware-flowrate-and-booster-registry.md) which captures the `flowRateContexts` schema; this ADR captures the **classification framework** that interprets those measurements.
+Refines Lesson #36 from the filter-arc trifecta (cone Project #1 → flat Project #2 → specialty cone Project #3) to its post-RP4 empirically-validated form. Companion to [ADR-0015](docs/adr/0015-accessory-aware-flowrate-and-booster-registry.md) which captures the `flowRateContexts` schema; this ADR captures the **classification framework** that interprets those measurements.
 
 ## Context
 

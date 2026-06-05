@@ -83,7 +83,7 @@ No other prompt asserts residency. The other roasting prompts' opening lines (`l
 
 ## Findings: Change 2 anchor readiness (brewing operational-guide)
 
-**Anchors are clean.** [operational-guide.md](../skills/brewing-assistant/cluster/operational-guide.md) sections:
+**Anchors are clean.** [operational-guide.md](docs/skills/brewing-assistant/cluster/operational-guide.md) sections:
 
 | Anchor | Line | Purpose |
 |---|---|---|
@@ -107,7 +107,7 @@ Anchor drift risk: low (anchor names are stable + load-bearing). The spec's `lis
 
 ## Findings: Change 2 follow-up — operator-guide split-check
 
-The spec's split-check ("confirm operator-guide's contents are actually used at session start, not only later") surfaces real candidates. [operator-guide.md](../skills/coordinator/operator-guide.md) sections (159 lines / under-budget for the resident exemption):
+The spec's split-check ("confirm operator-guide's contents are actually used at session start, not only later") surfaces real candidates. [operator-guide.md](docs/skills/coordinator/operator-guide.md) sections (159 lines / under-budget for the resident exemption):
 
 | Section | Line | Resident? | Reasoning |
 |---|---|---|---|

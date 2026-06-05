@@ -12,7 +12,7 @@ Run a coordinated drift check across the three surfaces that drive Latent's work
 
 The three surfaces:
 
-1. **Codebase + docs** — already audited via Sprint F ([report](sprint-f-audit-2026-05-24.md)). 6-actor matrix walked clean across Sprints 0-14 + M. No drift surfaced beyond shipped.md row backfill (closed inline).
+1. **Codebase + docs** — already audited via Sprint F ([report](docs/sprints/sprint-f-audit-2026-05-24.md)). 6-actor matrix walked clean across Sprints 0-14 + M. No drift surfaced beyond shipped.md row backfill (closed inline).
 2. **claude.ai project memory + custom instructions** — surface Claude Code cannot touch. ~12-day delta since pre-grilling era likely.
 3. **Chris's lived workflow** — green bean → reference roast → reference cup → optimized brew (roasting side); purchased bean → iteration → optimized brew → propose_doc_changes (brewing side). Substrate has moved a lot in 2 weeks.
 
@@ -26,7 +26,7 @@ The three surfaces:
 
 ### Surface 2 — claude.ai memory + instructions audit
 
-Read: [sprint-r-audit-prep-claude-ai-memory-diff-2026-05-25.md](sprint-r-audit-prep-claude-ai-memory-diff-2026-05-25.md)
+Read: [sprint-r-audit-prep-claude-ai-memory-diff-2026-05-25.md](docs/sprints/sprint-r-audit-prep-claude-ai-memory-diff-2026-05-25.md)
 
 Walk:
 - Section 1 — canonical taxonomies (11 axes including new SWORKS) — verify counts + recent deltas
@@ -42,8 +42,8 @@ For each stale or gap finding: refresh claude.ai's memory inline. Log finding in
 ### Surface 3 — Chris's lived workflow audit
 
 Read:
-- [sprint-r-audit-prep-roasting-workflow-baseline-2026-05-25.md](sprint-r-audit-prep-roasting-workflow-baseline-2026-05-25.md)
-- [sprint-r-audit-prep-brewing-workflow-baseline-2026-05-25.md](sprint-r-audit-prep-brewing-workflow-baseline-2026-05-25.md)
+- [sprint-r-audit-prep-roasting-workflow-baseline-2026-05-25.md](docs/sprints/sprint-r-audit-prep-roasting-workflow-baseline-2026-05-25.md)
+- [sprint-r-audit-prep-brewing-workflow-baseline-2026-05-25.md](docs/sprints/sprint-r-audit-prep-brewing-workflow-baseline-2026-05-25.md)
 
 For each phase in each baseline:
 - ✅ matches lived practice
@@ -82,7 +82,7 @@ Bundle findings into `memory/project_audit_cluster_2026-05-XX.md` (single retro 
 
 ## Output
 
-Triggers the architecture brainstorm cluster kickoff ([architecture-rethink-cluster-kickoff-2026-05-25.md](architecture-rethink-cluster-kickoff-2026-05-25.md)). The brainstorm session reads the audit retro as one of its primary inputs.
+Triggers the architecture brainstorm cluster kickoff ([architecture-rethink-cluster-kickoff-2026-05-25.md](docs/sprints/architecture-rethink-cluster-kickoff-2026-05-25.md)). The brainstorm session reads the audit retro as one of its primary inputs.
 
 ## Open questions
 

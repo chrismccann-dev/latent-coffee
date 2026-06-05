@@ -113,7 +113,7 @@ First action: read `docs/research-projects/<track-slug>.md` in full. Then summar
 
 **Section 4 — "Read it in full first."** Short directive. The temptation for any session to skim a long protocol doc is real; this directive is the structural pre-emption.
 
-**Section 5 — Project framing.** 2-3 paragraphs. Where does this track sit in the project's arc? What's the project's bigger question? This is the only section where the Assistant gets cross-track context — every other section is single-track-scoped. Per [`sharp-substrate-fold.md`](../sharp-substrate-fold.md), the cross-track context here is summary-grained, not detail-grained.
+**Section 5 — Project framing.** 2-3 paragraphs. Where does this track sit in the project's arc? What's the project's bigger question? This is the only section where the Assistant gets cross-track context — every other section is single-track-scoped. Per [`sharp-substrate-fold.md`](docs/skills/research-coordinator/cluster/sharp-substrate-fold.md), the cross-track context here is summary-grained, not detail-grained.
 
 **Section 6 — Notable refinements from prior tracks.** Cite prior-track lessons that change behavior in THIS track. Don't dump every prior lesson — the protocol doc already has the full inherited-lessons section. Section 6 surfaces the 3-5 most load-bearing for the current track.
 
@@ -127,13 +127,13 @@ First action: read `docs/research-projects/<track-slug>.md` in full. Then summar
 
 ## Template evolution
 
-The 9-section structure is the post-RP4 distilled form. Single-section additions / removals happen only at process-retro time per [`process-retro.md`](process-retro.md) cross-project ratification gate. Track-level deviations from the template stay track-internal — they don't change the template itself unless they repeat across projects.
+The 9-section structure is the post-RP4 distilled form. Single-section additions / removals happen only at process-retro time per [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md) cross-project ratification gate. Track-level deviations from the template stay track-internal — they don't change the template itself unless they repeat across projects.
 
 ---
 
 ## Related primitives
 
-- [`role-discipline.md`](../role-discipline.md) — pre-bake site #2 (the spawn prompt is the second of three locations where the rule is restated)
-- [`calibration-arc.md`](../calibration-arc.md) — section 7's Step 0 sub-step references resolve here
-- [`templates/handoff-brief-template.md`](handoff-brief-template.md) — section 7 step 8 references this
-- [ADR-0017](../../../../adr/0017-research-assistant-architecture.md) § Spawn-prompt mechanism
+- [`role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md) — pre-bake site #2 (the spawn prompt is the second of three locations where the rule is restated)
+- [`calibration-arc.md`](docs/skills/research-coordinator/cluster/calibration-arc.md) — section 7's Step 0 sub-step references resolve here
+- [`templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md) — section 7 step 8 references this
+- [ADR-0017](docs/adr/0017-research-assistant-architecture.md) § Spawn-prompt mechanism

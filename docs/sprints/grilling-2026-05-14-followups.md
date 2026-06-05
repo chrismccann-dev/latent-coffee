@@ -4,10 +4,10 @@
 
 First /grill-with-docs session, audit-grilling the roasting cluster of implicit Latent terminology. 12 grilling rounds over one sitting. Outputs:
 
-- [CONTEXT.md](../../CONTEXT.md) — 31 glossary terms across 7 sub-sections (V-set anatomy / trace / endpoint / character / lifecycle / lot-close synthesis / forward design); 14 relationships; 8 flagged ambiguities.
+- [CONTEXT.md](CONTEXT.md) — 31 glossary terms across 7 sub-sections (V-set anatomy / trace / endpoint / character / lifecycle / lot-close synthesis / forward design); 14 relationships; 8 flagged ambiguities.
 - `.claude/skills/grill-with-docs/` — Matt Pocock's skill installed verbatim, runs as `/grill-with-docs` project-scoped slash command.
-- [CLAUDE.md:11-13](../../CLAUDE.md) — new "Shared language + decisions" group in Documentation Index pointing at CONTEXT.md + docs/adr/.
-- [lib/mcp/docs.ts](../../lib/mcp/docs.ts) — CONTEXT.md registered at `docs://context.md` so claude.ai can read the glossary during workflows.
+- [CLAUDE.md:11-13](CLAUDE.md) — new "Shared language + decisions" group in Documentation Index pointing at CONTEXT.md + docs/adr/.
+- [lib/mcp/docs.ts](lib/mcp/docs.ts) — CONTEXT.md registered at `docs://context.md` so claude.ai can read the glossary during workflows.
 
 Shipped as commit `c498e27` on branch `claude/elegant-ardinghelli-05c4e2`.
 

@@ -1,7 +1,7 @@
 # Processes
 
 **Enforcement bar:** Strict (enforcement lands sprint 1e.3)
-**Canonical registry:** [lib/process-registry.ts](../../lib/process-registry.ts) (authoritative for validation)
+**Canonical registry:** [lib/process-registry.ts](lib/process-registry.ts) (authoritative for validation)
 **Last adopted:** 2026-04-23
 **Adoption path:** Phylum A2 (authored new ruleset). Chris authored canonical list 2026-04-22, revised 2026-04-23, drawing on Roberta Sami's process taxonomy, Robert (Moonwake) producer research, and the 55-brew corpus. First A2 port after Variety + Region A1 ports.
 
@@ -21,7 +21,7 @@ Additions require a 3-step edit: this doc, `lib/process-registry.ts`, and a DB m
 
 ## Canonical list
 
-Matches the exported constants in [lib/process-registry.ts](../../lib/process-registry.ts) exactly.
+Matches the exported constants in [lib/process-registry.ts](lib/process-registry.ts) exactly.
 
 ### Base processes (4)
 
@@ -106,7 +106,7 @@ Single-value. Orthogonal to wet-process base — decaf coffee still has an under
 
 Single-value. Proper-name proprietary techniques - branded under a proper-noun name AND mechanically opaque (the producer markets the brand without fully disclosing the underlying recipe). Each has a canonical decomposition; the signature captures the producer brand that the decomposition alone would lose. The picker surfaces the decomposition as a **hint, not auto-fill** - rare variants (Moonshadow Washed at a known Moonshadow Natural producer) are legitimate.
 
-Registry expanded from 3 to 15 entries in Sprint T1 / BR-1 (2026-05-18) to match Chris's working canonical list ([CONTEXT-brewing.md § Signature method](../../CONTEXT-brewing.md)). Producer + country populated only where attribution is confirmed; the rest land skeleton-pending-verification (synthesis content also deferred per Sub Pages 4's per-signature prompt-variant plan). Non-canonical descriptors in the parenthetical decompositions (Dynamic Cherry as a fermentation token, Biological Fermentation, Thermal Control, Zeolite Drying) are intentionally omitted from the modifier arrays rather than approximated - promotion of any of those terms to a canonical modifier is a separate deliberate edit.
+Registry expanded from 3 to 15 entries in Sprint T1 / BR-1 (2026-05-18) to match Chris's working canonical list ([CONTEXT-brewing.md § Signature method](CONTEXT-brewing.md)). Producer + country populated only where attribution is confirmed; the rest land skeleton-pending-verification (synthesis content also deferred per Sub Pages 4's per-signature prompt-variant plan). Non-canonical descriptors in the parenthetical decompositions (Dynamic Cherry as a fermentation token, Biological Fermentation, Thermal Control, Zeolite Drying) are intentionally omitted from the modifier arrays rather than approximated - promotion of any of those terms to a canonical modifier is a separate deliberate edit.
 
 - **Moonshadow** - Alo Coffee, Ethiopia. Decomposition: `base:Natural + drying:[Dark Room Dried, Slow Dry]`. Shade-dried to 20% moisture, then extended LDE drying to 11% moisture over ~57 days. Typically Natural; a rare Washed variant exists (MSW1 Airworks x Shoebox x Alo special lot, 2024 — same drying protocol applied to a washed ferment).
 - **TyOxidator** - Pepe Jijon at Finca Soledad, Ecuador. Decomposition: `base:Washed + fermentation:[Aerobic]`. Aerobic oxidative fermentation protocol designed for Typica Mejorado.

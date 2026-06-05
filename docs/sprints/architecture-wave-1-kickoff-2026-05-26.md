@@ -1,11 +1,11 @@
 # Architecture Wave 1 implementation kickoff — Master Coordinator + Brewing Equipment Expert paired ship
 
 **Date:** 2026-05-26
-**Predecessor:** Architecture brainstorm cluster ([architecture-rethink-cluster-kickoff-2026-05-25.md](architecture-rethink-cluster-kickoff-2026-05-25.md) → shipped via [project-architecture-brainstorm-2026-05-26](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_architecture_brainstorm_2026-05-26.md))
+**Predecessor:** Architecture brainstorm cluster ([architecture-rethink-cluster-kickoff-2026-05-25.md](docs/sprints/architecture-rethink-cluster-kickoff-2026-05-25.md) → shipped via [project-architecture-brainstorm-2026-05-26](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_architecture_brainstorm_2026-05-26.md))
 **Successor:** Architecture Wave 2 (4 consolidation ships — Historians + WBC Archivists)
 **Sizing:** M (1 implementation sprint; markdown + cluster migration, no DB schema change)
 **Branch:** suggest `claude/architecture-wave-1-2026-05-XX`
-**Mode:** Implementation — first ship of the composable sub-skills architecture per [ADR-0011](../adr/0011-composable-sub-skills-architecture.md), [ADR-0012](../adr/0012-master-coordinator-pattern.md), [ADR-0013](../adr/0013-self-improvement-primitives.md).
+**Mode:** Implementation — first ship of the composable sub-skills architecture per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md), [ADR-0012](docs/adr/0012-master-coordinator-pattern.md), [ADR-0013](docs/adr/0013-self-improvement-primitives.md).
 
 ## Goal
 
@@ -17,14 +17,14 @@ Why paired (per ADR-0012): Master Coordinator with an empty catalog isn't testab
 
 ### Master Coordinator (4 files exist as stubs; Wave 1 fills with full content)
 
-- [`docs/skills/coordinator/SKILL.md`](../skills/coordinator/SKILL.md) — already authored in brainstorm PR; no Wave 1 changes
-- [`docs/skills/coordinator/catalog.md`](../skills/coordinator/catalog.md) — already authored as Wave 1 starter; verify brewing/roasting domain principles sections match BREWING.md / ROASTING.md top-section content (extract + paste)
-- [`docs/skills/coordinator/dispatch-rules.md`](../skills/coordinator/dispatch-rules.md) — already authored; verify Wave 1 entries (Brewing Equipment Expert) are accurate
-- [`docs/skills/coordinator/handoff-rules.md`](../skills/coordinator/handoff-rules.md) — already authored; Wave 1 status is "no cross-domain chains active yet"
+- [`docs/skills/coordinator/SKILL.md`](docs/skills/coordinator/SKILL.md) — already authored in brainstorm PR; no Wave 1 changes
+- [`docs/skills/coordinator/catalog.md`](docs/skills/coordinator/catalog.md) — already authored as Wave 1 starter; verify brewing/roasting domain principles sections match BREWING.md / ROASTING.md top-section content (extract + paste)
+- [`docs/skills/coordinator/dispatch-rules.md`](docs/skills/coordinator/dispatch-rules.md) — already authored; verify Wave 1 entries (Brewing Equipment Expert) are accurate
+- [`docs/skills/coordinator/handoff-rules.md`](docs/skills/coordinator/handoff-rules.md) — already authored; Wave 1 status is "no cross-domain chains active yet"
 
 ### Brewing Equipment Expert cluster (Wave 1 migration of 8 existing files)
 
-- [`docs/skills/brewing-equipment-expert/SKILL.md`](../skills/brewing-equipment-expert/SKILL.md) — already authored in brainstorm PR; no Wave 1 changes
+- [`docs/skills/brewing-equipment-expert/SKILL.md`](docs/skills/brewing-equipment-expert/SKILL.md) — already authored in brainstorm PR; no Wave 1 changes
 - `docs/skills/brewing-equipment-expert/cluster/brewers.md` — **NEW** (migrate from `docs/taxonomies/brewers.md`)
 - `docs/skills/brewing-equipment-expert/cluster/filters.md` — **NEW** (migrate from `docs/taxonomies/filters.md`)
 - `docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md` — **NEW** (migrate from `docs/taxonomies/grinders.md`)
@@ -33,14 +33,14 @@ Why paired (per ADR-0012): Master Coordinator with an empty catalog isn't testab
 
 ### Redirect stubs at original taxonomy locations
 
-- `docs/taxonomies/brewers.md` → ~200-byte redirect: "Content migrated to `docs/skills/brewing-equipment-expert/cluster/brewers.md` per [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md)."
+- `docs/taxonomies/brewers.md` → ~200-byte redirect: "Content migrated to `docs/skills/brewing-equipment-expert/cluster/brewers.md` per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md)."
 - `docs/taxonomies/filters.md` → same shape
 - `docs/taxonomies/grinders.md` → same shape
 - `docs/taxonomies/sworks.md` → same shape
 
 ### MCP Resource registration
 
-- [`lib/mcp/docs.ts`](../../lib/mcp/docs.ts) `DOC_FILES` array adds 8 new Resource entries:
+- [`lib/mcp/docs.ts`](lib/mcp/docs.ts) `DOC_FILES` array adds 8 new Resource entries:
   - `docs://skills/coordinator/SKILL.md`
   - `docs://skills/coordinator/catalog.md`
   - `docs://skills/coordinator/dispatch-rules.md`
@@ -50,7 +50,7 @@ Why paired (per ADR-0012): Master Coordinator with an empty catalog isn't testab
   - `docs://skills/brewing-equipment-expert/cluster/filters.md`
   - `docs://skills/brewing-equipment-expert/cluster/grinder-eg1.md`
   - `docs://skills/brewing-equipment-expert/cluster/sworks.md`
-- [`next.config.js`](../../next.config.js) `outputFileTracingIncludes['/api/mcp/**']` adds glob coverage for `docs/skills/**/*.md`
+- [`next.config.js`](next.config.js) `outputFileTracingIncludes['/api/mcp/**']` adds glob coverage for `docs/skills/**/*.md`
 
 ### CLAUDE.md updates
 
@@ -154,7 +154,7 @@ npm run check:mcp-bundle
 
 ## Coordination notes
 
-- **Wave 1 implementation does NOT touch BREWING.md / ROASTING.md content** — only domain principles sections of the catalog get extracted from their tops. The big BREWING.md / ROASTING.md shrink happens in Wave 2 (per [master-doc-transition-plan.md](../architecture/master-doc-transition-plan.md)).
+- **Wave 1 implementation does NOT touch BREWING.md / ROASTING.md content** — only domain principles sections of the catalog get extracted from their tops. The big BREWING.md / ROASTING.md shrink happens in Wave 2 (per [master-doc-transition-plan.md](docs/architecture/master-doc-transition-plan.md)).
 - **The Surface 1 follow-up sprint (Immersion modifier + 2 audit-prep typos)** is still parked. Not in Wave 1 scope.
 - **POD-1 stays in scope as absorbed into Cupping Specialist (Wave 3)**; PRODUCT.md update reflects this.
 

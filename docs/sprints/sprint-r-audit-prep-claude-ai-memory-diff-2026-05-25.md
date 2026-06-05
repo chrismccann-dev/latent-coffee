@@ -53,13 +53,13 @@ If claude.ai's memory says 32, 33, or 34 Tools, refresh. Most recent: **Sprint 1
 
 **Arbitration / doc tools:** `propose_doc_changes`, `propose_canonical_addition`, `resolve_queue_entry` (3)
 
-**Total: 35 Tools.** Auth: bearer-token (desktop MCP clients) + OAuth 2.1 + PKCE (claude.ai web). All documented in [SYNC_V2.md](../../SYNC_V2.md).
+**Total: 35 Tools.** Auth: bearer-token (desktop MCP clients) + OAuth 2.1 + PKCE (claude.ai web). All documented in [SYNC_V2.md](SYNC_V2.md).
 
 ---
 
 ## Section 3 — MCP Resources (`docs://`)
 
-If claude.ai's memory references a different Resource set, refresh. Current registered Resources in [lib/mcp/docs.ts](../../lib/mcp/docs.ts) `DOC_FILES`:
+If claude.ai's memory references a different Resource set, refresh. Current registered Resources in [lib/mcp/docs.ts](lib/mcp/docs.ts) `DOC_FILES`:
 
 - `docs://brewing.md`
 - `docs://roasting.md`

@@ -2,7 +2,7 @@
 
 > Paste this back into a Claude Code session here to close the loop. It restates the
 > plan so it stands alone, reports what shipped per item, and lists the verification
-> actually run. Kickoff brief: [cupping-schema-guardrails-kickoff.md](cupping-schema-guardrails-kickoff.md).
+> actually run. Kickoff brief: [cupping-schema-guardrails-kickoff.md](docs/sprints/cupping-schema-guardrails-kickoff.md).
 
 ## 1. The plan, as executed
 
@@ -23,31 +23,31 @@ was "leave it out." Decision below.
 ## 2. What shipped, per item
 
 ### #27 — `cuppings.cooling_arc_pattern` enum  ✅ matched plan
-- **Migration:** [`078_cupping_roast_guardrails.sql`](../../supabase/migrations/078_cupping_roast_guardrails.sql)
+- **Migration:** [`078_cupping_roast_guardrails.sql`](supabase/migrations/078_cupping_roast_guardrails.sql)
   adds `cooling_arc_pattern text` + a CHECK constraint `IN ('degrade','hold','improve','flat')`
   (text + CHECK, matching the `fc_audibility` enum pattern from migrations 061/066), plus a
   column COMMENT. No backfill — historical cuppings stay NULL (operator patches on re-review).
-- **MCP write path:** added to `pushCuppingInputSchema` ([push-cupping.ts](../../lib/mcp/push-cupping.ts))
-  + `patchCuppingInputSchema` ([patch-cupping.ts](../../lib/mcp/patch-cupping.ts)) as a `z.enum`,
+- **MCP write path:** added to `pushCuppingInputSchema` ([push-cupping.ts](lib/mcp/push-cupping.ts))
+  + `patchCuppingInputSchema` ([patch-cupping.ts](lib/mcp/patch-cupping.ts)) as a `z.enum`,
   with a describe block contrasting it with the `temperature_behavior` prose. Persisted in
   `persistCupping`, added to `CUPPING_PATCH_FIELDS`, and an enum guard added to
   `validateCuppingPayload` + `patchCupping` (mirrors the DB CHECK so a bad value fails with a
   readable MCP error). New exported `COOLING_ARC_PATTERNS` / `CoolingArcPattern` in
-  [roast-import.ts](../../lib/roast-import.ts).
-- **Type + UI:** `Cupping.cooling_arc_pattern` added to [lib/types.ts](../../lib/types.ts); the
+  [roast-import.ts](lib/roast-import.ts).
+- **Type + UI:** `Cupping.cooling_arc_pattern` added to [lib/types.ts](lib/types.ts); the
   `/green/[id]` page (read path is `select('*')`, so the column flows automatically) renders a
   "Cooling arc" row next to "Temperature behavior" in both the pourover-gate block and the
   per-cup list (guarded on the value, so invisible until a value lands).
-- **Prompt:** [log-cupping.md](../prompts/log-cupping.md) STAGE 3 gained a `cooling_arc_pattern`
+- **Prompt:** [log-cupping.md](docs/prompts/log-cupping.md) STAGE 3 gained a `cooling_arc_pattern`
   bullet (pick the enum alongside the prose, not instead of it).
-- **Glossary:** "Cooling arc pattern" headword added to [CONTEXT-roasting.md](../../CONTEXT-roasting.md)
+- **Glossary:** "Cooling arc pattern" headword added to [CONTEXT-roasting.md](CONTEXT-roasting.md)
   § Cupping and cup-character interpretation.
 
 ### #31 — cupping_date / rest_days consistency guard  ✅ matched plan (MCP-layer, not DB)
 - **Where:** enforced in the MCP write path, NOT the DB — it needs the joined
   `roasts.roast_date` and produces a per-field readable error, matching the
   `end-condition-bounds.ts` pattern. New helper
-  [`lib/mcp/cupping-date-bounds.ts`](../../lib/mcp/cupping-date-bounds.ts) `checkCuppingDateConsistency(roastDate, cuppingDate, restDays)`.
+  [`lib/mcp/cupping-date-bounds.ts`](lib/mcp/cupping-date-bounds.ts) `checkCuppingDateConsistency(roastDate, cuppingDate, restDays)`.
 - **Rules:** (1) `rest_days < 0` → reject (always, needs no dates — catches the bare-date
   voice slip that wrote a -23 rest); (2) `cupping_date < roast_date + 1 day` → reject (a cup is
   evaluated at least a day after the roast; same-day or earlier = a slip); (3)

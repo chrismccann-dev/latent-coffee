@@ -56,7 +56,7 @@ Enter plan mode. Present bundle structure, ratify, ship. Files likely to touch: 
 If a bundle adds a DB column, apply the migration to Supabase BEFORE merge — the worktree has no DDL path (only PostgREST). 4d had no DB dependency and merged clean; aim for the same. If a column is genuinely needed, ship code on a branch + hand Chris the one-line migration + merge after `check-migrations` goes green.
 
 ## Reference
-- [Sub-sprint 4d kickoff](sub-sprint-4d-cultivars-polish-kickoff-2026-05-28.md) + [complementary pass](sub-sprint-4d-cultivars-polish-complementary-pass-2026-05-28.md) — most recent precedent (the "informational surface → light bundle" + intentionally-internal-columns lessons)
-- [Sub-sprint 4c kickoff](sub-sprint-4c-brews-polish-kickoff-2026-05-28.md) + [complementary pass](sub-sprint-4c-brews-polish-complementary-pass-2026-05-28.md) — the data-model-reframe + migration-gap lessons
-- [PRODUCT.md § Active Sprints #4](../../PRODUCT.md) — series-level scope
-- [CLAUDE.md § Terroirs](../../CLAUDE.md) — post-Sub-Pages-2 detail-page shape
+- [Sub-sprint 4d kickoff](docs/sprints/sub-sprint-4d-cultivars-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4d-cultivars-polish-complementary-pass-2026-05-28.md) — most recent precedent (the "informational surface → light bundle" + intentionally-internal-columns lessons)
+- [Sub-sprint 4c kickoff](docs/sprints/sub-sprint-4c-brews-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4c-brews-polish-complementary-pass-2026-05-28.md) — the data-model-reframe + migration-gap lessons
+- [PRODUCT.md § Active Sprints #4](PRODUCT.md) — series-level scope
+- [CLAUDE.md § Terroirs](CLAUDE.md) — post-Sub-Pages-2 detail-page shape

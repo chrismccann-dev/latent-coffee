@@ -9,7 +9,7 @@
 ## Background
 
 These came out of the page-by-page priority recount that produced the **priority stack**
-model. See [docs/design-system.md § Detail-page grammar](../design-system.md) for the
+model. See [docs/design-system.md § Detail-page grammar](docs/design-system.md) for the
 model. Doc PR: #354 (main `5eef651`). The green-view files are
 `app/(app)/green/[id]/page.tsx` + its view components; the lifecycle states + per-view
 shapes are documented in `docs/architecture/page-ia.md § Green`.

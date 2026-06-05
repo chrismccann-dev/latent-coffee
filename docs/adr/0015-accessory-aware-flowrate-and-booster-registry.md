@@ -97,7 +97,7 @@ When the trigger fires, the implementer should:
 
 ## Pattern reference
 
-`SworksEntry` sub-taxonomy (Sprint T5 / CR-7, 2026-05-18, at [lib/sworks-registry.ts](../../lib/sworks-registry.ts) + [docs/skills/brewing-equipment-expert/cluster/sworks.md](../skills/brewing-equipment-expert/cluster/sworks.md)) is the closest pattern precedent — single-canonical sub-registry for owned-instrument enumerated entries (SworksEntry has per-dial enumeration; BoosterEntry doesn't need per-position enumeration since Boosters are binary on/off, but the top-level-equipment-class-gets-its-own-registry pattern is the same).
+`SworksEntry` sub-taxonomy (Sprint T5 / CR-7, 2026-05-18, at [lib/sworks-registry.ts](lib/sworks-registry.ts) + [docs/skills/brewing-equipment-expert/cluster/sworks.md](docs/skills/brewing-equipment-expert/cluster/sworks.md)) is the closest pattern precedent — single-canonical sub-registry for owned-instrument enumerated entries (SworksEntry has per-dial enumeration; BoosterEntry doesn't need per-position enumeration since Boosters are binary on/off, but the top-level-equipment-class-gets-its-own-registry pattern is the same).
 
 ## Sources
 
@@ -142,7 +142,7 @@ The Decided shape section above frames `flowRateContexts` as a context-condition
 
 ### Forward pointer
 
-Research Project #4 (re-measure Project #1 V60 papers in Sibarist BS, scope brief at end of [specialty-cone-filter-drawdown.md](../research-projects/specialty-cone-filter-drawdown.md)) is the empirical test of Lesson #36's "paper-brewer-interaction not paper-fiber" framing. If RP4 confirms V60 papers converge to HALO-B3-like flow in BS, the mechanistic refinement above is strongly validated and the `flowRateContexts` implementation can proceed with the paper-brewer-interaction framing as the operating model.
+Research Project #4 (re-measure Project #1 V60 papers in Sibarist BS, scope brief at end of [specialty-cone-filter-drawdown.md](docs/research-projects/specialty-cone-filter-drawdown.md)) is the empirical test of Lesson #36's "paper-brewer-interaction not paper-fiber" framing. If RP4 confirms V60 papers converge to HALO-B3-like flow in BS, the mechanistic refinement above is strongly validated and the `flowRateContexts` implementation can proceed with the paper-brewer-interaction framing as the operating model.
 
 ---
 

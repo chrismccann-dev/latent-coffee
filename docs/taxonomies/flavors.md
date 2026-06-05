@@ -1,7 +1,7 @@
 # Flavor Note Taxonomy
 
 Authoritative authored content for the flavor canonical registry.
-Mirror file: [lib/flavor-registry.ts](../../lib/flavor-registry.ts).
+Mirror file: [lib/flavor-registry.ts](lib/flavor-registry.ts).
 
 **3-axis composable system** (Sprint 1g, 2026-04-26):
 

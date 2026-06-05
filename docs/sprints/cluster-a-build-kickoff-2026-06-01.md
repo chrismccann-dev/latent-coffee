@@ -1,6 +1,6 @@
 # Cluster A build — kickoff brief
 
-Execution brief. The calls are grilled + Chris-ratified (2026-06-01); this is planned-execution, so the autonomy rule applies — branch, build, verify, PR, merge as one flow when each PR is green. Spec: [cluster-a-scaffold-spec-2026-06-01.md](cluster-a-scaffold-spec-2026-06-01.md). ADR: [0019](../adr/0019-lot-brew-web.md).
+Execution brief. The calls are grilled + Chris-ratified (2026-06-01); this is planned-execution, so the autonomy rule applies — branch, build, verify, PR, merge as one flow when each PR is green. Spec: [cluster-a-scaffold-spec-2026-06-01.md](docs/sprints/cluster-a-scaffold-spec-2026-06-01.md). ADR: [0019](docs/adr/0019-lot-brew-web.md).
 
 ## Goal
 
@@ -13,7 +13,7 @@ Land the lot-brew cross-domain scaffold: the **brewing-to-roasting handoff brief
 ## PRs
 
 **PR-A1 — schema + link (do first; the optimized-brew dogfood needs the column).**
-- Migration NNN: `green_beans.optimized_brew_id uuid REFERENCES brews(id) ON DELETE SET NULL`, idempotent (`ADD COLUMN IF NOT EXISTS`), no auto-backfill. Carbon copy of [069](../../supabase/migrations/069_green_beans_peer_reference_brew.sql).
+- Migration NNN: `green_beans.optimized_brew_id uuid REFERENCES brews(id) ON DELETE SET NULL`, idempotent (`ADD COLUMN IF NOT EXISTS`), no auto-backfill. Carbon copy of [069](supabase/migrations/069_green_beans_peer_reference_brew.sql).
 - `lib/types.ts` `GreenBean` += `optimized_brew_id: string | null`.
 - `lib/mcp/push-green-bean.ts` + `lib/mcp/patch-green-bean.ts` Zod + Tool descriptions; `lib/roast-import.ts` `GreenBeanPayload` / `PatchGreenBeanPayload` / `GREEN_BEAN_PATCH_FIELDS` / `persistGreenBean` INSERT.
 - Resolved view (`app/(app)/green/[id]/page.tsx`): `pickOptimizedBrew` prefers the explicit FK, heuristic as fallback.

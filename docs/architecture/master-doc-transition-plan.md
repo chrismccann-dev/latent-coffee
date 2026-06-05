@@ -1,6 +1,6 @@
 # Master-doc transition plan: BREWING.md + ROASTING.md → ~500-byte redirect stubs
 
-**Status:** Plan, not implementation. Wave-by-wave shrink schedule for the two master docs as their content migrates into sub-skill clusters. Ratifies the decisions locked in [ADR-0011](../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../adr/0012-master-coordinator-pattern.md).
+**Status:** Plan, not implementation. Wave-by-wave shrink schedule for the two master docs as their content migrates into sub-skill clusters. Ratifies the decisions locked in [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md).
 
 ## Starting state (2026-05-26 baseline)
 
@@ -108,12 +108,12 @@ The arbiter pipeline (PR #198 + #200 from 2026-05-26 are recent examples) contin
 
 **Mitigation:**
 - During Wave 2-4 implementation, route NEW content directly to sub-skill clusters via the new architecture, NOT to BREWING.md / ROASTING.md
-- The arbiter playbook ([ARBITER.md](../../ARBITER.md)) updates as part of Wave 2 implementation to direct new proposals to the appropriate sub-skill cluster instead of the master docs
+- The arbiter playbook ([ARBITER.md](ARBITER.md)) updates as part of Wave 2 implementation to direct new proposals to the appropriate sub-skill cluster instead of the master docs
 - Existing pending arbitration queues are processed under the old destinations through the end of Wave 1; new queue entries from Wave 2 onward target sub-skill clusters
 
 ## Cross-references
 
-- [ADR-0011](../adr/0011-composable-sub-skills-architecture.md) — the architectural decision driving this migration
-- [ADR-0012](../adr/0012-master-coordinator-pattern.md) — Master Coordinator catalog absorbs domain principles from the master doc tops
-- [docs/skills/coordinator/catalog.md](../skills/coordinator/catalog.md) — the unified catalog that supersedes per-domain master docs
-- [ARBITER.md](../../ARBITER.md) — needs updating in Wave 2 to route new doc proposals to sub-skill clusters
+- [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) — the architectural decision driving this migration
+- [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) — Master Coordinator catalog absorbs domain principles from the master doc tops
+- [docs/skills/coordinator/catalog.md](docs/skills/coordinator/catalog.md) — the unified catalog that supersedes per-domain master docs
+- [ARBITER.md](ARBITER.md) — needs updating in Wave 2 to route new doc proposals to sub-skill clusters

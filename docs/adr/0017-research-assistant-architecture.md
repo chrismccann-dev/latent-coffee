@@ -4,7 +4,7 @@
 
 The filter arc (4 closed research projects, 2026-05-21 → 2026-05-26) generated the substrate that finally unblocked Research Assistant SKILL.md scaffolding. The Step 1 grilling (2026-05-26) that closed the substrate-input loop locked the architecture before the Step 2 scaffolding sprint executed.
 
-Three properties of research work emerged from the filter arc that the standard [ADR-0011](0011-composable-sub-skills-architecture.md) sub-skill pattern doesn't accommodate cleanly:
+Three properties of research work emerged from the filter arc that the standard [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) sub-skill pattern doesn't accommodate cleanly:
 
 1. **Methodology is co-authored per-track at Step 0, not pre-baked.** Brewing-side and roasting-side workflows have stable methodology (Brewing Assistant proposes a recipe from a fixed framework; Brew Recorder writes it via fixed Tools). Research projects iterate on the methodology *as part of the project itself* — every track refines the Step 0 sub-steps, the bimodality screen criteria, the hypothesis-test framing.
 
@@ -38,11 +38,11 @@ Three sessions, three roles, no overlap:
 | Execution | Apply scoped execution plan's substrate edits, run typecheck, commit, push, open PR | Re-interpret the plan; design follow-up tracks; participate in Coordinator's planning |
 
 The rule is pre-baked at three locations to make the boundary impossible to miss:
-1. Top of [Research Assistant SKILL.md](../skills/research-assistant/SKILL.md) (caps block)
-2. Top of every spawn prompt (caps block — see [`templates/spawn-prompt-template.md`](../skills/research-coordinator/cluster/templates/spawn-prompt-template.md))
+1. Top of [Research Assistant SKILL.md](docs/skills/research-assistant/SKILL.md) (caps block)
+2. Top of every spawn prompt (caps block — see [`templates/spawn-prompt-template.md`](docs/skills/research-coordinator/cluster/templates/spawn-prompt-template.md))
 3. Top of every protocol doc Coordinator authors at `docs/research-projects/<track-slug>.md`
 
-Full primitive doc: [`docs/skills/research-coordinator/cluster/role-discipline.md`](../skills/research-coordinator/cluster/role-discipline.md).
+Full primitive doc: [`docs/skills/research-coordinator/cluster/role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md).
 
 ### Sharp substrate-fold discipline
 
@@ -61,7 +61,7 @@ What stays inward:
 
 The fold gate has structural protection via a cross-project ratification rule: a single-project finding does NOT graduate into a cluster primitive. Only when a SECOND project independently confirms the finding does the primitive update. This is the same gate that protects schema-level over-generalization (filter-arc Lesson #36 would have been mis-graduated at Project #3 close without this gate; RP4 partially contradicted it).
 
-Full primitive doc: [`docs/skills/research-coordinator/cluster/sharp-substrate-fold.md`](../skills/research-coordinator/cluster/sharp-substrate-fold.md).
+Full primitive doc: [`docs/skills/research-coordinator/cluster/sharp-substrate-fold.md`](docs/skills/research-coordinator/cluster/sharp-substrate-fold.md).
 
 ### Process retro as accumulation mechanism
 
@@ -69,7 +69,7 @@ Research projects are ephemeral — each project's findings don't compound again
 
 Retro fires at end of every project (not every track). Coordinator + operator participate (no Assistant — Assistants are ephemeral). Output: methodology primitive doc updates in the research-coordinator cluster + roadmap update. **Coordinator gates next project's scoping on the retro having happened** — without the retro, the next project starts from drift-laden primitives that look unchanged but have shifted in the operator's head.
 
-Full primitive doc: [`docs/skills/research-coordinator/cluster/process-retro.md`](../skills/research-coordinator/cluster/process-retro.md).
+Full primitive doc: [`docs/skills/research-coordinator/cluster/process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md).
 
 ### Architectural exceptions (from ADR-0011)
 
@@ -108,11 +108,11 @@ Hard-removed in the Step 2 scaffolding ship: `docs/skills/learning-assistant/` +
 
 | Artifact | Location |
 |---|---|
-| Research Coordinator SKILL.md | [docs/skills/research-coordinator/SKILL.md](../skills/research-coordinator/SKILL.md) |
-| Research Coordinator cluster | [docs/skills/research-coordinator/cluster/](../skills/research-coordinator/cluster/) |
-| Research Assistant SKILL.md | [docs/skills/research-assistant/SKILL.md](../skills/research-assistant/SKILL.md) |
+| Research Coordinator SKILL.md | [docs/skills/research-coordinator/SKILL.md](docs/skills/research-coordinator/SKILL.md) |
+| Research Coordinator cluster | [docs/skills/research-coordinator/cluster/](docs/skills/research-coordinator/cluster/) |
+| Research Assistant SKILL.md | [docs/skills/research-assistant/SKILL.md](docs/skills/research-assistant/SKILL.md) |
 | Per-project protocol docs (canonical archive) | `docs/research-projects/<track-slug>.md` (per-track, Coordinator-authored) |
-| Roadmap | [docs/skills/research-coordinator/cluster/roadmap.md](../skills/research-coordinator/cluster/roadmap.md) |
+| Roadmap | [docs/skills/research-coordinator/cluster/roadmap.md](docs/skills/research-coordinator/cluster/roadmap.md) |
 
 ## Sources
 
@@ -128,6 +128,6 @@ Hard-removed in the Step 2 scaffolding ship: `docs/skills/learning-assistant/` +
 
 ## Notes for future audit
 
-- The 17-sub-skill enumeration should be re-verified at every sub-skill ship going forward. The bookkeeping has drifted before (Wave 4 PR 4a's CCIL count). [sub-skills-status.md](../architecture/sub-skills-status.md) is the operational ground truth.
+- The 17-sub-skill enumeration should be re-verified at every sub-skill ship going forward. The bookkeeping has drifted before (Wave 4 PR 4a's CCIL count). [sub-skills-status.md](docs/architecture/sub-skills-status.md) is the operational ground truth.
 - If a future research workflow needs MCP Tool surface (e.g. a hypothetical `push_research_track` Tool), this ADR should be re-opened. Today's substrate-via-execution-session mechanism deliberately avoids the MCP layer; if that constraint ever bends, the exception 1 framing here needs to be amended.
 - If a future cross-domain workflow needs the Planner + Executor split that Research collapses (e.g. a longitudinal-study workflow with stable methodology), the exception 2 framing here needs to be amended.

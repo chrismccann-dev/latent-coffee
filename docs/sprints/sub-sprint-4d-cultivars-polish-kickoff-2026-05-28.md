@@ -54,7 +54,7 @@ Enter plan mode (`ExitPlanMode`). Present the bundle structure, get ratification
 If a bundle adds a DB column, the migration must be applied to Supabase BEFORE the merge — the Claude Code worktree has no DDL path (no psql, no Supabase CLI, no `execute_sql` MCP, only PostgREST). 4c's `push_brew` insert + `list_recent_brews` select would 400 against a column-less DB. Plan for: ship code on a branch, hand Chris the one-line migration to apply, merge after `check-migrations` goes green. Sequence non-column bundles to merge independently (4c Bundle B had no DB dep and merged first).
 
 ## Reference
-- [Sub-sprint 4c kickoff](sub-sprint-4c-brews-polish-kickoff-2026-05-28.md) + [complementary pass](sub-sprint-4c-brews-polish-complementary-pass-2026-05-28.md) — most recent precedent (incl. the data-model-reframe + migration-gap lessons)
-- [Sub-sprint 4b kickoff](sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) + [complementary pass](sub-sprint-4b-roasters-polish-complementary-pass-2026-05-28.md)
-- [PRODUCT.md § Active Sprints #4](../../PRODUCT.md) — series-level scope
-- [CLAUDE.md § Cultivars](../../CLAUDE.md) — post-Sub-Pages-3 detail-page shape
+- [Sub-sprint 4c kickoff](docs/sprints/sub-sprint-4c-brews-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4c-brews-polish-complementary-pass-2026-05-28.md) — most recent precedent (incl. the data-model-reframe + migration-gap lessons)
+- [Sub-sprint 4b kickoff](docs/sprints/sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) + [complementary pass](docs/sprints/sub-sprint-4b-roasters-polish-complementary-pass-2026-05-28.md)
+- [PRODUCT.md § Active Sprints #4](PRODUCT.md) — series-level scope
+- [CLAUDE.md § Cultivars](CLAUDE.md) — post-Sub-Pages-3 detail-page shape

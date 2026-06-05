@@ -28,7 +28,7 @@ Producer notes (cranberry, honeycomb, lingonberry) failed to surface substantial
 
 v1a +3.4 / v1b +6.6 / v1c +1.0 — the LEADING slot had the WIDEST delta, and the tightest-delta slot (v1c at +1.0, in V4 target zone) cupped as the LOSER.
 
-**Working hypothesis:** v1c's drop-ceiling breach mechanically drove the core to catch up to the surface via overdevelopment, producing a tight delta that masks an overdeveloped cup rather than signaling good roast structure. This violates the CCIL hypothesis "tight delta correlates with cup quality" — flag as **Medium-confidence violation worth watching**, not yet generalizable. **Propagated to [cross-coffee-insights.md § Working Hypotheses (Single-Lot, Low Confidence)](../patterns/cross-coffee-insights.md#working-hypotheses-single-lot-low-confidence).**
+**Working hypothesis:** v1c's drop-ceiling breach mechanically drove the core to catch up to the surface via overdevelopment, producing a tight delta that masks an overdeveloped cup rather than signaling good roast structure. This violates the CCIL hypothesis "tight delta correlates with cup quality" — flag as **Medium-confidence violation worth watching**, not yet generalizable. **Propagated to [cross-coffee-insights.md § Working Hypotheses (Single-Lot, Low Confidence)](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#working-hypotheses-single-lot-low-confidence).**
 
 ## V1 key insight (Medium confidence)
 
@@ -58,7 +58,7 @@ Brew direction not yet brew-confirmed — V1 was evaluated only at xbloom Brian 
 
 ## Cross-references
 
-- [by-process/natural.md](../patterns/by-process/natural.md) — per-process roll-up; first East African Red Bourbon natural in archive
-- [cross-coffee-insights.md § Working Hypotheses (Single-Lot, Low Confidence)](../patterns/cross-coffee-insights.md#working-hypotheses-single-lot-low-confidence) — WB-to-Ground delta hypothesis violation flagged here
-- [active-lots/cos-hig-bor-2026.md](./cos-hig-bor-2026.md) — sibling natural where xbloom-gate misranking was first surfaced
-- [active-lots/cgle-srume-natural-2026.md](./cgle-srume-natural-2026.md) — SR Natural V3 anchor that this lot's V1 spread centered on
+- [by-process/natural.md](docs/skills/roasting-historian/cluster/patterns/by-process/natural.md) — per-process roll-up; first East African Red Bourbon natural in archive
+- [cross-coffee-insights.md § Working Hypotheses (Single-Lot, Low Confidence)](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#working-hypotheses-single-lot-low-confidence) — WB-to-Ground delta hypothesis violation flagged here
+- [active-lots/cos-hig-bor-2026.md](docs/skills/roasting-historian/cluster/active-lots/cos-hig-bor-2026.md) — sibling natural where xbloom-gate misranking was first surfaced
+- [active-lots/cgle-srume-natural-2026.md](docs/skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md) — SR Natural V3 anchor that this lot's V1 spread centered on

@@ -18,9 +18,9 @@ Processes came in lighter than expected because Chris already did the hard IA wo
 | Check | Result |
 |---|---|
 | Registry render paths (`BaseProcessEntry.summary`/`brewArchetype`, `ModifierEntry.overview`, `SignatureEntry.overview`/`observedCupProfile`) | **Clean.** Every field that exists has a render path with empty-state gating. No 4d-style populated-but-hidden column. |
-| Routing determinism ([lib/process-routing.ts](../../lib/process-routing.ts)) | Slug helpers + reverse parsers consistent; `modifierComboSlug` alphabetizes so the same structural pattern → same slug. (Note: honey subprocess slug strips the "honey" suffix — `Black Honey` → `black`, URL `/processes/honey/black`.) |
-| Aggregation ([lib/process-aggregation.ts](../../lib/process-aggregation.ts)) | Signature brews excluded from modifier-combo aggregations, included in modifier-index; `composeProcessDisplay` dedupe holds. No change. |
-| Synthesis dispatch ([lib/synthesis/adapters/process.ts](../../lib/synthesis/adapters/process.ts)) | `getProcessAdapter(kind)` (5 kinds) + `process_aggregation_syntheses` cache intact. No change. |
+| Routing determinism ([lib/process-routing.ts](lib/process-routing.ts)) | Slug helpers + reverse parsers consistent; `modifierComboSlug` alphabetizes so the same structural pattern → same slug. (Note: honey subprocess slug strips the "honey" suffix — `Black Honey` → `black`, URL `/processes/honey/black`.) |
+| Aggregation ([lib/process-aggregation.ts](lib/process-aggregation.ts)) | Signature brews excluded from modifier-combo aggregations, included in modifier-index; `composeProcessDisplay` dedupe holds. No change. |
+| Synthesis dispatch ([lib/synthesis/adapters/process.ts](lib/synthesis/adapters/process.ts)) | `getProcessAdapter(kind)` (5 kinds) + `process_aggregation_syntheses` cache intact. No change. |
 | Confidence thresholds ([lib/process-confidence.ts](../../lib/process-confidence.ts)) | **Drift caught (F5/B3).** Code renders HIGH at `>= 5`, but the file comment + CLAUDE.md + the kickoff brief all said "3+ = HIGH per Rule 5." |
 
 ## New catch — confidence threshold drift (B3)
@@ -34,7 +34,7 @@ F4 is a real gap, two parts:
 1. `list_skeleton_entries` covers only the **producer** + **roaster** registries (explicit `skeleton: true` flag). Process-registry overviews (signature `overview`, base `summary`) have no flag and feed **no arbiter queue** — they only render empty-state prose on the page. Nothing reminds Chris to author them.
 2. Honey subprocesses have **no description field at all** — there is `BaseProcessEntry.summary` for Honey-the-base but no per-subprocess slot. "Black honey description" is a *missing field*, not an unauthored one; adding it = net-new registry shape + render path.
 
-Both cross into MCP-surface / content-architecture territory (Actor 4), which the kickoff brief flagged as likely-out-of-scope ("process resolution stable"). **Chris's call: defer both** — 4f stays the light series-closer. Logged to [docs/grilling-queue.md](../grilling-queue.md) as a follow-up.
+Both cross into MCP-surface / content-architecture territory (Actor 4), which the kickoff brief flagged as likely-out-of-scope ("process resolution stable"). **Chris's call: defer both** — 4f stays the light series-closer. Logged to [docs/grilling-queue.md](docs/grilling-queue.md) as a follow-up.
 
 ## Ratified 4f bundle
 

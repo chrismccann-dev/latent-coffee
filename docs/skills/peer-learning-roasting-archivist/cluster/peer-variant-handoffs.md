@@ -2,7 +2,7 @@
 
 Durable home for filed **peer-variant handoffs** — the 5-field calibration assessment produced brewing-side via `docs/prompts/peer-variant-completion.md` when an external roaster's version of one of Chris's own green lots is brewed. One record per green lot that (a) has a peer-roasted variant brewed + (b) has an existing `green_beans` row (the `peer_reference_brew_id` FK is set). Not-yet-started peer lots stay **courier-carried** until their green row exists (see SKILL.md § Peer-variant handoff consumption); Panama Janson is the canonical courier-carried case and is intentionally NOT filed here.
 
-Consumption reasoning (weight by info-value, consult per lifecycle stage) lives in [SKILL.md § Peer-variant handoff consumption](../SKILL.md). Seeded Cluster A, 2026-06-01.
+Consumption reasoning (weight by info-value, consult per lifecycle stage) lives in [SKILL.md § Peer-variant handoff consumption](docs/skills/peer-learning-roasting-archivist/SKILL.md). Seeded Cluster A, 2026-06-01.
 
 ---
 

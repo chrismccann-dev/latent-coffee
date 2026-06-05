@@ -2,11 +2,11 @@
 
 **THIS IS AN INTERPRETIVE PRUNING SESSION.** Chris's steer is load-bearing on every shape call. Default to "ask, don't ship"; once a call is steered, execute the mechanical part (operator owns the interpretive restructure + shape steer; Claude Code owns the mechanical prune + fidelity verification). **This is a LIVE WORKFLOW prompt — dropping a load-bearing instruction breaks cupping sessions. Higher stakes than a reference doc; verify every removed step is genuinely dead before cutting.**
 
-Pruning case 006 ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md); [Pattern J, ADR-0013 Amendment](../adr/0013-self-improvement-primitives.md)). Coverage is complete, so a normal prune — reach for the honest shape.
+Pruning case 006 ([scope doc](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md); [Pattern J, ADR-0013 Amendment](docs/adr/0013-self-improvement-primitives.md)). Coverage is complete, so a normal prune — reach for the honest shape.
 
 ## Why this doc, why now
 
-`docs/prompts/log-cupping.md` is **49.2 KB / 40 KB** — over the prompt cap ([doc-tripwires.md](../architecture/doc-tripwires.md)). It is a **full-read claude.ai entry prompt**: every cupping session loads all 49 KB before doing anything, so the per-session context cost is the whole file (this is why prompts are capped tighter than the section-read CONTEXT glossaries). It is also the longest-standing live fire.
+`docs/prompts/log-cupping.md` is **49.2 KB / 40 KB** — over the prompt cap ([doc-tripwires.md](docs/architecture/doc-tripwires.md)). It is a **full-read claude.ai entry prompt**: every cupping session loads all 49 KB before doing anything, so the per-session context cost is the whole file (this is why prompts are capped tighter than the section-read CONTEXT glossaries). It is also the longest-standing live fire.
 
 ## Doc shape → likely prune shapes
 

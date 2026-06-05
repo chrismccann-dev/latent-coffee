@@ -8,7 +8,7 @@ Migrated from ROASTING.md § Key Counterflow Observations (Machine-Specific) in 
 
 ## Turning Point (TP)
 
-TP probe reads consistently low (78-81°C) across all sessions regardless of charge temp, BBP fan speed, or charge timing. Dongzhe's machine reads ~94°C under similar conditions (see [peer-learning-roasting-archivist § Dongzhe](../../../peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) for the same-machine peer reference). TP is almost certainly a measurement artifact or probe placement difference specific to this unit.
+TP probe reads consistently low (78-81°C) across all sessions regardless of charge temp, BBP fan speed, or charge timing. Dongzhe's machine reads ~94°C under similar conditions (see [peer-learning-roasting-archivist § Dongzhe](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) for the same-machine peer reference). TP is almost certainly a measurement artifact or probe placement difference specific to this unit.
 
 > **Do not use TP as a primary diagnostic signal — it is not actionable on this machine.** Use FC temp and FC timing as the primary drum-state proxies instead.
 
@@ -74,7 +74,7 @@ Roast position within a session meaningfully affects FC timing. First roast in a
 
 **Drop temp as a per-experiment-batch design variable:** because drop is now profile-set, you can design experiments that deliberately vary drop temp across A/B/C batches (e.g. v3a 208°C / v3b 210°C / v3c 212°C drop sweep on a fixed peak inlet). This was clunky under the manual-drop regime; it's clean under bean temp end condition.
 
-**Compatibility with FC marking:** if a coffee has audible FC, mark it manually for the data record — bean temp end condition still drives the drop. If silent, do not try to mark FC; let the profile end condition do the work and log as manual-no-audio at the drop temp. See [cluster/protocols/fc-marking.md](../protocols/fc-marking.md) for the full protocol.
+**Compatibility with FC marking:** if a coffee has audible FC, mark it manually for the data record — bean temp end condition still drives the drop. If silent, do not try to mark FC; let the profile end condition do the work and log as manual-no-audio at the drop temp. See [cluster/protocols/fc-marking.md](docs/skills/roest-knowledge/cluster/protocols/fc-marking.md) for the full protocol.
 
 ### Manual-override exception rules (when to override the BEAN_TEMP end condition)
 
@@ -97,7 +97,7 @@ The pattern across all five rules: **the BEAN_TEMP auto-drop optimizes for the t
 
 ## WB-to-Ground Agtron Delta as Development Signal
 
-The delta between whole bean (WB) Agtron and ground Agtron is one of the most sensitive internal development signals available. **Operational vocabulary tracks magnitude, not sign** — the directional interpretation (surface ahead of core vs core ahead of surface) flips by lot family, so the scalar delta is read for magnitude and the surface-vs-interior pattern is named in prose when it matters. See [CONTEXT-roasting.md § WB→Gnd Agtron delta](../../../../../CONTEXT-roasting.md) for the canonical definition.
+The delta between whole bean (WB) Agtron and ground Agtron is one of the most sensitive internal development signals available. **Operational vocabulary tracks magnitude, not sign** — the directional interpretation (surface ahead of core vs core ahead of surface) flips by lot family, so the scalar delta is read for magnitude and the surface-vs-interior pattern is named in prose when it matters. See [CONTEXT-roasting.md § WB→Gnd Agtron delta](CONTEXT-roasting.md) for the canonical definition.
 
 | Magnitude | Reading | Action |
 |---|---|---|

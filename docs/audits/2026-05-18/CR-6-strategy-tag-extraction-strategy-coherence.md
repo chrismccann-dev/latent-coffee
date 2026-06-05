@@ -1,6 +1,6 @@
 # CR-6 — Roaster strategy tag ↔ brew extraction strategy vocabulary-coherence audit
 
-**Source**: [grilling-2026-05-16-canonical-registries-followups.md item #6](../../sprints/grilling-2026-05-16-canonical-registries-followups.md) + [CONTEXT.md flagged ambiguity line 1518](../../../CONTEXT.md)
+**Source**: [grilling-2026-05-16-canonical-registries-followups.md item #6](docs/sprints/grilling-2026-05-16-canonical-registries-followups.md) + [CONTEXT.md flagged ambiguity line 1518](../../../CONTEXT.md)
 **Sprint**: T5 (2026-05-18)
 **Decision**: **The two vocabularies should NOT be force-aligned. They describe different things. Lock the distinction in CONTEXT.md; no rename sprint.**
 
@@ -114,7 +114,7 @@ SELF-ROASTED             → use Chris's iteration loop directly
 
 ## Pairs with
 
-- [CR-13 + MCP-3 strictness mapping](CR-13-MCP-3-canonical-strictness-mapping.md) — both vocabularies are strict-static enums; their strictness tier is in the strictness audit.
+- [CR-13 + MCP-3 strictness mapping](docs/audits/2026-05-18/CR-13-MCP-3-canonical-strictness-mapping.md) — both vocabularies are strict-static enums; their strictness tier is in the strictness audit.
 - The CONTEXT.md flagged-ambiguity close — closes line 1518 inline at sprint close-out.
 
 ## Out of scope for T5

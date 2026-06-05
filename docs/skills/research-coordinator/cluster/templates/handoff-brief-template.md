@@ -15,7 +15,7 @@ At the end of every Research Assistant session, the Assistant appends a handoff 
 
 Both consumers must be able to act on the brief without seeing the prior Assistant-session conversation. The brief is self-contained.
 
-After the brief is written, the Assistant declares termination and stops. No commits, no PRs, no further edits. See [`role-discipline.md`](../role-discipline.md).
+After the brief is written, the Assistant declares termination and stops. No commits, no PRs, no further edits. See [`role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md).
 
 ---
 
@@ -140,7 +140,7 @@ End of <track-name> close-out.
 
 **Substrate edit specifications.** **The most load-bearing section for the Execution session.** Each edit is paste-ready: file path + exact change + data source + fresh-context-readable rationale. The Execution session won't see the prior conversation; the spec must stand alone. Sub-categorize by edit type (registry / cluster doc / ADR / audit item) for the Execution session's reading order. **Do NOT execute the edits in this session** — the DO NOT block at the top of the section is the load-bearing reminder.
 
-**New lessons captured.** Numbered (continue the project's running numbering — Project #4's lessons start at RP4-N1 because lessons #1-40 inherited from #1-#3). Lessons that graduate to cluster primitives go through the cross-project ratification gate at [`process-retro.md`](../process-retro.md). Single-project lessons stay logged here.
+**New lessons captured.** Numbered (continue the project's running numbering — Project #4's lessons start at RP4-N1 because lessons #1-40 inherited from #1-#3). Lessons that graduate to cluster primitives go through the cross-project ratification gate at [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md). Single-project lessons stay logged here.
 
 **Audit items queued.** Numbered. Each item has a status. Audit items are where unresolved substrate-shape questions accumulate; the project's end-document consolidates them at close.
 
@@ -172,8 +172,8 @@ The filter arc's close-out briefs landed at ~5-15 KB each (RP4 was 13 KB). That'
 
 ## Related primitives
 
-- [`role-discipline.md`](../role-discipline.md) — the termination declaration block is non-negotiable
-- [`sharp-substrate-fold.md`](../sharp-substrate-fold.md) — § Substrate edit specifications is the fold mechanism
-- [`process-retro.md`](../process-retro.md) — § New lessons + § Protocol-execution friction feed the retro
-- [`templates/spawn-prompt-template.md`](spawn-prompt-template.md) — section 7 step 8 references this template
-- [ADR-0017](../../../../adr/0017-research-assistant-architecture.md) § Handoff brief as integration artifact
+- [`role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md) — the termination declaration block is non-negotiable
+- [`sharp-substrate-fold.md`](docs/skills/research-coordinator/cluster/sharp-substrate-fold.md) — § Substrate edit specifications is the fold mechanism
+- [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md) — § New lessons + § Protocol-execution friction feed the retro
+- [`templates/spawn-prompt-template.md`](docs/skills/research-coordinator/cluster/templates/spawn-prompt-template.md) — section 7 step 8 references this template
+- [ADR-0017](docs/adr/0017-research-assistant-architecture.md) § Handoff brief as integration artifact

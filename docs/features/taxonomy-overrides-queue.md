@@ -136,11 +136,11 @@ ALTER TABLE brews ADD COLUMN cultivar_provenance text DEFAULT 'canonical'
 
 ## Hook insertion sites
 
-5 sites, all in [`lib/brew-import.ts`](../../lib/brew-import.ts) and [`lib/roast-import.ts`](../../lib/roast-import.ts) (file may not exist yet for roast-side hooks; see "Roast hooks" below).
+5 sites, all in [`lib/brew-import.ts`](lib/brew-import.ts) and [`lib/roast-import.ts`](lib/roast-import.ts) (file may not exist yet for roast-side hooks; see "Roast hooks" below).
 
 ### Site A — 5 text-only `findOrCreate*` helpers (override → queue)
 
-In [`lib/brew-import.ts:500-526`](../../lib/brew-import.ts):
+In [`lib/brew-import.ts:500-526`](lib/brew-import.ts):
 
 ```ts
 export function findOrCreateRoaster(
@@ -172,13 +172,13 @@ The queue inserts happen post-brew-insert so `source_id` resolves to a real row.
 
 ### Site B — `findOrCreateTerroir` / `findOrCreateCultivar` (auto-created FK rows)
 
-In [`lib/brew-import.ts:528+`](../../lib/brew-import.ts) (terroir) and [`lib/brew-import.ts:452-493`](../../lib/brew-import.ts) (cultivar): when the create branch fires, set `terroir_provenance = 'auto_created'` (or `cultivar_provenance`) on the green_bean / brew row that triggered the create. This is a column write, not a queue insert (per D2 — auto-created FK rows from canonical input do NOT queue).
+In [`lib/brew-import.ts:528+`](lib/brew-import.ts) (terroir) and [`lib/brew-import.ts:452-493`](lib/brew-import.ts) (cultivar): when the create branch fires, set `terroir_provenance = 'auto_created'` (or `cultivar_provenance`) on the green_bean / brew row that triggered the create. This is a column write, not a queue insert (per D2 — auto-created FK rows from canonical input do NOT queue).
 
-The `created` flag on `FindOrCreateResult` (already exists in [`lib/brew-import.ts:448-450`](../../lib/brew-import.ts:448)) is the signal — caller spreads `terroir_provenance: result.created ? 'auto_created' : 'canonical'` into the green_bean / brew insert.
+The `created` flag on `FindOrCreateResult` (already exists in [`lib/brew-import.ts:448-450`](lib/brew-import.ts:448)) is the signal — caller spreads `terroir_provenance: result.created ? 'auto_created' : 'canonical'` into the green_bean / brew insert.
 
 ### Site C — Roast push paths
 
-`push_roast` in [`lib/mcp/push-roast.ts`](../../lib/mcp/push-roast.ts) doesn't use the 5 text-only `findOrCreate*` helpers directly — roasts are a child entity of green_beans (which carry the canonicals). No new hook needed. Confirmed by reviewing the `push_roast` schema; canonicals live on the parent green_bean row.
+`push_roast` in [`lib/mcp/push-roast.ts`](lib/mcp/push-roast.ts) doesn't use the 5 text-only `findOrCreate*` helpers directly — roasts are a child entity of green_beans (which carry the canonicals). No new hook needed. Confirmed by reviewing the `push_roast` schema; canonicals live on the parent green_bean row.
 
 ### Site D — `propose_canonical_addition` (model-callable submit)
 

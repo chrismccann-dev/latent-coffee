@@ -12,7 +12,7 @@ Migrated from BREWING.md § Location Constraints + § Equipment Reference + § V
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Brewers**                   | April Brewer Glass, Kalita Wave Tsubame 155, SWORKS Bottomless Dripper. (XBLOOM available but manual preferred.)                                                                                                                                                                                                                                                                          |
 | **Filters**                   | xBloom Premium Paper only (compatible with both Kalita Wave 155 and Bottomless Dripper).                                                                                                                                                                                                                                                                                                      |
-| **Water**                     | Tap water — Downtown Palo Alto municipal supply. Do not assume soft or mineralized water. No water adjustments available. **Roast-forward amplification:** office tap minerals fill out an already-heavy body — on a coffee already carrying developed-roast solubles, office tap pushes it from 'manageable brown tea' to 'punishing oversteeped black tea' (Khun Lao Double Honey arc, 2026-05-26). For any roast-forward lot, prefer home low-mineral remineralized water; if office-only, expect the body one register heavier and do not chase it with grind. Cross-anchor water × roast-level rule lives in [cross-coffee-insights.md § Pattern #6](../../brewing-historian/cluster/patterns/cross-coffee-insights.md). |
+| **Water**                     | Tap water — Downtown Palo Alto municipal supply. Do not assume soft or mineralized water. No water adjustments available. **Roast-forward amplification:** office tap minerals fill out an already-heavy body — on a coffee already carrying developed-roast solubles, office tap pushes it from 'manageable brown tea' to 'punishing oversteeped black tea' (Khun Lao Double Honey arc, 2026-05-26). For any roast-forward lot, prefer home low-mineral remineralized water; if office-only, expect the body one register heavier and do not chase it with grind. Cross-anchor water × roast-level rule lives in [cross-coffee-insights.md § Pattern #6](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md). |
 | **April Brewer**              | OFFICE: drains ~2:30 with xBloom Premium Paper regardless of grind. Strong fit for integration / Suppression / mid-palate work — works well on heavy-roast / loud beans where the brew layer needs to control rather than push (e.g. Mandela XO heavy-suppression brewing). Not suitable for Full Expression at the office (use Kalita 155 or SWORKS Bottomless when high agitation is needed).                                                                                                                                                                                                                                       |
 | **Kalita Wave 155**           | Reliable 3:00-3:30 drawdown with xBloom Premium Paper. Pour structure and rest timing are the primary extraction levers, not grind size. NOTE: runs faster than expected even at finer grind — use Bottomless Dripper when precise flow control is needed. On some coffees (confirmed: Sebastian Ramirez White Honey Gesha) the Kalita still drains too fast for Balanced Intensity — switch to the SWORKS Bottomless Dripper with a Restricted valve when contact time is critical.                                                                                                                                                         |
 | **SWORKS Bottomless Dripper** | Variable-flow valve dripper. Cone geometry, uses 155 flat or wave filters (xBloom Premium Paper at office). Valve dial restricts or opens flow mid-brew — each pour phase can have an independent valve state (Restricted / Half-Open / Open). Primary office brewer for Balanced Intensity and Full Expression when contact time management is critical. See Valve Position Reference below. |
@@ -28,7 +28,7 @@ Migrated from BREWING.md § Location Constraints + § Equipment Reference + § V
 
 ### Brewer System
 
-Canonical brewer SKUs are in `canonicals://brewers` (46 canonicals + 24 aliases). Below is the rotation-relevant subset with cup-tendency framing for recipe construction. The per-brewer technical spec sheet lives in [brewers.md](./brewers.md).
+Canonical brewer SKUs are in `canonicals://brewers` (46 canonicals + 24 aliases). Below is the rotation-relevant subset with cup-tendency framing for recipe construction. The per-brewer technical spec sheet lives in [brewers.md](docs/skills/brewing-equipment-expert/cluster/brewers.md).
 
 | **Brewer**                    | **Geometry**           | **Flow**                    | **Cup Tendency**                          | **Notes**                                                                                                                                                                                                                |
 |-------------------------------|------------------------|-----------------------------|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -63,7 +63,7 @@ The cup-tendency column above describes each brewer's primary register, but in p
 
 ### Filter System
 
-Canonical filter SKUs are in `canonicals://filters` (58 canonicals + 56 aliases). Below is the rotation-relevant subset; the per-filter technical spec sheet lives in [filters.md](./filters.md).
+Canonical filter SKUs are in `canonicals://filters` (58 canonicals + 56 aliases). Below is the rotation-relevant subset; the per-filter technical spec sheet lives in [filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md).
 
 | **Filter**                       | **Type**    | **Flow**    | **Behavior**                                   | **Cup Impact / Notes**                                                                                                                                                                                                                                                                                                                                                                                                                          |
 |----------------------------------|-------------|-------------|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -95,7 +95,7 @@ The Sibarist B3 Cone (medium-fast) and Sibarist FAST Cone (very fast) sit at not
 - For pure Clarity-First on delicate washed Gesha at small-pouch (12.5g) doses: Sibarist FAST Cone, not B3.
 - If only B3 is available and a FAST-style result is wanted: pull a half-notch finer (e.g. 6.5 instead of 6.6) to compensate, then verify drawdown.
 - The Sibarist B2 Cone (not currently in inventory) would fill this gap at a flow rate intermediate between B3 and FAST. Worth considering for purchase if delicate washed Gesha brewing becomes more frequent.
-- A Filter Drawdown Test Protocol has been drafted to convert filter choice from a gut-read into a measured lever — see [brewing-historian/cluster/patterns/cross-coffee-insights.md § Open Questions](../../brewing-historian/cluster/patterns/cross-coffee-insights.md).
+- A Filter Drawdown Test Protocol has been drafted to convert filter choice from a gut-read into a measured lever — see [brewing-historian/cluster/patterns/cross-coffee-insights.md § Open Questions](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md).
 
 ### Additional Tools
 
@@ -106,7 +106,7 @@ The Sibarist B3 Cone (medium-fast) and Sibarist FAST Cone (very fast) sit at not
 
 ### Grinder: Weber EG-1
 
-Large flat burr, tight particle distribution, low fines. One EG-1 at home (distilled + remineralized water), one at office (tap water, Downtown Palo Alto). Both calibrated to the same grind settings. **Per-setting D50 / Zone / Extraction Behavior / Use Case content lives in [grinder-eg1.md](./grinder-eg1.md)** — that is the canonical source for the 51-setting taxonomy (16 measured, 35 valid-but-unmeasured).
+Large flat burr, tight particle distribution, low fines. One EG-1 at home (distilled + remineralized water), one at office (tap water, Downtown Palo Alto). Both calibrated to the same grind settings. **Per-setting D50 / Zone / Extraction Behavior / Use Case content lives in [grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md)** — that is the canonical source for the 51-setting taxonomy (16 measured, 35 valid-but-unmeasured).
 
 **Key structural finding:** settings 6.0-6.3 all produce D50 values in the ~1000-1060 µm range due to burr geometry compression. Below 6.0, D50 continues to drop but at a diminishing rate — the steepest meaningful drop is 6.0→5.5 (~95 µm). Below 5.0, the EG-1 hits a D50 floor at ~820-880 µm regardless of dial setting.
 
@@ -114,7 +114,7 @@ Large flat burr, tight particle distribution, low fines. One EG-1 at home (disti
 
 ## Valve Position Reference — SWORKS Bottomless Dripper
 
-The per-dial-state taxonomy + flow-rate measurements live in [sworks.md](./sworks.md). The operational-recipe-construction view below is the rotation-relevant subset for recipe construction.
+The per-dial-state taxonomy + flow-rate measurements live in [sworks.md](docs/skills/brewing-equipment-expert/cluster/sworks.md). The operational-recipe-construction view below is the rotation-relevant subset for recipe construction.
 
 | **Valve State**            | **Flow Behavior**                      | **Use When**                                   | **Notes**                                                                                                                                                                                                                                                                                      |
 |----------------------------|----------------------------------------|------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -173,9 +173,9 @@ The per-dial-state taxonomy + flow-rate measurements live in [sworks.md](./swork
 
 ## Cross-references
 
-- [brewers.md](./brewers.md) — per-brewer technical spec sheet (46 canonical entries)
-- [filters.md](./filters.md) — per-filter technical spec sheet (64 canonical entries)
-- [grinder-eg1.md](./grinder-eg1.md) — per-setting D50 / Zone / Extraction Behavior taxonomy (51 settings)
-- [sworks.md](./sworks.md) — per-dial-state SWORKS taxonomy with flow-rate measurements
-- [brewing-assistant/cluster/operational-guide.md](../../brewing-assistant/cluster/operational-guide.md) — the BREW PROMPT operational guidance that consumes this reference
-- [coordinator/catalog.md § brewing-domain-principles](../../coordinator/catalog.md) — brewer rotation discipline framing
+- [brewers.md](docs/skills/brewing-equipment-expert/cluster/brewers.md) — per-brewer technical spec sheet (46 canonical entries)
+- [filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md) — per-filter technical spec sheet (64 canonical entries)
+- [grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md) — per-setting D50 / Zone / Extraction Behavior taxonomy (51 settings)
+- [sworks.md](docs/skills/brewing-equipment-expert/cluster/sworks.md) — per-dial-state SWORKS taxonomy with flow-rate measurements
+- [brewing-assistant/cluster/operational-guide.md](docs/skills/brewing-assistant/cluster/operational-guide.md) — the BREW PROMPT operational guidance that consumes this reference
+- [coordinator/catalog.md § brewing-domain-principles](docs/skills/coordinator/catalog.md) — brewer rotation discipline framing

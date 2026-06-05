@@ -26,9 +26,9 @@ Phases can ship as separate PRs or one bundled. Recommend separate — Phase 1 i
 
 Three small changes to existing code, plus one schema review:
 
-1. **Token mint scope.** [lib/roest-client.ts:48](../../lib/roest-client.ts) currently sends `body: 'grant_type=client_credentials'` with no scope. Add `scope=read+write` so minted tokens can hit write endpoints. The cached token's `expires_at` field already accounts for refresh — no other change needed.
+1. **Token mint scope.** [lib/roest-client.ts:48](lib/roest-client.ts) currently sends `body: 'grant_type=client_credentials'` with no scope. Add `scope=read+write` so minted tokens can hit write endpoints. The cached token's `expires_at` field already accounts for refresh — no other change needed.
 
-2. **File header comment fix.** [lib/roest-client.ts:14](../../lib/roest-client.ts) says "Roest credentials are read-only (scope: 'read')" — that comment is now wrong. Update when touching the file.
+2. **File header comment fix.** [lib/roest-client.ts:14](lib/roest-client.ts) says "Roest credentials are read-only (scope: 'read')" — that comment is now wrong. Update when touching the file.
 
 3. **POST/PATCH-capable fetcher.** Existing `authedFetch<T>(path)` is GET-only. Add a sibling:
 
@@ -83,7 +83,7 @@ If Chris ever changes machine or profile-type philosophy, surface as inputs then
 
 ### Implementation
 
-New file `lib/mcp/push-roast-profile.ts` following the shape of existing push tools (mirror [lib/mcp/push-roast.ts](../../lib/mcp/push-roast.ts)):
+New file `lib/mcp/push-roast-profile.ts` following the shape of existing push tools (mirror [lib/mcp/push-roast.ts](lib/mcp/push-roast.ts)):
 
 1. Validate input shape (zod schema).
 2. Validate bezier arrays:
@@ -96,13 +96,13 @@ New file `lib/mcp/push-roast-profile.ts` following the shape of existing push to
 5. If `enable_share: true`, follow up with `PUT /profiles/{id}/enable_share/`.
 6. Return `{ profile_id, share_url? }`.
 
-Register in [lib/mcp/server.ts](../../lib/mcp/server.ts) tool-list block.
+Register in [lib/mcp/server.ts](lib/mcp/server.ts) tool-list block.
 
 ### Tool description (this is the high-leverage part)
 
 The Tool description is what teaches claude.ai how to construct a profile. It should:
 
-- **Reference [ROASTING.md](../../ROASTING.md)** as the source of truth for Chris's roasting methodology.
+- **Reference [ROASTING.md](ROASTING.md)** as the source of truth for Chris's roasting methodology.
 - **Encode the v1a/v1b/v1c naming convention** explicitly: every profile starts as `<bean-name> v1a`; subsequent iterations on the same bean increment to v1b, v1c.
 - **Specify bezier shape conventions**:
   - `temperature_bezier`: typically 4-6 control points covering charge → dry-end → FC → drop. Inlet temp targets in °C.
@@ -112,7 +112,7 @@ The Tool description is what teaches claude.ai how to construct a profile. It sh
 - **End condition guidance**: Chris's preferred gate is `BEAN_TEMP` per ROASTING.md. Typical values 198-205°C depending on bean development target.
 - **Length**: ~60-90 lines of guidance. Long Tool descriptions are fine; this is the load-bearing surface.
 
-Cross-reference: [BREWING.md](../../BREWING.md) section on prompt v9 + canonicals shows the pattern of long descriptive prompts loaded into Tool descriptions.
+Cross-reference: [BREWING.md](BREWING.md) section on prompt v9 + canonicals shows the pattern of long descriptive prompts loaded into Tool descriptions.
 
 ### Validation gotchas
 
@@ -125,7 +125,7 @@ Cross-reference: [BREWING.md](../../BREWING.md) section on prompt v9 + canonical
 
 **None this phase.** The Tool returns the `profile_id` to claude.ai; claude.ai then uses it in subsequent context. No new column on `green_beans` or `roasts` to capture "Claude pushed this profile."
 
-**Consider for future:** if Phase 1 ships and we want to link "Claude designed a roast for bean X with profile Y → roast happened → log Y came back via pull_roest_log", we'd add a `roest_profile_id integer` column to capture the inverse mapping. But [lib/roest-client.ts:117](../../lib/roest-client.ts) already captures `profile_link` and `roast_profile_name` as text — sufficient for trace purposes through this sprint.
+**Consider for future:** if Phase 1 ships and we want to link "Claude designed a roast for bean X with profile Y → roast happened → log Y came back via pull_roest_log", we'd add a `roest_profile_id integer` column to capture the inverse mapping. But [lib/roest-client.ts:117](lib/roest-client.ts) already captures `profile_link` and `roast_profile_name` as text — sufficient for trace purposes through this sprint.
 
 ### Test plan
 
@@ -141,7 +141,7 @@ Both consume the same `Inventory` schema; same fetcher; same customer URL resolu
 
 ### `push_inventory` (POST /inventories/)
 
-Tool shape mirrors `RoestInventory` from [lib/roest-client.ts:145](../../lib/roest-client.ts) (the existing read shape — same fields, just write direction):
+Tool shape mirrors `RoestInventory` from [lib/roest-client.ts:145](lib/roest-client.ts) (the existing read shape — same fields, just write direction):
 
 ```typescript
 {
@@ -172,7 +172,7 @@ Tool shape mirrors `RoestInventory` from [lib/roest-client.ts:145](../../lib/roe
 }
 ```
 
-**`bean_process` mapping** is already documented in [lib/roest-client.ts:222](../../lib/roest-client.ts) — re-use the inverse map (1=Natural, 2=Washed, 3=Honey, 4=Co-fermented/XO, 5=Anaerobic).
+**`bean_process` mapping** is already documented in [lib/roest-client.ts:222](lib/roest-client.ts) — re-use the inverse map (1=Natural, 2=Washed, 3=Honey, 4=Co-fermented/XO, 5=Anaerobic).
 
 ### `patch_inventory` (PATCH /inventories/{id}/)
 
@@ -206,7 +206,7 @@ green_bean_id: { type: 'string', nullable: true, description: '...' }
 
 ### Validation gotchas
 
-- **Weight unit ambiguity.** [lib/roest-client.ts:404](../../lib/roest-client.ts) (`normalizeRoestInventoryWeightG`) already handles the read-side: Roest returns weights as `grams * 1000` for some inventories. The write side: send raw grams, not multiplied? Confirm during sprint kickoff with one push to a test bean. If Roest expects multiplied units for writes too, mirror the normalization in reverse.
+- **Weight unit ambiguity.** [lib/roest-client.ts:404](lib/roest-client.ts) (`normalizeRoestInventoryWeightG`) already handles the read-side: Roest returns weights as `grams * 1000` for some inventories. The write side: send raw grams, not multiplied? Confirm during sprint kickoff with one push to a test bean. If Roest expects multiplied units for writes too, mirror the normalization in reverse.
 - **Moisture format.** Read side is fraction-or-percentage drift (some lots `0.087`, some `8.7`). Write side: send as percentage (`8.7`)? Confirm.
 - **Required fields.** OpenAPI schema only marks `author_name` + `created` as `required` and both are `readOnly` — so technically only `name` is required by the user. But producing a useful inventory entry needs at minimum `name + country + cultivar + bean_process + initial_weight + price`. Surface those as required-in-spirit via Tool description even though API accepts looser input.
 
@@ -243,7 +243,7 @@ green_bean_id: { type: 'string', nullable: true, description: '...' }
 
 ## Sprint cadence reminders
 
-Per [CLAUDE.md § Sprint cadence](../../CLAUDE.md):
+Per [CLAUDE.md § Sprint cadence](CLAUDE.md):
 
 1. **Plan-mode before coding.** Surface the bezier-shape decisions and Tool description outline before writing the Tool file. Don't silently interpret.
 2. **End-to-end test against the real Roest before PR.** Push a profile, load it on the tablet, run a roast. Don't ship Phase 1 without this.

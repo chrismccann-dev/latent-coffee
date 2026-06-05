@@ -1,7 +1,7 @@
 # WBC Brewing Archivist
 
 **Tier:** Knowledge / **Domain:** Brewing / **Wave:** 2 / **Status:** Wave 2 PR 1 shipped 2026-05-26
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -9,10 +9,10 @@ Author and maintain the WBC (World Brewers Cup) competitor corpus on the brewing
 
 ## Knowledge cluster contents (Wave 2 PR 1)
 
-- [`cluster/wbc-reference.md`](cluster/wbc-reference.md) — migrated from `docs/brewing/wbc-reference.md` (5-axis foundational map + 8 strategy families). Old path resolves to a redirect stub for back-compat.
-- [`cluster/wbc-recipes.md`](cluster/wbc-recipes.md) — migrated from `docs/brewing/wbc-recipes.md` (102-recipe corpus). Old path resolves to a redirect stub.
-- [`cluster/per-strategy/<strategy>.md`](cluster/per-strategy/) — 6 per-strategy stub docs (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid). Placeholders today; populate as patterns crystallize.
-- [`cluster/canonical/wbc-tested-recipes.md`](cluster/canonical/wbc-tested-recipes.md) — canonical registry stub tracking which WBC recipes have been directly tested on a Latent brew. Empty today; grows via the Step 1d WBC corpus-check Named Consideration.
+- [`cluster/wbc-reference.md`](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) — migrated from `docs/brewing/wbc-reference.md` (5-axis foundational map + 8 strategy families). Old path resolves to a redirect stub for back-compat.
+- [`cluster/wbc-recipes.md`](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — migrated from `docs/brewing/wbc-recipes.md` (102-recipe corpus). Old path resolves to a redirect stub.
+- [`cluster/per-strategy/<strategy>.md`](docs/skills/wbc-brewing-archivist/cluster/per-strategy/) — 6 per-strategy stub docs (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid). Placeholders today; populate as patterns crystallize.
+- [`cluster/canonical/wbc-tested-recipes.md`](docs/skills/wbc-brewing-archivist/cluster/canonical/wbc-tested-recipes.md) — canonical registry stub tracking which WBC recipes have been directly tested on a Latent brew. Empty today; grows via the Step 1d WBC corpus-check Named Consideration.
 
 ## Inputs
 
@@ -33,7 +33,7 @@ None directly.
 
 ## Self-improvement
 
-- **Patterns:** B (external-event refresh on new WBC year drop) — see [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+- **Patterns:** B (external-event refresh on new WBC year drop) — see [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 - **Signal:** new WBC year → prompt refresh
 
 ## Wave 2 PR 1 ship notes (2026-05-26)

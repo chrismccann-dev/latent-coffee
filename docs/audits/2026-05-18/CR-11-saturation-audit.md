@@ -1,6 +1,6 @@
 # CR-11 — 95-96% pick-not-author saturation audit (per-axis)
 
-**Source**: [grilling-2026-05-16-canonical-registries-followups.md item #11](../../sprints/grilling-2026-05-16-canonical-registries-followups.md)
+**Source**: [grilling-2026-05-16-canonical-registries-followups.md item #11](docs/sprints/grilling-2026-05-16-canonical-registries-followups.md)
 **Sprint**: T5 (2026-05-18)
 **Decision**: **Latent's canonical-resolution rate hits or exceeds the 95-96% target on 9 of 10 axes. Only the producer axis is below, by a single-row margin (98.8% canonical, 0% alias, 1.2% override-eligible — within tolerance).**
 
@@ -139,6 +139,6 @@ SELECT target_doc, status, COUNT(*) AS n FROM doc_proposals GROUP BY target_doc,
 Re-run this audit IF any of the following lands:
 
 1. Quarterly cadence — Q3 2026-Q4 2026 next.
-2. Any new canonical axis lands (e.g. SWORKS valve flow via [CR-7](CR-7-sworks-valve-flow-scoping.md), water taxonomy bootstrap).
+2. Any new canonical axis lands (e.g. SWORKS valve flow via [CR-7](docs/audits/2026-05-18/CR-7-sworks-valve-flow-scoping.md), water taxonomy bootstrap).
 3. The override queue accumulates ≥5 pending entries on any single axis (signals coverage strategy drift).
 4. A registry adoption sprint adds 10+ canonical entries in a single registry.

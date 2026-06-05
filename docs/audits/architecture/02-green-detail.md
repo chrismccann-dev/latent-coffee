@@ -3,7 +3,7 @@
 **Session:** Architecture-audit dogfood #2 (2026-06-04). Read-only; no code edited.
 **Surface:** [`app/(app)/green/[id]/page.tsx`](../../../app/(app)/green/[id]/page.tsx) + [`lib/lifecycle-state.ts`](../../../lib/lifecycle-state.ts).
 **Centered smell:** large mixed-concern file + weak type boundary.
-**Rubric:** Part B v0 of [architecture-review-skill-brainstorm-2026-06-04.md](../../features/architecture-review-skill-brainstorm-2026-06-04.md).
+**Rubric:** Part B v0 of [architecture-review-skill-brainstorm-2026-06-04.md](docs/features/architecture-review-skill-brainstorm-2026-06-04.md).
 
 ---
 

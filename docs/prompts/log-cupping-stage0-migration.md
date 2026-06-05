@@ -1,6 +1,6 @@
 # log-cupping STAGE 0 — pre-rewrite state-shape migration (ARCHIVED procedure)
 
-> **Break-glass reference.** This is the full backfill procedure that used to live inline as STAGE 0 of [`log-cupping.md`](log-cupping.md). It was archived out of the every-session prompt on 2026-06-04 (doc-pruning case 006) because **no live lot can trigger it** — every open V-set lot has migrated to post-rewrite shape, and the only NULL-shaped V-sets remaining are historical (already-cupped) early V-sets that do not re-enter `log-cupping`.
+> **Break-glass reference.** This is the full backfill procedure that used to live inline as STAGE 0 of [`log-cupping.md`](docs/prompts/log-cupping.md). It was archived out of the every-session prompt on 2026-06-04 (doc-pruning case 006) because **no live lot can trigger it** — every open V-set lot has migrated to post-rewrite shape, and the only NULL-shaped V-sets remaining are historical (already-cupped) early V-sets that do not re-enter `log-cupping`.
 >
 > `log-cupping.md` keeps a thin detection stub. If detection ever fires (a pre-rewrite lot is re-cupped), pull this doc into the session and run the procedure below. Not MCP-registered — operator-pulled when needed.
 

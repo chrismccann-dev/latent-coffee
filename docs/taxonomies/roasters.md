@@ -1,11 +1,11 @@
 # Roasters
 
 **Enforcement bar:** Strict (enforcement lands sprint 1h.2)
-**Canonical registry:** [lib/roaster-registry.ts](../../lib/roaster-registry.ts) (validation mirror)
+**Canonical registry:** [lib/roaster-registry.ts](lib/roaster-registry.ts) (validation mirror)
 **Last adopted:** 2026-04-24
 **Adoption path:** Authored taxonomy (Chris, 2026-04-23 CSV pass + 2026-04-24 enrichment) drawing on roaster-published brew guides, BMR roaster reference cards, and the 55-brew corpus. First taxonomy port without a DB FK column — `brews.roaster` is text-only; canonical enforcement is code-and-validation only, no migration to a `roasters` table.
 
-Canonical roaster reference for the latent-coffee app. **73 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](../../lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint 1h structural port.
+Canonical roaster reference for the latent-coffee app. **73 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md), sprint 1h structural port.
 
 **Composition:** Each roaster is a single canonical name (no nested hierarchy like Region's Country → Macro). The rich shape captures 30 fields per entry: location/country, roast style + development bias + rest curve, strategy tag + family, primary driver / extraction purpose, house style + brew guide status (3-state: official / implied / none — Sub-sprint 4b Bundle B 2026-05-28) + brew guide link, recipe baseline (temp / dose / water / ratio / time / agitation), brewer + filter type, extraction intent + failure mode + tolerance, process sensitivity, brew adjustment method, calibration role, confidence level, and free-text notes. Plus optional `displayName` for tight UI surfaces (brew cards) and `bmrHouseStyle` / `bmrNotes` authored prose preserved verbatim from the prior 21-entry registry where richer than CSV.
 
@@ -14,7 +14,7 @@ Canonical roaster reference for the latent-coffee app. **73 canonical roasters**
 - **`implied`** — Chris derived a recipe from community sources: Reddit, brew-card aggregations from third parties, FAQ inferences, structural inference from the roast style + similar peers. Best estimate, not roaster-verified.
 - **`none`** — no recipe known, official or implied.
 
-Drives the BREWING PHILOSOPHY render gate on `/roasters/[slug]` per [app/(app)/roasters/[slug]/page.tsx](../../app/%28app%29/roasters/%5Bslug%5D/page.tsx). `brewGuideSource` + `brewGuideType` remain as provenance fields (where the recipe came from — YouTube / Blog / Wayback / Reddit / etc.); only the page-front gate reads `brewGuideStatus`. Distribution today: 57 official / 12 implied / 4 none. Classification ratification trail in [docs/sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md](../sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md).
+Drives the BREWING PHILOSOPHY render gate on `/roasters/[slug]` per [app/(app)/roasters/[slug]/page.tsx](../../app/%28app%29/roasters/%5Bslug%5D/page.tsx). `brewGuideSource` + `brewGuideType` remain as provenance fields (where the recipe came from — YouTube / Blog / Wayback / Reddit / etc.); only the page-front gate reads `brewGuideStatus`. Distribution today: 57 official / 12 implied / 4 none. Classification ratification trail in [docs/sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md](docs/sprints/sub-sprint-4b-brew-guide-classifications-2026-05-28.md).
 
 Additions require a 2-step edit: this doc + `lib/roaster-registry.ts` (no DB migration unless you're renaming an existing canonical, in which case a 3rd file is the migration). New canonicals are deliberate decisions, not drift. Sprint 1h.2 will land enforcement on `/add` + `/brews/[id]/edit` with an "add new" escape hatch when a roaster legitimately doesn't fit the canonical list.
 
@@ -24,7 +24,7 @@ External claims in this doc are sourced at authoring time from the CSV; Chris's 
 
 ## Canonical list
 
-Matches the `ROASTERS` array in [lib/roaster-registry.ts](../../lib/roaster-registry.ts) exactly. 73 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
+Matches the `ROASTERS` array in [lib/roaster-registry.ts](lib/roaster-registry.ts) exactly. 73 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
 
 ### Clarity-First (28)
 
@@ -171,7 +171,7 @@ Migration 027 renames the 20 short-form entries to canonical full names. Aliases
 
 ## Per-entry reference
 
-Rich attribute content for each canonical roaster. Field names match `RoasterEntry` in [lib/roaster-registry.ts](../../lib/roaster-registry.ts).
+Rich attribute content for each canonical roaster. Field names match `RoasterEntry` in [lib/roaster-registry.ts](lib/roaster-registry.ts).
 
 ### Clarity-First
 

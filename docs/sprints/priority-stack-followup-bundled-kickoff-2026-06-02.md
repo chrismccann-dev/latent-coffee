@@ -12,7 +12,7 @@
 The 2026-06-02 session reconciled the claude.ai/design v2 system against
 `docs/design-system.md` and formalized the **priority stack** model (primary /
 secondary / tertiary content ranking per detail page). See
-[docs/design-system.md § Detail-page grammar](../design-system.md) for the model and
+[docs/design-system.md § Detail-page grammar](docs/design-system.md) for the model and
 the per-surface ranking table — read it first; items 1 and 2 are direct consequences
 of it. Doc PR: #354 (main `5eef651`).
 

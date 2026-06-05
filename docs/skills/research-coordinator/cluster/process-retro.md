@@ -94,16 +94,16 @@ For each finding in the retro that warrants substrate-level refinement: update t
 
 | Retro finding type | Where it lands |
 |---|---|
-| Role-boundary failure mode | [`role-discipline.md`](role-discipline.md) — extend the DO NOT / DO list or the "Why this rule exists" examples |
-| Step 0 sub-step refinement | [`calibration-arc.md`](calibration-arc.md) — update the primitive's description; possibly add a new primitive (gated on second-project confirmation) |
-| Sharp-fold gap (something folded outward that shouldn't have, or something stayed inward that should have folded) | [`sharp-substrate-fold.md`](sharp-substrate-fold.md) — update the examples or the gate description |
-| Spawn prompt structural drift | [`templates/spawn-prompt-template.md`](templates/spawn-prompt-template.md) — refine the 9-section skeleton |
-| Handoff brief shape drift | [`templates/handoff-brief-template.md`](templates/handoff-brief-template.md) — refine the section list |
+| Role-boundary failure mode | [`role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md) — extend the DO NOT / DO list or the "Why this rule exists" examples |
+| Step 0 sub-step refinement | [`calibration-arc.md`](docs/skills/research-coordinator/cluster/calibration-arc.md) — update the primitive's description; possibly add a new primitive (gated on second-project confirmation) |
+| Sharp-fold gap (something folded outward that shouldn't have, or something stayed inward that should have folded) | [`sharp-substrate-fold.md`](docs/skills/research-coordinator/cluster/sharp-substrate-fold.md) — update the examples or the gate description |
+| Spawn prompt structural drift | [`templates/spawn-prompt-template.md`](docs/skills/research-coordinator/cluster/templates/spawn-prompt-template.md) — refine the 9-section skeleton |
+| Handoff brief shape drift | [`templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md) — refine the section list |
 | Cross-project pattern (something fired twice now) | The pattern graduates from research-surface lesson to cluster primitive |
 
 ### 2. Roadmap update
 
-[`roadmap.md`](roadmap.md) gets updated to:
+[`roadmap.md`](docs/skills/research-coordinator/cluster/roadmap.md) gets updated to:
 
 - Move the just-closed project from § Now to § Closed (with pointer to its end-document)
 - Move the next project (if scoped during the retro) from § Next to § Now
@@ -120,7 +120,7 @@ Only when a SECOND project independently surfaces the same finding does the clus
 
 **Why:** Single-project findings have notorious over-generalization risk. The filter arc's own Lesson #36 (paper "self-choke" is paper-brewer-INTERACTION not paper-fiber-intrinsic) was framed at Project #3 close-out as "deepest insight of arc" — and was partially contradicted by RP4 (CAFEC family retains paper-fiber signal). If Lesson #36 had graduated to a cluster primitive at Project #3 close-out, RP4 would have had to issue a substrate retraction.
 
-The gate is structural protection against the same failure mode at the methodology layer that the gate already protects against at the schema layer (per [`sharp-substrate-fold.md`](sharp-substrate-fold.md)).
+The gate is structural protection against the same failure mode at the methodology layer that the gate already protects against at the schema layer (per [`sharp-substrate-fold.md`](docs/skills/research-coordinator/cluster/sharp-substrate-fold.md)).
 
 **Practical mechanism:** The Coordinator tracks single-project methodology lessons in the protocol doc's Notes section. At the next project's retro, the operator + Coordinator scan prior projects' methodology lessons looking for repeat fires. Repeats graduate; non-repeats stay logged where they are.
 
@@ -146,7 +146,7 @@ Operator should expect to do most of the talking. The Coordinator's job is to as
 
 ## Related primitives
 
-- [`role-discipline.md`](role-discipline.md) — the retro is the only session where the Coordinator carries cross-track + cross-project context simultaneously; the role split is relaxed at retro time
-- [`sharp-substrate-fold.md`](sharp-substrate-fold.md) — the retro's substrate-fold output (primitive doc updates) is itself an instance of substrate fold; sharp + pointed
-- [`roadmap.md`](roadmap.md) — the second canonical retro output
-- [ADR-0017](../../../adr/0017-research-assistant-architecture.md) § Process retro as accumulation mechanism
+- [`role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md) — the retro is the only session where the Coordinator carries cross-track + cross-project context simultaneously; the role split is relaxed at retro time
+- [`sharp-substrate-fold.md`](docs/skills/research-coordinator/cluster/sharp-substrate-fold.md) — the retro's substrate-fold output (primitive doc updates) is itself an instance of substrate fold; sharp + pointed
+- [`roadmap.md`](docs/skills/research-coordinator/cluster/roadmap.md) — the second canonical retro output
+- [ADR-0017](docs/adr/0017-research-assistant-architecture.md) § Process retro as accumulation mechanism

@@ -1,6 +1,6 @@
 # Resync grill — 2026-05-31 (record)
 
-First item sequenced out of the capstone product-roadmap-review (2026-05-31). Pre-Cluster-A doc/glossary resync: drain the grilling-queue + doc-size tripwire review + XO-as-signature, so the Cluster A scaffold grill lands on synced ground. Grilling session — ask-don't-ship; outputs are CONTEXT/ADR/doc edits, no feature code or migration. Kickoff: [resync-grill-kickoff-2026-05-31.md](resync-grill-kickoff-2026-05-31.md).
+First item sequenced out of the capstone product-roadmap-review (2026-05-31). Pre-Cluster-A doc/glossary resync: drain the grilling-queue + doc-size tripwire review + XO-as-signature, so the Cluster A scaffold grill lands on synced ground. Grilling session — ask-don't-ship; outputs are CONTEXT/ADR/doc edits, no feature code or migration. Kickoff: [resync-grill-kickoff-2026-05-31.md](docs/sprints/resync-grill-kickoff-2026-05-31.md).
 
 Ratification queue walked first: empty (no prior ship to ratify).
 
@@ -24,8 +24,8 @@ Ratification queue walked first: empty (no prior ship to ratify).
 1. **Green detail hero-tile rebind** (Item 43) — rebind the 3 `SspNamePlate` cover colors on the green detail views from per-surface emphasis (amber/lavender/green) to the lifecycle `--tile-*` token per state. Accents untouched. Small.
 2. **Process-content arbiter-queue + honey map** (Item 40) — extend `list_skeleton_entries` to a process axis (derive blank = missing overview); add lightweight honey-subprocess description map + render path. Folds into the taxonomy-fill side-quest.
 3. **Root-doc compaction/split sprint** (tripwire) — CLAUDE.md primary (extract per-page IA blocks → `docs/architecture/`) + PRODUCT.md + "what else moves out" review. Cluster B, interleaved.
-4. **claude.ai grilling review** — the mini-session that finalizes the Item 37 paste-ready memory block + the 3-part check. Brief: [claude-ai-grilling-review-brief-2026-05-31.md](claude-ai-grilling-review-brief-2026-05-31.md).
-5. **Cluster A scaffold grill-to-spec** — the next session in the chain. Brief: [cluster-a-scaffold-grill-to-spec-kickoff-2026-05-31.md](cluster-a-scaffold-grill-to-spec-kickoff-2026-05-31.md).
+4. **claude.ai grilling review** — the mini-session that finalizes the Item 37 paste-ready memory block + the 3-part check. Brief: [claude-ai-grilling-review-brief-2026-05-31.md](docs/sprints/claude-ai-grilling-review-brief-2026-05-31.md).
+5. **Cluster A scaffold grill-to-spec** — the next session in the chain. Brief: [cluster-a-scaffold-grill-to-spec-kickoff-2026-05-31.md](docs/sprints/cluster-a-scaffold-grill-to-spec-kickoff-2026-05-31.md).
 
 ## Retro
 
@@ -48,7 +48,7 @@ All edits were Actor-5 (Claude Code docs) + Actor-6 (one PRODUCT.md roadmap/rend
 
 ## Companion: claude.ai grilling review (2026-05-31 - first run of the recurring protocol)
 
-First firing of the `feedback_claude_ai_grilling_review` standing rule, run as a small parallel session right after this grill. Brief: [claude-ai-grilling-review-brief-2026-05-31.md](claude-ai-grilling-review-brief-2026-05-31.md). Chris pulled the full instruction + memory sets for both projects so the review ran against the actual claude.ai layer rather than blind-drafted edits.
+First firing of the `feedback_claude_ai_grilling_review` standing rule, run as a small parallel session right after this grill. Brief: [claude-ai-grilling-review-brief-2026-05-31.md](docs/sprints/claude-ai-grilling-review-brief-2026-05-31.md). Chris pulled the full instruction + memory sets for both projects so the review ran against the actual claude.ai layer rather than blind-drafted edits.
 
 **Component 1 - memory + instruction currency.** The brief's Item 37 premise was *backwards*: it assumed both memories over-described the CONTEXT split as load-bearing fetches. Reality - brewing memory references CONTEXT nowhere (no fix needed there), and roasting memory had the *opposite* drift, mislabeling the live `context-roasting.md` (~105KB zone glossary) + `context-shared.md` (thin index) as "redirect/stub files." Five merge-only edits authored and pasted; **all landed clean in a single chatbox pass** (better than the ~2-pass norm; no partial-supersession):
 - Roasting: (a) RoR shipped (migration 070 - removed the stale "decision deferred" horizon item, added the 4 columns + pull_roest_log compute); (b) active-lots slimmed to a bare identity index (transient status purged, `get_bean_pipeline` authoritative); (c) tool count corrected to 8 patch / 35 total; (d) instruments = Lighttells CM-200 (color + particle, one device) + MD-500 (moisture/density); (e) CONTEXT-stub tidy (context-roasting/shared are Claude-Code-facing glossary, not stubs - cluster-only by design per Chris).

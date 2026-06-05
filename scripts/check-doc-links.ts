@@ -101,7 +101,10 @@ function githubSlug(headingText: string): string {
     .toLowerCase()
     .replace(/[^\w\s-]/g, '') // drop punctuation/unicode (·, —, :, etc.) — GitHub behaviour
     .trim()
-    .replace(/\s+/g, '-')
+    .replace(/\s/g, '-') // each whitespace char → one hyphen (GitHub's github-slugger does
+    // NOT collapse runs: a heading like `FC Floor & Ceiling` leaves a double space where
+    // `&` was stripped, and GitHub emits `fc-floor--ceiling-...` (double hyphen). Collapsing
+    // with `\s+` here under-produced hyphens and false-flagged every such anchor as dead.
 }
 
 // Build the set of anchors a target file exposes: heading slugs (deduped with

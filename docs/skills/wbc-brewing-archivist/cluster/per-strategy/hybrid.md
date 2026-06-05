@@ -4,11 +4,11 @@
 
 ## Latent strategy framing
 
-Hybrid = 6th first-class strategy promoted v8.4 (2026-05-06). Combines two strategies into one brew via deliberate phase separation. 5 canonical sub-forms: Sequential Hybrid / Phase-Mapped / Selective Bloom / Inverted Hybrid / Side-by-Side. See [BREWING.md § Hybrid](../../../../../BREWING.md) + [lib/hybrid-subform.ts](../../../../../lib/hybrid-subform.ts).
+Hybrid = 6th first-class strategy promoted v8.4 (2026-05-06). Combines two strategies into one brew via deliberate phase separation. 5 canonical sub-forms: Sequential Hybrid / Phase-Mapped / Selective Bloom / Inverted Hybrid / Side-by-Side. See [BREWING.md § Hybrid](BREWING.md) + [lib/hybrid-subform.ts](lib/hybrid-subform.ts).
 
 ## WBC anchors observed
 
-- **Eline Ferket 2025** — Selective Bloom Hybrid canonical: Hario Switch, bloom-as-strategy. Pull [wbc-recipes.md](../wbc-recipes.md) Ferket entry.
+- **Eline Ferket 2025** — Selective Bloom Hybrid canonical: Hario Switch, bloom-as-strategy. Pull [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) Ferket entry.
 - 34 of 102 WBC recipes use Time Distribution as the primary axis (largest under-served axis pre-v8.4); many of those map to Hybrid sub-forms post-promotion.
 
 ## Cross-coffee patterns to author
@@ -18,7 +18,7 @@ Hybrid = 6th first-class strategy promoted v8.4 (2026-05-06). Combines two strat
 
 ## See also
 
-- [wbc-reference.md § Hybrid family](../wbc-reference.md)
-- [wbc-recipes.md](../wbc-recipes.md)
-- [BREWING.md § Hybrid](../../../../../BREWING.md)
-- [lib/hybrid-subform.ts](../../../../../lib/hybrid-subform.ts)
+- [wbc-reference.md § Hybrid family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
+- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
+- [BREWING.md § Hybrid](BREWING.md)
+- [lib/hybrid-subform.ts](lib/hybrid-subform.ts)

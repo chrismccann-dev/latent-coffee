@@ -1,6 +1,6 @@
 # BR-4 — `brews.extraction_confirmed` retirement evaluation
 
-**Source**: [grilling-2026-05-15-brewing-followups.md item #4](../../sprints/grilling-2026-05-15-brewing-followups.md)
+**Source**: [grilling-2026-05-15-brewing-followups.md item #4](docs/sprints/grilling-2026-05-15-brewing-followups.md)
 **Sprint**: T5 (2026-05-18)
 **Decision**: **Keep + reframe**. Do not retire.
 

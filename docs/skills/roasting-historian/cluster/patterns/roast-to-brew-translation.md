@@ -2,11 +2,11 @@
 
 *This section translates roast parameter patterns into expected brew behavior and starting recipe adjustments. It bridges the gap between the roasting reference guide and the brewing reference guide. Updated as new lots are resolved.*
 
-Migrated from ROASTING.md § Roast-to-Brew Translation in Wave 3 PR 1 (2026-05-26). The kickoff brief proposed routing to Roest Knowledge, but the content shape (cross-coffee pattern aggregation including 2 working hypothesis stubs at the tail) is structurally identical to the rest of the Roasting Historian cluster — see [cross-coffee-insights.md](cross-coffee-insights.md). Per Chris-locked decision 2026-05-26, lives here.
+Migrated from ROASTING.md § Roast-to-Brew Translation in Wave 3 PR 1 (2026-05-26). The kickoff brief proposed routing to Roest Knowledge, but the content shape (cross-coffee pattern aggregation including 2 working hypothesis stubs at the tail) is structurally identical to the rest of the Roasting Historian cluster — see [cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md). Per Chris-locked decision 2026-05-26, lives here.
 
 ---
 
-> The 6 brewing strategies + 5 modifiers referenced below (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid + Output Selection / Thermal Staging / Aroma Capture / Role-Based Pulse / Equipment) are defined in [BREWING.md § The Two-Axis Framework](../../../../../BREWING.md#the-two-axis-framework). The brew-side documentation contract (Step 4 Resolved Brew Output Format) lives in [BREWING.md § Step 4](../../../../../BREWING.md#step-4---resolved-brew-output-format). When proposing a brew strategy from a roast outcome, name the canonical strategy explicitly so the iteration loop matches the framework.
+> The 6 brewing strategies + 5 modifiers referenced below (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid + Output Selection / Thermal Staging / Aroma Capture / Role-Based Pulse / Equipment) are defined in [BREWING.md § The Two-Axis Framework](docs/skills/coordinator/catalog.md#brewing-domain-principles). The brew-side documentation contract (Step 4 Resolved Brew Output Format) lives in [BREWING.md § Step 4](docs/skills/brewing-assistant/cluster/operational-guide.md#step-4--resolved-brew-output-format). When proposing a brew strategy from a roast outcome, name the canonical strategy explicitly so the iteration loop matches the framework.
 
 > Core principle: The brew recipe does not fix a bad roast, but it can hide a good one. A roast that passes the Day 7 evaluation gate but feels muted is often an extraction problem, not a roast problem. Always try a pushed brew before concluding more development is needed.
 
@@ -27,7 +27,7 @@ Several roast parameters directly predict how a coffee will behave at brew time,
 | Maillard 40-44% | Balanced phase structure — full aromatic expression available | Pushed recipe appropriate. Lower temp, higher concentration. |
 | FC temp 202-205°C, drop 206-207°C | Confirmed target zone for Sudan Rume-type coffees — full expression should be achievable at brew | Pushed recipe. See reference recipe below. |
 
-> Per-lot reference brew recipes (CGLE Sudan Rume Washed #133, CGLE Mandela XO #139) live in [ROASTING.md § Reference Roasts + Brews (Closed Lots)](../../../../../ROASTING.md#reference-roasts--brews-closed-lots). The decision logic + processing-method hypotheses below apply when designing the optimized brew for a new lot reaching reference-roast declaration.
+> Per-lot reference brew recipes (CGLE Sudan Rume Washed #133, CGLE Mandela XO #139) live in [ROASTING.md § Reference Roasts + Brews (Closed Lots)](ROASTING.md). The decision logic + processing-method hypotheses below apply when designing the optimized brew for a new lot reaching reference-roast declaration.
 
 ---
 

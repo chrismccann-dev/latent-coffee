@@ -8,9 +8,9 @@
 
 ## Scope
 
-Read-only 6-actor matrix audit across the full post-grilling-sequencing delta: Sprint 0 through Sprint 14. The matrix is the cross-system audit pattern locked in [CLAUDE.md § Sprint cadence #4](../../CLAUDE.md) — every substrate change should be traceable through each actor that consumes or produces it.
+Read-only 6-actor matrix audit across the full post-grilling-sequencing delta: Sprint 0 through Sprint 14. The matrix is the cross-system audit pattern locked in [CLAUDE.md § Sprint cadence #4](CLAUDE.md) — every substrate change should be traceable through each actor that consumes or produces it.
 
-Per [post-grilling-sequencing.md § Sprint F](post-grilling-sequencing.md), this is the gate before Sprint R. If clean, proceed to Sprint R; if drift surfaces, fix inline or queue per Chris-decision.
+Per [post-grilling-sequencing.md § Sprint F](docs/sprints/post-grilling-sequencing.md), this is the gate before Sprint R. If clean, proceed to Sprint R; if drift surfaces, fix inline or queue per Chris-decision.
 
 ## Substrate-change inventory (Sprints 0-14)
 
@@ -42,7 +42,7 @@ Per [post-grilling-sequencing.md § Sprint F](post-grilling-sequencing.md), this
 
 ### MCP Tool surface
 
-- **Tool count: 35** (2 from canonical-tools + 4 from doc-tools + 29 single-file). Matches [CLAUDE.md § MCP server status](../../CLAUDE.md) ("35 Tools live as of 2026-05-21").
+- **Tool count: 35** (2 from canonical-tools + 4 from doc-tools + 29 single-file). Matches [CLAUDE.md § MCP server status](CLAUDE.md) ("35 Tools live as of 2026-05-21").
 - Sprint 12 / CR-4 added the one new Tool (`list_skeleton_entries`); prior 34-Tool baseline since Sub Pages 6.1.
 - `lib/mcp/docs.ts` `DOC_FILES`: 14 paths covered by 8 globs in `next.config.js` `outputFileTracingIncludes['/api/mcp/**']`. `check:mcp-bundle` clean.
 
@@ -73,7 +73,7 @@ Per [post-grilling-sequencing.md § Sprint F](post-grilling-sequencing.md), this
 | 3 | claude.ai project instructions / Resource catalog | ✅ clean | `lib/mcp/docs.ts` registers all 14 doc files including sworks.md (Sprint T5), importer-exporter-scoping.md (Sprint T3 CR-3), dongzhe-livestream.md, redesign.md. TAXONOMY_AXES = 11 (sworks included). `docs/audits/2026-05-18/` files intentionally NOT registered as Resources (internal audit trail, not catalog-served). |
 | 4 | MCP server (`lib/mcp/*.ts`) | ✅ clean | Tool count = 35. Every Sprint 10-14 schema column has matching Zod field in push/patch Tools with `.describe()` citing the migration + ADR. `signature_method_override` on push_brew; queue trio AXIS_VALUES widened to 8; `fermentation_qualifiers` on push/patch brew. `check:mcp-bundle` 14/8 clean. |
 | 5 | Claude Code (CLAUDE.md + CONTEXT.md + docs/) | ✅ clean | CONTEXT.md has glossary entries for every Sprint 10-14 substrate change with explicit Sprint-N + migration + ADR back-links: Brewing tolerance / Acceptable roast window / Terroir takeaway / FC audibility state / Aromatic behavior / Structural behavior / Rest behavior (correctly not relocated) / Scope tags / Scope-tag prefix convention / Cross-source / Short-form capsule / Recipe / Roest profile / curve-shape names / Fermentation qualifier / Reference candidate / Signature method. ADR-0006 gap is intentional (deferred RO-CP-9 candidate). |
-| 6 | Latent app (schema + UI + registries) | ✅ clean | All 11 migrations 055-065 land in `lib/types.ts` with provenance comments. `check:registry-sync` all 20 axes in sync. UI render paths verified at lines [page.tsx:1479-1490](../../app/(app)/green/[id]/page.tsx) (Sprint 11 character relocation) + [SynthesisCard.tsx:103-107](../../components/SynthesisCard.tsx) (Sprint 13 short-form). |
+| 6 | Latent app (schema + UI + registries) | ✅ clean | All 11 migrations 055-065 land in `lib/types.ts` with provenance comments. `check:registry-sync` all 20 axes in sync. UI render paths verified at lines [page.tsx:1479-1490](../../app/(app)/green/[id]/page.tsx) (Sprint 11 character relocation) + [SynthesisCard.tsx:103-107](components/SynthesisCard.tsx) (Sprint 13 short-form). |
 
 ## Drift findings + resolution
 
@@ -101,7 +101,7 @@ All other 6-actor matrix hops are clean. Every substrate change Sprint 0-14 is t
 Sprint F closes clean post-ride-along. Sprint R (PRODUCT.md / roadmap review) opens with:
 
 1. **PRODUCT.md § Active Sprint Queue** walks the post-grilling-sequencing-closeout state with a current shipped.md tableau.
-2. **Deferred sprint candidates** at top of next-step list per [post-grilling-sequencing.md § Deferred sprints](post-grilling-sequencing.md):
+2. **Deferred sprint candidates** at top of next-step list per [post-grilling-sequencing.md § Deferred sprints](docs/sprints/post-grilling-sequencing.md):
    - **POD-1** (pour-over discriminator gate + optimized brew lifecycle states) — Chris-flagged near-term 2026-05-18.
    - **DF-SCH-CAND-1..5** dogfood schema migration sprint enumeration — 4 of 5 candidates already shipped via Schema sprints S1-S4 + Sprints 11-12; Sprint R's job is to decide whether the 5th candidate (`experiments.taste_for_validation_*`) earns its own sprint.
    - **CR-7-promote** SWORKS valve flow taxonomy structured-pour-structure column.

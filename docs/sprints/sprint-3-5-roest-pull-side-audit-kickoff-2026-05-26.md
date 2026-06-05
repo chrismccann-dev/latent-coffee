@@ -1,8 +1,8 @@
 # Sprint 3.5 — Roest pull-side audit + parity cleanup — kickoff brief
 
-**Sub-sprint 1 of 4** in the [Writing-path surface polish series](./writing-path-surface-polish-series-2026-05-26.md). PRODUCT.md § Active Sprints #3. First sprint off the post-roadmap-re-session queue (2026-05-26).
+**Sub-sprint 1 of 4** in the [Writing-path surface polish series](docs/sprints/writing-path-surface-polish-series-2026-05-26.md). PRODUCT.md § Active Sprints #3. First sprint off the post-roadmap-re-session queue (2026-05-26).
 
-**Series context:** the writing path (claude.ai → MCP → DB) gets a 4-sub-sprint polish pass before the Read-path series starts. This sub-sprint is the longest of the 4 (~1-2 days); the rest are smaller (~1-2h / ~30 min / ~1 day). See the [series umbrella doc](./writing-path-surface-polish-series-2026-05-26.md) for the full sequence + what comes next.
+**Series context:** the writing path (claude.ai → MCP → DB) gets a 4-sub-sprint polish pass before the Read-path series starts. This sub-sprint is the longest of the 4 (~1-2 days); the rest are smaller (~1-2h / ~30 min / ~1 day). See the [series umbrella doc](docs/sprints/writing-path-surface-polish-series-2026-05-26.md) for the full sequence + what comes next.
 
 ## Goal
 
@@ -100,16 +100,16 @@ Otherwise: implement, verify, push + merge per autonomy rule.
 
 When this sub-sprint ships + merges:
 
-1. Update [writing-path-surface-polish-series-2026-05-26.md](./writing-path-surface-polish-series-2026-05-26.md) sequence table — flip Sub-sprint 1 row to SHIPPED + add PR # + merge commit.
+1. Update [writing-path-surface-polish-series-2026-05-26.md](docs/sprints/writing-path-surface-polish-series-2026-05-26.md) sequence table — flip Sub-sprint 1 row to SHIPPED + add PR # + merge commit.
 2. Update `shipped.md` with a row for Sprint 3.5.
 3. Update PRODUCT.md § Active Sprints #3 Sub-sprint 1 — flip to SHIPPED.
 4. Surface the next-up sub-sprint in your closing message: **Sub-sprint 2 — MCP ergonomics polish (Round 15 cluster).** ~1-2h. Full kickoff scope inline in the series umbrella doc (no separate brief needed for the smaller sub-sprints).
 
 ## Cross-references
 
-- [writing-path-surface-polish-series-2026-05-26.md](./writing-path-surface-polish-series-2026-05-26.md) — series umbrella with sequencing + next sub-sprint kickoffs
-- [PRODUCT.md § Active Sprints #3](../../PRODUCT.md#active-sprints) — canonical scope source
-- [docs/features/roest-api-parity-phase-3.md](../features/roest-api-parity-phase-3.md) — original scoping (reshape against this brief)
-- [docs/skills/roest-api-worker/SKILL.md](../skills/roest-api-worker/SKILL.md) — sub-skill sync target
-- [docs/skills/roest-knowledge/cluster/api/](../skills/roest-knowledge/cluster/api/) — read-surface / write-surface / quirks docs
+- [writing-path-surface-polish-series-2026-05-26.md](docs/sprints/writing-path-surface-polish-series-2026-05-26.md) — series umbrella with sequencing + next sub-sprint kickoffs
+- [PRODUCT.md § Active Sprints #3](PRODUCT.md#active-sprints) — canonical scope source
+- [docs/features/roest-api-parity-phase-3.md](docs/features/roest-api-parity-phase-3.md) — original scoping (reshape against this brief)
+- [docs/skills/roest-api-worker/SKILL.md](docs/skills/roest-api-worker/SKILL.md) — sub-skill sync target
+- [docs/skills/roest-knowledge/cluster/api/](docs/skills/roest-knowledge/cluster/api/) — read-surface / write-surface / quirks docs
 - `feedback_mcp_continuous_log.md` Outstanding follow-ups — Round 15 cluster (Sub-sprint 2 of this series)

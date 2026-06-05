@@ -1,7 +1,7 @@
 # WBC Roasting Archivist
 
 **Tier:** Knowledge / **Domain:** Roasting / **Wave:** 2 / **Status:** Wave 2 PR 1 shipped 2026-05-26
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -9,12 +9,12 @@ Author and maintain the WBC competitor corpus on the roasting side (2022-2025); 
 
 ## Knowledge cluster contents (Wave 2 PR 1)
 
-- [`cluster/wbc-roasting.md`](cluster/wbc-roasting.md) — migrated from `docs/roasting/wbc-roasting.md`. Old path resolves to a redirect stub for back-compat.
-- [`cluster/sourcing/strategy.md`](cluster/sourcing/strategy.md) — migrated from `docs/roasting/wbc-sourcing.md` (tentative merge; future split when sourcing research grows). Old path resolves to a redirect stub.
-- [`cluster/sourcing/portfolio-lanes.md`](cluster/sourcing/portfolio-lanes.md) — navigational sub-resource for the 5-lane portfolio frame (substantive content lives in `strategy.md § 10`).
-- [`cluster/sourcing/priority-targets.md`](cluster/sourcing/priority-targets.md) — navigational sub-resource for Tier 1/2/3 priority targets (substantive content lives in `strategy.md § 7-9`).
-- [`cluster/per-competitor/`](cluster/per-competitor/) — placeholder directory for per-competitor deep dives. Empty today; populate as research deepens beyond strategy-level summaries.
-- [`cluster/canonical/wbc-tested-cultivars.md`](cluster/canonical/wbc-tested-cultivars.md) — canonical registry stub tracking which WBC-validated cultivar / process / sourcing patterns have been tested in Latent's lineup. Empty today; grows via Latent buying cycles.
+- [`cluster/wbc-roasting.md`](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) — migrated from `docs/roasting/wbc-roasting.md`. Old path resolves to a redirect stub for back-compat.
+- [`cluster/sourcing/strategy.md`](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) — migrated from `docs/roasting/wbc-sourcing.md` (tentative merge; future split when sourcing research grows). Old path resolves to a redirect stub.
+- [`cluster/sourcing/portfolio-lanes.md`](docs/skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md) — navigational sub-resource for the 5-lane portfolio frame (substantive content lives in `strategy.md § 10`).
+- [`cluster/sourcing/priority-targets.md`](docs/skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md) — navigational sub-resource for Tier 1/2/3 priority targets (substantive content lives in `strategy.md § 7-9`).
+- [`cluster/per-competitor/`](docs/skills/wbc-roasting-archivist/cluster/per-competitor/) — placeholder directory for per-competitor deep dives. Empty today; populate as research deepens beyond strategy-level summaries.
+- [`cluster/canonical/wbc-tested-cultivars.md`](docs/skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md) — canonical registry stub tracking which WBC-validated cultivar / process / sourcing patterns have been tested in Latent's lineup. Empty today; grows via Latent buying cycles.
 
 ## Inputs
 
@@ -39,7 +39,7 @@ None directly.
 
 ## Self-improvement
 
-- **Patterns:** B (external-event refresh on new WBC year drop; sourcing channel events) — see [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+- **Patterns:** B (external-event refresh on new WBC year drop; sourcing channel events) — see [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 - **Signal:** new WBC year drops → prompt refresh; lane miss/hit drift threshold from closed lots
 
 ## Wave 2 PR 1 ship notes (2026-05-26)

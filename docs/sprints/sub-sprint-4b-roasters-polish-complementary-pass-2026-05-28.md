@@ -1,6 +1,6 @@
 # Sub-sprint 4b — Roasters polish complementary pass — 2026-05-28
 
-**Phase 2 of the 3-phase audit** per [kickoff brief](sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md). Phase 1 (Chris's page-by-page audit) closed 2026-05-28 with 5 PDF items + a load-bearing job reframe. This doc is the complementary pass.
+**Phase 2 of the 3-phase audit** per [kickoff brief](docs/sprints/sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md). Phase 1 (Chris's page-by-page audit) closed 2026-05-28 with 5 PDF items + a load-bearing job reframe. This doc is the complementary pass.
 
 **No implementation specifics in this doc.** Phase 3 will bundle into plan-mode PRs.
 
@@ -19,7 +19,7 @@ Per PDF. Section title only; render unchanged in this item alone.
 ### A2. Promote `doseG` + `waterG` into the Reference Brew Recipe card
 Per PDF. Currently `composeBaselineRecipe` ([page.tsx:34-41](../../app/%28app%29/roasters/%5Bslug%5D/page.tsx#L34)) composes only `tempC` / `ratio` / `typicalBrewTime` / `agitationLevel` into the inline string. Dose + water render only in the Additional Information collapsible.
 
-**Cross-check**: the synthesis adapter ([lib/synthesis/adapters/roaster.ts:32-42](../../lib/synthesis/adapters/roaster.ts#L32)) DOES include dose + water + ratio + temp + time + agitation in its `Recipe baseline` line. So the synthesis prompt has the complete recipe; the page render was the only place this got truncated. Substrate-consistent fix.
+**Cross-check**: the synthesis adapter ([lib/synthesis/adapters/roaster.ts:32-42](lib/synthesis/adapters/roaster.ts#L32)) DOES include dose + water + ratio + temp + time + agitation in its `Recipe baseline` line. So the synthesis prompt has the complete recipe; the page render was the only place this got truncated. Substrate-consistent fix.
 
 ### A3. `bmrHouseStyle` stays in Additional Information
 Ratified per Chris's audio response. Reason: it's an input source feeding claude.ai brewing-strategy work, not above-the-fold output on the roaster page. Distinction from `houseStyle` (which stays in Brewing Philosophy) preserved.
@@ -317,9 +317,9 @@ When bundles ship, trace per CLAUDE.md sprint cadence #4:
 
 ## Related docs
 
-- [sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md](sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) — kickoff brief
-- [sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md](sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md) — 4a Phase 2 shape reference
-- [lib/roaster-registry.ts](../../lib/roaster-registry.ts) — registry + family colors
-- [lib/synthesis/adapters/roaster.ts](../../lib/synthesis/adapters/roaster.ts) — synthesis prompt anchor
-- [docs/taxonomies/roasters.md](../taxonomies/roasters.md) — authored content (verify needs `brewGuideStatus` annotation for Bundle B)
+- [sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md](docs/sprints/sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) — kickoff brief
+- [sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md](docs/sprints/sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md) — 4a Phase 2 shape reference
+- [lib/roaster-registry.ts](lib/roaster-registry.ts) — registry + family colors
+- [lib/synthesis/adapters/roaster.ts](lib/synthesis/adapters/roaster.ts) — synthesis prompt anchor
+- [docs/taxonomies/roasters.md](docs/taxonomies/roasters.md) — authored content (verify needs `brewGuideStatus` annotation for Bundle B)
 - CLAUDE.md § Roasters (lines ~99, ~150-151) — drift fix targets

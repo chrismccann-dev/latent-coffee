@@ -12,7 +12,7 @@ Five sections, in priority order. Each entry is a one-or-two-line pointer with o
 
 | Section | Meaning |
 |---|---|
-| **Now** | Single-slot. The research project the Coordinator is actively running. Empty when between projects (between retro completion + next-project scoping). Per [`process-retro.md`](process-retro.md), the Coordinator does not scope a new project until the prior project's retro has completed. |
+| **Now** | Single-slot. The research project the Coordinator is actively running. Empty when between projects (between retro completion + next-project scoping). Per [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md), the Coordinator does not scope a new project until the prior project's retro has completed. |
 | **Next** | Queued, ordered. The next research project to start after the current one closes. Order reflects priority + sequencing constraints. May be empty when nothing is queued. |
 | **Extensions of completed** | Things flagged during a closed project's retro that are worth a follow-up project but aren't on the critical path. Filter-arc example: HALO-B3 vs CONE-B3 brewing-quality test (RP4 AI-4). |
 | **Side quests** | Smaller research ideas that aren't full projects — measurement campaigns, registry sanity checks, single-day investigations. May graduate to § Next if they grow scope. |
@@ -64,12 +64,12 @@ The 4-track filter arc that produced the substrate for Research Assistant Step 2
 
 | # | Track | Methodology | Closed | End-document |
 |---|---|---|---|---|
-| 1 | Cone Filter Drawdown | Paper-brewer-combo (V60 Glass + Sibarist CONE B3 baseline) | 2026-05-23 | [cone-filter-drawdown.md](../../../research-projects/cone-filter-drawdown.md) |
-| 2 | Flat-bottom Filter Drawdown | Paper-brewer-combo (Orea Type-A + Negotiator + BOOSTER 45 exploratory pulls) | 2026-05-24 | [flat-bottom-filter-drawdown.md](../../../research-projects/flat-bottom-filter-drawdown.md) |
-| 3 | Specialty Cone Filter Drawdown | Paper-brewer-combo (Funnex + Sibarist BS, 2 sub-projects) | 2026-05-25 | [specialty-cone-filter-drawdown.md](../../../research-projects/specialty-cone-filter-drawdown.md) |
-| RP4 | Paper-Only V60 Cohort Re-Measurement in Sibarist BS | Paper-only methodology validation | 2026-05-26 | [paper-only-v60-cohort-drawdown.md](../../../research-projects/paper-only-v60-cohort-drawdown.md) |
+| 1 | Cone Filter Drawdown | Paper-brewer-combo (V60 Glass + Sibarist CONE B3 baseline) | 2026-05-23 | [cone-filter-drawdown.md](docs/research-projects/cone-filter-drawdown.md) |
+| 2 | Flat-bottom Filter Drawdown | Paper-brewer-combo (Orea Type-A + Negotiator + BOOSTER 45 exploratory pulls) | 2026-05-24 | [flat-bottom-filter-drawdown.md](docs/research-projects/flat-bottom-filter-drawdown.md) |
+| 3 | Specialty Cone Filter Drawdown | Paper-brewer-combo (Funnex + Sibarist BS, 2 sub-projects) | 2026-05-25 | [specialty-cone-filter-drawdown.md](docs/research-projects/specialty-cone-filter-drawdown.md) |
+| RP4 | Paper-Only V60 Cohort Re-Measurement in Sibarist BS | Paper-only methodology validation | 2026-05-26 | [paper-only-v60-cohort-drawdown.md](docs/research-projects/paper-only-v60-cohort-drawdown.md) |
 
-**Substrate output:** ~49 lessons (numbered #1-#40 + RP4-N1 through RP4-N9) · 23 audit items (P2 AI-1 through RP4 AI-7) · 2 ADRs ([ADR-0015](../../../adr/0015-accessory-aware-flowrate-and-booster-registry.md) FilterEntry.flowRateContexts + BoosterEntry registry, [ADR-0016](../../../adr/0016-family-conditional-flow-rate-classification.md) family-conditional flow-rate classification framework). Both ADRs locked; implementation deferred to a future sprint (trigger conditions met).
+**Substrate output:** ~49 lessons (numbered #1-#40 + RP4-N1 through RP4-N9) · 23 audit items (P2 AI-1 through RP4 AI-7) · 2 ADRs ([ADR-0015](docs/adr/0015-accessory-aware-flowrate-and-booster-registry.md) FilterEntry.flowRateContexts + BoosterEntry registry, [ADR-0016](docs/adr/0016-family-conditional-flow-rate-classification.md) family-conditional flow-rate classification framework). Both ADRs locked; implementation deferred to a future sprint (trigger conditions met).
 
 **Project-level retro:** The filter-arc retro WAS the Step 1 grilling session (2026-05-26) that locked the Research Assistant Step 2 scope. The outputs of that retro are the cluster docs in this directory + ADR-0017 + the Step 2 scaffolding ship itself. The filter arc is the canonical "first project" that the methodology primitives were forged on.
 
@@ -77,7 +77,7 @@ The 4-track filter arc that produced the substrate for Research Assistant Step 2
 
 ## Roadmap update discipline
 
-Per [`process-retro.md`](process-retro.md): the Coordinator updates this roadmap at every project close + at every retro. Mid-project, the Coordinator may update § Side quests with emergent ideas, but should NOT add to § Next mid-project (that's the retro's job — premature queuing causes scope drift).
+Per [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md): the Coordinator updates this roadmap at every project close + at every retro. Mid-project, the Coordinator may update § Side quests with emergent ideas, but should NOT add to § Next mid-project (that's the retro's job — premature queuing causes scope drift).
 
 When updating § Closed: add the new entry at the TOP (reverse-chronological) with a brief project description + closed date + end-document pointer. Don't summarize the project's findings here — those live in the end-document.
 

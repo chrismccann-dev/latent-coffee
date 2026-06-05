@@ -16,7 +16,7 @@ ROUTE → (master log + categorize/point) → BACKLOG → REVIEW+PLAN → [imple
 **Two surfaces.** The master feedback log (`feedback_mcp_continuous_log.md`, memory) is
 reframed as raw intake + routing ledger + audit trail — every item recorded with its routing
 decision; wins and non-buildable items live there and nowhere else. A new dedicated
-[`docs/product/feedback-backlog.md`](../product/feedback-backlog.md) holds only the
+[`docs/product/feedback-backlog.md`](docs/product/feedback-backlog.md) holds only the
 **actionable** subset, shape-tagged and recurrence-counted. The split exists because the two
 have different consumers: the log is a human/audit surface, the backlog is machine-scanned by
 the plan skill and must survive into PRs (so it's repo-tracked, not a memory file).
@@ -26,10 +26,10 @@ friction bumps a count instead of spawning a duplicate. That count is the domina
 prioritization, encoding Chris's principle: build "the things that keep coming up again and
 again" first, because recurrence means structural cost, not incident.
 
-**Two skills.** [`route-feedback`](../../.claude/skills/route-feedback/SKILL.md) (intake;
+**Two skills.** [`route-feedback`](.claude/skills/route-feedback/SKILL.md) (intake;
 keeps the "process pending workflow feedback" trigger) splits a paste, routes each item to its
 home, auto-files safe classes and confirms risky ones, and nudges when a cluster is ripe.
-[`plan-feedback`](../../.claude/skills/plan-feedback/SKILL.md) (operator-initiated) clusters
+[`plan-feedback`](.claude/skills/plan-feedback/SKILL.md) (operator-initiated) clusters
 the backlog by root cause, scores by recurrence + criticality + buildability, emits a sprint
 kickoff brief, and hands off to an implementer sub-agent.
 
@@ -58,9 +58,9 @@ Rejected alternatives:
   claude.ai-side project-instruction + prompt changes for marginal parsing gain; free-paste is
   zero-cost on the claude.ai side and the router normalizes it fine.
 
-See: [route-feedback](../../.claude/skills/route-feedback/SKILL.md) ·
-[plan-feedback](../../.claude/skills/plan-feedback/SKILL.md) ·
-[feedback-backlog.md](../product/feedback-backlog.md) · [ARBITER.md](../../ARBITER.md)
+See: [route-feedback](.claude/skills/route-feedback/SKILL.md) ·
+[plan-feedback](.claude/skills/plan-feedback/SKILL.md) ·
+[feedback-backlog.md](docs/product/feedback-backlog.md) · [ARBITER.md](ARBITER.md)
 (substrate-to-substrate analog) ·
-[doc-pruning brainstorm](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md)
+[doc-pruning brainstorm](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md)
 (Cluster B light-formalization precedent).

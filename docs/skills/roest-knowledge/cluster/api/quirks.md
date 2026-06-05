@@ -1,6 +1,6 @@
 # Roest API — Observed Quirks
 
-Operator-stub doc per [Roest Knowledge SKILL.md](../../SKILL.md) — Chris-stubbed-Claude-integrates. Placeholder until Chris encounters a push / pull behavior worth folding.
+Operator-stub doc per [Roest Knowledge SKILL.md](docs/skills/roest-knowledge/SKILL.md) — Chris-stubbed-Claude-integrates. Placeholder until Chris encounters a push / pull behavior worth folding.
 
 ---
 
@@ -29,6 +29,6 @@ When the first quirk lands, this doc shifts from forward-investment to active.
 
 ## Cross-links
 
-- [cluster/api/read-surface.md](read-surface.md) — Roest API read endpoints.
-- [cluster/api/write-surface.md](write-surface.md) — Roest API write endpoints.
-- [cluster/observed-quirks.md](../observed-quirks.md) — machine-side quirks (distinct from API-side; these live one level up).
+- [cluster/api/read-surface.md](docs/skills/roest-knowledge/cluster/api/read-surface.md) — Roest API read endpoints.
+- [cluster/api/write-surface.md](docs/skills/roest-knowledge/cluster/api/write-surface.md) — Roest API write endpoints.
+- [cluster/observed-quirks.md](docs/skills/roest-knowledge/cluster/observed-quirks.md) — machine-side quirks (distinct from API-side; these live one level up).

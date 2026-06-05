@@ -1,6 +1,6 @@
 # CR-13 + MCP-3 — Per-axis canonical-strictness 4-tier mapping
 
-**Source**: [grilling-2026-05-16-canonical-registries-followups.md item #13](../../sprints/grilling-2026-05-16-canonical-registries-followups.md) + [grilling-2026-05-15-mcp-followups.md item #3](../../sprints/grilling-2026-05-15-mcp-followups.md)
+**Source**: [grilling-2026-05-16-canonical-registries-followups.md item #13](docs/sprints/grilling-2026-05-16-canonical-registries-followups.md) + [grilling-2026-05-15-mcp-followups.md item #3](docs/sprints/grilling-2026-05-15-mcp-followups.md)
 **Sprint**: T5 (2026-05-18)
 **Bundled per kickoff confirmation** — single doc with two sub-sections: registry-side view (CR-13) + MCP-Tool-side view (MCP-3).
 **Decision**: **Map every canonical axis to one of 4 strictness tiers; document the per-tier behavior the system encodes. Two follow-up surface gaps surfaced for future sprints — neither blocks T5.**
@@ -49,7 +49,7 @@ This doc bundles two angles per the T5 kickoff:
 - **strict-static**: 8 axes (terroir / cultivar / base_process / subprocess / 4 modifier-axes / fermentation_qualifier / structure_tag)
 - **closed-objective**: 1 axis (roast_level)
 - **self-owned**: 2 axes (brewer / filter)
-- **self-only**: 1 axis (grinder; future SWORKS via [CR-7](CR-7-sworks-valve-flow-scoping.md); future water taxonomy)
+- **self-only**: 1 axis (grinder; future SWORKS via [CR-7](docs/audits/2026-05-18/CR-7-sworks-valve-flow-scoping.md); future water taxonomy)
 - **open-loose**: 4 axes (producer / roaster / signature_method / flavor_base + flavor_modifier)
 
 ### Registry-side gaps
@@ -99,7 +99,7 @@ Per [SYNC_V2.md](../../../SYNC_V2.md), MCP Tools that write canonical-axis value
 ### MCP-side gaps
 
 1. **`signature_method` strictness mismatch with tier**: open-loose tier today but strict enforcement. Sprint 12 MCP-1 closes the gap by adding queue support.
-2. **`extraction_confirmed` is free-text but post-[BR-4](BR-4-extraction-confirmed-retirement.md) reframe should describe the narrower scope**. Tool description update lands in a future brewing-side sprint per BR-4 recommendation.
+2. **`extraction_confirmed` is free-text but post-[BR-4](docs/audits/2026-05-18/BR-4-extraction-confirmed-retirement.md) reframe should describe the narrower scope**. Tool description update lands in a future brewing-side sprint per BR-4 recommendation.
 3. **`cooling_curve_target` is free-text** with no canonical home today. Per BR-3, future promotion to a `cooling_curve_design` modifier is a possibility but population is too low to justify today. Leave as free-text.
 
 ## Per-tier behavior locked
@@ -154,8 +154,8 @@ Each strictness tier encodes a specific operational policy. Document inline so f
 
 ## Pairs with
 
-- [CR-6 strategy tag ↔ extraction strategy coherence](CR-6-strategy-tag-extraction-strategy-coherence.md) — both vocabularies are strict-static; the coherence audit confirmed they describe distinct lifecycle stages.
-- [CR-11 saturation audit](CR-11-saturation-audit.md) — saturation rate per axis confirms each tier's policy actually holds in practice (95-96% target met everywhere except producer at 98.8%, single-row drift).
+- [CR-6 strategy tag ↔ extraction strategy coherence](docs/audits/2026-05-18/CR-6-strategy-tag-extraction-strategy-coherence.md) — both vocabularies are strict-static; the coherence audit confirmed they describe distinct lifecycle stages.
+- [CR-11 saturation audit](docs/audits/2026-05-18/CR-11-saturation-audit.md) — saturation rate per axis confirms each tier's policy actually holds in practice (95-96% target met everywhere except producer at 98.8%, single-row drift).
 - The CONTEXT.md flagged-ambiguity close at line 1507 — closes inline at sprint close-out.
 
 ## Out of scope for T5

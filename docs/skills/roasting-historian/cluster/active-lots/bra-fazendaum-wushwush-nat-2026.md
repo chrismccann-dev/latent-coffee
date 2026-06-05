@@ -34,7 +34,7 @@ Producer notes (mandarin / prune / cacao) absent across all three cups. Cacao pa
 
 ## Critical V1 architectural finding
 
-FC arrives at 204-206°C across all three peak inlet levels. **Higher peak pulls FC TIME earlier but does NOT pull FC TEMP lower.** Same architectural failure pattern as Sudan Rume Natural V2 reproduced on a different cultivar / different lot / different terroir. **Propagated to [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](../patterns/cross-coffee-insights.md#fc-temp-architectural-constraint-on-naturals).**
+FC arrives at 204-206°C across all three peak inlet levels. **Higher peak pulls FC TIME earlier but does NOT pull FC TEMP lower.** Same architectural failure pattern as Sudan Rume Natural V2 reproduced on a different cultivar / different lot / different terroir. **Propagated to [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#fc-temp-architectural-constraint-on-naturals---working-hypothesis).**
 
 ## V2 design (experiment CGLE-WUSHWUSH-NAT-2026-V2, pushed to Roest 2026-05-25)
 
@@ -62,6 +62,6 @@ Wush Wush V1 cup outcome does NOT support carrying the framework forward to Finc
 
 ## Cross-references
 
-- [by-process/natural.md](../patterns/by-process/natural.md) — per-process roll-up
-- [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](../patterns/cross-coffee-insights.md#fc-temp-architectural-constraint-on-naturals) — pattern co-confirmed by this lot's V1 data
-- [active-lots/cgle-srume-natural-2026.md](./cgle-srume-natural-2026.md) — sibling natural; V3/V4 architecture cited as Path 1 transfer reference
+- [by-process/natural.md](docs/skills/roasting-historian/cluster/patterns/by-process/natural.md) — per-process roll-up
+- [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#fc-temp-architectural-constraint-on-naturals---working-hypothesis) — pattern co-confirmed by this lot's V1 data
+- [active-lots/cgle-srume-natural-2026.md](docs/skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md) — sibling natural; V3/V4 architecture cited as Path 1 transfer reference

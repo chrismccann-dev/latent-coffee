@@ -3,7 +3,7 @@
 **Session:** 2026-06-04 · ARCHITECTURE-AUDIT DOGFOOD SESSION (read-only, no code edited).
 **Surface:** `app/(app)/{terroirs,cultivars,roasters,processes}/[*]/page.tsx` — the aggregation **detail** pages.
 **Centered smell:** duplication-at-distance + adoption gap.
-**Rubric:** Part B of [architecture-review-skill-brainstorm-2026-06-04.md](../../features/architecture-review-skill-brainstorm-2026-06-04.md) (v0).
+**Rubric:** Part B of [architecture-review-skill-brainstorm-2026-06-04.md](docs/features/architecture-review-skill-brainstorm-2026-06-04.md) (v0).
 
 ---
 
@@ -108,7 +108,7 @@ So beats 1, 4, 7 are the un-extracted duplication; beats 2, 5, 6, 8 are already 
 ### Candidate 5: `<RegistryDetailShell>` — the whole-page template  ⟵ CALIBRATION / DEFER
 - **Files:** the registry-anchor trio (1-3); the process aggregates could follow.
 - **Current shape:** beats 1-8 in the same order on every page.
-- **Problem:** the *spine* is duplicated, but the **meaningful variation lives in beat 3 (page-specific cards), the SynthesisCard cache source, and the roaster's inverted priority stack** (`roasters/[slug]` deliberately leads with `CoffeesList` and collapses synthesis — the documented "roaster exception" in [docs/design-system.md § Detail-page grammar](../../design-system.md)). A single shell that owns the section order would have to special-case the roaster, and would tempt future authors to bend pages toward the template instead of the content.
+- **Problem:** the *spine* is duplicated, but the **meaningful variation lives in beat 3 (page-specific cards), the SynthesisCard cache source, and the roaster's inverted priority stack** (`roasters/[slug]` deliberately leads with `CoffeesList` and collapses synthesis — the documented "roaster exception" in [docs/design-system.md § Detail-page grammar](docs/design-system.md)). A single shell that owns the section order would have to special-case the roaster, and would tempt future authors to bend pages toward the template instead of the content.
 - **Proposed deepening:** *Possible* `<DetailShell backTo header synthesis coffees additional>{children=beat3}</DetailShell>`, but only after 1-4 prove the seams. **More likely correct: do NOT build this** — once the cross-link loop, back-link, and Additional-Info are extracted, the residual per-page code IS the legitimate variation, and a shell would be a shallow pass-through that hides nothing and constrains layout.
 - **Verification:** N/A (recommend not building yet).
 - **Recommendation:** **Speculative** — explicitly flagged as the over-abstraction trap the brief warned about. This is the audit *killing a plausible-but-wrong refactor*: the rubric's false-positive discipline says surface it and recommend against it for now.

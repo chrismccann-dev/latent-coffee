@@ -81,8 +81,8 @@ This DRAFT was written from one workflow walkthrough thread. Things to observe b
 
 ## Cross-references
 
-- [PRODUCT.md § Roadmap](../../PRODUCT.md) — POD-1 parent item
-- [docs/prompts/log-cupping.md STAGE 4](../prompts/log-cupping.md) — current C-1/C-2 substrate
-- [docs/prompts/close-lot.md STAGE 4](../prompts/close-lot.md) — current optimized-brew push
-- [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](pourover-discriminator-and-optimized-brew-states-kickoff.md) — prior POD scoping
+- [PRODUCT.md § Roadmap](PRODUCT.md) — POD-1 parent item
+- [docs/prompts/log-cupping.md STAGE 4](docs/prompts/log-cupping.md) — current C-1/C-2 substrate
+- [docs/prompts/close-lot.md STAGE 4](docs/prompts/close-lot.md) — current optimized-brew push
+- [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md) — prior POD scoping
 - 2026-05-26 audit cluster retro (`memory/project_audit_cluster_2026-05-26.md`) — source of this draft

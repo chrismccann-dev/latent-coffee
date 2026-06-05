@@ -33,13 +33,13 @@ A research project runs across three structurally distinct Claude Code sessions.
 ## DO (in the Assistant session)
 
 - Read the protocol doc in full BEFORE Step 0
-- Walk the operator through Step 0 calibration-arc primitives ([`calibration-arc.md`](calibration-arc.md))
+- Walk the operator through Step 0 calibration-arc primitives ([`calibration-arc.md`](docs/skills/research-coordinator/cluster/calibration-arc.md))
 - Run scoring pulls / observations / measurements one-at-a-time (Project #1 Lesson #7 — tool-call-per-pull pacing)
 - Apply auto-retest (Project #1 Lesson #5), confirmed-outlier procedure (Project #3 Lesson #21), and cross-confirmation alternatives as appropriate
 - Pre-state hypothesis tests in the protocol doc's "predicted outcomes" column before scoring begins (Project #4 Lesson #16 active-mode framing)
 - Capture friction + new lessons + audit items inline in the protocol doc (Project #2 Lesson #12 — the doc IS the archive)
 - Test substantive mid-run theory inside the session (Project #1 Lesson #16 — budget ~2 exploratory pulls)
-- Produce a handoff brief at session end per [`templates/handoff-brief-template.md`](templates/handoff-brief-template.md)
+- Produce a handoff brief at session end per [`templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md)
 - Declare termination explicitly at the end of the handoff brief
 
 ---
@@ -71,7 +71,7 @@ The brief grilling locked three sessions, not two (Coordinator + Assistant + Exe
 
 Coordinator carries the long-running context — roadmap, cross-track view, methodology primitives, prior project end-documents. That context is exactly what should NOT be polluted by line-by-line registry edits. The Coordinator's role is to scope the execution plan sharply enough that a fresh session with no prior context can apply it cleanly. That scoping IS the value the Coordinator adds; doing the edits in-session would conflate scoping with applying, and re-introduce the same Project-#3-style ephemeral-state risk for Coordinator-side context.
 
-Three sessions, three roles. Structurally rigid. Scopewise fluid (per the [ADR-0017](../../../adr/0017-research-assistant-architecture.md) 3-actor pattern framing).
+Three sessions, three roles. Structurally rigid. Scopewise fluid (per the [ADR-0017](docs/adr/0017-research-assistant-architecture.md) 3-actor pattern framing).
 
 ---
 
@@ -79,8 +79,8 @@ Three sessions, three roles. Structurally rigid. Scopewise fluid (per the [ADR-0
 
 This rule must be pre-baked at:
 
-1. **Top of [Research Assistant SKILL.md](../../research-assistant/SKILL.md)** — caps + DO NOT/DO lists + this "Why this rule exists" reference
-2. **Top of every spawn prompt** generated from [`templates/spawn-prompt-template.md`](templates/spawn-prompt-template.md) — caps block at the top of the protocol-doc-internal "Read this before Step 0" section
+1. **Top of [Research Assistant SKILL.md](docs/skills/research-assistant/SKILL.md)** — caps + DO NOT/DO lists + this "Why this rule exists" reference
+2. **Top of every spawn prompt** generated from [`templates/spawn-prompt-template.md`](docs/skills/research-coordinator/cluster/templates/spawn-prompt-template.md) — caps block at the top of the protocol-doc-internal "Read this before Step 0" section
 3. **Top of every protocol doc** Coordinator authors at `docs/research-projects/<track-slug>.md` — same caps block
 
 Three pre-bake locations because the Project #3 failure mode showed the boundary is genuinely invisible to the Assistant from inside. Repeating the rule in caps at three load-bearing entry points is the recovery mechanism.
@@ -111,7 +111,7 @@ The explicit declaration is structurally important — it makes the "did the Ass
 
 ## Related primitives
 
-- [`sharp-substrate-fold.md`](sharp-substrate-fold.md) — context-firewall principle that motivates the three-role split
-- [`templates/handoff-brief-template.md`](templates/handoff-brief-template.md) — the bridge artifact between Assistant and Execution sessions
-- [`templates/spawn-prompt-template.md`](templates/spawn-prompt-template.md) — pre-bake site #2 for this rule
-- [ADR-0017](../../../adr/0017-research-assistant-architecture.md) § The role-discipline rule
+- [`sharp-substrate-fold.md`](docs/skills/research-coordinator/cluster/sharp-substrate-fold.md) — context-firewall principle that motivates the three-role split
+- [`templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md) — the bridge artifact between Assistant and Execution sessions
+- [`templates/spawn-prompt-template.md`](docs/skills/research-coordinator/cluster/templates/spawn-prompt-template.md) — pre-bake site #2 for this rule
+- [ADR-0017](docs/adr/0017-research-assistant-architecture.md) § The role-discipline rule

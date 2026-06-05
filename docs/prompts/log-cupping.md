@@ -98,7 +98,7 @@ Almost always skipped — every live lot is post-rewrite. Run a minimal `get_bea
 
 If detection does NOT fire, print `STAGE 0: skipped - fresh-from-rewrite lot` and continue to STAGE 1.
 
-If it DOES fire (a pre-rewrite lot is being re-cupped), the full backfill procedure is archived at [`log-cupping-stage0-migration.md`](log-cupping-stage0-migration.md) — pull it in, run the backfill (one-pass, evidence-only, no fabrication), print `STAGE 0: backfilled <N> recipe rows + <M> experiment-slot fields`, then continue.
+If it DOES fire (a pre-rewrite lot is being re-cupped), the full backfill procedure is archived at [`log-cupping-stage0-migration.md`](docs/prompts/log-cupping-stage0-migration.md) — pull it in, run the backfill (one-pass, evidence-only, no fabrication), print `STAGE 0: backfilled <N> recipe rows + <M> experiment-slot fields`, then continue.
 
 ---
 

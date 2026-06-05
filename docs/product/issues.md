@@ -2,11 +2,11 @@
 
 *Last updated: 2026-06-03 (split out of PRODUCT.md)*
 
-Product bugs, missing states, and incomplete substrate — kept out of [PRODUCT.md](../../PRODUCT.md) and the [roadmap](roadmap.md) so neither bloats. Distinct from the roadmap's *Longer-Term Items* (which are "this works but is thin"); items here are "this exists but is broken / stub-state" or "this should exist but doesn't yet."
+Product bugs, missing states, and incomplete substrate — kept out of [PRODUCT.md](PRODUCT.md) and the [roadmap](docs/product/roadmap.md) so neither bloats. Distinct from the roadmap's *Longer-Term Items* (which are "this works but is thin"); items here are "this exists but is broken / stub-state" or "this should exist but doesn't yet."
 
 Long-term home: migrate to GitHub Issues if volume grows. Markdown queue for now (~handful of live items).
 
-When an item resolves: move it to [docs/sprints/shipped.md](../sprints/shipped.md) or the relevant retro — do not keep resolved detail here.
+When an item resolves: move it to [docs/sprints/shipped.md](docs/sprints/shipped.md) or the relevant retro — do not keep resolved detail here.
 
 ---
 
@@ -61,7 +61,7 @@ Recipe rows landed in migration 052 (116/116 historical roasts have a `roast_rec
 
 ### `/brews` index unbounded render (~100-brew tripwire)
 
-**Status:** monitor (also tracked in [PRODUCT.md § Scaling Watch-Items](../../PRODUCT.md)).
+**Status:** monitor (also tracked in [PRODUCT.md § Scaling Watch-Items](PRODUCT.md)).
 
 `/brews` renders every brew as a `BrewCard` with no cap/pagination. At ~89 brews this is a non-issue (server-rendered, no client list JS). **Action when crossing ~100 brews:** a small "show first N + load more" mini-sprint on the *unfiltered* view only (filters already narrow the list). The per-roaster Coffees-list half is already handled (`CoffeesList` caps at 10 with a "Show N more" expander).
 
@@ -69,4 +69,4 @@ Recipe rows landed in migration 052 (116/116 historical roasts have a `roast_rec
 
 ## Resolved / shipped
 
-Do not keep resolved detail here — it moves to [docs/sprints/shipped.md](../sprints/shipped.md) or the relevant retro.
+Do not keep resolved detail here — it moves to [docs/sprints/shipped.md](docs/sprints/shipped.md) or the relevant retro.

@@ -3,7 +3,7 @@
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
 **Lot:** COS-HIG-BOR-2026
-**Status:** CLOSED 2026-05-23 - reference roast v3b (#185). This active-lot working file is retired; see [learnings/cos-hig-bor-2026.md](../learnings/cos-hig-bor-2026.md) for the closed-lot deep dive.
+**Status:** CLOSED 2026-05-23 - reference roast v3b (#185). This active-lot working file is retired; see [learnings/cos-hig-bor-2026.md](docs/skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md) for the closed-lot deep dive.
 **Process:** Anaerobic Dry Process
 **Terroir:** Costa Rica
 
@@ -28,7 +28,7 @@ Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).
 
 ## Key V2 findings
 
-- **xbloom_gate has now produced INVERSE-DIRECTION misranking on this lot twice.** V1: v1b's lactic note suggested underdevelopment, real pourover proved otherwise. V2: v2c's staying-power suggested winner, real pourover proved otherwise. Pattern: on this lot xbloom (1:17.5/94°C) extracts in a way that misleads ranking between close candidates. Use Balanced Intensity real pourover on top 2 candidates before declaring outcome. **Propagated to [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](../patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals).**
+- **xbloom_gate has now produced INVERSE-DIRECTION misranking on this lot twice.** V1: v1b's lactic note suggested underdevelopment, real pourover proved otherwise. V2: v2c's staying-power suggested winner, real pourover proved otherwise. Pattern: on this lot xbloom (1:17.5/94°C) extracts in a way that misleads ranking between close candidates. Use Balanced Intensity real pourover on top 2 candidates before declaring outcome. **Propagated to [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals---working-hypothesis).**
 - **Structural cleanliness correlates with cup quality when extraction is properly chosen.** v2b's clean structural shape (audible FC at 203.3°C, dev 13.2%, Maillard 39.3%) DID predict the real-pourover winner. The xbloom-only "structural-vs-cup disconnect" was an extraction artifact, not a cup phenomenon.
 - **WB-to-ground delta SIGN matters at xbloom but doesn't predict the real-pourover winner.** v2b delta -0.3 = real-pourover winner; v2c delta -1.1 = NOT the real-pourover winner; v2a delta +2.4 = aggressive cup (consistent across both evaluations). Demote sign-of-delta from "primary signal" to "secondary observation worth tracking."
 - v1c "winner" profile was NOT cleanly reproducible at v2a (same inlet curve, different FC behavior + higher drop temp). Replication problem still unresolved; deprioritized now that v2b is the better candidate.
@@ -41,5 +41,5 @@ Anchor on v2b. v3a replicates v2b at 253°C peak / 210°C drop (BEAN_TEMP end co
 
 ## Cross-references
 
-- [by-process/natural.md](../patterns/by-process/natural.md) — per-process roll-up (anaerobic-natural subgroup)
-- [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](../patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals) — pattern co-confirmed by this lot
+- [by-process/natural.md](docs/skills/roasting-historian/cluster/patterns/by-process/natural.md) — per-process roll-up (anaerobic-natural subgroup)
+- [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals---working-hypothesis) — pattern co-confirmed by this lot

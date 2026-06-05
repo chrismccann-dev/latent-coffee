@@ -1,7 +1,7 @@
 # Grinders
 
 **Enforcement bar:** Strict (sprint 1k — enforcement lands with adoption)
-**Canonical registry:** [lib/grinder-registry.ts](../../../../lib/grinder-registry.ts) (validation mirror)
+**Canonical registry:** [lib/grinder-registry.ts](lib/grinder-registry.ts) (validation mirror)
 **Last adopted:** 2026-04-25
 **Adoption path:** Authored taxonomy (Chris, 2026-04-25). Per-setting D50 / Zone / Extraction Behavior / Use Case content sourced from Chris's "Taxonomy Reference - Grinder and Grind Setting" CSV (15 measured settings on the EG-1 with ULTRA SSP burrs). 6.6 included with `status: 'needs_fresh_measurement'` to preserve historical brew data while flagging the contaminated reading. 7.0 included with `status: 'anomalous'` (reads finer than 6.9 — bailout setting). All other settings in the 3.0-8.0 dial range are canonical but carry no measurement yet.
 
@@ -90,4 +90,4 @@ Grinder-name drift observed in DB (pre-sprint 1k audit) + `<input>` hyphenation/
 
 ## Adoption retro
 
-See [memory/project_grinder_taxonomy_adoption.md](../../memory/project_grinder_taxonomy_adoption.md) for the sprint 1k retro covering the EG-1 monoculture audit finding, the enumerated-vs-free-text setting decision (revised after Chris shared the Taxonomy Reference CSV), and the rework that followed.
+See [memory/project_grinder_taxonomy_adoption.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_grinder_taxonomy_adoption.md) for the sprint 1k retro covering the EG-1 monoculture audit finding, the enumerated-vs-free-text setting decision (revised after Chris shared the Taxonomy Reference CSV), and the rework that followed.

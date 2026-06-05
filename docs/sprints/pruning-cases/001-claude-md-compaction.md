@@ -5,7 +5,7 @@
 ## Header
 
 - **Doc pruned:** `CLAUDE.md` — 152.4 KB → 38.1 KB (PRODUCT.md 132 KB → 114 KB as a side effect of the shared design doc).
-- **Trigger:** root-doc 120 KB tripwire (CLAUDE.md was ~32 KB over). Now tracked in [docs/architecture/doc-tripwires.md § Root living docs](../../architecture/doc-tripwires.md).
+- **Trigger:** root-doc 120 KB tripwire (CLAUDE.md was ~32 KB over). Now tracked in [docs/architecture/doc-tripwires.md § Root living docs](docs/architecture/doc-tripwires.md).
 - **Shape(s) used:** **extract** (primary) + **split** (one source doc → four destination docs). Move-never-delete; zero content removed.
 - **Judgment calls:**
   1. *Data Model depth* — keep inline vs. split entity-roster from per-column histories. Chris: bite the bullet and split now ("cheap now, harder every time a column gets added"). The line is stable: roster = every-session, column histories = on-demand.

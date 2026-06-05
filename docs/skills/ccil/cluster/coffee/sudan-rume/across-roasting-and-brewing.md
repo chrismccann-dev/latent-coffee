@@ -4,8 +4,8 @@
 
 **Cardinality:** N=3 across both domains (2 roasting lots + 1 brewing lot at this writing).
 
-- **Roasting:** [CGLE Sudan Rume Hybrid Washed (CGLE-SRUME-WASHED-2026)](../../../../../../ROASTING.md#cgle-srume-washed-2026---sudan-rume-hybrid-washed) (closed, reference roast batch #133) · [CGLE Sudan Rume Natural (CGLE-SRUME-NATURAL-2026)](../../../../../../ROASTING.md#cgle-srume-natural-2026---sudan-rume-natural) (closed 2026-05-23, reference roast batch #187 / V5A)
-- **Brewing:** [CGLE Las Margaritas Sudan Rume Natural (Special Guests Edition 0326-42)](../../../../../brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — one data point on the brewing-only side (different roaster, not Latent-roasted)
+- **Roasting:** [CGLE Sudan Rume Hybrid Washed (CGLE-SRUME-WASHED-2026)](docs/skills/roasting-historian/cluster/learnings/cgle-srume-washed-2026.md) (closed, reference roast batch #133) · [CGLE Sudan Rume Natural (CGLE-SRUME-NATURAL-2026)](docs/skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md) (closed 2026-05-23, reference roast batch #187 / V5A)
+- **Brewing:** [CGLE Las Margaritas Sudan Rume Natural (Special Guests Edition 0326-42)](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — one data point on the brewing-only side (different roaster, not Latent-roasted)
 
 This is the **first CCIL seed pattern** authored in Wave 4 PR 4a. Its job is to demonstrate the shape of cross-domain synthesis on a coffee where both a Latent-roasted lot AND an externally-roasted brewing lot of the same variety exist. Pattern F's archetype: the same variety throughline expresses differently on each layer; CCIL surfaces the cross-layer tension and proposes the unified working hypothesis.
 
@@ -31,7 +31,7 @@ Sudan Rume is an ancient Ethiopian landrace from the Boma Plateau — parent of 
 
 ## Cross-domain tension to flag
 
-**The "fast cone phase-separates on Sudan Rume" brewing rule has a roasting-side counter-example.** The Brewing Historian's [by-cultivar/sudan-rume.md](../../../../../brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) vehicle-dependency rule was confirmed at N=2 (SR Natural + Newbery Street Thai cultivar-mix Washed) and promoted to working rule: SL-lineage and aromatic-landrace varieties on fast-cone vehicles phase-separate; April Brewer Glass + April Paper is the corrective vehicle. But the Latent-roasted SR Hybrid Washed reference brew runs on **UFO Ceramic + Sibarist Fast Cone + Melodrip** and produces an integrated cup (candied apricot + bergamot + jasmine + lemon + integrated stone fruit).
+**The "fast cone phase-separates on Sudan Rume" brewing rule has a roasting-side counter-example.** The Brewing Historian's [by-cultivar/sudan-rume.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) vehicle-dependency rule was confirmed at N=2 (SR Natural + Newbery Street Thai cultivar-mix Washed) and promoted to working rule: SL-lineage and aromatic-landrace varieties on fast-cone vehicles phase-separate; April Brewer Glass + April Paper is the corrective vehicle. But the Latent-roasted SR Hybrid Washed reference brew runs on **UFO Ceramic + Sibarist Fast Cone + Melodrip** and produces an integrated cup (candied apricot + bergamot + jasmine + lemon + integrated stone fruit).
 
 **Working cross-domain hypothesis (low confidence, single counter-example):** the vehicle-dependency rule may be process-scoped rather than variety-scoped. The aromatic-landrace volatile profile gets denser on naturals (fruit-layer fermentation adds late-attack volatile complexity that needs slow integration via the bed) and lighter on washed (less late-attack volatile complexity; fast bed with Melodrip-controlled turbulence preserves clarity). If this holds, the rule generalizes to: **fast-cone vehicles phase-separate aromatic-landrace NATURALS; fast-cone + Melodrip-controlled vehicles work on aromatic-landrace WASHED.**
 
@@ -60,7 +60,7 @@ Confirmation needed: a second Sudan Rume Washed brew (could be SR Hybrid Washed 
 - If muted at 91°C, go 1 click finer on grind — do NOT increase temp.
 - Cool-window evaluation: best warm-to-cool; cup opens significantly cooling.
 
-**Research Coordinator — when scoping a Sudan Rume research project (per [ADR-0017](../../../../../../adr/0017-research-assistant-architecture.md)):**
+**Research Coordinator — when scoping a Sudan Rume research project (per [ADR-0017](docs/adr/0017-research-assistant-architecture.md)):**
 - N=3 is the corpus floor for cross-process pattern promotion. Today's N=3 covers Hybrid Washed (Latent) + Natural (Latent, resolved) + Natural (external CGLE Las Margaritas brewing-only). A third Sudan Rume Washed brew or a fresh aromatic-landrace washed lot would resolve the vehicle-dependency tension flagged above.
 - Track candidate variables: process (washed / natural / hybrid) × vehicle (April vs fast cone) × roast peak inlet (washed envelope vs natural envelope). The variety throughline is the constant; the project maps how each layer's mechanics serve or suppress it.
 
@@ -68,14 +68,14 @@ Confirmation needed: a second Sudan Rume Washed brew (could be SR Hybrid Washed 
 
 - **Not a recipe lookup.** Planners pulling specific recipes go to the brewing historian / roasting historian clusters. CCIL surfaces the cross-domain framing that informs HOW those recipes get chosen.
 - **Not a final answer.** Promotion of the working "process-scoped vehicle-dependency" hypothesis requires the second Sudan Rume Washed brew counter-example to resolve. CCIL working hypotheses age into confirmed patterns or get retired; this entry will be revisited when N grows.
-- **Not the only CCIL pattern that could land in Wave 4.** Sudan Rume is the seed because the substrate exists across both domains today. Future Pattern A refresh events (when Historians' patterns drift, when Workflow Executor sub-skills push new brews / roasts that match an existing CCIL pattern) will append patterns or trigger new pattern files via the [Roasting Historian](../../../../../roasting-historian/SKILL.md) + [Brewing Historian](../../../../../brewing-historian/SKILL.md) integration paths.
+- **Not the only CCIL pattern that could land in Wave 4.** Sudan Rume is the seed because the substrate exists across both domains today. Future Pattern A refresh events (when Historians' patterns drift, when Workflow Executor sub-skills push new brews / roasts that match an existing CCIL pattern) will append patterns or trigger new pattern files via the [Roasting Historian](docs/skills/roasting-historian/SKILL.md) + [Brewing Historian](docs/skills/brewing-historian/SKILL.md) integration paths.
 
 ## Cross-references
 
-- [Roasting Historian § Cross-Coffee Insight Layer](../../../../../roasting-historian/cluster/patterns/cross-coffee-insights.md) — WB-Ground Agtron delta directional interpretation by lot family
-- [Roasting Historian § Roast-to-Brew Translation](../../../../../roasting-historian/cluster/patterns/roast-to-brew-translation.md) — predicting brew behavior from roast parameters
-- [Roest Knowledge § Counterflow Observations](../../../../../roest-knowledge/cluster/machine/counterflow-observations.md) — FC window targeting, drop temp discipline, WB-Ground delta as development signal
-- [Roest Knowledge § Fan Strategy](../../../../../roest-knowledge/cluster/protocols/fan-strategy.md) — fan curves for SR Washed (confirmed) and SR Natural (V2 hypothesis)
-- [Peer-Learning Roasting Archivist § Dongzhe](../../../../../peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) — "start from washed profile and let FC timing tell you" principle + SR Natural energy caveat
-- [Brewing Historian § by-cultivar/sudan-rume.md](../../../../../brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — full brewing-side variety entry: vehicle-dependency rule + body intuition rule + temperature ceiling
-- [CCIL § decomposition-log.md](../../decomposition-log.md) — Pattern F audit trail (logs every CCIL self-decomposition event)
+- [Roasting Historian § Cross-Coffee Insight Layer](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) — WB-Ground Agtron delta directional interpretation by lot family
+- [Roasting Historian § Roast-to-Brew Translation](docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md) — predicting brew behavior from roast parameters
+- [Roest Knowledge § Counterflow Observations](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md) — FC window targeting, drop temp discipline, WB-Ground delta as development signal
+- [Roest Knowledge § Fan Strategy](docs/skills/roest-knowledge/cluster/protocols/fan-strategy.md) — fan curves for SR Washed (confirmed) and SR Natural (V2 hypothesis)
+- [Peer-Learning Roasting Archivist § Dongzhe](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) — "start from washed profile and let FC timing tell you" principle + SR Natural energy caveat
+- [Brewing Historian § by-cultivar/sudan-rume.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — full brewing-side variety entry: vehicle-dependency rule + body intuition rule + temperature ceiling
+- [CCIL § decomposition-log.md](docs/skills/ccil/cluster/decomposition-log.md) — Pattern F audit trail (logs every CCIL self-decomposition event)

@@ -2,9 +2,9 @@
 
 Self-only canonical sub-taxonomy capturing Chris's SWORKS Bottomless Dripper valve-dial vocabulary. The dial controls flow rate during a brew — a real lever distinct from grind, temperature, agitation. The vocabulary is reference material claude.ai consults at brief time (Step 1d strategy + Step 2 recipe design) and lifecycle-archive material for cross-brew analysis.
 
-**Authoritative authored content.** [lib/sworks-registry.ts](../../../../lib/sworks-registry.ts) is the validation mirror.
+**Authoritative authored content.** [lib/sworks-registry.ts](lib/sworks-registry.ts) is the validation mirror.
 
-**Not a comprehensive registry.** Captures one owned instrument (SWORKS Bottomless Dripper, office). Adding a second valve-modulated brewer would be a deliberate registry extension — the validation surface stays self-only by design, structurally analogous to [grinder-eg1.md](grinder-eg1.md) (EG-1 only).
+**Not a comprehensive registry.** Captures one owned instrument (SWORKS Bottomless Dripper, office). Adding a second valve-modulated brewer would be a deliberate registry extension — the validation surface stays self-only by design, structurally analogous to [grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md) (EG-1 only).
 
 ## Canonical list
 
@@ -122,13 +122,13 @@ This taxonomy is intentionally narrow today (one instrument, 5 useful dial state
 
 1. A second valve-modulated brewer enters Chris's rotation (e.g. a SWORKS v2 or an alternative valve-dripper). The shape supports multiple `SworksEntry`-class entries; today there's only one.
 2. Per-pour valve-dial pattern becomes a structured `brews` column. Today the dial sequence lives in `brews.pour_structure` free-text; a future structured-pour-structure sprint may extract it. At that point the registry becomes the validation source for the column.
-3. Cross-brew aggregation queries demand structured valve-dial patterns (per [CR-7 scoping](../../../audits/2026-05-18/CR-7-sworks-valve-flow-scoping.md) trigger #2).
+3. Cross-brew aggregation queries demand structured valve-dial patterns (per [CR-7 scoping](docs/audits/2026-05-18/CR-7-sworks-valve-flow-scoping.md) trigger #2).
 
 Until then the registry is a vocabulary anchor only; brew-side persistence stays free-text.
 
 ## Related references
 
-- [lib/sworks-registry.ts](../../../../lib/sworks-registry.ts) — validation mirror (TS)
-- [lib/brewer-registry.ts](../../../../lib/brewer-registry.ts) — `SWORKS Bottomless Dripper` is the canonical brewer entry; this file extends valve-dial vocabulary
-- [BREWING.md § Valve Position Reference](../../../../BREWING.md) — original prose location, retained as the practical brewing playbook
-- [docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md](grinder-eg1.md) — sibling self-only canonical sub-taxonomy (EG-1)
+- [lib/sworks-registry.ts](lib/sworks-registry.ts) — validation mirror (TS)
+- [lib/brewer-registry.ts](lib/brewer-registry.ts) — `SWORKS Bottomless Dripper` is the canonical brewer entry; this file extends valve-dial vocabulary
+- [BREWING.md § Valve Position Reference](BREWING.md) — original prose location, retained as the practical brewing playbook
+- [docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md) — sibling self-only canonical sub-taxonomy (EG-1)

@@ -5,7 +5,7 @@
 Fourth `/grill-with-docs` session, audit-grilling the canonical-registries cluster — the 10 taxonomy axes that drive Latent's validation pipeline (cultivar / terroir / producer / roaster / brewer / filter / grinder / roast level / flavor / process). 12 grilling rounds; richer-than-typical density because the cluster cuts across all 10 axes simultaneously.
 
 Outputs:
-- [CONTEXT.md](../../CONTEXT.md) — **23 new glossary entries** under a new "Canonical Registries" sub-section (peer to "Roasting", "Brewing", "MCP / Sync Architecture"). Plus **~16 new relationships** in the Relationships section + **~10 new flagged ambiguities**. CONTEXT.md now ~104 entries total (31 roasting + 23 brewing + 27 MCP + 23 canonical registries).
+- [CONTEXT.md](CONTEXT.md) — **23 new glossary entries** under a new "Canonical Registries" sub-section (peer to "Roasting", "Brewing", "MCP / Sync Architecture"). Plus **~16 new relationships** in the Relationships section + **~10 new flagged ambiguities**. CONTEXT.md now ~104 entries total (31 roasting + 23 brewing + 27 MCP + 23 canonical registries).
 
 The 23 new entries fall into 5 thematic groups:
 

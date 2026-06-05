@@ -74,8 +74,8 @@ Enter plan mode. Present bundle structure, ratify, ship. Files likely to touch: 
 If the Anoxic decision (Q4) — or anything else — adds a DB column, apply the migration to Supabase BEFORE merge: the worktree has no DDL path (only PostgREST). 4d + 4e had no DB dependency and merged clean. If a column is genuinely needed, ship code on a branch + hand Chris the one-line migration + merge after `check-migrations` goes green. Sequence any non-DB bundle to merge independently.
 
 ## Reference
-- [Sub-sprint 4e kickoff](sub-sprint-4e-terroirs-polish-kickoff-2026-05-28.md) + [complementary pass](sub-sprint-4e-terroirs-polish-complementary-pass-2026-05-28.md) — most recent precedent (the "informational surface → single component fix" lesson + the clean substrate cross-check)
-- [Sub-sprint 4d kickoff](sub-sprint-4d-cultivars-polish-kickoff-2026-05-28.md) + [complementary pass](sub-sprint-4d-cultivars-polish-complementary-pass-2026-05-28.md) — the "informational → light bundle" + intentionally-internal-columns lessons
-- [PRODUCT.md § Active Sprints #4](../../PRODUCT.md) — series-level scope (4f is the closer)
-- [CLAUDE.md § Processes](../../CLAUDE.md) — post-Sub-Pages-4 3-tier architecture shape
-- [docs/grilling-queue.md](../grilling-queue.md) — the Anoxic-qualifier question may already have a queue entry worth draining here
+- [Sub-sprint 4e kickoff](docs/sprints/sub-sprint-4e-terroirs-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4e-terroirs-polish-complementary-pass-2026-05-28.md) — most recent precedent (the "informational surface → single component fix" lesson + the clean substrate cross-check)
+- [Sub-sprint 4d kickoff](docs/sprints/sub-sprint-4d-cultivars-polish-kickoff-2026-05-28.md) + [complementary pass](docs/sprints/sub-sprint-4d-cultivars-polish-complementary-pass-2026-05-28.md) — the "informational → light bundle" + intentionally-internal-columns lessons
+- [PRODUCT.md § Active Sprints #4](PRODUCT.md) — series-level scope (4f is the closer)
+- [CLAUDE.md § Processes](CLAUDE.md) — post-Sub-Pages-4 3-tier architecture shape
+- [docs/grilling-queue.md](docs/grilling-queue.md) — the Anoxic-qualifier question may already have a queue entry worth draining here

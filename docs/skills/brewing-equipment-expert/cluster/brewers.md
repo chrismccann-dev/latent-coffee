@@ -1,7 +1,7 @@
 # Brewer (Dripper) Taxonomy
 
 Authoritative authored content for the brewer canonical registry.
-Mirror file: [lib/brewer-registry.ts](../../../../lib/brewer-registry.ts).
+Mirror file: [lib/brewer-registry.ts](lib/brewer-registry.ts).
 
 Total canonical brewers: **46** (12 owned).
 

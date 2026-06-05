@@ -4,7 +4,7 @@
 
 Migrated from ROASTING.md § Standard Workflow > Between Batch Protocol + Hopper Pre-Load Timing in Wave 4 PR 4b (2026-05-21).
 
-> **Operator-fixed constants** (Item 25 / Group 5 grill, 2026-05-24, audio-ratified): the four constants below (10-minute warm-up dry run / BBP parameters / 125°C hopper-load alert / 117°C charge temp) are **operator-discipline constants — never varied across V-sets, beans, or roast types**. Substrate must DESIGN AROUND these, not propose varying them. Chris's muscle memory governs — he does NOT look at recipe fields for drop temp because he always charges at 117°C. If thermal-energy or input-energy change is the goal, vary recipe-level levers (peak inlet temp / temperature curve / fan / drum speed) — NOT the operator-fixed routine. See [CONTEXT-roasting.md § Operator-fixed roast constants](../../../../../CONTEXT-roasting.md) for the full glossary entry + the recipe-schema-vs-lived-practice asymmetry note.
+> **Operator-fixed constants** (Item 25 / Group 5 grill, 2026-05-24, audio-ratified): the four constants below (10-minute warm-up dry run / BBP parameters / 125°C hopper-load alert / 117°C charge temp) are **operator-discipline constants — never varied across V-sets, beans, or roast types**. Substrate must DESIGN AROUND these, not propose varying them. Chris's muscle memory governs — he does NOT look at recipe fields for drop temp because he always charges at 117°C. If thermal-energy or input-energy change is the goal, vary recipe-level levers (peak inlet temp / temperature curve / fan / drum speed) — NOT the operator-fixed routine. See [CONTEXT-roasting.md § Operator-fixed roast constants](CONTEXT-roasting.md) for the full glossary entry + the recipe-schema-vs-lived-practice asymmetry note.
 
 ## Standard Workflow
 
@@ -36,14 +36,14 @@ This workflow is fixed and should be followed identically for every roast sessio
 
 Loading beans into the hopper at 125°C gives the beans approximately 60-90 seconds of pre-warming in ambient drum heat before charge. This raises the effective thermal mass at the charge event and produces earlier and cooler FC.
 
-This is likely part of the reason a trusted peer (same machine, same mode) consistently achieves TP of 94°C vs. this machine's 78-81°C. See [peer-learning-roasting-archivist § Dongzhe](../../../peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) for the peer's parameter set.
+This is likely part of the reason a trusted peer (same machine, same mode) consistently achieves TP of 94°C vs. this machine's 78-81°C. See [peer-learning-roasting-archivist § Dongzhe](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) for the peer's parameter set.
 
 **Important caveat:** Loading too early produces underdevelopment. Batch #134 (hopper loaded at ~125°C on a non-standard session) produced FC at 197.6°C — below the FC floor for Sudan Rume Washed — resulting in a nutty, grassy, flat cup regardless of dev time. The 125°C hopper load with 117°C charge produces FC at approximately 201-205°C on the CF-Light profile. Do not push the hopper pre-load earlier.
 
 ## Cross-references
 
-- [machine/l200-ultra.md](../machine/l200-ultra.md) — hardware reference for the Roest L200 Ultra
-- [protocols/fan-strategy.md](./fan-strategy.md) — fan curve shape during the active roast
-- [protocols/evaluation.md](./evaluation.md) — Day 7 pourover evaluation cadence and protocol
-- [protocols/fc-marking.md](./fc-marking.md) — FC marking discipline
-- [roasting-historian § cross-coffee-insights — Session Position Effect](../../../roasting-historian/cluster/patterns/cross-coffee-insights.md) — confirmed thermal-mass effect across the corpus
+- [machine/l200-ultra.md](docs/skills/roest-knowledge/cluster/machine/l200-ultra.md) — hardware reference for the Roest L200 Ultra
+- [protocols/fan-strategy.md](docs/skills/roest-knowledge/cluster/protocols/fan-strategy.md) — fan curve shape during the active roast
+- [protocols/evaluation.md](docs/skills/roest-knowledge/cluster/protocols/evaluation.md) — Day 7 pourover evaluation cadence and protocol
+- [protocols/fc-marking.md](docs/skills/roest-knowledge/cluster/protocols/fc-marking.md) — FC marking discipline
+- [roasting-historian § cross-coffee-insights — Session Position Effect](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) — confirmed thermal-mass effect across the corpus

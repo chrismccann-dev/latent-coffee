@@ -4,7 +4,7 @@ Meta-architecture document for the "Reference Taxonomies" umbrella. Scoping only
 
 Written 2026-04-21 after a four-part interpretive brainstorm session. Sibling per-taxonomy docs (Region / Variety / Process / Dripper / Flavor) reference this one for shared conventions. Grind-size analysis is Phylum C (placement-only) and lives as a sprint-queue line item, not a feature doc.
 
-Pattern reference: [reference-roast-and-guide.md](reference-roast-and-guide.md) — same four-part session shape (purpose / architecture / surface / phasing), same "authored, not computed" framing, same "retro before docs" sprint cadence.
+Pattern reference: [reference-roast-and-guide.md](docs/features/reference-roast-and-guide.md) — same four-part session shape (purpose / architecture / surface / phasing), same "authored, not computed" framing, same "retro before docs" sprint cadence.
 
 ---
 
@@ -298,9 +298,9 @@ Preserved for Phylum A ports still to land (Process / Dripper / Flavor).
 
 **Pre-sprint dual-registry audit is mandatory, not spot-check.** Variety found 7+ inconsistencies between `lib/cultivar-registry.ts` and `lib/brew-import.ts` `CULTIVAR_REGISTRY` (en-dash vs hyphen, stale Garnica family, divergent 74110/74112 lineage, Gesha 5 vs 1). Region found the same class of drift between `lib/terroir-registry.ts` (3-bundle) and `lib/brew-import.ts` `TERROIR_REGISTRY` (flat 22-entry). Every future port runs `rg "<X>_REGISTRY|<X>_LOOKUP"` before first edit and collapses any dual-registry drift as part of the port.
 
-**Exhaustive DB-cross-check before presenting rename tables** — see [memory/feedback_exhaustive_db_cross_check.md](../../memory/feedback_exhaustive_db_cross_check.md). Region 1d.1 surfaced 2 additional reclassifications in follow-up turns that a systematic pass against the CSV would have caught in round 1 (Colombia Antioquia `Western` → `Central`; Burundi Kayanza `Lake Kivu` → `Mumirwa Escarpment`). Cost of the systematic pass is ~5 minutes of SQL; cost of missing it is 2-3 extra approval round-trips.
+**Exhaustive DB-cross-check before presenting rename tables** — see [memory/feedback_exhaustive_db_cross_check.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_exhaustive_db_cross_check.md). Region 1d.1 surfaced 2 additional reclassifications in follow-up turns that a systematic pass against the CSV would have caught in round 1 (Colombia Antioquia `Western` → `Central`; Burundi Kayanza `Lake Kivu` → `Mumirwa Escarpment`). Cost of the systematic pass is ~5 minutes of SQL; cost of missing it is 2-3 extra approval round-trips.
 
-**Python generators for CSV → markdown + TS scale past ~50×12 cells.** Hand-authoring Region's 127 × 14 attribute-cells (~1780 cells) + 127 TS registry entries would have been 2 orders of magnitude more error-prone than running a small generator script. Scripts currently live in `/tmp/` (ephemeral); if Process / Dripper / Flavor follow the same CSV-research shape, see [PRODUCT.md § Side-quests](../../PRODUCT.md#side-quests-logged-do-not-auto-queue) for the "commit generator scripts to `scripts/taxonomy-ports/`" candidate.
+**Python generators for CSV → markdown + TS scale past ~50×12 cells.** Hand-authoring Region's 127 × 14 attribute-cells (~1780 cells) + 127 TS registry entries would have been 2 orders of magnitude more error-prone than running a small generator script. Scripts currently live in `/tmp/` (ephemeral); if Process / Dripper / Flavor follow the same CSV-research shape, see [PRODUCT.md § Side-quests](PRODUCT.md#side-quests-logged-do-not-auto-queue) for the "commit generator scripts to `scripts/taxonomy-ports/`" candidate.
 
 **Structural vs content migrations always split.** Variety: migration 021 (structural renames + lineage shifts) + migration 022 (content backfill). Region: migration 023 (structural, shipped) + 024 (content, queued for 1d.2). Keeps PRs reviewable and lets the enforcement sub-sprint (1b / 1d.3) run against canonically-named rows even if content hasn't backfilled yet. Codify: rename / reclassify / lineage shifts in one migration, field backfills in a separate migration.
 

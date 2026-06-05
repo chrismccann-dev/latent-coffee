@@ -1,8 +1,8 @@
 # WBC-2 — Time Distribution Playbook canonical-modifier promotion scoping
 
-**Source**: [grilling-2026-05-16-wbc-followups.md item #2](../../sprints/grilling-2026-05-16-wbc-followups.md)
+**Source**: [grilling-2026-05-16-wbc-followups.md item #2](docs/sprints/grilling-2026-05-16-wbc-followups.md)
 **Sprint**: T5 (2026-05-18)
-**Pairs with**: [BR-3 WBC systematic review](BR-3-wbc-systematic-review.md)
+**Pairs with**: [BR-3 WBC systematic review](docs/audits/2026-05-18/BR-3-wbc-systematic-review.md)
 **Decision**: **Stay deferred at MODIFIER_TYPES=4. Recommend promoting `time_distribution_pattern` as a 5th modifier ONLY when a population threshold is met (~3 brews using a non-`role_based_pulse` template).**
 
 ## Question
@@ -13,7 +13,7 @@ Implementation explicitly deferred to a v8.6 brewing taxonomy sprint per the kic
 
 ## The 5 doc-layer templates
 
-From [wbc-reference.md § Time Distribution Practical Playbook](../../brewing/wbc-reference.md):
+From [wbc-reference.md § Time Distribution Practical Playbook](docs/brewing/wbc-reference.md):
 
 | Template | Today's home | Latent absorption | Population? |
 | --- | --- | --- | --- |

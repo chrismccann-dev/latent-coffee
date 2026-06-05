@@ -1,6 +1,6 @@
 # KICKOFF — cross-coffee-insights.md 007b (drain the Pending Relocation block)
 
-**THIS IS AN INTERPRETIVE SESSION** (Chris's steer load-bearing). Default to "ask, don't ship." This is the follow-on to **pruning case 007a** ([handoff](pruning-cases/007-cross-coffee-insights.md)) — a **cross-cluster re-home**, not a content prune. Read the 007a handoff + [the refactor architecture](../skills/brewing-historian/cluster/patterns/cross-coffee-insights.md) first.
+**THIS IS AN INTERPRETIVE SESSION** (Chris's steer load-bearing). Default to "ask, don't ship." This is the follow-on to **pruning case 007a** ([handoff](docs/sprints/pruning-cases/007-cross-coffee-insights.md)) — a **cross-cluster re-home**, not a content prune. Read the 007a handoff + [the refactor architecture](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md) first.
 
 ## What 007a left for you
 
@@ -28,7 +28,7 @@ Actor 5 (brewing-historian cluster docs + by-coffee-family capsules) + **Actor 4
 
 ## Output
 
-- Pending Relocation block fully drained + deleted; CCIL smaller still. By-coffee-family capsules + equipment cluster carry the re-homed detail. Case-007b handoff appended to / alongside [007-cross-coffee-insights.md](pruning-cases/007-cross-coffee-insights.md).
+- Pending Relocation block fully drained + deleted; CCIL smaller still. By-coffee-family capsules + equipment cluster carry the re-homed detail. Case-007b handoff appended to / alongside [007-cross-coffee-insights.md](docs/sprints/pruning-cases/007-cross-coffee-insights.md).
 - Return the handoff to the Cluster B doc-pruning thread.
 
 BRANCH: own branch off latest main.

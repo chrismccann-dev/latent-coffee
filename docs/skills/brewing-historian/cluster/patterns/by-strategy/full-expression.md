@@ -2,9 +2,9 @@
 
 *Coffee Research · Latent · Brewing Historian cluster · by-strategy*
 
-**Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](../../../../../../BREWING.md#axis-1---extraction-strategy) for the canonical Full Expression definition (mechanics: 6.3-5.5 or finer grind, **high agitation - active spiral, multiple pours, push the bed**, near-boiling water, longer brew time, 1:13-1:17; intent: extract heavy co-ferments, anaerobic washed Colombian Geshas, anoxic naturals, dense washed varieties with fruit-forward roaster intent. Melodrip is NOT part of Full Expression - that's Extraction Push).
+**Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the canonical Full Expression definition (mechanics: 6.3-5.5 or finer grind, **high agitation - active spiral, multiple pours, push the bed**, near-boiling water, longer brew time, 1:13-1:17; intent: extract heavy co-ferments, anaerobic washed Colombian Geshas, anoxic naturals, dense washed varieties with fruit-forward roaster intent. Melodrip is NOT part of Full Expression - that's Extraction Push).
 
-Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Needed Full Expression](../../../../../../BREWING.md#coffees-that-needed-full-expression) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](../../../../../adr/0011-composable-sub-skills-architecture.md).
+Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Needed Full Expression](BREWING.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # Pruning case NNN — <doc name>
 
-> Structured handoff doc for a post-tripwire pruning exercise. Lead with the 5-line header so lessons aggregate across cases toward the eventual systematization decision (see [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](../../features/doc-pruning-mechanism-brainstorm-2026-06-03.md)). Append the session transcript / detailed log below the header.
+> Structured handoff doc for a post-tripwire pruning exercise. Lead with the 5-line header so lessons aggregate across cases toward the eventual systematization decision (see [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md)). Append the session transcript / detailed log below the header.
 
 ## Header
 

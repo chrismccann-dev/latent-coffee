@@ -197,7 +197,7 @@ a screenshot per area; each change signed off before edit, autonomy applied only
   covers misaligned within a row — and the grid had no cross-row equalization. Fix = `.who` →
   **fixed `height: 86px`** (seam locked at one vertical position; 2-line producers fit, shorter
   feet center with cover negative space — the "negative space is fine" call) + **`auto-rows-fr`**
-  on the [brews/page.tsx](<../../app/(app)/brews/page.tsx>) grid (every row matches the tallest →
+  on the [brews/page.tsx](<app/(app)/brews/page.tsx>) grid (every row matches the tallest →
   all cards identical height across the whole grid). Verified: 1 distinct card height (260) + 1
   distinct face height (174) + 0 clipped feet across all 88 cards @1024; 248/162/0 @390.
 - **CI-1 cultivar tree declutter — ✅ FIXED.** The deployed index IS the `├└│` tree (CI-1 shipped
@@ -206,12 +206,12 @@ a screenshot per area; each change signed off before edit, autonomy applied only
   **drop the swatch + count + 5-block dial entirely** (grid → `auto 1fr`), rendering connector +
   label flush to the spine; only clickable cultivar leaves keep the dial. Whole spine **nudged
   ~1px larger** (name 12→13px, species 11→12px, conn 12→13px, swatch 9→10px, row pad 3→4px) so it
-  reads at a weight closer to the other indexes. [cultivars/page.tsx](<../../app/(app)/cultivars/page.tsx>)
+  reads at a weight closer to the other indexes. [cultivars/page.tsx](<app/(app)/cultivars/page.tsx>)
   render gate + `.cultivar-tree` CSS. `/simplify` then removed the now-dead branch count reduces
   (`spCount`/`famCount`/`linCount`) + branch `color` (branch rows carry `count: 0` / `color: null`).
 - **Terroir row meta (climate-clause removal — new this session, distinct from TI-1's tick
   scale) — ✅ FIXED.** Dropped the climate-stress clause + its ` · ` dot from `terroirMeta` in
-  [terroirs/page.tsx](<../../app/(app)/terroirs/page.tsx>) — country header + macro name +
+  [terroirs/page.tsx](<app/(app)/terroirs/page.tsx>) — country header + macro name +
   elevation is the clean set.
 
 **Verified**: tsc clean (worktree node_modules symlink trick); previewed all 3 surfaces @1024 +

@@ -2,11 +2,11 @@
 
 **THIS IS AN INTERPRETIVE SESSION** (Chris's steer load-bearing). Default to "ask, don't ship." **This is a Pattern-F single-doc SPLIT, NOT a content prune** — read the framing below before reaching for delete.
 
-Pruning case 007 ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md); [Pattern J, ADR-0013 Amendment](../adr/0013-self-improvement-primitives.md) + [ADR-0014](../adr/0014-pattern-f-threshold-tiers.md) single-doc cap).
+Pruning case 007 ([scope doc](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md); [Pattern J, ADR-0013 Amendment](docs/adr/0013-self-improvement-primitives.md) + [ADR-0014](docs/adr/0014-pattern-f-threshold-tiers.md) single-doc cap).
 
 ## Why this doc, why now — and why it's NOT a delete
 
-`docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md` is **80.0 KB / 80 KB** — at the Historian single-doc cap ([doc-tripwires.md](../architecture/doc-tripwires.md); ADR-0014 logged it as "76/80, approaching" on 2026-05-23, now tripped).
+`docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md` is **80.0 KB / 80 KB** — at the Historian single-doc cap ([doc-tripwires.md](docs/architecture/doc-tripwires.md); ADR-0014 logged it as "76/80, approaching" on 2026-05-23, now tripped).
 
 **The Historian is DESIGNED to compound.** ADR-0014 gives it the highest caps (250 cluster / 80 single-doc) precisely because per-coffee / per-strategy / per-variety cross-coffee synthesis accumulating IS the desired growth pattern. So the content here is load-bearing hard-won synthesis — **do not delete insight to hit a byte target.** The single-doc cap is about one *file* being too big to load into a claude.ai brewing session in one read, not about the content being excess. The honest move is **`split`**: reorganize so each loadable unit is under cap; preserve every insight.
 

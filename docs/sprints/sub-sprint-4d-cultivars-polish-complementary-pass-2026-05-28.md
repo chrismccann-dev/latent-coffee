@@ -5,7 +5,7 @@ Mirror of the 4a/4b/4c complementary-pass docs. Phase 2 of the 3-phase grilling 
 ## Method
 
 - Read [app/(app)/cultivars/page.tsx](../../app/%28app%29/cultivars/page.tsx) (index) + [app/(app)/cultivars/[id]/page.tsx](../../app/%28app%29/cultivars/%5Bid%5D/page.tsx) (detail).
-- Cross-checked all 27 `Cultivar` columns in [lib/types.ts](../../lib/types.ts) against detail-page render paths.
+- Cross-checked all 27 `Cultivar` columns in [lib/types.ts](lib/types.ts) against detail-page render paths.
 - Queried live population of the candidate-unrendered columns against the DB (32 materialized cultivar rows — the other ~31 of the 63 registry canonicals have no brew reference yet, so no row exists; expected event-driven materialization, not a gap).
 - Render-gate spot-check mirroring the 4b `brewGuideLink` false-negative + 4c `Water:` label-collision catches.
 

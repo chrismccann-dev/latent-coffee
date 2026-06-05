@@ -1,8 +1,8 @@
 # Latent Glossary — Canonical Registries
 
-Extracted from [CONTEXT-shared.md](../../CONTEXT-shared.md) in the Pattern J pruning sprint (2026-05-25) to bring the parent glossary under the ADR-0014 session-load tier cap (40 KB). This file holds the meta-language about Latent's canonical registry system — vocabulary that applies across all 10 taxonomy axes (cultivar / terroir / process / roaster / producer / brewer / filter / grinder / roast level / flavor).
+Extracted from [CONTEXT-shared.md](CONTEXT-shared.md) in the Pattern J pruning sprint (2026-05-25) to bring the parent glossary under the ADR-0014 session-load tier cap (40 KB). This file holds the meta-language about Latent's canonical registry system — vocabulary that applies across all 10 taxonomy axes (cultivar / terroir / process / roaster / producer / brewer / filter / grinder / roast level / flavor).
 
-Strict glossary per [grill-with-docs](../../.claude/skills/grill-with-docs/SKILL.md) format — no implementation details, only term definitions + cardinality relationships. The actual canonical lists live in [docs/taxonomies/](../taxonomies/) (authoritative markdown sources) and [lib/*-registry.ts](../../lib/) (validation mirrors); implementation specifics live in [CLAUDE.md](../../CLAUDE.md).
+Strict glossary per [grill-with-docs](.claude/skills/grill-with-docs/SKILL.md) format — no implementation details, only term definitions + cardinality relationships. The actual canonical lists live in [docs/taxonomies/](docs/taxonomies/) (authoritative markdown sources) and [lib/*-registry.ts](lib/) (validation mirrors); implementation specifics live in [CLAUDE.md](CLAUDE.md).
 
 
 **Aggregation level**:

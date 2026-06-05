@@ -1,6 +1,6 @@
 # BR-5 — `brews.is_process_dominant` evaluation at N=82 corpus
 
-**Source**: [grilling-2026-05-15-brewing-followups.md item #5](../../sprints/grilling-2026-05-15-brewing-followups.md)
+**Source**: [grilling-2026-05-15-brewing-followups.md item #5](docs/sprints/grilling-2026-05-15-brewing-followups.md)
 **Sprint**: T5 (2026-05-18)
 **Decision**: **Keep as-is**. Field still earning its keep.
 

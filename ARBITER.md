@@ -672,7 +672,7 @@ Per [CLAUDE.md § Sprint cadence](CLAUDE.md#sprint-cadence-for-claude) item #4, 
 - **Actor 5 (Claude Code):** CLAUDE.md / CONTEXT-roasting.md need an edit only if the operational ladder itself shifts; pure CCIL restructure does not.
 - **Actor 2 (prompts):** `log-cupping.md` / `close-lot.md` / `start-lot.md` / `one-shot.md` / `one-shot-closeout.md` reference CCIL by top-level anchor "Cross-Coffee Insight Layer" - that anchor is unchanged, so prompts continue to resolve. If any prompt links to a specific subsection by anchor (e.g. `#fc-floor--ceiling-by-processing-method`), `grep` for those anchors and verify they still resolve after restructure.
 - **Actor 3 (claude.ai):** next session pulls fresh `roasting.md` via `docs://` MCP Resource. The Confirmed Patterns subsection's relative weight on V1-design is something Chris flags to the claude.ai project at the start of the next roasting session.
-- **Actor 1 (Chris):** rendered ROASTING.md should read coherently. Verify navigation from Confirmed Patterns bullets → detail sections works (the bullet links use markdown `[§ Section](#section-anchor)` form; section anchors are GitHub-style slugified from H2 headings).
+- **Actor 1 (Chris):** rendered ROASTING.md should read coherently. Verify navigation from Confirmed Patterns bullets → detail sections works (the bullet links use markdown `[§ Section](#<slug>)` form; section anchors are GitHub-style slugified from H2 headings).
 
 ### CCIL-7. Worked example (2026-05-18 first pass)
 
@@ -734,7 +734,7 @@ The principle: read-to-write Tool naming is acceptable ONLY when the operator is
 
 ## Cross-references
 
-- **Architecture:** [SYNC_V2.md § propose_doc_changes](SYNC_V2.md#propose_doc_changes) + § "Doc storage model" + § "Conflict resolution / two-store reconciliation".
+- **Architecture:** [SYNC_V2.md § propose_doc_changes](SYNC_V2.md) + § "Doc storage model" + § "Conflict resolution / two-store reconciliation".
 - **Tool spec:** `lib/mcp/propose-doc-changes.ts` — input schema, target_doc allow-list, supersede logic.
 - **Migration:** `supabase/migrations/037_doc_proposals.sql` — table schema + RLS + indices.
 - **Phase 3 (taxonomy queue):** [docs/features/taxonomy-overrides-queue.md](docs/features/taxonomy-overrides-queue.md) (design) + `supabase/migrations/045_taxonomy_overrides_queue.sql` (substrate) + `lib/mcp/list-taxonomy-queue.ts` / `propose-canonical-addition.ts` / `resolve-queue-entry.ts` (Tools).

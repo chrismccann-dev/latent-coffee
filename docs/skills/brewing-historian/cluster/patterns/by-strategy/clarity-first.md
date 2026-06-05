@@ -2,9 +2,9 @@
 
 *Coffee Research · Latent · Brewing Historian cluster · by-strategy*
 
-**Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](../../../../../../BREWING.md#axis-1---extraction-strategy) for the canonical Clarity-First definition (mechanics: 6.8-6.5 grind, low agitation, fast-flow filters, 1:16-1:17, moderate temp 91-94°C).
+**Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the canonical Clarity-First definition (mechanics: 6.8-6.5 grind, low agitation, fast-flow filters, 1:16-1:17, moderate temp 91-94°C).
 
-Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Clarity-First](../../../../../../BREWING.md#coffees-that-confirmed-clarity-first) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](../../../../../adr/0011-composable-sub-skills-architecture.md).
+Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Clarity-First](BREWING.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
 
 ---
 

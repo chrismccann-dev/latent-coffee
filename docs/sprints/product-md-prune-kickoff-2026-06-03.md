@@ -2,11 +2,11 @@
 
 **THIS IS AN INTERPRETIVE PRUNING SESSION.** Chris's steer is load-bearing on every shape call. Default to "ask, don't ship" on what-to-prune; once a call is steered, execute the mechanical part (same division of labor that worked on cases 001 + 002 — **operator owns the interpretive restructure + shape steer; Claude Code owns the mechanical prune + fidelity verification**). Do NOT remove roadmap content without Chris approving the specific section.
 
-Third dogfood of the doc-pruning protocol ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md)). Its job: prune the live-fire root doc AND deliberately land the one shape still without a standalone worked example — **`archive`**.
+Third dogfood of the doc-pruning protocol ([scope doc](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md)). Its job: prune the live-fire root doc AND deliberately land the one shape still without a standalone worked example — **`archive`**.
 
 ## Why this doc, why now
 
-`PRODUCT.md` is **~127 KB / 120 KB** — over the root-doc tripwire ([doc-tripwires.md](../architecture/doc-tripwires.md), live queue #2). It is the largest root living doc and grows monotonically as the Roadmap accumulates shipped/closed/parked entries. It was 114 KB at the 2026-06-02 compaction and has already drifted +13 KB — the Roadmap is the growth driver.
+`PRODUCT.md` is **~127 KB / 120 KB** — over the root-doc tripwire ([doc-tripwires.md](docs/architecture/doc-tripwires.md), live queue #2). It is the largest root living doc and grows monotonically as the Roadmap accumulates shipped/closed/parked entries. It was 114 KB at the 2026-06-02 compaction and has already drifted +13 KB — the Roadmap is the growth driver.
 
 ## The deliberate-hunt mandate: land `archive`
 
@@ -32,7 +32,7 @@ The § Active Sprints ordered working queue, the capstone reprioritization, the 
 
 - PRODUCT.md under the 120 KB tripwire.
 - **Case-003 handoff doc** at `docs/sprints/pruning-cases/003-product-md.md` using `_template.md` — header filled, with the shape-coverage note answering "did we land `archive`?"
-- Update [doc-tripwires.md](../architecture/doc-tripwires.md) Current-size column + Live queue.
+- Update [doc-tripwires.md](docs/architecture/doc-tripwires.md) Current-size column + Live queue.
 - If the archive destination is a new doc, register it where appropriate (note: PRODUCT.md and most `docs/features` / `docs/sprints` are NOT MCP-registered — Actor 4 likely N/A; verify).
 - Return the handoff to the Cluster B doc-pruning thread → triggers the **systematization decision** (all 5 shapes now covered across 3 doc-shapes: reference-doc 001 / glossary 002 / roadmap 003).
 

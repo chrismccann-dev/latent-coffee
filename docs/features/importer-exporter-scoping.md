@@ -2,7 +2,7 @@
 
 **Status:** scoping only — implementation deferred.
 **Decision target:** how (or whether) Latent should model coffee importers and exporters as a typed canonical axis distinct from the producer axis.
-**Authored:** 2026-05-18, Sprint T3 / CR-3, in response to Round 4 of the 2026-05-16 canonical-registries grilling session ([followups](../sprints/grilling-2026-05-16-canonical-registries-followups.md) #3) and as the architectural sibling of the [CR-2 Nordic Approach alias removal](../taxonomies/producers.md).
+**Authored:** 2026-05-18, Sprint T3 / CR-3, in response to Round 4 of the 2026-05-16 canonical-registries grilling session ([followups](docs/sprints/grilling-2026-05-16-canonical-registries-followups.md) #3) and as the architectural sibling of the [CR-2 Nordic Approach alias removal](docs/taxonomies/producers.md).
 
 This doc weighs three options for an axis Latent does not currently model, names the concrete pain that surfaced it, sets out what data already exists vs. what would be net-new, and proposes a deferred default. It does not propose a registry, a schema migration, or a Tool. Implementation lands in a follow-up sprint if and when the pain crosses the threshold.
 
@@ -12,7 +12,7 @@ This doc weighs three options for an axis Latent does not currently model, names
 
 The brewing corpus has 79 rows as of 2026-05-13. Across that corpus, two distinct kinds of entity show up under the `brews.producer` column today:
 
-1. **Actual producers** — the farmers, washing stations, exporting groups, or estates that grew, processed, and dried the cherry. 120 of these are registered canonically in [lib/producer-registry.ts](../../lib/producer-registry.ts) ([authored markdown](../taxonomies/producers.md)) with a tier-scoped coverage strategy and an `allowOverride` escape hatch for net-new entries.
+1. **Actual producers** — the farmers, washing stations, exporting groups, or estates that grew, processed, and dried the cherry. 120 of these are registered canonically in [lib/producer-registry.ts](lib/producer-registry.ts) ([authored markdown](docs/taxonomies/producers.md)) with a tier-scoped coverage strategy and an `allowOverride` escape hatch for net-new entries.
 
 2. **Importers and exporters** — companies that sourced the green from the producer, brought it across an ocean, and sold it to a roaster. These are NOT producers, but historically the brew picker had no other slot for them, so a small number drifted into `brews.producer` and got canonicalized as if they were producers.
 
@@ -32,7 +32,7 @@ Chris-framed at the 2026-05-16 grilling: "maybe in some sense I probably should 
 
 ## 2. What already exists in the model
 
-The producer registry's `ProducerEntry` shape ([lib/producer-registry.ts:55-95](../../lib/producer-registry.ts)) already carries two relationship arrays:
+The producer registry's `ProducerEntry` shape ([lib/producer-registry.ts:55-95](lib/producer-registry.ts)) already carries two relationship arrays:
 
 ```ts
 exporters: string[]   // optional: known exporters this producer ships through
@@ -103,7 +103,7 @@ Brew-level attribution stays at the producer level; the importer / exporter rela
 Accept that importer / exporter is permanently a producer-card metadata field — not a brew-row attribute, not a canonical axis. The Nordic Approach alias-class drift is prevented by:
 
 1. The producer-axis override queue (`taxonomy_overrides_queue`) — `producer = "Nordic Approach"` no longer auto-collapses; it surfaces for Chris-as-arbiter review
-2. The arbiter playbook ([ARBITER.md](../../ARBITER.md)) — Chris hand-routes the row to "this is an importer, please re-identify the actual producer"
+2. The arbiter playbook ([ARBITER.md](ARBITER.md)) — Chris hand-routes the row to "this is an importer, please re-identify the actual producer"
 3. The existing `producer.importers[]` + `producer.exporters[]` free-text fields on the producer registry — kept for descriptive context but never promoted to canonical
 
 **Pros:**
@@ -122,7 +122,7 @@ Accept that importer / exporter is permanently a producer-card metadata field �
 
 ## 4. Recommendation — Option C (unmodeled, deferred)
 
-**The standing reason for deferral:** Chris's brewing corpus today is roaster-anchored, not importer-anchored. 79 brews; importer information is recoverable from the producer card in ~33% of rows (the ones with `ProducerEntry.importers` populated) and irrelevant to brewing recipe design in 100% of rows. Modeling an axis now to solve a 1-row historical drift would be the textbook "designing for hypothetical future requirements" mistake the [CLAUDE.md tone-and-style rule](../../CLAUDE.md) calls out.
+**The standing reason for deferral:** Chris's brewing corpus today is roaster-anchored, not importer-anchored. 79 brews; importer information is recoverable from the producer card in ~33% of rows (the ones with `ProducerEntry.importers` populated) and irrelevant to brewing recipe design in 100% of rows. Modeling an axis now to solve a 1-row historical drift would be the textbook "designing for hypothetical future requirements" mistake the [CLAUDE.md tone-and-style rule](CLAUDE.md) calls out.
 
 **The override queue is the right place to catch this class of drift.** Sprint T3 / CR-2 already made that surface load-bearing: `producer = "Nordic Approach"` now fails canonical and surfaces in the queue. Chris-as-arbiter resolves the entry on a case-by-case basis with the right interpretation in hand at that moment.
 
@@ -132,7 +132,7 @@ Accept that importer / exporter is permanently a producer-card metadata field �
 
 2. **Override-queue drift accumulates.** If the `taxonomy_overrides_queue` collects ≥5 importer-class entries within a year, that's evidence the drift is recurring and the override queue is doing maintenance work an axis would automate.
 
-3. **WBC sourcing structured-data need.** If [docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md](../skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) (migrated from `docs/roasting/wbc-sourcing.md` in Wave 2 PR 1, 2026-05-26) reaches a point where importer attribution is querying-relevant for sourcing decisions (e.g. "show me all lots that came through Red Fox in the past 2 years"), the Option A queryability becomes worth the schema cost.
+3. **WBC sourcing structured-data need.** If [docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) (migrated from `docs/roasting/wbc-sourcing.md` in Wave 2 PR 1, 2026-05-26) reaches a point where importer attribution is querying-relevant for sourcing decisions (e.g. "show me all lots that came through Red Fox in the past 2 years"), the Option A queryability becomes worth the schema cost.
 
 4. **Cross-system audit catches a quiet drift.** If a future grilling session surfaces that producer attributions have continued drifting onto importer names even with the override queue in place (i.e. Chris is bypassing the queue and pasting through), the friction model isn't working and a hard structural separation is the right response.
 
@@ -142,7 +142,7 @@ Until one of those triggers fires, the existing `ProducerEntry.importers[]` + `.
 
 ## 5. What landed in Sprint T3 / CR-2 (the alias removal)
 
-The full Sprint T3 / CR-2 alias-removal fix is documented in the [producers.md changelog](../taxonomies/producers.md) under the 2026-05-18 entry. Briefly: the `Nordic Approach → Mekuria Mergia & Elias Rooba` alias was removed from `PRODUCER_ALIASES` ([lib/producer-registry.ts](../../lib/producer-registry.ts)) with a load-bearing comment block in its place explaining why. The DB rename had already happened in migration 031 (April 2026) and landed on the legitimate producer of the affected lot, so no DB re-identification was needed. The `Mekuria Mergia & Elias Rooba` producer entry continues to record `importers: ["Nordic Approach"]` as the real relationship.
+The full Sprint T3 / CR-2 alias-removal fix is documented in the [producers.md changelog](docs/taxonomies/producers.md) under the 2026-05-18 entry. Briefly: the `Nordic Approach → Mekuria Mergia & Elias Rooba` alias was removed from `PRODUCER_ALIASES` ([lib/producer-registry.ts](lib/producer-registry.ts)) with a load-bearing comment block in its place explaining why. The DB rename had already happened in migration 031 (April 2026) and landed on the legitimate producer of the affected lot, so no DB re-identification was needed. The `Mekuria Mergia & Elias Rooba` producer entry continues to record `importers: ["Nordic Approach"]` as the real relationship.
 
 This means a future write attempt of `producer = "Nordic Approach"` will:
 
@@ -172,10 +172,10 @@ None of these need answering today. They're the agenda for the future sprint tha
 
 ## Sources
 
-- [docs/sprints/grilling-2026-05-16-canonical-registries-followups.md](../sprints/grilling-2026-05-16-canonical-registries-followups.md) — Round 4 surfacing the unmodeled axis; followup item #3
-- [docs/taxonomies/producers.md](../taxonomies/producers.md) — current producer registry incl. importer/exporter relational metadata
-- [lib/producer-registry.ts](../../lib/producer-registry.ts) — `ProducerEntry` shape definition (importers / exporters fields)
+- [docs/sprints/grilling-2026-05-16-canonical-registries-followups.md](docs/sprints/grilling-2026-05-16-canonical-registries-followups.md) — Round 4 surfacing the unmodeled axis; followup item #3
+- [docs/taxonomies/producers.md](docs/taxonomies/producers.md) — current producer registry incl. importer/exporter relational metadata
+- [lib/producer-registry.ts](lib/producer-registry.ts) — `ProducerEntry` shape definition (importers / exporters fields)
 - Migration 031 (2026-04-26) — the sprint 1l producer canonicalization that introduced the Nordic Approach alias
-- [docs/features/taxonomy-overrides-queue.md](./taxonomy-overrides-queue.md) — the override queue that catches future Nordic-Approach-class drift
-- [ARBITER.md](../../ARBITER.md) — the queue-resolution playbook
-- [CONTEXT-shared.md](../../CONTEXT-shared.md) § Canonical Registries — the four-way coverage strategy framing
+- [docs/features/taxonomy-overrides-queue.md](docs/features/taxonomy-overrides-queue.md) — the override queue that catches future Nordic-Approach-class drift
+- [ARBITER.md](ARBITER.md) — the queue-resolution playbook
+- [CONTEXT-shared.md](CONTEXT-shared.md) § Canonical Registries — the four-way coverage strategy framing

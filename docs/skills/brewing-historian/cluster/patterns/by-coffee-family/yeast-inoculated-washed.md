@@ -4,11 +4,11 @@
 
 **Corpus:** N=4 brews on Washed base + Yeast Inoculated fermentation modifier.
 
-**Current rollup:** default strategy + key levers below. Confirmed Balanced Intensity across 5 yeast-inoculated subtypes (anaerobic natural, thermal shock washed, white honey, natural with washed finish, anaerobic honey); cross-experimental context in [cross-coffee-insights.md](../cross-coffee-insights.md).
+**Current rollup:** default strategy + key levers below. Confirmed Balanced Intensity across 5 yeast-inoculated subtypes (anaerobic natural, thermal shock washed, white honey, natural with washed finish, anaerobic honey); cross-experimental context in [cross-coffee-insights.md](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md).
 
 **Default strategy:** Balanced Intensity. Don't assume Full Expression — yeast engineering carries the expressive weight; extraction strategy is about not getting in the way.
 
-**Per-strategy entries:** [Balanced Intensity](../by-strategy/balanced-intensity.md) (Finca El Paraíso thermal shock Geshas Letty/Luna/Lychee, Sebastian Ramirez El Placer white honey, Don Eduardo natural with washed finish, Yunnan Catimor yeast-inoculated lots).
+**Per-strategy entries:** [Balanced Intensity](docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md) (Finca El Paraíso thermal shock Geshas Letty/Luna/Lychee, Sebastian Ramirez El Placer white honey, Don Eduardo natural with washed finish, Yunnan Catimor yeast-inoculated lots).
 
 **Key levers:**
 

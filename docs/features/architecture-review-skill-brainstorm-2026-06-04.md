@@ -13,7 +13,7 @@ So the target is **one standing architecture-review skill**, not five point tool
 
 ## Method: dogfood, then derive (the doc-pruning template)
 
-We do NOT author the skill from theory. We mirror how the doc-pruning mechanism was built ([doc-pruning brainstorm](doc-pruning-mechanism-brainstorm-2026-06-03.md)):
+We do NOT author the skill from theory. We mirror how the doc-pruning mechanism was built ([doc-pruning brainstorm](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md)):
 
 1. **Run 3-5 real architecture audits** on distinct Latent surfaces — each a **separate, self-contained Claude Code session** (no memory of this thread), read-only, producing a structured **handoff doc**.
 2. Each session hits a **different smell family** so the derived skill's taxonomy is grounded in real Latent examples across the whole space (the way pruning needed all six shapes worked before locking the mechanism).
@@ -37,9 +37,9 @@ Triangulating my survey evidence (Part C) against the two external sources.
 | **Surface ambitious candidates, operator picks, never auto-rewrite** | doc | "False positives are less dangerous than missed opportunities" → surface, don't rewrite. Matches Latent's ask-don't-ship + grilling culture exactly. |
 | **Candidate-card report format** | both | Files / Current shape / Problem / Proposed deepening / Before-After / Recommendation strength (Strong/Worth-exploring/Speculative) / Size (S/M/L) / Risk. (Rendered as **markdown**, see DROP.) |
 | **Mechanical scan layer** | doc | Largest files, most-imported, most-changed, files-changed-together, many-exports. Doable with `wc`/`git log`/`grep`. |
-| **Grill before any refactor** | both | Already native to Latent via [`/grill-with-docs`](../../.claude/skills/grill-with-docs/SKILL.md). The architecture skill *reuses* it rather than reinventing the grilling loop. |
+| **Grill before any refactor** | both | Already native to Latent via [`/grill-with-docs`](.claude/skills/grill-with-docs/SKILL.md). The architecture skill *reuses* it rather than reinventing the grilling loop. |
 | **Vocabulary discipline** | Pocock | module / interface / implementation / depth / seam / adapter / locality / leverage — enforced consistently. Candidate CONTEXT-shared headword (`re-home` precedent). |
-| **ADR-aware** | Pocock | Don't re-litigate settled decisions; offer an ADR when the operator rejects a candidate with a load-bearing reason. Latent has [docs/adr/](../adr/). |
+| **ADR-aware** | Pocock | Don't re-litigate settled decisions; offer an ADR when the operator rejects a candidate with a load-bearing reason. Latent has [docs/adr/](docs/adr/). |
 
 ### DROP (does not apply to Latent)
 
@@ -54,7 +54,7 @@ Triangulating my survey evidence (Part C) against the two external sources.
 
 | Adaptation | Rationale |
 |---|---|
-| **Replace "characterization tests before refactor" → "characterization *verification* before refactor"** | Latent's safety net is `npm run build` (tsc) + **preview verification** + the **six-actor cross-system audit** ([CLAUDE.md § Cross-system audit](../../CLAUDE.md)) + targeted DB reads via MCP `execute_sql`. The safe-change sequence keeps the *shape* (lock behavior → seam → move → migrate callers → delete old path) but swaps the lock mechanism. |
+| **Replace "characterization tests before refactor" → "characterization *verification* before refactor"** | Latent's safety net is `npm run build` (tsc) + **preview verification** + the **six-actor cross-system audit** ([CLAUDE.md § Cross-system audit](CLAUDE.md)) + targeted DB reads via MCP `execute_sql`. The safe-change sequence keeps the *shape* (lock behavior → seam → move → migrate callers → delete old path) but swaps the lock mechanism. |
 | **The doc substrate is first-class architecture.** Agents navigate `docs/skills/` clusters + CONTEXT-* + prompts as much as they navigate code. | "AI-navigability" in Latent includes "can an agent find the right cluster doc / is the pointer alive." The **dead-anchor problem IS an architecture smell** in Latent terms, not a separate concern. One dogfood session targets the doc substrate explicitly. |
 | **Redirect-stub / back-compat-shim discipline IS the safe-migration mechanism Latent already runs** (the doc-pruning arc). | The skill's "migrate callers, then delete old path" maps onto Latent's existing stub pattern — no new mechanism needed, reuse the muscle. |
 | **"Everything imports this" detection maps to `lib/` helpers + the `lib/*-registry.ts` validation mirrors.** | Latent's central modules are the registries + brew-import.ts + the synthesis adapters. The junk-drawer-vs-deep-module test runs against those. |

@@ -8,7 +8,7 @@ Scope is concrete (this brief + the scope doc). Plan-mode first (the scope is in
 
 ## Read first
 
-- **[docs/features/claude-design-redesign-scope-2026-05-29.md](../features/claude-design-redesign-scope-2026-05-29.md)** — the governing scope. Q1-Q4 + the 5 ratifications + token/primitive migration strategy.
+- **[docs/features/claude-design-redesign-scope-2026-05-29.md](docs/features/claude-design-redesign-scope-2026-05-29.md)** — the governing scope. Q1-Q4 + the 5 ratifications + token/primitive migration strategy.
 - **The design bundle** at `~/Documents/Latent Coffee Design System/Latent Design System - Full/project/` (parked from claude.ai/design 2026-05-29; verified present). Pixel specs live here:
   - `Latent - Design System v2.html` — **§01 Tokens** (the `:root` block) + **§07 Component Reference**.
   - `subpage-system.jsx` — the `Ssp*` component definitions + the `.ssp-*` CSS (in the host `Latent - Sub Page System v1.html` `<style>` block).

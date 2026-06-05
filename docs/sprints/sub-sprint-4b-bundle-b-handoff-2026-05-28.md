@@ -5,9 +5,9 @@
 This doc is the **single entry surface for the new session**. Read in this order:
 
 1. **This doc** (full Bundle B execution playbook, locked decisions, exact files + line ranges)
-2. [Phase 2 complementary pass § Bucket E1 + F1](sub-sprint-4b-roasters-polish-complementary-pass-2026-05-28.md) — the substrate-gap reasoning + the 17-row affected-roasters table
+2. [Phase 2 complementary pass § Bucket E1 + F1](docs/sprints/sub-sprint-4b-roasters-polish-complementary-pass-2026-05-28.md) — the substrate-gap reasoning + the 17-row affected-roasters table
 3. **CLAUDE.md § Roasters** (lines 146-153) — current page-job framing post Bundle A
-4. [Sub-sprint 4b kickoff brief](sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) — only if Phase 1/2 context is missing
+4. [Sub-sprint 4b kickoff brief](docs/sprints/sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) — only if Phase 1/2 context is missing
 
 Everything else (the original plan file at `~/.claude/plans/quizzical-knitting-pinwheel.md`, the roaster registry, the page render code) is referenced inline below — no need to read upfront.
 

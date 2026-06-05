@@ -8,7 +8,7 @@ All internal markdown links in the repo resolve **relative to the repository roo
 
 ## Context
 
-Architecture-audit dogfood Session 4 ([04-doc-substrate.md](../audits/architecture/04-doc-substrate.md)) found the repo had **no single link convention** — two coexisted, split by author-era. Root-relative links dominate `docs/architecture/*`, `docs/sprints/*`, `docs/reference/*`; file-relative `../../` links dominate `docs/skills/` clusters. The result: 169 links that resolve fine for the Claude Code agent (cwd = repo root) but 404 on GitHub web, plus a recurring off-by-one `../` fragility in the 5-6-level-deep cluster tree. The absence of a *stated* convention (Session 4-F7: it was only implicit in CLAUDE.md's harness instruction) was itself the root cause of three downstream doc-rot candidates.
+Architecture-audit dogfood Session 4 ([04-doc-substrate.md](docs/audits/architecture/04-doc-substrate.md)) found the repo had **no single link convention** — two coexisted, split by author-era. Root-relative links dominate `docs/architecture/*`, `docs/sprints/*`, `docs/reference/*`; file-relative `../../` links dominate `docs/skills/` clusters. The result: 169 links that resolve fine for the Claude Code agent (cwd = repo root) but 404 on GitHub web, plus a recurring off-by-one `../` fragility in the 5-6-level-deep cluster tree. The absence of a *stated* convention (Session 4-F7: it was only implicit in CLAUDE.md's harness instruction) was itself the root cause of three downstream doc-rot candidates.
 
 ## Why root-relative
 

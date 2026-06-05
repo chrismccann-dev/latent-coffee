@@ -1,8 +1,8 @@
 # Reference Taxonomies — Flavor
 
-Per-taxonomy feature doc for the Flavor-note taxonomy. Part of the [Reference Taxonomies umbrella](reference-taxonomies-attribution.md). **Phylum A2 (author new ruleset, loose enforcement bar).** Fifth sprint or deferred.
+Per-taxonomy feature doc for the Flavor-note taxonomy. Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md). **Phylum A2 (author new ruleset, loose enforcement bar).** Fifth sprint or deferred.
 
-Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md) for shared conventions.
+Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md) for shared conventions.
 
 ---
 
@@ -39,7 +39,7 @@ Unlike Process + Dripper, Flavor has a substantial existing canonical registry:
 
 ## Canonical adoption workflow (for this sprint)
 
-Per [attribution § Canonical adoption workflow](reference-taxonomies-attribution.md#canonical-adoption-workflow):
+Per [attribution § Canonical adoption workflow](docs/features/reference-taxonomies-attribution.md#canonical-adoption-workflow):
 
 1. **Research (Chris).** Chris:
    - Reviews current 132-tag list for gaps.
@@ -139,7 +139,7 @@ No new `/flavor-notes/` top-level page in this sprint. If a flavor reference pag
 
 ## Sources (for this feature doc)
 
-- [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md)
+- [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md)
 - `lib/flavor-registry.ts` (existing canonical starting point, 132 tags, 8 families)
 - Roaster offered-coffees pages: Leaves, Substance, Noma Kaffe, Heart, Hydrangea (primary external sources for tag extension)
 - `memory/project_flavor_canonicalization.md` (2026-04-17 prior sprint — "keep data, classify on render" principle)
