@@ -84,8 +84,8 @@ keeps recurring.
 
 ## 3. PR + merge SHA
 
-- PR: <FILL AT MERGE>
-- main commit SHA: <FILL AT MERGE>
+- PR: [#385](https://github.com/chrismccann-dev/latent-coffee/pull/385)
+- main commit SHA: `5ebecc2`
 
 ## 4. Verification results (what was actually run/seen)
 
@@ -102,11 +102,20 @@ keeps recurring.
 - **Cross-system audit:** `check:doc-sizes` → all Tier-1 surfaces within cap (CONTEXT-roasting +
   log-cupping additions didn't cross anything); `check:mcp` → 35 Tools (no new Tool — fields added
   to existing Tools). No new `docs://` Resource, so `check:mcp-bundle` N/A.
-- **NOT yet run (post-apply):** the end-to-end sample push (a cupping with a `cooling_arc_pattern`
-  value landing + a deliberately-bad date being rejected via the live MCP) and the
-  `roast_recipe_divergence` view read — both require migration 078 applied to PROD. No psql /
-  connection string is available in this environment, and migrations are applied manually via the
-  Supabase SQL Editor (repo convention), so this is gated on Chris applying 078.
+- **Post-apply (migration 078 applied by Chris 2026-06-05, "Success. No rows returned"):**
+  read-only PostgREST verification against PROD with the service-role key —
+  - `cuppings.cooling_arc_pattern` column now resolves (HTTP 200; was `42703` pre-apply). The
+    CHECK constraint applied with the migration (the `ALTER ... ADD CONSTRAINT` succeeded).
+  - `roast_recipe_divergence` view live: 145 roast rows, **13 read `execution_diverged_from_recipe = true`**,
+    and a boolean-integrity check confirmed every diverged row is genuinely
+    `(roast_end_condition_type = 'manual' AND recipe_end_condition_target IS NOT NULL)` — e.g. a
+    real manual-drop roast whose recipe targeted 205°C bean-temp. The derivation is correct on
+    live data and immediately surfaces 13 lots where the operator dropped by feel against a
+    recipe that planned a machine target.
+  - **Deliberately NOT done:** a live sample `push_cupping` write. Writing a junk cupping to PROD
+    violates the MCP-canonical-input discipline; the date guard (#31) is unit-proven (11 cases)
+    and lives in the persist path, and the enum CHECK is confirmed applied, so no live write was
+    needed to close the verification.
 
 ## 5. Deferred / surprising / newly surfaced
 
