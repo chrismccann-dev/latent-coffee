@@ -4,7 +4,7 @@
 
 **Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the canonical Balanced Intensity definition (mechanics: 6.5-6.3 grind, moderate agitation, 1:15-1:16, 93-95°C, often controlled flow via xBloom Premium Paper or SWORKS Restricted valve through main pours; sits between Clarity-First's gentleness and Full Expression's force).
 
-Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Needed Balanced Intensity](BREWING.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
+Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Needed Balanced Intensity](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
 
 ---
 

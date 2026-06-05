@@ -4,7 +4,7 @@
 
 ## Latent strategy framing
 
-Extraction Push = fine grind + high temperature + low agitation (Melodrip / Sibarist FAST / very slow pour) + fast papers. Push yield while preserving transparency on a clean coffee. The Wölfl 2024 / Tran / Giachgia pattern. See [BREWING.md § Extraction Push](BREWING.md).
+Extraction Push = fine grind + high temperature + low agitation (Melodrip / Sibarist FAST / very slow pour) + fast papers. Push yield while preserving transparency on a clean coffee. The Wölfl 2024 / Tran / Giachgia pattern. See [BREWING.md § Extraction Push](docs/skills/coordinator/catalog.md#brewing-domain-principles).
 
 ## WBC anchors observed
 
@@ -20,4 +20,4 @@ Extraction Push = fine grind + high temperature + low agitation (Melodrip / Siba
 
 - [wbc-reference.md § Extraction Push family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
 - [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
-- [BREWING.md § Extraction Push](BREWING.md)
+- [BREWING.md § Extraction Push](docs/skills/coordinator/catalog.md#brewing-domain-principles)

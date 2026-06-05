@@ -16,7 +16,7 @@
 - **roast_learnings row:** primary lever (Maillard energy continuity — smooth, continuously declining RoR into FC without sag was the root cause of recurring oversteeped-tea dryness; fixing the inlet curve shape eliminated the defect entirely), narrow window (20-35s dev / FC ~206-208°C), cultivar + general takeaways present, no `why_this_roast_won` verdict. Read via MCP: `read_canonical("roast_learnings", "GUA-LIB-ADC-2024")`.
 - **Green bean detail page:** `/green/[id]` resolved-view.
 - **Archive prose:** [docs/roasting/archive.md § GUA-LIB-ADC-2024](docs/roasting/archive.md#gua-lib-adc-2024).
-- **Legacy lots summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — Legacy and incomplete lots](ROASTING.md).
+- **Legacy lots summary:** [ROASTING.md § Reference Roasts + Brews (Closed Lots) — Legacy and incomplete lots](docs/roasting/archive.md).
 
 ## Cross-lot framing — what this lot taught the Historian
 

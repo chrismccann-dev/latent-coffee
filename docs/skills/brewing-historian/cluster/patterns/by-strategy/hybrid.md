@@ -4,7 +4,7 @@
 
 **Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the canonical Hybrid definition (used when the brew is structured around phase boundaries with different jobs assigned to each phase, rather than a single extraction logic running throughout). Hybrid is the 6th first-class strategy (promoted v8.4, 2026-05-06) and ships with 5 sub-forms: Sequential / Phase-Mapped / Selective Bloom / Intensity-Clarity Split / Temperature-Staged. Hardware: Hario Switch at home (canonical) or SWORKS Bottomless Dripper at office when valve transitions are doing strategic work.
 
-Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Hybrid](BREWING.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
+Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Hybrid](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
 
 ---
 

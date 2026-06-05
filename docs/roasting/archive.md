@@ -2,7 +2,7 @@
 
 Per-lot reference roast + best brew + generalized lessons for every closed lot. Split out of ROASTING.md on 2026-05-03 (Sprint 2.7) so the master roasting reference stays focused on in-flight protocol, current state, and cross-coffee insight - not per-lot history.
 
-The cross-coffee patterns that have generalized across multiple lots stay in [ROASTING.md § Cross-Coffee Insight Layer](ROASTING.md#cross-coffee-insight-layer). Per-lot prose lives here.
+The cross-coffee patterns that have generalized across multiple lots stay in [ROASTING.md § Cross-Coffee Insight Layer](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md). Per-lot prose lives here.
 
 When a new lot closes, add a section below following the template of the existing entries (lot ID + variety + process header, reference roast + best brew + roast parameters + generalized lessons subsection if the lot generated >2 generalizable patterns).
 
@@ -39,7 +39,7 @@ These learnings emerged from 4 experiment sets across 13 batches.
 
 - **Reference roast:** Batch #133 (confirmed), Batch #148 (closest replication)
 - **Best brew:** UFO Ceramic + Sibarist Fast Cone, EG-1 6.0, 15g/210g, 91°C, Melodrip, bloom 45g/45s, pour to 130g then 210g, target 2:45-3:15
-- **Roast parameters:** CF-Light inlet (200 → 237 → 245 → 245 → 240 → 230 → 222°C), fan (80 → 70 → 65 → 72 → 75%), charge 117°C, hopper load ~120°C (old standard - see [Hopper Pre-Load replication caveat](ROASTING.md#hopper-pre-load-timing)), drop at 206-207°C, dev time 0:45 end condition
+- **Roast parameters:** CF-Light inlet (200 → 237 → 245 → 245 → 240 → 230 → 222°C), fan (80 → 70 → 65 → 72 → 75%), charge 117°C, hopper load ~120°C (old standard - see [Hopper Pre-Load replication caveat](docs/skills/roest-knowledge/cluster/protocols/between-batch-protocol.md#hopper-pre-load-timing)), drop at 206-207°C, dev time 0:45 end condition
 
 ### Generalized lessons (likely apply to high-density washed Colombians with unusual aromatic profiles)
 
@@ -84,4 +84,4 @@ These learnings emerged from 6 experiment sets across 20+ batches.
 **Status:** CLOSED. Counterflow chapter unresolved - green exhausted before reaching a confirmed counterflow reference roast.
 
 - **Reference roast:** Batch 52 (pre-counterflow)
-- **Counterflow signal:** Three counterflow batches (95, 97, 99) all returned underdeveloped at Day 10 pourover despite dev times of 24-40s. Batch 99 at 40s/16.1% DTR was monotone, nutty, and missing Gesha character. **Treat 40s as a confirmed floor, not a target — for future washed Gesha lots in counterflow, start at 48s minimum.** Flat fan was used on these batches; shaped fan curves should be used from the start on future Gesha lots. Tracked as a forward research question in [ROASTING.md § Open Questions](ROASTING.md#open-questions) ("Does 48s dev-time floor hold across new lots?").
+- **Counterflow signal:** Three counterflow batches (95, 97, 99) all returned underdeveloped at Day 10 pourover despite dev times of 24-40s. Batch 99 at 40s/16.1% DTR was monotone, nutty, and missing Gesha character. **Treat 40s as a confirmed floor, not a target — for future washed Gesha lots in counterflow, start at 48s minimum.** Flat fan was used on these batches; shaped fan curves should be used from the start on future Gesha lots. Tracked as a forward research question in [ROASTING.md § Open Questions](docs/skills/roasting-historian/cluster/patterns/open-questions.md) ("Does 48s dev-time floor hold across new lots?").

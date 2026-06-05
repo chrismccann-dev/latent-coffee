@@ -27,7 +27,7 @@ Several roast parameters directly predict how a coffee will behave at brew time,
 | Maillard 40-44% | Balanced phase structure — full aromatic expression available | Pushed recipe appropriate. Lower temp, higher concentration. |
 | FC temp 202-205°C, drop 206-207°C | Confirmed target zone for Sudan Rume-type coffees — full expression should be achievable at brew | Pushed recipe. See reference recipe below. |
 
-> Per-lot reference brew recipes (CGLE Sudan Rume Washed #133, CGLE Mandela XO #139) live in [ROASTING.md § Reference Roasts + Brews (Closed Lots)](ROASTING.md). The decision logic + processing-method hypotheses below apply when designing the optimized brew for a new lot reaching reference-roast declaration.
+> Per-lot reference brew recipes (CGLE Sudan Rume Washed #133, CGLE Mandela XO #139) live in [ROASTING.md § Reference Roasts + Brews (Closed Lots)](docs/roasting/archive.md). The decision logic + processing-method hypotheses below apply when designing the optimized brew for a new lot reaching reference-roast declaration.
 
 ---
 

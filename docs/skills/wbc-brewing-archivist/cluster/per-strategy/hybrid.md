@@ -4,7 +4,7 @@
 
 ## Latent strategy framing
 
-Hybrid = 6th first-class strategy promoted v8.4 (2026-05-06). Combines two strategies into one brew via deliberate phase separation. 5 canonical sub-forms: Sequential Hybrid / Phase-Mapped / Selective Bloom / Inverted Hybrid / Side-by-Side. See [BREWING.md § Hybrid](BREWING.md) + [lib/hybrid-subform.ts](lib/hybrid-subform.ts).
+Hybrid = 6th first-class strategy promoted v8.4 (2026-05-06). Combines two strategies into one brew via deliberate phase separation. 5 canonical sub-forms: Sequential Hybrid / Phase-Mapped / Selective Bloom / Inverted Hybrid / Side-by-Side. See [BREWING.md § Hybrid](docs/skills/coordinator/catalog.md#brewing-domain-principles) + [lib/hybrid-subform.ts](lib/hybrid-subform.ts).
 
 ## WBC anchors observed
 
@@ -20,5 +20,5 @@ Hybrid = 6th first-class strategy promoted v8.4 (2026-05-06). Combines two strat
 
 - [wbc-reference.md § Hybrid family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
 - [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
-- [BREWING.md § Hybrid](BREWING.md)
+- [BREWING.md § Hybrid](docs/skills/coordinator/catalog.md#brewing-domain-principles)
 - [lib/hybrid-subform.ts](lib/hybrid-subform.ts)

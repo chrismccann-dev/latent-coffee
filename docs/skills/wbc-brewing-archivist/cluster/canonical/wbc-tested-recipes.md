@@ -23,4 +23,4 @@ Empty. To be populated as the WBC corpus check (BREWING.md Step 1d Named Conside
 
 - [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — full 102-recipe archive
 - [wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) — strategy-family / sub-form mapping
-- [BREWING.md § Step 1d WBC corpus check](BREWING.md)
+- [BREWING.md § Step 1d WBC corpus check](docs/skills/brewing-assistant/cluster/operational-guide.md)
