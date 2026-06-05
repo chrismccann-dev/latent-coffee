@@ -90,6 +90,10 @@ export interface GreenBean {
   quantity_g: number | null
   moisture: string | null
   density: string | null
+  // Producer/seller-supplied tasting notes (migration 039). Other 039 intake
+  // columns (seller / exporter / elevation_m / additional_notes /
+  // roest_inventory_id) remain untyped here — add as consumers adopt them.
+  producer_tasting_notes: string | null
   terroir_id: string | null
   cultivar_id: string | null
   // Phase 3 (migration 045): canonical-vs-auto_created flag for FK rows.
@@ -240,6 +244,9 @@ export interface Cupping {
   cupping_date: string | null
   rest_days: number | null
   eval_method: string | null
+  // Free-text recipe-variant label (migration 041) — distinguishes cuppings of
+  // the same roast evaluated under different brew/prep variants.
+  recipe_variant: string | null
   ground_agtron: number | null
   ground_color_description: string | null
   aroma: string | null
