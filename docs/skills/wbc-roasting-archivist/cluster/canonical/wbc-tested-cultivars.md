@@ -18,11 +18,11 @@ For each tested pattern, capture:
 
 ## Initial state
 
-Empty. To be populated as the [sourcing/strategy.md](../sourcing/strategy.md) priority-targets list drives explicit lot purchases over the next ~5-10 buying cycles.
+Empty. To be populated as the [sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) priority-targets list drives explicit lot purchases over the next ~5-10 buying cycles.
 
 ## See also
 
-- [wbc-roasting.md](../wbc-roasting.md) — WBC roasting lessons
-- [sourcing/strategy.md](../sourcing/strategy.md) — sourcing strategy + Tier 1/2/3 priority targets
-- [docs/taxonomies/varieties.md](../../../../taxonomies/varieties.md) — canonical cultivar registry
-- [docs/taxonomies/processes.md](../../../../taxonomies/processes.md) — canonical process taxonomy
+- [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) — WBC roasting lessons
+- [sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) — sourcing strategy + Tier 1/2/3 priority targets
+- [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md) — canonical cultivar registry
+- [docs/taxonomies/processes.md](docs/taxonomies/processes.md) — canonical process taxonomy

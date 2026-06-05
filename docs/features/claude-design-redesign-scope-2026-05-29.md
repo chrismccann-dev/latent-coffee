@@ -1,6 +1,6 @@
 # Claude-Design-led redesign — SCOPING DOC (2026-05-29)
 
-Output of the redesign **brainstorm** session (kickoff: [claude-design-redesign-brainstorm-kickoff-2026-05-28.md](../sprints/claude-design-redesign-brainstorm-kickoff-2026-05-28.md)). This doc answers the four open questions with Chris's ratified calls, proposes the sprint decomposition + sequencing, and names the token/primitive migration strategy. **It feeds plan → roadmap; it is not itself a plan to execute.** No code, no migrations were written in the brainstorm.
+Output of the redesign **brainstorm** session (kickoff: [claude-design-redesign-brainstorm-kickoff-2026-05-28.md](docs/sprints/claude-design-redesign-brainstorm-kickoff-2026-05-28.md)). This doc answers the four open questions with Chris's ratified calls, proposes the sprint decomposition + sequencing, and names the token/primitive migration strategy. **It feeds plan → roadmap; it is not itself a plan to execute.** No code, no migrations were written in the brainstorm.
 
 Running this session + producing this doc is the **third gate** (§ Active Sprints #5). With it met, the redesign promotes from QUEUED to an Active sprint, and separate plan-mode sprints execute against this scope.
 

@@ -2,7 +2,7 @@
 
 **Tier:** Special (outside the 3-tier architecture)
 **Wave:** 1 (paired with Brewing Equipment Expert as first ship)
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md)
 
 ## Job-to-be-done
 
@@ -40,9 +40,9 @@ None directly. Master Coordinator does not write substrate. The dispatched sub-s
 
 ## Cluster contents
 
-- [`catalog.md`](catalog.md) — the 18-sub-skill registry + brewing/roasting domain principles
-- [`dispatch-rules.md`](dispatch-rules.md) — intent → sub-skill mapping
-- [`handoff-rules.md`](handoff-rules.md) — cross-domain handoff dispatch paths
+- [`catalog.md`](docs/skills/coordinator/catalog.md) — the 18-sub-skill registry + brewing/roasting domain principles
+- [`dispatch-rules.md`](docs/skills/coordinator/dispatch-rules.md) — intent → sub-skill mapping
+- [`handoff-rules.md`](docs/skills/coordinator/handoff-rules.md) — cross-domain handoff dispatch paths
 
 ## Implementation notes
 

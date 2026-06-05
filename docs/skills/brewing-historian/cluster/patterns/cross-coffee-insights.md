@@ -20,7 +20,7 @@ Use this file for patterns that cross at least two anchors, such as:
 - modifier compatibility across strategies
 - open questions that need future brew evidence before promotion
 
-Sibling: [ROASTING.md § Cross-Coffee Insight Layer](../../../../../ROASTING.md#cross-coffee-insight-layer). See [docs/reference/synthesis-pipeline.md § Cross-coffee insight layer](../../../../../docs/reference/synthesis-pipeline.md) for the canonical noun and how this surface complements per-anchor knowledge capsules.
+Sibling: [roasting-side Cross-Coffee Insight Layer](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#cross-coffee-insight-layer). See [docs/reference/synthesis-pipeline.md § Cross-coffee insight layer](docs/reference/synthesis-pipeline.md) for the canonical noun and how this surface complements per-anchor knowledge capsules.
 
 ## Promotion Rule
 
@@ -64,12 +64,12 @@ Do not copy past recipes from this file. Use it to flag whether the default plan
 
 ### By Strategy
 
-- [Clarity-First](by-strategy/clarity-first.md) — washed Gesha, Ethiopian washed landraces, Sydra / Typica Mejorado, Laurina, Esmeralda NC naturals, Rwandan washed Bourbon.
-- [Suppression](by-strategy/suppression.md) — anaerobic naturals and cold-room dehydration naturals where bitter finish is temperature-driven.
-- [Balanced Intensity](by-strategy/balanced-intensity.md) — honey lots, dense varieties, yeast-inoculated lots, Pacamara, El Paraíso thermal shock, traditional naturals.
-- [Full Expression](by-strategy/full-expression.md) — heavy anaerobic washed, co-ferments, dense washed varieties, Full-Expression roaster lots.
-- [Extraction Push](by-strategy/extraction-push.md) — fine + high-temp + turbulence-controlled recipes for clean coffees that need higher yield without compression (Pepe Jijón Sidra Wave Hybrid first-confirmed).
-- [Hybrid](by-strategy/hybrid.md) — Switch / phase-mapped / valve-modulated brews where one mode cannot solve both intensity and clarity.
+- [Clarity-First](docs/skills/brewing-historian/cluster/patterns/by-strategy/clarity-first.md) — washed Gesha, Ethiopian washed landraces, Sydra / Typica Mejorado, Laurina, Esmeralda NC naturals, Rwandan washed Bourbon.
+- [Suppression](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md) — anaerobic naturals and cold-room dehydration naturals where bitter finish is temperature-driven.
+- [Balanced Intensity](docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md) — honey lots, dense varieties, yeast-inoculated lots, Pacamara, El Paraíso thermal shock, traditional naturals.
+- [Full Expression](docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md) — heavy anaerobic washed, co-ferments, dense washed varieties, Full-Expression roaster lots.
+- [Extraction Push](docs/skills/brewing-historian/cluster/patterns/by-strategy/extraction-push.md) — fine + high-temp + turbulence-controlled recipes for clean coffees that need higher yield without compression (Pepe Jijón Sidra Wave Hybrid first-confirmed).
+- [Hybrid](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md) — Switch / phase-mapped / valve-modulated brews where one mode cannot solve both intensity and clarity.
 
 **Strategy unclear (needs more data):** Dark Room Dry Natural Gesha (Panama Elida, Garrido Mokkita) responded to Balanced Intensity but may want more - flag for re-evaluation. Brazil washed Geisha (Daterra Borem) - April Glass + xBloom Premium Paper was the right setup but Brazil terroir is unusual for the rotation; more data needed.
 
@@ -77,13 +77,13 @@ Do not copy past recipes from this file. Use it to flag whether the default plan
 
 Use cultivar files for variety-intrinsic body, density, transparency, and aromatic behavior. The N≥3 cultivars have graduated to their own capsules:
 
-- [74158](by-cultivar/74158.md)
-- [Ethiopian Landrace Population](by-cultivar/ethiopian-landrace-population.md)
-- [Gesha](by-cultivar/gesha.md)
-- [Mejorado](by-cultivar/mejorado.md)
-- [Pacamara](by-cultivar/pacamara.md)
-- [Sidra](by-cultivar/sidra.md)
-- [Sudan Rume](by-cultivar/sudan-rume.md)
+- [74158](docs/skills/brewing-historian/cluster/patterns/by-cultivar/74158.md)
+- [Ethiopian Landrace Population](docs/skills/brewing-historian/cluster/patterns/by-cultivar/ethiopian-landrace-population.md)
+- [Gesha](docs/skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md)
+- [Mejorado](docs/skills/brewing-historian/cluster/patterns/by-cultivar/mejorado.md)
+- [Pacamara](docs/skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md)
+- [Sidra](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md)
+- [Sudan Rume](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md)
 
 Sub-threshold cultivars (n<3, not yet graduated) live in [Sub-Threshold Cultivar Candidates](#sub-threshold-cultivar-candidates) below.
 
@@ -91,12 +91,12 @@ Sub-threshold cultivars (n<3, not yet graduated) live in [Sub-Threshold Cultivar
 
 Use the process-family files for normal process logic. Keep this file focused on exceptions that cross process with roast, cultivar, roaster, equipment, or water. Each graduated family capsule carries its own default-strategy detail (folded in from the former By-Process table in pruning case 007b). Families below the n≥3 threshold live in [Sub-Threshold Process-Family Candidates](#sub-threshold-process-family-candidates) below.
 
-- [Anaerobic Natural](by-coffee-family/anaerobic-natural.md)
-- [Anaerobic Washed](by-coffee-family/anaerobic-washed.md)
-- [Double Anaerobic Washed](by-coffee-family/double-anaerobic-washed.md) (also the heavy-co-ferment lane)
-- [Thermal Shock Washed](by-coffee-family/thermal-shock-washed.md)
-- [Yeast-Inoculated Natural](by-coffee-family/yeast-inoculated-natural.md)
-- [Yeast-Inoculated Washed](by-coffee-family/yeast-inoculated-washed.md)
+- [Anaerobic Natural](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md)
+- [Anaerobic Washed](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-washed.md)
+- [Double Anaerobic Washed](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md) (also the heavy-co-ferment lane)
+- [Thermal Shock Washed](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md)
+- [Yeast-Inoculated Natural](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-natural.md)
+- [Yeast-Inoculated Washed](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-washed.md)
 - Sub-threshold (n<3): Washed, White/Light Honey, Honey (medium), Standard Natural, Controlled Natural, Anoxic Natural → [Sub-Threshold Process-Family Candidates](#sub-threshold-process-family-candidates)
 
 ### Proposed New Axis: By Roast Level
@@ -109,15 +109,15 @@ Use this table as the tactical Coffee Brief lookup (the former Process / Variety
 
 | Cross-axis signal | Default risk | Recommended start | Why this lives here | Canonical follow-up |
 |---|---|---|---|---|
-| Medium / developed specialty natural, especially if visibly oily or Agtron ~48 | Process and cultivar defaults over-extract roast solubles | Hybrid → Intensity-Clarity Split | Roast level overrides process and cultivar | Pattern #1 below + [Hybrid](by-strategy/hybrid.md) |
-| Anaerobic natural across origins | Clarity-First under-extracts; Balanced can expose bitter tail | Suppression | Same process behavior confirmed across Colombia, Ethiopia, Panama | Pattern #2 + [Suppression](by-strategy/suppression.md) + [anaerobic-natural](by-coffee-family/anaerobic-natural.md) |
-| Cold-room dehydration natural | Suppression-like bitter-tail behavior but often wants slightly more heat than anaerobic natural | Suppression at higher temp band (push +1°C from 92°C to 93°C) | Drying modifier behaves like process modifier, not origin-specific terroir | Pattern #2 + [Suppression](by-strategy/suppression.md) |
-| Clean anaerobic washed + Full-Expression roaster | Balanced default may under-read roaster intent | Follow roaster: Full Expression | Roaster style overrides clean-process default | Pattern #3 + `docs/brewing/roasters.md` + [Full Expression](by-strategy/full-expression.md) |
-| Heavy anaerobic washed Colombian Huila / Cauca Gesha | Clarity-First or Balanced under-extracts heavy ferment structure | Full Expression | Process + region + variety combo | [Full Expression](by-strategy/full-expression.md) + [Gesha](by-cultivar/gesha.md) |
-| Anoxic natural (sealed container fermentation) | Clarity-First under-extracts; variety ceiling logic misleads | Full Expression (n=1: Scenery Pikudo's Rosado) | Process overrides variety-default ceiling | [Full Expression](by-strategy/full-expression.md) + [Sub-Threshold: Rosado](#sub-threshold-cultivar-candidates) |
-| Heavy anaerobic / co-ferment | Under-extraction; drying/astringent tail in last fraction | Full Expression (+ late-cut Output Selection candidate) | Process + modifier interaction | [Full Expression](by-strategy/full-expression.md) + [Modifier Layer](#modifier-layer) |
-| Experimental fermentation (thermal shock, yeast-inoculated) | False assumption that experimental process means Full Expression | Balanced Intensity - confirm with roaster guide | Modifier behavior crosses natural / washed / honey / thermal shock | [Balanced Intensity](by-strategy/balanced-intensity.md) + yeast-inoculated / thermal-shock family files |
-| Aromatic-landrace / SL-lineage lots on fast cone vehicles | Phase separation: sharp top note + adjacent body | April Brewer Glass + April Paper or other integration vehicle | Cultivar + equipment interaction | Pattern #4 + [Sudan Rume](by-cultivar/sudan-rume.md) |
+| Medium / developed specialty natural, especially if visibly oily or Agtron ~48 | Process and cultivar defaults over-extract roast solubles | Hybrid → Intensity-Clarity Split | Roast level overrides process and cultivar | Pattern #1 below + [Hybrid](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md) |
+| Anaerobic natural across origins | Clarity-First under-extracts; Balanced can expose bitter tail | Suppression | Same process behavior confirmed across Colombia, Ethiopia, Panama | Pattern #2 + [Suppression](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md) + [anaerobic-natural](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md) |
+| Cold-room dehydration natural | Suppression-like bitter-tail behavior but often wants slightly more heat than anaerobic natural | Suppression at higher temp band (push +1°C from 92°C to 93°C) | Drying modifier behaves like process modifier, not origin-specific terroir | Pattern #2 + [Suppression](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md) |
+| Clean anaerobic washed + Full-Expression roaster | Balanced default may under-read roaster intent | Follow roaster: Full Expression | Roaster style overrides clean-process default | Pattern #3 + `docs/brewing/roasters.md` + [Full Expression](docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md) |
+| Heavy anaerobic washed Colombian Huila / Cauca Gesha | Clarity-First or Balanced under-extracts heavy ferment structure | Full Expression | Process + region + variety combo | [Full Expression](docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md) + [Gesha](docs/skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md) |
+| Anoxic natural (sealed container fermentation) | Clarity-First under-extracts; variety ceiling logic misleads | Full Expression (n=1: Scenery Pikudo's Rosado) | Process overrides variety-default ceiling | [Full Expression](docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md) + [Sub-Threshold: Rosado](#sub-threshold-cultivar-candidates) |
+| Heavy anaerobic / co-ferment | Under-extraction; drying/astringent tail in last fraction | Full Expression (+ late-cut Output Selection candidate) | Process + modifier interaction | [Full Expression](docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md) + [Modifier Layer](#modifier-layer) |
+| Experimental fermentation (thermal shock, yeast-inoculated) | False assumption that experimental process means Full Expression | Balanced Intensity - confirm with roaster guide | Modifier behavior crosses natural / washed / honey / thermal shock | [Balanced Intensity](docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md) + yeast-inoculated / thermal-shock family files |
+| Aromatic-landrace / SL-lineage lots on fast cone vehicles | Phase separation: sharp top note + adjacent body | April Brewer Glass + April Paper or other integration vehicle | Cultivar + equipment interaction | Pattern #4 + [Sudan Rume](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) |
 | High-EY roaster (Sey, Flower Child, Picky Chemist, Dak) | EG-1 cannot reach their ~450 µm target D50 on its burr geometry | Full Expression + 5.5 grind + boiling water + T-92 filter + slow draw | Roaster target + grinder geometry interaction; compensate via temp / agitation / filter / brew time, not grind | `docs/brewing/roasters.md` + equipment cluster |
 | Roast-forward lot + office tap water | Body reads one register heavier; roast wall can look like extraction error | Prefer home low-mineral water, or plan suppression / Hybrid | Water + roast-level interaction | Pattern #6 + equipment / water reference |
 | Competition / showcase aromatic lot | Daily payoff may not justify overhead | Aroma Capture only when aromatics are the point | Modifier value depends on context and strategy | [Modifier Layer](#modifier-layer) |
@@ -140,8 +140,8 @@ Confirmed shape:
 
 Confirmed data points:
 
-- **Untold Brazil Fazenda Um Wush Wush Natural (WWNAT), brew 25b4465b (2026-05-22)** — a clean controlled natural (Raised Bed) the Controlled Natural row would default to Balanced Intensity. Roasted MEDIUM. On Balanced Intensity (April + April Paper, EG-1 6.4 / 93°C) the developed-roast solubles were amplified into a punishing oversteeped-black-tea wall with prune barely detectable. Resolution was a strategy re-zone to Hybrid (Intensity-Clarity Split) on the Switch (see [by-strategy/hybrid.md](by-strategy/hybrid.md)), NOT a parameter tweak within Balanced.
-- **Untold Panama Janson Pacamara Natural (Hacienda 491, Dark Room Dried natural, Pacamara), brew 24b39678 (2026-05-31)** — whole-bean Agtron 47.9, the darkest roast in the archive, visibly oily. Pacamara density → Balanced and the cold-room-dehydration flag → Suppression, but at Agtron 47.9 the roast governed above both. Brew 1 (Orea + FLAT 2 B3, 88°C / EG-1 6.7) gave guava/molasses attack but a bitter/smoky/ashy oversteeped-tea body; resolved by Hybrid (Switch, EG-1 6.8). See [by-cultivar/pacamara.md](by-cultivar/pacamara.md).
+- **Untold Brazil Fazenda Um Wush Wush Natural (WWNAT), brew 25b4465b (2026-05-22)** — a clean controlled natural (Raised Bed) the Controlled Natural row would default to Balanced Intensity. Roasted MEDIUM. On Balanced Intensity (April + April Paper, EG-1 6.4 / 93°C) the developed-roast solubles were amplified into a punishing oversteeped-black-tea wall with prune barely detectable. Resolution was a strategy re-zone to Hybrid (Intensity-Clarity Split) on the Switch (see [by-strategy/hybrid.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md)), NOT a parameter tweak within Balanced.
+- **Untold Panama Janson Pacamara Natural (Hacienda 491, Dark Room Dried natural, Pacamara), brew 24b39678 (2026-05-31)** — whole-bean Agtron 47.9, the darkest roast in the archive, visibly oily. Pacamara density → Balanced and the cold-room-dehydration flag → Suppression, but at Agtron 47.9 the roast governed above both. Brew 1 (Orea + FLAT 2 B3, 88°C / EG-1 6.7) gave guava/molasses attack but a bitter/smoky/ashy oversteeped-tea body; resolved by Hybrid (Switch, EG-1 6.8). See [by-cultivar/pacamara.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md).
 
 Operational rule:
 
@@ -166,7 +166,7 @@ Rule:
 - For cold-room dehydration lots, use the Suppression logic but expect a slightly higher useful temperature band (push +1°C from 92°C to 93°C).
 - If Suppression does not resolve the cup, **Balanced Intensity + Inverted Temperature Staging** (88°C → 94°C) is the experimental fallback.
 
-This stays here because the pattern crosses origin, cultivar, and drying / fermentation modifier. Lot-specific notes + the office SWORKS valve template live in [by-strategy/suppression.md](by-strategy/suppression.md) and [by-coffee-family/anaerobic-natural.md](by-coffee-family/anaerobic-natural.md).
+This stays here because the pattern crosses origin, cultivar, and drying / fermentation modifier. Lot-specific notes + the office SWORKS valve template live in [by-strategy/suppression.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md) and [by-coffee-family/anaerobic-natural.md](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md).
 
 ### 3. Roaster House Style Can Override Clean Process Defaults
 
@@ -176,7 +176,7 @@ For clean anaerobic washed coffees, Balanced Intensity is the process default. B
 
 Confirmed shape:
 
-- DAK Apricoast, Ethiopia Arbegona: clean anaerobic washed Ethiopian landrace still preserved transparency under Full Expression mechanics. (Detail in [by-cultivar/ethiopian-landrace-population.md](by-cultivar/ethiopian-landrace-population.md).)
+- DAK Apricoast, Ethiopia Arbegona: clean anaerobic washed Ethiopian landrace still preserved transparency under Full Expression mechanics. (Detail in [by-cultivar/ethiopian-landrace-population.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/ethiopian-landrace-population.md).)
 - The strategy was not "heavy ferment needs Full Expression." It was "clean anaerobic washed + Full-Expression roaster can follow the roaster."
 
 Operational rule:
@@ -201,8 +201,8 @@ Confirmed shape:
 
 Confirmed data points:
 
-- Sudan Rume Natural (CGLE Las Margaritas) — Orea Glass + fast cone emphasized pungent lemongrass / ginger separation; April Glass + April Paper resolved it. (Detail in [by-cultivar/sudan-rume.md](by-cultivar/sudan-rume.md).)
-- Newbery Street Nawin Doi Chang Washed — Orea + fast paper phase-separated milk chocolate body, lemon top, and hollow tail; April Glass + April Paper integrated them. (Full lot note → [docs/brewing/roasters.md § Newbery Street](../../../../brewing/roasters.md).)
+- Sudan Rume Natural (CGLE Las Margaritas) — Orea Glass + fast cone emphasized pungent lemongrass / ginger separation; April Glass + April Paper resolved it. (Detail in [by-cultivar/sudan-rume.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md).)
+- Newbery Street Nawin Doi Chang Washed — Orea + fast paper phase-separated milk chocolate body, lemon top, and hollow tail; April Glass + April Paper integrated them. (Full lot note → [docs/brewing/roasters.md § Newbery Street](docs/brewing/roasters.md).)
 
 Operational rule:
 
@@ -226,7 +226,7 @@ Cross-coffee rules:
   - **Transformation:** new volatile notes emerge (naturals).
   - **Damage control:** roast or bitterness recedes enough to judge the cup (dark roasts).
 
-Keep only diagnostic patterns here. Per-coffee cooling notes live in their respective cultivar, process-family, or roaster capsule (re-homed in pruning case 007b; e.g. Sidra → [by-cultivar/sidra.md](by-cultivar/sidra.md), thermal shock → [by-coffee-family/thermal-shock-washed.md](by-coffee-family/thermal-shock-washed.md), Picolot/DAK/Newbery → [docs/brewing/roasters.md](../../../../brewing/roasters.md)).
+Keep only diagnostic patterns here. Per-coffee cooling notes live in their respective cultivar, process-family, or roaster capsule (re-homed in pruning case 007b; e.g. Sidra → [by-cultivar/sidra.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md), thermal shock → [by-coffee-family/thermal-shock-washed.md](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md), Picolot/DAK/Newbery → [docs/brewing/roasters.md](docs/brewing/roasters.md)).
 
 ### 6. Water Strength and Office Tap Can Change Roast-Forward Coffees
 
@@ -240,7 +240,7 @@ Rule:
 - If brewing office-only, expect the body to read one register heavier.
 - Do not chase the extra body with grind. Treat it as a water-mineral interaction, not an extraction error.
 
-This stays here only because it crosses roast level, water, and strategy routing. Detailed office equipment / water notes live in the Brewing Equipment Expert cluster ([sworks.md § Valve restriction timing principles](../../../brewing-equipment-expert/cluster/sworks.md) + [operational-reference.md § Location Constraints](../../../brewing-equipment-expert/cluster/operational-reference.md) for the office tap-water finding).
+This stays here only because it crosses roast level, water, and strategy routing. Detailed office equipment / water notes live in the Brewing Equipment Expert cluster ([sworks.md § Valve restriction timing principles](docs/skills/brewing-equipment-expert/cluster/sworks.md) + [operational-reference.md § Location Constraints](docs/skills/brewing-equipment-expert/cluster/operational-reference.md) for the office tap-water finding).
 
 ## Sub-Threshold Cultivar Candidates
 
@@ -249,28 +249,28 @@ These cultivars are below the n≥3 graduation threshold. They stay here as cand
 - **Pink Bourbon** - transparency-driven, not weight-driven. Balanced is the ceiling. Does not benefit from Full Expression.
 - **Rosado (Pink Bourbon family, Colombia)** - transparency-driven like Pink Bourbon; Balanced normally the ceiling. However, anoxic natural processing overrides the variety signal entirely (confirmed Full Expression on Scenery Pikudo's Rosado, n=1) - do not apply Rosado/Pink Bourbon ceiling logic to anoxic natural lots. Note: 'Anoxic' canonicalizes to `fermentation:[Anaerobic]` with qualifier `Anoxic`; the qualifier is a record-when-known annotation, NOT a strategy-decision layer - the single-data-point Full-Expression call belongs to this specific lot (Rosado on Anoxic execution), not to the qualifier categorically.
 - **Mokka (Bourbon Family, classic Bourbon lineage)** - ancient Yemen-origin dwarf Bourbon-type. Small beans, low yield, high aromatic intensity. Genetically distinct from Mokkita despite name similarity - do NOT classify as the same variety. One data point: Picolot Garrido Panama Mokka Natural (Emerald PL#015) - Full Expression at EG-1 6.0 / 95°C kettle-off / SWORKS fast/fast/slow (Dial 7 → 7 → 5). Transparency-driven cup structure with "crisp body" intentional to the variety; tea-like body is not a recipe deficiency. Pair with roaster Full Expression guidance rather than variety ceiling logic. Distinct from Mokkita: cleaner, more structured acidity with herbal lift; wine character absent.
-- **Mokkita (Modern Hybrids, multi-parent hybrid lineage)** - modern selection/hybrid line, often tied to specific farms (e.g. Garrido). Broader brew tolerance than Gesha; can handle Balanced and benefits from it. Distinct from Mokka: wine-structured naturals with dark plum / raisin fruit and structural weight. Confirmed in cup: Picolot Garrido Mokkita Cold Room (DRD Natural) cupped syrupy, wine-structured, mulled-wine-and-raisin (vs the Mokka Emerald's cleaner transparency-driven herbal lift) - do NOT transfer the Mokka 6.0 Full-Expression recipe to Mokkita. Process-tier distinction within Mokkita: Cold Room DRD ≠ standard DRD. The plain Mokkita Natural DRD held a medium body at 6.6; the heavier Cold Room dark-drying ferment supported one click finer at EG-1 6.2 / 94°C / valve 5→5→7 while holding the full layered profile - confirmed Balanced Intensity (deep end). Warm-cup bitter tail resolves with a kettle-off-base Pour-2 temperature taper, not grind coarsening. Evaluate below 50°C. See [by-strategy/balanced-intensity.md](by-strategy/balanced-intensity.md). brew_id 7ad09c9b-35c3-4635-88eb-248bb38b42bc.
+- **Mokkita (Modern Hybrids, multi-parent hybrid lineage)** - modern selection/hybrid line, often tied to specific farms (e.g. Garrido). Broader brew tolerance than Gesha; can handle Balanced and benefits from it. Distinct from Mokka: wine-structured naturals with dark plum / raisin fruit and structural weight. Confirmed in cup: Picolot Garrido Mokkita Cold Room (DRD Natural) cupped syrupy, wine-structured, mulled-wine-and-raisin (vs the Mokka Emerald's cleaner transparency-driven herbal lift) - do NOT transfer the Mokka 6.0 Full-Expression recipe to Mokkita. Process-tier distinction within Mokkita: Cold Room DRD ≠ standard DRD. The plain Mokkita Natural DRD held a medium body at 6.6; the heavier Cold Room dark-drying ferment supported one click finer at EG-1 6.2 / 94°C / valve 5→5→7 while holding the full layered profile - confirmed Balanced Intensity (deep end). Warm-cup bitter tail resolves with a kettle-off-base Pour-2 temperature taper, not grind coarsening. Evaluate below 50°C. See [by-strategy/balanced-intensity.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md). brew_id 7ad09c9b-35c3-4635-88eb-248bb38b42bc.
 - **Catimor (group)** - Timor Hybrid-derived dwarf hybrid; not transparency-driven, not aromatic-landrace structure. Carries denser body weight than higher-elevation Bourbon/Typica varieties at equivalent recipe targets - reads as black/brown tea structure on the body even on a clean recipe; this is variety + low/mid elevation, not a recipe artifact, and does not respond to coarsening. Confirmed yeast-inoculated lots from Yunnan (Project One Light, Olina Cai) on Moonwake: Peach Oolong (anaerobic natural) at EG-1 6.3 / 96°C and Blue Iris (anaerobic honey) at EG-1 6.3 / 95°C, both Balanced Intensity, both 1300-1500 masl. Variety + yeast inoculation pair to Balanced Intensity at the finer end; honey vs anaerobic-natural finishing process shifts the temperature ceiling by 1°C (honey at 95°C, anaerobic natural at 96°C) without changing grind position. Two data points, same producer.
 - **Catuai (washed, Honduras)** - dense variety that exceeded Clarity-First's extraction ceiling despite clean washed process. One data point; flag variety density and expression intent on future washed Catuai lots.
 - **Red Bourbon (Bourbon family, classic Bourbon lineage; long-ferment washed)** - long-ferment Rwandan washed Red Bourbon (Moonwake Ngoma Station J.M.V. Usekanabagoyi, Nyamasheke / Lake Kivu Highlands) peaks ~45°C and below. ≥50°C: pear and grapefruit forward, mid-palate undifferentiated, faint drying tail. ~50°C: lemon verbena separates as a distinct herbal-tea note, body fills in. Below ~45°C: drying tail resolves entirely, attack gains brightness, profile integrates into pear + grapefruit + honeyed verbena tea. Cool-window discipline applies to long-ferment classic washed lots, not just processed/anaerobic ones - the 8-hour cherry + 12-hour wet ferment footprint produces a faint phenolic tail that is temperature-driven, not extraction-driven. One data point - flag for confirmation on the next Burundian or Rwandan washed Bourbon with comparable ferment length.
 
 ## Sub-Threshold Process-Family Candidates
 
-These process families are below the n≥3 graduation threshold for their own `by-coffee-family/` capsule, or carry only a single-axis default-strategy note with no standing cross-anchor pattern. They stay here as thin notes + routers (the parallel of Sub-Threshold Cultivar Candidates above) and graduate to a capsule when they reach n≥3 of distinct family-level pattern. Most of the actual per-coffee evidence already lives in the cultivar / roaster / strategy homes named in each router. (The six already-graduated families - Anaerobic Natural, Anaerobic Washed, Double Anaerobic Washed, Thermal Shock Washed, Yeast-Inoculated Natural/Washed - have their own capsules; the heavy-co-ferment lane lives inside [by-coffee-family/double-anaerobic-washed.md](by-coffee-family/double-anaerobic-washed.md).)
+These process families are below the n≥3 graduation threshold for their own `by-coffee-family/` capsule, or carry only a single-axis default-strategy note with no standing cross-anchor pattern. They stay here as thin notes + routers (the parallel of Sub-Threshold Cultivar Candidates above) and graduate to a capsule when they reach n≥3 of distinct family-level pattern. Most of the actual per-coffee evidence already lives in the cultivar / roaster / strategy homes named in each router. (The six already-graduated families - Anaerobic Natural, Anaerobic Washed, Double Anaerobic Washed, Thermal Shock Washed, Yeast-Inoculated Natural/Washed - have their own capsules; the heavy-co-ferment lane lives inside [by-coffee-family/double-anaerobic-washed.md](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md).)
 
-- **Washed** → Clarity-First. Turbulence flattens acidity; don't over-agitate. Exception: dense varieties with fruit-forward expression intent (Catuai, Honduras) may exceed the Clarity-First ceiling and need Full Expression - one data point. Router: clean washed evidence on [by-strategy/clarity-first.md](by-strategy/clarity-first.md); cultivar-density exceptions in the relevant by-cultivar capsule (e.g. [Catuai candidate](#sub-threshold-cultivar-candidates) above).
+- **Washed** → Clarity-First. Turbulence flattens acidity; don't over-agitate. Exception: dense varieties with fruit-forward expression intent (Catuai, Honduras) may exceed the Clarity-First ceiling and need Full Expression - one data point. Router: clean washed evidence on [by-strategy/clarity-first.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/clarity-first.md); cultivar-density exceptions in the relevant by-cultivar capsule (e.g. [Catuai candidate](#sub-threshold-cultivar-candidates) above).
 - **White / Light Honey** → Clarity-First → Balanced. Some lots need 6.5 not 6.7. Key risk: thin sweetness at the coarse end.
-- **Honey (medium)** → Balanced Intensity. Pink Bourbon prefers Balanced, not Full (see Pink Bourbon candidate above). Heavy honey can push toward sweetness overload. **General cooling default: evaluate honey-process lots below 50°C** - sweetness integration increases below 50°C (confirmed on anaerobic-honey Gesha, Finca La Reserva; per-lot detail in [by-cultivar/gesha.md](by-cultivar/gesha.md) + the Colibri roaster card).
-- **Standard Natural (non-anaerobic, raised bed / washed station)** → Balanced Intensity. Ethiopian landraces with brightness-forward targets (berry, citrus, white tea) confirm the Balanced lower edge (EG-1 6.4 / 94°C; Moonwake Alo Gemechu Station, Sidama - detail in [by-cultivar/ethiopian-landrace-population.md](by-cultivar/ethiopian-landrace-population.md)). CGLE Sudan Rume Natural confirmed Balanced at the light end - variety transparency drives position within Balanced ([by-cultivar/sudan-rume.md](by-cultivar/sudan-rume.md)). Key risk: a sharp finish above 50°C is heat masking, not an extraction defect - do not coarsen or drop temp; evaluate below 50°C. For aromatic-landrace varieties (Sudan Rume, SL-lineage), watch for vehicle-driven phase separation rather than extraction depth (Active Pattern #4).
-- **Controlled Natural (DRD, raised bed)** → Balanced Intensity. Picolot Garrido naturals confirmed Full Expression on roaster house style - Mokka (PL#015) at EG-1 6.0 and Pacamara (PL#16) at EG-1 6.1, both fast/fast/slow Dial 7 → 7 → 5 (detail in [docs/brewing/roasters.md § Picolot](../../../../brewing/roasters.md) + [by-cultivar/pacamara.md](by-cultivar/pacamara.md); Mokka/Mokkita as cultivar candidates above). Straight natural alone does NOT invert SWORKS valve structure - slow/slow/open inversion is reserved for yeast-anaerobic and heavy co-ferment lots. Hacienda La Esmeralda "NC" climate-controlled naturals stay Clarity-First (two data points; detail in [by-cultivar/gesha.md](by-cultivar/gesha.md)). Key risk: wine character needs support, not suppression; do not invert house valve structure for clean naturals; do not apply the Balanced default to Esmeralda NC lots.
+- **Honey (medium)** → Balanced Intensity. Pink Bourbon prefers Balanced, not Full (see Pink Bourbon candidate above). Heavy honey can push toward sweetness overload. **General cooling default: evaluate honey-process lots below 50°C** - sweetness integration increases below 50°C (confirmed on anaerobic-honey Gesha, Finca La Reserva; per-lot detail in [by-cultivar/gesha.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md) + the Colibri roaster card).
+- **Standard Natural (non-anaerobic, raised bed / washed station)** → Balanced Intensity. Ethiopian landraces with brightness-forward targets (berry, citrus, white tea) confirm the Balanced lower edge (EG-1 6.4 / 94°C; Moonwake Alo Gemechu Station, Sidama - detail in [by-cultivar/ethiopian-landrace-population.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/ethiopian-landrace-population.md)). CGLE Sudan Rume Natural confirmed Balanced at the light end - variety transparency drives position within Balanced ([by-cultivar/sudan-rume.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md)). Key risk: a sharp finish above 50°C is heat masking, not an extraction defect - do not coarsen or drop temp; evaluate below 50°C. For aromatic-landrace varieties (Sudan Rume, SL-lineage), watch for vehicle-driven phase separation rather than extraction depth (Active Pattern #4).
+- **Controlled Natural (DRD, raised bed)** → Balanced Intensity. Picolot Garrido naturals confirmed Full Expression on roaster house style - Mokka (PL#015) at EG-1 6.0 and Pacamara (PL#16) at EG-1 6.1, both fast/fast/slow Dial 7 → 7 → 5 (detail in [docs/brewing/roasters.md § Picolot](docs/brewing/roasters.md) + [by-cultivar/pacamara.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md); Mokka/Mokkita as cultivar candidates above). Straight natural alone does NOT invert SWORKS valve structure - slow/slow/open inversion is reserved for yeast-anaerobic and heavy co-ferment lots. Hacienda La Esmeralda "NC" climate-controlled naturals stay Clarity-First (two data points; detail in [by-cultivar/gesha.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md)). Key risk: wine character needs support, not suppression; do not invert house valve structure for clean naturals; do not apply the Balanced default to Esmeralda NC lots.
 - **Anoxic Natural (sealed container)** → Full Expression (Scenery Pikudo's Rosado, one data point). Process overrides the variety signal; a temperature taper resolves the bitter tail. Cooling: peaks below 50°C - the mild bitter tail at serving temperature resolves cleanly as the cup cools. Router: cross-axis exception in the Cross-Axis Strategy Router above; variety note as the [Rosado candidate](#sub-threshold-cultivar-candidates). ('Anoxic' canonicalizes to `fermentation:[Anaerobic]` with the `Anoxic` qualifier - a record-when-known annotation, not a strategy-decision layer.)
-- **Heavy Anaerobic / Co-ferment** → Full Expression (heavy-ferment logic; confirm with roaster guide). Now homed in [by-coffee-family/double-anaerobic-washed.md § Heavy co-ferment](by-coffee-family/double-anaerobic-washed.md) - late-cut Output Selection candidate + El Eden Tamarind cooling. Key risk: sour if under, boozy if over.
+- **Heavy Anaerobic / Co-ferment** → Full Expression (heavy-ferment logic; confirm with roaster guide). Now homed in [by-coffee-family/double-anaerobic-washed.md § Heavy co-ferment](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/double-anaerobic-washed.md) - late-cut Output Selection candidate + El Eden Tamarind cooling. Key risk: sour if under, boozy if over.
 
 ## Modifier Layer
 
 Modifiers are Axis 2. They do not replace strategy selection - use them only after Axis 1 is clear. *Rule: same as strategy patterns - don't promote a modifier-coffee combination from "experimental" to "confirmed pattern" until two data points exist.* Modifiers have no single-axis capsule, so this file is their permanent home.
 
-> **v8.4 (2026-05-06):** the v8.3 *Immersion* modifier was removed and absorbed into the **Hybrid** strategy (Axis 1) via `hybrid_subform`. Switch-style + SWORKS valve-modulated brewing is now a strategy-level decision, not a modifier. See [by-strategy/hybrid.md](by-strategy/hybrid.md).
+> **v8.4 (2026-05-06):** the v8.3 *Immersion* modifier was removed and absorbed into the **Hybrid** strategy (Axis 1) via `hybrid_subform`. Switch-style + SWORKS valve-modulated brewing is now a strategy-level decision, not a modifier. See [by-strategy/hybrid.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md).
 
 ### Output Selection
 

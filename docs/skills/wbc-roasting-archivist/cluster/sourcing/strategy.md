@@ -1,6 +1,6 @@
 # WBC Sourcing Strategy (Latent)
 
-Sourcing-side companion to [wbc-roasting.md](../wbc-roasting.md). Derived from the same WBC corpus (~100 competitor entries, 2022-2025) but answers a different question: **what greens should Latent be buying?**
+Sourcing-side companion to [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md). Derived from the same WBC corpus (~100 competitor entries, 2022-2025) but answers a different question: **what greens should Latent be buying?**
 
 Read this doc when:
 
@@ -11,17 +11,17 @@ Read this doc when:
 
 This is **portfolio framing**, not a comprehensive producer registry. The validation registry for canonical producers / regions / varieties / processes lives in:
 
-- [docs/taxonomies/producers.md](../../../../taxonomies/producers.md) — 120 canonical producers
-- [docs/taxonomies/regions.md](../../../../taxonomies/regions.md) — 121 macro terroirs across 38 countries
-- [docs/taxonomies/varieties.md](../../../../taxonomies/varieties.md) — 63 canonical cultivars
-- [docs/taxonomies/processes.md](../../../../taxonomies/processes.md) — composable process taxonomy
+- [docs/taxonomies/producers.md](docs/taxonomies/producers.md) — 120 canonical producers
+- [docs/taxonomies/regions.md](docs/taxonomies/regions.md) — 121 macro terroirs across 38 countries
+- [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md) — 63 canonical cultivars
+- [docs/taxonomies/processes.md](docs/taxonomies/processes.md) — composable process taxonomy
 
 The sourcing tiers in this doc reference producers and varieties from those registries; if a name shows up here that isn't in the canonical registry, that's a cue to consider promotion.
 
 ## History
 
-- **2026-05-09:** Initial draft. Authored from Chris's "Sourcing Strategy Ideas for Roasting" synthesis doc plus the underlying WBC corpus. Latent inventory mapped to tiers as a 2026-05-09 snapshot — refresh on inventory change. Two-doc split with [wbc-roasting.md](../wbc-roasting.md) covering the *how to roast* side.
-- **2026-05-18 (Sprint T2):** Three doc edits folding the 2026-05-16 grilling locks into the authored doc — § 10 portfolio formalized 4 → 5 lanes (Value / roast-practice promoted from gap-analysis-only to authored frame; WBC-6); § 11 Sourcing channels added with 6 channel kinds (Generalist retailer / Specialty importer / Competition-grade importer / Direct-from-farm / Auction-sample channel / Direct-from-auction awareness-only; WBC-8); Geisha Village classification corrected inside the new § 11 (direct-from-farm with 1kg-sample-bag sub-pattern, not generalist retailer; WBC-7). Each lock matches the canonical vocabulary already in [docs/reference/wbc-materials.md](../../../../../docs/reference/wbc-materials.md).
+- **2026-05-09:** Initial draft. Authored from Chris's "Sourcing Strategy Ideas for Roasting" synthesis doc plus the underlying WBC corpus. Latent inventory mapped to tiers as a 2026-05-09 snapshot — refresh on inventory change. Two-doc split with [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) covering the *how to roast* side.
+- **2026-05-18 (Sprint T2):** Three doc edits folding the 2026-05-16 grilling locks into the authored doc — § 10 portfolio formalized 4 → 5 lanes (Value / roast-practice promoted from gap-analysis-only to authored frame; WBC-6); § 11 Sourcing channels added with 6 channel kinds (Generalist retailer / Specialty importer / Competition-grade importer / Direct-from-farm / Auction-sample channel / Direct-from-auction awareness-only; WBC-8); Geisha Village classification corrected inside the new § 11 (direct-from-farm with 1kg-sample-bag sub-pattern, not generalist retailer; WBC-7). Each lock matches the canonical vocabulary already in [docs/reference/wbc-materials.md](docs/reference/wbc-materials.md).
 
 ## How sourcing thinking shifted post-WBC review
 
@@ -241,7 +241,7 @@ For Latent, this suggests a **portfolio approach**:
 - 1 experimental learning coffee
 - 1 value coffee to practice roast changes
 
-Most blending experiments queued in [wbc-roasting.md § Blending experiments](../wbc-roasting.md) are *same-green* layering, but the multi-green portfolio framing here matters for sourcing decisions: when buying, ask whether the portfolio has a missing role.
+Most blending experiments queued in [wbc-roasting.md § Blending experiments](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) are *same-green* layering, but the multi-green portfolio framing here matters for sourcing decisions: when buying, ask whether the portfolio has a missing role.
 
 ## 7. Tier 1/2/3 priority targets
 
@@ -371,7 +371,7 @@ This section is the operational scoreboard — fold the abstract framework above
 
 | Bean | Tier | Lane | Sourcing notes |
 |---|---|---|---|
-| **CGLE Sudan Rume Hybrid Washed** (1710m, Las Margaritas, Caicedonia) | T1/T2 hybrid | Reference clarity + roast-learning hybrids | Washed Sudan Rume = T1 process; CGLE = T2 producer. The cleanest expression of a roast-learning hybrid currently in inventory. Strong candidate for the same-green dev ladder in [wbc-roasting.md § Blending experiments](../wbc-roasting.md). |
+| **CGLE Sudan Rume Hybrid Washed** (1710m, Las Margaritas, Caicedonia) | T1/T2 hybrid | Reference clarity + roast-learning hybrids | Washed Sudan Rume = T1 process; CGLE = T2 producer. The cleanest expression of a roast-learning hybrid currently in inventory. Strong candidate for the same-green dev ladder in [wbc-roasting.md § Blending experiments](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md). |
 | **GESHA CLOUDS Natural Gesha** (Milton Monroy, Forest Coffee, Tolima) | T1/T2 hybrid | Fruit-tea expression | Colombian natural Gesha at competition-tier producer. Not in the canonical WBC producer cluster (Mikava / Janson / Mount Totumas) but the same role player. Anaerobic natural drying protocol (84h tank ferment + 24-32 day raised-bed drying + dark room rest + GrainPro storage) puts it on the heavier-process end of the natural lane. |
 | **El Paraíso Red Plum Castillo** (Diego Bermúdez, Cauca, 1960m) | T2/T3 | Process learning | Diego Bermúdez = Wilton Benitez / Granja Paraíso network territory. Castillo Washed + Pulp Fermentation is *cleaner* than the network's typical thermal-shock anaerobic, but the producer biases toward T3 risk profile. Highest-elevation, highest-density coffee in current inventory (1960m, 802 g/L) — the FC-temp architectural-constraint hypothesis matters here. |
 | **Wush Wush Natural DRD** (Stefano Um, Brazil Sul de Minas, 1130m) | T2 (off-pattern) | Process learning | Outside the typical WBC buying lane — Brazilian Wush Wush at 1130m elevation. Wush Wush is Gesha-adjacent (Ethiopian landrace) but Brazilian terroir + dark-room drying gives a different set of expectations. Cuppings will validate or refute the variety hypothesis at this elevation. High-information regardless. |
@@ -383,12 +383,12 @@ This section is the operational scoreboard — fold the abstract framework above
 
 | Bean | Tier | Lane | Sourcing retrospective |
 |---|---|---|---|
-| **CGLE Mandela XO** (Trujillo, Valle del Cauca) | T2 | Roast-learning hybrids | Direct match for "CGLE Mandela / CGLE 17" T2 priority. Closed sprint 2.5; reference roast in [docs/roasting/archive.md](../../../../roasting/archive.md). |
+| **CGLE Mandela XO** (Trujillo, Valle del Cauca) | T2 | Roast-learning hybrids | Direct match for "CGLE Mandela / CGLE 17" T2 priority. Closed sprint 2.5; reference roast in [docs/roasting/archive.md](docs/roasting/archive.md). |
 | **Gesha Village 1931 Oma / Surma / Oma** (Bench Maji, Ethiopia, 2000m) | T1 | Reference clarity | Ethiopian washed Gesha at 2000m. Three closed lots from this estate cover the reference-clarity Ethiopia lane historically. |
 | **Guatemala El Socorro Java** (Acatenango, 1650m) | T2 | Roast-learning hybrids | Java variety = T2 "Gesha alternative." Useful learning coffee on a low-acid heritage lineage. |
 | **Guatemala Aurelio del Cerro** (Huehuetenango, 1700m, Bourbon + Caturra) | Off-tier | Value | Off-portfolio — value-tier washed Bourbon / Caturra blend. Good roast-practice green at low risk. |
-| **CGLE Sudan Rume Natural** (1710m, Las Margaritas) | T2 | Roast-learning hybrids | **Resolved 2026-05-23**, reference roast #187 (V5A). Cross-process companion to the Hybrid Washed — the fruit layer needed washed-level energy (do NOT default to "natural = less heat" on Sudan Rume). Deep dive: [roasting-historian learnings/cgle-srume-natural-2026.md](../../../roasting-historian/cluster/learnings/cgle-srume-natural-2026.md). |
-| **Costa Rica Higuito Anaerobic Dry Process** (Bourbon, 1650m) | T3 | Process learning (high-risk) | **Resolved 2026-05-23**, reference roast v3b (#185). The T3 "heavy anaerobic with liqueur descriptors" learning lot — confirmed the xbloom gate misranks close candidates on anaerobic-natural lots (real pourover is the required arbiter). Deep dive: [roasting-historian learnings/cos-hig-bor-2026.md](../../../roasting-historian/cluster/learnings/cos-hig-bor-2026.md). |
+| **CGLE Sudan Rume Natural** (1710m, Las Margaritas) | T2 | Roast-learning hybrids | **Resolved 2026-05-23**, reference roast #187 (V5A). Cross-process companion to the Hybrid Washed — the fruit layer needed washed-level energy (do NOT default to "natural = less heat" on Sudan Rume). Deep dive: [roasting-historian learnings/cgle-srume-natural-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md). |
+| **Costa Rica Higuito Anaerobic Dry Process** (Bourbon, 1650m) | T3 | Process learning (high-risk) | **Resolved 2026-05-23**, reference roast v3b (#185). The T3 "heavy anaerobic with liqueur descriptors" learning lot — confirmed the xbloom gate misranks close candidates on anaerobic-natural lots (real pourover is the required arbiter). Deep dive: [roasting-historian learnings/cos-hig-bor-2026.md](docs/skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md). |
 
 ### Portfolio gap analysis (Latent-adjusted)
 
@@ -423,8 +423,8 @@ Prioritized buy list **reordered for Latent's current palate (VERY expressive + 
 
 ## Cross-references
 
-- **Roasting-side companion:** [wbc-roasting.md](../wbc-roasting.md).
-- **Brewing-side WBC docs:** [wbc-reference.md](../../../wbc-brewing-archivist/cluster/wbc-reference.md), [wbc-recipes.md](../../../wbc-brewing-archivist/cluster/wbc-recipes.md).
-- **Canonical taxonomies:** [docs/taxonomies/producers.md](../../../../taxonomies/producers.md), [docs/taxonomies/regions.md](../../../../taxonomies/regions.md), [docs/taxonomies/varieties.md](../../../../taxonomies/varieties.md), [docs/taxonomies/processes.md](../../../../taxonomies/processes.md).
-- **Live lot knowledge:** [ROASTING.md § Lot Knowledge](../../../../../ROASTING.md), [docs/roasting/archive.md](../../../../roasting/archive.md).
-- **Bean intake operational prompt:** [docs/prompts/start-lot.md](../../../../prompts/start-lot.md).
+- **Roasting-side companion:** [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md).
+- **Brewing-side WBC docs:** [wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md), [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md).
+- **Canonical taxonomies:** [docs/taxonomies/producers.md](docs/taxonomies/producers.md), [docs/taxonomies/regions.md](docs/taxonomies/regions.md), [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md), [docs/taxonomies/processes.md](docs/taxonomies/processes.md).
+- **Live lot knowledge:** [ROASTING.md § Lot Knowledge](ROASTING.md), [docs/roasting/archive.md](docs/roasting/archive.md).
+- **Bean intake operational prompt:** [docs/prompts/start-lot.md](docs/prompts/start-lot.md).

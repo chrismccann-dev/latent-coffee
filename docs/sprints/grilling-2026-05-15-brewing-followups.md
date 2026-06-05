@@ -4,8 +4,8 @@
 
 Second `/grill-with-docs` session, audit-grilling the brewing cluster of implicit Latent terminology. 12 grilling rounds over one sitting. Outputs:
 
-- [CONTEXT.md](../../CONTEXT.md) — **23 new glossary entries** under a "Brewing" sub-section: Extraction Strategy / Two-Axis Framework / Modifier / Strategy promotion / Hybrid sub-form / Phase / Phase boundary / Mechanical role / Cup-side target / Strategy zone / Coffee Brief / Iteration loop / Reference brew / Resolved brew / Variety signal / Process signal / Roaster signal / Signal override / Extraction Confirmed / Modifiers Confirmed / Cooling-Curve Target / Signature method / Process-Dominant. **1 updated entry** (Optimized brew — now cross-pointed to Reference brew). **~40 new relationships** capturing the framework structure, signal arbitration, and lifecycle connections. **7 new flagged ambiguities** for future review. **Example dialogue section seeded** with the Picolot Simba Coffee Brief substrate.
-- [docs/adr/0001-two-axis-brewing-framework.md](../adr/0001-two-axis-brewing-framework.md) — **first ADR in the repo**. Documents the WBC 5-axis → Latent 2-axis compression as a hard-to-reverse, learning-stage architectural decision with an explicit promotion path (v8.4 Hybrid promotion is the canonical precedent).
+- [CONTEXT.md](CONTEXT.md) — **23 new glossary entries** under a "Brewing" sub-section: Extraction Strategy / Two-Axis Framework / Modifier / Strategy promotion / Hybrid sub-form / Phase / Phase boundary / Mechanical role / Cup-side target / Strategy zone / Coffee Brief / Iteration loop / Reference brew / Resolved brew / Variety signal / Process signal / Roaster signal / Signal override / Extraction Confirmed / Modifiers Confirmed / Cooling-Curve Target / Signature method / Process-Dominant. **1 updated entry** (Optimized brew — now cross-pointed to Reference brew). **~40 new relationships** capturing the framework structure, signal arbitration, and lifecycle connections. **7 new flagged ambiguities** for future review. **Example dialogue section seeded** with the Picolot Simba Coffee Brief substrate.
+- [docs/adr/0001-two-axis-brewing-framework.md](docs/adr/0001-two-axis-brewing-framework.md) — **first ADR in the repo**. Documents the WBC 5-axis → Latent 2-axis compression as a hard-to-reverse, learning-stage architectural decision with an explicit promotion path (v8.4 Hybrid promotion is the canonical precedent).
 
 ## Standing decision: brewing-followups do not block dogfood
 
@@ -17,18 +17,18 @@ None of the 9 follow-ups below are correctness blockers for routine brewing work
 
 **1. Signature method registry gap — critical** [REGISTRY SYNC]
 - Why: Chris's working canonical list has **14 signatures** (Moonshadow / TyOxidator / Alchemy / TIM / XO / Enzyflow / Bio-innovation / Sous-vide / Amazake / Anti-maceration / Dynamic cherry / Dry fermentation / Splash / Symbiotic) + **Wave Hybrid** flagged as a 15th candidate. The Latent registry currently encodes **3** (Moonshadow / TyOxidator / Hybrid Washed). Two-direction gap: **11 missing signatures** + **Hybrid Washed possibly deprecated** (not in Chris's working list).
-- Surface: [lib/process-registry.ts](../../lib/process-registry.ts) + [docs/taxonomies/processes.md](../taxonomies/processes.md)
+- Surface: [lib/process-registry.ts](lib/process-registry.ts) + [docs/taxonomies/processes.md](docs/taxonomies/processes.md)
 - Migration shape: ADD 11+ canonical entries; verify Hybrid Washed status with Chris before any removal. If deprecated, query `brews.signature_method = 'Hybrid Washed'` + `green_beans.signature_method = 'Hybrid Washed'` for re-mapping candidates.
 - Highest priority of the 9 follow-ups — affects future Coffee Brief authoring for every proprietary-process coffee.
 
 **2. BREWING.md doc-edit pass — Phase-Mapped + Role-Based Pulse vocabulary** [DOC EDIT]
 - Why: BREWING.md uses `saturation / body / clarity / finish` as a "sensory target" set in both the Phase-Mapped Hybrid definition and the Role-Based Pulse modifier definition. Per round 4 grilling, this collapses **mechanical role** + **cup-side target** into one mixed vocabulary; canonical resolution is the **formal split**: mechanical role is open-ended (names a WBC axis being engaged on that phase), cup-side target is the **fixed 5-attribute set** `aroma / attack / mid-palate / body / finish`.
-- Surface: [BREWING.md](../../BREWING.md) § Phase-Mapped Hybrid sub-form description (in Hybrid strategy section) + Role-Based Pulse modifier description (in Modifiers section)
+- Surface: [BREWING.md](BREWING.md) § Phase-Mapped Hybrid sub-form description (in Hybrid strategy section) + Role-Based Pulse modifier description (in Modifiers section)
 - Coupled with #1 because both update brewing canonical content; bundle in one PR.
 
 **3. WBC systematic-review** [SCOPING]
 - Why: Chris asked round 3 for a systematic review of the WBC 5 foundational control axes + ~9 strategy families + per-family subtypes against the current Latent set (6 strategies + 4 modifiers + 5 Hybrid sub-forms), to confirm the chosen subset is the right starting point or whether anything should be promoted next.
-- Surface: [docs/brewing/wbc-reference.md](../brewing/wbc-reference.md) + [docs/brewing/wbc-recipes.md](../brewing/wbc-recipes.md) + [BREWING.md](../../BREWING.md)
+- Surface: [docs/brewing/wbc-reference.md](docs/brewing/wbc-reference.md) + [docs/brewing/wbc-recipes.md](docs/brewing/wbc-recipes.md) + [BREWING.md](BREWING.md)
 - Output: a report (not a code change) flagging promotion candidates + deferrals + new modifier or sub-form proposals. Could feed into a future ADR-0002 if promotion lands.
 
 ### Field retirement / re-evaluation (cluster 4-6)
@@ -85,12 +85,12 @@ Sprint A is the most time-sensitive (registry gap is affecting authoring TODAY).
 
 ## Combined with roasting-side followups
 
-Roasting-side grilling on 2026-05-14 surfaced 7 follow-ups (#1-#7 in [grilling-2026-05-14-followups.md](grilling-2026-05-14-followups.md); item #8 was "brewing-cluster grilling" which this session completed). Combined backlog: **16 items across roasting + brewing clusters**. Bundle by sprint affinity, not by cluster origin.
+Roasting-side grilling on 2026-05-14 surfaced 7 follow-ups (#1-#7 in [grilling-2026-05-14-followups.md](docs/sprints/grilling-2026-05-14-followups.md); item #8 was "brewing-cluster grilling" which this session completed). Combined backlog: **16 items across roasting + brewing clusters**. Bundle by sprint affinity, not by cluster origin.
 
 ## Open questions for the next grilling session
 
 - The brewing cluster is mostly covered. Remaining narrower terms (Roaster brew guide, Strategy drift, the canonical-picker pattern — canonical / alias / override / NET-NEW / drift) are deferred — they're not load-bearing today and the picker pattern overlaps with code-side terminology that isn't brewing-specific.
-- Next likely grilling targets: the **synthesis pipeline** (the 4-entity directed synthesis system in [lib/synthesis/](../../lib/synthesis/) — terroir / cultivar / process / roaster adapters), or the **MCP architecture** (32 Tools, OAuth 2.1 + PKCE, claude.ai vs Claude Code asymmetric trust model). Both have implicit Latent-specific terminology worth crystallizing.
+- Next likely grilling targets: the **synthesis pipeline** (the 4-entity directed synthesis system in [lib/synthesis/](lib/synthesis/) — terroir / cultivar / process / roaster adapters), or the **MCP architecture** (32 Tools, OAuth 2.1 + PKCE, claude.ai vs Claude Code asymmetric trust model). Both have implicit Latent-specific terminology worth crystallizing.
 
 ## Audio dictation note
 

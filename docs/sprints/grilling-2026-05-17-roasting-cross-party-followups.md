@@ -6,10 +6,10 @@ Cross-party `/grill-with-docs` audit pair — paired Claude Code with `claude.ai
 
 Outputs:
 
-- [CONTEXT.md](../../CONTEXT.md) — **21 new glossary entries** primarily in the `### Roasting` / `### V-set close synthesis` (new sub-section) / `### Forward design` / inter-cluster sections: WB→Gnd Agtron delta / Anchor profile / Anchor confidence / V-set close-out narrative / FC floor / Drop ceiling / Dev headroom / FC audibility state / Signal precedence / Multi-factor weighting / Peak inlet / Green spec / BBP / Hopper pre-load / Maillard % / Experiment (umbrella) / Peer roaster / Session position effect / Thermal reset protocol / Fan curve / Pre-V1 risk reduction. **9 existing entries edited** (V-set cardinality bug + Experiment-umbrella sub-shape positioning; Roast→cup trace rewrite around asymmetric layer structure; Taste-for reframe as principled non-articulation; Lever + Non-factor lot-close ordering clarified; Carry-forward learnings upstream/downstream cross-reference; Tolerance-anchored design canonical noun; Resolved three-event handoff sequence; Anchor confidence layered redirect on expensive lots; Signal precedence rule #6 layering). **6 new flagged ambiguities** capturing schema-vs-writing seams + cross-project asymmetries + open vocabulary gaps.
-- [docs/adr/0003-anchor-vocabulary-canonicalization.md](../adr/0003-anchor-vocabulary-canonicalization.md) — locks the "anchor profile" canonical + 6-level confidence ladder + Anchor profile ↔ Carry-forward learning upstream/downstream relationship.
-- [docs/adr/0004-vset-close-schema-writing-seam.md](../adr/0004-vset-close-schema-writing-seam.md) — locks option (c) "document the gap and accept it" for the per-slot cup schema vs V-set-wide cup narrative mismatch.
-- [docs/adr/0005-parameter-type-conditional-signal-arbitration.md](../adr/0005-parameter-type-conditional-signal-arbitration.md) — locks the parameter-type-conditional model (precedence on categorical / weighting on continuous) and the anchor-confidence × lot-value layered structure.
+- [CONTEXT.md](CONTEXT.md) — **21 new glossary entries** primarily in the `### Roasting` / `### V-set close synthesis` (new sub-section) / `### Forward design` / inter-cluster sections: WB→Gnd Agtron delta / Anchor profile / Anchor confidence / V-set close-out narrative / FC floor / Drop ceiling / Dev headroom / FC audibility state / Signal precedence / Multi-factor weighting / Peak inlet / Green spec / BBP / Hopper pre-load / Maillard % / Experiment (umbrella) / Peer roaster / Session position effect / Thermal reset protocol / Fan curve / Pre-V1 risk reduction. **9 existing entries edited** (V-set cardinality bug + Experiment-umbrella sub-shape positioning; Roast→cup trace rewrite around asymmetric layer structure; Taste-for reframe as principled non-articulation; Lever + Non-factor lot-close ordering clarified; Carry-forward learnings upstream/downstream cross-reference; Tolerance-anchored design canonical noun; Resolved three-event handoff sequence; Anchor confidence layered redirect on expensive lots; Signal precedence rule #6 layering). **6 new flagged ambiguities** capturing schema-vs-writing seams + cross-project asymmetries + open vocabulary gaps.
+- [docs/adr/0003-anchor-vocabulary-canonicalization.md](docs/adr/0003-anchor-vocabulary-canonicalization.md) — locks the "anchor profile" canonical + 6-level confidence ladder + Anchor profile ↔ Carry-forward learning upstream/downstream relationship.
+- [docs/adr/0004-vset-close-schema-writing-seam.md](docs/adr/0004-vset-close-schema-writing-seam.md) — locks option (c) "document the gap and accept it" for the per-slot cup schema vs V-set-wide cup narrative mismatch.
+- [docs/adr/0005-parameter-type-conditional-signal-arbitration.md](docs/adr/0005-parameter-type-conditional-signal-arbitration.md) — locks the parameter-type-conditional model (precedence on categorical / weighting on continuous) and the anchor-confidence × lot-value layered structure.
 
 ## Substrate-practice gap finding
 
@@ -27,12 +27,12 @@ None of the 9 follow-ups below are correctness blockers for routine roasting wor
 
 **1. ROASTING.md additive-vs-precedence table split** [DOC EDIT]
 - Why: ROASTING.md's Green-Spec → Starting-Hypothesis table currently operates additively ("read every row whose Signal applies; combine guidance"). The round-5 audit confirmed this is correct-but-incomplete — additive works for continuous adjustments (density / moisture / altitude contributions stack cleanly) but fails on (i) parameters where multiple signals conflict on the same continuous output and (ii) parameters where one signal categorically rules out a regime another suggests. The parameter-type-conditional model from ADR-0005 needs to surface in the doc.
-- Surface: [ROASTING.md](../../ROASTING.md) § Green-Spec → Starting-Hypothesis
+- Surface: [ROASTING.md](ROASTING.md) § Green-Spec → Starting-Hypothesis
 - Migration shape: split into two tables — additive table for continuous adjustments (current table, untouched) + new precedence table for categorical decisions (process-family → anchor-selection, FC-audibility-expectation → end-condition, fruit-layer-presence → energy-direction-inversion). Cross-link both to the **Signal precedence** + **Multi-factor weighting** entries in CONTEXT.md.
 
 **2. Development entry framing edit** [DOC EDIT]
 - Why: ROASTING.md's existing **Development** framing says "A large WB→Gnd delta means the bean looked roasted on the outside but stalled inside." Round 1 audit established that polarity flips by lot family — conventional-case (washed) has Gnd lighter than WB ("stalled inside" reading is correct); heavy-ferment / fruit-layer case has WB lighter than Gnd (Mandela XO #139 = WB 76 / Gnd 72.4 is the case study; interior actually develops more uniformly than surface implies). The current line is convention-1-specific and reads wrong on heavy-ferment lots.
-- Surface: [ROASTING.md](../../ROASTING.md) § Development (or wherever the line appears)
+- Surface: [ROASTING.md](ROASTING.md) § Development (or wherever the line appears)
 - Edit shape: soften the framing to "typically, in conventional / washed roasts" or split into two lot-family-specific readings. The CONTEXT.md `WB→Gnd Agtron delta` entry already documents the two patterns cleanly — ROASTING.md can cross-reference rather than restate.
 - Coupled with #1 (both ROASTING.md doc edits); bundle in one PR.
 
@@ -75,7 +75,7 @@ None of the 9 follow-ups below are correctness blockers for routine roasting wor
 **9. Skeleton ADR for substrate-practice gap audit mechanism**
 - Why: The audit itself instantiated a pattern worth naming — cross-party grilling sessions are the closest mechanism today for closing the **practice-to-substrate** direction (whereas `propose_doc_changes` closes the substrate-to-substrate direction). If this becomes repeatable, the mechanism deserves explicit framing alongside the existing arbiter / queue tooling.
 - Decision needed: skeleton an ADR documenting the audit-as-mechanism, or leave as session-output-only?
-- Surface: `docs/adr/0006-*.md` if scoped; alternatively a section in [ARBITER.md](../../ARBITER.md) or a new `docs/audits/` directory pattern.
+- Surface: `docs/adr/0006-*.md` if scoped; alternatively a section in [ARBITER.md](ARBITER.md) or a new `docs/audits/` directory pattern.
 - Lowest priority; surface only if the pattern repeats in 2026-Q3/Q4.
 
 ## Round-by-round summary

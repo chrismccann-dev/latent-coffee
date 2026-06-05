@@ -6,7 +6,7 @@ Intent → sub-skill mapping. Populated as sub-skills ship.
 
 | Operator intent / prompt context | Dispatch target | Knowledge clusters to load |
 |---|---|---|
-| Any brewing session that needs equipment guidance (brewer + filter + grinder + grind setting constraints) | [Brewing Equipment Expert](../brewing-equipment-expert/SKILL.md) | `brewing-equipment-expert/cluster/` |
+| Any brewing session that needs equipment guidance (brewer + filter + grinder + grind setting constraints) | [Brewing Equipment Expert](docs/skills/brewing-equipment-expert/SKILL.md) | `brewing-equipment-expert/cluster/` |
 | Operator asks about EG-1 grind setting safety/quirks | Brewing Equipment Expert | `brewing-equipment-expert/cluster/grinder-eg1.md` |
 | Operator asks about SWORKS dial behavior | Brewing Equipment Expert | `brewing-equipment-expert/cluster/sworks.md` |
 
@@ -14,19 +14,19 @@ Intent → sub-skill mapping. Populated as sub-skills ship.
 
 | Operator intent / prompt context | Dispatch target | Knowledge clusters to load |
 |---|---|---|
-| New lot intake (operator opens `start-lot.md` or describes a green-bean lot they just received) | [Roasting Assistant](../roasting-assistant/SKILL.md) | `roasting-historian/cluster/` + `wbc-roasting-archivist/cluster/` + `roest-knowledge/cluster/` + `peer-learning-roasting-archivist/cluster/` |
+| New lot intake (operator opens `start-lot.md` or describes a green-bean lot they just received) | [Roasting Assistant](docs/skills/roasting-assistant/SKILL.md) | `roasting-historian/cluster/` + `wbc-roasting-archivist/cluster/` + `roest-knowledge/cluster/` + `peer-learning-roasting-archivist/cluster/` |
 | One-shot lot design (single-batch sample, operator opens `one-shot.md` STAGE 2) | Roasting Assistant | Same as new lot intake |
 | V_(n+1) recipe design after current V-set cupping (operator at `log-cupping.md` STAGE 3 or Cupping Specialist Path B routes here) | Roasting Assistant | Same as new lot intake + `roasting-historian/cluster/learnings/<this-lot>.md` if exists |
-| New brew session (operator opens `start-brew.md` or describes a coffee they're about to brew) | [Brewing Assistant](../brewing-assistant/SKILL.md) | `brewing-historian/cluster/` + `wbc-brewing-archivist/cluster/` + `brewing-equipment-expert/cluster/` |
+| New brew session (operator opens `start-brew.md` or describes a coffee they're about to brew) | [Brewing Assistant](docs/skills/brewing-assistant/SKILL.md) | `brewing-historian/cluster/` + `wbc-brewing-archivist/cluster/` + `brewing-equipment-expert/cluster/` |
 | In-thread brew iteration (operator inside the active brew session reports tasting notes, wants refinement) | Brewing Assistant | Same as new brew session; Phase 2 sub-prompt active |
 | Optimized brew dial-in on reference roast (Chain 1 mid-step) | Brewing Assistant | Same as new brew session + `roasting-historian/cluster/learnings/<this-lot>.md` for roast context |
-| Sourcing opportunity evaluation (operator: "importer offered me X, should I buy?") | [Sourcing Workflow Planner](../sourcing-workflow-planner/SKILL.md) | `wbc-roasting-archivist/cluster/sourcing/` + `roasting-historian/cluster/` + direct `green_beans` table read |
+| Sourcing opportunity evaluation (operator: "importer offered me X, should I buy?") | [Sourcing Workflow Planner](docs/skills/sourcing-workflow-planner/SKILL.md) | `wbc-roasting-archivist/cluster/sourcing/` + `roasting-historian/cluster/` + direct `green_beans` table read |
 
 ## Research workflow — operator-direct, NOT Coordinator-dispatched
 
-Research Coordinator + Research Assistant are deliberately **not dispatched by Master Coordinator** per [ADR-0017](../../adr/0017-research-assistant-architecture.md) Exception 3 (operator-direct). The pair runs in Claude Code sessions, not claude.ai sessions. Entry surface: operator types "I want to start a research project" (or "I want to start a research track") into a fresh Claude Code session; that session becomes the Research Coordinator. Subsequent Assistant + Execution sessions are operator-spawned via manual paste of Coordinator-authored spawn prompts + scoped execution plans. No catalog routing, no MCP catalog refresh required.
+Research Coordinator + Research Assistant are deliberately **not dispatched by Master Coordinator** per [ADR-0017](docs/adr/0017-research-assistant-architecture.md) Exception 3 (operator-direct). The pair runs in Claude Code sessions, not claude.ai sessions. Entry surface: operator types "I want to start a research project" (or "I want to start a research track") into a fresh Claude Code session; that session becomes the Research Coordinator. Subsequent Assistant + Execution sessions are operator-spawned via manual paste of Coordinator-authored spawn prompts + scoped execution plans. No catalog routing, no MCP catalog refresh required.
 
-The pair appears in [`catalog.md`](catalog.md) for visibility (Knowledge tier + Workflow Executing tier respectively), but dispatch-rules deliberately do NOT include them. Catalog discipline + dispatch-rule discipline are decoupled for this pair only.
+The pair appears in [`catalog.md`](docs/skills/coordinator/catalog.md) for visibility (Knowledge tier + Workflow Executing tier respectively), but dispatch-rules deliberately do NOT include them. Catalog discipline + dispatch-rule discipline are decoupled for this pair only.
 
 If a claude.ai session ever expresses research-track-design intent ("test water side across next 5 lots"), the correct response is: redirect the operator to a fresh Claude Code session — claude.ai is the wrong surface for research work because research methodology is co-authored at Step 0 + role discipline requires session-role separation.
 
@@ -36,14 +36,14 @@ Substrate-writer sub-skills wrapping existing MCP Tools. Each owns 1-5 `push_*` 
 
 | Operator intent / prompt context | Dispatch target | Knowledge clusters to load |
 |---|---|---|
-| Post-roast batch logging (operator at `log-roast.md` STAGE 3 has Roest logs + per-batch reflections) | [Roast Recorder](../roast-recorder/SKILL.md) | `roest-knowledge/cluster/` (log interpretation + protocols) + `roasting-historian/cluster/` (retrospective comparison) |
+| Post-roast batch logging (operator at `log-roast.md` STAGE 3 has Roest logs + per-batch reflections) | [Roast Recorder](docs/skills/roast-recorder/SKILL.md) | `roest-knowledge/cluster/` (log interpretation + protocols) + `roasting-historian/cluster/` (retrospective comparison) |
 | Pre-rewrite-lot inline backfill (`roast_recipes` missing for V_n, design intent reconstructable) | Roast Recorder STAGE 1(b) | Same as post-roast batch logging |
-| Optimized brew completion (`bundled-brewing-completion.md`, purchased or self-roasted) | [Brew Recorder](../brew-recorder/SKILL.md) | `brewing-equipment-expert/cluster/` (canonical validation) + `brewing-historian/cluster/` (retrospective) |
+| Optimized brew completion (`bundled-brewing-completion.md`, purchased or self-roasted) | [Brew Recorder](docs/skills/brew-recorder/SKILL.md) | `brewing-equipment-expert/cluster/` (canonical validation) + `brewing-historian/cluster/` (retrospective) |
 | In-thread brew finalization (Brewing Assistant Phase 3 handoff) | Brew Recorder | Same as optimized brew completion |
-| Day-7 xBloom cupping push + V-set Path A/B/C/C-1/C-2 routing (operator at `log-cupping.md`) | [Cupping Specialist](../cupping-specialist/SKILL.md) | `roasting-historian/cluster/` (`is_reference_candidate` patterns + cross-lot retros) + `roest-knowledge/cluster/protocols/` (silent-FC protocol stack) + `cupping-specialist/cluster/pod-1-routing.md` (when nearing reference) |
+| Day-7 xBloom cupping push + V-set Path A/B/C/C-1/C-2 routing (operator at `log-cupping.md`) | [Cupping Specialist](docs/skills/cupping-specialist/SKILL.md) | `roasting-historian/cluster/` (`is_reference_candidate` patterns + cross-lot retros) + `roest-knowledge/cluster/protocols/` (silent-FC protocol stack) + `cupping-specialist/cluster/pod-1-routing.md` (when nearing reference) |
 | `is_reference_candidate` flag-setting on V-set leading slot | Cupping Specialist STAGE 3 | Same as Day-7 cupping |
-| Roest API profile push (Roasting Assistant produced approved recipe; operator at `start-lot.md` STAGE 3 or `log-cupping.md` STAGE 5(c)) | [Roest API Worker](../roest-api-worker/SKILL.md) | `roest-knowledge/cluster/api/` (write surface + quirks) + `roest-knowledge/cluster/firmware/` (version constraints) + `roest-knowledge/cluster/observed-quirks.md` (live issues) |
-| V-set lot close-out (operator at `close-lot.md` after Cupping Specialist Path A → Brewing Assistant → Brew Recorder Chain 1) | [Close-Lot Specialist](../close-lot-specialist/SKILL.md) | `roasting-historian/cluster/` (verdict synthesis + carry-forward field discipline) |
+| Roest API profile push (Roasting Assistant produced approved recipe; operator at `start-lot.md` STAGE 3 or `log-cupping.md` STAGE 5(c)) | [Roest API Worker](docs/skills/roest-api-worker/SKILL.md) | `roest-knowledge/cluster/api/` (write surface + quirks) + `roest-knowledge/cluster/firmware/` (version constraints) + `roest-knowledge/cluster/observed-quirks.md` (live issues) |
+| V-set lot close-out (operator at `close-lot.md` after Cupping Specialist Path A → Brewing Assistant → Brew Recorder Chain 1) | [Close-Lot Specialist](docs/skills/close-lot-specialist/SKILL.md) | `roasting-historian/cluster/` (verdict synthesis + carry-forward field discipline) |
 | One-shot lot close-out (operator at `one-shot-closeout.md`, `green_beans.is_one_shot=true`) | Close-Lot Specialist | Same as V-set close-out; 7 lever-attribution fields rejected by schema |
 | Chain 3 Path C close-without-reference (Cupping Specialist routes directly to Close-Lot Specialist) | Close-Lot Specialist | Same as V-set close-out |
 
@@ -53,7 +53,7 @@ Wave 4 adds CCIL dispatch rules for cross-domain synthesis intents.
 
 ## Cross-domain dispatch (see also handoff-rules.md)
 
-When operator intent spans both brewing and roasting, see [`handoff-rules.md`](handoff-rules.md) for the canonical chains. PR 2 made Chains 1 + 2 + 3 + 4 substantive (Planner halves ACTIVE). **PR 3 promotes Chains 1 + 2 + 3 + 4 from PARTIAL → ACTIVE** (all 5 Workflow Executing sub-skills flipped ACTIVE); Chain 5 already ACTIVE (single-step Sourcing Workflow Planner); Chain 6 remains placeholder for Wave 4 CCIL.
+When operator intent spans both brewing and roasting, see [`handoff-rules.md`](docs/skills/coordinator/handoff-rules.md) for the canonical chains. PR 2 made Chains 1 + 2 + 3 + 4 substantive (Planner halves ACTIVE). **PR 3 promotes Chains 1 + 2 + 3 + 4 from PARTIAL → ACTIVE** (all 5 Workflow Executing sub-skills flipped ACTIVE); Chain 5 already ACTIVE (single-step Sourcing Workflow Planner); Chain 6 remains placeholder for Wave 4 CCIL.
 
 ## Override logging (Pattern H)
 

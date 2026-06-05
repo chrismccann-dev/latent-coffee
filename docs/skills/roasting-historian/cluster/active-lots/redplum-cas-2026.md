@@ -59,6 +59,6 @@ Note: operator mentioned wanting to test a simulated pourover variant on the v1b
 
 ## Cross-references
 
-- [by-process/washed.md](../patterns/by-process/washed.md) — per-process roll-up; this lot is the high-moisture pulp-fermentation washed variant
-- [cross-coffee-insights.md § Working Hypotheses (Single-Lot, Low Confidence)](../patterns/cross-coffee-insights.md#working-hypotheses-single-lot-low-confidence) — Total Time Outweighs Peak Inlet for Body Weight on Pulp-Fermentation Washed at High Moisture hypothesis seeded here
-- [learnings/cgle-srume-washed-2026.md](../learnings/cgle-srume-washed-2026.md) — #133 anchor that this lot's V1 inherited
+- [by-process/washed.md](docs/skills/roasting-historian/cluster/patterns/by-process/washed.md) — per-process roll-up; this lot is the high-moisture pulp-fermentation washed variant
+- [cross-coffee-insights.md § Working Hypotheses (Single-Lot, Low Confidence)](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#working-hypotheses-single-lot-low-confidence) — Total Time Outweighs Peak Inlet for Body Weight on Pulp-Fermentation Washed at High Moisture hypothesis seeded here
+- [learnings/cgle-srume-washed-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-srume-washed-2026.md) — #133 anchor that this lot's V1 inherited

@@ -2,9 +2,9 @@
 
 *Coffee Research · Latent · Brewing Historian cluster · by-strategy*
 
-**Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](../../../../../../BREWING.md#axis-1---extraction-strategy) for the canonical Extraction Push definition (mechanics: 6.3-5.5 or finer grind, **low agitation (Melodrip)**, fast-flow filters - Sibarist FAST flat or cone, near-boiling water 93-98°C, 1:15-1:17, often longer total brew time than Clarity-First but cleaner cup than Full Expression; intent: push extraction yield while preserving transparency on clean coffees where Full Expression's high agitation would compress aromatic clarity).
+**Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the canonical Extraction Push definition (mechanics: 6.3-5.5 or finer grind, **low agitation (Melodrip)**, fast-flow filters - Sibarist FAST flat or cone, near-boiling water 93-98°C, 1:15-1:17, often longer total brew time than Clarity-First but cleaner cup than Full Expression; intent: push extraction yield while preserving transparency on clean coffees where Full Expression's high agitation would compress aromatic clarity).
 
-Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Extraction Push](../../../../../../BREWING.md#coffees-that-confirmed-extraction-push) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](../../../../../adr/0011-composable-sub-skills-architecture.md).
+Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Extraction Push](BREWING.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
 
 ---
 

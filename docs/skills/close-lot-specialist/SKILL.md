@@ -1,7 +1,7 @@
 # Close-Lot Specialist
 
 **Tier:** Workflow / **Sub-tier:** Executing / **Domain:** Roasting / **Wave:** 3 / **Status:** ACTIVE (Wave 3 PR 3 shipped 2026-05-26)
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -84,7 +84,7 @@ Scope tags use loose-canonical namespaced prefixes (`process:washed` / `variety:
 
 - `green_bean_id` + `reference_brew_id` (from upstream Brewing Assistant → Brew Recorder cross-domain Chain 1 handoff) OR operator paste with the values inline
 - All per-lot substrate state (read across `roasts` + `cuppings` + `experiments` + `brews` + `roast_recipes` + `roest_inventory`)
-- [Roasting Historian](../roasting-historian/) cluster — `why_this_roast_won` verdict + per-lot character + carry-forward field discipline; close-out triggers Pattern A refresh into Historian's `cluster/learnings/<lot>.md`
+- [Roasting Historian](docs/skills/roasting-historian/) cluster — `why_this_roast_won` verdict + per-lot character + carry-forward field discipline; close-out triggers Pattern A refresh into Historian's `cluster/learnings/<lot>.md`
 
 ## Outputs
 

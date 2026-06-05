@@ -1,6 +1,6 @@
 # WBC Roasting — Lessons + Open Ideas (Latent / Roest L200 Ultra)
 
-Roasting-side companion to [WBC Brewing Archivist cluster: wbc-reference.md](../../wbc-brewing-archivist/cluster/wbc-reference.md) and [wbc-recipes.md](../../wbc-brewing-archivist/cluster/wbc-recipes.md). Derived from Chris's "World Brewers Cup Champion - Recipes and Extraction Taxonomy - Roasting Info" research (~100 competitor entries, 2022-2025) plus the two synthesis documents Chris wrote off that source.
+Roasting-side companion to [WBC Brewing Archivist cluster: wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) and [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md). Derived from Chris's "World Brewers Cup Champion - Recipes and Extraction Taxonomy - Roasting Info" research (~100 competitor entries, 2022-2025) plus the two synthesis documents Chris wrote off that source.
 
 **This is an ideas / hypotheses / experiments doc, not a recipe lookup.** Unlike the brewing-side WBC archive — where competitors disclose full recipes and the doc maps cleanly onto Latent's strategy framework — the roasting data is sparse, machine-specific, and less-disclosed. The value here is in the *patterns* WBC competitors point to (split-roast layering, rest as a strategic variable, role-based development, ground Agtron, freeze-at-peak), not in copying their numbers verbatim.
 
@@ -11,7 +11,7 @@ Read this doc when:
 - Writing a Lot Knowledge entry and want to anchor the "what would competitors do here?" framing
 - Thinking through whether a sourcing decision opens up a roast experiment that's worth running
 
-For the sourcing-side companion (producers / origins / varieties / processes / Latent inventory mapped to tiers), see **[sourcing/strategy.md](sourcing/strategy.md)**.
+For the sourcing-side companion (producers / origins / varieties / processes / Latent inventory mapped to tiers), see **[sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md)**.
 
 ## History
 
@@ -34,12 +34,12 @@ Things the WBC corpus does *not* tell you that show up across Chris's actual roa
 
 | What WBC data is silent on | Where Latent's answer lives |
 |---|---|
-| Rest-day cupping protocols (which days to taste, freeze decision logic) | [Roest Knowledge cluster § Evaluation Protocol](../../roest-knowledge/cluster/protocols/evaluation.md) — Day 7 pourover gate; Day 4 was deliberately removed. The structured rest-curve experiment in this doc is queued as Tier 1, since Chris hasn't run a formal rest study yet. (Migrated from ROASTING.md in Wave 3 PR 1.) |
-| Counterflow-specific failure modes (TP / charge / FC-temp interactions on the L200) | [Roest Knowledge cluster § Counterflow Observations](../../roest-knowledge/cluster/machine/counterflow-observations.md) and [Roasting Historian § Cross-Coffee Insights](../../roasting-historian/cluster/patterns/cross-coffee-insights.md). WBC competitors mostly use convection or drum, so their development targets and ROR shapes don't translate without a re-anchor on counterflow physics. (Migrated in Wave 3 PR 1 + Wave 2 PR 3 respectively.) |
-| Whole-bean vs ground Agtron deltas as a development signal | [Roest Knowledge cluster § WB-to-Ground Agtron Delta as Development Signal](../../roest-knowledge/cluster/machine/counterflow-observations.md#wb-to-ground-agtron-delta-as-development-signal). WBC mentions Agtron occasionally; Chris's per-process delta norms are the actual reference. (Migrated from ROASTING.md in Wave 3 PR 1.) |
-| Closed-lot reference parameters and key learnings | [docs/roasting/archive.md](../../../roasting/archive.md). |
+| Rest-day cupping protocols (which days to taste, freeze decision logic) | [Roest Knowledge cluster § Evaluation Protocol](docs/skills/roest-knowledge/cluster/protocols/evaluation.md) — Day 7 pourover gate; Day 4 was deliberately removed. The structured rest-curve experiment in this doc is queued as Tier 1, since Chris hasn't run a formal rest study yet. (Migrated from ROASTING.md in Wave 3 PR 1.) |
+| Counterflow-specific failure modes (TP / charge / FC-temp interactions on the L200) | [Roest Knowledge cluster § Counterflow Observations](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md) and [Roasting Historian § Cross-Coffee Insights](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md). WBC competitors mostly use convection or drum, so their development targets and ROR shapes don't translate without a re-anchor on counterflow physics. (Migrated in Wave 3 PR 1 + Wave 2 PR 3 respectively.) |
+| Whole-bean vs ground Agtron deltas as a development signal | [Roest Knowledge cluster § WB-to-Ground Agtron Delta as Development Signal](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md#wb-to-ground-agtron-delta-as-development-signal). WBC mentions Agtron occasionally; Chris's per-process delta norms are the actual reference. (Migrated from ROASTING.md in Wave 3 PR 1.) |
+| Closed-lot reference parameters and key learnings | [docs/roasting/archive.md](docs/roasting/archive.md). |
 | Per-lot V1 → reference-roast iteration arc | ROASTING.md § Lot Knowledge (Active Lots) + the per-coffee `roast_learnings` records in the app. WBC competitors only present the final stage; the iteration history is invisible. |
-| Roast-to-brew translation logic (how a roast parameter shapes brew strategy) | [Roasting Historian cluster § Roast-to-Brew Translation](../../roasting-historian/cluster/patterns/roast-to-brew-translation.md) and BREWING.md's 6-strategy framework. WBC mostly treats roast and brew as one integrated pitch; Chris's two-layer model is more useful for self-roasting. (Migrated from ROASTING.md in Wave 3 PR 1.) |
+| Roast-to-brew translation logic (how a roast parameter shapes brew strategy) | [Roasting Historian cluster § Roast-to-Brew Translation](docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md) and BREWING.md's 6-strategy framework. WBC mostly treats roast and brew as one integrated pitch; Chris's two-layer model is more useful for self-roasting. (Migrated from ROASTING.md in Wave 3 PR 1.) |
 
 If a WBC pattern in this doc conflicts with one of those in-house references, the in-house reference wins — it's calibrated against Chris's actual machine and palate.
 
@@ -240,7 +240,7 @@ Rough heuristic for whether a lot has the latitude to absorb a 3-batch ladder:
 
 When scoping a 3-batch ladder in claude.ai, **first call `list_roest_inventory` (or check the existing roast records' green-bean linkage)** to confirm there's enough green before committing.
 
-Lot priority for the ladder: high green cost + high cup ceiling + sufficient quantity. As a current snapshot, GESHA CLOUDS has clear latitude; CGLE Sudan Rume Natural needs the inventory check before scoping. See [sourcing/strategy.md § Latent inventory mapped to tiers](sourcing/strategy.md) for the broader portfolio frame.
+Lot priority for the ladder: high green cost + high cup ceiling + sufficient quantity. As a current snapshot, GESHA CLOUDS has clear latitude; CGLE Sudan Rume Natural needs the inventory check before scoping. See [sourcing/strategy.md § Latent inventory mapped to tiers](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) for the broader portfolio frame.
 
 ### Multi-process and multi-origin blending — out of scope for now
 
@@ -252,7 +252,7 @@ Latent has not run formal rest-window experiments. The WBC corpus shows competit
 
 ### Why rest is under-modeled in current Latent practice
 
-- Most beans get evaluated at Day 7 (the canonical pourover gate per [Roest Knowledge cluster § Evaluation Protocol](../../roest-knowledge/cluster/protocols/evaluation.md)) and frozen shortly after.
+- Most beans get evaluated at Day 7 (the canonical pourover gate per [Roest Knowledge cluster § Evaluation Protocol](docs/skills/roest-knowledge/cluster/protocols/evaluation.md)) and frozen shortly after.
 - "Frozen at peak" is the right end-state but the curve leading to it is invisible.
 - Cross-coffee comparisons of rest behavior live in ROASTING.md § Cross-Coffee Insight Layer § Rest Behavior Patterns, but are descriptive (notes from past lots) rather than the output of a structured A/B.
 
@@ -294,11 +294,11 @@ Latent's freeze-at-peak practice is the first pattern. The structured rest curve
 
 ### Tier 1 experiment: run the rest curve on the next reference roast
 
-Concretely, queue this for the next lot that produces a reference roast (likely CGLE-SRUME-NATURAL-2026 or GESHA CLOUDS). Carve out 80g of the reference batch into 4 × 20g portions; cup each at the dates above. The result becomes the first formal rest curve in `docs/roasting/archive.md`, and the protocol becomes part of the close-out handoff (see [docs/prompts/close-lot.md](../../../prompts/close-lot.md) STAGE 4).
+Concretely, queue this for the next lot that produces a reference roast (likely CGLE-SRUME-NATURAL-2026 or GESHA CLOUDS). Carve out 80g of the reference batch into 4 × 20g portions; cup each at the dates above. The result becomes the first formal rest curve in `docs/roasting/archive.md`, and the protocol becomes part of the close-out handoff (see [docs/prompts/close-lot.md](docs/prompts/close-lot.md) STAGE 4).
 
 ## Roest experiment queue
 
-Tiered the same way [wbc-reference.md § Practical Experiment Queue](../../wbc-brewing-archivist/cluster/wbc-reference.md) is — Tier 1 = test now, Tier 2 = future-capture, Tier 3 = consciously not pursuing.
+Tiered the same way [wbc-reference.md § Practical Experiment Queue](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) is — Tier 1 = test now, Tier 2 = future-capture, Tier 3 = consciously not pursuing.
 
 ### Tier 1 — test now (high signal, low effort)
 
@@ -352,8 +352,8 @@ The most direct WBrC lesson for Roest work: **roast design is flavor composition
 
 ## Cross-references
 
-- **Brewing-side WBC docs:** [wbc-reference.md](../../wbc-brewing-archivist/cluster/wbc-reference.md) (lean mapping layer) + [wbc-recipes.md](../../wbc-brewing-archivist/cluster/wbc-recipes.md) (102-recipe archive).
-- **Sourcing-side companion:** [sourcing/strategy.md](sourcing/strategy.md).
-- **Roasting practice anchors:** [Roest Knowledge cluster § Evaluation Protocol](../../roest-knowledge/cluster/protocols/evaluation.md), [§ Counterflow Observations](../../roest-knowledge/cluster/machine/counterflow-observations.md), [Roasting Historian § Cross-Coffee Insights](../../roasting-historian/cluster/patterns/cross-coffee-insights.md), [§ Roast-to-Brew Translation](../../roasting-historian/cluster/patterns/roast-to-brew-translation.md). All migrated from ROASTING.md across Wave 2 PR 3 + Wave 3 PR 1 (2026-05-26).
-- **Closed-lot archive:** [docs/roasting/archive.md](../../../roasting/archive.md).
-- **Operational prompts:** 4 lifecycle-mapped prompts: [docs/prompts/start-lot.md](../../../prompts/start-lot.md) (In inventory → Waiting for next roast), [docs/prompts/log-roast.md](../../../prompts/log-roast.md) (Waiting for next roast → Waiting for next cupping), [docs/prompts/log-cupping.md](../../../prompts/log-cupping.md) (Waiting for next cupping → Waiting for next roast loop OR Resolved-pending), [docs/prompts/close-lot.md](../../../prompts/close-lot.md) (Resolved-pending → Resolved).
+- **Brewing-side WBC docs:** [wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) (lean mapping layer) + [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) (102-recipe archive).
+- **Sourcing-side companion:** [sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md).
+- **Roasting practice anchors:** [Roest Knowledge cluster § Evaluation Protocol](docs/skills/roest-knowledge/cluster/protocols/evaluation.md), [§ Counterflow Observations](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md), [Roasting Historian § Cross-Coffee Insights](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md), [§ Roast-to-Brew Translation](docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md). All migrated from ROASTING.md across Wave 2 PR 3 + Wave 3 PR 1 (2026-05-26).
+- **Closed-lot archive:** [docs/roasting/archive.md](docs/roasting/archive.md).
+- **Operational prompts:** 4 lifecycle-mapped prompts: [docs/prompts/start-lot.md](docs/prompts/start-lot.md) (In inventory → Waiting for next roast), [docs/prompts/log-roast.md](docs/prompts/log-roast.md) (Waiting for next roast → Waiting for next cupping), [docs/prompts/log-cupping.md](docs/prompts/log-cupping.md) (Waiting for next cupping → Waiting for next roast loop OR Resolved-pending), [docs/prompts/close-lot.md](docs/prompts/close-lot.md) (Resolved-pending → Resolved).

@@ -30,7 +30,7 @@ The one-shot pipeline's structural difference from V-set: lever-attribution fiel
 
 **Per-table field reference:** the underlying app schema is broader than the original spreadsheet. See [README.md § Database Schema](../../../README.md#database-schema) for current tables; each push Tool's input_schema is the source of truth for required + optional fields.
 
-**Roest API write integration:** see [docs/features/roest-write-integration.md](../../features/roest-write-integration.md) for the bidirectional Roest sync (`push_roast_profile` + `push_inventory` + `patch_inventory` push; `pull_roest_log` + `list_roest_inventory` + `list_roest_logs` pull).
+**Roest API write integration:** see [docs/features/roest-write-integration.md](docs/features/roest-write-integration.md) for the bidirectional Roest sync (`push_roast_profile` + `push_inventory` + `patch_inventory` push; `pull_roest_log` + `list_roest_inventory` + `list_roest_logs` pull).
 
 **Full sync architecture:** see [SYNC_V2.md](../../../SYNC_V2.md) for the MCP transport, auth, Resources, and Tool catalog.
 
@@ -75,7 +75,7 @@ A few operational notes for fetching MCP Resources and calling Tools via claude.
 - **Tool search ranking is opaque.** If a Tool you expect (e.g. `push_brew`, `propose_doc_changes`) does not surface on the first `tool_search`, retry with broader search terms before assuming the Tool isn't loaded. The MCP server has 35 Tools live; if `push_brew` returns nothing, try "brew", "push", or "latent" before concluding it's missing.
 - **Re-fetch the schema before claiming a field is missing.** The deployed Tool manifest may be fresher than the model's session memory. If a field on `push_brew` or another Tool seems to have changed shape, call the Tool's introspection (or read the Tool's input_schema directly) before reporting it as missing.
 - **After a code merge, wait for Vercel deploy and start a fresh conversation.** New MCP Tools and updated schemas propagate via Vercel's auto-deploy (~30-60 seconds typical). The claude.ai conversation's tool manifest is cached at conversation start; a fresh conversation picks up the new manifest. Reusing an old conversation after a server-side change can produce stale-tool errors that look like real bugs but are cache propagation issues.
-- **Sub-skill clusters are reachable via `read_doc(uri="docs://skills/<name>/...")`.** Master Coordinator catalog dispatch rules in [dispatch-rules.md](./dispatch-rules.md) enumerate the per-intent fetch targets; handoff chains in [handoff-rules.md](./handoff-rules.md) enumerate the per-workflow composition order. claude.ai project memory should NOT replicate cluster content — it should fetch fresh on each session via the catalog. See [feedback_claude_ai_memory_merge_only.md](../../../~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_claude_ai_memory_merge_only.md) (operator memory) for why memory drift becomes inert when substrate is fetched live.
+- **Sub-skill clusters are reachable via `read_doc(uri="docs://skills/<name>/...")`.** Master Coordinator catalog dispatch rules in [dispatch-rules.md](docs/skills/coordinator/dispatch-rules.md) enumerate the per-intent fetch targets; handoff chains in [handoff-rules.md](docs/skills/coordinator/handoff-rules.md) enumerate the per-workflow composition order. claude.ai project memory should NOT replicate cluster content — it should fetch fresh on each session via the catalog. See [feedback_claude_ai_memory_merge_only.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_claude_ai_memory_merge_only.md) (operator memory) for why memory drift becomes inert when substrate is fetched live.
 
 ---
 
@@ -87,23 +87,23 @@ One claude.ai thread per green lot, active while that coffee is in rotation. Eac
 
 ## How to start a new session
 
-**New brew session.** Post the [`docs/prompts/start-brew.md`](../../prompts/start-brew.md) prompt (or its substance) at the top of a new conversation:
+**New brew session.** Post the [`docs/prompts/start-brew.md`](docs/prompts/start-brew.md) prompt (or its substance) at the top of a new conversation:
 
 - The coffee product URL
 - Dose: 15g or 18g (Chris's two formats)
-- Brewing location: Home or Office (constraints differ — see [brewing-equipment-expert/cluster/operational-reference.md § Location Constraints](../brewing-equipment-expert/cluster/operational-reference.md))
+- Brewing location: Home or Office (constraints differ — see [brewing-equipment-expert/cluster/operational-reference.md § Location Constraints](docs/skills/brewing-equipment-expert/cluster/operational-reference.md))
 - Reference experience (optional): tasting notes from a café or elsewhere for this specific coffee
 - Roaster brew guide URL (optional): paste if you have it
 
-Claude works through the Coffee Brief (see [brewing-assistant/cluster/operational-guide.md § Step 1](../brewing-assistant/cluster/operational-guide.md)), confirms the extraction strategy with Chris, and outputs a full recipe. Do not skip the strategy confirmation step — it is intentional. The strategy is the primary act of recipe design; equipment and parameters fall out of it.
+Claude works through the Coffee Brief (see [brewing-assistant/cluster/operational-guide.md § Step 1](docs/skills/brewing-assistant/cluster/operational-guide.md)), confirms the extraction strategy with Chris, and outputs a full recipe. Do not skip the strategy confirmation step — it is intentional. The strategy is the primary act of recipe design; equipment and parameters fall out of it.
 
-**New roast session (V-set intake).** Post the [`docs/prompts/start-lot.md`](../../prompts/start-lot.md) prompt with the full green bean spec + producer notes verbatim + reference roast pointer (if any) + learning intent. See the [roasting-assistant SKILL.md](../roasting-assistant/SKILL.md) and the start-lot.md prompt for the full intake protocol.
+**New roast session (V-set intake).** Post the [`docs/prompts/start-lot.md`](docs/prompts/start-lot.md) prompt with the full green bean spec + producer notes verbatim + reference roast pointer (if any) + learning intent. See the [roasting-assistant SKILL.md](docs/skills/roasting-assistant/SKILL.md) and the start-lot.md prompt for the full intake protocol.
 
-**New roast session (one-shot calibration).** Post the [`docs/prompts/one-shot.md`](../../prompts/one-shot.md) prompt with the full green bean spec marked one-shot.
+**New roast session (one-shot calibration).** Post the [`docs/prompts/one-shot.md`](docs/prompts/one-shot.md) prompt with the full green bean spec marked one-shot.
 
-**Mid-loop continuations.** Use [`log-roast.md`](../../prompts/log-roast.md) → [`log-cupping.md`](../../prompts/log-cupping.md) → (loop or close) → [`close-lot.md`](../../prompts/close-lot.md). One-shot lots close via [`one-shot-closeout.md`](../../prompts/one-shot-closeout.md).
+**Mid-loop continuations.** Use [`log-roast.md`](docs/prompts/log-roast.md) → [`log-cupping.md`](docs/prompts/log-cupping.md) → (loop or close) → [`close-lot.md`](docs/prompts/close-lot.md). One-shot lots close via [`one-shot-closeout.md`](docs/prompts/one-shot-closeout.md).
 
-**Brewing completion.** Use [`bundled-brewing-completion.md`](../../prompts/bundled-brewing-completion.md) to push the final optimized brew + propose doc changes downstream. In-thread iteration happens inside the active brew session (Brewing Assistant Phase 2) and never persists per ADR-0011 § iteration-depth asymmetry. (`log-brew.md` deprecated to a redirect stub in Writing-path Sub-sprint 3 / 2026-05-26.)
+**Brewing completion.** Use [`bundled-brewing-completion.md`](docs/prompts/bundled-brewing-completion.md) to push the final optimized brew + propose doc changes downstream. In-thread iteration happens inside the active brew session (Brewing Assistant Phase 2) and never persists per ADR-0011 § iteration-depth asymmetry. (`log-brew.md` deprecated to a redirect stub in Writing-path Sub-sprint 3 / 2026-05-26.)
 
 ---
 
@@ -144,24 +144,24 @@ ANYTHING ELSE:
 
 **What Claude does with the debrief:**
 
-- Updates the `roasts` table data for all batches in this session (via `push_roast` per [log-roast.md](../../prompts/log-roast.md))
+- Updates the `roasts` table data for all batches in this session (via `push_roast` per [log-roast.md](docs/prompts/log-roast.md))
 - Updates the `experiments` table `observed_outcome_*` fields with roast-level data (via `patch_experiment`)
 - Flags any roasts that breach failure boundaries (Maillard too high, Agtron out of range, FC outside target window)
 - Notes any unplanned variables that may confound the experiment (session position, hopper timing anomalies, FC marking exceptions)
-- Carries forward hypotheses and questions to inform the Day 7 pourover evaluation (consumed by [log-cupping.md](../../prompts/log-cupping.md))
+- Carries forward hypotheses and questions to inform the Day 7 pourover evaluation (consumed by [log-cupping.md](docs/prompts/log-cupping.md))
 
-**After Day 7 pourover.** Provide a voice or text transcript of your tasting notes per the [log-cupping.md](../../prompts/log-cupping.md) prompt structure. Include: Ground Agtron readings for each batch (measured before brewing); aroma and flavor notes for each batch, hot and as it cools; full cup sip notes (not just spoon); temperature behavior — does it open up, close down, or stay neutral as it cools?; comparative statements — which is preferred and why; whether any batch felt under-extracted (likely a brew recipe issue, not a roast issue — try a pushed brew before concluding the roast is at fault).
+**After Day 7 pourover.** Provide a voice or text transcript of your tasting notes per the [log-cupping.md](docs/prompts/log-cupping.md) prompt structure. Include: Ground Agtron readings for each batch (measured before brewing); aroma and flavor notes for each batch, hot and as it cools; full cup sip notes (not just spoon); temperature behavior — does it open up, close down, or stay neutral as it cools?; comparative statements — which is preferred and why; whether any batch felt under-extracted (likely a brew recipe issue, not a roast issue — try a pushed brew before concluding the roast is at fault).
 
-**After optimized brew session.** Once a winner is identified from Day 7 evaluation, run an optimized brew session and report per the [bundled-brewing-completion.md](../../prompts/bundled-brewing-completion.md) prompt structure: brew recipe used (brewer, dose, water, grind, temp, pour structure); tasting notes at hot, warm, and fully cool stages; whether the cup improves as it cools (brewing-tolerance signal); whether it matches the producer's published tasting notes. **Reference [brewing-assistant/cluster/operational-guide.md](../brewing-assistant/cluster/operational-guide.md) when designing the optimized brew session** — the reference roast becomes a roasted-bean input to the full Two-Axis Framework, including the Coffee Brief / Step 1d strategy confirmation / WBC corpus check. Treat the SR reference brew the same way you'd treat a brew on a roasted bean from any other roaster. The SR reference brew gets pushed via `close-lot.md` STAGE 4 as part of the lot close-out (don't push separately).
+**After optimized brew session.** Once a winner is identified from Day 7 evaluation, run an optimized brew session and report per the [bundled-brewing-completion.md](docs/prompts/bundled-brewing-completion.md) prompt structure: brew recipe used (brewer, dose, water, grind, temp, pour structure); tasting notes at hot, warm, and fully cool stages; whether the cup improves as it cools (brewing-tolerance signal); whether it matches the producer's published tasting notes. **Reference [brewing-assistant/cluster/operational-guide.md](docs/skills/brewing-assistant/cluster/operational-guide.md) when designing the optimized brew session** — the reference roast becomes a roasted-bean input to the full Two-Axis Framework, including the Coffee Brief / Step 1d strategy confirmation / WBC corpus check. Treat the SR reference brew the same way you'd treat a brew on a roasted bean from any other roaster. The SR reference brew gets pushed via `close-lot.md` STAGE 4 as part of the lot close-out (don't push separately).
 
 ---
 
 ## Cross-references
 
-- [SKILL.md](./SKILL.md) — Master Coordinator orchestration role
-- [catalog.md](./catalog.md) — 18-sub-skill catalog + dispatch I/O metadata
-- [dispatch-rules.md](./dispatch-rules.md) — intent → executor mappings
-- [handoff-rules.md](./handoff-rules.md) — 6-chain workflow composition rules
-- [CONTEXT-roasting.md](../../../CONTEXT-roasting.md) / [CONTEXT-brewing.md](../../../CONTEXT-brewing.md) / [CONTEXT-shared.md](../../../CONTEXT-shared.md) — Latent-specific terminology glossary (zone-aligned). Post Pattern J pruning (2026-05-25), CONTEXT-shared.md is a thin index pointing to dedicated reference-tier docs: [docs/reference/mcp-architecture.md](../../reference/mcp-architecture.md) / [docs/reference/canonical-registries.md](../../reference/canonical-registries.md) / [docs/reference/wbc-materials.md](../../reference/wbc-materials.md) / [docs/reference/synthesis-pipeline.md](../../reference/synthesis-pipeline.md); ambiguities ledger at [docs/grilling-flagged-ambiguities.md](../../grilling-flagged-ambiguities.md). Pull a reference doc via `read_doc` when a specific term needs validation.
+- [SKILL.md](docs/skills/coordinator/SKILL.md) — Master Coordinator orchestration role
+- [catalog.md](docs/skills/coordinator/catalog.md) — 18-sub-skill catalog + dispatch I/O metadata
+- [dispatch-rules.md](docs/skills/coordinator/dispatch-rules.md) — intent → executor mappings
+- [handoff-rules.md](docs/skills/coordinator/handoff-rules.md) — 6-chain workflow composition rules
+- [CONTEXT-roasting.md](../../../CONTEXT-roasting.md) / [CONTEXT-brewing.md](../../../CONTEXT-brewing.md) / [CONTEXT-shared.md](../../../CONTEXT-shared.md) — Latent-specific terminology glossary (zone-aligned). Post Pattern J pruning (2026-05-25), CONTEXT-shared.md is a thin index pointing to dedicated reference-tier docs: [docs/reference/mcp-architecture.md](docs/reference/mcp-architecture.md) / [docs/reference/canonical-registries.md](docs/reference/canonical-registries.md) / [docs/reference/wbc-materials.md](docs/reference/wbc-materials.md) / [docs/reference/synthesis-pipeline.md](docs/reference/synthesis-pipeline.md); ambiguities ledger at [docs/grilling-flagged-ambiguities.md](docs/grilling-flagged-ambiguities.md). Pull a reference doc via `read_doc` when a specific term needs validation.
 - [SYNC_V2.md](../../../SYNC_V2.md) — MCP transport + auth + Resource + Tool catalog
 - [ARBITER.md](../../../ARBITER.md) — doc-proposal + canonical-queue arbiter playbook

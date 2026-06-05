@@ -18,7 +18,7 @@ After this series ships, the writing path is stable enough to support the Read-p
 
 | # | Sub-sprint | Sizing | Status | Kickoff doc |
 |---|---|---|---|---|
-| 1 | Sprint 3.5 — Roest pull-side audit + /datapoints/ unlock | ~3-4h actual (vs ~1-2 days kickoff sizing) | SHIPPED — [PR #263](https://github.com/chrismccann-dev/latent-coffee/pull/263) / main `451935d` | [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](./sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md) + [post-ship reshape](../features/roest-api-parity-phase-3.md) |
+| 1 | Sprint 3.5 — Roest pull-side audit + /datapoints/ unlock | ~3-4h actual (vs ~1-2 days kickoff sizing) | SHIPPED — [PR #263](https://github.com/chrismccann-dev/latent-coffee/pull/263) / main `451935d` | [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](docs/sprints/sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md) + [post-ship reshape](docs/features/roest-api-parity-phase-3.md) |
 | 2 | MCP ergonomics polish (Round 15 cluster) | ~1.5h actual | SHIPPED — [PR #266](https://github.com/chrismccann-dev/latent-coffee/pull/266) / main `e6eca4a` | Inline § below |
 | 3 | Brewing-completion prompt consolidation | ~30 min actual | SHIPPED — [PR #268](https://github.com/chrismccann-dev/latent-coffee/pull/268) / main `5cd9d4b` | Inline § below |
 | 4 | Human-write surface deprecation | ~3h actual (vs ~1 day kickoff sizing) | SHIPPED — [PR #270](https://github.com/chrismccann-dev/latent-coffee/pull/270) / main `d8b30d1` | Inline § below |
@@ -33,7 +33,7 @@ After this series ships, the writing path is stable enough to support the Read-p
 
 ## How to use this doc
 
-- **Starting Sub-sprint 1**: open the dedicated kickoff brief at [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](./sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md). That doc has full per-item detail.
+- **Starting Sub-sprint 1**: open the dedicated kickoff brief at [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](docs/sprints/sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md). That doc has full per-item detail.
 - **Starting Sub-sprint 2, 3, or 4**: point a new session at THIS doc + scroll to the relevant inline kickoff § below. Each has self-contained scope; no separate kickoff brief needed.
 - **At the end of any sub-sprint**: update the Status column above in this doc as part of the ship PR (SHIPPED + PR # + merge commit). Surface "Sub-sprint N+1 is next" in the closing message so the next session has a clear handoff.
 
@@ -45,7 +45,7 @@ Per CLAUDE.md sprint cadence #4, every sub-sprint that changes substrate (new fi
 
 ## Sub-sprint 1 — Sprint 3.5 — Roest pull-side audit + parity cleanup
 
-**Full kickoff brief:** [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](./sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md).
+**Full kickoff brief:** [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](docs/sprints/sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md).
 
 TL;DR: 6 audit items (R57 / R59 / R60 / R64 / R65 / R66) + 1 new discovery item (RoR tracking fields) + roest-api-worker sub-skill vocabulary sync. Lighter than the original Phase 3 scope per Chris audio — several items will resolve to "documented as manual augmentation." One audio-confirm checkpoint on the RoR migration scope decision.
 
@@ -228,8 +228,8 @@ When Sub-sprint 4 ships:
 
 ## Cross-references
 
-- [PRODUCT.md § Active Sprints #3 Writing-path surface polish series](../../PRODUCT.md#active-sprints) — the canonical scope source
-- [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](./sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md) — Sub-sprint 1 detailed kickoff
+- [PRODUCT.md § Active Sprints #3 Writing-path surface polish series](PRODUCT.md#active-sprints) — the canonical scope source
+- [sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md](docs/sprints/sprint-3-5-roest-pull-side-audit-kickoff-2026-05-26.md) — Sub-sprint 1 detailed kickoff
 - [`feedback_mcp_continuous_log.md`](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_continuous_log.md) Outstanding follow-ups items 14-19 — Sub-sprint 2 source
 - [`feedback_mcp_only_input.md`](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_only_input.md) — standing principle that bounds Sub-sprints 3 + 4
-- [docs/sprints/shipped.md](./shipped.md) — sprint-by-sprint ship log
+- [docs/sprints/shipped.md](docs/sprints/shipped.md) — sprint-by-sprint ship log

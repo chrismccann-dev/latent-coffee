@@ -4,7 +4,7 @@
 
 **Corpus:** N=3 brews on Washed base + Thermal Shock intervention modifier. Finca El Paraíso (Diego Bermúdez, Cauca, Colombia) is the canonical producer.
 
-**Current rollup:** the full recipe gradient + cooling behavior live below (graduated from the cross-coffee-insights.md rollup in pruning cases 007a/007b). The cross-experimental default-strategy context (thermal shock + yeast-inoculated → Balanced Intensity) sits with the yeast-inoculated capsules + [cross-coffee-insights.md](../cross-coffee-insights.md).
+**Current rollup:** the full recipe gradient + cooling behavior live below (graduated from the cross-coffee-insights.md rollup in pruning cases 007a/007b). The cross-experimental default-strategy context (thermal shock + yeast-inoculated → Balanced Intensity) sits with the yeast-inoculated capsules + [cross-coffee-insights.md](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md).
 
 **Default strategy:** Balanced Intensity (confirmed across three Finca El Paraíso lots — Letty Bermúdez Gesha, Luna Bermúdez Gesha, Lychee Castillo). Don't apply the Huila/Cauca Full Expression pattern to these lots — flavor targets are aromatic and transparency-driven.
 
@@ -18,6 +18,6 @@
 
 **Cooling behavior (flavor-target-driven, not lot-driven):** rose-forward lots (Letty) require near-40°C evaluation; aromatic-floral lots without rose (Luna, Lychee) peak ~45-50°C.
 
-**Per-strategy entries:** [Balanced Intensity](../by-strategy/balanced-intensity.md) (all three Finca El Paraíso thermal shock lots).
+**Per-strategy entries:** [Balanced Intensity](docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md) (all three Finca El Paraíso thermal shock lots).
 
 Patterns specific to thermal-shock-washed sub-types (non-Finca-El-Paraíso producers, non-Gesha cultivars under thermal shock) will accrue here as the corpus grows.

@@ -2,7 +2,7 @@
 
 Comprehensive reference archive of World Brewers Cup recipes. Sourced from Chris's "World Brewers Cup Champion - Recipes and Extraction Taxonomy" research, expanded from the original 18-recipe summary (2023-2025 finalists/champions only) to the full 102-recipe set covering 2022-2025.
 
-For Latent's mapping of WBC families/subtypes onto its own 6-strategy / 3-modifier framework (post-v8.4), see **[wbc-reference.md](wbc-reference.md)**. This document is the deep archive — competitor-by-competitor recipes grouped by strategy family, plus the full subtype definitions table.
+For Latent's mapping of WBC families/subtypes onto its own 6-strategy / 3-modifier framework (post-v8.4), see **[wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)**. This document is the deep archive — competitor-by-competitor recipes grouped by strategy family, plus the full subtype definitions table.
 
 **This is reference material, not a canonical registry.** Latent does not validate recipes against this archive. Use it for "what was the WBC competitor doing?" lookups during a brief, when re-framing an existing reference recipe under a new strategy classification, or when scoping a deliberate new experiment ("which 2025 finalists used Selective Bloom Hybrid?").
 

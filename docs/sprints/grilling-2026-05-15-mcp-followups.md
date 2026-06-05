@@ -4,7 +4,7 @@
 
 Third `/grill-with-docs` session, audit-grilling the MCP / Sync Architecture cluster — the largest single cluster in the series at 10 grilling rounds. Outputs:
 
-- [CONTEXT.md](../../CONTEXT.md) — **27 new glossary entries** under a "MCP / Sync Architecture" sub-section (peer to "Roasting", "Brewing"). Plus **~15 new relationships** capturing role separation + auth split + trust tiers + arbiter pipeline + drift/bloat prevention + cross-system consistency. **7 new flagged ambiguities** for future review. CONTEXT.md is now ~81 entries total (31 roasting + 23 brewing + 27 MCP).
+- [CONTEXT.md](CONTEXT.md) — **27 new glossary entries** under a "MCP / Sync Architecture" sub-section (peer to "Roasting", "Brewing"). Plus **~15 new relationships** capturing role separation + auth split + trust tiers + arbiter pipeline + drift/bloat prevention + cross-system consistency. **7 new flagged ambiguities** for future review. CONTEXT.md is now ~81 entries total (31 roasting + 23 brewing + 27 MCP).
 
 The new entries split across two thematic groups:
 
@@ -26,7 +26,7 @@ None of the follow-ups below are correctness blockers for the existing claude.ai
 - Effort: small-medium. Schema + Tool wiring is mechanical; arbiter doc edit is small.
 
 **2. Signature method registry sync — fold into Sprint A above** [REGISTRY SYNC]
-- Why: Already logged in [grilling-2026-05-15-brewing-followups.md](grilling-2026-05-15-brewing-followups.md) item #1 (highest brewing priority). MCP follow-up #1 is the architectural complement — register the queue path; brewing follow-up is the canonical-list fill. Both touch `lib/process-registry.ts` + `docs/taxonomies/processes.md` and should bundle.
+- Why: Already logged in [grilling-2026-05-15-brewing-followups.md](docs/sprints/grilling-2026-05-15-brewing-followups.md) item #1 (highest brewing priority). MCP follow-up #1 is the architectural complement — register the queue path; brewing follow-up is the canonical-list fill. Both touch `lib/process-registry.ts` + `docs/taxonomies/processes.md` and should bundle.
 
 **3. Per-axis canonical-strictness audit against the 4-tier framing** [AUDIT + DOC]
 - Why: Chris's 4-tier framing (strict-static / self-owned / closed-objective / open-loose) from round 8 grilling gives a clean per-axis policy taxonomy, but today's queue implementation maps unevenly: strict-static cultivar/terroir + override-eligible self-owned brewer/filter/grinder + override-eligible loose-producer-roaster are all in the queue; flavor + roast-level + process-modifier axes aren't. Either the 4-tier framing should drive uniform queue coverage, or per-tier behaviors should be deliberately distinct and documented.

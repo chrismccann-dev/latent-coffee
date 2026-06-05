@@ -44,8 +44,8 @@ Build a calibrated flow map of home cone filters so filter choice becomes a quan
 
 1. ✅ Median drawdown value (seconds) for each tested cone filter, recorded in the Recording Sheet below.
 2. ✅ Grind compensation table (half-notches finer/coarser vs B3) for swapping filters within a recipe.
-3. ✅ `FilterEntry` type extension in [lib/filter-registry.ts](../../lib/filter-registry.ts): new fields `measuredDrawdownSec` / `measurementDose` / `measurementBaseline` / `measurementDate` / `measurementProject` / `bedBehaviorUnderLoad` (4-value enum). Populated for the 8 tested filters; remaining filters left `undefined`.
-4. ✅ Updates to [docs/skills/brewing-equipment-expert/cluster/filters.md](../skills/brewing-equipment-expert/cluster/filters.md) — measured-drawdown surfaced + Cafec contradiction call-out.
+3. ✅ `FilterEntry` type extension in [lib/filter-registry.ts](lib/filter-registry.ts): new fields `measuredDrawdownSec` / `measurementDose` / `measurementBaseline` / `measurementDate` / `measurementProject` / `bedBehaviorUnderLoad` (4-value enum). Populated for the 8 tested filters; remaining filters left `undefined`.
+4. ✅ Updates to [docs/skills/brewing-equipment-expert/cluster/filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md) — measured-drawdown surfaced + Cafec contradiction call-out.
 
 ---
 
@@ -334,7 +334,7 @@ After close-out: protocol section is reusable (with baseline + brewer swap) as t
 - Pour rate emerged as the dominant variable, not dispersion device. Operator's two dispersion-class devices (glass Melodrip + OXO screen) were both pour-rate-permissive. Discipline (count-out-loud) did more work than instrument choice.
 
 **What was easier than expected:**
-- Count-out-loud pour discipline ("50/100/150/200/250" at 6-second intervals) gave real-time feedback and corrected mid-pour without losing rhythm. Future research-project templates should make count-out-loud an explicit operational technique line in Per-Pull Procedure, not implicit. **Refined post-Project #2 (2026-05-24):** the underlying technique is "checkpoint pacing" — verbal narration is one optional implementation, but mental checkpoint tracking with selective verbal callouts where capacity allows also works (Chris found pure verbalization hard mid-pour). See [flat-bottom-filter-drawdown.md](flat-bottom-filter-drawdown.md) Notes section Lesson #4.
+- Count-out-loud pour discipline ("50/100/150/200/250" at 6-second intervals) gave real-time feedback and corrected mid-pour without losing rhythm. Future research-project templates should make count-out-loud an explicit operational technique line in Per-Pull Procedure, not implicit. **Refined post-Project #2 (2026-05-24):** the underlying technique is "checkpoint pacing" — verbal narration is one optional implementation, but mental checkpoint tracking with selective verbal callouts where capacity allows also works (Chris found pure verbalization hard mid-pour). See [flat-bottom-filter-drawdown.md](docs/research-projects/flat-bottom-filter-drawdown.md) Notes section Lesson #4.
 - Operator preferred running pulls one-at-a-time in the thread rather than batch-and-summarize-later — *"so I don't have to remember everything on my side."* The thread acted as live recording-sheet + observation-capture + decision-log simultaneously. **Future Research Assistant skill should default to tool-call-per-pull pacing, not "run all 10 then debrief."**
 - B3 noise floor came in at 8s — tighter than the protocol's expected ≤15s threshold and tighter than forecast. Sibarist's "Extremely stable" `flowConsistency` registry cell measured up.
 - Operator self-surfaced an instrument deviation between Pull 1 and Pull 2 (*"I should mention I have a custom glass Melodrip"*) and proposed a corrective calibration. Step 0's "lay them out physically" framing primes self-audit; future templates should encourage operators to verbalize equipment provenance unprompted.

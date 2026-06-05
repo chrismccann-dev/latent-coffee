@@ -49,7 +49,7 @@ Build a calibrated flow map of home flat-bottom filters so filter choice becomes
 1. ✅ Median drawdown values for 5 tested flat filters (baseline + 4 non-baseline). Recording Sheet below.
 2. ✅ Grind compensation table (vs FLAT 2 B3 baseline).
 3. ✅ `FilterEntry` type extended with 7th field (`measurementNote?: string`) — captures size variants, accessory context, hand-fold provenance, design-intent notes that pure data fields can't. 2 net-new entries authored (FLAT 2 B3 + FLAT 2 FAST). 5 existing entries updated.
-4. ✅ Updates to [docs/skills/brewing-equipment-expert/cluster/filters.md](../skills/brewing-equipment-expert/cluster/filters.md) — new top-level Project #2 reference section + per-paper measurement bullets.
+4. ✅ Updates to [docs/skills/brewing-equipment-expert/cluster/filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md) — new top-level Project #2 reference section + per-paper measurement bullets.
 5. ✅ Alias map cleanup — 2 mis-collapsing aliases re-pointed, 6 new aliases added (now size-aware).
 
 ---

@@ -146,10 +146,10 @@ Per [feedback_autonomy.md](~/.claude/projects/-Users-chrismccann-latent-coffee/m
 
 ## Reference
 
-- [Sub-sprint 4b kickoff brief](sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) — precedent for the 3-phase shape
-- [Sub-sprint 4b complementary pass](sub-sprint-4b-roasters-polish-complementary-pass-2026-05-28.md) — precedent for Phase 2 structure
-- [Sub-sprint 4b Bundle B handoff doc](sub-sprint-4b-bundle-b-handoff-2026-05-28.md) — precedent for the fresh-session execution playbook shape
-- [Sub-sprint 4a kickoff brief](sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md) — 3-phase template originator
-- [Sub-sprint 4a complementary pass](sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md) — Phase 2 template originator
-- [PRODUCT.md § Active Sprints #4](../../PRODUCT.md) — series-level scope + sub-sprint queue
-- [CLAUDE.md § Brews](../../CLAUDE.md) — read this for the post-Sub-Pages-1 detail-page shape + post Writing-path Sub-sprint 4 form-deprecation state
+- [Sub-sprint 4b kickoff brief](docs/sprints/sub-sprint-4b-roasters-polish-kickoff-2026-05-27.md) — precedent for the 3-phase shape
+- [Sub-sprint 4b complementary pass](docs/sprints/sub-sprint-4b-roasters-polish-complementary-pass-2026-05-28.md) — precedent for Phase 2 structure
+- [Sub-sprint 4b Bundle B handoff doc](docs/sprints/sub-sprint-4b-bundle-b-handoff-2026-05-28.md) — precedent for the fresh-session execution playbook shape
+- [Sub-sprint 4a kickoff brief](docs/sprints/sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md) — 3-phase template originator
+- [Sub-sprint 4a complementary pass](docs/sprints/sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md) — Phase 2 template originator
+- [PRODUCT.md § Active Sprints #4](PRODUCT.md) — series-level scope + sub-sprint queue
+- [CLAUDE.md § Brews](CLAUDE.md) — read this for the post-Sub-Pages-1 detail-page shape + post Writing-path Sub-sprint 4 form-deprecation state

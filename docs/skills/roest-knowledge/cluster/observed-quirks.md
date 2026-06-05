@@ -1,6 +1,6 @@
 # Machine-Side Observed Quirks
 
-Operator-stub doc per [Roest Knowledge SKILL.md](../SKILL.md) — Chris-stubbed-Claude-integrates. Machine-side anomalies, distinct from API-side quirks (which live at [cluster/api/quirks.md](api/quirks.md)).
+Operator-stub doc per [Roest Knowledge SKILL.md](docs/skills/roest-knowledge/SKILL.md) — Chris-stubbed-Claude-integrates. Machine-side anomalies, distinct from API-side quirks (which live at [cluster/api/quirks.md](docs/skills/roest-knowledge/cluster/api/quirks.md)).
 
 ---
 
@@ -16,7 +16,7 @@ A quirk earns an entry here when:
 
 ## Current state
 
-Today: load-bearing machine-side quirks are documented inline in [cluster/machine/counterflow-observations.md](machine/counterflow-observations.md) where they directly drive recipe construction (TP probe artifact, charge-temp probe lag, session position effect). This doc covers quirks that don't drive recipe construction directly but are worth knowing.
+Today: load-bearing machine-side quirks are documented inline in [cluster/machine/counterflow-observations.md](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md) where they directly drive recipe construction (TP probe artifact, charge-temp probe lag, session position effect). This doc covers quirks that don't drive recipe construction directly but are worth knowing.
 
 No standalone entries today. Pattern A refresh (substrate-event threshold ≥3 roasts) flows content here.
 
@@ -29,6 +29,6 @@ Examples of what might land here:
 
 ## Cross-links
 
-- [cluster/machine/counterflow-observations.md](machine/counterflow-observations.md) — machine-specific observations that directly drive recipe construction (load-bearing).
-- [cluster/api/quirks.md](api/quirks.md) — API-side quirks (cloud-API behavior, not machine-side).
-- [cluster/firmware/README.md](firmware/README.md) — per-firmware-version notes when a quirk is version-specific.
+- [cluster/machine/counterflow-observations.md](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md) — machine-specific observations that directly drive recipe construction (load-bearing).
+- [cluster/api/quirks.md](docs/skills/roest-knowledge/cluster/api/quirks.md) — API-side quirks (cloud-API behavior, not machine-side).
+- [cluster/firmware/README.md](docs/skills/roest-knowledge/cluster/firmware/README.md) — per-firmware-version notes when a quirk is version-specific.

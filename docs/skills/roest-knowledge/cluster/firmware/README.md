@@ -1,6 +1,6 @@
 # Roest Firmware — Per-Version Notes
 
-Operator-stub doc per [Roest Knowledge SKILL.md](../../SKILL.md). Placeholder for per-firmware-version behavioral notes when Roest behavior changes across versions.
+Operator-stub doc per [Roest Knowledge SKILL.md](docs/skills/roest-knowledge/SKILL.md). Placeholder for per-firmware-version behavioral notes when Roest behavior changes across versions.
 
 ---
 
@@ -28,5 +28,5 @@ When the first version-specific behavior lands, file as `<version>.md` and link 
 
 ## Cross-links
 
-- [cluster/api/quirks.md](../api/quirks.md) — API quirks (firmware-independent; machine-firmware vs. cloud-API).
-- [cluster/machine/counterflow-observations.md](../machine/counterflow-observations.md) — current machine behavior on the current firmware.
+- [cluster/api/quirks.md](docs/skills/roest-knowledge/cluster/api/quirks.md) — API quirks (firmware-independent; machine-firmware vs. cloud-API).
+- [cluster/machine/counterflow-observations.md](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md) — current machine behavior on the current firmware.

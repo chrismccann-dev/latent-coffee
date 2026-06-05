@@ -1,6 +1,6 @@
 # DF-SCH — Dogfood schema-migration candidates enumeration + sequencing
 
-**Source**: [post-grilling-sequencing.md § B.4 line 498](../../sprints/post-grilling-sequencing.md) — Sprint 5 kickoff deliverable
+**Source**: [post-grilling-sequencing.md § B.4 line 498](docs/sprints/post-grilling-sequencing.md) — Sprint 5 kickoff deliverable
 **Sprint**: T5 (2026-05-18)
 **Decision**: **4 of 5 candidates already shipped earlier today via Schema sprints S1-S4. The 5th has a prompt-level alternative; default = defer schema promotion, ship the prompt-level fix in Sprint 6.**
 
@@ -47,7 +47,7 @@ WHERE table_name='experiments' AND column_name LIKE 'taste_for_validation%';
 
 ## CAND-5 detail — prompt-level vs schema
 
-Per [cleanup-queue-handoff-brief-2026-05-17.md § S5](../../sprints/cleanup-queue-handoff-brief-2026-05-17.md):
+Per [cleanup-queue-handoff-brief-2026-05-17.md § S5](docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md):
 
 > S5 — (Optional, defer or alternative to A #13) `experiments.taste_for_validation_a/b/c/d` text columns: post-cup verification of whether the three taste_for reference points each materialized as predicted. Default: handle via A #13 prompt-level extension instead. Promote to schema if structural treatment preferred after the prompt-level approach is dogfooded.
 

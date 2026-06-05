@@ -1,7 +1,7 @@
 # Brew Recorder
 
 **Tier:** Workflow / **Sub-tier:** Executing / **Domain:** Brewing / **Wave:** 3 / **Status:** ACTIVE (Wave 3 PR 3 shipped 2026-05-26)
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -23,8 +23,8 @@ Write the final optimized brew to substrate after the brew session completes. Ow
 
 - Brew execution data — from Brewing Assistant Phase 3 handoff (final optimized recipe) OR from operator-paste at `bundled-brewing-completion.md`
 - Tasting observations — audio-dictation transcript per `feedback_audio_dictation.md` (long multi-fact turns; extract every implicit term)
-- [Brewing Equipment Expert](../brewing-equipment-expert/) cluster — canonical equipment validation
-- [Brewing Historian](../brewing-historian/) cluster — retrospective comparison; surfaces "this brew's flavor profile is consistent with prior anaerobic-natural Sudan Rume Suppression brews" kind of signal in the prose fields
+- [Brewing Equipment Expert](docs/skills/brewing-equipment-expert/) cluster — canonical equipment validation
+- [Brewing Historian](docs/skills/brewing-historian/) cluster — retrospective comparison; surfaces "this brew's flavor profile is consistent with prior anaerobic-natural Sudan Rume Suppression brews" kind of signal in the prose fields
 
 ## Outputs
 

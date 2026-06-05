@@ -61,7 +61,7 @@ Three failure modes the firewall guards against:
 
 2. **Context bloat at the consumption layer.** If every lesson + audit item + hypothesis-test friction-capture flowed into a cluster doc that claude.ai loads via MCP, the operational layer would grow ~5-10 KB per project. Within 5 projects, the operational layer would breach the 120 KB tripwire. The fold gate keeps research-surface size from propagating into operational-surface size.
 
-3. **False precision on partially-baked findings.** Research projects regularly produce findings that have one of: shaky measurement precision, small sample size, geometry-confound, single-operator bias. Folding those into operational substrate before cross-project ratification (the "fires in a second project" gate at [`process-retro.md`](process-retro.md)) makes the operational layer carry false-confidence claims. The firewall is the cross-project ratification gate's structural complement.
+3. **False precision on partially-baked findings.** Research projects regularly produce findings that have one of: shaky measurement precision, small sample size, geometry-confound, single-operator bias. Folding those into operational substrate before cross-project ratification (the "fires in a second project" gate at [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md)) makes the operational layer carry false-confidence claims. The firewall is the cross-project ratification gate's structural complement.
 
 ---
 
@@ -90,7 +90,7 @@ In practice: when the operator pastes a handoff brief into the Coordinator sessi
 
 ## Related primitives
 
-- [`role-discipline.md`](role-discipline.md) — three-role split that makes the firewall structurally enforced
-- [`process-retro.md`](process-retro.md) — cross-project ratification gate; primitives graduate from research surface to cluster doc only on second-project confirmation
-- [`roadmap.md`](roadmap.md) — where unfolded findings get queued (Side quests / Extensions of completed) if they aren't ready to fold outward yet
-- [ADR-0017](../../../adr/0017-research-assistant-architecture.md) § Sharp substrate-fold discipline
+- [`role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md) — three-role split that makes the firewall structurally enforced
+- [`process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md) — cross-project ratification gate; primitives graduate from research surface to cluster doc only on second-project confirmation
+- [`roadmap.md`](docs/skills/research-coordinator/cluster/roadmap.md) — where unfolded findings get queued (Side quests / Extensions of completed) if they aren't ready to fold outward yet
+- [ADR-0017](docs/adr/0017-research-assistant-architecture.md) § Sharp substrate-fold discipline

@@ -1,6 +1,6 @@
 # Cluster A scaffold - SPEC (grill-to-spec output)
 
-Grilled 2026-05-31 / 2026-06-01. Source: [cluster-a-scaffold-grill-to-spec-kickoff-2026-05-31.md](cluster-a-scaffold-grill-to-spec-kickoff-2026-05-31.md). Grilling session (ask-don't-ship); this is the spec, not the build.
+Grilled 2026-05-31 / 2026-06-01. Source: [cluster-a-scaffold-grill-to-spec-kickoff-2026-05-31.md](docs/sprints/cluster-a-scaffold-grill-to-spec-kickoff-2026-05-31.md). Grilling session (ask-don't-ship); this is the spec, not the build.
 
 ## Headline reframe
 

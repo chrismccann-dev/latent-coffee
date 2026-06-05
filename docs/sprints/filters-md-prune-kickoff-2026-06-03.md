@@ -2,11 +2,11 @@
 
 **THIS IS AN INTERPRETIVE PRUNING SESSION.** Chris's steer is load-bearing on every shape call. Default to "ask, don't ship" on what-to-prune; once a call is steered, execute the mechanical part (operator owns the interpretive restructure + shape steer; Claude Code owns the mechanical prune + fidelity verification — the division of labor that worked on cases 001-003). Do NOT drop a canonical filter value the registry / brews depend on without flagging it.
 
-Fourth dogfood of the doc-pruning protocol ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md); [Pattern J, ADR-0013 Amendment](../adr/0013-self-improvement-primitives.md)). Coverage is already complete (all 5 shapes worked in 001-003), so this is a **normal prune, not a shape-hunt** — reach for the honest shape, no deliberate-hunt mandate.
+Fourth dogfood of the doc-pruning protocol ([scope doc](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md); [Pattern J, ADR-0013 Amendment](docs/adr/0013-self-improvement-primitives.md)). Coverage is already complete (all 5 shapes worked in 001-003), so this is a **normal prune, not a shape-hunt** — reach for the honest shape, no deliberate-hunt mandate.
 
 ## Why this doc, why now
 
-`docs/skills/brewing-equipment-expert/cluster/filters.md` is **70.4 KB / 60 KB** — over the single-doc cap ([doc-tripwires.md](../architecture/doc-tripwires.md), surfaced by the first `npm run check:doc-sizes` run, 2026-06-03). It is also **the lever for the cluster tripwire**: filters.md is 70.4 of the brewing-equipment-expert cluster's 157.8 KB, so this prune alone likely takes the whole cluster back under its 150 KB cap (see the companion conditional kickoff `brewing-equipment-expert-cluster-kickoff-2026-06-03.md` — run THIS first).
+`docs/skills/brewing-equipment-expert/cluster/filters.md` is **70.4 KB / 60 KB** — over the single-doc cap ([doc-tripwires.md](docs/architecture/doc-tripwires.md), surfaced by the first `npm run check:doc-sizes` run, 2026-06-03). It is also **the lever for the cluster tripwire**: filters.md is 70.4 of the brewing-equipment-expert cluster's 157.8 KB, so this prune alone likely takes the whole cluster back under its 150 KB cap (see the companion conditional kickoff `brewing-equipment-expert-cluster-kickoff-2026-06-03.md` — run THIS first).
 
 ## Doc shape → likely prune shapes
 

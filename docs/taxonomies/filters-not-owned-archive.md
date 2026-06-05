@@ -1,7 +1,7 @@
 # Filter Paper Archive — Not-Owned Candidates
 
 Preserves the **not-owned** filter-paper entries that used to live inline in
-[docs/skills/brewing-equipment-expert/cluster/filters.md](../skills/brewing-equipment-expert/cluster/filters.md).
+[docs/skills/brewing-equipment-expert/cluster/filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md).
 Split out 2026-06-03 (pruning case 004) so the live equipment registry loads
 only what Chris actually owns.
 

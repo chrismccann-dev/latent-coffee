@@ -2,7 +2,7 @@
 
 **Status:** Brainstorm CONVERGED 2026-06-02. Graduated to a scoped brainstorm doc; **prioritized to NEXT, operator-gated** (slots in when Chris green-lights a *fresh* green-bean lot to dogfood-and-design simultaneously — current lots are mid-cycle and can't be retrofitted mid-arc). Cluster B completes first.
 
-**Session:** Capstone roadmap-review + Lot Coordinator brainstorm (grilling/interpretive). Mirror pattern: [ADR-0017 — Research Coordinator + Research Assistant](../adr/0017-research-assistant-architecture.md).
+**Session:** Capstone roadmap-review + Lot Coordinator brainstorm (grilling/interpretive). Mirror pattern: [ADR-0017 — Research Coordinator + Research Assistant](docs/adr/0017-research-assistant-architecture.md).
 
 ---
 
@@ -82,7 +82,7 @@ The seam cleaves prediction-authorship from actual-capture:
 - **Coordinator writes the *predictions*** — `roast_recipes` rows + `experiments.predicted_cup_*` (design intent). This is today's `start-lot` S2-3 and `log-cupping` S5 (Design V_(n+1)).
 - **V-Set Assistant writes the *actuals*** — `roasts` + `cuppings`, and patches the recipe rows with Roest linkage. This is today's `log-roast` + `log-cupping` S1-3.
 
-The handoff packet carries predictions *down*; the results packet carries actuals + interpretation *up*. Consequence: **building the Coordinator naturally produces the predicted/actual pairing that the [Predicted-vs-Actual roast delta surface](../../PRODUCT.md) roadmap item renders.** Two roadmap items share one spine.
+The handoff packet carries predictions *down*; the results packet carries actuals + interpretation *up*. Consequence: **building the Coordinator naturally produces the predicted/actual pairing that the [Predicted-vs-Actual roast delta surface](PRODUCT.md) roadmap item renders.** Two roadmap items share one spine.
 
 The seam is already a stage break in today's prompts: `log-cupping` STAGE 3 → STAGE 4. Today's single session runs S1-5 in one breath *because it holds the whole lot in its head*; the split ends the Assistant at S3 (record + interpret the cup) and moves S4-5 (decide + design next) up to the Coordinator.
 
@@ -100,7 +100,7 @@ Unlike research (no shared store, handoffs carry everything), roasting has the *
 - Handoff/results packets carry **only interpretation + pointers**, never numbers.
 - A fresh V-Set Assistant can **reconstruct most of its input** by pulling the lot pipeline — the courier paste shrinks toward "run V2 for bean X, focus = the 108°C drop hypothesis."
 
-This makes [`get_bean_pipeline since:`](../../PRODUCT.md) and the [`read_canonical` name-filter](../../PRODUCT.md) **prerequisites of this architecture, not loose MCP side-quests** — they keep couriering cheap as the lot grows.
+This makes [`get_bean_pipeline since:`](PRODUCT.md) and the [`read_canonical` name-filter](PRODUCT.md) **prerequisites of this architecture, not loose MCP side-quests** — they keep couriering cheap as the lot grows.
 
 ### 4. Sim Pourover Packet → Coordinator owns it
 
@@ -124,7 +124,7 @@ The sim-pour is the *reference-roast contention* decision — cross-candidate, l
 - **Sim-pour runoff data-capture ownership.** The runoff logs as `cuppings` with `eval_method='Simulated Pourover'` — does the Coordinator capture it, or spawn a mini-assistant? Minor; resolve at plan time.
 - **Needs its own ADR.** This *breaks* ADR-0017 Exception 1 (research = Claude-Code-direct, no shared store). This is **claude.ai-mediated with MCP as shared state** — a genuinely new pattern, and the reason handoffs can be thin. New ADR, not an amendment.
 - **CONTEXT-roasting grill.** New vocabulary to lock: *Roasting Coordinator*, *V-Set Assistant*, *Roasting Brief*, *V-set Handoff Packet*, *V-set Results Packet*. Run a `/grill-with-docs` pass before/at the plan sprint.
-- **Missing "awaiting brew-side completion" lifecycle state(s) on `/green`** (folded in from the 2026-06-03 priority-stack recount; see [docs/product/issues.md](../product/issues.md)). The current lifecycle has `waiting_for_next_roast` / `waiting_for_next_cupping` but **no state for "pourover packet emitted to the brewing side, waiting for the brew-side task to finish before the next roasting-side step."** Two variants the Coordinator/Assistant model needs to represent: (1) **one-shot** — optimized-pourover packet → brew → close-out (resolved/unresolved); today the cupped-but-not-closed one-shot mis-buckets to "waiting for next roast" (`computeLifecycleState` rule (f)) because there's no such state (Mountain Harvest is the live example). (2) **V-set** — simulated-pourover packet → brew-side runoff → declare reference roast OR iterate (this is the Sim Pourover Gate / §4 above). **Both are state-shaped, not design-shaped**, and were deliberately NOT patched in the recount session (Chris: don't design something this sprint will rework). Decide here whether these become first-class lifecycle states, a Coordinator-side "brief" status, or a thin derived signal — and how `computeLifecycleState` + the `/green` index sections reflect them. `green_beans.optimized_brew_id` / `peer_reference_brew_id` already exist and may be the hook.
+- **Missing "awaiting brew-side completion" lifecycle state(s) on `/green`** (folded in from the 2026-06-03 priority-stack recount; see [docs/product/issues.md](docs/product/issues.md)). The current lifecycle has `waiting_for_next_roast` / `waiting_for_next_cupping` but **no state for "pourover packet emitted to the brewing side, waiting for the brew-side task to finish before the next roasting-side step."** Two variants the Coordinator/Assistant model needs to represent: (1) **one-shot** — optimized-pourover packet → brew → close-out (resolved/unresolved); today the cupped-but-not-closed one-shot mis-buckets to "waiting for next roast" (`computeLifecycleState` rule (f)) because there's no such state (Mountain Harvest is the live example). (2) **V-set** — simulated-pourover packet → brew-side runoff → declare reference roast OR iterate (this is the Sim Pourover Gate / §4 above). **Both are state-shaped, not design-shaped**, and were deliberately NOT patched in the recount session (Chris: don't design something this sprint will rework). Decide here whether these become first-class lifecycle states, a Coordinator-side "brief" status, or a thin derived signal — and how `computeLifecycleState` + the `/green` index sections reflect them. `green_beans.optimized_brew_id` / `peer_reference_brew_id` already exist and may be the hook.
 
 ## Prerequisites already on the roadmap
 

@@ -1,11 +1,11 @@
 # Varieties
 
 **Enforcement bar:** Strict
-**Canonical registry:** [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts) (authoritative for validation)
+**Canonical registry:** [lib/cultivar-registry.ts](lib/cultivar-registry.ts) (authoritative for validation)
 **Last adopted:** 2026-04-22
 **Adoption path:** Authored new (Chris, 2026-04-22 research pass drawing on World Coffee Research, Rob Hoo's *Cultivar: A Practical Guide for Coffee Roasters*, farm and roaster cultivar documentation, and Chris's 56-brew corpus for Observed sections)
 
-Canonical cultivar reference for the latent-coffee app. 63 cultivars covering the species / family / lineage / cultivar hierarchy from the Variety sprint (part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint-1 Phylum A1 port). Four species scaffolded: Arabica (dominant), plus Eugenioides / Liberica / Robusta as placeholders for lots Chris hasn't yet cupped. Additions require a 3-step edit: this doc, `lib/cultivar-registry.ts`, and a DB migration if an existing row needs renaming.
+Canonical cultivar reference for the latent-coffee app. 63 cultivars covering the species / family / lineage / cultivar hierarchy from the Variety sprint (part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md), sprint-1 Phylum A1 port). Four species scaffolded: Arabica (dominant), plus Eugenioides / Liberica / Robusta as placeholders for lots Chris hasn't yet cupped. Additions require a 3-step edit: this doc, `lib/cultivar-registry.ts`, and a DB migration if an existing row needs renaming.
 
 External claims in this doc are cited at authoring time and rolled up in the `## Sources` block at the bottom of the page. Chris's own tested observations live in per-cultivar `#### Observed Across My Corpus` subsections in confirmed voice; external claims in tentative voice. No graduation — external claims stay cited forever.
 
@@ -13,7 +13,7 @@ External claims in this doc are cited at authoring time and rolled up in the `##
 
 ## Canonical list
 
-Matches `CULTIVARS` in [lib/cultivar-registry.ts](../../lib/cultivar-registry.ts) exactly. 63 entries.
+Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exactly. 63 entries.
 
 **Arabica — Ethiopian Landrace Families**
 - JARC selection lineage: 74110, 74112, 74148, 74158, 74165

@@ -1,6 +1,6 @@
 # PRODUCT.md Refactor Handoff
 
-*Operator-authored 2026-06-03; filed into the repo as the case-003 input artifact. The structured pruning-case record is [pruning-cases/003-product-md.md](pruning-cases/003-product-md.md); this is Chris's original prototype handoff, preserved.*
+*Operator-authored 2026-06-03; filed into the repo as the case-003 input artifact. The structured pruning-case record is [pruning-cases/003-product-md.md](docs/sprints/pruning-cases/003-product-md.md); this is Chris's original prototype handoff, preserved.*
 
 ---
 

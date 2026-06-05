@@ -22,7 +22,7 @@ Subsequent execution sessions consume this doc one sprint at a time, fresh conte
 
 Standing fences:
 - **Dogfood closed 2026-05-18 at Round 7**. Original plan was 8 rounds; Round 7 wrapped up the full loop earlier than expected. Closeout docs shipped as [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172). Dogfood-merge gate is now OPEN (see § 3).
-- **Cleanup-actions PR (Sprints 6-8) is the dogfood deliverable**: 28 items total (13 A prompt edits + 9 B MCP schema-description fixes + 3 C page-render polish + 3 CONTEXT.md additions). Authoritative scope at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md); reconciliation rules at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md).
+- **Cleanup-actions PR (Sprints 6-8) is the dogfood deliverable**: 28 items total (13 A prompt edits + 9 B MCP schema-description fixes + 3 C page-render polish + 3 CONTEXT.md additions). Authoritative scope at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md); reconciliation rules at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](docs/sprints/dogfood-polish-pr-reconciliation-summary.md).
 - **Dedup rule**: per the reconciliation summary, when a post-grilling followup item touches a file in the cleanup-actions PR's touch-list AND ships at or before Sprints 6-8, the cleanup-actions PR ships first and the post-grilling edit rebases. Default applied unless Chris reverses for a specific item.
 - **Brewing-side is fully fair game**. The dogfood exercised the roasting + cupping iteration loop, not the brewing-side write surface. Brewing-side schema, MCP Tools, prompts, registries, and UI are pre-safe and were already pre-safe even pre-Round-7.
 - **SYN-8 unified in Sprint 9** (per Chris-confirmed 2026-05-17). Both BREWING.md + ROASTING.md renamed together; no half-rename in Sprint 1.
@@ -162,7 +162,7 @@ Items 1-2 shipped as [PR #167](https://github.com/chrismccann-dev/latent-coffee/
 
 ### Part B: Roasting dogfooding - cleanup actions (post-Round-7 handoff brief, all POST by construction)
 
-Authoritative source: [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md) (per-item rationale + round of origin) + [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md) (dedup rules + overlap risks against post-grilling clusters). All items are POST-dogfood-close. Dogfood closed 2026-05-18 at Round 7. **28 cleanup-actions items total** (Sprints 6-8) + the deferred schema-migration + arbiter + operational items below.
+Authoritative source: [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md) (per-item rationale + round of origin) + [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](docs/sprints/dogfood-polish-pr-reconciliation-summary.md) (dedup rules + overlap risks against post-grilling clusters). All items are POST-dogfood-close. Dogfood closed 2026-05-18 at Round 7. **28 cleanup-actions items total** (Sprints 6-8) + the deferred schema-migration + arbiter + operational items below.
 
 #### B.1 Sub-PR A — Prompt edits (13 items, `docs/prompts/`)
 
@@ -252,7 +252,7 @@ Separate from the cleanup-actions PR per reconciliation summary § Out-of-scope.
 |---|---|---|---|
 | POD-1 | First-class workflow state for the Path C interim pour-over discriminator + the post-reference-roast optimized-brew dial-in phase | SCH + UI + PRM + CTX | XL (full sprint) |
 
-Per Chris-confirmed 2026-05-18 framing in [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](pourover-discriminator-and-optimized-brew-states-kickoff.md): "near-term, not longer-term — it maps onto what Chris actually does in his roasting workflow, and the system should reflect that." Triggers as the first "new thing to take on" after Sprint R closes (post-grilling sequence completes). Lives in DEF for this plan; surfaces in Sprint R for promotion.
+Per Chris-confirmed 2026-05-18 framing in [docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md](docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md): "near-term, not longer-term — it maps onto what Chris actually does in his roasting workflow, and the system should reflect that." Triggers as the first "new thing to take on" after Sprint R closes (post-grilling sequence completes). Lives in DEF for this plan; surfaces in Sprint R for promotion.
 
 ### Inventory totals after dedupe
 
@@ -498,7 +498,7 @@ Triggers after Sprint F closes. Walks PRODUCT.md § Active Sprints / Newly queue
 | DF-SCH-CAND-1..5 | Dogfood schema migration sprint (5 candidates) | Enumerated at Sprint 5 kickoff; bundle decision at that time. Candidates: `cuppings.wb_to_ground_delta` / `is_reference_candidate` / `cuppings.sweetness` / `roast_recipes.was_backfilled` / `experiments.taste_for_validation_*`. |
 | DF-OPS1 | CGLE Sudan Rume Natural V5 recipe rows backfill | Chris-driven; standalone. |
 | DF-OPS2 | Historical end_condition backfill on roasts ≤ batch 169 | Chris-driven; standalone. |
-| POD-1 | Pour-over discriminator gate + optimized brew lifecycle states | Chris-flagged near-term 2026-05-18; first "new thing to take on" candidate after Sprint R. Full scope at [pourover-discriminator-and-optimized-brew-states-kickoff.md](pourover-discriminator-and-optimized-brew-states-kickoff.md). |
+| POD-1 | Pour-over discriminator gate + optimized brew lifecycle states | Chris-flagged near-term 2026-05-18; first "new thing to take on" candidate after Sprint R. Full scope at [pourover-discriminator-and-optimized-brew-states-kickoff.md](docs/sprints/pourover-discriminator-and-optimized-brew-states-kickoff.md). |
 | CR-7-promote | SWORKS valve flow taxonomy promotion (post-scoping) | After CR-7's scoping decision in Sprint 5. |
 | CR-9 / WBC-4-large | Water taxonomy bootstrap | Large bottoms-up authoring sprint; trigger when Chris has bandwidth. |
 | WBC-3 / CR-8 | Filter behavior measurement OPS | Chris-physical-world work. |
@@ -546,8 +546,8 @@ The gate Chris specified is now satisfied. Verification trace:
 
 1. ✅ **Dogfood loop closed at Round 7** (Chris-confirmed 2026-05-18). Original plan was 8 rounds; Round 7 wrapped up the full loop earlier than expected. The closeout brief explicitly names Round 7 as the final round.
 2. ✅ **Continuous feedback log Round 7 entry written** (`memory/feedback_mcp_continuous_log.md`).
-3. ✅ **Dogfood handoff brief merged to main** as part of [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172) (2026-05-18). Brief lives at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](cleanup-queue-handoff-brief-2026-05-17.md).
-4. ✅ **Reconciliation summary shipped** at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](dogfood-polish-pr-reconciliation-summary.md). Per-item dedup rules + 5 overlap-risk callouts documented.
+3. ✅ **Dogfood handoff brief merged to main** as part of [#172](https://github.com/chrismccann-dev/latent-coffee/pull/172) (2026-05-18). Brief lives at [docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md](docs/sprints/cleanup-queue-handoff-brief-2026-05-17.md).
+4. ✅ **Reconciliation summary shipped** at [docs/sprints/dogfood-polish-pr-reconciliation-summary.md](docs/sprints/dogfood-polish-pr-reconciliation-summary.md). Per-item dedup rules + 5 overlap-risk callouts documented.
 5. ✅ **DF inventory locked** at 28 cleanup-actions items (Sprints 6-8) + 5 schema-migration candidates + 1 arbiter task + 2 operational backfills + 1 new pour-over discriminator state expansion (POD-1, DEF until Sprint R).
 
 **Sprint 6 kickoff session can proceed without additional verification.** Read the handoff brief + reconciliation summary at kickoff; bundle DF-A items per their order in the cleanup-actions enumeration (DF-A2 + DF-A3 are the sprint-killers and land first within the sprint).

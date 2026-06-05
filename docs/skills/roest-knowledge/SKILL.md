@@ -1,7 +1,7 @@
 # Roest Knowledge
 
 **Tier:** Knowledge / **Domain:** Roasting / **Wave:** 3 / **Status:** ACTIVE (Wave 3 PR 1 shipped 2026-05-26)
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -40,7 +40,7 @@ None directly. Roest API Worker is the executor; this sub-skill is the reference
 
 ## Self-improvement
 
-- **Patterns:** A (substrate-event refresh on observed quirks accumulating from multiple roasts), B (external-event refresh on firmware updates / API drift), I (operator-initiated integration) — see [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+- **Patterns:** A (substrate-event refresh on observed quirks accumulating from multiple roasts), B (external-event refresh on firmware updates / API drift), I (operator-initiated integration) — see [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 - **Signal:** API drift detected → trigger refresh; observed-quirk threshold (3+ roasts logging same anomaly) → flag review
 
 ## Notes for Wave 3 implementation sprint

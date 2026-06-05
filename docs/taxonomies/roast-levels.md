@@ -1,11 +1,11 @@
 # Roast Levels
 
 **Enforcement bar:** Strict (sprint 1m — enforcement lands with adoption)
-**Canonical registry:** [lib/roast-level-registry.ts](../../lib/roast-level-registry.ts) (validation mirror)
+**Canonical registry:** [lib/roast-level-registry.ts](lib/roast-level-registry.ts) (validation mirror)
 **Last adopted:** 2026-04-24
 **Adoption path:** Authored taxonomy (Chris, 2026-04-24 planning session). Bucket ranges anchored to the Lighttells CM200 whole-bean Agtron scale — Chris's primary color-measurement instrument for self-roasted lots and resting/purchased coffee. Marketing-tag aliases (Nordic Light / Ultra Light / Specialty Light / Modern Light / Omni Light) were surveyed from prevailing roaster self-positioning language and mapped onto the objective buckets.
 
-Canonical roast-level reference for the latent-coffee app. **8 canonical buckets** covering the full Agtron whole-bean range from ~130 (raw-ish under-developed) down to 0 (carbonized). Each bucket owns a 10-unit (or wider at extremes) Agtron range; a measurement on the CM200 maps deterministically to exactly one bucket. Part of the [Reference Taxonomies umbrella](../features/reference-taxonomies-attribution.md), sprint 1m structural port.
+Canonical roast-level reference for the latent-coffee app. **8 canonical buckets** covering the full Agtron whole-bean range from ~130 (raw-ish under-developed) down to 0 (carbonized). Each bucket owns a 10-unit (or wider at extremes) Agtron range; a measurement on the CM200 maps deterministically to exactly one bucket. Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md), sprint 1m structural port.
 
 **Composition:** Each roast level is `{ name, agtronWholeBean: [min, max] }`. Intentionally lean — no sensory prose, no ground-bean Agtron range, no development-time ratio. Sensory prose can be added later if `/api/synthesize` prompts grow to need per-bucket framing; ground Agtron is out of scope because Chris's CM200 workflow measures whole bean only.
 
@@ -17,7 +17,7 @@ Additions require a 2-step edit: this doc + `lib/roast-level-registry.ts` (no DB
 
 ## Canonical list
 
-Matches `ROAST_LEVELS` in [lib/roast-level-registry.ts](../../lib/roast-level-registry.ts) exactly. 8 entries, ordered from lightest to darkest.
+Matches `ROAST_LEVELS` in [lib/roast-level-registry.ts](lib/roast-level-registry.ts) exactly. 8 entries, ordered from lightest to darkest.
 
 | Bucket | Agtron whole bean | Intent note |
 |---|---|---|
@@ -77,4 +77,4 @@ Capitalization, hyphenation, and word-order variants surfaced in imports and pas
 
 ## Adoption retro
 
-See [memory/project_roast_level_taxonomy_adoption.md](../../memory/project_roast_level_taxonomy_adoption.md) for the sprint 1m retro covering the two-dimensional-model decision, the `canonicalize()` CanonicalLookup method addition, and the bundled 1h.2 roaster `/add` enforcement.
+See [memory/project_roast_level_taxonomy_adoption.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_roast_level_taxonomy_adoption.md) for the sprint 1m retro covering the two-dimensional-model decision, the `canonicalize()` CanonicalLookup method addition, and the bundled 1h.2 roaster `/add` enforcement.

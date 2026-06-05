@@ -1,6 +1,6 @@
 # BR-3 — WBC systematic review report
 
-**Source**: [grilling-2026-05-15-brewing-followups.md item #3](../../sprints/grilling-2026-05-15-brewing-followups.md)
+**Source**: [grilling-2026-05-15-brewing-followups.md item #3](docs/sprints/grilling-2026-05-15-brewing-followups.md)
 **Sprint**: T5 (2026-05-18)
 **Decision**: **Latent's 6 + 4 + Hybrid-subforms vocabulary is the right starting point.** 1 minor promotion candidate; rest stay deferred per Chris's intentional non-add framing.
 
@@ -8,7 +8,7 @@
 
 Per round 3 of the 2026-05-15 brewing grilling: a systematic review of the WBC 5 foundational control axes + 9 strategy families + per-family subtypes against Latent's 6 strategies + 4 modifiers + 5 Hybrid sub-forms, to confirm the chosen subset is the right starting point or whether anything should be promoted next. Output is a report, not a code change.
 
-Pairs with [WBC-2 Time Distribution Playbook scoping](WBC-2-time-distribution-playbook-scoping.md) — the largest promotion-candidate question gets its own scoping doc.
+Pairs with [WBC-2 Time Distribution Playbook scoping](docs/audits/2026-05-18/WBC-2-time-distribution-playbook-scoping.md) — the largest promotion-candidate question gets its own scoping doc.
 
 ## Latent vocabulary today
 
@@ -53,7 +53,7 @@ Pairs with [WBC-2 Time Distribution Playbook scoping](WBC-2-time-distribution-pl
 | Short-long-short | Doc-only | ⚠️ Partially absorbed |
 | Parametric Hybrid | Deferred per wbc-reference.md | ⛔️ Out of scope (blend territory) |
 
-**Verdict**: Most under-served axis at the *recipe* level. 34 of 102 recipes use Time Distribution as a secondary control. Promotion candidate is the broader Time Distribution Playbook — covered in [WBC-2 scoping](WBC-2-time-distribution-playbook-scoping.md). Recommendation deferred to that doc; do not promote in T5.
+**Verdict**: Most under-served axis at the *recipe* level. 34 of 102 recipes use Time Distribution as a secondary control. Promotion candidate is the broader Time Distribution Playbook — covered in [WBC-2 scoping](docs/audits/2026-05-18/WBC-2-time-distribution-playbook-scoping.md). Recommendation deferred to that doc; do not promote in T5.
 
 ### Axis 3 — Physical System
 
@@ -128,7 +128,7 @@ After mapping the full WBC corpus, the only structural gap surfaced by this audi
 
 **Latent's 6 strategies + 4 modifiers + 5 Hybrid sub-forms + 5 cross-cutting doc-layer patterns is the right starting point.** The WBC corpus shifts the relative weights (Hybrid emerged as the largest cluster, Time Distribution shows up in 34/102 as some control logic) but Latent's compression strategy — fold axes 2-5 mechanics into the modifier + Hybrid surface, leave axis 3 out of scope, keep extras in the doc layer — remains structurally sound at this corpus size.
 
-**One promotion candidate (Time Distribution Playbook) is non-trivial enough to deserve its own scoping doc** — see [WBC-2](WBC-2-time-distribution-playbook-scoping.md). Recommendation lives there; T5 is no-registry-edits.
+**One promotion candidate (Time Distribution Playbook) is non-trivial enough to deserve its own scoping doc** — see [WBC-2](docs/audits/2026-05-18/WBC-2-time-distribution-playbook-scoping.md). Recommendation lives there; T5 is no-registry-edits.
 
 **Re-test trigger**: if any of these signals lands, re-run this audit:
 
@@ -138,6 +138,6 @@ After mapping the full WBC corpus, the only structural gap surfaced by this audi
 
 ## Out of scope for T5
 
-- The Time Distribution Playbook scoping (separate doc, [WBC-2](WBC-2-time-distribution-playbook-scoping.md)).
+- The Time Distribution Playbook scoping (separate doc, [WBC-2](docs/audits/2026-05-18/WBC-2-time-distribution-playbook-scoping.md)).
 - Any registry edit in `lib/extraction-modifiers.ts`.
 - Any BREWING.md vocabulary expansion.

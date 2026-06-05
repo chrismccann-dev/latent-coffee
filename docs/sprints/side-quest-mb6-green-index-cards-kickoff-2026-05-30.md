@@ -1,7 +1,7 @@
 # `side-quest` MB-6 — green index card treatment (session 5 of 5) — kickoff brief
 
 Redesign-polish punch-list, bucket 5 — the **final** bucket. Hand-off from the
-`data-model` session ([punch-list § Data-model session outcomes](../features/redesign-polish-punchlist.md)).
+`data-model` session ([punch-list § Data-model session outcomes](docs/features/redesign-polish-punchlist.md)).
 Buckets run **one per session, sequentially**: `data-audit` ✅ → `naming` ✅ →
 `cleanup` ✅ → `data-model` ✅ → **`side-quest` MB-6 (this one)**.
 

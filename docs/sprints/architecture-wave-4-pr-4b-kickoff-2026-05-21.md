@@ -2,11 +2,11 @@
 
 **Status:** Kickoff brief authored 2026-05-21 (post-PR-4a). Ready to launch in the next session.
 
-**Predecessor:** [Wave 4 PR 4a shipped 2026-05-21](https://github.com/chrismccann-dev/latent-coffee/pull/210) (merge `2b70b32`) — CCIL skeleton + Sudan Rume seed pattern + Chain 6 activation. See [retro](../../~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_architecture_wave_4_pr_4a_2026-05-21.md).
+**Predecessor:** [Wave 4 PR 4a shipped 2026-05-21](https://github.com/chrismccann-dev/latent-coffee/pull/210) (merge `2b70b32`) — CCIL skeleton + Sudan Rume seed pattern + Chain 6 activation. See [retro](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_architecture_wave_4_pr_4a_2026-05-21.md).
 
 ## Goal
 
-Close the architecture implementation arc. Per [ADR-0011](../adr/0011-composable-sub-skills-architecture.md) / [ADR-0012](../adr/0012-master-coordinator-pattern.md) / [ADR-0013](../adr/0013-self-improvement-primitives.md) and `docs/architecture/master-doc-transition-plan.md` § Wave 4:
+Close the architecture implementation arc. Per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) / [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) / [ADR-0013](docs/adr/0013-self-improvement-primitives.md) and `docs/architecture/master-doc-transition-plan.md` § Wave 4:
 
 1. **Rewrite BREWING.md + ROASTING.md as ~500-byte redirect stubs** enumerating where each former section now lives. End-state per the transition plan: a navigable pointer block routes every former anchor to its new cluster home.
 2. **Migrate residual operational content** from both master docs to appropriate sub-skill clusters or `coordinator/catalog.md § domain-principles`.

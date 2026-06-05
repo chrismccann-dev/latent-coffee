@@ -3,8 +3,8 @@
 Execution session. Cluster A was grilled to spec and PR-A1 shipped; this session runs the live dogfood and authors the A2/A3 prompts/skills the dogfood shapes. The spec calls are ratified, so the autonomy rule applies for mechanical work — but A2/A3 *prompt wording* is interpretive: let the live cases shape it and surface drafts before finalizing.
 
 ## What already shipped (read these first)
-- **Spec:** [docs/sprints/cluster-a-scaffold-spec-2026-06-01.md](cluster-a-scaffold-spec-2026-06-01.md) — the full three-workflow design + the unifying "brewing-to-roasting handoff brief" primitive.
-- **Decision:** [ADR-0019](../adr/0019-lot-brew-web.md) — the lot brew-web (two sibling FKs over heuristic/join-table).
+- **Spec:** [docs/sprints/cluster-a-scaffold-spec-2026-06-01.md](docs/sprints/cluster-a-scaffold-spec-2026-06-01.md) — the full three-workflow design + the unifying "brewing-to-roasting handoff brief" primitive.
+- **Decision:** [ADR-0019](docs/adr/0019-lot-brew-web.md) — the lot brew-web (two sibling FKs over heuristic/join-table).
 - **Glossary:** CONTEXT-shared § Cross-domain Workflow ("Brewing-to-roasting handoff brief") + § Relationships (brew-web); CONTEXT-roasting § Peer-roasted reference brew (Information value + Peer-variant handoff) + § Optimized brew (optimized_brew_id link).
 - **PR-A1 (merged):** `green_beans.optimized_brew_id` FK (migration 075) + FK-hinted brews↔green_beans embeds. Live on main.
 

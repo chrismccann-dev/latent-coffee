@@ -42,7 +42,7 @@ The 4 detail-page families (IA preserved per the CLAUDE.md § Roasters / Cultiva
 - `/green` index + `/brews` index — separate later sprints (indexes, not detail pages).
 - `/producers` + `/experiments` + homepage — deferred per the scope doc.
 - No IA changes (chrome re-skin only). No schema / MCP / registry / prompt changes (Actors 1-4 no-op).
-- `ProcessAdditionalInfo` extraction + the F4 arbiter-reminder — already on [docs/grilling-queue.md](../grilling-queue.md), out of scope.
+- `ProcessAdditionalInfo` extraction + the F4 arbiter-reminder — already on [docs/grilling-queue.md](docs/grilling-queue.md), out of scope.
 
 ## CSS
 Most `.ssp-*` CSS exists (Sprints 0-4). Likely already-present + reusable: `.ssp-card`(+`.dark`), `.ssp-shead`, `.ssp-coll`, `.ssp-ident`, `.ssp-prose-rows`, `.chip`. Check `globals.css` first — may need a small **cross-link chip block** style (for `TagLinkList`) or a **2-col aggregation grid** if `.ssp-ident` (which caps at 5-cell tabular) doesn't fit the longer label/value lists; if so add a named class, don't arbitrary-`[Npx]`.

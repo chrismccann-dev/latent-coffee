@@ -1,7 +1,7 @@
 # Research Assistant
 
 **Tier:** Workflow / **Sub-tier:** Executing / **Domain:** Cross-domain / **Wave:** N/A (post-architecture-arc) / **Status:** ACTIVE (Step 2 ship)
-**ADR origin:** [ADR-0011 (amended)](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0017](../../adr/0017-research-assistant-architecture.md)
+**ADR origin:** [ADR-0011 (amended)](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0017](docs/adr/0017-research-assistant-architecture.md)
 
 ---
 
@@ -24,10 +24,10 @@ Your job in a Research Assistant session is **execution + handoff brief producti
 - Run scoring pulls / observations / measurements one-at-a-time per the protocol doc
 - Apply auto-retest / confirmed-outlier / cross-confirmation primitives as appropriate
 - Capture friction + new lessons + audit items inline in the protocol doc (the doc IS the archive — Project #2 Lesson #12)
-- Produce a handoff brief at session end, following [`research-coordinator/cluster/templates/handoff-brief-template.md`](../research-coordinator/cluster/templates/handoff-brief-template.md)
+- Produce a handoff brief at session end, following [`research-coordinator/cluster/templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md)
 - **TERMINATE the session after the handoff brief.** Do not continue to "finish the job" by attempting commits.
 
-**Why this rule exists:** Filter-arc Project #3's cold execution session over-stepped its role-split — attempted registry edits + ran `tsc` + reported "files modified, build clean" without committing. When the compile session checked, the claimed edits were not present in any branch (working state was ephemeral and lost). The compile session had to re-do all substrate integration from the handoff brief. Lesson #40 is the substrate-extraction lesson from that failure mode. Honor it. The full primitive doc is at [`research-coordinator/cluster/role-discipline.md`](../research-coordinator/cluster/role-discipline.md).
+**Why this rule exists:** Filter-arc Project #3's cold execution session over-stepped its role-split — attempted registry edits + ran `tsc` + reported "files modified, build clean" without committing. When the compile session checked, the claimed edits were not present in any branch (working state was ephemeral and lost). The compile session had to re-do all substrate integration from the handoff brief. Lesson #40 is the substrate-extraction lesson from that failure mode. Honor it. The full primitive doc is at [`research-coordinator/cluster/role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md).
 
 ---
 
@@ -35,7 +35,7 @@ Your job in a Research Assistant session is **execution + handoff brief producti
 
 Conduct a single **research track** under a Research Coordinator's protocol doc. Run Step 0 inventory + calibration with operator, execute scoring pulls / observations / measurements per protocol, capture lessons + audit items inline, produce a handoff brief, terminate.
 
-One Assistant session per track. Ephemeral — does not persist past handoff brief production. Does not see other tracks in the project (deliberate context firewall — see [`research-coordinator/cluster/sharp-substrate-fold.md`](../research-coordinator/cluster/sharp-substrate-fold.md)).
+One Assistant session per track. Ephemeral — does not persist past handoff brief production. Does not see other tracks in the project (deliberate context firewall — see [`research-coordinator/cluster/sharp-substrate-fold.md`](docs/skills/research-coordinator/cluster/sharp-substrate-fold.md)).
 
 ## Vocabulary discipline
 
@@ -48,12 +48,12 @@ One Assistant session per track. Ephemeral — does not persist past handoff bri
 
 1. **Receive spawn prompt.** Operator pastes the Coordinator's 9-section spawn prompt as the opening message of a fresh Claude Code session. That session is the Assistant.
 2. **Read the protocol doc in full** (the spawn prompt will point at the path under `docs/research-projects/<track-slug>.md`). Read the role-discipline block at the top before anything else.
-3. **Step 0 — calibration arc.** Walk the operator through the protocol's Step 0 sub-steps. The unified primitive set is in [`research-coordinator/cluster/calibration-arc.md`](../research-coordinator/cluster/calibration-arc.md). Common sub-steps: physical-photo inventory cross-check, SKU naming convention notes, brewer capacity sanity check, alias-map audit, vendor design intent capture, pre-pull-1 calibration shot, bimodality screen.
+3. **Step 0 — calibration arc.** Walk the operator through the protocol's Step 0 sub-steps. The unified primitive set is in [`research-coordinator/cluster/calibration-arc.md`](docs/skills/research-coordinator/cluster/calibration-arc.md). Common sub-steps: physical-photo inventory cross-check, SKU naming convention notes, brewer capacity sanity check, alias-map audit, vendor design intent capture, pre-pull-1 calibration shot, bimodality screen.
 4. **Pre-state hypothesis tests** in the protocol doc's "predicted outcomes" column before scoring pulls begin (per Project #4 Lesson #16: substantive theory generation happens mid-run, but pre-stating predictions makes post-test diagnosis cleaner).
 5. **Execute scoring pulls / observations / measurements** one-at-a-time. Tool-call-per-pull pacing (Project #1 Lesson #7). Auto-retest rule (Project #1 Lesson #5) + confirmed-outlier procedure (Project #3 Lesson #21) + cross-confirmation alternative as appropriate.
 6. **Capture inline.** Friction + new lessons + audit items land inline in the protocol doc's Notes / Lessons / Audit Items sections. Per Project #2 Lesson #12: the protocol doc IS the archive.
 7. **Mid-run hypothesis testing.** If substantive theory emerges (Project #1 Lesson #16: "budget for ~2 exploratory pulls"), test it inside the session. Don't defer — the operator + Assistant context is where this thinking happens cheapest.
-8. **Produce handoff brief.** Follow [`research-coordinator/cluster/templates/handoff-brief-template.md`](../research-coordinator/cluster/templates/handoff-brief-template.md) section-by-section. Brief is the compile session's canonical consumption artifact — make it complete enough that no re-derivation from raw notes is required.
+8. **Produce handoff brief.** Follow [`research-coordinator/cluster/templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md) section-by-section. Brief is the compile session's canonical consumption artifact — make it complete enough that no re-derivation from raw notes is required.
 9. **Terminate.** No commits, no PRs, no substrate edits. Declare termination explicitly at the end of the handoff brief (mirror the Project #4 close-out's explicit declaration block).
 
 ## Operational tempo
@@ -85,7 +85,7 @@ The Assistant does NOT carry context across tracks. Each new track is a fresh As
 
 **None.** Research Assistant does not write substrate via MCP. The handoff brief is the integration artifact; the compile session (a separate fresh Claude Code session) does substrate-fold via the Coordinator's scoped execution plan.
 
-This is one of the deliberate architectural exceptions to the [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) standard pattern. See [ADR-0017](../../adr/0017-research-assistant-architecture.md) § Architectural exceptions.
+This is one of the deliberate architectural exceptions to the [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) standard pattern. See [ADR-0017](docs/adr/0017-research-assistant-architecture.md) § Architectural exceptions.
 
 ## Self-improvement
 

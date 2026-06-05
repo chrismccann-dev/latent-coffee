@@ -4,14 +4,14 @@
 
 The **actionable** subset of workflow feedback — the items that need a *build* (prompt
 fix / MCP fix / schema / UI / architecture), not just a route-and-forget filing.
-This is the seam between the [route-feedback](../../.claude/skills/route-feedback/SKILL.md)
-skill (which files items here) and the [plan-feedback](../../.claude/skills/plan-feedback/SKILL.md)
+This is the seam between the [route-feedback](.claude/skills/route-feedback/SKILL.md)
+skill (which files items here) and the [plan-feedback](.claude/skills/plan-feedback/SKILL.md)
 skill (which clusters + prioritizes them into a buildable sprint).
 
 **Master log** (raw intake + routing ledger + wins + non-actionable items):
 `~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_continuous_log.md`.
 Terminal-home items (standing rules → memory, concepts → grilling-queue, etc.) are
-NOT duplicated here; only buildable work lands here. See [ADR-0020](../adr/0020-feedback-handoff-pipeline.md)
+NOT duplicated here; only buildable work lands here. See [ADR-0020](docs/adr/0020-feedback-handoff-pipeline.md)
 for the pipeline rationale.
 
 ## Entry format
@@ -55,7 +55,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Source:** master log #23 (Round 17)
 - **Body:** `log-cupping.md` STAGE 6's binary skip/propose during a gate defers ALL doc proposals to post-SPG re-entry, including cupping-INDEPENDENT ones that could land now (the V_n status flip, SPG-independent cup findings, a CCIL violation). Consequence: the active-lot doc reads "designed/pushed, not roasted" when it was in fact cupped. Needs a real-time partial-write rule + an explicit "deferred proposals" queue concept. Pairs tightly with the SPG lifecycle-state item.
 
-> **Shipped 2026-06-04 (#385, Cluster 2):** `cooling_arc_pattern` enum (#27), `cupping_date`/rest_days guard (#31), and `roast_recipe_divergence` view (#26) — see [docs/sprints/shipped.md](../sprints/shipped.md). Migration 078. Removed from the open list per the status lifecycle.
+> **Shipped 2026-06-04 (#385, Cluster 2):** `cooling_arc_pattern` enum (#27), `cupping_date`/rest_days guard (#31), and `roast_recipe_divergence` view (#26) — see [docs/sprints/shipped.md](docs/sprints/shipped.md). Migration 078. Removed from the open list per the status lifecycle.
 
 ### Per-batch failure-boundary breach record on experiments (JSONB array)
 - **Shape:** schema

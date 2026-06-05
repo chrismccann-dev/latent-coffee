@@ -43,6 +43,6 @@ Bean temp end condition at 204–205°C. FC is ambiguous/inaudible — do not ma
 
 ## Related
 
-- [by-process/natural.md](../patterns/by-process/natural.md) — natural-process roll-up
-- [cross-coffee-insights.md § Varietal Aromatic Fingerprints](../patterns/cross-coffee-insights.md) — Sudan Rume row gets updated with the natural-process expression (close-out proposal `ae16998a` pending arbitration)
-- [brewing-historian by-cultivar/sudan-rume.md](../../../brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — brewing-side Sudan Rume notes (Special Guests roast + Las Margaritas anchor); this lot's brew confirms April Glass vehicle rule + 91°C aromatic ceiling extends across roast levels
+- [by-process/natural.md](docs/skills/roasting-historian/cluster/patterns/by-process/natural.md) — natural-process roll-up
+- [cross-coffee-insights.md § Varietal Aromatic Fingerprints](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) — Sudan Rume row gets updated with the natural-process expression (close-out proposal `ae16998a` pending arbitration)
+- [brewing-historian by-cultivar/sudan-rume.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/sudan-rume.md) — brewing-side Sudan Rume notes (Special Guests roast + Las Margaritas anchor); this lot's brew confirms April Glass vehicle rule + 91°C aromatic ceiling extends across roast levels

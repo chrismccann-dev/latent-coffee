@@ -2,7 +2,7 @@
 
 **Status:** Kickoff brief authored 2026-05-21 (post-Wave-4-PR-4b). Ready to launch in the next session.
 
-**Predecessors:** Architecture implementation arc CLOSED 2026-05-21 with [Wave 4 PR 4b](https://github.com/chrismccann-dev/latent-coffee/pull/213) (merge `1c0692216`). 9 PRs across 4 waves; ~358KB cumulative master-doc shrink. Sprint R Phase 4 promotes from queued → ACTIVE per [PRODUCT.md § Roadmap entry #4](../../PRODUCT.md).
+**Predecessors:** Architecture implementation arc CLOSED 2026-05-21 with [Wave 4 PR 4b](https://github.com/chrismccann-dev/latent-coffee/pull/213) (merge `1c0692216`). 9 PRs across 4 waves; ~358KB cumulative master-doc shrink. Sprint R Phase 4 promotes from queued → ACTIVE per [PRODUCT.md § Roadmap entry #4](PRODUCT.md).
 
 ## Goal
 

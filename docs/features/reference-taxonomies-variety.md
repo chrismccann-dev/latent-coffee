@@ -1,8 +1,8 @@
 # Reference Taxonomies — Variety
 
-Per-taxonomy feature doc for the Variety / Cultivar taxonomy. Part of the [Reference Taxonomies umbrella](reference-taxonomies-attribution.md). **Phylum A1 (port existing ruleset).** Sprint-1 deliverable after the attribution scaffolding sprint.
+Per-taxonomy feature doc for the Variety / Cultivar taxonomy. Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md). **Phylum A1 (port existing ruleset).** Sprint-1 deliverable after the attribution scaffolding sprint.
 
-Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md) for shared conventions (adoption workflow, citation format, enforcement mechanics).
+Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md) for shared conventions (adoption workflow, citation format, enforcement mechanics).
 
 ---
 
@@ -48,7 +48,7 @@ The Cultivar section of Chris's Google Doc is already:
 
 ## Canonical adoption workflow (for this sprint)
 
-Per [attribution § Canonical adoption workflow](reference-taxonomies-attribution.md#canonical-adoption-workflow):
+Per [attribution § Canonical adoption workflow](docs/features/reference-taxonomies-attribution.md#canonical-adoption-workflow):
 
 1. **Research (Chris).** Chris works through the ~20 canonical cultivars and drafts per-cultivar content. For each cultivar, fill the ~15-18 attributes. External sources likely to inform: Rob Hoo's *Cultivar: A Practical Guide for Coffee Roasters*, World Coffee Research's cultivar database, SCA resources, specific roaster cultivar pages. Chris authors in his voice, citing external sources in the per-taxonomy `## Sources` block.
 2. **Draft (Chris).** Chris shares the draft `docs/taxonomies/varieties.md` inline or via branch.
@@ -135,7 +135,7 @@ If all 5 pass and Chris confirms, the registry accepts a new canonical entry. If
 
 ## Dependencies
 
-- **[Attribution scaffolding sprint](reference-taxonomies-attribution.md#canonical-adoption-workflow)** — ships first. Produces `docs/taxonomies/` directory, header-block template, `## Sources` convention. This sprint assumes those artifacts exist.
+- **[Attribution scaffolding sprint](docs/features/reference-taxonomies-attribution.md#canonical-adoption-workflow)** — ships first. Produces `docs/taxonomies/` directory, header-block template, `## Sources` convention. This sprint assumes those artifacts exist.
 - **Sync V1 sub-sprint 1 steps (b) + (c)** — already shipped (PR #30, 2026-04-21). `lib/cultivar-registry.ts` exists with 26 canonical names + 13 lineages from DB snapshot. This sprint enriches the registry with curated canonical content + authored reference material, not greenfield extraction.
 - **Sync V1 step (d) dog-food** — has Mokka-cultivar pre-req flagged. Chris's Variety research resolves this. The two work in the same cycle.
 - **No hard dependency on Region.** Region can ship before or after Variety — they're independent A1 ports. Both register extracts exist; both get enriched.
@@ -166,8 +166,8 @@ If all 5 pass and Chris confirms, the registry accepts a new canonical entry. If
 ## Sources (for this feature doc)
 
 - Chris's ChatGPT context doc: `context for chatgpt on coffee info, terroir, cultivar, best brew`
-- [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md) (umbrella meta)
-- [CLAUDE.md § Cultivar Registry Rules](../../CLAUDE.md) (existing repo convention)
+- [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md) (umbrella meta)
+- [CLAUDE.md § Cultivar Registry Rules](CLAUDE.md) (existing repo convention)
 - Migration 016 (Gesha collapse, JARC blend, Garnica relocation)
 
 Per-cultivar authored content sources will be captured in `docs/taxonomies/varieties.md` `## Sources` block when that file is authored. Likely primary external reference: Rob Hoo, *Cultivar: A Practical Guide for Coffee Roasters*.

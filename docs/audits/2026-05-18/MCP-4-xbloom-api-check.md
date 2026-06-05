@@ -1,6 +1,6 @@
 # MCP-4 — xBloom API existence check
 
-**Source**: [grilling-2026-05-15-mcp-followups.md item #4](../../sprints/grilling-2026-05-15-mcp-followups.md)
+**Source**: [grilling-2026-05-15-mcp-followups.md item #4](docs/sprints/grilling-2026-05-15-mcp-followups.md)
 **Sprint**: T5 (2026-05-18)
 **Time budget**: 30 min lookup
 **Decision**: **No public xBloom API exists today. Close the open question.**

@@ -24,7 +24,7 @@ Migrated from ROASTING.md § Evaluation Protocol in Wave 3 PR 1 (2026-05-26).
 - Delta above 5 points: surface development is running ahead of core — profile needs more early energy
 - Delta near zero or slightly negative: even development confirmed (this is the target)
 
-See [cluster/machine/counterflow-observations.md § WB-to-Ground Agtron Delta as Development Signal](../machine/counterflow-observations.md#wb-to-ground-agtron-delta-as-development-signal) for the per-lot-family directional interpretation (magnitude is the operational reading; sign flips between washed and heavy-ferment families).
+See [cluster/machine/counterflow-observations.md § WB-to-Ground Agtron Delta as Development Signal](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md#wb-to-ground-agtron-delta-as-development-signal) for the per-lot-family directional interpretation (magnitude is the operational reading; sign flips between washed and heavy-ferment families).
 
 **Optimized brew session — one additional session after a winner is identified:**
 

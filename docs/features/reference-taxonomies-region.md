@@ -1,8 +1,8 @@
 # Reference Taxonomies — Region
 
-Per-taxonomy feature doc for the Region / Terroir taxonomy. Part of the [Reference Taxonomies umbrella](reference-taxonomies-attribution.md). **Phylum A1 (port existing ruleset).** Second sprint after Variety.
+Per-taxonomy feature doc for the Region / Terroir taxonomy. Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md). **Phylum A1 (port existing ruleset).** Second sprint after Variety.
 
-Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md) for shared conventions.
+Written 2026-04-21 from the Reference Taxonomies brainstorm. Pattern reference: [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md) for shared conventions.
 
 ---
 
@@ -65,7 +65,7 @@ The reconciliation itself is a decision to lock — once done, Chris's Google Do
 
 ## Canonical adoption workflow (for this sprint)
 
-Per [attribution § Canonical adoption workflow](reference-taxonomies-attribution.md#canonical-adoption-workflow):
+Per [attribution § Canonical adoption workflow](docs/features/reference-taxonomies-attribution.md#canonical-adoption-workflow):
 
 1. **Research (Chris).** Reconcile 14 vs 21. Draft per-macro content for all ~21 canonical macros. Extend list if buying patterns suggest additional macros (e.g. Kenya Nyeri Highlands, Yirgacheffe Highlands). External sources likely: Sweet Maria's origin pages, SCA / specialty coffee origin references, Hacienda / producer-published location descriptions.
 2. **Draft (Chris).** Share draft `docs/taxonomies/regions.md`.
@@ -168,7 +168,7 @@ If all 4 answer yes, the submission marks the macro as a candidate for registry 
 ## Sources (for this feature doc)
 
 - Chris's ChatGPT context doc, Terroir section
-- [reference-taxonomies-attribution.md](reference-taxonomies-attribution.md)
+- [reference-taxonomies-attribution.md](docs/features/reference-taxonomies-attribution.md)
 - CLAUDE.md § Canonical Registries (macro terroir rules)
 - Migration 015 (Guatemala macros Huehuetenango + Acatenango)
 - `feedback_terroir_cultivar_registry.md` memory (canonical registry discipline)

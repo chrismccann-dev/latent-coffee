@@ -40,5 +40,5 @@ Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).
 
 ## Cross-references
 
-- [by-process/washed.md](../patterns/by-process/washed.md) — Gesha washed pattern context (variety + process anchor)
-- [cross-coffee-insights.md § Varietal Aromatic Fingerprints](../patterns/cross-coffee-insights.md#varietal-aromatic-fingerprints) — Gesha row
+- [by-process/washed.md](docs/skills/roasting-historian/cluster/patterns/by-process/washed.md) — Gesha washed pattern context (variety + process anchor)
+- [cross-coffee-insights.md § Varietal Aromatic Fingerprints](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#varietal-aromatic-fingerprints) — Gesha row

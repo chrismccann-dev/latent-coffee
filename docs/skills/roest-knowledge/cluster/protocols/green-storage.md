@@ -12,6 +12,6 @@ Measure ground Agtron (15g) at the Day 7 evaluation session before brewing — g
 
 ## Cross-references
 
-- [protocols/evaluation.md](./evaluation.md) — Day 7 pourover evaluation protocol
-- [protocols/fc-marking.md](./fc-marking.md) — FC marking discipline
-- [roasting-historian § cross-coffee-insights — Rest Behavior Patterns](../../../roasting-historian/cluster/patterns/cross-coffee-insights.md#rest-behavior-patterns) — per-process Day-N gate guidance
+- [protocols/evaluation.md](docs/skills/roest-knowledge/cluster/protocols/evaluation.md) — Day 7 pourover evaluation protocol
+- [protocols/fc-marking.md](docs/skills/roest-knowledge/cluster/protocols/fc-marking.md) — FC marking discipline
+- [roasting-historian § cross-coffee-insights — Rest Behavior Patterns](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#rest-behavior-patterns) — per-process Day-N gate guidance

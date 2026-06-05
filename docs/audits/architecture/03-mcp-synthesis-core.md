@@ -3,7 +3,7 @@
 **Session:** 2026-06-04 dogfood (Session 3 of the architecture-review-skill plan). Read-only, no code edited.
 **Surface:** `lib/mcp/` (40 files, ~7,087 LOC, 35 Tools + Resources) + `lib/synthesis/` (adapter pipeline + 3-call orchestrator, ~1,400 LOC).
 **Centered smell:** module depth — shallow-vs-deep, seam/adapter, "everything imports this," the deletion test.
-**Rubric:** Part B of [architecture-review-skill-brainstorm-2026-06-04.md](../../features/architecture-review-skill-brainstorm-2026-06-04.md).
+**Rubric:** Part B of [architecture-review-skill-brainstorm-2026-06-04.md](docs/features/architecture-review-skill-brainstorm-2026-06-04.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # Dongzhe — Peer Roaster Profile
 
-**Same machine (Roest L200 Ultra, counterflow mode), same general practice, different cup target + different methodology.** Highest-weight directional source in the peer hierarchy; specific numbers don't transfer due to confirmed machine-level thermal differences and his looser dev / darker target. Authored as a Pattern I operator-curated profile per [ADR-0013](../../../adr/0013-self-improvement-primitives.md); next-source integration happens when Chris surfaces new long-form content (livestream, podcast, blog post).
+**Same machine (Roest L200 Ultra, counterflow mode), same general practice, different cup target + different methodology.** Highest-weight directional source in the peer hierarchy; specific numbers don't transfer due to confirmed machine-level thermal differences and his looser dev / darker target. Authored as a Pattern I operator-curated profile per [ADR-0013](docs/adr/0013-self-improvement-primitives.md); next-source integration happens when Chris surfaces new long-form content (livestream, podcast, blog post).
 
 **Tier in reference-signal hierarchy** (per Roasting Assistant intake): **Tier 2** — peer roaster on identical machine + method. Above Tier 3 (WBrC champion / Sey / Substance generic roasting wisdom, totally different machines) and below Tier 1 (Chris's own resolved roasts on this archive's coffees: Mandela XO #139, SR Washed #133, etc.).
 
@@ -87,7 +87,7 @@ These are the actionable extracts. The full transcript has more texture, but the
 
 Promote moisture + density (paired) to first-order intake signal alongside process and terroir/cultivar. Equal-weight four-input check at the New Coffee Onboarding Protocol Step 3, not a process-first hierarchy.
 
-Status: Cross-referenced from [ROASTING.md § Step 3 - Anchor Profile Selection Logic](../../../../../ROASTING.md#step-3---anchor-profile-selection-logic).
+Status: Cross-referenced from [ROASTING.md § Step 3 - Anchor Profile Selection Logic](ROASTING.md).
 
 #### Delta 2 — Momentum into FC > weight loss (CONFIRMATORY + adds proposed logged fields)
 
@@ -105,7 +105,7 @@ Chris's silent-crack archive (SR Natural, Mandela XO, Costa Rica Anaerobic, like
 
 All three are extractable from Roest log data Chris already captures — no new measurement equipment, no live-operation burden.
 
-Status: **Schema work parked in [PRODUCT.md § Side Quests](../../../../../PRODUCT.md#side-quests)** — touches `push_roast` input schema, archive-import column dependencies, and the Roest log extraction pipeline. Separable decision from "does ROASTING.md describe these as fields we track." Currently waiting on Chris's explicit go-ahead before opening that sprint.
+Status: **Schema work parked in [PRODUCT.md § Side Quests](PRODUCT.md)** — touches `push_roast` input schema, archive-import column dependencies, and the Roest log extraction pipeline. Separable decision from "does ROASTING.md describe these as fields we track." Currently waiting on Chris's explicit go-ahead before opening that sprint.
 
 #### Delta 3 — Honey process is a fork (INFORMATIONAL → placeholder framework)
 
@@ -117,14 +117,14 @@ Honey coffees can be roasted "as a washed process or as a natural process," depe
 
 Chris has no resolved honey lots in the archive. Currently the only honey lot in inventory is the **Cruz Loma TM Honey one-shot** (Taza Dorada 2024 #15), queued behind the Rancho Tio Emilio Typica Mejorado Washed one-shot. Useful framing to have when that lot comes up for roast.
 
-Status: Cross-referenced from [ROASTING.md § Honey Process - Roast Direction Fork](../../../../../ROASTING.md#honey-process---roast-direction-fork). Placeholder framework until the first honey lot resolves; then converted to lot-knowledge.
+Status: Cross-referenced from [ROASTING.md § Honey Process - Roast Direction Fork](ROASTING.md). Placeholder framework until the first honey lot resolves; then converted to lot-knowledge.
 
 #### Delta 4 — Low-moisture and high-moisture rules (CONFIRMATORY → upgrades confidence)
 
 - **Low moisture (≤10%):** gentler / slower early energy. Avoid overshoot. Watch for early momentum spike. Use ground color (not whole-bean visual) to verify.
 - **High moisture (≥11%):** more drying energy to match the curve traced on a normal-moisture lot. **Do not conflate with more development** — moisture needs drying support, it does not automatically mean more post-crack dev.
 
-Both rules already exist in [ROASTING.md § Green Spec → Starting Hypothesis](../../../../../ROASTING.md#green-spec--starting-hypothesis) at Medium confidence. The REDPLUM-CAS-2026 V1 (11.2% moisture, biased upward 2°C) and BRA-BIOMA-PB1604 V1 design (9.3% moisture, biased lower than Bioma Natural) are both consistent with what Dongzhe describes — so this is partial validation of moves Chris is already making.
+Both rules already exist in [ROASTING.md § Green Spec → Starting Hypothesis](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#green-spec--starting-hypothesis) at Medium confidence. The REDPLUM-CAS-2026 V1 (11.2% moisture, biased upward 2°C) and BRA-BIOMA-PB1604 V1 design (9.3% moisture, biased lower than Bioma Natural) are both consistent with what Dongzhe describes — so this is partial validation of moves Chris is already making.
 
 Status: Confidence on the two moisture rows in the Green Spec table **upgraded Medium → Medium-High** with peer-livestream confirmation.
 
@@ -164,5 +164,5 @@ A line from Dongzhe's claude.ai discussion that's worth surfacing: **"Stop think
 
 - **First long-form capture:** 2026-05-17 Yunnan-Hatchi livestream (URL above).
 - **Prior chat-history integration:** Dongzhe references in ROASTING.md predate this doc; the Reference Roast Target + Core Principles sections were folded from those chat-history extractions before the livestream existed.
-- **Pattern I trigger:** next session is operator-initiated when Chris surfaces another long-form content event (livestream / podcast / blog post). No autonomous external monitoring per [Peer-Learning Roasting Archivist SKILL.md](../../SKILL.md) Round 2 lock.
+- **Pattern I trigger:** next session is operator-initiated when Chris surfaces another long-form content event (livestream / podcast / blog post). No autonomous external monitoring per [Peer-Learning Roasting Archivist SKILL.md](docs/skills/peer-learning-roasting-archivist/SKILL.md) Round 2 lock.
 - **Refresh cadence:** episodic, not periodic. Stale-claim detection happens when a folded delta turns out to be wrong on a future Chris lot (Pattern A signal flows back up through the affected Delta entry).

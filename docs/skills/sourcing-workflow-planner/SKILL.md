@@ -1,7 +1,7 @@
 # Sourcing Workflow Planner
 
 **Tier:** Workflow / **Sub-tier:** Planning / **Domain:** Roasting / **Wave:** 3 / **Status:** ACTIVE (Wave 3 PR 2 shipped 2026-05-26)
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -18,10 +18,10 @@ Evaluate a new lot opportunity against sourcing strategy + current portfolio. Re
 ## Inputs
 
 - Lot opportunity (operator-provided in claude.ai session: importer offering details, cupping notes, price, lot quantity, processing, producer, lane signal)
-- [WBC Roasting Archivist](../wbc-roasting-archivist/) cluster § sourcing/strategy.md — 5-lane portfolio + Tier 1/2/3 priority targets + tested-cultivars canonical registry
-- [Roasting Historian](../roasting-historian/) cluster — closed-lot lane-performance retros + per-cultivar + per-process patterns
+- [WBC Roasting Archivist](docs/skills/wbc-roasting-archivist/) cluster § sourcing/strategy.md — 5-lane portfolio + Tier 1/2/3 priority targets + tested-cultivars canonical registry
+- [Roasting Historian](docs/skills/roasting-historian/) cluster — closed-lot lane-performance retros + per-cultivar + per-process patterns
 - Direct `green_beans` table read — current inventory state for portfolio-fit assessment
-- (Pre-2026-05-27 the Inputs list included Learning Assistant track-aware context. That dependency is removed — Research Coordinator per [ADR-0017](../../adr/0017-research-assistant-architecture.md) is operator-direct in Claude Code, not a claude.ai-side input source. If a sourcing decision intersects an active research project, the operator surfaces that context manually.)
+- (Pre-2026-05-27 the Inputs list included Learning Assistant track-aware context. That dependency is removed — Research Coordinator per [ADR-0017](docs/adr/0017-research-assistant-architecture.md) is operator-direct in Claude Code, not a claude.ai-side input source. If a sourcing decision intersects an active research project, the operator surfaces that context manually.)
 
 ## Outputs
 
@@ -41,7 +41,7 @@ None directly. Sourcing decisions are physical-world events; no substrate write 
 
 ## Self-improvement
 
-- **Patterns:** E (workflow-execution refresh — recommendation quality measured against lot outcome after roasting + cupping) — see [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+- **Patterns:** E (workflow-execution refresh — recommendation quality measured against lot outcome after roasting + cupping) — see [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 - **Signal:** lane miss/hit rate drift from closed lots > threshold → re-validate sourcing strategy via `propose_doc_changes` targeting `skills/wbc-roasting-archivist/cluster/sourcing/strategy.md`; portfolio gaps surfaced repeatedly across multiple sourcing evals → flag for sourcing-strategy refresh
 
 ## Wave 3 PR 2 ship notes (2026-05-26)

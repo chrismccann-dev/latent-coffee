@@ -3,7 +3,7 @@
 **Date**: 2026-05-18
 **Sprint**: Sprint M (post-T5, pre-blocking-dogfood-merge-gate, pre-Sprint 6)
 **Sizing**: S — 1-3h
-**Master plan**: [post-grilling-sequencing.md § Sprint M](post-grilling-sequencing.md)
+**Master plan**: [post-grilling-sequencing.md § Sprint M](docs/sprints/post-grilling-sequencing.md)
 **Branch**: `claude/sprint-m-sync-audit-2026-05-18`
 
 ## Summary
@@ -26,7 +26,7 @@ T1 (#179) · T2 (#180) · T3 (#181 + #182) · T4 (#183) · T5 (#184) · Schema s
 **Status**: Clean ✅ (after 4 fixes — see Drift section).
 
 - CONTEXT.md flagged-ambiguity entries from the 2026-05-16 grilling sessions: 10 closed inline at "Resolved 2026-05-18" markers (T1 / T3 CR-1 / T3 CR-2 / T4 SYN-2 / T5 CR-7 + RO-7 cluster + others). Spot-checked § Qualifier (CR-1 corrective locked), § Reference candidate (S2 entry), § Corpus tier (T4 entry), § Backfilled recipe (S4 entry) — all coherent.
-- 11 audit decision docs at [docs/audits/2026-05-18/](../audits/2026-05-18/) are reachable via filesystem (intentional per T5 — NOT registered as MCP Resources).
+- 11 audit decision docs at [docs/audits/2026-05-18/](docs/audits/2026-05-18/) are reachable via filesystem (intentional per T5 — NOT registered as MCP Resources).
 - `/brews/[id]` qualifier render `[Anaerobic Natural] QUALIFIER [Anoxic]` verified via T3 retro on Rosado brew.
 
 ## Actor 2 — `docs/prompts/*.md` (claude.ai session prompts)
@@ -49,10 +49,10 @@ T3 (`fermentation_qualifiers`) doesn't surface in brewing prompts — same deleg
 
 **Status**: Clean ✅ (next session start picks up additions)
 
-- New `docs://taxonomies/sworks.md` Resource (T5) registered in [lib/mcp/docs.ts](../../lib/mcp/docs.ts) at L42-50 — visible alongside grinders.md, brewers.md, etc. claude.ai catalog refresh on next session start picks it up.
+- New `docs://taxonomies/sworks.md` Resource (T5) registered in [lib/mcp/docs.ts](lib/mcp/docs.ts) at L42-50 — visible alongside grinders.md, brewers.md, etc. claude.ai catalog refresh on next session start picks it up.
 - New `docs://features/importer-exporter-scoping.md` Resource (T3 CR-3) registered at L51 — first `docs/features/` entry in DOC_FILES; bundle coverage extended in next.config.js (verified `check:mcp-bundle` passes 14/8).
-- `canonicals://processes` axis (T3 CR-5) now exposes `fermentation_qualifiers` sub-axis — [lib/mcp/canonicals.ts:216](../../lib/mcp/canonicals.ts).
-- `push_brew` + `patch_brew` Zod schemas (T3 CR-5) expose `fermentation_qualifiers: z.array(z.string()).optional().nullable()` with descriptions — [lib/mcp/push-brew.ts:140](../../lib/mcp/push-brew.ts) + [lib/mcp/patch-brew.ts:29](../../lib/mcp/patch-brew.ts).
+- `canonicals://processes` axis (T3 CR-5) now exposes `fermentation_qualifiers` sub-axis — [lib/mcp/canonicals.ts:216](lib/mcp/canonicals.ts).
+- `push_brew` + `patch_brew` Zod schemas (T3 CR-5) expose `fermentation_qualifiers: z.array(z.string()).optional().nullable()` with descriptions — [lib/mcp/push-brew.ts:140](lib/mcp/push-brew.ts) + [lib/mcp/patch-brew.ts:29](lib/mcp/patch-brew.ts).
 - `push_cupping` + `patch_cupping` Zod (Schema sprint S3 fold-in) expose `sweetness` + `temperature_behavior` + `wb_agtron`.
 
 ## Actor 4 — MCP server (lib/mcp/*.ts Tools + Resources)
@@ -91,13 +91,13 @@ Six edits to close drift discovered during the matrix walk. All small (1-line or
 
 | # | File | Drift | Fix |
 |---|---|---|---|
-| 1 | [CLAUDE.md:30](../../CLAUDE.md) | "32 Tools live as of 2026-05-06" — stale since Sub Pages 6.1 (2026-05-13) added `push_roast_recipe` + `patch_roast_recipe` | Updated to "34 Tools live as of 2026-05-13" with the 6.1 attribution + prior-baseline pointer |
-| 2 | [CLAUDE.md:300](../../CLAUDE.md) | "Currently 32 Tools" in tripwire enumeration | Updated to "Currently 34 Tools" |
-| 3 | [PRODUCT.md:471](../../PRODUCT.md) | Hybrid Washed listed as a signature in the "synthesis variant" follow-up bullet | Reframed to reference the 15-canonical post-T1 list + name BR-1 deprecation explicitly |
-| 4 | [BREWING.md:322](../../BREWING.md) | Signature Method spec lists `Hybrid Washed` as a canonical | Replaced 3-name enumeration with the 15-canonical post-T1 list + deprecation note pointing at the structured `[Anaerobic, Aerobic] Washed` replacement |
-| 5 | [BREWING.md:420](../../BREWING.md) | Anoxic-natural row's qualifier note: "The qualifier is queryable and preserves the strategy distinction" — over-claim corrected by T3 CR-1 | Reframed to align with the locked corrective ("record-when-known annotation, NOT a strategy-decision layer"); kept the single-data-point Full-Expression call on the row as lot-specific record |
+| 1 | [CLAUDE.md:30](CLAUDE.md) | "32 Tools live as of 2026-05-06" — stale since Sub Pages 6.1 (2026-05-13) added `push_roast_recipe` + `patch_roast_recipe` | Updated to "34 Tools live as of 2026-05-13" with the 6.1 attribution + prior-baseline pointer |
+| 2 | [CLAUDE.md:300](CLAUDE.md) | "Currently 32 Tools" in tripwire enumeration | Updated to "Currently 34 Tools" |
+| 3 | [PRODUCT.md:471](PRODUCT.md) | Hybrid Washed listed as a signature in the "synthesis variant" follow-up bullet | Reframed to reference the 15-canonical post-T1 list + name BR-1 deprecation explicitly |
+| 4 | [BREWING.md:322](BREWING.md) | Signature Method spec lists `Hybrid Washed` as a canonical | Replaced 3-name enumeration with the 15-canonical post-T1 list + deprecation note pointing at the structured `[Anaerobic, Aerobic] Washed` replacement |
+| 5 | [BREWING.md:420](BREWING.md) | Anoxic-natural row's qualifier note: "The qualifier is queryable and preserves the strategy distinction" — over-claim corrected by T3 CR-1 | Reframed to align with the locked corrective ("record-when-known annotation, NOT a strategy-decision layer"); kept the single-data-point Full-Expression call on the row as lot-specific record |
 | 6 | [app/(app)/processes/page.tsx:5](../../app/%28app%29/processes/page.tsx) | Comment lists "Moonshadow / Hybrid Washed / TyOxidator" as the Signature Methods | Reframed comment to point at the 15-canonical post-T1 registry + name the 2 currently-brewed signatures (Moonshadow + TyOxidator) + Hybrid Washed deprecation |
-| 7 | [CONTEXT.md:951](../../CONTEXT.md) | Qualifier-pattern-is-generalizable bullet uses "Wave Hybrid as a qualifier on Hybrid Washed" as the open example — both halves resolved differently in T1 / BR-1 | Reframed to document the T1 / BR-1 resolution (Wave Hybrid promoted to canonical; Hybrid Washed deprecated) and explicitly keep the pattern open for future cases |
+| 7 | [CONTEXT.md:951](CONTEXT.md) | Qualifier-pattern-is-generalizable bullet uses "Wave Hybrid as a qualifier on Hybrid Washed" as the open example — both halves resolved differently in T1 / BR-1 | Reframed to document the T1 / BR-1 resolution (Wave Hybrid promoted to canonical; Hybrid Washed deprecated) and explicitly keep the pattern open for future cases |
 
 ## Out of scope (intentional)
 

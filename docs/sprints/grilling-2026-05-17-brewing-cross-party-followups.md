@@ -12,9 +12,9 @@ First **cross-party** `/grill-with-docs` session — a new audit flavor where Cl
 
 **Outputs**:
 
-- [CONTEXT.md](../../CONTEXT.md) — **7 new glossary entries** under the Brewing sub-section: Named Consideration, WBC corpus check, Wrong-zone trap, Iteration budget, Diminishing returns, Strategy pivot, Brewer rotation discipline. **1 cluster note appended** to the Iteration loop entry naming the three iteration-termination paths.
-- [BREWING.md](../../BREWING.md) — **1 byproduct edit**: line 250 "strategy shift" → "strategy pivot" for cross-doc vocabulary coherence.
-- [next.config.js](../../next.config.js) — **bundle fix** (separately merged as [latent-coffee#164](https://github.com/chrismccann-dev/latent-coffee/pull/164)): added `./CONTEXT.md` + `./docs/roasting/*.md` to `outputFileTracingIncludes` for `/api/mcp/**`. Surfaced when claude.ai tried to `read_doc(uri="docs://context.md")` and ENOENT'd — the docs were registered as Resources in [lib/mcp/docs.ts](../../lib/mcp/docs.ts) but never added to the Vercel bundle glob. Recurring pattern of `feedback_vercel_bundle_static_files.md`; cross-party grilling is the only workflow shape that forces claude.ai to actually fetch CONTEXT.md cold, which is why this bug surfaced now.
+- [CONTEXT.md](CONTEXT.md) — **7 new glossary entries** under the Brewing sub-section: Named Consideration, WBC corpus check, Wrong-zone trap, Iteration budget, Diminishing returns, Strategy pivot, Brewer rotation discipline. **1 cluster note appended** to the Iteration loop entry naming the three iteration-termination paths.
+- [BREWING.md](BREWING.md) — **1 byproduct edit**: line 250 "strategy shift" → "strategy pivot" for cross-doc vocabulary coherence.
+- [next.config.js](next.config.js) — **bundle fix** (separately merged as [latent-coffee#164](https://github.com/chrismccann-dev/latent-coffee/pull/164)): added `./CONTEXT.md` + `./docs/roasting/*.md` to `outputFileTracingIncludes` for `/api/mcp/**`. Surfaced when claude.ai tried to `read_doc(uri="docs://context.md")` and ENOENT'd — the docs were registered as Resources in [lib/mcp/docs.ts](lib/mcp/docs.ts) but never added to the Vercel bundle glob. Recurring pattern of `feedback_vercel_bundle_static_files.md`; cross-party grilling is the only workflow shape that forces claude.ai to actually fetch CONTEXT.md cold, which is why this bug surfaced now.
 
 ## The 7 new headwords (iteration-cluster taxonomy + workflow stance)
 
@@ -57,7 +57,7 @@ Distilled from claude.ai's Round 7 retrospective + the session's confabulation p
 
 The current description enumerates roasting-side concepts (V-set, batch slot, experiment frame, etc.) but doesn't mention brewing-side concepts. claude.ai uses the description to decide whether to read CONTEXT.md for a given question; without brewing enumeration, it may not realize CONTEXT.md is the right surface for brewing-side vocabulary. Update the description to add a Brewing cluster enumeration (Coffee Brief / Named Consideration / Iteration budget / Diminishing returns / Strategy pivot / Wrong-zone trap / Brewer rotation discipline / Hybrid sub-form / Two-Axis Framework / extraction strategy / signal arbitration) alongside the existing roasting enumeration.
 
-Surface: [lib/mcp/docs.ts](../../lib/mcp/docs.ts) `DOC_DESCRIPTIONS['docs://context.md']`. Single-string edit.
+Surface: [lib/mcp/docs.ts](lib/mcp/docs.ts) `DOC_DESCRIPTIONS['docs://context.md']`. Single-string edit.
 
 **2. Vercel bundle audit guardrail** [PROCESS / INFRASTRUCTURE]
 

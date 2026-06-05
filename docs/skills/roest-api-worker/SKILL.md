@@ -1,7 +1,7 @@
 # Roest API Worker
 
 **Tier:** Workflow / **Sub-tier:** Executing / **Domain:** Roasting / **Wave:** 3 / **Status:** ACTIVE (Wave 3 PR 3 shipped 2026-05-26)
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -26,7 +26,7 @@ Push roast profiles to the Roest L200 Ultra via the Roest API. Owns `push_roast_
 ## Inputs
 
 - Roast recipe proposal (from Roasting Assistant, typed; from operator paste otherwise)
-- [Roest Knowledge](../roest-knowledge/) cluster — `cluster/api/{read-surface,write-surface,quirks}.md` for API contract + drift patterns; `cluster/firmware/README.md` for firmware-version constraints; `cluster/observed-quirks.md` for live-issue tracking
+- [Roest Knowledge](docs/skills/roest-knowledge/) cluster — `cluster/api/{read-surface,write-surface,quirks}.md` for API contract + drift patterns; `cluster/firmware/README.md` for firmware-version constraints; `cluster/observed-quirks.md` for live-issue tracking
 
 ## Outputs
 

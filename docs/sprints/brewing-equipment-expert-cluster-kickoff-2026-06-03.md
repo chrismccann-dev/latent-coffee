@@ -1,14 +1,14 @@
 # KICKOFF — brewing-equipment-expert cluster over-cap (pruning case 005, CONDITIONAL)
 
-> **CLOSED MOOT 2026-06-03.** Pruning case 004 (filters.md owned/not-owned split) took the cluster from 157.8 → **109.9 KB / 150**, well under cap. No case-005 session needed; no decomposition. See [pruning case 004](pruning-cases/004-filters-md.md). The decision tree below is retained for reference only.
+> **CLOSED MOOT 2026-06-03.** Pruning case 004 (filters.md owned/not-owned split) took the cluster from 157.8 → **109.9 KB / 150**, well under cap. No case-005 session needed; no decomposition. See [pruning case 004](docs/sprints/pruning-cases/004-filters-md.md). The decision tree below is retained for reference only.
 
 **RUN THIS SECOND, AND ONLY IF STILL NEEDED.** The cluster is over its cap *because* `filters.md` is bloated (70.4 of 157.8 KB). Run `filters-md-prune-kickoff-2026-06-03.md` FIRST, then `npm run check:doc-sizes`. **If the cluster is back under 150 KB, this kickoff is moot — close it, no session needed.** Only proceed below if the cluster is *still* over after the filters.md prune.
 
-**THIS IS AN INTERPRETIVE SESSION** (Chris's steer load-bearing) — and unlike a normal prune, the cluster-cap question is as much a **Pattern F decomposition** decision ([ADR-0014](../adr/0014-pattern-f-threshold-tiers.md)) as a Pattern J prune. Default to "ask, don't ship"; decomposition is an architectural call, not a mechanical edit.
+**THIS IS AN INTERPRETIVE SESSION** (Chris's steer load-bearing) — and unlike a normal prune, the cluster-cap question is as much a **Pattern F decomposition** decision ([ADR-0014](docs/adr/0014-pattern-f-threshold-tiers.md)) as a Pattern J prune. Default to "ask, don't ship"; decomposition is an architectural call, not a mechanical edit.
 
 ## Why this exists
 
-`docs/skills/brewing-equipment-expert/` is **157.8 KB / 150 KB** (Equipment-Reference cluster cap, [doc-tripwires.md](../architecture/doc-tripwires.md)) — surfaced by the first `npm run check:doc-sizes` run (2026-06-03), which caught drift the 2026-05-23 ADR-0014 hand-audit had logged as "144 / 150, approaching." Composition:
+`docs/skills/brewing-equipment-expert/` is **157.8 KB / 150 KB** (Equipment-Reference cluster cap, [doc-tripwires.md](docs/architecture/doc-tripwires.md)) — surfaced by the first `npm run check:doc-sizes` run (2026-06-03), which caught drift the 2026-05-23 ADR-0014 hand-audit had logged as "144 / 150, approaching." Composition:
 
 | Doc | Size |
 |---|---|

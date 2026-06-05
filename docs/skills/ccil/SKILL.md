@@ -1,7 +1,7 @@
 # Cross-Coffee Insight Layer (CCIL)
 
 **Tier:** Special / **Domain:** Cross-domain / **Wave:** 4 / **Status:** ACTIVE (skeleton + Sudan Rume seed pattern shipped Wave 4 PR 4a, 2026-05-21)
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -11,8 +11,8 @@ Synthesize across domain Historians + WBC archivists + Latent's per-entity termi
 
 **Today (post Wave 4 PR 4a, 2026-05-21):**
 
-- [`cluster/coffee/sudan-rume/across-roasting-and-brewing.md`](cluster/coffee/sudan-rume/across-roasting-and-brewing.md) — seed pattern doc demonstrating cross-domain synthesis on Sudan Rume (N=3 across both domains: Latent-roasted CGLE SR Hybrid Washed + Latent-roasted CGLE SR Natural (resolved, ref #187) + externally-roasted CGLE Las Margaritas SR Natural brewing-only)
-- [`cluster/decomposition-log.md`](cluster/decomposition-log.md) — Pattern F audit trail; logs every CCIL self-decomposition event (per [ADR-0013](../../adr/0013-self-improvement-primitives.md) bloat tripwires)
+- [`cluster/coffee/sudan-rume/across-roasting-and-brewing.md`](docs/skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md) — seed pattern doc demonstrating cross-domain synthesis on Sudan Rume (N=3 across both domains: Latent-roasted CGLE SR Hybrid Washed + Latent-roasted CGLE SR Natural (resolved, ref #187) + externally-roasted CGLE Las Margaritas SR Natural brewing-only)
+- [`cluster/decomposition-log.md`](docs/skills/ccil/cluster/decomposition-log.md) — Pattern F audit trail; logs every CCIL self-decomposition event (per [ADR-0013](docs/adr/0013-self-improvement-primitives.md) bloat tripwires)
 
 **Target shape (accrues via Pattern A refresh events + future seed pattern ships):**
 
@@ -36,7 +36,7 @@ Synthesize across domain Historians + WBC archivists + Latent's per-entity termi
 
 ## Called by / Calls
 
-- **Called by:** Roasting Assistant, Brewing Assistant (cross-domain-aware planners). Research Coordinator may consult CCIL when scoping a research project per [ADR-0017](../../adr/0017-research-assistant-architecture.md), but the call is operator-direct in Claude Code rather than a Master-Coordinator-dispatched chain.
+- **Called by:** Roasting Assistant, Brewing Assistant (cross-domain-aware planners). Research Coordinator may consult CCIL when scoping a research project per [ADR-0017](docs/adr/0017-research-assistant-architecture.md), but the call is operator-direct in Claude Code rather than a Master-Coordinator-dispatched chain.
 - **Calls:** Roasting Historian · Brewing Historian · WBC Roasting Archivist · WBC Brewing Archivist (read-only synthesis input). Does NOT call workflow tier.
 
 ## MCP Tools in scope
@@ -45,7 +45,7 @@ None directly. CCIL is a synthesis layer; its output is cluster docs consumed by
 
 ## Self-improvement
 
-- **Patterns:** A (substrate-event refresh when Historians' patterns drift), D (tier-threshold refresh when underlying domain corpora cross tiers), **F (bloat-tripwire decomposition — PRIMARY pattern for this sub-skill; CCIL is the archetypal Pattern F user)** — see [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+- **Patterns:** A (substrate-event refresh when Historians' patterns drift), D (tier-threshold refresh when underlying domain corpora cross tiers), **F (bloat-tripwire decomposition — PRIMARY pattern for this sub-skill; CCIL is the archetypal Pattern F user)** — see [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 - **Signal:** bloat tripwire (>120KB total cluster OR >60KB single doc) → propose self-decomposition into sub-domain CCILs; prompt-revision when CCIL's recommendations judged generic for a domain N times
 
 ## Autonomy stage progression (custom thresholds per ADR-0013 outlier rules)
@@ -57,6 +57,6 @@ None directly. CCIL is a synthesis layer; its output is cluster docs consumed by
 
 ## Wave 4 implementation status
 
-- **Wave 4 PR 4a shipped 2026-05-21.** Skeleton + Sudan Rume seed pattern. CCIL flipped PLACEHOLDER → ACTIVE. Chicken-and-egg Historians dependency resolved (Brewing Historian shipped Wave 2 PR 2, Roasting Historian shipped Wave 2 PR 3). Chain 6 in [coordinator/handoff-rules.md](../coordinator/handoff-rules.md) activated pending lived-practice Wölfl cross-pollination execution.
+- **Wave 4 PR 4a shipped 2026-05-21.** Skeleton + Sudan Rume seed pattern. CCIL flipped PLACEHOLDER → ACTIVE. Chicken-and-egg Historians dependency resolved (Brewing Historian shipped Wave 2 PR 2, Roasting Historian shipped Wave 2 PR 3). Chain 6 in [coordinator/handoff-rules.md](docs/skills/coordinator/handoff-rules.md) activated pending lived-practice Wölfl cross-pollination execution.
 - **Wave 4 PR 4b pending.** Master-doc residual migration (BREWING.md ~124KB → ~500-byte redirect stub; ROASTING.md ~72KB → ~500-byte redirect stub) + Naturals + Honey + 3 ambiguous ROASTING.md sections cleanup pass + CLAUDE.md sub-skills section compaction (extract to `docs/architecture/sub-skills-status.md`). PR 4b closes the architecture implementation arc.
-- **Self-decomposition trigger remains the architectural backstop.** Per [ADR-0013](../../adr/0013-self-improvement-primitives.md) Pattern F: when CCIL grows past 120KB total cluster OR any single doc past 60KB, decompose into sub-domain CCILs. First decomposition event documented in [decomposition-log.md](cluster/decomposition-log.md) when triggered.
+- **Self-decomposition trigger remains the architectural backstop.** Per [ADR-0013](docs/adr/0013-self-improvement-primitives.md) Pattern F: when CCIL grows past 120KB total cluster OR any single doc past 60KB, decompose into sub-domain CCILs. First decomposition event documented in [decomposition-log.md](docs/skills/ccil/cluster/decomposition-log.md) when triggered.

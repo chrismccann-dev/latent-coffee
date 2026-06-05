@@ -100,9 +100,9 @@ Whether these warrant first-class substrate (DB-stored vs derived) is open. Life
 
 ## Cross-references
 
-- [`docs/sprints/pod-1-scoping-draft-2026-05-26.md`](../../../sprints/pod-1-scoping-draft-2026-05-26.md) — the source DRAFT that this cluster doc carries forward
-- [`docs/prompts/log-cupping.md`](../../../prompts/log-cupping.md) STAGE 4 — current Path C-1/C-2 substrate
-- [`docs/prompts/close-lot.md`](../../../prompts/close-lot.md) STAGE 4 — current optimized-brew push
-- [`docs/skills/cupping-specialist/SKILL.md`](../SKILL.md) — Cupping Specialist canonical spec; § Path routing for the four ACTIVE paths
-- [Architecture Wave 3 PR 3 retro](../../../../../-Users-chrismccann-latent-coffee/memory/) — will land at PR 3 close-out
+- [`docs/sprints/pod-1-scoping-draft-2026-05-26.md`](docs/sprints/pod-1-scoping-draft-2026-05-26.md) — the source DRAFT that this cluster doc carries forward
+- [`docs/prompts/log-cupping.md`](docs/prompts/log-cupping.md) STAGE 4 — current Path C-1/C-2 substrate
+- [`docs/prompts/close-lot.md`](docs/prompts/close-lot.md) STAGE 4 — current optimized-brew push
+- [`docs/skills/cupping-specialist/SKILL.md`](docs/skills/cupping-specialist/SKILL.md) — Cupping Specialist canonical spec; § Path routing for the four ACTIVE paths
+- [Architecture Wave 3 PR 3 retro](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/) — will land at PR 3 close-out
 - 2026-05-26 audit cluster retro (`memory/project_audit_cluster_2026-05-26.md`) — source of the original draft

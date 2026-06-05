@@ -1,7 +1,7 @@
 # Architecture brainstorm cluster kickoff — composable sub-skills + self-improving + cross-corpus
 
 **Date:** 2026-05-25
-**Predecessor:** Audit cluster ([audit-cluster-kickoff-2026-05-25.md](audit-cluster-kickoff-2026-05-25.md))
+**Predecessor:** Audit cluster ([audit-cluster-kickoff-2026-05-25.md](docs/sprints/audit-cluster-kickoff-2026-05-25.md))
 **Successor:** Architecture implementation sprint(s) — scope TBD post-brainstorm
 **Sizing:** L (1-2 day brainstorm session; not implementation; produces ADR(s) + decomposition spec)
 **Branch:** TBD at kickoff (suggest `claude/architecture-brainstorm-2026-05-XX`)

@@ -1,6 +1,6 @@
 # RO-7 — `roast_learnings.rest_behavior` keep-or-drop decision
 
-**Source**: [grilling-2026-05-14-followups.md item #7](../../sprints/grilling-2026-05-14-followups.md)
+**Source**: [grilling-2026-05-14-followups.md item #7](docs/sprints/grilling-2026-05-14-followups.md)
 **Sprint**: T5 (2026-05-18)
 **Decision**: **Keep as-is. Reframe the description; do not relocate.**
 

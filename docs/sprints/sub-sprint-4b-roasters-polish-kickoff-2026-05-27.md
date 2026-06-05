@@ -95,18 +95,18 @@ Only after plan approval does code change.
 - `app/(app)/roasters/[slug]/page.tsx` (337 lines) — detail
 
 **Reference docs:**
-- [`lib/roaster-registry.ts`](../../lib/roaster-registry.ts) — `ROASTERS` array + `RoasterEntry` shape + family lookup
-- [`docs/taxonomies/roasters.md`](../taxonomies/roasters.md) — authored content
-- [`lib/synthesis/adapters/roaster.ts`](../../lib/synthesis/adapters/roaster.ts) — per-roaster synthesis prompt + RoasterEntry → anchor
+- [`lib/roaster-registry.ts`](lib/roaster-registry.ts) — `ROASTERS` array + `RoasterEntry` shape + family lookup
+- [`docs/taxonomies/roasters.md`](docs/taxonomies/roasters.md) — authored content
+- [`lib/synthesis/adapters/roaster.ts`](lib/synthesis/adapters/roaster.ts) — per-roaster synthesis prompt + RoasterEntry → anchor
 - `roaster_syntheses` table — cache layer
-- [`app/api/roasters/synthesize/route.ts`](../../app/api/roasters/synthesize/route.ts) — synthesis API
+- [`app/api/roasters/synthesize/route.ts`](app/api/roasters/synthesize/route.ts) — synthesis API
 
 **Components likely in scope:**
 - [`components/SectionCard.tsx`](../../components/SectionCard.tsx) — shared section chrome
-- [`components/Tag.tsx`](../../components/Tag.tsx) + [`components/TagLinkList.tsx`](../../components/TagLinkList.tsx) — cross-link tag blocks
-- [`components/CollapsibleBlock.tsx`](../../components/CollapsibleBlock.tsx) — Additional Information wrapper
-- [`components/SynthesisCard.tsx`](../../components/SynthesisCard.tsx) — "What I've Learned" card
-- [`components/FlavorNotesByFamily.tsx`](../../components/FlavorNotesByFamily.tsx) — Common Flavor Notes in Additional Info
+- [`components/Tag.tsx`](../../components/Tag.tsx) + [`components/TagLinkList.tsx`](components/TagLinkList.tsx) — cross-link tag blocks
+- [`components/CollapsibleBlock.tsx`](components/CollapsibleBlock.tsx) — Additional Information wrapper
+- [`components/SynthesisCard.tsx`](components/SynthesisCard.tsx) — "What I've Learned" card
+- [`components/FlavorNotesByFamily.tsx`](components/FlavorNotesByFamily.tsx) — Common Flavor Notes in Additional Info
 
 ## Known candidate items (radar, NOT implementation list)
 
@@ -145,9 +145,9 @@ Read-only at first. Implementation surfaces:
 
 - [app/(app)/roasters/page.tsx](../../app/(app)/roasters/page.tsx)
 - [app/(app)/roasters/[slug]/page.tsx](../../app/(app)/roasters/%5Bslug%5D/page.tsx)
-- [components/SectionCard.tsx](../../components/SectionCard.tsx) / [components/TagLinkList.tsx](../../components/TagLinkList.tsx) / [components/CollapsibleBlock.tsx](../../components/CollapsibleBlock.tsx) / [components/SynthesisCard.tsx](../../components/SynthesisCard.tsx) — if shared component tweaks needed
-- [lib/roaster-registry.ts](../../lib/roaster-registry.ts) — only if drift surfaces (rare)
-- [docs/taxonomies/roasters.md](../taxonomies/roasters.md) — only if drift surfaces
+- [components/SectionCard.tsx](../../components/SectionCard.tsx) / [components/TagLinkList.tsx](components/TagLinkList.tsx) / [components/CollapsibleBlock.tsx](components/CollapsibleBlock.tsx) / [components/SynthesisCard.tsx](components/SynthesisCard.tsx) — if shared component tweaks needed
+- [lib/roaster-registry.ts](lib/roaster-registry.ts) — only if drift surfaces (rare)
+- [docs/taxonomies/roasters.md](docs/taxonomies/roasters.md) — only if drift surfaces
 
 **Unlikely net-new this sprint**: schema changes, new tables, new MCP Tools. Polish is primarily render-side.
 
@@ -207,8 +207,8 @@ When bundles ship, trace through the six-actor chain per CLAUDE.md sprint cadenc
 
 ## Related docs
 
-- [docs/sprints/sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md](sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md) — 4a kickoff template + audio-clarification recovery pattern
-- [docs/sprints/sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md](sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md) — 4a Phase 2 output (shape reference)
+- [docs/sprints/sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md](docs/sprints/sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md) — 4a kickoff template + audio-clarification recovery pattern
+- [docs/sprints/sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md](docs/sprints/sub-sprint-4a-green-bean-polish-complementary-pass-2026-05-27.md) — 4a Phase 2 output (shape reference)
 - [project_roasters_aggregation.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_roasters_aggregation.md) — original aggregation sprint (2026-04-18)
 - [project_roaster_taxonomy_adoption.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_roaster_taxonomy_adoption.md) — 1h.1 70-roaster registry (2026-04-24)
 - [project_roasters_detail_rethink.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_roasters_detail_rethink.md) — Sub Pages 5 (2026-05-11), the precedent for 4b

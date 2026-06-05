@@ -1,6 +1,6 @@
 # CR-7 — SWORKS valve flow taxonomy promotion scoping
 
-**Source**: [grilling-2026-05-16-canonical-registries-followups.md item #7](../../sprints/grilling-2026-05-16-canonical-registries-followups.md)
+**Source**: [grilling-2026-05-16-canonical-registries-followups.md item #7](docs/sprints/grilling-2026-05-16-canonical-registries-followups.md)
 **Sprint**: T5 (2026-05-18)
 **Decision at kickoff**: **Scope + ship the promotion this sprint.**
 
@@ -47,8 +47,8 @@ Two structural alternatives considered:
 
 ## Pairs with
 
-- [WBC-2 Time Distribution Playbook scoping](WBC-2-time-distribution-playbook-scoping.md) — both T5 items consider promoting an existing prose vocabulary to a canonical surface. WBC-2 deferred until population threshold; CR-7 ships because population is already real (12 brews use SWORKS today).
-- [CR-13 + MCP-3 strictness mapping](CR-13-MCP-3-canonical-strictness-mapping.md) — SWORKS joins the self-only tier alongside EG-1 grinder. Tier policy: validation-only registry; rare net-new entries via deliberate edit only.
+- [WBC-2 Time Distribution Playbook scoping](docs/audits/2026-05-18/WBC-2-time-distribution-playbook-scoping.md) — both T5 items consider promoting an existing prose vocabulary to a canonical surface. WBC-2 deferred until population threshold; CR-7 ships because population is already real (12 brews use SWORKS today).
+- [CR-13 + MCP-3 strictness mapping](docs/audits/2026-05-18/CR-13-MCP-3-canonical-strictness-mapping.md) — SWORKS joins the self-only tier alongside EG-1 grinder. Tier policy: validation-only registry; rare net-new entries via deliberate edit only.
 
 ## Future triggers
 

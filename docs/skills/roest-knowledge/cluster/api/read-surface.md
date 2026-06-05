@@ -2,7 +2,7 @@
 
 Roest API read endpoints used by Latent MCP server. Knowledge anchor for Roast Recorder + Roest API Worker (Workflow tier sub-skills, Wave 3 PRs 2-3); they execute the calls, this doc holds the *knowledge* of how the API behaves.
 
-Operator-stub scope per [Roest Knowledge SKILL.md](../../SKILL.md) — Chris-stubbed-Claude-integrates pattern. Today's content seeded from Sprint 2.5 (Roasting MCP + ROASTING.md) + Sprint 2.7.5 (workflow walkthrough + Roest API write dogfood) + Roest API write Phase 1+2 (2026-05-06) + Sprint 3.5 (pull-side audit + /datapoints/ unlock, 2026-05-26). Patterns A + B (substrate-event + external-event refresh) flow content here as new endpoints land or behavior drifts.
+Operator-stub scope per [Roest Knowledge SKILL.md](docs/skills/roest-knowledge/SKILL.md) — Chris-stubbed-Claude-integrates pattern. Today's content seeded from Sprint 2.5 (Roasting MCP + ROASTING.md) + Sprint 2.7.5 (workflow walkthrough + Roest API write dogfood) + Roest API write Phase 1+2 (2026-05-06) + Sprint 3.5 (pull-side audit + /datapoints/ unlock, 2026-05-26). Patterns A + B (substrate-event + external-event refresh) flow content here as new endpoints land or behavior drifts.
 
 ---
 
@@ -10,13 +10,13 @@ Operator-stub scope per [Roest Knowledge SKILL.md](../../SKILL.md) — Chris-stu
 
 | Endpoint | Latent MCP Tool / Resource | Implementation |
 |---|---|---|
-| `/logs/{id}/` — per-roast summary (event timestamps, discrete temps, weights, profile linkage) | `pull_roest_log` Tool | [lib/mcp/pull-roest-log.ts](../../../../../lib/mcp/pull-roest-log.ts) |
-| `/profiles/{id}/?customer={id}` — as-designed bezier curves (temperature, fan, rpm, power) + end-condition trigger | `pull_roest_log` Tool (linked fetch) | [lib/roest-client.ts](../../../../../lib/roest-client.ts) `getRoestProfile` |
-| `/datapoints/?log={log_id}&page_size=1000` — raw temperature time-series (bt / et / inlet_temp / drum_temp + msec); paginated via `next` | `pull_roest_log` Tool (linked fetch, Sprint 3.5) | [lib/roest-client.ts](../../../../../lib/roest-client.ts) `getRoestDatapoints` |
-| `/inventories/{id}/?customer={id}` — green-bean lot metadata + price + notes | `list_roest_inventory` Tool | [lib/mcp/list-roest-inventory.ts](../../../../../lib/mcp/list-roest-inventory.ts) |
+| `/logs/{id}/` — per-roast summary (event timestamps, discrete temps, weights, profile linkage) | `pull_roest_log` Tool | [lib/mcp/pull-roest-log.ts](lib/mcp/pull-roest-log.ts) |
+| `/profiles/{id}/?customer={id}` — as-designed bezier curves (temperature, fan, rpm, power) + end-condition trigger | `pull_roest_log` Tool (linked fetch) | [lib/roest-client.ts](lib/roest-client.ts) `getRoestProfile` |
+| `/datapoints/?log={log_id}&page_size=1000` — raw temperature time-series (bt / et / inlet_temp / drum_temp + msec); paginated via `next` | `pull_roest_log` Tool (linked fetch, Sprint 3.5) | [lib/roest-client.ts](lib/roest-client.ts) `getRoestDatapoints` |
+| `/inventories/{id}/?customer={id}` — green-bean lot metadata + price + notes | `list_roest_inventory` Tool | [lib/mcp/list-roest-inventory.ts](lib/mcp/list-roest-inventory.ts) |
 | `/inventories/?customer={id}&search=&is_archived=&limit=` — paginated inventory index | `list_roest_inventory` Tool | same |
-| `/logs/?inventory={id}&limit={n}` — paginated log index per inventory lot | `list_roest_logs` Tool | [lib/mcp/list-roest-logs.ts](../../../../../lib/mcp/list-roest-logs.ts) |
-| `/users/self/` — customer info (id + URL) for the bearer token | internal `getRoestCustomerInfo` (cached) | [lib/roest-client.ts](../../../../../lib/roest-client.ts) `getRoestCustomerInfo` |
+| `/logs/?inventory={id}&limit={n}` — paginated log index per inventory lot | `list_roest_logs` Tool | [lib/mcp/list-roest-logs.ts](lib/mcp/list-roest-logs.ts) |
+| `/users/self/` — customer info (id + URL) for the bearer token | internal `getRoestCustomerInfo` (cached) | [lib/roest-client.ts](lib/roest-client.ts) `getRoestCustomerInfo` |
 
 ---
 
@@ -90,7 +90,7 @@ Bearer-token auth via OAuth 2.0 client_credentials. Token cached in-memory for t
 
 ## Cross-links
 
-- [cluster/api/write-surface.md](write-surface.md) — Roest API write endpoints (profile push + inventory write).
-- [cluster/api/quirks.md](quirks.md) — observed API quirks (drift, retry patterns, edge cases). Placeholder today.
-- [SYNC_V2.md](../../../../../SYNC_V2.md) — full MCP transport / auth / Resources / Tool catalog.
-- [docs/features/roest-api-parity-phase-3.md](../../../../features/roest-api-parity-phase-3.md) — Sprint 3.5 audit scoping doc (post-shipping notes inline).
+- [cluster/api/write-surface.md](docs/skills/roest-knowledge/cluster/api/write-surface.md) — Roest API write endpoints (profile push + inventory write).
+- [cluster/api/quirks.md](docs/skills/roest-knowledge/cluster/api/quirks.md) — observed API quirks (drift, retry patterns, edge cases). Placeholder today.
+- [SYNC_V2.md](SYNC_V2.md) — full MCP transport / auth / Resources / Tool catalog.
+- [docs/features/roest-api-parity-phase-3.md](docs/features/roest-api-parity-phase-3.md) — Sprint 3.5 audit scoping doc (post-shipping notes inline).

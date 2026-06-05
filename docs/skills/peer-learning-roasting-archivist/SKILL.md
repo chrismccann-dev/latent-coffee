@@ -1,7 +1,7 @@
 # Peer-Learning Roasting Archivist
 
 **Tier:** Knowledge / **Domain:** Roasting / **Wave:** 3 / **Status:** ACTIVE (Wave 3 PR 1 shipped 2026-05-26)
-**ADR origin:** [ADR-0011](../../adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](../../adr/0012-master-coordinator-pattern.md) + [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+**ADR origin:** [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) + [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) + [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 
 ## Job-to-be-done
 
@@ -59,7 +59,7 @@ None directly.
 
 ## Self-improvement
 
-- **Patterns:** B (external-event refresh when operator surfaces new peer content), I (operator-initiated resource integration — the canonical workflow for this sub-skill) — see [ADR-0013](../../adr/0013-self-improvement-primitives.md)
+- **Patterns:** B (external-event refresh when operator surfaces new peer content), I (operator-initiated resource integration — the canonical workflow for this sub-skill) — see [ADR-0013](docs/adr/0013-self-improvement-primitives.md)
 - **Signal:** operator brings new peer content (e.g. "Dongzhe just dropped a new livestream; pull the transcripts and integrate") → Pattern I session in Claude Code
 
 ## Notes for Wave 3 implementation sprint

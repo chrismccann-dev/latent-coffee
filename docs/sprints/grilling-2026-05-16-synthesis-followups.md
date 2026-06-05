@@ -5,8 +5,8 @@
 Sixth `/grill-with-docs` session, paired audit-grilling: (A) the synthesis pipeline subsystem in `lib/synthesis/` (4 adapters + scaffolding + vendored humanizer skill, ~1050 lines across 9 files); (B) a miscellaneous cleanup sweep across the 5 prior cluster followups for unresolved open questions. Shorter-than-typical session per design (synthesis is structurally compact; misc cleanup is variable). 6 grilling rounds.
 
 Outputs:
-- [CONTEXT.md](../../CONTEXT.md) — **7 new glossary entries** under a new "Synthesis Pipeline" sub-section (peer to Roasting / Brewing / MCP / Canonical Registries / WBC Reference Materials). Plus **8 new flagged ambiguities**, **3 misc-cleanup resolutions** (one prior flagged ambiguity retired + two prior open questions locked), and **2 new relationships** in the Relationships section. CONTEXT.md now ~130 entries total across 6 sub-sections (31 roasting + 23 brewing + 27 MCP + 23 canonical registries + 19 WBC + 7 synthesis).
-- [docs/adr/0002-two-call-synthesis-pipeline.md](../adr/0002-two-call-synthesis-pipeline.md) — **second ADR in the repo**. Documents the humanizer-as-separate-call decision (cognitively distinct tasks, vendored-skill resync, humanizer reusability for non-synthesis surfaces) and the accepted cost (2x latency + credit spend per generation, bounded by lazy resynthesize).
+- [CONTEXT.md](CONTEXT.md) — **7 new glossary entries** under a new "Synthesis Pipeline" sub-section (peer to Roasting / Brewing / MCP / Canonical Registries / WBC Reference Materials). Plus **8 new flagged ambiguities**, **3 misc-cleanup resolutions** (one prior flagged ambiguity retired + two prior open questions locked), and **2 new relationships** in the Relationships section. CONTEXT.md now ~130 entries total across 6 sub-sections (31 roasting + 23 brewing + 27 MCP + 23 canonical registries + 19 WBC + 7 synthesis).
+- [docs/adr/0002-two-call-synthesis-pipeline.md](docs/adr/0002-two-call-synthesis-pipeline.md) — **second ADR in the repo**. Documents the humanizer-as-separate-call decision (cognitively distinct tasks, vendored-skill resync, humanizer reusability for non-synthesis surfaces) and the accepted cost (2x latency + credit spend per generation, bounded by lazy resynthesize).
 - [~/.claude/projects/.../memory/feedback_grilling_refresh_at_feature_ship.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_grilling_refresh_at_feature_ship.md) — **new standing operating rule**: Claude must proactively force a short `/grill-with-docs` refresh at the start or end of every feature ship before agreeing to move on. Cross-system sync depends on CONTEXT.md currency; Chris-explicit 2026-05-16.
 
 The 7 new entries fall into 3 thematic groups:
@@ -37,8 +37,8 @@ The 7 new entries fall into 3 thematic groups:
 - Effort: deferred; future-scope.
 
 **2. Confidence + length modulation by corpus size** [PROMPT REFINEMENT]
-- Why: Today's `earlyData` flag ([buildPrompt.ts:65](../../lib/synthesis/buildPrompt.ts)) is binary (`learningRows.length < 3`). Chris wants a 3-4 tier gradient: 1-coffee Catimor capsule shouldn't sound as authoritative or be as long as a 30-coffee Gesha capsule.
-- Surface: replace the binary flag with tiered logic (e.g. < 3 / 3-7 / 8-15 / 15+) driving both confidence language AND target paragraph count + takeaway count. Modify [buildPrompt.ts](../../lib/synthesis/buildPrompt.ts) + adapter weighting + SHARED_RULES.
+- Why: Today's `earlyData` flag ([buildPrompt.ts:65](lib/synthesis/buildPrompt.ts)) is binary (`learningRows.length < 3`). Chris wants a 3-4 tier gradient: 1-coffee Catimor capsule shouldn't sound as authoritative or be as long as a 30-coffee Gesha capsule.
+- Surface: replace the binary flag with tiered logic (e.g. < 3 / 3-7 / 8-15 / 15+) driving both confidence language AND target paragraph count + takeaway count. Modify [buildPrompt.ts](lib/synthesis/buildPrompt.ts) + adapter weighting + SHARED_RULES.
 - Effort: small (prompt + scaffolding refinement, no schema change).
 - Pairs with #4 — large-corpus capsules at risk of degrading to append-lists need the same enforcement layer.
 
@@ -49,11 +49,11 @@ The 7 new entries fall into 3 thematic groups:
 
 **4. Re-synthesize-don't-append discipline as a stronger prompt rule** [PROMPT REFINEMENT]
 - Why: `SHARED_RULES` currently says "extract recurring patterns across the corpus and write a human-readable field note" + "do not summarize each coffee one by one" — aspirational. Chris wants it stronger ("it shouldn't just append this stuff and be one big long list of things I've learned from each one. This would be synthesizing").
-- Surface: [buildPrompt.ts:10-18](../../lib/synthesis/buildPrompt.ts) `SHARED_RULES` — promote the multiplicative-not-additive language to a non-negotiable directive (top of the rules block, with concrete instruction that the model should produce one narrative not N per-coffee notes).
+- Surface: [buildPrompt.ts:10-18](lib/synthesis/buildPrompt.ts) `SHARED_RULES` — promote the multiplicative-not-additive language to a non-negotiable directive (top of the rules block, with concrete instruction that the model should produce one narrative not N per-coffee notes).
 - Effort: small (prompt-only).
 
 **5. Humanizer vocabulary grounding** [INVESTIGATION + POSSIBLE REFINEMENT]
-- Why: Today's preservation list is hardcoded in `USER_OVERRIDE` ([humanizer.ts:23](../../lib/synthesis/humanizer.ts:23)) — covers the 6 strategy names + 4 modifier types + named gear + proper nouns + cultivar / process terms + numbers + structure. Chris-flagged: "I'm not sure if it keeps all of our vocabulary... maybe it can pull from this context file to look at these things."
+- Why: Today's preservation list is hardcoded in `USER_OVERRIDE` ([humanizer.ts:23](lib/synthesis/humanizer.ts:23)) — covers the 6 strategy names + 4 modifier types + named gear + proper nouns + cultivar / process terms + numbers + structure. Chris-flagged: "I'm not sure if it keeps all of our vocabulary... maybe it can pull from this context file to look at these things."
 - Surface: scoping — should the humanizer have CONTEXT.md awareness? Options: (a) extract canonical-vocabulary terms from CONTEXT.md at build time + inject into the USER_OVERRIDE list; (b) give the humanizer tool-use access to read CONTEXT.md on demand; (c) leave as-is (hardcoded list is a meaningful subset). Investigate before refactoring.
 - Effort: small investigation; possibly medium implementation.
 

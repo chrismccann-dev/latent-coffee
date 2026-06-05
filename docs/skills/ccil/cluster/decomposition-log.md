@@ -2,7 +2,7 @@
 
 *Cross-Coffee Insight Layer · Pattern F audit trail · started Wave 4 PR 4a, 2026-05-21*
 
-This doc tracks every CCIL self-decomposition event. Per [ADR-0013](../../../adr/0013-self-improvement-primitives.md) § Pattern F, when CCIL grows too large it splits into sub-domain CCILs. Decomposition events are append-only — historical entries are NOT edited or removed.
+This doc tracks every CCIL self-decomposition event. Per [ADR-0013](docs/adr/0013-self-improvement-primitives.md) § Pattern F, when CCIL grows too large it splits into sub-domain CCILs. Decomposition events are append-only — historical entries are NOT edited or removed.
 
 ## Trigger conditions
 
@@ -10,7 +10,7 @@ A decomposition event fires when ANY of the following are observed:
 
 - **Bloat tripwire: >120KB total cluster size** (`wc -c docs/skills/ccil/cluster/**/*.md` sums above 120,000 bytes). Mirrors the CLAUDE.md / BREWING.md / ROASTING.md tripwire from CLAUDE.md § Sprint cadence § Standing tripwires.
 - **Bloat tripwire: >60KB single doc** (any individual cluster file exceeds 60,000 bytes). Pattern from ADR-0011 § Tripwires.
-- **Dispatch-accuracy degradation** — recommendations consumed by planners (Roasting Assistant / Brewing Assistant) drift below the per-sub-skill autonomy graduation threshold from [ADR-0013](../../../adr/0013-self-improvement-primitives.md), measured as override rate across the last 12 dispatched recommendations.
+- **Dispatch-accuracy degradation** — recommendations consumed by planners (Roasting Assistant / Brewing Assistant) drift below the per-sub-skill autonomy graduation threshold from [ADR-0013](docs/adr/0013-self-improvement-primitives.md), measured as override rate across the last 12 dispatched recommendations.
 - **Cross-domain pattern density exceeds intra-pattern coherence** — when a single cluster file's patterns no longer cohere under a common throughline (e.g. `cluster/coffee/sudan-rume/across-roasting-and-brewing.md` accumulates so many sub-patterns that some belong in a separate file).
 
 ## How to record a decomposition

@@ -1,6 +1,6 @@
 # Sub-sprint 4a — Phase 2 Complementary Pass (Claude)
 
-**Pairs with**: [Phase 1 audit](sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md) + Chris's annotated PDF (`Green Bean Polish (1).pdf`) + the two mockup screenshots for Roast Hypothesis + Roast Actuals + Chris's voice-memo clarifications.
+**Pairs with**: [Phase 1 audit](docs/sprints/sub-sprint-4a-green-bean-polish-kickoff-2026-05-27.md) + Chris's annotated PDF (`Green Bean Polish (1).pdf`) + the two mockup screenshots for Roast Hypothesis + Roast Actuals + Chris's voice-memo clarifications.
 
 **Mode**: Read-only synthesis per kickoff brief § Phase 2. No implementation specifics; categorized findings only. Phase 3 will bundle these + Chris's notes into a plan.
 
@@ -20,7 +20,7 @@
 
 ## 1. Bug root cause — Higuito + CGLE Sudan Rume Natural rendering as Resolved (F)
 
-**Cause**: Both lots have `roast_learnings` rows. The lifecycle helper at [lib/lifecycle-state.ts:101-105](../../lib/lifecycle-state.ts) routes any lot with a `roast_learnings` row to `resolved`, full stop — no further discriminator.
+**Cause**: Both lots have `roast_learnings` rows. The lifecycle helper at [lib/lifecycle-state.ts:101-105](lib/lifecycle-state.ts) routes any lot with a `roast_learnings` row to `resolved`, full stop — no further discriminator.
 
 **DB state** (pulled via `get_bean_pipeline`):
 
@@ -157,7 +157,7 @@ The kickoff brief listed 8 dormant fields. After reading the resolved view + the
 
 ## 8. Reference Roasts entity — out of polish scope (G — recommend deferring to its own sub-sprint)
 
-The kickoff brief lists this as part of Sub-sprint 4a, citing [docs/features/reference-roast-and-guide.md](../features/reference-roast-and-guide.md) Sprint B. Chris's audit does NOT mention it once. He treated the existing `roast_learnings.best_batch_id` + `roasts.is_reference` substrate as fine — the only render changes he asked for are within the existing schema.
+The kickoff brief lists this as part of Sub-sprint 4a, citing [docs/features/reference-roast-and-guide.md](docs/features/reference-roast-and-guide.md) Sprint B. Chris's audit does NOT mention it once. He treated the existing `roast_learnings.best_batch_id` + `roasts.is_reference` substrate as fine — the only render changes he asked for are within the existing schema.
 
 **Recommendation**: defer the Reference Roasts entity work to its own sub-sprint (4a.2 or push into 4b's order). Reasoning:
 - Schema entity creation, new MCP Tools, migration, and a corresponding read-side rewrite is a multi-day chunk.

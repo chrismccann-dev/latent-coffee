@@ -1,7 +1,7 @@
 # `cleanup` session (session 3 of 5) — kickoff brief
 
 Redesign-polish punch-list, bucket 3. Hand-off from the `naming` session
-([punch-list § Naming session outcomes](../features/redesign-polish-punchlist.md)).
+([punch-list § Naming session outcomes](docs/features/redesign-polish-punchlist.md)).
 Buckets run **one per session, sequentially**: `data-audit` ✅ → `naming` ✅ →
 **`cleanup` (this one)** → `data-model` → `side-quest` MB-6.
 
@@ -21,13 +21,13 @@ subtraction. Ship as one PR (or split if an area gets fiddly).
 ## Scope (in) — high-level only; wait for Chris's pasted specifics per area
 
 1. **`/brews` card heights** — cards still load at inconsistent heights. This was
-   **BI-1**, marked shipped in PR1 (#317) via [components/BrewCard.tsx](../../components/BrewCard.tsx)
+   **BI-1**, marked shipped in PR1 (#317) via [components/BrewCard.tsx](components/BrewCard.tsx)
    equal-height work — so this is a **reopen / residual**, not net-new. Chris will
    specify the exact case (likely a foot-height or grid-row-height mismatch). The
    v2 paper-foot split (face + warm-paper foot) shipped Redesign Sprint 6 PR3; the
    equal-height intent (longer producer info sizes the whole grid's cards up, a
    little negative space is fine) is the BI-1 spec. Likely `flex` column +
-   `min-height` / CSS-grid `auto-rows`, in `.brew-card` ([app/globals.css](../../app/globals.css)).
+   `min-height` / CSS-grid `auto-rows`, in `.brew-card` ([app/globals.css](app/globals.css)).
 2. **Cultivar index spine** — declutter the genealogical spine. **Note the
    history:** CI-1 was originally LOCKED to "build the ├ └ │ tree spline" but
    Redesign Sprint 6 PR2 **reversed that** and kept the **grl grouped-row list**
@@ -37,8 +37,8 @@ subtraction. Ship as one PR (or split if an area gets fiddly).
    before editing** — the "declutter the spine" likely means the Species spine
    label and/or the `.grl-lineage` indent treatment, not a literal tree. Files:
    [app/(app)/cultivars/page.tsx](../../app/%28app%29/cultivars/page.tsx) + the
-   `.grl-*` / `.grl-lineage` CSS in [globals.css](../../app/globals.css), possibly
-   [components/IndexList.tsx](../../components/IndexList.tsx).
+   `.grl-*` / `.grl-lineage` CSS in [globals.css](app/globals.css), possibly
+   [components/IndexList.tsx](components/IndexList.tsx).
 3. **Terroir index** — small removal-oriented cleanup on the grl grouped-row list
    ([app/(app)/terroirs/page.tsx](../../app/%28app%29/terroirs/page.tsx) + `.grl-*`
    CSS). Chris will specify.

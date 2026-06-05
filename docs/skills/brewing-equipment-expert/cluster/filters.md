@@ -2,14 +2,14 @@
 
 Agent-facing registry of the filter papers **Chris owns**, what brewers each
 fits, and the brewing role each plays. Mirror file:
-[lib/filter-registry.ts](../../../../lib/filter-registry.ts).
+[lib/filter-registry.ts](lib/filter-registry.ts).
 
 ## Purpose
 
 This is what the Brewing Equipment Expert pulls from when the Brewing Assistant
 needs a brewer + filter pair for a recipe. It exists to make **owned** equipment
 and its real behavior unambiguous. Not-owned candidates live in
-[docs/taxonomies/filters-not-owned-archive.md](../../../taxonomies/filters-not-owned-archive.md)
+[docs/taxonomies/filters-not-owned-archive.md](docs/taxonomies/filters-not-owned-archive.md)
 (promotion pool — do not load for live selection). `lib/filter-registry.ts`
 stays the full canonical validator for **all** 67 papers (owned + not-owned), so
 every `brews.filter` value still resolves; this doc is the prose home for the 23
@@ -326,10 +326,10 @@ result** — the full protocols, raw data, replicate ranges, and lesson extracti
 live in the research-project docs; the agent does not need to read them to select
 a filter.
 
-- Research Project #1: [Cone Filter Drawdown Characterization](../../../research-projects/cone-filter-drawdown.md)
-- Research Project #2: [Flat-Bottom Filter Drawdown Characterization](../../../research-projects/flat-bottom-filter-drawdown.md)
-- Research Project #3: [Specialty Cone Filter Drawdown Characterization](../../../research-projects/specialty-cone-filter-drawdown.md)
-- Research Project #4: [Paper-Only V60 Cohort Drawdown Re-Measurement in Sibarist BS](../../../research-projects/paper-only-v60-cohort-drawdown.md)
+- Research Project #1: [Cone Filter Drawdown Characterization](docs/research-projects/cone-filter-drawdown.md)
+- Research Project #2: [Flat-Bottom Filter Drawdown Characterization](docs/research-projects/flat-bottom-filter-drawdown.md)
+- Research Project #3: [Specialty Cone Filter Drawdown Characterization](docs/research-projects/specialty-cone-filter-drawdown.md)
+- Research Project #4: [Paper-Only V60 Cohort Drawdown Re-Measurement in Sibarist BS](docs/research-projects/paper-only-v60-cohort-drawdown.md)
 
 Registry-level takeaways that change selection (encoded in the rules above):
 
@@ -345,7 +345,7 @@ Drift variants observed in legacy DB rows. Ambiguous Sibarist drift (e.g.
 `CONE FAST`) is handled per-row in migration 032 with (brewer, filter) WHERE
 clauses; only unambiguous variants live in the runtime alias map. Targets are the
 canonical names in `lib/filter-registry.ts` (some resolve to not-owned papers in
-the [archive](../../../taxonomies/filters-not-owned-archive.md)).
+the [archive](docs/taxonomies/filters-not-owned-archive.md)).
 
 - `Espro Bloom` → **xBloom Premium Paper Filters**
 - `Espro Bloom (flat bottom)` → **xBloom Premium Paper Filters**
@@ -412,6 +412,6 @@ the [archive](../../../taxonomies/filters-not-owned-archive.md)).
 ## Changelog
 
 - 2026-06-04 — **filter reconciliation** (case-004 follow-up). Registry collapsed 67→58 canonical filters (23 owned unchanged; 35 not-owned). Executed the dedups case 004 flagged: 3 pure duplicate-SKU rows (AC4-100W variant / AB-101-100W variant / AB-102-100W Alt SKU), the AC4-40B brown pack-size variant, and the 5 CAFEC Cup-1 papers (Abaca / Abaca+ / T-83 / T-90 / T-92) collapsed into their Cup-4 twins (Chris brews single cups → Cup-1 vs Cup-4 is paper SIZE he treats as identical; T-codes preserved across twins). The owned Abaca+ Cup-4 paper was renamed from the mislabeled "CAFEC Abaca Cup 4 ... (40 pack)" / APC4-40W → **CAFEC Abaca+ Cup 4 Cone Paper Filter** / APC4-100W (its true SKU + line); the 2 legacy "Abaca+ Cup 1" brews were really this paper (migration 077 remap). All collapsed names aliased to survivors. `CAFEC Traditional Cup 1 Filter` (CC1) kept distinct (no Cup-4 twin). 56 aliases total.
-- 2026-06-03 — **pruning case 004** (70.4 KB → owned-only). Added Purpose + agent selection-rules; moved the four `## Measured Drawdown Reference` research blocks + per-entry RP/lesson citation chains out to the [research appendix](#research-measurement-appendix) (full data already in `docs/research-projects/*.md`); pruned the live doc to the **23 owned** papers, grouped by fit geometry (V60 cone / Flat-bottom + wave / Specialty + paired); moved the **44 not-owned** papers to [docs/taxonomies/filters-not-owned-archive.md](../../../taxonomies/filters-not-owned-archive.md); corrected April Paper Filter fit to **April-only**. `lib/filter-registry.ts` unchanged except the April fit fix (still the full 67-entry validator). Pack-size / cup-size / duplicate-SKU registry dedups flagged for a follow-up reconciliation pass (see pruning case 004 handoff).
+- 2026-06-03 — **pruning case 004** (70.4 KB → owned-only). Added Purpose + agent selection-rules; moved the four `## Measured Drawdown Reference` research blocks + per-entry RP/lesson citation chains out to the [research appendix](#research-measurement-appendix) (full data already in `docs/research-projects/*.md`); pruned the live doc to the **23 owned** papers, grouped by fit geometry (V60 cone / Flat-bottom + wave / Specialty + paired); moved the **44 not-owned** papers to [docs/taxonomies/filters-not-owned-archive.md](docs/taxonomies/filters-not-owned-archive.md); corrected April Paper Filter fit to **April-only**. `lib/filter-registry.ts` unchanged except the April fit fix (still the full 67-entry validator). Pack-size / cup-size / duplicate-SKU registry dedups flagged for a follow-up reconciliation pass (see pruning case 004 handoff).
 - 2026-04-27 — Cafec packaging-name update (migration 034). Owned Cup 4 papers gain T-XX codes printed on packaging: T-92 (light, LC4), T-90 (medium, MC4), T-83 (dark, DC4), plus the "+" on Abaca+ (APC4). (The not-owned Cup 1 T-code variants now live in the archive.)
 - 2026-04-26 — initial registry built from authored CSV (Sprint 1f). Same-name dedupes (5) recorded at build.

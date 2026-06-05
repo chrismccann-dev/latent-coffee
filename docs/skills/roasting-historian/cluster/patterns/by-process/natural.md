@@ -16,23 +16,23 @@ Use the washed profile as the starting point. Lower inlet temp for the early sta
 
 ## Architectural constraint (cross-natural)
 
-The **FC-Temp Architectural Constraint on Naturals** — a structural pattern surfaced from Sudan Rume Natural V2 + Fazenda Um Wush Wush V1 — lives in [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](../cross-coffee-insights.md#fc-temp-architectural-constraint-on-naturals). Summary: on naturals across multiple cultivars / terroirs, higher peak inlet pulls FC TIME earlier but does NOT pull FC TEMP lower. FC arrives in a narrow 204-206°C window regardless of peak energy. Implication: peak inlet is not the right primary lever for FC-temp targeting on naturals — early-ramp shape is.
+The **FC-Temp Architectural Constraint on Naturals** — a structural pattern surfaced from Sudan Rume Natural V2 + Fazenda Um Wush Wush V1 — lives in [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#fc-temp-architectural-constraint-on-naturals---working-hypothesis). Summary: on naturals across multiple cultivars / terroirs, higher peak inlet pulls FC TIME earlier but does NOT pull FC TEMP lower. FC arrives in a narrow 204-206°C window regardless of peak energy. Implication: peak inlet is not the right primary lever for FC-temp targeting on naturals — early-ramp shape is.
 
 ## xbloom evaluation gate misranking
 
-The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** on close anaerobic-natural candidates with extracted-but-discordant character — confirmed twice on Costa Rica Anaerobic Dry Process Higuito (v1b lactic note + v2c staying-power). See [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](../cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals). On naturals with heavy fermentation, run Balanced Intensity real pourover on the top 2 candidates before declaring outcome.
+The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** on close anaerobic-natural candidates with extracted-but-discordant character — confirmed twice on Costa Rica Anaerobic Dry Process Higuito (v1b lactic note + v2c staying-power). See [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals---working-hypothesis). On naturals with heavy fermentation, run Balanced Intensity real pourover on the top 2 candidates before declaring outcome.
 
 ## Per-lot deep dives
 
-- [CGLE Sudan Rume Natural (active V5)](../../active-lots/cgle-srume-natural-2026.md) — active V5 (V4C confirmed reference roast Batch 169; V5 replicates pending Day 7 pourover)
-- [Bukure Natural Lot 21 Red Bourbon (active V2)](../../active-lots/rwa-nova-nat21-rb-2026.md) — active V2 designed at 234/238/242°C peak (shifted DOWN 6°C from V1 spread); first East African Red Bourbon natural in archive
-- [Fazenda Um Wush Wush Natural Dark Room Dried (active V1 → V2 blocked)](../../active-lots/bra-fazendaum-wushwush-nat-2026.md) — V1 cupped 2026-05-15 with cup-vs-structure inversion; V2 design blocked on Untold paired roasted reference cup
+- [CGLE Sudan Rume Natural (active V5)](docs/skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md) — active V5 (V4C confirmed reference roast Batch 169; V5 replicates pending Day 7 pourover)
+- [Bukure Natural Lot 21 Red Bourbon (active V2)](docs/skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md) — active V2 designed at 234/238/242°C peak (shifted DOWN 6°C from V1 spread); first East African Red Bourbon natural in archive
+- [Fazenda Um Wush Wush Natural Dark Room Dried (active V1 → V2 blocked)](docs/skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md) — V1 cupped 2026-05-15 with cup-vs-structure inversion; V2 design blocked on Untold paired roasted reference cup
 
 ## Cross-references
 
-- [cross-coffee-insights.md § FC Floor & Ceiling by Processing Method](../cross-coffee-insights.md#fc-floor--ceiling-by-processing-method) — Natural high-density Colombian: FC floor ~202°C, drop ceiling ~205-206°C
-- [cross-coffee-insights.md § WB-to-Ground Agtron Delta Norms](../cross-coffee-insights.md#wb-to-ground-agtron-delta-norms-by-processing-method) — Natural high-density Colombian: target ≤2 points; V1 typical 2-4
-- [cross-coffee-insights.md § Green Spec → Starting Hypothesis](../cross-coffee-insights.md#green-spec--starting-hypothesis) — Density ≥800 g/L + Natural row; Density ≥800 + Natural + dried-fruit-layer row
-- [cross-coffee-insights.md § Rest Behavior Patterns](../cross-coffee-insights.md#rest-behavior-patterns) — Natural, high-density Colombian: Day 7 pourover correct gate
-- [washed.md](./washed.md) — sibling per-process roll-up; naturals anchor on washed profile + adjust
-- [by-process/honey.md](./honey.md) — sibling per-process; the roast-direction fork shares some architecture with natural
+- [cross-coffee-insights.md § FC Floor & Ceiling by Processing Method](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#fc-floor--ceiling-by-processing-method) — Natural high-density Colombian: FC floor ~202°C, drop ceiling ~205-206°C
+- [cross-coffee-insights.md § WB-to-Ground Agtron Delta Norms](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#wb-to-ground-agtron-delta-norms-by-processing-method) — Natural high-density Colombian: target ≤2 points; V1 typical 2-4
+- [cross-coffee-insights.md § Green Spec → Starting Hypothesis](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#green-spec--starting-hypothesis) — Density ≥800 g/L + Natural row; Density ≥800 + Natural + dried-fruit-layer row
+- [cross-coffee-insights.md § Rest Behavior Patterns](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#rest-behavior-patterns) — Natural, high-density Colombian: Day 7 pourover correct gate
+- [washed.md](docs/skills/roasting-historian/cluster/patterns/by-process/washed.md) — sibling per-process roll-up; naturals anchor on washed profile + adjust
+- [by-process/honey.md](docs/skills/roasting-historian/cluster/patterns/by-process/honey.md) — sibling per-process; the roast-direction fork shares some architecture with natural

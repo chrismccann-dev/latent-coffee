@@ -4,21 +4,21 @@
 
 The live product roadmap. **Current, on-deck, and future product work only.** Closed sprint bodies, per-sprint retros, research-experiment history, and long bug narratives do not live here — see [Out of scope](#out-of-scope-for-this-roadmap) for where each goes.
 
-- Shipped sprint index: [docs/sprints/shipped.md](../sprints/shipped.md)
+- Shipped sprint index: [docs/sprints/shipped.md](docs/sprints/shipped.md)
 - Per-sprint retrospectives: `memory/project_*.md`
-- Product bugs / missing-or-incomplete substrate: [docs/product/issues.md](issues.md)
-- Grilling sessions: per-session records in `docs/sprints/grilling-<date>-*.md`; standing concept queue + resolution history in [docs/grilling-queue.md](../grilling-queue.md).
+- Product bugs / missing-or-incomplete substrate: [docs/product/issues.md](docs/product/issues.md)
+- Grilling sessions: per-session records in `docs/sprints/grilling-<date>-*.md`; standing concept queue + resolution history in [docs/grilling-queue.md](docs/grilling-queue.md).
 
 ## Roadmap hygiene
 
 When a sprint ships:
 
-1. Append the shipped summary to [docs/sprints/shipped.md](../sprints/shipped.md).
+1. Append the shipped summary to [docs/sprints/shipped.md](docs/sprints/shipped.md).
 2. File / update the per-sprint retrospective (`memory/project_*.md`).
-3. Promote unresolved follow-ups into this roadmap, [issues.md](issues.md), or a domain-specific roadmap (research, etc.).
+3. Promote unresolved follow-ups into this roadmap, [issues.md](docs/product/issues.md), or a domain-specific roadmap (research, etc.).
 4. Remove the completed sprint body from this roadmap.
 
-When work is **not** product-side: research experiments go to the Research Coordinator roadmap; brewing concepts to brewing coordinator / expert-skill docs; roasting concepts to roasting context / coordinator docs; bugs to [issues.md](issues.md) unless they are the top active product sprint.
+When work is **not** product-side: research experiments go to the Research Coordinator roadmap; brewing concepts to brewing coordinator / expert-skill docs; roasting concepts to roasting context / coordinator docs; bugs to [issues.md](docs/product/issues.md) unless they are the top active product sprint.
 
 > The "shipped → handoff doc → append to shipped → remove from roadmap" loop as a *formalized standing rule* (auto-handoff at every ship) is flagged for the Cluster B feedback-handoff-formalization brainstorm — not yet codified as autonomous behavior.
 
@@ -27,7 +27,7 @@ When work is **not** product-side: research experiments go to the Research Coord
 **2026-06-02** (post-redesign / post-compaction review): retired the consumed 2026-06-02 working queue; Cluster B set NOW; Lot Coordinator graduated to a brainstorm doc + promoted to NEXT/operator-gated; two MCP context items re-tagged as Lot-Coordinator prerequisites. Prior reorders: 2026-05-26 (closed Sprint R's Option 1 sequence; Sprints 3.4 / 3.6 / 3.7 killed), 2026-05-25 (Sprint R), 2026-05-08 (post-v8.5).
 
 **Capstone reprioritization (2026-05-31)** themes that still frame the queue:
-- **Cluster A — cross-domain lot↔brew scaffold. SHIPPED 2026-06-01** (A1 schema migration 075 + A2/A3 workflow prompts + A4 CONTEXT/ADR-0019 + Peer-Learning archivist). Detail in [shipped.md](../sprints/shipped.md).
+- **Cluster A — cross-domain lot↔brew scaffold. SHIPPED 2026-06-01** (A1 schema migration 075 + A2/A3 workflow prompts + A4 CONTEXT/ADR-0019 + Peer-Learning archivist). Detail in [shipped.md](docs/sprints/shipped.md).
 - **Cluster B — system-maintenance / anti-bloat layer.** The Claude Code + Latent *system* side has had the least optimization, and nothing actively synthesizes/prunes/curates docs. This is the current NOW theme (see below).
 
 ---
@@ -38,27 +38,26 @@ When work is **not** product-side: research experiments go to the Research Coord
 
 Complete the theme before the Lot Coordinator restructure. The most-neglected surface area.
 
-**Shipped members:** migration-drift gate ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)) · CLAUDE.md compaction ([#352](https://github.com/chrismccann-dev/latent-coffee/pull/352)) · **doc-pruning mechanism — COMPLETE** ([scope doc](../features/doc-pruning-mechanism-brainstorm-2026-06-03.md), [tripwires](../architecture/doc-tripwires.md)): Pattern J promoted placeholder→defined via light formalization ([#369](https://github.com/chrismccann-dev/latent-coffee/pull/369) — `check:doc-sizes` script + daily CI cron as the automated trigger, manual operator-led prune as the response), **six shapes** worked across 7 cases (001 CLAUDE.md / 002 CONTEXT-roasting / 003 PRODUCT.md / 004 filters.md / 006 log-cupping / 007 cross-coffee-insights — the last surfaced the `re-home` shape; 005 mooted), **over-cap backlog fully drained** (all Tier-1 surfaces within cap as of 2026-06-04).
+**Shipped members:** migration-drift gate ([#350](https://github.com/chrismccann-dev/latent-coffee/pull/350)) · CLAUDE.md compaction ([#352](https://github.com/chrismccann-dev/latent-coffee/pull/352)) · **doc-pruning mechanism — COMPLETE** ([scope doc](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md), [tripwires](docs/architecture/doc-tripwires.md)): Pattern J promoted placeholder→defined via light formalization ([#369](https://github.com/chrismccann-dev/latent-coffee/pull/369) — `check:doc-sizes` script + daily CI cron as the automated trigger, manual operator-led prune as the response), **six shapes** worked across 7 cases (001 CLAUDE.md / 002 CONTEXT-roasting / 003 PRODUCT.md / 004 filters.md / 006 log-cupping / 007 cross-coffee-insights — the last surfaced the `re-home` shape; 005 mooted), **over-cap backlog fully drained** (all Tier-1 surfaces within cap as of 2026-06-04).
 
-**Shipped members (cont.):** **feedback-handoff formalization — COMPLETE** ([ADR-0020](../adr/0020-feedback-handoff-pipeline.md)): the route→plan→[implement] pipeline — `route-feedback` + `plan-feedback` skills + the [feedback-backlog](feedback-backlog.md) seam (master-log reframe + recurrence-counted routing); proven by dogfooding `plan-feedback` over the real Round-19 backlog. Implementer skill deferred (spawned sub-agent for now), per the doc-pruning light-formalization posture. · **architecture-review skill + 2 gates — COMPLETE** ([derivation](../features/architecture-review-skill-derivation-2026-06-04.md)): the code-side sibling of doc-pruning — derived from 5 dogfood audits ([docs/audits/architecture/](../audits/architecture/) `01..05`), locked the v1 rubric (R1-R13) + smell taxonomy + candidate-card-v1. Shipped `/architecture-review <surface>` (read-only, stops-at-report) + `check:hotspots` (mechanical scan) + `check:doc-links` (root-relative + dead-anchor gate, [ADR-0021](../adr/0021-root-relative-doc-links.md)). The doc-link *remediation* (the 169-link `../../`→root-relative migration) is the spun-out follow-up, not this build. · **CCIL + librarian content-accuracy audit — COMPLETE** ([#383](https://github.com/chrismccann-dev/latent-coffee/pull/383)): cross-checked the librarians' synthesized assertions (lot states, reference-roast batch #s, deltas, densities, inventory) against the live DB; 10 corrections D1-D10 across CCIL seed + roasting-historian + WBC clusters (biggest: SR Natural "V5 active, ref #169" → resolved, ref #187). Spawned two follow-ups: the Thermal-Staging rename sweep + ROASTING/BREWING dead-anchor link-rot (**the latter converges with the doc-link remediation below — do it once**).
+**Shipped members (cont.):** **feedback-handoff formalization — COMPLETE** ([ADR-0020](docs/adr/0020-feedback-handoff-pipeline.md)): the route→plan→[implement] pipeline — `route-feedback` + `plan-feedback` skills + the [feedback-backlog](docs/product/feedback-backlog.md) seam (master-log reframe + recurrence-counted routing); proven by dogfooding `plan-feedback` over the real Round-19 backlog. Implementer skill deferred (spawned sub-agent for now), per the doc-pruning light-formalization posture. · **architecture-review skill + 2 gates — COMPLETE** ([derivation](docs/features/architecture-review-skill-derivation-2026-06-04.md)): the code-side sibling of doc-pruning — derived from 5 dogfood audits ([docs/audits/architecture/](docs/audits/architecture/) `01..05`), locked the v1 rubric (R1-R13) + smell taxonomy + candidate-card-v1. Shipped `/architecture-review <surface>` (read-only, stops-at-report) + `check:hotspots` (mechanical scan) + `check:doc-links` (root-relative + dead-anchor gate, [ADR-0021](docs/adr/0021-root-relative-doc-links.md)). The doc-link *remediation* (the 169-link `../../`→root-relative migration) is the spun-out follow-up, not this build. · **CCIL + librarian content-accuracy audit — COMPLETE** ([#383](https://github.com/chrismccann-dev/latent-coffee/pull/383)): cross-checked the librarians' synthesized assertions (lot states, reference-roast batch #s, deltas, densities, inventory) against the live DB; 10 corrections D1-D10 across CCIL seed + roasting-historian + WBC clusters (biggest: SR Natural "V5 active, ref #169" → resolved, ref #187). Spawned two follow-ups: the Thermal-Staging rename sweep + ROASTING/BREWING dead-anchor link-rot (**the latter converged into the doc-link remediation below**). · **doc-link remediation — COMPLETE** ([shipped.md](docs/sprints/shipped.md), 2026-06-05): drove `check:doc-links` from 1065 live misses to 0 — file-relative `../../`→root-relative migration across ~270 docs under [ADR-0021](docs/adr/0021-root-relative-doc-links.md) + redirect-stub dead-anchor repoints (absorbing the CCIL audit's ROASTING/BREWING follow-up) + `page-ia.md` stale-component reconciliation (Session 04 Candidates 1/3/4) + a gate slug fix so anchor generation matches GitHub's per-whitespace slugger.
 
 **Remaining members (Cluster B nearly closed):**
-- **Doc-link remediation sprint** (the spun-out follow-up of the architecture-review build: migrate the file-relative `../../` minority to root-relative under [ADR-0021](../adr/0021-root-relative-doc-links.md) + fix the redirect-stub dead anchors + `page-ia.md` stale component pointers — Session 04 Candidates 1/3/4. **Also absorbs the CCIL audit's ROASTING/BREWING dead-anchor follow-up.** `check:doc-links` goes green when drained).
 - **"Inverted Temperature Staging" → "Thermal Staging" rename sweep** across the brewing-historian + brewing-assistant clusters (CCIL-audit follow-up; legacy name still server-side-accepted on write, so docs-only).
 - **MEMORY.md consolidation** — Chris ran a pass in a parallel thread; MEMORY.md index reflects the ADR-0020 pipeline + 2026-06-04 capstone refresh, so it appears current. *Confirm the `consolidate-memory` pass formally closed* before marking shipped.
 - **MCP continuous-feedback drain** — the *mechanism* shipped (the `route-feedback` intake + `plan-feedback` planning skills); "draining" is now a **standing operation** (run `plan-feedback` when the backlog piles up), not a remaining sprint. Open backlog items route per `plan-feedback` (the lifecycle-gate cluster → Lot Coordinator; failure-boundary breach #6; MCP intermittent-execution; execute_sql doc-accuracy).
 
 ### 2. Lot Coordinator + V-Set Assistant — NEXT, operator-gated
 
-Roasting-only restructure mirroring the Research Coordinator / Research Assistant pattern ([ADR-0017](../adr/0017-research-assistant-architecture.md)). Brainstorm doc: [docs/features/lot-coordinator-brainstorm-2026-06-02.md](../features/lot-coordinator-brainstorm-2026-06-02.md).
+Roasting-only restructure mirroring the Research Coordinator / Research Assistant pattern ([ADR-0017](docs/adr/0017-research-assistant-architecture.md)). Brainstorm doc: [docs/features/lot-coordinator-brainstorm-2026-06-02.md](docs/features/lot-coordinator-brainstorm-2026-06-02.md).
 
 **Why:** roasting runs as ONE claude.ai session per green-bean lot — the whole lifecycle (design → V-set roast → cupping → iterate → reference call → learnings) in a single thread. That single-session model is the root cause of cross-domain handoff verbosity. The fix: a **Lot Coordinator** holds the lot-level plan; a **V-Set / Experiment Assistant** is spawned per V-set, takes that set roast→cupping→learned, STOPS, and returns a thin handoff the coordinator consumes.
 
 **Trigger:** the next *fresh* green-bean lot ready to start clean on the new process (current lots are mid-cycle, can't be retrofitted). Big sprint — brainstorm → plan → build, no build until the trigger fires.
 
-**Likely scope:** own ADR · CONTEXT-roasting grill · three packet/brief templates · lifecycle-state model updates for brew-side handoff waits · MCP context-efficiency prerequisites (`read_canonical(axis, name)` + `get_bean_pipeline(since:)` — both in [issues.md](issues.md)).
+**Likely scope:** own ADR · CONTEXT-roasting grill · three packet/brief templates · lifecycle-state model updates for brew-side handoff waits · MCP context-efficiency prerequisites (`read_canonical(axis, name)` + `get_bean_pipeline(since:)` — both in [issues.md](docs/product/issues.md)).
 
-**Surfaced by the log-cupping prune (case 006, 2026-06-04):** `log-cupping.md` currently does too much in one prompt — beyond recording the cupping it also (a) designs V_(n+1) inline (STAGE 6: `push_experiment` + `push_roast_recipe` × N + `push_roast_profile` × N) and (b) proposes cluster-doc changes inline (STAGE 7). Both arguably belong in a dedicated roast-design skill + a docs workflow, leaving the cupping prompt to record-the-cup-and-emit-a-handoff-packet. **Deliberately NOT changed in the prune** (it would alter how the live cupping cycle works, and the right boundary depends on the whole roast flow, not just the cupping side). Decide the boundary here, against the full Coordinator/Assistant design — the cupping prompt's prototype packet-handoff shape (`Next Roast Design Packet` / `Doc Maintenance Packet`) is the candidate target. See [pruning case 006](../sprints/pruning-cases/006-log-cupping.md).
+**Surfaced by the log-cupping prune (case 006, 2026-06-04):** `log-cupping.md` currently does too much in one prompt — beyond recording the cupping it also (a) designs V_(n+1) inline (STAGE 6: `push_experiment` + `push_roast_recipe` × N + `push_roast_profile` × N) and (b) proposes cluster-doc changes inline (STAGE 7). Both arguably belong in a dedicated roast-design skill + a docs workflow, leaving the cupping prompt to record-the-cup-and-emit-a-handoff-packet. **Deliberately NOT changed in the prune** (it would alter how the live cupping cycle works, and the right boundary depends on the whole roast flow, not just the cupping side). Decide the boundary here, against the full Coordinator/Assistant design — the cupping prompt's prototype packet-handoff shape (`Next Roast Design Packet` / `Doc Maintenance Packet`) is the candidate target. See [pruning case 006](docs/sprints/pruning-cases/006-log-cupping.md).
 
 ### Workflow rule that bounds the queue
 
@@ -150,7 +149,7 @@ The app is a living memory + livable archive; a public surface emerges as a side
 
 ### Substrate expansion (Chris-gated, future)
 
-- **Filter drawdown comprehensive test** — empirical timing of every owned filter on real beds. Output ingests into `lib/filter-registry.ts` + the Brewing Equipment Expert cluster. Authoring effort, not a code sprint. (The prior Filter-drawdown *research experiment* closed 2026-05-27 — see [shipped.md](../sprints/shipped.md) + the Research Coordinator roadmap; this is the substrate-ingest follow-on.)
+- **Filter drawdown comprehensive test** — empirical timing of every owned filter on real beds. Output ingests into `lib/filter-registry.ts` + the Brewing Equipment Expert cluster. Authoring effort, not a code sprint. (The prior Filter-drawdown *research experiment* closed 2026-05-27 — see [shipped.md](docs/sprints/shipped.md) + the Research Coordinator roadmap; this is the substrate-ingest follow-on.)
 - **Water chemistry as an 11th canonical taxonomy** — `lib/water-registry.ts` + `docs/taxonomies/water.md` + `brews.water` text canonical. **Triggers when:** Chris's water-chemistry experiments produce enough data to define canonical entries.
 
 ---
@@ -159,10 +158,10 @@ The app is a living memory + livable archive; a public surface emerges as a side
 
 These belong in their own docs:
 
-- Closed sprint bodies → [docs/sprints/shipped.md](../sprints/shipped.md).
+- Closed sprint bodies → [docs/sprints/shipped.md](docs/sprints/shipped.md).
 - Per-sprint retrospective detail → `memory/project_*.md`.
 - Research-experiment history (e.g. filter drawdown) → Research Coordinator roadmap.
-- Product bugs / missing-or-incomplete substrate → [docs/product/issues.md](issues.md).
+- Product bugs / missing-or-incomplete substrate → [docs/product/issues.md](docs/product/issues.md).
 - Taste-profile doctrine → brewing-side substrate; handled per coffee.
 - Spreadsheet-era source-data counts → query the DB.
 - Brewing / roasting / equipment concept definitions → coordinator + context docs.

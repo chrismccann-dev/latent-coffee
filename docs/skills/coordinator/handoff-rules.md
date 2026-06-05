@@ -29,13 +29,13 @@ Cupping Specialist (executes Day-7 cupping)
                └─ Output: lot transitions to lifecycle state `resolved`
 ```
 
-**POD-1 absorption status:** POD-1's scope is absorbed into Cupping Specialist at the SKILL.md level (Wave 3 PR 3) + bookmarked at [`docs/skills/cupping-specialist/cluster/pod-1-routing.md`](../cupping-specialist/cluster/pod-1-routing.md) with trigger conditions for the future Path C rewrite + simulated-pourover schema scoping. The "optimized brew lifecycle states" half stays as DRAFT until lived-practice trigger conditions are met (2-3 V-set Path A lots observed + 1 one-shot close-out + Stefano Um / Bukure / Higuito decisions).
+**POD-1 absorption status:** POD-1's scope is absorbed into Cupping Specialist at the SKILL.md level (Wave 3 PR 3) + bookmarked at [`docs/skills/cupping-specialist/cluster/pod-1-routing.md`](docs/skills/cupping-specialist/cluster/pod-1-routing.md) with trigger conditions for the future Path C rewrite + simulated-pourover schema scoping. The "optimized brew lifecycle states" half stays as DRAFT until lived-practice trigger conditions are met (2-3 V-set Path A lots observed + 1 one-shot close-out + Stefano Um / Bukure / Higuito decisions).
 
 ## Chain 2: New research track design — REMOVED (2026-05-27)
 
-**Status:** REMOVED per [ADR-0017](../../adr/0017-research-assistant-architecture.md). Research is operator-direct in Claude Code, NOT dispatched by Master Coordinator. The Research Coordinator + Research Assistant pair runs entirely in Claude Code sessions; entry surface is "operator types 'I want to start a research project' into a fresh Claude Code session," not a claude.ai prompt that the Master Coordinator routes.
+**Status:** REMOVED per [ADR-0017](docs/adr/0017-research-assistant-architecture.md). Research is operator-direct in Claude Code, NOT dispatched by Master Coordinator. The Research Coordinator + Research Assistant pair runs entirely in Claude Code sessions; entry surface is "operator types 'I want to start a research project' into a fresh Claude Code session," not a claude.ai prompt that the Master Coordinator routes.
 
-If a claude.ai session expresses research-track-design intent, the correct response is to redirect the operator to a fresh Claude Code session. See [`dispatch-rules.md § Research workflow`](dispatch-rules.md#research-workflow--operator-direct-not-coordinator-dispatched).
+If a claude.ai session expresses research-track-design intent, the correct response is to redirect the operator to a fresh Claude Code session. See [`dispatch-rules.md § Research workflow`](docs/skills/coordinator/dispatch-rules.md#research-workflow--operator-direct-not-coordinator-dispatched).
 
 Research projects can still trigger Chains 3 + 4 + 5 as their per-track substrate writes flow through. But the orchestration above those chains is operator-side (Coordinator-scoped), not Master-Coordinator-routed.
 
@@ -113,7 +113,7 @@ Single-step chain; no downstream substrate-writer hop because sourcing decisions
 
 ## Chain 6: Cross-pollination Wölfl-design brew — RESCOPED (2026-05-27)
 
-**Status:** RESCOPED post [ADR-0017](../../adr/0017-research-assistant-architecture.md). Cross-pollination is now an operator-direct research-project pattern (Research Coordinator-orchestrated in a Claude Code session), not a Master-Coordinator-dispatched chain. When the cross-pollination project arrives at substrate-write moments, Chains 3 + 4 + 5 fire as their normal selves; CCIL synthesizes at end.
+**Status:** RESCOPED post [ADR-0017](docs/adr/0017-research-assistant-architecture.md). Cross-pollination is now an operator-direct research-project pattern (Research Coordinator-orchestrated in a Claude Code session), not a Master-Coordinator-dispatched chain. When the cross-pollination project arrives at substrate-write moments, Chains 3 + 4 + 5 fire as their normal selves; CCIL synthesizes at end.
 
 The cross-domain experiment shape: roast targeting a known competitor's brew approach (e.g. Wölfl's 2024 WBrC Extraction Push: Don Benji Gesha natural anaerobic on Orea v4 + Sibarist FAST + Melodrip at 93°C). The orchestrating layer is now Research Coordinator (operator-direct, Claude Code session), not Master Coordinator dispatch.
 
@@ -143,7 +143,7 @@ Pattern A is the load-bearing self-improvement pattern here: each cross-pollinat
 - **Wave 3 PR 3:** 5 Workflow Executing sub-skills ACTIVE → Chains 1, 3, 4 move from PARTIAL to ACTIVE; Chain 2 moves to ACTIVE-pending-Learning-Knowledge (archival hop deferred per ADR-0011 trigger of ≥2 completed research tracks). **Wave 3 closed.**
 - **Wave 4 PR 4a:** CCIL ACTIVE (skeleton + Sudan Rume seed pattern). Chain 6 (Wölfl cross-pollination) moves from PLACEHOLDER → ACTIVE-pending-lived-practice (every sub-skill in the chain exists; chain not yet exercised against a real cross-pollination lot). Existing CCIL synthesis hop into Chain 6 now actionable.
 - **Wave 4 PR 4b:** Master-doc residual migration + redirect-stub rewrite + CLAUDE.md compaction; no new chain activations expected. PR 4b closes the architecture implementation arc.
-- **Research Assistant Step 2 (2026-05-27):** Research Coordinator + Research Assistant shipped as operator-direct Claude-Code-centric pair per [ADR-0017](../../adr/0017-research-assistant-architecture.md). Chain 2 REMOVED + Chain 6 RESCOPED (cross-pollination is now operator-orchestrated via Research Coordinator). Chains 3/4/5 unaffected — they still fire as their normal selves when a research project arrives at substrate-write moments.
+- **Research Assistant Step 2 (2026-05-27):** Research Coordinator + Research Assistant shipped as operator-direct Claude-Code-centric pair per [ADR-0017](docs/adr/0017-research-assistant-architecture.md). Chain 2 REMOVED + Chain 6 RESCOPED (cross-pollination is now operator-orchestrated via Research Coordinator). Chains 3/4/5 unaffected — they still fire as their normal selves when a research project arrives at substrate-write moments.
 
 ## Discipline
 

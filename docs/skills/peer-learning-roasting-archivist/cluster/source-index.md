@@ -1,6 +1,6 @@
 # Source Index — Peer-Learning Roasting Archivist
 
-Provenance + freshness tracking for peer-roaster content pulled into this cluster. Operator-curated per [Peer-Learning Roasting Archivist SKILL.md](../SKILL.md); updated on every Pattern I integration session.
+Provenance + freshness tracking for peer-roaster content pulled into this cluster. Operator-curated per [Peer-Learning Roasting Archivist SKILL.md](docs/skills/peer-learning-roasting-archivist/SKILL.md); updated on every Pattern I integration session.
 
 ---
 
@@ -8,7 +8,7 @@ Provenance + freshness tracking for peer-roaster content pulled into this cluste
 
 | Peer | Profile doc | Primary source(s) | Last integrated | Refresh signal |
 |---|---|---|---|---|
-| Dongzhe | [cluster/per-peer/dongzhe.md](per-peer/dongzhe.md) | (1) Prior chat-history extractions (Reference Roast Target #249 + Core Principles — predates this cluster); (2) Yunnan-Hatchi livestream <https://www.youtube.com/watch?v=9ehIioqBesE> captured 2026-05-17 | 2026-05-26 (Wave 3 PR 1 migration into cluster) | Episodic — next Pattern I session when Chris surfaces another long-form content event |
+| Dongzhe | [cluster/per-peer/dongzhe.md](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md) | (1) Prior chat-history extractions (Reference Roast Target #249 + Core Principles — predates this cluster); (2) Yunnan-Hatchi livestream <https://www.youtube.com/watch?v=9ehIioqBesE> captured 2026-05-17 | 2026-05-26 (Wave 3 PR 1 migration into cluster) | Episodic — next Pattern I session when Chris surfaces another long-form content event |
 
 ---
 

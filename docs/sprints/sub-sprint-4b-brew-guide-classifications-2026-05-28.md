@@ -1,6 +1,6 @@
 # Sub-sprint 4b Bundle B — Brew guide classifications
 
-**Authored 2026-05-28** as Step 2 of the Bundle B execution playbook ([handoff doc](sub-sprint-4b-bundle-b-handoff-2026-05-28.md)).
+**Authored 2026-05-28** as Step 2 of the Bundle B execution playbook ([handoff doc](docs/sprints/sub-sprint-4b-bundle-b-handoff-2026-05-28.md)).
 
 All 73 `RoasterEntry` records classified against the 3-state substrate ratified in the kickoff conversation. Pre-edit — awaiting Chris's row-by-row review before any registry write.
 

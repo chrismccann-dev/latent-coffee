@@ -1,11 +1,11 @@
 # Architecture Wave 2 implementation kickoff — Historians + WBC Archivists (4 consolidation ships)
 
 **Date:** 2026-05-26
-**Predecessor:** Wave 1 ([architecture-wave-1-kickoff-2026-05-26.md](architecture-wave-1-kickoff-2026-05-26.md) → shipped via [PR #202](https://github.com/chrismccann-dev/latent-coffee/pull/202), merge commit `5e29683`, retro at [project_architecture_wave_1_2026-05-26.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_architecture_wave_1_2026-05-26.md))
+**Predecessor:** Wave 1 ([architecture-wave-1-kickoff-2026-05-26.md](docs/sprints/architecture-wave-1-kickoff-2026-05-26.md) → shipped via [PR #202](https://github.com/chrismccann-dev/latent-coffee/pull/202), merge commit `5e29683`, retro at [project_architecture_wave_1_2026-05-26.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_architecture_wave_1_2026-05-26.md))
 **Successor:** Wave 3 (operator-stub clusters + 9 Workflow tier sub-skills; POD-1 absorbs into Cupping Specialist here)
-**Sizing:** L (biggest BREWING.md / ROASTING.md shrink event in the architecture arc; ~60-80KB each per [master-doc-transition-plan.md](../architecture/master-doc-transition-plan.md))
+**Sizing:** L (biggest BREWING.md / ROASTING.md shrink event in the architecture arc; ~60-80KB each per [master-doc-transition-plan.md](docs/architecture/master-doc-transition-plan.md))
 **Branch (suggested):** `claude/architecture-wave-2-2026-05-XX`
-**Mode:** Implementation — second ship of the composable sub-skills architecture per [ADR-0011](../adr/0011-composable-sub-skills-architecture.md) / [ADR-0012](../adr/0012-master-coordinator-pattern.md) / [ADR-0013](../adr/0013-self-improvement-primitives.md).
+**Mode:** Implementation — second ship of the composable sub-skills architecture per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) / [ADR-0012](docs/adr/0012-master-coordinator-pattern.md) / [ADR-0013](docs/adr/0013-self-improvement-primitives.md).
 
 ## Goal
 
@@ -13,12 +13,12 @@ Fill in the 4 Knowledge-tier sub-skill placeholders that landed at brainstorm ti
 
 ## Why 4 ships, paired or sequenced
 
-Per [ADR-0011](../adr/0011-composable-sub-skills-architecture.md) Wave 2 = 4 consolidation sub-skills:
+Per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md) Wave 2 = 4 consolidation sub-skills:
 
 1. **Brewing Historian** — absorbs BREWING.md "Cross-Coffee Insight Layer" + per-strategy patterns
 2. **Roasting Historian** — absorbs ROASTING.md equivalent + per-bean experiment patterns + lot knowledge
 3. **WBC Brewing Archivist** — migrates `docs/brewing/wbc-reference.md` + `docs/brewing/wbc-recipes.md` (5-axis foundational map + 8 strategy families + 102-recipe corpus)
-4. **WBC Roasting Archivist** — migrates `docs/roasting/wbc-roasting.md` + `docs/roasting/wbc-sourcing.md` (tentatively merged Sourcing Knowledge per [ADR-0011](../adr/0011-composable-sub-skills-architecture.md))
+4. **WBC Roasting Archivist** — migrates `docs/roasting/wbc-roasting.md` + `docs/roasting/wbc-sourcing.md` (tentatively merged Sourcing Knowledge per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md))
 
 **Recommended sequencing (3 PRs):**
 
@@ -34,7 +34,7 @@ Alternative: **single PR for all 4**. Defensible but risks reviewer fatigue + th
 
 ### Brewing Historian
 
-- **Status:** placeholder SKILL.md exists ([docs/skills/brewing-historian/SKILL.md](../skills/brewing-historian/SKILL.md)) — fill in full content during this Wave's session
+- **Status:** placeholder SKILL.md exists ([docs/skills/brewing-historian/SKILL.md](docs/skills/brewing-historian/SKILL.md)) — fill in full content during this Wave's session
 - **Cluster authoring:**
   - `cluster/patterns/cross-coffee-insights.md` — absorbs BREWING.md "Cross-Coffee Insight Layer" section verbatim
   - `cluster/patterns/by-strategy/<strategy>.md` — 6 files (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid) extracted from BREWING.md's per-strategy reference
@@ -44,7 +44,7 @@ Alternative: **single PR for all 4**. Defensible but risks reviewer fatigue + th
 
 ### Roasting Historian
 
-- **Status:** placeholder SKILL.md exists ([docs/skills/roasting-historian/SKILL.md](../skills/roasting-historian/SKILL.md)) — fill in full content
+- **Status:** placeholder SKILL.md exists ([docs/skills/roasting-historian/SKILL.md](docs/skills/roasting-historian/SKILL.md)) — fill in full content
 - **Cluster authoring:**
   - `cluster/patterns/cross-coffee-insights.md` — absorbs ROASTING.md equivalent section
   - `cluster/learnings/<lot>.md` — 6 initial per-lot deep-dive learnings (CGLE Sudan Rume Hybrid Washed / CGLE Mandela XO / GV Surma / GV Oma / GUA Libertad / GUA El Socorro) sourced from `roast_learnings` rows + ROASTING.md per-bean experiment sections
@@ -56,7 +56,7 @@ Alternative: **single PR for all 4**. Defensible but risks reviewer fatigue + th
 
 ### WBC Brewing Archivist
 
-- **Status:** placeholder SKILL.md exists ([docs/skills/wbc-brewing-archivist/SKILL.md](../skills/wbc-brewing-archivist/SKILL.md)) — fill in full content
+- **Status:** placeholder SKILL.md exists ([docs/skills/wbc-brewing-archivist/SKILL.md](docs/skills/wbc-brewing-archivist/SKILL.md)) — fill in full content
 - **Cluster authoring:**
   - `cluster/wbc-reference.md` — `git mv` from `docs/brewing/wbc-reference.md` (verbatim move + path-depth tweaks for any relative links)
   - `cluster/wbc-recipes.md` — `git mv` from `docs/brewing/wbc-recipes.md` (102-recipe corpus, ~moderate size)
@@ -65,7 +65,7 @@ Alternative: **single PR for all 4**. Defensible but risks reviewer fatigue + th
 
 ### WBC Roasting Archivist
 
-- **Status:** placeholder SKILL.md exists ([docs/skills/wbc-roasting-archivist/SKILL.md](../skills/wbc-roasting-archivist/SKILL.md)) — fill in full content
+- **Status:** placeholder SKILL.md exists ([docs/skills/wbc-roasting-archivist/SKILL.md](docs/skills/wbc-roasting-archivist/SKILL.md)) — fill in full content
 - **Cluster authoring:**
   - `cluster/wbc-roasting.md` — `git mv` from `docs/roasting/wbc-roasting.md`
   - `cluster/sourcing/strategy.md` — `git mv` from `docs/roasting/wbc-sourcing.md` (tentative merge with WBC Roasting per ADR-0011; split when Chris does dedicated sourcing research)
@@ -101,12 +101,12 @@ Old `docs://brewing/wbc-{reference,recipes}.md` + `docs://roasting/wbc-{roasting
 **Prompts:**
 - `bundled-brewing-completion.md` — STEP 2 propose_doc_changes section updates `target_doc` discipline. Today's `"brewing.md"` target should route via the Brewing Historian cluster (e.g. `"skills/brewing-historian/cluster/patterns/cross-coffee-insights.md"`); existing alias shapes need extension
 - `propose-doc-changes-from-brew.md` — same `target_doc` updates
-- `close-lot.md` STAGE 3 — references Roasting Historian as the carry-forward home (per [docs/skills/roasting-historian/SKILL.md](../skills/roasting-historian/SKILL.md) line 47)
-- `start-lot.md` STAGE 2 carry-forward search — references WBC Roasting Archivist as a knowledge cluster (per [docs/skills/wbc-roasting-archivist/SKILL.md](../skills/wbc-roasting-archivist/SKILL.md) line 49)
+- `close-lot.md` STAGE 3 — references Roasting Historian as the carry-forward home (per [docs/skills/roasting-historian/SKILL.md](docs/skills/roasting-historian/SKILL.md) line 47)
+- `start-lot.md` STAGE 2 carry-forward search — references WBC Roasting Archivist as a knowledge cluster (per [docs/skills/wbc-roasting-archivist/SKILL.md](docs/skills/wbc-roasting-archivist/SKILL.md) line 49)
 - `start-brew.md` Step 1 — reference WBC Brewing Archivist for WBC-anchor lookups
 - `bundled-brewing-completion.md` — same WBC reference update
 
-**Sync-check script:** [`scripts/check-registry-md-sync.ts`](../../scripts/check-registry-md-sync.ts) — no change (only the 4 brewing-equipment axes were tracked; Historians + WBC don't have validation-mirror counterparts in `lib/`)
+**Sync-check script:** [`scripts/check-registry-md-sync.ts`](scripts/check-registry-md-sync.ts) — no change (only the 4 brewing-equipment axes were tracked; Historians + WBC don't have validation-mirror counterparts in `lib/`)
 
 **Pre-execution `grep -rn` is mandatory** per Wave 1 retro lesson — the brief here can't enumerate every reference site exhaustively; grep against the moved file paths at session start surfaces the rest. Wave 1 found 5 additional sites the brief missed (registry comments / script mdPath / ARBITER table / PRODUCT.md links / CONTEXT.md line). Expect a similar surface for Wave 2 given the master-doc surface area is larger.
 

@@ -1,6 +1,6 @@
 # Sub-sprint 4e — Terroirs polish — Claude's complementary pass — 2026-05-28
 
-Companion to [the kickoff brief](sub-sprint-4e-terroirs-polish-kickoff-2026-05-28.md). Phase 2 of the 3-phase grilling sequence (Chris audit → this pass → plan-mode bundle). Mirrors the 4a–4d complementary-pass artifacts.
+Companion to [the kickoff brief](docs/sprints/sub-sprint-4e-terroirs-polish-kickoff-2026-05-28.md). Phase 2 of the 3-phase grilling sequence (Chris audit → this pass → plan-mode bundle). Mirrors the 4a–4d complementary-pass artifacts.
 
 ## Outcome up front
 

@@ -4,7 +4,7 @@
 
 **Corpus:** N=34 brews (largest single-cultivar corpus in the archive).
 
-This capsule is the canonical home for Gesha variety-intrinsic behavior and Gesha × process sub-groupings. Cross-anchor interactions (roast level, roaster house style) keep a router here and live as patterns in [cross-coffee-insights.md](../cross-coffee-insights.md).
+This capsule is the canonical home for Gesha variety-intrinsic behavior and Gesha × process sub-groupings. Cross-anchor interactions (roast level, roaster house style) keep a router here and live as patterns in [cross-coffee-insights.md](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md).
 
 ## Variety-intrinsic body principle
 
@@ -28,7 +28,7 @@ Confirmed Balanced Intensity. Finca La Reserva (Antioquia, Colibri): EG-1 6.4 / 
 
 ## Colombian Gesha (anaerobic washed)
 
-Process overrides variety entirely. Full Expression confirmed for Huila/Cauca anaerobic washed lots. Note: Colombian anaerobic NATURAL Gesha (e.g. Hydrangea Finca Inmaculada, Valle del Cauca) is a different profile - Balanced Intensity, reclassified to Suppression on cooling-driven bitter-tail grounds (see [by-strategy/suppression.md](../by-strategy/suppression.md)), not Full Expression. Heavy anaerobic washed Colombian Gesha (Jeferson Motta family, Huila/Cauca) is the canonical Full Expression case - see [by-strategy/full-expression.md](../by-strategy/full-expression.md).
+Process overrides variety entirely. Full Expression confirmed for Huila/Cauca anaerobic washed lots. Note: Colombian anaerobic NATURAL Gesha (e.g. Hydrangea Finca Inmaculada, Valle del Cauca) is a different profile - Balanced Intensity, reclassified to Suppression on cooling-driven bitter-tail grounds (see [by-strategy/suppression.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md)), not Full Expression. Heavy anaerobic washed Colombian Gesha (Jeferson Motta family, Huila/Cauca) is the canonical Full Expression case - see [by-strategy/full-expression.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md).
 
 ## Cooling behavior (Gesha-specific)
 
@@ -41,14 +41,14 @@ Process overrides variety entirely. Full Expression confirmed for Huila/Cauca an
 
 ## Cross-anchor routers (detail lives elsewhere)
 
-- **El Paraíso thermal shock Geshas (Colombian, yeast-inoculated)** - process governs, not variety. Balanced Intensity, not the Huila/Cauca Full Expression pattern. Detail → [by-coffee-family/thermal-shock-washed.md](../by-coffee-family/thermal-shock-washed.md).
-- **Dark / developed-roast Gesha** - roast level can override the Clarity-First variety default. See the roast-level override pattern in [cross-coffee-insights.md](../cross-coffee-insights.md).
-- **'Prefers hot over cool' on Colombian anaerobic Gesha** - extraction-overshoot diagnostic; cross-coffee. See the cooling diagnostic in [cross-coffee-insights.md](../cross-coffee-insights.md).
+- **El Paraíso thermal shock Geshas (Colombian, yeast-inoculated)** - process governs, not variety. Balanced Intensity, not the Huila/Cauca Full Expression pattern. Detail → [by-coffee-family/thermal-shock-washed.md](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/thermal-shock-washed.md).
+- **Dark / developed-roast Gesha** - roast level can override the Clarity-First variety default. See the roast-level override pattern in [cross-coffee-insights.md](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md).
+- **'Prefers hot over cool' on Colombian anaerobic Gesha** - extraction-overshoot diagnostic; cross-coffee. See the cooling diagnostic in [cross-coffee-insights.md](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md).
 
 ## Per-strategy entries referencing Gesha
 
-- [Clarity-First](../by-strategy/clarity-first.md) — washed Gesha (Panama / Colombia highlands), Esmeralda NC naturals, Finca Sophia Grand Reserve standard natural, Lamastus Lovely Vuelta DRD.
-- [Suppression](../by-strategy/suppression.md) — Colombian anaerobic natural (Hydrangea Finca Inmaculada), Panama Gesha NASD (Picolot Altieri CHOMBI).
-- [Balanced Intensity](../by-strategy/balanced-intensity.md) — Colombian anaerobic honey (Finca La Reserva), El Paraíso thermal shock (Letty / Luna / Lychee), Sebastian Ramirez El Placer yeast-inoculated white honey, Don Eduardo yeast-inoculated natural with washed finish.
-- [Full Expression](../by-strategy/full-expression.md) — Jeferson Motta anaerobic washed (Huila/Cauca pattern).
-- [Hybrid](../by-strategy/hybrid.md) — SWORKS slow/slow/open Sequential template across yeast-inoculated Geshas (Janson 1010, Sebastian Ramirez White Honey, Finca La Reserva Anaerobic Honey).
+- [Clarity-First](docs/skills/brewing-historian/cluster/patterns/by-strategy/clarity-first.md) — washed Gesha (Panama / Colombia highlands), Esmeralda NC naturals, Finca Sophia Grand Reserve standard natural, Lamastus Lovely Vuelta DRD.
+- [Suppression](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md) — Colombian anaerobic natural (Hydrangea Finca Inmaculada), Panama Gesha NASD (Picolot Altieri CHOMBI).
+- [Balanced Intensity](docs/skills/brewing-historian/cluster/patterns/by-strategy/balanced-intensity.md) — Colombian anaerobic honey (Finca La Reserva), El Paraíso thermal shock (Letty / Luna / Lychee), Sebastian Ramirez El Placer yeast-inoculated white honey, Don Eduardo yeast-inoculated natural with washed finish.
+- [Full Expression](docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md) — Jeferson Motta anaerobic washed (Huila/Cauca pattern).
+- [Hybrid](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md) — SWORKS slow/slow/open Sequential template across yeast-inoculated Geshas (Janson 1010, Sebastian Ramirez White Honey, Finca La Reserva Anaerobic Honey).

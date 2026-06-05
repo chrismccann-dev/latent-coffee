@@ -1,7 +1,7 @@
 # `data-model` session (session 4 of 5) — kickoff brief
 
 Redesign-polish punch-list, bucket 4. Hand-off from the `cleanup` session
-([punch-list § Cleanup session outcomes](../features/redesign-polish-punchlist.md)).
+([punch-list § Cleanup session outcomes](docs/features/redesign-polish-punchlist.md)).
 Buckets run **one per session, sequentially**: `data-audit` ✅ → `naming` ✅ →
 `cleanup` ✅ → **`data-model` (this one)** → `side-quest` MB-6.
 
@@ -11,7 +11,7 @@ Buckets run **one per session, sequentially**: `data-audit` ✅ → `naming` ✅
 with a **full audio readout of several real recipes** — deliberately spanning
 **complex and simplistic** pour structures — so the storage-shape decision is
 made against the real range, not a guess off the written notes. **Do NOT touch
-[lib/pour-structure.ts](../../lib/pour-structure.ts) or design a storage shape
+[lib/pour-structure.ts](lib/pour-structure.ts) or design a storage shape
 before that audio lands.**
 
 Posture on the storage-shape call: **capture-first, ask-don't-ship.** This is
@@ -66,7 +66,7 @@ on the last pour rendering as a phantom extra pour.
 
 ## Where the code lives (pointers — do NOT edit before the audio)
 
-- **[lib/pour-structure.ts](../../lib/pour-structure.ts)** — `parsePourSteps(text): ParsedPourStep[]`
+- **[lib/pour-structure.ts](lib/pour-structure.ts)** — `parsePourSteps(text): ParsedPourStep[]`
   with the composable strategy cascade (newline > semicolon > middle-dot >
   period+marker > arrow-chain). `ParsedPourStep` carries `raw` always +
   best-effort `label / time / amount_g / method`. `extractDrawdown(total_time,
@@ -74,7 +74,7 @@ on the last pour rendering as a phantom extra pour.
   note: *"Don't change the storage shape; the parser eats the existing free-text
   column"* — **that note is exactly what's under review this session.**
 - **Render: `/brews/[id]` Reference Brew Recipe section** — `<SspTimeline>` in
-  [components/Ssp.tsx](../../components/Ssp.tsx). The brew detail page
+  [components/Ssp.tsx](components/Ssp.tsx). The brew detail page
   ([app/(app)/brews/[id]/page.tsx](<../../app/(app)/brews/[id]/page.tsx>))
   prepends bloom as a `0:00 · Bloom` step, then feeds `parsePourSteps`, then
   `cleanPourDesc(raw, time)` strips the leading `Pour N:`/time echo. The
