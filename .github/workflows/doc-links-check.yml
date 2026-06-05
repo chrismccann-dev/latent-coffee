@@ -1,0 +1,39 @@
+name: doc-links-check
+
+# Internal-doc-link gate (Cluster B, spec'd by architecture-audit Session 04 —
+# docs/audits/architecture/04-doc-substrate.md). Runs `npm run check:doc-links`,
+# which resolves every `[text](target)` link relative to the REPO ROOT (per
+# ADR-0021) and validates `#anchor` fragments against GitHub-slug anchor sets —
+# the check that catches the redirect-stub dead-anchor class a "does the file
+# exist" checker silently passes.
+#
+# Schedule-only (no pull_request trigger), exactly like doc-sizes-check.yml:
+#   - schedule (daily): the drift catch-all — surfaces a link that went dead on
+#     main (a doc moved, a heading was renamed, a component was deleted out from
+#     under a page-ia.md pointer).
+#   - workflow_dispatch: manual run.
+#
+# EXPECTED-RED until the Session-04 remediation sprint migrates the file-relative
+# `../../` minority to root-relative (the 169-link convention-schism backlog,
+# explicitly out of scope for the gate-authoring sprint). A non-zero run today =
+# that backlog still has items; it is NOT a regression. A PR trigger would
+# red-block every unrelated docs PR on this pre-existing debt, so there isn't one.
+# Run locally in any PR that touches a tracked doc (`npm run check:doc-links`).
+#
+# DB-free (just file reads) — needs no secrets.
+
+on:
+  schedule:
+    - cron: '30 14 * * *' # daily ~14:30 UTC (after migrations + doc-sizes)
+  workflow_dispatch:
+
+jobs:
+  check-doc-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run check:doc-links
+        run: npm run check:doc-links
