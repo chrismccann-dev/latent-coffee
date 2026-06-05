@@ -13,6 +13,7 @@
     "check:doc-links": "npx -y -p tsx@4 tsx scripts/check-doc-links.ts",
     "check:doc-sizes": "npx -y -p tsx@4 tsx scripts/check-doc-sizes.ts",
     "check:migrations": "npx -y -p tsx@4 tsx scripts/check-migrations.ts",
+    "check:types-vs-schema": "npx -y -p tsx@4 tsx scripts/check-types-vs-schema.ts",
     "check:registry-sync": "npx -y -p tsx@4 tsx scripts/check-registry-md-sync.ts",
     "check:terroir-resolver": "npx -y -p tsx@4 tsx scripts/check-terroir-resolver.ts",
     "audit:data": "npx -y -p tsx@4 tsx scripts/data-sanity-audit.ts"

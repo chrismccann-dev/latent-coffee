@@ -1,0 +1,49 @@
+name: types-vs-schema-check
+
+# Type-vs-schema drift gate (Class-A-gating). Runs `npm run check:types-vs-schema`,
+# which introspects the live PostgREST OpenAPI schema (GET /rest/v1/) and confirms
+# every DB column on a modeled table is typed in lib/types.ts.
+#
+# Standing rule (Chris, 2026-06-05): Class A (a DB column not in its interface)
+# gates the build (non-zero exit); Class B/C warn only. Reverses the old
+# "type-as-consumed" policy. Pairs with check:migrations + the cross-system
+# audit's Actor-6 hop.
+#
+# Three triggers:
+#   - pull_request (types / script / package paths): validate PRs that touch
+#     lib/types.ts or the script itself before they merge.
+#   - schedule (daily): the catch-all - surfaces a migration merged to main that
+#     added a column without typing it in lib/types.ts, which a path-filtered PR
+#     trigger alone cannot see. Runs on the default branch against prod.
+#   - workflow_dispatch: manual run (useful right after applying a migration).
+#
+# Requires the SUPABASE_SERVICE_ROLE_KEY + NEXT_PUBLIC_SUPABASE_URL repo secrets.
+# When the secret is absent the script FAILS (exit 2) - it does NOT skip-green.
+# A silent skip is exactly why migration 069 drifted undetected for 8 days.
+
+on:
+  pull_request:
+    paths:
+      - 'lib/types.ts'
+      - 'scripts/check-types-vs-schema.ts'
+      - 'supabase/migrations/**'
+      - 'package.json'
+  schedule:
+    - cron: '0 14 * * *' # daily ~14:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-types-vs-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm install --no-audit --no-fund --prefer-offline
+      - name: Run check:types-vs-schema
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run check:types-vs-schema

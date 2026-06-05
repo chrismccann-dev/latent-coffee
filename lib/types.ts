@@ -91,9 +91,9 @@ export interface GreenBean {
   moisture: string | null
   density: string | null
   // Producer/seller-supplied intake fields (migration 039). All typed here as
-  // of the 2026-06-05 schema-vs-type drift scan; previously only
-  // producer_tasting_notes was surfaced and the siblings were left "type as a
-  // consumer adopts them", which is the drift class this scan closed.
+  // of the 2026-06-05 schema-vs-type drift scan. Standing rule (reversing the
+  // old "type as a consumer adopts them" policy): every DB column on a modeled
+  // table is typed here — enforced by `npm run check:types-vs-schema`.
   producer_tasting_notes: string | null
   seller: string | null
   exporter: string | null
