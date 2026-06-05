@@ -55,29 +55,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Source:** master log #23 (Round 17)
 - **Body:** `log-cupping.md` STAGE 6's binary skip/propose during a gate defers ALL doc proposals to post-SPG re-entry, including cupping-INDEPENDENT ones that could land now (the V_n status flip, SPG-independent cup findings, a CCIL violation). Consequence: the active-lot doc reads "designed/pushed, not roasted" when it was in fact cupped. Needs a real-time partial-write rule + an explicit "deferred proposals" queue concept. Pairs tightly with the SPG lifecycle-state item.
 
-### `cooling_arc_pattern` enum on cuppings
-- **Shape:** schema
-- **Recurrence:** 1 (now differentiating on a 2nd lot)
-- **Criticality:** med
-- **Status:** open
-- **Source:** master log #27 (Round 17)
-- **Body:** `degrade / hold / improve / flat`, independent of `temperature_behavior` prose. Becoming a real signal axis; cross-lot "which lots cooling-arc-degrade" should be canonical-queryable not regex-on-prose. Pairs with the prior shipped cupping-schema axes (wb_to_ground_delta S1, sweetness S3).
-
-### recipe↔roast intentional-divergence signal
-- **Shape:** schema (derived field)
-- **Recurrence:** 1 (all 3 V3 roasts on one lot)
-- **Criticality:** low
-- **Status:** open
-- **Source:** master log #26 (Round 17)
-- **Body:** `recipe.end_condition_target=209` vs `roast.end_condition_type=manual` (target NULL) is an intentional, lore-dependent divergence. Candidate derived `roast.execution_diverged_from_recipe: true` so analytics read correctly without knowing the lore.
-
-### Server-side `cupping_date ≥ roast_date+1` + rest_days consistency validation
-- **Shape:** schema (validation)
-- **Recurrence:** 1 (voice-to-text date slip caught only by day-of-week math)
-- **Criticality:** med
-- **Status:** open
-- **Source:** master log #31 (Round 18)
-- **Body:** Voice-to-text date slips are a real transcript-drift class; a bare "March 31" with no day-of-week would write nonsense rest_days (e.g. −23) with no guard. Low-cost server-side guardrail: cupping_date follows roast_date, and computed rest_days matches supplied (modulo timezone).
+> **Shipped 2026-06-04 (#385, Cluster 2):** `cooling_arc_pattern` enum (#27), `cupping_date`/rest_days guard (#31), and `roast_recipe_divergence` view (#26) — see [docs/sprints/shipped.md](../sprints/shipped.md). Migration 078. Removed from the open list per the status lifecycle.
 
 ### Per-batch failure-boundary breach record on experiments (JSONB array)
 - **Shape:** schema
@@ -104,6 +82,14 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Status:** open (triggered — needs next failure capture)
 - **Source:** master log #7 (Round 5)
 - **Body:** Triggered item; act when the next failure is captured with the payload.
+
+### `execute_sql` doc references are ambiguous (separate Supabase MCP server, not always connected)
+- **Shape:** mcp (doc accuracy)
+- **Recurrence:** 1 (surfaced by the Cluster-2 build §5, 2026-06-04)
+- **Criticality:** low
+- **Status:** open
+- **Source:** Cluster-2 completion report §5; flagged by Chris on close-out
+- **Body:** CLAUDE.md § Local Verification Fallbacks, ARBITER.md, and the kickoff-brief template reference an MCP `execute_sql` for DB work, but it is NOT in the latent-coffee MCP server's 35 Tools — it comes from a **separately-connected Supabase MCP server** (project `uhqxyxglyuhmpxegqsrt`, per `memory/reference_supabase_project_id.md`) that Chris connects on some sessions, not all. The references read as always-available. Fix: clarify them as "the Supabase MCP `execute_sql` *when that server is connected*" + name the fallback (a `.select('<col>')` PostgREST probe with the service-role key) for sessions without it. Not env-dependent-stale, just under-specified.
 
 ## Open — prompt / doc-touch
 
