@@ -217,7 +217,12 @@ export async function persistGreenBean(
     lot_id: payload.lot_id,
     name: payload.name,
     producer: canonicalProducer,
-    origin: payload.origin ?? null,
+    // Cleanup-actions (Round-2 #2 / 2026-06-04): default origin from the
+    // resolved terroir's country when the payload omits it. origin is the
+    // human-facing country label; terroir.country is the canonical source the
+    // FK resolution already validated, so there's no reason to leave it NULL
+    // when the terroir block carried a country.
+    origin: payload.origin ?? payload.terroir?.country ?? null,
     region: payload.region ?? null,
     variety: payload.variety ?? null,
     process: payload.process ?? null,

@@ -14,7 +14,9 @@ export const patchExperimentInputSchema = {
   ),
   // UPSERT-key fields — patchable but rarely changed
   green_bean_id: z.string().uuid().optional().nullable(),
-  experiment_id: z.string().optional(),
+  experiment_id: z.string().optional().describe(
+    'Human-readable label like "MX-DEV-v1" — a no-space hyphen-joined slug (typically <LOT-PREFIX>-V<n>). Patchable but rarely changed. The response echoes experiment_id in canonical_values, plus an experiment_id_format_warning when the value contains whitespace (descriptive prose belongs in additional_notes / context, not the label).',
+  ),
   // Pass-through fields (mirror push_experiment)
   batch_ids: z.string().optional().nullable().describe(
     'Comma- or hyphen-separated Roest batch numbers participating in this experiment (e.g. "139, 140, 141"). Omit the field entirely to leave NULL at design time — do NOT pass the string "null" or "NULL" (those land as literal strings, not SQL NULL). log-roast.md STAGE 5 fills this in once V_n is roasted; design-time push_experiment / patch_experiment from log-cupping.md V_(n+1) design should omit.',
@@ -73,7 +75,7 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
     {
       title: 'Patch Experiment',
       description:
-        'Update / save / record / push field-level changes to an existing experiment by experiment_pk (the primary-key path). The companion INSERT path of the same domain UPSERTs by composite (green_bean_id, experiment_id) — that covers the iterative-design path; this Tool uses the PK so you can correct the experiment_id label itself or fix prose typos in observed_outcome_* / key_insight without composite-key matching. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find experiment_pk: call get_bean_pipeline (returns experiments[] with id keyed by experiment_id). 16 cross-batch fields per Sub Pages 6.1 (migration 052) — four families: updated_cup_prediction_a/b/c/d (post-roast), taste_for_a/b/c/d (cupping-table prep), delta_from_roast_a/b/c/d (vs recipe predictions), delta_from_cup_a/b/c/d (vs updated_cup_prediction_* if populated, else vs roast_recipes.predicted_cup). Returns { experiment_pk, updated_fields: [...], canonical_values? } — updated_fields echoes which columns landed; canonical_values echoes the values of enum-validated and format-checked fields (key_insight_confidence + winner, plus winner_format_warning when the value diverges from the "V<n><letter> (Batch <Roest#>)" slot-id format). canonical_values is OMITTED entirely from the response when no echo-tracked field was supplied — treat it as optional. Co-owned by Cupping Specialist (cup-side closure — delta_from_cup_* / winner / key_insight + key_insight_confidence / what_changes_going_forward / open_questions / additional_notes) + Roast Recorder (roast-side closure at log-roast STAGE 5 — observed_outcome_* / delta_from_roast_* / updated_cup_prediction_* / taste_for_*) per ADR-0011.',
+        'Update / save / record / push field-level changes to an existing experiment by experiment_pk (the primary-key path). The companion INSERT path of the same domain UPSERTs by composite (green_bean_id, experiment_id) — that covers the iterative-design path; this Tool uses the PK so you can correct the experiment_id label itself or fix prose typos in observed_outcome_* / key_insight without composite-key matching. Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. To find experiment_pk: call get_bean_pipeline (returns experiments[] with id keyed by experiment_id). 16 cross-batch fields per Sub Pages 6.1 (migration 052) — four families: updated_cup_prediction_a/b/c/d (post-roast), taste_for_a/b/c/d (cupping-table prep), delta_from_roast_a/b/c/d (vs recipe predictions), delta_from_cup_a/b/c/d (vs updated_cup_prediction_* if populated, else vs roast_recipes.predicted_cup). Returns { experiment_pk, updated_fields: [...], canonical_values? } — updated_fields echoes which columns landed; canonical_values echoes the values of enum-validated and format-checked fields (key_insight_confidence + winner + batch_ids + experiment_id, plus a sibling *_format_warning when a format-checked value diverges: winner from "V<n><letter> (Batch <Roest#>)", batch_ids from comma/hyphen-separated Roest numbers, experiment_id from a no-space hyphen-joined slug). canonical_values is OMITTED entirely from the response when no echo-tracked field was supplied — treat it as optional. Co-owned by Cupping Specialist (cup-side closure — delta_from_cup_* / winner / key_insight + key_insight_confidence / what_changes_going_forward / open_questions / additional_notes) + Roast Recorder (roast-side closure at log-roast STAGE 5 — observed_outcome_* / delta_from_roast_* / updated_cup_prediction_* / taste_for_*) per ADR-0011.',
       inputSchema: patchExperimentInputSchema,
     },
     withToolErrorLogging('patch_experiment', async (input) => {
@@ -120,6 +122,30 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
         const WINNER_FORMAT_RE = /^V\d+[A-D] \(Batch \d+\)$/i
         if (winnerStr !== '' && !WINNER_FORMAT_RE.test(winnerStr)) {
           canonical_values.winner_format_warning = `Expected "V<n><letter> (Batch <Roest#>)" per log-cupping.md STAGE 3. Got: "${winnerStr}". Verdict prose beyond the slot identifier belongs in additional_notes.`
+        }
+      }
+      // Cleanup-actions (Round-17 block2 #1 / 2026-06-04): extend the
+      // accept-and-warn shape to the other free-string fields that carry a
+      // canonical format. Same pattern as winner — accept the value, echo it,
+      // surface a non-blocking *_format_warning when it diverges so prose lands
+      // in the right field. batch_ids is comma/hyphen-separated Roest numbers;
+      // experiment_id is a no-space hyphen-joined slug (e.g. "MX-DEV-v1").
+      if (payloadObj.batch_ids !== undefined && payloadObj.batch_ids !== null) {
+        const batchStr = String(payloadObj.batch_ids)
+        canonical_values.batch_ids = batchStr
+        // Digits separated by comma / hyphen / whitespace only.
+        const BATCH_IDS_FORMAT_RE = /^\d+(\s*[,\-–—]\s*\d+)*$/
+        if (batchStr !== '' && !BATCH_IDS_FORMAT_RE.test(batchStr)) {
+          canonical_values.batch_ids_format_warning = `Expected comma- or hyphen-separated Roest batch numbers (e.g. "139, 140, 141"). Got: "${batchStr}". Non-numeric prose belongs in additional_notes.`
+        }
+      }
+      if (payloadObj.experiment_id !== undefined && payloadObj.experiment_id !== null) {
+        const expStr = String(payloadObj.experiment_id)
+        canonical_values.experiment_id = expStr
+        // Hyphen-joined label, no whitespace (e.g. "MX-DEV-v1").
+        const EXPERIMENT_ID_FORMAT_RE = /^\S+$/
+        if (expStr !== '' && !EXPERIMENT_ID_FORMAT_RE.test(expStr)) {
+          canonical_values.experiment_id_format_warning = `Expected a no-space hyphen-joined label (e.g. "MX-DEV-v1"). Got: "${expStr}". Descriptive prose belongs in additional_notes / context.`
         }
       }
       const out: {
