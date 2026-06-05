@@ -4,6 +4,8 @@ Latent self-improves when **(1) new rows sharpen interpretation of prior rows** 
 
 ## Amendment 2026-06-03 — Pattern J promoted from placeholder to defined (light formalization)
 
+**Governing principle:** the *why* behind this amendment + the whole anti-bloat half is the **formalization tax** ([ADR-0022](0022-formalization-tax-and-self-improvement-counterbalance.md), 2026-06-05) — this ADR is the *what* (the patterns), ADR-0022 is the *why* (the principle + the universal N=3 graduation threshold + the prescribed arbiter-shaped clawback shape).
+
 The case-study-driven deferral resolved. Three lived pruning exercises across three distinct doc-shapes worked the full shape-space: **001** CLAUDE.md (reference-doc → `extract` + `split`, PR #352), **002** CONTEXT-roasting.md (living-glossary → `consolidate` + `delete`, PR #365), **003** PRODUCT.md (roadmap → `archive` + `split` + `consolidate`, PR #368). All five sub-mechanism shapes — **extract / split / consolidate / archive / delete** — now have a standalone worked example. Full scoping + the case index live in [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md); the structured handoffs in [docs/sprints/pruning-cases/](docs/sprints/pruning-cases/).
 
 **Decision: light formalization, not a full mechanism build.** The strongest cross-case signal is that the **interpretive prune resists automation** — in all three, the operator reading the doc from first principles and re-clustering it was load-bearing. So Pattern J splits into an automated **trigger** half and an operator-led **response** half:
