@@ -248,6 +248,17 @@ export function modifierIndexUrl(modifier: string): string {
   return `/processes/modifiers/${modifierSlug(modifier)}`
 }
 
+/**
+ * Cross-link URL for a base-process value coming off a brew row (a plain
+ * string, not the `BaseProcess` union). Applies the canonical `kebab` so the
+ * 4 detail pages that build a "/processes/{base}" cross-link stop re-inlining
+ * the slug regex (Candidate 4 of the detail-page dedup audit). Identical output
+ * to `baseHubUrl` for the canonical bases, but accepts any string.
+ */
+export function processCrossLinkUrl(baseProcess: string): string {
+  return `/processes/${kebab(baseProcess)}`
+}
+
 export function signatureUrl(name: string): string {
   return `/processes/signatures/${signatureSlug(name)}`
 }

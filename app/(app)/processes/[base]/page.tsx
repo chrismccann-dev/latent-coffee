@@ -12,7 +12,7 @@
 //   4. Brew Archetypes (5-field grid from BaseProcessEntry.brewArchetype)
 //   5. What I've Learned About [Base] Coffees (SynthesisCard, kind=base)
 //   6. [Base] Coffees I Have Brewed (full list)
-//   7. Additional Information (CollapsibleBlock with FlavorNotes + 3 TagLinkLists)
+//   7. Additional Information (<AdditionalInfo>: flavor notes + 3 cross-link groups)
 //   8. Confidence
 
 import { createClient } from '@/lib/supabase/server'
@@ -28,12 +28,12 @@ import {
   compactRows,
   type MetaPair,
 } from '@/components/Ssp'
-import { TagLinkList } from '@/components/TagLinkList'
-import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
-import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import { AdditionalInfo } from '@/components/AdditionalInfo'
+import { DetailBackLink } from '@/components/DetailBackLink'
 import { ConfidenceCard } from '@/components/ConfidenceCard'
 import { CoffeesList } from '@/components/CoffeesList'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
+import { extractCrossLinks } from '@/lib/cross-links'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import {
@@ -44,6 +44,7 @@ import {
 import { aggregateBaseHub } from '@/lib/process-aggregation'
 import {
   parseBaseSlug,
+  baseSlug,
   modifierComboUrl,
   honeySubprocessUrl,
   signatureUrl,
@@ -51,7 +52,7 @@ import {
 } from '@/lib/process-routing'
 
 export function generateStaticParams() {
-  return BASE_PROCESSES.map((base) => ({ base: base.toLowerCase().replace(/[^a-z0-9]+/g, '-') }))
+  return BASE_PROCESSES.map((base) => ({ base: baseSlug(base) }))
 }
 
 export default async function BaseHubPage({ params }: { params: { base: string } }) {
@@ -82,26 +83,7 @@ export default async function BaseHubPage({ params }: { params: { base: string }
   const family = base === 'Wet-hulled' ? 'Other' : base
   const color = getFamilyColor(family)
   const sortedFlavors = aggregateFlavorNotes(brewList)
-
-  // Cross-link maps
-  const terroirMap = new Map<string, { id: string; country: string }>()
-  const cultivarMap = new Map<string, string>()
-  const roasterSet = new Set<string>()
-  for (const brew of brewList) {
-    if (brew.terroir?.country && brew.terroir.id) {
-      const key = brew.terroir.macro_terroir || brew.terroir.admin_region || brew.terroir.country
-      if (!terroirMap.has(key)) {
-        terroirMap.set(key, { id: brew.terroir.id, country: brew.terroir.country })
-      }
-    }
-    if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
-      cultivarMap.set(brew.cultivar.cultivar_name, brew.cultivar.id)
-    }
-    if (brew.roaster) roasterSet.add(brew.roaster)
-  }
-
-  const hasAdditional =
-    sortedFlavors.length > 0 || terroirMap.size > 0 || cultivarMap.size > 0 || roasterSet.size > 0
+  const links = extractCrossLinks(brewList)
 
   const archetypeRows = entry?.brewArchetype
     ? compactRows([
@@ -120,12 +102,7 @@ export default async function BaseHubPage({ params }: { params: { base: string }
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/processes"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Processes
-      </Link>
+      <DetailBackLink href="/processes">Processes</DetailBackLink>
 
       {/* Header */}
       <SspTopBar roaster="Base Process" kind="Process Hub" />
@@ -224,29 +201,15 @@ export default async function BaseHubPage({ params }: { params: { base: string }
       <CoffeesList title={`${base} Coffees I Have Brewed`} brews={brewList} />
 
       {/* Additional Information */}
-      {hasAdditional && (
-        <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
-          <TagLinkList
-            title="CULTIVARS EXPLORED"
-            items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
-              key: name, label: name, href: `/cultivars/${id}`,
-            }))}
-          />
-          <TagLinkList
-            title="TERROIRS EXPLORED"
-            items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
-              key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
-            }))}
-          />
-          <TagLinkList
-            title="ROASTERS EXPLORED"
-            items={Array.from(roasterSet).map((r) => ({
-              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
-            }))}
-          />
-        </CollapsibleBlock>
-      )}
+      <AdditionalInfo
+        flavors={sortedFlavors}
+        links={links}
+        sections={[
+          { dimension: 'cultivars' },
+          { dimension: 'terroirs' },
+          { dimension: 'roasters' },
+        ]}
+      />
 
       {/* Confidence */}
       <ConfidenceCard brewCount={brewList.length} />

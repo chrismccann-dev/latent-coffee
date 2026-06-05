@@ -15,12 +15,12 @@ import {
   SspShead,
   type MetaPair,
 } from '@/components/Ssp'
-import { TagLinkList } from '@/components/TagLinkList'
-import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
-import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import { AdditionalInfo } from '@/components/AdditionalInfo'
+import { DetailBackLink } from '@/components/DetailBackLink'
 import { ConfidenceCard } from '@/components/ConfidenceCard'
 import { CoffeesList } from '@/components/CoffeesList'
 import { aggregateFlavorNotes } from '@/lib/flavor-registry'
+import { extractCrossLinks } from '@/lib/cross-links'
 import SynthesisCard from '@/components/SynthesisCard'
 import { computeInputMaxUpdatedAt } from '@/lib/synthesis/inputUpdatedAt'
 import {
@@ -65,24 +65,7 @@ export default async function ModifierIndexPage({
   const entry = getModifierEntry(parsed.name)
   const color = axisColor(parsed.axis)
   const sortedFlavors = aggregateFlavorNotes(agg.all)
-
-  const terroirMap = new Map<string, { id: string; country: string }>()
-  const cultivarMap = new Map<string, string>()
-  const roasterSet = new Set<string>()
-  for (const brew of agg.all) {
-    if (brew.terroir?.country && brew.terroir.id) {
-      const key = brew.terroir.macro_terroir || brew.terroir.admin_region || brew.terroir.country
-      if (!terroirMap.has(key)) {
-        terroirMap.set(key, { id: brew.terroir.id, country: brew.terroir.country })
-      }
-    }
-    if (brew.cultivar?.cultivar_name && brew.cultivar.id) {
-      cultivarMap.set(brew.cultivar.cultivar_name, brew.cultivar.id)
-    }
-    if (brew.roaster) roasterSet.add(brew.roaster)
-  }
-  const hasAdditional =
-    sortedFlavors.length > 0 || terroirMap.size > 0 || cultivarMap.size > 0 || roasterSet.size > 0
+  const links = extractCrossLinks(agg.all)
 
   const baseEntries = (Object.entries(agg.byBase) as [BaseProcess, number][])
     .filter(([_, c]) => (c ?? 0) > 0)
@@ -96,12 +79,7 @@ export default async function ModifierIndexPage({
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/processes"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Processes
-      </Link>
+      <DetailBackLink href="/processes">Processes</DetailBackLink>
 
       {/* Header */}
       <SspTopBar roaster={`${parsed.axis} modifier`} kind="Modifier Index" />
@@ -181,29 +159,15 @@ export default async function ModifierIndexPage({
       />
 
       {/* Additional Information */}
-      {hasAdditional && (
-        <CollapsibleBlock title="ADDITIONAL INFORMATION">
-          <FlavorNotesByFamily notes={sortedFlavors} title="FLAVOR NOTES I HAVE EXPERIENCED" />
-          <TagLinkList
-            title="CULTIVARS EXPLORED"
-            items={Array.from(cultivarMap.entries()).map(([name, id]) => ({
-              key: name, label: name, href: `/cultivars/${id}`,
-            }))}
-          />
-          <TagLinkList
-            title="TERROIRS EXPLORED"
-            items={Array.from(terroirMap.entries()).map(([name, { id, country }]) => ({
-              key: name, label: `${country} / ${name}`, href: `/terroirs/${id}`,
-            }))}
-          />
-          <TagLinkList
-            title="ROASTERS EXPLORED"
-            items={Array.from(roasterSet).map((r) => ({
-              key: r, label: r, href: `/roasters/${encodeURIComponent(r)}`,
-            }))}
-          />
-        </CollapsibleBlock>
-      )}
+      <AdditionalInfo
+        flavors={sortedFlavors}
+        links={links}
+        sections={[
+          { dimension: 'cultivars' },
+          { dimension: 'terroirs' },
+          { dimension: 'roasters' },
+        ]}
+      />
 
       {/* Confidence */}
       <ConfidenceCard brewCount={agg.all.length} />
