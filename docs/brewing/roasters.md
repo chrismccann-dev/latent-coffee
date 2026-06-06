@@ -277,9 +277,10 @@ Split out of BREWING.md SECTION 2 on 2026-04-29 (Sprint 2.4) so each roaster car
 | **Location**            | Tokyo, Japan                                                                                               |
 | **Strategy Tag**        | BALANCED                                                                                                   |
 | **EG-1 Starting Range** | 6.5-6.4                                                                                                    |
-| **House Style**         | 260g / 86°C / 15g. Bloom 70g, stir 3x. Pour 1: 0:30 to 140g. Pour 2: 1:20, 50g. Target 2:30.               |
-| **Brew Guide**          | Official (via Reddit).                                                                                     |
-| **Notes**               | 86°C is standout signal - deliberately low. If cups taste flat, step up to 88-90°C before adjusting grind. |
+| **House Style (my EG-1)** | 260g / 86°C / 15g. Bloom 70g, stir 3x. Pour 1: 0:30 to 140g. Pour 2: 1:20, 50g. Target 2:30.            |
+| **Official Recipe**     | Origami + Kalita Wave + gold flow-control insert. 14.5g / 260g water / 86-90°C. Two 30g blooms (0:00, 0:20), two 100g pours (0:50, ~1:30). Stop at ~200-220g beverage YIELD (pull carafe early while it still drips) - real ratio ~1:16, not the ~1:18 it looks like. Target 2:30-2:45, ~1.5 TDS. Origami insert subs: April dripper or a 49-51mm puck screen. |
+| **Brew Guide**          | Official (website + 2026 Osaka field transcript).                                                          |
+| **Notes**               | 86°C is standout signal - deliberately low; the developed-light roast (Agtron ~94) makes low temp + high contact safe rather than under-extracting. If cups taste flat, step up to 88-90°C before adjusting grind. The yield-cutoff is the trap: drain the full 260g and the cup goes weak/thin. Pre-wet the filter. Fruit-intensity house (naturals/anaerobics/co-ferments/infused, expressive Geisha for washed); optional chilling ball helps loud fruity coffees, hurts nutty/caramel profiles. |
 
 ## Tanat Coffee
 

@@ -997,25 +997,25 @@ _Amsterdam, Netherlands_ · **BALANCED**
 #### Glitch Coffee
 _Tokyo, Japan_ · **BALANCED**
 
-- **Roast style:** Light (Japanese clarity, slightly more developed than Nordic)
-- **Development bias:** Moderate development, relatively accessible solubility; designed for lower-temp extraction
+- **Roast style:** Light (Japanese developed-light; Agtron ~94 measured - darker than Nordic ultra-light at 100-110+, but still light by Western standards; shop sells "underdeveloped" t-shirts as an in-joke about being light in a Japanese context)
+- **Development bias:** Moderate development; solubles are easier to reach than Nordic ultra-light, which is what makes low-temp extraction viable rather than under-extracting
 - **Rest curve:** ~2-3 weeks typical; relatively forgiving across rest
-- **Primary driver:** Temperature (downward control)
-- **Extraction purpose:** Reduce harshness and highlight sweetness/clarity by lowering extraction temperature
-- **House style:** V60 with low temperature, moderate pours, controlled flow; avoids boiling water to prevent over-extraction
+- **Primary driver:** Low temperature + contact-time control (low temp is the bitterness ceiling; long contact + bed agitation is the floor)
+- **Extraction purpose:** Amplify sweet, thick, clear fruit intensity while capping bitterness through low brew temperature; deliberately trades "correct" clarity-style extraction for in-your-face fruit
+- **House style:** Origami dripper (plastic) + Kalita Wave filter + gold flow-control insert; two small 30g blooms then two large 100g pours, deliberately high/agitating pours, low temp; pour 260g total but pull the carafe at ~200-220g beverage yield (not full drawdown). Optional chilling ball (Nucleus Paragon) for loud fruity coffees.
 - **Brew guide:** [Official (Website)](https://shop.glitchcoffee.com/en/pages/brew-guide)
 - **Brew guide status:** official
-- **Recipe baseline:** temp=84-90, dose=15, water=260, ratio=1:17, time=2:15-2:45, agitation=Medium
-- **Primary brewer:** V60
-- **Filter type:** Cone (Hario)
-- **Extraction intent:** Balanced (20-21%)
-- **Failure mode:** Under-extraction presents as muted or dull; over-extraction presents quickly as bitterness if temp too high
+- **Recipe baseline:** temp=86-90, dose=14.5, water=260 input / ~200-220 yield, ratio=~1:18 on paper / ~1:16 effective, time=2:30-2:45, agitation=Medium-High
+- **Primary brewer:** Origami (April dripper or a 49-51mm puck screen are viable substitutes for the gold insert)
+- **Filter type:** Kalita Wave paper + gold flow-control insert
+- **Extraction intent:** Balanced, high sensory intensity (~1.5 TDS target measured in-shop)
+- **Failure mode:** Too hot or too fine tips into bitterness/harshness; too coarse or draining the full 260g (missing the yield cutoff) tastes thin/weak
 - **Over-extraction tolerance:** Low-Medium
-- **Process sensitivity:** Washed: balanced; Natural: benefits from slightly higher temp; Processed: requires careful temp increase to avoid thinness
-- **Brew adjustment method:** Temp
-- **Calibration role:** Low-Temp Extraction Benchmark
+- **Process sensitivity:** Naturals / anaerobics / co-ferments / infused: ideal fit (loud fruit is the house identity); Washed: few, mostly expressive Geisha lots with intense peach/citric character; nutty/caramel coffees benefit least from the chilling-ball workflow
+- **Brew adjustment method:** Temp + yield cutoff + grind
+- **Calibration role:** Low-Temp Fruit-Intensity Benchmark
 - **Confidence:** High
-- **Notes:** Core identity is using lower temperature (~85-88°C common) to control extraction; opposite of Sey/Dak approach; temp is primary dial, not grind or agitation; raising temp increases both intensity and risk quickly
+- **Notes:** Core identity is low brew temp (86-89°C) making aggressive contact time + bed agitation safe, producing sweet/thick/clean fruit rather than clarity-style separation. The buried detail that throws people: stop the brew at ~200-220g beverage yield (carafe pulled while the dripper still drips), so the real ratio is ~1:16 not the ~1:18 it looks like on paper - a dual input/output scale (e.g. Timemore dual-sensor) tracks this, or just pour 70g instead of 100g on the final pour and drain fully. Pour timing: 30g at 0:00, 30g at 0:20, 100g at 0:50 (high pour for agitation), final 100g to 260g at ~1:30. Pre-wet the filter to remove paper off-notes; bags ship with a pre-ground calibration sample to dial grind by eye. Chilling ball helps punchy fruity coffees, hurts nutty/caramel profiles. Opposite of the Sey/Dak high-extraction approach. Sourced from a 2026 Osaka-branch field transcript + Glitch's published recipe.
 
 #### Little Wolf Coffee
 _Massachusetts, USA_ · **BALANCED → CLARITY**
