@@ -59,14 +59,15 @@ Roasters whose default is to protect clarity. Low-agitation, conservative pour s
 - **VWI by CHADWANG**
 - **XLIII Coffee Roasters**
 
-### Balanced (15)
+### Balanced (16)
 
-Roasters who target moderate extraction (20-22% EY) as the home position. Some skew toward clarity on cooling (BALANCED → CLARITY); most are stable around the center. 15 entries.
+Roasters who target moderate extraction (20-22% EY) as the home position. Some skew toward clarity on cooling (BALANCED → CLARITY); most are stable around the center. 16 entries.
 
 - **Café Estelar**
 - **Coava Coffee Roasters**
 - **Coffee Supreme**
 - **Colibri Coffee Roasters**
+- **Component Coffee**
 - **Father’s Coffee Roastery**
 - **Five Elephant Coffee** — BALANCED → CLARITY
 - **Friedhats Coffee**
@@ -113,11 +114,10 @@ Roasters who intentionally push extraction. Includes BALANCED → FULL (most), F
 - **Subtext Coffee**
 - **The Picky Chemist**
 
-### Varies (6)
+### Varies (5)
 
-Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 6 entries.
+Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 5 entries.
 
-- **Component Coffee**
 - **Moonwake Coffee Roasters**
 - **Scenery Coffee**
 - **Strait Coffee** — BALANCED / VARIES
@@ -911,6 +911,19 @@ _Everett, WA, USA_ · **BALANCED** · archive: 2 brews
 - **Calibration role:** Generalist baseline
 - **Confidence:** Low
 - **Notes:** Limited data; avoid overfitting
+
+#### Component Coffee
+_Visalia, CA, USA_ · **BALANCED** · archive: 1 brew
+
+- **Roast style:** Light-medium
+- **Development bias:** Moderate development; accessible solubility
+- **Rest curve:** 1-3 weeks typical (inferred); likely earlier-drinking than ultra-light roasters
+- **Extraction purpose:** Produce sweet, approachable, repeatable cups for cafe and subscription drinkers
+- **House style:** No public brew guide; cafe/subscription-oriented roaster with broad accessibility rather than technical brewing doctrine
+- **Brew guide:** None (No formal guide)
+- **Brew guide status:** none
+- **Calibration role:** Accessible Specialty Baseline
+- **Notes:** Component operates shops in Visalia, Fresno, and Tulare and sells coffee/subscriptions online; no brew guide found, so treat as a generalist specialty roaster rather than a clarity-first or system roaster. Recipe baseline / brewer / filter / extraction intent left unset (genuinely unknown, not pending) per Chris.
 
 #### Father’s Coffee Roastery
 _Prague, Czech Republic_ · **BALANCED**
@@ -1730,12 +1743,6 @@ _Chaudfontaine, Belgium_ · **SYSTEM** · archive: 1 brew
 ---
 
 ### Varies
-
-#### Component Coffee
-_Location pending_ · **VARIES** · archive: 1 brew
-
-- **Brew guide status:** none
-- **Notes:** Skeleton entry. Promoted from the taxonomy override queue 2026-06-06 against brew dc886312 (Colombia Terra Pink Bourbon Anaerobic Natural, Huila community lot). Rich fields (location / country / roast style / development bias / house style / recipe baseline / etc.) pending Chris's roaster info; surfaces via `list_skeleton_entries` for the next enrichment pass.
 
 #### Moonwake Coffee Roasters
 _San Jose, CA, USA_ · **VARIES** · archive: 10 brews

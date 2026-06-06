@@ -2553,17 +2553,25 @@ export const ROASTERS: RoasterEntry[] = [
     bmrHouseStyle: 'Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
   },
   {
-    // Skeleton entry — promoted from taxonomy_overrides_queue 2026-06-06
-    // (queue_id 7d7af4a1) against brew dc886312 (Colombia Terra Pink Bourbon
-    // Anaerobic Natural, Huila community lot). Rich fields pending Chris's
-    // roaster info; surfaces via list_skeleton_entries for the next enrichment
-    // pass. VARIES is a placeholder strategy tag, not a characterization.
+    // Enriched 2026-06-06 (arbiter session) from Chris's roaster CSV. Promoted
+    // from taxonomy_overrides_queue 7d7af4a1 against brew dc886312. Intentionally
+    // sparse — cafe/subscription roaster with no published brewing doctrine; the
+    // recipe-baseline + brewer/filter + intent/tolerance fields are genuinely
+    // unknown (not omitted-pending), so they stay unset rather than invented.
     name: 'Component Coffee',
-    strategyTag: 'VARIES',
+    location: 'Visalia, CA',
+    country: 'USA',
+    roastStyle: 'Light-medium',
+    developmentBias: 'Moderate development; accessible solubility',
+    restCurve: '1-3 weeks typical (inferred); likely earlier-drinking than ultra-light roasters',
+    strategyTag: 'BALANCED',
+    extractionPurpose: 'Produce sweet, approachable, repeatable cups for cafe and subscription drinkers',
+    houseStyle: 'No public brew guide; cafe/subscription-oriented roaster with broad accessibility rather than technical brewing doctrine',
     brewGuideStatus: 'none',
-    skeleton: true,
+    brewGuideType: 'No formal guide',
+    calibrationRole: 'Accessible Specialty Baseline',
     notes:
-      'Skeleton entry. Promoted from taxonomy_overrides_queue 2026-06-06 against brew dc886312 (Colombia Terra Pink Bourbon Anaerobic Natural, Huila community lot). Rich fields pending Chris\'s roaster info.',
+      'Component operates shops in Visalia, Fresno, and Tulare and sells coffee/subscriptions online; no brew guide found, so treat as a generalist specialty roaster rather than a clarity-first or system roaster.',
   },
 ]
 
