@@ -2552,6 +2552,19 @@ export const ROASTERS: RoasterEntry[] = [
     notes: 'Roest L200 Ultra, counterflow, 100g batches. Measurement: Lighttells CM-200 (Agtron WB+ground, grind PSD), MD-500 (moisture+density). Enriched 2026-06-03 (arbiter session) from Chris\'s roaster record; sparse by nature (self-roaster, no fixed house brew recipe).',
     bmrHouseStyle: 'Roast for brewing tolerance, brew for intensity. Roasts designed to contain many possible cups, not demand one narrow set of conditions.',
   },
+  {
+    // Skeleton entry — promoted from taxonomy_overrides_queue 2026-06-06
+    // (queue_id 7d7af4a1) against brew dc886312 (Colombia Terra Pink Bourbon
+    // Anaerobic Natural, Huila community lot). Rich fields pending Chris's
+    // roaster info; surfaces via list_skeleton_entries for the next enrichment
+    // pass. VARIES is a placeholder strategy tag, not a characterization.
+    name: 'Component Coffee',
+    strategyTag: 'VARIES',
+    brewGuideStatus: 'none',
+    skeleton: true,
+    notes:
+      'Skeleton entry. Promoted from taxonomy_overrides_queue 2026-06-06 against brew dc886312 (Colombia Terra Pink Bourbon Anaerobic Natural, Huila community lot). Rich fields pending Chris\'s roaster info.',
+  },
 ]
 
 // Sprint 12 / CR-4 (2026-05-21): typed helper for the list_skeleton_entries
