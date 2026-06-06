@@ -276,7 +276,7 @@ Post-cupping is the natural moment for cluster-doc updates — cup signal is the
 - **Cross-coffee pattern** (not protocol-level) -> `skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` (APPEND with a confidence marker matching `key_insight_confidence`).
 - **Per-lot FC ceiling calibration** -> the FC Floor & Ceiling subsection of the same cross-coffee-insights doc (APPEND with marker).
 
-Fetch live anchors via `read_doc` (or `read_doc_section`) BEFORE drafting. Submit ONE multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` (the `'roasting.md'` target is deprecated). Citations: `[{section_anchor, op, proposed_text, current_text, target_doc?}]`.
+Fetch live anchors via `read_doc` (or `read_doc_section`) BEFORE drafting. Submit ONE multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` (the `'roasting.md'` target is deprecated). Citations: `[{section_anchor, operation, proposed_text, current_text, rationale, target_doc?}]` (the tool's citation field is named `operation`, NOT `op`; `rationale` is also required per citation).
 
 **Skip** and report why when downstream evidence is imminent: SPG fired (leading-slot identity provisional); V_(n+1) is designed to directly test the insight; or `key_insight_confidence` is Low (Low belongs in `additional_notes`, not cluster docs — the CCIL append threshold is Medium minimum). Print `STAGE 7: skipped - <reason>`. Don't fabricate a proposal to fill the stage. AVOID editing close-out artifacts (Recently Closed Lots, Reference Brew Recipes) — those are `close-lot.md`'s.
 
