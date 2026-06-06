@@ -20,3 +20,20 @@ Chris flagged it 2026-06-05 ("before I forget... may be its own concept"): he co
 - If it changes claude.ai-facing substrate materially, note the claude.ai grilling review (likely minor — it's a Claude-Code/design-process concept).
 
 Self-aware note: this grill is *itself* a concrete example of concrete-example-first (Chris walked the lived instances — the design-system reconciliation, the PRODUCT.md refactor, the CCIL re-architecture, this whole session — before naming it). Lampshade it in the headword if it helps.
+
+---
+
+## Outcome (resolved 2026-06-05)
+
+All four resolution points locked with Chris (audio-ratified):
+
+1. **Name:** `concrete-example-first`. Rejected: "example-first design" (drops *concrete/lived*), "walk-the-example" (names step one only), "lived-example-first" (strong runner-up; "concrete" names the operative concrete↔abstract axis), "show-don't-tell", "rule of three" (that's the threshold's count).
+2. **Graduation threshold (N=3):** human-facing generative **twin**. Feeder → gate — concrete-example-first *produces* the worked instances; the threshold *counts* them and gates the leap. Shared N=3 dial, different object. Gate-family kin: Simulated Pourover Gate, doc-size tripwire (stake-in-the-ground, not auto-act).
+3. **Prototype-as-input-not-canon:** interrelated **sibling** (not parent/child). Both express *lived/concrete/internal is canonical; abstract/external is input you generalize-from or pull-from and test, never canon you reshape your reality to fit.* concrete-example-first = construction axis; prototype-as-input-not-canon = consumption axis. The shared-root umbrella was **considered and parked at N<3** — mint only if it recurs 3×.
+4. **Home:** headword in [docs/reference/mcp-architecture.md](docs/reference/mcp-architecture.md) + one-line pointer in [ADR-0022 § Mechanism 1](docs/adr/0022-formalization-tax-and-self-improvement-counterbalance.md). **No standalone ADR** (vocabulary, not a hard-to-reverse decision).
+
+Two enrichments past the original flag, surfaced in Chris's audio: **do-it-for-real (forcing function)** and **generalize-from-lived-not-imagined** (the plan/execute deviation rationale; the architecture-review skill is the canonical instance — run on 3 real surfaces, lived outcomes fed back, then graduated).
+
+Also logged (do **not** act now): mcp-architecture.md scope-drift re-home candidate → future `CONTEXT-system.md`, deferred until a doc-size tripwire fires ([grilling-queue § Open candidates](docs/grilling-queue.md)).
+
+claude.ai grilling review: minor — the headword is served via `docs://reference/mcp-architecture.md` but concrete-example-first is a Claude-Code/design-process concept claude.ai doesn't operationally invoke mid-workflow. No instruction edit needed; flag at next review.
