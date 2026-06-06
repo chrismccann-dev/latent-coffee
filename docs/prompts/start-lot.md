@@ -145,7 +145,7 @@ After (c) returns, patch the matching `roast_recipes` row via `patch_roast_recip
 
 If the lot warrants a new entry (most do), propose creating `docs/skills/roasting-historian/cluster/active-lots/<lot-slug>.md` via `propose_doc_changes`. The file body is what would have been the `### LOT-CODE - Description` block in the legacy ROASTING.md: working hypothesis, V1 framing, carry-forward learnings being tested, any per-lot protocol deviations.
 
-Required fields: top-level `target_doc: "skills/roasting-historian/cluster/active-lots/<lot-slug>.md"` (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing), top-level `summary` (one-line, the arbiter sees this when triaging), `citations: [{section_anchor, op: "append", proposed_text}]`. Optional `source = {kind: "session", id: "<lot_id V1 intake>"}`.
+Required fields: top-level `target_doc: "skills/roasting-historian/cluster/active-lots/<lot-slug>.md"` (`'roasting.md'` is deprecated post Wave 4 PR 4b per ARBITER.md § target_doc routing), top-level `summary` (one-line, the arbiter sees this when triaging), `citations: [{section_anchor, operation: "append", proposed_text, rationale}]` (the citation field is named `operation`, NOT `op`; `rationale` is required per citation). Optional `source = {kind: "session", id: "<lot_id V1 intake>"}`.
 
 If unsure which `<lot-slug>` to use, run `list_docs(prefix="skills/roasting-historian/cluster/active-lots/")` to see the current naming convention. This is a targeted lookup against the existing per-lot files — don't fetch the Master Coordinator catalog for this; the catalog is reserved for cross-domain proposal-routing at lifecycle close (see `close-lot.md` STAGE 5 + `one-shot-closeout.md` STAGE 5).
 
