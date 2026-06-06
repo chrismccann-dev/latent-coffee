@@ -5,7 +5,7 @@
 **Lot:** RWA-NOVA-NAT21-RB-2026
 **Status:** Closed (2026-06-06). V1 + V2 closed via Path A; V2 SPG (2026-06-04) resolved 194 (v2b) as the reference roast; optimized brew dialed in to Hybrid (Intensity-Clarity Split) on April Switch at brewing-side start-brew session (2026-06-06). Lot reached Resolved state via close-lot.md on this date.
 
-**See closed-lot learnings:** `docs/skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md` (deferred artifact - path needs SKILL_FILES registration before propose_doc_changes can target it; content drafted at close-lot.md STAGE 7).
+**See closed-lot learnings:** [learnings/rwa-nova-nat21-rb-2026.md](docs/skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md) (registered + seeded 2026-06-06).
 **Cultivar:** Red Bourbon
 **Terroir:** Rwanda / Northern Province / Virunga foothills (terroir_provenance=canonical as of 2026-05-06)
 **Producer:** Agnes Mukamushinja & Felix Hitayezu / Nova Washing Station (producer_override; tier-3, awaiting registry research)
