@@ -5,7 +5,7 @@
 **Last adopted:** 2026-04-24
 **Adoption path:** Authored taxonomy (Chris, 2026-04-23 CSV pass + 2026-04-24 enrichment) drawing on roaster-published brew guides, BMR roaster reference cards, and the 55-brew corpus. First taxonomy port without a DB FK column — `brews.roaster` is text-only; canonical enforcement is code-and-validation only, no migration to a `roasters` table.
 
-Canonical roaster reference for the latent-coffee app. **73 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md), sprint 1h structural port.
+Canonical roaster reference for the latent-coffee app. **74 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md), sprint 1h structural port.
 
 **Composition:** Each roaster is a single canonical name (no nested hierarchy like Region's Country → Macro). The rich shape captures 30 fields per entry: location/country, roast style + development bias + rest curve, strategy tag + family, primary driver / extraction purpose, house style + brew guide status (3-state: official / implied / none — Sub-sprint 4b Bundle B 2026-05-28) + brew guide link, recipe baseline (temp / dose / water / ratio / time / agitation), brewer + filter type, extraction intent + failure mode + tolerance, process sensitivity, brew adjustment method, calibration role, confidence level, and free-text notes. Plus optional `displayName` for tight UI surfaces (brew cards) and `bmrHouseStyle` / `bmrNotes` authored prose preserved verbatim from the prior 21-entry registry where richer than CSV.
 
@@ -113,10 +113,11 @@ Roasters who intentionally push extraction. Includes BALANCED → FULL (most), F
 - **Subtext Coffee**
 - **The Picky Chemist**
 
-### Varies (5)
+### Varies (6)
 
-Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 5 entries.
+Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 6 entries.
 
+- **Component Coffee**
 - **Moonwake Coffee Roasters**
 - **Scenery Coffee**
 - **Strait Coffee** — BALANCED / VARIES
@@ -1729,6 +1730,12 @@ _Chaudfontaine, Belgium_ · **SYSTEM** · archive: 1 brew
 ---
 
 ### Varies
+
+#### Component Coffee
+_Location pending_ · **VARIES** · archive: 1 brew
+
+- **Brew guide status:** none
+- **Notes:** Skeleton entry. Promoted from the taxonomy override queue 2026-06-06 against brew dc886312 (Colombia Terra Pink Bourbon Anaerobic Natural, Huila community lot). Rich fields (location / country / roast style / development bias / house style / recipe baseline / etc.) pending Chris's roaster info; surfaces via `list_skeleton_entries` for the next enrichment pass.
 
 #### Moonwake Coffee Roasters
 _San Jose, CA, USA_ · **VARIES** · archive: 10 brews
