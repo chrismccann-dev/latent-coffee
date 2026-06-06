@@ -12,6 +12,18 @@ When an item resolves: move it to [docs/sprints/shipped.md](docs/sprints/shipped
 
 ## Active issues / incomplete substrate
 
+### `CONTEXT-brewing.md` modifier list stale (4 → 5; rename + `equipment` missing)
+
+**Status:** substrate-currency miss; surfaced 2026-06-05 claude.ai grilling review (Component 1).
+
+`CONTEXT-brewing.md:20` (the **Modifier** glossary entry) still reads *"Four canonical types post-v8.5: `output_selection`, `inverted_temperature_staging`, `aroma_capture`, `role_based_pulse`."* Shipped reality per `lib/extraction-modifiers.ts` (write-side source of truth) is **five**: `output_selection`, `thermal_staging` (renamed from `inverted_temperature_staging`, alias-safe), `aroma_capture`, `role_based_pulse`, `equipment` — both the rename and `equipment` landed in Sub-sprint 4c (2026-05-28). The #399 Thermal-Staging rename sweep hit the cluster docs but **missed CONTEXT-brewing.md**, a missed hop in the 4c/#399 six-actor trace. claude.ai reads this file as a `docs://` Resource, so the stale Resource re-feeds the old vocab even after the project-memory fix. **Do NOT** rename the "Temperature-Staged" Hybrid *sub-form* (CONTEXT-brewing.md:28 / hybrid.md) — that's a different concept; the rename was modifier-only. CONTEXT is grilling-grown, so land this as a currency correction at the next brewing grill (or a targeted fix PR) rather than bulk-authoring.
+
+### `log-cupping-stage0-migration.md` not registered in `lib/mcp/docs.ts`
+
+**Status:** latent break-glass gap, low urgency; surfaced 2026-06-05 claude.ai grilling review (Component 1).
+
+The STAGE 0 pre-rewrite migration procedure was extracted from `log-cupping.md` (pruning case 006) into `docs/prompts/log-cupping-stage0-migration.md`, but the path is **not** in `docs.ts` — so if STAGE 0 detection fires (a pre-rewrite lot re-cupped), claude.ai is told to pull a doc it cannot fetch as a Resource. Low urgency because no pre-rewrite lots remain on live state today, but it violates the "register reference docs in MCP same PR" rule. Register the path (+ confirm `next.config.js` `outputFileTracingIncludes` coverage via `npm run check:mcp-bundle`).
+
 ### Missing lifecycle state: pourover packet handed off, awaiting brew-side completion
 
 **Status:** deferred to the Lot Coordinator + V-Set Assistant sprint (Chris audio 2026-06-03; kept as-is for now).
