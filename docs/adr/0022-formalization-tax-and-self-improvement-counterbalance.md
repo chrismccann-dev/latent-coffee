@@ -24,6 +24,8 @@ N=3 is the **universal dial** across every surface that was previously running i
 
 **Graduation is provisional, not terminal.** A graduated rule is itself a formalization, so it is taxed too. Keep collecting examples 4, 5, 6+; if the later evidence diverges, the rule is subject to **edit / prune / delete**. Nothing is promoted-and-forgotten — the clawback mechanism (below) applies to rules, not just docs.
 
+**The human-facing generative twin of this gate is concrete-example-first.** The graduation threshold is the *gate on the substrate* (when an abstraction may promote); **concrete-example-first** is the *generative reasoning method* Chris runs to feed it (walk and actually build/run ≥3 whole lived instances, then generalize up from what actually happened, not from a guessed general). Feeder → gate; both share the N=3 dial. Definition + `_Avoid_` line live as a headword in [docs/reference/mcp-architecture.md](docs/reference/mcp-architecture.md) (no standalone ADR — it is vocabulary, not a hard-to-reverse decision); see also its interrelated sibling **prototype-as-input-not-canon** (the debate method below).
+
 ## Mechanism 2 — Arbiter-shaped clawback: the cleanup (prescriptive template)
 
 The clawback half (pruning / deleting / refactoring / archiving) reclaims the bloat that accretes as the system formalizes. **Every clawback mechanism MUST be built to one prescribed shape** — because a clawback mechanism that *auto-acts* is itself a heavy formalization (an autonomous agent editing substrate is a big standing rule with big second-order risk). The mechanism keeps its own footprint cheap by splitting into:
