@@ -103,7 +103,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** arch (MCP / arbiter API)
 - **Recurrence:** 3 (Round 21: UGA-MH-ELGON one-shot learnings + calibrations; RWA-NOVA-NAT21-RB Bukure; COS-HIG-BOR Higuito sibling — all orphaned)
 - **Criticality:** high
-- **Status:** open (OBSERVING — Chris call 2026-06-05: file-and-watch, act at 3+ close-outs; leaning option (b) arbiter ticket from STAGE 5)
+- **Status:** planned (plan-feedback 2026-06-06 — Chris confirmed 3x trigger met, build option (b); brief: docs/sprints/per-lot-file-registration-kickoff.md)
 - **Source:** master log #33 (Round 21)
 - **Body:** one-shot-closeout.md + close-lot.md route close-out narrative to `cluster/learnings/<lot-slug>.md` + `cluster/one-shot-calibrations/<lot-slug>.md`, but both reject ("Unknown skills target... Register in lib/mcp/docs.ts SKILL_FILES first"). Every closed lot orphans its canonical-home content. **Root cause of the "doc proposal couldn't land" friction — keystone of the doc-write-ergonomics cluster.** Candidates: (a) propose_doc_changes auto-registers a newly-named lot file under whitelisted prefixes (`cluster/learnings/`, `cluster/one-shot-calibrations/`); (b) STAGE 5 emits an arbiter ticket for registration + seeding. Interim option-(b) walk ran clean twice (Higuito cos-hig at R10; Bukure rwa-nova PR #411) — supports (b) as the standing fix when the 3x trigger formalizes.
 

@@ -13,6 +13,23 @@ import {
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
 
+// Net-new per-lot files (closed-lot learnings / one-shot calibrations) land via the
+// per-lot-file-registration arbiter ticket flow (close-lot / one-shot-closeout STAGE 5
+// -> ARBITER.md § Per-lot file registration tickets), NOT via propose_doc_changes.
+// When a rejected skills/ target is a well-formed path under one of these prefixes,
+// the rejection points the operator at the ticket flow instead of a bare "register
+// first" (feedback-backlog #33 catch-time -> hint-time move).
+const PER_LOT_REGISTRATION_PREFIXES = [
+  'skills/roasting-historian/cluster/learnings/',
+  'skills/roasting-historian/cluster/one-shot-calibrations/',
+] as const
+
+function isPerLotRegistrationPath(target: string): boolean {
+  return PER_LOT_REGISTRATION_PREFIXES.some(
+    (prefix) => target.startsWith(prefix) && target.slice(prefix.length).match(/^[^/]+\.md$/) !== null,
+  )
+}
+
 // Cheap fuzzy-match for anchor "did you mean" hints (#R50). Returns the
 // best candidate from the doc's sections list when the supplied anchor
 // doesn't resolve. Score = lowercase substring containment first, then
@@ -240,6 +257,12 @@ function normalizeTargetDoc(
     // first.
     const uri = `docs://${trimmed}`
     if (!isKnownDoc(uri)) {
+      if (isPerLotRegistrationPath(trimmed)) {
+        return {
+          ok: false,
+          error: `'${trimmed}' is a net-new per-lot file under a registration-whitelisted prefix. Do not retry propose_doc_changes; emit a per-lot-file-registration arbiter ticket (close-lot / one-shot-closeout STAGE 5) so the path is registered + seeded.`,
+        }
+      }
       return {
         ok: false,
         error: `Unknown skills target: '${trimmed}'. Register the path in lib/mcp/docs.ts SKILL_FILES first, then re-attempt.`,
