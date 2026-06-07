@@ -357,6 +357,91 @@ Once merged + Vercel deploys: `list_skeleton_entries` no longer surfaces the res
 
 ---
 
+## Per-lot file registration tickets (feedback-backlog #33, 2026-06-06)
+
+When a lot closes, `close-lot.md` STAGE 5 (V-set) and `one-shot-closeout.md` STAGE 5 (one-shot) route the close-out narrative to **net-new per-lot files** under two whitelisted prefixes:
+
+- `skills/roasting-historian/cluster/learnings/<lot-slug>.md`
+- `skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md`
+
+But `propose_doc_changes` validates every `skills/` target against the registered `SKILL_FILES` allow-list in [lib/mcp/docs.ts](lib/mcp/docs.ts) (via `isKnownDoc`), so a brand-new per-lot file rejects until its path is registered. Rather than let `propose_doc_changes` auto-register (which would drop the human-in-the-loop gate), the close-out prompt emits a **per-lot-file-registration ticket** - a fenced block in the close-out response - that this section consumes: register the path, glob-verify it, and seed the file with the ticketed content.
+
+This is the **sixth arbiter queue type**, walked alongside `doc_proposals` + `taxonomy_overrides_queue` + skeleton entries + CCIL observing list + Ratification queue during a `process pending arbitration` run. Unlike the other queues there is no DB row and no `list_*` Tool - the ticket is the close-out artifact Chris pastes in. Run it BEFORE the prose-proposal pass when a close-out is in the batch, because the registered-but-unseeded path is what the close-out's own `propose_doc_changes` citations append against (the active-lot empty-replace, archive, cross-coffee-insights citations all still go through `propose_doc_changes` as usual - the ticket flow is ONLY for the two net-new per-lot files).
+
+The ticket format (emitted by close-out STAGE 5, rendered to Chris at STAGE 7):
+
+```
+ticket_type: per-lot-file-registration
+lot_slug: <slug>
+target_path: skills/roasting-historian/cluster/learnings/<lot-slug>.md
+seed_content: |
+  # <Lot title>
+  ... full drafted markdown body (header + Substrate pointers + Cross-lot framing + Related) ...
+source: {kind: "session", id: "<lot_id close-out>"}
+```
+
+One ticket per net-new file. A lot may emit up to 2 (learnings + calibrations); a one-shot lot typically emits the calibrations ticket, a V-set lot the learnings ticket.
+
+### P1. Read the pending ticket(s)
+
+Read the per-lot-file-registration ticket(s) from the close-out artifact Chris pastes in. There is no DB query - the ticket is response-emitted (same transport as a `doc_proposals` paste). If the close-out artifact carries no ticket block, there is no net-new per-lot file to register; surface that and skip to the normal prose-proposal pass.
+
+### P2. Validate `target_path`
+
+For each ticket, confirm:
+
+- `target_path` starts with one of exactly two whitelisted per-lot prefixes: `skills/roasting-historian/cluster/learnings/` or `skills/roasting-historian/cluster/one-shot-calibrations/`. Any other net-new `skills/` path is NOT a per-lot file - reject the ticket and route that content through the normal arbiter prose-proposal path (which requires a deliberate `SKILL_FILES` registration in its own right).
+- The filename stem matches `lot_slug` (e.g. `lot_slug: cos-hig-bor-2026` → `.../learnings/cos-hig-bor-2026.md`). Mismatch means a malformed ticket - surface to Chris, do not register.
+- `seed_content` is non-empty (an empty body means the close-out didn't draft the file; surface to Chris).
+
+### P3. Register the path in `lib/mcp/docs.ts`
+
+Add BOTH entries for the path in [lib/mcp/docs.ts](lib/mcp/docs.ts):
+
+1. The `SKILL_FILES` entry: `'docs://<target_path>': '<target_path>'` (URI → repo-relative file path), placed next to the existing `learnings/` or `one-shot-calibrations/` entries.
+2. The matching `DOC_DESCRIPTIONS` entry keyed by the same `docs://<target_path>` URI - a one-line description in the same shape as the sibling per-lot entries (e.g. "Closed-lot learnings deep-dive for <Lot title>: <one-line summary>.").
+
+Both are required - `SKILL_FILES` makes `isKnownDoc` pass (so `propose_doc_changes` accepts the path) and `DOC_DESCRIPTIONS` populates the Resource catalog `description`.
+
+### P4. Verify the glob + run the bundle check
+
+The `outputFileTracingIncludes['/api/mcp/**']` glob `./docs/skills/**/*.md` in [next.config.js](next.config.js) already covers both whitelisted per-lot prefixes, so no `next.config.js` edit is needed for a per-lot file. Confirm the path is under that glob, then run:
+
+```bash
+npm run check:mcp-bundle
+```
+
+Must exit 0 - the script statically verifies every `DOC_FILES` path is covered by a tracing glob. If it exits non-zero, the path is outside the glob (should not happen for the two whitelisted prefixes; investigate before proceeding).
+
+### P5. Seed the file
+
+Create the file at `docs/<target_path>` and write the ticket's `seed_content` verbatim as the body. Apply the house-style normalization rule (plain hyphens, never em-/en-dashes - same as the prose-proposal apply step). This is the canonical home for the close-out narrative; subsequent `propose_doc_changes` appends from this or future close-outs land against it.
+
+### P6. Commit + PR + merge
+
+Reuse the standard commit step. Branch suggestion: `claude/per-lot-registration-<lot-slug>-<date>`.
+
+```bash
+git add lib/mcp/docs.ts docs/<target_path>
+git commit -m "$(cat <<'EOF'
+Register + seed per-lot file: <lot-slug>
+
+Per-lot-file-registration ticket from <lot_id> close-out.
+- SKILL_FILES + DOC_DESCRIPTIONS entry for docs://<target_path>
+- Seeded file with close-out narrative
+- check:mcp-bundle: exit 0
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+EOF
+)"
+git push -u origin claude/<branch>:claude/<branch>
+gh pr create --title "Register + seed per-lot file: <lot-slug>" --body "..."
+```
+
+Once merged + Vercel deploys: the path is in the catalog, `propose_doc_changes` accepts citations against it, and the next close-out (or this one's remaining citations) can append to the seeded file. If this section runs BEFORE the close-out's prose-proposal citations in the same batch, the citations targeting the now-registered path resolve in the same arbiter session.
+
+---
+
 ## CCIL observing list review (Item 1, Sprint R Phase 4 Step 4 grill, 2026-05-23)
 
 [docs/skills/ccil/cluster/observing.md](docs/skills/ccil/cluster/observing.md) holds candidate structural concepts that were named at a grill but lack confirming N for promotion to the CONTEXT-{roasting,brewing,shared}.md glossary family or a confirmed CCIL pattern. Walked as the **fourth arbiter queue type** alongside `doc_proposals` + `taxonomy_overrides_queue` + skeleton entries during a `process pending arbitration` run. Same forcing function, no separate trigger — Chris explicitly chose to fold into the existing arbiter rather than spec a new one (avoids process bloat; per-item judgment beats systematic rules at this scale).

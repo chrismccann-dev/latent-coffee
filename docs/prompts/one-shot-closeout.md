@@ -137,9 +137,24 @@ Routing decision tree (by SHAPE of the insight, not just topic). Per-citation `t
 - **Closed-lot learnings**: APPEND or CREATE the close-out summary at `docs/skills/roasting-historian/cluster/learnings/<lot-slug>.md` (one file per closed lot). Tag explicitly as **one-shot**:
   - On Outcome A: "Reference roast set: Batch <N>. Single attempt, carry-forward anchored on <Lot Y>. One-shot lot."
   - On Outcome B: "Closed without reference. Single attempt, roast off-target. Salvaged via optimized brew (recipe ref in Reference Brew Recipes by Lot). One-shot lot."
+  - If the learnings file is net-new (not already in `lib/mcp/docs.ts` SKILL_FILES), do NOT route it through `propose_doc_changes` (it will reject `"Unknown skills target..."`). Emit a per-lot-file-registration ticket instead (see the ticket block format below); the arbiter registers + seeds it. If the file already exists, a normal `propose_doc_changes` APPEND citation is correct.
 - **Reference Brew Recipes by Lot**: APPEND the optimized brew recipe from STAGE 3 to the relevant Reference Brew section in the Roasting Historian cluster (route via the catalog if uncertain). On Outcome B include the compensation reasoning verbatim from `push_brew.what_i_learned` - that prose is the carry-forward for future one-shot brew-side decisions.
 - **Cross-Coffee Insight Layer**: ONLY append to `docs://skills/roasting-historian/cluster/patterns/cross-coffee-insights.md` if a generalizable cross-coffee pattern emerged AND `key_insight_confidence` was Medium-High or High on the experiment. One-shots typically don't reach the threshold for CCIL contribution; defer to repeated observation on similar future lots. Single-lot patterns at Low confidence go to `additional_notes` on the experiment row, NOT to CCIL.
-- **One-Shot Calibrations in Process**: append or create a brief one-shot summary at `docs/skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md` so future carry-forward searches surface this lot quickly. Citation `target_doc: 'skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md'`.
+- **One-Shot Calibrations in Process**: append or create a brief one-shot summary at `docs/skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md` so future carry-forward searches surface this lot quickly. If the file already exists, APPEND via a normal `propose_doc_changes` citation (`target_doc: 'skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md'`). If it is net-new, do NOT route it through `propose_doc_changes` (it rejects `"Unknown skills target..."`) - emit a per-lot-file-registration ticket (format below) so the arbiter registers + seeds the calibrations file. This is the canonical home for the one-shot calibration narrative; future similar-lot one-shots append against it.
+
+  **Per-lot-file-registration ticket** (emit one fenced block per net-new per-lot file - learnings and/or calibrations; render to Chris at STAGE 7; the arbiter consumes it via the ARBITER.md "Per-lot file registration tickets" section: register the path in `lib/mcp/docs.ts` SKILL_FILES + DOC_DESCRIPTIONS, glob-verify via `npm run check:mcp-bundle`, seed the file):
+
+  ```
+  ticket_type: per-lot-file-registration
+  lot_slug: <lot-slug>
+  target_path: skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md
+  seed_content: |
+    # <Lot title>
+    ... full drafted markdown body (header + carry-forward framing + Related) ...
+  source: {kind: "session", id: "<lot_id one-shot close-out>"}
+  ```
+
+  `target_path` must be one of the two whitelisted per-lot prefixes (`skills/roasting-historian/cluster/learnings/<lot-slug>.md` or `skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md`) and its stem must match `lot_slug`. Everything else in this STAGE still routes through `propose_doc_changes` as usual - the ticket flow is ONLY for the net-new per-lot files.
 
 AVOID promoting to protocol cluster docs (FC Marking Protocol at `docs://skills/roest-knowledge/cluster/protocols/fc-marking.md` / Drop Temp as the Primary Drop Signal at `docs://skills/roest-knowledge/cluster/machine/counterflow-observations.md#drop-temp-as-the-primary-drop-signal` / Standard Inlet Curve Template at `docs://skills/roest-knowledge/cluster/protocols/fan-strategy.md#standard-inlet-curve-template`) on one-shot data. Protocol changes require cross-lot evidence; N=1 isn't enough.
 
