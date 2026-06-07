@@ -99,13 +99,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Source:** Cluster-2 completion report §5; flagged by Chris on close-out
 - **Body:** CLAUDE.md § Local Verification Fallbacks, ARBITER.md, and the kickoff-brief template reference an MCP `execute_sql` for DB work, but it is NOT in the latent-coffee MCP server's 35 Tools — it comes from a **separately-connected Supabase MCP server** (project `uhqxyxglyuhmpxegqsrt`, per `memory/reference_supabase_project_id.md`) that Chris connects on some sessions, not all. The references read as always-available. Fix: clarify them as "the Supabase MCP `execute_sql` *when that server is connected*" + name the fallback (a `.select('<col>')` PostgREST probe with the service-role key) for sessions without it. Not env-dependent-stale, just under-specified.
 
-### SKILL_FILES gates net-new per-lot learnings files — no model-callable creation path
-- **Shape:** arch (MCP / arbiter API)
-- **Recurrence:** 3 (Round 21: UGA-MH-ELGON one-shot learnings + calibrations; RWA-NOVA-NAT21-RB Bukure; COS-HIG-BOR Higuito sibling — all orphaned)
-- **Criticality:** high
-- **Status:** planned (plan-feedback 2026-06-06 — Chris confirmed 3x trigger met, build option (b); brief: docs/sprints/per-lot-file-registration-kickoff.md)
-- **Source:** master log #33 (Round 21)
-- **Body:** one-shot-closeout.md + close-lot.md route close-out narrative to `cluster/learnings/<lot-slug>.md` + `cluster/one-shot-calibrations/<lot-slug>.md`, but both reject ("Unknown skills target... Register in lib/mcp/docs.ts SKILL_FILES first"). Every closed lot orphans its canonical-home content. **Root cause of the "doc proposal couldn't land" friction — keystone of the doc-write-ergonomics cluster.** Candidates: (a) propose_doc_changes auto-registers a newly-named lot file under whitelisted prefixes (`cluster/learnings/`, `cluster/one-shot-calibrations/`); (b) STAGE 5 emits an arbiter ticket for registration + seeding. Interim option-(b) walk ran clean twice (Higuito cos-hig at R10; Bukure rwa-nova PR #411) — supports (b) as the standing fix when the 3x trigger formalizes.
+> **Shipped 2026-06-06 (#418, plan-feedback Sprint 1 / #33 keystone):** per-lot-file-registration arbiter-ticket flow (option (b)) — close-out STAGE 5 emits a standardized ticket; new ARBITER.md `## Per-lot file registration tickets` section (P1-P6) registers + seeds the net-new per-lot learnings/calibrations file under the whitelisted `learnings/` + `one-shot-calibrations/` prefixes; propose_doc_changes rejection message now points at the ticket flow. See [docs/sprints/shipped.md](docs/sprints/shipped.md) + completion report. Removed from the open list per the status lifecycle.
 
 ### propose_doc_changes append has no mid-section placement
 - **Shape:** mcp (schema)
