@@ -10,7 +10,7 @@ This doc summarizes wave-by-wave what shipped + when + with what. For the archit
 
 ## Sub-skill catalog summary
 
-3-tier architecture (Knowledge / Workflow / CCIL) + Master Coordinator router. **17 sub-skills active** post Research Assistant Step 2 scaffolding ship (2026-05-27 — see [ADR-0017](docs/adr/0017-research-assistant-architecture.md) + [ADR-0011 Amendment 2026-05-27](docs/adr/0011-composable-sub-skills-architecture.md#amendment-2026-05-27-research-assistant-step-2-scaffolding)). Learning Assistant + Learning Knowledge deprecated; Research Coordinator + Research Assistant added. Full catalog with I/O metadata + dispatch rules at [docs/skills/coordinator/catalog.md](docs/skills/coordinator/catalog.md).
+3-tier architecture (Knowledge / Workflow / CCIL) + Master Coordinator router. **19 sub-skills active** — 17 post Research Assistant Step 2 scaffolding (2026-05-27 — see [ADR-0017](docs/adr/0017-research-assistant-architecture.md) + [ADR-0011 Amendment 2026-05-27](docs/adr/0011-composable-sub-skills-architecture.md#amendment-2026-05-27-research-assistant-step-2-scaffolding)), plus **Roasting Coordinator + V-Set Assistant** (built 2026-06-09, dogfood-pending — operator-direct Claude-Code-native roasting pair per [ADR-0024](docs/adr/0024-lot-coordinator-claude-code-native.md); net-new, the existing roasting workflow skills stay live through the grace-handoff). Learning Assistant + Learning Knowledge deprecated; Research Coordinator + Research Assistant added 2026-05-27. Full catalog with I/O metadata + dispatch rules at [docs/skills/coordinator/catalog.md](docs/skills/coordinator/catalog.md).
 
 | Tier | Sub-skill | Wave | Status |
 |---|---|---|---|
@@ -22,6 +22,7 @@ This doc summarizes wave-by-wave what shipped + when + with what. For the archit
 | Knowledge | [Peer-Learning Roasting Archivist](docs/skills/peer-learning-roasting-archivist/) | 3 PR 1 | ACTIVE |
 | Knowledge | [Roest Knowledge](docs/skills/roest-knowledge/) | 3 PR 1 | ACTIVE |
 | Knowledge (with Planning collapsed in) | [Research Coordinator](docs/skills/research-coordinator/) | post-arc | ACTIVE (Step 2) |
+| Knowledge (with Planning collapsed in) | [Roasting Coordinator](docs/skills/roasting-coordinator/) | post-arc | ACTIVE (built 2026-06-09, dogfood-pending) |
 | Workflow Planning | [Roasting Assistant](docs/skills/roasting-assistant/) | 3 PR 2 | ACTIVE |
 | Workflow Planning | [Brewing Assistant](docs/skills/brewing-assistant/) | 3 PR 2 | ACTIVE |
 | Workflow Planning | [Sourcing Workflow Planner](docs/skills/sourcing-workflow-planner/) | 3 PR 2 | ACTIVE |
@@ -31,6 +32,7 @@ This doc summarizes wave-by-wave what shipped + when + with what. For the archit
 | Workflow Executing | [Roest API Worker](docs/skills/roest-api-worker/) | 3 PR 3 | ACTIVE |
 | Workflow Executing | [Close-Lot Specialist](docs/skills/close-lot-specialist/) | 3 PR 3 | ACTIVE |
 | Workflow Executing | [Research Assistant](docs/skills/research-assistant/) | post-arc | ACTIVE (Step 2) |
+| Workflow Executing | [V-Set Assistant](docs/skills/v-set-assistant/) | post-arc | ACTIVE (built 2026-06-09, dogfood-pending) |
 | Special | [Cross-Coffee Insight Layer (CCIL)](docs/skills/ccil/) | 4 PR 4a | ACTIVE |
 | Coordinator | [Master Coordinator](docs/skills/coordinator/) | 1 | ACTIVE |
 
