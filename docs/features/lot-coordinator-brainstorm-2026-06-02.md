@@ -1,6 +1,6 @@
 # Lot Coordinator + V-Set Assistant — brainstorm
 
-**Status:** Brainstorm CONVERGED 2026-06-02. Graduated to a scoped brainstorm doc; **prioritized to NEXT, operator-gated** (slots in when Chris green-lights a *fresh* green-bean lot to dogfood-and-design simultaneously — current lots are mid-cycle and can't be retrofitted mid-arc). Cluster B completes first.
+**Status:** Brainstorm CONVERGED 2026-06-02; **all seams resolved + GRADUATED TO PLAN 2026-06-09** (see [§ 2026-06-09 resolution](#2026-06-09-resolution-all-seams-walked-graduated-to-plan) below). Architecture locked in **[ADR-0024](docs/adr/0024-lot-coordinator-claude-code-native.md)**; plan-sprint kickoff at [docs/features/lot-coordinator-plan-kickoff-2026-06-09.md](docs/features/lot-coordinator-plan-kickoff-2026-06-09.md). **Build trigger-gated** on the next fresh green-bean lot (operator out of town; prepped and ready for return); the first lot is an explicit dogfood. The big reversal from this doc's original framing: the Coordinator/Assistant pair is **Claude-Code-native, not claude.ai-mediated** — which means it *confirms* ADR-0017 Exception 1 rather than breaking it, and the Coordinator is **Brief-persistent / session-transient** (Model B), not a persistent thread.
 
 **Session:** Capstone roadmap-review + Lot Coordinator brainstorm (grilling/interpretive). Mirror pattern: [ADR-0017 — Research Coordinator + Research Assistant](docs/adr/0017-research-assistant-architecture.md).
 
@@ -133,3 +133,36 @@ The sim-pour is the *reference-roast contention* decision — cross-candidate, l
 ## Trigger
 
 **Operator-gated.** Chris green-lights when the next *fresh* green-bean lot is ready to start clean on the new process (dogfood + design simultaneously). Cluster B completes first.
+
+---
+
+## 2026-06-09 resolution (all seams walked; graduated to plan)
+
+Grilling continuation of this brainstorm. Every open seam resolved + Chris-ratified by audio, fork by fork. Canonical record is **[ADR-0024](docs/adr/0024-lot-coordinator-claude-code-native.md)**; this section is the narrative trail. Two operator-provided prototype inputs were mined (treated as input-not-canon per Chris): an agent-surface-area prototype + a handoff diagram, and the lived Gesha Clouds full-cycle example (incl. an SPG-fails-back-to-V4 case) — useful for *shape*; the system as-built stayed the ground truth. The [severity handoff (2026-06-06)](docs/features/roasting-context-window-severity-handoff-2026-06-06.md) made the problem empirical (~80-90% post-compaction; cost flipped to conversation prose; a lived `get_bean_pipeline`-skip staleness failure).
+
+### The big reversal: Claude-Code-native, not claude.ai-mediated
+
+This doc originally assumed the pair would be **claude.ai-mediated** (and therefore *break* ADR-0017 Exception 1, needing a new "claude.ai-mediated + MCP-shared-state" ADR). Chris reopened that inherited assumption and we flipped it: **roasting moves to Claude Code.** Decided on the **domain-boundary principle** — put the surface boundary where the domain boundary already is: roasting-domain → Claude Code; brewing-domain → claude.ai (for now). The optimized brew + the SPG *execution* stay claude.ai (both brewing-domain); the SPG *decision/verdict* is Coordinator-side. Going Claude-Code-native resolves three hard problems at once (forces the Brief into durable substrate; *confirms* Exception 1 instead of forking a new pattern; makes instance 2 coherent with the spine) and puts the skill where the self-improving loop can see/edit it. Accepted cost: no mobile fallback for the roasting loop (core loop is home+laptop anyway). Grace-handoff migration: build net-new, destroy nothing; retire claude.ai/roasting when the last in-flight lot resolves.
+
+### Persistence: Model B (Brief-persistent, session-transient)
+
+Chris initially pictured a long-running Coordinator thread (Research's nominal shape). After walking the tradeoffs we chose **Model B**: the **Roasting Brief** (`docs/lots/<lot>.md`) is the source of truth; coordinator sessions are transient (a role any fresh session adopts by reading the Brief + `get_bean_pipeline`); keep-warm is an allowed optimization, never depended on. Deciding argument: **asymmetry of failure modes** — Model A's failure mode (long thread bloats + compacts lossily) is the exact thing we're escaping; Model B's (imperfect write-discipline drops a little nuance, recovered from the DB) is mild + self-correcting, and the transient-session constraint is a healthy forcing function keeping the Brief complete. First-class Coordinator responsibility: write the Brief at every natural break.
+
+### Fork-by-fork resolutions
+
+1. **The cut (Forks 1+2).** Predicted/actual, three roles. **V-Set Assistant** = execute the cycle only (roast → post-roast re-prediction → cupping record → patch experiment cup-side → Results Packet → STOP; writes `roasts` + `cuppings`). **Coordinator** = plan + close (Brief, every V-set design = predictions, route decisions, reference, close-out). **Doc-proposals** = close-time substrate-fold (Execution role), out of the cupping step entirely. This decomposes today's overloaded `log-cupping.md` (record + design-next + propose-docs → three jobs).
+2. **Prediction = three-point delta chain.** Design prediction (Coordinator, pre-roast) → roast-actual re-prediction (Assistant, post-roast, **durable write** — chosen over ephemeral) → cup-actual (Assistant). Drop rules are *why* the roast diverges from design, so the honest cupping-table baseline is the roast-actual re-prediction, not the design one. Assistant holds #2/#3 in-cycle (triangulated vs producer notes); Coordinator resolves all deltas on return. This is the predicted-vs-actual delta surface the roadmap wants.
+3. **Packets (Fork 3).** Brief (durable, points at DB for numbers) / near-empty Handoff-down (Coordinator stages recipe rows + Roest profiles first; packet = "run V2, focus = X") / thin Results-up (row pointers + interpretation + next-step hypothesis as input-not-canon + route recommendation as input). MCP shared state keeps all packets thin. Route recommendation is **input**; the Coordinator decides because it owns the plan and the next step *is* the plan.
+4. **Lifecycle (Fork 4).** Move from *derived* to **stored `lot_status`** — because the brew-side-wait has no row to derive from. Coarse set with one catch-all `waiting_for_brewing` (the Brief holds which brewing task). Guardrails recover derived's can't-drift virtue: single write path (MCP Tools + Coordinator) + a `check:lifecycle-consistency` validator gate. Visible on `/green`. (Chris pushed for the stored field over my initial derived-lean; the brew-wait forcing stored signal anyway settled it.)
+5. **Skills (Fork 5).** Operator-direct (Exception 1 confirmed + extended). **Hybrid** reconciliation: subsume the prose-heavy design/close logic into the two session skills; keep the thin Tool-owning executors (`roast-recorder` / `cupping-specialist` / `roest-api-worker`) as called primitives; compose the knowledge clusters unchanged. **Build net-new, destroy nothing** (grace-handoff). **One-shot = N=1 lot** (degenerate Coordinator, one Assistant).
+6. **Brewing scope (Fork 6).** Roasting-only, locked (re-confirmed). Brewing stays claude.ai; the cross-domain seam is the designed packet boundary.
+
+### Operator dry-run (validated; the thing to test against the real lot)
+
+T0 Start lot (Coordinator, fresh CC session) → V1 Handoff. T1 V1 roast+cup (Assistant) → Results Packet → STOP. T2 Coordinator (fresh session, reconstructs from Brief + DB) resolves deltas + routes: next V-set | SPG | reference. T3 SPG on brewing side (claude.ai) → verdict back. T4 Coordinator consumes verdict: pass → declare reference + optimized-brew packet; fail (fighting too hard brewing-side = roasting problem) → design V4. T5 Optimized brew (claude.ai) → return packet. T6 Close lot (Coordinator): reconcile, tie `brew_id`, `roast_learnings`, substrate-fold, archive inventory, `resolved`. Every "back to Coordinator" is a fresh session reconstructing from the Brief.
+
+### Parked / deferred
+
+- **Drop-rules mechanism edits** — Chris has specific improvements to how drop rules are designed/executed (surfaced during the prediction discussion). Parked to the [grilling queue](docs/grilling-queue.md), separate from item 35 (drop-rules UI persistence).
+- **CONTEXT-roasting vocab grill** ([item 46](docs/grilling-queue.md)) — fires at plan-sprint kickoff, *before* the build (grilling-first).
+- Exact schema (`lot_status` enum + migration + resolution-pointer FKs), exact cluster contents, the `check:lifecycle-consistency` script — all build-time (tax: states named, schema deferred).
