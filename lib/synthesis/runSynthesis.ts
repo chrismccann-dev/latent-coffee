@@ -23,6 +23,7 @@ import { buildSynthesisPrompt } from './buildPrompt'
 import { buildShortFormPrompt } from './buildShortFormPrompt'
 import { applyHumanizer } from './humanizer'
 import type { EntityAdapter } from './types'
+import { computeInputMaxUpdatedAt } from './inputUpdatedAt'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -45,20 +46,6 @@ interface RunSynthesisInput<T> {
   entityName: string
   brews: Record<string, unknown>[]
   roastLearnings?: Record<string, unknown>[]
-}
-
-function maxUpdatedAt(...sets: (Record<string, unknown>[] | undefined)[]): string | null {
-  let max: string | null = null
-  for (const rows of sets) {
-    if (!rows) continue
-    for (const row of rows) {
-      const ts = row.updated_at
-      if (typeof ts === 'string' && (max === null || ts > max)) {
-        max = ts
-      }
-    }
-  }
-  return max
 }
 
 export async function runSynthesis<T>(input: RunSynthesisInput<T>): Promise<SynthesisOutcome> {
@@ -93,7 +80,7 @@ export async function runSynthesis<T>(input: RunSynthesisInput<T>): Promise<Synt
       brewCount: brews.length,
       learningRowCount: 0,
       roastLearningRowCount: 0,
-      inputMaxUpdatedAt: maxUpdatedAt(brews, roastLearnings),
+      inputMaxUpdatedAt: computeInputMaxUpdatedAt(brews, roastLearnings),
       message: 'Corpus rows found but no learning data to synthesize',
     }
   }
@@ -113,7 +100,7 @@ export async function runSynthesis<T>(input: RunSynthesisInput<T>): Promise<Synt
       brewCount: brews.length,
       learningRowCount: learningRows.length,
       roastLearningRowCount: roastLearningRows.length,
-      inputMaxUpdatedAt: maxUpdatedAt(brews, roastLearnings),
+      inputMaxUpdatedAt: computeInputMaxUpdatedAt(brews, roastLearnings),
       tier: tier.tier,
       message: 'Synthesis call returned no text',
     }
@@ -150,7 +137,7 @@ export async function runSynthesis<T>(input: RunSynthesisInput<T>): Promise<Synt
     brewCount: brews.length,
     learningRowCount: learningRows.length,
     roastLearningRowCount: roastLearningRows.length,
-    inputMaxUpdatedAt: maxUpdatedAt(brews, roastLearnings),
+    inputMaxUpdatedAt: computeInputMaxUpdatedAt(brews, roastLearnings),
     tier: tier.tier,
   }
 }
