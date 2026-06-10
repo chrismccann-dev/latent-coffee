@@ -52,7 +52,7 @@ For a small batch (≤2 groups), one PR is fine. For a larger batch (3+), one PR
 
 For `roaster/{Name}` proposals: open `docs/brewing/roasters.md`, locate the `## {Canonical Name}` header, and operate within that section's body.
 
-For `skills/{path}.md` proposals (Wave 2 PR 1, 2026-05-26 onward): open `docs/skills/{path}.md` (e.g. `docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md`, `docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md`, `docs/skills/roasting-historian/cluster/active-lots/<lot>.md`, `docs/skills/brewing-assistant/cluster/operational-guide.md`). Validated against the registered SKILL_FILES allow-list in [lib/mcp/docs.ts](lib/mcp/docs.ts) — only declared cluster paths resolve.
+For `skills/{path}.md` proposals (Wave 2 PR 1, 2026-05-26 onward): open `docs/skills/{path}.md` (e.g. `docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md`, `docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md`, `docs/skills/roasting-historian/cluster/active-lots/<lot>.md`, `docs/skills/brewing-assistant/cluster/operational-guide.md`). Validated against the registered DOC_CATALOG allow-list in [lib/mcp/docs.ts](lib/mcp/docs.ts) — only declared cluster paths resolve.
 
 **Post Wave 4 PR 4b (2026-05-21) routing:** BREWING.md and ROASTING.md are ~3KB and ~6KB redirect-stub pointer tables; proposals targeting them have no useful place to land. Route every proposal to a sub-skill cluster path. The redirect stub itself enumerates the per-section → cluster-path mapping. If you see a stale proposal targeting `brewing.md` or `roasting.md`, apply the cross-doc move to the right cluster path and surface to Chris. Today's substrate is sub-skill clusters; the master-doc workflow is closed.
 
@@ -364,7 +364,7 @@ When a lot closes, `close-lot.md` STAGE 5 (V-set) and `one-shot-closeout.md` STA
 - `skills/roasting-historian/cluster/learnings/<lot-slug>.md`
 - `skills/roasting-historian/cluster/one-shot-calibrations/<lot-slug>.md`
 
-But `propose_doc_changes` validates every `skills/` target against the registered `SKILL_FILES` allow-list in [lib/mcp/docs.ts](lib/mcp/docs.ts) (via `isKnownDoc`), so a brand-new per-lot file rejects until its path is registered. Rather than let `propose_doc_changes` auto-register (which would drop the human-in-the-loop gate), the close-out prompt emits a **per-lot-file-registration ticket** - a fenced block in the close-out response - that this section consumes: register the path, glob-verify it, and seed the file with the ticketed content.
+But `propose_doc_changes` validates every `skills/` target against the registered `DOC_CATALOG` allow-list in [lib/mcp/docs.ts](lib/mcp/docs.ts) (via `isKnownDoc`), so a brand-new per-lot file rejects until its path is registered. Rather than let `propose_doc_changes` auto-register (which would drop the human-in-the-loop gate), the close-out prompt emits a **per-lot-file-registration ticket** - a fenced block in the close-out response - that this section consumes: register the path, glob-verify it, and seed the file with the ticketed content.
 
 This is the **sixth arbiter queue type**, walked alongside `doc_proposals` + `taxonomy_overrides_queue` + skeleton entries + CCIL observing list + Ratification queue during a `process pending arbitration` run. Unlike the other queues there is no DB row and no `list_*` Tool - the ticket is the close-out artifact Chris pastes in. Run it BEFORE the prose-proposal pass when a close-out is in the batch, because the registered-but-unseeded path is what the close-out's own `propose_doc_changes` citations append against (the active-lot empty-replace, archive, cross-coffee-insights citations all still go through `propose_doc_changes` as usual - the ticket flow is ONLY for the two net-new per-lot files).
 
@@ -390,18 +390,23 @@ Read the per-lot-file-registration ticket(s) from the close-out artifact Chris p
 
 For each ticket, confirm:
 
-- `target_path` starts with one of exactly two whitelisted per-lot prefixes: `skills/roasting-historian/cluster/learnings/` or `skills/roasting-historian/cluster/one-shot-calibrations/`. Any other net-new `skills/` path is NOT a per-lot file - reject the ticket and route that content through the normal arbiter prose-proposal path (which requires a deliberate `SKILL_FILES` registration in its own right).
+- `target_path` starts with one of exactly two whitelisted per-lot prefixes: `skills/roasting-historian/cluster/learnings/` or `skills/roasting-historian/cluster/one-shot-calibrations/`. Any other net-new `skills/` path is NOT a per-lot file - reject the ticket and route that content through the normal arbiter prose-proposal path (which requires a deliberate `DOC_CATALOG` registration in its own right).
 - The filename stem matches `lot_slug` (e.g. `lot_slug: cos-hig-bor-2026` → `.../learnings/cos-hig-bor-2026.md`). Mismatch means a malformed ticket - surface to Chris, do not register.
 - `seed_content` is non-empty (an empty body means the close-out didn't draft the file; surface to Chris).
 
 ### P3. Register the path in `lib/mcp/docs.ts`
 
-Add BOTH entries for the path in [lib/mcp/docs.ts](lib/mcp/docs.ts):
+Add ONE `DOC_CATALOG` entry in [lib/mcp/docs.ts](lib/mcp/docs.ts) (audit-06 C3, 2026-06-10 — the former SKILL_FILES + DOC_DESCRIPTIONS + listDocs triple collapsed into the single catalog array), placed next to the existing `learnings/` or `one-shot-calibrations/` entries:
 
-1. The `SKILL_FILES` entry: `'docs://<target_path>': '<target_path>'` (URI → repo-relative file path), placed next to the existing `learnings/` or `one-shot-calibrations/` entries.
-2. The matching `DOC_DESCRIPTIONS` entry keyed by the same `docs://<target_path>` URI - a one-line description in the same shape as the sibling per-lot entries (e.g. "Closed-lot learnings deep-dive for <Lot title>: <one-line summary>.").
+```ts
+{
+  uri: 'docs://<target_path>',
+  title: 'Roasting Historian — learnings / <Lot title>',
+  description: 'Closed-lot learnings deep-dive for <Lot title>: <one-line summary>.',
+},
+```
 
-Both are required - `SKILL_FILES` makes `isKnownDoc` pass (so `propose_doc_changes` accepts the path) and `DOC_DESCRIPTIONS` populates the Resource catalog `description`.
+The repo-relative file path derives from the URI automatically (no `path:` field needed for `skills/` paths). The one entry makes `isKnownDoc` pass (so `propose_doc_changes` accepts the path) AND populates the Resource catalog title + description.
 
 ### P4. Verify the glob + run the bundle check
 
@@ -411,7 +416,7 @@ The `outputFileTracingIncludes['/api/mcp/**']` glob `./docs/skills/**/*.md` in [
 npm run check:mcp-bundle
 ```
 
-Must exit 0 - the script statically verifies every `DOC_FILES` path is covered by a tracing glob. If it exits non-zero, the path is outside the glob (should not happen for the two whitelisted prefixes; investigate before proceeding).
+Must exit 0 - the script statically verifies every `DOC_CATALOG` + `DOC_FILES` path is covered by a tracing glob. If it exits non-zero, the path is outside the glob (should not happen for the two whitelisted prefixes; investigate before proceeding).
 
 ### P5. Seed the file
 
@@ -427,7 +432,7 @@ git commit -m "$(cat <<'EOF'
 Register + seed per-lot file: <lot-slug>
 
 Per-lot-file-registration ticket from <lot_id> close-out.
-- SKILL_FILES + DOC_DESCRIPTIONS entry for docs://<target_path>
+- DOC_CATALOG entry for docs://<target_path>
 - Seeded file with close-out narrative
 - check:mcp-bundle: exit 0
 

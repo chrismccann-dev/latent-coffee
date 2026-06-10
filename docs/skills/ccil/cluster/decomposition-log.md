@@ -20,7 +20,7 @@ When a trigger fires:
 1. Append a new entry below with date + trigger source + before/after cluster shape + rationale.
 2. Move the affected pattern docs into the new sub-structure; preserve back-compat redirect stubs at the original paths (mirror the BREWING.md / ROASTING.md Wave 2/3 pattern).
 3. Update `docs/skills/ccil/SKILL.md` § Knowledge cluster contents to reflect the new sub-structure.
-4. Register new paths in `lib/mcp/docs.ts` (SKILL_FILES + DOC_DESCRIPTIONS + listDocs).
+4. Register new paths in `lib/mcp/docs.ts` (one DOC_CATALOG entry per path — uri + title + description; audit-06 C3 collapse).
 5. Cross-system audit per CLAUDE.md § Sprint cadence checkpoint 4.
 
 ## Entries
