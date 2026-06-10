@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistExperiment, type ExperimentPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // push_experiment — UPSERT on (user_id, green_bean_id, experiment_id).
 // Experiments iterate as observations land — first push at experiment design,
@@ -99,17 +99,9 @@ export function registerPushExperimentTool(server: McpServer, auth: McpAuthConte
     withToolErrorLogging('push_experiment', async (input) => {
       const payload = input as ExperimentPayload
       const result = await persistExperiment(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       const out = { experiment_pk: result.experiment_pk, created: result.created }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

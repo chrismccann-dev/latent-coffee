@@ -1,7 +1,7 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // resolve_queue_entry — arbiter-side Tool that flips a queue row from
 // 'pending' to 'promoted' / 'aliased' / 'rejected' / 'duplicate'.
@@ -107,10 +107,7 @@ export function registerResolveQueueEntryTool(server: McpServer, auth: McpAuthCo
         status: data.status as string,
         resolved_at: data.resolved_at as string,
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

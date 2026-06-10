@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { patchCupping, CUPPING_PATCH_FIELDS, type PatchCuppingPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, echoUpdatedFields, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // patch_cupping (Sprint 2.6) — composite-key lookup mirroring the
 // migration-041 NULLS NOT DISTINCT unique constraint on
@@ -63,24 +63,11 @@ export function registerPatchCuppingTool(server: McpServer, auth: McpAuthContext
     withToolErrorLogging('patch_cupping', async (input) => {
       const payload = input as PatchCuppingPayload
       const result = await patchCupping(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        if (result.code === 'no_op') throw new Error(result.message)
-        if (result.code === 'not_found') throw new Error(result.message)
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       // Echo the diff. Round-5 dogfood symmetry sweep (2026-05-10).
-      const payloadObj = payload as unknown as Record<string, unknown>
-      const updated_fields = CUPPING_PATCH_FIELDS.filter(
-        (k) => k in payloadObj && payloadObj[k] !== undefined,
-      )
+      const updated_fields = echoUpdatedFields(payload, CUPPING_PATCH_FIELDS)
       const out = { cupping_id: result.cupping_id, updated_fields }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

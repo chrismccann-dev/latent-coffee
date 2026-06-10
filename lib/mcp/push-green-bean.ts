@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistGreenBean, type GreenBeanPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // push_green_bean — top-level entry point for the self-roasted lineage.
 // Inserts a green_beans row with terroir + cultivar FK resolution via
@@ -89,12 +89,7 @@ export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContex
     withToolErrorLogging('push_green_bean', async (input) => {
       const payload = input as GreenBeanPayload
       const result = await persistGreenBean(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       // Phase 3 (#R47): queued_for_taxonomy_review echoes Site A queue inserts
       // for the producer override path. Empty on existing-row hits and when
       // producer resolves canonically.
@@ -105,10 +100,7 @@ export function registerPushGreenBeanTool(server: McpServer, auth: McpAuthContex
         created: result.created,
         queued_for_taxonomy_review: result.queued_for_taxonomy_review,
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

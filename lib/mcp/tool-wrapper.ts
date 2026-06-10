@@ -20,3 +20,41 @@ export function withToolErrorLogging<H extends (...args: any[]) => any>(
     }
   }) as H
 }
+
+// Audit-06 candidate 4 — the shared tool-tail helpers. Every push/patch Tool
+// used to hand-roll the same three blocks; the error-message strings below are
+// load-bearing (claude.ai parses them to decide its retry behavior), so any
+// change here propagates to every Tool at once — deliberately.
+
+// The fail variants of PersistFail (validation | db_error) and
+// PatchResult (validation | no_op | not_found | db_error) both narrow here.
+export type ToolFailResult =
+  | { ok: false; code: 'validation'; errors: string[] }
+  | { ok: false; code: 'db_error' | 'no_op' | 'not_found'; message: string }
+
+// Declared `never` so callers get control-flow narrowing:
+// `if (!result.ok) throwToolFail(result)` leaves `result` narrowed to ok.
+export function throwToolFail(result: ToolFailResult): never {
+  if (result.code === 'validation') {
+    throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
+  }
+  if (result.code === 'no_op' || result.code === 'not_found') {
+    throw new Error(result.message)
+  }
+  throw new Error(`Database error: ${result.message}`)
+}
+
+// The standard MCP success envelope: JSON text content + structuredContent.
+export function toolJson<T extends Record<string, unknown>>(out: T) {
+  return {
+    content: [{ type: 'text' as const, text: JSON.stringify(out) }],
+    structuredContent: out,
+  }
+}
+
+// Patch-tool diff echo (Round-5 dogfood symmetry sweep, 2026-05-10): report
+// which of the entity's PATCH_FIELDS were actually present in the payload.
+export function echoUpdatedFields(payload: object, fields: readonly string[]): string[] {
+  const obj = payload as Record<string, unknown>
+  return fields.filter((k) => k in obj && obj[k] !== undefined)
+}

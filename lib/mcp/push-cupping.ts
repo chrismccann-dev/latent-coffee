@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistCupping, type CuppingPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // push_cupping — single cupping evaluation insert. roast_id is required (FK).
 // V4 evaluation protocol is Day 7 pourover — this Tool captures both Day 4
@@ -60,12 +60,7 @@ export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext)
     withToolErrorLogging('push_cupping', async (input) => {
       const payload = input as CuppingPayload
       const result = await persistCupping(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       // Echo the composite-key tuple back so the caller can sanity-check that
       // the row landed under the intended (roast_id, date, method, variant)
       // signature without a follow-up read. Roest write feedback round-4
@@ -84,10 +79,7 @@ export function registerPushCuppingTool(server: McpServer, auth: McpAuthContext)
           recipe_variant: payload.recipe_variant ?? null,
         },
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

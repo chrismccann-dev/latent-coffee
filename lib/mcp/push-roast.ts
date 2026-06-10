@@ -3,7 +3,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistRoast, type RoastPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // push_roast — single batch roast log insert. green_bean_id is required (FK).
 // All other fields optional. The 8 Sprint-2.5 enrichment columns (added in
@@ -139,12 +139,7 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
       const boundsErr = checkEndConditionBounds(payload.end_condition_type, payload.end_condition_target)
       if (boundsErr) throw new Error(`Validation failed:\n  - ${boundsErr}`)
       const result = await persistRoast(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       // Phase 3 (#R47): push_roast itself doesn't trigger queue inserts (the
       // roasts table has no canonical text fields with override flags;
       // canonicals live on the parent green_beans). Always-empty echo
@@ -159,10 +154,7 @@ export function registerPushRoastTool(server: McpServer, auth: McpAuthContext) {
           queue_id: string
         }>,
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

@@ -11,7 +11,7 @@ import {
   type TaxonomyAxis,
 } from '@/lib/mcp/docs'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // Net-new per-lot files (closed-lot learnings / one-shot calibrations) land via the
 // per-lot-file-registration arbiter ticket flow (close-lot / one-shot-closeout STAGE 5
@@ -480,10 +480,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
         preflight: result.preflight,
         warnings: result.warnings,
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(responsePayload) }],
-        structuredContent: responsePayload,
-      }
+      return toolJson(responsePayload)
     }),
   )
 }

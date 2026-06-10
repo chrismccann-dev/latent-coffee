@@ -9,7 +9,7 @@ import {
   resolveCanonicalAxis,
   type CanonicalAxis,
 } from '@/lib/mcp/canonicals'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // Canonical-introspection Tools (MCP feedback batch 3, 2026-04-30).
 //
@@ -63,10 +63,7 @@ export function registerCanonicalTools(server: McpServer) {
         title,
         description,
       }))
-      return {
-        content: [{ type: 'text', text: JSON.stringify({ axes }) }],
-        structuredContent: { axes },
-      }
+      return toolJson({ axes })
     }),
   )
 

@@ -3,7 +3,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { patchRoast, ROAST_PATCH_FIELDS, type PatchRoastPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 export const patchRoastInputSchema = {
   roast_id: z.string().uuid().describe(
@@ -86,14 +86,7 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
       const boundsErr = checkEndConditionBounds(payload.end_condition_type, payload.end_condition_target)
       if (boundsErr) throw new Error(`Validation failed:\n  - ${boundsErr}`)
       const result = await patchRoast(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        if (result.code === 'no_op') throw new Error(result.message)
-        if (result.code === 'not_found') throw new Error(result.message)
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       // Echo the diff. Mirrors patch_inventory + patch_experiment. Round-5
       // dogfood symmetry sweep (2026-05-10).
       const payloadObj = payload as unknown as Record<string, unknown>
@@ -122,10 +115,7 @@ export function registerPatchRoastTool(server: McpServer, auth: McpAuthContext) 
       if (Object.keys(canonical_values).length > 0) {
         out.canonical_values = canonical_values
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { searchRoestInventories, roestInventoryToPushGreenBeanPayload } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // list_roest_inventory — search Chris's Roest inventory (customer 2424).
 // Returns an array of inventories with normalized push_green_bean-shaped
@@ -41,10 +41,7 @@ export function registerListRoestInventoryTool(server: McpServer, auth: McpAuthC
       const normalized = inventories.map(roestInventoryToPushGreenBeanPayload)
       void auth
       const out = { count: normalized.length, inventories: normalized }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

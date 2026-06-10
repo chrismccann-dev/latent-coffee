@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { authedWrite, type RoestInventory } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // patch_inventory — PATCH /inventories/{id}/ on api.roestcoffee.com.
 // Phase 2 of Roest write integration. Field-level updates to an existing
@@ -122,10 +122,7 @@ export function registerPatchInventoryTool(server: McpServer, auth: McpAuthConte
       if (body.bean_process !== undefined) canonical_values.bean_process = body.bean_process
       if (body.is_archived !== undefined) canonical_values.is_archived = body.is_archived
       const out = { ok: true as const, updated_fields, canonical_values }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

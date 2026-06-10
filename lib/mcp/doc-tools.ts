@@ -9,7 +9,7 @@ import {
   readDoc,
   readDocSection,
 } from '@/lib/mcp/docs'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // Doc-introspection Tools (MCP feedback batch 2, 2026-04-30).
 //
@@ -51,10 +51,7 @@ export function registerDocTools(server: McpServer) {
             return docs.filter((d) => d.uri.startsWith(normalized))
           })()
         : docs
-      return {
-        content: [{ type: 'text', text: JSON.stringify({ docs: filtered }) }],
-        structuredContent: { docs: filtered },
-      }
+      return toolJson({ docs: filtered })
     }),
   )
 
@@ -83,10 +80,7 @@ export function registerDocTools(server: McpServer) {
         anchors,
       }
       if (redirectTo) payload.redirect_to = redirectTo
-      return {
-        content: [{ type: 'text', text: JSON.stringify(payload) }],
-        structuredContent: payload,
-      }
+      return toolJson(payload)
     }),
   )
 

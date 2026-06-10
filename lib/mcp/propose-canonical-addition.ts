@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { insertQueueRow } from '@/lib/taxonomy-queue'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // propose_canonical_addition — model-callable Tool that submits a net-new
 // canonical value to the taxonomy_overrides_queue with submission_path =
@@ -95,10 +95,7 @@ export function registerProposeCanonicalAdditionTool(server: McpServer, auth: Mc
         status: result.created ? ('pending' as const) : ('duplicate' as const),
         ...(result.created ? {} : { duplicate_of: result.queue_id }),
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

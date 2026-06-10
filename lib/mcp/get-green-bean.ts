@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { lookupGreenBean, type LookupGreenBeanFilter } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // get_green_bean — read-only lookup of a green_bean row by lot_id,
 // roest_inventory_id, or green_bean_id. Returns the row scoped to the
@@ -51,10 +51,7 @@ export function registerGetGreenBeanTool(server: McpServer, auth: McpAuthContext
         throw new Error(`Database error: ${result.message}`)
       }
       const out = result.row
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

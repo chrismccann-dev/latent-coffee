@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { searchRoestLogs, msecToMMSS } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // list_roest_logs — discover Roest roast log batches by inventory_id.
 //
@@ -70,10 +70,7 @@ export function registerListRoestLogsTool(server: McpServer, auth: McpAuthContex
         count: summaries.length,
         logs: summaries,
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

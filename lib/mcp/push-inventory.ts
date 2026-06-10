@@ -8,7 +8,7 @@ import {
   type RoestInventory,
 } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // Today's date in YYYY-MM-DD as the user's configured TZ (ROEST_USER_TIMEZONE,
 // default America/Los_Angeles). Used as the reg_date default — Roest requires
@@ -173,10 +173,7 @@ export function registerPushInventoryTool(server: McpServer, auth: McpAuthContex
         linked,
         link_error,
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }
