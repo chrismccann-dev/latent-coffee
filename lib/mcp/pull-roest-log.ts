@@ -10,7 +10,7 @@ import {
   type RoestDatapoint,
 } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // pull_roest_log — server-side fetch of a Roest /logs/{id}/ row + its linked
 // /profiles/{profile_id}/ (for fan_curve / inlet_curve beziers). Returns a
@@ -89,10 +89,7 @@ export function registerPullRoestLogTool(server: McpServer, auth: McpAuthContext
       // doesn't write but Tool registration retains userId for symmetry with
       // the push tools and future query-Tools that scope to user.
       void auth
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

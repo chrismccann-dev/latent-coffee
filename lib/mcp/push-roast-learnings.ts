@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistRoastLearnings, type RoastLearningsPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // push_roast_learnings — UPSERT on (user_id, green_bean_id). One row per closed
 // bean, filled at lot close-out. The 17 structured fields mirror the
@@ -67,17 +67,9 @@ export function registerPushRoastLearningsTool(server: McpServer, auth: McpAuthC
     withToolErrorLogging('push_roast_learnings', async (input) => {
       const payload = input as RoastLearningsPayload
       const result = await persistRoastLearnings(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       const out = { roast_learnings_id: result.roast_learnings_id, created: result.created }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

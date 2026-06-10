@@ -7,7 +7,7 @@ import {
 } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, echoUpdatedFields, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 export const patchRoastRecipeInputSchema = {
   recipe_id: z.string().uuid().describe(
@@ -73,23 +73,10 @@ export function registerPatchRoastRecipeTool(server: McpServer, auth: McpAuthCon
         )
       }
       const result = await patchRoastRecipe(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        if (result.code === 'no_op') throw new Error(result.message)
-        if (result.code === 'not_found') throw new Error(result.message)
-        throw new Error(`Database error: ${result.message}`)
-      }
-      const payloadObj = payload as unknown as Record<string, unknown>
-      const updated_fields = ROAST_RECIPE_PATCH_FIELDS.filter(
-        (k) => k in payloadObj && payloadObj[k] !== undefined,
-      )
+      if (!result.ok) throwToolFail(result)
+      const updated_fields = echoUpdatedFields(payload, ROAST_RECIPE_PATCH_FIELDS)
       const out = { recipe_id: result.recipe_id, updated_fields }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { fetchBrewById } from '@/lib/mcp/brews'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // get_brew — Tool surface for the brews://by-id/{uuid} Resource.
 //
@@ -36,10 +36,7 @@ export function registerGetBrewTool(server: McpServer, auth: McpAuthContext) {
       if (!row) {
         throw new Error(`Brew ${brew_id} not found (or not owned by this api_key's user)`)
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(row) }],
-        structuredContent: row,
-      }
+      return toolJson(row)
     }),
   )
 }

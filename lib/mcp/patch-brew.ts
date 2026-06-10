@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { patchBrew, PATCH_BREW_EDITABLE_FIELDS } from '@/lib/brew-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // patch_brew (Sprint 2.6) — field-level mutation Tool. Mirrors push_brew's
 // surface but every field is optional except `brew_id`. Re-uses the shared
@@ -122,14 +122,7 @@ export function registerPatchBrewTool(server: McpServer, auth: McpAuthContext) {
     withToolErrorLogging('patch_brew', async (input) => {
       const body = input as Record<string, unknown>
       const result = await patchBrew(auth.supabase, auth.userId, input.brew_id, body)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        if (result.code === 'no_op') throw new Error(result.message)
-        if (result.code === 'not_found') throw new Error(result.message)
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       // Echo simple-column diff. FK re-resolutions (roaster / producer /
       // cultivar / terroir / process axes) intentionally excluded - they touch
       // multiple columns + sibling rows. Round-5 dogfood symmetry sweep
@@ -138,10 +131,7 @@ export function registerPatchBrewTool(server: McpServer, auth: McpAuthContext) {
         (k) => k in body && body[k] !== undefined,
       )
       const out = { brew_id: result.brewId, updated_fields }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

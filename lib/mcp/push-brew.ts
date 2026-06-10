@@ -13,7 +13,7 @@ import {
 import { STRUCTURE_KEYS } from '@/lib/flavor-registry'
 import { HYBRID_SUBFORMS } from '@/lib/hybrid-subform'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // Input schema mirrors lib/brew-import.ts BrewPayload + SYNC_V2.md push_brew spec.
 // We let zod validate shape, then hand the typed object to persistBrew which
@@ -400,10 +400,7 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
         queued_for_taxonomy_review: result.queuedForTaxonomyReview,
         warnings: [] as string[],
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(responsePayload) }],
-        structuredContent: responsePayload,
-      }
+      return toolJson(responsePayload)
     }),
   )
 }

@@ -3,7 +3,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistRoastRecipe, type RoastRecipePayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // push_roast_recipe — UPSERT on (user_id, experiment_id, batch_slot) when both
 // fields supplied (canonical V-set framing), otherwise UPSERT on
@@ -104,17 +104,9 @@ export function registerPushRoastRecipeTool(server: McpServer, auth: McpAuthCont
         )
       }
       const result = await persistRoastRecipe(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       const out = { recipe_id: result.recipe_id, created: result.created }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

@@ -6,7 +6,7 @@ import {
 } from '@/lib/roest-client'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { checkEndConditionBounds } from '@/lib/mcp/end-condition-bounds'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // push_roast_profile — server-side POST /profiles/ to api.roestcoffee.com.
 // Constructs an INLET_TEMP counterflow profile from claude.ai-supplied beziers
@@ -244,10 +244,7 @@ export function registerPushRoastProfileTool(server: McpServer, auth: McpAuthCon
         profile_id: created.id,
         share_url,
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

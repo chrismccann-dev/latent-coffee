@@ -6,7 +6,7 @@ import {
   type PatchExperimentPayload,
 } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 export const patchExperimentInputSchema = {
   experiment_pk: z.string().uuid().describe(
@@ -81,14 +81,7 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
     withToolErrorLogging('patch_experiment', async (input) => {
       const payload = input as PatchExperimentPayload
       const result = await patchExperiment(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        if (result.code === 'no_op') throw new Error(result.message)
-        if (result.code === 'not_found') throw new Error(result.message)
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       // Echo the diff so the caller can sanity-check which fields landed
       // without a follow-up get_bean_pipeline read. Mirrors patch_inventory's
       // updated_fields pattern. Round-5 dogfood (2026-05-10).
@@ -159,10 +152,7 @@ export function registerPatchExperimentTool(server: McpServer, auth: McpAuthCont
       if (Object.keys(canonical_values).length > 0) {
         out.canonical_values = canonical_values
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

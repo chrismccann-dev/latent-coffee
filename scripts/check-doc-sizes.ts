@@ -128,6 +128,10 @@ const SKILL_CLUSTER_CLASS: Record<string, keyof typeof SKILL_CLASS_CAP> = {
   'research-coordinator': 'EquipmentReference',
   'roest-knowledge': 'EquipmentReference',
   coordinator: 'Coordinator',
+  // Lot Coordinator pair (ADR-0024, PR #424) — Coordinator plans/closes lots;
+  // V-Set Assistant is an in-cycle workflow skill like the other *-assistants.
+  'roasting-coordinator': 'Coordinator',
+  'v-set-assistant': 'Workflow',
   ccil: 'CCIL',
   'brewing-assistant': 'Workflow',
   'roasting-assistant': 'Workflow',

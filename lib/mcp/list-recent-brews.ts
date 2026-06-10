@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { fetchRecentBrews, RECENT_DEFAULT_LIMIT, RECENT_MAX_LIMIT } from '@/lib/mcp/brews'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // list_recent_brews — Tool surface for the brews://recent Resource.
 //
@@ -44,10 +44,7 @@ export function registerListRecentBrewsTool(server: McpServer, auth: McpAuthCont
       const limit = (input as { limit?: number }).limit ?? RECENT_DEFAULT_LIMIT
       const rows = await fetchRecentBrews(auth.supabase, auth.userId, limit)
       const out = { count: rows.length, brews: rows }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }

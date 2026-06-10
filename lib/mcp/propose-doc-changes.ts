@@ -11,7 +11,7 @@ import {
   type TaxonomyAxis,
 } from '@/lib/mcp/docs'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // Net-new per-lot files (closed-lot learnings / one-shot calibrations) land via the
 // per-lot-file-registration arbiter ticket flow (close-lot / one-shot-closeout STAGE 5
@@ -95,7 +95,7 @@ function findClosestAnchor(target: string, candidates: string[]): string | null 
 //   - 'taxonomies/{axis}.md'                      — one of 10 canonical taxonomy MD files
 //   - 'skills/{path}.md'                          — Wave 2 PR 1: composable sub-skills cluster docs (ADR-0011).
 //                                                   Validated against isKnownDoc(`docs://skills/${path}.md`); only registered
-//                                                   cluster paths in lib/mcp/docs.ts SKILL_FILES are accepted. Routes new
+//                                                   cluster paths in lib/mcp/docs.ts DOC_CATALOG are accepted. Routes new
 //                                                   WBC content proposals into the cluster instead of BREWING.md / ROASTING.md.
 //
 // Roaster names are canonicalized via ROASTER_LOOKUP.canonicalize on insert so
@@ -141,7 +141,7 @@ const sourceRef = z.object({
 
 export const proposeDocChangesInputSchema = {
   target_doc: z.string().describe(
-    'Default doc identifier for citations that don\'t override it. Allowed values: "brewing.md" | "roasting.md" | "roaster/{Canonical Roaster Name}" | "taxonomies/{axis}.md" | "skills/{path}.md". Roaster names auto-canonicalize via ROASTER_LOOKUP; unknown roasters are rejected (add to docs/taxonomies/roasters.md first). `skills/{path}.md` routes proposals into composable sub-skill cluster docs (Wave 2 PR 1+, ADR-0011) — e.g. `skills/wbc-brewing-archivist/cluster/wbc-reference.md`; validated against the registered SKILL_FILES allow-list. For cross-doc proposals, set per-citation target_doc on each citation that diverges from this default.',
+    'Default doc identifier for citations that don\'t override it. Allowed values: "brewing.md" | "roasting.md" | "roaster/{Canonical Roaster Name}" | "taxonomies/{axis}.md" | "skills/{path}.md". Roaster names auto-canonicalize via ROASTER_LOOKUP; unknown roasters are rejected (add to docs/taxonomies/roasters.md first). `skills/{path}.md` routes proposals into composable sub-skill cluster docs (Wave 2 PR 1+, ADR-0011) — e.g. `skills/wbc-brewing-archivist/cluster/wbc-reference.md`; validated against the registered DOC_CATALOG allow-list. For cross-doc proposals, set per-citation target_doc on each citation that diverges from this default.',
   ),
   source: sourceRef.describe('What triggered the proposal — a brew log session, a roast cupping, an end-of-coffee debrief, or a general session.'),
   citations: z.array(citation).min(1).describe(
@@ -252,7 +252,7 @@ function normalizeTargetDoc(
   }
   if (trimmed.startsWith('skills/')) {
     // Wave 2 PR 1 (ADR-0011): composable sub-skill cluster docs. Validated via
-    // isKnownDoc against the docs:// URI so only registered SKILL_FILES paths
+    // isKnownDoc against the docs:// URI so only registered DOC_CATALOG paths
     // resolve — adding a new sub-skill requires registering it in lib/mcp/docs.ts
     // first.
     const uri = `docs://${trimmed}`
@@ -265,7 +265,7 @@ function normalizeTargetDoc(
       }
       return {
         ok: false,
-        error: `Unknown skills target: '${trimmed}'. Register the path in lib/mcp/docs.ts SKILL_FILES first, then re-attempt.`,
+        error: `Unknown skills target: '${trimmed}'. Register the path in lib/mcp/docs.ts DOC_CATALOG first, then re-attempt.`,
       }
     }
     return { ok: true, target_doc: trimmed }
@@ -480,10 +480,7 @@ export function registerProposeDocChangesTool(server: McpServer, auth: McpAuthCo
         preflight: result.preflight,
         warnings: result.warnings,
       }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(responsePayload) }],
-        structuredContent: responsePayload,
-      }
+      return toolJson(responsePayload)
     }),
   )
 }

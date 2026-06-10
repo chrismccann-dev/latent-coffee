@@ -2,7 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { patchGreenBean, GREEN_BEAN_PATCH_FIELDS, type PatchGreenBeanPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
-import { withToolErrorLogging } from '@/lib/mcp/tool-wrapper'
+import { withToolErrorLogging, echoUpdatedFields, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 const terroir = z.object({
   country: z.string(),
@@ -86,27 +86,14 @@ export function registerPatchGreenBeanTool(server: McpServer, auth: McpAuthConte
     withToolErrorLogging('patch_green_bean', async (input) => {
       const payload = input as PatchGreenBeanPayload
       const result = await patchGreenBean(auth.supabase, auth.userId, payload)
-      if (!result.ok) {
-        if (result.code === 'validation') {
-          throw new Error(`Validation failed:\n${result.errors.map((e) => `  - ${e}`).join('\n')}`)
-        }
-        if (result.code === 'no_op') throw new Error(result.message)
-        if (result.code === 'not_found') throw new Error(result.message)
-        throw new Error(`Database error: ${result.message}`)
-      }
+      if (!result.ok) throwToolFail(result)
       // Echo simple-column diff. FK re-resolutions (terroir / cultivar /
       // producer) intentionally excluded - they touch multiple columns + sibling
       // rows; caller should follow-up read if they need terroir_id / cultivar_id
       // confirmation. Round-5 dogfood symmetry sweep (2026-05-10).
-      const payloadObj = payload as unknown as Record<string, unknown>
-      const updated_fields = GREEN_BEAN_PATCH_FIELDS.filter(
-        (k) => k in payloadObj && payloadObj[k] !== undefined,
-      )
+      const updated_fields = echoUpdatedFields(payload, GREEN_BEAN_PATCH_FIELDS)
       const out = { green_bean_id: result.green_bean_id, updated_fields }
-      return {
-        content: [{ type: 'text', text: JSON.stringify(out) }],
-        structuredContent: out,
-      }
+      return toolJson(out)
     }),
   )
 }
