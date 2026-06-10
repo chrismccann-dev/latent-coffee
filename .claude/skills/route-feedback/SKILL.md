@@ -21,12 +21,12 @@ memory file as append-only "Rounds," so real signal rotted: a recurring friction
 same as a one-off, and buildable work was buried next to wins.
 
 This skill is the **intake + routing** half of the feedback pipeline (see
-[ADR-0020](../../../docs/adr/0020-feedback-handoff-pipeline.md)). Its job is to take the
+[ADR-0020](docs/adr/0020-feedback-handoff-pipeline.md)). Its job is to take the
 paste apart into discrete items and send each one to the place that will actually act on it,
 so the signal compounds instead of accumulating. The **planning** half — turning the
 accumulated backlog into a buildable sprint — is the separate `plan-feedback` skill.
 
-This is the **practice-to-substrate** analog of [ARBITER.md](../../../ARBITER.md) (which
+This is the **practice-to-substrate** analog of [ARBITER.md](ARBITER.md) (which
 routes substrate-to-substrate `propose_doc_changes`): same read → present → confirm → apply
 discipline, different input (lived workflow friction rather than staged doc proposals).
 
@@ -35,7 +35,7 @@ discipline, different input (lived workflow friction rather than staged doc prop
 - **Master feedback log** — `~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_continuous_log.md`.
   The raw intake + routing ledger + audit trail. Every item gets recorded here with the
   routing decision stamped on it. Wins and non-actionable items live here and nowhere else.
-- **Feedback backlog** — [`docs/product/feedback-backlog.md`](../../../docs/product/feedback-backlog.md).
+- **Feedback backlog** — [`docs/product/feedback-backlog.md`](docs/product/feedback-backlog.md).
   Only the **actionable** subset (work that needs a build). Shape-tagged + recurrence-counted
   so `plan-feedback` can cluster and prioritize. Repo-tracked so it survives into PRs.
 

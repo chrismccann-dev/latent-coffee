@@ -46,6 +46,6 @@ None directly.
 
 - **Files migrated:** `docs/roasting/wbc-roasting.md` + `docs/roasting/wbc-sourcing.md` → `cluster/` via `git mv`; original paths now hold ~200-byte redirect stubs. `wbc-sourcing.md` lands at `cluster/sourcing/strategy.md` (sub-dir reserved for future split if Sourcing Knowledge earns its own sub-skill).
 - **Sourcing collapse rationale (Chris's Round 2 confirmation):** Sourcing's content today all came from the WBC corpus. Net surface area is light. Tentative merge into one sub-skill; future split trigger = `cluster/sourcing/` grows beyond ~3-5 docs OR dedicated sourcing research (sourcing book) produces content that doesn't fit alongside WBC strategy patterns.
-- **MCP Resources:** new cluster files registered in [lib/mcp/docs.ts](../../../lib/mcp/docs.ts) `DOC_FILES` + `DOC_DESCRIPTIONS` + `listDocs`. Old `docs://roasting/wbc-{roasting,sourcing}.md` URIs resolve to redirect stubs.
+- **MCP Resources:** new cluster files registered in [lib/mcp/docs.ts](lib/mcp/docs.ts) `DOC_FILES` + `DOC_DESCRIPTIONS` + `listDocs`. Old `docs://roasting/wbc-{roasting,sourcing}.md` URIs resolve to redirect stubs.
 - **Cross-system propagation:** ARBITER.md routing updated to direct new `propose_doc_changes` proposals at WBC roasting / sourcing content into the cluster; CONTEXT-{roasting,brewing,shared}.md / ROASTING.md / start-lot.md path refs updated.
 - **Subsequent waves:** Wave 3 Roest Knowledge + Wave 4 redirect-stubs on ROASTING.md may interact with this cluster's scope — counterflow methodology stays in ROASTING.md through Wave 3.

@@ -13,7 +13,7 @@ description: >-
 # Plan Feedback
 
 The `route-feedback` skill files actionable workflow feedback into
-[`docs/product/feedback-backlog.md`](../../../docs/product/feedback-backlog.md), shape-tagged
+[`docs/product/feedback-backlog.md`](docs/product/feedback-backlog.md), shape-tagged
 and recurrence-counted. Items accumulate there across many sessions. This skill is the moment
 that turns that pile into a decision: **what do we actually build next, and what's the brief?**
 
@@ -30,7 +30,7 @@ It produces a plan and hands off; it does not silently start building.
 
 ### 1. Read the whole backlog (and sweep the master log for stragglers)
 
-Read [`docs/product/feedback-backlog.md`](../../../docs/product/feedback-backlog.md) fully.
+Read [`docs/product/feedback-backlog.md`](docs/product/feedback-backlog.md) fully.
 Then sweep the master log
 (`~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_continuous_log.md`)
 `## Outstanding follow-ups` + latest status section for any open actionable item that never
@@ -73,7 +73,7 @@ is interpretive, and Chris's read of which friction hurts most is the load-beari
 ### 5. Emit a kickoff brief for the chosen cluster(s)
 
 Write a paste-ready kickoff brief in the project's standard sprint-cadence shape (see
-[CLAUDE.md § Sprint cadence](../../../CLAUDE.md) item 7):
+[CLAUDE.md § Sprint cadence](CLAUDE.md) item 7):
 - **Goal** (1-2 sentences)
 - **Scope** (in / out)
 - **Files likely to touch**
@@ -96,7 +96,7 @@ tells Chris the report is ready to bring back here. Chris pastes it into a Claud
 to close out: flip the cluster's backlog items `open → shipped`, confirm the `shipped.md` row,
 and `route-feedback` any new friction the build surfaced. Without this section the loop dangles
 — a build ships but the backlog never learns it shipped, and friction the build exposed is
-lost. See [the first such brief](../../../docs/sprints/cupping-schema-guardrails-kickoff.md)
+lost. See [the first such brief](docs/sprints/cupping-schema-guardrails-kickoff.md)
 for the shape.
 
 ### 6. Mark planned items + hand off
@@ -134,4 +134,4 @@ This skill was first proven by running it over the real accumulated backlog (the
 `feedback_mcp_continuous_log.md` Round-19 open state). That run's prioritized output — the
 lifecycle-gate-not-modeled cluster ranking highest by recurrence, the claude.ai-client gating
 correctly ranked out as an Anthropic escalation rather than a Latent sprint — is the worked
-example of steps 2-5. See [ADR-0020](../../../docs/adr/0020-feedback-handoff-pipeline.md).
+example of steps 2-5. See [ADR-0020](docs/adr/0020-feedback-handoff-pipeline.md).
