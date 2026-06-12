@@ -46,8 +46,47 @@ export type LifecycleState =
   | 'in_inventory'
   | 'waiting_for_next_roast'
   | 'waiting_for_next_cupping'
+  | 'waiting_for_brewing'
   | 'resolved'
   | 'unresolved'
+
+// Lot Coordinator dogfood (migration 080, ADR-0024 § 6) — the stored
+// green_beans.lot_status value set. Single source for the zod enum on
+// patch_green_bean, the check:lifecycle-consistency gate, and the SQL
+// CHECK constraint that lands once the live lot confirms the set.
+//
+// `waiting_for_brewing` is the one state derivation can't produce: the ball
+// is in the brewing court (SPG execution or optimized brew, both claude.ai-
+// side) and there is no row whose absence distinguishes "not handed off"
+// from "handed off and waiting." The Roasting Brief holds WHICH brewing task.
+export const LOT_STATUS_VALUES = [
+  'in_inventory',
+  'waiting_for_next_roast',
+  'waiting_for_next_cupping',
+  'waiting_for_brewing',
+  'resolved',
+  'unresolved',
+] as const
+export type LotStatus = (typeof LOT_STATUS_VALUES)[number]
+
+/**
+ * Stored-with-derived-fallback resolution (migration 080). The stored
+ * lot_status wins when present and valid; NULL (every pre-080 row, incl.
+ * the in-flight claude.ai lots) falls back to the derived computation so
+ * those lots render unchanged. The derived logic survives as the validator
+ * — scripts/check-lifecycle-consistency.ts flags stored-vs-derived
+ * disagreement (with the one designed exception: stored waiting_for_brewing
+ * where derivation, blind to the brewing handoff, says waiting_for_next_roast).
+ */
+export function resolveLifecycleState(
+  stored: string | null | undefined,
+  b: LifecycleInputs,
+): LifecycleState {
+  if (stored && (LOT_STATUS_VALUES as readonly string[]).includes(stored)) {
+    return stored as LifecycleState
+  }
+  return computeLifecycleState(b)
+}
 
 // V-set batch slots — three real, fourth is rare (some V-sets run 4 batches).
 // Shared across the cupping view (page.tsx `computeSlotInfos`) and
@@ -244,6 +283,8 @@ export function lifecycleStageLabel(
       return 'Next roast'
     case 'waiting_for_next_cupping':
       return 'Next cupping'
+    case 'waiting_for_brewing':
+      return 'In brewing'
     case 'resolved':
       return referenceBatchLabel?.trim() ? referenceBatchLabel : 'Reference'
     case 'unresolved':
@@ -271,6 +312,8 @@ export function lifecycleSectionTitle(state: LifecycleState): string {
       return 'Waiting for next roast'
     case 'waiting_for_next_cupping':
       return 'Waiting for next cupping'
+    case 'waiting_for_brewing':
+      return 'Waiting for brewing'
     case 'resolved':
       return 'Resolved'
     case 'unresolved':

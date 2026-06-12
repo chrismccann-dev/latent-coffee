@@ -1,0 +1,45 @@
+name: lifecycle-consistency-check
+
+# Lifecycle-consistency gate (Lot Coordinator dogfood, migration 080 /
+# ADR-0024 § 6). Runs `npm run check:lifecycle-consistency`, which compares
+# every lot's stored green_beans.lot_status against what its rows imply
+# (lib/lifecycle-state.ts computeLifecycleState — the derived logic survives
+# as the validator).
+#
+# Three triggers (mirrors migrations-check):
+#   - pull_request (lifecycle / write-path / script paths): catches a wiring
+#     change that would let stored and derived drift.
+#   - schedule (daily): the catch-all — surfaces drift introduced by any write
+#     path within a day. Runs against prod.
+#   - workflow_dispatch: manual run (useful right after a Coordinator route).
+#
+# Requires the SUPABASE_SERVICE_ROLE_KEY + NEXT_PUBLIC_SUPABASE_URL repo
+# secrets. When the secret is absent the script FAILS (exit 2) — never a
+# silent green skip (same policy as check:migrations).
+
+on:
+  pull_request:
+    paths:
+      - 'lib/lifecycle-state.ts'
+      - 'lib/roast-import.ts'
+      - 'scripts/check-lifecycle-consistency.ts'
+      - 'package.json'
+  schedule:
+    - cron: '0 14 * * *' # daily ~14:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-lifecycle-consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm install --no-audit --no-fund --prefer-offline
+      - name: Run check:lifecycle-consistency
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run check:lifecycle-consistency

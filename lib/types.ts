@@ -126,6 +126,12 @@ export interface GreenBean {
   // peer_reference_brew_id; set at close-lot, replaces the pickOptimizedBrew
   // heuristic. ON DELETE SET NULL. See ADR-0019.
   optimized_brew_id: string | null
+  // Lot Coordinator dogfood (migration 080, ADR-0024 § 6): stored lifecycle
+  // status. NULL = pre-080 row, renders via the derived fallback
+  // (lib/lifecycle-state.ts resolveLifecycleState). Maintained by the MCP
+  // write path only (single-write-path guardrail); value set mirrors
+  // LOT_STATUS_VALUES.
+  lot_status: string | null
   created_at: string
   updated_at: string
   // Joined data

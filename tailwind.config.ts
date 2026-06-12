@@ -59,6 +59,7 @@ const config: Config = {
           'tile-inventory': '#B4B4AE',     // grey — held back, hidden from primary view
           'tile-next-roast': '#4A7C59',    // sage green — green bean, ready to roast
           'tile-next-cupping': '#6B5E3A',  // olive-bronze — between roast and cupping
+          'tile-brewing': '#3F5E6B',       // steel blue — water; ball in the brewing court
           'tile-resolved': '#3a2418',      // roasted brown — finished bean
           // Name-plate hero edge (Ssp* primitive family)
           'hero-plum': '#7A3B5C',

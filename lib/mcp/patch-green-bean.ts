@@ -1,6 +1,7 @@
 import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { patchGreenBean, GREEN_BEAN_PATCH_FIELDS, type PatchGreenBeanPayload } from '@/lib/roast-import'
+import { LOT_STATUS_VALUES } from '@/lib/lifecycle-state'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { withToolErrorLogging, echoUpdatedFields, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
@@ -72,6 +73,14 @@ export const patchGreenBeanInputSchema = {
   optimized_brew_id: z.string().uuid().optional().nullable().describe(
     'Optional FK to a brews(id) row for the canonical optimized brew of THIS green-bean lot (the operator own daily-consumption pour-over for the reference roast). The primary set-point: at close-lot, read the brew_id from the optimized-brew handoff brief and patch it here; or backfill it for a lot closed before this column existed. Distinct from peer_reference_brew_id (external roaster version). Pass NULL to clear. See CONTEXT-roasting.md section Optimized brew + ADR-0019.',
   ),
+  // Migration 080 (ADR-0024 § 6, Lot Coordinator dogfood 2026-06-11): the
+  // Coordinator-explicit slot in the lot_status single write path.
+  lot_status: z
+    .enum(LOT_STATUS_VALUES)
+    .optional()
+    .describe(
+      'Stored lot lifecycle status (migration 080). Most transitions are AUTOMATIC — push_roast advances to waiting_for_next_cupping, push_experiment / a landed winner advance to waiting_for_next_roast, push_roast_learnings closes to resolved/unresolved — so you rarely set this. Set it explicitly ONLY for the transitions no row write implies: → waiting_for_brewing when the lot is handed to the brewing side (SPG execution or optimized brew — the Roasting Brief records WHICH), or a deliberate correction/reopen. Cannot be cleared to NULL (NULL = pre-080 derived fallback). The derived lifecycle survives as a validator (check:lifecycle-consistency flags stored-vs-rows disagreement).',
+    ),
 }
 
 export function registerPatchGreenBeanTool(server: McpServer, auth: McpAuthContext) {
