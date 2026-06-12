@@ -118,7 +118,7 @@ Roest profile (machine artifact): The JSON specification pushed to the Roest L20
 
 ### Anchor Profile, Reference Roast Profile
 
-Anchor profile / reference roast profile / curve-shape names (preserved canonical concepts): Pre-existing roasting terminology for a curve-shape reference used at V1 design time — distinct from both the recipe aggregate noun and the Roest profile machine artifact. The anchor profile is the existing profile chosen as the V1 starting point (see ROASTING.md § Step 3 - Anchor Profile Selection Logic); the reference roast profile is the curve from a closed lot's reference roast used directly as the next lot's anchor; named curve-shape references like CF-Light profile / washed profile / natural profile / working profile denote stable curve templates. These usages are NOT drift — they describe the *shape* of the curve as a transferable starting framework, not a row in roast_recipes and not a JSON push to the Roest tablet. Preserved verbatim in ROASTING.md + docs/roasting/\* and Latent prose. *Avoid*: rewriting "anchor profile" to "anchor recipe" (loses the curve-shape framing); collapsing curve-shape names with the recipe aggregate (curve-shape is a starting framework, recipe is the per-batch design intent that wraps the chosen curve).
+Anchor profile / reference roast profile / curve-shape names (preserved canonical concepts): Pre-existing roasting terminology for a curve-shape reference used at V1 design time — distinct from both the recipe aggregate noun and the Roest profile machine artifact. The anchor profile is the existing profile chosen as the V1 starting point (see [onboarding-protocol.md § Step 3 — Anchor Profile Selection Logic](docs/skills/roasting-assistant/cluster/onboarding-protocol.md)); the reference roast profile is the curve from a closed lot's reference roast used directly as the next lot's anchor; named curve-shape references like CF-Light profile / washed profile / natural profile / working profile denote stable curve templates. These usages are NOT drift — they describe the *shape* of the curve as a transferable starting framework, not a row in roast_recipes and not a JSON push to the Roest tablet. Preserved verbatim across the roasting cluster docs + Latent prose. *Avoid*: rewriting "anchor profile" to "anchor recipe" (loses the curve-shape framing); collapsing curve-shape names with the recipe aggregate (curve-shape is a starting framework, recipe is the per-batch design intent that wraps the chosen curve).
 
 Distinct from carry-forward learning: anchor profile is parametric reference (specific numbers from a real prior roast); carry-forward learning is propositional knowledge (sentence-shaped guidance derived from anchor profiles). One anchor profile generates multiple carry-forward learnings; one carry-forward learning may consolidate signal from multiple anchors. Design opens with the anchor; interpretation closes with the carry-forward. *Avoid*: "reference profile" (confuses with reference roast at lot-close); "anchor roast" outside the inventory-column context (use "anchor profile" or bare "anchor" in prose); collapsing anchor profile and carry-forward learning into the same concept.
 
@@ -160,96 +160,39 @@ This section is about **operator discipline**, not recipe design. Agents should 
 
 ### Operator-fixed constants
 
-Four constants apply in every roast session, across every V-set, green lot, and roast type:
-
-1. **10-minute warm-up dry run**: turn on the Roest, heat for 10 minutes, then run one dry roast with no beans until drum temperature reaches 140°C.
-2. **Between-Batch Protocol (BBP)**: run the fixed cooldown routine from the prior roast's ~140°C drum end-state down to the 120°C BBP endpoint.
-3. **Hopper-load temp: 125°C**: when the drum cools to 125°C during BBP, the alert fires and Chris loads the green beans into the shoot / hopper. Beans do not enter the drum yet.
-4. **Charge temp: 117°C**: when the drum reads 117°C, Chris pulls the lever. Beans drop from the hopper into the drum and the roast officially starts.
-
-Canonical distinction: **load at 125°C, charge at 117°C**.
+Four constants apply in every roast session, across every V-set, green lot, and roast type: the **10-minute warm-up dry run** (dry roast with no beans until 140°C drum), the **Between-Batch Protocol (BBP)** (fixed cooldown to the 120°C endpoint), **hopper-load temp 125°C** (beans into the hopper at the alert; not yet in the drum), and **charge temp 117°C** (lever pulled, beans drop into the drum, roast starts). Canonical distinction: **load at 125°C, charge at 117°C**. Full parameters + empirical rationale live in [docs/skills/roest-knowledge/cluster/protocols/between-batch-protocol.md](docs/skills/roest-knowledge/cluster/protocols/between-batch-protocol.md).
 
 Recipe-schema-vs-lived-practice asymmetry: roast_recipes.charge_temp + roast_recipes.hopper_load_temp schema fields exist as if they were recipe-variable, but lived values are operator-fixed at 117°C / 125°C. Substrate proposals should write these defaults to recipe rows but not propose varying them across V-set slots. If a V-set's structural question genuinely REQUIRES varying the constants, the variation must be front-and-center in the primary_question + variables + rationale prose (not buried in a recipe row), AND the expert must explicitly flag to Chris that the constants are being varied — muscle memory will otherwise override the recipe.
 
 ### Session sequence
 
-Standard session sequence:
-
-1. Turn on Roest.
-2. Warm up for 10 minutes.
-3. Run a dry roast with no beans to 140°C.
-4. Run BBP down to the 120°C endpoint.
-5. At 125°C, load beans into the hopper.
-6. At 117°C, pull the lever and charge beans into the drum.
-7. Roast.
-8. Roast ends around 140°C drum temperature.
-9. Run BBP.
-10. Repeat hopper-load / charge / roast for the next batch.
-
-For a three-slot V-set:
-
-```text
-thermal reset -> BBP -> load at 125°C -> charge at 117°C -> V1a
-V1a ends -> BBP -> load at 125°C -> charge at 117°C -> V1b
-V1b ends -> BBP -> load at 125°C -> charge at 117°C -> V1c
-```
-
-Thermal reset happens once at session start. BBP happens after every real roast.
+Standard session shape: thermal reset once at session start, then per batch: BBP cooldown -> load at 125°C -> charge at 117°C -> roast (ends around 140°C drum) -> BBP again for the next batch. The step-by-step workflow lives in [between-batch-protocol.md § Standard Workflow](docs/skills/roest-knowledge/cluster/protocols/between-batch-protocol.md).
 
 ### Between-Batch Protocol (BBP)
 
-**BBP** is the frozen between-batch routine that cools the Roest from the prior roast's end-state to the next roast's charge state.
+**BBP** is the frozen between-batch routine that cools the Roest from the prior roast's end-state (typically ~140°C drum) to the 120°C endpoint, with the hopper-load alert firing at 125°C and charge at 117°C on the coast down. Typical runtime is approximately 2:00-2:30. The frozen parameters (fan taper, air temp) live in [between-batch-protocol.md](docs/skills/roest-knowledge/cluster/protocols/between-batch-protocol.md).
 
-Canonical BBP shape:
-
-- Start from the prior roast's end-state, typically around 140°C drum temperature.
-- Fan taper: 100% -> 60% at 0:30 -> 40% at 1:00 -> 25% at 1:45.
-- End BBP at 120°C drum temperature.
-- Hopper-load alert fires at 125°C during the cooldown path.
-- Charge happens at 117°C.
-- Typical duration is roughly 7 minutes.
-
-BBP is distinct from thermal reset:
-
-- **Thermal reset** drives the drum up.
-- **BBP** cools the drum down.
-- **Thermal reset** happens once at session start.
-- **BBP** happens between every real roast.
+BBP is distinct from thermal reset: thermal reset drives the drum **up**, once at session start; BBP cools the drum **down**, between every real roast.
 
 Avoid: "between-roast cooldown" when the full BBP is meant, "thermal reset" as a synonym for BBP, "drum recovery."
 
 ### Hopper pre-load
 
-**Hopper pre-load** is loading green beans into the Roest hopper at the 125°C alert, before official charge at 117°C.
-
-The 125°C pre-load gives beans roughly 60-90 seconds of acclimation in the hopper before they drop into the drum. Drifting this timing can change cup quality. Prior observed drift between 125°C and 120°C pre-load created enough cup difference to make the 125°C lock load-bearing.
+**Hopper pre-load** is loading green beans into the Roest hopper at the 125°C alert, before official charge at 117°C — roughly 60-90 seconds of acclimation before the drop. The 125°C lock is load-bearing: observed drift between 125°C and 120°C pre-load created enough cup difference to freeze it. Empirical detail in [between-batch-protocol.md § Hopper Pre-Load Timing](docs/skills/roest-knowledge/cluster/protocols/between-batch-protocol.md).
 
 Avoid: "preheat" for hopper pre-load, "pre-charge," or "hopper load" without the temperature regime.
 
 ### Thermal reset protocol
 
-**Thermal reset** is the dry-roast warm-up routine that equalizes the drum before the first experimental batch.
-
-It runs the Roest through a controlled dry roast with no beans until the drum reaches 140°C. This solves the first-batch-of-session problem: a cold or under-saturated drum absorbs heat into its own mass rather than transferring energy consistently into the beans.
-
-Use thermal reset when starting a roast session. Use BBP between real roasts.
+**Thermal reset** is the dry-roast warm-up routine that equalizes the drum before the first experimental batch — a controlled dry roast with no beans until the drum reaches 140°C, solving the first-batch-of-session problem (a cold drum absorbs heat into its own mass rather than transferring energy consistently into the beans). Use thermal reset when starting a roast session; use BBP between real roasts.
 
 Avoid: "deep reset," "drum reset," treating thermal reset as part of BBP.
 
 ### Session position effect
 
-**Session position effect** is the thermal asymmetry across consecutive roasts inside one session.
+**Session position effect** is the thermal asymmetry across consecutive roasts inside one session — the first roast tends to run slow (drum still absorbing heat into mass), later roasts faster as the drum saturates.
 
-Typical pattern:
-
-- First roast runs slow because the drum is still absorbing heat into mass.
-- Middle roast is the most thermally stable reference position.
-- Third roast runs fast because the drum is more saturated and acceleration is in place.
-
-Session position matters in two places:
-
-1. **Pre-emptive V-set design**: put the most important batch in the middle position when possible. This is usually the slot closest to the anchor or the batch carrying the V-set's primary hypothesis.
-2. **Post-hoc V-set interpretation**: separate variable-induced movement from session-position movement. If V1c fires FC earlier than V1b, some of that may come from the higher peak inlet, and some may come from third-slot acceleration.
+Because the thermal reset + BBP routine runs before every batch (including the first), the residual effect is small and is absorbed into the experiment rather than compensated for — slot ordering is NOT a design lever. Where it still matters is **post-hoc V-set interpretation**: separate variable-induced movement from session-position movement (if V1c fires FC earlier than V1b, some of that may come from the higher peak inlet, and some from third-slot acceleration). Machine-specific data lives in [counterflow-observations.md § Session Position Effect](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md).
 
 Session position is independent from anchor confidence. Anchor confidence describes how well the prior profile fits the new lot. Session position describes the Roest's within-session thermal state.
 
@@ -257,14 +200,10 @@ Avoid: "first-batch effect," "session drift."
 
 ### Agent rules
 
-- Treat 125°C hopper-load and 117°C charge as fixed.
-- Treat BBP as fixed and not recipe-tunable.
-- Treat thermal reset and BBP as separate routines.
+- Treat 125°C hopper-load, 117°C charge, BBP, and thermal reset as fixed; thermal reset and BBP are separate routines.
 - Use recipe-level levers when changing roast energy.
-- Place the most important V-set slot in the middle session position when possible.
-- Account for session-position effect when interpreting FC timing, drop timing, and roast-speed differences across slots.
-- Use "load" for the 125°C hopper event.
-- Use "charge" for the 117°C bean-drop event.
+- Do not treat slot ordering as a design lever; account for session-position effect when interpreting FC timing, drop timing, and roast-speed differences across slots.
+- Use "load" for the 125°C hopper event and "charge" for the 117°C bean-drop event.
 
 
 ## V-set design and forward planning
@@ -291,7 +230,7 @@ Peak inlet: The maximum inlet-air temperature on the temperature_bezier curve �
 
 ### Green spec
 
-Green spec: The umbrella term for the green-bean physical and provenance bundle that drives V1 starting-hypothesis design: density (g/L), moisture (%), altitude (m), variety, process family. The complete green-spec is the design input to anchor profile selection + Signal precedence + Multi-factor weighting. Lot-specific deviations from the anchor's green spec trigger continuous adjustments: low density → -2 to -3°C peak inlet; high moisture → +1 to +2°C; extreme altitude → ±0-2°C. Gating function: when green spec is unmeasured (sealed-bag lots from some sellers — Untold, certain auction lots), variety-density-critical lots gate V1 until measured; less-sensitive lots proceed cautiously with a wider V1 spread. The ROASTING.md Green-Spec → Starting-Hypothesis table operates on this concept. *Avoid*: "green data" (under-specified — could include sourcing metadata); "bean spec" (overlaps with cultivar identity); "intake measurements" (only covers density + moisture, omits altitude/variety/process).
+Green spec: The umbrella term for the green-bean physical and provenance bundle that drives V1 starting-hypothesis design: density (g/L), moisture (%), altitude (m), variety, process family. The complete green-spec is the design input to anchor profile selection + Signal precedence + Multi-factor weighting. Lot-specific deviations from the anchor's green spec trigger continuous adjustments via the additive table (see Multi-factor weighting). Gating function: when green spec is unmeasured (sealed-bag lots from some sellers — Untold, certain auction lots), variety-density-critical lots gate V1 until measured; less-sensitive lots proceed cautiously with a wider V1 spread. The Green Spec → Starting Hypothesis table in [cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) operates on this concept. *Avoid*: "green data" (under-specified — could include sourcing metadata); "bean spec" (overlaps with cultivar identity); "intake measurements" (only covers density + moisture, omits altitude/variety/process).
 
 ### Anchor confidence
 
@@ -309,23 +248,9 @@ The phrase "more a starting point than a recommendation" (from Daterra Laurina's
 
 Signal precedence: The structural model for categorical / discrete design decisions in roast design — one signal wins outright, others are overridden. Applies when the output is a categorical choice drawn from a discrete set: which anchor profile to select, which end condition mechanism (dev_time vs bean_temp), which drop ceiling regime, whether to gate V1 design (Deferred). Each precedence rule is shaped "Signal A overrides Signal B when triggering condition C is present" and is lot-conditional, not global — there's no fixed priority order across all lots; specific conditions trigger specific overrides.
 
-Operating precedence rules (working memory, not yet doc-formalized):
-
-1. Process family overrides density adjustment when fermentation-cellulose modification is present (heavy ferment / anaerobic / XO). The fermentation layer's thermal behavior matters more than density variation.
-2. Fruit-layer thermal insulation overrides density-driven energy hedging on naturals. Fruit layer needs MORE energy to drive FC timing into range, not less — density adjustment direction inverts. (FC-timing override; flavor lesson can run opposite direction once timing is in range.)
-3. Variety-difficulty overrides anchor confidence calibration. When the variety has documented atypical thermal/structural behavior (Daterra Laurina's pointy small beans), anchor confidence drops independently of anchor-match quality.
-4. Drop ceiling discipline overrides FC-timing chase. When dev compression would force a drop ceiling breach, hold the ceiling and accept compressed dev — the FC-temp-architectural-constraint pattern.
-5. Silent-FC expectation overrides dev-time-end-condition standard. Default end condition is dev_time; on silent-FC family lots it becomes bean_temp at target drop temp.
-6. High lot value narrows V1 spread; anchor-confidence-widening pressure redirects to pre-V1 risk reduction. These are a layering, not a head-on precedence: lot value narrows V1 spread (cost of wide miss is high), while anchor confidence's widening pressure gets channeled into Pre-V1 risk reduction (density gating, paired roasted-reference cupping, producer outreach, deferral). The two rules adjust DIFFERENT parameters; not competing precedence.
-7. Active unresolved-anchor process family overrides one-shot timing. When the only available anchor is itself unresolved, defer the one-shot rather than proceed against unresolved-anchor risk.
-
-The closest thing to a global precedence rule: closed-lot anchor evidence always outweighs general process-family guidance from ROASTING.md tables — but this is barely a precedence rule, more a re-statement of "anchor profile is more load-bearing than generalized table guidance" (see Anchor profile).
-
-Explicit vs implicit in prose: precedence reasoning is explicit when the override is unusual or counterintuitive ("HARD OUTLIER," "if process turns out to be heavy ferment"); implicit when it's encoded in the family-anchor selection itself (selecting the heavy-ferment anchor IS the precedence decision, no restatement needed). The override is named by reference to the specific trigger in prose, not by reference to a precedence-rule registry.
+The operating precedence rules themselves are registry data, not glossary content: the canonical home is the **Precedence table — categorical decisions** in [cross-coffee-insights.md § Green Spec → Starting Hypothesis](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md), alongside the additive table (continuous adjustments). New rules join there as lived practice surfaces them. The closest thing to a global rule: closed-lot anchor evidence always outweighs generalized process-family table guidance (see Anchor profile).
 
 Distinct from multi-factor weighting: precedence governs categorical decisions; weighting governs continuous numerical adjustments. Both happen in the same V1 design pass — categorical precedence picks the anchor + end-condition regime, then weighting adjusts continuous parameters within that regime.
-
-Storage open question: precedence rules may not need a separate registry — they're effectively carry-forward learnings that operate at the design-decision layer rather than the parameter-adjustment layer. Whether to tag them as "design-precedence" carry-forwards or canonicalize them in their own list is undecided.
 
 Avoid: "signal override" (brewing-side term — overlaps semantically but brewing's framework is pure precedence; roasting's has the precedence/weighting split, so naming-as-brewing-side conflates them); "priority order" (suggests global ranking; rules are lot-conditional); "design rule" (too generic).
 
@@ -342,7 +267,7 @@ Use multi-factor weighting when the output is continuous:
 - Maillard % tolerance window
 - drop temp target within the drop-ceiling regime
 
-Operating shape: peak inlet adjustment off anchor stacks density contribution (-2 to -3°C if low density) + moisture contribution (+1 to +2°C if high moisture) + altitude contribution (±0-2°C if extreme). The result is a hedged operator-judgment composite.
+Operating shape: contributing signals (density / moisture / altitude / etc.) stack into a hedged operator-judgment composite. The working signal-by-signal values live in the **Additive table — continuous adjustments** in [cross-coffee-insights.md § Green Spec → Starting Hypothesis](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md).
 
 Distinct from **Signal precedence**: precedence governs categorical decisions such as which anchor, which end condition, or whether to defer. Weighting governs numerical adjustments after the categorical path is selected.
 
@@ -402,11 +327,11 @@ Computation rule on did_not_fire batches: when fc_audibility = did_not_fire (or 
 
 ### WB→Gnd Agtron delta (or delta in unambiguous roasting context)
 
-WB→Gnd Agtron delta (or delta in unambiguous roasting context): The magnitude (absolute value) of the difference between Agtron readings on whole-bean (WB) and ground (Gnd) samples of the same roast, in Agtron points. The quantitative diagnostic-primary for the Development uniformity that underdev / overdev signals capture qualitatively on the cup side — small delta means surface and interior reached comparable browning; large delta means one outran the other. Two polarity patterns appear by lot family, which is why the sign is fuzzy in lived prose: (1) conventional case — Gnd reads lighter (higher Agtron) than WB, since grinding exposes the less-developed interior; common in washed coffees with no fermentation insulation. (2) Heavy-ferment / fruit-layer case — WB reads lighter than Gnd, since fermentation cellulose insulates the surface and the interior develops more uniformly than the surface implies; Mandela XO #139 (WB 76 / Gnd 72.4, delta 3.6) is the case study. Operational vocabulary tracks magnitude, not sign; name the surface-vs-interior pattern in prose when it matters, do not encode it in the delta scalar. Note: ROASTING.md's "large delta = stalled inside" framing in the Development entry maps to the conventional case only and should be read as pattern (1)-specific, not universal.
+WB→Gnd Agtron delta (or delta in unambiguous roasting context): The magnitude (absolute value) of the difference between Agtron readings on whole-bean (WB) and ground (Gnd) samples of the same roast, in Agtron points. The quantitative diagnostic-primary for the Development uniformity that underdev / overdev signals capture qualitatively on the cup side — small delta means surface and interior reached comparable browning; large delta means one outran the other. Two polarity patterns appear by lot family, which is why the sign is fuzzy in lived prose: (1) conventional case — Gnd reads lighter (higher Agtron) than WB, since grinding exposes the less-developed interior; common in washed coffees with no fermentation insulation. (2) Heavy-ferment / fruit-layer case — WB reads lighter than Gnd, since fermentation cellulose insulates the surface and the interior develops more uniformly than the surface implies; Mandela XO #139 (WB 76 / Gnd 72.4, delta 3.6) is the case study. Operational vocabulary tracks magnitude, not sign; name the surface-vs-interior pattern in prose when it matters, do not encode it in the delta scalar. Note: the "large delta = stalled inside" framing in § Development (above) maps to the conventional case only and should be read as pattern (1)-specific, not universal.
 
 Threshold vocabulary (anchor-relative, not table-driven): tight (≤~2 points, best cup quality correlation), working / V2-typical (3-5), wide (>5), stalled (>10 in extreme cases). The directional verb shrinking describes a delta tightening over successive V-sets — a reliable convergence signal that the profile is on the right track.
 
-Anchor-relative, not table-driven: in active-lot writing, "what counts as tight here" comes from the closest anchor profile's resolved delta (Sudan Rume Washed CF-Light #133 = 1.0 for the washed family; Mandela XO #139 = 3.6 for the heavy-ferment family), not from ROASTING.md's "WB-to-Ground Agtron Delta Norms by Processing Method" table. The table is the downstream crystallization of the anchor-profile pattern; the anchors are the canonical reference in operational prose. (The pair of WB and Gnd readings together has no canonical pair-noun in lived prose — "WB / ground" or "WB 76 / ground 72.4" is the everyday form. Intentional non-lemma.) *Avoid*: "Agtron difference," "Agtron gap," signed-delta conventions baked into the scalar (use the magnitude + a prose pattern label instead), bare "delta" in cross-domain contexts where brewing-side delta could be confused.
+Anchor-relative, not table-driven: in active-lot writing, "what counts as tight here" comes from the closest anchor profile's resolved delta (Sudan Rume Washed CF-Light #133 = 1.0 for the washed family; Mandela XO #139 = 3.6 for the heavy-ferment family), not from the "WB-to-Ground Agtron Delta Norms by Processing Method" table in [cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md). The table is the downstream crystallization of the anchor-profile pattern; the anchors are the canonical reference in operational prose. (The pair of WB and Gnd readings together has no canonical pair-noun in lived prose — "WB / ground" or "WB 76 / ground 72.4" is the everyday form. Intentional non-lemma.) *Avoid*: "Agtron difference," "Agtron gap," signed-delta conventions baked into the scalar (use the magnitude + a prose pattern label instead), bare "delta" in cross-domain contexts where brewing-side delta could be confused.
 
 ### FC floor
 
@@ -464,13 +389,9 @@ Avoid: "elasticity" (deprecated except in motto context), "brew robustness", "fl
 
 ### Roast -> Cup Trace
 
-Roast→cup trace: The causal-attribution chain across two layers — roast (design intent → actuals → delta) and cup (V-set hypothesis → actuals → delta) — that lets observed surprises be localized to either the roast deviating from plan or the prediction itself being wrong. The whole point of comparative 3-batch V-sets is that the trace becomes tasteable across slots — and the trace surfaces operationally as comparative narrative across slots, NOT as 18 per-slot cells. Two asymmetries are load-bearing in lived practice (the earlier symmetric framing didn't capture them):
+Roast→cup trace: The causal-attribution chain across two layers — roast (design intent → actuals → delta) and cup (V-set hypothesis → actuals → delta) — that lets observed surprises be localized to either the roast deviating from plan or the prediction itself being wrong. The whole point of comparative 3-batch V-sets is that the trace becomes tasteable across slots — and the trace surfaces operationally as comparative narrative across slots, NOT as 18 per-slot cells. Two asymmetries are load-bearing in lived practice: (1) roast-layer delta is **exception-write** (explicit prose only when the roast surprised — FC fired early, drop ceiling breached, Maillard ran long), cup-layer delta is **always-write** (the spine of every close-out verdict, judged against the V-set hypothesis); (2) cup-side decomposition is **V-set-wide, not per-slot** — roast-side observations live per-slot, cup-side observations live as one comparative narrative paragraph, and the schema's per-slot cup fields populate from that narrative or stay null (see flagged ambiguity).
 
-(1) Roast-layer delta is exception-write, cup-layer delta is always-write. When the roast hits its design intent, lived prose just notes the metrics and moves on — the predicted-vs-actual comparison stays implicit (expectations were encoded in the V_n recipe). Only when the roast surprised (FC fired early, drop ceiling breached, Maillard ran long) does explicit roast-delta prose appear. Cup-layer delta, by contrast, is the spine of the verdict — written every V-set close-out, against the V-set hypothesis (not against a post-roast updated cup prediction, which itself is rarely written explicitly).
-
-(2) Cup-side decomposition is V-set-wide, not per-slot. Roast-side observations live per-slot (numeric metrics row + one-line roast observation per slot). Cup-side observations live as one V-set-wide narrative paragraph comparing the slots against each other on aromatic presentation / hot-vs-cool behavior / cup-character ranking / producer-notes ballpark — plus a verdict sentence + V_(n+1) implication sentence. The schema's per-slot cup fields (observed_outcome_a/b/c/d, updated_cup_prediction_a/b/c/d, taste_for_a/b/c/d, delta_from_cup_a/b/c/d) capture the conceptual structure but populate either from the V-set-wide narrative or stay null. Schema-as-designed and writing-as-practiced are deliberately mismatched at this seam — see flagged ambiguity.
-
-The operational unit that produces the trace is the V-set close-out narrative (separate entry); this trace entry names the conceptual chain, the narrative entry names the writing shape. *Avoid*: "prediction trace", "delta chain", "expectation pipeline", "predict-observe loop"; "per-slot trace" or "18-cell trace" (mis-frames the V-set-wide cup-side structure as per-slot).
+The operational unit that produces the trace is the V-set close-out narrative (separate entry — the writing shape, component order, and schema seam live there). *Avoid*: "prediction trace", "delta chain", "expectation pipeline", "predict-observe loop"; "per-slot trace" or "18-cell trace" (mis-frames the V-set-wide cup-side structure as per-slot).
 
 ### Taste-for
 
@@ -553,16 +474,16 @@ Schema seam: the experiments table has per-slot structured fields (observed_outc
 
 ### Key-insight confidence ladder
 
-Key-insight confidence ladder: The 4-level enum graded on experiments.key_insight_confidence at V-set close-out via log-cupping.md STAGE 3 (also one-shot.md STAGE 4 for one-shots, where the upper levels cap at Medium per N=1 constraint). Apply consistently across sessions; downstream queries + ROASTING.md routing decisions filter on this level. Operational ladder:
+Key-insight confidence ladder: The 4-level enum graded on experiments.key_insight_confidence at V-set close-out via log-cupping.md STAGE 3 (also one-shot.md STAGE 4 for one-shots, where the upper levels cap at Medium per N=1 constraint). Apply consistently across sessions; downstream queries + CCIL routing decisions filter on this level. Operational ladder:
 
-* Low — interesting hypothesis. Single-V-set observation, not yet replicated. Flag in the log but don't act on it yet. Stays in additional_notes or key_insight prose; does NOT route to the Cross-Coffee Insight Layer in ROASTING.md.
+* Low — interesting hypothesis. Single-V-set observation, not yet replicated. Flag in the log but don't act on it yet. Stays in additional_notes or key_insight prose; does NOT route to the Cross-Coffee Insight Layer ([cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md)).
 * Medium — consistent with 1-2 prior data points (this lot's earlier V-sets, or a closely-similar prior lot's carry-forward). Worth weighting in V_(n+1) design but not promotion-ready. Acceptable as a CCIL append at Medium-marker level.
 * Medium-High — strong evidence within this lot, ready to be a working assumption for the rest of the lot's V-sets and for similar-cultivar carry-forward. Survives "what would change my mind?" prompting.
-* High — ready to promote to a protocol change in ROASTING.md (typically routes through log-cupping.md STAGE 6 or close-lot.md STAGE 5 as an APPEND or REPLACE on a protocol section). Requires either multi-V-set repetition within this lot OR strong cross-lot corroboration.
+* High — ready to promote to a protocol change in the roasting cluster docs (typically routes through log-cupping.md STAGE 6 or close-lot.md STAGE 5 as an APPEND or REPLACE on a protocol section). Requires either multi-V-set repetition within this lot OR strong cross-lot corroboration.
 
 Tie-breaking rule: if unsure between two levels, pick the lower and explain why in additional_notes. The cost of under-claiming is delayed-promotion (low); the cost of over-claiming is bad protocol changes (high).
 
-Mirrors the CCIL marker vocabulary in ROASTING.md so the append-confidence marker on a CCIL entry matches the source experiment's level. The schema enum + this entry are the single source of truth for the four levels. *Avoid*: bare "confidence" without the level qualifier; "strong" / "weak" (loses the threshold-shape semantics); collapsing Medium and Medium-High (the distinction is whether the insight has survived adversarial framing).
+Mirrors the CCIL marker vocabulary so the append-confidence marker on a CCIL entry matches the source experiment's level. The schema enum + this entry are the single source of truth for the four levels. *Avoid*: bare "confidence" without the level qualifier; "strong" / "weak" (loses the threshold-shape semantics); collapsing Medium and Medium-High (the distinction is whether the insight has survived adversarial framing).
 
 ## Lot-close synthesis
 
@@ -611,28 +532,20 @@ xBloom: A physical automated pour-over machine that runs one mechanically-consis
 
 ### Peer Roaster
 
-Peer roaster (or peer machine, peer's framework by framing): An external roaster operating on identical hardware (Roest L200 Ultra in counterflow) whose cup judgments + design frameworks contribute to V1 design as high-weight directional input, even though specific roast parameters don't transfer due to confirmed machine-level thermal differences. The three framings differentiate by what's being cited:
+Peer roaster (or peer machine, peer's framework by framing): An external roaster operating on identical hardware (Roest L200 Ultra in counterflow) whose cup judgments + design frameworks contribute to V1 design as high-weight directional input, even though specific roast parameters don't transfer due to confirmed machine-level thermal differences. The three framings differentiate by what's being cited: **peer roaster** when citing the person making a judgment; **peer machine** when flagging the thermal asymmetry that prevents parameter transfer; **peer's framework** when citing the conceptual contribution.
 
-* Peer roaster when citing the person making a judgment ("per the peer roaster's framework on acidity-vs-sweetness axis trade-off")
-* Peer machine when flagging the thermal asymmetry that prevents parameter transfer ("peer machine runs ~3°C cooler at the same setpoint — his TP ~94°C vs my 78-81°C, his charge 112.2°C vs my 117°C")
-* Peer's framework when citing the conceptual contribution ("peer's framework: shorter Maillard / higher momentum at FC produces acidity and clarity")
+Canonical vocabulary moves in real prose: "directionally carries" (the principle transfers even when the specific numbers don't — the phrase that does most of the work when citing peer input); "specific numbers don't transfer" (the explicit disclaimer that fires every time peer parameters get cited); "confirmed machine-level thermal differences" (the structural reason for number non-transferability).
 
-Canonical vocabulary moves in real prose:
-
-* "Directionally carries" — the principle transfers even when the specific numbers don't. The phrase that does most of the work when citing peer input.
-* "Specific numbers don't transfer" — explicit-disclaimer phrase that fires every time peer parameters get cited.
-* "Confirmed machine-level thermal differences" — the structural reason for number non-transferability.
-
-No canonical structured storage. Peer's resolved roasts aren't in Chris's Roest log and don't get batch numbers like #133 or #139; the peer's framework lives in Chris's head and in scattered intake notes. Peer observations contribute to anchor confidence + starting hypothesis at V1 design time but have no canonical home — flagged ambiguity. Also missing: a canonical phrase for "peer observation conflicts with my own anchor-derived data and the conflict is operationally important" — today resolved by operator judgment with no documented precedence rule. *Avoid*: "external reference roaster" (overformal, doesn't capture the operating relationship); collapsing peer roaster + peer machine + peer's framework into one term (the three framings do different work in prose); citing peer numbers without the "specific numbers don't transfer" disclaimer.
+Durable home: the per-peer framework + parameter sets live in the Peer-Learning Roasting Archivist cluster ([per-peer/dongzhe.md](docs/skills/peer-learning-roasting-archivist/cluster/per-peer/dongzhe.md)); peer roasts aren't in Chris's Roest log and don't get batch numbers like #133 or #139. Still missing: a canonical phrase for "peer observation conflicts with my own anchor-derived data and the conflict is operationally important" — today resolved by operator judgment with no documented precedence rule (flagged ambiguity). *Avoid*: "external reference roaster" (overformal, doesn't capture the operating relationship); collapsing peer roaster + peer machine + peer's framework into one term (the three framings do different work in prose); citing peer numbers without the "specific numbers don't transfer" disclaimer.
 
 
 ### Peer-roasted reference brew
 
-Peer-roasted reference brew: A brew row in brews representing the roasted variant of a Latent green-bean lot, purchased from the same source (the producer, an importer offering a roasted line, or a peer roaster who sourced the same lot). Acts as a calibration anchor for the roasting side — Chris cups the peer brew to know what the bean "should taste like" before committing his own V-set design, and the peer cup informs leading-slot assessment during log-cupping.md Path C-1 calibration. Roughly 25-30%+ of green-bean lots have a peer-roasted reference; Chris buys the roasted variant when available. Lived instances at migration time (migration 069): CGLE Sudan Rume Natural (special-guest roasted version, same farm + same lot + same time); Wush Wush (peer-roasted version); every bean from Untold Coffee Lab (paired roasted variant for each lot); future lots when the peer-roasted version is findable. The limiting factor on coverage is sourcing — sometimes the roasted version isn't available for sale. Conceptually the peer variant is a third triangulation point on the bean — independent of the producer's notes and Chris's own roast + taste — which is why it calibrates V-set direction rather than dictating it (see § Information value).
+Peer-roasted reference brew: A brew row in brews representing the roasted variant of a Latent green-bean lot, purchased from the same source (the producer, an importer offering a roasted line, or a peer roaster who sourced the same lot). Acts as a calibration anchor for the roasting side — Chris cups the peer brew to know what the bean "should taste like" before committing his own V-set design, and the peer cup informs leading-slot assessment during log-cupping.md Path C-1 calibration. Roughly 25-30%+ of green-bean lots have one (CGLE Sudan Rume Natural, Wush Wush, every Untold Coffee Lab lot); the limiting factor on coverage is sourcing. Conceptually the peer variant is a third triangulation point on the bean — independent of the producer's notes and Chris's own roast + taste — which is why it calibrates V-set direction rather than dictating it (see § Information value).
 
-Schema (migration 069): nullable FK green_beans.peer_reference_brew_id pointing at brews(id). 1:1 in current practice — one green-bean lot has at most one peer reference. Many-to-many (one green-bean lot with peer-roasted versions from multiple peer roasters) is not a current pattern; if it emerges, migrate to a join table later. ON DELETE SET NULL on the FK constraint (peer brew delete clears the link, doesn't cascade). Typically backfilled via patch_green_bean(peer_reference_brew_id) AFTER the peer brew row lands in the DB (the brewing-side write path is independent), not at green-bean push time.
+Schema: nullable FK green_beans.peer_reference_brew_id → brews(id) (migration 069), 1:1 in current practice, typically backfilled via patch_green_bean AFTER the peer brew row lands; column history in [docs/architecture/data-model.md](docs/architecture/data-model.md). No app UI surface — the peer-roasted lessons live in the Peer-Learning Roasting Archivist cluster; the FK is the find-fast pointer.
 
-Relationship to other concepts: distinct from Reference roast (Chris's own designated winning roast on his lot — see § Reference roast) and from Reference cup (the xBloom Day-7 gate cup of Chris's reference roast — see § Reference cup). The peer-roasted reference is external calibration anchor, not internal lot output. Distinct from a Control experiment V-set (which IS Chris's own roast, replicating the leading slot to confirm). The peer brew is one direction of cross-domain workflow flow: brewing-side input (the peer roast was a purchased brew) feeds back as roasting-side calibration. No app UI surface — the peer-roasted lessons live in the Peer-Learning Roasting Archivist skill, not the app; the schema FK is preserved purely as the find-fast pointer.
+Relationship to other concepts: distinct from Reference roast (Chris's own designated winning roast — see § Reference roast), from Reference cup (the xBloom Day-7 gate cup of Chris's reference roast — see § Reference cup), and from a Control experiment V-set (Chris's own confirming roast) — the peer-roasted reference is external calibration input, not internal lot output.
 
 *Avoid*: "peer brew" (too generic — Chris drinks many peer brews that aren't calibration anchors for his own lots); "external reference roast" ("reference roast" is a Latent-specific term for Chris's designated lot winner — see § Reference roast); collapsing peer-roasted reference + control experiment (control experiment is Chris's own roast).
 
@@ -640,14 +553,14 @@ Relationship to other concepts: distinct from Reference roast (Chris's own desig
 
 Information value: A High / Medium / Low rating of how transferable a peer-roasted variant's cup is to Chris's own roast design, gated by roast-level distance from Chris's philosophy, NOT by sourcing proximity (the "dark roast overtakes everything" rule — past ~second crack the roast character swamps variety / origin / process, so almost nothing transfers; Janson *and* Wush Wush are both from the same retailer, Untold, yet both rate Low — same source does not imply high transfer). The dial measures cup/flavor transfer; a separate, orthogonal hypothesis / roast-behavior channel (handoff field 4) can fire even at Low and lift a variant's real value above its flavor grade.
 
-Exemplar ladder (three rungs; the Low rung spans two named states):
+Exemplar ladder (three rungs; the Low rung spans two named states; full per-lot narratives live in [peer-variant-handoffs.md](docs/skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md)):
 
-* High — same lot, roast inside Chris's light/ultra-light window: most of the cup is bean. No clean lived instance yet — awaiting a peer variant roasted in-window. Even at High the cup is a high-*correlation* reference, not a 1:1 target (taste is single-palate / subjective).
-* Medium — real but partial; discount the roast-developed register. Canonical: CGLE Sudan Rume Natural (Special Guests, 71.7 Agtron WB, ~4-6 points darker than Chris's anchor band — the closest-to-High case so far, but recorded Medium because it was roasted a touch darker than Chris would).
-* Low, upper edge — roast is the loudest thing in the cup, but faint bean signal survives *and/or* the hypothesis channel fires. Canonical: Wush Wush (Untold, 65.4 Agtron, ~25 points off) — aromatic reserve (prune / mandarin) confirms bean traits *and* it confirmed the "roasts fast/dark → bias lighter" roast-behavior hypothesis, high-value even at Low.
-* Low, floor (roast-erased) — the roast fully swamps the bean; variety / origin / process stop mattering; the handoff is a pure discount list, no bean-attributable bucket, no manufactured takeaways. Canonical: Panama Janson Pacamara (Untold, 47.9 Agtron, oily, past second crack).
+* High — same lot, roast inside Chris's light/ultra-light window: most of the cup is bean. No lived instance yet; even at High the cup is a high-*correlation* reference, not a 1:1 target.
+* Medium — real but partial; discount the roast-developed register. Canonical: CGLE Sudan Rume Natural (Special Guests, 71.7 Agtron WB, ~4-6 points dark of the anchor band).
+* Low, upper edge — roast is the loudest thing in the cup, but faint bean signal survives *and/or* the hypothesis channel fires. Canonical: Wush Wush (Untold, 65.4 Agtron, ~25 points off — aromatic reserve + the "roasts fast/dark → bias lighter" confirmation).
+* Low, floor (roast-erased) — the roast fully swamps the bean; the handoff is a pure discount list, no bean-attributable bucket. Canonical: Panama Janson Pacamara (Untold, 47.9 Agtron, oily, past second crack).
 
-The mechanism producing the rating is the three-bucket cup split — bean-attributable / roast-attributable / open questions (notes where bean and roast are *entangled* and can't be split from one cup, held to watch rather than transferred; see § Peer-variant handoff field 3). A peer-roasted variant is also a third triangulation point on the bean: alongside the producer's notes and Chris's own roast + taste, it adds an independent third read on what the green is capable of.
+The mechanism producing the rating is the three-bucket cup split — bean-attributable / roast-attributable / open questions (notes where bean and roast are *entangled* and can't be split from one cup, held to watch rather than transferred; see § Peer-variant handoff field 3).
 
 ### Peer-variant handoff
 
@@ -655,11 +568,11 @@ Peer-variant handoff: The brewing-side completion of a peer variant emits a 5-fi
 
 ### Same-lot confidence grade (field 1)
 
-Same-lot confidence grade (field 1): "lot" stays strict (same crop lot — same farm, same season; per § Relationships, same producer + cultivar across two purchases = two distinct lots). The grade rates how confidently the peer IS that same strict lot: exact crop lot confirmed (matching lot/edition number, or roaster confirms) → bean substrate identical; source-confirmed, crop-lot unverified (producer/farm/variety/process match, exact crop lot pending) → *probably* same lot, so discount the bean-attributable bucket slightly (a sibling crop lot could differ). The lower grade can be reached by operator ratification — direct roaster conversation, sole-lot inference — when written/third-party provenance is impossible; a rare exception, not a routine loosening of "lot." Canonical: CGLE Sudan Rume Natural, Edition 0326-42 — bag photo + head-roaster verbally confirmed same variety/process/same-time purchase + CGLE sells only this one Sudan Rume Natural (competition variety; Special Guests roasts competition varieties) + no persistable roaster URL; operator-ratified same-lot, no external validation possible.
+Same-lot confidence grade (field 1): "lot" stays strict (same crop lot — same farm, same season; per § Relationships, same producer + cultivar across two purchases = two distinct lots). The grade rates how confidently the peer IS that same strict lot: exact crop lot confirmed (matching lot/edition number, or roaster confirms) → bean substrate identical; source-confirmed, crop-lot unverified (producer/farm/variety/process match, exact crop lot pending) → *probably* same lot, so discount the bean-attributable bucket slightly (a sibling crop lot could differ). The lower grade can be reached by operator ratification — direct roaster conversation, sole-lot inference — when written/third-party provenance is impossible; a rare exception, not a routine loosening of "lot." Canonical: CGLE Sudan Rume Natural, Edition 0326-42 (full provenance chain in [peer-variant-handoffs.md](docs/skills/peer-learning-roasting-archivist/cluster/peer-variant-handoffs.md)).
 
 ### Link timing + filed vs courier-carried
 
-Link timing + filed vs courier-carried: set green_beans.peer_reference_brew_id at the earliest moment both rows exist. Green row exists (mid-V-set / post-cycle) → completion prompt links immediately and the handoff is filed in the Peer-Learning Archivist's peer-variant-handoffs.md (Wush Wush, Sudan Rume). Green row doesn't exist (pre-V1 inventory pairing) → the handoff is courier-carried: the operator carries it and pastes it into start-lot.md, which sets the FK (and pulls the handoff as a V1 prior) when it creates the green row (Janson). No skeleton green-bean row. ("Courier-carried" is the consumption-side mirror of the link-timing rule; the operator is the human courier of every handoff brief — see CONTEXT-shared § Cross-domain Workflow.)
+Link timing + filed vs courier-carried: set green_beans.peer_reference_brew_id at the earliest moment both rows exist. Green row exists → the completion prompt links immediately and the handoff is filed in the Archivist's peer-variant-handoffs.md (Wush Wush, Sudan Rume). Green row doesn't exist yet (pre-V1 inventory pairing) → the handoff is courier-carried: the operator carries it and pastes it into start-lot.md, which sets the FK (and pulls the handoff as a V1 prior) when it creates the green row (Janson). No skeleton green-bean row. ("Courier-carried" is the consumption-side mirror of the link-timing rule; the operator is the human courier of every handoff brief — see CONTEXT-shared § Cross-domain Workflow.)
 
 ### Pre-V_n calibration gate
 
@@ -770,7 +683,7 @@ There is no dedicated lifecycle state for a pending SPG; agents should not inven
 Backfilled recipe: A roast_recipes row whose design intent was recovered AFTER the roast fired rather than captured at design time (migration 057). Lives in roast_recipes.was_backfilled boolean + paired backfill_notes text for provenance prose ("Recovered from session chat memory at V3 cup, 2026-05-19"). The boolean is a queryable axis distinguishing lots with end-to-end design-intent provenance from lots whose intent was recovered partially or fully after the fact — relevant for anchor profile confidence weighting and for spotting carry-forward decisions made on incomplete substrate. Three operational sources:
 
 1. Migration 052 legacy shells — the backfill created one recipe row per existing roast with NULL beziers + NULL experiment_id + NULL batch_slot. Surviving shells flagged was_backfilled = true (migration 057).
-2. log-cupping.md STAGE 0 inline-backfill — when a pre-rewrite V-set arrives at Day 7 cupping without populated predicted_cup / updated_cup_prediction_\* / taste_for_\* fields, the prompt reconstructs them from session memory + expected_outcomes per-slot split. Each patch_roast_recipe call sets was_backfilled: true + a backfill_notes string.
+2. Archived STAGE 0 inline-backfill ([log-cupping-stage0-migration.md](docs/prompts/log-cupping-stage0-migration.md)) — when a pre-rewrite V-set arrives at Day 7 cupping without populated predicted_cup / updated_cup_prediction_\* / taste_for_\* fields, the prompt reconstructs them from session memory + expected_outcomes per-slot split. Each patch_roast_recipe call sets was_backfilled: true + a backfill_notes string.
 3. log-roast.md STAGE 1(b) missing-recipe-row halt relaxation — when V_n design pre-dates the rewrite and the slot→recipe_id map is empty BUT design intent is reconstructable from session memory, push_roast_recipe × N fires with was_backfilled: true.
 
 *Avoid*: "legacy recipe" (overlapping with the larger pre-rewrite legacy concept); "auto-created recipe" (collides with the terroir_provenance: 'auto_created' flag); collapsing was_backfilled into the notes prose (the boolean axis is the load-bearing query primitive).

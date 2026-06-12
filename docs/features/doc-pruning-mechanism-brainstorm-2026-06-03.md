@@ -46,6 +46,8 @@ Carried from ADR-0013 / grilling-queue, now treated as the coverage checklist:
 
 The five-shape framing is now **six**: extract / split / consolidate / archive / delete / **re-home (re-scope)**. `re-home` is a candidate headword for the CONTEXT-shared grill (see grilling-queue). The over-cap live-fire backlog is drained ([doc-tripwires.md](docs/architecture/doc-tripwires.md) Live queue — all Tier-1 within cap as of 2026-06-04).
 
+**Status update (2026-06-12, after case 008 — first preemptive + first second-pass case):** [case 008](docs/sprints/pruning-cases/008-context-roasting-second-pass.md) re-pruned CONTEXT-roasting (109.2 → 104.0 KB) at ~91% of cap, operator-initiated rather than tripwire-fired. Three new systematization inputs: (13) **on a second pass over an already-pruned glossary, the dominant bloat class shifts from deliberation narrative to cluster duplication** — detection is mechanical (diff each operational-flavored section against the cluster doc the redirect-stub map says owns it); (14) **a prune doubles as a practice-contradiction detector** — side-by-side comparison with the operational twin surfaced two real contradictions (BBP duration, session-position slot placement) that neither doc's own maintenance caught; (15) **glossary-prune savings estimates run ~2× actual** when definitions + distinctions + avoid-lists are correctly kept intact — plan KB targets accordingly.
+
 ## The protocol (what we do now and going forward)
 
 ### 1. Tripwires on all constantly-loaded core docs — PLACED this session
