@@ -38,7 +38,7 @@ invoke skill → PLAN session generates a plan
 The pattern is already built, in parts, five times — which is *why* it earned naming but *not yet* universal implementation (the parts ≠ the whole-loop ≥3×):
 - **Feedback pipeline** ([ADR-0020](0020-feedback-handoff-pipeline.md)) — route→plan→execute→completion-report-back: the spine + Loop 1.
 - **Doc-pruning** ([ADR-0013](0013-self-improvement-primitives.md) Pattern J / [ADR-0022](0022-formalization-tax-and-self-improvement-counterbalance.md)) — Loop 2 (the clawback), run 7×.
-- **Architecture-review** — spine + Loop 1; **instance 1 of the full loop, has not yet run a single improvement cycle.**
+- **Architecture-review** — spine + Loop 1; **instance 1 of the full loop. First improvement cycle run 2026-06-12** ([cycle record](../audits/architecture/improvement-log.md)) — evidence: 6 audits, 27 candidates, 13 shipped across 5 remediation PRs, zero recorded misses; 6 evidence-cited amendments, 4 suggestions deferred to the recurrence ledger; Loop 2 checked, not triggered.
 - **Research Coordinator + Research Assistant** ([ADR-0017](0017-research-assistant-architecture.md)) — the spine.
 - **Lot Coordinator + V-Set Assistant** ([brainstorm](../features/lot-coordinator-brainstorm-2026-06-02.md)) — the spine; **the next deliberate instance (instance 2), built as a conscious worked example of this pattern, not a bespoke roasting thing.**
 
@@ -49,6 +49,10 @@ The pattern is already built, in parts, five times — which is *why* it earned 
 3. **Graduate:** once the full loop has run end-to-end ≥3 times across surfaces, graduate the universal "self-improvement skill every skill invokes" — shaped by the lived edge cases, including the resolution of the open question above.
 
 End state Chris named: this loop applied to **every** surface — claude.ai, roasting, brewing, design, product, documentation, the product-build process, Claude-Code-as-a-system, the Latent system — so every surface gets better over time, while the clawback half keeps the formalization tax in check.
+
+## Amendment 2026-06-12 — loop-record convention (minted at instance 1, cycle 1)
+
+Each improvement cycle records as a dated entry in an **`improvement-log.md`** sibling to the skill's worked-example corpus (architecture-review: [docs/audits/architecture/improvement-log.md](../audits/architecture/improvement-log.md)). The entry carries: the evidence base, a scorecard of the skill's lived record, the amendments made (each citing the finding or miss that motivated it), a **considered-and-rejected suggestion ledger with recurrence counts** (the anti-lawyer-redline safeguard made auditable — deferred suggestions accumulate there toward the N=3 graduation instead of vanishing between cycles), a Loop-2 trigger check (checked, not skipped), and the next-cycle trigger. Minted at N=1 deliberately under the act-now tier: an unrecorded cycle's evidence decays immediately (structural-fix class), and the convention is itself provisional — instances 2-3 may reshape it when their cycles run.
 
 ## Relationship to the other ADRs
 
