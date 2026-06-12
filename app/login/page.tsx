@@ -113,13 +113,6 @@ export default function LoginPage() {
           <Suspense fallback={<div className="h-64" />}>
             <LoginForm />
           </Suspense>
-
-          <p className="mt-6 text-center text-sm text-latent-mid">
-            Don't have an account?{' '}
-            <Link href="/signup" className="text-latent-fg hover:text-latent-accent-light">
-              Sign up
-            </Link>
-          </p>
         </div>
       </main>
     </div>

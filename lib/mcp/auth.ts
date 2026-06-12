@@ -3,7 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createServiceClient } from '@/lib/supabase/service'
 
 export class McpAuthError extends Error {
-  constructor(public reason: 'missing' | 'malformed' | 'unknown') {
+  constructor(public reason: 'missing' | 'malformed' | 'unknown' | 'expired') {
     super(reason)
   }
 }
@@ -30,17 +30,37 @@ function extractBearer(req: Request): string {
 export async function requireApiKey(req: Request): Promise<McpAuthContext> {
   const raw = extractBearer(req)
   const supabase = createServiceClient()
+  // `select('*')` (not an explicit column list) is deliberate: it keeps this
+  // lookup working even if migration 081 (expires_at) hasn't been applied yet —
+  // a missing column is simply absent from the row rather than erroring the
+  // whole query, so the auth path can't 500 during a migration/deploy window.
   const { data, error } = await supabase
     .from('api_keys')
-    .select('id, user_id')
+    .select('*')
     .eq('key_hash', hashKey(raw))
     .is('revoked_at', null)
     .maybeSingle()
   if (error) throw error
   if (!data) throw new McpAuthError('unknown')
 
+  // Security remediation #1: enforce token expiry server-side. NULL expires_at
+  // = non-expiring (legacy desktop key, or pre-migration rows). OAuth-minted
+  // tokens carry now()+TTL and are rejected once past it.
+  if (data.expires_at && new Date(data.expires_at).getTime() <= Date.now()) {
+    throw new McpAuthError('expired')
+  }
+
   // Fire-and-forget last-used timestamp; don't block the request on it.
-  void supabase.from('api_keys').update({ last_used_at: new Date().toISOString() }).eq('id', data.id)
+  // (Remediation #7: the previous `void <builder>` never executed — supabase-js
+  // builders are lazy thenables, so the HTTP request only fires once awaited /
+  // .then()'d. This restores the leaked-key detection signal.)
+  supabase
+    .from('api_keys')
+    .update({ last_used_at: new Date().toISOString() })
+    .eq('id', data.id)
+    .then(({ error: updateErr }) => {
+      if (updateErr) console.error('[mcp/auth] last_used_at update failed:', updateErr)
+    })
 
   return { userId: data.user_id, supabase }
 }

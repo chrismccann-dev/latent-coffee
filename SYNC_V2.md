@@ -63,15 +63,16 @@ Authorization: Bearer <ANTHROPIC_LATENT_SYNC_KEY>
 ```
 - Key generated once via Supabase admin SQL: `INSERT INTO api_keys (key_hash, user_id, label) VALUES (...)`.
 - Stored in claude.ai project's MCP config (or Claude Code's `~/.config/...`).
-- Server validates against `api_keys` table (`SUPABASE_SERVICE_ROLE_KEY` for the lookup), resolves to `user_id`, all queries scoped via RLS.
-- Rotation: invalidate row, generate new, paste into client config.
+- Server validates against `api_keys` table (`SUPABASE_SERVICE_ROLE_KEY` for the lookup), resolves to `user_id`. **The MCP path runs as the service role, which bypasses RLS — the `.eq('user_id', …)` filters in every tool handler are the sole isolation control, not a backstop on top of RLS.**
+- **Token expiry (security-review-2026-06 #1, migration 081):** `requireApiKey` rejects any row where `expires_at <= now()`. The hand-issued desktop key has `expires_at = NULL` and is therefore non-expiring (rotate manually).
+- Rotation: invalidate row (`revoked_at`), generate new, paste into client config.
 
 **Path B — OAuth 2.1 + PKCE (claude.ai web):**
 - Discovery endpoints: `/.well-known/oauth-protected-resource` + `/.well-known/oauth-authorization-server`.
-- `/api/mcp/authorize` → 5-minute auth code (stored in `oauth_authorization_codes`, migration 043).
-- `/api/mcp/token` → returns access_token (reuses the api_keys row internally).
-- WWW-Authenticate header on `/api/mcp` 401 to trigger re-auth.
-- Static client credentials via Vercel env (`MCP_OAUTH_CLIENT_ID` + `MCP_OAUTH_CLIENT_SECRET`).
+- `/api/mcp/authorize` → 5-minute auth code (stored in `oauth_authorization_codes`, migration 043). **Owner-pinned (security-review-2026-06 #2): only the session matching `OWNER_USER_ID` may complete the flow; fails closed if that env is unset.**
+- `/api/mcp/token` → mints a fresh `api_keys` row with `expires_at = now() + 1y` (security-review-2026-06 #1), returns it as `access_token`. Auth-code consume is an atomic compare-and-swap (`#6`); client-secret compare is constant-time (`#8`).
+- WWW-Authenticate header on `/api/mcp` 401 to trigger re-auth (incl. when a token passes its `expires_at`).
+- Static client credentials via Vercel env (`OAUTH_CLIENT_ID` + `OAUTH_CLIENT_SECRET`). Owner pin via `OWNER_USER_ID`.
 - Single-tenant + single-user shape collapsed B-OAuth's heaviest costs (consent UI, scopes, identity) to ~nothing.
 
 ### MCP Resources (read-only, browseable)
