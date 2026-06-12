@@ -3,10 +3,10 @@ import { GreenBean } from '@/lib/types'
 import { IndexCap, LotStage } from '@/components/IndexList'
 import { GreenCard, type GreenCardData } from '@/components/GreenCard'
 import {
-  computeLifecycleState,
   extractBatchNumber,
   lifecycleSectionTitle,
   pickLatestExperiment,
+  resolveLifecycleState,
   type LifecycleState,
 } from '@/lib/lifecycle-state'
 
@@ -17,15 +17,20 @@ import {
 // most important things") — the v2 §04 lot-card grid that Redesign Sprint 6 PR1
 // rejected is now adopted, but grouped by state rather than flattened.
 //
-// State is derived per row on read via computeLifecycleState (no stored status
-// column). In-inventory lots are not surfaced — per docs/roasting/redesign.md
+// State is the stored green_beans.lot_status with derived fallback
+// (resolveLifecycleState, migration 080 / ADR-0024 § 6) — pre-080 rows are
+// NULL and keep rendering from the derived computation unchanged.
+// In-inventory lots are not surfaced — per docs/roasting/redesign.md
 // § 5.1 they wait for the eventual inventory page.
 //
 // Section order is the user's mental order (active work first, archive last):
 // 1. Waiting for next roast — design landed, roasts pending
 // 2. Waiting for next cupping — roasts done, cuppings + synthesis pending
-// 3. Resolved — reference roast confirmed, archival
-// 4. Unresolved — closed without confirmed reference (we learned something
+// 3. Waiting for brewing — ball in the brewing court (SPG execution or
+//    optimized brew, claude.ai-side). Stored-only state; derivation can't
+//    see the handoff. Lot Coordinator dogfood (2026-06-11).
+// 4. Resolved — reference roast confirmed, archival
+// 5. Unresolved — closed without confirmed reference (we learned something
 //    but didn't reach a verdict). Sub-sprint 4a (2026-05-27).
 //
 // Card content is state-dependent (see GreenCard.tsx): active lots show
@@ -35,6 +40,7 @@ import {
 const SECTION_ORDER: LifecycleState[] = [
   'waiting_for_next_roast',
   'waiting_for_next_cupping',
+  'waiting_for_brewing',
   'resolved',
   'unresolved',
 ]
@@ -80,6 +86,9 @@ const TILE_COLOR: Record<LifecycleState, string> = {
   in_inventory: 'var(--tile-inventory)',
   waiting_for_next_roast: 'var(--tile-next-roast)',
   waiting_for_next_cupping: 'var(--tile-next-cupping)',
+  // Steel blue — water. Hue shift off the green-brown roast axis to signal
+  // "with brewing, not roasting" distinctly (hue-not-lightness rule).
+  waiting_for_brewing: 'var(--tile-brewing)',
   resolved: 'var(--tile-resolved)',
   unresolved: 'var(--subtle)',
 }
@@ -114,7 +123,7 @@ export default async function GreenBeansPage() {
   // rendered — the index intentionally surfaces only the 4 active states.
   const beansByState = new Map<LifecycleState, GreenBeanIndexRow[]>()
   for (const bean of beans) {
-    const state = computeLifecycleState(bean)
+    const state = resolveLifecycleState(bean.lot_status, bean)
     if (!SECTION_ORDER.includes(state)) continue
     const arr = beansByState.get(state) ?? []
     arr.push(bean)

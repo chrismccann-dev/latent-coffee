@@ -20,8 +20,8 @@ import { PerRoastReflections } from '@/components/PerRoastReflections'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
 import { DropRulesCard } from '@/components/DropRulesCard'
 import {
-  computeLifecycleState,
   extractBatchNumber,
+  resolveLifecycleState,
   SLOT_LETTERS,
   type SlotLetter,
   type PriorExperimentShape,
@@ -180,11 +180,19 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
   // "Reference" → "Leading" vocabulary rotation and verdict block dropped).
   // in_inventory is filtered out of /green per scope doc § 5.1 and only
   // reachable via direct URL — routes to InventoryPlaceholder.
-  const state = computeLifecycleState(bean)
+  const state = resolveLifecycleState(bean.lot_status, bean)
   if (state === 'waiting_for_next_roast') {
     return <WaitingForNextRoastView bean={bean} cuppings={cuppings} />
   }
   if (state === 'waiting_for_next_cupping') {
+    return <WaitingForNextCuppingView bean={bean} cuppings={cuppings} />
+  }
+  // waiting_for_brewing (migration 080 / ADR-0024 § 6): the lot is paused on a
+  // brewing-side task (SPG execution or optimized brew). The latest V-set's
+  // actuals + hypothesis remain the page's useful content while the ball is in
+  // the brewing court, so reuse the cupping view; it derives the rotated
+  // status pill from bean.lot_status itself.
+  if (state === 'waiting_for_brewing') {
     return <WaitingForNextCuppingView bean={bean} cuppings={cuppings} />
   }
   if (state === 'resolved') {
@@ -776,6 +784,11 @@ function WaitingForNextCuppingView({
   bean: GreenLotDetail
   cuppings: Cupping[]
 }) {
+  // waiting_for_brewing render (migration 080): same view shape — the latest
+  // V-set actuals — with the status pill saying the lot is with brewing.
+  // Derived from the stored column directly: derivation can never produce
+  // waiting_for_brewing, so lot_status is the single source for this signal.
+  const brewingWait = bean.lot_status === 'waiting_for_brewing'
   const experiments = bean.experiments
   const latestExp = experiments.length
     ? [...experiments].sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''))[0]
@@ -826,9 +839,21 @@ function WaitingForNextCuppingView({
     { label: 'Variety', value: bean.variety ?? bean.cultivar?.cultivar_name ?? '—' },
   ]
   const pills = [
-    <StatusPill key="state" label="Waiting · Next Cupping" tone="lavender" />,
+    brewingWait ? (
+      <StatusPill key="state" label="Waiting · Brewing" tone="teal" />
+    ) : (
+      <StatusPill key="state" label="Waiting · Next Cupping" tone="lavender" />
+    ),
     ...(bean.process ? [<Chip key="proc" name={bean.process} tone="green" />] : []),
-    ...(vLabel ? [<Chip key="vset" name={`${vLabel} · awaiting cupping`} tone="plum" />] : []),
+    ...(vLabel
+      ? [
+          <Chip
+            key="vset"
+            name={`${vLabel} · ${brewingWait ? 'with brewing' : 'awaiting cupping'}`}
+            tone="plum"
+          />,
+        ]
+      : []),
   ]
 
   // Roast Actuals card — identical content in both subtrees, only the section

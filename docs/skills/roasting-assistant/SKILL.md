@@ -15,7 +15,7 @@ Construct a starting roast recipe before the physical roast happens. Output is a
 - Pull machine constraints from Roest Knowledge (L200 Ultra thermal behavior + API quirks + protocol stack)
 - Pull peer-roaster patterns from Peer-Learning Roasting Archivist (Dongzhe profile + cross-peer N<3 stub as it grows)
 - Pull sourcing/lane context from WBC Roasting Archivist § sourcing/ (until Sourcing Knowledge splits out per ADR-0011)
-- Construct: `charge_temp` / `hopper_load_temp` / bezier curves (temperature/fan/RPM/power) / drop rules / predicted FC / predicted cup / Hypothesis prose
+- Construct: `charge_temp` / `hopper_load_temp` / bezier curves (temperature/fan/RPM/power) / drop rules / predicted FC / predicted cup / Hypothesis prose. **Drop rules MUST follow the authoring standard in [`cluster/drop-rules.md`](docs/skills/roasting-assistant/cluster/drop-rules.md)** (two branches, one imperative line each, clock-time + drop-temp only — no explanation, no FC-timing conditionals; canonical copy lives in the roasting-coordinator cluster per ADR-0024)
 - For V-set lots: generate 3 batches (V_n a/b/c) with deliberate variance against a documented `variable_being_tested` and `expected_outcome` per V-set methodology
 - For one-shot lots: single batch design (`one-shot.md` STAGE 2 framing); same cluster reads, no a/b/c variance
 

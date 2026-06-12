@@ -24,6 +24,60 @@ import {
 } from '@/lib/brew-import'
 import { fireQueueInserts, type QueuedEntry } from '@/lib/taxonomy-queue'
 import { checkCuppingDateConsistency } from '@/lib/mcp/cupping-date-bounds'
+import { LOT_STATUS_VALUES, type LotStatus } from '@/lib/lifecycle-state'
+
+// ---------------------------------------------------------------------------
+// lot_status single write path (migration 080, ADR-0024 § 6)
+//
+// The stored lifecycle status transitions ONLY through these persist/patch
+// helpers (lockstep with the derived logic in lib/lifecycle-state.ts, which
+// survives as the validator — scripts/check-lifecycle-consistency.ts):
+//
+//   persistGreenBean        → 'in_inventory' (set in the insert row)
+//   persistExperiment       → 'waiting_for_next_roast' (create; or update that
+//                             sets winner — mirrors the derived flip)
+//   persistRoast            → 'waiting_for_next_cupping'
+//   persistCupping          → no change (post-cupping route is the Roasting
+//                             Coordinator's decision, not derivable here)
+//   patchExperiment(winner) → 'waiting_for_next_roast'
+//   persist/patchRoastLearnings → 'resolved' / 'unresolved' from
+//                             why_this_roast_won (the close-out verdict)
+//   patchGreenBean(lot_status) → Coordinator-explicit transitions, primarily
+//                             → 'waiting_for_brewing' at the brewing handoff
+//
+// Best-effort by design: a failed status write must not fail the primary
+// row write (the gate catches drift within a day). Returns a warning string
+// on failure, null on success. `respectClosed` skips the advance when the lot
+// is already resolved/unresolved — close-out wins over late row writes;
+// reopening is an explicit patch_green_bean lot_status call.
+// ---------------------------------------------------------------------------
+
+async function setLotStatus(
+  supabase: SupabaseClient,
+  userId: string,
+  greenBeanId: string,
+  status: LotStatus,
+  opts: { respectClosed?: boolean } = {},
+): Promise<string | null> {
+  if (opts.respectClosed) {
+    const { data: row, error } = await supabase
+      .from('green_beans')
+      .select('lot_status')
+      .eq('user_id', userId)
+      .eq('id', greenBeanId)
+      .maybeSingle()
+    if (error) return `lot_status not advanced to '${status}': ${error.message}`
+    const current = (row?.lot_status ?? null) as string | null
+    if (current === 'resolved' || current === 'unresolved') return null
+  }
+  const { error: updErr } = await supabase
+    .from('green_beans')
+    .update({ lot_status: status })
+    .eq('user_id', userId)
+    .eq('id', greenBeanId)
+  if (updErr) return `lot_status not advanced to '${status}': ${updErr.message}`
+  return null
+}
 
 // Cluster 2 (#27) — canonical cooling-arc shape enum, independent of the
 // temperature_behavior prose. Migration 078 CHECK constraint mirrors this.
@@ -270,6 +324,9 @@ export async function persistGreenBean(
     // Migration 075 (Cluster A / MB-7). Optional optimized-brew FK; defaults
     // NULL when payload omits, typically set at close-lot.
     optimized_brew_id: payload.optimized_brew_id ?? null,
+    // Migration 080 (ADR-0024 § 6). New lots start the stored lifecycle here;
+    // the single write path above maintains it from this point on.
+    lot_status: 'in_inventory' satisfies LotStatus,
   }
 
   const { data, error } = await supabase
@@ -601,6 +658,18 @@ export async function persistRoast(
   if (error || !data) {
     return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
   }
+
+  // Migration 080 — a logged roast advances the stored lifecycle to the
+  // cupping wait (lockstep with the derived flip).
+  const statusWarning = await setLotStatus(
+    supabase,
+    userId,
+    payload.green_bean_id,
+    'waiting_for_next_cupping',
+    { respectClosed: true },
+  )
+  if (statusWarning) warnings.push(statusWarning)
+
   return { ok: true, roast_id: data.id as string, created: true, warnings }
 }
 
@@ -912,6 +981,10 @@ export async function persistExperiment(
     if (error || !data) {
       return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
     }
+    // Migration 080 — a fresh V-set design puts the lot back in the roast wait.
+    await setLotStatus(supabase, userId, payload.green_bean_id, 'waiting_for_next_roast', {
+      respectClosed: true,
+    })
     return { ok: true, experiment_pk: data.id as string, created: true }
   } else {
     const { data, error } = await supabase
@@ -922,6 +995,13 @@ export async function persistExperiment(
       .single()
     if (error || !data) {
       return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
+    }
+    // Migration 080 — an UPSERT update that lands the winner (the STAGE 5
+    // synthesis flow) mirrors the derived flip back to the roast wait.
+    if (payload.winner?.trim()) {
+      await setLotStatus(supabase, userId, payload.green_bean_id, 'waiting_for_next_roast', {
+        respectClosed: true,
+      })
     }
     return { ok: true, experiment_pk: data.id as string, created: false }
   }
@@ -1080,6 +1160,15 @@ export async function persistRoastLearnings(
     if (error || !data) {
       return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
     }
+    // Migration 080 — close-out: the verdict prose discriminates resolved vs
+    // unresolved (same rule as the derived logic). No respectClosed guard:
+    // the learnings write IS the close-out authority.
+    await setLotStatus(
+      supabase,
+      userId,
+      payload.green_bean_id,
+      payload.why_this_roast_won?.trim() ? 'resolved' : 'unresolved',
+    )
     return { ok: true, roast_learnings_id: data.id as string, created: true }
   } else {
     const { data, error } = await supabase
@@ -1091,6 +1180,12 @@ export async function persistRoastLearnings(
     if (error || !data) {
       return { ok: false, code: 'db_error', message: error?.message ?? 'no row returned' }
     }
+    await setLotStatus(
+      supabase,
+      userId,
+      payload.green_bean_id,
+      payload.why_this_roast_won?.trim() ? 'resolved' : 'unresolved',
+    )
     return { ok: true, roast_learnings_id: data.id as string, created: false }
   }
 }
@@ -1172,6 +1267,11 @@ export interface PatchGreenBeanPayload {
   // close-lot from the brew_id in the optimized-brew handoff brief, or
   // backfilled for lots closed before this column existed.
   optimized_brew_id?: string | null
+  // Migration 080 (ADR-0024 § 6). The Coordinator's explicit transition slot
+  // in the single write path — primarily → 'waiting_for_brewing' at the SPG /
+  // optimized-brew handoff (the one state no row write implies), plus
+  // deliberate corrections/reopens. Validated against LOT_STATUS_VALUES.
+  lot_status?: LotStatus
 }
 
 export const GREEN_BEAN_PATCH_FIELDS = [
@@ -1186,6 +1286,8 @@ export const GREEN_BEAN_PATCH_FIELDS = [
   'peer_reference_brew_id',
   // Migration 075 (Cluster A / MB-7)
   'optimized_brew_id',
+  // Migration 080 (ADR-0024 § 6) — Coordinator-explicit lifecycle transition
+  'lot_status',
 ] as const
 
 export async function patchGreenBean(
@@ -1210,6 +1312,16 @@ export async function patchGreenBean(
 
   const errors: string[] = []
   const patch = buildPatchObject(payload, GREEN_BEAN_PATCH_FIELDS)
+
+  // Migration 080 — readable-error layer beneath the z.enum MCP schema
+  // (mirrors the COOLING_ARC_PATTERNS guard pattern). lot_status is never
+  // cleared to NULL through this path; NULL means pre-080 derived fallback.
+  if ('lot_status' in payload) {
+    const v = payload.lot_status
+    if (!v || !(LOT_STATUS_VALUES as readonly string[]).includes(v)) {
+      errors.push(`lot_status must be one of: ${LOT_STATUS_VALUES.join(', ')}`)
+    }
+  }
 
   // Producer canonicalize (text-only, allowOverride).
   if ('producer' in payload) {
@@ -1503,7 +1615,7 @@ export async function patchExperiment(
 
   const { data: existing, error: lookupErr } = await supabase
     .from('experiments')
-    .select('id')
+    .select('id, green_bean_id')
     .eq('user_id', userId)
     .eq('id', payload.experiment_pk)
     .maybeSingle()
@@ -1527,6 +1639,19 @@ export async function patchExperiment(
   if (error || !data) {
     return { ok: false, code: 'db_error', message: error?.message || 'experiment update failed' }
   }
+
+  // Migration 080 — landing the winner (cup-side synthesis) mirrors the
+  // derived flip back to the roast wait.
+  if (typeof payload.winner === 'string' && payload.winner.trim()) {
+    await setLotStatus(
+      supabase,
+      userId,
+      existing.green_bean_id as string,
+      'waiting_for_next_roast',
+      { respectClosed: true },
+    )
+  }
+
   return { ok: true, experiment_pk: data.id as string }
 }
 
@@ -1597,6 +1722,18 @@ export async function patchRoastLearnings(
   if (error || !data) {
     return { ok: false, code: 'db_error', message: error?.message || 'roast_learnings update failed' }
   }
+
+  // Migration 080 — a patch that touches the close-out verdict re-discriminates
+  // resolved vs unresolved (same rule as persistRoastLearnings).
+  if ('why_this_roast_won' in payload) {
+    await setLotStatus(
+      supabase,
+      userId,
+      targetGreenBeanId,
+      payload.why_this_roast_won?.trim() ? 'resolved' : 'unresolved',
+    )
+  }
+
   return { ok: true, roast_learnings_id: data.id as string }
 }
 

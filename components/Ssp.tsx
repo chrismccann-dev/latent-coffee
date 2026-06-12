@@ -26,11 +26,12 @@ export function Chip({ name, tone }: { name: ReactNode; tone?: AccentTone }) {
 
 /**
  * StatusPill — dot + mono-uppercase label. Default green; `amber` for roast,
- * and the three lifecycle tones (lavender / resolved / archive) for the Sprint 2
- * green pages. Deliberately distinct from {@link Chip} — a status never reads as
- * a flavor chip.
+ * the three lifecycle tones (lavender / resolved / archive) for the Sprint 2
+ * green pages, and `teal` for the waiting_for_brewing wait (migration 080 /
+ * Lot Coordinator dogfood — water hue, ball in the brewing court). Deliberately
+ * distinct from {@link Chip} — a status never reads as a flavor chip.
  */
-export type StatusTone = 'amber' | 'lavender' | 'resolved' | 'archive'
+export type StatusTone = 'amber' | 'lavender' | 'teal' | 'resolved' | 'archive'
 
 export function StatusPill({ label, tone }: { label: ReactNode; tone?: StatusTone }) {
   return (
