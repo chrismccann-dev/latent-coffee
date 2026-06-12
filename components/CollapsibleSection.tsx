@@ -1,23 +1,23 @@
-// Lab-document collapsible (`.ssp-coll`). Re-skinned in Redesign Sprint 4
-// (2026-05-29) from the prior `<details className="bg-white border ...">`
-// card-chrome to the v2 Ssp* family — hairline-prefixed mono summary +
-// chevron + `.ssp-sub` padded body. Used ONLY by the /green page + its three
-// collapsible shared components (RoastLogTable's defaultCollapsed branch /
-// PerRoastReflections / CrossBatchNotesBlock) plus the page-level All-Cuppings
-// / Experiment-Journey / Experiment-Frame / Drop-Rules disclosures — re-skinning
-// it here is what closes the green collapse seam in one move. (The aggregation
-// pages use the separate CollapsibleBlock, untouched.)
+// Lab-document collapsible (`.ssp-coll`) — the ONE disclosure shell for both
+// page families (polish-audit Pass 3 merged the byte-similar former
+// CollapsibleSection / CollapsibleBlock pair; both export names survive).
 //
-// `ct` is an optional right-aligned context line in the summary (additive —
-// every existing caller passes `title` only).
+// `padded` wraps children in a `.ssp-sub` padded block — the green-page shape
+// (CollapsibleSection). Without it children render bare inside `.body` and
+// carry their own `.ssp-sub` blocks stacking with hairline dividers — the
+// aggregation-page shape (CollapsibleBlock). Pure CSS, collapsed by default,
+// no client component / hydration flicker.
+//
+// `ct` is an optional right-aligned context line in the summary.
 
 type Props = {
   title: React.ReactNode
   ct?: React.ReactNode
+  padded?: boolean
   children: React.ReactNode
 }
 
-export function CollapsibleSection({ title, ct, children }: Props) {
+function Collapsible({ title, ct, padded, children }: Props) {
   return (
     <details className="ssp-coll">
       <summary>
@@ -25,9 +25,17 @@ export function CollapsibleSection({ title, ct, children }: Props) {
         {ct ? <span className="ct">{ct}</span> : null}
         <span className="chev" />
       </summary>
-      <div className="body">
-        <div className="ssp-sub">{children}</div>
-      </div>
+      <div className="body">{padded ? <div className="ssp-sub">{children}</div> : children}</div>
     </details>
   )
+}
+
+/** Green-page collapsible — padded `.ssp-sub` body. */
+export function CollapsibleSection(props: Omit<Props, 'padded'>) {
+  return <Collapsible {...props} padded />
+}
+
+/** Aggregation-page "Additional Information" collapsible — bare body. */
+export function CollapsibleBlock(props: Omit<Props, 'padded'>) {
+  return <Collapsible {...props} />
 }

@@ -165,10 +165,12 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
       ])
     : []
 
+  // Family + Coffees rows dropped (polish-audit Pass 1): the topbar anchor
+  // slot carries the family and the topbar count slot carries the coffee
+  // count — topbar = identity, hero meta = differentiation. (The CoffeesList
+  // shead keeps its own per-section count.)
   const meta: MetaPair[] = [
-    { label: 'Family', value: family },
     ...(locationStr ? [{ label: 'Location', value: locationStr }] : []),
-    { label: 'Coffees', value: `${brewCount}` },
   ]
 
   return (
@@ -176,7 +178,11 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
       <DetailBackLink href="/roasters">Roasters</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar roaster={`${family} family`} kind="Roaster Profile" />
+      <SspTopBar
+        count={`${brewCount} COFFEE${brewCount === 1 ? '' : 'S'}`}
+        anchor={`${family} family`}
+        kind="Roaster Profile"
+      />
       <SspNamePlate
         title={entry?.name || roasterName}
         meta={meta}

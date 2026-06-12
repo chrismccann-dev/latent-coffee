@@ -42,19 +42,24 @@ export function StatusPill({ label, tone }: { label: ReactNode; tone?: StatusTon
   )
 }
 
-/** TopBar — black mono strip. Optional left slots; `·` only between present slots. */
+/** TopBar — black mono strip. Optional left slots; `·` only between present slots.
+ *  Slot semantics (polish-audit sprint, 2026-06-11): `id` = the entity's own
+ *  identifier (lot id, batch #), `count` = a corpus/count line (N ROASTS,
+ *  N COFFEES, a date), `anchor` = the identity anchor the topbar carries so the
+ *  hero meta doesn't repeat it (roaster name, species, country, family).
+ *  Topbar = identity; hero meta = differentiation; never duplicate. */
 export function SspTopBar({
-  brewId,
-  date,
-  roaster,
+  id,
+  count,
+  anchor,
   kind = 'Tasting Sheet',
 }: {
-  brewId?: string
-  date?: string
-  roaster?: string
+  id?: string
+  count?: string
+  anchor?: string
   kind?: string
 }) {
-  const parts = [brewId, date, roaster].filter(Boolean) as string[]
+  const parts = [id, count, anchor].filter(Boolean) as string[]
   return (
     <div className="ssp-topbar">
       <div className="l">

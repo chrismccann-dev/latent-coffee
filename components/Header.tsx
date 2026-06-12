@@ -34,8 +34,12 @@ export function Header() {
           </span>
         </Link>
 
-        {/* Desktop navigation — centered destinations (v2 nav-v2 shape) */}
-        <nav className="hidden md:flex flex-1 items-center justify-center flex-wrap gap-6">
+        {/* Desktop navigation — centered destinations (v2 nav-v2 shape).
+            Chrome @media exception (grilling-queue 52, ratified 2026-06-11):
+            viewport chrome can't use container queries by construction, so the
+            header collapses via Tailwind @media — at lg: (1024) to honor the
+            two-point 390/1024 model. Tablets 768-1023 get the hamburger. */}
+        <nav className="hidden lg:flex flex-1 items-center justify-center flex-wrap gap-6">
           {navItems.map(({ label, href }) => (
             <Link
               key={href}
@@ -52,17 +56,17 @@ export function Header() {
         </nav>
 
         {/* Invisible tail spacer — balances the logo so the nav cluster is truly centered */}
-        <div className="hidden md:block w-36 flex-shrink-0" aria-hidden="true" />
+        <div className="hidden lg:block w-36 flex-shrink-0" aria-hidden="true" />
 
         {/* Mobile: push hamburger to the right */}
-        <div className="flex-1 md:hidden" />
+        <div className="flex-1 lg:hidden" />
         <button
           type="button"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
           aria-controls="mobile-nav"
-          className="md:hidden w-9 h-9 flex items-center justify-center rounded border border-latent-border text-latent-fg flex-shrink-0"
+          className="lg:hidden w-9 h-9 flex items-center justify-center rounded border border-latent-border text-latent-fg flex-shrink-0"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             {menuOpen ? (
@@ -82,7 +86,7 @@ export function Header() {
       {menuOpen && (
         <nav
           id="mobile-nav"
-          className="md:hidden border-t border-latent-border bg-latent-surface"
+          className="lg:hidden border-t border-latent-border bg-latent-surface"
         >
           <div className="max-w-[1200px] mx-auto px-6 py-2 flex flex-col">
             {navItems.map(({ label, href }) => (

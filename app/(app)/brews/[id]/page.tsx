@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import { DetailBackLink } from '@/components/DetailBackLink'
 import {
   Chip,
   StatusPill,
@@ -211,33 +211,29 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
     proseFields.length > 0 ||
     !!brew.classification
 
+  // Roaster row dropped (polish-audit Pass 1): the topbar anchor slot already
+  // carries the roaster — topbar = identity, hero meta = differentiation.
   const meta = [
     {
       label: 'Variety',
       value: brew.variety || brew.cultivar?.cultivar_name || '—',
     },
-    { label: 'Roaster', value: brew.roaster || '—' },
     { label: 'Producer', value: producer || '—' },
   ]
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/brews"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Brews
-      </Link>
+      <DetailBackLink href="/brews">Brews</DetailBackLink>
 
       {/* Header */}
       <SspTopBar
-        brewId={
+        id={
           brew.source === 'self-roasted' && brew.roast?.batch_id
             ? `Batch #${brew.roast.batch_id}`
             : undefined
         }
-        date={brew.created_at?.slice(0, 10)}
-        roaster={brew.roaster?.toUpperCase()}
+        count={brew.created_at?.slice(0, 10)}
+        anchor={brew.roaster?.toUpperCase()}
         kind="Brew Detail"
       />
       <SspNamePlate

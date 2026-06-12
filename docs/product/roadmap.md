@@ -96,7 +96,6 @@ Product-side candidates with enough shape to discuss or scope, not active until 
 
 These came out of the 2026-06-02 priority-stack recount but are bigger than tweaks:
 
-- **Synthesis surface rethink.** The recount demoted synthesis below the entity-info block on every aggregation page *because it's too long*, not low-value. Fix is shortening/restructuring synthesis so its weight matches its secondary rank — not reordering. Connects to the three-LLM-call short-form work.
 - **Navigation reorg by actual usage.** Lived nav: **brews / roasters / green** are primary; **terroirs / cultivars / processes** rarely visited. Reorder the desktop nav by usage, or use the hamburger even on desktop.
 - **Brew-card recall mismatch (variety vs bag name).** Chris recalls coffees by bag name ("Picolot → Loud Giants"); `/brews` cards show the variety name, so he falls back to the roaster page. Surfacing the bag/coffee name on brew cards interacts with producer prominence + card density — needs thought, not a quick edit.
 

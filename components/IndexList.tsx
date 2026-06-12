@@ -62,10 +62,14 @@ export function GrlGroupHeader({
 /**
  * 5-block count bar fill — ABSOLUTE thresholds (Chris-locked 2026-05-30), so a
  * bar means the same thing on every index page rather than normalizing to the
- * per-page max. Scale: 1→1 · 2-3→2 · 4-5→3 · 6-7→4 · 8+→5. Zero shows no blocks.
+ * per-page max. Scale: 1→1 · 2→2 · 3-4→3 · 5-7→4 · 8+→5; zero shows no blocks.
+ * Unified with the confidence scale (grilling-queue 54, 2026-06-11): the
+ * boundaries align with lib/confidence's Chris-locked 1 / 2-4 / 5+ labels, so
+ * HIGH (5+) always lights the 4th block. ConfidenceCard renders this same fill
+ * inside the dark card — the two surfaces can't drift.
  */
 export function barBlocks(count: number): boolean[] {
-  const on = count <= 0 ? 0 : count === 1 ? 1 : count <= 3 ? 2 : count <= 5 ? 3 : count <= 7 ? 4 : 5
+  const on = count <= 0 ? 0 : count === 1 ? 1 : count === 2 ? 2 : count <= 4 ? 3 : count <= 7 ? 4 : 5
   return Array.from({ length: 5 }, (_, i) => i < on)
 }
 

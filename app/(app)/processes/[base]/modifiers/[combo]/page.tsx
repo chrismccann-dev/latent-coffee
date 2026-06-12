@@ -88,7 +88,7 @@ export default async function ModifierComboPage({
       <DetailBackLink href={baseHubUrl(base)}>{base}</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar roaster={base} kind="Process Variant" />
+      <SspTopBar anchor={base} kind="Process Variant" />
       <SspNamePlate title={label} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Process Description (authored — priority-stack recount Tweak 6) */}

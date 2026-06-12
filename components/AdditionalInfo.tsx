@@ -1,6 +1,6 @@
 import { TagLinkList } from '@/components/TagLinkList'
 import { FlavorNotesByFamily } from '@/components/FlavorNotesByFamily'
-import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import { CollapsibleBlock } from '@/components/CollapsibleSection'
 import type { CrossLinkDimension, CrossLinks } from '@/lib/cross-links'
 
 // Standardized first-person section voice (matches the app's journal voice:
