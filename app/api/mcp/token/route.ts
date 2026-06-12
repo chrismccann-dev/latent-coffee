@@ -13,7 +13,7 @@
 // the raw value isn't recoverable. So /token mints a fresh api_key per
 // successful exchange. Same Bearer-validation path on /api/mcp afterward.
 
-import { createHash, randomBytes } from 'crypto'
+import { createHash, randomBytes, timingSafeEqual } from 'crypto'
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
 
@@ -21,6 +21,15 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const ACCESS_TOKEN_TTL_SECONDS = 31536000 // 1 year — no refresh tokens v1
+
+// Constant-time string compare (remediation #8). Hash both sides to a fixed
+// 32-byte digest first so timingSafeEqual never sees a length mismatch (which
+// would throw and itself leak length info).
+function safeStrEqual(a: string, b: string): boolean {
+  const ad = createHash('sha256').update(a).digest()
+  const bd = createHash('sha256').update(b).digest()
+  return timingSafeEqual(ad, bd)
+}
 
 function errorResponse(error: string, description?: string, status = 400): NextResponse {
   return NextResponse.json(
@@ -90,7 +99,12 @@ async function handleToken(req: Request): Promise<NextResponse> {
   if (!expectedClientId || !expectedClientSecret) {
     return errorResponse('server_error', 'OAuth client credentials not configured', 500)
   }
-  if (clientId !== expectedClientId || clientSecret !== expectedClientSecret) {
+  if (
+    !clientId ||
+    !clientSecret ||
+    !safeStrEqual(clientId, expectedClientId) ||
+    !safeStrEqual(clientSecret, expectedClientSecret)
+  ) {
     return errorResponse('invalid_client', 'unknown client credentials', 401)
   }
 
@@ -138,26 +152,37 @@ async function handleToken(req: Request): Promise<NextResponse> {
     return errorResponse('invalid_grant', 'PKCE verifier mismatch')
   }
 
-  // Mark consumed BEFORE issuing the token so a duplicate request races itself
-  // out via the unique key on `code`.
-  const { error: consumeErr } = await service
+  // Mark consumed BEFORE issuing the token. The conditional `.is('consumed_at',
+  // null)` + `.select()` makes this an atomic compare-and-swap: under two
+  // concurrent exchanges of the same code exactly one UPDATE matches a row; the
+  // other comes back with zero rows and is rejected (remediation #6 — single-use
+  // is now actually enforced, not just advertised).
+  const { data: consumed, error: consumeErr } = await service
     .from('oauth_authorization_codes')
     .update({ consumed_at: new Date().toISOString() })
     .eq('code', code)
     .is('consumed_at', null)
+    .select('code')
   if (consumeErr) {
     console.error('[mcp/token] consume failed:', consumeErr)
     return errorResponse('server_error', 'failed to consume code', 500)
+  }
+  if (!consumed?.length) {
+    return errorResponse('invalid_grant', 'code already used')
   }
 
   // Mint a fresh api_keys row. Raw token returned to claude.ai web; only the
   // sha256 hash persists in the table (matches existing Bearer pattern).
   const rawToken = randomBytes(32).toString('base64url')
   const keyHash = createHash('sha256').update(rawToken).digest('hex')
+  // Remediation #1: persist a real expiry matching the advertised expires_in so
+  // requireApiKey can enforce it (was advertised but never stored/enforced).
+  const expiresAt = new Date(Date.now() + ACCESS_TOKEN_TTL_SECONDS * 1000).toISOString()
   const { error: keyErr } = await service.from('api_keys').insert({
     user_id: row.user_id,
     key_hash: keyHash,
     label: 'claude-web-oauth',
+    expires_at: expiresAt,
   })
   if (keyErr) {
     console.error('[mcp/token] api_keys insert failed:', keyErr)
