@@ -29,6 +29,7 @@ V-SET RESULTS — <lot-slug> V<n>
 - cup vs producer notes: <on-track / off-track against the anchor>
 - next-step hypothesis: <INPUT-NOT-CANON — what I'd try next>
 - route recommendation: <INPUT — next-V | SPG | reference; Coordinator decides>
+- process friction (optional): <anything about the WORKFLOW that chafed this cycle — packet too thin/fat, reconstruct gap, role boundary, protocol ambiguity. The Assistant cannot edit docs; this line is its channel. The Coordinator transcribes it to roasting-coordinator/cluster/process-friction-log.md>
 ```
 
 The next-step hypothesis + route recommendation are **input**; the Coordinator owns both decisions (it holds the plan + the cross-V-set context). The Assistant's value is the freshest lived read of the cycle.

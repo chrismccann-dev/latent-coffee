@@ -72,11 +72,13 @@ Unlike Research (single-threaded), roasting lots **can run in parallel** — mul
 - [`cluster/close-out.md`](docs/skills/roasting-coordinator/cluster/close-out.md) — reference declaration + `roast_learnings` + the scoped substrate-fold + inventory archive.
 - [`cluster/lot-status-build.md`](docs/skills/roasting-coordinator/cluster/lot-status-build.md) — the stored `lot_status` design + the migration draft + the `check:lifecycle-consistency` spec. **Apply at dogfood** (touches shared lifecycle behavior).
 - [`cluster/drop-rules.md`](docs/skills/roasting-coordinator/cluster/drop-rules.md) — the operator-facing drop-rule authoring standard (read-at-the-machine: two branches, one imperative line each, clock-time + drop-temp only, no explanation, no FC-timing conditionals). Synthesized from 9 lived slots (2026-06-09). The Coordinator applies this when authoring `drop_rule_if_fast` / `drop_rule_if_slow` at V-set design.
+- [`cluster/process-friction-log.md`](docs/skills/roasting-coordinator/cluster/process-friction-log.md) — append-only cross-lot log of friction about the WORKFLOW itself (vs the Brief, which holds lot knowledge). Coordinator sessions append at every natural break; Assistants report via the Results Packet `process friction` line and the Coordinator transcribes. Standing mechanism (Chris-ratified 2026-06-11), feeds the lot-close retro + N=3 graduation.
 
 ## Self-improvement
 
 - **Patterns:** Manual lot-close retro (operator + Coordinator). A friction that recurs across lots graduates into a cluster primitive at the N=3 threshold ([ADR-0022](docs/adr/0022-formalization-tax-and-self-improvement-counterbalance.md)); anti-lawyer-redline safeguard applies (make the skill better, not bigger — [ADR-0023](docs/adr/0023-self-improving-skill-loop.md)).
-- **Signal:** The first dogfood lot is expected to surface revisions — capture them in the Brief + here.
+- **Capture surface:** [`cluster/process-friction-log.md`](docs/skills/roasting-coordinator/cluster/process-friction-log.md) — append process friction there at every natural break (same write-discipline as the Brief; the Brief gets lot knowledge, the log gets workflow friction). The lot-close retro scans it; recurring entries are the graduation candidates.
+- **Signal:** The first dogfood lot is expected to surface revisions — capture them in the log + the Brief as they happen.
 
 ## Architectural exceptions / notes
 
