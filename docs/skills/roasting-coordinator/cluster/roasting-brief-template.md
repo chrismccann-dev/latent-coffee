@@ -33,7 +33,7 @@ What is this lot trying to resolve? The lever(s) under test across V-sets. The f
 Where the lot is right now + what the Coordinator's next action is. The single most important "reconstruct here" pointer.
 
 ## Open questions / carry-forward
-Unresolved threads; what a future session needs to remember that isn't in the DB.
+Unresolved threads; what a future session needs to remember that isn't in the DB. (Lot knowledge only — friction about the WORKFLOW itself goes to [process-friction-log.md](docs/skills/roasting-coordinator/cluster/process-friction-log.md), appended at the same natural breaks.)
 
 ## Cross-domain handoffs
 - SPG: <not-run | packet-emitted <date> | verdict: …>
