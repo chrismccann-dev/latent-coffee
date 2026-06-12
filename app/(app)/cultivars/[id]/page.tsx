@@ -89,8 +89,9 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
     field('Common Pitfalls', cultivar.common_pitfalls),
   ])
 
+  // Species row dropped (polish-audit Pass 1): the topbar anchor slot already
+  // carries the species — topbar = identity, hero meta = differentiation.
   const meta: MetaPair[] = [
-    ...(cultivar.species ? [{ label: 'Species', value: cultivar.species }] : []),
     ...(cultivar.genetic_family ? [{ label: 'Family', value: cultivar.genetic_family }] : []),
     ...(cultivar.lineage ? [{ label: 'Lineage', value: cultivar.lineage }] : []),
   ]
@@ -100,7 +101,7 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
       <DetailBackLink href="/cultivars">Cultivars</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar roaster={cultivar.species ?? undefined} kind="Cultivar Profile" />
+      <SspTopBar anchor={cultivar.species ?? undefined} kind="Cultivar Profile" />
       <SspNamePlate
         title={cultivar.cultivar_name}
         meta={meta}

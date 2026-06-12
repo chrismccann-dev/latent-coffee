@@ -52,7 +52,7 @@ export default function SignupPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <header className="border-b border-latent-border">
-          <div className="max-w-6xl mx-auto px-6 h-14 flex items-center">
+          <div className="max-w-[1200px] mx-auto px-6 h-14 flex items-center">
             <Link href="/" className="font-mono font-bold text-lg tracking-widest uppercase">
               LATENT
               <span className="font-light text-latent-mid ml-1.5 text-xs tracking-wide">
@@ -84,7 +84,7 @@ export default function SignupPage() {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="border-b border-latent-border">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center">
+        <div className="max-w-[1200px] mx-auto px-6 h-14 flex items-center">
           <Link href="/" className="font-mono font-bold text-lg tracking-widest uppercase">
             LATENT
             <span className="font-light text-latent-mid ml-1.5 text-xs tracking-wide">

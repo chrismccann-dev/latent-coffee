@@ -5,23 +5,25 @@
 //   5+   = HIGH   (Strong)
 //   2-4  = MEDIUM (Emerging)
 //   1    = LOW    (Anecdotal); 0 also LOW
+// The visual companion is the shared 5-block bar (components/IndexList
+// `barBlocks`, scale unified with these thresholds per grilling-queue 54,
+// 2026-06-11 — HIGH always lights the 4th block; the old emoji field is gone).
 // Callers that need a surface-specific `desc` (e.g. terroir's non-process count)
-// spread the result and override `desc` while keeping the shared `label`/`emoji`.
+// spread the result and override `desc` while keeping the shared `label`.
 // Do NOT re-inline these thresholds in a page — import confidenceFor.
 
 export interface ConfidenceLabel {
-  emoji: string
   label: string
   desc: string
 }
 
 export function confidenceFor(brewCount: number): ConfidenceLabel {
   if (brewCount >= 5) {
-    return { emoji: '🟢', label: 'HIGH', desc: `${brewCount} coffees explored` }
+    return { label: 'HIGH', desc: `${brewCount} coffees explored` }
   }
   if (brewCount >= 2) {
-    return { emoji: '🟡', label: 'MEDIUM', desc: `${brewCount} coffees explored` }
+    return { label: 'MEDIUM', desc: `${brewCount} coffees explored` }
   }
   const noun = brewCount === 1 ? 'coffee' : 'coffees'
-  return { emoji: '🔴', label: 'LOW', desc: `${brewCount} ${noun} explored` }
+  return { label: 'LOW', desc: `${brewCount} ${noun} explored` }
 }

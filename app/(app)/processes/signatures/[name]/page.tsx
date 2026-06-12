@@ -85,7 +85,7 @@ export default async function SignaturePage({
       <DetailBackLink href="/processes">Processes</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar roaster="Signature Method" kind="Process Profile" />
+      <SspTopBar anchor="Signature Method" kind="Process Profile" />
       <SspNamePlate title={name} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Process Overview (authored Tier B prose) */}

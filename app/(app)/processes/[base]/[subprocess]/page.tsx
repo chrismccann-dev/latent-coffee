@@ -85,7 +85,7 @@ export default async function HoneySubprocessPage({
       <DetailBackLink href="/processes/honey">Honey</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar roaster="Honey" kind="Process Variant" />
+      <SspTopBar anchor="Honey" kind="Process Variant" />
       <SspNamePlate title={displayTitle} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Process Description (authored — priority-stack recount Tweak 6) */}
