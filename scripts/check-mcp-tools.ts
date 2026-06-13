@@ -15,12 +15,15 @@
 
 import { statSync } from 'node:fs'
 import { join } from 'node:path'
+import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
+import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { buildMcpServer } from '@/lib/mcp/server'
 import {
   checkToolDiscoverability,
   formatDiscoverabilityFailures,
   type ToolDescriptor,
 } from '@/lib/mcp/discoverability-check'
+import { isSchemaNode, type SchemaNode } from '@/lib/mcp/schema-compat'
 
 function collectToolDescriptors(server: ReturnType<typeof buildMcpServer>): ToolDescriptor[] {
   const internal = server as unknown as {
@@ -50,7 +53,98 @@ function fileMtime(path: string): string {
   }
 }
 
-function main(): void {
+// --- Published-catalog type coverage (Lot Coordinator dogfood, 2026-06-12) ---
+//
+// Fetches tools/list through a real in-memory MCP client — the same path
+// claude.ai / Claude Code hit — so it exercises lib/mcp/schema-compat.ts's
+// tools/list wrapper end-to-end. Three assertions:
+//
+//   1. Every top-level input property publishes resolvable type info
+//      (type / enum / const / $ref) UNLESS its zod source is z.unknown() /
+//      z.any() (jsonb passthrough fields like the bezier blobs). The zod
+//      cross-check is what makes this a "type info LOST in conversion" gate
+//      rather than a heuristic — a regression that strips a z.number() to {}
+//      fails even though {} looks like a legitimate any-field.
+//   2. No anyOf/oneOf node anywhere in the catalog lacks a sibling hoisted
+//      `type` — bare unions are exactly what Claude Code's client drops
+//      (the -32602 "received string" class that blocked push_green_bean +
+//      push_roast_recipe in the first Claude-Code-native write session).
+//   3. Canary: push_green_bean.price_per_kg publishes type ["number","null"].
+
+// Unwrap zod v4 optional/nullable/default/describe wrappers to the core def type.
+function zodCoreType(schema: unknown): string | undefined {
+  let def = (schema as { _zod?: { def?: { type?: string; innerType?: unknown } } })?._zod?.def
+  for (let i = 0; i < 20 && def; i++) {
+    if (def.type === 'optional' || def.type === 'nullable' || def.type === 'default') {
+      def = (def.innerType as { _zod?: { def?: { type?: string; innerType?: unknown } } })?._zod?.def
+    } else {
+      return def.type
+    }
+  }
+  return undefined
+}
+
+function hasTypeInfo(node: SchemaNode): boolean {
+  return 'type' in node || 'enum' in node || 'const' in node || '$ref' in node
+}
+
+async function checkPublishedCatalog(server: ReturnType<typeof buildMcpServer>): Promise<string[]> {
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair()
+  const client = new Client({ name: 'check-mcp-tools', version: '0.0.0' })
+  await Promise.all([server.connect(serverTransport), client.connect(clientTransport)])
+  const { tools } = await client.listTools()
+  const problems: string[] = []
+
+  const internal = server as unknown as {
+    _registeredTools?: Record<string, { inputSchema?: { _zod?: { def?: { shape?: Record<string, unknown> } } } }>
+  }
+
+  for (const tool of tools) {
+    const pubProps = (tool.inputSchema as SchemaNode | undefined)?.properties
+    const zodShape = internal._registeredTools?.[tool.name]?.inputSchema?._zod?.def?.shape ?? {}
+    if (!isSchemaNode(pubProps)) continue
+
+    // 1. Top-level properties: typed unless the zod source is unknown/any.
+    for (const [key, prop] of Object.entries(pubProps)) {
+      if (!isSchemaNode(prop)) continue
+      const core = zodCoreType(zodShape[key])
+      const deliberatelyAny = core === 'unknown' || core === 'any' || core === undefined
+      if (!hasTypeInfo(prop) && !deliberatelyAny) {
+        problems.push(`${tool.name}.${key}: published without type info (zod core: ${core})`)
+      }
+    }
+
+    // 2. No bare unions anywhere (recursive).
+    const walk = (node: unknown, path: string): void => {
+      if (Array.isArray(node)) {
+        node.forEach((n, i) => walk(n, `${path}[${i}]`))
+        return
+      }
+      if (!isSchemaNode(node)) return
+      if ((Array.isArray(node.anyOf) || Array.isArray(node.oneOf)) && !('type' in node)) {
+        problems.push(`${tool.name}${path}: anyOf/oneOf union without hoisted type (Claude Code drops these)`)
+      }
+      for (const [k, v] of Object.entries(node)) {
+        if (k !== 'description') walk(v, `${path}.${k}`)
+      }
+    }
+    walk(tool.inputSchema, '')
+  }
+
+  // 3. Canary.
+  const greenBean = tools.find((t) => t.name === 'push_green_bean')
+  const price = ((greenBean?.inputSchema as SchemaNode | undefined)?.properties as SchemaNode | undefined)
+    ?.price_per_kg as SchemaNode | undefined
+  if (JSON.stringify(price?.type) !== JSON.stringify(['number', 'null'])) {
+    problems.push(
+      `canary: push_green_bean.price_per_kg published as ${JSON.stringify(price)} — expected type ["number","null"]`,
+    )
+  }
+
+  return problems
+}
+
+async function main(): Promise<void> {
   // Stub auth context — descriptions don't touch supabase/userId.
   const stubAuth = {
     supabase: null as unknown as never,
@@ -67,19 +161,30 @@ function main(): void {
   }
 
   const failures = checkToolDiscoverability(tools)
-  if (failures.length === 0) {
-    console.log(`MCP tool discoverability check passed for ${tools.length} tool(s):`)
-    const serverMtime = fileMtime(join(process.cwd(), 'lib', 'mcp', 'server.ts'))
-    for (const t of tools) {
-      console.log(`  - ${t.name}  (source mtime: ${fileMtime(sourcePathForTool(t.name))})`)
-    }
-    console.log(`\nTOTAL: ${tools.length} tools registered.`)
-    console.log(`lib/mcp/server.ts last modified: ${serverMtime}`)
-    process.exit(0)
+  if (failures.length > 0) {
+    console.error(formatDiscoverabilityFailures(failures))
+    process.exit(1)
   }
 
-  console.error(formatDiscoverabilityFailures(failures))
-  process.exit(1)
+  const catalogProblems = await checkPublishedCatalog(server)
+  if (catalogProblems.length > 0) {
+    console.error(`Published-catalog type coverage FAILED (${catalogProblems.length} problem(s)):`)
+    for (const p of catalogProblems) console.error(`  - ${p}`)
+    process.exit(1)
+  }
+
+  console.log(`MCP tool discoverability check passed for ${tools.length} tool(s):`)
+  const serverMtime = fileMtime(join(process.cwd(), 'lib', 'mcp', 'server.ts'))
+  for (const t of tools) {
+    console.log(`  - ${t.name}  (source mtime: ${fileMtime(sourcePathForTool(t.name))})`)
+  }
+  console.log(`\nTOTAL: ${tools.length} tools registered.`)
+  console.log(`lib/mcp/server.ts last modified: ${serverMtime}`)
+  console.log('Published-catalog type coverage passed (no untyped properties, no bare unions; price_per_kg canary OK).')
+  process.exit(0)
 }
 
-main()
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})
