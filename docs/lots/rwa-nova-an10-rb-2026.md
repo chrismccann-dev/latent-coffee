@@ -63,13 +63,11 @@ Lot-side:
 3. Lot 21's lingonberry never surfaced on any brew angle; this lot's spec swaps it for lime — watch whether the bright-edge note survives the ferment at any slot.
 4. Purchase date recorded as 2026-04-15 (mirrored from Lot 21's Showroom order) — correct via patch if the order record says otherwise.
 
-Architecture friction (Coordinator dogfood log):
+Process notes:
 
-1. **MCP schema-publication bug (the big one):** every `.optional().nullable()` zod field publishes to the MCP tool catalog with no type declaration, so Claude Code's MCP client serializes objects/numbers as strings and server-side zod rejects them. claude.ai never hit this. Blocked `push_green_bean` + `push_roast_recipe` entirely and stripped `push_inventory` to strings-only. Worked around by invoking the same canonical write path in-process (`persistGreenBean` / `persistRoastRecipe` in [lib/roast-import.ts](lib/roast-import.ts)); `push_experiment` / `push_roast_profile` / `patch_green_bean` worked via MCP because their load-bearing fields are typed. Fix spun off as a background task; until it ships, Claude-Code-native sessions need the in-process fallback for numeric/object writes.
-2. **Terroir registry collision:** Rwanda Northern and Southern Province both map to macro "Central Plateau Highlands"; the (country, macro) lookup silently resolved intake to a Southern row and nearly split the Bukure siblings across terroir rows. Repointed to Lot 21's row (meso in match key), deleted the orphan. Substrate question for the grilling queue: should findOrCreateTerroir prefer an admin_region match when the caller supplies one?
-3. Roest inventory 9962 is missing structured moisture/density/elevation/price (friction 1 fallout — values packed into its notes + live in the DB). Patch after the schema fix ships.
-4. Minor: the meso-keyed terroir match set `terroir_provenance: auto_created` even though the country/macro pair is canonical — corrected manually; worth a look in the find-or-create provenance logic.
-5. What worked: the compose-don't-reauthor model held — onboarding protocol + Roest Knowledge + Historian + Lot 21 learnings answered every design question; the drop-rule authoring standard produced glanceable rules on the first try; ask-at-every-fork with prior-lock-as-recommended resolved all 7 forks in two question rounds.
+- Workflow-level friction from this session lives in the [process-friction log](docs/skills/roasting-coordinator/cluster/process-friction-log.md) (entries dated 2026-06-12): the MCP nullable-schema publication bug (fix spun off as a background task; in-process persist fallback documented there) and the sibling-lot terroir FK near-miss at intake (registry collision flagged for the grilling queue).
+- Lot-side residue of the schema bug: Roest inventory 9962 is missing structured moisture/density/elevation/price (values packed into its notes + live in the DB) — patch after the fix ships.
+- What worked: the compose-don't-reauthor model held — onboarding protocol + Roest Knowledge + Historian + Lot 21 learnings answered every design question; the drop-rule authoring standard produced glanceable rules on the first try; ask-at-every-fork with prior-lock-as-recommended resolved all 7 forks in two question rounds.
 
 ## Cross-domain handoffs
 
