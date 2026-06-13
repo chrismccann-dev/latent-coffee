@@ -39,6 +39,7 @@ import {
   assertToolDiscoverability,
   type ToolDescriptor,
 } from '@/lib/mcp/discoverability-check'
+import { installPublishedSchemaCompat } from '@/lib/mcp/schema-compat'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 function templateVar(variables: Variables, key: string): string {
@@ -86,6 +87,13 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerResolveQueueEntryTool(server, auth)
   // Sprint 12 / CR-4 (2026-05-21): third arbiter queue type (skeleton entries).
   registerListSkeletonEntriesTool(server, auth)
+
+  // Lot Coordinator dogfood (2026-06-12): rewrite nullable anyOf unions in the
+  // published catalog into type-array form so Claude Code's MCP client keeps
+  // the type info (it drops anyOf property unions, then serializes those
+  // fields as strings and trips the server-side zod -32602). Must run AFTER
+  // all registerTool calls — it wraps the SDK's tools/list handler.
+  installPublishedSchemaCompat(server)
 
   // Discoverability guard (MCP feedback batch 4). Dev-only — fires fast on the
   // first MCP request after a tool description regresses into the "Inserts a
