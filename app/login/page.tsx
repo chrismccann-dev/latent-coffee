@@ -92,7 +92,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="border-b border-latent-border">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center">
+        <div className="max-w-[1200px] mx-auto px-6 h-14 flex items-center">
           <Link href="/" className="font-mono font-bold text-lg tracking-widest uppercase">
             LATENT
             <span className="font-light text-latent-mid ml-1.5 text-xs tracking-wide">
@@ -113,13 +113,6 @@ export default function LoginPage() {
           <Suspense fallback={<div className="h-64" />}>
             <LoginForm />
           </Suspense>
-
-          <p className="mt-6 text-center text-sm text-latent-mid">
-            Don't have an account?{' '}
-            <Link href="/signup" className="text-latent-fg hover:text-latent-accent-light">
-              Sign up
-            </Link>
-          </p>
         </div>
       </main>
     </div>

@@ -10,6 +10,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { Chip } from '@/components/Ssp'
 import { IndexCap, GrlRow } from '@/components/IndexList'
 import {
   BASE_PROCESSES,
@@ -136,12 +137,9 @@ function CorePortalCard({ base, hub }: CorePortalCardProps) {
   return (
     <Link
       href={baseHubUrl(base)}
-      className="flex gap-4 items-stretch border border-latent-border rounded-md p-4 hover:bg-white transition-colors group"
+      className="flex gap-4 items-stretch border border-latent-border p-4 hover:bg-white transition-colors group"
     >
-      <div
-        className="w-24 h-24 rounded flex-shrink-0"
-        style={{ backgroundColor: color }}
-      />
+      <div className="w-24 h-24 flex-shrink-0" style={{ backgroundColor: color }} />
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline justify-between gap-3 mb-1">
           <h3 className="font-sans text-lg font-semibold">{base}</h3>
@@ -152,20 +150,15 @@ function CorePortalCard({ base, hub }: CorePortalCardProps) {
         <div className="font-mono text-xxs text-latent-mid mb-3">
           {hub.pure.length} pure &middot; {hub.modified.length} modified
         </div>
+        {/* Canonical Chip primitive (polish-audit Pass 3 — was a hand-drawn
+            re-creation of the deleted `.tag` look). */}
         <div className="flex flex-wrap gap-1.5">
-          <span className="inline-block font-mono text-chip uppercase tracking-wide bg-latent-highlight border border-latent-highlight-border text-latent-fg px-2 py-1 rounded">
-            Pure {base} ({hub.pure.length})
-          </span>
+          <Chip name={`Pure ${base} (${hub.pure.length})`} tone="green" />
           {inlineCombos.map((combo) => (
-            <span
-              key={combo.slug}
-              className="inline-block font-mono text-chip uppercase tracking-wide bg-latent-highlight border border-latent-highlight-border text-latent-fg px-2 py-1 rounded"
-            >
-              {combo.label} ({combo.count})
-            </span>
+            <Chip key={combo.slug} name={`${combo.label} (${combo.count})`} tone="green" />
           ))}
           {eligibleCombos.length > inlineCombos.length && (
-            <span className="inline-block font-mono text-chip uppercase tracking-wide text-latent-mid px-2 py-1">
+            <span className="font-mono text-xxs text-latent-mid self-center">
               +{eligibleCombos.length - inlineCombos.length} more
             </span>
           )}

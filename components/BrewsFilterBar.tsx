@@ -57,9 +57,12 @@ export function BrewsFilterBar({
   const [mobileOpen, setMobileOpen] = useState(false)
   const totalActive = (activeStrategy ? 1 : 0) + activeRoasters.length
 
+  // Chrome @media exception (grilling-queue 52, ratified 2026-06-11): the
+  // FILTERS disclosure collapses at lg: (1024) per the two-point 390/1024
+  // model — viewport chrome uses Tailwind @media, not container queries.
   return (
     <div className="mb-6">
-      <div className="md:hidden mb-2">
+      <div className="lg:hidden mb-2">
         <FilterTrigger
           label="Filters"
           activeCount={totalActive}
@@ -67,7 +70,7 @@ export function BrewsFilterBar({
           onClick={() => setMobileOpen((v) => !v)}
         />
       </div>
-      <div className={`${mobileOpen ? 'block' : 'hidden'} md:block space-y-2`}>
+      <div className={`${mobileOpen ? 'block' : 'hidden'} lg:block space-y-2`}>
         <DimensionRow label="Strategy">
           {EXTRACTION_STRATEGIES.map((s) => {
             const style = getStrategyStyle(s)!

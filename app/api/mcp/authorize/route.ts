@@ -112,6 +112,18 @@ async function handleAuthorize(req: Request): Promise<NextResponse> {
     return NextResponse.redirect(`${u.origin}/login?next=${encodeURIComponent(next)}`)
   }
 
+  // 6b. Owner pin (remediation #2). This is a single-user app, but the endpoint
+  //     previously minted a token for ANY logged-in user. Only the owner may
+  //     complete the flow. Fail closed if OWNER_USER_ID is unconfigured —
+  //     existing tokens keep working; only NEW authorizations are blocked.
+  const ownerId = process.env.OWNER_USER_ID
+  if (!ownerId) {
+    return errorRedirect(redirectUri, state, 'server_error', 'OWNER_USER_ID not configured')
+  }
+  if (user.id !== ownerId) {
+    return errorRedirect(redirectUri, state, 'access_denied', 'not authorized for this resource')
+  }
+
   // 7. Mint authorization code.
   const code = randomBytes(32).toString('hex')
   const expiresAt = new Date(Date.now() + CODE_TTL_SECONDS * 1000).toISOString()

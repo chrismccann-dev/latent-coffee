@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import { DetailBackLink } from '@/components/DetailBackLink'
 import {
   Chip,
   StatusPill,
@@ -296,25 +296,23 @@ function WaitingForNextRoastView({
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/green"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Green Beans
-      </Link>
+      <DetailBackLink href="/green">Green Beans</DetailBackLink>
 
-      {/* Header — amber (roast-emphasis) cover marks the waiting-for-roast
-          lifecycle state per the v2 artboard STATE["stage-1"]. */}
+      {/* Header — hero cover/edge binds to the lifecycle tile token
+          (--tile-next-roast) so index card → detail hero reads as one color
+          story (resync grill 2026-05-31 reconciliation: hero = lifecycle
+          state). The in-content amber task-salience accents are the other
+          color axis and stay roast-emphasis. Lifecycle state renders once —
+          the toned StatusPill in the hero; the topbar holds identity only. */}
       <SspTopBar
-        brewId={bean.lot_id ?? undefined}
-        date={`${roasts.length} ROAST${roasts.length === 1 ? '' : 'S'}`}
-        roaster="WAITING · NEXT ROAST"
+        id={bean.lot_id ?? undefined}
+        count={`${roasts.length} ROAST${roasts.length === 1 ? '' : 'S'}`}
         kind="Green Lot"
       />
       <SspNamePlate
         title={bean.name || bean.lot_id}
-        coverColor="#A88037"
-        edgeColor="#A88037"
+        coverColor="var(--tile-next-roast)"
+        edgeColor="var(--tile-next-roast)"
         meta={metaPairs}
         pills={pills}
       />
@@ -428,23 +426,13 @@ function WaitingForNextRoastView({
 
       <PerRoastReflections roasts={roasts} />
 
-      <details className="ssp-coll">
-        <summary>
-          Additional Information
-          <span className="ct">Full history renders on the resolved view</span>
-          <span className="chev" />
-        </summary>
-        <div className="body">
-          <div className="ssp-sub">
-            <div className="font-sans text-sm text-latent-mid italic">
-              Deeper detail (cupping history, all experiments, roast learnings,
-              related brews) renders on the resolved-lot page shape. The
-              waiting-for-next-roast view stays focused on what&apos;s queued to
-              roast.
-            </div>
-          </div>
-        </div>
-      </details>
+      {/* Pointer, not a disclosure (polish-audit Pass 3): the old Additional
+          Information collapse opened to a body that only said deeper detail
+          lives on the resolved view — an affordance must not promise content
+          it doesn't have. */}
+      <div className="font-mono text-xxs text-latent-mid">
+        FULL HISTORY · CUPPINGS · EXPERIMENTS · LEARNINGS RENDER ON THE RESOLVED VIEW
+      </div>
     </div>
   )
 }
@@ -612,10 +600,7 @@ function buildHypothesisData(recipes: RoastRecipe[]): { cols: { label: string }[
               <span className="hidden font-sans text-xs leading-relaxed group-open:inline">
                 {r.rationale}
               </span>
-              <span className="ml-1 text-latent-mid text-xxs select-none">
-                <span className="inline group-open:hidden">▾</span>
-                <span className="hidden group-open:inline">▴</span>
-              </span>
+              <span className="chev ml-1" />
             </summary>
           </details>
         ) : (
@@ -876,25 +861,22 @@ function WaitingForNextCuppingView({
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/green"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Green Beans
-      </Link>
+      <DetailBackLink href="/green">Green Beans</DetailBackLink>
 
-      {/* Header — lavender (cup-emphasis) cover marks the waiting-for-cupping
-          lifecycle state per the v2 artboard STATE["stage-2"]. */}
+      {/* Header — hero cover/edge binds to the lifecycle tile token so index
+          card → detail hero reads as one color story (resync grill 2026-05-31:
+          hero = lifecycle state; --tile-brewing when the lot is with brewing).
+          The in-content lavender task-salience accents stay cup-emphasis.
+          Lifecycle state renders once — the toned StatusPill in the hero. */}
       <SspTopBar
-        brewId={bean.lot_id ?? undefined}
-        date={`${roasts.length} ROAST${roasts.length === 1 ? '' : 'S'}`}
-        roaster="WAITING · NEXT CUPPING"
+        id={bean.lot_id ?? undefined}
+        count={`${roasts.length} ROAST${roasts.length === 1 ? '' : 'S'}`}
         kind="Green Lot"
       />
       <SspNamePlate
         title={bean.name || bean.lot_id}
-        coverColor="#7A6E9E"
-        edgeColor="#7A6E9E"
+        coverColor={brewingWait ? 'var(--tile-brewing)' : 'var(--tile-next-cupping)'}
+        edgeColor={brewingWait ? 'var(--tile-brewing)' : 'var(--tile-next-cupping)'}
         meta={metaPairs}
         pills={pills}
       />
@@ -1028,23 +1010,11 @@ function WaitingForNextCuppingView({
 
       <PerRoastReflections roasts={roasts} />
 
-      <details className="ssp-coll">
-        <summary>
-          Additional Information
-          <span className="ct">Full history renders on the resolved view</span>
-          <span className="chev" />
-        </summary>
-        <div className="body">
-          <div className="ssp-sub">
-            <div className="font-sans text-sm text-latent-mid italic">
-              Deeper detail (full cupping history, all experiments archive, roast
-              learnings, related brews) renders on the resolved-lot page shape in
-              Sub Pages 6.5. The waiting-for-next-cupping view stays focused on
-              the active V_n hypothesis + actuals.
-            </div>
-          </div>
-        </div>
-      </details>
+      {/* Pointer, not a disclosure — same affordance-honesty fix as the
+          waiting-for-roast view (polish-audit Pass 3). */}
+      <div className="font-mono text-xxs text-latent-mid">
+        FULL HISTORY · CUPPINGS · EXPERIMENTS · LEARNINGS RENDER ON THE RESOLVED VIEW
+      </div>
     </div>
   )
 }
@@ -1340,7 +1310,6 @@ const ARCHIVE_VARIANTS: Record<
   ArchiveVariant,
   {
     tile: string
-    topbarLabel: string
     statusLabel: string
     statusTone: 'resolved' | 'archive'
     stateClass: 'state-resolved' | 'state-archive'
@@ -1353,8 +1322,10 @@ const ARCHIVE_VARIANTS: Record<
   }
 > = {
   resolved: {
-    tile: '#4A7C59',
-    topbarLabel: 'RESOLVED',
+    // Lifecycle tile token (roasted brown) — matches the /green index card so
+    // index → detail reads as one color story (polish-audit Pass 1; was the
+    // mis-bound #4A7C59 resolution green).
+    tile: 'var(--tile-resolved)',
     statusLabel: 'Resolved',
     statusTone: 'resolved',
     stateClass: 'state-resolved',
@@ -1366,8 +1337,9 @@ const ARCHIVE_VARIANTS: Record<
     carryCaution: null,
   },
   unresolved: {
-    tile: '#6B6B66',
-    topbarLabel: 'CLOSED · NO REFERENCE',
+    // Neutral mid grey — same value the /green index unresolved card uses
+    // ("unresolved keeps neutral mid", design-system doc).
+    tile: 'var(--mid)',
     statusLabel: 'Unresolved',
     statusTone: 'archive',
     stateClass: 'state-archive',
@@ -1529,15 +1501,16 @@ function ArchiveLotBody({
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/green"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Green Beans
-      </Link>
+      <DetailBackLink href="/green">Green Beans</DetailBackLink>
 
-      {/* Hero — green (resolved) / gray (archive) cover per the v2 STATE map. */}
-      <SspTopBar brewId={bean.lot_id ?? undefined} roaster={v.topbarLabel} kind="Green Lot" />
+      {/* Hero — lifecycle tile cover (roasted brown / neutral mid) matching the
+          index card. State renders once via the hero StatusPill; the topbar
+          holds identity only. */}
+      <SspTopBar
+        id={bean.lot_id ?? undefined}
+        count={`${roasts.length} ROAST${roasts.length === 1 ? '' : 'S'}`}
+        kind="Green Lot"
+      />
       <SspNamePlate
         title={bean.name || bean.lot_id}
         coverColor={v.tile}
@@ -2006,23 +1979,15 @@ function InventoryPlaceholder({ bean }: { bean: GreenLotDetail }) {
 
   return (
     <div className="ssp-page">
-      <Link
-        href="/green"
-        className="font-mono text-xs uppercase tracking-[0.16em] text-latent-mid hover:text-latent-fg"
-      >
-        ← Back to Green Beans
-      </Link>
+      <DetailBackLink href="/green">Green Beans</DetailBackLink>
 
-      {/* Grey (inventory) cover per the v2 tile palette (--tile-inventory). */}
-      <SspTopBar
-        brewId={bean.lot_id ?? undefined}
-        roaster="IN INVENTORY"
-        kind="Green Lot"
-      />
+      {/* Grey (inventory) cover per the v2 tile palette. State renders once
+          via the hero StatusPill; the topbar holds identity only. */}
+      <SspTopBar id={bean.lot_id ?? undefined} kind="Green Lot" />
       <SspNamePlate
         title={bean.name || bean.lot_id}
-        coverColor="#B4B4AE"
-        edgeColor="#B4B4AE"
+        coverColor="var(--tile-inventory)"
+        edgeColor="var(--tile-inventory)"
         meta={metaPairs}
         pills={pills}
       />

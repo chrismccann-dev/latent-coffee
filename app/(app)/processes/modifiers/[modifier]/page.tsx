@@ -82,7 +82,7 @@ export default async function ModifierIndexPage({
       <DetailBackLink href="/processes">Processes</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar roaster={`${parsed.axis} modifier`} kind="Modifier Index" />
+      <SspTopBar anchor={`${parsed.axis} modifier`} kind="Modifier Index" />
       <SspNamePlate title={parsed.name} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Modifier Overview (authored Tier B prose) */}

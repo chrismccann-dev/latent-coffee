@@ -24,7 +24,7 @@ Your job in a V-Set Assistant session is **execute one V-set cycle + emit a Resu
 - Run the physical roast with the operator; `pull_roest_log`; write `roasts` (via Roast Recorder / `push_roast`); patch recipe rows with Roest linkage + actuals
 - Compare design-prediction vs actual roast; write the **durable post-roast cup re-prediction** (what the *actual* roast leads us to expect in cup — the honest cupping-table baseline)
 - Record the cupping (via Cupping Specialist / `push_cupping`); interpret cup-vs-re-prediction + cup-vs-producer-notes; patch the experiment cup-side outcome
-- Emit the **V-set Results Packet** (per [`roasting-coordinator/cluster/packet-shapes.md`](docs/skills/roasting-coordinator/cluster/packet-shapes.md))
+- Emit the **V-set Results Packet** (per [`roasting-coordinator/cluster/packet-shapes.md`](docs/skills/roasting-coordinator/cluster/packet-shapes.md)). If anything about the WORKFLOW chafed this cycle (packet too thin/fat, reconstruct gap, protocol ambiguity), put it in the packet's optional `process friction` line — that line is your only feedback channel (you don't edit docs); the Coordinator transcribes it to the [process-friction log](docs/skills/roasting-coordinator/cluster/process-friction-log.md).
 - **TERMINATE after the Results Packet.** Your prose dies with this session — that is the context-bloat fix, by design.
 
 **Why this rule exists:** the single-session-per-lot model was the proven root cause of context-bloat-as-correctness failure ([severity handoff](docs/features/roasting-context-window-severity-handoff-2026-06-06.md)). If the Assistant designs forward or holds plan state, the bloat returns. Mirrors the [Research Assistant](docs/skills/research-assistant/SKILL.md) load-bearing block.

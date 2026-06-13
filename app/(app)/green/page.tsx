@@ -77,11 +77,12 @@ type GreenBeanIndexRow = GreenBean & {
 }
 
 // Lifecycle-tile gradient (Redesign Sprint 0, 2026-05-29): green-coffee →
-// roasted-coffee across the stages — sage (next-roast) → olive-bronze
-// (next-cupping) → roasted brown (resolved). Unresolved keeps neutral gray
-// (`--subtle`): it sits outside the green-brown axis to signal "no verdict"
+// roasted-coffee across the stages — leaf green (next-roast) → olive-bronze
+// (next-cupping) → roasted brown (resolved). Unresolved keeps neutral mid
+// grey (`--mid`, polish-audit Pass 1 — `--subtle` put near-white face text at
+// ~1.9:1): it sits outside the green-brown axis to signal "no verdict"
 // distinctly from both active and confirmed lots. The card uses this as the
-// face background; light text reads cleanly on all four.
+// face background; light text reads cleanly on all five.
 const TILE_COLOR: Record<LifecycleState, string> = {
   in_inventory: 'var(--tile-inventory)',
   waiting_for_next_roast: 'var(--tile-next-roast)',
@@ -90,7 +91,7 @@ const TILE_COLOR: Record<LifecycleState, string> = {
   // "with brewing, not roasting" distinctly (hue-not-lightness rule).
   waiting_for_brewing: 'var(--tile-brewing)',
   resolved: 'var(--tile-resolved)',
-  unresolved: 'var(--subtle)',
+  unresolved: 'var(--mid)',
 }
 
 export default async function GreenBeansPage() {
@@ -136,7 +137,7 @@ export default async function GreenBeansPage() {
   )
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8">
+    <div className="max-w-[1200px] mx-auto px-6 py-8">
       <IndexCap left="GREEN" right={`${totalSurfaced} ${totalSurfaced === 1 ? 'LOT' : 'LOTS'}`} />
 
       {/* Empty state. Sub Pages 6.6 (2026-05-13) — claude.ai via the Latent

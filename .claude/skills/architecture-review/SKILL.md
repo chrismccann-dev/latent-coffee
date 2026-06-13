@@ -5,7 +5,7 @@ description: Read-only architecture audit of a named surface (a page family, a l
 
 <what-this-is>
 
-`/architecture-review <surface>` runs one read-only audit of a named surface and produces a refactor-ready report. It is the **code-side sibling of the doc-pruning mechanism** — operator-invoked, judgment-heavy, repo-wide. It was *derived from* five real Latent audits (the worked-example corpus, [docs/audits/architecture/](docs/audits/architecture/) `01..05`), not theorized; every rule below (R1-R13) is a friction-log correction, not a guess.
+`/architecture-review <surface>` runs one read-only audit of a named surface (or the whole repo, as in audit 06) and produces a refactor-ready report. It is the **code-side sibling of the doc-pruning mechanism** — operator-invoked, judgment-heavy, repo-wide. It was *derived from* five real Latent audits (the worked-example corpus, [docs/audits/architecture/](docs/audits/architecture/) `01..05`, grown by each subsequent run — `06` is the first post-skill audit), not theorized; every rule below (R1-R13) is a friction-log correction, not a guess.
 
 **The two guardrails that define the skill's character:**
 - **R8 — it kills bad refactor ideas.** On a well-factored surface the leave-alone calls are *half the value* — they stop a future agent from shattering a deep module while "tidying." A `Considered-and-rejected` section is mandatory, not optional.
@@ -42,6 +42,8 @@ The seed (the surface brief, Part C survey numbers, a prior count) is a hypothes
 - Run `npm run check:hotspots` (it surfaces *where* the churn × logic-LOC × fanout mass is).
 - `grep -c` / `rg` **every** seed claim before trusting it ("BackLink ×10" turned out to be 8 inline `<Link>`s and **zero** `<BackLink>` component — a different, easier refactor than the seed implied).
 - Treat the re-measured numbers as the finding; treat the seed as folklore. A skill that inherits the seed under-scopes.
+- **Prior-candidate status check (cycle 1, from 06).** When prior audits cover or overlap the surface — always true for a whole-repo sweep — verify **file-by-file** which prior candidates landed and which are still open, *before* deriving anything new. Open STRONG candidates carry forward as findings (cite the prior card; don't re-derive); rejected-by-design candidates carry into Considered-and-rejected (Step 6). This check, not a new smell pass, is what got Audit 03's backlog shipped: it sat at 0/4 landed with a correctness-class finding (the `maxUpdatedAt` twin) rotting until 06's carryover check surfaced it (PR #427).
+- **Gate-currency claims are seed claims.** A doc asserting "`check:doc-links` green as of <date>" is a hypothesis — re-run the gate. 06 found 25 live misses behind a green claim, plus two stale CLAUDE.md dev notes.
 
 ## Step 1 — Orient (read-only)
 
@@ -66,13 +68,13 @@ The locked smell taxonomy (fired ✓ in the cited sessions):
 
 | Smell | Lens | Key sub-distinction | Seen |
 |---|---|---|---|
-| **Duplication-at-distance** | extraction test | **divergence among the copies is the priority multiplier (R5)** — diff the N copies; "same code in N places *that have begun to diverge*" is the dangerous version | 01, 02, 03 |
-| **Shotgun-surgery** | edit-sites-per-change | distinct from dup-of-logic: one logical change touches N collections/sites (03 `docs.ts`: 1 doc → 4 edit sites). For a high-churn file, sample its recent commits and count distinct sites each change touched | 03 |
+| **Duplication-at-distance** | extraction test | **divergence among the copies is the priority multiplier (R5)** — diff the N copies; "same code in N places *that have begun to diverge*" is the dangerous version | 01, 02, 03, 06 |
+| **Shotgun-surgery** | edit-sites-per-change | distinct from dup-of-logic: one logical change touches N collections/sites (03 `docs.ts`: 1 doc → 4 edit sites). For a high-churn file, sample its recent commits and count distinct sites each change touched | 03, 06 |
 | **Large mixed-concern file** | "edit A → must read B?" | **sectioned-long vs tangled-long** — a sectioned file (02: view→its-helpers ×5) demotes the split; score on the *tax*, not raw LOC | 02 |
 | **Shallow / pass-through** | deletion test | rare on mature cores; the extraction test fires instead | mostly ✗ |
 | **Weak type boundary** | edge-vs-interior axis | classify each cast by dataflow location — ~32/34 were legit *edge* casts (05); only *interior* `any`/asserts count. The **adoption-gap fork (R4)** decides effort | 02, calib 05 |
 | **Doc-substrate non-navigability** | per-renderer matrix | stale-vs-dead, live-vs-archive, `docs://` third space → **doc-substrate mode** below (R12) | 04 |
-| **Stale-pointer** | doc-claim vs live code | dead-AND-misleading > merely-dead; needs a filesystem cross-check the link-checker can't do (04: `page-ia.md` → deleted `SectionCard`) | 04 |
+| **Stale-pointer** | doc-claim vs live code | dead-AND-misleading > merely-dead; needs a filesystem cross-check the link-checker can't do (04: `page-ia.md` → deleted `SectionCard`) | 04, 06 |
 | **Dead code** | extraction/deletion | **"unused export" ≠ "dead code"** — metric is repo-occurrences == 1, *not* zero-external-refs; "intentional symmetric API surface" is a non-finding class needing an allowlist (05) | low, calib 05 |
 | **Adoption gap** | grep-for-existing | the decisive *pre-scoring* fork (R4) | all |
 
@@ -115,6 +117,8 @@ One card per candidate:
 
 A first-class section listing the plausible-but-wrong refactors and *why each is left alone*. On a well-factored surface this is half the value. Each entry names the module, the naive smell that would flag it, and the reason it's depth-earning-its-keep (deletion-test result, `.describe()`-is-documentation, intentional symmetric API surface, sectioned-not-tangled). Kill the bad ideas explicitly — the doc-pruning "kill bad ideas" discipline, verbatim.
 
+Two carry-forward rules (cycle 1, from 06): **re-flag prior audits' rejected-by-design candidates** when re-covering their surface, so no future "tidying" session resurrects them (06 re-flagged Audit 01's `RegistryDetailShell` rejection verbatim); and give deliberate-twin non-findings an **explicit revisit trigger** ("leave alone; revisit only if a third copy appears" — the N=3 dial, 06's `formatVLabel` twins).
+
 ## Step 7 — Dependency sequence (R7)
 
 Emit a sequence, not just a sorted list. Sequencing is load-bearing: 02's split (C4) is *actively harmful* before the type (C1) and dedup (C2) land — you'd copy `any` into 5 files. 04 sequences decide-5 → fix-1 → fix-2. Use each card's `Depends on:` field to build the DAG and state the order.
@@ -153,22 +157,25 @@ Because no substrate changes (this is internal refactor scoping), a full six-act
 
 <stop-condition>
 
-The audit session **stops at the report.** Do not edit code. End with: the decisive lead recommendation, the candidate cards, the considered-and-rejected list, the dependency sequence, and open questions to resolve before implementation. The actual refactor is a later, separate, grilled exercise:
+The audit session **stops at the report.** Do not edit code. End with: the decisive lead recommendation, the candidate cards, the considered-and-rejected list, the dependency sequence, and open questions to resolve before implementation. The actual refactor is a later, separate exercise:
 1. `/grill-with-docs` the chosen candidate (own concept? right interface? what should callers stop knowing? which ADRs constrain it?). **Compose — don't restate** `/grill-with-docs` or `/simplify`.
 2. Characterization verification (the matrix above) to lock current behavior.
 3. Name/extract the seam → move implementation → migrate one caller → migrate the rest → delete the old path (back-compat stub per Latent discipline) → update docs/ADR/CONTEXT → `npm run build` + preview verify + six-actor audit if substrate moved.
+
+**Handoff calibration (cycle 1).** The grill step is for candidates carrying a **genuinely open interface question** — the report's `Open questions before implementation` section marks exactly these (06: the `customize`-hook shape on roast-import C6; the per-view file layout on green/[id] C5(c)). Behavior-preserving adoptions and mechanical derivations whose verification matrix is **deterministic** (tsc + byte-identical characterization diff + error-string identity) may go straight to an operator-approved execution session: all five lived remediation PRs shipped that way with zero regressions (#393, #394, #395, #427 A-D). Don't over-grill a pure adoption gap; don't cite this line to skip the grill on a candidate with an open question.
 
 </stop-condition>
 
 <worked-example-corpus>
 
-The five derivation audits are the skill's worked examples — read the matching one when auditing a similar surface:
+The derivation audits plus every subsequent run are the skill's worked examples — read the matching one when auditing a similar surface:
 
 - [docs/audits/architecture/01-detail-pages.md](docs/audits/architecture/01-detail-pages.md) — **duplication-at-distance + adoption gap** (the detail-page family). The template copy-pasted 8× (not the seed's 7) and the dup had *started to rot* (`cultivarMap` shape drift). Killed the full-page-shell over-abstraction (Candidate 5).
 - [docs/audits/architecture/02-green-detail.md](docs/audits/architecture/02-green-detail.md) — **large mixed-concern file + weak type boundary** (`green/[id]/page.tsx`). The smell was the `any` boundary, not the 2,098 LOC; the fix was adopt-not-author (types already existed). Demonstrates the dependency DAG.
 - [docs/audits/architecture/03-mcp-synthesis-core.md](docs/audits/architecture/03-mcp-synthesis-core.md) — **module depth** (MCP + synthesis core). Cores are *correctly deep*; the smell is duplicated boilerplate the abstractions stopped one layer short of. Where the extraction test (R3) and the considered-and-rejected section (R8) were born.
 - [docs/audits/architecture/04-doc-substrate.md](docs/audits/architecture/04-doc-substrate.md) — **doc-substrate non-navigability** (the doc-substrate-mode source). The per-renderer matrix; 409 raw → ~167 agent-dead + ~169 GitHub-only + 33 FP; the `check:doc-links` gate spec.
 - [docs/audits/architecture/05-lib-type-deadcode.md](docs/audits/architecture/05-lib-type-deadcode.md) — **calibration** (`lib/` type + dead-code sweep). The "leave it alone" verdict is the correct output; ~15 real orphans, 1 weak boundary. Proves the false-positive discipline.
+- [docs/audits/architecture/06-full-codebase.md](docs/audits/architecture/06-full-codebase.md) — **whole-repo sweep + the carryover discipline** (the first post-skill run). Established prior-candidate landed status file-by-file before deriving anything new; caught a gate regression hiding behind a "green as of <date>" claim; its four STRONG candidates shipped same-session in the report's dependency order (PR #427). Read it when the surface is the whole repo or overlaps prior audits.
 
 </worked-example-corpus>
 
@@ -177,5 +184,6 @@ The five derivation audits are the skill's worked examples — read the matching
 - **Two deterministic gates do the mechanical detection** — `scripts/check-hotspots.ts` (`check:hotspots`, the Step-2 scan) and `scripts/check-doc-links.ts` (`check:doc-links`, the doc-substrate-mode detector). The skill *calls* them and interprets; it does not re-implement their logic.
 - **On-demand, operator-invoked** ([decision locked 2026-06-04](docs/features/architecture-review-skill-derivation-2026-06-04.md)): there is no cron and no feature-ship coupling — architecture judgment is interpretive (the R6/R8 calibration can't be automated). `check:hotspots` runs on CI to surface *where* to point the skill.
 - **Compose, don't duplicate:** the refactor step reuses `/grill-with-docs` and `/simplify`; this skill scopes and hands off, it does not restate their loops.
+- **Instance 1 of the self-improving skill loop** ([ADR-0023](docs/adr/0023-self-improving-skill-loop.md)): improvement cycles re-read the lived record (audits + remediation PRs) and amend this skill; each cycle records in [docs/audits/architecture/improvement-log.md](docs/audits/architecture/improvement-log.md). Every amendment cites the audit finding or miss that motivated it; suggestions without that backing accumulate in the log's deferred ledger toward the N=3 graduation (anti-lawyer-redline: better, not bigger).
 
 </relationship-to-the-rest>

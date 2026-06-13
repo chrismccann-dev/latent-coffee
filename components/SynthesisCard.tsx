@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { SspShead } from '@/components/Ssp'
-import { CollapsibleBlock } from '@/components/CollapsibleBlock'
+import { CollapsibleBlock } from '@/components/CollapsibleSection'
 import SynthesisRenderer from '@/components/SynthesisRenderer'
 
 interface SynthesisCardProps {
@@ -93,33 +93,37 @@ export default function SynthesisCard({
 
   if (!synthesis && !loading && currentBrewCount === 0) return null
 
-  // SYN-3 mobile fallback: when short_form is null (post-migration window or
-  // 3rd-call failure), render the long-form on mobile too rather than a
-  // blank state. The Regenerate button stays available either way.
-  const mobileText = shortForm ?? synthesis
-
   const inner = loading ? (
-    <div className="flex items-center gap-3">
-      <div className="w-4 h-4 border-2 border-latent-mid border-t-latent-fg rounded-full animate-spin" />
-      <p className="font-mono text-xs text-latent-mid">{loadingText}</p>
-    </div>
+    // Static mono line — no spinner (motion rule: color transitions only).
+    <p className="font-mono text-xs text-latent-mid">{loadingText}</p>
   ) : synthesis ? (
     <div>
-      {/* Mobile (<md:): short-form when available, long-form fallback. The
-          one @media split left in the migrated surfaces — kept because it's a
-          content switch (mobile gets the digest), not a layout reflow. */}
-      <div className="md:hidden">
-        {mobileText && <SynthesisRenderer text={mobileText} />}
-      </div>
-      {/* Desktop (md+): full long-form */}
-      <div className="hidden md:block">
+      {/* Capsule inversion (polish-audit Pass 2): the short-form capsule is
+          the default read at EVERY width; the long-form essay sits behind a
+          lightweight inline disclosure. NULL-capsule rows (post-migration
+          window or 3rd-call failure) fall back to long-form open. This
+          retires the md: split — the one @media that survived migration. */}
+      {shortForm ? (
+        <>
+          <SynthesisRenderer text={shortForm} />
+          <details className="ssp-synth-full">
+            <summary>
+              Full synthesis
+              <span className="chev" />
+            </summary>
+            <div className="mt-3">
+              <SynthesisRenderer text={synthesis} />
+            </div>
+          </details>
+        </>
+      ) : (
         <SynthesisRenderer text={synthesis} />
-      </div>
+      )}
       <button
         onClick={generateSynthesis}
         className="font-mono text-xxs text-latent-mid hover:text-latent-fg mt-4 transition-colors"
       >
-        Regenerate
+        REGENERATE
       </button>
     </div>
   ) : (

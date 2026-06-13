@@ -40,7 +40,7 @@
 
   /* Lifecycle tiles — green-coffee → roasted-coffee gradient across stages */
   --tile-inventory: #B4B4AE;     /* grey — held back, hidden from primary view */
-  --tile-next-roast: #4A7C59;    /* sage green — green bean, ready to roast */
+  --tile-next-roast: #5F7A33;    /* leaf green — green bean, ready to roast. Re-derived off #4A7C59 (grilling-queue 53, 2026-06-11): the resolution accent keeps that hex; the lifecycle "green bean" stop is its own yellower hue */
   --tile-next-cupping: #6B5E3A;  /* olive-bronze — between roast and cupping */
   --tile-brewing: #3F5E6B;       /* steel blue — water; ball in the brewing court (hue shift off the green-brown axis) */
   --tile-resolved: #3a2418;      /* roasted brown — finished bean */
@@ -119,6 +119,13 @@ body {
 .font-mono {
   font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
 }
+
+/* Canonical expand chevron — THE one disclosure affordance app-wide (polish-
+   audit Pass 3; replaces the rotating ▾ / ▾▴ glyph swaps). Base style here;
+   contexts that need placement tweaks (.ssp-coll margin-left:auto etc.) layer
+   on top. Any <details> flips it open via the generic [open] rule. */
+.chev { display: inline-block; width: 7px; height: 7px; border-right: 1.5px solid var(--mid); border-bottom: 1.5px solid var(--mid); transform: rotate(45deg); transition: transform 0.18s ease; flex-shrink: 0; }
+details[open] > summary .chev { transform: rotate(-135deg); }
 
 /* ============================================================
    GLOBAL CHROME PRIMITIVES (legacy — re-skinned to warm paper).
@@ -511,6 +518,14 @@ body {
 .ssp-anchor[open] > .ssp-anchor-line { margin-top: 6px; }
 .ssp-anchor-line { font-family: var(--mono); font-size: 10.5px; color: var(--mid); letter-spacing: 0.02em; line-height: 1.55; }
 
+/* Synthesis long-form disclosure (polish-audit Pass 2 capsule inversion).
+   The short-form capsule renders by default at every width; the full essay
+   sits behind this inline mono summary — same lightweight register as
+   .ssp-anchor, no extra card chrome. */
+.ssp-synth-full { margin-top: 12px; }
+.ssp-synth-full > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); font-weight: 600; }
+.ssp-synth-full > summary::-webkit-details-marker { display: none; }
+
 /* "Why" prose block — producer notes / verdict-style lede inside a state card */
 .ssp-why { margin: 6px 0 14px; }
 .ssp-why:last-child { margin-bottom: 0; }
@@ -712,6 +727,13 @@ body {
 .grl-row .bar, .cultivar-tree .bar { display: inline-flex; gap: 2px; align-self: center; }
 .grl-row .bar i, .cultivar-tree .bar i { width: 9px; height: 11px; background: var(--border); }
 .grl-row .bar i.on, .cultivar-tree .bar i.on { background: var(--fg); }
+
+/* Confidence-card variant of the 5-block bar — white fill on the dark card
+   (replaced the 🟢🟡🔴 emoji, grilling-queue 54 / polish-audit gated item 04).
+   Same geometry as the index bars; only the fill colors invert. */
+.conf-bar { display: inline-flex; gap: 2px; }
+.conf-bar i { width: 9px; height: 11px; background: rgba(244,244,241,0.18); }
+.conf-bar i.on { background: #F4F4F1; }
 
 /* simple — no count/bar; right side is free meta (green stage label) */
 .grl-row.simple { grid-template-columns: 44px 1fr auto; gap: 16px; }

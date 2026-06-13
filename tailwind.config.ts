@@ -57,7 +57,7 @@ const config: Config = {
           // Lifecycle tiles — green-coffee → roasted-coffee gradient across the 4 states.
           // Resolved goes roasted-brown per redesign ratification #5 (was near-black `fg`).
           'tile-inventory': '#B4B4AE',     // grey — held back, hidden from primary view
-          'tile-next-roast': '#4A7C59',    // sage green — green bean, ready to roast
+          'tile-next-roast': '#5F7A33',    // leaf green — green bean, ready to roast (re-derived off #4A7C59, queue 53)
           'tile-next-cupping': '#6B5E3A',  // olive-bronze — between roast and cupping
           'tile-brewing': '#3F5E6B',       // steel blue — water; ball in the brewing court
           'tile-resolved': '#3a2418',      // roasted brown — finished bean

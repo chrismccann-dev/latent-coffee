@@ -83,7 +83,7 @@ export function CoffeesList({
             <summary className="flex items-center gap-2 px-4 py-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-mono text-xs text-latent-mid hover:text-latent-fg transition-colors border-t border-latent-hairline">
               <span className="group-open:hidden">Show {hidden.length} more</span>
               <span className="hidden group-open:inline">Show fewer</span>
-              <span className="transition-transform group-open:rotate-180">▾</span>
+              <span className="chev" />
             </summary>
             <div>
               {hidden.map((brew) => (

@@ -164,8 +164,9 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       : []),
   ]
 
+  // Country row dropped (polish-audit Pass 1): the topbar anchor slot already
+  // carries the country — topbar = identity, hero meta = differentiation.
   const meta: MetaPair[] = [
-    ...(terroir.country ? [{ label: 'Country', value: terroir.country }] : []),
     ...(terroir.admin_region ? [{ label: 'Admin Region', value: terroir.admin_region }] : []),
     ...(merged.elevation_min && merged.elevation_max
       ? [{ label: 'Elevation', value: `${merged.elevation_min}–${merged.elevation_max}m` }]
@@ -178,7 +179,7 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       <DetailBackLink href="/terroirs">Terroirs</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar roaster={terroir.country ?? undefined} kind="Terroir Profile" />
+      <SspTopBar anchor={terroir.country ?? undefined} kind="Terroir Profile" />
       <SspNamePlate
         title={macroName}
         meta={meta}

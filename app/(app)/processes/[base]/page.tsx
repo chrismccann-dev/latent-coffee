@@ -105,7 +105,7 @@ export default async function BaseHubPage({ params }: { params: { base: string }
       <DetailBackLink href="/processes">Processes</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar roaster="Base Process" kind="Process Hub" />
+      <SspTopBar anchor="Base Process" kind="Process Hub" />
       <SspNamePlate title={base} meta={meta} coverColor={color} edgeColor={color} />
 
       {/* Process Summary */}

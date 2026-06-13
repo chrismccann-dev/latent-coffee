@@ -14,6 +14,14 @@ export async function POST(request: Request) {
 
   const supabase = createClient()
 
+  // Remediation #4: explicit auth gate (parity with processes/roasters). Don't
+  // rely on RLS returning zero rows to incidentally block unauthenticated paid
+  // LLM calls — that protection evaporates the day any anon read policy lands.
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
   const { data: terroirs, error } = await supabase
     .from('terroirs')
     .select('*')
