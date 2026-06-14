@@ -12,16 +12,21 @@ This is the **product-system map**, not the brewing or roasting instruction manu
 
 ## Purpose
 
-Latent Coffee Research is the product and system layer for Chris McCann's personal coffee research practice. It turns brewing, roasting, cupping, and learning into a structured, queryable archive.
+**North Star.** Latent is the opinionated training and decision-compounding system whose job is to take Chris up the coffee-competition ladder to a World Brewers Cup win, earned full-stack and on his own accord.
 
-**Single user.** Supabase Auth + Row Level Security exist for safety and deployment hygiene, not multi-tenancy. No plan for teams, public accounts, or shared workspaces.
+**Single user, single goal.** Supabase Auth + Row Level Security exist for safety and deployment hygiene, not multi-tenancy. No plan for teams, public accounts, or shared workspaces. Latent is built for one person and one goal; it takes a pointed, opinionated view, not a neutral one. There are no external consumers to design for.
 
-The product has two jobs:
+**Why.** This is for the love of the craft and the mastery of it, not a career or a commercial endeavor. The competition is a forcing function (the National Geographic Photographer of the Year 2016 pattern): a clarifying goal that forces every component piece into focus, and a third-party stamp proving the mastery is real, independently judged rather than self-asserted.
 
-1. **Archive the best-known state of each coffee.** Purchased coffees store the final best brew. Self-roasted lots store the full roast journey, then resolve into a reference roast, reference brew, and per-lot `roast_learnings` synthesis.
-2. **Compound future decisions.** Each new roasted coffee or green-bean lot starts with prior evidence about cultivar, terroir, process, roaster style, equipment behavior, and prior extraction outcomes — instead of starting from scratch.
+**Full-stack, own-accord.** Chris sources, roasts, and brews the cup himself. *Producing* (farm-level raw-material creation) is the single biggest lever on the cup but stays out of scope (too slow to experiment against, too operationally heavy, more than a full-time job), so he partners with a producer rather than operating one. Full-stack means **sourcing -> roasting -> brewing**; producing is a partnership. A deliberate inversion of the usual competition story: bring the *producer* forward, not the roaster.
 
-The north star is **World Brewers Cup-level mastery**: a deep, structured understanding of how cultivars, terroirs, processes, and extraction strategies interact to create the best possible cup.
+**The ladder.** WBC is the pinnacle, a placeholder for the top rung. Owning the roast opens more rungs beneath it (World Roasting Championship, brand and manufacturer competitions). The goal is competition-winning mastery proved across the ladder, with WBC at the apex.
+
+**The lever hierarchy.** What Chris wants at the end cup drives everything; the levers cascade down from it. In order of effect on the cup: production (partnered, out of his control) > sourcing > roasting > brewing. Sourcing is weighted equal-or-greater to roasting - the biggest lever Chris can actually touch.
+
+**The mechanism (what the app is *for*).** Every roast, cupping, and brew becomes compounding evidence aimed at the table. The two foundational jobs - archive the best-known state of each coffee, and compound future decisions on prior evidence - are the *means*, not the end: interjecting champion knowledge and compounding lived results is the training method. That is why the WBC-champion reference corpus exists and why the archive matters. Concretely: purchased coffees store the final best brew; self-roasted lots store the full roast journey, then resolve into a reference roast, reference brew, and per-lot `roast_learnings` synthesis, so each new lot starts from accumulated evidence about cultivar, terroir, process, roaster style, equipment behavior, and prior extraction outcomes instead of from scratch.
+
+**Phase.** Currently in *search space*: every purchased roasted coffee is a practice run for brewing exploration across many brewers and methods. The arc *scopes down* over time - lock the target cup, let the roast determine the brew. Horizon: ~2-3 years to competition-ready. Architect toward it now.
 
 ---
 
