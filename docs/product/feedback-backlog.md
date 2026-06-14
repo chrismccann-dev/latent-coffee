@@ -1,6 +1,6 @@
 # Workflow-Feedback Backlog
 
-*Last updated: 2026-06-06 (reconciled against `feedback_mcp_continuous_log.md` through Round 22 — filed #33-#51 minus the shipped #35/#39)*
+*Last updated: 2026-06-13 (Round 23 — filed #52, the type-stripped-registration numeric-param reject)*
 
 The **actionable** subset of workflow feedback — the items that need a *build* (prompt
 fix / MCP fix / schema / UI / architecture), not just a route-and-forget filing.
@@ -74,6 +74,14 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Body:** Roast-side `what_to_change` carries forward-looking inferences from structure alone; the cup occasionally inverts them (Bukure v2b "lengthen dev" vs SPG "minimal dev is the lever"). Candidate field `roast_structure_inference_overridden_by_cup`. Not asking for the field yet — track across lots; a third occurrence → CCIL-promotion-worthy. Pairs with the #22/#23 lifecycle-modeling meta-pattern.
 
 ## Open — MCP / infra
+
+### push_roast (and every numeric-field Tool) rejects numeric params as strings on the type-stripped `latent-coffee` registration
+- **Shape:** mcp (infra / schema-publish + server validation)
+- **Recurrence:** 1 (Round 23 / AN10 V1 roast-logging, 2026-06-13)
+- **Criticality:** high
+- **Status:** open
+- **Source:** master log #52 (Round 23)
+- **Body:** The Latent server is registered twice in Claude Code: `mcp__latent-coffee__*` (JSON-schema field `type`s STRIPPED — fields publish as bare `{description}`) and `mcp__eeaa2042-…__*` (full types). On the `latent-coffee` registration the Claude Code tool bridge serializes every numeric param as a STRING, so `push_roast` zod hard-rejects ~14 fields in one shot (`invalid_type: expected number, received string` — batch_size_g, charge_temp, drop_temp, agtron, roest_log_id, end_condition_target, fc_total_cracks, ror_*, …). Deterministic, not transient (distinct from the patch_roast/read_doc_section cold-start item below). Exposes EVERY numeric-heavy Tool (push_roast / push_cupping / push_experiment / patch_*) — it bites any field whose published schema lacks a `type`; explicitly-typed scalars (pull_roest_log `log_id`, list_roest_logs `inventory_id`) work on either registration. Workaround that unblocked AN10 logging: call the identical Tool via the `eeaa2042` registration (typed schema → bridge sends real JSON numbers). Latent-side fix: `z.coerce.number()` on numeric input fields so string-encoded numerics are accepted regardless of which registration/client strips types. Client-side angle (why Claude Code republishes the `latent-coffee` catalog type-stripped while `eeaa2042` keeps types) → Bucket C escalation note in master log. Interim: document "use the fully-typed registration for numeric writes" in the operator-guide so the next Coordinator session doesn't burn rounds rediscovering it.
 
 ### `patch_roast` + `read_doc_section` intermittent execute-after-search failures
 - **Shape:** mcp (infra)
