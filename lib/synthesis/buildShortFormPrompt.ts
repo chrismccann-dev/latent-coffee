@@ -50,6 +50,7 @@ Vocabulary preservation (HARD requirement — do NOT paraphrase these):
 - Gear / proper nouns: SWORKS, Melodrip, Hario Switch, Sibarist, Orea, EG-1, Picolot, Garrido, Janson, Diego Bermúdez, etc.
 - Cultivar / process / signature-method names: Gesha, Pacamara, Sudan Rume, Moonshadow, TyOxidator, Anoxic, washed, natural, honey, anaerobic, yeast-inoculated, thermal shock, co-ferment.
 - Roasting vocabulary (when present in source): primary lever, brewing tolerance, acceptable roast window, underdevelopment signal, overdevelopment signal, aromatic behavior, structural behavior, rest behavior, scope tags (process:* / variety:* / terroir:*).
+- Taste-apex vocabulary (when present in source): layered-evolving (the canonical apex term) and its antonym one-dimensional — keep verbatim, do not soften to "complex" / "expressive" / "flat".
 - All temperature / grind / ratio numbers verbatim.
 - Any cultivar / terroir / producer / farm / roaster proper noun the long-form names.
 
