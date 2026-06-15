@@ -114,7 +114,7 @@ function findClosestAnchor(target: string, candidates: string[]): string | null 
 const VALID_OPERATIONS = ['append', 'replace', 'prepend'] as const
 const VALID_SOURCE_KINDS = ['brew', 'roast', 'cupping', 'session'] as const
 
-const citation = z.object({
+const citationFields = z.object({
   section_anchor: z.string().describe(
     'Header text WITHOUT the leading `#` characters. E.g. "Equipment Reference". Anchor matching is case-sensitive exact match against `## ` or `### ` headers in the resolved file — call `list_doc_sections(uri)` to discover valid anchors before drafting. The arbiter does NOT fuzzy-match — stale anchors surface to the user with current_text + proposed_text for retarget vs discard decision.',
   ),
@@ -124,13 +124,36 @@ const citation = z.object({
   ),
   proposed_text: z.string().describe('The text to append / prepend / replace with.'),
   operation: z.enum(VALID_OPERATIONS).describe(
-    '`replace` — substitute matching text (uses current_text for drift detection). `append` — add to the END of the named section. `prepend` — add to the START of the named section. Note: append/prepend currently land at section boundaries; mid-section positioning relative to specific bullets is not yet supported.',
+    '`replace` — substitute matching text (uses current_text for drift detection). `append` — add to the END of the named section. `prepend` — add to the START of the named section. Note: append/prepend currently land at section boundaries; mid-section positioning relative to specific bullets is not yet supported. The shorthand `op` is accepted as a server-side alias for this field (if both are supplied, `operation` wins and `op` is dropped silently).',
   ),
   rationale: z.string().describe('Free-text justification — surfaced to the arbiter at apply time.'),
   target_doc: z.string().optional().describe(
     'OPTIONAL per-citation override of the proposal-level target_doc. Accepts the same shape as the proposal-level field: `brewing.md` | `roasting.md` | `roaster/{Canonical Roaster Name}` | `taxonomies/{axis}.md` | `skills/{path}.md`. Use when a single proposal\'s citations span multiple files (e.g. one citation targets `roaster/Dongzhe` and another targets `brewing.md`). When omitted, inherits the proposal-level target_doc.',
   ),
 })
+
+// #54 (write-path-hardening, 2026-06-15): server-side input forgiveness for the
+// recurring `op` vs `operation` citation-field mismatch. The shorthand `op` keeps
+// getting tried despite the prompts saying `operation` in three places (PR #409 /
+// #39). Normalize `op` -> `operation` BEFORE the z.enum(VALID_OPERATIONS) validator
+// runs. LOCKED precedence: if a citation supplies BOTH, the explicit `operation`
+// wins and `op` is dropped silently; `op` only fills `operation` when `operation`
+// is absent. z.preprocess keeps the published JSON Schema clean - it emits the inner
+// object's schema (no `op` property, `operation` keeps its enum+type), so the
+// schema-compat rewrite (lib/mcp/schema-compat.ts) + check:mcp stay green.
+const citation = z.preprocess((val) => {
+  if (val && typeof val === 'object' && !Array.isArray(val)) {
+    const v = val as Record<string, unknown>
+    if (v.op !== undefined && v.operation === undefined) {
+      return { ...v, operation: v.op, op: undefined }
+    }
+    if ('op' in v) {
+      const { op: _op, ...rest } = v
+      return rest
+    }
+  }
+  return val
+}, citationFields)
 
 const sourceRef = z.object({
   kind: z.enum(VALID_SOURCE_KINDS).describe('What triggered the proposal. `brew` = a single completed brew; `roast` / `cupping` = roasting-side events (Sprint 2.5+); `session` = a general working-session not tied to a specific entity.'),

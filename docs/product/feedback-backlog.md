@@ -1,6 +1,6 @@
 # Workflow-Feedback Backlog
 
-*Last updated: 2026-06-15 (Round 24 — filed #53–#56 from the V-set close-out resumed after mid-STAGE-5 compaction; bumped #46)*
+*Last updated: 2026-06-15 (write-path-hardening sprint SHIPPED - #54 op/operation alias + #56 push_brew FK-inherit + #46 patch_inventory pre-load hint removed from open per the status lifecycle; see [docs/sprints/shipped.md](docs/sprints/shipped.md). Earlier 2026-06-15: #52 resolved-by-side-effect of the 2026-06-13 schema-compat ship, removed from open. Round 24 prior: filed #53-#56; bumped #46.)*
 
 The **actionable** subset of workflow feedback — the items that need a *build* (prompt
 fix / MCP fix / schema / UI / architecture), not just a route-and-forget filing.
@@ -75,13 +75,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 
 ## Open — MCP / infra
 
-### push_roast (and every numeric-field Tool) rejects numeric params as strings on the type-stripped `latent-coffee` registration
-- **Shape:** mcp (infra / schema-publish + server validation)
-- **Recurrence:** 1 (Round 23 / AN10 V1 roast-logging, 2026-06-13)
-- **Criticality:** high
-- **Status:** open
-- **Source:** master log #52 (Round 23)
-- **Body:** The Latent server is registered twice in Claude Code: `mcp__latent-coffee__*` (JSON-schema field `type`s STRIPPED — fields publish as bare `{description}`) and `mcp__eeaa2042-…__*` (full types). On the `latent-coffee` registration the Claude Code tool bridge serializes every numeric param as a STRING, so `push_roast` zod hard-rejects ~14 fields in one shot (`invalid_type: expected number, received string` — batch_size_g, charge_temp, drop_temp, agtron, roest_log_id, end_condition_target, fc_total_cracks, ror_*, …). Deterministic, not transient (distinct from the patch_roast/read_doc_section cold-start item below). Exposes EVERY numeric-heavy Tool (push_roast / push_cupping / push_experiment / patch_*) — it bites any field whose published schema lacks a `type`; explicitly-typed scalars (pull_roest_log `log_id`, list_roest_logs `inventory_id`) work on either registration. Workaround that unblocked AN10 logging: call the identical Tool via the `eeaa2042` registration (typed schema → bridge sends real JSON numbers). Latent-side fix: `z.coerce.number()` on numeric input fields so string-encoded numerics are accepted regardless of which registration/client strips types. Client-side angle (why Claude Code republishes the `latent-coffee` catalog type-stripped while `eeaa2042` keeps types) → Bucket C escalation note in master log. Interim: document "use the fully-typed registration for numeric writes" in the operator-guide so the next Coordinator session doesn't burn rounds rediscovering it.
+> **Resolved 2026-06-13 (#52 — by side-effect of the "MCP published-schema compat" ship, see [docs/sprints/shipped.md](docs/sprints/shipped.md)):** push_roast (and every numeric-field Tool) string-rejection shared the *same root cause* as the same-day (same lot, RWA-NOVA-AN10-RB-2026) schema-compat fix — `.optional().nullable()` numeric fields published as bare `anyOf:[T,null]` unions that Claude Code's client drops (claude-code#5844), leaving the field untyped so numerics serialized as strings → zod -32602 reject. [lib/mcp/schema-compat.ts](lib/mcp/schema-compat.ts) rewrites the published catalog globally (`anyOf [T,null]` → `type:[T,"null"]`, recursive, one `tools/list` wrap, no per-tool edits); the `check:mcp` gate now fails on any property lacking resolvable type info across the whole catalog (986 problems → 0). Verified in code: every field #52 named (`batch_size_g`/`agtron`/`charge_temp`/`drop_temp`/`end_condition_target`/`fc_total_cracks`/…) is `z.number().optional().nullable()` in [push-roast.ts](lib/mcp/push-roast.ts), exactly the shape the ship rewrites. Different mechanism than #52's proposed `z.coerce.number()`, same symptom gone. Removed from the open list per the status lifecycle. Flip is pending one live re-verification in the next fresh Coordinator session (existing sessions hold the stale catalog per the MCP-cache rule).
 
 ### `patch_roast` + `read_doc_section` intermittent execute-after-search failures
 - **Shape:** mcp (infra)
@@ -133,14 +127,6 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Source:** master log #38 (Round 21)
 - **Body:** Apply the accept-and-warn/closest_match pattern to `experiment_id` reuse — warn when an experiment_id is reused with a different green_bean_id (catches cross-lot copy-paste). Extends the shipped #28a accept-and-warn work.
 
-### patch_inventory ergonomics — param-name asymmetry + deferred-tool latency
-- **Shape:** mcp (Tool surface + prompt hint)
-- **Recurrence:** 3 (Round 21 S1#3 + S6#2; Round 24 Item 5)
-- **Criticality:** low
-- **Status:** open
-- **Source:** master log #46 (Round 21), Round 24 Item 5
-- **Body:** `patch_inventory` takes `roest_inventory_id`, not `inventory_id` (param-name asymmetry); and it's deferred behind tool_search so every close-lot hits lookup latency on its 1:1 STAGE 6 archive call. Ask: surface patch_inventory eagerly, or add a pre-load hint at the top of close-lot.md / one-shot-closeout.md. Round 24 sharpens the why: the tool is called exactly once per lot, so it's **structurally never warm** in the catalog at the STAGE 6 archive call — the pre-load hint is the right fix.
-
 ### push_brew tool_search ranking boost
 - **Shape:** mcp (tool-discovery ranking)
 - **Recurrence:** 1 (Round 22 Item 1)
@@ -149,14 +135,6 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Source:** master log #49 (Round 22)
 - **Body:** Both `push_brew` (literal) and "INSERT CREATE new brew row primary write path" (descriptive) initially returned the tool with the *wrong parameter set*; two searches with full descriptive phrasing needed to load the correct schema. Pre-warm in bundled-brewing-completion.md prevents an empty-recall loop but the mis-ranking still burns one tool_search. Ask: keyword boost on push_brew when query tokens "new brew row" / "primary write path" are present. Distinct from #46 (wrong-result ranking, not latency). Part of catch-time→hint-time cluster (with #51).
 
-### `op` vs `operation` citation-field — accept both via a tool-level schema alias
-- **Shape:** mcp (server-side input alias)
-- **Recurrence:** 2 (Round 21 S3#1 → shipped prompt fix #39/PR #409; recurred Round 24 / Item 2 despite the prompt warning)
-- **Criticality:** med
-- **Status:** open
-- **Source:** master log #54 (Round 24); sibling of shipped #39
-- **Body:** The propose_doc_changes citation field is `operation`, but `op` keeps getting tried. The #39 prompt fix (PR #409) corrected the shorthand in three lifecycle prompts, yet the footgun recurred Round 24 — the model used `operation` correctly only because it remembered the prior validation error + the prompt self-warns in three places. Permanent fix: accept BOTH `op` and `operation` server-side (zod alias / `.transform`), the same class as #52's `z.coerce.number()` coercion ask, so it stops relying on each prompt's reminder. Part of the catch-time→hint-time cluster (with #49, #51).
-
 ### Net-new per-lot file-registration ticket lives outside the MCP write surface — make it trackable
 - **Shape:** arch (schema/surface) + mcp
 - **Recurrence:** 1 (Round 24 / Item 4)
@@ -164,14 +142,6 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Status:** open
 - **Source:** master log #55 (Round 24); follow-on gap after shipped #33/#418
 - **Body:** The #33/#418 arbiter-ticket flow (option b) shipped the *creation* path for net-new per-lot learnings/calibrations files, but the emitted ticket lives entirely outside MCP — a fenced block the operator hand-routes to a Claude Code arbiter session. Seam: the lot is "Resolved" in the DB the moment STAGE 6 archives inventory, yet the closed-lot learnings file doesn't exist until the ticket is processed separately, so the resolved-view "see closed-lot learnings" pointer (proposal 1/3) dangles if the ticket is lost. The only record the ticket was emitted is chat. Ask: (a) a lightweight `pending_file_registrations` table the close-lot prompt writes to (dangling-pointer risk becomes queryable), or (b) surface unprocessed tickets where the operator sees them. **Distinct from #33** (creation, shipped) — this is the tracking/visibility gap. Part of the doc-write-ergonomics cluster; the close-out-fan-out seam.
-
-### push_brew should inherit terroir/cultivar FKs from `green_bean_id`
-- **Shape:** mcp (Tool behavior)
-- **Recurrence:** 2 (Round 10 #2 Higuito; recurred Round 24 / Item 6)
-- **Criticality:** med
-- **Status:** open
-- **Source:** master log #56 (Round 24); first logged Round 10 #2
-- **Body:** When push_brew receives a `green_bean_id`, it still re-resolves terroir/cultivar from scratch and can create a *new* divergent terroir row (Round 24: brew terroir `5b454459…` auto-created "Central Andean Cordillera" vs green canonical `7e8d0618…`; Round 10: Higuito `b3a5681e` ≠ green `56dedde9`). Benign for lot-binding (the brew binds via green_bean_id + roast_id, not terroir_id) but it litters orphan/divergent terroir rows. Ask: default terroir/cultivar FKs from the green-bean row when green_bean_id is supplied. The long-queued "push_brew FK-inheritance" Tool sprint.
 
 ## Open — prompt / doc-touch
 
