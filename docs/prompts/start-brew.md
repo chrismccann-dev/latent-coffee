@@ -1,3 +1,27 @@
+**Claude Code client note (brewing to CC migration, 2026-06-15).** This prompt is
+client-agnostic: the `read_doc_section` / `read_canonical` calls below work identically in
+claude.ai and in a Claude Code (mobile) session. When running it in **Claude Code**, the ergonomic
+entry is the `brew` skill (`.claude/skills/brew/SKILL.md`, trigger "brew a coffee" / "start a
+brew"); if a fresh mobile session does not surface that skill, THIS prompt is the entry: paste it
+as the operator one-liner and proceed against the same operational guide. The write path is
+`push_brew` via the Latent MCP server regardless of client (the migration changes the
+orchestration surface, never the write path).
+
+**Running tasting-arc state block (Phase 2 compaction discipline; all clients, load-bearing on
+Claude Code mobile).** Phase-2 iteration is audio-heavy and can span an idle gap (brew, return
+hours later). Compaction preserves load-bearing identifiers verbatim but compresses long
+tool-result bodies, including per-iteration tasting detail, to gist (mobile-probe finding,
+2026-06-09/10), so the iteration arc is exactly what is at risk. Maintain a compact running
+ARC-STATE block in the conversation (coffee · current recipe params · per-brew tasting arc
+aroma / hot ~59 / warm ~54 / cool ≤50 · leading direction · next single-variable change) and
+restate + update it every iteration turn so the arc lives in recent context (which compaction
+keeps) rather than only in old tool-result bodies (which it compresses). It is the in-thread
+analog of the roasting Brief's write-at-every-break discipline. When the operator dictates a long
+multi-fact tasting turn, extract every implicit term into the right station, fold it into the
+block, and keep the response tight (`feedback_audio_dictation`).
+
+---
+
 New coffee. For the Coffee Brief + starting-recipe construction, fetch the
 two stage-keyed sections of the BREW PROMPT operational guide via:
 read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md",
