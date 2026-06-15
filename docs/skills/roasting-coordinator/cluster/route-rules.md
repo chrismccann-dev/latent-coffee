@@ -25,14 +25,16 @@ The Results Packet's route recommendation is **input**; the Coordinator decides,
 
 **Route B — Simulated Pourover Gate.** Two finalists are plausible but the table cup isn't decisive; an optimized-brew stab might flip or confirm it; you don't want to burn full V-sets yet. Emit the thin SPG packet (claude.ai), flip `lot_status → waiting_for_brewing`. **Do NOT** advance lifecycle or design the next V-set while waiting. The SPG is the **roasting-vs-brewing-problem discriminator**: it's a *stab* at the optimized brew, not the answer.
 
-**Route C — declare reference.** One slot clearly wins; real-pourover / SPG validation is acceptable; no structural unresolved issue. Patch the winning roast `is_reference`, emit the Optimized-Brew Packet (claude.ai).
+**Route C — declare reference.** One slot clearly wins; real-pourover / SPG validation is acceptable; no structural unresolved issue. "Wins" = best reveals the **layered-evolving** apex (a cup that develops across the temperature + structural arcs), **not** the loudest or sweetest first sip and **not** an Agtron number — the ceiling is the apex ([SKILL.md § Apex anchor](docs/skills/roasting-coordinator/SKILL.md) / [CONTEXT-taste.md § Roasting philosophy](CONTEXT-taste.md)). Patch the winning roast `is_reference`, emit the Optimized-Brew Packet (claude.ai).
 
 **Route D — hold.** Real blockers only (missing logs, unknown slot mapping, duplicate-row conflict).
 
 ## SPG verdict consumption
 
+The SPG is the **express-then-clarify couple's** diagnostic (roasting and brewing are coupled, not independent — [SKILL.md § Apex anchor](docs/skills/roasting-coordinator/SKILL.md)): the brew clarifies what the roast expressed, so a cup that won't clarify points back at expression.
+
 - **Pass** → Route C (declare reference + optimized brew).
-- **Fail** → Route A (design V_(n+1)). The SPG failing means you were *fighting too hard brewing-side to make the cup work* — that's evidence it's a **roasting** problem, so go back to the drawing board rather than squeezing the optimized brew. (Lived precedent: Gesha Clouds — 192 beat 191 but wasn't finishable as a reference, so V4 with more core development.)
+- **Fail** → Route A (design V_(n+1)). The SPG failing means you were *fighting too hard brewing-side to make the cup work* — that's evidence the **roast** didn't develop enough latent layers (the develop-fully-for-expression move came up short), a **roasting** problem, so go back to the drawing board rather than squeezing the optimized brew. (Lived precedent: Gesha Clouds — 192 beat 191 but wasn't finishable as a reference, so V4 with more core development.)
 
 ## One-shot lots
 

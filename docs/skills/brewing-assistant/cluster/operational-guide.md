@@ -135,7 +135,7 @@ After the recipe table, provide three short sections:
 
 ## Step 3 — Iteration Loop (Phase 2 — in-thread iteration)
 
-After each brew, provide tasting notes covering aroma, attack, mid-palate, body, and finish. Note how it changes as it cools.
+After each brew, provide tasting notes across the **whole temperature arc** — this is the governing evaluation frame, because the apex is an *arc* claim (a **layered-evolving** cup reveals new layers as it moves; the transitions *are* part of the product). Record every station, no throwaway: **aroma → hot ~59-60°C → warm ~54-55°C → cool ≤50°C and below**, plus how the cup changes between them. **Never iterate off a single temperature** — judge the *shape* of the evolution (does the cup open into new layers as it cools, or collapse to **one-dimensional** at one or more stations?), not one station in isolation. A single-peak **Cooling-Curve Target** is a named exception *within* the whole-arc default (fires only when a coffee's peak window diverges from the 50-55°C drinking default — see the Named Consideration in Step 1d). Canon: [CONTEXT-taste.md § Brewing philosophy](CONTEXT-taste.md).
 
 Claude will respond with adjusted parameters. **Adjustment width is scale-dependent — concretely mapped to the iteration's position in the search**, mirroring the roasting-side Adjustment rule (CONTEXT-roasting.md § Adjustment; Brew 1 is the brewing analog of V1):
 
@@ -153,6 +153,7 @@ Claude will respond with adjusted parameters. **Adjustment width is scale-depend
 
 At each iteration, Claude must also assess:
 
+- **Whole-arc shape** — does the cup hold its **layered-evolving** shape across the *whole* arc, or does it collapse to **one-dimensional** at one or more stations? A cup that's great hot but flat cool (or vice versa) has failed the arc — that's an iteration signal, not a pass. Never resolve a brew on a single station's reading.
 - Are we making incremental progress, or does something feel structurally wrong (consistently sour, flat, hollow, or one-dimensional despite multiple tweaks)?
 - If 2-3 iterations in and the cup still feels off structurally, Claude should flag this explicitly and ask whether to pivot extraction strategy rather than continue tweaking parameters within the current one.
 - If the confirmed extraction strategy seems mismatched to what you are tasting, Claude should recommend a strategy pivot and explain what that would change about the approach.
