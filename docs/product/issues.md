@@ -89,6 +89,12 @@ The brewing philosophy makes **whole-arc evaluation** the governing frame: every
 
 The sourcing philosophy's acquisition signal #1 is **producer reputation as proxy for the engineered process** ("source by cross-referencing weak signal"). The `producer-taxonomy` registry exists (`docs/taxonomies/producers.md`, 120 canonical producers) and `brews.producer` / `green_beans` carry it, but there is **no producer index page** and **no "known-for engineered process" attribute** — the reputation signal that drives buying has nowhere to live in the app. Distinct from the parked "Split `brews.producer` into producer_name + farm_name" (roadmap § Blocked and parked) and the "Producers as a first-class citizen" brainstorm. **Question:** does the producer-reputation acquisition signal earn a producer index surface + a process-signature attribute, or stay doc-layer (sourcing strategy.md § 1)? Scope before any build. Canon: [CONTEXT-taste.md § Sourcing philosophy](CONTEXT-taste.md).
 
+### CCIL consolidation due (roasting side) — stale CGLE-GESHA-CLOUDS-2026 working hypotheses
+
+**Status:** maintenance overdue; surfaced 2026-06-15 arbiter session (Gesha Clouds close-out, [#445](https://github.com/chrismccann-dev/latent-coffee/pull/445)).
+
+The Gesha Clouds close-out promoted the bean-temp-target-above-FC lever + the xbloom-flatters-vs-real-pourover corollary to `docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md § Confirmed Patterns` (High, resolved across 4 V-sets). But the now-closed lot still has stale **single-lot Low-confidence** entries in that file's § Working Hypotheses (the four CGLE-GESHA-CLOUDS-2026 rows: heavy-anaerobic WB-to-Ground delta pattern · cupping-table reversal of Day 7 pourover · bean-temp-end-condition-as-safer-default · V2 aggressive-direction-recipe-dependent), plus the `## FC-Temp Architectural Constraint on Naturals` / `## xbloom Evaluation Gate Misranking on Anaerobic Naturals` Working-Hypothesis H2 sections that the close-out evidence now bears on. Run a CCIL consolidation pass (`consolidate cross-coffee insights`; [ARBITER.md § CCIL consolidation pass](ARBITER.md)) to retire / fold the resolved hypotheses into the Confirmed-Patterns index + reference tables. Interpretive (retire-vs-promote-vs-fold is Chris's call) — not arbiter-automatable.
+
 ---
 
 ## Resolved / shipped
