@@ -17,6 +17,16 @@ Vocabulary used in this prompt is defined in CONTEXT-roasting.md (one-shot lot, 
 
 MCP namespace: tools surface under `Latent Coffee`.
 
+**Pre-load `patch_inventory` at session start** (do this BEFORE STAGE 1):
+`patch_inventory` is called exactly once per lot - at STAGE 6's single archive
+call - so it is **structurally never warm** in the catalog when you reach it,
+and the `tool_search` cold-lookup latency lands on the close-out's last write.
+Explicitly call `tool_search(query: "patch_inventory archive roest inventory row is_archived")`
+right after the catalog fetch so the tool is resolved before STAGE 6. If it
+doesn't surface in the top-3, fall back to invoking it directly by name
+(`patch_inventory`) - the discovery ranking is advisory; the tool exists in the
+registry regardless. (It takes `roest_inventory_id`, not `inventory_id`.)
+
 ## STAGE 1 - Resolve bean + verify Resolved-pending state
 
 **This STAGE writes**: nothing (read-only).

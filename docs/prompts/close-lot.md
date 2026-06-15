@@ -19,6 +19,16 @@ STAGE 4 optimized-brew LINK path - verify the handed-back brew_id, then set
 
 MCP namespace: tools surface under `Latent Coffee`.
 
+**Pre-load `patch_inventory` at session start** (do this BEFORE STAGE 1):
+`patch_inventory` is called exactly once per lot - at STAGE 6's single archive
+call - so it is **structurally never warm** in the catalog when you reach it,
+and the `tool_search` cold-lookup latency lands on the close-out's last write.
+Explicitly call `tool_search(query: "patch_inventory archive roest inventory row is_archived")`
+right after the catalog fetch so the tool is resolved before STAGE 6. If it
+doesn't surface in the top-3, fall back to invoking it directly by name
+(`patch_inventory`) - the discovery ranking is advisory; the tool exists in the
+registry regardless. (It takes `roest_inventory_id`, not `inventory_id`.)
+
 ## Routing
 
 I'll reference the lot by `lot_id` or `green_bean_id` + name the reference roast (e.g. "Sudan Rume Natural reference roast = V4C / Batch 169"). I'll either paste the optimized brew recipe inline or reference it by an existing `brew_id` if it's already in the DB.

@@ -295,7 +295,7 @@ export const pushBrewInputSchema = {
     'Origin of the coffee. Defaults to "purchased". When "self-roasted", green_bean_id is required (cross-validated server-side).',
   ),
   green_bean_id: z.string().uuid().optional().nullable().describe(
-    'FK to green_beans.id — required when source = "self-roasted". Use list_roest_inventory + push_green_bean to seed if the bean isn\'t in DB yet.',
+    'FK to green_beans.id — required when source = "self-roasted". Use list_roest_inventory + push_green_bean to seed if the bean isn\'t in DB yet. When supplied, the brew INHERITS terroir_id / cultivar_id from the green-bean row (per axis, when that FK is non-NULL) rather than re-resolving from the payload terroir/cultivar, so the brew binds to the lot\'s canonical FKs and no divergent terroir/cultivar row is minted. Falls back to the payload find-or-create path for any axis the green bean leaves NULL.',
   ),
   roast_id: z.string().uuid().optional().nullable().describe(
     'FK to roasts.id — optional even for self-roasted; links the brew to the specific roast batch (e.g. Mandela XO Batch 139).',

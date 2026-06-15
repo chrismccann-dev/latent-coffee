@@ -885,6 +885,34 @@ export async function persistBrew(
   const poursResult = payload.pours == null ? null : cleanPours(payload.pours)
   const cleanedPours: PourStep[] | null = poursResult && poursResult.ok ? poursResult.value : null
 
+  // #56 (write-path-hardening, 2026-06-15): when a brew is pushed with a
+  // green_bean_id, INHERIT the green bean's canonical terroir_id / cultivar_id
+  // instead of re-resolving from the payload. The payload-resolve path mints a
+  // divergent/orphan terroir row whenever the payload's free-text terroir
+  // canonicalizes to a different row than the lot's green bean already binds to
+  // (Round 24: brew terroir "Central Andean Cordillera" 5b454459… vs green
+  // canonical 7e8d0618…; Round 10: Higuito b3a5681e ≠ green 56dedde9). LOCKED
+  // rule (kickoff #2): per-axis - when green_bean_id is supplied AND that axis's
+  // FK on the green-bean row is non-NULL, bind to it directly and SKIP
+  // findOrCreate* (so no divergent row is minted); when the FK is NULL or the
+  // green bean isn't found, FALL BACK to the payload findOrCreate* path for that
+  // axis. The purchased path (no green_bean_id) is unchanged. A brew that
+  // inherited binds to an existing canonical row → provenance 'canonical'.
+  let inheritedTerroirId: string | null = null
+  let inheritedCultivarId: string | null = null
+  if (payload.green_bean_id?.trim()) {
+    const { data: greenBean } = await supabase
+      .from('green_beans')
+      .select('terroir_id, cultivar_id')
+      .eq('id', payload.green_bean_id)
+      .eq('user_id', userId)
+      .maybeSingle()
+    if (greenBean) {
+      inheritedTerroirId = greenBean.terroir_id ?? null
+      inheritedCultivarId = greenBean.cultivar_id ?? null
+    }
+  }
+
   // Sprint 2.6 — terroir + cultivar route through the strict-canonical
   // findOrCreate* helpers. Closes 4 silent-failure modes from the dog-food log
   // (R7 silent-NULL, R8 silent-create-non-canonical, R12 meso-collapse, R23
@@ -893,40 +921,54 @@ export async function persistBrew(
   // reports every error in one round-trip. Run in parallel (Promise.all) since
   // they're independent DB calls. The opts.confirmNew{Terroir,Cultivar} flags
   // are NO-OPS in this path — strict-canonical model has no "confirm new" flow.
+  // #56: each axis falls through to findOrCreate* ONLY when not inherited from
+  // the green bean above - inheriting skips the resolve so no divergent row is
+  // minted.
   const [terroirResult, cultivarResult] = await Promise.all([
-    findOrCreateTerroir(
-      supabase,
-      userId,
-      payload.terroir.country,
-      payload.terroir.macro_terroir,
-      payload.terroir.admin_region,
-      payload.terroir.meso_terroir,
-    ),
-    findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name),
+    inheritedTerroirId
+      ? Promise.resolve(null)
+      : findOrCreateTerroir(
+          supabase,
+          userId,
+          payload.terroir.country,
+          payload.terroir.macro_terroir,
+          payload.terroir.admin_region,
+          payload.terroir.meso_terroir,
+        ),
+    inheritedCultivarId
+      ? Promise.resolve(null)
+      : findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name),
   ])
-  if (!terroirResult.ok) errors.push(terroirResult.error)
-  if (!cultivarResult.ok) errors.push(cultivarResult.error)
+  if (terroirResult && !terroirResult.ok) errors.push(terroirResult.error)
+  if (cultivarResult && !cultivarResult.ok) errors.push(cultivarResult.error)
   if (errors.length > 0) {
     return { ok: false, code: 'validation', errors }
   }
-  // Post-FK narrowing — both must be ok past the errors-length check above.
-  if (!terroirResult.ok || !cultivarResult.ok) {
+  // Post-FK narrowing - a non-inherited result must be ok past the errors check.
+  if ((terroirResult && !terroirResult.ok) || (cultivarResult && !cultivarResult.ok)) {
     return { ok: false, code: 'validation', errors: ['unreachable: post-FK narrowing'] }
   }
-  if (!terroirResult.id || !cultivarResult.id) {
+  // Resolve each axis to its final id: the inherited green-bean FK takes
+  // precedence; otherwise the payload findOrCreate* id.
+  const terroirId = inheritedTerroirId ?? (terroirResult && terroirResult.ok ? terroirResult.id : null)
+  const cultivarId = inheritedCultivarId ?? (cultivarResult && cultivarResult.ok ? cultivarResult.id : null)
+  if (!terroirId || !cultivarId) {
     // findOrCreate* returns id:null on empty input. validateBrewPayload already
     // requires terroir.country + cultivar.cultivar_name, so this is unreachable
-    // unless validation regresses. Surface as validation error rather than crash.
+    // for the payload path unless validation regresses; for the inherit path a
+    // non-NULL green-bean FK was required to set inherited*Id. Surface as
+    // validation error rather than crash.
     return {
       ok: false,
       code: 'validation',
       errors: ['terroir and cultivar must resolve to non-null IDs (post-validation guard)'],
     }
   }
-  const terroirId = terroirResult.id
-  const cultivarId = cultivarResult.id
-  const createdTerroir = terroirResult.created
-  const createdCultivar = cultivarResult.created
+  // Provenance: an inherited axis bound to an existing canonical row (never
+  // minted) → 'canonical'. A payload-resolved axis is 'auto_created' only when
+  // findOrCreate* materialized a fresh row this push.
+  const createdTerroir = inheritedTerroirId ? false : !!(terroirResult && terroirResult.ok && terroirResult.created)
+  const createdCultivar = inheritedCultivarId ? false : !!(cultivarResult && cultivarResult.ok && cultivarResult.created)
 
   // Compute ratio if possible
   let ratio = payload.ratio ?? null
