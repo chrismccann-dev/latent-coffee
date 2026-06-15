@@ -265,13 +265,13 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Source:** master log #48 (Round 21)
 - **Body:** Two pre-migration SPG cuppings (`a3946b27-6a9d-405f-b49c-c4920b85c0af` + `d8f814c8-3976-4018-b93f-86c4240873b5`) carry the SPG flag in recipe_variant/overall and should be patched to the canonical `eval_method` field now the migration is live.
 
-### Data-patch: Batch 193 fc_audibility → did_not_fire (blocked on migration 079)
+### Data-patch: fc_audibility ambiguous → did_not_fire backfill (Batch 193 + Wush Wush V2 206/207/208) (blocked on migration 079)
 - **Shape:** schema (data-patch)
-- **Recurrence:** 1 (Round 21 S2#7 — residual of #35, which itself SHIPPED PR #409)
+- **Recurrence:** 2 (Round 21 S2#7 — residual of #35, which itself SHIPPED PR #409; + Wush Wush V2 surfaced 2026-06-15 arbiter session, #445)
 - **Criticality:** low
 - **Status:** open (triggered — blocked until Chris pastes migration 079 into the SQL Editor)
-- **Source:** master log #35 (Round 21)
-- **Body:** Batch 193 `f4ef106f` needs fc_audibility ambiguous→did_not_fire via patch_roast; blocked until migration 079 lands in PROD, and requires fc_start/fc_temp/dev_time_s NULL on the row first (068 triple-null co-rule). The #35 constraint-drift fix shipped; this is just the data row waiting on the migration paste.
+- **Source:** master log #35 (Round 21); Wush Wush V2 via doc-proposal 774fa01c
+- **Body:** Batch 193 `f4ef106f` needs fc_audibility ambiguous→did_not_fire via patch_roast; blocked until migration 079 lands in PROD, and requires fc_start/fc_temp/dev_time_s NULL on the row first (068 triple-null co-rule). The #35 constraint-drift fix shipped; this is just the data row waiting on the migration paste. **Second instance:** the BRA-FAZENDAUM-WUSHWUSH-NAT-2026 V2 batches 206/207/208 all dropped at bean-temp targets with FC never firing — pushed as `fc_audibility='ambiguous'` and want the same ambiguous→did_not_fire patch under the same migration-079 + 068-co-rule conditions. (Note: the V2 active-lot doc + proposal 774fa01c reference "migration 066" for the enum value, but 066 already landed 2026-05-24 — the live blocker is 079 + the triple-null co-rule, same as Batch 193.)
 
 ---
 
