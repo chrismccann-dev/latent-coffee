@@ -750,6 +750,12 @@ const DOC_CATALOG: CatalogDoc[] = [
     description: 'Per-lot learnings for Costa Rica Anaerobic Dry Process Higuito (closed 2026-05-19, reference #185 v3b). First self-roasted lot to confirm the anaerobic-natural Suppression + temperature-primacy pattern on the brewing side (4th confirmed origin alongside Colombia / Ethiopia / Panama). Anchors: xbloom misranks between close candidates not by direction; replication-by-profile unreliable (FC audibility flipped + WB-to-Ground delta swung); peak inlet × dev-time non-additive; overdev is a peak/dev interaction not an Agtron threshold.',
   },
   {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/cgle-gesha-clouds-2026.md',
+    listed: false,
+    title: 'Roasting Historian — learnings / CGLE Gesha Clouds Forest 2026',
+    description: 'Closed-lot learnings deep-dive for CGLE Gesha Clouds - Forest (COL-MIL-GES-2026, closed 2026-06-14, reference roast Batch 200 / V4A). Heavy-anaerobic Gesha natural that wanted markedly more core development than its washed anchor predicted; the resolving lever was the bean-temp end-condition drop target on a fixed 250C-peak curve (set ~3-4C above observed FC), not peak inlet or post-peak decline shape. Anchors: bean-temp-target-above-FC as the primary lever; xbloom gate flatters surface / real-pourover discriminates; dev-time not Agtron as the development proxy on this process family; wide WB-to-Ground delta with light grounds is the non-disqualifying lot signature while wide delta with dark grounds is over-development.',
+  },
+  {
     uri: 'docs://skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md',
     listed: false,
     title: 'Roasting Historian — learnings / Bukure Natural Lot 21 Red Bourbon 2026',

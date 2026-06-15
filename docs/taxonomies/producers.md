@@ -15,7 +15,7 @@ so the registry is intentionally tier-scoped rather than comprehensive.
 Net-new producers can be persisted via the `/add` flow's `allowOverride`
 path; rich content gets backfilled when the producer earns it.
 
-**Total entries:** 121 (Tier 1: 52 · Tier 2: 62 · Tier 3: 7)
+**Total entries:** 123 (Tier 1: 52 · Tier 2: 62 · Tier 3: 9)
 
 ---
 
@@ -1812,7 +1812,7 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Other Systems (uncategorized)  ·  61 producers
+### Other Systems (uncategorized)  ·  63 producers
 
 ### Asefa & Mulugeta Dukamo
 
@@ -3776,6 +3776,36 @@ path; rich content gets backfilled when the producer earns it.
 - **Exporters:** Mountain Harvest
 - **Importers:** Specialty importers / direct buyers
 - **Contact:** https://www.instagram.com/mountainharvestcoffee/
+
+---
+
+### Milton Monroy
+
+**Country:** Colombia · **Admin:** Tolima · **Macro:** TBD (skeleton)
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Finca San Pedro
+- **Processing Capability:** Natural Anaerobic
+- **Primary Cultivars:** Gesha
+- **Exporters:** Forest Coffee
+- **Roaster References:** Latent
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-15 from the COL-MIL-GES-2026 Gesha Clouds Forest lot (close-out 2026-06-14) - producer of Latent's first resolved Gesha lot (reference roast Batch 200 / V4A). See [learnings/cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-gesha-clouds-2026.md).
+
+---
+
+### Agnes Mukamushinja & Felix Hitayezu, Nova Washing Station
+
+**Country:** Rwanda · **Admin:** TBD (skeleton) · **Macro:** TBD (skeleton)
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Washing Station / Smallholder
+- **Farm:** Nova Washing Station
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-15 from a Nova Washing Station brew. Canonical kept as the full submitted name per operator decision.
 
 ---
 

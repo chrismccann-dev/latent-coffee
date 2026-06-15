@@ -3,7 +3,7 @@
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
 **Lot:** BRA-FAZENDAUM-WUSHWUSH-NAT-2026
-**Status:** Active - V2 designed + pushed to Roest 2026-05-25 (profiles 520910/520911/520912), not yet roasted. V1 cupped 2026-05-15 (Day 11). Untold paired-roasted reference cupped 2026-05-25 - the pre-V2 calibration gate; it RESOLVED the cup-vs-structure question and unblocked V2. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah ($419/kg, deferred).
+**Status:** Active - V2 roasted 2026-06-05 (batches 206/207/208), Day 7 cupping pending. **All three V2 batches did NOT reach FC** (fc_audibility=ambiguous in DB pending migration 066 for did_not_fire enum value). V1 cupped 2026-05-15. Untold paired-roasted reference cupped 2026-05-25 - resolved the V1 cup-vs-structure question. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah ($419/kg, deferred).
 **Cultivar:** Wush Wush
 **Terroir:** Brazil
 **Producer:** Fazenda Um
@@ -47,6 +47,27 @@ The Untold-reference calibration resolved the V1 cup-vs-structure question towar
 - **v2c UPPER BRACKET** (recipe d28dc3e5, Roest 520912): early ramp 200→232→240, peak 242, bean-temp drop **204°C** - still cooler than every V1 drop. Safe-development fallback if a/b land too light.
 
 **Success criterion (from brew handoff):** a plain percolation Balanced Intensity brew (V60/Orea, ~1:16, ~93°C) yields mandarin + prune + cacao with a clean finish and no oversteeped wall - i.e. the roast widened brewing tolerance enough that the Hario Switch rescue is unnecessary. Falsifiable: if mandarin still requires the Switch, V2 didn't go light enough.
+
+## V2 roast results - hypothesis FALSIFIED (2026-06-05)
+
+All three V2 batches dropped at their bean-temp targets with FC having never fired:
+
+- **v2a (Batch 206, 200°C drop):** No FC. Drop 4:14/200.1°C, Agtron WB **95.3** (extremely light), weight loss 7.5%. 0 cracks. Floor-finder confirmed floor is above 200°C.
+- **v2b (Batch 207, 202°C drop):** No FC. Drop 4:24/202.0°C, Agtron WB **88.8** (very light), weight loss 8.3%. 0 cracks. ror_at_4:00 = 9.39°C/min (post-peak decel).
+- **v2c (Batch 208, 204°C drop):** No FC. Drop 4:30/204.0°C, Agtron WB **86.9** (very light), weight loss 8.6%. 0 cracks. ror_at_4:00 = 9.62°C/min. Most-developed V2 batch and still no FC - confirms FC temp at 242°C peak sits above 204°C.
+
+**V2 hypothesis falsified.** The hypothesis 'gentling the early inlet ramp moves FC TEMP cooler' is wrong, at least within the design envelope (peak 242°C, early-ramp variation 224→236 to 232→240). Combined with V1's finding 'peak inlet moves FC TIME but not FC TEMP,' V2 establishes the stronger claim: **FC TEMP on this Wush Wush is roughly fixed at ~205°C bean_temp across the inlet-curve design space tested.** This is a hard constraint, not a probe-and-tune variable. Confidence: Medium-High (3+3 batch evidence, monotonic Agtron progression across the recipe spread confirms the spread executed mechanically as designed).
+
+**Reframing of V1 leading-slot inversion**: the cup-vs-structure inversion of V1 (favored slot was structurally-worst) was NOT evidence the coffee 'wants' the V1 profile - it was evidence that all of V1 was equally past FC, and the leading slot won by accident of cooling dynamics rather than by the V1 inlet variable. The brew-handoff insight ('target lighter than Untold's medium roast') is still operative, but the path to lighter is NOT via FC-temp manipulation.
+
+## V3 design fork - awaiting V2 cup data
+
+Two paths emerge, both accepting FC ~205°C as a fixed property of this coffee:
+
+- **Path α - hold peak 242°C, raise drop target to 205-206°C bean_temp.** Restore V1-era FC energy budget but with the auto-drop discipline V1 lacked. Effectively: rerun v1a's energy with v2's drop discipline. Favored if V2 cups show pure underdev signature with no first-emergence floral/mandarin signal (the lighter direction failed at 242°C peak, return to V1-era energy with disciplined drop).
+- **Path β - raise peak inlet to 244-246°C, hold drop target cool at 203-204°C bean_temp.** Use peak inlet as the lever V1 confirmed (moves FC TIME earlier) paired with cool auto-drop that V1 lacked, catching the bean immediately post-FC with very tight dev. Favored if V2 cups show ANY first emergence of mandarin/floral OR absence of V1's dark-tea body (the lighter direction works, just need FC to actually happen).
+
+Decision deferred to post-V2-cupping conversation.
 
 ## Strategic
 
