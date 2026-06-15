@@ -248,6 +248,34 @@ Rule:
 
 This stays here only because it crosses roast level, water, and strategy routing. Detailed office equipment / water notes live in the Brewing Equipment Expert cluster ([sworks.md § Valve restriction timing principles](docs/skills/brewing-equipment-expert/cluster/sworks.md) + [operational-reference.md § Location Constraints](docs/skills/brewing-equipment-expert/cluster/operational-reference.md) for the office tap-water finding).
 
+### 7. Cupping-Muted Is an Aromatic-Ceiling Signal, Not a Parameter-Failure Signal
+
+**Status:** First confirmed 2026-06-06 on Terraform Coffee Roasters Loja Ecuador Clara Luz Sidra Natural (brew_id 37affc20-67ce-438d-a255-ad801afe1644). One data point; second confirmation needed before treating as fully generalized.
+
+A cup that reads muted on first brew can come from two structurally different sources: extraction is wrong (parameters fixable), or the lot's aromatic ceiling is genuinely lower than the variety/process default assumes (parameters cannot fix it - structural / vehicle move required). **Cupping behavior discriminates between the two.** A cupping is the highest-extraction, highest-agitation, longest-contact way to taste a coffee - if the cupping also reads muted, the cup's aromatic ceiling is set at the source, not by the brew. Pushing extraction harder will not surface what is not there to surface; it will instead pull tannin and bitterness without finding the missing aromatic register.
+
+Confirmed shape:
+
+- First brew on variety/process default reads muted, under-expressed, or quiet.
+- A cupping of the same lot (separately, even with a third party) ALSO reads quiet.
+- Pushing extraction (finer grind, hotter water, more agitation) widens the body but does not unlock the missing aromatic register.
+- Resolution comes from STRUCTURAL front-loading - closed-immersion brewer (April Switch or Hario Switch) extending closed contact across most of the cup's flavor mass - which surfaces the buried (but-present) aromatic register that gentle percolation could not reach.
+
+Confirmed data point:
+
+- **Terraform Loja Sidra Natural, Light-Medium roast (Agtron 62.4), brew 37affc20 (2026-06-06).** v1 followed the Sidra variety default of Clarity-First (UFO + Sibarist Fast Cone, 6.6 / 91°C, 1:17, 2 pours) and read under-extracted/muted. Reframe came when Chris recalled cupping the lot for Kim - the cupping had also read quiet. v2/v3 escalated to Balanced Intensity (6.3 / 94°C, 2-3 pour structures with various agitation profiles) - unlocked the apricot/tart fruit register that v1's low temp + long bloom had suppressed (confirming v1 was flavor-compressed) but front-palate still under-expressed. v4 was a multi-variable jump to April Switch + Hybrid Intensity-Clarity Split (closed bloom + closed-through-Pour-1 = ~80s closed immersion across 150g water before the open percolation Phase 2). The structural front-loading is what reached the front-palate aromatics; parametric extraction-push could not.
+
+Operational rule:
+
+- When a cup reads muted on a competent first brew, ASK if the coffee has been cupped (by the operator or shared with a third party). A muted cupping is a strong override signal.
+- If cupping-muted: pivot to structural front-loading (closed-immersion Hybrid on April Switch or Hario Switch), NOT deeper extraction (finer grind / hotter water / more agitation). The bias is wrong direction.
+- The override is axis-agnostic: it can defeat variety signal (Sidra → Clarity-First), process signal (Natural → Balanced/Full), or roaster signal (Terraform → Clarity-First card). When in conflict with the default, cupping-muted wins.
+- The override should be surfaced at brief time when the operator has cupping context, not discovered on brew 3.
+
+Distinct from Pattern 1 (Roast Level Can Override Process and Cultivar) - roast-level overrides are visible at the Agtron read before brewing; cupping-muted requires actually tasting the coffee at maximum extraction. Distinct from Pattern 4 (Vehicle Integration for Aromatic-Landrace) - that pattern is about phase-separated cups where flavor IS projecting; this pattern is about cups where projection is absent at the source. Both can use a switch / immersion-favoring vehicle, but for different reasons.
+
+Second non-Sidra, non-Terraform confirmation needed before treating as fully generalized (tracked in Open Questions).
+
 ## Sub-Threshold Cultivar Candidates
 
 These cultivars are below the n≥3 graduation threshold. They stay here as candidate entries and graduate to a `by-cultivar/` capsule when they reach n≥3.

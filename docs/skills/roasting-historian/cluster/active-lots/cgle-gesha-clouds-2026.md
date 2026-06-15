@@ -64,10 +64,13 @@ Finalists 191 + 192 cupped at the same recipe (V60 02, EG-1 5.6, 93°C off-base 
 
 ## Open questions for V4
 
-1. How much additional core development can V4 land at the held 250°C peak without losing the complexity-preservation that gives v3c its identity?
-2. Is there a control-batch upper bound where "more development" tips into over-development on this anaerobic natural? V4 sweep brackets.
-3. Does the wide-WB-to-Ground-delta-non-disqualifying-at-gate-but-limiting-at-real-pourover pattern generalize across heavy-anaerobic Gesha as a process-family pattern, or is it lot-specific? Needs another anaerobic-natural lot to test (queue for cross-lot review at lot close-out).
-4. Does the Hario Switch ICS + late cut hold up across rest days? V4 SPG at Day 7 vs V3 SPG at Day 12 tests this implicitly.
+## Status: Closed (2026-06-14)
+
+**Reference roast: Batch 200 (V4A).** Resolved on V4 - the first clean bean-temp auto-drop on the lot (211°C / 5:09) delivered the core development the cup needed while staying clean: at the Day 8 xBloom pourover it landed the producer notes (tangerine, rose, kiwi, raspberry, lemongrass) most completely of any batch across four V-sets, with supportive body and best structural integration on the lot. V4B (201, manual pull / anomalous phase) read flat-but-harsh; V4C (202, darkest bean / stall-prevention drop) read flat-off - both sit just past the 200 sweet spot. SPG was skipped by operator decision (single finalist; 200 is the corrected version of v3c's already-SPG-vetted profile; the optimized-brew dial-in served as the real-pourover confirmation). Optimized brew dialed as a Temperature-Staged Hybrid on the Hario Switch (96°C intensity / ~88°C clarity, two-kettle), confirming Batch 200 holds at real pourover (did NOT slide into the 191 body-centric/dark-tea failure).
+
+**V4 answered the open questions:** (1) 211°C target landed the core development without losing complexity-preservation - that was the resolution. (2) The over-development upper bound is just past 200 - both 201 and 202 tipped over (harsh-disintegrated and flat-off respectively). (3+4) carried to the closed-lot learnings file for cross-lot synthesis.
+
+**See closed-lot learnings:** [learnings/cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-gesha-clouds-2026.md)
 
 ## Cross-references
 
