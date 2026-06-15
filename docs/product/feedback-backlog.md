@@ -1,6 +1,6 @@
 # Workflow-Feedback Backlog
 
-*Last updated: 2026-06-13 (Round 23 — filed #52, the type-stripped-registration numeric-param reject)*
+*Last updated: 2026-06-15 (Round 24 — filed #53–#56 from the V-set close-out resumed after mid-STAGE-5 compaction; bumped #46)*
 
 The **actionable** subset of workflow feedback — the items that need a *build* (prompt
 fix / MCP fix / schema / UI / architecture), not just a route-and-forget filing.
@@ -135,11 +135,11 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 
 ### patch_inventory ergonomics — param-name asymmetry + deferred-tool latency
 - **Shape:** mcp (Tool surface + prompt hint)
-- **Recurrence:** 2 (Round 21 S1#3 + S6#2)
+- **Recurrence:** 3 (Round 21 S1#3 + S6#2; Round 24 Item 5)
 - **Criticality:** low
 - **Status:** open
-- **Source:** master log #46 (Round 21)
-- **Body:** `patch_inventory` takes `roest_inventory_id`, not `inventory_id` (param-name asymmetry); and it's deferred behind tool_search so every close-lot hits lookup latency on its 1:1 STAGE 6 archive call. Ask: surface patch_inventory eagerly, or add a pre-load hint at the top of close-lot.md / one-shot-closeout.md.
+- **Source:** master log #46 (Round 21), Round 24 Item 5
+- **Body:** `patch_inventory` takes `roest_inventory_id`, not `inventory_id` (param-name asymmetry); and it's deferred behind tool_search so every close-lot hits lookup latency on its 1:1 STAGE 6 archive call. Ask: surface patch_inventory eagerly, or add a pre-load hint at the top of close-lot.md / one-shot-closeout.md. Round 24 sharpens the why: the tool is called exactly once per lot, so it's **structurally never warm** in the catalog at the STAGE 6 archive call — the pre-load hint is the right fix.
 
 ### push_brew tool_search ranking boost
 - **Shape:** mcp (tool-discovery ranking)
@@ -148,6 +148,30 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Status:** open
 - **Source:** master log #49 (Round 22)
 - **Body:** Both `push_brew` (literal) and "INSERT CREATE new brew row primary write path" (descriptive) initially returned the tool with the *wrong parameter set*; two searches with full descriptive phrasing needed to load the correct schema. Pre-warm in bundled-brewing-completion.md prevents an empty-recall loop but the mis-ranking still burns one tool_search. Ask: keyword boost on push_brew when query tokens "new brew row" / "primary write path" are present. Distinct from #46 (wrong-result ranking, not latency). Part of catch-time→hint-time cluster (with #51).
+
+### `op` vs `operation` citation-field — accept both via a tool-level schema alias
+- **Shape:** mcp (server-side input alias)
+- **Recurrence:** 2 (Round 21 S3#1 → shipped prompt fix #39/PR #409; recurred Round 24 / Item 2 despite the prompt warning)
+- **Criticality:** med
+- **Status:** open
+- **Source:** master log #54 (Round 24); sibling of shipped #39
+- **Body:** The propose_doc_changes citation field is `operation`, but `op` keeps getting tried. The #39 prompt fix (PR #409) corrected the shorthand in three lifecycle prompts, yet the footgun recurred Round 24 — the model used `operation` correctly only because it remembered the prior validation error + the prompt self-warns in three places. Permanent fix: accept BOTH `op` and `operation` server-side (zod alias / `.transform`), the same class as #52's `z.coerce.number()` coercion ask, so it stops relying on each prompt's reminder. Part of the catch-time→hint-time cluster (with #49, #51).
+
+### Net-new per-lot file-registration ticket lives outside the MCP write surface — make it trackable
+- **Shape:** arch (schema/surface) + mcp
+- **Recurrence:** 1 (Round 24 / Item 4)
+- **Criticality:** med
+- **Status:** open
+- **Source:** master log #55 (Round 24); follow-on gap after shipped #33/#418
+- **Body:** The #33/#418 arbiter-ticket flow (option b) shipped the *creation* path for net-new per-lot learnings/calibrations files, but the emitted ticket lives entirely outside MCP — a fenced block the operator hand-routes to a Claude Code arbiter session. Seam: the lot is "Resolved" in the DB the moment STAGE 6 archives inventory, yet the closed-lot learnings file doesn't exist until the ticket is processed separately, so the resolved-view "see closed-lot learnings" pointer (proposal 1/3) dangles if the ticket is lost. The only record the ticket was emitted is chat. Ask: (a) a lightweight `pending_file_registrations` table the close-lot prompt writes to (dangling-pointer risk becomes queryable), or (b) surface unprocessed tickets where the operator sees them. **Distinct from #33** (creation, shipped) — this is the tracking/visibility gap. Part of the doc-write-ergonomics cluster; the close-out-fan-out seam.
+
+### push_brew should inherit terroir/cultivar FKs from `green_bean_id`
+- **Shape:** mcp (Tool behavior)
+- **Recurrence:** 2 (Round 10 #2 Higuito; recurred Round 24 / Item 6)
+- **Criticality:** med
+- **Status:** open
+- **Source:** master log #56 (Round 24); first logged Round 10 #2
+- **Body:** When push_brew receives a `green_bean_id`, it still re-resolves terroir/cultivar from scratch and can create a *new* divergent terroir row (Round 24: brew terroir `5b454459…` auto-created "Central Andean Cordillera" vs green canonical `7e8d0618…`; Round 10: Higuito `b3a5681e` ≠ green `56dedde9`). Benign for lot-binding (the brew binds via green_bean_id + roast_id, not terroir_id) but it litters orphan/divergent terroir rows. Ask: default terroir/cultivar FKs from the green-bean row when green_bean_id is supplied. The long-queued "push_brew FK-inheritance" Tool sprint.
 
 ## Open — prompt / doc-touch
 
@@ -238,6 +262,14 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Status:** open
 - **Source:** master log #51 (Round 22)
 - **Body:** v1 strategy reasoning referenced the project-uploaded Brewing_v8_4.md snapshot (no Terraform card); live taxonomy roasters.md already had the Terraform Coffee Roasters card. End-of-brew workflow caught it via live-fetch; the *initial* brief did not. Reinforces the standing rule "current_text for replace ops must be fetched live immediately before drafting — never from project-uploaded files." Ask: brief-generation guardrail so the upfront brief fetches live too. Part of catch-time→hint-time cluster (with #49).
+
+### close-lot/one-shot-closeout STAGE 5 resume-after-compaction note
+- **Shape:** prompt
+- **Recurrence:** 1 (Round 24 / Item 1)
+- **Criticality:** med
+- **Status:** open
+- **Source:** master log #53 (Round 24)
+- **Body:** A mid-close-out compaction + trigger re-send can naively re-run STAGES 1-4 (re-patch the reference roast, re-push roast_learnings, re-issue Calls 1-2). All idempotent (roast_learnings UPSERT, proposal auto-supersede per (target_doc, section_anchor), patch_* echoes) so re-run is safe but wasteful/noisy. Ask: a one-line "resuming a partially-completed close-out" preamble in close-lot.md / one-shot-closeout.md STAGE 5 — check roast_learnings existence + existing proposal_ids by (target_doc, section_anchor) before re-issuing. The data model already tolerates it; the guidance makes resume explicit. Part of the resume-safety / idempotency-is-implicit cluster (with #55 — the one non-idempotent seam).
 
 ## Open — data / migration (operator-run via MCP)
 
