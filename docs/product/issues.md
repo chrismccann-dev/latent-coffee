@@ -77,6 +77,18 @@ Recipe rows landed in migration 052 (116/116 historical roasts have a `roast_rec
 
 `/brews` renders every brew as a `BrewCard` with no cap/pagination. At ~89 brews this is a non-issue (server-rendered, no client list JS). **Action when crossing ~100 brews:** a small "show first N + load more" mini-sprint on the *unfiltered* view only (filters already narrow the list). The per-roaster Coffees-list half is already handled (`CoffeesList` caps at 10 with a "Show N more" expander).
 
+### Whole-arc tasting capture on `brews` (data-model question — scope, don't build)
+
+**Status:** scoping question surfaced 2026-06-14 (North Star arc propagation; brewing philosophy decision 14). Scope-only — do NOT auto-build.
+
+The brewing philosophy makes **whole-arc evaluation** the governing frame: every brew is designed + judged across the full temperature arc (aroma -> hot ~59-60°C -> warm ~54-55°C -> cool ≤50°C), "never iterate off a single temperature." But the `brews` data model can't store that shape: `flavors` jsonb is **not temperature-stationed**, and `cooling_curve_target` is a single window, not a per-station record. The cupping side already has the analog (`cuppings.temperature_behavior` prose axis). **Question:** does `brews` need per-station (hot/warm/cool) tasting capture paralleling cuppings, or is the single `cooling_curve_target` + free-text `flavors` enough for the optimized-brew archive? Scope as a brainstorm (could conclude column-only, a structured `tasting_arc` jsonb, or "no change needed") before any build. Canon: [CONTEXT-taste.md § Brewing philosophy](CONTEXT-taste.md).
+
+### Producer index gap (sourcing acquisition signal has no app home — scope, don't build)
+
+**Status:** scoping question surfaced 2026-06-14 (North Star arc propagation; sourcing philosophy). Scope-only — do NOT auto-build.
+
+The sourcing philosophy's acquisition signal #1 is **producer reputation as proxy for the engineered process** ("source by cross-referencing weak signal"). The `producer-taxonomy` registry exists (`docs/taxonomies/producers.md`, 120 canonical producers) and `brews.producer` / `green_beans` carry it, but there is **no producer index page** and **no "known-for engineered process" attribute** — the reputation signal that drives buying has nowhere to live in the app. Distinct from the parked "Split `brews.producer` into producer_name + farm_name" (roadmap § Blocked and parked) and the "Producers as a first-class citizen" brainstorm. **Question:** does the producer-reputation acquisition signal earn a producer index surface + a process-signature attribute, or stay doc-layer (sourcing strategy.md § 1)? Scope before any build. Canon: [CONTEXT-taste.md § Sourcing philosophy](CONTEXT-taste.md).
+
 ---
 
 ## Resolved / shipped

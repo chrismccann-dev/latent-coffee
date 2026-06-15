@@ -111,7 +111,6 @@ Each is its own session, sized small-to-medium, output is a scoping doc that fee
 
 - **Coffee brief / `brews.roaster_tasting_notes` scoping.** Roasting captures expected→actual at both stages; brewing only captures actual. The Coffee Brief is the missing "expected" half. Outcome could be a full entity, a column-only first sprint, or deferred ("could conclude we don't need to do anything").
 - **WBC-mastery long-term feature direction.** "What do I need to do to get closer to entering, competing, and winning the World Brewers Cup — not just making the app nicer?" Strategic vision brainstorm; output is longer-term roadmap themes ranked against the mastery goal.
-- **North Star propagation pass** (follow-up from the North Star grilling arc, Session 1 shipped 2026-06-14). The canonical North Star now lives in [PRODUCT.md § Purpose](PRODUCT.md) (re-pointed from neutral "research journal" to opinionated "training system for the competition ladder") + a one-line repoint in [CLAUDE.md](CLAUDE.md). **Not yet propagated** to the other surfaces: claude.ai project instructions, MCP Resource descriptions ([lib/mcp/docs.ts](lib/mcp/docs.ts)), the roasting/brewing assistant clusters, and the Session 3 philosophy docs (sourcing -> roasting -> brewing) once authored. This is the "make sure everything is architected and pointing at the goal" six-actor audit. **Trigger:** after the North Star arc closes (Sessions 2 + 3), so the philosophy docs are propagated in the same pass. Arc order: Session 1 = goal (done) -> Session 2 = taste target -> Session 3 = three philosophies (sourcing/roasting/brewing).
 
 ---
 
@@ -157,7 +156,7 @@ The app is a living memory + livable archive; a public surface emerges as a side
 ### Substrate expansion (Chris-gated, future)
 
 - **Filter drawdown comprehensive test** — empirical timing of every owned filter on real beds. Output ingests into `lib/filter-registry.ts` + the Brewing Equipment Expert cluster. Authoring effort, not a code sprint. (The prior Filter-drawdown *research experiment* closed 2026-05-27 — see [shipped.md](docs/sprints/shipped.md) + the Research Coordinator roadmap; this is the substrate-ingest follow-on.)
-- **Water chemistry as an 11th canonical taxonomy** — `lib/water-registry.ts` + `docs/taxonomies/water.md` + `brews.water` text canonical. **Triggers when:** Chris's water-chemistry experiments produce enough data to define canonical entries.
+- **Water chemistry as an 11th canonical taxonomy + a "Water Design" Step 1d gate** — `lib/water-registry.ts` + `docs/taxonomies/water.md` + `brews.water` text canonical, **plus** a dedicated "Water Design" Coffee Brief Step 1d gate (peer to brewer/filter/temp). Water is the brewing philosophy's named **#1 frontier lever** (the comp winner's edge, Chris's biggest gap) but its promotion is **gated on completing the water research project** — until then it stays a cross-cutting doc-layer flag (the WBC corpus check's cross-cutting half), NOT a forced Named Consideration. Decision source: [CONTEXT-taste.md § Brewing philosophy](CONTEXT-taste.md) (decision 15) + the water research project is a natural Research Coordinator project per ADR-0017. **Triggers when:** the water research project completes and produces enough data to define canonical entries.
 
 ---
 

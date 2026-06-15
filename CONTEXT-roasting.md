@@ -10,7 +10,7 @@ This file is primarily a concept glossary, not an implementation manual. It shou
 
 Use this file when deciding what a term means, how it relates to nearby terms, and which noun should be used in code, prompts, prose, or UI. Use the linked sub-documents when the task requires execution detail.
 
-Brewing terms live in [CONTEXT-brewing.md](CONTEXT-brewing.md), Cross-cutting infrastructure (MCP / Sync Architecture / Canonical Registries / WBC Reference Materials / Synthesis Pipeline / Relationships / Flagged ambiguities) lives in [CONTEXT-shared.md](CONTEXT-shared.md). Strict glossary per grill-with-docs format — no implementation details, only term definitions + cardinality relationships. Grown via /grill-with-docs sessions, never bulk-authored. Implementation details live in CLAUDE.md, not here.
+Brewing terms live in [CONTEXT-brewing.md](CONTEXT-brewing.md), Cross-cutting infrastructure (MCP / Sync Architecture / Canonical Registries / WBC Reference Materials / Synthesis Pipeline / Relationships / Flagged ambiguities) lives in [CONTEXT-shared.md](CONTEXT-shared.md). The **taste apex** + the 3 derived philosophies + the apex vocabulary (`layered-evolving` / the `reveal-not-inject` keystone / the `express-then-clarify` couple / `two hard walls` / ceiling-defined-by-apex-not-Agtron) live in [CONTEXT-taste.md](CONTEXT-taste.md) — the roasting philosophy's reconciled operational home is [coordinator/catalog.md § Roasting domain principles](docs/skills/coordinator/catalog.md). Strict glossary per grill-with-docs format — no implementation details, only term definitions + cardinality relationships. Grown via /grill-with-docs sessions, never bulk-authored. Implementation details live in CLAUDE.md, not here.
 
 
 ## Reading order for agents

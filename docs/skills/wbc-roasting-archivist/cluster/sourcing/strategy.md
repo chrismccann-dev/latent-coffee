@@ -23,6 +23,26 @@ The sourcing tiers in this doc reference producers and varieties from those regi
 - **2026-05-09:** Initial draft. Authored from Chris's "Sourcing Strategy Ideas for Roasting" synthesis doc plus the underlying WBC corpus. Latent inventory mapped to tiers as a 2026-05-09 snapshot — refresh on inventory change. Two-doc split with [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) covering the *how to roast* side.
 - **2026-05-18 (Sprint T2):** Three doc edits folding the 2026-05-16 grilling locks into the authored doc — § 10 portfolio formalized 4 → 5 lanes (Value / roast-practice promoted from gap-analysis-only to authored frame; WBC-6); § 11 Sourcing channels added with 6 channel kinds (Generalist retailer / Specialty importer / Competition-grade importer / Direct-from-farm / Auction-sample channel / Direct-from-auction awareness-only; WBC-8); Geisha Village classification corrected inside the new § 11 (direct-from-farm with 1kg-sample-bag sub-pattern, not generalist retailer; WBC-7). Each lock matches the canonical vocabulary already in [docs/reference/wbc-materials.md](docs/reference/wbc-materials.md).
 
+## 0. Sourcing philosophy (North Star-derived)
+
+The reconciled, in-voice sourcing doctrine. Derived from the **Latent apex** (layered-evolving: distinctive, multilayered, transforms across the temperature + structural arcs; anti-target one-dimensional whether clean or funky). Canon + verbatim statement: [CONTEXT-taste.md § Sourcing philosophy](CONTEXT-taste.md). The §§ 1-11 below are the *operational substrate* (producer/origin/variety/process/channel detail) this philosophy operates over - read this section first; it sets what the rest of the doc is *for*.
+
+**Source for the latent cup.** Buy beans that already carry layered-evolving complexity, so roasting and brewing only have to *reveal* it (the keystone: reveal the latent, don't inject the absent). The load-bearing filter is the **process signature**: producers running a systematized, experimental, engineering-minded processing method (slow-controlled drying, dark/cold-room, oxidative, dry-ferment, yeast) whose **output is legible layered complexity**. The draw is the producer's *embodiment of an engineering mindset* - the same method-kinship Chris brings to roasting and brewing - **not** name-loyalty.
+
+**Judge the output, not the mechanism.** A co-ferment that lands layered-and-legible is welcome; a slow-dry that lands flat fails. **Reveal-engineering** (the complexity is already in the bean) is the trusted, highest-probability *and* easiest vehicle; **inject-engineering** is admitted but high-variance - its easy mode is the anti-target (loud single-note funk), so it earns a place only when it lands legible. Chris is *not* in the anti-co-ferment moral camp; the filter is the cup, governed by the anti-target: *one-dimensional, whether clean or funky.*
+
+**Filter stack (hard gate to free):**
+- **Process signature = the hard gate** (engineering-minded method whose output is legible layered complexity).
+- **Exotic-distinctive variety = a distinctiveness floor** (working theory, not a proven rule; heavy process engineering may yet substitute for distinctive genetics on a commodity cultivar - counter-case held open).
+- **High altitude = a strong prior** (every favorite sits 1,350-2,500m; hypothesized slower-maturation -> complexity, untested; actively seeking a low-altitude slow-engineered counterexample).
+- **Geography = density, not a gate.** Panama Chiriquí is where the signature currently clusters *in Chris's experience*, but the signature is portable (Ecuador already proves it). Non-Panama engineered naturals are **actively sought** to run the portability test.
+
+**The producer comes forward, but later.** No current producer relationships, no producer index yet, no lot-scale buying - the tight producer cluster in the favorites was a curation artifact, not a relationship. "Bring the producer forward" (the North Star inversion) is a *narrative + access* lever that becomes first-order **near competition time**; today the roster is **open and process-defined, not name-locked**. Single-producer partnership is explicitly rejected for now.
+
+**Acquisition = cross-reference weak signal (small-sourcer reality).** Take-what-you-can-get at 1-2kg; protocol interrogation is relationship-gated and future. Source by cross-referencing: (1) producer reputation as proxy for the engineered process, (2) process detail on the label when present, (3) tasting-note **complexity tells** - varied-not-monotone notes, a complexity vocabulary ("layered" / "complexity" / "multidimensional" / "evolves"), and **temperature-variance notes** (Forward Coffee writes hot/warm/cool notes per lot; a big swing is a strong signal, and Forward is the exception, not the norm).
+
+**Near-term execution: the Oct 2026 Panama push.** World of Coffee Panama, Best of Panama, Forward Coffee, the sourcing-site contact (channel detail in § 11) - request **"more like the HiU Los Lajones,"** not the classic-clean Geshas - *plus* a deliberate **non-Panama pull** to run the portability test.
+
 ## How sourcing thinking shifted post-WBC review
 
 The dominant pattern across 2022-2025 WBC coffees: **high-elevation Gesha or Gesha-adjacent coffees, often from Panama or Colombia, processed with controlled fermentation, used either as a single expressive lot or as one component in a designed blend.**
@@ -57,6 +77,8 @@ The framework below preserves the WBC tier mapping (Tier 1 = best fit *for clean
 | T3 (high-risk process) | More aligned than the WBC framing suggests | Latent's "VERY expressive + Suppression" stance means controlled high-process coffees are *closer* to the buying target than the WBC framing implies — provided the green is clean enough not to go boozy / artificial |
 
 This is why current Latent inventory looks T2/T3-heavy on first read of the framework — that's not portfolio drift, it's Latent's actual preference operating against a framework keyed to a different palate.
+
+> **North Star refinement (2026-06-14).** The "VERY expressive / something *loud* to say" framing above (authored 2026-05-09) is **superseded in target by the apex** (§ 0): the aim is **layered-evolving, complexity made legible** - distinctive, multilayered, *transforming* across the temperature + structural arcs - **not** loud-single-note. The anti-target is **one-dimensional whether clean OR funky**: a loud fruit-bomb misses exactly as much as a flat clean cup. The "control expression on the brew side via Suppression" instinct is still right, now stated precisely as the **express-then-clarify couple** (develop fully for expression on the roast; clarify/suppress downstream on the brew - [CONTEXT-taste.md § Roasting/Brewing philosophy](CONTEXT-taste.md)). Read "VERY expressive" below as "*high-process, high-complexity, distinctive*," not "loud" - the §§ 1-11 substrate still applies; only the target word sharpens.
 
 The portfolio gap analysis in § Latent inventory mapped to tiers below uses the **Latent-adjusted** priority, not the raw WBC tiering, when calling out missing lanes.
 

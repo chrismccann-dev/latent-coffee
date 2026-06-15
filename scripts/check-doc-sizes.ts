@@ -102,6 +102,7 @@ const ROOT_AND_CONTEXT: { path: string; cap: number; profile: string }[] = [
   { path: 'CONTEXT-roasting.md', cap: 120, profile: 'section-read · claude.ai roasting' },
   { path: 'CONTEXT-brewing.md', cap: 120, profile: 'section-read · claude.ai brewing' },
   { path: 'CONTEXT-shared.md', cap: 120, profile: 'section-read · both' },
+  { path: 'CONTEXT-taste.md', cap: 120, profile: 'section-read · claude.ai taste' },
 ]
 
 const PROMPT_CAP = 40 // full-read every claude.ai session

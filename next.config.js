@@ -21,13 +21,16 @@ const nextConfig = {
     // docs/reference/*.md + docs/grilling-flagged-ambiguities.md added
     // 2026-05-25 Pattern J pruning sprint when CONTEXT-shared.md split
     // its 4 operational subsections + flagged-ambiguities ledger into
-    // sibling reference / ledger docs.)
+    // sibling reference / ledger docs; CONTEXT-taste.md added 2026-06-14
+    // North Star arc propagation pass as the 4th CONTEXT zone (the apex +
+    // 3 derived philosophies).)
     outputFileTracingIncludes: {
       '/api/mcp/**': [
         './CONTEXT.md',
         './CONTEXT-roasting.md',
         './CONTEXT-brewing.md',
         './CONTEXT-shared.md',
+        './CONTEXT-taste.md',
         './BREWING.md',
         './ROASTING.md',
         './docs/brewing/*.md',
