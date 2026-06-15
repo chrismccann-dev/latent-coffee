@@ -72,8 +72,8 @@ pass the correct `roest_inventory_id` at STAGE 6 (out of scope per the brief). *
 
 ## 3. PR + merge SHA
 
-- **PR:** {{PR_URL}}
-- **Merge commit on main:** {{MERGE_SHA}}
+- **PR:** https://github.com/chrismccann-dev/latent-coffee/pull/448 (MERGED, squash)
+- **Merge commit on main:** `732b37560e35ad4c071e0c400f53e54e5cd149f7`
 
 ## 4. Verification - actual results
 
