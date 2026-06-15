@@ -12,11 +12,11 @@ When an item resolves: move it to [docs/sprints/shipped.md](docs/sprints/shipped
 
 ## Active issues / incomplete substrate
 
-### `CONTEXT-brewing.md` modifier list stale (4 → 5; rename + `equipment` missing)
+### `docs/reference/wbc-materials.md` modifier mapping stale (4 → 5; needs a grill, not a rename)
 
-**Status:** substrate-currency miss; surfaced 2026-06-05 claude.ai grilling review (Component 1).
+**Status:** substrate-currency miss; surfaced 2026-06-15 apex coordinator bake-in six-actor audit (#3).
 
-`CONTEXT-brewing.md:20` (the **Modifier** glossary entry) still reads *"Four canonical types post-v8.5: `output_selection`, `inverted_temperature_staging`, `aroma_capture`, `role_based_pulse`."* Shipped reality per `lib/extraction-modifiers.ts` (write-side source of truth) is **five**: `output_selection`, `thermal_staging` (renamed from `inverted_temperature_staging`, alias-safe), `aroma_capture`, `role_based_pulse`, `equipment` — both the rename and `equipment` landed in Sub-sprint 4c (2026-05-28). The #399 Thermal-Staging rename sweep hit the cluster docs but **missed CONTEXT-brewing.md**, a missed hop in the 4c/#399 six-actor trace. claude.ai reads this file as a `docs://` Resource, so the stale Resource re-feeds the old vocab even after the project-memory fix. **Do NOT** rename the "Temperature-Staged" Hybrid *sub-form* (CONTEXT-brewing.md:28 / hybrid.md) — that's a different concept; the rename was modifier-only. CONTEXT is grilling-grown, so land this as a currency correction at the next brewing grill (or a targeted fix PR) rather than bulk-authoring.
+`docs/reference/wbc-materials.md:55` + `:64` still describe **"Latent's 4 modifier types map structurally 1:1 onto WBC axes 2-5"** using the pre-4c name `inverted_temperature_staging`. The brew-recorder / CONTEXT-brewing / catalog instances of this drift were fixed mechanically in the #3 bake-in, but this one is **not a clean rename**: the 5th canonical type `equipment` (persistent/timed gear) does **not** map onto a WBC control axis the way the other four do, so adding it breaks the "1:1 onto axes 2-5" framing. The fix needs a judgment call on how `equipment` sits relative to the WBC-axis mapping (own row? noted as gear-not-axis? out-of-scope like Physical System?). Land it at the next brewing `/grill-with-docs` pass (or a scoped reconciliation), not a find-replace. Until then the rename half (`inverted_temperature_staging` → `thermal_staging`) is also pending here.
 
 ### `log-cupping-stage0-migration.md` not registered in `lib/mcp/docs.ts`
 
