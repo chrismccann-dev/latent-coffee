@@ -139,6 +139,16 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   { name: 'Liberica', species: 'Liberica', family: 'Liberica', lineage: 'Liberica lineage' },
   { name: 'Excelsa', species: 'Liberica', family: 'Liberica', lineage: 'Excelsa lineage' },
   { name: 'Robusta', species: 'Robusta', family: 'Robusta', lineage: 'Robusta lineage' },
+
+  // Workstream B green-inventory promotions (2026-06-17) — the brief's 4
+  // (Aramosa / Anacafe 14 / RAB C15 / Blue Mountain) + Arara (lead cultivar of
+  // the Bioma Arara/IBC12/Paraiso field blend; chosen as the "primary cultivar"
+  // representation per the kickoff brief's blend rule). See varieties.md.
+  { name: 'Blue Mountain', species: 'Arabica', family: 'Typica Family', lineage: 'Typica lineage' },
+  { name: 'Anacafe 14', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
+  { name: 'Arara', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
+  { name: 'RAB C15', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage' },
+  { name: 'Aramosa', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Arabica × racemosa interspecific lineage' },
 ]
 
 // ---------------------------------------------------------------------------
@@ -292,6 +302,13 @@ export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
   'Bourbon Caturra blend': 'Bourbon, Caturra (Blend)',
   'Red Bourbon / Mibirizi blend': 'Red Bourbon, Mibirizi (Blend)',
   'Red Bourbon Mibirizi blend': 'Red Bourbon, Mibirizi (Blend)',
+
+  // Workstream B green-inventory promotions (2026-06-17)
+  'SL-28': 'SL28', // 5 Mountain Harvest lots carry the hyphenated form (mirrors SL-14)
+  'Yellow Aramosa': 'Aramosa', // Daterra color-prefixed trade name
+  'RAB C 15': 'RAB C15', // spaced form from the Mountain Harvest variety field
+  RABC15: 'RAB C15', // collapsed form (matches the lot-ID slug)
+  'Anacafé 14': 'Anacafe 14', // Spanish-accent rendering
 }
 
 // ---------------------------------------------------------------------------
