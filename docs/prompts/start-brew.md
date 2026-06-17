@@ -49,7 +49,19 @@ dispatch to the WBC Brewing Archivist
 (docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md +
 docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md). For canonical
 lookups, call read_canonical Tool with the axis name per
-docs://skills/coordinator/operator-guide.md § Canonical taxonomy lookups. Run
+docs://skills/coordinator/operator-guide.md § Canonical taxonomy lookups.
+
+**Purchased-coffee freezer lookup (Step 1a, before asking for Agtron).** If this is a
+PURCHASED coffee, first consult the freezer-stock table —
+read_doc(uri="docs://brewing/freezer-stock.md") — and match by roaster + coffee name (the
+`##` heading is the key). On a hit, seed the Coffee Brief from the record, most importantly
+the whole-bean Agtron (taken at dose-out) so Chris is NOT asked to re-measure, plus the spec
+URL / process / variety / rest window. On a miss, or a `Resting` row with Agtron `pending`,
+proceed normally — the doc is a convenience cache, not the source of truth. (Self-roasted
+brews skip this — the optimized-brew entry below pulls the roasted-bean state from the DB
+instead.)
+
+Run
 Step 1 Coffee Brief; pause at Step 1d for strategy + modifier confirmation
 before producing the recipe. When you output the recipe (Step 2 Recipe Output
 format), author Bloom + Pour Structure in the labeled, CUMULATIVE-target shape

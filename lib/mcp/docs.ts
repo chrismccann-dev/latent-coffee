@@ -138,6 +138,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     description: 'Use when working with a specific roaster — per-roaster brewing lessons + house-style cards (e.g. Hydrangea El Paraíso thermal-shock guidance, Sey extraction expectations). Reference for roaster-anchored brew design.',
   },
   {
+    uri: 'docs://brewing/freezer-stock.md',
+    title: 'Freezer Stock — Roasted Bean Inventory (brew-time lookup)',
+    description: 'Use at BREW TIME, for PURCHASED roasted coffees, to look up a coffee already dosed + frozen in Chris\'s freezer by roaster + coffee name (the ## heading is the lookup key). On a hit, seed the Coffee Brief from the record — MOST IMPORTANTLY the whole-bean Agtron taken at dose-out, so the operator is NOT asked to re-measure — plus the spec URL, process, variety, elevation, rest window, and notes. The brewing precursor inventory: purchased roasted bags degassed, Agtron-read, dosed into 15g vials, frozen, not yet brewed. Status Frozen = dosed + Agtron taken; Resting = not yet dosed, Agtron pending. Complete going forward (added at pack-time), intentionally NOT backfilled — a miss is expected; fall back to the Coffee URL / operator. NOT the source of truth (the brew row carries authoritative data); a convenience cache. Self-roasted brews skip this (pull the roasted-bean state from the DB via get_green_bean + get_bean_pipeline instead).',
+  },
+  {
     uri: 'docs://brewing/wbc-reference.md',
     title: 'WBC Reference (Latent mapping)',
     description: '[MIGRATED in Wave 2 PR 1] Authoritative content lives at docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md. This URI resolves to a redirect stub for back-compat with sessions still referencing the old path.',

@@ -108,9 +108,9 @@ function composeLotMeta(bean: any): string {
 // scope doc § 5 — one URL renders one of four lifecycle shapes based on the
 // state computed from joined data. 6.3 shipped waiting-for-next-roast; 6.4
 // shipped waiting-for-next-cupping; 6.5 ships resolved and retires the
-// pre-6.3 LegacyDetailRender fall-through. The remaining in_inventory state
-// is filtered out of the /green index (scope doc § 5.1) and only reachable
-// via direct URL — it routes to the minimal InventoryPlaceholder below.
+// pre-6.3 LegacyDetailRender fall-through. The in_inventory state now has a
+// first-class index section too (migration 082, 2026-06-17); it routes to
+// InventoryView below.
 
 export default async function GreenBeanDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -178,8 +178,8 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
   // + lessons archive). Sub-sprint 4a (2026-05-27) = unresolved (closed
   // without confirmed reference — same archive shape as resolved but with
   // "Reference" → "Leading" vocabulary rotation and verdict block dropped).
-  // in_inventory is filtered out of /green per scope doc § 5.1 and only
-  // reachable via direct URL — routes to InventoryPlaceholder.
+  // in_inventory now has its own /green index section (migration 082) and
+  // routes to InventoryView.
   const state = resolveLifecycleState(bean.lot_status, bean)
   if (state === 'waiting_for_next_roast') {
     return <WaitingForNextRoastView bean={bean} cuppings={cuppings} />
@@ -202,7 +202,7 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
     return <UnresolvedView bean={bean} cuppings={cuppings} brewsForLot={brewsForLot ?? []} />
   }
 
-  return <InventoryPlaceholder bean={bean} />
+  return <InventoryView bean={bean} />
 }
 
 // ---------------------------------------------------------------------------
@@ -1960,13 +1960,15 @@ function PairRow({ label, value }: { label: string; value?: string | null }) {
 }
 
 // ---------------------------------------------------------------------------
-// Inventory placeholder — in_inventory lots are filtered out of the /green
-// index (scope doc § 5.1) but reachable via direct URL. Surface a minimal
-// page so the route still resolves rather than 404s on a real lot. The
-// dedicated inventory page is punted to a later sprint per scope doc § 6.
+// Inventory view — in_inventory lots: sitting in storage, awaiting their first
+// roast (no experiment designed yet). Surfaced on the /green index as their own
+// section since migration 082 (2026-06-17) — this is the realized inventory
+// surface scope doc § 6 deferred. Shows identity + the optional pre-roast
+// intake_hypothesis snapshot + green specs. The roast_priority stack-rank
+// (Phase 2) renders here too once the Coordinator write path lands.
 // ---------------------------------------------------------------------------
 
-function InventoryPlaceholder({ bean }: { bean: GreenLotDetail }) {
+function InventoryView({ bean }: { bean: GreenLotDetail }) {
   const metaPairs = [
     { label: 'Producer', value: bean.producer ?? '—' },
     { label: 'Origin', value: bean.origin ?? bean.terroir?.country ?? '—' },
@@ -1995,12 +1997,20 @@ function InventoryPlaceholder({ bean }: { bean: GreenLotDetail }) {
       <div className="ssp-card">
         <SspShead ct="Awaiting first V-set">In Inventory</SspShead>
         <div className="font-sans text-sm leading-relaxed text-latent-mid">
-          This lot is in inventory — no experiments designed yet. Design V1 in
-          claude.ai via push_experiment + push_roast_recipe to surface the
-          waiting-for-next-roast view here. The /green index intentionally hides
-          in-inventory lots; this page is only reachable via direct URL.
+          Sitting in storage, awaiting its first roast — no V-set designed yet.
+          Designing V1 (push_experiment + push_roast_recipe) moves it to the
+          waiting-for-next-roast view.
         </div>
       </div>
+
+      {bean.intake_hypothesis && (
+        <div className="ssp-card">
+          <SspShead ct="Pre-roast snapshot — regenerated live at roast-design time">
+            Intake Hypothesis
+          </SspShead>
+          <div className="body whitespace-pre-line">{bean.intake_hypothesis}</div>
+        </div>
+      )}
 
       <GreenBeanInfoCard bean={bean} />
     </div>

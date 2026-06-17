@@ -99,6 +99,12 @@ export interface GreenBean {
   exporter: string | null
   elevation_m: number | null
   additional_notes: string | null
+  // Migration 082 (2026-06-17): operator/Coordinator pre-roast design hypothesis
+  // captured at inventory intake (anchor profile, drop ceiling, V1 spread, gating).
+  // Optional, NOT required at intake. A starting snapshot, NOT canon — the Roasting
+  // Coordinator regenerates a live derivation at roast-design time. Distinct from
+  // additional_notes (processing/history catch-all).
+  intake_hypothesis: string | null
   roest_inventory_id: number | null
   // One-shot lot flag (migration 054): single-batch sample (~100-120g, no
   // iteration possible). Drives the one-shot prompt family + the
@@ -132,6 +138,13 @@ export interface GreenBean {
   // write path only (single-write-path guardrail); value set mirrors
   // LOT_STATUS_VALUES.
   lot_status: string | null
+  // Migration 082 (2026-06-17): in_inventory "what to roast next" soft stack-rank.
+  // Stored (not derived) so the /green inventory section can sort without an LLM
+  // call at render; the Roasting Coordinator refreshes it on demand. Lower = roast
+  // sooner (1 = next up); NULL = unranked. Coordinator write path + index ordering
+  // land in Phase 2.
+  roast_priority: number | null
+  roast_priority_rationale: string | null
   created_at: string
   updated_at: string
   // Joined data

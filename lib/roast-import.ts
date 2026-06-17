@@ -146,6 +146,11 @@ export interface GreenBeanPayload {
   // Notes
   producer_tasting_notes?: string | null
   additional_notes?: string | null
+  // Migration 082 — pre-roast design hypothesis captured at intake (optional, not
+  // canon; the Roasting Coordinator regenerates a live derivation at roast-design
+  // time). roast_priority / roast_priority_rationale are Phase 2 (Coordinator-only
+  // write path) — not accepted on the push payload, they stay NULL at intake.
+  intake_hypothesis?: string | null
   // Roest cross-ref
   roest_inventory_id?: number | null
   // Workflow class (migration 054). True for single-batch sample lots
@@ -308,6 +313,10 @@ export async function persistGreenBean(
     elevation_m: payload.elevation_m ?? null,
     producer_tasting_notes: payload.producer_tasting_notes ?? null,
     additional_notes: payload.additional_notes ?? null,
+    // Migration 082 — optional pre-roast design hypothesis; defaults NULL.
+    // roast_priority / roast_priority_rationale stay NULL (unranked) at intake;
+    // the Roasting Coordinator sets them in Phase 2.
+    intake_hypothesis: payload.intake_hypothesis ?? null,
     roest_inventory_id: payload.roest_inventory_id ?? null,
     terroir_id: terroirId,
     cultivar_id: cultivarId,
@@ -1255,6 +1264,8 @@ export interface PatchGreenBeanPayload {
   elevation_m?: number | null
   producer_tasting_notes?: string | null
   additional_notes?: string | null
+  // Migration 082 — patchable pre-roast design hypothesis (snapshot, not canon).
+  intake_hypothesis?: string | null
   roest_inventory_id?: number | null
   // Migration 054 — workflow class flag, patchable for retroactive flagging
   // (Rancho Tio backfill case + future post-intake reclassification).
@@ -1279,7 +1290,7 @@ export const GREEN_BEAN_PATCH_FIELDS = [
   'importer', 'seller', 'exporter', 'source_type', 'link',
   'purchase_date', 'price_per_kg', 'quantity_g',
   'moisture', 'density', 'elevation_m',
-  'producer_tasting_notes', 'additional_notes', 'roest_inventory_id',
+  'producer_tasting_notes', 'additional_notes', 'intake_hypothesis', 'roest_inventory_id',
   // Migration 054
   'is_one_shot',
   // Migration 069 (Phase 2 Item 17)
