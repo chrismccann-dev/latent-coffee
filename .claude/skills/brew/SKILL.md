@@ -94,7 +94,14 @@ do not re-fetch the whole doc). This is the same fetch discipline `start-brew.md
 
 **Step 1: Coffee Brief.** Fetch
 `read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md", anchor="Step 1 — Coffee Brief (Claude runs this automatically)")`.
-Run 1a-1d. For equipment knowledge dispatch to the Brewing Equipment Expert cluster; for WBC
+Run 1a-1d. **Purchased-coffee freezer lookup (do this first, in 1a):** before asking Chris for the
+roasted-bean color, consult the freezer-stock table — `read_doc(uri="docs://brewing/freezer-stock.md")`
+(mobile/MCP) or read `docs/brewing/freezer-stock.md` directly — and match by roaster + coffee name
+(the `##` heading is the key). On a HIT, seed the brief from the record: **the whole-bean Agtron is
+the load-bearing pull — use it, do NOT ask Chris to re-measure** — plus the spec URL, process,
+variety, elevation, and rest window. On a MISS (or a `Resting` row with Agtron `pending`), proceed
+normally. Self-roasted brews skip this — the carve-out pulls the roasted-bean state from the DB
+(`get_green_bean` + `get_bean_pipeline`) instead. For equipment knowledge dispatch to the Brewing Equipment Expert cluster; for WBC
 recipe anchors + cross-cutting control patterns dispatch to the WBC Brewing Archivist; for
 per-cultivar / per-coffee-family / per-strategy priors dispatch to the Brewing Historian; for
 canonical lookups call `read_canonical(axis: "<name>")`. **Pause at Step 1d for strategy + modifier
@@ -176,6 +183,7 @@ in-app forms.
 
 ## Cross-references
 
+- [docs/brewing/freezer-stock.md](docs/brewing/freezer-stock.md), the roasted-bean freezer inventory — brew-time lookup for purchased coffees (whole-bean Agtron + URL + specs), so Chris isn't asked to re-measure
 - [docs/prompts/start-brew.md](docs/prompts/start-brew.md), the claude.ai entry prompt + the CC operator-one-liner fallback surface (same operational guide)
 - [docs/prompts/bundled-brewing-completion.md](docs/prompts/bundled-brewing-completion.md), the completion path (push_brew, then propose_doc_changes)
 - [docs/skills/brewing-assistant/cluster/operational-guide.md](docs/skills/brewing-assistant/cluster/operational-guide.md), the substantive Steps 1-4 how-to (composed via read_doc)

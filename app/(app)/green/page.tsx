@@ -20,10 +20,12 @@ import {
 // State is the stored green_beans.lot_status with derived fallback
 // (resolveLifecycleState, migration 080 / ADR-0024 § 6) — pre-080 rows are
 // NULL and keep rendering from the derived computation unchanged.
-// In-inventory lots are not surfaced — per docs/roasting/redesign.md
-// § 5.1 they wait for the eventual inventory page.
+// In-inventory lots ARE surfaced as of migration 082 (2026-06-17), positioned
+// last (below Unresolved) — this index IS the inventory page that
+// docs/roasting/redesign.md § 5.1 deferred to.
 //
-// Section order is the user's mental order (active work first, archive last):
+// Section order is the user's mental order (active work first, archive, then
+// inventory last):
 // 1. Waiting for next roast — design landed, roasts pending
 // 2. Waiting for next cupping — roasts done, cuppings + synthesis pending
 // 3. Waiting for brewing — ball in the brewing court (SPG execution or
@@ -32,6 +34,9 @@ import {
 // 4. Resolved — reference roast confirmed, archival
 // 5. Unresolved — closed without confirmed reference (we learned something
 //    but didn't reach a verdict). Sub-sprint 4a (2026-05-27).
+// 6. In inventory — sitting in storage awaiting first roast (no experiment
+//    yet). Surfaced last, below Unresolved, per Chris's call (migration 082,
+//    2026-06-17). Phase 2 adds the roast_priority stack-rank ordering here.
 //
 // Card content is state-dependent (see GreenCard.tsx): active lots show
 // identity + lot code; resolved / unresolved lots show the reference/leading
@@ -43,6 +48,11 @@ const SECTION_ORDER: LifecycleState[] = [
   'waiting_for_brewing',
   'resolved',
   'unresolved',
+  // Inventory surface (migration 082, 2026-06-17): in_inventory lots are now
+  // rendered, positioned LAST — below Unresolved on the navigation spine, per
+  // Chris's call. Lots sitting in storage awaiting their first roast (no
+  // experiment yet). Previously filtered out; this IS the inventory page.
+  'in_inventory',
 ]
 
 const ARCHIVE_STATES = new Set<LifecycleState>(['resolved', 'unresolved'])
@@ -120,8 +130,9 @@ export default async function GreenBeansPage() {
 
   const beans = (greenBeans || []) as GreenBeanIndexRow[]
 
-  // Group by lifecycle state. In-inventory lots are computed but never
-  // rendered — the index intentionally surfaces only the 4 active states.
+  // Group by lifecycle state. Every state in SECTION_ORDER renders, including
+  // in_inventory (appended last, migration 082). A state not in SECTION_ORDER
+  // (none today) would be skipped by the guard below.
   const beansByState = new Map<LifecycleState, GreenBeanIndexRow[]>()
   for (const bean of beans) {
     const state = resolveLifecycleState(bean.lot_status, bean)

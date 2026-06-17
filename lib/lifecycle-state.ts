@@ -38,9 +38,10 @@
 //      clearly past inventory. Treat as waiting-for-next-roast (the closest
 //      semantic match — there's roasting activity but no V-set framing yet).
 //
-// In-inventory lots are NOT surfaced on the /green index per scope doc § 5.1.
-// The compute helper still returns 'in_inventory' for them; the index page
-// filters them out at render time.
+// In-inventory lots ARE surfaced on the /green index as of migration 082
+// (2026-06-17), positioned last (below Unresolved). The compute helper returns
+// 'in_inventory'; the index renders it as its own section (was filtered out
+// pre-082, when the index deferred to "the eventual inventory page").
 
 export type LifecycleState =
   | 'in_inventory'

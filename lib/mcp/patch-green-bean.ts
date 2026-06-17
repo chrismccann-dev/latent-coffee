@@ -53,6 +53,10 @@ export const patchGreenBeanInputSchema = {
   elevation_m: z.number().int().optional().nullable(),
   producer_tasting_notes: z.string().optional().nullable(),
   additional_notes: z.string().optional().nullable(),
+  // Migration 082 — patchable pre-roast design hypothesis (see push_green_bean).
+  intake_hypothesis: z.string().optional().nullable().describe(
+    'Pre-roast design hypothesis (anchor profile, drop ceiling, V1 spread, gating flags). Optional, not canon — the Roasting Coordinator regenerates a live derivation at roast-design time. Patchable post-intake to capture or revise the snapshot. Pass NULL to clear.',
+  ),
   roest_inventory_id: z.number().int().optional().nullable(),
   // Migration 054 — workflow class flag, patchable for retroactive flagging
   // (e.g. Rancho Tio post-merge backfill where the one-shot framing wasn't

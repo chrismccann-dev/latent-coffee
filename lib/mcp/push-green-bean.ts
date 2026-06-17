@@ -61,6 +61,10 @@ export const pushGreenBeanInputSchema = {
   // Notes
   producer_tasting_notes: z.string().optional().nullable().describe('Producer/seller-supplied tasting notes. Promoted from optional to required intake field per V2 onboarding protocol.'),
   additional_notes: z.string().optional().nullable().describe('Catch-all for processing / history / additional context.'),
+  // Migration 082 (2026-06-17)
+  intake_hypothesis: z.string().optional().nullable().describe(
+    'Pre-roast design hypothesis captured at inventory intake: anchor profile + confidence, drop ceiling, V1 inlet spread, FC-marking plan, density/process gating flags, brew-direction lean. Optional — NOT required at intake (a lot can sit in inventory with no hypothesis). Treated as a STARTING SNAPSHOT, not canon: the Roasting Coordinator regenerates a live derivation from the anchor profiles + green specs at roast-design time, so a stale hypothesis here never overrides fresh design thinking. Distinct from additional_notes (processing/history catch-all) and producer_tasting_notes (the seller-supplied flavor target). The roast-queue stack-rank fields (roast_priority / roast_priority_rationale) are NOT set here — they are Coordinator-maintained.',
+  ),
   // Roest cross-ref
   roest_inventory_id: z.number().int().optional().nullable().describe('api.roestcoffee.com /inventories/{id}/ — set when seeded from pull_roest_log.'),
   // Workflow class (migration 054, 2026-05-15)
