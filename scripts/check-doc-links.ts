@@ -207,6 +207,10 @@ function fileIsSkipped(file: string, src: string): boolean {
   // sibling links + `./src/ordering/…` generic-template examples are its own
   // convention, not Latent substrate (Session 04 FP taxonomy).
   if (f.includes('.claude/skills/grill-with-docs/')) return true
+  // writing-great-skills is the same shape: a vendored Matt-Pocock portable
+  // skill whose SKILL.md points at a sibling `GLOSSARY.md` (its own convention,
+  // not Latent root-relative substrate). Skip it like grill-with-docs.
+  if (f.includes('.claude/skills/writing-great-skills/')) return true
   return false
 }
 
