@@ -73,9 +73,13 @@ is interpretive, and Chris's read of which friction hurts most is the load-beari
 ### 5. Emit a kickoff brief for the chosen cluster(s)
 
 Write a paste-ready kickoff brief in the project's standard sprint-cadence shape (see
-[CLAUDE.md § Sprint cadence](CLAUDE.md) item 7):
+[CLAUDE.md § Sprint cadence](CLAUDE.md) item 7). This brief is the canonical **grill->plan synthesis
+seam**: the ranked-cluster discussion in steps 2-4 IS the interview, so the brief synthesizes its
+resolved output - it does not re-open the prioritization. The fields:
+- **Problem** (the recurring friction the cluster closes, framed from the workflow's view - one line)
 - **Goal** (1-2 sentences)
 - **Scope** (in / out)
+- **Entry surface** (which skill / prompt the implementer session enters through - for a grilling cluster, "start a fresh `/grill-with-docs` session"; for execution, the spawned implementer sub-agent or the relevant workflow prompt)
 - **Files likely to touch**
 - **Verification plan** (incl. the six-actor cross-system audit if it's a substrate change)
 - **Open questions**
