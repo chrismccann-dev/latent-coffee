@@ -12,6 +12,23 @@ import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wr
 // Roest cross-ref: pass roest_inventory_id when seeded from pull_roest_log
 // or list_roest_inventory results — server stores it for round-trip lookups.
 
+// MCP clients differ in whether they JSON-encode scalar tool args as native
+// numbers/booleans or as strings — some bridges (incl. the Claude Code tool
+// bridge used for bulk operator pushes) stringify every scalar, while others
+// (claude.ai web) send native types. Coerce defensively so the Tool tolerates
+// both. Boolean coercion is EXPLICIT ('true'/'false' → bool) to avoid the
+// Boolean('false') === true trap; non-string inputs pass through untouched.
+const numField = (inner: z.ZodNumber) =>
+  z.preprocess(
+    (v) => (typeof v === 'string' && v.trim() !== '' ? Number(v) : v),
+    inner.optional().nullable(),
+  )
+const boolField = () =>
+  z.preprocess(
+    (v) => (v === 'true' ? true : v === 'false' ? false : v),
+    z.boolean().optional().nullable(),
+  )
+
 const terroir = z.object({
   country: z.string(),
   admin_region: z.string().optional().nullable(),
@@ -52,12 +69,12 @@ export const pushGreenBeanInputSchema = {
   link: z.string().optional().nullable().describe('Spec sheet / purchase URL.'),
   // Lot economics
   purchase_date: z.string().optional().nullable().describe('YYYY-MM-DD.'),
-  price_per_kg: z.number().optional().nullable(),
-  quantity_g: z.number().int().optional().nullable().describe('Total purchased in grams.'),
+  price_per_kg: numField(z.number()),
+  quantity_g: numField(z.number().int()).describe('Total purchased in grams.'),
   // Bean specs
   moisture: z.string().optional().nullable().describe('Bare numeric string ("8.70"); % appended on render. NO % suffix in stored value.'),
   density: z.string().optional().nullable().describe('Bare numeric string ("776"); g/L appended on render. NO g/L suffix in stored value.'),
-  elevation_m: z.number().int().optional().nullable().describe('Lot elevation in meters.'),
+  elevation_m: numField(z.number().int()).describe('Lot elevation in meters.'),
   // Notes
   producer_tasting_notes: z.string().optional().nullable().describe('Producer/seller-supplied tasting notes. Promoted from optional to required intake field per V2 onboarding protocol.'),
   additional_notes: z.string().optional().nullable().describe('Catch-all for processing / history / additional context.'),
@@ -66,9 +83,9 @@ export const pushGreenBeanInputSchema = {
     'Pre-roast design hypothesis captured at inventory intake: anchor profile + confidence, drop ceiling, V1 inlet spread, FC-marking plan, density/process gating flags, brew-direction lean. Optional — NOT required at intake (a lot can sit in inventory with no hypothesis). Treated as a STARTING SNAPSHOT, not canon: the Roasting Coordinator regenerates a live derivation from the anchor profiles + green specs at roast-design time, so a stale hypothesis here never overrides fresh design thinking. Distinct from additional_notes (processing/history catch-all) and producer_tasting_notes (the seller-supplied flavor target). The roast-queue stack-rank fields (roast_priority / roast_priority_rationale) are NOT set here — they are Coordinator-maintained.',
   ),
   // Roest cross-ref
-  roest_inventory_id: z.number().int().optional().nullable().describe('api.roestcoffee.com /inventories/{id}/ — set when seeded from pull_roest_log.'),
+  roest_inventory_id: numField(z.number().int()).describe('api.roestcoffee.com /inventories/{id}/ — set when seeded from pull_roest_log.'),
   // Workflow class (migration 054, 2026-05-15)
-  is_one_shot: z.boolean().optional().nullable().describe(
+  is_one_shot: boolField().describe(
     'True for single-batch sample lots (~100-120g, no iteration possible). Origin: auction-lot sample sets, farm sample sets sent during sourcing negotiations, rare allocations. Routes the lot through docs/prompts/one-shot.md + one-shot-closeout.md instead of the 4-prompt V-set pipeline (start-lot / log-roast / log-cupping / close-lot). Triggers schema-validation on push_roast_learnings / patch_roast_learnings: lever-attribution fields (primary_lever / secondary_levers / roast_window_width / brewing_tolerance / what_didnt_move_needle / underdevelopment_signal / overdevelopment_signal) must be NULL on one-shot close-outs (N=1 cannot populate; require cross-batch evidence). terroir_takeaway is NOT in this list — terroir attribution does not require cross-batch evidence and is populatable on one-shot lots. Defaults false. See CONTEXT-roasting.md "One-shot lot" entry for the workflow class.',
   ),
   // Migration 069 (Phase 2 Item 17, 2026-05-24)
