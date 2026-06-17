@@ -1812,7 +1812,7 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Other Systems (uncategorized)  ·  63 producers
+### Other Systems (uncategorized)  ·  80 producers
 
 ### Asefa & Mulugeta Dukamo
 
@@ -3806,6 +3806,275 @@ path; rich content gets backfilled when the producer earns it.
 - **Producer Type:** Washing Station / Smallholder
 - **Farm:** Nova Washing Station
 - **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-15 from a Nova Washing Station brew. Canonical kept as the full submitted name per operator decision.
+
+---
+
+### Marcelo Assis
+
+**Country:** Brazil · **Admin:** Minas Gerais (Campos Altos) · **Macro:** Cerrado Mineiro
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual / Estate
+- **Farm:** Bioma Café
+- **Processing Capability:** Natural
+- **Primary Cultivars:** Arara
+- **Importers:** Showroom
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Bioma Natural + Bioma Peaberry 1604 lots, Showroom Coffee).
+
+---
+
+### Rexson Raguni
+
+**Country:** Papua New Guinea · **Admin:** Western Highlands · **Macro:** PNG Central Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Mong Coffee
+- **Processing Capability:** Natural (WHP slow-dried)
+- **Primary Cultivars:** Blue Mountain, Caturra, Mundo Novo
+- **Importers:** Showroom
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Mong Coffee Hagen WHP Natural — first PNG lot in the archive).
+
+---
+
+### Salomon Estela
+
+**Country:** Peru · **Admin:** Cajamarca · **Macro:** Northern Andean Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** El Morito
+- **Processing Capability:** Natural
+- **Primary Cultivars:** Marsellesa
+- **Importers:** Showroom
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (El Pino Marshell Natural K56).
+
+---
+
+### Felipe Sardi
+
+**Country:** Colombia · **Admin:** Cundinamarca · **Macro:** Northern Andean Cordillera
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Estate
+- **Farm:** La Palma y El Tucán
+- **Processing Capability:** Washed / Natural (advanced fermentation)
+- **Primary Cultivars:** Sidra
+- **Importers:** Untold
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (LPyT Sidra Natural B 068). **Macro note:** Cundinamarca has no canonical Colombian macro in the terroir registry; mapped to the nearest cordillera (Northern Andean Cordillera, the Eastern-Cordillera-range macro) per the kickoff-brief default. Revisit if a Cundinamarca / Eastern Cordillera macro is added.
+
+---
+
+### 96B Coffee Company
+
+**Country:** Vietnam · **Admin:** Quảng Trị · **Macro:** North Central Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Experimental
+- **Producer Type:** Company
+- **Farm:** 96B (Hướng Phùng)
+- **Processing Capability:** Anaerobic fermentation
+- **Primary Cultivars:** Liberica
+- **Importers:** Chloé Cà Phê
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (96B Liberica Anaerobic — first Liberica-species lot in the archive; Chloé Cà Phê collaboration).
+
+---
+
+### Galo Morales
+
+**Country:** Ecuador · **Admin:** Pichincha · **Macro:** Northern Andean Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Cruz Loma
+- **Processing Capability:** Honey
+- **Primary Cultivars:** Mejorado
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Cruz Loma Typica Mejorado Honey, Taza Dorada 2024 #15).
+
+---
+
+### Richard Eduardo Alvarado
+
+**Country:** Ecuador · **Admin:** Loja · **Macro:** Southern Andean Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Cofradia
+- **Processing Capability:** Carbonic Maceration
+- **Primary Cultivars:** Sidra
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Cofradia Sidra Bourbon Carbonic Maceration, Taza Dorada 2024 #16).
+
+---
+
+### Luis Carpio Iniguez
+
+**Country:** Ecuador · **Admin:** Loja · **Macro:** Southern Andean Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Aurum
+- **Processing Capability:** Natural
+- **Primary Cultivars:** Gesha
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Aurum Geisha Natural, Taza Dorada 2024 #18 — DEFERRED lot).
+
+---
+
+### Women of Kajere and Gombe Elgon communities
+
+**Country:** Uganda · **Admin:** Eastern Region (Mount Elgon) · **Macro:** Mount Elgon Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Community
+- **Farm:** Kajere Station
+- **Processing Capability:** Washed Anaerobic / Yeast-inoculated washed
+- **Primary Cultivars:** SL28, SL14
+- **Exporters:** Mountain Harvest
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Kajere Washed Anaerobic XF + Kajere Washed Hybrid PK1 Yeast, Mountain Harvest Paradigm Shift). Community/aggregate lot — name-as-given per the kickoff-brief default.
+
+---
+
+### Yilwanako and Buginyanya communities
+
+**Country:** Uganda · **Admin:** Eastern Region (Mount Elgon) · **Macro:** Mount Elgon Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Community
+- **Farm:** Sironko Station
+- **Processing Capability:** Natural / Natural Anaerobic
+- **Primary Cultivars:** Nyasaland, SL14, SL28
+- **Exporters:** Mountain Harvest
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Sironko ferment-intensity ladder: Pure Natural / Natural Anaerobic / Natural Anaerobic PK1). Community/aggregate lot — name-as-given per the kickoff-brief default.
+
+---
+
+### Rwenzori Smallholder Project
+
+**Country:** Uganda · **Admin:** Western Region (Rwenzori) · **Macro:** Rwenzori Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Smallholder network
+- **Farm:** Rwenzori Station (Kasese & Bunyangabo)
+- **Processing Capability:** Washed Dry Fermentation
+- **Primary Cultivars:** SL14
+- **Exporters:** Mountain Harvest
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Rwenzori Washed Dry Fermentation — first Rwenzori/Western Uganda lot). Community/aggregate lot — name-as-given per the kickoff-brief default.
+
+---
+
+### Nshozi-Kabonero Estate
+
+**Country:** Uganda · **Admin:** Western Region (Rwenzori) · **Macro:** Rwenzori Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Estate
+- **Farm:** Nshozi-Kabonero Estate (40 acres)
+- **Processing Capability:** Natural / Natural Anaerobic
+- **Primary Cultivars:** Batian, RAB C15
+- **Exporters:** Mountain Harvest
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Rwenzori Batian Natural + RAB C15 Natural Anaerobic — variety-segmentation estate lots).
+
+---
+
+### Kibate-A Estate
+
+**Country:** Uganda · **Admin:** Western Region (Rwenzori) · **Macro:** Rwenzori Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Estate
+- **Farm:** Kibate-A Estate (14 acres)
+- **Processing Capability:** Natural Gesha
+- **Primary Cultivars:** Gesha
+- **Exporters:** Mountain Harvest
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Rwenzori Geisha Natural — first African Geisha in the archive; DEFERRED lot).
+
+---
+
+### Rafael Tapia Alvarado
+
+**Country:** Mexico · **Admin:** Veracruz · **Macro:** Gulf Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Don Gustavo
+- **Processing Capability:** Washed
+- **Primary Cultivars:** Anacafe 14, Marsellesa
+- **Importers:** Snow Beans Coffee
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Mexico CoE 2025 #2 — first Mexican lot in the archive).
+
+---
+
+### Wilfredo Arias Candia
+
+**Country:** Peru · **Admin:** Cusco · **Macro:** Southern Andean Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Campo Verde
+- **Processing Capability:** Washed
+- **Primary Cultivars:** Gesha, Bourbon
+- **Importers:** Snow Beans Coffee
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Peru CoE 2024 #2 — washed Geisha + Bourbon).
+
+---
+
+### Tamru Godana Doba
+
+**Country:** Ethiopia · **Admin:** Sidama · **Macro:** Sidama Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Tamru
+- **Processing Capability:** Natural
+- **Primary Cultivars:** 74158
+- **Importers:** Snow Beans Coffee
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Ethiopia CoE 2024 #16 — first Ethiopian-grown lot in the archive).
+
+---
+
+### Ismael Recinos Flores
+
+**Country:** El Salvador · **Admin:** Santa Ana (Metapán) · **Macro:** Alotepec-Metapán Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** La Bendición
+- **Processing Capability:** Honey
+- **Primary Cultivars:** Pacamara
+- **Importers:** Snow Beans Coffee
+- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (El Salvador CoE 2024 #1, 92.00 — highest score in inventory; first Salvadoran lot in the archive).
 
 ---
 

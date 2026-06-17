@@ -2292,6 +2292,141 @@ only (display layer in `lib/brew-cover-title.ts`).
 
 ---
 
+### Blue Mountain
+
+**Species:** Arabica  **Genetic Family:** Typica Family  **Lineage:** Typica lineage
+
+#### Genetics
+- **Genetic Background:** Jamaican Typica selection; the same Typica line carried to Papua New Guinea (and Kenya) in colonial-era plantings, often field-blended with Caturra / Mundo Novo at origin.
+- **Market names normalized here:** none.
+
+#### Agronomy
+- **Typical Origins:** Jamaica; Papua New Guinea highlands; Kenya.
+- **Altitude Sensitivity:** 1,000-2,000 masl; medium.
+- **Limiting Factors:** Low yield; Typica disease susceptibility.
+- **Market Context:** Specialty; heritage Typica.
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Washed, natural.
+- **Typical Flavor Notes:** Mild sweetness, soft florals, clean cup; in PNG naturals shows lychee / longan / rose at altitude.
+- **Acidity Style:** Mild-medium.
+- **Body Style:** Round, silky.
+- **Aromatics:** Moderate; floral at high grown.
+- **Terroir Transparency:** Medium-high.
+- **Extraction Sensitivity:** Moderate.
+
+**Notes:** Added 2026-06-17 (Workstream B green-inventory push) as the lead cultivar of the Mong Coffee Hagen WHP Natural field blend (Blue Mountain / Caturra / Mundo Novo, PNG). First Papua New Guinea lot in the archive.
+
+---
+
+### Anacafe 14
+
+**Species:** Arabica  **Genetic Family:** Modern Hybrids  **Lineage:** Timor Hybrid-derived lineage
+
+#### Genetics
+- **Genetic Background:** Guatemalan natural hybrid (Catimor × Pacamara lineage) released by Anacafé; rust-resistant, Catimor-group workhorse.
+- **Market names normalized here:** Anacafé 14 (accent variant).
+
+#### Agronomy
+- **Typical Origins:** Guatemala; Mexico.
+- **Altitude Sensitivity:** 1,300-1,700 masl; medium.
+- **Limiting Factors:** Catimor-lineage cup ceiling; not an aromatic-star variety.
+- **Market Context:** Specialty / production; clean washed.
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Washed.
+- **Typical Flavor Notes:** Structured sweetness, brown sugar, cherry, citrus lift.
+- **Acidity Style:** Medium.
+- **Body Style:** Medium-full.
+- **Aromatics:** Moderate.
+- **Terroir Transparency:** Medium.
+- **Extraction Sensitivity:** Moderate; forgiving.
+
+**Notes:** Added 2026-06-17 (Workstream B). Lead cultivar of the Mexico CoE 2025 #2 (Don Gustavo) washed lot — first Mexican origin and first Anacafe 14 in the archive.
+
+---
+
+### Arara
+
+**Species:** Arabica  **Genetic Family:** Modern Hybrids  **Lineage:** Timor Hybrid-derived lineage
+
+#### Genetics
+- **Genetic Background:** Brazilian variety, Obatã (Sarchimor-derived) × Yellow Catuaí; rust-resistant, yellow-cherry.
+- **Market names normalized here:** none.
+
+#### Agronomy
+- **Typical Origins:** Brazil (Cerrado Mineiro, Sul de Minas).
+- **Altitude Sensitivity:** 900-1,300 masl; low-medium.
+- **Limiting Factors:** Production-oriented; expression depends on processing.
+- **Market Context:** Specialty / production; common in Cerrado field blends.
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Natural, anaerobic natural.
+- **Typical Flavor Notes:** Brown sugar, dried fruit, honeycomb, milk chocolate.
+- **Acidity Style:** Mild-medium.
+- **Body Style:** Round, full.
+- **Aromatics:** Moderate.
+- **Terroir Transparency:** Medium.
+- **Extraction Sensitivity:** Forgiving.
+
+**Notes:** Added 2026-06-17 (Workstream B) as the "primary cultivar" representation of the Bioma (Marcelo Assis) field blend — Arara / IBC12 / Paraiso — across both the Bioma Natural and Bioma Peaberry 1604 lots. The full blend string is preserved in each lot's free-text variety field.
+
+---
+
+### RAB C15
+
+**Species:** Arabica  **Genetic Family:** Modern Hybrids  **Lineage:** Multi-parent hybrid lineage
+
+#### Genetics
+- **Genetic Background:** Interspecific hybrid carrying *C. canephora* (robusta) genetics (C. arabica Kent × C. canephora lineage, via Sln.6); least Arabica-like cultivar among the Mountain Harvest Ugandan lots.
+- **Market names normalized here:** RAB C 15 (spaced), RABC15 (collapsed lot-ID form).
+
+#### Agronomy
+- **Typical Origins:** Uganda (Rwenzori); East African breeding programs.
+- **Altitude Sensitivity:** 1,500-2,200 masl; medium.
+- **Limiting Factors:** Robusta-introgression chemistry — higher chlorogenic-acid load means over-development reads harsher.
+- **Market Context:** Specialty / experimental; variety-segmented estate lots.
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Natural, natural anaerobic.
+- **Typical Flavor Notes:** Mango, passion fruit, guava, rose.
+- **Acidity Style:** Mixed.
+- **Body Style:** Medium-full (robusta lineage adds body).
+- **Aromatics:** Moderate.
+- **Terroir Transparency:** Medium.
+- **Extraction Sensitivity:** Sensitive on the dark end — err under-developed.
+
+**Notes:** Added 2026-06-17 (Workstream B). First interspecific (robusta-genetics) hybrid in the archive — Rwenzori RAB C15 Natural Anaerobic (Mountain Harvest, Uganda). Carries a hybrid-cultivar confidence haircut.
+
+---
+
+### Aramosa
+
+**Species:** Arabica  **Genetic Family:** Modern Hybrids  **Lineage:** Arabica × racemosa interspecific lineage
+
+#### Genetics
+- **Genetic Background:** Interspecific hybrid of *Coffea arabica* × *Coffea racemosa*, low-caffeine; developed by Daterra (Brazil). Sister low-caffeine profile to Laurina, with different (interspecific) bean chemistry.
+- **Market names normalized here:** Yellow Aramosa (color-prefixed trade name).
+
+#### Agronomy
+- **Typical Origins:** Brazil (Cerrado, Patrocínio).
+- **Altitude Sensitivity:** 1,000-1,200 masl; low-medium.
+- **Limiting Factors:** Low-caffeine, different bean chemistry; behaves atypically in the roaster.
+- **Market Context:** Specialty / experimental (Daterra Masterpieces).
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Anaerobic natural.
+- **Typical Flavor Notes:** Green grape, honey, magnolia; tartaric acidity, silky low body.
+- **Acidity Style:** Tartaric.
+- **Body Style:** Light, silky.
+- **Aromatics:** Floral, delicate.
+- **Terroir Transparency:** Medium-high.
+- **Extraction Sensitivity:** Sensitive; favors balance over intensity.
+
+**Notes:** Added 2026-06-17 (Workstream B). Daterra Yellow Aramosa Anaerobic Natural lot. First Arabica × racemosa interspecific hybrid in the archive (low-caffeine, sister to Laurina).
+
+---
+
 ## Sources
 
 Per-claim citations at authoring time; rollup below.
