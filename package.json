@@ -14,6 +14,7 @@
     "check:doc-sizes": "npx -y -p tsx@4 tsx scripts/check-doc-sizes.ts",
     "check:migrations": "npx -y -p tsx@4 tsx scripts/check-migrations.ts",
     "check:lifecycle-consistency": "npx -y -p tsx@4 tsx scripts/check-lifecycle-consistency.ts",
+    "check:lifecycle-derivation": "npx -y -p tsx@4 tsx scripts/check-lifecycle-derivation.ts",
     "check:types-vs-schema": "npx -y -p tsx@4 tsx scripts/check-types-vs-schema.ts",
     "check:registry-sync": "npx -y -p tsx@4 tsx scripts/check-registry-md-sync.ts",
     "check:terroir-resolver": "npx -y -p tsx@4 tsx scripts/check-terroir-resolver.ts",

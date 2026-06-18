@@ -75,7 +75,15 @@ type GreenBeanIndexRow = GreenBean & {
   roasts: Array<{
     id: string
     batch_id: string | null
+    recipe_id: string | null
     cuppings: Array<{ id: string }> | null
+  }>
+  // Authoritative roast↔experiment link for the lifecycle derivation
+  // (roasts.recipe_id → roast_recipes.id → experiment_id label). See
+  // computeLifecycleState.
+  roast_recipes: Array<{
+    id: string
+    experiment_id: string | null
   }>
   roast_learnings: Array<{
     id: string
@@ -114,15 +122,18 @@ export default async function GreenBeansPage() {
 
   // Fetch shape covers computeLifecycleState's inputs + everything the card
   // builder reads: experiment_id (V-set pill), roasts.batch_id (authoritative
-  // reference batch via best_roast_id), nested cuppings (tally + cupping gate),
-  // and brews (flavor line on archive cards, picked by roast_id = best_roast_id).
+  // reference batch via best_roast_id), roasts.recipe_id + roast_recipes
+  // (authoritative roast↔experiment link for the lifecycle derivation), nested
+  // cuppings (tally + cupping gate), and brews (flavor line on archive cards,
+  // picked by roast_id = best_roast_id).
   const { data: greenBeans, error } = await supabase
     .from('green_beans')
     .select(
       `
       *,
       experiments(id, experiment_id, batch_ids, winner, created_at),
-      roasts(id, batch_id, cuppings(id)),
+      roasts(id, batch_id, recipe_id, cuppings(id)),
+      roast_recipes(id, experiment_id),
       roast_learnings(id, best_batch_id, best_roast_id, why_this_roast_won),
       brews!green_bean_id(id, roast_id, flavor_notes, created_at)
     `,
