@@ -1,10 +1,10 @@
-**Claude Code client note (brewing to CC migration, 2026-06-15).** This prompt is
-client-agnostic: the `read_doc_section` / `read_canonical` calls below work identically in
-claude.ai and in a Claude Code (mobile) session. When running it in **Claude Code**, the ergonomic
-entry is the `brew` skill (`.claude/skills/brew/SKILL.md`, trigger "brew a coffee" / "start a
-brew"); if a fresh mobile session does not surface that skill, THIS prompt is the entry: paste it
-as the operator one-liner and proceed against the same operational guide. The write path is
-`push_brew` via the Latent MCP server regardless of client (the migration changes the
+**Claude Code entry note (brewing is Claude-Code-native; claude.ai brewing retired 2026-06-18,
+roadmap #4).** The ergonomic entry is the `brew` skill (`.claude/skills/brew/SKILL.md`, trigger
+"brew a coffee" / "start a brew"); THIS prompt is the **fallback** when a fresh mobile session
+does not surface that skill (paste it as the operator one-liner and proceed against the same
+operational guide), and the substrate the skill references for the self-roasted optimized-brew
+carve-out below. The `read_doc_section` / `read_canonical` calls are client-agnostic; the write
+path is `push_brew` via the Latent MCP server regardless of client (the migration changed the
 orchestration surface, never the write path).
 
 **Running tasting-arc state block (Phase 2 compaction discipline; all clients, load-bearing on
