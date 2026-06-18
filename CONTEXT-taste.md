@@ -88,6 +88,30 @@ Each philosophy is derived *from the apex above*; the lever hierarchy (productio
 
 ---
 
+## Empirical anchors
+
+Post-arc evidence, added 2026-06-17. The session statements above are verbatim and unedited; this section records measured data that *confirms and quantifies* them without re-authoring them.
+
+### Roast-level anchor (Agtron)
+
+Chris read whole-bean Agtron (Lighttells) on the favorite PicoLot lots he had >=40g of - a direct measurement of the roast register the apex sits in:
+
+| Coffee | Producer | Process | Agtron (WB) |
+|---|---|---|---|
+| Altieri CHOMBI Gesha | MIMA / Altieri | Natural dry-ferment | 80.7 |
+| Emerald Garrido Mokka | Garrido / Mama Cata | Natural | 77.2 (78.4 2nd read) |
+| Kotowa Silvia Marina Geisha | Kotowa | Natural | 76.1 |
+| Elida Vuelta Washed DRD Gesha | Lamastus | Washed DRD | 75.8 |
+| Garrido Mokkita ("mulled wine") | Garrido | Cold-room natural | 71.1 |
+
+**Range WB ~71-81, centered ~76-77, every lot device-classed "Light."** This *quantifies* the existing canon - the apex's "lighter-to-medium-light" and the roasting philosophy's "high-end-of-light-into-light-medium register... slightly darker than the old ultra-light instinct" - and rules out the Nordic/ultra-light-bleached end (nothing above ~81). It is not a new claim; it is the measured location of the register the philosophies already name.
+
+**Internal gradient (descriptive, not a setpoint):** the lightest favorite (Altieri CHOMBI, 80.7) is the most *transparent*; the darkest (Mokkita, 71.1) is the most *layered*. So within the band, lighter leans transparency and more-developed leans layered body - a dial for placing the "narrow band the V-sets hunt" (Roasting philosophy). Per that philosophy, **the ceiling is still defined by the apex, not by an Agtron number** - this anchor describes *where the favorites land*, it does not prescribe a target color.
+
+**Caveats:** (1) whole-bean Lighttells readings - per [brewing-assistant operational-guide](docs/skills/brewing-assistant/cluster/operational-guide.md), *ground* Agtron at dose-out is the authoritative brew-time extraction prior, not WB, and the WB-to-ground delta can be wide; these numbers describe roast color, not a brew prior. (2) Cross-device calibration (Lighttells vs the cupping Agtron device, `whb_agtron`) is needed before ~76-77 is treated as a literal self-roast setpoint. (3) These are PicoLot's roasts (the apex reference), not Chris's self-roasts.
+
+---
+
 ## Honest baseline
 
 Recorded in-grill, load-bearing: **no resolved roast -> optimized brew of Chris's own has yet reached the layered-evolving bar of the cited peak competition lots (PicoLot etc.).** All three philosophies are the **compass the V-sets/brews aim at and the training method exists to reach** - leading hypotheses under active test, NOT validated recipes. Matches [PRODUCT.md § Purpose](PRODUCT.md) "currently in *search space*."

@@ -87,3 +87,11 @@ Open questions for Session 3:
 - Does the roasting philosophy change for purchased vs self-roasted paths, or is it one philosophy?
 - Where does water chemistry sit in the brewing philosophy now that it's named as the biggest under-explored lever?
 - After Session 3, the post-arc propagation pass writes CONTEXT-taste.md + the three philosophies into substrate (see deferred checklist).
+
+---
+
+## Addendum 2026-06-17 - Agtron roast-level reading (closes the line-36 open offer)
+
+The open offer in the Roast-correction fact-check above (Agtron-read the office PicoLot favorites to pin the roast level empirically) is now **fulfilled**. Chris read whole-bean Agtron (Lighttells) on the favorites he had >=40g of: Altieri CHOMBI 80.7, Emerald Garrido Mokka 77.2, Kotowa Silvia Marina 76.1, Elida Vuelta Washed DRD 75.8, Garrido Mokkita 71.1. **Range WB ~71-81, centered ~76-77, all device-classed "Light."**
+
+Outcome: this *confirms and quantifies* the existing canon rather than correcting it. The Session-3 roasting philosophy's "high-end-of-light-into-light-medium register... slightly darker than the old ultra-light instinct" is the right frame; the data puts numbers on it and rules out the Nordic/ultra-light-bleached end. The earlier in-thread "not medium-light" phrasing was **dropped** - it conflicted with the ratified Session-3 register, which reaches *into* light-medium (the Mokkita at 71). Internal gradient: lighter (~80) = most transparent favorite, more-developed (~71) = most layered. Canonical home for this evidence: [CONTEXT-taste.md § Empirical anchors](../../CONTEXT-taste.md). Framed there as descriptive (where the favorites land), not an Agtron setpoint - the roasting philosophy keeps "ceiling = apex, not a number."
