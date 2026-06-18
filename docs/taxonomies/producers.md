@@ -3781,31 +3781,57 @@ path; rich content gets backfilled when the producer earns it.
 
 ### Milton Monroy
 
-**Country:** Colombia · **Admin:** Tolima · **Macro:** TBD (skeleton)
+**Country:** Colombia · **Admin:** Tolima · **Macro:** Central Andean Cordillera
 
-- **Tier:** 3
+- **Tier:** 1
 - **Producer System:** none (renders under Other Systems)
-- **Reference Role:** Signal
-- **Producer Type:** Individual
-- **Farm:** Finca San Pedro
-- **Processing Capability:** Natural Anaerobic
+- **Processing System Tags:** Extended Fermentation System
+- **Reference Role:** Anchor
+- **Producer Type:** Individual / Family
+- **Farm:** Finca San Pedro / Finca San Cayetano
+- **Farming Model:** High-Value Exotic Cultivar Estate
+- **Processing Capability:** Washed / Natural / Anaerobic
+- **Processing Style Tags:** Extended Anaerobic, Dual Fermentation, Experimental Natural
+- **Drying Method:** Covered Canopies + Mechanical Pre-Drying
 - **Primary Cultivars:** Gesha
-- **Exporters:** Forest Coffee
-- **Roaster References:** Latent
-- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-15 from the COL-MIL-GES-2026 Gesha Clouds Forest lot (close-out 2026-06-14) - producer of Latent's first resolved Gesha lot (reference roast Batch 200 / V4A). See [learnings/cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-gesha-clouds-2026.md).
+- **Secondary Cultivars:** Caturra, Castillo
+- **Known For:** COE Finalist, Modified Wet Mill, Exotic Cultivar Focus
+- **Typical Flavor Profile:** Tropical Fruit + Clean, Floral + High Tone, Citrus + Bright
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Tea-like / Silky
+- **Consistency Rating:** High
+- **Market Tier:** Ultra-Premium / Competition
+- **Exporters:** Forest Coffee, Clearpath Coffee
+- **Importers:** Direct / Specialty Buyers
+- **Roaster References:** Latent, Monmouth, Friedhats, PERC
 
 ---
 
 ### Agnes Mukamushinja & Felix Hitayezu, Nova Washing Station
 
-**Country:** Rwanda · **Admin:** TBD (skeleton) · **Macro:** TBD (skeleton)
+**Country:** Rwanda · **Admin:** Gicumbi District · **Macro:** Central Plateau Highlands
 
-- **Tier:** 3
+- **Tier:** 2
 - **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Classic East African Washed System
 - **Reference Role:** Signal
-- **Producer Type:** Washing Station / Smallholder
-- **Farm:** Nova Washing Station
-- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-15 from a Nova Washing Station brew. Canonical kept as the full submitted name per operator decision.
+- **Producer Type:** Estate / Washing Station
+- **Farm:** Nova Coffee Plantation / Nova Washing Station
+- **Farming Model:** Estate + Smallholder Network
+- **Processing Capability:** Washed / Natural / Anaerobic
+- **Processing Style Tags:** Fully Washed, Natural, Anaerobic Fermentation
+- **Drying Method:** Raised African Beds
+- **Primary Cultivars:** Red Bourbon
+- **Known For:** Women-Centered Enterprise, Lot Traceability, Nova Washing Station
+- **Typical Flavor Profile:** Stone Fruit + Sweet, Tropical Fruit + Clean, Chocolate + Spice
+- **Acidity Style:** Citric
+- **Body Style:** Silky / Creamy
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Specialty
+- **Exporters:** Nova Coffee Ltd, Ikawa House
+- **Importers:** Crop to Cup, Project Origin
+- **Roaster References:** Boon Boona, 19grams, One Line, Grouch & Co
+- **Contact:** https://novacoffeerwanda.com/
 
 ---
 
@@ -3813,15 +3839,27 @@ path; rich content gets backfilled when the producer earns it.
 
 **Country:** Brazil · **Admin:** Minas Gerais (Campos Altos) · **Macro:** Cerrado Mineiro
 
-- **Tier:** 3
+- **Tier:** 2
 - **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Controlled Natural / Drying System
 - **Reference Role:** Signal
 - **Producer Type:** Individual / Estate
-- **Farm:** Bioma Café
-- **Processing Capability:** Natural
-- **Primary Cultivars:** Arara
-- **Importers:** Showroom
-- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Bioma Natural + Bioma Peaberry 1604 lots, Showroom Coffee).
+- **Farm:** Fazenda Bioma
+- **Farming Model:** Data-Driven Precision Estate
+- **Processing Capability:** Natural / Pulped Natural / Experimental
+- **Processing Style Tags:** Aerobic Natural, Experimental Natural, Pulped Natural
+- **Drying Method:** Pyramid Solar Drying Covers
+- **Primary Cultivars:** Catuaí
+- **Secondary Cultivars:** Arara
+- **Known For:** Bioma Café, Data-Driven Agronomy, Estate-Traceable Micro-lots
+- **Typical Flavor Profile:** Chocolate + Sweet, Stone Fruit + Clean, Nutty + Sweet
+- **Acidity Style:** Citric / Low Intensity
+- **Body Style:** Round / Creamy
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Specialty
+- **Exporters:** Bioma Café
+- **Importers:** Crop to Cup, Showroom Coffee
+- **Roaster References:** Driftaway, Kea Coffee
 
 ---
 
@@ -3936,33 +3974,59 @@ path; rich content gets backfilled when the producer earns it.
 
 ### Women of Kajere and Gombe Elgon communities
 
-**Country:** Uganda · **Admin:** Eastern Region (Mount Elgon) · **Macro:** Mount Elgon Highlands
+**Country:** Uganda · **Admin:** Mount Elgon Region · **Macro:** Mount Elgon Highlands
 
-- **Tier:** 3
+- **Tier:** 2
 - **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Classic East African Washed System
 - **Reference Role:** Signal
-- **Producer Type:** Community
-- **Farm:** Kajere Station
-- **Processing Capability:** Washed Anaerobic / Yeast-inoculated washed
-- **Primary Cultivars:** SL28, SL14
+- **Producer Type:** Women Smallholder Cooperative Network
+- **Farm:** Kajere / Gombe Community Lots
+- **Farming Model:** Women-Led Agroforestry Network
+- **Processing Capability:** Washed / Honey / Natural
+- **Processing Style Tags:** Yellow Honey, Natural, Micro-lot Washed
+- **Drying Method:** Shaded Raised African Beds
+- **Primary Cultivars:** Nyasaland, SL14
+- **Secondary Cultivars:** SL28
+- **Known For:** Women-Led Micro-lots, Taste of Harvest Winner, Mountain Harvest Network
+- **Typical Flavor Profile:** Green Fruit + Bright, Sugar + Sweet, Nutty + Soft
+- **Acidity Style:** Malic
+- **Body Style:** Round / Medium
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Auction
 - **Exporters:** Mountain Harvest
-- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Kajere Washed Anaerobic XF + Kajere Washed Hybrid PK1 Yeast, Mountain Harvest Paradigm Shift). Community/aggregate lot — name-as-given per the kickoff-brief default.
+- **Importers:** Specialty Importers
+- **Roaster References:** Boutique Roaster Auction Drops
+- **Contact:** https://www.instagram.com/mountainharvestcoffee/
 
 ---
 
 ### Yilwanako and Buginyanya communities
 
-**Country:** Uganda · **Admin:** Eastern Region (Mount Elgon) · **Macro:** Mount Elgon Highlands
+**Country:** Uganda · **Admin:** Sironko District · **Macro:** Mount Elgon Highlands
 
-- **Tier:** 3
+- **Tier:** 2
 - **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Classic East African Washed System
 - **Reference Role:** Signal
-- **Producer Type:** Community
-- **Farm:** Sironko Station
-- **Processing Capability:** Natural / Natural Anaerobic
-- **Primary Cultivars:** Nyasaland, SL14, SL28
+- **Producer Type:** Smallholder Community Network
+- **Farm:** Yilwanako / Buginyanya Community Lots
+- **Farming Model:** Smallholder Agroforestry Network
+- **Processing Capability:** Washed / Natural / Honey / Anaerobic Honey
+- **Processing Style Tags:** Pure Natural, Honey, Anaerobic Honey, Fully Washed
+- **Drying Method:** Raised African Beds
+- **Primary Cultivars:** SL14, Nyasaland
+- **Secondary Cultivars:** SL28
+- **Known For:** Mountain Harvest Network, Strict Cherry Selection, High-Brix Lots
+- **Typical Flavor Profile:** Red Fruit + Sweet, Spice + Sweet, Chocolate + Dense
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Round / Full
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Specialty
 - **Exporters:** Mountain Harvest
-- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Sironko ferment-intensity ladder: Pure Natural / Natural Anaerobic / Natural Anaerobic PK1). Community/aggregate lot — name-as-given per the kickoff-brief default.
+- **Importers:** Royal Coffee, Crop to Cup
+- **Roaster References:** Driftaway, Farmers First, Roastersaurus, City Boy
+- **Contact:** https://www.instagram.com/mountainharvestcoffee/
 
 ---
 
@@ -3984,17 +4048,29 @@ path; rich content gets backfilled when the producer earns it.
 
 ### Nshozi-Kabonero Estate
 
-**Country:** Uganda · **Admin:** Western Region (Rwenzori) · **Macro:** Rwenzori Highlands
+**Country:** Uganda · **Admin:** Rwenzori Region · **Macro:** Rwenzori Highlands
 
-- **Tier:** 3
+- **Tier:** 2
 - **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Controlled Natural / Drying System
 - **Reference Role:** Signal
-- **Producer Type:** Estate
-- **Farm:** Nshozi-Kabonero Estate (40 acres)
-- **Processing Capability:** Natural / Natural Anaerobic
-- **Primary Cultivars:** Batian, RAB C15
-- **Exporters:** Mountain Harvest
-- **Skeleton:** rich fields pending research. Added via Workstream B green-inventory push 2026-06-17 (Rwenzori Batian Natural + RAB C15 Natural Anaerobic — variety-segmentation estate lots).
+- **Producer Type:** Estate / Innovation Hub
+- **Farm:** Nshozi Coffee Estate
+- **Farming Model:** Regenerative Estate / Research-Aligned Farm
+- **Processing Capability:** Washed / Honey / Natural
+- **Processing Style Tags:** High-Altitude Natural, Honey, Fully Washed
+- **Drying Method:** Ventilated Solar Tents
+- **Primary Cultivars:** Bourbon, SL28
+- **Known For:** Single Estate Uganda, Regenerative Trials, Ultra-High Altitude
+- **Typical Flavor Profile:** Dried Fruit + Dense, Chocolate + Sweet, Sugar + Dark
+- **Acidity Style:** Malic / Winey
+- **Body Style:** Heavy / Velvety
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Specialty
+- **Exporters:** Nshozi Coffee Estates Ltd, Genuine Origin Networks
+- **Importers:** Specialty Importers
+- **Roaster References:** Premium Rwenzori Single-Origin Roasters
+- **Contact:** https://nshozi.com/
 
 ---
 
@@ -4118,6 +4194,10 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 | Alias | Canonical |
 |---|---|
+| `Milton Leonardo Monroy` | `Milton Monroy` |
+| `Agnes Mukamushinja & Felix Hitayezu` | `Agnes Mukamushinja & Felix Hitayezu, Nova Washing Station` |
+| `Marcelo Nogueira Assis` | `Marcelo Assis` |
+| `Nshozi Coffee Estates` | `Nshozi-Kabonero Estate` |
 | `Abel Dominguez` | `Abel Domínguez` |
 | `Abel Dominguez, Blooms Coffee` | `Abel Domínguez` |
 | `El Placer (farm)` | `Sebastián Ramírez` |
