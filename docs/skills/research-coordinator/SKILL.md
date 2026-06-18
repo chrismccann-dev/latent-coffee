@@ -76,12 +76,13 @@ The research-knowledge cluster lives at `cluster/` and houses methodology primit
 - [`cluster/calibration-arc.md`](docs/skills/research-coordinator/cluster/calibration-arc.md) — Step 0 unified primitives that survived across all 4 RPs.
 - [`cluster/process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md) — End-of-project retro mechanism. The accumulation surface.
 - [`cluster/roadmap.md`](docs/skills/research-coordinator/cluster/roadmap.md) — Now / Next / Extensions / Side quests / Closed. Single-slot Now per § Operational tempo.
+- [`cluster/templates/coordinator-kickoff-template.md`](docs/skills/research-coordinator/cluster/templates/coordinator-kickoff-template.md) — 12-section skeleton for bootstrapping a fresh Coordinator session per project. v1 status — pending second-project ratification.
 - [`cluster/templates/spawn-prompt-template.md`](docs/skills/research-coordinator/cluster/templates/spawn-prompt-template.md) — 9-section skeleton for Assistant spawn prompts.
 - [`cluster/templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md) — Distilled from P1-RP4 close-out briefs.
 
 ## Methodology refinement discipline
 
-Primitives in this cluster (`role-discipline.md`, `sharp-substrate-fold.md`, `calibration-arc.md`, `process-retro.md`, `spawn-prompt-template.md`, `handoff-brief-template.md`) are NOT auto-updated at project closeout. Methodology refinement happens via **manual process-retro** at end of each project (see [`cluster/process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md)). Primitives graduate from a single-project lesson into a cluster doc only when they fire in a SECOND research project — the cross-project ratification gate prevents single-incident over-generalization (the filter arc's Lesson #36 was over-generalized from a 3-project sample; RP4 refined it to family-conditional — that's exactly the failure mode the gate guards against).
+Primitives in this cluster (`role-discipline.md`, `sharp-substrate-fold.md`, `calibration-arc.md`, `process-retro.md`, `coordinator-kickoff-template.md`, `spawn-prompt-template.md`, `handoff-brief-template.md`) are NOT auto-updated at project closeout. Methodology refinement happens via **manual process-retro** at end of each project (see [`cluster/process-retro.md`](docs/skills/research-coordinator/cluster/process-retro.md)). Primitives graduate from a single-project lesson into a cluster doc only when they fire in a SECOND research project — the cross-project ratification gate prevents single-incident over-generalization (the filter arc's Lesson #36 was over-generalized from a 3-project sample; RP4 refined it to family-conditional — that's exactly the failure mode the gate guards against).
 
 ## Self-improvement
 
