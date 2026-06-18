@@ -4039,7 +4039,7 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     marketTier: "High-End / Specialty",
     exporters: ["Nova Coffee Ltd", "Ikawa House"],
     importers: ["Crop to Cup", "Project Origin"],
-    roasterReferences: ["Boon Boona", "19grams", "One Line", "Grouch & Co"],
+    roasterReferences: ["Latent", "Boon Boona", "19grams", "One Line", "Grouch & Co"],
     contact: "https://novacoffeerwanda.com/",
   },
 
@@ -4077,7 +4077,7 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     marketTier: "High-End / Specialty",
     exporters: ["Bioma Café"],
     importers: ["Crop to Cup", "Showroom Coffee"],
-    roasterReferences: ["Driftaway", "Kea Coffee"],
+    roasterReferences: ["Latent", "Driftaway", "Kea Coffee"],
     contact: null,
   },
   {
@@ -4316,7 +4316,7 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     marketTier: "High-End / Auction",
     exporters: ["Mountain Harvest"],
     importers: ["Specialty Importers"],
-    roasterReferences: ["Boutique Roaster Auction Drops"],
+    roasterReferences: ["Latent", "Boutique Roaster Auction Drops"],
     contact: "https://www.instagram.com/mountainharvestcoffee/",
   },
   {
@@ -4345,7 +4345,7 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     marketTier: "High-End / Specialty",
     exporters: ["Mountain Harvest"],
     importers: ["Royal Coffee", "Crop to Cup"],
-    roasterReferences: ["Driftaway", "Farmers First", "Roastersaurus", "City Boy"],
+    roasterReferences: ["Latent", "Driftaway", "Farmers First", "Roastersaurus", "City Boy"],
     contact: "https://www.instagram.com/mountainharvestcoffee/",
   },
   {
@@ -4404,7 +4404,7 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     marketTier: "High-End / Specialty",
     exporters: ["Nshozi Coffee Estates Ltd", "Genuine Origin Networks"],
     importers: ["Specialty Importers"],
-    roasterReferences: ["Premium Rwenzori Single-Origin Roasters"],
+    roasterReferences: ["Latent", "Premium Rwenzori Single-Origin Roasters"],
     contact: "https://nshozi.com/",
   },
   {
