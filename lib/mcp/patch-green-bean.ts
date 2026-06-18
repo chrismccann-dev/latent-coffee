@@ -3,6 +3,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { patchGreenBean, GREEN_BEAN_PATCH_FIELDS, type PatchGreenBeanPayload } from '@/lib/roast-import'
 import { LOT_STATUS_VALUES } from '@/lib/lifecycle-state'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { numField } from '@/lib/mcp/coerce'
 import { withToolErrorLogging, echoUpdatedFields, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 const terroir = z.object({
@@ -46,18 +47,30 @@ export const patchGreenBeanInputSchema = {
   source_type: z.string().optional().nullable(),
   link: z.string().optional().nullable(),
   purchase_date: z.string().optional().nullable(),
-  price_per_kg: z.number().optional().nullable(),
-  quantity_g: z.number().int().optional().nullable(),
+  // numField wraps the numeric fields so the stringifying CC MCP bridge (PR
+  // #457) round-trips them — the Coordinator patches these over that bridge.
+  price_per_kg: numField(z.number()),
+  quantity_g: numField(z.number().int()),
   moisture: z.string().optional().nullable(),
   density: z.string().optional().nullable(),
-  elevation_m: z.number().int().optional().nullable(),
+  elevation_m: numField(z.number().int()),
   producer_tasting_notes: z.string().optional().nullable(),
   additional_notes: z.string().optional().nullable(),
   // Migration 082 — patchable pre-roast design hypothesis (see push_green_bean).
   intake_hypothesis: z.string().optional().nullable().describe(
     'Pre-roast design hypothesis (anchor profile, drop ceiling, V1 spread, gating flags). Optional, not canon — the Roasting Coordinator regenerates a live derivation at roast-design time. Patchable post-intake to capture or revise the snapshot. Pass NULL to clear.',
   ),
-  roest_inventory_id: z.number().int().optional().nullable(),
+  // Migration 082 (Phase 2, 2026-06-17) — the in_inventory "what to roast next"
+  // soft stack-rank. Coordinator-maintained: set by the inventory re-rank op
+  // (NOT at intake — push_green_bean deliberately omits these). Read by the
+  // /green inventory section, which sorts roast_priority asc NULLS LAST.
+  roast_priority: numField(z.number().int()).describe(
+    'In_inventory roast-queue rank. Lower = roast sooner (1 = next up). Coordinator-maintained via the "re-rank my inventory" operation — NOT set at intake. Scheme (ranked-top + banded-tail): 1..K = the genuine conviction front (sequential, unique); 50 = the "soon" band (shared, no strong order within); 90 = the "deferred/blocked" sentinel (shared, with a blocker rationale). NULL = unranked (sorts last, below deferred — signals the lot needs an insert pass). Pass NULL to clear. Pair every change with roast_priority_rationale. See docs/skills/roasting-coordinator/cluster/inventory-rerank.md.',
+  ),
+  roast_priority_rationale: z.string().optional().nullable().describe(
+    'One line on why this lot sits where it does in the roast queue — carries the softness the integer alone cannot (e.g. "roast next: peak freshness + washed anchor locked", "soon: no strong order within band", "deferred — blocked on Gesha Clouds reference resolution"). Set alongside roast_priority. Pass NULL to clear.',
+  ),
+  roest_inventory_id: numField(z.number().int()),
   // Migration 054 — workflow class flag, patchable for retroactive flagging
   // (e.g. Rancho Tio post-merge backfill where the one-shot framing wasn't
   // known at push time).
@@ -93,7 +106,7 @@ export function registerPatchGreenBeanTool(server: McpServer, auth: McpAuthConte
     {
       title: 'Patch Green Bean',
       description:
-        'Update / save / record / push field-level changes to an existing green coffee bean lot by green_bean_id. Sibling of push_green_bean (for new lots). Use this when registry adds happen mid-flight (e.g. an alias was added so producer should re-canonicalize), to backfill missing fields (additional_notes, producer_tasting_notes), to correct previously-saved values, or to update terroir / cultivar via the strict-canonical findOrCreate* path (Sprint 2.6). Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Producer canonicalizes via PRODUCER_LOOKUP with `producer_override:true` for net-new producers. To find green_bean_id: call get_green_bean({lot_id}) or list it via get_bean_pipeline. Returns { green_bean_id, updated_fields: [...] } — updated_fields echoes which simple text/numeric columns landed in the patch (mirrors patch_inventory + patch_experiment pattern). FK re-resolutions (terroir / cultivar / producer) are NOT echoed because they touch multiple columns + sibling rows; check terroir_id / cultivar_id on a follow-up read if you need to confirm those landed.',
+        'Update / save / record / push field-level changes to an existing green coffee bean lot by green_bean_id. Sibling of push_green_bean (for new lots). Use this when registry adds happen mid-flight (e.g. an alias was added so producer should re-canonicalize), to backfill missing fields (additional_notes, producer_tasting_notes), to correct previously-saved values, to update terroir / cultivar via the strict-canonical findOrCreate* path (Sprint 2.6), or to set the in_inventory roast-queue rank (roast_priority + roast_priority_rationale — Coordinator-maintained via the "re-rank my inventory" operation; NOT accepted on push_green_bean). Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. Producer canonicalizes via PRODUCER_LOOKUP with `producer_override:true` for net-new producers. To find green_bean_id: call get_green_bean({lot_id}) or list it via get_bean_pipeline. Returns { green_bean_id, updated_fields: [...] } — updated_fields echoes which simple text/numeric columns landed in the patch (mirrors patch_inventory + patch_experiment pattern). FK re-resolutions (terroir / cultivar / producer) are NOT echoed because they touch multiple columns + sibling rows; check terroir_id / cultivar_id on a follow-up read if you need to confirm those landed.',
       inputSchema: patchGreenBeanInputSchema,
     },
     withToolErrorLogging('patch_green_bean', async (input) => {

@@ -23,6 +23,7 @@ import { registerListRoestInventoryTool } from '@/lib/mcp/list-roest-inventory'
 import { registerListRoestLogsTool } from '@/lib/mcp/list-roest-logs'
 import { registerGetGreenBeanTool } from '@/lib/mcp/get-green-bean'
 import { registerGetBeanPipelineTool } from '@/lib/mcp/get-bean-pipeline'
+import { registerListGreenInventoryTool } from '@/lib/mcp/list-green-inventory'
 import { registerListRecentBrewsTool } from '@/lib/mcp/list-recent-brews'
 import { registerGetBrewTool } from '@/lib/mcp/get-brew'
 import { registerPatchBrewTool } from '@/lib/mcp/patch-brew'
@@ -74,6 +75,9 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerListRoestLogsTool(server, auth)
   registerGetGreenBeanTool(server, auth)
   registerGetBeanPipelineTool(server, auth)
+  // Inventory → Claude Code Phase 2 (2026-06-17): bulk read of the in_inventory
+  // roast-queue working set for the Coordinator's "re-rank my inventory" op.
+  registerListGreenInventoryTool(server, auth)
   registerListRecentBrewsTool(server, auth)
   registerGetBrewTool(server, auth)
   registerPatchBrewTool(server, auth)
