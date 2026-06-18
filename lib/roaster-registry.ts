@@ -2573,6 +2573,20 @@ export const ROASTERS: RoasterEntry[] = [
     notes:
       'Component operates shops in Visalia, Fresno, and Tulare and sells coffee/subscriptions online; no brew guide found, so treat as a generalist specialty roaster rather than a clarity-first or system roaster.',
   },
+  // ---- Skeleton (research pending) ----
+  // Promoted via taxonomy-queue arbitration 2026-06-18. Thin metadata from the
+  // El Mango SL28 Washed brew; remove the skeleton flag when rich fields land.
+  {
+    name: 'Snite',
+    displayName: 'Snite',
+    location: 'Tokyo, Japan',
+    country: 'Japan',
+    strategyTag: 'VARIES',
+    brewGuideStatus: 'none',
+    notes:
+      'Skeleton entry promoted from the El Mango SL28 Washed brew (73028eb1) - first SL28 lot in the brewing archive. Strategy tag (VARIES placeholder), house style, and recipe baseline pending more lots. The lot confirmed SL-lineage phase-separation: Clarity-First on the April Glass under-expressed the attack and over-extracted the late body simultaneously; resolved via a full Hybrid (Intensity-Clarity Split) on the April Switch.',
+    skeleton: true,
+  },
 ]
 
 // Sprint 12 / CR-4 (2026-05-21): typed helper for the list_skeleton_entries

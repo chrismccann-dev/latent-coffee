@@ -3,7 +3,7 @@
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
 **Lot:** BRA-FAZENDAUM-WUSHWUSH-NAT-2026
-**Status:** Active - V2 roasted 2026-06-05 (batches 206/207/208), Day 7 cupping pending. **All three V2 batches did NOT reach FC** (fc_audibility=ambiguous in DB pending migration 066 for did_not_fire enum value). V1 cupped 2026-05-15. Untold paired-roasted reference cupped 2026-05-25 - resolved the V1 cup-vs-structure question. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah ($419/kg, deferred).
+**Status:** Active - V2 cupped 2026-06-14 (Day 9, REST_DAYS_DRIFT +2). **Leading slot v2c (Batch 208)** - mandarin emerged for the first time on this lot, V1's dark-tea body absent. **NOT reference quality** per operator (mandarin 'not fully formed,' cup loses acidity cooling, body thin). V3 designed + pushed to Roest 2026-06-16 (profiles 532798/532799/532800). V1 cupped 2026-05-15. Untold paired-roasted reference cupped 2026-05-25. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah ($419/kg, deferred).
 **Cultivar:** Wush Wush
 **Terroir:** Brazil
 **Producer:** Fazenda Um
@@ -60,14 +60,25 @@ All three V2 batches dropped at their bean-temp targets with FC having never fir
 
 **Reframing of V1 leading-slot inversion**: the cup-vs-structure inversion of V1 (favored slot was structurally-worst) was NOT evidence the coffee 'wants' the V1 profile - it was evidence that all of V1 was equally past FC, and the leading slot won by accident of cooling dynamics rather than by the V1 inlet variable. The brew-handoff insight ('target lighter than Untold's medium roast') is still operative, but the path to lighter is NOT via FC-temp manipulation.
 
-## V3 design fork - awaiting V2 cup data
+## V2 cup results (Day 9, 2026-06-14, xbloom_gate)
 
-Two paths emerge, both accepting FC ~205°C as a fixed property of this coffee:
+Leading slot: **v2c (Batch 208)**, NOT reference quality. Cup hierarchy tracked structural hierarchy monotonically this time (Agtron 95.3 / 90.7 / 87.5 → undrinkable / borderline / leading), reversing V1's cup-vs-structure inversion - which confirms the V1 inversion was an all-past-FC artifact.
 
-- **Path α - hold peak 242°C, raise drop target to 205-206°C bean_temp.** Restore V1-era FC energy budget but with the auto-drop discipline V1 lacked. Effectively: rerun v1a's energy with v2's drop discipline. Favored if V2 cups show pure underdev signature with no first-emergence floral/mandarin signal (the lighter direction failed at 242°C peak, return to V1-era energy with disciplined drop).
-- **Path β - raise peak inlet to 244-246°C, hold drop target cool at 203-204°C bean_temp.** Use peak inlet as the lever V1 confirmed (moves FC TIME earlier) paired with cool auto-drop that V1 lacked, catching the bean immediately post-FC with very tight dev. Favored if V2 cups show ANY first emergence of mandarin/floral OR absence of V1's dark-tea body (the lighter direction works, just need FC to actually happen).
+- **v2a (Batch 206, ground 93.9):** UNDRINKABLE per operator. Grassy + vegetal + hay - validates the brew handoff's predicted underdev signature on this Wush Wush. Diagnostic data point on what no-FC underdev tastes like. WB→Gnd delta +1.4.
+- **v2b (Batch 207, ground 90.7):** BORDER OF UNDRINKABLE. **First-emergence frontier** - mandarin/prune as an 'idea forming' but doesn't hold shape. V1 had ZERO floral character; v2b's Agtron 90.7 is the first point on this lot where any floral signal appears. WB→Gnd delta **-1.9** (sign-inverted, second occurrence on this lot).
+- **v2c (Batch 208, ground 87.5):** **LEADING SLOT.** TWO breakthroughs: (1) Mandarin EMERGED ('definitely taste the Mandarin') - first time on this lot. (2) V1's pungent dark-tea body GONE, replaced by 'very, very light black tea, not pungent.' Cool stage: mandarin holds but loses acidity edge ('not fully formed'). Operator: 'needs slightly more development to bring out the characteristic in the producer cup. But not too much to then pull out the Dark black tinis. If this ends up being a little bit more developed, I can deal with that on the brewing side.' WB→Gnd delta -0.6 (sign-inverted, third occurrence on this lot).
 
-Decision deferred to post-V2-cupping conversation.
+**Strategic implication:** the V2 cup data picked the equivalent of Path α (lighter direction works, push development upward from v2c's no-FC zone toward V1-era FC ~205°C) with one key refinement - the spread is wider than the doc's original Path α floor (205-206°C) because operator-stated tolerance accepts dark-tea reintroduction at light/manageable level, meaning V3 can probe up to 210°C bean_temp before hitting deal-breaker. Path β disconfirmed at the cup level - mandarin emergence + dark-tea absence on v2c at 242°C peak / 204°C drop confirms peak inlet doesn't need to be raised; the lighter direction works at v2c's peak.
+
+## V3 design (experiment CGLE-WUSHWUSH-NAT-2026-V3, pushed to Roest 2026-06-16)
+
+**Single-variable narrow probe.** All three slots use **v2c's parent recipe identically** - peak 242°C, early ramp 200→232→240, gentle decline, fan SR-Natural standard, charge 117 / hopper 125 operator-fixed. **Only end_condition_target varies across the spread** - the cleanest possible isolated-variable test.
+
+- **v3a TARGET / most-likely-winner** (recipe 644901da, Roest 532798): bean-temp auto-drop **206°C**. Matches V1A's drop point exactly but with auto-drop discipline V1 lacked. Hypothesis: V1-era FC temp with v2c's lighter curve preserves mandarin without rebuilding V1's pungent dark-tea wall.
+- **v3b MIDDLE BRACKET** (recipe 23942274, Roest 532799): bean-temp auto-drop **208°C**. Operator-acceptable dark-tea zone. Allows ~30-50s dev past FC. Tests whether an extra 2°C gives mandarin structural integrity at the cost of more dark-tea reintroduction.
+- **v3c UPPER BRACKET** (recipe 36d4f2fc, Roest 532800): bean-temp auto-drop **210°C**. Tests upper bound of operator tolerance. Allows 50-80s dev past FC. Deal-breaker: pungent V1-style dark-tea returns. Acceptable: light/manageable dark-tea at developed level.
+
+**Success criterion (extended from brew handoff):** at least one slot shows fully-formed mandarin character with body that integrates the dark-tea register rather than letting it dominate, AND survives cool-stage testing without losing acidity edge. The plain Balanced Intensity brew test (V60/Orea ~1:16 ~93°C yields mandarin + prune + cacao without Hario Switch rescue) remains the final-validation gate post-V3 leading slot.
 
 ## Strategic
 
@@ -75,11 +86,13 @@ Wush Wush V1 cup outcome does NOT support carrying the framework forward to Finc
 
 ## Open questions
 
-1. Untold paired roasted reference cup vs the three V1 batches — direction calibration.
-2. Cup-vs-structure inversion: real signal or preference-among-failures?
-3. Sign-inverted WB→Ground delta on v1b — measurement artifact, session-position effect, or real surface-vs-core dynamic?
-4. Does dark-room drying preserve aromatics differently than expected?
-5. Wush Wush counterflow transferability to Finca Deborah — lower than the inventory doc assumed?
+1. ~~Untold paired roasted reference cup vs the three V1 batches~~ RESOLVED 2026-05-25 - Untold's medium roast shows the same dark-black-tea-wall as V1; confirmed V1's dark-tea body is roast-derived over-development.
+2. ~~Cup-vs-structure inversion: real signal or preference-among-failures?~~ RESOLVED 2026-06-14 - preference-among-failures. V2 cup hierarchy tracked structural hierarchy monotonically when all three slots sat below FC, confirming V1's inversion was an all-past-FC artifact (cooling-dynamics accident, not coffee preference).
+3. Sign-inverted WB→Ground delta now confirmed on THREE batches across this lot: v1b -0.8, v2b -1.9, v2c -0.6. v1a and v1c were positive (+1.5 each). **Promotable to Cross-Coffee Insight Layer at Medium confidence** if a second lot (similar variety or dark-room drying) reproduces the pattern. Hypothesis: surface runs ahead of core on Wush Wush / dark-room-dried naturals.
+4. Does dark-room drying preserve aromatics differently than expected? Open - mandarin emerged at Agtron 87.5 (v2c) which is lighter than typical natural mandarin-emergence Agtron, but N=1 lot can't isolate dark-room-drying from other lot factors.
+5. Wush Wush counterflow transferability to Finca Deborah - V2 cup demonstrated mandarin can be unlocked on this Wush Wush via the lighter direction; the framework is now PARTIALLY earned (the direction works) but Finca Deborah's high-elevation natural Gesha has different density / FC-floor assumptions that don't transfer uncritically. Deferral remains until Wush Wush V3 resolves to a reference roast.
+6. **NEW from V2:** mandarin 'not fully formed' on v2c - is the gap a development gap (insufficient roast time/heat) or a brew-side question (xbloom under-extracting at this Agtron)? V3 tests the development gap. If V3 doesn't close it, an SPG cup on V3 finalists would isolate.
+7. **NEW from V2:** at what Agtron point does V1's pungent dark-tea wall return? V3 brackets this between v2c's 87.5 ground Agtron (no dark-tea) and v1a's 71.8 ground Agtron (pungent dark-tea). The acceptable-tolerance upper bound is what V3 will resolve.
 
 ## Cross-references
 
