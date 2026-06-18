@@ -3830,7 +3830,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Market Tier:** High-End / Specialty
 - **Exporters:** Nova Coffee Ltd, Ikawa House
 - **Importers:** Crop to Cup, Project Origin
-- **Roaster References:** Boon Boona, 19grams, One Line, Grouch & Co
+- **Roaster References:** Latent, Boon Boona, 19grams, One Line, Grouch & Co
 - **Contact:** https://novacoffeerwanda.com/
 
 ---
@@ -3859,7 +3859,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Market Tier:** High-End / Specialty
 - **Exporters:** Bioma Café
 - **Importers:** Crop to Cup, Showroom Coffee
-- **Roaster References:** Driftaway, Kea Coffee
+- **Roaster References:** Latent, Driftaway, Kea Coffee
 
 ---
 
@@ -3996,7 +3996,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Market Tier:** High-End / Auction
 - **Exporters:** Mountain Harvest
 - **Importers:** Specialty Importers
-- **Roaster References:** Boutique Roaster Auction Drops
+- **Roaster References:** Latent, Boutique Roaster Auction Drops
 - **Contact:** https://www.instagram.com/mountainharvestcoffee/
 
 ---
@@ -4025,7 +4025,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Market Tier:** High-End / Specialty
 - **Exporters:** Mountain Harvest
 - **Importers:** Royal Coffee, Crop to Cup
-- **Roaster References:** Driftaway, Farmers First, Roastersaurus, City Boy
+- **Roaster References:** Latent, Driftaway, Farmers First, Roastersaurus, City Boy
 - **Contact:** https://www.instagram.com/mountainharvestcoffee/
 
 ---
@@ -4069,7 +4069,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Market Tier:** High-End / Specialty
 - **Exporters:** Nshozi Coffee Estates Ltd, Genuine Origin Networks
 - **Importers:** Specialty Importers
-- **Roaster References:** Premium Rwenzori Single-Origin Roasters
+- **Roaster References:** Latent, Premium Rwenzori Single-Origin Roasters
 - **Contact:** https://nshozi.com/
 
 ---
