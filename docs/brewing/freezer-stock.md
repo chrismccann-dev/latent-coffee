@@ -29,8 +29,10 @@
 > **Status:** `Frozen` = dosed into 15g vials + frozen (Agtron taken) · `Resting` = purchased,
 > resting out of the freezer, not yet dosed (Agtron pending).
 >
-> **Maintenance:** complete going forward (every newly-frozen coffee is added at pack-time) but
-> intentionally NOT backfilled — older freezer coffees may be absent. A miss is normal.
+> **Maintenance:** complete going forward (every newly-frozen coffee is added at pack-time, via
+> the [`freezer-stock` skill](.claude/skills/freezer-stock/SKILL.md) - "add a roasted bag to my
+> freezer") but intentionally NOT backfilled - older freezer coffees may be absent. A miss is
+> normal.
 
 **Total coffees:** 94
 
