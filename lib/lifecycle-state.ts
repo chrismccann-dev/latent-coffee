@@ -121,6 +121,12 @@ export type LifecycleInputs = {
   experiments?:
     | Array<{
         id?: string
+        // The experiment's free-text label (e.g. "V4"). The AUTHORITATIVE
+        // experiment↔roast link: roast_recipes.experiment_id carries this same
+        // label and roasts.recipe_id → roast_recipes.id, so a roast resolves to
+        // its owning experiment via that FK chain — independent of the
+        // drift-prone free-text batch_ids string. Matched in computeLifecycleState.
+        experiment_id?: string | null
         winner?: string | null
         batch_ids?: string | null
         created_at?: string | null
@@ -130,9 +136,23 @@ export type LifecycleInputs = {
     | Array<{
         id?: string
         batch_id?: string | null
+        // FK to roast_recipes.id (migration 052). The robust link to the owning
+        // experiment (recipe_id → roast_recipes → experiment_id label), used in
+        // preference to free-text batch_ids when the recipe linkage is supplied.
+        recipe_id?: string | null
         cuppings?: Array<{ id?: string }> | null
       }>
     | null
+  // The lot's roast_recipes, exposing each recipe's experiment label so a roast
+  // resolves to its owning experiment via roasts.recipe_id → roast_recipes.id →
+  // experiment_id. Optional: when absent, the derivation falls back to free-text
+  // batch_ids matching (legacy behavior — callers that don't join recipes are
+  // unaffected). Added 2026-06-17 after the REDPLUM-CAS-2026 V4 drift — a V-set
+  // experiment created with batch_ids=NULL whose 4 roasts linked correctly via
+  // recipe_id derived to waiting_for_next_roast (zero batch_ids matches) and
+  // disagreed with the correct stored waiting_for_next_cupping, reddening the
+  // check:lifecycle-consistency gate.
+  roast_recipes?: Array<{ id?: string; experiment_id?: string | null }> | null
   roast_learnings?:
     | { id?: string; why_this_roast_won?: string | null }
     | Array<{ id?: string; why_this_roast_won?: string | null }>
@@ -188,11 +208,34 @@ export function computeLifecycleState(b: LifecycleInputs): LifecycleState {
   const latest = pickLatestExperiment(experiments)
 
   // 4. Latest experiment has no roasts yet → waiting for next roast.
-  //    "No roasts yet" = none of the batch_ids in this experiment resolve to
-  //    an existing roast row. batch_ids is free text ("139, 140, 141" or
-  //    "139-141"); we extract numeric tokens and match against roasts.batch_id.
+  //    A roast "belongs to the latest experiment" via either of two signals:
+  //
+  //    (a) AUTHORITATIVE — the FK chain roasts.recipe_id → roast_recipes.id →
+  //        roast_recipes.experiment_id (label), matched against the latest
+  //        experiment's experiment_id label. Drift-proof; the experiment↔batch
+  //        link the data model actually enforces.
+  //    (b) FALLBACK — the experiment's free-text batch_ids ("139, 140, 141" or
+  //        "139-141"), numeric tokens extracted and matched against
+  //        roasts.batch_id. Legacy/back-compat: the string is hand-maintained
+  //        and can drift (REDPLUM-CAS-2026 V4, 2026-06-17 — batch_ids=NULL while
+  //        4 roasts linked via recipe_id; (b) alone matched zero and derived
+  //        the wrong state).
+  //
+  //    A roast matches if EITHER holds, so callers that don't supply the recipe
+  //    linkage (roast_recipes) degrade gracefully to (b)'s prior behavior.
+  const latestLabel = latest.experiment_id?.trim() || null
+  const recipeExpLabelById = new Map<string, string | null>()
+  for (const rc of b.roast_recipes ?? []) {
+    if (rc?.id) recipeExpLabelById.set(rc.id, rc.experiment_id?.trim() || null)
+  }
   const expBatchIds = new Set(parseBatchIds(latest.batch_ids ?? ''))
   const matchedRoasts = roasts.filter((r) => {
+    // (a) authoritative recipe→experiment FK path
+    if (latestLabel && r.recipe_id) {
+      const recipeLabel = recipeExpLabelById.get(r.recipe_id)
+      if (recipeLabel && recipeLabel === latestLabel) return true
+    }
+    // (b) free-text batch_ids fallback
     const id = r.batch_id?.trim()
     return id != null && expBatchIds.has(id)
   })

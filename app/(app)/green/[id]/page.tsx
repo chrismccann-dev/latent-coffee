@@ -181,7 +181,11 @@ export default async function GreenBeanDetailPage({ params }: { params: { id: st
   // "Reference" → "Leading" vocabulary rotation and verdict block dropped).
   // in_inventory now has its own /green index section (migration 082) and
   // routes to InventoryView.
-  const state = resolveLifecycleState(bean.lot_status, bean)
+  // `recipes` is aliased from roast_recipes in the select above; surface it
+  // under the canonical `roast_recipes` key so computeLifecycleState resolves
+  // each roast's owning experiment via the recipe_id → experiment_id FK link
+  // (authoritative), not just the drift-prone free-text batch_ids.
+  const state = resolveLifecycleState(bean.lot_status, { ...bean, roast_recipes: bean.recipes })
   if (state === 'waiting_for_next_roast') {
     return <WaitingForNextRoastView bean={bean} cuppings={cuppings} />
   }

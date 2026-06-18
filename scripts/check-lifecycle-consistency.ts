@@ -83,8 +83,9 @@ async function main(): Promise<number> {
       .select(
         `
         id, lot_id, name, lot_status,
-        experiments(id, batch_ids, winner, created_at),
-        roasts(id, batch_id, cuppings(id)),
+        experiments(id, experiment_id, batch_ids, winner, created_at),
+        roasts(id, batch_id, recipe_id, cuppings(id)),
+        roast_recipes(id, experiment_id),
         roast_learnings(id, why_this_roast_won)
       `,
       )

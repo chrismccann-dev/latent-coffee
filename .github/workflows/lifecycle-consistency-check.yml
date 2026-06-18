@@ -23,6 +23,7 @@ on:
       - 'lib/lifecycle-state.ts'
       - 'lib/roast-import.ts'
       - 'scripts/check-lifecycle-consistency.ts'
+      - 'scripts/check-lifecycle-derivation.ts'
       - 'package.json'
   schedule:
     - cron: '0 14 * * *' # daily ~14:00 UTC
@@ -38,6 +39,10 @@ jobs:
           node-version: '20'
       - name: Install deps
         run: npm install --no-audit --no-fund --prefer-offline
+      # Pure-logic regression guard for the derivation itself (no secret needed).
+      # Runs first so a logic regression fails fast, independent of prod reads.
+      - name: Run check:lifecycle-derivation
+        run: npm run check:lifecycle-derivation
       - name: Run check:lifecycle-consistency
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
