@@ -74,6 +74,12 @@ function walkMd(rel: string, out: string[]): void {
   for (const e of entries) {
     if (e.name === 'node_modules' || e.name === '.next' || e.name === '.git') continue
     const childRel = rel === '.' ? e.name : join(rel, e.name)
+    // Skip nested worktrees: .claude/worktrees/* are full repo clones, each carrying its
+    // own docs/ tree. Walking them scans ~N copies of the substrate and drowns the real
+    // live-miss signal (a 287-worktree checkout inflated this gate to 166K phantom misses).
+    // Skip the worktrees dir specifically, NOT all of .claude/ — .claude/skills/*/SKILL.md
+    // carry links that must stay checked.
+    if (childRel === join('.claude', 'worktrees')) continue
     if (e.isDirectory()) walkMd(childRel, out)
     else if (e.name.endsWith('.md')) out.push(childRel)
   }
