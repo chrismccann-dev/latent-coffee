@@ -295,6 +295,36 @@ export function lifecycleStageLabel(
   }
 }
 
+// Display label for an in_inventory lot's roast-queue rank (migration 082,
+// Phase 2). Maps the banded integer back to its human band — the ranked front
+// shows its position ("#N next up"), the shared bands show their name. Centralizes
+// the band→label rule so the /green index + the InventoryView detail card agree.
+// The numeric anchors mirror the inventory-rerank doctrine: 1..K = conviction
+// front, 50 = "soon", 90 = "deferred". Returns null for unranked lots (caller
+// omits the surface).
+export function roastPriorityLabel(priority: number | null | undefined): string | null {
+  if (priority == null) return null
+  if (priority >= 90) return 'Deferred'
+  if (priority >= 50) return 'Soon'
+  return `#${priority} next up`
+}
+
+// roast_priority asc with NULLs last; created_at desc as the in-band tiebreak.
+// Shared by the /green inventory-section sort + listGreenInventory (the MCP
+// read) so both surfaces order identically. NULL ranks sink below every
+// assigned rank (incl. the 90 deferred sentinel). Lives here — not in
+// roast-import.ts — so the /green server component can sort without importing
+// the supabase-heavy roast-import module for one pure comparator.
+export function compareRoastPriority(
+  a: { roast_priority: number | null; created_at: string },
+  b: { roast_priority: number | null; created_at: string },
+): number {
+  const ap = a.roast_priority ?? Number.POSITIVE_INFINITY
+  const bp = b.roast_priority ?? Number.POSITIVE_INFINITY
+  if (ap !== bp) return ap - bp
+  return (b.created_at ?? '').localeCompare(a.created_at ?? '')
+}
+
 // Strip leading "Batch " / "Batch #" / "#" from a free-text best_batch_id so
 // callers can compose "Batch #N" without double-prefixing. Handles all four
 // historical shapes ("133" / "Batch 139" / "#94" / "Batch #25") consistently.

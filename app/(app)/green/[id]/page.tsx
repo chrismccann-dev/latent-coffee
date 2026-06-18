@@ -22,6 +22,7 @@ import { DropRulesCard } from '@/components/DropRulesCard'
 import {
   extractBatchNumber,
   resolveLifecycleState,
+  roastPriorityLabel,
   SLOT_LETTERS,
   type SlotLetter,
   type PriorExperimentShape,
@@ -1963,12 +1964,13 @@ function PairRow({ label, value }: { label: string; value?: string | null }) {
 // Inventory view — in_inventory lots: sitting in storage, awaiting their first
 // roast (no experiment designed yet). Surfaced on the /green index as their own
 // section since migration 082 (2026-06-17) — this is the realized inventory
-// surface scope doc § 6 deferred. Shows identity + the optional pre-roast
-// intake_hypothesis snapshot + green specs. The roast_priority stack-rank
-// (Phase 2) renders here too once the Coordinator write path lands.
+// surface scope doc § 6 deferred. Shows identity + the optional roast-queue
+// rank (Phase 2) + the optional pre-roast intake_hypothesis snapshot + green
+// specs.
 // ---------------------------------------------------------------------------
 
 function InventoryView({ bean }: { bean: GreenLotDetail }) {
+  const priorityLabel = roastPriorityLabel(bean.roast_priority)
   const metaPairs = [
     { label: 'Producer', value: bean.producer ?? '—' },
     { label: 'Origin', value: bean.origin ?? bean.terroir?.country ?? '—' },
@@ -2002,6 +2004,19 @@ function InventoryView({ bean }: { bean: GreenLotDetail }) {
           waiting-for-next-roast view.
         </div>
       </div>
+
+      {priorityLabel && (
+        <div className="ssp-card">
+          <SspShead ct={`Roast-queue rank — ${priorityLabel}`}>Roast Priority</SspShead>
+          {bean.roast_priority_rationale ? (
+            <div className="body whitespace-pre-line">{bean.roast_priority_rationale}</div>
+          ) : (
+            <div className="font-sans text-sm leading-relaxed text-latent-mid">
+              Ranked {priorityLabel} in the inventory roast queue.
+            </div>
+          )}
+        </div>
+      )}
 
       {bean.intake_hypothesis && (
         <div className="ssp-card">

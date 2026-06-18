@@ -24,7 +24,12 @@ import {
 } from '@/lib/brew-import'
 import { fireQueueInserts, type QueuedEntry } from '@/lib/taxonomy-queue'
 import { checkCuppingDateConsistency } from '@/lib/mcp/cupping-date-bounds'
-import { LOT_STATUS_VALUES, type LotStatus } from '@/lib/lifecycle-state'
+import {
+  LOT_STATUS_VALUES,
+  resolveLifecycleState,
+  compareRoastPriority,
+  type LotStatus,
+} from '@/lib/lifecycle-state'
 
 // ---------------------------------------------------------------------------
 // lot_status single write path (migration 080, ADR-0024 § 6)
@@ -454,6 +459,91 @@ export async function lookupGreenBean(
     }
   }
   return { ok: true, row: data as GreenBeanRow }
+}
+
+// ---------------------------------------------------------------------------
+// listGreenInventory — the in_inventory roast-queue working set
+// ---------------------------------------------------------------------------
+
+// The fields the inventory re-rank op reasons over + writes back. Identity +
+// green specs + the intake snapshot + the current rank. Mirrors the columns the
+// Roasting Coordinator's inventory-rerank doctrine reads (lib/list-green-inventory
+// MCP Tool wraps this).
+export type GreenInventoryRow = {
+  id: string
+  lot_id: string
+  name: string
+  origin: string | null
+  variety: string | null
+  process: string | null
+  density: string | null
+  quantity_g: number | null
+  lot_status: string | null
+  intake_hypothesis: string | null
+  roast_priority: number | null
+  roast_priority_rationale: string | null
+  created_at: string
+}
+
+export type ListGreenInventoryResult =
+  | { ok: true; rows: GreenInventoryRow[] }
+  | { ok: false; code: 'db_error'; message: string }
+
+// Fetch the user's in_inventory lots (lifecycle = in_inventory: a green_bean row
+// with no experiments and no roasts, per resolveLifecycleState) ordered the way
+// the /green inventory section renders them — roast_priority asc with NULLs last,
+// created_at desc as the in-band tiebreak. This is the bulk read the inventory
+// re-rank + intake-time-insert ops need to see the current ranking in one call;
+// no single-row MCP read covers it (get_green_bean = one row, get_bean_pipeline
+// = one lot).
+export async function listGreenInventory(
+  supabase: SupabaseClient,
+  userId: string,
+): Promise<ListGreenInventoryResult> {
+  // The experiments / roasts / roast_learnings joins exist only to compute the
+  // lifecycle state (in_inventory = no experiments AND no roasts). No cuppings
+  // join — for an in_inventory lot roasts is empty, so the cupping gate never
+  // applies.
+  const { data, error } = await supabase
+    .from('green_beans')
+    .select(
+      `id, lot_id, name, origin, variety, process, density, quantity_g, lot_status,
+       intake_hypothesis, roast_priority, roast_priority_rationale, created_at,
+       experiments(id), roasts(id),
+       roast_learnings(id, why_this_roast_won)`,
+    )
+    .eq('user_id', userId)
+  if (error) return { ok: false, code: 'db_error', message: error.message }
+
+  type JoinedRow = GreenInventoryRow & {
+    experiments?: Array<{ id: string }> | null
+    roasts?: Array<{ id: string }> | null
+    roast_learnings?: Array<{ id: string; why_this_roast_won: string | null }> | null
+  }
+
+  const inInventory = ((data ?? []) as JoinedRow[]).filter(
+    (r) => resolveLifecycleState(r.lot_status, r) === 'in_inventory',
+  )
+
+  inInventory.sort(compareRoastPriority)
+
+  // Strip the join arrays — the working set is the bare lot row.
+  const rows: GreenInventoryRow[] = inInventory.map((r) => ({
+    id: r.id,
+    lot_id: r.lot_id,
+    name: r.name,
+    origin: r.origin,
+    variety: r.variety,
+    process: r.process,
+    density: r.density,
+    quantity_g: r.quantity_g,
+    lot_status: r.lot_status,
+    intake_hypothesis: r.intake_hypothesis,
+    roast_priority: r.roast_priority,
+    roast_priority_rationale: r.roast_priority_rationale,
+    created_at: r.created_at,
+  }))
+  return { ok: true, rows }
 }
 
 // ---------------------------------------------------------------------------
@@ -1266,6 +1356,12 @@ export interface PatchGreenBeanPayload {
   additional_notes?: string | null
   // Migration 082 — patchable pre-roast design hypothesis (snapshot, not canon).
   intake_hypothesis?: string | null
+  // Migration 082 (Phase 2) — the in_inventory roast-queue stack-rank.
+  // Coordinator-maintained via the "re-rank my inventory" op (NOT at intake).
+  // Lower = roast sooner; band anchors 50/90; NULL = unranked. See
+  // docs/skills/roasting-coordinator/cluster/inventory-rerank.md.
+  roast_priority?: number | null
+  roast_priority_rationale?: string | null
   roest_inventory_id?: number | null
   // Migration 054 — workflow class flag, patchable for retroactive flagging
   // (Rancho Tio backfill case + future post-intake reclassification).
@@ -1290,7 +1386,9 @@ export const GREEN_BEAN_PATCH_FIELDS = [
   'importer', 'seller', 'exporter', 'source_type', 'link',
   'purchase_date', 'price_per_kg', 'quantity_g',
   'moisture', 'density', 'elevation_m',
-  'producer_tasting_notes', 'additional_notes', 'intake_hypothesis', 'roest_inventory_id',
+  'producer_tasting_notes', 'additional_notes', 'intake_hypothesis',
+  // Migration 082 (Phase 2) — roast-queue stack-rank (Coordinator-maintained).
+  'roast_priority', 'roast_priority_rationale', 'roest_inventory_id',
   // Migration 054
   'is_one_shot',
   // Migration 069 (Phase 2 Item 17)

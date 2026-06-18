@@ -3,6 +3,7 @@ import { GreenBean } from '@/lib/types'
 import { IndexCap, LotStage } from '@/components/IndexList'
 import { GreenCard, type GreenCardData } from '@/components/GreenCard'
 import {
+  compareRoastPriority,
   extractBatchNumber,
   lifecycleSectionTitle,
   pickLatestExperiment,
@@ -36,7 +37,11 @@ import {
 //    but didn't reach a verdict). Sub-sprint 4a (2026-05-27).
 // 6. In inventory — sitting in storage awaiting first roast (no experiment
 //    yet). Surfaced last, below Unresolved, per Chris's call (migration 082,
-//    2026-06-17). Phase 2 adds the roast_priority stack-rank ordering here.
+//    2026-06-17). Ordered by the roast_priority stack-rank (Phase 2,
+//    2026-06-17): roast_priority asc with unranked (NULL) lots last — see the
+//    in_inventory sort below. Lower = roast sooner (1 = next up); the bands are
+//    50 = "soon" and 90 = "deferred". The Roasting Coordinator's "re-rank my
+//    inventory" op writes the ranks (cluster/inventory-rerank.md).
 //
 // Card content is state-dependent (see GreenCard.tsx): active lots show
 // identity + lot code; resolved / unresolved lots show the reference/leading
@@ -141,6 +146,12 @@ export default async function GreenBeansPage() {
     arr.push(bean)
     beansByState.set(state, arr)
   }
+
+  // The in_inventory section orders by the roast_priority stack-rank (Phase 2);
+  // every other section keeps its created_at desc order from the query. Sort
+  // only that bucket — roast_priority asc, NULLs last, created_at desc tiebreak
+  // (shared comparator so this matches list_green_inventory exactly).
+  beansByState.get('in_inventory')?.sort(compareRoastPriority)
 
   const totalSurfaced = SECTION_ORDER.map((s) => beansByState.get(s)?.length ?? 0).reduce(
     (a, b) => a + b,

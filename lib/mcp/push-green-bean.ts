@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { persistGreenBean, type GreenBeanPayload } from '@/lib/roast-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
+import { numField, boolField } from '@/lib/mcp/coerce'
 import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
 // push_green_bean — top-level entry point for the self-roasted lineage.
@@ -11,23 +12,9 @@ import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wr
 //
 // Roest cross-ref: pass roest_inventory_id when seeded from pull_roest_log
 // or list_roest_inventory results — server stores it for round-trip lookups.
-
-// MCP clients differ in whether they JSON-encode scalar tool args as native
-// numbers/booleans or as strings — some bridges (incl. the Claude Code tool
-// bridge used for bulk operator pushes) stringify every scalar, while others
-// (claude.ai web) send native types. Coerce defensively so the Tool tolerates
-// both. Boolean coercion is EXPLICIT ('true'/'false' → bool) to avoid the
-// Boolean('false') === true trap; non-string inputs pass through untouched.
-const numField = (inner: z.ZodNumber) =>
-  z.preprocess(
-    (v) => (typeof v === 'string' && v.trim() !== '' ? Number(v) : v),
-    inner.optional().nullable(),
-  )
-const boolField = () =>
-  z.preprocess(
-    (v) => (v === 'true' ? true : v === 'false' ? false : v),
-    z.boolean().optional().nullable(),
-  )
+//
+// numField / boolField (the cross-client scalar-coercion preprocessors) now
+// live in lib/mcp/coerce.ts — patch_green_bean reuses them for roast_priority.
 
 const terroir = z.object({
   country: z.string(),
