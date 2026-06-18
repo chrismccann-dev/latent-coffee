@@ -24,7 +24,7 @@ External claims in this doc are sourced at authoring time from the CSV; Chris's 
 
 ## Canonical list
 
-Matches the `ROASTERS` array in [lib/roaster-registry.ts](lib/roaster-registry.ts) exactly. 73 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
+Matches the `ROASTERS` array in [lib/roaster-registry.ts](lib/roaster-registry.ts) exactly. 74 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
 
 ### Clarity-First (28)
 
@@ -114,12 +114,13 @@ Roasters who intentionally push extraction. Includes BALANCED → FULL (most), F
 - **Subtext Coffee**
 - **The Picky Chemist**
 
-### Varies (5)
+### Varies (6)
 
-Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 5 entries.
+Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 6 entries.
 
 - **Moonwake Coffee Roasters**
 - **Scenery Coffee**
+- **Snite**
 - **Strait Coffee** — BALANCED / VARIES
 - **Switch Coffee** — BALANCED / VARIES
 - **Untold Coffee Lab**
@@ -1794,6 +1795,11 @@ _London, UK, UK_ · **VARIES** · archive: 1 brew
 - **Confidence:** High
 - **Notes:** Core philosophy is per-coffee dialing; not a fixed system; long bloom and low agitation are baseline but adjusted; encourages adapting grind and ratio rather than pushing temp or agitation aggressively
 
+#### Snite
+_Tokyo, Japan_ · **VARIES** · archive: 1 brew
+
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-18 from the El Mango SL28 Washed brew (73028eb1) - first SL28 lot in the brewing archive. Strategy tag (VARIES placeholder), house style, and recipe baseline pending more lots. The lot confirmed SL-lineage phase-separation: Clarity-First on the April Glass under-expressed the attack and over-extracted the late body simultaneously; resolved via a full Hybrid (Intensity-Clarity Split) on the April Switch (see [hybrid.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md) sixth ICS data point).
+
 #### Strait Coffee
 _San Jose, CA, USA_ · **BALANCED / VARIES** · archive: 6 brews
 
@@ -1888,5 +1894,6 @@ _Home (Roest sample roaster, 100g batches)_ · **SELF-ROASTED** · archive: 4 br
 
 ## Changelog
 
+- **2026-06-18 (taxonomy queue arbitration):** Promoted **Snite** (Tokyo) as a skeleton entry in the Varies family. First evidence: El Mango SL28 Washed (Evin Joel Moreno Reyes, Finca El Mango, Honduras) - first SL28 lot in the brewing archive. Strategy tag is a VARIES placeholder pending more lots; the lot confirmed SL-lineage phase-separation, resolved via a Hybrid (Intensity-Clarity Split) on the April Switch. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-05-20 (taxonomy queue arbitration):** Promoted **Newbery Street Coffee Roasters** (Boston-named, location pending verification) as a skeleton entry in the Balanced family. First evidence: Nawin Doi Chang Washed (first Thailand lot in the Latent archive). 91°C is the only viable evaluation temp on the single tested lot - positioned closer to Glitch (Tokyo low-temp Balanced) than Hydrangea (Berkeley Clarity-First) on the low-temp Balanced spectrum. Confidence Low pending more brews. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-04-24 (sprint 1h.1):** First adoption. 70 canonical roasters across 6 families. SYSTEM added as a 6th family per Chris + ChatGPT review. 4 reclassifications from prior 21-entry registry: Rose / Noma / Picky Chemist (→ SYSTEM), TM Coffee (→ CLARITY-FIRST). 20-rename migration 027 collapses short-form DB values to canonical full names. Aliases preserve short-form resolvability.

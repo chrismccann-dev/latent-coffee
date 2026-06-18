@@ -4078,6 +4078,38 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+### Evin Joel Moreno Reyes, El Mango
+
+**Country:** Honduras · **Admin:** Copán / Ocotepeque / Lempira · **Macro:** Western Honduras Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Finca El Mango
+- **Processing Capability:** Washed
+- **Primary Cultivars:** SL28
+- **Roaster References:** Snite
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-18 from the Snite (Tokyo) El Mango SL28 Washed brew (73028eb1) - first SL28 lot in the brewing archive; farm in Las Vegas, Santa Bárbara.
+
+---
+
+### Ilde Burbano, El Pilón
+
+**Country:** Colombia · **Admin:** Huila · **Macro:** Huila Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Finca El Pilón
+- **Processing Capability:** Anaerobic Washed
+- **Primary Cultivars:** Pink Bourbon
+- **Roaster References:** Moonwake Coffee Roasters
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-18 from the Moonwake Ilde Burbano El Pilón Anaerobic Washed Pink Bourbon brew (8cc88312); meso Palestina.
+
+---
+
 ## Aliases (DB drift + collapses)
 
 Observed `brews.producer` strings (or common typos) → canonical name.

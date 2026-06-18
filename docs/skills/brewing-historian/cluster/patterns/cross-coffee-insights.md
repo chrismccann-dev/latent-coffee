@@ -192,7 +192,7 @@ Put roaster-specific evidence in `docs/brewing/roasters.md`. Keep only the overr
 
 ### 4. Vehicle Integration Matters for Aromatic-Landrace / SL-Lineage Coffees
 
-**Status:** Working pattern. Two confirmations across different lots; cultivar-specific confirmations still needed.
+**Status:** Working pattern. Three confirmations across different lots; cultivar-specific confirmations still needed.
 
 Some aromatic-landrace or SL-lineage coffees can phase-separate on fast cone vehicles. The problem is not extraction depth. It is integration.
 
@@ -212,7 +212,9 @@ Operational rule:
 - If an aromatic-landrace / SL-lineage coffee has good flavor notes but reads as layers rather than a single cup, switch vehicle before changing grind.
 - Treat April Glass + April Paper as the integration-corrective default until proven otherwise.
 
-The original three Ethiopian-landrace candidates (74110/74112, SL-28, Wush Wush) remain individually untested for the washed/April pattern - confirm on a lot from each before treating it as fully generalized (tracked in Open Questions).
+Of the original three Ethiopian-landrace candidates (74110/74112, SL-28, Wush Wush), SL-28 is now confirmed (see below); 74110/74112 and Wush Wush remain individually untested for the washed/April pattern - confirm on a lot from each before treating it as fully generalized (tracked in Open Questions).
+
+**SL-28 confirmed (2026-06-18).** First SL28 lot in the archive - Snite (Tokyo) Honduras El Mango SL28 Washed (light, WB Agtron 76.2; brew_id 73028eb1-0cd4-4105-9666-9120f43e0038) - confirms the SL-lineage phase-separation behavior on SL28: Brew 1 (Clarity-First, April Glass) under-expressed the attack, thinned the mid-palate, over-extracted the late body, and read as separated layers (cherry/lemon/honey top sitting apart from the body). Nuance this lot adds to the operational rule: the passive April integration vehicle alone did NOT resolve it - the cup needed a full Hybrid (Intensity-Clarity Split) pivot on the valve-equipped April Switch (closed immersion front + clean open finish) to integrate into the bag's cherry-lemon-honey. So for a genuinely separating SL-lineage lot, 'switch vehicle before changing grind' extends to 'switch to an immersion-staged ICS structure' when the passive vehicle is not enough. Of the three original Ethiopian-landrace candidates, SL-28 is now confirmed; 74110/74112 and Wush Wush remain individually untested. See by-strategy/hybrid.md (sixth ICS data point) for the full recipe.
 
 ### 5. Cooling Arc Is a Diagnostic, Not a Recipe Lever
 
@@ -287,6 +289,7 @@ These cultivars are below the n≥3 graduation threshold. They stay here as cand
 - **Catimor (group)** - Timor Hybrid-derived dwarf hybrid; not transparency-driven, not aromatic-landrace structure. Carries denser body weight than higher-elevation Bourbon/Typica varieties at equivalent recipe targets - reads as black/brown tea structure on the body even on a clean recipe; this is variety + low/mid elevation, not a recipe artifact, and does not respond to coarsening. Confirmed yeast-inoculated lots from Yunnan (Project One Light, Olina Cai) on Moonwake: Peach Oolong (anaerobic natural) at EG-1 6.3 / 96°C and Blue Iris (anaerobic honey) at EG-1 6.3 / 95°C, both Balanced Intensity, both 1300-1500 masl. Variety + yeast inoculation pair to Balanced Intensity at the finer end; honey vs anaerobic-natural finishing process shifts the temperature ceiling by 1°C (honey at 95°C, anaerobic natural at 96°C) without changing grind position. Two data points, same producer.
 - **Catuai (washed, Honduras)** - dense variety that exceeded Clarity-First's extraction ceiling despite clean washed process. One data point; flag variety density and expression intent on future washed Catuai lots.
 - **Red Bourbon (Bourbon family, classic Bourbon lineage; long-ferment washed)** - long-ferment Rwandan washed Red Bourbon (Moonwake Ngoma Station J.M.V. Usekanabagoyi, Nyamasheke / Lake Kivu Highlands) peaks ~45°C and below. ≥50°C: pear and grapefruit forward, mid-palate undifferentiated, faint drying tail. ~50°C: lemon verbena separates as a distinct herbal-tea note, body fills in. Below ~45°C: drying tail resolves entirely, attack gains brightness, profile integrates into pear + grapefruit + honeyed verbena tea. Cool-window discipline applies to long-ferment classic washed lots, not just processed/anaerobic ones - the 8-hour cherry + 12-hour wet ferment footprint produces a faint phenolic tail that is temperature-driven, not extraction-driven. One data point - flag for confirmation on the next Burundian or Rwandan washed Bourbon with comparable ferment length.
+- **Pink Bourbon data point (n+1, 2026-06-17):** Moonwake Ilde Burbano El Pilón (Palestina, Huila, 1740m), clean Anaerobic Washed (24h anaerobic, double-washed), Light roast - Clarity-First upper-edge delivered on Brew 1 at EG-1 6.5 / 94°C / Kalita Wave 155 + xBloom Premium / 15g:240g (1:16). Confirms the transparency-driven / Balanced-is-ceiling read, and adds that clean anaerobic *washed* (not natural) sits clarity-side rather than Suppression. Layered-evolving cup: grape-over-green-tea reads separated hot/warm, integrates to green grape + blackberry + bergamot finish at the ~45°C cool peak - evaluated at peak, no iteration warranted (Cooling Arc is a diagnostic, not a recipe lever). brew_id 8cc88312-3bee-453f-8965-e98d957f8c5e.
 
 ## Sub-Threshold Process-Family Candidates
 
