@@ -34,7 +34,7 @@
 > freezer") but intentionally NOT backfilled - older freezer coffees may be absent. A miss is
 > normal.
 
-**Total coffees:** 94
+**Total coffees:** 100
 
 ---
 
@@ -397,19 +397,19 @@
 **URL:** https://helmcoffeeroasters.com/products/panama-el-burro-lot-16-natural-gesha
 **Notes:** peach, lemon candy, CapriSun, lavender. Over half the estate inside Volcán Barú National Park. Cherries take 5+ yrs to fruit.
 
-## Helm Coffee — Colombia Nogales Nativo — Colombia & Caturra — Anaerobic Washed
+## Helm Coffee — Colombia Nogales Nativo — Colombia — Anaerobic Washed
 **Country:** Colombia · **Region/Farm:** Pitalito, Huila / Los Nogales · **Producer:** Oscar Hernandez
-**Variety:** Colombia & Caturra · **Process:** Anaerobic Washed (depulped, hermetic tank + mosto culture, 18°C, raised-bed 15 days + 30-day GrainPro stabilisation) · **Elevation:** 1850 m
+**Variety:** Colombia · **Process:** Anaerobic Washed (depulped, hermetic tank + mosto culture, 18°C, raised-bed 15 days + 30-day GrainPro stabilisation) · **Elevation:** 1850 m
 **Agtron:** 62.6 (Medium light) · **Status:** Frozen (15g doses)
 **URL:** https://helmcoffeeroasters.com/collections/frontpage/products/colombia-los-nogales-colombia-caturra
-**Notes:** strawberry, rose, white chocolate, kumquat. Biotechnology-focused farm.
+**Notes:** strawberry, rose, white chocolate, kumquat. Variety per bag label = Colombia (Helm web listing says "Colombia & Caturra"; bag is canonical). Biotechnology-focused farm.
 
 ## Helm Coffee — Colombia Nogales Mystic — Yellow Bourbon — Anaerobic Washed
 **Country:** Colombia · **Region/Farm:** Pitalito, Huila / Los Nogales · **Producer:** Oscar Hernandez
 **Variety:** Yellow Bourbon · **Process:** Anaerobic Washed (depulped, hermetic tank + mosto culture, 18°C, raised-bed 15 days + 30-day GrainPro stabilisation) · **Elevation:** 1850 m
 **Agtron:** 87.1 (Very light) · **Status:** Frozen (15g doses)
 **URL:** https://helmcoffeeroasters.com/collections/frontpage/products/colombia-los-nogales-yellow-bourbon
-**Notes:** orange blossom, banana, strawberry sorbet. Same farm/process as Nativo — good comparison pair.
+**Notes:** lemon-lime, apples, pink florals, peach tea. Same farm/process as Nativo — good comparison pair.
 
 ## Glitch Coffee and Roasters — Ethiopia Sidama Tamiru Alo Berry "Under Screen" — Natural 74165
 **Country:** Ethiopia · **Region/Farm:** Bensa, Sidama / Alo Station · **Producer:** Tamiru Tadesse (Alo Coffee)
@@ -628,11 +628,11 @@
 **Notes:** TPC = Stéphane, Beaufays Belgium, ultralight Stronghold profile (passion-project roaster). Harvest July 2025. Notes: orange blossom, red fruit, umami, tea-like. Delicate/ultra-clean. Clarity-First.
 
 ## SHITE (Sniite) — Honduras Evin Joel Moreno Reyes — El Mango — SL28 Washed
-**Country:** Honduras · **Region/Farm:** Las Vegas / Finca El Mango · **Producer:** Evin Joel Moreno Reyes
+**Country:** Honduras · **Region/Farm:** El Cedral, Las Vegas, Santa Bárbara / Finca El Mango · **Producer:** Evin Joel Moreno Reyes
 **Variety:** SL28 · **Process:** Washed · **Elevation:** 1640 m
 **Agtron:** 76.2 (Light color) · **Status:** Frozen (15g doses)
-**URL:** https://www.instagram.com/p/DXlHJGAE0eS/
-**Notes:** Roaster SHITE/Sniite (Tokyo, Japan; sniite.shop). ⚠️ IG link — no product page. Notes: bing cherry, lemon, apple, honey, juicy, complex acidity. SL28 in Honduras is unusual.
+**URL:** https://sniite.shop/items/69ed7567d3c2c937af3d3019
+**Notes:** Roaster SHITE/Sniite (Tokyo, Japan; sniite.shop). 2025 Cup of Excellence Exotic Variety category, 11th place — El Mango has placed SL-28 in COE 3 consecutive years. Filter roast, 100g. Notes: bing cherry, lemon, apple, honey, milk chocolate, juicy, complex acidity, long aftertaste. SL28 in Honduras is unusual.
 
 ## Thankfully Coffee — Ecuador Felipe Luzon — Mejorado — Washed
 **Country:** Ecuador · **Region/Farm:** Palanda, Zamora-Chinchipe / Finca Los Eucaliptos · **Producer:** Felipe Luzon
@@ -660,7 +660,7 @@
 **Variety:** Guarani (Aramosa hybrid family) · **Process:** Natural Anaerobic (62hr, native Brazilian yeast) · **Elevation:** ~1200 m
 **Agtron:** 72.5 (Light) · **Status:** Frozen (15g doses)
 **URL:** https://xliiicoffee.com/en/product/malemolencia-1-masterpiece-auction-2025/
-**Notes:** XLIII Coffee (Da Nang, Vietnam). Masterpieces Auction 2025 lot. Notes: pistachios, green grape, melon. Guarani = climate-resilient Aramosa lineage (low caffeine relatives).
+**Notes:** XLIII Coffee (Da Nang, Vietnam). Masterpieces Auction 2025 lot. Notes: pistachios, green grape, melon. Guarani = climate-resilient Aramosa lineage (low caffeine relatives). Giesen W6A, extremely light. Aroma shifts pistachio/green grape/melon (hot) → strawberry/raspberry/melon (warm) → plum/pistachio/dark chocolate (cold); long finish, brandy-soaked cherry. Flavor-locked pack — peak 8–16 wks post-roast while sealed.
 
 ## SEY Coffee — Frank Aroste La Esperanza — Gesha — Washed — Peru
 **Country:** Peru · **Region/Farm:** Santa Ana, Cusco / La Esperanza · **Producer:** Frank Aroste
@@ -689,3 +689,45 @@
 **Agtron:** pending · **Status:** Resting (agtron pending)
 **URL:** https://coffee-with-dongze.myshopify.com/products/hachi-x-yunnan-x-terroir-maximus-x-brian-quan-%E7%B9%81%E8%8A%B1-x-%E6%B5%81%E5%85%89-x-%E6%98%A0%E9%9B%AA
 **Notes:** Brian Quan collab. One of 3 process variants (50g each). Notes: tropical fruits, papaya, champagne, bergamot, floral, grape, banana, perfume. Watch perfume ceiling on this one. Multi-stage sequential ferment.
+
+## XLIII Coffee — Ziriguidum #2 — Daterra Masterpieces Auction 2025 — Brazil
+**Country:** Brazil · **Region/Farm:** Cerrado Mineiro, Patrocínio / Fazenda Daterra · **Producer:** Daterra (Masterpieces auction lot)
+**Variety:** Laurina (Bourbon Pointu — low caffeine) · **Process:** Natural · **Elevation:** 900–1200 m
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**URL:** https://xliiicoffee.com/en/product/ziriguidum-2-masterpieces-auction-2025/
+**Notes:** XLIII Coffee (Da Nang, Vietnam). Masterpieces Auction 2025, crop 2025, 250g. Giesen W6A, extremely light. Notes: cherry candy, red berries, raspberry; aroma shifts cherry/cola/ripe grape (hot) → cherry candy/raspberry/strawberry (warm) → pineapple/cinnamon/cacao nibs (cold). Sparkling phosphoric/malic acidity. Same Daterra Masterpieces auction as the XLIII Malemolência #1 Guarani lot. Flavor-locked pack — peak 8–16 wks post-roast while sealed.
+
+## Hydrangea Coffee Roasters — Pink Bourbon — Washed — Finca Inmaculada (Fellow Farms Project)
+**Country:** Colombia · **Region/Farm:** Valle del Cauca / Finca Inmaculada · **Producer:** The Holguin Family
+**Variety:** Pink Bourbon · **Process:** Washed · **Elevation:** 1500–1700 m
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**URL:** https://hydrangea.coffee/products/pink-bourbon-washed-finca-inmaculada-fellow-farms-project
+**Notes:** Fellow Farms Project. Notes: hibiscus, plum, lime. Sold out / archived at roaster.
+
+## Hydrangea Coffee Roasters — Sudan Rume — Natural — Finca Las Margaritas (CGLE)
+**Country:** Colombia · **Region/Farm:** Valle del Cauca / Finca Las Margaritas (Café Granja La Esperanza) · **Producer:** Rigoberto & Luis Eduardo Herrera (CGLE)
+**Variety:** Sudan Rume · **Process:** Natural · **Elevation:** 1570–1850 m
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**URL:** https://hydrangea.coffee/products/sudan-rume-natural-cafe-granja-la-esperanza
+**Notes:** Notes: cherry, bergamot flowers, papaya — bright/perfumed, layered fruit, clean finish. CGLE Las Margaritas (rare/high-end varieties). Region normalized to Valle del Cauca — Hydrangea's bag labels this lot "Cauca," but its CGLE siblings (Natural XO, Hybrid Washed) + the Special Guests CGLE entry confirm Valle del Cauca as canonical. Sold out / archived.
+
+## Hydrangea Coffee Roasters — Gesha — Washed 507NWS — Finca Nuguo
+**Country:** Panama · **Region/Farm:** Jurutungo, Chiriquí / Finca Nuguo · **Producer:** José "Pocho" Gallardo
+**Variety:** Gesha · **Process:** Washed (507NWS) · **Elevation:** 1800–1950 m
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**URL:** https://hydrangea.coffee/products/gesha-washed-finca-nuguo
+**Notes:** 507NWS lot. Fermented pulped 48hr at Nuguo, then dried in a controlled room in David (from Feb 21, 22°C). Notes: bergamot, white peach, jasmine. Sold out / archived.
+
+## Hydrangea Coffee Roasters — Sudan Rume — Natural XO — Finca Las Margaritas (CGLE)
+**Country:** Colombia · **Region/Farm:** Valle del Cauca / Finca Las Margaritas (Café Granja La Esperanza) · **Producer:** Rigoberto & Luis Eduardo Herrera (CGLE)
+**Variety:** Sudan Rume · **Process:** Natural "XO" (extended natural — flotation + Brix-gated, 70hr GrainPro ferment rotated every 5hr) · **Elevation:** 1570–1850 m
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**URL:** https://hydrangea.coffee/products/sudan-rume-natural-xo-las-margaritas-cafe-granja-la-esperanza
+**Notes:** First Sudan Rume offered in CGLE's XO style. Notes: violet, strawberry, sangria — wine-like structure. Same farm as the plain Natural and Hybrid Washed CGLE Sudan Rume lots. Sold out / archived.
+
+## Hydrangea Coffee Roasters — Sudan Rume — Hybrid Washed — Finca Las Margaritas (CGLE)
+**Country:** Colombia · **Region/Farm:** Valle del Cauca / Finca Las Margaritas (Café Granja La Esperanza) · **Producer:** Rigoberto & Luis Eduardo Herrera (CGLE)
+**Variety:** Sudan Rume · **Process:** Hybrid Washed (14hr open-tank → 18hr oxygen-free → depulp → 24hr aerobic → washed; mechanical silo dry 3–5 days at 38°C) · **Elevation:** 1570–1850 m
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**URL:** https://hydrangea.coffee/products/cgle-sudan-rume-hw
+**Notes:** Staged-ferment washed — keeps washed cleanliness with added aromatic depth. Notes: bergamot, blue lilac, mango. Same farm as the plain Natural and Natural XO CGLE Sudan Rume lots. Sold out / archived.
