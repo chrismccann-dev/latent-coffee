@@ -184,8 +184,8 @@ in-app forms.
 ## Cross-references
 
 - [docs/brewing/freezer-stock.md](docs/brewing/freezer-stock.md), the roasted-bean freezer inventory — brew-time lookup for purchased coffees (whole-bean Agtron + URL + specs), so Chris isn't asked to re-measure
-- [docs/prompts/start-brew.md](docs/prompts/start-brew.md), the claude.ai entry prompt + the CC operator-one-liner fallback surface (same operational guide)
-- [docs/prompts/bundled-brewing-completion.md](docs/prompts/bundled-brewing-completion.md), the completion path (push_brew, then propose_doc_changes)
+- [docs/prompts/start-brew.md](docs/prompts/start-brew.md), the CC `/brew` fallback entry surface + self-roasted carve-out substrate (claude.ai brewing retired 2026-06-18; same operational guide)
+- [docs/prompts/bundled-brewing-completion.md](docs/prompts/bundled-brewing-completion.md), the shared completion engine this skill hands off to (push_brew, then propose_doc_changes)
 - [docs/skills/brewing-assistant/cluster/operational-guide.md](docs/skills/brewing-assistant/cluster/operational-guide.md), the substantive Steps 1-4 how-to (composed via read_doc)
 - [docs/skills/brewing-assistant/cluster/process-friction-log.md](docs/skills/brewing-assistant/cluster/process-friction-log.md), the close-retro friction log
 - [CONTEXT-taste.md § Brewing philosophy](CONTEXT-taste.md), apex canon

@@ -1,3 +1,9 @@
+**Completion engine for the Claude Code `/brew` skill (brewing is Claude-Code-native;
+claude.ai brewing retired 2026-06-18).** This is the shared purchased-brew completion path the
+`/brew` skill hands off to (and that `peer-variant-completion.md` wraps as STEP A); it is
+client-agnostic and composed via `read_doc`. The former `log-brew.md` +
+`propose-doc-changes-from-brew.md` redirect stubs were removed at retirement.
+
 Use when a PURCHASED brew is finished. **HARD GATE — STOP before STEP 1
 if this brew is self-roasted.** Self-roasted brews (`roaster: "Latent"`,
 or brewed from a coffee with a `green_bean_id` in the Latent app) push via
