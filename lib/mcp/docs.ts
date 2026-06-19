@@ -300,7 +300,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   {
     uri: 'docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md',
     title: 'WBC Roasting Archivist — Sourcing Strategy',
-    description: 'Use when evaluating a green offer or rebalancing inventory — WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, Tier 1/2/3 priority targets, 5-lane portfolio frame, sourcing channel classifications, and current Latent inventory mapped to portfolio lanes (snapshot 2026-05-09; Sprint T2 lane formalization 2026-05-18). Migrated from docs/roasting/wbc-sourcing.md in Wave 2 PR 1.',
+    description: 'Use when evaluating a green offer or rebalancing inventory — WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, the sourcing-bucket action axis, 5-lane portfolio frame, sourcing channel classifications, and current Latent inventory mapped to portfolio lanes (snapshot 2026-05-09; Sprint T2 lane formalization 2026-05-18). Migrated from docs/roasting/wbc-sourcing.md in Wave 2 PR 1.',
   },
   {
     uri: 'docs://skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md',

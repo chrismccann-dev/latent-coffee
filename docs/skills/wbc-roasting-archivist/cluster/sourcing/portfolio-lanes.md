@@ -4,11 +4,11 @@
 
 ## Frame
 
-The 5-lane portfolio-construction frame Chris uses for **green-bean inventory balance**. Distinct from Sourcing priority (which classifies per-lot buying priority); see [docs/reference/wbc-materials.md § Portfolio lanes](docs/reference/wbc-materials.md) for the canonical glossary entry.
+The 5-lane portfolio-construction frame Chris uses for **green-bean inventory balance**. This is the **Role** axis of the three-axis sourcing spine (Fit · Role · Action); distinct from the Sourcing bucket (the **Action** axis — `pursue` / `watch` / `learning` / `calibration` / `avoid`, classifying per-producer buying action). See [docs/reference/wbc-materials.md § Portfolio lanes](docs/reference/wbc-materials.md) for the canonical glossary entry.
 
 The 5 lanes name the **role-shape** a balanced inventory should cover, regardless of which individual lots fill each lane:
 
-1. Reference clarity
+1. Calibration clarity (renamed from Reference clarity, 2026-06-19)
 2. Fruit-tea expression
 3. Process learning
 4. Roast-learning hybrids
@@ -21,5 +21,5 @@ The 5 lanes name the **role-shape** a balanced inventory should cover, regardles
 ## See also
 
 - [sourcing/strategy.md § 10](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) — full lane definitions + inventory mapping
-- [sourcing/priority-targets.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md) — Tier 1/2/3 priority targets (orthogonal to lanes)
+- [sourcing/priority-targets.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md) — sourcing buckets / action axis (orthogonal to lanes)
 - [docs/reference/wbc-materials.md § Portfolio lanes](docs/reference/wbc-materials.md) — canonical glossary

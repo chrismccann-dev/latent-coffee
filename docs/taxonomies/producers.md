@@ -8,57 +8,59 @@ Both files are generated from Chris's authored research CSVs (see § Sources).
 calibration reference (Anchor reference role). Tier 2: repeat top-roaster
 producer with strong sourcing/brewing signal (Signal). Tier 3: emerging or
 edge-case producer useful for tracking directional change (Experimental).
+This `tier` is **registry system-importance only** — a different axis from the
+retired sourcing "Tier 1/2/3 priority targets" (now the § Sourcing priority
+*action bucket*) and from the WBC-corpus tier reading. It is the one remaining
+numbered "tier" axis; keep it scoped to system-importance.
 
-**Coverage** — 154 producers covering Chris's estimated 60-70% of brewed
+**Coverage** — 155 producers covering Chris's estimated 60-70% of brewed
 coffees. Producer data branches unboundedly compared to cultivar/terroir,
 so the registry is intentionally tier-scoped rather than comprehensive.
-Net-new producers can be persisted via the `/add` flow's `allowOverride`
-path; rich content gets backfilled when the producer earns it.
+Net-new producers are persisted via the canonical-addition path (MCP
+taxonomy queue / a deliberate registry edit); rich content gets backfilled
+when the producer earns it.
 
-**Total entries:** 153 (Tier 1: 57 · Tier 2: 73 · Tier 3: 23)
+**Total entries:** 155 (Tier 1: 59 · Tier 2: 73 · Tier 3: 23)
 
 ---
 
-## Sourcing priority (curated shortlist)
+## Sourcing priority (action axis)
 
-The `sourcingPriority` field (added 2026-06-19) is the curated "what I'm targeting
-next when I source" shortlist, distinct from `tier` (system-importance) and from the
-evidence-derived **Indexed** state (the unsourced registry tail). It carries an
-authored **action bucket** plus a one-line **rationale**, and drives the `/producers`
-**Priority targets** tab plus the detail Sourcing-lens "Buy priority" / "Sourcing
-note" rows.
+The `sourcingPriority` field (added 2026-06-19, folded into canon by the producer
+sourcing-priority canon pass) is the **action half of the three-axis sourcing
+spine**: **Fit** (a filter cascade + a prose scorecard sanity-check, never a stored
+number) · **Role** (the five portfolio lanes) · **Action** (this `bucket`). It is
+distinct from `tier` (registry system-importance) and from the evidence-derived
+**Indexed** state (the unsourced registry tail). It carries an authored **action
+bucket** plus a one-line **rationale**, and drives the `/producers` **Priority
+targets** tab plus the detail Sourcing-lens rows. The resolved model lives in
+[strategy.md §§ 7-10](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md).
 
-**Buckets** (Chris's S/A/B/C/D action ranking, pursue first):
+**Buckets** (pursue first; the retired Tier 1/2/3 sourcing framing's successor):
 
 | Bucket | Meaning |
 |---|---|
-| `pursue` | Actively pursue: apex-aligned, buy small-format lots when they appear |
-| `watch` | Watchlist: strong fit, missing access / confidence / current portfolio need |
-| `learning` | Learning target: process / cultivar / roast learning; buy when the lot has a job |
-| `reference` | Reference / calibration: clean-coffee skill upkeep, not urgent |
-| `avoid` | Avoid / deprioritize: hidden from the Priority tab |
+| `pursue` | Apex-aligned — act the moment a lot surfaces. A standing recognition set, not a single-target optimization (access is opportunistic at 1kg scale). |
+| `watch` | Strong engineered fit but unproven / higher-risk / no access yet — the portability-exploration lane. |
+| `learning` | Build-skill: a new process, a new variety, or roasting basics. A variety-coverage gap routes here, not to `pursue` (apex is process-defined). |
+| `calibration` | Keep a known clean skill sharp against a fixed clean benchmark (washed Panama Gesha the yardstick). Renamed from `reference` in the canon pass. |
+| `avoid` | Deprioritize flag — empty of named producers today (you don't canonically index a one-dimensional producer as a target). |
 
 Orthogonal to relationship state: a producer can be both **Brewed** and a priority
-target. Authored lazily; v1 seeds only the apex-anchor roster Chris named in the
-"Latent Producer Sourcing Targets" prototype
-([docs/features/producer-sourcing-targets-prototype-2026-06-19.md](docs/features/producer-sourcing-targets-prototype-2026-06-19.md)),
-all `bucket: pursue`:
+target. Authored lazily — only the active sourcing roster carries it. Current roster
+(geography-agnostic, process-first; Panama leads on lived-evidence density, not as a gate):
 
-- **Altieri Family**, **Lamastus Family**, **Mama Cata Estate (Garrido Family)**,
-  **Jannette & Kai Janson (Janson Farms)**, **Jamison Savage** (Finca Deborah),
-  **Pepe Jijón** (Finca Soledad), **Wilton Benitez** (with risk controls).
-
-**TODO (Chris authors):** the missing named apex anchors **Mikava / Santuario** and
-**CGLE / Café Granja La Esperanza** need new `ProducerEntry` rows before they can
-carry a bucket; plus `watch` / `learning` / `reference` buckets for the broader roster.
-**Prototype-not-canon:** the bucket model + the strategy.md § 7 reconciliation is a
-deferred grilling pass, not yet canon.
+- **`pursue` (13)** — *PA:* Altieri Family · Lamastus Family · Mama Cata Estate (Garrido) · Jannette & Kai Janson · Jamison Savage (Finca Deborah) · Ricardo & Victoria Koyner (Kotowa) · Graciano Cruz (HiU / Los Lajones). *CO:* Wilton Benitez · Rigoberto & Luis Eduardo Herrera (CGLE) · Paul & Kevin Doyle (Mikava / Santuario). *EC:* Pepe Jijón (Finca Soledad) · Juan Peña (Hacienda La Papaya). *CN:* Olina Cai (Project One Light).
+- **`watch` (4)** — Daterra (Luis Pascoal) · Nguisse Nare · Carmen Cecilia Montoya Patiño · William Ferney Ortiz Ruiz.
+- **`learning` (4)** — Diego Samuel Bermúdez Tapia (El Paraíso) · Julian Holguín Ramos (Inmaculada) · Po Zha (Yunnan) · Nawin Yaesorkoo (Doi Chang).
+- **`calibration` (2)** — Peterson Family (Hacienda La Esmeralda) · Rachel Samuel and Adam Overton (Gesha Village).
+- **`avoid`** — empty.
 
 ---
 
 ## By Producer System
 
-### Colombia Processing Labs  ·  14 producers
+### Colombia Processing Labs  ·  15 producers
 
 ### Deiro Garcia
 
@@ -322,6 +324,38 @@ deferred grilling pass, not yet canon.
 - **Roaster References:** Black & White, Manhattan, Sey, JBC
 - **Contact:** https://www.instagram.com/wilton.benitez92
 - **Process Signature:** Colombia processing-lab benchmark: thermal shock, double anaerobic, yeast, and carbonic methods for high-intensity engineered tropical/floral profiles. _(hand-authored)_
+
+---
+
+### Paul & Kevin Doyle
+
+**Country:** Colombia · **Admin:** Risaralda · **Macro:** Western Andean Cordillera
+
+- **Tier:** 1
+- **Producer System:** Colombia Processing Labs
+- **Processing System Tags:** Carbonic Fermentation System
+- **Reference Role:** Anchor
+- **Producer Type:** Family Estate
+- **Farm:** Mikava Coffee / Finca Santuario / Finca Marsella
+- **Farming Model:** Competition Micro-Estate
+- **Processing Capability:** Washed / Natural / Carbonic
+- **Processing Style Tags:** Carbonic Maceration, CO₂ Fermentation, Hybrid Washed, Temperature-Controlled Fermentation
+- **Drying Method:** Shaded Solar Canopies / Marquesinas
+- **Primary Cultivars:** Gesha
+- **Secondary Cultivars:** Sudan Rume, Bourbon, Tabi, Ethiopian Landrace selections
+- **Known For:** COE Record, Carbonic Maceration Natural, Competition Nano-Lots
+- **Typical Flavor Profile:** Floral + High Tone, Red Fruit + Candy, Citrus + Bright
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Silky / Syrupy
+- **Consistency Rating:** High
+- **Market Tier:** Ultra-Premium / Competition
+- **Exporters:** Mikava Coffee
+- **Importers:** Direct / Competition Buyers
+- **Roaster References:** World Brewers Cup, World Barista Championship, Competition Roasters
+- **Contact:** https://www.instagram.com/mikavacoffee/
+- **Process Signature:** Colombia competition micro-estate (Mikava / Finca Santuario): temperature-controlled carbonic maceration, CO₂ fermentation, and hybrid-washed processing of Gesha and Sudan Rume for layered high-tone floral, red-fruit / candy, and bright-citrus clarity. _(hand-authored)_
+
+*Added 2026-06-19 (producer sourcing-priority canon pass) from Chris's CSV-grade record. Canonical name follows the registry person/family convention; "Mikava / Santuario" is the common reference form (Mikava / Mikava Coffee / Santuario / Finca Santuario / Finca Marsella aliased to canonical Paul & Kevin Doyle). The named pursue roster's Colombia-side carbonic-maceration Gesha benchmark. Sourcing bucket: pursue.*
 
 ---
 
@@ -4384,6 +4418,13 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 | `Lily Garrido` | `Mama Cata Estate (Garrido Family)` |
 | `Jose David Garrido` | `Mama Cata Estate (Garrido Family)` |
 | `José David Garrido` | `Mama Cata Estate (Garrido Family)` |
+| `Mikava` | `Paul & Kevin Doyle` |
+| `Mikava Coffee` | `Paul & Kevin Doyle` |
+| `Mikava / Santuario` | `Paul & Kevin Doyle` |
+| `Mikava/Santuario` | `Paul & Kevin Doyle` |
+| `Santuario` | `Paul & Kevin Doyle` |
+| `Finca Santuario` | `Paul & Kevin Doyle` |
+| `Finca Marsella` | `Paul & Kevin Doyle` |
 | `Gilberto Ramiro Mejia, Rancho Tio Emilio` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
 | `Rancho Tio Emilio` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
 | `Finca Rancho Tio Emilio` | `Rancho Tio Emilio (Gilberto Ramiro Mejia)` |
@@ -4421,6 +4462,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 ## Changelog
 
+- 2026-06-19 — Producer sourcing-priority canon pass: folded the resolved three-axis sourcing model into canon. Renamed the `reference` sourcing bucket → `calibration` (zero data migration; no producer carried `reference`). Seeded the full action-axis roster on the registry — `pursue` (13), `watch` (4), `learning` (4), `calibration` (2), `avoid` empty. Promoted net-new `Paul & Kevin Doyle` (Tier 1 / Anchor, Colombia / Risaralda / Western Andean Cordillera, sourcing bucket `pursue`) — the Mikava / Santuario competition micro-estate (carbonic-maceration Gesha); aliased `Mikava` / `Mikava Coffee` / `Mikava / Santuario` / `Santuario` / `Finca Santuario` / `Finca Marsella` → `Paul & Kevin Doyle` (the `Finca`-prefixed aliases also defend against the loose 3-char `Finca <X>` prefix matcher mis-routing to Finca Sophia). HiU / Los Lajones (Graciano Cruz) was already promoted 2026-06-18, so Mikava was the only net-new producer this pass. Total entries 153→155 (count reconciled against the live registry).
 - 2026-06-18 — Taxonomy queue arbitration (Forward Coffee Panama session): promoted net-new `Graciano Cruz` (Tier 1 / Anchor, Panama / Volcán Barú Highlands, sourcing bucket `pursue`) — the Los Lajones Estate owner (HiU Coffee Company) behind the HiU Los Lajones Geisha Natural Bambu 8B green lot; aliased `HiU Los Lajones` / `HiU Coffee` / `Los Lajones` / `Los Lajones Estate` / `Finca Los Lajones` → `Graciano Cruz`. Resolved queue entry a8efff63. Separately added `Black Moon` / `Black Moon Farm` → `Hunter Tedman` aliases (the Black Moon Chiroso lot brand resolves to the canonical Hunter Tedman / Black Moon Farm entry). Both surfaced in the 2026-06-18 Forward sourcing exercise.
 - 2026-04-26 — Sprint 1l: structural port from 49-name flat → 118-entry rich. Migration 031 applies DB drift renames + 6 collapses (Yusuf / Alo Village → Tamiru Tadesse · Local Ninga → Long Miles · Letty + Finca El Paraiso → Diego Bermúdez · Nordic Approach → Mekuria Mergia).
 - 2026-05-20 — Taxonomy queue arbitration: aliased `Gissell & Lily Garrido` (Picolot Simba's Comp Edition Ethiopia Heirloom Cold Room Natural brew) onto the existing `Mama Cata Estate (Garrido Family)` canonical, expanding the alias surface to cover sibling-name variants (Gissell / Lily / Jose David Garrido), umbrella brands (Garrido Family, Garrido's Coffee & Estates), and farm short forms (Mama Cata, Mama Cata Estate, Finca Mama Cata). Promoted net-new `Nawin Yaesorkoo` (Tier 3 / Experimental skeleton, first Thailand lot - Newbery Street Doi Chang Washed) and `Rancho Tio Emilio (Gilberto Ramiro Mejia)` (Tier 3 / Experimental Ecuador, Typica Mejorado Washed Taza Dorada 2024 #6) with full alias coverage for the comma-joined form, bare farm name, and shortened person variants.

@@ -23,6 +23,6 @@ Empty. To be populated as the [sourcing/strategy.md](docs/skills/wbc-roasting-ar
 ## See also
 
 - [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) — WBC roasting lessons
-- [sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) — sourcing strategy + Tier 1/2/3 priority targets
+- [sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) — sourcing strategy + the sourcing-bucket action axis
 - [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md) — canonical cultivar registry
 - [docs/taxonomies/processes.md](docs/taxonomies/processes.md) — canonical process taxonomy

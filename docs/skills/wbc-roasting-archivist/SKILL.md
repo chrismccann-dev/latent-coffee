@@ -12,7 +12,7 @@ Author and maintain the WBC competitor corpus on the roasting side (2022-2025); 
 - [`cluster/wbc-roasting.md`](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) — migrated from `docs/roasting/wbc-roasting.md`. Old path resolves to a redirect stub for back-compat.
 - [`cluster/sourcing/strategy.md`](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) — migrated from `docs/roasting/wbc-sourcing.md` (tentative merge; future split when sourcing research grows). Old path resolves to a redirect stub.
 - [`cluster/sourcing/portfolio-lanes.md`](docs/skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md) — navigational sub-resource for the 5-lane portfolio frame (substantive content lives in `strategy.md § 10`).
-- [`cluster/sourcing/priority-targets.md`](docs/skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md) — navigational sub-resource for Tier 1/2/3 priority targets (substantive content lives in `strategy.md § 7-9`).
+- [`cluster/sourcing/priority-targets.md`](docs/skills/wbc-roasting-archivist/cluster/sourcing/priority-targets.md) — navigational sub-resource for the sourcing-bucket action axis (substantive content lives in `strategy.md § 7`).
 - [`cluster/per-competitor/`](docs/skills/wbc-roasting-archivist/cluster/per-competitor/) — placeholder directory for per-competitor deep dives. Empty today; populate as research deepens beyond strategy-level summaries.
 - [`cluster/canonical/wbc-tested-cultivars.md`](docs/skills/wbc-roasting-archivist/cluster/canonical/wbc-tested-cultivars.md) — canonical registry stub tracking which WBC-validated cultivar / process / sourcing patterns have been tested in Latent's lineup. Empty today; grows via Latent buying cycles.
 
