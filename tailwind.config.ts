@@ -54,6 +54,7 @@ const config: Config = {
           'acc-teal': '#5C8A8C',   'acc-teal-bg': '#E8F0F0',   'acc-teal-br': '#C5D7D8',
           'acc-amber': '#A88037',  'acc-amber-bg': '#F4ECDC',  'acc-amber-br': '#DEC9A0',
           'acc-plum': '#8E5A6E',   'acc-plum-bg': '#F2E8EC',   'acc-plum-br': '#D8BFCB',
+          'acc-blue': '#5A7A9E',   'acc-blue-bg': '#E9EEF3',   'acc-blue-br': '#C3D2DF',  // producer "Brewed" relationship badge
           // Lifecycle tiles — green-coffee → roasted-coffee gradient across the 4 states.
           // Resolved goes roasted-brown per redesign ratification #5 (was near-black `fg`).
           'tile-inventory': '#B4B4AE',     // grey — held back, hidden from primary view

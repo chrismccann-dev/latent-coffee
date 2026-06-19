@@ -10,6 +10,7 @@ const navItems = [
   { label: 'CULTIVARS', href: '/cultivars' },
   { label: 'PROCESSES', href: '/processes' },
   { label: 'ROASTERS', href: '/roasters' },
+  { label: 'PRODUCERS', href: '/producers' },
   { label: 'GREEN', href: '/green' },
 ]
 

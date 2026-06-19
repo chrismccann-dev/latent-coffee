@@ -31,7 +31,7 @@ export function Chip({ name, tone }: { name: ReactNode; tone?: AccentTone }) {
  * Lot Coordinator dogfood — water hue, ball in the brewing court). Deliberately
  * distinct from {@link Chip} — a status never reads as a flavor chip.
  */
-export type StatusTone = 'amber' | 'lavender' | 'teal' | 'resolved' | 'archive'
+export type StatusTone = 'amber' | 'lavender' | 'teal' | 'resolved' | 'archive' | 'blue'
 
 export function StatusPill({ label, tone }: { label: ReactNode; tone?: StatusTone }) {
   return (

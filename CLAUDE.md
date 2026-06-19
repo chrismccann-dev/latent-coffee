@@ -97,6 +97,8 @@ Per-page IA in [docs/architecture/page-ia.md § Cultivars](docs/architecture/pag
 Per-page IA in [docs/architecture/page-ia.md § Processes](docs/architecture/page-ia.md). Read when touching `app/(app)/processes/`.
 ### Roasters
 Per-page IA in [docs/architecture/page-ia.md § Roasters](docs/architecture/page-ia.md). Read when touching `app/(app)/roasters/`.
+### Producers
+Per-page IA in [docs/architecture/page-ia.md § Producers](docs/architecture/page-ia.md). Read when touching `app/(app)/producers/`. Sourcing-forward index + detail (shipped 2026-06-19); no DB table — aggregation is text-equality on `brews.producer` / `green_beans.producer` (canonicalized via `PRODUCER_LOOKUP`), derivation in [lib/producers.ts](lib/producers.ts).
 ### Brews
 Per-page IA in [docs/architecture/page-ia.md § Brews](docs/architecture/page-ia.md). Read when touching `app/(app)/brews/`.
 ### Header nav slot allocation (`components/Header.tsx`)

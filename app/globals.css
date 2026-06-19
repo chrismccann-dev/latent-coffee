@@ -30,6 +30,10 @@
   --acc-teal:  #5C8A8C;  --acc-teal-bg:  #E8F0F0;  --acc-teal-br:  #C5D7D8;
   --acc-amber: #A88037;  --acc-amber-bg: #F4ECDC;  --acc-amber-br: #DEC9A0;
   --acc-plum:  #8E5A6E;  --acc-plum-bg:  #F2E8EC;  --acc-plum-br:  #D8BFCB;
+  /* slate-blue — producer relationship badge "Brewed" (Producers-first-class
+     2026-06-19). Hue-distinct from teal (greener) so a "Brewed" badge never
+     reads as the self-roast teal family. */
+  --acc-blue:  #5A7A9E;  --acc-blue-bg:  #E9EEF3;  --acc-blue-br:  #C3D2DF;
 
   /* Semantic chrome — three named workflow-state roles + the new archive role.
      Distinct from flavor accents: these denote *workflow state*, not flavor. */
@@ -226,6 +230,7 @@ details[open] > summary .chev { transform: rotate(-135deg); }
 .chip.teal  { background: var(--acc-teal-bg);  border-color: var(--acc-teal-br);  color: #2f5152; }
 .chip.amber { background: var(--acc-amber-bg); border-color: var(--acc-amber-br); color: #6c5018; }
 .chip.plum  { background: var(--acc-plum-bg);  border-color: var(--acc-plum-br);  color: #582d3f; }
+.chip.blue  { background: var(--acc-blue-bg);  border-color: var(--acc-blue-br);  color: #2f4459; }
 
 /* Page wrapper — carries the named query container */
 .ssp-page { display: flex; flex-direction: column; gap: 10px; max-width: 820px; margin: 0 auto; width: 100%; padding: 14px 16px 56px; container-type: inline-size; container-name: ssppage; }
@@ -466,6 +471,8 @@ details[open] > summary .chev { transform: rotate(-135deg); }
 .status.resolved .dot { background: var(--resolved-emphasis); }
 .status.archive { background: var(--archive-emphasis-bg); border-color: var(--archive-emphasis-br); color: #3a3a36; }
 .status.archive .dot { background: var(--archive-emphasis); }
+.status.blue { background: var(--acc-blue-bg); border-color: var(--acc-blue-br); color: #2f4459; }
+.status.blue .dot { background: var(--acc-blue); }
 
 /* ------------------------------------------------------------------
    Green cupping primitives — ported from the v2 mobile-handoff bundle
