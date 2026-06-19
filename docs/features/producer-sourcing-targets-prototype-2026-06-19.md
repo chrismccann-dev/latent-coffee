@@ -1,14 +1,33 @@
-> **Provenance + status.** Chris's long-form thinking on what constitutes the Latent
-> sourcing targets and why, supplied 2026-06-19 during the producers sourcing-priority
-> sprint. **Treat as prototype, not canon** (Chris's framing). The sprint shipped only a
-> simplified slice: the `sourcingPriority?: { bucket; rationale }` registry field +
-> Priority targets tab (bucket = the S/A/B/C/D action ranking below; the numeric
-> fit/buy scores, riskFlags, and the separate Type axis were deferred). This doc is the
-> source artifact for the deferred **canon-reconciliation grilling pass** that folds the
-> model into `strategy.md § 7` + `CONTEXT-taste § Sourcing philosophy` (roadmap On deck:
-> "Producer sourcing-priority canon pass"). Reproduced as authored.
+> **Provenance + status (updated 2026-06-19, canon pass).** Chris's long-form thinking on
+> what constitutes the Latent sourcing targets and why, supplied 2026-06-19. This is now
+> the **lived-validated canon source artifact** for the sourcing model — no longer
+> "prototype, not canon." The producer sourcing-priority canon pass folded the resolved
+> three-axis model into canon: **Fit** (the filter cascade) · **Role** (the five portfolio
+> lanes) · **Action** (the `sourcingPriority` bucket). Canon homes:
+> [strategy.md §§ 7-10](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md),
+> [docs/taxonomies/producers.md § Sourcing priority](docs/taxonomies/producers.md),
+> [CONTEXT-taste.md § Sourcing philosophy](CONTEXT-taste.md). The reconciliation mapping
+> (how the structures below resolved) is the next block; Chris's original authored prose is
+> preserved beneath it as the source artifact, reproduced as written — its S/A/B/C/D, Types
+> A-D, and two-score framing are **superseded** by the mapping, kept verbatim for provenance.
+> (The path keeps "prototype" for inbound-link back-compat; the status above is canon.)
 
 # Latent Producer Sourcing Targets
+
+## Canon reconciliation (2026-06-19 canon pass)
+
+How the prototype's structures resolved into canon:
+
+- **Ranking Buckets (S/A/B/C/D) → the action `bucket`.** S→`pursue` · A→`watch` · B→`learning` · C→`calibration` (renamed from `reference`) · D→`avoid` (empty of named producers today). The bucket is the **Action** axis; the live roster (13 `pursue` / 4 `watch` / 4 `learning` / 2 `calibration`) lives on `ProducerEntry.sourcingPriority`.
+- **Target Producer Types A-D → dissolved** into bucket (Action) + lane (Role). "Apex anchor" survives as a *fit descriptor*, not a Type. The five lanes (Calibration-clarity / Fruit-tea-expression / Process-learning / Roast-learning-hybrids / Value-practice) are the **Role** axis (strategy.md § 10).
+- **Two-score model (Producer Fit + Buy Priority) → not computed.** Numeric fit/buy scores stay **deferred** — you can't compute a score from point-of-sale info, so the verdict is baked into the bucket. The real procedure is the **filter cascade** (strategy.md § 9); the reweighted scorecard (Process signature 25 · Layered-evolving 20 · **Personal taste 20** · Producer 15 · Cultivar 12 · Terroir 8, drying folded into Process signature) is a prose sanity back-check only. Missing data is neutral, not negative.
+- **riskFlags → inline in the rationale**, not a structured field, until a consumer exists. The anti-target is **structural** (one-dimensional + loud + no evolution across the cooling/structural arc), not a flavor vocabulary — boozy / funky / candy are not disqualifiers (Candy Blast fails on *movement*, not the co-ferment; Project One Light is apex).
+- **Process signature = the hard gate** (unchanged). Distinctive variety is a **#2 distinctiveness floor**, counter-case-able (Project One Light: process substituting for exotic genetics on a commodity Catimor). Geography = density, not a gate.
+- **New canonical producers this pass:** Paul & Kevin Doyle (Mikava / Santuario, Colombia → `pursue`). HiU / Los Lajones (Graciano Cruz) was already promoted 2026-06-18.
+
+---
+
+*The original authored artifact, reproduced as written (2026-06-19):*
 
 ## Summary
 

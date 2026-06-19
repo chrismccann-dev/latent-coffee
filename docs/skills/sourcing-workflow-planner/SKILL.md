@@ -10,7 +10,7 @@ Evaluate a new lot opportunity against sourcing strategy + current portfolio. Re
 ## Workflow scope
 
 - Read lot opportunity (importer offering / sample arrival / WBC year reference / sourcing channel signal)
-- Pull sourcing strategy from WBC Roasting Archivist § sourcing/ (5-lane portfolio definitions + Tier 1/2/3 priority targets — currently merged per ADR-0011 tentative collapse; future Sourcing Knowledge sub-skill splits out when sourcing book lands)
+- Pull sourcing strategy from WBC Roasting Archivist § sourcing/ (5-lane portfolio definitions + the sourcing-bucket action axis — currently merged per ADR-0011 tentative collapse; future Sourcing Knowledge sub-skill splits out when sourcing book lands)
 - Pull current inventory state via direct `green_beans` table read (rows where lifecycle_state ∈ {in_inventory, waiting_for_next_roast, waiting_for_next_cupping})
 - Pull lane-performance signals from closed lots via Roasting Historian (per-lot learnings + cross-cultivar / cross-process patterns)
 - Construct: recommendation (buy / hold / pass) + lane-fit assessment + rationale prose
@@ -18,7 +18,7 @@ Evaluate a new lot opportunity against sourcing strategy + current portfolio. Re
 ## Inputs
 
 - Lot opportunity (operator-provided in claude.ai session: importer offering details, cupping notes, price, lot quantity, processing, producer, lane signal)
-- [WBC Roasting Archivist](docs/skills/wbc-roasting-archivist/) cluster § sourcing/strategy.md — 5-lane portfolio + Tier 1/2/3 priority targets + tested-cultivars canonical registry
+- [WBC Roasting Archivist](docs/skills/wbc-roasting-archivist/) cluster § sourcing/strategy.md — 5-lane portfolio + the sourcing-bucket action axis + tested-cultivars canonical registry
 - [Roasting Historian](docs/skills/roasting-historian/) cluster — closed-lot lane-performance retros + per-cultivar + per-process patterns
 - Direct `green_beans` table read — current inventory state for portfolio-fit assessment
 - (Pre-2026-05-27 the Inputs list included Learning Assistant track-aware context. That dependency is removed — Research Coordinator per [ADR-0017](docs/adr/0017-research-assistant-architecture.md) is operator-direct in Claude Code, not a claude.ai-side input source. If a sourcing decision intersects an active research project, the operator surfaces that context manually.)

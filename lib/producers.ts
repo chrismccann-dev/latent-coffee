@@ -46,8 +46,8 @@ export function producerKey(name: string | null | undefined): string | null {
 
 // `indexed_only` = catalogued in the registry but with zero personal evidence
 // (no brews / green / learnings). Named "Indexed" user-facing — deliberately NOT
-// "target": a curated sourcing-priority (the real shortlist, strategy.md § 7)
-// is a separate future `sourcingPriority` field, not this evidence-derived state.
+// "target": the curated sourcing shortlist (the action axis, strategy.md § 7) is
+// the separate `sourcingPriority` bucket field, not this evidence-derived state.
 export type RelationshipState =
   | 'indexed_only'
   | 'brewed_purchased'
@@ -76,7 +76,7 @@ export const BUCKET_LABEL: Record<SourcingBucket, string> = {
   pursue: 'Actively pursue',
   watch: 'Watchlist',
   learning: 'Learning target',
-  reference: 'Reference / calibration',
+  calibration: 'Calibration',
   avoid: 'Avoid / deprioritize',
 }
 
@@ -84,7 +84,7 @@ const BUCKET_RANK: Record<SourcingBucket, number> = {
   pursue: 0,
   watch: 1,
   learning: 2,
-  reference: 3,
+  calibration: 3,
   avoid: 4,
 }
 

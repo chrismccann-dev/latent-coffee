@@ -46,18 +46,20 @@ export type ProducerSystem =
   | 'Ecuador Mejorado + Precision Estates'
   | 'Thailand Experimental Processing'
 
-// Curated sourcing-priority axis (Producers sourcing-priority sprint, 2026-06-19).
-// The real "what I'm targeting next when I source" shortlist — distinct from the
-// evidence-derived `indexed_only` relationship state (the "Indexed" tab) AND from
-// `tier` (system-importance) / `referenceRole` (reference-system role). Authored
-// from Chris's "Latent Producer Sourcing Targets" prototype
-// (docs/features/producer-sourcing-targets-prototype-2026-06-19.md), which is
-// prototype-not-canon: the buckets are his S/A/B/C/D action ranking
-// (pursue/watch/learning/reference/avoid), v1 carries only the action bucket +
-// authored rationale (the numeric fit/buy scores, riskFlags, and a separate
-// role-Type axis are deferred). The canon reconciliation against
-// strategy.md § 7 + CONTEXT-taste is a separate future grilling pass.
-export type SourcingBucket = 'pursue' | 'watch' | 'learning' | 'reference' | 'avoid'
+// Curated sourcing-priority axis — the `Action` half of the three-axis sourcing
+// spine (Fit = the filter cascade + scorecard sanity-check, never a stored
+// number · Role = the five portfolio lanes · Action = this bucket). Folded into
+// canon by the producer sourcing-priority canon pass (2026-06-19); the resolved
+// model lives in docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md
+// §§ 7-10 + docs/features/producer-sourcing-targets-prototype-2026-06-19.md.
+// Distinct from the evidence-derived `indexed_only` relationship state (the
+// "Indexed" tab) AND from `tier` (registry system-importance) / `referenceRole`
+// (reference-system role). v1 carries only the action bucket + an authored
+// one-line rationale; numeric fit/buy scores and structured riskFlags stay
+// deliberately deferred — you can't compute a score from point-of-sale info, so
+// the verdict is baked into the bucket and risk stays inline in the rationale.
+// `reference` was renamed `calibration` in the canon pass (zero data migration).
+export type SourcingBucket = 'pursue' | 'watch' | 'learning' | 'calibration' | 'avoid'
 
 export interface SourcingPriority {
   bucket: SourcingBucket
@@ -215,6 +217,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Crop to Cup", "Showroom"],
     roasterReferences: ["Moonwake", "September"],
     contact: "https://www.instagram.com/nigussienare",
+    sourcingPriority: {
+      bucket: "watch",
+      rationale: "Extreme-altitude Sidama anaerobic-natural (74158): apex-shaped on paper, but Ethiopian anaerobic-natural carries real boozy / one-dimensional risk until there's cup evidence — watch, not pursue.",
+    },
   },
   {
     name: "Peterson Family",
@@ -244,6 +250,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Mercanta", "Olam"],
     roasterReferences: ["Intelligentsia", "Blue Bottle", "Moonwake", "George Howell"],
     contact: "https://www.instagram.com/haciendalaesmeralda",
+    sourcingPriority: {
+      bucket: "calibration",
+      rationale: "Hacienda La Esmeralda — the textbook washed Panama Gesha benchmark and the fixed clean yardstick. Keep one in rotation every few cycles to keep clean-clarity roasting sharp; deliberately skipped on Forward as over-indexed / already covered.",
+    },
     processSignature: "Panama Gesha-pioneer estate: yeast-inoculated and slow-dry processing of auction-grade Gesha for high-tone floral, citrus, and tea-like clarity.",
     processSignatureConfidence: "hand-authored",
   },
@@ -382,6 +392,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Coffee Quest", "Chicas"],
     roasterReferences: ["Sey", "Fiftybeans", "Rebelbean"],
     contact: "https://www.instagram.com/williamferney1223/",
+    sourcingPriority: {
+      bucket: "watch",
+      rationale: "Huila Chiroso / Pink Bourbon processing smallholder (carbonic / lactic / dry-ferment): strong engineered-fit Chiroso, no access or personal evidence yet — watch.",
+    },
   },
   {
     name: "Doris Tuiyott",
@@ -788,6 +802,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Coffee Quest", "Onyx"],
     roasterReferences: ["Sey", "Onyx", "Ilse"],
     contact: "https://www.instagram.com/cafexporto/",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Data-driven Ecuador Mejorado benchmark (Hacienda La Papaya): sensor-driven and barrel fermentation — textbook engineered process on the apex variety floor; the recommended Ecuador portability pursue (Enrique Merino / Lugmapata the close alternate).",
+    },
   },
   {
     name: "Merino Family",
@@ -1260,6 +1278,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Falcon", "Onyx"],
     roasterReferences: ["Moonwake", "Tandem", "Monogram"],
     contact: "https://www.instagram.com/carmenmontoya",
+    sourcingPriority: {
+      bucket: "watch",
+      rationale: "Antioquia Chiroso COE pioneer (Bella Vista): clean multi-day-ferment washed Chiroso — strong engineered fit on the named Chiroso lane, but unproven in the Latent archive; watch.",
+    },
   },
   {
     name: "Central Sumatera Coffee",
@@ -1608,6 +1630,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Yellow Rooster", "Cafe Imports", "Sucafina"],
     roasterReferences: ["PT's", "Sey", "Moonwake", "Equator"],
     contact: "https://www.instagram.com/cafegranjalaesperanza",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Colombia experimental-fermentation benchmark (Café Granja La Esperanza): anaerobic / XO-natural / mosto across a rare-cultivar bank (first Colombian Gesha, Mandela, Sudan Rume) — repeat Latent source with a layered-legible ceiling and direct WhatsApp access.",
+    },
     processSignature: "Colombia experimental-fermentation benchmark estate group: anaerobic, XO natural, and mosto processing across a rare-cultivar bank (first Colombian Gesha, Mandela), tuned for clean high-tone floral / stone-fruit clarity.",
     processSignatureConfidence: "hand-authored",
   },
@@ -2437,6 +2463,50 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     processSignatureConfidence: "hand-authored",
   },
   {
+    // New canonical producer — authored 2026-06-19 (producer sourcing-priority
+    // canon pass) from Chris's CSV-grade record. "Mikava / Santuario" is the
+    // common reference form; the canonical name follows the registry person/
+    // family convention (Paul & Kevin Doyle run Mikava Coffee / Finca Santuario
+    // / Finca Marsella). The named pursue roster's Colombia-side carbonic-
+    // maceration Gesha benchmark. Defensive aliases (Mikava / Santuario /
+    // Finca Santuario / Finca Marsella) added to PRODUCER_ALIASES so the
+    // common forms resolve and the loose 3-char "Finca <X>" prefix matcher
+    // does NOT mis-route "Finca Santuario" / "Finca Marsella" to Finca Sophia.
+    name: "Paul & Kevin Doyle",
+    tier: 1,
+    producerSystem: "Colombia Processing Labs",
+    processingSystemTags: ["Carbonic Fermentation System"],
+    referenceRole: "Anchor",
+    producerType: "Family Estate",
+    farmName: "Mikava Coffee / Finca Santuario / Finca Marsella",
+    country: "Colombia",
+    adminRegion: "Risaralda",
+    macroTerroir: "Western Andean Cordillera",
+    farmingModel: "Competition Micro-Estate",
+    processingCapability: "Washed / Natural / Carbonic",
+    processingStyleTags: ["Carbonic Maceration", "CO₂ Fermentation", "Hybrid Washed", "Temperature-Controlled Fermentation"],
+    dryingMethod: "Shaded Solar Canopies / Marquesinas",
+    primaryCultivars: ["Gesha"],
+    secondaryCultivars: ["Sudan Rume", "Bourbon", "Tabi", "Ethiopian Landrace selections"],
+    experimentalCultivars: [],
+    knownFor: ["COE Record", "Carbonic Maceration Natural", "Competition Nano-Lots"],
+    typicalFlavorProfile: ["Floral + High Tone", "Red Fruit + Candy", "Citrus + Bright"],
+    acidityStyle: "Citric / Malic",
+    bodyStyle: "Silky / Syrupy",
+    consistencyRating: "High",
+    marketTier: "Ultra-Premium / Competition",
+    exporters: ["Mikava Coffee"],
+    importers: ["Direct / Competition Buyers"],
+    roasterReferences: ["World Brewers Cup", "World Barista Championship", "Competition Roasters"],
+    contact: "https://www.instagram.com/mikavacoffee/",
+    processSignature: "Colombia competition micro-estate (Mikava / Finca Santuario): temperature-controlled carbonic maceration, CO₂ fermentation, and hybrid-washed processing of Gesha and Sudan Rume for layered high-tone floral, red-fruit / candy, and bright-citrus clarity.",
+    processSignatureConfidence: "hand-authored",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Colombia carbonic-maceration Gesha benchmark (Mikava / Santuario): COE-record CM and hybrid-washed engineering landing layered red-fruit / floral clarity — the Colombia-side CM apex and a non-Panama portability anchor.",
+    },
+  },
+  {
     name: "Yessica & Diego Parra",
     tier: 1,
     producerSystem: "Colombia Processing Labs",
@@ -2580,6 +2650,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Yunnan Coffee LLC", "Bespoke"],
     roasterReferences: ["Moonwake", "Almanac", "Saints of Mokha"],
     contact: "https://www.instagram.com/olina_caicai",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Yunnan systematic-engineered process (Project One Light) landing layered-evolving on a commodity Catimor — the variety-floor counter-case + the non-Panama portability proof; rank ~1.5 personal favorite.",
+    },
   },
   {
     name: "Po Zha",
@@ -2609,6 +2683,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Yunnan Coffee LLC"],
     roasterReferences: ["Smay", "Moonwake"],
     contact: "https://www.instagram.com/yunnancoffeellc/",
+    sourcingPriority: {
+      bucket: "learning",
+      rationale: "Yunnan experimental-processing estate (Catimor): non-Panama process-learning rep — how anaerobic / low-temp ferment transforms a commodity base; the Project-One-Light learning sibling.",
+    },
   },
   {
     name: "Songfeng Cooperative",
@@ -2928,6 +3006,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Direct / Various"],
     roasterReferences: ["George Howell", "Passenger", "La Terza"],
     contact: "https://www.instagram.com/daterracoffee",
+    sourcingPriority: {
+      bucket: "watch",
+      rationale: "Brazil precision-at-scale estate (Penta process / wood-silo aging): strong engineered fit, but reads blend-component / precision-at-scale — watch, don't pursue on spec until a single layered-evolving lot proves out.",
+    },
     processSignature: "Brazil precision / Penta-process estate: carbon-negative full-spectrum processing and wood-silo aging of Bourbon / Mundo Novo for low-acid chocolate, nutty-sweet, clean stone-fruit profiles.",
     processSignatureConfidence: "hand-authored",
   },
@@ -2959,6 +3041,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["The Coffee Quest", "Falcon"],
     roasterReferences: ["Intelligentsia", "Gardelli", "Red Rooster"],
     contact: "https://www.instagram.com/fincaelparaisocoffee",
+    sourcingPriority: {
+      bucket: "learning",
+      rationale: "Finca El Paraíso thermal-shock / biocatalysis lab: the canonical process-learning target — recipe-based engineering teaches how high-process interacts with roast; buy when a lot has a clear learning job.",
+    },
     processSignature: "Colombia bio-industrial processing lab: recipe-based thermal shock, double anaerobic, and biocatalysis engineering high-intensity tropical / lychee and candy-sweet profiles.",
     processSignatureConfidence: "hand-authored",
   },
@@ -3350,6 +3436,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Various"],
     roasterReferences: ["Onyx", "Gardelli", "The Barn"],
     contact: "https://www.instagram.com/inmaculadacoffeefarms",
+    sourcingPriority: {
+      bucket: "learning",
+      rationale: "Inmaculada carbonic / Eugenioides-commercializing estate: process-and-variety learning lane (Sudan Rume, Eugenioides, Laurina) — teaches sweetness-vs-acidity role design.",
+    },
   },
   {
     name: "Julio César Madrid Tisnés",
@@ -3437,6 +3527,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Falcon", "MTC Specialty"],
     roasterReferences: ["Black & White", "Onyx", "Gardelli"],
     contact: "https://www.instagram.com/geshavillage",
+    sourcingPriority: {
+      bucket: "calibration",
+      rationale: "Gesha-origin agroforestry estate (1931 / Gori Gesha): clean high-clarity Ethiopian Gesha reference — calibration upkeep for the floral-transparent lane, not urgent (over-indexed in specialty).",
+    },
     processSignature: "Ethiopia Gesha-origin agroforestry estate: precision fermentation and block-level lot separation of Gesha 1931 / Gori Gesha for high-tone floral, tropical, and bergamot-citrus clarity.",
     processSignatureConfidence: "hand-authored",
   },
@@ -3468,6 +3562,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Various"],
     roasterReferences: ["PT’s Coffee", "Global Roasters"],
     contact: "https://www.instagram.com/cafekotowa",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Multi-generational Boquete estate (Kotowa / Rio Cristal): carbonic-maceration and anaerobic multi-process on a clean Panama base — the access-friendly Panama processing-depth pursue.",
+    },
   },
   {
     name: "Roque Sánchez Cruz",
@@ -3957,6 +4055,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Ally Coffee", "This Side Up"],
     roasterReferences: ["Newbery Street Coffee Roasters"],
     contact: "https://www.instagram.com/nawin_yaesorkoo/",
+    sourcingPriority: {
+      bucket: "learning",
+      rationale: "Doi Chang specialty-processing pioneer (controlled yeast / anaerobic-natural / red-honey): Thailand process-learning rep — high-information off the WBC map.",
+    },
   },
   {
     // Skeleton - promoted from override queue 2026-05-26 (raw_value
@@ -4893,6 +4995,17 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Los Lajones": "Graciano Cruz",
   "Los Lajones Estate": "Graciano Cruz",
   "Finca Los Lajones": "Graciano Cruz",
+  // Mikava / Santuario (Paul & Kevin Doyle, Risaralda) — canonical added
+  // 2026-06-19 sourcing-canon pass. "Mikava" is the universal reference form;
+  // "Finca Santuario" / "Finca Marsella" are defensive against the loose
+  // 3-char "Finca <X>" prefix matcher (else they'd mis-route to Finca Sophia).
+  Mikava: "Paul & Kevin Doyle",
+  "Mikava Coffee": "Paul & Kevin Doyle",
+  "Mikava / Santuario": "Paul & Kevin Doyle",
+  "Mikava/Santuario": "Paul & Kevin Doyle",
+  Santuario: "Paul & Kevin Doyle",
+  "Finca Santuario": "Paul & Kevin Doyle",
+  "Finca Marsella": "Paul & Kevin Doyle",
   "Jamison Savage, Direct with Savage Coffees": "Jamison Savage",
   // Short form (no farm-name parenthetical) for the Janson Farms entry.
   // Surfaced by Track 2 dry-run as 1 brew producer-drift row.

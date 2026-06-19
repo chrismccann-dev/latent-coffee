@@ -89,7 +89,7 @@ Resources are content endpoints claude.ai can list and fetch. Each Resource has 
 | `docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md` | WBC 5-axis foundational map + 8 strategy families + Cross-Cutting Control Patterns | Repo file |
 | `docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md` | 102-recipe WBC archive (2022-2025) | Repo file |
 | `docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md` | WBC roasting lessons + Roest L200 hypotheses + blending experiments + rest-curve protocol | Repo file |
-| `docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md` | WBC sourcing strategy + Tier 1/2/3 priority targets + 5-lane portfolio frame + sourcing channels | Repo file |
+| `docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md` | WBC sourcing strategy + sourcing buckets (action axis) + 5-lane portfolio frame + sourcing channels | Repo file |
 | `docs://roasting.md` | `ROASTING.md` text (full, or `#{anchor}` for one section) | Repo file |
 | `docs://taxonomies/{axis}.md` | Authored markdown for one of the 10 canonical taxonomies (full, or `#{anchor}`) | Repo file |
 | `docs://prompts/{name}.md` | Operational prompts (start-brew / bundled-brewing-completion brewing-side — Claude-Code `/brew` substrate post claude.ai-brewing retirement 2026-06-18; start-lot / log-roast / log-cupping / close-lot V-set roasting; one-shot / one-shot-closeout one-shot roasting) | Repo file |
