@@ -130,5 +130,5 @@ Fresh Claude Code session: "execute the producer sourcing-priority canon pass" �
 
 ## Grill-close follow-ups (per CLAUDE.md grilling ritual)
 
-- Run the **claude.ai grilling review** (3-part: memory/instruction currency + cross-party claude.ai grill + context-window usage, roasting-emphasized) — the sourcing strategy is the one surface Claude Code can't see/edit and the bucket vocabulary + apex-process framing just shifted materially.
+- **No claude.ai grilling review needed** (status update 2026-06-19, [[project-workflow-surface-migration]]): the claude.ai surface is being retired — brewing is 100% on Claude Code, and roasting is one V-set turn from done (Roasting Coordinator live, first dogfood lot through first-roast, awaiting first cupping ~2026-06-20). The new sourcing model propagates by editing the **Claude-Code substrate the roasting coordinator reads directly** (strategy.md / coordinator/catalog.md / wbc-materials.md via `read_doc`) — which step 4's doc-sweep already covers. Actor 3 is collapsing into Actor 5; there is no separate claude.ai instructions surface to harden.
 - Update [docs/grilling-queue.md](docs/grilling-queue.md) § Resolved with this session.
