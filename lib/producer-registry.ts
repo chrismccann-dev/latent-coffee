@@ -117,7 +117,7 @@ export interface ProducerEntry {
 
 
 // ---------------------------------------------------------------------------
-// 153-entry registry (originally 85 CSV #1 + 33 CSV #3 + Mama Cata + Miguel
+// 154-entry registry (originally 85 CSV #1 + 33 CSV #3 + Mama Cata + Miguel
 // Estela skeleton + Ruarai Factory (Ruthaka FCS, 2026-05-30 data-audit); the
 // balance accrued via taxonomy-queue arbitrations, + Finca Sophia (2026-06-19
 // producer-attribution fix). Lead count last reconciled 2026-06-19 against the
@@ -3108,6 +3108,41 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     contact: "https://www.instagram.com/noscoffee",
   },
   {
+    name: "Graciano Cruz",
+    tier: 1,
+    producerSystem: null,
+    processingSystemTags: ["Controlled Processing System"],
+    referenceRole: "Anchor",
+    producerType: "Estate / Innovator",
+    farmName: "Finca Los Lajones (HiU Coffee)",
+    country: "Panama",
+    adminRegion: "Tierras Altas (Volcán)",
+    macroTerroir: "Volcán Barú Highlands",
+    farmingModel: "Estate (160ha; ~120ha forest reserve, zero-water processing)",
+    processingCapability: "Honey / Natural",
+    processingStyleTags: ["Honey", "Natural", "Bambu Process", "Raised-Bed Dried"],
+    dryingMethod: "Raised African Beds",
+    primaryCultivars: ["Gesha"],
+    secondaryCultivars: ["Catuai", "Pacamara"],
+    experimentalCultivars: [],
+    knownFor: ["Best of Panama (2008 #12; 2025 Geisha #6 Natural / #7 Washed)", "High-elevation Geisha to 2100m"],
+    typicalFlavorProfile: ["Floral + High Tone", "Tropical Fruit + Sweet", "Citrus + Sparkling"],
+    acidityStyle: "Citric / Malic",
+    bodyStyle: "Silky / Juicy",
+    consistencyRating: "High",
+    marketTier: "Competition / Ultra-Premium",
+    exporters: [],
+    importers: ["Forward Coffee"],
+    roasterReferences: ["Rosso", "Latent"],
+    contact: "https://www.instagram.com/hiucoffee",
+    processSignature: "High-altitude Volcán Barú Gesha estate (to 2100m) on a zero-water honey + natural system, raised-bed dried for layered tropical-floral clarity.",
+    processSignatureConfidence: "hand-authored",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "The named apex benchmark - 'more like the HiU Los Lajones'. Layered tropical-floral natural Gesha with a strong hot-to-cool arc; first Latent green lot 2026-06 (Bambu 8B).",
+    },
+  },
+  {
     name: "Hunter Tedman",
     tier: 1,
     producerSystem: null,
@@ -4850,6 +4885,14 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Gesha Village Coffee Estate": "Rachel Samuel and Adam Overton",
   "Henry Bonilla": "Henry Bonilla Murcia",
   "Hunter Tedman": "Hunter Tedman",
+  "Black Moon": "Hunter Tedman",
+  "Black Moon Farm": "Hunter Tedman",
+  "Graciano Cruz": "Graciano Cruz",
+  "HiU Los Lajones": "Graciano Cruz",
+  "HiU Coffee": "Graciano Cruz",
+  "Los Lajones": "Graciano Cruz",
+  "Los Lajones Estate": "Graciano Cruz",
+  "Finca Los Lajones": "Graciano Cruz",
   "Jamison Savage, Direct with Savage Coffees": "Jamison Savage",
   // Short form (no farm-name parenthetical) for the Janson Farms entry.
   // Surfaced by Track 2 dry-run as 1 brew producer-drift row.
