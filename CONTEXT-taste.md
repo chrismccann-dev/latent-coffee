@@ -110,6 +110,19 @@ Chris read whole-bean Agtron (Lighttells) on the favorite PicoLot lots he had >=
 
 **Caveats:** (1) whole-bean Lighttells readings - per [brewing-assistant operational-guide](docs/skills/brewing-assistant/cluster/operational-guide.md), *ground* Agtron at dose-out is the authoritative brew-time extraction prior, not WB, and the WB-to-ground delta can be wide; these numbers describe roast color, not a brew prior. (2) Cross-device calibration (Lighttells vs the cupping Agtron device, `whb_agtron`) is needed before ~76-77 is treated as a literal self-roast setpoint. (3) These are PicoLot's roasts (the apex reference), not Chris's self-roasts.
 
+### Non-Panama / commodity-variety anchor (Project One Light)
+
+Added 2026-06-19 during the sourcing-priority canon grill. The Agtron table above is the Panama PicoLot cluster; this anchor records the one taste-backed favorite *outside* it, because it is the standing **counter-case** to two of the apex's open priors.
+
+**Project One Light "Peach Oolong" (Olina Cai, Yunnan, China)** - yeast anaerobic natural, **Catimor**. Ranked by Chris just below the Panama PicoLot favorites (a "rank ~1.5"). It carries the layered-evolving signature - pu'er, peach candy, jasmine milk tea, notes that *move* across the cooling arc - on a **co-ferment-adjacent process** (the same yeast-anaerobic family whose one-dimensional easy mode produces the anti-target).
+
+Why it anchors the canon:
+- **Geography is density, not a gate.** It places an apex-grade, taste-backed favorite in Yunnan - a region *building* an engineered-process identity rather than inheriting one. Panama is where Chris's evidence clusters, not where the signature lives.
+- **Variety is a floor, not a gate (counter-case confirmed).** The systematic process landed apex on a **commodity-ish, non-exotic Catimor**. This is the named empirical case the Sourcing philosophy holds open ("heavy process engineering may yet substitute for distinctive genetics on a commodity cultivar") - here it did. It reinforces **process as the #1 signal** and demotes distinctive variety further toward floor-not-gate.
+- **The anti-target is structural, not a flavor vocabulary.** Same process *family* as a one-note candy bomb, opposite *outcome*: it lands layered-evolving, so it is welcome. The disqualifier was never "funky/yeast/co-ferment" - it is *one-dimensional-and-static across the arc*.
+
+Caveat: a single favorite, palate-judged (not a controlled comparison). It widens the apex's evidence base beyond Panama; it does not by itself overturn the high-altitude or distinctive-variety priors.
+
 ---
 
 ## Honest baseline
