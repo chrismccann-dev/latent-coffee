@@ -175,7 +175,7 @@ export default async function ProducerDetailPage({ params }: { params: { slug: s
 
       {/* 1. Header */}
       <SspTopBar
-        count={brewCount > 0 ? `${brewCount} COFFEE${brewCount === 1 ? '' : 'S'}` : 'TARGET'}
+        count={brewCount > 0 ? `${brewCount} COFFEE${brewCount === 1 ? '' : 'S'}` : 'INDEXED'}
         anchor={country ?? entry?.producerSystem ?? 'Producer'}
         kind="Producer Profile"
       />
@@ -299,7 +299,7 @@ export default async function ProducerDetailPage({ params }: { params: { slug: s
         <div className="ssp-card">
           <SspShead>My Evidence</SspShead>
           <p className="font-sans text-sm text-latent-mid">
-            No personal evidence yet — this is a target producer. Acquisition signal only.
+            No personal evidence yet — indexed from the canonical registry. Acquisition signal only.
           </p>
         </div>
       )}

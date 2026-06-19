@@ -18,7 +18,7 @@ const TABS: { key: ProducerTab; label: string }[] = [
   { key: 'in_inventory', label: 'In inventory' },
   { key: 'roasted', label: 'Roasted by me' },
   { key: 'brewed', label: 'Brewed' },
-  { key: 'target', label: 'Target producer' },
+  { key: 'indexed', label: 'Indexed' },
   { key: 'needs_enrichment', label: 'Needs enrichment' },
 ]
 

@@ -42,8 +42,12 @@ export function producerKey(name: string | null | undefined): string | null {
 // Relationship + enrichment state
 // ---------------------------------------------------------------------------
 
+// `indexed_only` = catalogued in the registry but with zero personal evidence
+// (no brews / green / learnings). Named "Indexed" user-facing — deliberately NOT
+// "target": a curated sourcing-priority (the real shortlist, strategy.md § 7)
+// is a separate future `sourcingPriority` field, not this evidence-derived state.
 export type RelationshipState =
-  | 'target_only'
+  | 'indexed_only'
   | 'brewed_purchased'
   | 'sourced_green'
   | 'self_roasted'
@@ -56,7 +60,7 @@ export type ProducerTab =
   | 'in_inventory'
   | 'roasted'
   | 'brewed'
-  | 'target'
+  | 'indexed'
   | 'needs_enrichment'
 
 // Lot lifecycle statuses that mean a held lot has entered the roast cycle (but
@@ -100,7 +104,7 @@ export function deriveRelationshipState(
   }
   if (greenLots.length > 0) return 'sourced_green'
   if (brews.length > 0) return 'brewed_purchased'
-  return 'target_only'
+  return 'indexed_only'
 }
 
 export function deriveEnrichmentStatus(entry: ProducerEntry | null): EnrichmentStatus {
@@ -127,8 +131,8 @@ export function deriveEnrichmentStatus(entry: ProducerEntry | null): EnrichmentS
 
 /**
  * Build one ProducerAggregate per producer across the universe of (registry ∪
- * evidence). Registry producers with zero evidence surface as `target_only`
- * (the sourcing wishlist); evidence producers absent from the registry surface
+ * evidence). Registry producers with zero evidence surface as `indexed_only`
+ * (catalogued, not yet sourced); evidence producers absent from the registry surface
  * with `entry: null`. Both index and detail call this with the full (tiny) row
  * sets and filter in memory — text-equality canonicalization rules out a `.eq`
  * query.
@@ -177,7 +181,7 @@ export function aggregateProducers(
     ensure(key).roastLearnings.push(rl)
   }
 
-  // Seed every registry producer so target-only producers appear.
+  // Seed every registry producer so indexed-only producers appear.
   for (const entry of PRODUCERS) ensure(entry.name)
 
   const aggregates: ProducerAggregate[] = []
@@ -234,8 +238,8 @@ export function relationshipBadge(
       return { label: 'Roasted by me', tone: 'teal' }
     case 'resolved_reference':
       return { label: 'Reference', tone: 'teal' }
-    case 'target_only':
-      return { label: 'Target producer', tone: 'amber' }
+    case 'indexed_only':
+      return { label: 'Indexed', tone: 'amber' }
   }
 }
 
@@ -271,8 +275,8 @@ export function matchesTab(agg: ProducerAggregate, tab: ProducerTab): boolean {
       )
     case 'brewed':
       return isVisibleInDefaultIndex(agg) && agg.purchasedBrews.length > 0
-    case 'target':
-      return isVisibleInDefaultIndex(agg) && agg.relationshipState === 'target_only'
+    case 'indexed':
+      return isVisibleInDefaultIndex(agg) && agg.relationshipState === 'indexed_only'
   }
 }
 
@@ -364,7 +368,7 @@ export function latentFit(entry: ProducerEntry | null): string {
 export function buyPosture(agg: ProducerAggregate): string {
   const cult = agg.entry?.primaryCultivars?.[0]
   switch (agg.relationshipState) {
-    case 'target_only':
+    case 'indexed_only':
       return 'Find a clean, disclosed lot'
     case 'resolved_reference':
       return 'Compare future lots to the reference'
@@ -404,7 +408,7 @@ export function evidenceLevel(agg: ProducerAggregate): string {
 export function nextAction(agg: ProducerAggregate): string {
   const posture = buyPosture(agg)
   const stylized = isStylized(agg.entry)
-  if (agg.relationshipState === 'target_only') {
+  if (agg.relationshipState === 'indexed_only') {
     return stylized
       ? `${posture}; confirm clarity survives the processing.`
       : `${posture}; verify disclosure before buying.`
@@ -436,7 +440,7 @@ const ALL_TABS: ProducerTab[] = [
   'in_inventory',
   'roasted',
   'brewed',
-  'target',
+  'indexed',
   'needs_enrichment',
 ]
 
