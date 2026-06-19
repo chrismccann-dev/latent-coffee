@@ -9,7 +9,7 @@ calibration reference (Anchor reference role). Tier 2: repeat top-roaster
 producer with strong sourcing/brewing signal (Signal). Tier 3: emerging or
 edge-case producer useful for tracking directional change (Experimental).
 
-**Coverage** — 153 producers covering Chris's estimated 60-70% of brewed
+**Coverage** — 154 producers covering Chris's estimated 60-70% of brewed
 coffees. Producer data branches unboundedly compared to cultivar/terroir,
 so the registry is intentionally tier-scoped rather than comprehensive.
 Net-new producers can be persisted via the `/add` flow's `allowOverride`
@@ -2119,6 +2119,37 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 - **Importers:** Various
 - **Roaster References:** Hatch, Seven Seeds, Onyx
 - **Contact:** https://www.instagram.com/lalopty
+
+---
+
+### Graciano Cruz
+
+**Country:** Panama · **Admin:** Tierras Altas (Volcán) · **Macro:** Volcán Barú Highlands
+
+- **Tier:** 1
+- **Producer System:** —
+- **Processing System Tags:** Controlled Processing System
+- **Reference Role:** Anchor
+- **Producer Type:** Estate / Innovator
+- **Farm:** Finca Los Lajones (HiU Coffee)
+- **Farming Model:** Estate (160ha; ~120ha forest reserve, zero-water processing)
+- **Processing Capability:** Honey / Natural
+- **Processing Style Tags:** Honey, Natural, Bambu Process, Raised-Bed Dried
+- **Drying Method:** Raised African Beds
+- **Primary Cultivars:** Gesha
+- **Secondary Cultivars:** Catuai, Pacamara
+- **Known For:** Best of Panama (2008 #12; 2025 Geisha #6 Natural / #7 Washed), High-elevation Geisha to 2100m
+- **Typical Flavor Profile:** Floral + High Tone, Tropical Fruit + Sweet, Citrus + Sparkling
+- **Acidity Style:** Citric / Malic
+- **Body Style:** Silky / Juicy
+- **Consistency Rating:** High
+- **Market Tier:** Competition / Ultra-Premium
+- **Exporters:** —
+- **Importers:** Forward Coffee
+- **Roaster References:** Rosso, Latent
+- **Contact:** https://www.instagram.com/hiucoffee
+
+*Promoted 2026-06-18 from the taxonomy queue (Forward Coffee HiU Los Lajones Geisha Natural Bambu 8B green lot). HiU Los Lajones / Los Lajones / Finca Los Lajones / HiU Coffee aliased to canonical Graciano Cruz, the Los Lajones Estate owner (HiU Coffee Company). Confirmed via web research; estate on Volcán Barú, 1750-2400m, honey + natural on raised beds. Sourcing bucket: pursue (the named apex benchmark).*
 
 ---
 
@@ -4325,6 +4356,13 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 | `Gesha Village Coffee Estate` | `Rachel Samuel and Adam Overton` |
 | `Henry Bonilla` | `Henry Bonilla Murcia` |
 | `Hunter Tedman` | `Hunter Tedman` |
+| `Black Moon` | `Hunter Tedman` |
+| `Black Moon Farm` | `Hunter Tedman` |
+| `HiU Los Lajones` | `Graciano Cruz` |
+| `HiU Coffee` | `Graciano Cruz` |
+| `Los Lajones` | `Graciano Cruz` |
+| `Los Lajones Estate` | `Graciano Cruz` |
+| `Finca Los Lajones` | `Graciano Cruz` |
 | `Jamison Savage, Direct with Savage Coffees` | `Jamison Savage` |
 | `Jeferson Motta` | `Jeferson Adrián Motta` |
 | `Jeferson Motta, Motta Farm` | `Jeferson Adrián Motta` |
@@ -4383,6 +4421,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 ## Changelog
 
+- 2026-06-18 — Taxonomy queue arbitration (Forward Coffee Panama session): promoted net-new `Graciano Cruz` (Tier 1 / Anchor, Panama / Volcán Barú Highlands, sourcing bucket `pursue`) — the Los Lajones Estate owner (HiU Coffee Company) behind the HiU Los Lajones Geisha Natural Bambu 8B green lot; aliased `HiU Los Lajones` / `HiU Coffee` / `Los Lajones` / `Los Lajones Estate` / `Finca Los Lajones` → `Graciano Cruz`. Resolved queue entry a8efff63. Separately added `Black Moon` / `Black Moon Farm` → `Hunter Tedman` aliases (the Black Moon Chiroso lot brand resolves to the canonical Hunter Tedman / Black Moon Farm entry). Both surfaced in the 2026-06-18 Forward sourcing exercise.
 - 2026-04-26 — Sprint 1l: structural port from 49-name flat → 118-entry rich. Migration 031 applies DB drift renames + 6 collapses (Yusuf / Alo Village → Tamiru Tadesse · Local Ninga → Long Miles · Letty + Finca El Paraiso → Diego Bermúdez · Nordic Approach → Mekuria Mergia).
 - 2026-05-20 — Taxonomy queue arbitration: aliased `Gissell & Lily Garrido` (Picolot Simba's Comp Edition Ethiopia Heirloom Cold Room Natural brew) onto the existing `Mama Cata Estate (Garrido Family)` canonical, expanding the alias surface to cover sibling-name variants (Gissell / Lily / Jose David Garrido), umbrella brands (Garrido Family, Garrido's Coffee & Estates), and farm short forms (Mama Cata, Mama Cata Estate, Finca Mama Cata). Promoted net-new `Nawin Yaesorkoo` (Tier 3 / Experimental skeleton, first Thailand lot - Newbery Street Doi Chang Washed) and `Rancho Tio Emilio (Gilberto Ramiro Mejia)` (Tier 3 / Experimental Ecuador, Typica Mejorado Washed Taza Dorada 2024 #6) with full alias coverage for the comma-joined form, bare farm name, and shortened person variants.
 - 2026-05-18 — Sprint T3 / CR-2: removed the `Nordic Approach → Mekuria Mergia & Elias Rooba` alias. Nordic Approach is a Norwegian importer, NOT a producer; the sprint 1l alias was a data error. The migration 031 collapse happened to land the one affected brew (Ethiopia Burtukaana Goro Bedesa, Substance Café roast) on the legitimate producer of that lot — Mekuria Mergia & Elias Rooba IS the Guji Highlands producer Nordic Approach imports from — so no DB re-identification was needed; the producer entry continues to record `importers: ["Nordic Approach"]` as the real relationship. Going forward, a write of `producer = "Nordic Approach"` fails canonical resolution and surfaces in the override queue rather than silently re-collapsing onto the wrong axis. See [docs/features/importer-exporter-scoping.md](docs/features/importer-exporter-scoping.md) for the unmodeled-importer/exporter axis decision and how it shaped this fix.
