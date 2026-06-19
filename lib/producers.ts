@@ -16,6 +16,8 @@ import {
   PRODUCER_LOOKUP,
   getProducerEntry,
   type ProducerEntry,
+  type SourcingBucket,
+  type SourcingPriority,
 } from './producer-registry'
 import { ROASTER_LOOKUP } from './roaster-registry'
 import { confidenceFor } from './confidence'
@@ -57,11 +59,40 @@ export type EnrichmentStatus = 'complete' | 'usable' | 'skeleton' | 'needs-revie
 
 export type ProducerTab =
   | 'all'
+  | 'priority'
   | 'in_inventory'
   | 'roasted'
   | 'brewed'
   | 'indexed'
   | 'needs_enrichment'
+
+// ---------------------------------------------------------------------------
+// Sourcing priority — the curated "what I'm targeting next" axis (authored on
+// ProducerEntry.sourcingPriority; see producer-registry.ts). Distinct from the
+// evidence-derived `indexed_only` state and from `tier` / `referenceRole`.
+// ---------------------------------------------------------------------------
+
+export const BUCKET_LABEL: Record<SourcingBucket, string> = {
+  pursue: 'Actively pursue',
+  watch: 'Watchlist',
+  learning: 'Learning target',
+  reference: 'Reference / calibration',
+  avoid: 'Avoid / deprioritize',
+}
+
+const BUCKET_RANK: Record<SourcingBucket, number> = {
+  pursue: 0,
+  watch: 1,
+  learning: 2,
+  reference: 3,
+  avoid: 4,
+}
+
+/** Sort weight for the Priority tab (lower = higher priority). Producers with no
+ *  authored priority sort last. */
+export function bucketRank(sp: SourcingPriority | null | undefined): number {
+  return sp ? BUCKET_RANK[sp.bucket] : 99
+}
 
 // Lot lifecycle statuses that mean a held lot has entered the roast cycle (but
 // is not yet resolved). `resolved` and the presence of a roast_learnings row are
@@ -254,6 +285,14 @@ export function matchesTab(agg: ProducerAggregate, tab: ProducerTab): boolean {
   switch (tab) {
     case 'all':
       return isVisibleInDefaultIndex(agg)
+    case 'priority':
+      // The curated sourcing shortlist: any producer carrying an authored
+      // sourcingPriority, minus the explicit `avoid` deprioritize signal.
+      return (
+        isVisibleInDefaultIndex(agg) &&
+        agg.entry?.sourcingPriority != null &&
+        agg.entry.sourcingPriority.bucket !== 'avoid'
+      )
     case 'needs_enrichment':
       return agg.enrichmentStatus === 'skeleton' || agg.enrichmentStatus === 'needs-review'
     case 'in_inventory':
@@ -437,6 +476,7 @@ export function deriveDecisionStrip(agg: ProducerAggregate): DecisionCell[] {
 
 const ALL_TABS: ProducerTab[] = [
   'all',
+  'priority',
   'in_inventory',
   'roasted',
   'brewed',
@@ -459,6 +499,9 @@ export interface ProducerCardData {
   primaryCultivars: string[]
   relationship: { state: RelationshipState; label: string; tone: RelationshipBadgeTone }
   enrichmentStatus: EnrichmentStatus
+  /** Authored sourcing priority (curated shortlist) — null unless on the active
+   *  roster. Drives the Priority tab's bucket-rank sort; card render unchanged. */
+  sourcingPriority: SourcingPriority | null
   evidence: { brews: number; roasters: number; lots: number; learnings: number }
   evidenceDepth: number
   roasterSignals: RoasterSignal[]
@@ -490,6 +533,7 @@ export function toCardData(agg: ProducerAggregate): ProducerCardData {
       ...relationshipBadge(agg.relationshipState),
     },
     enrichmentStatus: agg.enrichmentStatus,
+    sourcingPriority: e?.sourcingPriority ?? null,
     evidence: {
       brews: agg.brews.length,
       roasters: agg.brewedRoasters.length,
