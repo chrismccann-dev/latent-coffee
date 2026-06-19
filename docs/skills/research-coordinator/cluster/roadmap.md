@@ -38,17 +38,21 @@ Each candidate carries three implicit axes used for sequencing:
 
 ## Now
 
-### Track 5 — Brewing-quality / textural-quality layer for filters
+### Filter textural-quality layer (Research Project #5)
+
+*Roadmap slot formerly "Track 5"; renamed at scoping — "track" is a Coordinator/Assistant sub-unit, not a project. This project is geometry-split into multiple tracks (below).*
 
 **Effort:** small. **Fold-in:** high (extends filter-arc substrate). **WBC payoff:** medium.
 
-**Scope:** Adds a `quality` field (textural axis: thin / syrupy / heavy as starting cut) to `FilterEntry`, extending the filter arc's `measured` substrate. Uses xBloom as controlled-pour platform to isolate paper-as-variable under realistic brewing conditions (center / spiral / circular pour patterns; pre/post agitation; programmatic temp + flow), unlike the filter arc which deliberately measured paper-only flow under non-realistic 250g-at-once dumps that produced craters and bypassed bed-uniformity considerations.
+**Status (2026-06-19):** Track 1 (V60 cone) scoped, protocol drafted, dial-in recipe locked — READY to spawn (pending one scope confirm: BS→Track 3). Protocol: [filter-textural-quality-v60-cone.md](docs/research-projects/filter-textural-quality-v60-cone.md). **Three-track geometry split:** Track 1 V60 cone (now) · Track 2 Kalita flat (queued) · Track 3 Sibarist BS native (candidate — the BS fits the xBloom big slot with the claw holder removed).
 
-**Brewer compatibility (forcing function):** xBloom confirmed compatible with Kalita flat-bottom (already used for pour-over cupping in the roasting schedule); V60 likely (possibly plastic body if glass doesn't fit the basket dimensions). Sibarist / Funnex / Cypress brewing systems incompatible with the xBloom basket — out of scope for this track. Track 5 validates which brewers can use xBloom as a controlled platform — downstream signal for § Next #1 (Bloom science).
+**Scope:** Adds a textural-quality field to `FilterEntry` (drawn from the canonical `structure_tags` Body/Clarity/Finish vocabulary), extending the filter arc's `measured` substrate. *(The earlier "thin/syrupy/heavy" seed is NOT canonical — "thin"=`Body:Light`, "heavy"=`Body:Syrupy`; the field reuses the brew vocabulary rather than inventing one.)* Uses xBloom as controlled-pour platform to isolate paper-as-variable under realistic brewing conditions (center / spiral / circular pour patterns; pre/post agitation; programmatic temp + flow), unlike the filter arc which deliberately measured paper-only flow under non-realistic 250g-at-once dumps that produced craters and bypassed bed-uniformity considerations.
+
+**Brewer compatibility (forcing function):** xBloom drives a **Kalita** flat (confirmed; Chris's cupping brewer) and a **V60** (confirmed 2026-06-18) via its dripper-holder ("claw"). Funnex / Cypress don't fit the claw. The **Sibarist Brewing System** doesn't fit the claw either, BUT it fits the xBloom **big slot directly with the claw removed** (confirmed 2026-06-19, at ~V60 height) — so it's a usable platform after all. HALO papers are also V60-shaped (fit a V60). This validates which brewers xBloom can drive — downstream signal for § Next #1 (Bloom science) — and yields the three-track geometry split above.
 
 **Why this slot:** Smallest effort × highest fold-in × short effort-to-result loop. Extends existing filter substrate (one new track + one new column), not a new corpus. **Prototypes the subjective-into-taxonomy mechanism that every future project will need** (bloom feel, routine evaluation, blending sensory output, sourcing cup signals all involve subjective data getting compressed into sharp substrate). Second project for the new Coordinator + Assistant architecture — battle-tests the methodology primitives forged in the filter arc.
 
-**Methodology refinement focus:** how to convert subjective string descriptions (operator cupping prose) into structured taxonomy fields without losing fidelity. Output method TBD at Step 0 — candidate approaches include a controlled-vocabulary enum, a free-text + tag pair, or a multi-axis scoring rubric. First substantial sharp-substrate-fold test of subjective → structured.
+**Methodology refinement focus:** how to convert subjective cupping prose into structured taxonomy fields without losing fidelity. **Method locked at scoping: reuse the existing canonical `structure_tags` enum** (Body/Clarity/Finish) — a borrow, not a build, so the paper's textural reading speaks the same language as every brew. The prototype question (HT4) is whether the 29-descriptor vocabulary has enough resolution for paper-texture work or whether prose leaks — capture both prose and tags, the gap is the data. First substantial sharp-substrate-fold test of subjective → structured; whether the method generalizes is deferred to the project retro per the cross-project ratification gate.
 
 ---
 
