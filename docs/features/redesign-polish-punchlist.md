@@ -60,8 +60,13 @@ below — desktop items all still hold on mobile (Chris did not re-list them).
 - **"Attach resolved brew to lot" affordance.** The FK linkage exists (`brews.green_bean_id` +
   `roast_id`) but there's no explicit UI/workflow way to *designate* "this brew IS the lot's
   reference drinking brew." Chris flagged confusion risk about which end-brew belongs to a lot.
-- *(Out of scope, flagged only)* Finca Sophia Heritage brew lists producer "Wilton Benitez"
-  (Colombia/Granja Paraíso) on a Panama Finca Sophia lot — possible mis-attribution; not touched.
+- *(RESOLVED 2026-06-19, [PR #480](https://github.com/chrismccann-dev/latent-coffee/pull/480))*
+  Finca Sophia Heritage brew listed producer "Wilton Benitez" (Colombia/Granja Paraíso) on a Panama
+  Finca Sophia lot. Root cause: Finca Sophia had no canonical producer entry. Added the "Finca
+  Sophia" canonical + aliases (producer-registry.ts + producers.md) and re-pointed both mis-attributed
+  Dongzhe lots (Heritage Collection + Grand Reserve Natural, the latter wrongly on "Lamastus Family")
+  via MCP patch_brew. Wilton Benitez back to a zero-evidence Indexed producer. See the
+  2026-06-19 row in [shipped.md](docs/sprints/shipped.md).
 
 ### NAMING SESSION (session 2 of 5) — kickoff brief
 
