@@ -93,8 +93,11 @@ export interface ProducerEntry {
 
 
 // ---------------------------------------------------------------------------
-// 121-entry registry (85 CSV #1 + 33 CSV #3 + Mama Cata + Miguel Estela skeleton
-// + Ruarai Factory (Ruthaka FCS), added 2026-05-30 data-audit session)
+// 153-entry registry (originally 85 CSV #1 + 33 CSV #3 + Mama Cata + Miguel
+// Estela skeleton + Ruarai Factory (Ruthaka FCS, 2026-05-30 data-audit); the
+// balance accrued via taxonomy-queue arbitrations, + Finca Sophia (2026-06-19
+// producer-attribution fix). Lead count last reconciled 2026-06-19 against the
+// live array length - the historical breakdown above no longer sums to it.)
 // ---------------------------------------------------------------------------
 
 export const PRODUCERS: readonly ProducerEntry[] = [
@@ -214,6 +217,49 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     roasterReferences: ["Intelligentsia", "Blue Bottle", "Moonwake", "George Howell"],
     contact: "https://www.instagram.com/haciendalaesmeralda",
     processSignature: "Panama Gesha-pioneer estate: yeast-inoculated and slow-dry processing of auction-grade Gesha for high-tone floral, citrus, and tea-like clarity.",
+    processSignatureConfidence: "hand-authored",
+  },
+  {
+    // Added 2026-06-19 (producer-attribution-fix session, confirmed by Chris).
+    // Two Dongzhe "Finca Sophia" brews were mis-attributed at the producer
+    // level: "Finca Sophia Heritage Collection" -> "Wilton Benitez" (a Colombia
+    // / Cauca / Granja Paraíso 92 lab - geographically impossible against the
+    // Panama terroir_id), and "Finca Sophia Grand Reserve Natural" ->
+    // "Lamastus Family" (a different Panama estate). Both re-pointed here.
+    // Finca Sophia is Boot Coffee's extreme-altitude Panama Gesha estate
+    // (Willem Boot owner; Kelly Hartmann on-farm, per docs/brewing/freezer-stock.md).
+    // Estate-as-producer canonical (Chris's call - mirrors Hartmann Reserve /
+    // Mama Cata Estate). Rich fields authored from the Volcán Barú terroir
+    // registry + public estate knowledge, NOT a research CSV - exporters /
+    // importers / contact left empty pending CSV-grade enrichment.
+    name: "Finca Sophia",
+    tier: 1,
+    producerSystem: "Panama Genetic + Precision Estates",
+    processingSystemTags: ["Controlled Processing System"],
+    referenceRole: "Anchor",
+    producerType: "Estate",
+    farmName: "Finca Sophia",
+    country: "Panama",
+    adminRegion: "Chiriquí",
+    macroTerroir: "Volcán Barú Highlands",
+    farmingModel: "Estate",
+    processingCapability: "Washed / Natural",
+    processingStyleTags: ["Slow Dry"],
+    dryingMethod: "Raised Bed",
+    primaryCultivars: ["Gesha"],
+    secondaryCultivars: ["Bourbon", "Typica", "Caturra"],
+    experimentalCultivars: [],
+    knownFor: ["Extreme Altitude", "Heritage Collection", "Competition Gesha"],
+    typicalFlavorProfile: ["Floral + High Tone", "Citrus + Bright", "Tea + Clean"],
+    acidityStyle: "Citric",
+    bodyStyle: "Tea-like",
+    consistencyRating: "High",
+    marketTier: "High-End / Competition",
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Dongzhe"],
+    contact: null,
+    processSignature: "Panama extreme-altitude estate (Boot Coffee): washed and raised-bed natural processing of competition Gesha and a Bourbon / Typica / Caturra Heritage Collection for high-tone floral, bergamot-citrus, tea-like clarity.",
     processSignatureConfidence: "hand-authored",
   },
   {
@@ -4680,6 +4726,22 @@ export function listSkeletonProducers(): ProducerEntry[] {
 }
 
 export const PRODUCER_ALIASES: Record<string, string> = {
+  // Finca Sophia (Boot Coffee, Panama) producer-string variants - added
+  // 2026-06-19 attribution-fix session. The estate is collectively owned;
+  // Willem Boot (owner) / Kelly Hartmann (on-farm) per docs/brewing/freezer-stock.md.
+  // "Finca Sofia" catches the common single-p misspelling.
+  "Willem Boot": "Finca Sophia",
+  "Willem Boot / Kelly Hartmann": "Finca Sophia",
+  "Boot Coffee": "Finca Sophia",
+  "Finca Sofia": "Finca Sophia",
+  // "Finca Sophia" is now the only "fin"-prefixed canonical, so the loose
+  // 3-char-prefix matcher (lib/canonical-registry.ts) resolves any unaliased
+  // "Finca <X>" producer write to it. Defensive alias for the highest-likelihood
+  // collision: Pepe Jijón's farm "Finca Soledad" (an Anchor producer Chris
+  // brews) - the existing "Pepe Jijon, Finca Soledad" alias only caught the
+  // comma form, so the bare farm name silently mis-resolved to Finca Sophia.
+  // Other bare "Finca <farm>" writes should still surface in the arbiter queue.
+  "Finca Soledad": "Pepe Jijón",
   // Enriched-producer name variants (taxonomy-queue arbitration 2026-06-18)
   "Milton Leonardo Monroy": "Milton Monroy",
   "Agnes Mukamushinja & Felix Hitayezu": "Agnes Mukamushinja & Felix Hitayezu, Nova Washing Station",
