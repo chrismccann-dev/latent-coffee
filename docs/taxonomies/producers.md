@@ -9,13 +9,13 @@ calibration reference (Anchor reference role). Tier 2: repeat top-roaster
 producer with strong sourcing/brewing signal (Signal). Tier 3: emerging or
 edge-case producer useful for tracking directional change (Experimental).
 
-**Coverage** — 121 producers covering Chris's estimated 60-70% of brewed
+**Coverage** — 153 producers covering Chris's estimated 60-70% of brewed
 coffees. Producer data branches unboundedly compared to cultivar/terroir,
 so the registry is intentionally tier-scoped rather than comprehensive.
 Net-new producers can be persisted via the `/add` flow's `allowOverride`
 path; rich content gets backfilled when the producer earns it.
 
-**Total entries:** 123 (Tier 1: 52 · Tier 2: 62 · Tier 3: 9)
+**Total entries:** 153 (Tier 1: 57 · Tier 2: 73 · Tier 3: 23)
 
 ---
 
@@ -431,7 +431,7 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
-### Panama Genetic + Precision Estates  ·  12 producers
+### Panama Genetic + Precision Estates  ·  13 producers
 
 ### Altieri Family
 
@@ -459,6 +459,35 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Klatch, Falcon
 - **Roaster References:** Bean & Bean, Proud Mary, Sagebrush
 - **Contact:** https://www.instagram.com/altieri.coffee
+
+---
+
+### Finca Sophia
+
+**Country:** Panama · **Admin:** Chiriquí · **Macro:** Volcán Barú Highlands
+
+- **Tier:** 1
+- **Producer System:** Panama Genetic + Precision Estates
+- **Processing System Tags:** Controlled Processing System
+- **Reference Role:** Anchor
+- **Producer Type:** Estate
+- **Farm:** Finca Sophia
+- **Farming Model:** Estate
+- **Processing Capability:** Washed / Natural
+- **Processing Style Tags:** Slow Dry
+- **Drying Method:** Raised Bed
+- **Primary Cultivars:** Gesha
+- **Secondary Cultivars:** Bourbon, Typica, Caturra
+- **Known For:** Extreme Altitude, Heritage Collection, Competition Gesha
+- **Typical Flavor Profile:** Floral + High Tone, Citrus + Bright, Tea + Clean
+- **Acidity Style:** Citric
+- **Body Style:** Tea-like
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Competition
+- **Roaster References:** Dongzhe
+- **Process Signature:** Panama extreme-altitude estate (Boot Coffee): washed and raised-bed natural processing of competition Gesha and a Bourbon / Typica / Caturra Heritage Collection for high-tone floral, bergamot-citrus, tea-like clarity. _(hand-authored)_
+
+_Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-altitude Panama Gesha estate - Willem Boot (owner) / Kelly Hartmann (on-farm). Two Dongzhe "Finca Sophia" brews were mis-attributed (Heritage Collection to "Wilton Benitez"; Grand Reserve Natural to "Lamastus Family") and re-pointed here. Aliases: Willem Boot, Willem Boot / Kelly Hartmann, Boot Coffee, Finca Sofia. Exporters / importers / contact pending CSV-grade enrichment._
 
 ---
 
