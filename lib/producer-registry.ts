@@ -75,6 +75,16 @@ export interface ProducerEntry {
   importers: string[]
   roasterReferences: string[]
   contact: string | null
+  // Producers-first-class sprint (2026-06-19): a synthesized one-line process
+  // signature — the /producers detail-page headline and the index-card lead.
+  // Editorial, hand-authored first; the arbiter enrichment pass may AI-draft the
+  // long tail. OPTIONAL so the registry authors lazily — absence resolves to
+  // enrichmentStatus 'usable' (not 'complete') in lib/producers.ts, so the page
+  // degrades gracefully on un-authored producers (renders system / processing
+  // tags / known-for instead). See
+  // docs/features/producers-first-class-scoping-2026-06-18.md § Resolved forks.
+  processSignature?: string
+  processSignatureConfidence?: 'hand-authored' | 'generated' | 'needs-review'
   // True for entries that haven't been fully researched yet — only have
   // name / farm / geography from the existing brew row. Backfill rich
   // content later by editing the entry directly.
@@ -203,6 +213,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Mercanta", "Olam"],
     roasterReferences: ["Intelligentsia", "Blue Bottle", "Moonwake", "George Howell"],
     contact: "https://www.instagram.com/haciendalaesmeralda",
+    processSignature: "Panama Gesha-pioneer estate: yeast-inoculated and slow-dry processing of auction-grade Gesha for high-tone floral, citrus, and tea-like clarity.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Lamastus Family",
@@ -232,6 +244,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Proud Mary", "Klatch", "Mercanta"],
     roasterReferences: ["Sey", "Moonwake", "BlackGold"],
     contact: "https://www.instagram.com/elidaestate",
+    processSignature: "Panama genetic + precision estate: anaerobic slow-dry and carbonic processing of Gesha and Catuai for Best-of-Panama tropical-fermented to high-tone floral profiles.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Ratibor Jr. & Tessie Hartmann",
@@ -754,6 +768,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: [],
     roasterReferences: ["Sey", "Moonwake", "Proud Mary"],
     contact: "https://www.instagram.com/fincasoledadintag/",
+    processSignature: "Ecuador Mejorado clarity estate: wave processing, controlled fermentation, biodynamic farming, and clean high-tone Typica Mejorado / Sidra expression.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Roberto Jiménez",
@@ -1073,6 +1089,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: [],
     roasterReferences: ["Sey", "Moonwake"],
     contact: "https://www.instagram.com/tamiru_tadesse.t/",
+    processSignature: "Ethiopia high-altitude clarity system: anaerobic and high-precision processing of Sidama landrace lots for competition-grade floral, citrus-zest, clean-tea expression.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Alexia Mejía",
@@ -1508,6 +1526,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Yellow Rooster", "Cafe Imports", "Sucafina"],
     roasterReferences: ["PT's", "Sey", "Moonwake", "Equator"],
     contact: "https://www.instagram.com/cafegranjalaesperanza",
+    processSignature: "Colombia experimental-fermentation benchmark estate group: anaerobic, XO natural, and mosto processing across a rare-cultivar bank (first Colombian Gesha, Mandela), tuned for clean high-tone floral / stone-fruit clarity.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Sigfredo Corado & David Velásquez",
@@ -2267,6 +2287,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Forward", "Artisan"],
     roasterReferences: ["Black & White", "Onyx", "JBC", "PERC"],
     contact: "https://www.instagram.com/sebastian_ramirezr",
+    processSignature: "Colombia processing hub: carbonic, co-fermentation, and thermal-shock methods (Midnight Bloom) for high-intensity fermented tropical and red-fruit / candy profiles.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Sergio Aranda Gómez",
@@ -2325,6 +2347,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["CoTrade", "Falcon", "Micafe"],
     roasterReferences: ["Black & White", "Manhattan", "Sey", "JBC"],
     contact: "https://www.instagram.com/wilton.benitez92",
+    processSignature: "Colombia processing-lab benchmark: thermal shock, double anaerobic, yeast, and carbonic methods for high-intensity engineered tropical/floral profiles.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Yessica & Diego Parra",
@@ -2818,6 +2842,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Direct / Various"],
     roasterReferences: ["George Howell", "Passenger", "La Terza"],
     contact: "https://www.instagram.com/daterracoffee",
+    processSignature: "Brazil precision / Penta-process estate: carbon-negative full-spectrum processing and wood-silo aging of Bourbon / Mundo Novo for low-acid chocolate, nutty-sweet, clean stone-fruit profiles.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Diego Samuel Bermúdez Tapia",
@@ -2847,6 +2873,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["The Coffee Quest", "Falcon"],
     roasterReferences: ["Intelligentsia", "Gardelli", "Red Rooster"],
     contact: "https://www.instagram.com/fincaelparaisocoffee",
+    processSignature: "Colombia bio-industrial processing lab: recipe-based thermal shock, double anaerobic, and biocatalysis engineering high-intensity tropical / lychee and candy-sweet profiles.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Dinesh Kumar",
@@ -3079,6 +3107,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Project Origin"],
     roasterReferences: ["Onyx", "Gardelli", "The Barn", "Proud Mary"],
     contact: "https://www.instagram.com/savagecoffees",
+    processSignature: "Panama carbonic-maceration pioneer: nitrogen and carbonic recipe-based processing of Volcán Gesha for elegant high-tone floral, citrus, and clean stone-fruit profiles.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Jorge \"Pikudo\" Andrade",
@@ -3282,6 +3312,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Falcon", "MTC Specialty"],
     roasterReferences: ["Black & White", "Onyx", "Gardelli"],
     contact: "https://www.instagram.com/geshavillage",
+    processSignature: "Ethiopia Gesha-origin agroforestry estate: precision fermentation and block-level lot separation of Gesha 1931 / Gori Gesha for high-tone floral, tropical, and bergamot-citrus clarity.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Ricardo & Victoria Koyner",
@@ -3543,6 +3575,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Direct / Specialty importers"],
     roasterReferences: ["Proud Mary", "La Cabra", "Willoughby's", "Burman Coffee Traders"],
     contact: "https://www.instagram.com/mamacataestate/",
+    processSignature: "Panama precision estate: anaerobic slow-dry and greenhouse-controlled drying of non-Gesha Caturra / Catuai (and the Mokkita mutation) for clean high-tone floral and structured-tea expression.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Miguel Estela",
@@ -3642,6 +3676,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Specialty importers globally"],
     roasterReferences: ["Onyx", "Black & White", "Gardelli", "La Cabra", "Proud Mary"],
     contact: "https://jansoncoffee.com/ (IG: @jansoncoffee)",
+    processSignature: "Panama multi-estate Gesha program: extreme lot separation with anaerobic slow-dry and controlled fermentation for clean high-tone floral, citrus, and stone-fruit clarity.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     // Skeleton — surfaced by Track 2 dry-run as producer drift on 1 brew
@@ -3867,6 +3903,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Direct / specialty buyers"],
     roasterReferences: ["Untold Coffee Lab"],
     contact: "https://www.instagram.com/umcoffeeco/",
+    processSignature: "Brazil mountain micro-lot estate: multi-stage anaerobic and slow drying of Yellow Bourbon / Mundo Novo for chocolate-sweet, bright-citrus, and fermented-tropical profiles.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     // Skeleton - promoted from override queue 2026-05-23 (raw_value
@@ -4012,6 +4050,8 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Direct / Specialty Buyers"],
     roasterReferences: ["Latent", "Monmouth", "Friedhats", "PERC"],
     contact: null,
+    processSignature: "Tolima Gesha-focused experimental natural system: extended fermentation, covered-canopy drying, high-density lots, and clean tropical/floral expression when development is sufficient.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Agnes Mukamushinja & Felix Hitayezu, Nova Washing Station",

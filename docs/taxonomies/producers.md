@@ -223,6 +223,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Forward, Artisan
 - **Roaster References:** Black & White, Onyx, JBC, PERC
 - **Contact:** https://www.instagram.com/sebastian_ramirezr
+- **Process Signature:** Colombia processing hub: carbonic, co-fermentation, and thermal-shock methods (Midnight Bloom) for high-intensity fermented tropical and red-fruit / candy profiles. _(hand-authored)_
 
 ---
 
@@ -283,6 +284,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** CoTrade, Falcon, Micafe
 - **Roaster References:** Black & White, Manhattan, Sey, JBC
 - **Contact:** https://www.instagram.com/wilton.benitez92
+- **Process Signature:** Colombia processing-lab benchmark: thermal shock, double anaerobic, yeast, and carbonic methods for high-intensity engineered tropical/floral profiles. _(hand-authored)_
 
 ---
 
@@ -518,6 +520,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Specialty importers globally
 - **Roaster References:** Onyx, Black & White, Gardelli, La Cabra, Proud Mary
 - **Contact:** https://jansoncoffee.com/ (IG: @jansoncoffee)
+- **Process Signature:** Panama multi-estate Gesha program: extreme lot separation with anaerobic slow-dry and controlled fermentation for clean high-tone floral, citrus, and stone-fruit clarity. _(hand-authored)_
 
 ---
 
@@ -636,6 +639,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Proud Mary, Klatch, Mercanta
 - **Roaster References:** Sey, Moonwake, BlackGold
 - **Contact:** https://www.instagram.com/elidaestate
+- **Process Signature:** Panama genetic + precision estate: anaerobic slow-dry and carbonic processing of Gesha and Catuai for Best-of-Panama tropical-fermented to high-tone floral profiles. _(hand-authored)_
 
 ---
 
@@ -666,6 +670,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Direct / Specialty importers
 - **Roaster References:** Proud Mary, La Cabra, Willoughby's, Burman Coffee Traders
 - **Contact:** https://www.instagram.com/mamacataestate/
+- **Process Signature:** Panama precision estate: anaerobic slow-dry and greenhouse-controlled drying of non-Gesha Caturra / Catuai (and the Mokkita mutation) for clean high-tone floral and structured-tea expression. _(hand-authored)_
 
 ---
 
@@ -696,6 +701,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Mercanta, Olam
 - **Roaster References:** Intelligentsia, Blue Bottle, Moonwake, George Howell
 - **Contact:** https://www.instagram.com/haciendalaesmeralda
+- **Process Signature:** Panama Gesha-pioneer estate: yeast-inoculated and slow-dry processing of auction-grade Gesha for high-tone floral, citrus, and tea-like clarity. _(hand-authored)_
 
 ---
 
@@ -962,6 +968,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Exporters:** Alo Coffee
 - **Roaster References:** Sey, Moonwake
 - **Contact:** https://www.instagram.com/tamiru_tadesse.t/
+- **Process Signature:** Ethiopia high-altitude clarity system: anaerobic and high-precision processing of Sidama landrace lots for competition-grade floral, citrus-zest, clean-tea expression. _(hand-authored)_
 
 ---
 
@@ -1669,6 +1676,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Market Tier:** High-End / Competition
 - **Roaster References:** Sey, Moonwake, Proud Mary
 - **Contact:** https://www.instagram.com/fincasoledadintag/
+- **Process Signature:** Ecuador Mejorado clarity estate: wave processing, controlled fermentation, biodynamic farming, and clean high-tone Typica Mejorado / Sidra expression. _(hand-authored)_
 
 ---
 
@@ -2014,6 +2022,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** The Coffee Quest, Falcon
 - **Roaster References:** Intelligentsia, Gardelli, Red Rooster
 - **Contact:** https://www.instagram.com/fincaelparaisocoffee
+- **Process Signature:** Colombia bio-industrial processing lab: recipe-based thermal shock, double anaerobic, and biocatalysis engineering high-intensity tropical / lychee and candy-sweet profiles. _(hand-authored)_
 
 ---
 
@@ -2156,6 +2165,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Project Origin
 - **Roaster References:** Onyx, Gardelli, The Barn, Proud Mary
 - **Contact:** https://www.instagram.com/savagecoffees
+- **Process Signature:** Panama carbonic-maceration pioneer: nitrogen and carbonic recipe-based processing of Volcán Gesha for elegant high-tone floral, citrus, and clean stone-fruit profiles. _(hand-authored)_
 
 ---
 
@@ -2390,6 +2400,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Falcon, MTC Specialty
 - **Roaster References:** Black & White, Onyx, Gardelli
 - **Contact:** https://www.instagram.com/geshavillage
+- **Process Signature:** Ethiopia Gesha-origin agroforestry estate: precision fermentation and block-level lot separation of Gesha 1931 / Gori Gesha for high-tone floral, tropical, and bergamot-citrus clarity. _(hand-authored)_
 
 ---
 
@@ -2450,6 +2461,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Yellow Rooster, Cafe Imports, Sucafina
 - **Roaster References:** PT's, Sey, Moonwake, Equator
 - **Contact:** https://www.instagram.com/cafegranjalaesperanza
+- **Process Signature:** Colombia experimental-fermentation benchmark estate group: anaerobic, XO natural, and mosto processing across a rare-cultivar bank (first Colombian Gesha, Mandela), tuned for clean high-tone floral / stone-fruit clarity. _(hand-authored)_
 
 ---
 
@@ -2790,6 +2802,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Direct / Various
 - **Roaster References:** George Howell, Passenger, La Terza
 - **Contact:** https://www.instagram.com/daterracoffee
+- **Process Signature:** Brazil precision / Penta-process estate: carbon-negative full-spectrum processing and wood-silo aging of Bourbon / Mundo Novo for low-acid chocolate, nutty-sweet, clean stone-fruit profiles. _(hand-authored)_
 
 ---
 
@@ -3746,6 +3759,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Importers:** Direct / specialty buyers
 - **Roaster References:** Untold Coffee Lab
 - **Contact:** https://www.instagram.com/umcoffeeco/
+- **Process Signature:** Brazil mountain micro-lot estate: multi-stage anaerobic and slow drying of Yellow Bourbon / Mundo Novo for chocolate-sweet, bright-citrus, and fermented-tropical profiles. _(hand-authored)_
 
 ---
 
@@ -3804,6 +3818,7 @@ path; rich content gets backfilled when the producer earns it.
 - **Exporters:** Forest Coffee, Clearpath Coffee
 - **Importers:** Direct / Specialty Buyers
 - **Roaster References:** Latent, Monmouth, Friedhats, PERC
+- **Process Signature:** Tolima Gesha-focused experimental natural system: extended fermentation, covered-canopy drying, high-density lots, and clean tropical/floral expression when development is sufficient. _(hand-authored)_
 
 ---
 
