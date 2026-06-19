@@ -46,6 +46,25 @@ export type ProducerSystem =
   | 'Ecuador Mejorado + Precision Estates'
   | 'Thailand Experimental Processing'
 
+// Curated sourcing-priority axis (Producers sourcing-priority sprint, 2026-06-19).
+// The real "what I'm targeting next when I source" shortlist — distinct from the
+// evidence-derived `indexed_only` relationship state (the "Indexed" tab) AND from
+// `tier` (system-importance) / `referenceRole` (reference-system role). Authored
+// from Chris's "Latent Producer Sourcing Targets" prototype
+// (docs/features/producer-sourcing-targets-prototype-2026-06-19.md), which is
+// prototype-not-canon: the buckets are his S/A/B/C/D action ranking
+// (pursue/watch/learning/reference/avoid), v1 carries only the action bucket +
+// authored rationale (the numeric fit/buy scores, riskFlags, and a separate
+// role-Type axis are deferred). The canon reconciliation against
+// strategy.md § 7 + CONTEXT-taste is a separate future grilling pass.
+export type SourcingBucket = 'pursue' | 'watch' | 'learning' | 'reference' | 'avoid'
+
+export interface SourcingPriority {
+  bucket: SourcingBucket
+  /** Authored one-line "why" — mirrors the prototype's per-target rationale. */
+  rationale?: string
+}
+
 export interface ProducerEntry {
   name: string
   displayName?: string
@@ -85,6 +104,11 @@ export interface ProducerEntry {
   // docs/features/producers-first-class-scoping-2026-06-18.md § Resolved forks.
   processSignature?: string
   processSignatureConfidence?: 'hand-authored' | 'generated' | 'needs-review'
+  // Curated sourcing-priority signal — drives the /producers "Priority targets"
+  // tab + the detail Sourcing-lens "Buy priority" row. OPTIONAL + authored lazily
+  // (only the active sourcing roster carries it); orthogonal to relationshipState,
+  // tier, and referenceRole. See SourcingPriority above.
+  sourcingPriority?: SourcingPriority
   // True for entries that haven't been fully researched yet — only have
   // name / farm / geography from the existing brew row. Backfill rich
   // content later by editing the entry directly.
@@ -129,6 +153,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Klatch", "Falcon"],
     roasterReferences: ["Bean & Bean", "Proud Mary", "Sagebrush"],
     contact: "https://www.instagram.com/altieri.coffee",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Apex Panama Gesha anchor: RFF / anaerobic slow-dry system producing layered tropical-floral clarity.",
+    },
   },
   {
     name: "Maribel Herrera Torres",
@@ -290,6 +318,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Proud Mary", "Klatch", "Mercanta"],
     roasterReferences: ["Sey", "Moonwake", "BlackGold"],
     contact: "https://www.instagram.com/elidaestate",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Apex Panama master producer (Elida / El Burro): anaerobic slow-dry and carbonic Gesha at a Best-of-Panama ceiling.",
+    },
     processSignature: "Panama genetic + precision estate: anaerobic slow-dry and carbonic processing of Gesha and Catuai for Best-of-Panama tropical-fermented to high-tone floral profiles.",
     processSignatureConfidence: "hand-authored",
   },
@@ -814,6 +846,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: [],
     roasterReferences: ["Sey", "Moonwake", "Proud Mary"],
     contact: "https://www.instagram.com/fincasoledadintag/",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Apex Ecuador Mejorado clarity estate (Finca Soledad): wave processing and biodynamic farming; the non-Panama portability proof.",
+    },
     processSignature: "Ecuador Mejorado clarity estate: wave processing, controlled fermentation, biodynamic farming, and clean high-tone Typica Mejorado / Sidra expression.",
     processSignatureConfidence: "hand-authored",
   },
@@ -2393,6 +2429,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["CoTrade", "Falcon", "Micafe"],
     roasterReferences: ["Black & White", "Manhattan", "Sey", "JBC"],
     contact: "https://www.instagram.com/wilton.benitez92",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Engineered thermal-shock / yeast benchmark; apex aromatic intensity, buy with risk controls (process-forward risk).",
+    },
     processSignature: "Colombia processing-lab benchmark: thermal shock, double anaerobic, yeast, and carbonic methods for high-intensity engineered tropical/floral profiles.",
     processSignatureConfidence: "hand-authored",
   },
@@ -3153,6 +3193,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Project Origin"],
     roasterReferences: ["Onyx", "Gardelli", "The Barn", "Proud Mary"],
     contact: "https://www.instagram.com/savagecoffees",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "High-end Finca Deborah clarity reference: carbonic / nitrogen recipe processing for florals and structured acidity.",
+    },
     processSignature: "Panama carbonic-maceration pioneer: nitrogen and carbonic recipe-based processing of Volcán Gesha for elegant high-tone floral, citrus, and clean stone-fruit profiles.",
     processSignatureConfidence: "hand-authored",
   },
@@ -3621,6 +3665,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Direct / Specialty importers"],
     roasterReferences: ["Proud Mary", "La Cabra", "Willoughby's", "Burman Coffee Traders"],
     contact: "https://www.instagram.com/mamacataestate/",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Apex Garrido precision estate: anaerobic slow-dry non-Gesha (Mokkita) with clean high-tone, structured-tea expression.",
+    },
     processSignature: "Panama precision estate: anaerobic slow-dry and greenhouse-controlled drying of non-Gesha Caturra / Catuai (and the Mokkita mutation) for clean high-tone floral and structured-tea expression.",
     processSignatureConfidence: "hand-authored",
   },
@@ -3722,6 +3770,10 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     importers: ["Specialty importers globally"],
     roasterReferences: ["Onyx", "Black & White", "Gardelli", "La Cabra", "Proud Mary"],
     contact: "https://jansoncoffee.com/ (IG: @jansoncoffee)",
+    sourcingPriority: {
+      bucket: "pursue",
+      rationale: "Repeat-WBC reference producer: multi-estate Gesha lot separation for florality, acidity, and clean Panama structure.",
+    },
     processSignature: "Panama multi-estate Gesha program: extreme lot separation with anaerobic slow-dry and controlled fermentation for clean high-tone floral, citrus, and stone-fruit clarity.",
     processSignatureConfidence: "hand-authored",
   },

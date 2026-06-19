@@ -9,6 +9,7 @@ import {
   deriveDecisionStrip,
   channelType,
   roasterSignals,
+  BUCKET_LABEL,
   type ProducerAggregate,
 } from '@/lib/producers'
 import {
@@ -124,8 +125,15 @@ export default async function ProducerDetailPage({ params }: { params: { slug: s
       : entry.contact
     : null
   const brewedRefCount = signals.filter((s) => s.brewed).length
+  // Authored sourcing priority overrides the rule-derived buy-posture when present
+  // (the curated shortlist signal); the rationale gets its own row below it.
+  const sp = entry?.sourcingPriority
+  const buyPriorityValue = sp
+    ? BUCKET_LABEL[sp.bucket]
+    : decision.find((d) => d.label === 'Buy posture')?.value
   const sourcingRows = compactRows([
-    { label: 'Buy priority', value: decision.find((d) => d.label === 'Buy posture')?.value },
+    { label: 'Buy priority', value: buyPriorityValue },
+    { label: 'Sourcing note', value: sp?.rationale ?? null },
     { label: 'Target lots / cultivars', value: list(entry?.primaryCultivars) },
     { label: 'Process fit', value: decision.find((d) => d.label === 'Latent fit')?.value },
     { label: 'Known risks', value: decision.find((d) => d.label === 'Primary risk')?.value },

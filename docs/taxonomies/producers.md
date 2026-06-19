@@ -19,6 +19,43 @@ path; rich content gets backfilled when the producer earns it.
 
 ---
 
+## Sourcing priority (curated shortlist)
+
+The `sourcingPriority` field (added 2026-06-19) is the curated "what I'm targeting
+next when I source" shortlist, distinct from `tier` (system-importance) and from the
+evidence-derived **Indexed** state (the unsourced registry tail). It carries an
+authored **action bucket** plus a one-line **rationale**, and drives the `/producers`
+**Priority targets** tab plus the detail Sourcing-lens "Buy priority" / "Sourcing
+note" rows.
+
+**Buckets** (Chris's S/A/B/C/D action ranking, pursue first):
+
+| Bucket | Meaning |
+|---|---|
+| `pursue` | Actively pursue: apex-aligned, buy small-format lots when they appear |
+| `watch` | Watchlist: strong fit, missing access / confidence / current portfolio need |
+| `learning` | Learning target: process / cultivar / roast learning; buy when the lot has a job |
+| `reference` | Reference / calibration: clean-coffee skill upkeep, not urgent |
+| `avoid` | Avoid / deprioritize: hidden from the Priority tab |
+
+Orthogonal to relationship state: a producer can be both **Brewed** and a priority
+target. Authored lazily; v1 seeds only the apex-anchor roster Chris named in the
+"Latent Producer Sourcing Targets" prototype
+([docs/features/producer-sourcing-targets-prototype-2026-06-19.md](docs/features/producer-sourcing-targets-prototype-2026-06-19.md)),
+all `bucket: pursue`:
+
+- **Altieri Family**, **Lamastus Family**, **Mama Cata Estate (Garrido Family)**,
+  **Jannette & Kai Janson (Janson Farms)**, **Jamison Savage** (Finca Deborah),
+  **Pepe Jijón** (Finca Soledad), **Wilton Benitez** (with risk controls).
+
+**TODO (Chris authors):** the missing named apex anchors **Mikava / Santuario** and
+**CGLE / Café Granja La Esperanza** need new `ProducerEntry` rows before they can
+carry a bucket; plus `watch` / `learning` / `reference` buckets for the broader roster.
+**Prototype-not-canon:** the bucket model + the strategy.md § 7 reconciliation is a
+deferred grilling pass, not yet canon.
+
+---
+
 ## By Producer System
 
 ### Colombia Processing Labs  ·  14 producers

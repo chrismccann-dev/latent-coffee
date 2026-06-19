@@ -11,10 +11,11 @@
 import { useMemo, useState } from 'react'
 import { IndexCap } from '@/components/IndexList'
 import { ProducerCard } from '@/components/ProducerCard'
-import type { ProducerCardData, ProducerTab } from '@/lib/producers'
+import { bucketRank, type ProducerCardData, type ProducerTab } from '@/lib/producers'
 
 const TABS: { key: ProducerTab; label: string }[] = [
   { key: 'all', label: 'All producers' },
+  { key: 'priority', label: 'Priority targets' },
   { key: 'in_inventory', label: 'In inventory' },
   { key: 'roasted', label: 'Roasted by me' },
   { key: 'brewed', label: 'Brewed' },
@@ -82,6 +83,12 @@ export function ProducersIndex({ producers }: { producers: ProducerCardData[] })
       return true
     })
     return filtered.sort((a, b) => {
+      // Priority tab leads with the authored sourcing-bucket rank (pursue first);
+      // every other tab keeps the evidence-depth spine.
+      if (tab === 'priority') {
+        const rankDelta = bucketRank(a.sourcingPriority) - bucketRank(b.sourcingPriority)
+        if (rankDelta !== 0) return rankDelta
+      }
       if (b.evidenceDepth !== a.evidenceDepth) return b.evidenceDepth - a.evidenceDepth
       const ta = a.tier ?? 99
       const tb = b.tier ?? 99
