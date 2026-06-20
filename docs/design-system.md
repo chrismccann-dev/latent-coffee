@@ -79,6 +79,7 @@ The brand voice is **quiet research notebook**: monospace labels, book-cover car
 
 - **Quiet hierarchy.** The loudest sans text is a detail-page hero `<h1>` at 22px semibold. There is no display/hero type. Page titles are 11.5px mono uppercase labels.
 - **Card titles go mono (ratification #2).** Index card variety/lot names use mono (brew-card 18px / lot-card 17px) — a deliberate change from the prior title-case-sans convention. Detail-page hero `<h1>` stays **sans** 22px. (Sprint 0 establishes the scale + builds `.ssp-name h1` sans; the index card-title flip lands per-surface.)
+- **Aggregation-index row names are sans-bold - except the cultivars tree (deliberate, design-audit 01).** The grouped-list indexes (`/terroirs`, `/roasters`, `/processes`) render entity names sans-bold in `GrlRow`; mono (ratification #2) is for brew-card / lot-card titles, not these rows. The one exception is `/cultivars`, whose bespoke ASCII tree keeps **mono leaf names** on purpose - cultivar identifiers are code-like (SL28, 74158, Castillo), so mono is the honest treatment. Don't "align" the cultivars tree to sans-bold to match its siblings.
 - **Letter-spacing:** `tracking-wide` (0.1em) for most mono uppercase, `tracking-widest` (0.15em) for the brand lockup.
 
 ### Spacing
@@ -160,7 +161,7 @@ Why every page looks the way it looks. Each is load-bearing — break it on one 
 
 ### Detail-page composition rules
 
-- **Dark vs light surfaces are semantic.** Dark (`#0E0E0E`) = the page's *narrative anchor* (brew recipe, peak expression, synthesis, confidence footer). Light = characterization grids and reference data. Don't dark-treat a reference grid — the surface tone signals "anchor" vs "reference," not decoration.
+- **Dark vs light surfaces are semantic.** Dark (`#0E0E0E`) = the page's *narrative anchor* (brew recipe, peak expression, confidence footer). Light = characterization grids and reference data. Don't dark-treat a reference grid — the surface tone signals "anchor" vs "reference," not decoration. **Synthesis is the exception:** narrative but *secondary*, not the anchor, so since the capsule inversion (polish-audit sprint, 2026-06-11) it renders **light** (`.ssp-card`) at every width - only its sibling Confidence footer is dark. (It was previously listed among the dark surfaces here; reconciled to the live render per design-audit 01.)
 - **Topbar = identity. Hero meta = differentiation. Never duplicate.** The black `SspTopBar` carries entity ID + count + category anchor (and the lot code Chris grabs constantly) — its props are named for those slots (`id` / `count` / `anchor`); the `SspNamePlate` meta carries differentiating attributes *not* already in the topbar. (Enforcement sweep landed in the polish-audit sprint, 2026-06-11 — 5 surfaces deduped.)
 - **Synthesis is the cross-page unifier** — every aggregation page carries a "what I've learned" block (`SynthesisCard`): the short-form capsule always visible, the long-form essay behind the inline `Full synthesis` disclosure — compact by default at every width (capsule inversion, polish-audit sprint 2026-06-11).
 
