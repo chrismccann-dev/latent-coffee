@@ -70,7 +70,7 @@ export function ProducerCard({ p }: { p: ProducerCardData }) {
       {(p.knownFor.length > 0 || p.primaryCultivars.length > 0) && (
         <div className="mt-2.5 flex flex-wrap gap-1.5">
           {p.knownFor.slice(0, 3).map((k) => (
-            <span key={`kf-${k}`} className="chip">
+            <span key={`kf-${k}`} className="chip clamp2" title={k}>
               {k}
             </span>
           ))}

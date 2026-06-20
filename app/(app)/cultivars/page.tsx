@@ -181,7 +181,7 @@ export default async function CultivarsPage() {
     <div className="max-w-3xl mx-auto px-6 py-8">
       <IndexCap
         left="CULTIVARS"
-        right={`${lineageCount} ${lineageCount === 1 ? 'LINEAGE' : 'LINEAGES'} · ${familyCount} ${familyCount === 1 ? 'FAMILY' : 'FAMILIES'} · ${totalCoffees} ${totalCoffees === 1 ? 'BREW' : 'BREWS'}`}
+        right={`${lineageCount} ${lineageCount === 1 ? 'LINEAGE' : 'LINEAGES'} · ${familyCount} ${familyCount === 1 ? 'FAMILY' : 'FAMILIES'}`}
       />
 
       {totalCultivars === 0 ? (
