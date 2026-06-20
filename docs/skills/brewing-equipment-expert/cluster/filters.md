@@ -48,6 +48,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Clarity cone (controlled)
 - Use case: Structured clarity (adds body without sacrificing cleanliness)
 - Measured drawdown: 60s @ 15g (Research Project #1 baseline/anchor) — the V60 cone reference. Bed: late-forming-crater.
+- Realistic drawdown: 195s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://sibarist.coffee/en-es/products/cone>
 
 ### CONE FAST — `CONE-FAST`
@@ -60,6 +61,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Clarity cone
 - Use case: Maximum clarity ceiling (fastest stable cone extraction); the true fast-rinse paper for a Hybrid open phase
 - Measured drawdown: 45s @ 15g (Project #1, -15s vs CONE B3) — fastest stable cone in the cohort; the *only* paper that matched its "Very fast" label (0.3 finer grind comp). Bed: pour-impact-crater.
+- Realistic drawdown: 158s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://sibarist.coffee/en-es/products/cone>
 
 ### Hario V60 Meteor Filter 02 — `METEOR-02`
@@ -72,6 +74,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Clarity cone
 - Use case: Improved clarity baseline (faster, more stable than standard Hario)
 - Measured drawdown: 65s @ 15g (Project #1, ~CONE B3). NOT a fast-rinse paper despite the "Fast" label — in a Hybrid open-phase rinse it kept pulling roast bitterness; use CONE FAST (45s) for a true rinse. Bed: late-forming-crater.
+- Realistic drawdown: 200s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://www.hario-usa.com/products/v60-meteor-filters-02>
 
 ### Hario V60 Paper Filter 01 (Tabbed) — `VCF-01-100W`
@@ -84,6 +87,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Clarity cone (classic)
 - Use case: Baseline cone reference (introduces variability intentionally)
 - Measured drawdown: 65s @ 15g (Project #1, ~CONE B3). Bed: pour-impact-crater.
+- Realistic drawdown: 192s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://www.hario-usa.com/products/paper-filter-for-01-drippers>
 
 ### CAFEC T-92 - Cup 4 Light Roast Paper Filter — `LC4-100W`
@@ -96,6 +100,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Clarity cone
 - Use case: Peak clarity (max separation, high-acid coffees)
 - Measured drawdown: 80s @ 15g (Project #1, +20s vs CONE B3) — REAL slow despite the "Fast" label (0.3 coarser grind comp); CAFEC label = extraction intent, not flow. Bed: late-forming-crater.
+- Realistic drawdown: 249s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://cafecusa.com/collections/filter-papers/products/cafec-pour-over>
 
 ### CAFEC Cup 4 Medium Roast Paper Filter — `MC4-100W`
@@ -108,6 +113,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Stability flat (cone variant)
 - Use case: Owned via Cafec Cup 4 4-pack assortment; medium-roast specific
 - Measured drawdown: 60s @ 15g (Project #1, =CONE B3) — baseline; mild paper-fiber slowness surfaces in tighter-floor re-tests. Bed: mixed.
+- Realistic drawdown: 200s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-cup-4-medium-roast-paper-filter-v60-02-mc4-100w-2>
 
 ### CAFEC Cup 4 Dark Roast Paper Filter — `DC4-100W`
@@ -120,6 +126,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Immersion hybrid (cone assist)
 - Use case: Owned via Cafec Cup 4 4-pack assortment; dark-roast specific
 - Measured drawdown: 68s @ 15g (Project #1, ~CONE B3) — measured near-baseline despite the "Slow" + "Thick" labels; CAFEC label = extraction intent, not flow. Bed: late-forming-crater.
+- Realistic drawdown: 219s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-cup-4-dark-roast-paper-filter-v60-02-dc4-100w>
 
 ### CAFEC Abaca+ Cup 4 Cone Paper Filter — `APC4-100W`
@@ -132,6 +139,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Clarity cone
 - Use case: Fast clarity baseline — Chris's workhorse Abaca+ cone ("the Abaca+ filter by Cafec"). Owns the 100-sheet standalone (APC4-100W, in use) + the Cup-4 variety-pack copy (APC1-40W); same paper, pack quantity is the only difference. Chris brews single cups only, so Cup-1 vs Cup-4 SIZE is functionally identical to him.
 - Measured drawdown: 72s @ 15g (Project #1, +12s vs CONE B3) — REAL slower than its "Fast" label; select by measured drawdown. Bed: late-forming-crater.
+- Realistic drawdown: 230s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-abaca-cup-4-cone-paper-filter-v60-02-apc4-40w>
 
 ## Flat-bottom + wave filters
@@ -291,6 +299,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Clarity cone (controlled system)
 - Use case: System-level structured clarity (max repeatability); also the paper-only measurement control
 - Measured drawdown: 134s @ 15g in Sibarist BS (Project #3b baseline/anchor; tightest noise floor in the arc). Note a 43s cross-session drift in Project #4 (91s, unresolved). Bed: stable.
+- Realistic drawdown: 190s (RP5 Track 1, xBloom V60, Pink Bourbon Washed) — ran in a V60 (not the BS) for RP5.
 - Link: <https://sibarist.coffee/en-es/products/cone-bs>
 
 ### Sibarist HALO CONE FAST — `HALO-FAST`
@@ -303,6 +312,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Clarity cone (system-level)
 - Use case: System-level peak clarity (eliminate fit + bypass variability)
 - Measured drawdown: 108s @ 15g in Sibarist BS (Project #3b, -26s vs HALO B3; 0.3 finer comp). Bed: stable.
+- Realistic drawdown: 160s (RP5 Track 1, xBloom V60, Pink Bourbon Washed) — ran in a V60 (not the BS) for RP5.
 - Link: <https://sibarist.coffee/en-es/products/cone-bs>
 
 ### Weber Bird Paper Filters — `BIRD-FILTER`
@@ -320,16 +330,18 @@ Measured-drawdown provenance + full research is in the
 
 ## Research measurement appendix
 
-The `Measured drawdown` lines above come from a four-project loaded-bed drawdown
-research arc (2026-05-23 → 2026-05-26). **Treat the measured numbers as the
-result** — the full protocols, raw data, replicate ranges, and lesson extraction
-live in the research-project docs; the agent does not need to read them to select
-a filter.
+The `Measured drawdown` lines above come from a five-project filter research arc
+(2026-05-23 → 2026-06-20). The first four characterized loaded-bed drawdown;
+RP5 Track 1 (below) added realistic-condition flow + texture. **Treat the measured
+numbers as the result** — the full protocols, raw data, replicate ranges, and
+lesson extraction live in the research-project docs; the agent does not need to
+read them to select a filter.
 
 - Research Project #1: [Cone Filter Drawdown Characterization](docs/research-projects/cone-filter-drawdown.md)
 - Research Project #2: [Flat-Bottom Filter Drawdown Characterization](docs/research-projects/flat-bottom-filter-drawdown.md)
 - Research Project #3: [Specialty Cone Filter Drawdown Characterization](docs/research-projects/specialty-cone-filter-drawdown.md)
 - Research Project #4: [Paper-Only V60 Cohort Drawdown Re-Measurement in Sibarist BS](docs/research-projects/paper-only-v60-cohort-drawdown.md)
+- Research Project #5 (Track 1): [Filter Textural-Quality (V60 cone)](docs/research-projects/filter-textural-quality-v60-cone.md)
 
 Registry-level takeaways that change selection (encoded in the rules above):
 
@@ -337,6 +349,39 @@ Registry-level takeaways that change selection (encoded in the rules above):
 - **Sibarist FLAT / FLAT 2 / WAVE flow depends on seating state** — Negotiator-compressed in Orea is far slower than free-seating.
 - **Chemex / Funnex: fold geometry sets effective bed shape** (cone-fold deep/narrow vs fan-fold wide/shallow) more than pulp fiber does.
 - **Sibarist BS works as a paper-only measurement control** because the paper acts as the dripper.
+
+### Texture is flow-mediated (RP5 Track 1, 2026-06-20)
+
+[Filter Textural-Quality (V60 cone)](docs/research-projects/filter-textural-quality-v60-cone.md)
+ran all 10 owned V60-cone papers through one realistic recipe (xBloom, Hydrangea
+Pink Bourbon Washed, 15g/247g 1:16.5) and tasted the texture. The headline:
+**paper texture is largely flow-mediated** — it co-varies monotonically with the
+realistic-condition end-time (`realisticDrawdownSec`), via three mechanisms:
+
+1. **Contact-time (dominant)** - longer end-time, more body. This is the one
+   mechanism the drawdown number itself captures.
+2. **Bypass / seating** - a loose-seating paper (e.g. VCF-01) tastes lighter than
+   its end-time predicts; the Sibarist BS eliminates this lever by making the
+   paper the dripper.
+3. **Flow-consistency over time** (Chris-originated) - steady flow reads as even /
+   clean; a choke-then-blend flow reads as complex. End-time alone does not
+   capture this.
+
+**Paper-selection guidance** (paper is a *multi*-dimensional texture lever -
+evenness / complexity / sharpness / body - not one "texture" scale):
+
+- **Sibarist steady-flow (B3)** - even, clean texture.
+- **Choking / blended-flow papers** - complex texture.
+- **FAST fiber** - sharp, light texture.
+- **Slow long-contact (CAFEC family)** - fuller, integrated, lingering texture.
+
+**HALO ≡ CONE in the cup** across *both* brewers (V60 and BS); HALO's only edge is
+structural seating. This resolves RP4 AI-4 as a fit / repeatability story, never a
+cup story.
+
+**PROVISIONAL** - this read rests on a single coffee. The clarity-weighted Pink
+Bourbon Washed compresses the Body axis; a body-forward second coffee is needed to
+confirm the texture map (deferred to a 2nd-coffee track).
 
 ## Aliases
 
@@ -411,6 +456,7 @@ the [archive](docs/taxonomies/filters-not-owned-archive.md)).
 
 ## Changelog
 
+- 2026-06-20 — **RP5 Track 1 fold** (filter textural-quality, V60 cone). Added a `realisticDrawdownSec` field (+ `realisticDrawdownNote`) to the 10 owned V60-cone papers — the realistic xBloom / Pink Bourbon Washed end-time, distinct from the non-realistic 250g-dump `measuredDrawdownSec`. Added the [flow-mediation knowledge subsection](#texture-is-flow-mediated-rp5-track-1-2026-06-20) (texture is largely flow-mediated, 3 mechanisms; paper is a multi-dimensional texture lever). Added `V60` to both HALO papers' fit (HALO ran in a V60 for all of RP5). RP4 AI-4 resolved: HALO ≡ CONE in the cup, fit story only. PROVISIONAL on a single coffee.
 - 2026-06-04 — **filter reconciliation** (case-004 follow-up). Registry collapsed 67→58 canonical filters (23 owned unchanged; 35 not-owned). Executed the dedups case 004 flagged: 3 pure duplicate-SKU rows (AC4-100W variant / AB-101-100W variant / AB-102-100W Alt SKU), the AC4-40B brown pack-size variant, and the 5 CAFEC Cup-1 papers (Abaca / Abaca+ / T-83 / T-90 / T-92) collapsed into their Cup-4 twins (Chris brews single cups → Cup-1 vs Cup-4 is paper SIZE he treats as identical; T-codes preserved across twins). The owned Abaca+ Cup-4 paper was renamed from the mislabeled "CAFEC Abaca Cup 4 ... (40 pack)" / APC4-40W → **CAFEC Abaca+ Cup 4 Cone Paper Filter** / APC4-100W (its true SKU + line); the 2 legacy "Abaca+ Cup 1" brews were really this paper (migration 077 remap). All collapsed names aliased to survivors. `CAFEC Traditional Cup 1 Filter` (CC1) kept distinct (no Cup-4 twin). 56 aliases total.
 - 2026-06-03 — **pruning case 004** (70.4 KB → owned-only). Added Purpose + agent selection-rules; moved the four `## Measured Drawdown Reference` research blocks + per-entry RP/lesson citation chains out to the [research appendix](#research-measurement-appendix) (full data already in `docs/research-projects/*.md`); pruned the live doc to the **23 owned** papers, grouped by fit geometry (V60 cone / Flat-bottom + wave / Specialty + paired); moved the **44 not-owned** papers to [docs/taxonomies/filters-not-owned-archive.md](docs/taxonomies/filters-not-owned-archive.md); corrected April Paper Filter fit to **April-only**. `lib/filter-registry.ts` unchanged except the April fit fix (still the full 67-entry validator). Pack-size / cup-size / duplicate-SKU registry dedups flagged for a follow-up reconciliation pass (see pruning case 004 handoff).
 - 2026-04-27 — Cafec packaging-name update (migration 034). Owned Cup 4 papers gain T-XX codes printed on packaging: T-92 (light, LC4), T-90 (medium, MC4), T-83 (dark, DC4), plus the "+" on Abaca+ (APC4). (The not-owned Cup 1 T-code variants now live in the archive.)
