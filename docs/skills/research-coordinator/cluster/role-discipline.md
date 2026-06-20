@@ -24,7 +24,7 @@ A research project runs across three structurally distinct Claude Code sessions.
 - Edit `docs/skills/*/cluster/*.md`
 - Edit ADR files
 - Edit `lib/mcp/docs.ts` or any other MCP config
-- Run `git commit`, `git push`, or `gh pr create`
+- `git commit` / `git push` SUBSTRATE edits, merge to main, or `gh pr create` — **EXCEPT** the one authorized archive-persist commit of the protocol doc itself (see DO list + § Archive persistence)
 - Run `npx tsc --noEmit` against substrate edits (you won't be making any)
 - Apply "what changed" file edits as part of close-out
 - Continue past the handoff brief to "finish the job"
@@ -40,6 +40,7 @@ A research project runs across three structurally distinct Claude Code sessions.
 - Capture friction + new lessons + audit items inline in the protocol doc (Project #2 Lesson #12 — the doc IS the archive)
 - Test substantive mid-run theory inside the session (Project #1 Lesson #16 — budget ~2 exploratory pulls)
 - Produce a handoff brief at session end per [`templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md)
+- **Commit + push the archive doc (the protocol doc) to your session branch at termination, and report the branch name + commit SHA in the handoff brief header** — the authorized archive-persist exception (see § Archive persistence). An uncommitted archive is not an archive.
 - Declare termination explicitly at the end of the handoff brief
 
 ---
@@ -75,6 +76,20 @@ Three sessions, three roles. Structurally rigid. Scopewise fluid (per the [ADR-0
 
 ---
 
+## Archive persistence — the authorized commit exception (RP5 Track 1 refinement, 2026-06-20)
+
+The "no commits" rule above is about **substrate** (registry / cluster docs / ADR / MCP). It was originally written too broadly — it didn't carve out the one commit the Assistant **must** make: persisting the **archive doc** (the protocol doc, which the Assistant updates in-place as the canonical record). An uncommitted archive sitting in a worktree is exactly the Lesson #40 ephemeral-loss case — doubly so with a `worktree-prune` routine in the mix; the whole session's output is one `git worktree remove` away from gone.
+
+**The convention (do this at termination):**
+
+1. **Commit + push the archive doc to your session branch.** This is the ONE authorized commit. It is NOT a substrate commit — no registry, no cluster docs, no ADR, no `tsc`, no merge to main, no substrate PR.
+2. **Report the branch name + commit SHA in the handoff brief header** (the `Archive location:` line in [`templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md)). The Coordinator + compile session fetch from there — never assume "the worktree" or "main" carries it.
+3. **The compile/execution session** then continues from (or branches off) that branch and bundles **archive + substrate into one PR** (recommended — keeps the archive and the registry/cluster edits it specifies in one history), OR merges an archive-only PR first if the archive needs to be on main sooner. Merging is the compile session's call, not the Assistant's.
+
+**Why this is the 2nd commit-boundary incident (gate met):** Lesson #40 (filter-arc Project #3) was the Assistant *over-committing* — attempting substrate edits + falsely claiming "files modified" without committing → ephemeral loss. RP5 Track 1 (2026-06-20) was the inverse — the "no commits" rule was too broad, so the Assistant had to reason out the archive-persist exception mid-session under ephemeral-loss risk. Two projects, same boundary, opposite failure modes → the rule is now precise: **no substrate commits; the archive-persist commit is required.**
+
+---
+
 ## Pre-bake locations
 
 This rule must be pre-baked at:
@@ -95,11 +110,12 @@ Every Assistant session ends with a termination declaration block at the bottom 
 ### Execution Session Termination
 
 Per Lesson #40 role-discipline rule:
-- ❌ NO registry edits made
-- ❌ NO commits, no pushes, no PRs opened
+- ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
+- ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Handoff brief produced above for compile session consumption
+- ✅ Archive doc committed + pushed to branch `<branch>` @ `<SHA>` (the authorized archive-persist exception — § Archive persistence)
+- ✅ Handoff brief produced above; branch + SHA in its `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
 End of <track-name> close-out.

@@ -15,7 +15,7 @@ Your job in a Research Assistant session is **execution + handoff brief producti
 - Edit `lib/*-registry.ts` files
 - Edit `docs/skills/*/cluster/*.md` files
 - Edit ADR files
-- Run `git commit`, `git push`, or `gh pr create`
+- `git commit` / `git push` SUBSTRATE edits, merge to main, or `gh pr create` (the archive-persist commit of the protocol doc is the ONE authorized exception — see DO list + `role-discipline.md` § Archive persistence)
 - Apply "what changed" file edits as part of close-out
 - Run `npx tsc --noEmit` against substrate edits (you won't be making any)
 
@@ -25,7 +25,8 @@ Your job in a Research Assistant session is **execution + handoff brief producti
 - Apply auto-retest / confirmed-outlier / cross-confirmation primitives as appropriate
 - Capture friction + new lessons + audit items inline in the protocol doc (the doc IS the archive — Project #2 Lesson #12)
 - Produce a handoff brief at session end, following [`research-coordinator/cluster/templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md)
-- **TERMINATE the session after the handoff brief.** Do not continue to "finish the job" by attempting commits.
+- **Commit + push the archive doc (protocol doc) to your session branch; report branch + SHA in the brief's `Archive location:` header** — the authorized archive-persist exception (an uncommitted archive isn't an archive)
+- **TERMINATE the session after the handoff brief.** Do not continue to "finish the job" by attempting *substrate* commits, merges, or PRs.
 
 **Why this rule exists:** Filter-arc Project #3's cold execution session over-stepped its role-split — attempted registry edits + ran `tsc` + reported "files modified, build clean" without committing. When the compile session checked, the claimed edits were not present in any branch (working state was ephemeral and lost). The compile session had to re-do all substrate integration from the handoff brief. Lesson #40 is the substrate-extraction lesson from that failure mode. Honor it. The full primitive doc is at [`research-coordinator/cluster/role-discipline.md`](docs/skills/research-coordinator/cluster/role-discipline.md).
 
@@ -54,7 +55,8 @@ One Assistant session per track. Ephemeral — does not persist past handoff bri
 6. **Capture inline.** Friction + new lessons + audit items land inline in the protocol doc's Notes / Lessons / Audit Items sections. Per Project #2 Lesson #12: the protocol doc IS the archive.
 7. **Mid-run hypothesis testing.** If substantive theory emerges (Project #1 Lesson #16: "budget for ~2 exploratory pulls"), test it inside the session. Don't defer — the operator + Assistant context is where this thinking happens cheapest.
 8. **Produce handoff brief.** Follow [`research-coordinator/cluster/templates/handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md) section-by-section. Brief is the compile session's canonical consumption artifact — make it complete enough that no re-derivation from raw notes is required.
-9. **Terminate.** No commits, no PRs, no substrate edits. Declare termination explicitly at the end of the handoff brief (mirror the Project #4 close-out's explicit declaration block).
+9. **Persist the archive.** Commit + push the protocol doc to your session branch; record the branch + SHA in the brief's `Archive location:` header (the authorized archive-persist exception — `role-discipline.md` § Archive persistence). No *substrate* commits, no merge, no PR.
+10. **Terminate.** Declare termination explicitly at the end of the handoff brief (mirror the Project #4 close-out's explicit declaration block).
 
 ## Operational tempo
 
@@ -73,7 +75,7 @@ The Assistant does NOT carry context across tracks. Each new track is a fresh As
 
 - **Inline protocol-doc updates** — friction captures, mid-run lessons, audit items, hypothesis-test resolutions, recording sheet completions
 - **Handoff brief** appended to the bottom of the protocol doc per the template structure
-- **No substrate edits.** No PR. No commit. No `tsc` run.
+- **Archive-persist commit** of the protocol doc to the session branch (the ONE authorized commit; branch + SHA reported in the brief). **No substrate edits, no merge, no substrate PR, no `tsc` run.**
 
 ## Called by / Calls
 
