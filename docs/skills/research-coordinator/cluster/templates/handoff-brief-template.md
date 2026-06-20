@@ -26,6 +26,7 @@ After the brief is written, the Assistant declares termination and stops. No com
 
 **Date:** <YYYY-MM-DD>
 **Session role:** execution + handoff brief production (no substrate edits)
+**Archive location:** branch `<branch>` @ `<commit-SHA>`, pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** <e.g. "✅ VALIDATES" / "❌ PARTIALLY CONTRADICTS" / "MIXED — see findings">
 
 <one-paragraph summary of what this brief is and how the compile session should consume it>
@@ -108,11 +109,12 @@ Lessons that fire in this single track stay logged here. Lessons that graduate t
 ### Execution Session Termination
 
 Per Lesson #40 role-discipline rule:
-- ❌ NO registry edits made
-- ❌ NO commits, no pushes, no PRs opened
+- ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
+- ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Handoff brief produced above for compile session consumption
+- ✅ Archive doc committed + pushed to branch `<branch>` @ `<SHA>` (the authorized archive-persist exception — see [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md))
+- ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
 End of <track-name> close-out.
