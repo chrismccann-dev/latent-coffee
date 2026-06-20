@@ -113,4 +113,4 @@ canonical-queue side effects.
 
 ## PR
 
-PR: _to be appended after the PR is opened_
+PR: https://github.com/chrismccann-dev/latent-coffee/pull/489 — **held open, not merged** (coordinator walkthrough pending).
