@@ -11,7 +11,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Chip } from '@/components/Ssp'
-import { IndexCap, GrlRow } from '@/components/IndexList'
+import { IndexCap, GrlCap, GrlRow } from '@/components/IndexList'
 import {
   BASE_PROCESSES,
   getSignatureEntry,
@@ -52,8 +52,11 @@ export default async function ProcessesIndexPage() {
     <div className="max-w-3xl mx-auto px-6 py-8">
       <IndexCap
         left="PROCESSES"
-        right={`${baseHubs.length} BASE · ${totalModifiers} MODIFIERS · ${totalSignatures} SIGNATURES · ${totalCoffees} COFFEES`}
+        right={`${baseHubs.length} BASE · ${totalModifiers} MODIFIERS · ${totalSignatures} SIGNATURES`}
       />
+      {/* Shared corpus-count sub-row — same "<X> EXPLORED / COFFEES REPRESENTED ·
+          N" register as the other 3 aggregation indexes (audit 01 Finding 3). */}
+      <GrlCap label="PROCESSES" count={totalCoffees} />
 
       {/* Section 1 — Core Process Portals (richer portal cards, kept) */}
       <section className="mb-10">
@@ -151,9 +154,13 @@ function CorePortalCard({ base, hub }: CorePortalCardProps) {
           {hub.pure.length} pure &middot; {hub.modified.length} modified
         </div>
         {/* Canonical Chip primitive (polish-audit Pass 3 — was a hand-drawn
-            re-creation of the deleted `.tag` look). */}
+            re-creation of the deleted `.tag` look). Suppress any 0-count variant
+            chip — a "(0)" chip is a dead affordance that resolves to nothing
+            (audit 01 Finding 6; general rule, not Honey-specific). The combos
+            are pre-filtered to eligible (count ≥ threshold), so Pure is the only
+            variant that can reach 0. */}
         <div className="flex flex-wrap gap-1.5">
-          <Chip name={`Pure ${base} (${hub.pure.length})`} tone="green" />
+          {hub.pure.length > 0 && <Chip name={`Pure ${base} (${hub.pure.length})`} tone="green" />}
           {inlineCombos.map((combo) => (
             <Chip key={combo.slug} name={`${combo.label} (${combo.count})`} tone="green" />
           ))}
