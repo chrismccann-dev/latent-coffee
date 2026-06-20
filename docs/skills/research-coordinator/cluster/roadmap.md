@@ -38,21 +38,7 @@ Each candidate carries three implicit axes used for sequencing:
 
 ## Now
 
-### Filter textural-quality layer (Research Project #5)
-
-*Roadmap slot formerly "Track 5"; renamed at scoping — "track" is a Coordinator/Assistant sub-unit, not a project. This project is geometry-split into multiple tracks (below).*
-
-**Effort:** small. **Fold-in:** high (extends filter-arc substrate). **WBC payoff:** medium.
-
-**Status (2026-06-19):** Track 1 (V60 cone) scoped, protocol drafted, dial-in recipe locked — READY to spawn (pending one scope confirm: BS→Track 3). Protocol: [filter-textural-quality-v60-cone.md](docs/research-projects/filter-textural-quality-v60-cone.md). **Three-track geometry split:** Track 1 V60 cone (now) · Track 2 Kalita flat (queued) · Track 3 Sibarist BS native (candidate — the BS fits the xBloom big slot with the claw holder removed).
-
-**Scope:** Adds a textural-quality field to `FilterEntry` (drawn from the canonical `structure_tags` Body/Clarity/Finish vocabulary), extending the filter arc's `measured` substrate. *(The earlier "thin/syrupy/heavy" seed is NOT canonical — "thin"=`Body:Light`, "heavy"=`Body:Syrupy`; the field reuses the brew vocabulary rather than inventing one.)* Uses xBloom as controlled-pour platform to isolate paper-as-variable under realistic brewing conditions (center / spiral / circular pour patterns; pre/post agitation; programmatic temp + flow), unlike the filter arc which deliberately measured paper-only flow under non-realistic 250g-at-once dumps that produced craters and bypassed bed-uniformity considerations.
-
-**Brewer compatibility (forcing function):** xBloom drives a **Kalita** flat (confirmed; Chris's cupping brewer) and a **V60** (confirmed 2026-06-18) via its dripper-holder ("claw"). Funnex / Cypress don't fit the claw. The **Sibarist Brewing System** doesn't fit the claw either, BUT it fits the xBloom **big slot directly with the claw removed** (confirmed 2026-06-19, at ~V60 height) — so it's a usable platform after all. HALO papers are also V60-shaped (fit a V60). This validates which brewers xBloom can drive — downstream signal for § Next #1 (Bloom science) — and yields the three-track geometry split above.
-
-**Why this slot:** Smallest effort × highest fold-in × short effort-to-result loop. Extends existing filter substrate (one new track + one new column), not a new corpus. **Prototypes the subjective-into-taxonomy mechanism that every future project will need** (bloom feel, routine evaluation, blending sensory output, sourcing cup signals all involve subjective data getting compressed into sharp substrate). Second project for the new Coordinator + Assistant architecture — battle-tests the methodology primitives forged in the filter arc.
-
-**Methodology refinement focus:** how to convert subjective cupping prose into structured taxonomy fields without losing fidelity. **Method locked at scoping: reuse the existing canonical `structure_tags` enum** (Body/Clarity/Finish) — a borrow, not a build, so the paper's textural reading speaks the same language as every brew. The prototype question (HT4) is whether the 29-descriptor vocabulary has enough resolution for paper-texture work or whether prose leaks — capture both prose and tags, the gap is the data. First substantial sharp-substrate-fold test of subjective → structured; whether the method generalizes is deferred to the project retro per the cross-project ratification gate.
+*Empty. Research Project #5 (Filter textural-quality layer) closed 2026-06-20 after Track 1 — see § Closed. Retro complete. **Next project: Water chemistry** (§ Next #5, operator-pulled-forward 2026-06-20 ahead of the queue) — awaiting its intake/scoping session, which will move it here.*
 
 ---
 
@@ -98,7 +84,9 @@ Ordered queue. Order reflects priority + sequencing constraints derived from the
 
 **Scope:** Phase 1 — comparative tasting of formulated mineral concentrates vs tap water vs distilled, building the difference vocabulary. Phase 2 — build own controlled mineral system independently varying Ca / Mg / Na / K / bicarbonate. End game: per-coffee water recipe library. Operator-flagged as "honestly probably the most important one" — most WBC champions arrive at custom water.
 
-**Sequencing rationale:** The big rock. Earlier projects' methodology refinements (Track 5's subjective-taxonomy work + Routine construction's WBC framing) sharpen the scoping. Chunking strategy TBD at scope time — phase 1 + phase 2 likely span multiple tracks. Could be argued earlier in the queue; operator's call at the next project-close sequencing pass.
+**Sequencing rationale:** The big rock. Earlier projects' methodology refinements sharpen the scoping. Chunking strategy TBD at scope time — phase 1 + phase 2 likely span multiple tracks.
+
+**→ SELECTED AS NEXT PROJECT (2026-06-20).** Operator pulled this forward ahead of the queue at RP5 close (highest-payoff pick per § Sequencing convention) — explicitly over Bloom science (#1) and over the dropped textural Tracks 2/3. Rationale: RP5 showed texture is flow / contact-time-mediated (not paper-direct), so re-running textural tracks on other geometries would teach little; meanwhile RP5 validated **xBloom as a near-perfect single-variable experiment platform** (lock the recipe, change only the water in the back, everything else constant) — which makes water the highest-order next variable. The shared Pink Bourbon Washed coffee was bought for this too. Operator has implementation thoughts ready; awaiting the intake/scoping session.
 
 ### 6. Cross-coffee blending
 
@@ -184,6 +172,18 @@ Non-brew-related. Le Nez du Café 60-aroma kit calibration ([link](https://www.l
 ---
 
 ## Closed
+
+### Filter textural-quality layer (Research Project #5, 2026-06-18 → 2026-06-20)
+
+Single track executed (V60 cone); Tracks 2 (Kalita flat) + 3 (Sibarist BS native) **dropped as moot** at close — Track 1 answered the question, and 2/3 would have re-run the same experiment on different geometries. Second project on the Coordinator/Assistant architecture. Closed 2026-06-20.
+
+| Track | Methodology | Closed | End-document |
+|---|---|---|---|
+| 1 | Filter textural quality, V60 cone — `structure_tags` taste reading via xBloom controlled-pour; paired-A/B vs CONE-B3, 1× per paper | 2026-06-20 | [filter-textural-quality-v60-cone.md](docs/research-projects/filter-textural-quality-v60-cone.md) |
+
+**Headline finding:** **paper texture is largely FLOW-MEDIATED** (contact-time dominant; + bypass + flow-consistency) — the paper doesn't directly modulate texture, it modulates flow / contact-time, which modulates texture. The hypothesized `texturalTags` field proved flow-redundant + vocabulary-under-resolving + single-coffee-conditioned → **deferred, not shipped.** **Durable substrate output instead:** a realistic-condition drawdown field (`realisticDrawdownSec`, the xBloom end-time the filter arc's non-realistic dumps couldn't give) + the HALO `fitsBrewers` += V60 correction + filters.md flow-mediation knowledge ([PR #494](https://github.com/chrismccann-dev/latent-coffee/pull/494) / main `6b73d22`). **RP4 AI-4 resolved:** HALO ≡ CONE in the cup (both brewers) — fit story, never a cup story.
+
+**Methodology output:** the archive-persist commit convention added to role-discipline ([PR #491](https://github.com/chrismccann-dev/latent-coffee/pull/491) — 2nd commit-boundary incident → ratification gate met, graduated). xBloom-as-controlled-platform + consumption-ceiling budgeting + per-axis tasting prompts + paired-A/B reading + dial-in-from-`/brew` seeded as taste-study primitive **candidates** — graduate at the water project (the 2nd taste-shaped project). Full retro in the end-document (§ Project Close + Retro).
 
 ### Filter arc (4 tracks, 2026-05-21 → 2026-05-26)
 

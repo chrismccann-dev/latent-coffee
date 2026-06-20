@@ -689,3 +689,35 @@ Per Lesson #40 role-discipline rule:
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
 End of Filter Textural-Quality Layer — V60 Cone (Track 1) close-out.
+
+---
+
+## PROJECT CLOSE + RETRO (Coordinator, 2026-06-20)
+
+This is now the project's **end-document** — RP5 closed after Track 1, so the protocol doc IS the end-document (per the single-track convention). Substrate fold merged: [PR #494](https://github.com/chrismccann-dev/latent-coffee/pull/494) / main `6b73d22`.
+
+### Project-close decision — Tracks 2/3 dropped as moot
+
+The project was scoped as 3 geometry-split tracks (V60 cone / Kalita flat / Sibarist BS native). **Tracks 2 + 3 are dropped at close.** Operator's call + Coordinator-concurred: Track 1 already answered the project's question. Track 2 (flat-bottom + flat papers) and Track 3 (BS, FAST vs B3) would re-run the same experiment on different geometries and find the same thing, because **the finding is that paper texture is largely flow / contact-time-mediated, not paper-construction-direct.** Re-confirming that across geometries teaches little worth applying. (And the single clarity-weighted coffee compressed the Body axis — a heavier coffee would do more to re-open the question than a different brewer geometry would.) A project closing after one of its planned tracks is legitimate — research scope is fluid (cf. the filter arc, where RP4 was *added* mid-project; here 2/3 were *removed*).
+
+### Retro — methodology (the accumulation payload)
+
+- **Graduated this project:** the **archive-persist commit convention** ([role-discipline.md § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md), [PR #491](https://github.com/chrismccann-dev/latent-coffee/pull/491)). 2nd commit-boundary incident after Lesson #40 (the inverse failure) → cross-project ratification gate met → folded into all 4 pre-bake locations now, not parked.
+- **Seeded as candidates (graduate at the water project — the 2nd taste-shaped project):**
+  - **xBloom as a single-variable experiment platform** (RP5-N1 + operator's strongest close-out framing): lock the recipe once, change only the target variable, everything else constant, same cup each time. Near-certain to graduate — the water project IS this pattern (change only the water in the back). Works across V60 / flat / Sibarist BS; Chemex/Funnex fit untested (claw-off, likely).
+  - **Consumption-ceiling budgeting** (RP5-N5): a taste study's hard cap is cups *consumed* (caffeine/volume ≈ 10/day, ~6 if pre-spent), not palate fatigue. Budget it at scope time; it forced the 2-sitting split here.
+  - **Per-axis tasting prompts** (RP5-N4), **paired-A/B-vs-baseline reading**, **dial-in-from-`/brew`** (recipe sourced from the brewing flow, verified-not-derived in-session), **seed-vocab-vs-canon check at scope time** (the "thin/syrupy/heavy" collision), **prior-project photo-inventory carry-forward** (waived when the cohort is unchanged).
+- **Friction that held / didn't recur:** role discipline held; the active-mode HT logging (Lesson #16) caught the richest findings (flow-consistency, 3 mechanisms) which were operator-originated mid-run — candidate: taste-study protocols should leave explicit room for operator-originated mechanism hypotheses.
+
+### Retro — the broader insights (operator-originated; captured as research direction, NOT yet folded)
+
+These emerged at close and are **hypotheses, not ratified substrate** — they inform the next projects, they don't fold into operational substrate until tested (sharp-substrate-fold false-precision gate).
+
+1. **Phase modulation is the brewing-side "layered-evolving" lever.** Operator's best brews (layered, evolving complexity over time — the [`CONTEXT-taste.md`](CONTEXT-taste.md) apex) trace to phase-by-phase *flow modulation*: holding the bloom long, restricting then opening pours, holding/releasing phases (not just on/off). The instrument is the **Sworks Bottomless Brewer** ([link](https://sworksdesign.com/Bottomless-Dripper-p605203046)) — a continuous valve that does, more elegantly, what the V60/April Switch do with on/off. This *negates the paper variable* (the operator controls each phase's flow directly), which dovetails with Track 1's "paper modulates flow, flow modulates texture" finding: control flow directly and the paper matters less. **Fold candidate (when tested):** Sworks brewer + phase-modulation framework → brewing-equipment-expert cluster; phase-modulation-as-layered-evolving-lever → CONTEXT-taste.md.
+2. **The full-stack apex hypothesis.** The end cup operator is chasing may be the *combination*: engineered/processed high-quality (sometimes exotic) green → roasted at the **high end of light** (light-to-medium-light, for full expressiveness) → **phase-modulating brewer** (Sworks / switch) to push-pull each phase → **optimized water chemistry**. Confound flagged: nearly all his best brews came from the *office* (Sworks brewer + Piccolot beans + **plain Palo Alto tap water, not even remineralized**) — so the water axis is currently *un*-optimized in his best results, implying large remaining upside. **North-Star-level** (ties sourcing→roasting→brewing→water to the layered-evolving apex). Fold candidate (when substantiated): PRODUCT.md meta-thesis / CONTEXT-taste.md.
+
+### Next project — Water chemistry (operator-selected, gate satisfied)
+
+Operator pulled **Water chemistry** (§ Next #5) forward ahead of the queue, over Bloom science and the dropped textural tracks — the highest-order next variable, and the one currently un-optimized in his best (office) brews. The Coordinator gate (no new project until the retro runs) is now satisfied by this retro. Next step: a **water-chemistry intake/scoping session** (operator has implementation thoughts ready; the shared Pink Bourbon Washed coffee + the validated xBloom-as-platform method carry straight over).
+
+End of Research Project #5.
