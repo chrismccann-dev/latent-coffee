@@ -88,6 +88,12 @@ Ordered queue. Order reflects priority + sequencing constraints derived from the
 
 **→ SELECTED AS NEXT PROJECT (2026-06-20).** Operator pulled this forward ahead of the queue at RP5 close (highest-payoff pick per § Sequencing convention) — explicitly over Bloom science (#1) and over the dropped textural Tracks 2/3. Rationale: RP5 showed texture is flow / contact-time-mediated (not paper-direct), so re-running textural tracks on other geometries would teach little; meanwhile RP5 validated **xBloom as a near-perfect single-variable experiment platform** (lock the recipe, change only the water in the back, everything else constant) — which makes water the highest-order next variable. The shared Pink Bourbon Washed coffee was bought for this too. Operator has implementation thoughts ready; awaiting the intake/scoping session.
 
+**Locked at RP5 close (carry into the water intake):**
+- **Platform:** xBloom, **fixed no-modulation dripper** (V60). Reproducibility = isolate the single variable, so phase-modulation (Sworks / Switch) is deliberately OUT of the controlled experiment — change only the water in the back, everything else constant. (The Sworks "best-cup" question is a separate non-experiment thread, not this project.)
+- **Coffee:** Hydrangea Pink Bourbon Washed (~5 lb less the RP5 usage), operator baseline-dialed — known-baseline is what lets subtle water deltas read, even on a clarity-weighted coffee.
+- **Method:** inherits the RP5-validated xBloom-as-single-variable-platform; intake will need operator's prepared water docs (current inventory: Third Wave Water + distilled + any salts/gear) + implementation thoughts. Watch the platform-vs-best-cup tension (xBloom-fixed-recipe answers "how water affects a controlled cup," not "how water affects my best Sworks cup") and the clarity-weighted-coffee caveat.
+- **Entry:** a FRESH Coordinator session ("I want to start a research project: water chemistry") — one Coordinator per project; RP5's Coordinator is closed.
+
 ### 6. Cross-coffee blending
 
 **Effort:** large. **Fold-in:** medium (inherits roast-blending taxonomy if § Next #11 fires first). **WBC payoff:** huge.
