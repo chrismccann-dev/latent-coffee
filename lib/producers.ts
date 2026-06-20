@@ -447,15 +447,24 @@ export function evidenceLevel(agg: ProducerAggregate): string {
 export function nextAction(agg: ProducerAggregate): string {
   const posture = buyPosture(agg)
   const stylized = isStylized(agg.entry)
-  if (agg.relationshipState === 'indexed_only') {
-    return stylized
-      ? `${posture}; confirm clarity survives the processing.`
-      : `${posture}; verify disclosure before buying.`
+  switch (agg.relationshipState) {
+    case 'indexed_only':
+      return stylized
+        ? `${posture}; confirm clarity survives the processing.`
+        : `${posture}; verify disclosure before buying.`
+    case 'brewed_purchased':
+      return `${posture}; ${stylized ? 'check the green is cleanly processed.' : 'green should hold the cup.'}`
+    // resolved_reference / self_roasted / sourced_green previously fell through to the v1
+    // `${posture}.` fallback, which duplicated the Buy-posture cell. Distinct copy below.
+    // resolved_reference is an interim doctrine line, pending the close-lot producer-
+    // disposition capture (Re-source / Back burner / Retire — roadmap On deck).
+    case 'resolved_reference':
+      return 'Re-source if a new lot fits the apex; otherwise retire.'
+    case 'self_roasted':
+      return 'Roast in process'
+    case 'sourced_green':
+      return 'Waiting for first roast'
   }
-  if (agg.relationshipState === 'brewed_purchased') {
-    return `${posture}; ${stylized ? 'check the green is cleanly processed.' : 'green should hold the cup.'}`
-  }
-  return `${posture}.`
 }
 
 export function deriveDecisionStrip(agg: ProducerAggregate): DecisionCell[] {
