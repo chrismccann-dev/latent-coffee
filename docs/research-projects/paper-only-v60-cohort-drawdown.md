@@ -592,11 +592,11 @@ See § Output § Methodology Validation Verdict above. **Verdict: ✅ VALIDATES.
 
 - **RP4 AI-3: CAFEC T-code as registry attribute.** Add `productCode: string` field to FilterEntry. CAFEC papers have a canonical T-code identifier (T-83 / T-90 / T-92) separate from the Cup-size encoding. Chris's preferred reference is by T-code. Registry should support this.
 
-- **RP4 AI-4: HALO-B3 design rationale investigation.** RP4-N9 raises the question: if HALO-B3 (native-BS paper) measures functionally identical to CONE-B3 (V60-shape in BS) on drawdown, what's the design rationale for HALO-B3? **Recommended follow-up: a brewing-quality test (clarity / extraction / mouthfeel) to investigate whether HALO-B3 differentiates on non-flow dimensions.**
+- **RP4 AI-4: HALO-B3 design rationale investigation.** RP4-N9 raises the question: if HALO-B3 (native-BS paper) measures functionally identical to CONE-B3 (V60-shape in BS) on drawdown, what's the design rationale for HALO-B3? **Recommended follow-up: a brewing-quality test (clarity / extraction / mouthfeel) to investigate whether HALO-B3 differentiates on non-flow dimensions.** **RESOLVED — RP5 Track 1 (2026-06-20): HALO-B3 ≡ CONE-B3 on the cup in both V60 and BS; differs only on structural seating. Fit/repeatability story, not a cup story.**
 
 - **RP4 AI-5: Family-conditional flow-rate classification framework.** RP4-N4 demonstrates that paper-brewer-interaction signal direction is family-conditional. **FilterEntry should support manufacturer/fiber-family axis as a discriminator.** Registry recommendation: add `paperFamily: 'Hario' | 'Sibarist' | 'CAFEC-Trad' | 'CAFEC-Abaca' | ...` or equivalent.
 
-- **RP4 AI-6: Sibarist FAST size variants as registry SKUs.** RP4 surfaced that CONE-FAST has size variants (small vs large) where the small variant doesn't fit BS. Registry currently treats "Sibarist FAST" as a single SKU but variant differentiation matters. **Recommended: add size-variant SKU records OR `sizeVariant` field to existing FAST SKU.**
+- **RP4 AI-6: Sibarist FAST size variants as registry SKUs.** RP4 surfaced that CONE-FAST has size variants (small vs large) where the small variant doesn't fit BS. Registry currently treats "Sibarist FAST" as a single SKU but variant differentiation matters. **Recommended: add size-variant SKU records OR `sizeVariant` field to existing FAST SKU.** **RP5: size = handling, not cup (Chris) — closeable.**
 
 - **RP4 AI-7: Endpoint-precision discipline in protocol.** Pull #1 measurement was "about 1:30 estimate"; pulls #2 + #3 + #9 had range-style readings ("1:29-1:31"). **Protocol could prescribe explicit endpoint reading discipline (e.g., "call the moment of specular→diffuse transition; if you miss it, give 1-2s range with upper bound chosen").**
 
