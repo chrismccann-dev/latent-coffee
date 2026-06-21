@@ -25,53 +25,46 @@ Evaluation posture (locked at intake): Day 7 xbloom gate as usual, but **escalat
 ## V-set log (the plan-state)
 
 - **V1** — design intent: peak-inlet **mapping pass at 236 / 239 / 242°C** on the Mandela XO curve shape (charge inlet 195°C, XO shaped fan, RPM flat, preheat 210°C), centered ~2°C below the XO anchor peak for the lower density. **BEAN_TEMP auto-drop 204°C uniform** (mid heavy-ferment ceiling, just above Lot 21's winning drop; doubles as the honest-trigger replication test of Batch 194's provisional manual pull). Slow-clock 6:00 uniform. Sequential run order v1a→v1b→v1c (operator-ratified divergence from the protocol's midpoint-first default — trusts the thermal-reset BBP). Expect silent-to-subtle FC; dual-threshold manual mark only; 208°C record-keeping fallback. v1a is the deliberate lower-bound probe (sub-FC is a usable data point per Lot 21's cup-floor-below-FC-floor finding). All design forks operator-ratified 2026-06-12 (structure / anchor / FC posture / spread / drop temp / slow clock).
-  · status: **designed + fully staged** (2026-06-12: experiment `AN10-PEAK-INLET-v1`, recipes v1a/b/c with frozen predictions + drop rules, Roest profiles **"Bukure AN - v1a/b/c"** = 530685 / 530686 / 530687, share-enabled)
-  · leading slot: — · what it proved: — · delta resolution: — · route taken: —
+  · status: **CLOSED** — roasted 2026-06-13 (batches 214/215/216), xbloom Day 7 (2026-06-20), SPG Day 8 (2026-06-21).
+  · **leading slot: V1C (Batch 216, 242 peak) — best of set, NOT the lot reference.**
+  · what it proved: (1) **FC audibility is a momentum threshold on this anaerobic** — 236 did_not_fire / 239 one boundary pop (subtle) / 242 audible (2 cracks, 4:31); the ferment raised the audible-FC bar vs Lot 21's clean natural. (2) **Bimodal response surface** — the developed end (216) decisively beats the bright-but-hollow low end (214), and the center (215, 239) is the *weakest* slot, not a compromise. (3) **SPG inverted the xbloom read on 214** — the gate over-amplified its brightness; under a real Extraction-Push pourover 214 is flat/nutty/hollow, so the 214-front + 216-back blend idea is dropped. (4) **216 is closest to producer notes** (cherry-cola / jam / cocoa) but under-built (flat-ish, disintegrated mid-palate) **with zero overdev signature even at the 207 manual-hold** → real roast headroom. (5) **widest WB→Gnd delta won again** (216 +6.9), 3rd consecutive on Nova Red Bourbon.
+  · delta resolution + full numbers live in the experiment row `AN10-PEAK-INLET-v1` (`key_insight` / `what_changes_going_forward` / `delta_from_cup_*` / `delta_from_roast_*`) — pull `get_bean_pipeline`, not duplicated here.
+  · route taken: **SPG (Path B) → advance to V2.**
+
+- **V2 — direction set, not yet designed.** The V1 Assistant's recommended direction (input-not-canon; the V2 Coordinator session owns the actual design + forks): **push development PAST 216** (216 = 242 peak / FC 4:31 / 44s dev / drop 207 manual-hold / Agtron 83.7 / +6.9), with an **honest bean-temp auto-drop (no manual hold)** so the developed window is repeatable; the old >206°C failure boundary is provisionally too low (216 hit 207 clean, no spice/overhang) so **deliberately probe past 206** watching for the heavy-ferment overdev signature (spice/cinnamon creep, roast overhang); **narrow-variance** (1-2 variables around the developed end), not a wide V1-style map. Budget: ~600g left = 3×100g + a brew session — **NO V3, so V2 must land the reference** (or close on best-available); be open to an SPG again at V2.
+  · status: not yet designed — fresh session (see Current state).
 
 ## Current state + next step
 
-**V1 is staged end-to-end; the ball is at the roaster.** V1 Handoff Packet + operator prep packet emitted 2026-06-12 (reproduced below). Next Coordinator action: consume the V1 Results Packet in a fresh session — reconstruct from this Brief + `get_bean_pipeline` (use `since:`), resolve the three-point deltas, then route (V2 design vs early SPG; with no V3 room, prefer whichever spends fewer batches answering the ferment question).
+**V1 closed; V2 not yet designed.** `lot_status` is `waiting_for_next_roast` (correct — ready for the next roast). **V2 design is a fresh-session job** per Model B + [process-friction entry #1](docs/skills/roasting-coordinator/cluster/process-friction-log.md): the warm session that ran V1 should not roll straight into designing the next phase. Open a fresh Claude Code session, say *"design AN10 V2,"* and it reconstructs everything from this Brief + `get_bean_pipeline(50ae372d-a4ee-465e-9e54-e2dcf9189c22)` — the V1 paste-block / Results Packet is **not needed** (its entire content is already in the DB; see § Process notes). V2 has the direction set (above) but the specifics — exact dev target, whether to lift the drop ceiling vs add energy, the 1-2 isolated variables — are forks for that session to walk.
 
-### V1 Handoff Packet (emitted 2026-06-12)
-
-```
-V-SET HANDOFF — rwa-nova-an10-rb-2026 V1
-- green_bean_id: 50ae372d-a4ee-465e-9e54-e2dcf9189c22
-- experiment_id: fb8b4330-5b27-4c77-b0d3-d628a954db7e   (recipe rows v1a/b/c in DB; Roest profiles staged + shared)
-- focus: peak-inlet mapping pass on the first anaerobic East African — where does the
-  energy center sit, and what does the ferment change vs Lot 21's clean natural?
-- not in the recipe rows: nothing. Reconstruct everything from get_bean_pipeline.
-```
-
-### Operator prep packet (emitted 2026-06-12)
-
-- **Run order:** v1a → v1b → v1c, sequential. One session, one lot.
-- **Profiles on the tablet:** "Bukure AN - v1a" / "Bukure AN - v1b" / "Bukure AN - v1c" (also loadable via the share URLs on the recipe rows).
-- **Per batch:** 100g. Standard operator-fixed routine (10-min warm-up dry run to 140°C, BBP, hopper load at 125°C, charge at 117°C).
-- **FC protocol:** expect silent-to-subtle. Mark manually only on a snap above 202°C in the expected window (~4:45-5:45 depending on slot); single snap is enough when temp + timing agree. If fully silent, 208°C fallback mark for the record — bean temp runs the drop either way. Record fc_audibility per batch.
-- **Drop rules (all three slots):**
-  - If running fast: **Let it auto-drop at 204°C. Don't intervene.**
-  - If running slow: **Drop at 6:00 regardless.**
-- **Record:** drop attribution honestly (auto vs manual pull) — Batch 194's provisional attribution is exactly what this V-set cleans up. Document any manual override explicitly; dev time is a measured output, not a target.
+The V1 Handoff + operator-prep packets (emitted 2026-06-12) were ephemeral couriers; their content lives in the recipe rows + DB and is not reproduced here.
 
 ## Open questions / carry-forward
 
-Lot-side:
+Lot-side (for V2):
 
-1. FC audibility under anaerobic — Lot 21's natural gave a legitimate 1-snap subtle mark; does the ferment silence it? Feeds the audibility-window hypothesis and future anaerobic-East-African anchoring.
-2. v1a sub-FC outcome is designed-in, not a failure — read it as "how far does 236 get," per the FC-threshold ≠ drinkability-threshold reframe.
-3. Lot 21's lingonberry never surfaced on any brew angle; this lot's spec swaps it for lime — watch whether the bright-edge note survives the ferment at any slot.
-4. Purchase date recorded as 2026-04-15 (mirrored from Lot 21's Showroom order) — correct via patch if the order record says otherwise.
+1. Where does the **heavy-ferment overdev signature** finally appear when pushed past 216? None yet — 216 was clean at the 207 manual-hold — so V2 deliberately hunts for it.
+2. Does the **under-built / disintegrated mid-palate** resolve with more roast development, or is it partly a brew-extraction issue? Brew-side note from the SPG: an Intensity-Clarity Split pulls more into 216's under-built front.
+3. FC audibility is a **momentum threshold** here (236 none / 239 one pop / 242 audible) — the anaerobic step raised the audible-FC bar vs Lot 21. V2 lives at 242+, so an audible FC is expected; confirm it holds.
+4. **Lingonberry→lime watch:** 216 carries "a touch of lime," 214 most overtly — the bright edge survives the ferment at the developed end; track whether it persists in the reference recipe.
+
+CCIL candidates held (not promoted — need V2 corroboration):
+
+- **widest WB→Gnd delta wins** — 3rd consecutive on Nova Red Bourbon (216 +6.9); cleaner at N=4 after V2.
+- **xbloom gate over-amplifies brightness / can invert vs a real pourover on bright anaerobics** — N=1 (214 this lot); watch for a 2nd instance before promoting.
 
 Process notes:
 
-- Workflow-level friction from this session lives in the [process-friction log](docs/skills/roasting-coordinator/cluster/process-friction-log.md) (entries dated 2026-06-12): the MCP nullable-schema publication bug (**fix shipped 2026-06-13** — [lib/mcp/schema-compat.ts](/lib/mcp/schema-compat.ts); root cause was Claude Code's client dropping `anyOf:[T, null]` property unions, not the server publishing empty schemas; nullable fields now publish as `type: [T, "null"]` type arrays, gated by `npm run check:mcp`. Sessions started before the fix keep the stale catalog — re-handshake / fresh session to pick up the typed schemas, after which the in-process persist fallback is no longer needed) and the sibling-lot terroir FK near-miss at intake (registry collision flagged for the grilling queue).
-- Lot-side residue of the schema bug: **closed 2026-06-13** — Roest inventory 9962 patched via `patch_inventory` (moisture 10.3 / density 786 / elevation 1900 / price 25.65), read-back verified, stale "pending schema fix" sentence removed from its notes. The structured fields and the Latent DB now agree.
-- What worked: the compose-don't-reauthor model held — onboarding protocol + Roest Knowledge + Historian + Lot 21 learnings answered every design question; the drop-rule authoring standard produced glanceable rules on the first try; ask-at-every-fork with prior-lock-as-recommended resolved all 7 forks in two question rounds.
+- Workflow friction from the V1 arc lives in the [process-friction log](docs/skills/roasting-coordinator/cluster/process-friction-log.md): the MCP nullable-schema publication bug (**resolved 2026-06-13**, `lib/mcp/schema-compat.ts`), the sibling-lot terroir FK near-miss, and (2026-06-21) the **V-set packet-persistence resolution**.
+- **Packet persistence resolved (2026-06-21):** V-set Handoff/Results Packets are **ephemeral couriers, not artifacts** — no file home. Confirmed empirically this session: the full V1 close reconstructed from `get_bean_pipeline` alone, and the paste-block carried nothing the DB didn't already hold (the Assistant had written `key_insight` / `what_changes_going_forward` / `delta_from_cup_*` into the experiment row). Durable content lands in the DB (numbers + Assistant interpretation) + this Brief (Coordinator narrative); the Brief's git history is the audit trail.
+- Lot-side residue of the schema bug closed 2026-06-13 (Roest 9962 structured fields patched + verified).
+- The MCP write notes the V1 Results Packet carried (`#57` `patch_green_bean` over-requires fields / clobbers `roast_priority`; `#58` SPG-lifecycle prompt drift) are already filed in the [feedback backlog](docs/product/feedback-backlog.md) via route-feedback Round 25 (#499/#500) — issue-tracked, not re-logged here.
+- What worked (V1 design): the compose-don't-reauthor model held; the drop-rule authoring standard produced glanceable rules on the first try; ask-at-every-fork with prior-lock-as-recommended resolved all 7 forks in two rounds.
 
 ## Cross-domain handoffs
 
-- SPG: not-run
+- SPG: **run at V1** (Day 8, 2026-06-21 — one standing Extraction-Push pourover on finalists 214 + 216) → 216 wins outright, but assessed best-of-set, **not reference-grade** → Path B advance to V2. Cuppings in the DB (`eval_method = Simulated Pourover`).
 - Optimized brew: not-started
 
 ## Close-out (when resolved)
