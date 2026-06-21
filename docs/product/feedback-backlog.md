@@ -1,6 +1,6 @@
 # Workflow-Feedback Backlog
 
-*Last updated: 2026-06-15 (write-path-hardening sprint SHIPPED - #54 op/operation alias + #56 push_brew FK-inherit + #46 patch_inventory pre-load hint removed from open per the status lifecycle; see [docs/sprints/shipped.md](docs/sprints/shipped.md). Earlier 2026-06-15: #52 resolved-by-side-effect of the 2026-06-13 schema-compat ship, removed from open. Round 24 prior: filed #53-#56; bumped #46.)*
+*Last updated: 2026-06-20 (Round 25 — filed #57 patch_green_bean required-set + #58 SPG-lifecycle prompt drift, both from the AN10 V1 cupping/SPG dogfood; partial-build note added to the #22 lifecycle entry). Prior 2026-06-15: write-path-hardening sprint SHIPPED - #54 op/operation alias + #56 push_brew FK-inherit + #46 patch_inventory pre-load hint removed; #52 resolved-by-side-effect of the 2026-06-13 schema-compat ship; Round 24 filed #53-#56.)*
 
 The **actionable** subset of workflow feedback — the items that need a *build* (prompt
 fix / MCP fix / schema / UI / architecture), not just a route-and-forget filing.
@@ -46,6 +46,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Status:** open
 - **Source:** master log #22 (Round 17), reinforced #30 (Round 18)
 - **Body:** When SPG (Simulated Pourover Gate) / any C-path calibration gate fires mid-V-set, the lot sits in a state distinct from both "winner declared" and "advance to V_(n+1)" — winner null, brew-side confirmation pending. Only encoded in prose today. Candidates: `lifecycle_state` enum (`waiting_for_spg`) on experiments, or a lightweight `gates` table `(green_bean_id, gate_type, status)`. This is the **lifecycle-gate-not-modeled meta-pattern** — the single highest-recurrence theme in the backlog; it spans V-set (SPG) AND one-shot (defer-verdict) paths. Tagged in `issues.md` as a Lot Coordinator + V-Set Assistant sprint concern.
+  - **Partial build (2026-06-20, AN10 dogfood):** migration-080's stored `waiting_for_brewing` state is now the de-facto SPG-handoff home (the lot sits there while the brew-side SPG runs) and is wired end-to-end. It's not a `waiting_for_spg`-specific state — it conflates SPG with optimized-brew — but it does give the gate a queryable, rendered home, partially addressing this entry. The remaining gap is the SPG-specific distinction + the winner-sentinel fooling the derivation (see the new prompt entry below). The prompt drift it created is filed separately under prompt/doc-touch.
 
 ### Deferred-proposals queue + partial-proposal gap during a calibration gate
 - **Shape:** arch (workflow/lifecycle)
@@ -76,6 +77,14 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 ## Open — MCP / infra
 
 > **Resolved 2026-06-13 (#52 — by side-effect of the "MCP published-schema compat" ship, see [docs/sprints/shipped.md](docs/sprints/shipped.md)):** push_roast (and every numeric-field Tool) string-rejection shared the *same root cause* as the same-day (same lot, RWA-NOVA-AN10-RB-2026) schema-compat fix — `.optional().nullable()` numeric fields published as bare `anyOf:[T,null]` unions that Claude Code's client drops (claude-code#5844), leaving the field untyped so numerics serialized as strings → zod -32602 reject. [lib/mcp/schema-compat.ts](lib/mcp/schema-compat.ts) rewrites the published catalog globally (`anyOf [T,null]` → `type:[T,"null"]`, recursive, one `tools/list` wrap, no per-tool edits); the `check:mcp` gate now fails on any property lacking resolvable type info across the whole catalog (986 problems → 0). Verified in code: every field #52 named (`batch_size_g`/`agtron`/`charge_temp`/`drop_temp`/`end_condition_target`/`fc_total_cracks`/…) is `z.number().optional().nullable()` in [push-roast.ts](lib/mcp/push-roast.ts), exactly the shape the ship rewrites. Different mechanism than #52's proposed `z.coerce.number()`, same symptom gone. Removed from the open list per the status lifecycle. Flip is pending one live re-verification in the next fresh Coordinator session (existing sessions hold the stale catalog per the MCP-cache rule).
+
+### `patch_green_bean` over-requires fields on a field-level patch + the two registrations disagree
+- **Shape:** mcp (schema)
+- **Recurrence:** 1 (Round 25 / AN10 SPG handoff, 2026-06-20)
+- **Criticality:** med
+- **Source:** master log #57 (Round 25)
+- **Status:** open
+- **Body:** `patch_green_bean` is a field-level mutation ("only fields you supply are updated") yet the typed `eeaa2042` registration marks SIX fields `required` — `green_bean_id` + `price_per_kg` + `quantity_g` + `elevation_m` + `roast_priority` + `roest_inventory_id` — so a `lot_status`-only change forces collateral writes AND a `roast_priority` null-clobber (the auto-mode classifier correctly blocked it as unconsented data loss). The `latent-coffee` registration of the same tool requires ONLY `green_bean_id` (that was the clean path used to set AN10's `waiting_for_brewing`). Two distinct problems: (a) a patch tool shouldn't require unrelated fields — the 5 over-required fields are almost certainly `.nullable()` without `.optional()` in the zod schema (nullable ≠ optional → published as required); make them `.optional().nullable()` so the required set collapses to `[green_bean_id]`; (b) the two registrations publish divergent `required` arrays. Sibling of #52 (same "MCP schema publication" family — #52 was the type-axis, resolved 2026-06-13 by [schema-compat.ts](lib/mcp/schema-compat.ts); this is the required-axis, which that fix did not touch).
 
 ### `patch_roast` + `read_doc_section` intermittent execute-after-search failures
 - **Shape:** mcp (infra)
@@ -144,6 +153,14 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Body:** The #33/#418 arbiter-ticket flow (option b) shipped the *creation* path for net-new per-lot learnings/calibrations files, but the emitted ticket lives entirely outside MCP — a fenced block the operator hand-routes to a Claude Code arbiter session. Seam: the lot is "Resolved" in the DB the moment STAGE 6 archives inventory, yet the closed-lot learnings file doesn't exist until the ticket is processed separately, so the resolved-view "see closed-lot learnings" pointer (proposal 1/3) dangles if the ticket is lost. The only record the ticket was emitted is chat. Ask: (a) a lightweight `pending_file_registrations` table the close-lot prompt writes to (dangling-pointer risk becomes queryable), or (b) surface unprocessed tickets where the operator sees them. **Distinct from #33** (creation, shipped) — this is the tracking/visibility gap. Part of the doc-write-ergonomics cluster; the close-out-fan-out seam.
 
 ## Open — prompt / doc-touch
+
+### log-cupping Path C-2 should flip `lot_status` to `waiting_for_brewing` (prompt vs migration-080 drift)
+- **Shape:** prompt (doc reconciliation)
+- **Recurrence:** 1 (Round 25 / AN10 V1 SPG handoff, 2026-06-20)
+- **Criticality:** med
+- **Source:** master log #58 (Round 25)
+- **Status:** open
+- **Body:** `log-cupping.md` Path C-2 says "state stays Waiting for next cupping" on an SPG handoff, but migration-080 added a stored `waiting_for_brewing` state that is now wired end-to-end (green index section + `--tile-brewing` color + "In brewing" label + `green/[id]/page.tsx:200` render branch reusing `WaitingForNextCuppingView` + the `check:lifecycle-consistency` designed exception `stored=waiting_for_brewing` / `derived=waiting_for_next_roast`). On the AN10 SPG handoff, leaving `lot_status` at `waiting_for_next_cupping` actually REDDENS the consistency cron — the `"deferred pending SPG"` winner sentinel pushes the derived state to `waiting_for_next_roast`, so only `waiting_for_brewing` lands the designed exception. Fix: update Path C-2 to flip `lot_status` → `waiting_for_brewing` at the SPG / optimized-brew handoff (re-entry still via log-cupping). This is the prompt catching up to a state that now exists — see the partial-build note on the #22 lifecycle entry above.
 
 ### Anchor-confidence framing in new-bean-intake (now `start-lot.md`)
 - **Shape:** prompt
