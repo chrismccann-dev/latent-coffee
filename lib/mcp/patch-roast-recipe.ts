@@ -2,6 +2,7 @@ import * as z from 'zod/v4'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import {
   patchRoastRecipe,
+  normalizeBezier,
   ROAST_RECIPE_PATCH_FIELDS,
   type PatchRoastRecipePayload,
 } from '@/lib/roast-import'
@@ -66,7 +67,9 @@ export function registerPatchRoastRecipeTool(server: McpServer, auth: McpAuthCon
       // Sprint 3.2 #3 + #4 — cross-field validation when relevant fields supplied.
       const boundsErr = checkEndConditionBounds(payload.end_condition_type, payload.end_condition_target)
       if (boundsErr) throw new Error(`Validation failed:\n  - ${boundsErr}`)
-      const pb = payload.power_bezier as unknown
+      // normalizeBezier first so a string-coerced power_bezier (stale catalog)
+      // can't slip past this INLET_TEMP guard as a non-array.
+      const pb = normalizeBezier(payload.power_bezier, 'power_bezier')
       if (Array.isArray(pb) && pb.length > 0) {
         throw new Error(
           'Validation failed:\n  - power_bezier must be null/empty on INLET_TEMP recipes (Chris\'s exclusive mode — see push_roast_profile). The server controls power to hit inlet target.',

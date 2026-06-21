@@ -1906,6 +1906,46 @@ export type PersistRoastRecipeResult =
   | (PersistOk<'recipe_id'> & { created: boolean })
   | PersistFail
 
+// The four jsonb bezier columns shared by push_roast_recipe + patch_roast_recipe.
+export const RECIPE_BEZIER_FIELDS = [
+  'temperature_bezier',
+  'fan_bezier',
+  'rpm_bezier',
+  'power_bezier',
+] as const
+
+// MCP clients whose published-catalog cache predates the schema-compat lift
+// (lib/mcp/schema-compat.ts) see the z.unknown() jsonb bezier fields as an
+// untyped `{}` and serialize the array argument as a JSON *string* — the server
+// then persists that string verbatim into the jsonb column instead of the array.
+// claude-code#5844's schema-compat only covered nullable SCALAR unions, not the
+// z.unknown() jsonb fields (schema-compat case 2 publishes them as bare `{}`).
+// Normalize at the persist chokepoint: detect a string-valued bezier and parse
+// it back to the array the column expects. Idempotent on arrays + null (and
+// undefined), so it's safe to run on every write path. Throws on a non-JSON /
+// non-array string so genuinely malformed input surfaces instead of silently
+// landing as a string in jsonb.
+export function normalizeBezier(value: unknown, field: string): unknown {
+  if (value == null || Array.isArray(value)) return value
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (trimmed === '') return null
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(trimmed)
+    } catch {
+      throw new Error(`${field} is a non-JSON string; expected a bezier control-point array`)
+    }
+    if (!Array.isArray(parsed)) {
+      throw new Error(`${field} JSON-parsed to ${typeof parsed}, not an array of control points`)
+    }
+    return parsed
+  }
+  // Object / number / boolean — pass through untouched (jsonb accepts it; we
+  // don't want to mask a genuinely different shape behind a coercion).
+  return value
+}
+
 export function validateRoastRecipePayload(p: RoastRecipePayload): ValidationResult {
   const errors: string[] = []
   if (!p.green_bean_id?.trim()) errors.push('green_bean_id is required')
@@ -1954,10 +1994,10 @@ export async function persistRoastRecipe(
     parent_recipe_id: payload.parent_recipe_id ?? null,
     rationale: payload.rationale ?? null,
     notes: payload.notes ?? null,
-    temperature_bezier: payload.temperature_bezier ?? null,
-    fan_bezier: payload.fan_bezier ?? null,
-    rpm_bezier: payload.rpm_bezier ?? null,
-    power_bezier: payload.power_bezier ?? null,
+    temperature_bezier: normalizeBezier(payload.temperature_bezier ?? null, 'temperature_bezier'),
+    fan_bezier: normalizeBezier(payload.fan_bezier ?? null, 'fan_bezier'),
+    rpm_bezier: normalizeBezier(payload.rpm_bezier ?? null, 'rpm_bezier'),
+    power_bezier: normalizeBezier(payload.power_bezier ?? null, 'power_bezier'),
     end_condition_type: payload.end_condition_type ?? null,
     end_condition_target: payload.end_condition_target ?? null,
     preheat_temperature_c: payload.preheat_temperature_c ?? null,
@@ -2045,6 +2085,10 @@ export async function patchRoastRecipe(
   const patch = buildPatchObject(payload, ROAST_RECIPE_PATCH_FIELDS)
   if (Object.keys(patch).length === 0) {
     return { ok: false, code: 'no_op', message: 'no editable fields supplied' }
+  }
+  // Same string-coerced-jsonb guard as the push path (see normalizeBezier).
+  for (const f of RECIPE_BEZIER_FIELDS) {
+    if (f in patch) patch[f] = normalizeBezier(patch[f], f)
   }
 
   const { data, error } = await supabase
