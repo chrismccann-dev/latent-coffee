@@ -38,7 +38,24 @@ Each candidate carries three implicit axes used for sequencing:
 
 ## Now
 
-*Empty. Research Project #5 (Filter textural-quality layer) closed 2026-06-20 after Track 1 — see § Closed. Retro complete. **Next project: Water chemistry** (§ Next #5, operator-pulled-forward 2026-06-20 ahead of the queue) — awaiting its intake/scoping session, which will move it here.*
+### Research Project #6 - Water chemistry & mineral concentrates (Track 1 drafted)
+
+**Opened:** 2026-06-20 (intake/scoping session). **Status:** Track 1 protocol drafted, awaiting Assistant-session execution (spawn prompt next). Third project on the Coordinator/Assistant architecture; second taste-shaped project (RP6 retro is where the RP5-seeded taste-study primitive candidates graduate if they fire again).
+
+**Thesis - reveal-not-inject.** NOT "find the best built water." It is to learn what each mineral move does to a known coffee, including the threshold where it stops *revealing* the coffee and starts *injecting* a flavor that masks origin/process/variety. This is the Dashwood guardrail (built waters play "within a box" of high-chloride/high-sulfate results; over-dosing minerals behaves like high-intervention processing or dark roast) reconciled with Latent's taste apex ([CONTEXT-taste.md](CONTEXT-taste.md): reveal-not-inject / layered-evolving). Roast Summit chemistry supplies the mechanism (bicarbonate destroys acid; Ca/Mg bind extraction-active compounds).
+
+**Locked scope (RP5 close + intake):**
+- **Platform:** xBloom, fixed no-modulation V60. Single-variable isolation.
+- **Coffee:** Hydrangea Pink Bourbon Washed, operator baseline-dialed. Clarity-weighted = sensitive masking detector (a feature for the threshold hunt).
+- **Base water:** distilled (Mini Classic distiller). Operator gear is complete (A&D EJ-123 0.001g balance, Apera EC60 + 84/1413 standards, LaMotte BrewLab + API GH/KH, two micropipettes, magnetic stirrer, amber dropper bottles) - no gear gap.
+- **Built-vs-natural arm:** IN (Dashwood). **Blinding:** semi-blind (operator codes/shuffles; outcomes genuinely unknown).
+- **Method:** all post-brew mineralization for the concentrate lanes; pre-brew only for the finished-water arm (TWW + naturals can't be drop-dosed).
+
+**Phase shape:**
+- **Phase 1 (concentrate screen - Track 1+):** post-brew screen of the 7 owned concentrates (DAK, TWW, APAX Tonik/Jamm/Lylac, KONFLUX, NÉMO, SBL Juicy&Sweet, Sooper) vs distilled control + natural arm. Build the difference-vocabulary; map each product's direction + sweet-spot dose + masking threshold. Owned set is chloride-forward (under-samples sulfate).
+- **Phase 2 (DIY isolation - later tracks):** clean 6-reagent kit (MgSO₄/MgCl₂/CaSO₄/CaCl₂/NaHCO₃/KHCO₃ - ordered this intake) varying Ca/Mg/Na/K/buffer at constant GH/KH. Bridge: reconstruct the disclosed SBL recipe (GH 44/KH 20) from raw salts to validate the rig, then vary one ion at a time. End game: per-coffee water recipe library, possibly its own sub-skill.
+
+**Track 1 protocol:** [water-concentrate-postbrew-screen.md](docs/research-projects/water-concentrate-postbrew-screen.md) - three-lane post-brew screen (Lane C pre-brew finished-water/natural arm · Lane A post-brew direction screen · Lane B dose-ladder on standouts). Awaiting a fresh Assistant session.
 
 ---
 
@@ -80,19 +97,7 @@ Ordered queue. Order reflects priority + sequencing constraints derived from the
 
 ### 5. Water chemistry & mineral concentrates
 
-**Effort:** large. **Fold-in:** none (whole new corpus, possibly own sub-skill). **WBC payoff:** huge.
-
-**Scope:** Phase 1 — comparative tasting of formulated mineral concentrates vs tap water vs distilled, building the difference vocabulary. Phase 2 — build own controlled mineral system independently varying Ca / Mg / Na / K / bicarbonate. End game: per-coffee water recipe library. Operator-flagged as "honestly probably the most important one" — most WBC champions arrive at custom water.
-
-**Sequencing rationale:** The big rock. Earlier projects' methodology refinements sharpen the scoping. Chunking strategy TBD at scope time — phase 1 + phase 2 likely span multiple tracks.
-
-**→ SELECTED AS NEXT PROJECT (2026-06-20).** Operator pulled this forward ahead of the queue at RP5 close (highest-payoff pick per § Sequencing convention) — explicitly over Bloom science (#1) and over the dropped textural Tracks 2/3. Rationale: RP5 showed texture is flow / contact-time-mediated (not paper-direct), so re-running textural tracks on other geometries would teach little; meanwhile RP5 validated **xBloom as a near-perfect single-variable experiment platform** (lock the recipe, change only the water in the back, everything else constant) — which makes water the highest-order next variable. The shared Pink Bourbon Washed coffee was bought for this too. Operator has implementation thoughts ready; awaiting the intake/scoping session.
-
-**Locked at RP5 close (carry into the water intake):**
-- **Platform:** xBloom, **fixed no-modulation dripper** (V60). Reproducibility = isolate the single variable, so phase-modulation (Sworks / Switch) is deliberately OUT of the controlled experiment — change only the water in the back, everything else constant. (The Sworks "best-cup" question is a separate non-experiment thread, not this project.)
-- **Coffee:** Hydrangea Pink Bourbon Washed (~5 lb less the RP5 usage), operator baseline-dialed — known-baseline is what lets subtle water deltas read, even on a clarity-weighted coffee.
-- **Method:** inherits the RP5-validated xBloom-as-single-variable-platform; intake will need operator's prepared water docs (current inventory: Third Wave Water + distilled + any salts/gear) + implementation thoughts. Watch the platform-vs-best-cup tension (xBloom-fixed-recipe answers "how water affects a controlled cup," not "how water affects my best Sworks cup") and the clarity-weighted-coffee caveat.
-- **Entry:** a FRESH Coordinator session ("I want to start a research project: water chemistry") — one Coordinator per project; RP5's Coordinator is closed.
+**→ PULLED TO § Now as Research Project #6 on 2026-06-20.** Intake/scoping complete; see § Now for the locked scope + Track 1 protocol pointer. (Was the highest-payoff queue pick; operator pulled it forward at RP5 close over Bloom science #1 and the dropped textural Tracks 2/3.) The remaining § Next entries keep their numbers.
 
 ### 6. Cross-coffee blending
 
