@@ -98,6 +98,15 @@ SWORKS valve restriction on small-dose Clarity-First office brews behaves OPPOSI
 - **Rule:** on 15g office Clarity-First brews with tap water, start Dial 5 through the extraction-critical pours and open to Dial 7 on the tail to cut tannins.
 - **Final-pour tail management is a distinct lever:** closing further (Dial 6 → Dial 5) at integration extends the drying tail; opening to Dial 7 at completion of Pour 2 cuts a tannic finish cleanly.
 
+### Small bed capacity constrains the Intensity-Clarity Split (LiuGuang Cascade Fermentation, 2026-06-22)
+
+The SWORKS Bottomless Dripper has a shallow bed + small chamber — at a 15g dose it holds only **~154g of water at once** before the chamber is full. This caps the single closed-immersion (Dial 0) phase of an **Intensity-Clarity Split**: you cannot pour a large intensity phase (e.g. to 180g) closed and let it steep — it overflows. **Consequence: the two-phase Intensity-Clarity Split is capacity-limited on the SWORKS.** Two ways to work within it:
+
+- **Three-phase it at the office** — break the closed-immersion intensity phase into 2-3 smaller sequential closed pours (refill as the bed draws down at Dial 0 → 5), then the open-drain (Dial 7) clarity phase last. This accumulates immersion contact without overflowing the chamber.
+- **Run the high-volume split at home on the Hario Switch** — full chamber capacity, so a single large closed-immersion phase is possible. Any Intensity-Clarity Split needing >~150g in the closed phase should default to the Switch; reserve the office SWORKS split for lower-volume / higher-concentration (≤1:11 at 15g) executions or phase it into three.
+
+First surfaced on the LiuGuang 流光 (Coffee with Dongze, Cascade Fermentation) office iteration — a two-phase split prescribed to 180g closed could only reach ~154g total, compromising the intensity phase (fruit reached but faint, body left flat).
+
 ### Valve transition timing is a co-lever with temperature (Project One Blue Iris)
 
 On Moonwake Blue Iris (yeast-anaerobic honey Catimor) at EG-1 6.3, the same temperature (95°C) that produced flattened florals + a bitter tail with a late Dial 5 → 6 transition produced the reference cup with the transition moved to ~halfway through Pour 2. Earlier valve-open shortens contact time on the tail, clearing bitter finish artifacts and creating headroom to push temperature higher for aromatic unlock. If a Balanced Intensity recipe has the right grind and temperature ceiling but the finish reads bitter, move the Dial 5 → 6 transition earlier in Pour 2 before dropping temperature. Confirmed once; retest on the next yeast-inoculated lot at the office. (Captured as the "Restricted main + late half-open transition" row in the table below.)
