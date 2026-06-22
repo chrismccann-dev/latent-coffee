@@ -98,14 +98,18 @@ SWORKS valve restriction on small-dose Clarity-First office brews behaves OPPOSI
 - **Rule:** on 15g office Clarity-First brews with tap water, start Dial 5 through the extraction-critical pours and open to Dial 7 on the tail to cut tannins.
 - **Final-pour tail management is a distinct lever:** closing further (Dial 6 → Dial 5) at integration extends the drying tail; opening to Dial 7 at completion of Pour 2 cuts a tannic finish cleanly.
 
-### Small bed capacity constrains the Intensity-Clarity Split (LiuGuang Cascade Fermentation, 2026-06-22)
+### Small chamber caps the CLOSED-PHASE volume, not the total brew — Intensity-Clarity Split execution (LiuGuang Cascade Fermentation, 2026-06-22)
 
-The SWORKS Bottomless Dripper has a shallow bed + small chamber — at a 15g dose it holds only **~154g of water at once** before the chamber is full. This caps the single closed-immersion (Dial 0) phase of an **Intensity-Clarity Split**: you cannot pour a large intensity phase (e.g. to 180g) closed and let it steep — it overflows. **Consequence: the two-phase Intensity-Clarity Split is capacity-limited on the SWORKS.** Two ways to work within it:
+The SWORKS Bottomless Dripper has a shallow bed + small chamber — at a 15g dose it holds only **~154-155g of water at once** when fully closed (Dial 0). This is a ceiling on the **simultaneous closed-immersion volume**, NOT a cap on the total brew: the total reaches a normal **1:16 (240g)** by draining the bed and topping up across phases. The earlier framing that the SWORKS "could only reach ~154g total" was wrong — drawdown lets you pour well past the chamber volume.
 
-- **Three-phase it at the office** — break the closed-immersion intensity phase into 2-3 smaller sequential closed pours (refill as the bed draws down at Dial 0 → 5), then the open-drain (Dial 7) clarity phase last. This accumulates immersion contact without overflowing the chamber.
-- **Run the high-volume split at home on the Hario Switch** — full chamber capacity, so a single large closed-immersion phase is possible. Any Intensity-Clarity Split needing >~150g in the closed phase should default to the Switch; reserve the office SWORKS split for lower-volume / higher-concentration (≤1:11 at 15g) executions or phase it into three.
+The real constraint on an **Intensity-Clarity Split** is therefore about **closed-immersion DWELL TIME**, not total volume. The correct office execution:
 
-First surfaced on the LiuGuang 流光 (Coffee with Dongze, Cascade Fermentation) office iteration — a two-phase split prescribed to 180g closed could only reach ~154g total, compromising the intensity phase (fruit reached but faint, body left flat).
+- **One long closed-immersion intensity phase, filled to bed-max and HELD.** Fill to ~155g closed (Dial 0) and let it steep for the full intensity dwell (~60-90s) before cracking. Then crack open (Dial 0 → 5 → 7) to drain and top up to the final weight (e.g. 240g / 1:16) — that drawdown + top-up IS the clarity phase.
+- **Do NOT fragment the closed charge into several short steeps.** Splitting the intensity phase into 2-3 quick closed pours (the approach first tried on LiuGuang) keeps refilling but starves the *dwell* — total closed contact ends up too short, and the cup comes back under-reached (fruit present but faint, body flat) even though total water hit 240g. Accumulating volume is not the same as accumulating immersion time.
+- **Push the intensity phase harder when there's headroom.** On LiuGuang the cup showed no bitterness / dark-tea at all → the closed phase was under-extracted, not over. With that headroom, go finer (6.2-6.4) and/or hotter (94°C) and hold the closed phase longer rather than backing off.
+- **Run the high-volume split at home on the Hario Switch** when you want >~155g held closed *simultaneously* — full chamber capacity makes a single large closed charge possible without the dwell-vs-volume tradeoff.
+
+First surfaced on the LiuGuang 流光 (Coffee with Dongze, Cascade Fermentation) office iteration: a two-phase split prescribed to 180g closed overflowed at ~155g; re-running it as fragmented short closed steeps reached 240g total but left the intensity phase too brief — fruit reached but faint, body flat, cup unresolved across three brews. The hindsight-correct shape is a single ~155g closed hold (~70s) → drain + top-up to 240g (1:16).
 
 ### Valve transition timing is a co-lever with temperature (Project One Blue Iris)
 
