@@ -547,11 +547,15 @@ function buildHypothesisData(recipes: RoastRecipe[]): { cols: { label: string }[
       label: 'Peak inlet',
       numeric: true,
       isLever: true,
-      // Computed from temperature_bezier max — deferred until bezier data
-      // is populated. Today all backfilled recipes have NULL beziers.
-      getValue: () => '—',
-      has: () => false,
-      rawValue: () => null,
+      // Max of the temperature_bezier control points (peakInletValue). Lights
+      // up once recipes carry beziers; pre-bezier rows return null and the row
+      // collapses via has(). Shares the helper with the Archive design strip.
+      getValue: (r) => renderPeakInlet(r),
+      has: (r) => peakInletValue(r) != null,
+      rawValue: (r) => {
+        const peak = peakInletValue(r)
+        return peak != null ? String(peak) : null
+      },
     },
     {
       label: 'Expected FC',
@@ -2105,22 +2109,34 @@ function composeBrewRecipeLine(brew: LotBrew): string | null {
 }
 
 // roast_recipes-side renderers. All return em-dash when the underlying field
-// is NULL. The 6 currently-resolved lots all have NULL beziers (Phase 3
-// backfill is intentionally empty per redesign doc § 7) so Peak inlet + Fan
-// curve render em-dashes today and light up as recipes are enriched.
-function renderPeakInlet(recipe: RoastRecipe | null): React.ReactNode {
-  if (!recipe?.temperature_bezier) return '—'
+// is NULL. The canonical bezier shape is a tuple array `[[msec, value], ...]`
+// (see formatBezier in lib/roest-client.ts + normalizeBezier in
+// lib/roast-import.ts, which stores arrays after PR #504). We read index [1] as
+// the value and keep an object-shape fallback (.temp/.pct/.value) for safety
+// against any legacy/hand-shaped rows.
+
+// Peak inlet = max temperature across the temperature_bezier control points.
+// Shared by renderPeakInlet (Archive design strip) and the Roast Hypothesis
+// grid's Peak inlet lever row (buildHypothesisData) so variance detection and
+// the rendered value stay in lockstep.
+function peakInletValue(recipe: RoastRecipe | null): number | null {
+  if (!recipe?.temperature_bezier) return null
   try {
-    const points = recipe.temperature_bezier as Array<Record<string, number>>
-    if (!Array.isArray(points) || points.length === 0) return '—'
+    const points = recipe.temperature_bezier as Array<[number, number] | Record<string, number>>
+    if (!Array.isArray(points) || points.length === 0) return null
     const temps = points
-      .map((p) => p.temp ?? p.value ?? null)
-      .filter((v): v is number => typeof v === 'number')
-    if (temps.length === 0) return '—'
-    return `${Math.max(...temps)}°C`
+      .map((p) => (Array.isArray(p) ? p[1] : p.temp ?? p.value ?? null))
+      .filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
+    if (temps.length === 0) return null
+    return Math.max(...temps)
   } catch {
-    return '—'
+    return null
   }
+}
+
+function renderPeakInlet(recipe: RoastRecipe | null): React.ReactNode {
+  const peak = peakInletValue(recipe)
+  return peak != null ? `${peak}°C` : '—'
 }
 
 function renderDropTemp(recipe: RoastRecipe | null): React.ReactNode {
@@ -2157,11 +2173,11 @@ function renderChargeHopper(recipe: RoastRecipe | null): React.ReactNode {
 function renderFanCurve(recipe: RoastRecipe | null): React.ReactNode {
   if (!recipe?.fan_bezier) return '—'
   try {
-    const points = recipe.fan_bezier as Array<Record<string, number>>
+    const points = recipe.fan_bezier as Array<[number, number] | Record<string, number>>
     if (!Array.isArray(points) || points.length === 0) return '—'
     const pcts = points
-      .map((p) => p.pct ?? p.value ?? null)
-      .filter((v): v is number => typeof v === 'number')
+      .map((p) => (Array.isArray(p) ? p[1] : p.pct ?? p.value ?? null))
+      .filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
       .map((v) => `${Math.round(v)}%`)
     return pcts.length > 0 ? (
       <span className="font-mono text-xs">{pcts.join(' → ')}</span>
