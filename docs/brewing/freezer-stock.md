@@ -344,7 +344,7 @@
 ## Prodigal Coffee — Caminos del Inka — Anaerobic Washed Gesha — Peru
 **Country:** Peru · **Region/Farm:** Cusco · **Producer:** Samuel Smith Perez
 **Variety:** Gesha · **Process:** Anaerobic Washed (48hr open-tank, raised-bed dried 15–20 days)
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 70.6 (Medium light color) · **Status:** Frozen (15g doses)
 **URL:** https://getprodigal.com/products/caminos-del-inka
 **Notes:** peach, orange, creamy. Rest before dosing.
 
@@ -393,7 +393,7 @@
 ## Helm Coffee — Panama El Burro Lot 16 — Natural Gesha
 **Country:** Panama · **Region/Farm:** Volcán Barú, Chiriquí / Lamastus El Burro Estate · **Producer:** Lamastus Family Estates
 **Variety:** Gesha · **Process:** Natural · **Elevation:** 1700 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 83.3 (Very light color) · **Status:** Frozen (15g doses)
 **URL:** https://helmcoffeeroasters.com/products/panama-el-burro-lot-16-natural-gesha
 **Notes:** peach, lemon candy, CapriSun, lavender. Over half the estate inside Volcán Barú National Park. Cherries take 5+ yrs to fruit.
 
@@ -421,7 +421,7 @@
 ## Hydrangea Coffee Roasters — Gesha Washed Franceschi Lot 232 — Panama
 **Country:** Panama · **Region/Farm:** Volcán, Chiriquí / Franceschi Coffee · **Producer:** Carlos Franceschi & Jean Paul Langenstein
 **Variety:** Geisha · **Process:** Washed · **Elevation:** 1600–1800 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 83.8 (Very light color) · **Status:** Frozen (15g doses)
 **URL:** https://hydrangea.coffee/products/gesha-washed-franceschi-lot-232
 **Notes:** navel orange, honeysuckle, white tea. Carlos Aguilera Franceschi = grandson of Carmen Estate founder. New smaller artisan project.
 
@@ -686,7 +686,7 @@
 ## Coffee with Dongze — Hachi x Yunnan x Terroir Maximus (Brian Quan) — Cascade Fermentation 流光 LiuGuang — China
 **Country:** China · **Region/Farm:** The Nest (云顶筑巢庄园), Yunnan · **Producer:** Hachi Project x Terroir Maximus
 **Variety:** Syrina (赛琳娜) · **Process:** Cascade Fermentation (流光 LiuGuang, multi-stage) · **Elevation:** 1450–1600 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 86.9 (Very light color) · **Status:** Frozen (15g doses)
 **URL:** https://coffee-with-dongze.myshopify.com/products/hachi-x-yunnan-x-terroir-maximus-x-brian-quan-%E7%B9%81%E8%8A%B1-x-%E6%B5%81%E5%85%89-x-%E6%98%A0%E9%9B%AA
 **Notes:** Brian Quan collab. One of 3 process variants (50g each). Notes: tropical fruits, papaya, champagne, bergamot, floral, grape, banana, perfume. Watch perfume ceiling on this one. Multi-stage sequential ferment.
 
