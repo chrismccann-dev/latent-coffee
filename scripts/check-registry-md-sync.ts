@@ -229,14 +229,28 @@ function mdH3Headers(
 }
 
 // --- md: brewer/filter shape — `### {Name}` or `### {Name} — Owned`.
+// Non-entry H2 sections whose H3 children are prose, NOT canonical entries.
+// Matched on the trimmed H2 title (case-insensitive). `appendix` is a substring
+// match so research appendices of any name are covered (filters.md RP5 appendix
+// added 2026-06-20: `### Texture is flow-mediated (...)` is a finding, not a filter).
+const OWNABLE_NON_ENTRY_H2 = /(^purpose\b|^selection rules\b|^aliases\b|^sources\b|^changelog\b|appendix)/i
 function mdH3HeadersForOwnable(rootSrc: string): string[] {
-  // Both brewers.md and filters.md have multiple H2 categories. Walk every
-  // H2 and collect H3 children — every H3 in the doc is a canonical entry.
+  // brewers.md and filters.md list canonical entries as H3 under gear-category
+  // H2s. The doc-meta sections (Purpose / Selection rules / Research measurement
+  // appendix / Aliases / Sources / Changelog) may carry their own H3 subsections
+  // that are NOT entries — track the current H2 and skip those, so an appendix
+  // heading never reads as a phantom canonical.
   const out: string[] = []
-  const lines = rootSrc.split('\n')
-  for (const line of lines) {
+  let inNonEntrySection = false
+  for (const line of rootSrc.split('\n')) {
+    const h2 = /^## \s*(.+?)\s*$/.exec(line)
+    if (h2) {
+      inNonEntrySection = OWNABLE_NON_ENTRY_H2.test(h2[1].trim())
+      continue
+    }
     const m = /^### \s*(.+?)\s*$/.exec(line)
     if (!m) continue
+    if (inNonEntrySection) continue
     let name = m[1]
     // Strip heading suffixes: ` — Owned` (brewers.md) and ` — \`SKU\`` (filters.md
     // entries carry their SKU code in a trailing backtick span).
