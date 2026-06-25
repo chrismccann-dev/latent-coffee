@@ -59,9 +59,9 @@ Roasters whose default is to protect clarity. Low-agitation, conservative pour s
 - **VWI by CHADWANG**
 - **XLIII Coffee Roasters**
 
-### Balanced (16)
+### Balanced (17)
 
-Roasters who target moderate extraction (20-22% EY) as the home position. Some skew toward clarity on cooling (BALANCED → CLARITY); most are stable around the center. 16 entries.
+Roasters who target moderate extraction (20-22% EY) as the home position. Some skew toward clarity on cooling (BALANCED → CLARITY); most are stable around the center. 17 entries.
 
 - **Café Estelar**
 - **Coava Coffee Roasters**
@@ -78,6 +78,7 @@ Roasters who target moderate extraction (20-22% EY) as the home position. Some s
 - **Prodigal Coffee**
 - **Shoebox Coffee**
 - **Simple Kaffa** — BALANCED → CLARITY
+- **Snite**
 - **The Barn Coffee Roasters** — BALANCED → CLARITY
 
 ### Extraction-Forward (19)
@@ -114,13 +115,12 @@ Roasters who intentionally push extraction. Includes BALANCED → FULL (most), F
 - **Subtext Coffee**
 - **The Picky Chemist**
 
-### Varies (6)
+### Varies (5)
 
-Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 6 entries.
+Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 5 entries.
 
 - **Moonwake Coffee Roasters**
 - **Scenery Coffee**
-- **Snite**
 - **Strait Coffee** — BALANCED / VARIES
 - **Switch Coffee** — BALANCED / VARIES
 - **Untold Coffee Lab**
@@ -1156,6 +1156,29 @@ _Taipei, Taiwan_ · **BALANCED → CLARITY**
 - **Confidence:** High
 - **Notes:** World-class competition lineage; more expressive than strict Nordic; less aggressive than Sey-style systems; strong reference for balanced high-level clarity brewing
 
+#### Snite
+_Setagaya, Tokyo_ · **BALANCED** · archive: 1 brew
+
+- **Roast style:** Light-medium / developed-light (Japanese specialty)
+- **Development bias:** Moderate development; more soluble and roast-present than Nordic ultra-light, but still clean and fruit-capable
+- **Rest curve:** 3-6 weeks typical (inferred); reviewed coffee improved materially around days 37-40 and was brewed at day 45
+- **Primary driver:** Filter / flow control
+- **Extraction purpose:** Preserve candied sweetness and fruit definition while filtering out roast heaviness
+- **House style:** No official guide found; unofficial review favored a standard 1:16 recipe, 96C, medium grind, and Chemex for cleanup; V60/Orea were less successful on the reviewed washed Ethiopia
+- **Brew guide:** [Unofficial (Review / Community)](https://www.youtube.com/watch?v=mKVqPvhEaJY)
+- **Brew guide status:** implied
+- **Recipe baseline:** temp=93-96, dose=15, water=240, ratio=1:16, time=2:45-3:30, agitation=Low-Medium
+- **Primary brewer:** Chemex / V60
+- **Filter type:** Heavy paper / cone
+- **Extraction intent:** Balanced (20-21.5%)
+- **Failure mode:** Too much extraction or low-filtration brewing emphasizes roast/robust notes; lowering extraction too far loses fruit and makes roast feel more dominant
+- **Over-extraction tolerance:** Medium
+- **Process sensitivity:** Washed Ethiopias: benefit from higher filtration and careful extraction; Naturals/fruit-forward lots likely more forgiving; Processed lots should start balanced, not high-extraction
+- **Brew adjustment method:** Filter choice + grind
+- **Calibration role:** Japanese Developed-Light Benchmark
+- **Confidence:** Medium
+- **Notes:** Snite (Setagaya, Tokyo) sells filter-roasted coffees online; treat as more developed than Nordic peers. In the unofficial Worka Sakaro washed Ethiopia review, V60 day 18 showed grapefruit/citric brightness but roast dominated; Chemex day 40 with thicker filters produced the best cup by cleaning up roast heaviness and revealing grape candy sweetness. Best first pass: standard 1:16, 94-96C, medium grind, lower agitation, and heavier filtration if roastiness obscures fruit. Latent lot context (El Mango SL28 Washed, brew 73028eb1, first SL28 in the brewing archive): confirmed SL-lineage phase-separation - Clarity-First on the April Glass under-expressed the attack and over-extracted the late body simultaneously; resolved via a full Hybrid (Intensity-Clarity Split) on the April Switch (see [hybrid.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md) sixth ICS data point).
+
 #### The Barn Coffee Roasters
 _Berlin, Germany_ · **BALANCED → CLARITY**
 
@@ -1795,11 +1818,6 @@ _London, UK, UK_ · **VARIES** · archive: 1 brew
 - **Confidence:** High
 - **Notes:** Core philosophy is per-coffee dialing; not a fixed system; long bloom and low agitation are baseline but adjusted; encourages adapting grind and ratio rather than pushing temp or agitation aggressively
 
-#### Snite
-_Tokyo, Japan_ · **VARIES** · archive: 1 brew
-
-- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-18 from the El Mango SL28 Washed brew (73028eb1) - first SL28 lot in the brewing archive. Strategy tag (VARIES placeholder), house style, and recipe baseline pending more lots. The lot confirmed SL-lineage phase-separation: Clarity-First on the April Glass under-expressed the attack and over-extracted the late body simultaneously; resolved via a full Hybrid (Intensity-Clarity Split) on the April Switch (see [hybrid.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md) sixth ICS data point).
-
 #### Strait Coffee
 _San Jose, CA, USA_ · **BALANCED / VARIES** · archive: 6 brews
 
@@ -1894,6 +1912,7 @@ _Home (Roest sample roaster, 100g batches)_ · **SELF-ROASTED** · archive: 4 br
 
 ## Changelog
 
+- **2026-06-25 (skeleton-review arbitration):** Enriched **Snite** (Setagaya, Tokyo) from Chris's authored CSV - full 29-field rich shape landed and the `skeleton: true` flag removed. Strategy tag resolved from the VARIES placeholder to **BALANCED**, so the entry moved Varies → Balanced (Varies 6→5, Balanced 16→17). Calibration role: Japanese Developed-Light Benchmark. The El Mango SL28 lot lesson (SL-lineage phase-separation, resolved via Hybrid ICS) is preserved in `notes` as operator ground truth. Note: Chris's CSV spelled the roaster "Sniite"; canonical kept as **Snite** to match the existing brew (73028eb1) + skeleton - flag if "Sniite" is the correct spelling (would need a registry + brews.roaster rename).
 - **2026-06-18 (taxonomy queue arbitration):** Promoted **Snite** (Tokyo) as a skeleton entry in the Varies family. First evidence: El Mango SL28 Washed (Evin Joel Moreno Reyes, Finca El Mango, Honduras) - first SL28 lot in the brewing archive. Strategy tag is a VARIES placeholder pending more lots; the lot confirmed SL-lineage phase-separation, resolved via a Hybrid (Intensity-Clarity Split) on the April Switch. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-05-20 (taxonomy queue arbitration):** Promoted **Newbery Street Coffee Roasters** (Boston-named, location pending verification) as a skeleton entry in the Balanced family. First evidence: Nawin Doi Chang Washed (first Thailand lot in the Latent archive). 91°C is the only viable evaluation temp on the single tested lot - positioned closer to Glitch (Tokyo low-temp Balanced) than Hydrangea (Berkeley Clarity-First) on the low-temp Balanced spectrum. Confidence Low pending more brews. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-04-24 (sprint 1h.1):** First adoption. 70 canonical roasters across 6 families. SYSTEM added as a 6th family per Chris + ChatGPT review. 4 reclassifications from prior 21-entry registry: Rose / Noma / Picky Chemist (→ SYSTEM), TM Coffee (→ CLARITY-FIRST). 20-rename migration 027 collapses short-form DB values to canonical full names. Aliases preserve short-form resolvability.

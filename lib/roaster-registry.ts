@@ -1519,6 +1519,48 @@ export const ROASTERS: RoasterEntry[] = [
     bmrHouseStyle: 'Established PNW multi-location roastery/cafe operation (founded 2005) with strong wholesale, retail, and espresso presence. Published brew guide is principles-only: 200–205°F, 1:17 starting ratio, 2:30–4:30 drip window — no pour structure, grind target, or temperature specificity.',
     bmrNotes: 'Brew guide too generic to extract house philosophy from — the absence of a specific recipe is itself the signal, differentiating cafe-broad roasters (Olympia, Bean & Bean) from recipe-publishing boutique roasters (Leaves, Substance, Noma).',
   },
+  // Enriched from Chris's authored CSV via skeleton-review arbitration 2026-06-25
+  // (was a VARIES skeleton promoted 2026-06-18 off the El Mango SL28 brew). The
+  // El Mango lot lesson is preserved in `notes` as operator ground truth.
+  {
+    name: 'Snite',
+    brewGuideStatus: 'implied',
+    displayName: 'Snite',
+    location: 'Setagaya, Tokyo',
+    country: 'Japan',
+    roastStyle: 'Light-medium / developed-light (Japanese specialty)',
+    developmentBias:
+      'Moderate development; more soluble and roast-present than Nordic ultra-light, but still clean and fruit-capable',
+    restCurve:
+      '3-6 weeks typical (inferred); reviewed coffee improved materially around days 37-40 and was brewed at day 45',
+    strategyTag: 'BALANCED',
+    primaryDriver: 'Filter / flow control',
+    extractionPurpose: 'Preserve candied sweetness and fruit definition while filtering out roast heaviness',
+    houseStyle:
+      'No official guide found; unofficial review favored a standard 1:16 recipe, 96C, medium grind, and Chemex for cleanup; V60/Orea were less successful on the reviewed washed Ethiopia',
+    brewGuideSource: 'Unofficial',
+    brewGuideLink: 'https://www.youtube.com/watch?v=mKVqPvhEaJY',
+    brewGuideType: 'Review / Community',
+    tempC: '93-96',
+    doseG: '15',
+    waterG: '240',
+    ratio: '1:16',
+    typicalBrewTime: '2:45-3:30',
+    agitationLevel: 'Low-Medium',
+    extractionIntent: 'Balanced (20-21.5%)',
+    failureMode:
+      'Too much extraction or low-filtration brewing emphasizes roast/robust notes; lowering extraction too far loses fruit and makes roast feel more dominant',
+    overExtractionTolerance: 'Medium',
+    processSensitivity:
+      'Washed Ethiopias: benefit from higher filtration and careful extraction; Naturals/fruit-forward lots likely more forgiving; Processed lots should start balanced, not high-extraction',
+    primaryBrewer: 'Chemex / V60',
+    filterType: 'Heavy paper / cone',
+    confidenceLevel: 'Medium',
+    brewAdjustmentMethod: 'Filter choice + grind',
+    calibrationRole: 'Japanese Developed-Light Benchmark',
+    notes:
+      'Snite (Setagaya, Tokyo) sells filter-roasted coffees online; treat as more developed than Nordic peers. In the unofficial Worka Sakaro washed Ethiopia review, V60 day 18 showed grapefruit/citric brightness but roast dominated; Chemex day 40 with thicker filters produced the best cup by cleaning up roast heaviness and revealing grape candy sweetness. Best first pass: standard 1:16, 94-96C, medium grind, lower agitation, and heavier filtration if roastiness obscures fruit. Latent lot context (El Mango SL28 Washed, brew 73028eb1, first SL28 in the brewing archive): the lot confirmed SL-lineage phase-separation - Clarity-First on the April Glass under-expressed the attack and over-extracted the late body simultaneously; resolved via a full Hybrid (Intensity-Clarity Split) on the April Switch.',
+  },
   // ---- Extraction-Forward ----
   {
     name: 'Dak Coffee Roasters',
@@ -2572,20 +2614,6 @@ export const ROASTERS: RoasterEntry[] = [
     calibrationRole: 'Accessible Specialty Baseline',
     notes:
       'Component operates shops in Visalia, Fresno, and Tulare and sells coffee/subscriptions online; no brew guide found, so treat as a generalist specialty roaster rather than a clarity-first or system roaster.',
-  },
-  // ---- Skeleton (research pending) ----
-  // Promoted via taxonomy-queue arbitration 2026-06-18. Thin metadata from the
-  // El Mango SL28 Washed brew; remove the skeleton flag when rich fields land.
-  {
-    name: 'Snite',
-    displayName: 'Snite',
-    location: 'Tokyo, Japan',
-    country: 'Japan',
-    strategyTag: 'VARIES',
-    brewGuideStatus: 'none',
-    notes:
-      'Skeleton entry promoted from the El Mango SL28 Washed brew (73028eb1) - first SL28 lot in the brewing archive. Strategy tag (VARIES placeholder), house style, and recipe baseline pending more lots. The lot confirmed SL-lineage phase-separation: Clarity-First on the April Glass under-expressed the attack and over-extracted the late body simultaneously; resolved via a full Hybrid (Intensity-Clarity Split) on the April Switch.',
-    skeleton: true,
   },
 ]
 
