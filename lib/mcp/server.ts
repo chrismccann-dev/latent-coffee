@@ -35,6 +35,8 @@ import { registerPatchRoastLearningsTool } from '@/lib/mcp/patch-roast-learnings
 import { registerListTaxonomyQueueTool } from '@/lib/mcp/list-taxonomy-queue'
 import { registerProposeCanonicalAdditionTool } from '@/lib/mcp/propose-canonical-addition'
 import { registerResolveQueueEntryTool } from '@/lib/mcp/resolve-queue-entry'
+import { registerListDocProposalsTool } from '@/lib/mcp/list-doc-proposals'
+import { registerResolveDocProposalTool } from '@/lib/mcp/resolve-doc-proposal'
 import { registerListSkeletonEntriesTool } from '@/lib/mcp/list-skeleton-entries'
 import {
   assertToolDiscoverability,
@@ -89,6 +91,12 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   registerListTaxonomyQueueTool(server, auth)
   registerProposeCanonicalAdditionTool(server, auth)
   registerResolveQueueEntryTool(server, auth)
+  // Doc-proposal arbiter Tools (2026-06-25): the prose-side reader + resolver,
+  // mirroring list_taxonomy_queue + resolve_queue_entry. Closes the last queue
+  // that forced the ARBITER.md playbook onto raw execute_sql — the prose pass
+  // now runs entirely on typed Tools.
+  registerListDocProposalsTool(server, auth)
+  registerResolveDocProposalTool(server, auth)
   // Sprint 12 / CR-4 (2026-05-21): third arbiter queue type (skeleton entries).
   registerListSkeletonEntriesTool(server, auth)
 

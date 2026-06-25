@@ -1,6 +1,6 @@
 # Doc Proposal Arbiter Playbook
 
-This file is the standalone playbook a Claude Code session loads when Chris says **"process pending arbitration"** (or any of the aliases below). It covers two queues now — **prose proposals** in `doc_proposals` and **canonical promotions** in `taxonomy_overrides_queue` (Phase 3, migration 045). One Claude Code session walks both.
+This file is the standalone playbook a Claude Code session loads when Chris says **"process pending arbitration"** (or any of the aliases below). It covers two queues now — **prose proposals** in `doc_proposals` and **canonical promotions** in `taxonomy_overrides_queue` (Phase 3, migration 045). One Claude Code session walks both. As of 2026-06-25 **both queues run entirely on typed latent-coffee MCP Tools** — prose: `list_doc_proposals` + `resolve_doc_proposal`; canonical: `list_taxonomy_queue` + `resolve_queue_entry`. The `execute_sql` snippets throughout are equivalent fallbacks for when the latent connector isn't attached; no raw SQL is required to run the playbook.
 
 If you're a future Claude session reading this for the first time: this is the same shape as how PRODUCT.md gets updated at the end of every sprint — Chris says "do the thing" and you read state, present diffs, get approval, edit files, commit, PR, merge. Two staging tables; one arbiter procedure.
 
@@ -22,6 +22,16 @@ If you're a future Claude session reading this for the first time: this is the s
 
 ### 1. Read pending proposals
 
+Use the `list_doc_proposals` MCP Tool — the prose-side analog of `list_taxonomy_queue`. It scopes to Chris's user_id automatically (auth context, no manual user_id derivation) and sorts by `(target_doc, created_at)`, so the groups in Step 2 are already contiguous:
+
+```ts
+list_doc_proposals({ status: 'pending' })
+```
+
+Returns `{ entries: [{ id, target_doc, source, citations, summary, status, notes, applied_by_session, created_at, applied_at }], total }`. Filter by `target_doc` to arbitrate one file at a time.
+
+Or, equivalently, via `execute_sql` (fallback when the latent connector isn't attached):
+
 ```sql
 SELECT id, target_doc, source, citations, summary, created_at
 FROM doc_proposals
@@ -29,8 +39,6 @@ WHERE user_id = $CHRIS_USER_ID
   AND status = 'pending'
 ORDER BY target_doc, created_at;
 ```
-
-Use the supabase MCP `execute_sql` Tool. The user_id is Chris's auth.users id — derive from one of the existing brews (`SELECT user_id FROM brews LIMIT 1` if not cached).
 
 If there are zero pending proposals, surface that to Chris and stop.
 
@@ -113,6 +121,19 @@ After all citations in one proposal are processed:
 | Every citation orphaned + Chris discarded all       | `superseded`      |
 | Citations partial-orphaned, Chris held some pending | leave `pending` (rare; surface to Chris) |
 
+Record the roll-up with the `resolve_doc_proposal` MCP Tool (the prose-side analog of `resolve_queue_entry`) — it flips the row and stamps `applied_at` + `applied_by_session`:
+
+```ts
+resolve_doc_proposal({
+  proposal_id: '<id>',
+  status: 'applied',                 // 'applied' | 'rejected' | 'superseded' per the table above
+  notes: '<per-citation outcomes on a mixed apply; omit otherwise>',
+  applied_by_session: '<the Claude Code session id you are in>',
+})
+```
+
+Returns `{ proposal_id, status, applied_at, superseded_ids }`. Resolution is one-way — only `pending` rows resolve; a re-call on an already-resolved row errors (audit-safe). For the `applied` with notes (mixed) case in the table above, pass `status: 'applied'` plus the per-citation outcomes in `notes`. Equivalent `execute_sql` fallback:
+
 ```sql
 UPDATE doc_proposals
 SET status = $STATUS,
@@ -121,8 +142,6 @@ SET status = $STATUS,
     notes = $NOTES
 WHERE id = $PROPOSAL_ID;
 ```
-
-Use the supabase MCP `execute_sql` Tool. Include `applied_by_session` (the Claude Code session id Chris is in) for audit trail.
 
 ### 8. Commit + PR + merge
 
@@ -268,11 +287,11 @@ Once merged + Vercel deploys: claude.ai's next push that resolves the new canoni
 
 | Step | Prose (doc_proposals) | Canonical (taxonomy_overrides_queue) |
 |------|------------------------|---------------------------------------|
-| Read | `SELECT * FROM doc_proposals WHERE status='pending'` | `list_taxonomy_queue({ status: 'pending' })` |
+| Read | `list_doc_proposals({ status: 'pending' })` | `list_taxonomy_queue({ status: 'pending' })` |
 | Group by | `target_doc` | `axis` |
 | Edit target | `BREWING.md` / `ROASTING.md` / `docs/brewing/roasters.md` / `docs/taxonomies/{axis}.md` | `lib/{axis}-registry.ts` + `docs/taxonomies/{axis}.md` |
 | Apply mechanism | Edit tool — append/prepend/replace | Edit tool — add registry entry / alias map entry |
-| Status flip | UPDATE doc_proposals SET status='applied' (per citation) | `resolve_queue_entry` Tool call |
+| Status flip | `resolve_doc_proposal` Tool call (per proposal roll-up) | `resolve_queue_entry` Tool call |
 | Status values | applied / rejected / superseded | promoted / aliased / rejected / duplicate |
 | Auto-supersede | Yes — per (target_doc, section_anchor) on insert | EXCLUDE constraint on (user, axis, lower(raw_value)) — second push returns existing pending row id |
 
@@ -563,7 +582,7 @@ For multi-citation proposals targeting the SAME section_anchor (rare but possibl
 
 When Claude.ai inserts a NEW proposal targeting `(target_doc, section_anchor)` that already has a pending proposal, the Tool handler in `lib/mcp/propose-doc-changes.ts` **automatically marks the older row `superseded`** in the same call. The arbiter never sees both — only the newer one is `pending`.
 
-The older row's `notes` field shows `Superseded by <new_id> on <timestamp>` for traceability. If Chris asks "what got superseded recently?":
+The older row's `notes` field shows `Superseded by <new_id> on <timestamp>` for traceability. If Chris asks "what got superseded recently?", use `list_doc_proposals({ status: 'superseded' })` (or the `execute_sql` fallback):
 
 ```sql
 SELECT id, target_doc, summary, notes, created_at
@@ -602,7 +621,17 @@ Use `supersede_ids` when: (a) the corrected fix lives at a different anchor with
 
 `supersede_ids` is the EXPLICIT path - claude.ai knows at write time. The IMPLICIT path is for cases where supersession intent surfaces only at queue-walk time: the older proposal is still `pending`, the newer one was filed without `supersede_ids`, but on reading both itʼs clear the newer one corrects the older. Two scan patterns the arbiter applies at queue-walk time:
 
-**Pattern 1: Summary-parse.** When a `pending` proposalʼs `summary` field contains any of: `CORRECTED:`, `SUPERSEDES:`, `(supersedes <UUID>)`, `(replaces <UUID>)`, or close variants (`Replaces <UUID>`, `Corrects <UUID>`, `Overrides <UUID>`), treat the cited UUIDs as supersession candidates. Manually inspect both rows; if the supersession is real, flip the older row:
+**Pattern 1: Summary-parse.** When a `pending` proposalʼs `summary` field contains any of: `CORRECTED:`, `SUPERSEDES:`, `(supersedes <UUID>)`, `(replaces <UUID>)`, or close variants (`Replaces <UUID>`, `Corrects <UUID>`, `Overrides <UUID>`), treat the cited UUIDs as supersession candidates. Manually inspect both rows; if the supersession is real, flip the older row(s) with `resolve_doc_proposal`. Preferred — fold them into the newer (keeper) proposal's resolution via `supersede_ids`, so one call resolves the keeper AND flips the stale rows (each gets a `Superseded by <new_id> ... via arbiter resolve_doc_proposal` note):
+
+```ts
+resolve_doc_proposal({
+  proposal_id: '<new_id>',          // the corrected / keeper proposal
+  status: 'applied',
+  supersede_ids: ['<old_uuid>'],    // arbiter-walked implicit supersession
+})
+```
+
+If instead the older row is being closed standalone (keeper already resolved earlier in the batch), call `resolve_doc_proposal({ proposal_id: '<old_uuid>', status: 'superseded', notes: 'Implicitly superseded by <new_id> — arbiter-walked summary-parse' })`. Equivalent `execute_sql` fallback:
 
 ```sql
 UPDATE doc_proposals
@@ -620,9 +649,9 @@ Worked example. Two proposals come in close together:
 | `aaa-...` | "Wush Wush V1: cup leans floral-forward with low-acid follow-through" | `roaster/Hydrangea Coffee` |
 | `bbb-...` | "CORRECTED: Wush Wush V2 cup notes (supersedes aaa-...) - V1 read was biased by short rest" | `roaster/Hydrangea Coffee` |
 
-The arbiter spots `CORRECTED:` + `(supersedes aaa-...)` in `bbb`ʼs summary, confirms by reading both rowsʼ citations, and runs the UPDATE above on `aaa`. If `bbb` had used `supersede_ids: ["aaa-..."]` at write time this would have auto-fired - the implicit path is the safety net.
+The arbiter spots `CORRECTED:` + `(supersedes aaa-...)` in `bbb`ʼs summary, confirms by reading both rowsʼ citations, and resolves `bbb` with `supersede_ids: ["aaa-..."]` (flipping `aaa` in the same call). If `bbb` had used `supersede_ids: ["aaa-..."]` at *write* time this would have auto-fired - the implicit path is the safety net.
 
-**Pattern 2: Source-id stem detection.** When two `pending` proposals share a `source.kind` and their `source.id` values share a canonical stem indicating one is a successor of the other (V2 brew on the same coffee, V3 close-lot on the same lot), AND the two proposals target overlapping clusters (e.g. both target `active-lots/<lot-slug>.md` or both target `roaster/<canonical>`), surface as a supersession candidate. Surface SQL:
+**Pattern 2: Source-id stem detection.** When two `pending` proposals share a `source.kind` and their `source.id` values share a canonical stem indicating one is a successor of the other (V2 brew on the same coffee, V3 close-lot on the same lot), AND the two proposals target overlapping clusters (e.g. both target `active-lots/<lot-slug>.md` or both target `roaster/<canonical>`), surface as a supersession candidate. Surface via `list_doc_proposals({ status: 'pending', source_kind: '<kind>' })` (or the `execute_sql` fallback):
 
 ```sql
 SELECT id, source, summary, citations
@@ -633,7 +662,7 @@ WHERE user_id = '<chris_user_id>'
 ORDER BY created_at;
 ```
 
-Visually inspect the `source.id` values for stem overlap (e.g. `CGLE-SRUME-NATURAL-2026-V1` vs `CGLE-SRUME-NATURAL-2026-V2`, or `brew_abc123-v1` vs `brew_abc123-v2`). For matches, read both rowsʼ citations - if the V2-source proposal genuinely supersedes the V1-source proposal (same lot, same cluster, newer read), flip the older row using the UPDATE pattern above (substitute `via arbiter-walked source-id-stem` in the notes).
+Visually inspect the `source.id` values for stem overlap (e.g. `CGLE-SRUME-NATURAL-2026-V1` vs `CGLE-SRUME-NATURAL-2026-V2`, or `brew_abc123-v1` vs `brew_abc123-v2`). For matches, read both rowsʼ citations - if the V2-source proposal genuinely supersedes the V1-source proposal (same lot, same cluster, newer read), flip the older row via `resolve_doc_proposal` (the `supersede_ids` path above, with `arbiter-walked source-id-stem` context in the notes).
 
 Worked example. Pending queue contains:
 

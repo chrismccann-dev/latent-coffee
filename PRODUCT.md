@@ -246,7 +246,7 @@ Pressure points for the 1,000-brew goal — product-architecture pressure, not s
 
 ### Before 200+ brews
 
-- **MCP Tool-count discoverability** — 35 Tools today; claude.ai's `tool_search` ranks opaquely. At 50+, consider consolidation (polymorphic `push_*`) or namespace grouping. Description-quality lever already pulled (PR #114).
+- **MCP Tool-count discoverability** — 38 Tools today; claude.ai's `tool_search` ranks opaquely. At 50+, consider consolidation (polymorphic `push_*`) or namespace grouping. Description-quality lever already pulled (PR #114).
 - **`/brews` index unbounded render (~100-brew tripwire)** — renders every brew with no cap. Non-issue at ~89 (server-rendered). At ~100, a small "show first N + load more" mini-sprint on the *unfiltered* view only. (Tracked in [issues.md](docs/product/issues.md); per-roaster Coffees list already caps at 10.)
 - **Full-text search** across `what_i_learned` + sensory fields, and saved/named views once lookup patterns stabilize.
 
