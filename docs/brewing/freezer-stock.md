@@ -34,7 +34,7 @@
 > freezer") but intentionally NOT backfilled - older freezer coffees may be absent. A miss is
 > normal.
 
-**Total coffees:** 100
+**Total coffees:** 103
 
 ---
 
@@ -731,3 +731,23 @@
 **Agtron:** pending · **Status:** Resting (agtron pending)
 **URL:** https://hydrangea.coffee/products/cgle-sudan-rume-hw
 **Notes:** Staged-ferment washed — keeps washed cleanliness with added aromatic depth. Notes: bergamot, blue lilac, mango. Same farm as the plain Natural and Natural XO CGLE Sudan Rume lots. Sold out / archived.
+
+## Airworks / September Coffee — Abel Salinas Ecuador Mejorado Washed
+**Country:** Ecuador · **Region/Farm:** Saraguro, Loja / Finca Arashi · **Producer:** Abel Salinas
+**Variety:** Typica Mejorado · **Process:** Washed (depulped → 24hr dry ferment → washed → 15-day dry) · **Elevation:** 1900 m
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**URL:** https://september.coffee/en-us/products/abel-salinas-ecuador-2025
+**Notes:** Roaster notes: peach, oolong tea, lemon — soft florals, intense lemonade acidity, juicy citrus, long sweet finish, light body. Abel Salinas = 58yo Cup of Excellence winner, first-gen grower; Finca Arashi (Saraguro), 7ha / ~22,000 trees, mostly Typica Mejorado (also Sidra + H1). Mejorado = Bourbon × Ethiopian Landrace cross. Harvest late 2024 (2nd year / 2nd harvest). Importer: The Coffee Quest. Light roast. Clarity-First likely (clean washed Mejorado). Also sold via Airworks: https://airworkscoffee.com/products/september-abel-selinas-washed-mejorado-2nd-harvest-lojas-ecuador-200g
+
+## Airworks / Still — Komothai Kanake (Red Earth)
+**Country:** Kenya · **Region/Farm:** Kiambu County / Komothai (Kanake) · **Producer:** —
+**Variety:** SL28, SL34, Ruiru 11, Batian · **Process:** Washed
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**Notes:** ⚠️ No product URL / sparse spec (producer + elevation pending) — enrich when available. "Red Earth" lot, roasted by Still (via Airworks). Roaster notes: blackcurrant, grape, berries, hibiscus, black tea, apricot. Clarity-First likely (traditional Kenyan washed SL blend).
+
+## Big Sur Coffee — Ethiopia Washed Faysel Abdosh Single Farm Premium — Guji Shakisso
+**Country:** Ethiopia · **Region/Farm:** Welabo, Oddo Shakisso, Guji / Faysel Abdosh Single Farm · **Producer:** Testi Specialty Coffee (Faysel Abdosh)
+**Variety:** Ethiopian Heirloom · **Process:** Washed (flotation → depulp → 36hr wet ferment → 21-day slow shade-dry on raised beds under black nets) · **Elevation:** 2100 m
+**Agtron:** pending · **Status:** Resting (agtron pending)
+**URL:** https://bigsurcafe.com/products/25-26-new-season-ethiopia-washed-faysel-abdosh-single-farm-premium-150g
+**Notes:** Harvest Dec 11 2025. Notes: white florals, citrus, bergamot, peach. Testi Single Farm Project (launched 2025) — centerpiece of the Private Collection Auction Series; clean/transparent/elegant. Same producer (Faysel Abdosh / Testi) as the Big Sur Triple Fermentation + Sewda + Gara Agena lots — comparison family. Clarity-First (washed heirloom).
