@@ -153,11 +153,12 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   // Provisional (2026-06-26) — net-new Chinese variety surfaced via a brew:
   // Hachi × Yunnan × Terroir Maximus (Coffee with Dongze / Dongzhe), 繁花 FanHua
   // Precursor Amplification Natural, The Nest (云顶筑巢庄园), Yunnan Southern
-  // Highlands. Genetics UNRESOLVED — family + lineage are provisional placeholders
-  // pending WCR / Chris research (canonical-addition queue id 5709bded). Added to
-  // unblock push_brew (cultivar is strict-canonical, no override). Re-home into a
-  // real family/lineage at the arbiter pass.
-  { name: 'Syrina', species: 'Arabica', family: 'Unresolved (provisional)', lineage: 'Unresolved (provisional) lineage' },
+  // Highlands. Genetics UNRESOLVED — `family` is a strict union type, so this is
+  // parked in 'Modern Hybrids' per the Mandela precedent (safest placement for an
+  // unclassified variety) and the lineage flags the provisional status. Re-home
+  // into the real family/lineage at the arbiter pass (canonical-addition queue id
+  // 5709bded). Added to unblock push_brew (cultivar is strict-canonical, no override).
+  { name: 'Syrina', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Unresolved (provisional) — pending genetic classification' },
 ]
 
 // ---------------------------------------------------------------------------
