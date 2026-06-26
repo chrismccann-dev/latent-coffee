@@ -149,6 +149,15 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   { name: 'Arara', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Timor Hybrid-derived lineage' },
   { name: 'RAB C15', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage' },
   { name: 'Aramosa', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Arabica × racemosa interspecific lineage' },
+
+  // Provisional (2026-06-26) — net-new Chinese variety surfaced via a brew:
+  // Hachi × Yunnan × Terroir Maximus (Coffee with Dongze / Dongzhe), 繁花 FanHua
+  // Precursor Amplification Natural, The Nest (云顶筑巢庄园), Yunnan Southern
+  // Highlands. Genetics UNRESOLVED — family + lineage are provisional placeholders
+  // pending WCR / Chris research (canonical-addition queue id 5709bded). Added to
+  // unblock push_brew (cultivar is strict-canonical, no override). Re-home into a
+  // real family/lineage at the arbiter pass.
+  { name: 'Syrina', species: 'Arabica', family: 'Unresolved (provisional)', lineage: 'Unresolved (provisional) lineage' },
 ]
 
 // ---------------------------------------------------------------------------
