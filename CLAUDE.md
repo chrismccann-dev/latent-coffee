@@ -79,7 +79,7 @@ Per-column schema histories (migration provenance + populate-side notes) + full 
 
 ### Relationship patterns (IMPORTANT)
 - **FK joins, not text matching:** brews→terroir (`terroir_id`) · brews→cultivar (`cultivar_id`) · brews→green_bean (`green_bean_id`) · green_beans→terroir/cultivar · roasts→roast_recipes (`recipe_id`) · roast_recipes→experiment (`experiment_id`) · roast_learnings→roast (`best_roast_id`).
-- **New brews MUST set `terroir_id` and `cultivar_id` on insert** — `push_brew` handles both via `findOrCreateTerroir` + `findOrCreateCultivar` in [lib/brew-import.ts](lib/brew-import.ts).
+- **New brews MUST set `terroir_id` and `cultivar_id` on insert** — `push_brew` handles both via `findOrCreateTerroir` + `findOrCreateCultivar` in [lib/brew-import.ts](lib/brew-import.ts). Net-new cultivars take `cultivar_override: true` (persists provisional genetics + queues for arbiter promotion; added 2026-06-26, mirrors `producer_override`); only the **terroir macro** is still strict-no-override. NEVER edit `lib/cultivar-registry.ts` + deploy mid-brew to unblock a write — use the override.
 - Full per-FK detail (backfill migrations, cardinality notes) in [docs/architecture/data-model.md](docs/architecture/data-model.md).
 
 ### Canonical registries

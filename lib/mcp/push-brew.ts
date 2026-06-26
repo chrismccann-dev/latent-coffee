@@ -117,7 +117,7 @@ const terroir = z.object({
 
 const cultivar = z.object({
   cultivar_name: z.string().describe(
-    'Canonical cultivar name (e.g. "Gesha", "Pink Bourbon", "Mokka", "Sudan Rume"). Resolves via CULTIVAR_LOOKUP — bare canonical name is sufficient; species / genetic_family / lineage auto-populate from the registry on insert. Aliases also resolve ("Geisha" → "Gesha", "Green-Tip Gesha" → "Gesha"). Strict canonical: no `cultivar_override` flag exists; net-new cultivars require a registry edit (docs/taxonomies/varieties.md + lib/cultivar-registry.ts) before the brew can land. Inspect via `read_canonical(axis="cultivars")`.',
+    'Canonical cultivar name (e.g. "Gesha", "Pink Bourbon", "Mokka", "Sudan Rume"). Resolves via CULTIVAR_LOOKUP — bare canonical name is sufficient; species / genetic_family / lineage auto-populate from the registry on insert. Aliases also resolve ("Geisha" → "Gesha", "Green-Tip Gesha" → "Gesha"). For a genuinely net-new variety not in the registry, set `cultivar_override: true` (sibling top-level flag) to persist provisional genetics and queue it for arbiter promotion — no registry edit / deploy needed. Inspect via `read_canonical(axis="cultivars")`.',
   ),
   species: z.string().optional().nullable().describe(
     'OPTIONAL — auto-populates from CULTIVAR_LOOKUP when cultivar_name resolves. Set explicitly only when you need to override the registry derivation, which is rare.',
@@ -149,6 +149,9 @@ export const pushBrewInputSchema = {
   // Origin (FK targets)
   terroir,
   cultivar,
+  cultivar_override: z.boolean().optional().describe(
+    'Set true to bypass strict cultivar canonical enforcement for a legitimately net-new variety. Persists a cultivars row with provisional genetics (species Arabica, family/lineage flagged "Unresolved (provisional)") and inserts a row in `taxonomy_overrides_queue` (axis="cultivar") for Chris-as-arbiter to classify / promote. Mirrors `producer_override` / `signature_method_override` — lets the brew land immediately instead of forcing a registry edit + Vercel deploy mid-brew. NOTE: until the arbiter lands the registry edit (`lib/cultivar-registry.ts` CULTIVARS + `docs/taxonomies/varieties.md`), every brew with this variety needs `cultivar_override: true` again. Added 2026-06-26 (FanHua / Syrina friction). Terroir macros remain strict (no override).',
+  ),
   variety: z.string().optional().nullable().describe('Legacy compat — use cultivar.cultivar_name.'),
 
   // Process
@@ -331,24 +334,25 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
           // reported together so the caller can fix everything in ONE retry
           // round instead of N. Two distinct hint surfaces:
           //   - text-only canonicals (roaster / producer / brewer / filter /
-          //     grinder) → suggest *_override flag for genuinely net-new entries
-          //   - terroir / cultivar → strict, no override; suggest the registry
-          //     edit path (Sprint 2.6 closed the override path on FK tables)
+          //     grinder / signature_method) + cultivar (FK table, 2026-06-26)
+          //     → suggest *_override flag for genuinely net-new entries
+          //   - terroir macro → strict, no override; suggest the registry edit
+          //     path (the one FK axis still without an override)
           const hasOverridable = result.errors.some(
-            (e) => /\b(roaster|producer|brewer|filter|grinder|signature_method)\b.*not in the canonical/i.test(e),
+            (e) => /\b(roaster|producer|brewer|filter|grinder|signature_method|cultivar)\b.*not in the canonical/i.test(e),
           )
           const hasRegistryGap = result.errors.some(
-            (e) => /registry gap|cultivar.*not in the canonical|macro terroir.*not in the canonical/i.test(e),
+            (e) => /registry gap|macro terroir.*not in the canonical/i.test(e),
           )
           const hints: string[] = []
           if (hasOverridable) {
             hints.push(
-              'For genuinely net-new entities (roaster / producer / brewer / filter / grinder / signature_method), re-send with the matching `*_override: true` flag (e.g. `producer_override: true` or `signature_method_override: true`).',
+              'For genuinely net-new entities (roaster / producer / brewer / filter / grinder / signature_method / cultivar), re-send with the matching `*_override: true` flag (e.g. `producer_override: true` or `cultivar_override: true`).',
             )
           }
           if (hasRegistryGap) {
             hints.push(
-              'Terroir and cultivar are strict-canonical (no override). To add a new entry, edit `docs/taxonomies/regions.md` + `lib/terroir-registry.ts` (or `varieties.md` + `lib/cultivar-registry.ts`) and redeploy before pushing.',
+              'Terroir macros are strict-canonical (no override). To add a new macro, edit `docs/taxonomies/regions.md` + `lib/terroir-registry.ts` (or call `propose_canonical_addition`) and redeploy before pushing.',
             )
           }
           const hint = hints.length ? '\n\nHint:\n  - ' + hints.join('\n  - ') : ''
@@ -381,6 +385,8 @@ export function registerPushBrewTool(server: McpServer, auth: McpAuthContext) {
         'grinder_override',
         // Sprint 12 / MCP-1 (2026-05-21, migration 063): signature_method joins.
         'signature_method_override',
+        // cultivar_override (FanHua / Syrina friction, 2026-06-26).
+        'cultivar_override',
       ]
       const created_with_overrides = overridable
         .filter((key) => input[key] === true)

@@ -102,10 +102,12 @@ If you have feedback for Claude Code on either path, mention it.
 STEP 1 - push_brew. Treat fields as final, no confirmation. Validation
 errors aggregate in one response - fix all in one retry round. For canonical
 lookups call read_canonical(axis: "<name>"). For net-new roaster / producer /
-brewer / filter / grinder, set *_override: true (the override path also queues
+brewer / filter / grinder / signature_method / cultivar, set *_override: true (the override path also queues
 the value for canonical promotion via taxonomy_overrides_queue; push_brew echoes
-queued_for_taxonomy_review[] in the response). Cultivars and terroirs are
-strict (no override) — net-new requires a registry edit or a propose_canonical_addition
+queued_for_taxonomy_review[] in the response). cultivar_override (added 2026-06-26)
+persists provisional genetics so a net-new variety lands the brew immediately - NEVER do a
+cultivar-registry edit + Vercel deploy mid-brew. Only terroir MACROS stay strict (no
+override) - net-new macros require a registry edit or a propose_canonical_addition
 call. Capture the brew_id from the success response.
 
 When the source coffee's process detail indicates sealed-container / no-headspace /

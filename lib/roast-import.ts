@@ -125,6 +125,10 @@ export interface GreenBeanPayload {
   // Origin / FK targets — terroir + cultivar fields use the same shape as brews
   terroir?: TerroirCandidate | null
   cultivar?: CultivarCandidate | null
+  // Opt-out of strict cultivar canonical enforcement for this lot. Mirrors
+  // producer_override; a net-new variety persists provisional genetics + queues
+  // for arbiter promotion instead of forcing a registry edit + deploy.
+  cultivar_override?: boolean
   // Origin / free-text fallbacks (kept on the row even when terroir/cultivar
   // FKs resolve, since green_beans has its own legacy origin/region/variety
   // columns that pre-date the FK joins)
@@ -260,6 +264,7 @@ export async function persistGreenBean(
   let cultivarId: string | null = null
   let createdTerroir = false
   let createdCultivar = false
+  let cultivarOverrodeCanonical = false
 
   if (payload.terroir) {
     const tr = await findOrCreateTerroir(
@@ -280,7 +285,9 @@ export async function persistGreenBean(
     createdTerroir = tr.created
   }
   if (payload.cultivar?.cultivar_name) {
-    const cr = await findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name)
+    const cr = await findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name, {
+      allowOverride: payload.cultivar_override === true,
+    })
     if (!cr.ok) {
       const code = cr.status === 400 ? 'validation' : 'db_error'
       return code === 'validation'
@@ -289,6 +296,7 @@ export async function persistGreenBean(
     }
     cultivarId = cr.id
     createdCultivar = cr.created
+    cultivarOverrodeCanonical = cr.overrodeCanonical === true
   }
 
   const insert = {
@@ -357,7 +365,16 @@ export async function persistGreenBean(
   const queued = await fireQueueInserts(
     supabase,
     userId,
-    [{ axis: 'producer', raw_value: canonicalProducer, needsQueue: producerNeedsQueue }],
+    [
+      { axis: 'producer', raw_value: canonicalProducer, needsQueue: producerNeedsQueue },
+      // cultivar_override (FanHua friction, 2026-06-26): a net-new variety
+      // pushed via cultivar_override queues for arbiter promotion.
+      {
+        axis: 'cultivar',
+        raw_value: payload.cultivar?.cultivar_name ?? null,
+        needsQueue: cultivarOverrodeCanonical,
+      },
+    ],
     { kind: 'green_bean', id: data.id as string },
   )
 

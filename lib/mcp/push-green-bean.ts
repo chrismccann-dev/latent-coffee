@@ -39,7 +39,10 @@ export const pushGreenBeanInputSchema = {
     'Origin terroir. country is required when set; macro_terroir resolves through TERROIR_MACRO_LOOKUP.',
   ),
   cultivar: cultivar.optional().nullable().describe(
-    'Cultivar. cultivar_name resolves through CULTIVAR_LOOKUP. Aliases accepted ("Geisha" -> "Gesha").',
+    'Cultivar. cultivar_name resolves through CULTIVAR_LOOKUP. Aliases accepted ("Geisha" -> "Gesha"). For a genuinely net-new variety, set `cultivar_override: true` to persist provisional genetics + queue it for arbiter promotion (no registry edit needed).',
+  ),
+  cultivar_override: z.boolean().optional().describe(
+    'Set true to bypass strict cultivar canonical enforcement for a net-new variety: persists provisional genetics (family/lineage "Unresolved (provisional)") + queues a taxonomy_overrides_queue row (axis="cultivar"). Mirrors producer_override. Added 2026-06-26.',
   ),
   // Free-text fallbacks (kept on green_beans alongside FK)
   origin: z.string().optional().nullable(),
