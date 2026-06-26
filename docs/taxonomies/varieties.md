@@ -47,6 +47,9 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exac
 - Liberica: Liberica, Excelsa
 - Robusta: Robusta
 
+**Provisional (genetics unresolved — pending research)**
+- Unresolved (provisional) lineage: Syrina
+
 ### Blend-naming convention (NAMING session, 2026-05-30)
 
 Field-blend cultivar canonicals follow the shape **`V1, V2 (Blend)`** — varieties
@@ -2424,6 +2427,28 @@ only (display layer in `lib/brew-cover-title.ts`).
 - **Extraction Sensitivity:** Sensitive; favors balance over intensity.
 
 **Notes:** Added 2026-06-17 (Workstream B). Daterra Yellow Aramosa Anaerobic Natural lot. First Arabica × racemosa interspecific hybrid in the archive (low-caffeine, sister to Laurina).
+
+---
+
+### Syrina
+
+**Species:** Arabica  **Genetic Family:** Unresolved (provisional)  **Lineage:** Unresolved (provisional) lineage
+
+#### Genetics
+- **Genetic Background:** UNRESOLVED. Net-new Chinese variety (赛琳娜 / "Syrina") surfaced via a brew; genetic family and lineage are provisional placeholders pending World Coffee Research / Chris research. Do NOT treat the family/lineage as authoritative until the arbiter re-homes it.
+- **Market names normalized here:** none.
+
+#### Agronomy
+- **Typical Origins:** China — Yunnan (Shuangjiang / Lincang; The Nest Estate, 云顶筑巢庄园, ~1,450-1,600 m).
+- **Limiting Factors:** Unknown (no archive data).
+- **Market Context:** Experimental / showcase — appeared in the Hachi Project × Terroir Maximus × Brian Quan collab roasted by Coffee with Dongze (Dongzhe).
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Natural (Precursor Amplification, a fermentation/enzyme precursor-forward natural).
+- **Typical Flavor Notes:** (single brew) dried mango, raisin, cinnamon; reaches expression best when extracted hard (96 °C, fine grind) and evaluated cool.
+- **Extraction Sensitivity:** Under-reaches at conservative parameters; rewarded Extraction Push.
+
+**Notes:** Added 2026-06-26 as a PROVISIONAL entry to unblock `push_brew` (cultivar is strict-canonical, no override path). Genetics unresolved — queued for canonical promotion / arbiter shaping (canonical-addition queue id `5709bded`). Re-home family + lineage out of the provisional placeholder once researched. First Chinese-cultivated Syrina (and first Hachi/Terroir-Maximus lot) in the archive.
 
 ---
 
