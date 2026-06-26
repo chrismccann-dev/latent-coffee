@@ -198,7 +198,7 @@ Once a recipe is confirmed as the reference brew for a coffee (iteration complet
 - **Country** — canonical country from `read_canonical("terroirs")` (e.g. `Panama`, `Colombia`, `Ethiopia`).
 - **Macro Terroir** — canonical macro from `read_canonical("terroirs")` for that country (e.g. `Volcán Barú Highlands`, `Central Andean Cordillera`, `Sidama Highlands`). If the natural-language name doesn't match canonical, look up the macro that contains the named area (e.g. "Boquete" → `Volcán Barú Highlands`; "Boquete" is a meso, not a macro).
 - **Meso Terroir** — free-text (not validated). Optional. Use the meso names listed under the chosen macro as guidance.
-- **Cultivar** — canonical cultivar from `read_canonical("cultivars")` (e.g. `Mokka`, `Gesha`, `Pink Bourbon`, `Sidra`). The varieties registry handles common variants via aliases (e.g. `Geisha` → `Gesha`, `Green-Tip Gesha` → `Gesha` — green-tip is a leaf phenotype, not separate genetics; `Mokka ≠ Mokkita`, distinguish precisely). If a blend, comma-separate.
+- **Cultivar** — canonical cultivar from `read_canonical("cultivars")` (e.g. `Mokka`, `Gesha`, `Pink Bourbon`, `Sidra`). The varieties registry handles common variants via aliases (e.g. `Geisha` → `Gesha`, `Green-Tip Gesha` → `Gesha` — green-tip is a leaf phenotype, not separate genetics; `Mokka ≠ Mokkita`, distinguish precisely). If a blend, comma-separate. If the variety isn't in the registry (net-new Chinese-cultivated / experimental varieties surface regularly), write it verbatim and set `cultivar_override: true` (NET-NEW) — push_brew persists provisional genetics + queues it for arbiter promotion. Do NOT edit the cultivar registry + deploy mid-brew.
 
 ---
 

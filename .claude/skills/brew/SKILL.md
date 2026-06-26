@@ -174,6 +174,25 @@ So this entry deliberately has **no** durable Brief file, **no** Coordinator/Ass
 friction log. The whole-arc tasting-capture *schema* question on `brews` is a separate, gated
 brainstorm ([roadmap.md](docs/product/roadmap.md)), not this skill's job.
 
+## Never code-deploy mid-brew (build-hygiene guardrail)
+
+A brew session **records** a brew; it does not ship app code. If a net-new
+canonical blocks `push_brew`, use the matching `*_override: true` flag — every
+axis now has one, **including `cultivar_override`** (added 2026-06-26 after the
+FanHua / Syrina friction, where a net-new variety forced a mid-brew cultivar-registry
+edit → PR → Vercel deploy and a red build hit prod). Hard rules:
+
+- **NEVER** edit `lib/cultivar-registry.ts` / `lib/terroir-registry.ts` (or any
+  `lib/*` / migration) and deploy mid-brew to unblock a write. The override flag
+  + the arbiter queue is the path; the registry promotion happens later, off the
+  brew session's critical path.
+- The one true strict axis left is the **terroir macro** — if a net-new macro
+  blocks, queue it via `propose_canonical_addition` and finish the brew with the
+  closest canonical macro (or park the push), rather than editing + deploying.
+- If a code change is ever genuinely unavoidable, **never merge without a green
+  `npx tsc --noEmit` / build** ([CLAUDE.md § build-hygiene](CLAUDE.md)). The
+  FanHua detour shipped a failed prod build because this step was skipped.
+
 ## MCP-only write path holds
 
 Regardless of client, the write path is `push_brew` via the Latent MCP server

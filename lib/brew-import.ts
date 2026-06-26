@@ -212,6 +212,16 @@ export interface BrewPayload {
   // Classification (required)
   terroir: TerroirCandidate
   cultivar: CultivarCandidate
+  // Transient: opt-out of strict cultivar canonical enforcement for this brew.
+  // Mirrors producer_override / signature_method_override. When true, a
+  // non-resolvable cultivar_name persists a cultivars row with provisional
+  // genetics (raw-text sentinel family/lineage) and queues a
+  // taxonomy_overrides_queue cultivar row for arbiter promotion — so a net-new
+  // variety lands the brew immediately instead of forcing a registry edit +
+  // deploy round-trip. Net-new Chinese-cultivated / experimental varieties
+  // (Syrina, etc.) surface often enough that the override earns its keep
+  // (FanHua brew friction, 2026-06-26).
+  cultivar_override?: boolean
 
   // Recipe
   brewer?: string | null
@@ -496,24 +506,64 @@ export async function matchCultivar(
 // in its response without a separate pre-existence DB check. False when input
 // is empty (no FK resolved) and on the find-existing branch; true on insert.
 export type FindOrCreateResult =
-  | { ok: true; id: string | null; created: boolean }
+  | { ok: true; id: string | null; created: boolean; overrodeCanonical?: boolean }
   | { ok: false; error: string; status: 400 | 500 }
+
+// Raw-text sentinel genetics for an override-pushed net-new cultivar. The
+// cultivars.genetic_family / lineage columns are plain text (no DB CHECK), so
+// the sentinel lands without a migration; the cultivar is deliberately NOT added
+// to the CULTIVARS registry array (it stays off-canonical until the arbiter
+// promotes it), and /cultivars groups it under this bucket as a visible
+// arbiter backlog. The arbiter re-homes genetics + promotes the name later.
+export const PROVISIONAL_CULTIVAR_FAMILY = 'Unresolved (provisional)'
+export const PROVISIONAL_CULTIVAR_LINEAGE =
+  'Unresolved (provisional) - pending genetic classification'
 
 export async function findOrCreateCultivar(
   supabase: SupabaseClient,
   userId: string,
   rawName: string | null | undefined,
+  opts: { allowOverride?: boolean } = {},
 ): Promise<FindOrCreateResult> {
   const raw = typeof rawName === 'string' ? rawName.trim() : ''
   if (!raw) return { ok: true, id: null, created: false }
 
   const entry = resolveCultivar(raw)
   if (!entry) {
-    return {
-      ok: false,
-      status: 400,
-      error: `cultivar "${raw}" is not in the canonical registry. To add a new cultivar, use /add.`,
+    if (!opts.allowOverride) {
+      return {
+        ok: false,
+        status: 400,
+        error: `cultivar "${raw}" is not in the canonical registry. For a genuinely net-new cultivar, re-send with cultivar_override: true (persists provisional genetics + queues for arbiter promotion).`,
+      }
     }
+    // Override branch — mirror the producer/signature_method allowOverride
+    // pattern, but for an FK table: persist a cultivars row verbatim with the
+    // raw-text sentinel genetics. Reuse an existing row (by name) so a repeat
+    // push of the same net-new variety doesn't mint a duplicate.
+    const { data: existingOverride } = await supabase
+      .from('cultivars')
+      .select('id')
+      .eq('user_id', userId)
+      .ilike('cultivar_name', raw)
+    if (existingOverride && existingOverride.length > 0) {
+      return { ok: true, id: existingOverride[0].id, created: false, overrodeCanonical: true }
+    }
+    const { data: overrideCreated, error: overrideErr } = await supabase
+      .from('cultivars')
+      .insert({
+        user_id: userId,
+        cultivar_name: raw,
+        species: 'Arabica',
+        genetic_family: PROVISIONAL_CULTIVAR_FAMILY,
+        lineage: PROVISIONAL_CULTIVAR_LINEAGE,
+      })
+      .select('id')
+      .single()
+    if (overrideErr || !overrideCreated) {
+      return { ok: false, status: 500, error: overrideErr?.message || 'cultivar create failed' }
+    }
+    return { ok: true, id: overrideCreated.id, created: true, overrodeCanonical: true }
   }
 
   const { data: existingRows } = await supabase
@@ -937,7 +987,9 @@ export async function persistBrew(
         ),
     inheritedCultivarId
       ? Promise.resolve(null)
-      : findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name),
+      : findOrCreateCultivar(supabase, userId, payload.cultivar.cultivar_name, {
+          allowOverride: payload.cultivar_override === true,
+        }),
   ])
   if (terroirResult && !terroirResult.ok) errors.push(terroirResult.error)
   if (cultivarResult && !cultivarResult.ok) errors.push(cultivarResult.error)
@@ -1080,6 +1132,15 @@ export async function persistBrew(
       { axis: 'grinder', raw_value: grinderResult.canonicalName, needsQueue: grinderResult.needsQueue },
       // Sprint 12 / MCP-1 (migration 063): signature_method joins the queue.
       { axis: 'signature_method', raw_value: signatureMethodResult.canonicalName, needsQueue: signatureMethodResult.needsQueue },
+      // cultivar_override (FanHua friction, 2026-06-26): a net-new variety
+      // pushed via cultivar_override queues for arbiter promotion just like the
+      // text axes. raw_value is the verbatim cultivar_name (no canonical form
+      // exists yet); needsQueue is true only when the override branch fired.
+      {
+        axis: 'cultivar',
+        raw_value: payload.cultivar.cultivar_name,
+        needsQueue: !!(cultivarResult && cultivarResult.ok && cultivarResult.overrodeCanonical),
+      },
     ],
     { kind: 'brew', id: brew.id },
   )
