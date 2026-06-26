@@ -48,7 +48,7 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exac
 - Robusta: Robusta
 
 **Provisional (genetics unresolved — pending research)**
-- Unresolved (provisional) lineage: Syrina
+- Parked in Modern Hybrids per the Mandela precedent (safest placement until classified): Syrina
 
 ### Blend-naming convention (NAMING session, 2026-05-30)
 
@@ -2432,7 +2432,7 @@ only (display layer in `lib/brew-cover-title.ts`).
 
 ### Syrina
 
-**Species:** Arabica  **Genetic Family:** Unresolved (provisional)  **Lineage:** Unresolved (provisional) lineage
+**Species:** Arabica  **Genetic Family:** Modern Hybrids *(provisional placement — genetics unresolved)*  **Lineage:** Unresolved (provisional) — pending genetic classification
 
 #### Genetics
 - **Genetic Background:** UNRESOLVED. Net-new Chinese variety (赛琳娜 / "Syrina") surfaced via a brew; genetic family and lineage are provisional placeholders pending World Coffee Research / Chris research. Do NOT treat the family/lineage as authoritative until the arbiter re-homes it.
