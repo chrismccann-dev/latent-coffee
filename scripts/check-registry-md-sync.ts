@@ -582,7 +582,7 @@ const AXES: AxisCheck[] = [
     tsPath: 'lib/process-registry.ts',
     mdPath: 'docs/taxonomies/processes.md',
     extractTs: tsRichArray('SIGNATURE_METHODS'),
-    extractMd: mdBoldBullets('Canonical list', 'Signature methods (15)'),
+    extractMd: mdBoldBullets('Canonical list', 'Signature methods (16)'),
   },
 
   // 10. Flavor — composable, 3 sub-axes (bases / modifiers / structure).

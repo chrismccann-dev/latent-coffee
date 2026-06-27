@@ -2746,6 +2746,50 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     roasterReferences: ["Moonwake", "Every Coffee"],
     contact: null,
   },
+  // The Nest (云顶筑巢庄园) — Tier-3 Yunnan experimental-processing estate,
+  // promoted from the taxonomy queue (6dc2b8ee) at the FanHua arbiter pass
+  // 2026-06-26, then reshaped per Chris: the real producer is the FARM (The Nest),
+  // not the marketed collab string. "Hachi Project" (Diego Bermúdez × Allan
+  // Hartmann) is the processing partner / project that works across many farms on
+  // special lots — captured as the exporter/project here, not the producer.
+  // Released via the Coffee with Dongze (Dongzhe) / Brian Quan collaboration. The
+  // marketed "Hachi Project x Terroir Maximus" string (+ its unicode-"×" variant)
+  // is aliased → The Nest so the FanHua brew aggregates here with no brew patch.
+  // Skeleton — backfill rich content on the next lot. The proprietary process is
+  // canonical in lib/process-registry.ts SIGNATURE_METHODS (Precursor Amplification).
+  // NOTE: "The Nest" is the only "the"-prefix canonical, so the loose 3-char-prefix
+  // matcher will resolve any unaliased "The <X>" producer write here — add a
+  // defensive alias if a colliding "The <X>" producer ever enters the corpus.
+  {
+    name: "The Nest",
+    tier: 3,
+    producerSystem: "China Experimental Processing",
+    processingSystemTags: ["Yunnan Catimor Transformation System"],
+    referenceRole: "Experimental",
+    producerType: "Estate",
+    farmName: "The Nest (云顶筑巢庄园)",
+    country: "China",
+    adminRegion: "Yunnan",
+    macroTerroir: "Yunnan Southern Highlands",
+    farmingModel: "Processing Initiative",
+    processingCapability: "Natural",
+    processingStyleTags: ["Precursor Amplification"],
+    dryingMethod: null,
+    primaryCultivars: ["Syrina"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: ["Precursor Amplification", "Experimental Processing"],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: "High-End / Competition",
+    exporters: ["Hachi Project"],
+    importers: [],
+    roasterReferences: ["Dongzhe"],
+    contact: "https://coffee-with-dongze.myshopify.com",
+    skeleton: true,
+  },
   {
     name: "Aimé Dusabe Gahizi",
     tier: 2,
@@ -4915,6 +4959,13 @@ export function listSkeletonProducers(): ProducerEntry[] {
 }
 
 export const PRODUCER_ALIASES: Record<string, string> = {
+  // The Nest (云顶筑巢庄园) — the real producer is the farm; "Hachi Project x
+  // Terroir Maximus" is the marketed processing-collab string the FanHua brew was
+  // recorded under (producer_override text). Alias both the ASCII and unicode-"×"
+  // forms → The Nest so the brew aggregates to the canonical producer with no
+  // brew patch (added 2026-06-26 FanHua arbiter pass; reshaped same pass).
+  "Hachi Project x Terroir Maximus": "The Nest",
+  "Hachi Project × Terroir Maximus": "The Nest",
   // Finca Sophia (Boot Coffee, Panama) producer-string variants - added
   // 2026-06-19 attribution-fix session. The estate is collectively owned;
   // Willem Boot (owner) / Kelly Hartmann (on-farm) per docs/brewing/freezer-stock.md.

@@ -48,7 +48,7 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exac
 - Robusta: Robusta
 
 **Provisional (genetics unresolved — pending research)**
-- Parked in Modern Hybrids per the Mandela precedent (safest placement until classified): Syrina
+- (none — Syrina de-provisioned to a researched Modern Hybrids multi-parent lineage 2026-06-26)
 
 ### Blend-naming convention (NAMING session, 2026-05-30)
 
@@ -2432,23 +2432,24 @@ only (display layer in `lib/brew-cover-title.ts`).
 
 ### Syrina
 
-**Species:** Arabica  **Genetic Family:** Modern Hybrids *(provisional placement — genetics unresolved)*  **Lineage:** Unresolved (provisional) — pending genetic classification
+**Species:** Arabica  **Genetic Family:** Modern Hybrids  **Lineage:** Multi-parent hybrid lineage
 
 #### Genetics
-- **Genetic Background:** UNRESOLVED. Net-new Chinese variety (赛琳娜 / "Syrina") surfaced via a brew; genetic family and lineage are provisional placeholders pending World Coffee Research / Chris research. Do NOT treat the family/lineage as authoritative until the arbiter re-homes it.
-- **Market names normalized here:** none.
+- **Genetic Background:** Rare modern Arabica hybrid with a complex multi-parent pedigree. Public descriptions and retailer-reported genetic testing indicate ancestry involving Sarchimor, Mundo Novo, Typica, Bourbon, and Timor Hybrid, though no formal breeding pedigree has been published. Treated as a distinct modern hybrid, NOT an Ethiopian landrace selection (despite occasionally being marketed alongside Gesha / Java). De-provisioned 2026-06-26 from the parking placeholder; Modern Hybrids was the correct family.
+- **Market names normalized here:** 赛琳娜 (Syrina).
 
 #### Agronomy
-- **Typical Origins:** China — Yunnan (Shuangjiang / Lincang; The Nest Estate, 云顶筑巢庄园, ~1,450-1,600 m).
-- **Limiting Factors:** Unknown (no archive data).
-- **Market Context:** Experimental / showcase — appeared in the Hachi Project × Terroir Maximus × Brian Quan collab roasted by Coffee with Dongze (Dongzhe).
+- **Typical Origins:** Originally a Thai breeding line — Thailand, Nan Province (Maneepruek). Increasingly planted in Yunnan, China (The Nest Estate, 云顶筑巢庄园, ~1,450-1,600 m).
+- **Altitude:** ~1,300-1,800 masl.
+- **Limiting Factors:** Limited planting base; incomplete published pedigree; availability largely confined to Thailand and Yunnan.
+- **Market Context:** Specialty premium / emerging competition cultivar — surfaced in the archive via the Hachi Project × Terroir Maximus × Brian Quan collab roasted by Coffee with Dongze (Dongzhe).
 
 #### Reference Content — Brewing & Cup Profile
 - **Common Processing Methods:** Natural (Precursor Amplification, a fermentation/enzyme precursor-forward natural).
 - **Typical Flavor Notes:** (single brew) dried mango, raisin, cinnamon; reaches expression best when extracted hard (96 °C, fine grind) and evaluated cool.
 - **Extraction Sensitivity:** Under-reaches at conservative parameters; rewarded Extraction Push.
 
-**Notes:** Added 2026-06-26 as a PROVISIONAL entry to unblock `push_brew` (cultivar is strict-canonical, no override path). Genetics unresolved — queued for canonical promotion / arbiter shaping (canonical-addition queue id `5709bded`). Re-home family + lineage out of the provisional placeholder once researched. First Chinese-cultivated Syrina (and first Hachi/Terroir-Maximus lot) in the archive.
+**Notes:** Added 2026-06-26 (provisional) to unblock `push_brew` during the FanHua brew, then de-provisioned the same day at the arbiter pass (canonical-addition queue id `5709bded`) once Chris's research confirmed the multi-parent hybrid pedigree. Modern Hybrids was already the correct family; lineage moved from the provisional placeholder to `Multi-parent hybrid lineage`. First Chinese-cultivated Syrina (and first Hachi/Terroir-Maximus lot) in the archive.
 
 ---
 
