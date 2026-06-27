@@ -38,24 +38,29 @@ Each candidate carries three implicit axes used for sequencing:
 
 ## Now
 
-### Research Project #6 - Water chemistry & mineral concentrates (Track 1 drafted)
+### Research Project #6 - Water chemistry & mineral concentrates (Phase 2 / Track 2 active)
 
-**Opened:** 2026-06-20 (intake/scoping session). **Status:** Track 1 protocol drafted, awaiting Assistant-session execution (spawn prompt next). Third project on the Coordinator/Assistant architecture; second taste-shaped project (RP6 retro is where the RP5-seeded taste-study primitive candidates graduate if they fire again).
+**Opened:** 2026-06-20. Third project on the Coordinator/Assistant architecture; second taste-shaped project (RP6 retro graduates the RP5-seeded taste-study primitive candidates if they fire again). **Status:** Track 1 (Phase 1 concentrate screen) CLOSED 2026-06-21; Track 2 (Phase 2 single-mineral isolation) protocol drafted, awaiting Assistant session.
 
-**Thesis - reveal-not-inject.** NOT "find the best built water." It is to learn what each mineral move does to a known coffee, including the threshold where it stops *revealing* the coffee and starts *injecting* a flavor that masks origin/process/variety. This is the Dashwood guardrail (built waters play "within a box" of high-chloride/high-sulfate results; over-dosing minerals behaves like high-intervention processing or dark roast) reconciled with Latent's taste apex ([CONTEXT-taste.md](CONTEXT-taste.md): reveal-not-inject / layered-evolving). Roast Summit chemistry supplies the mechanism (bicarbonate destroys acid; Ca/Mg bind extraction-active compounds).
+**Thesis - reveal-not-inject (operator-locked HOLD BOTH).** Reveal-not-inject is the KNOWLEDGE frame (map what each lever does, at each dose), NOT a purity rule - the objective is the best cup; the value is knowing each lever's effect so the choice is intentional. Working preference: scaffold off what the coffee already has over injecting what isn't there, but likeable injects are valid. Dashwood guardrail × Latent's taste apex ([CONTEXT-taste.md](CONTEXT-taste.md): reveal-not-inject / layered-evolving); Roast Summit chemistry is the mechanism (bicarbonate destroys acid; Ca/Mg bind extraction-active compounds).
 
-**Locked scope (RP5 close + intake):**
-- **Platform:** xBloom, fixed no-modulation V60. Single-variable isolation.
-- **Coffee:** Hydrangea Pink Bourbon Washed, operator baseline-dialed. Clarity-weighted = sensitive masking detector (a feature for the threshold hunt).
-- **Base water:** distilled (Mini Classic distiller). Operator gear is complete (A&D EJ-123 0.001g balance, Apera EC60 + 84/1413 standards, LaMotte BrewLab + API GH/KH, two micropipettes, magnetic stirrer, amber dropper bottles) - no gear gap.
-- **Built-vs-natural arm:** IN (Dashwood). **Blinding:** semi-blind (operator codes/shuffles; outcomes genuinely unknown).
-- **Method:** all post-brew mineralization for the concentrate lanes; pre-brew only for the finished-water arm (TWW + naturals can't be drop-dosed).
+**Locked scope:** xBloom + fixed no-modulation V60 · Hydrangea Pink Bourbon Washed (baseline-dialed, clarity-weighted = sensitive masking detector) · distilled base · semi-blind · operator gear complete (A&D EJ-123, Apera EC60 + 84/1413 standards, LaMotte BrewLab + API GH/KH, two micropipettes, stirrer). Single-coffee throughout → substrate-fold stays gated on a 2nd coffee.
+
+**Track 1 findings (Phase 1 concentrate screen, closed 2026-06-21):**
+- **Less is more on this clarity coffee** - in Lane C (pre-brew, extraction-valid) distilled beat TWW + both natural waters; nothing beat the zero-mineral control. Any built water must clear that bar.
+- **The reveal lives on the SULFATE axis** - the two sulfate-bearing products (LYLAC, SBL) tied at the top; SBL the single best reveal. The owned set is chloride-forward (under-samples sulfate) → motivates the clean kit's sulfate reagents.
+- **Sweet spots are LOW** (~2-3 drops/200 mL; vendor-mid past peak).
+- **Reveal vs inject is DOSE-DEPENDENT, not a product property** (JAMM injected @7, revealed @3) - the headline thesis refinement; reframes/resolves P6T1-AI-2.
+- **Best cup = a low-dose likeable inject** (JAMM @3) over the cleanest reveal (LYLAC @2). Cooling addendum: a well-cooled LYLAC+SBL+JAMM blend caught/edged JAMM-alone → "JAMM-body + sulfate-acidity" is a near-miss worth a dedicated session, and tasting temperature is itself a preference variable.
+- Archive (both sittings + addendum): [water-concentrate-postbrew-screen.md](docs/research-projects/water-concentrate-postbrew-screen.md).
 
 **Phase shape:**
-- **Phase 1 (concentrate screen - Track 1+):** post-brew screen of the 7 owned concentrates (DAK, TWW, APAX Tonik/Jamm/Lylac, KONFLUX, NÉMO, SBL Juicy&Sweet, Sooper) vs distilled control + natural arm. Build the difference-vocabulary; map each product's direction + sweet-spot dose + masking threshold. Owned set is chloride-forward (under-samples sulfate).
-- **Phase 2 (DIY isolation - later tracks):** clean 6-reagent kit (MgSO₄/MgCl₂/CaSO₄/CaCl₂/NaHCO₃/KHCO₃ - ordered this intake) varying Ca/Mg/Na/K/buffer at constant GH/KH. Bridge: reconstruct the disclosed SBL recipe (GH 44/KH 20) from raw salts to validate the rig, then vary one ion at a time. End game: per-coffee water recipe library, possibly its own sub-skill.
+- **Phase 1 (concentrate screen)** - DONE (Track 1).
+- **Phase 2 (DIY single-mineral isolation)** - ACTIVE (Track 2). Clean 6-reagent kit (MgSO₄/MgCl₂/CaSO₄/CaCl₂/NaHCO₃/KHCO₃ - all arrived) varying sulfate-vs-chloride / Mg-vs-Ca / buffer at **constant GH 44 / KH 20** (Track-1-validated-low; SBL's level). Hybrid method (post-brew direction screen → pre-brew constant-GH confirm on standouts). SBL-reconstruction-from-raw-salts is the rig-validation opener. Protocol: [water-single-mineral-isolation.md](docs/research-projects/water-single-mineral-isolation.md) + [spawn prompt](docs/research-projects/water-single-mineral-isolation-spawn-prompt.md). Awaiting a fresh Assistant session.
+- **Phase 2b (2nd-coffee replication)** - DEFERRED (needs a coffee purchase + rest). The codification gate: the difference-vocabulary doesn't fold to substrate until it holds on a 2nd coffee.
+- End game: per-coffee water recipe library, possibly its own sub-skill. Huge WBC payoff.
 
-**Track 1 protocol:** [water-concentrate-postbrew-screen.md](docs/research-projects/water-concentrate-postbrew-screen.md) - three-lane post-brew screen (Lane C pre-brew finished-water/natural arm · Lane A post-brew direction screen · Lane B dose-ladder on standouts). Awaiting a fresh Assistant session.
+**Carried items:** P6T1-AI-3 (TONIK roasted-barley astringency confound - re-test, fold into Track 2 if a reference cup fits); blending track candidate (JAMM-body + sulfate-acidity, promoted to near-miss by the cooling addendum); tasting-temperature-as-preference-variable (links § Next #10 rapid-chilling); candidate CONTEXT-taste refinement "reveal/inject is dose-zoned, not product-typed" (parked until the 2nd coffee).
 
 ---
 
