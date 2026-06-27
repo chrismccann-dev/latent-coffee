@@ -2746,22 +2746,27 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     roasterReferences: ["Moonwake", "Every Coffee"],
     contact: null,
   },
-  // Hachi Project x Terroir Maximus — Tier-3 experimental processing collab,
+  // The Nest (云顶筑巢庄园) — Tier-3 Yunnan experimental-processing estate,
   // promoted from the taxonomy queue (6dc2b8ee) at the FanHua arbiter pass
-  // 2026-06-26. Marketed as a collaboration: "Hachi" is the Diego Bermúdez ×
-  // Allan Hartmann processing project; "Terroir Maximus" is the Yunnan terroir
-  // side; the farm is The Nest (云顶筑巢庄园). Canonical name kept verbatim to the
-  // brew's producer_override text so /producers text-equality aggregation resolves
-  // with no brew patch. Skeleton — only geography + the Precursor Amplification
-  // signature are known; backfill rich content on the next lot. The proprietary
-  // process itself is canonical in lib/process-registry.ts SIGNATURE_METHODS.
+  // 2026-06-26, then reshaped per Chris: the real producer is the FARM (The Nest),
+  // not the marketed collab string. "Hachi Project" (Diego Bermúdez × Allan
+  // Hartmann) is the processing partner / project that works across many farms on
+  // special lots — captured as the exporter/project here, not the producer.
+  // Released via the Coffee with Dongze (Dongzhe) / Brian Quan collaboration. The
+  // marketed "Hachi Project x Terroir Maximus" string (+ its unicode-"×" variant)
+  // is aliased → The Nest so the FanHua brew aggregates here with no brew patch.
+  // Skeleton — backfill rich content on the next lot. The proprietary process is
+  // canonical in lib/process-registry.ts SIGNATURE_METHODS (Precursor Amplification).
+  // NOTE: "The Nest" is the only "the"-prefix canonical, so the loose 3-char-prefix
+  // matcher will resolve any unaliased "The <X>" producer write here — add a
+  // defensive alias if a colliding "The <X>" producer ever enters the corpus.
   {
-    name: "Hachi Project x Terroir Maximus",
+    name: "The Nest",
     tier: 3,
     producerSystem: "China Experimental Processing",
-    processingSystemTags: [],
+    processingSystemTags: ["Yunnan Catimor Transformation System"],
     referenceRole: "Experimental",
-    producerType: "Collaboration",
+    producerType: "Estate",
     farmName: "The Nest (云顶筑巢庄园)",
     country: "China",
     adminRegion: "Yunnan",
@@ -2779,7 +2784,7 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     bodyStyle: null,
     consistencyRating: null,
     marketTier: "High-End / Competition",
-    exporters: [],
+    exporters: ["Hachi Project"],
     importers: [],
     roasterReferences: ["Dongzhe"],
     contact: "https://coffee-with-dongze.myshopify.com",
@@ -4954,11 +4959,13 @@ export function listSkeletonProducers(): ProducerEntry[] {
 }
 
 export const PRODUCER_ALIASES: Record<string, string> = {
-  // Hachi Project x Terroir Maximus — canonical uses ASCII " x " (matches the
-  // brew's producer_override text). Defensive alias for the unicode "×" cross
-  // variant the roaster's product pages use, so a future write resolves cleanly
-  // (added 2026-06-26 FanHua arbiter pass).
-  "Hachi Project × Terroir Maximus": "Hachi Project x Terroir Maximus",
+  // The Nest (云顶筑巢庄园) — the real producer is the farm; "Hachi Project x
+  // Terroir Maximus" is the marketed processing-collab string the FanHua brew was
+  // recorded under (producer_override text). Alias both the ASCII and unicode-"×"
+  // forms → The Nest so the brew aggregates to the canonical producer with no
+  // brew patch (added 2026-06-26 FanHua arbiter pass; reshaped same pass).
+  "Hachi Project x Terroir Maximus": "The Nest",
+  "Hachi Project × Terroir Maximus": "The Nest",
   // Finca Sophia (Boot Coffee, Panama) producer-string variants - added
   // 2026-06-19 attribution-fix session. The estate is collectively owned;
   // Willem Boot (owner) / Kelly Hartmann (on-farm) per docs/brewing/freezer-stock.md.

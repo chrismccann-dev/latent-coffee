@@ -1639,14 +1639,15 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 ---
 
-### Hachi Project x Terroir Maximus
+### The Nest
 
 **Country:** China · **Admin:** Yunnan · **Macro:** Yunnan Southern Highlands
 
 - **Tier:** 3
 - **Producer System:** China Experimental Processing
+- **Processing System Tags:** Yunnan Catimor Transformation System
 - **Reference Role:** Experimental
-- **Producer Type:** Collaboration
+- **Producer Type:** Estate
 - **Farm:** The Nest (云顶筑巢庄园)
 - **Farming Model:** Processing Initiative
 - **Processing Capability:** Natural
@@ -1654,10 +1655,11 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 - **Primary Cultivars:** Syrina
 - **Known For:** Precursor Amplification, Experimental Processing
 - **Market Tier:** High-End / Competition
+- **Exporter / Processing Partner:** Hachi Project
 - **Roaster References:** Dongzhe
 - **Contact:** https://coffee-with-dongze.myshopify.com
 
-*Skeleton (promoted from taxonomy queue `6dc2b8ee`, 2026-06-26). A marketed collaboration: "Hachi" is the Diego Bermúdez × Allan Hartmann processing project; "Terroir Maximus" is the Yunnan terroir side; the farm is The Nest. Only geography + the Precursor Amplification signature are known — backfill rich content on the next lot. The proprietary process is canonical as a signature method (see [processes.md § Signature methods](processes.md)). First Hachi / Terroir-Maximus lot in the archive.*
+*Skeleton (promoted from taxonomy queue `6dc2b8ee`, 2026-06-26; reshaped same pass). The real producer is the farm — The Nest. "Hachi Project" (Diego Bermúdez × Allan Hartmann) is the processing partner / project that works across many farms on special lots, captured as the exporter here rather than the producer; the release is the Coffee with Dongze (Dongzhe) / Brian Quan collaboration. The marketed "Hachi Project x Terroir Maximus" string (+ its unicode-"×" variant) is aliased → The Nest so the FanHua brew aggregates here. Only geography + the Precursor Amplification signature are known — backfill rich content on the next lot. The proprietary process is canonical as a signature method (see [processes.md § Signature methods](processes.md)). First The Nest / Hachi-processed lot in the archive.*
 
 ---
 
