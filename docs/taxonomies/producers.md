@@ -1525,7 +1525,7 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 ---
 
-### China Experimental Processing  ·  4 producers
+### China Experimental Processing  ·  5 producers
 
 ### Olina Cai
 
@@ -1636,6 +1636,28 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 - **Market Tier:** High-End
 - **Exporters:** Songfeng Cooperative
 - **Roaster References:** Moonwake, Every Coffee
+
+---
+
+### Hachi Project x Terroir Maximus
+
+**Country:** China · **Admin:** Yunnan · **Macro:** Yunnan Southern Highlands
+
+- **Tier:** 3
+- **Producer System:** China Experimental Processing
+- **Reference Role:** Experimental
+- **Producer Type:** Collaboration
+- **Farm:** The Nest (云顶筑巢庄园)
+- **Farming Model:** Processing Initiative
+- **Processing Capability:** Natural
+- **Processing Style Tags:** Precursor Amplification
+- **Primary Cultivars:** Syrina
+- **Known For:** Precursor Amplification, Experimental Processing
+- **Market Tier:** High-End / Competition
+- **Roaster References:** Dongzhe
+- **Contact:** https://coffee-with-dongze.myshopify.com
+
+*Skeleton (promoted from taxonomy queue `6dc2b8ee`, 2026-06-26). A marketed collaboration: "Hachi" is the Diego Bermúdez × Allan Hartmann processing project; "Terroir Maximus" is the Yunnan terroir side; the farm is The Nest. Only geography + the Precursor Amplification signature are known — backfill rich content on the next lot. The proprietary process is canonical as a signature method (see [processes.md § Signature methods](processes.md)). First Hachi / Terroir-Maximus lot in the archive.*
 
 ---
 

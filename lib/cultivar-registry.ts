@@ -150,15 +150,15 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   { name: 'RAB C15', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage' },
   { name: 'Aramosa', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Arabica × racemosa interspecific lineage' },
 
-  // Provisional (2026-06-26) — net-new Chinese variety surfaced via a brew:
-  // Hachi × Yunnan × Terroir Maximus (Coffee with Dongze / Dongzhe), 繁花 FanHua
-  // Precursor Amplification Natural, The Nest (云顶筑巢庄园), Yunnan Southern
-  // Highlands. Genetics UNRESOLVED — `family` is a strict union type, so this is
-  // parked in 'Modern Hybrids' per the Mandela precedent (safest placement for an
-  // unclassified variety) and the lineage flags the provisional status. Re-home
-  // into the real family/lineage at the arbiter pass (canonical-addition queue id
-  // 5709bded). Added to unblock push_brew (cultivar is strict-canonical, no override).
-  { name: 'Syrina', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Unresolved (provisional) — pending genetic classification' },
+  // Net-new modern hybrid (2026-06-26) — surfaced via the Hachi × Yunnan ×
+  // Terroir Maximus collab (Coffee with Dongze / Dongzhe), 繁花 FanHua, Precursor
+  // Amplification Natural, The Nest (云顶筑巢庄园), Yunnan Southern Highlands.
+  // Originally a Thai breeding line (Nan Province), now planted in Yunnan; retailer
+  // genetic testing reports a complex multi-parent pedigree (Sarchimor, Mundo Novo,
+  // Typica, Bourbon, Timor Hybrid) — a true modern hybrid, NOT an Ethiopian
+  // landrace selection. De-provisioned from the parking placeholder at the arbiter
+  // pass (canonical-addition queue id 5709bded); family was already correct.
+  { name: 'Syrina', species: 'Arabica', family: 'Modern Hybrids', lineage: 'Multi-parent hybrid lineage' },
 ]
 
 // ---------------------------------------------------------------------------

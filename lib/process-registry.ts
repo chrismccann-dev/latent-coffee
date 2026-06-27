@@ -415,6 +415,20 @@ export const SIGNATURE_METHODS: readonly SignatureEntry[] = [
     base: 'Washed',
     fermentation_modifiers: ['Aerobic'],
   },
+  // Precursor Amplification — promoted from the override queue (416d6047) at the
+  // FanHua arbiter pass 2026-06-26. Proprietary proper-name natural from the Hachi
+  // Project (Diego Bermúdez × Allan Hartmann), applied here to the Yunnan terroir
+  // side (Terroir Maximus) at The Nest. Mechanically opaque — the brand markets the
+  // precursor/enzyme-amplification goal without disclosing the recipe, so no
+  // fermentation/experimental modifiers are approximated (matches the empty modifier
+  // arrays on the source brew 9ca79dbf). base:Natural only.
+  {
+    name: 'Precursor Amplification',
+    producer: 'Hachi Project (Diego Bermúdez × Allan Hartmann)',
+    base: 'Natural',
+    overview:
+      'A proprietary natural-style process from the Hachi Project (Diego Bermúdez × Allan Hartmann) designed to amplify aromatic flavor precursors through controlled enzyme/fermentation activity. The underlying recipe is not publicly disclosed, so the canonical decomposition captures only base:Natural; the signature preserves the producer brand the decomposition alone would lose. First surfaced in the archive via the Hachi × Yunnan × Terroir Maximus 繁花 FanHua lot (Syrina, The Nest 云顶筑巢庄园, Yunnan Southern Highlands).',
+  },
 ]
 
 export const SIGNATURE_NAMES = SIGNATURE_METHODS.map((s) => s.name) as readonly string[]

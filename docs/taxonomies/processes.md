@@ -102,7 +102,7 @@ Single-value. Orthogonal to wet-process base — decaf coffee still has an under
 - **Ethyl Acetate** - EA / sugarcane decaf
 - **CO2 Process** - supercritical-CO2 decaffeination
 
-### Signature methods (15)
+### Signature methods (16)
 
 Single-value. Proper-name proprietary techniques - branded under a proper-noun name AND mechanically opaque (the producer markets the brand without fully disclosing the underlying recipe). Each has a canonical decomposition; the signature captures the producer brand that the decomposition alone would lose. The picker surfaces the decomposition as a **hint, not auto-fill** - rare variants (Moonshadow Washed at a known Moonshadow Natural producer) are legitimate.
 
@@ -123,6 +123,7 @@ Registry expanded from 3 to 15 entries in Sprint T1 / BR-1 (2026-05-18) to match
 - **Splash** - producer pending. Decomposition: `base:Washed + fermentation:[Anaerobic, Lactic Fermentation]`.
 - **Symbiotic** - producer pending. Decomposition: `base:Washed + fermentation:[Mossto]` (cross-varietal descriptor is non-canonical, omitted).
 - **Wave Hybrid** - Pepe Jijón at Finca Soledad, Ecuador. Decomposition: `base:Washed + fermentation:[Aerobic]`. Pepe Jijón's hybrid follow-on to TyOxidator at the same facility.
+- **Precursor Amplification** - Hachi Project (Diego Bermúdez × Allan Hartmann), applied to the Yunnan terroir side (Terroir Maximus) at The Nest (云顶筑巢庄园). Decomposition: `base:Natural`. Proprietary precursor/enzyme-amplification natural; recipe not publicly disclosed, so no fermentation/experimental modifiers are approximated (mechanically opaque). Promoted from override queue `416d6047` at the FanHua arbiter pass (2026-06-26); first surfaced via the Hachi × Yunnan × Terroir Maximus 繁花 FanHua lot (Syrina). Added 2026-06-26.
 
 **Hybrid Washed deprecated** in Sprint T1 / BR-1 (2026-05-18). CGLE markets the term but publicly discloses the mechanical decomposition (`Whole-cherry aerobic -> sealed anaerobic -> depulp -> mucilage aerobic finish`), which fails the signature-method "mechanically opaque" criterion. Migration 058 re-maps the one affected brew row to `signature_method=NULL + base:Washed + fermentation:[Anaerobic, Aerobic]`; the green_beans lot name keeps the producer-marketing term ("CGLE Sudan Rume Hybrid Washed") as free-text in the lot label. The signature is removed from the canonical list and the alias map - any future write of `signature_method='Hybrid Washed'` now fails the canonical check, surfacing the deprecated term explicitly.
 

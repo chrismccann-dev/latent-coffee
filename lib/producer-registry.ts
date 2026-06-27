@@ -2746,6 +2746,45 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     roasterReferences: ["Moonwake", "Every Coffee"],
     contact: null,
   },
+  // Hachi Project x Terroir Maximus — Tier-3 experimental processing collab,
+  // promoted from the taxonomy queue (6dc2b8ee) at the FanHua arbiter pass
+  // 2026-06-26. Marketed as a collaboration: "Hachi" is the Diego Bermúdez ×
+  // Allan Hartmann processing project; "Terroir Maximus" is the Yunnan terroir
+  // side; the farm is The Nest (云顶筑巢庄园). Canonical name kept verbatim to the
+  // brew's producer_override text so /producers text-equality aggregation resolves
+  // with no brew patch. Skeleton — only geography + the Precursor Amplification
+  // signature are known; backfill rich content on the next lot. The proprietary
+  // process itself is canonical in lib/process-registry.ts SIGNATURE_METHODS.
+  {
+    name: "Hachi Project x Terroir Maximus",
+    tier: 3,
+    producerSystem: "China Experimental Processing",
+    processingSystemTags: [],
+    referenceRole: "Experimental",
+    producerType: "Collaboration",
+    farmName: "The Nest (云顶筑巢庄园)",
+    country: "China",
+    adminRegion: "Yunnan",
+    macroTerroir: "Yunnan Southern Highlands",
+    farmingModel: "Processing Initiative",
+    processingCapability: "Natural",
+    processingStyleTags: ["Precursor Amplification"],
+    dryingMethod: null,
+    primaryCultivars: ["Syrina"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: ["Precursor Amplification", "Experimental Processing"],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: "High-End / Competition",
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Dongzhe"],
+    contact: "https://coffee-with-dongze.myshopify.com",
+    skeleton: true,
+  },
   {
     name: "Aimé Dusabe Gahizi",
     tier: 2,
@@ -4915,6 +4954,11 @@ export function listSkeletonProducers(): ProducerEntry[] {
 }
 
 export const PRODUCER_ALIASES: Record<string, string> = {
+  // Hachi Project x Terroir Maximus — canonical uses ASCII " x " (matches the
+  // brew's producer_override text). Defensive alias for the unicode "×" cross
+  // variant the roaster's product pages use, so a future write resolves cleanly
+  // (added 2026-06-26 FanHua arbiter pass).
+  "Hachi Project × Terroir Maximus": "Hachi Project x Terroir Maximus",
   // Finca Sophia (Boot Coffee, Panama) producer-string variants - added
   // 2026-06-19 attribution-fix session. The estate is collectively owned;
   // Willem Boot (owner) / Kelly Hartmann (on-farm) per docs/brewing/freezer-stock.md.

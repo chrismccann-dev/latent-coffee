@@ -188,6 +188,12 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Grade:** OBSERVING (Phase 2 not built — grill at the Phase 2 design)
     - **Source:** this session; pairs with the parked roasted-freezer soft-ordering idea
 
+### From the FanHua arbiter pass (2026-06-26)
+
+52. **CONTEXT-brewing.md § Signature method working-list snapshot is stale.** The dated "Canonical working list (Chris's, 2026-05-15): 14 signatures" paragraph (CONTEXT-brewing.md:59) still says "The Latent app registry currently encodes only 3 (Moonshadow / TyOxidator / Hybrid Washed) — significant gap flagged for sprint" and flags Wave Hybrid as a "15th candidate." Reality as of this pass: the registry encodes **16** signatures (Wave Hybrid landed Sprint T1/BR-1; Hybrid Washed deprecated; Precursor Amplification added today). The snapshot was already stale before today and is now misleading. Grill: refresh the working-list paragraph (or re-frame it as a pointer to the live registry / processes.md § Signature methods) so it stops asserting a 3-vs-14 gap that no longer exists. Interpretive (dated glossary entry) — left for grilling rather than an autonomous arbiter rewrite.
+    - **Grade:** READY (clear factual drift; the only judgment call is snapshot-refresh vs pointer-reframe)
+    - **Source:** FanHua arbiter pass (Precursor Amplification signature promotion)
+
 ## Substrate pruning candidates
 
 Lived examples of substrate sections that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred until lived candidates covering all five shapes are worked through operator + Claude Code back-and-forth (case-study-driven generalization per Chris's framing at Item 16c grill). This section accumulates candidates; each becomes a worked example. **Systematization is deferred until all five shapes have a worked example** — full protocol at [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md).
