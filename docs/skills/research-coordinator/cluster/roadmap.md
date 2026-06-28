@@ -40,7 +40,7 @@ Each candidate carries three implicit axes used for sequencing:
 
 ### Research Project #6 - Water chemistry & mineral concentrates (Phase 2 / Track 2 active)
 
-**Opened:** 2026-06-20. Third project on the Coordinator/Assistant architecture; second taste-shaped project (RP6 retro graduates the RP5-seeded taste-study primitive candidates if they fire again). **Status:** Track 1 (Phase 1 concentrate screen) CLOSED 2026-06-21; Track 2 (Phase 2 single-mineral isolation) protocol drafted, awaiting Assistant session.
+**Opened:** 2026-06-20. Third project on the Coordinator/Assistant architecture; second taste-shaped project (RP6 retro graduates the RP5-seeded taste-study primitive candidates if they fire again). **Status:** Track 1 (Phase 1 concentrate screen) CLOSED 2026-06-21; Track 2 (Phase 2 single-mineral isolation) Sitting 1 (Lane A post-brew screen) done 2026-06-28; **Lane B (pre-brew isolation - the inversion adjudication) is the next sitting.**
 
 **Thesis - reveal-not-inject (operator-locked HOLD BOTH).** Reveal-not-inject is the KNOWLEDGE frame (map what each lever does, at each dose), NOT a purity rule - the objective is the best cup; the value is knowing each lever's effect so the choice is intentional. Working preference: scaffold off what the coffee already has over injecting what isn't there, but likeable injects are valid. Dashwood guardrail × Latent's taste apex ([CONTEXT-taste.md](CONTEXT-taste.md): reveal-not-inject / layered-evolving); Roast Summit chemistry is the mechanism (bicarbonate destroys acid; Ca/Mg bind extraction-active compounds).
 
@@ -48,19 +48,27 @@ Each candidate carries three implicit axes used for sequencing:
 
 **Track 1 findings (Phase 1 concentrate screen, closed 2026-06-21):**
 - **Less is more on this clarity coffee** - in Lane C (pre-brew, extraction-valid) distilled beat TWW + both natural waters; nothing beat the zero-mineral control. Any built water must clear that bar.
-- **The reveal lives on the SULFATE axis** - the two sulfate-bearing products (LYLAC, SBL) tied at the top; SBL the single best reveal. The owned set is chloride-forward (under-samples sulfate) → motivates the clean kit's sulfate reagents.
+- **Sulfate-axis reveal (CONTESTED by Track 2)** - the two sulfate-bearing *blends* (LYLAC, SBL) tied at the top; SBL the single best reveal. BUT those blends also contain chloride, and Track 2's single-salt isolation INVERTED this. Credit may belong to chloride - unresolved pending Track 2 Lane B (pre-brew).
 - **Sweet spots are LOW** (~2-3 drops/200 mL; vendor-mid past peak).
 - **Reveal vs inject is DOSE-DEPENDENT, not a product property** (JAMM injected @7, revealed @3) - the headline thesis refinement; reframes/resolves P6T1-AI-2.
-- **Best cup = a low-dose likeable inject** (JAMM @3) over the cleanest reveal (LYLAC @2). Cooling addendum: a well-cooled LYLAC+SBL+JAMM blend caught/edged JAMM-alone → "JAMM-body + sulfate-acidity" is a near-miss worth a dedicated session, and tasting temperature is itself a preference variable.
-- Archive (both sittings + addendum): [water-concentrate-postbrew-screen.md](docs/research-projects/water-concentrate-postbrew-screen.md).
+- **Best cup = a low-dose likeable inject** (JAMM @3) over the cleanest reveal (LYLAC @2). Cooling addendum: a well-cooled LYLAC+SBL+JAMM blend caught/edged JAMM-alone → "JAMM-body + sulfate-acidity" near-miss + tasting temperature is itself a preference variable.
+- Archive: [water-concentrate-postbrew-screen.md](docs/research-projects/water-concentrate-postbrew-screen.md).
+
+**Track 2 Sitting 1 findings (Phase 2 single-salt Lane A, post-brew, 2026-06-28 - PROVISIONAL, gates on Lane B):**
+- **INVERSION vs Track 1:** on isolated single salts, post-brew, **chloride reveals and sulfate muddies** (MgSO₄ worst 1.5; both chlorides best 3.5; best cup = MgCl₂+CaCl₂ blend, 4). Track 1's sulfate "winners" were blends that also carried chloride → Sitting 1 likely reassigns the credit to chloride. **Post-brew + single-coffee → gates on Lane B (pre-brew, HT3) before any fold.**
+- **Cation × anion is an INTERACTION** - Mg flips sign with its anion (MgCl₂ great / MgSO₄ worst); attribute to the pairing, never a lone ion. (Validates the Phase-2 isolation premise.)
+- **Candidate custom water for this coffee:** a two-chloride MgCl₂+CaCl₂ build (acid + sweet combined).
+- **Buffer:** both mute acid; Na adds liked sweetness, K flattens (Na > K, reverse of prediction). Reinforces the operator's minimal-KH lean.
+- **HT5 invalidated** - the recon-vs-bottled SBL A/B never happened (sample B mis-dosed ~400× to ≈distilled, F10); it just replicated "distilled wins." NO "DIY beats commercial" claim. Re-queued.
+- Archive (both Track-2 sittings land here): [water-single-mineral-isolation.md](docs/research-projects/water-single-mineral-isolation.md).
 
 **Phase shape:**
 - **Phase 1 (concentrate screen)** - DONE (Track 1).
-- **Phase 2 (DIY single-mineral isolation)** - ACTIVE (Track 2). Clean 6-reagent kit (MgSO₄/MgCl₂/CaSO₄/CaCl₂/NaHCO₃/KHCO₃ - all arrived) varying sulfate-vs-chloride / Mg-vs-Ca / buffer at **constant GH 44 / KH 20** (Track-1-validated-low; SBL's level). Hybrid method (post-brew direction screen → pre-brew constant-GH confirm on standouts). SBL-reconstruction-from-raw-salts is the rig-validation opener. Protocol: [water-single-mineral-isolation.md](docs/research-projects/water-single-mineral-isolation.md) + [spawn prompt](docs/research-projects/water-single-mineral-isolation-spawn-prompt.md). Awaiting a fresh Assistant session.
-- **Phase 2b (2nd-coffee replication)** - DEFERRED (needs a coffee purchase + rest). The codification gate: the difference-vocabulary doesn't fold to substrate until it holds on a 2nd coffee.
+- **Phase 2 (DIY single-mineral isolation)** - ACTIVE. Sitting 1 (Lane A post-brew) done; **Lane B (pre-brew constant-GH isolation) is the next sitting** - it adjudicates the inversion (HT3: does pre-brew confirm chloride>sulfate?). Priority leads with MgCl₂-vs-MgSO₄ @ GH 44; buffer axis TRIMMED to a minimal-KH check (operator's less-is-more lean). Lane B spawn prompt: [water-single-mineral-isolation-laneB-spawn-prompt.md](docs/research-projects/water-single-mineral-isolation-laneB-spawn-prompt.md) (supersedes the original Lane B section). Friction fixes folded in (WATER-vs-CONCENTRATE labeling per F10; build multi-salt waters from single-salt stocks per F7; pipettes per F9).
+- **Phase 2b (2nd-coffee replication)** - DEFERRED (needs a coffee purchase + rest). The codification gate: the difference-vocabulary (esp. the sulfate-vs-chloride question, now actively contested) doesn't fold to substrate until it holds on a 2nd coffee.
 - End game: per-coffee water recipe library, possibly its own sub-skill. Huge WBC payoff.
 
-**Carried items:** P6T1-AI-3 (TONIK roasted-barley astringency confound - re-test, fold into Track 2 if a reference cup fits); blending track candidate (JAMM-body + sulfate-acidity, promoted to near-miss by the cooling addendum); tasting-temperature-as-preference-variable (links § Next #10 rapid-chilling); candidate CONTEXT-taste refinement "reveal/inject is dose-zoned, not product-typed" (parked until the 2nd coffee).
+**Carried items / audit:** **P6T2-AI-1** (the sulfate/chloride inversion MUST be confirmed pre-brew in Lane B before any fold - the gating item); recon-vs-bottled SBL re-run at matched strength (re-queued after F10); P6T1-AI-3 (TONIK roasted-barley confound - re-test if a Lane B reference cup fits, else re-queue); blending track candidate (JAMM-body + sulfate-acidity near-miss + tasting-temperature variable, links § Next #10); candidate CONTEXT-taste refinement "reveal/inject is dose-zoned, not product-typed" (parked until the 2nd coffee). Six L-candidate method primitives logged in the Track 2 archive for the project retro (incl. WATER-vs-CONCENTRATE labeling, build-from-stocks, naive-palate-as-asset).
 
 ---
 
