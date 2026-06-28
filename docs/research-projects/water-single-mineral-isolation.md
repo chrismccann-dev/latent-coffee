@@ -347,7 +347,7 @@ _(Assistant: carry P6T1-AI-3 — the TONIK roasted-barley confound re-test — i
 
 **Date:** 2026-06-28
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/focused-fermat-1352f2` @ `<final pushed SHA — see termination message>`, pushed to origin (archive doc committed; substrate NOT touched; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/focused-fermat-1352f2` @ `da5f249` (this brief's content), pushed to origin (archive doc committed; substrate NOT touched; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** **MIXED — PARTIALLY CONTRADICTS Track 1.** Lane A (post-brew, single-salt) INVERTS Track 1's sulfate lead — chloride reveals, sulfate (esp. Mg) muddies — but this is single-coffee + post-brew only and GATES on Lane B (HT3) before any fold. The HT5 bonus delivered a clean side-result: a home single-salt reconstruction beats the bottled precipitating concentrate in the cup.
 
 This brief covers **Sitting 1 = Step 0 (full calibration) + Lane A (post-brew screen) + the SBL bonus A/B.** Lane B (pre-brew isolation — the rigorous core) was deliberately deferred to a fresh sitting per the fatigue discipline. The compile session should treat all findings as single-coffee → substrate-fold stays DEFERRED; the value here is the mechanism map + a sharpened Lane B plan.
@@ -437,7 +437,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch claude/focused-fermat-1352f2 @ <final SHA in termination message>
+- ✅ Archive doc committed + pushed to branch claude/focused-fermat-1352f2 @ da5f249 (brief content; this SHA-stamp follow-up commit is HEAD)
 - ✅ Handoff brief produced above; branch + SHA in its Archive location: header
 - 🛑 Session terminating after this brief lands. The Coordinator decides the next track / substrate-fold; Lane B runs as a fresh sitting.
 
