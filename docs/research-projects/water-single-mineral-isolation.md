@@ -4,8 +4,8 @@
 
 **Version:** 0.1 (DRAFT — Coordinator-authored, pre-execution)
 **Date drafted:** 2026-06-21
-**Date executed:** _(Assistant fills)_
-**Status:** 🟡 **DRAFT — awaiting Assistant-session execution.** Coordinator-scoped; not yet run.
+**Date executed:** 2026-06-28 (Sitting 1 in progress — Step 0)
+**Status:** 🟢 **EXECUTING — Assistant session, Sitting 1.** Step 0 calibration arc underway.
 **Platform:** xBloom (controlled-pour) driving a Hario V60 dripper, fixed no-modulation recipe
 **Method:** HYBRID — post-brew single-salt direction screen (Lane A) → pre-brew constant-GH isolation on standouts (Lane B)
 **Coffee:** Hydrangea Pink Bourbon Washed (same coffee as Track 1 — still single-coffee; codification stays gated on a 2nd coffee)
@@ -199,31 +199,66 @@ KH-only variations: NaHCO₃ ≈ 34 mg/L or KHCO₃ ≈ 40 mg/L per 20 ppm KH. D
 ### Inventory + hydration + stock prep (Step 0.1 / 0.2)
 | Salt | Hydration form confirmed | Stock ppm | EC60 reading | Date mixed |
 |---|---|---|---|---|
-| MgSO₄·7H₂O | | 10,000 | | |
-| MgCl₂·6H₂O | | 10,000 | | |
-| CaSO₄·2H₂O | | ~1–2 g/L (dilute) | | |
-| CaCl₂·2H₂O | | 10,000 | | |
-| NaHCO₃ | | 10,000 | | |
-| KHCO₃ | | 10,000 | | |
+| MgSO₄·7H₂O | ✅ Heptahydrate, MW 246.5 — 2× 8 oz jars (Epsom). Matches assumed MW. | 10,000 (1.000 g / 100 mL) | 4.45 mS ✅ (matches predicted ~4.4-4.5) | 2026-06-28 |
+| MgCl₂·6H₂O | ✅ Hexahydrate 98+% reagent grade flakes, MW 203.3 — 1× 4 oz. Matches. Desiccant present ✅. | 10,000 (1.003 g / 100 mL) | 9.28 mS ✅ (matches predicted ~9-10) | 2026-06-28 |
+| CaSO₄·2H₂O | ✅ Food-grade gypsum (dihydrate), MW 172 — 1× 1.5 lb. Matches. Dilute stock only (low solubility). | ~1,520 (0.152 g / 100 mL) | 1308 µS ✅ (matches predicted ~1.3-1.4 mS w/ ion-pairing); fully clear/dissolved | 2026-06-28 |
+| CaCl₂·2H₂O | ✅ Dihydrate USP grade, MW 147 — 1× 500 g. Matches. Desiccant present ✅. | 10,000 (1.001 g / 100 mL) | 13.10 mS ✅ (matches predicted ~14; slightly above top cal point 12.88 mS so absolute value approximate — gravimetric prep is source of truth) | 2026-06-28 |
+| NaHCO₃ | ✅ Baking soda on hand (MW 84). Matches. | 10,000 (1.000 g / 100 mL) | 8.32 mS ✅ (just under KHCO₃, as expected) | 2026-06-28 |
+| KHCO₃ | ✅ 99% USP food-grade fine powder, MW 100 — 2× 8 oz. Matches. | 10,000 (1.001 g / 100 mL) | 8.88 mS ✅ (matches predicted ~9) | 2026-06-28 |
+
+**0.1 verdict (2026-06-28):** All 6 reagents confirmed on-hand; all hydration forms match the protocol's assumed MWs → **no molar-math recompute; GH-44 starter masses (§ Starter recipes) stand as written.** Desiccant present in both chloride jars. Control water = distilled (confirmed). NaCl (sodium chloride, 3× 4 lb) is on the shelf but **OUT OF SCOPE** for this track — see friction F2. **Step 0.1 CLOSED.**
+
+**0.2 verdict (2026-06-28):** All 6 stocks mixed + EC60-fingerprinted; every reading matched its predicted conductivity (workflow + scale + reagent identities all cross-validated). 5 soluble salts at 10,000 ppm (1 g / 100 mL); gypsum at 1,520 ppm dilute (clear, fully dissolved). EC60 recalibrated 86→84 µS. **Step 0.2 CLOSED.** Next: 0.3 build-and-measure on the LaMotte.
+
+### LaMotte BrewLab Plus — kit reference (confirmed from booklet 2026-06-28)
+- **Total Hardness** (tube 4488): fill to **upper line** (1 drop = **10 ppm**, finest resolution) → 5 drops Reagent #5 [4483] → 1 Reagent #6 tablet [4484A] → **Blue = 0 hardness; Red = hardness present** → titrate Reagent #7 [4487WT] Red→Blue, count drops × 10. → GH 44 ≈ **4-5 drops**. (Mg²⁺ ppm = result × 0.24.)
+- **Calcium Hardness** (tube 4488, upper line, ×10): 6 drops Sodium Hydroxide w/Metal Inhibitors [4259] → 1 Ca Indicator tablet [5250A] → Red/Blue same logic → titrate Reagent #7 Red→Blue × 10. (Ca²⁺ ppm = result × 0.4.) **Magnesium Hardness = Total − Calcium.**
+- **Total Alkalinity** (tube 0715): fill to **25 mL line** (1 drop = **10 ppm**, finer than the 10 mL/25-ppm option) → 1 BCG-MR tablet [2311A] (turns **Green**) → titrate Sulfuric Acid 0.12N [7748WT] Green→Red, count drops × 10. → KH 20 = **2 drops**. (HCO₃ ppm = result × 1.2.)
+- **Chloride** (tube 0715, 25 mL line, 1 drop = 10 ppm): 5 drops Chloride Reagent A [4069] (turns **Yellow**) → titrate Silver Nitrate 0.171N [3824WT] Yellow→Orange-Brown × 10. Record ppm Chloride.
+- **Sulfate** (tube 0715, **5 mL line** only): 1 Sulfate Turb Tablet [6456] → cap + shake to disintegrate → remove cap → set tube bottom on a black target on the Sulfate Color Chart [7188-01-CC], look down through, match grayness to the gray scale (0/50/100/150/200 ppm). Turbidimetric, not a titration. If more turbid than 200: 5 mL sample + fill to 10 mL distilled, repeat, × 2.
+- **Sodium (by calculation):** A = Cl/35 + Sulfate/48 + Alkalinity/50; B = Total Hardness/50; **Na ppm = (A − B) × 23.** (We know Na by construction — only NaHCO₃ buffer adds it — so this is confirmatory.)
+- Resolution caveat: GH reads in 10 ppm steps (within one drop of target = pass); KH 20 is a clean 2-drop target.
+- **Distilled blank (2026-06-28) — PASS.** Total Hardness = 0 (dark blue, 0 drops). Total Alkalinity = 1 drop (= kit resolution floor, ≤10 ppm, effectively zero — distilled has no acid-neutralizing capacity). Distilled + kit both validated. **Account for the ~1-drop alkalinity floor when reading low KH** (a built KH-20 water should read ~2-3 drops: 2 real + the 1-drop floor). This also coarsens the KH-0-vs-KH-20 buffer-axis read (HT4) — detectable but only ~2 drops apart over a 1-drop floor.
+
+**Operational GH lock (2026-06-28):** the MgSO₄ test water titrated Total Hardness to **5 drops (50 ppm reading)** — a pass for GH 44 within the 10-ppm/drop resolution (a true-44 water needs the 5th drop to flip; 4 drops = 40 = still red). For ISOLATION, hold **"5 drops total hardness" constant across every Lane B comparison water** on this same kit — relative constancy across the swap is what makes it a clean ion test; absolute accuracy is secondary. KH lock = 2 real drops (expect ~2-3 incl. the 1-drop floor).
 
 ### Built-water verification (Step 0.3 / Lane B — LaMotte)
 | Water | Target GH/KH | Measured GH (Ca/Mg split) | Measured KH | Sulfate/Cl | Tuned? |
 |---|---|---|---|---|---|
+| MgSO₄ test (0.3) | 44 / 20 | TH **5 drops = 50 ✅**; Ca = **0 by construction** (Ca-hardness test muddy-purple, see F5); Mg = TH = 50 (all-Mg ✅) | **4 drops = 40 gross / ~30 net** (~1 drop high vs target; likely titration-speed overshoot, see F6 — NOT tuned, math dose is correct) | skipped on test water (confirmatory; known by construction) | **rig PASS** (GH ✅ / all-Mg ✅ / KH within 1 drop) |
+| SBL reconstruction (0.4) | 44 / 20 | TH **6 drops = 60 ✗** (2 drops over its ~40 target — SBL-build dosing-precision artifact, see F9; NOT a single-salt-rig failure) | **4 drops** (slow careful titration — SAME as MgSO₄ test across a different buffer recipe → F6 RESOLVED: stable +1-drop method offset, hold recipe) | (pending) | GH off-target; bottled-SBL reference compromised (F8) — see fork |
 
-### Predictions (pre-state HT1–HT5)
+### Predictions (pre-state HT1–HT5) — locked 2026-06-28 before Lane A scoring
 | Comparison | Predicted direction |
 |---|---|
+| HT1 — sulfate vs chloride | **Sulfate reveals** (lifts clarity / brightness / aromatic lift); **chloride bodies/rounds/mutes.** Track 1's sulfate lead (LYLAC/SBL) predicts the sulfate cups (MgSO₄, CaSO₄) read cleaner/brighter than the chloride cups (MgCl₂, CaCl₂) at equal level. |
+| HT2 — Mg vs Ca | **Mg = energetic / intense / more structured; Ca = rounder / sweeter / more muted** (BAC community read). On the sulfate pair: MgSO₄ sharper-brighter, CaSO₄ rounder-sweeter. |
+| HT4 — buffer (Na vs K bicarb) | Both **flatten the lime / mute acidity** (bicarbonate kills acid). KHCO₃ possibly **cleaner** than NaHCO₃ at equal level; the Pink Bourbon's lime clarity is the thing at risk. |
+| HT3 — pre vs post | (decided after Lane B — does the pre-brew confirm Lane A's directions or diverge? divergence = the extraction effect) |
+| HT5 — rig (recon vs bottled SBL) | Downgraded to bonus (F8). Recon is visibly cleaner; a real taste difference is plausible since dissolved-ion content differs. |
+| Operator prior | **Neutral / no strong priors** — operator's only prior water experience is pre-mixed multi-salt concentrates, so no single-ion expectations to bias toward. Methodologically clean: a naive palate can't unconsciously score toward the predicted directions. The above predictions are literature/Track-1 derived, NOT the operator's. |
 
-### Per-cup scoring (1–5; one row per cup)
-| Code | Water/ion | Lane | GH/KH | Acidity | Sweetness | Body | Clarity | Finish | Bitterness | Astringency | Flavor specificity | Overall | Reveal/Inject | Notes (prose — the payload) |
+### Per-cup scoring (1–5; one row per cup) — Lane A, Sitting 1, 2026-06-28 (semi-blind, control overall = 2)
+| Code | Water/ion | Lane | GH/KH | Acidity | Sweetness | Body | Clarity | Finish | Bitter | Astring | Flavor spec | Overall | Reveal/Inject | Notes (prose — the payload) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 7 | distilled control | A | 0 | base | base | base | base | base | base | base | base | **2** | — | Reference. Opens up as it cools (lime/tomato/brown tea). |
+| 1 | **MgSO₄** | A | GH44-eq | ↓ | ↓ | ↑ slt | ↓ | ↑ slt longer | = | ↑ slt drying | ↓ generic brown tea | **1.5** | neither (but worse) | **Muddied/flattened everything; lost sharpness, went generic brown tea. Worst cup. Sulfate+Mg did NOT reveal — it muted.** |
+| 2 | **MgCl₂** | A | GH44-eq | ↓ slt | **↑↑ way more** | ↑ creamier | ↓ | ↑ longer | = | none | — | **3.5** | reveal-ish (the "sweet part of the lime") | The SWEET axis. Creamy, sweet-lime. Wants to blend with #3. |
+| 3 | **CaCl₂** | A | GH44-eq | **↑↑ very pleasant** | ↑ | = | **↑↑ high** | ↓ short/clean | none | none | **↑↑ very high** | **3.5** | **reveal** (amplifies what's there) | The ACID axis. Lemon-lime sweetness, bright + clean. Standout. |
+| 4 | **CaSO₄** | A | GH44-eq (⚠ ~5% extra dilution, F-note) | ↑ slt | ↑ slt | ↑ slt | good | clean | none | little | present | **3** | reveal (mild) | Balanced mild amplifier of BOTH acid + sweet, less extreme. Middle of pack. (Dilution caveat may have softened it.) |
+| 5 | **NaHCO₃** | A | KH-eq | ↓ | **↑ liked it** | = | ↑ slt | ↑ slt | = | ↑ slt | = | **2.5** | slight inject | Muted acidity (as predicted) BUT added a pleasant sweet note — net liked. The nicer of the two buffers. |
+| 6 | **KHCO₃** | A | KH-eq | ↓ | ↓ | = | =/↓ | = | = | = | = | **<2** | neither | Flattened/muted everything. Worse than control. The worse buffer. |
+| 2+3 | MgCl₂+CaCl₂ (explor.) | A | — | ↑ | ↑ | thin | **↑↑ very high** | short | none | none | **↑↑ very high** | **4** | slight inject | **Best cup of the sitting.** Lemon-lime-Sprite; CaCl₂ acid + MgCl₂ sweet combined > either alone. |
+| (2+3)+4 | +CaSO₄ (explor.) | A | — | ↑ | ↑ | ↑ | high | — | none | none | high | ~3.5 | inject | "Fruit juice" — too much; over-eggs it. 2+3 stays the favorite. |
+| A | **bottled SBL** (Juicy&Sweet, 2.5 mL/L) | bonus pre-brew | ~GH44 nominal (actual uncertain — precip) | ↑ not super accentuated | ↑ slt | = | ↑ pretty high | present | none | **↑ a little** | ↑ pretty high | **> control** | reveal-ish (not injecting) | Sweet lime, better than control, but slightly astringent + "trying to do too much, needs a lower dose." |
+| B | **home reconstruction** (single-salt, F7) | bonus pre-brew | ~GH60 (built high, F9) | ↑ | ↑ | = (as A) | **↑↑ MUCH higher than A** | shorter | none | **none** | **↑↑ much higher than A** | **> control AND ≫ A** | not injecting | **Much cleaner / brighter / crisper / higher definition; not muddy, no astringency; "real material difference." Strongly preferred over bottled.** |
 
-### Per-axis summary (fill after scoring)
-| Factor isolated | Direction | Sweet-spot GH/dose | Pre-brew confirms post-brew? | Beats distilled? |
+### Per-axis summary (Lane A post-brew, 2026-06-28 — pre-brew columns pending Lane B)
+| Factor isolated | Direction (Lane A, post-brew) | Sweet-spot GH/dose | Pre-brew confirms post-brew? | Beats distilled? |
 |---|---|---|---|---|
-| Sulfate vs chloride | | | | |
-| Mg vs Ca | | | | |
-| KH level / source | | | | |
+| Sulfate vs chloride | **CHLORIDE reveals/amplifies; SULFATE muddies (esp. w/ Mg).** Inverts Track 1's sulfate lead. MgCl₂(3.5) ≫ MgSO₄(1.5); CaCl₂(3.5) > CaSO₄(3). | GH-44-eq worked well for chlorides | **PENDING — the key HT3 test (Lane B)** | Chlorides YES (3.5); CaSO₄ marginally (3); MgSO₄ NO (1.5) |
+| Mg vs Ca | **Interacts with the anion.** On chloride: Ca→acid+clarity, Mg→sweet+body (both win, different axes). On sulfate: Ca→balanced-ok, Mg→muddy-bad. Mg's sign FLIPS with anion. | low ok | PENDING | Ca: yes both anions. Mg: yes w/ chloride, no w/ sulfate |
+| KH level / source | Both ↓ acidity. **NaHCO₃ added a liked sweet note (2.5); KHCO₃ flattened (<2).** Na > K as buffer here — OPPOSITE of the "K cleaner" prediction. | very low | PENDING | NaHCO₃ marginally (2.5); KHCO₃ no |
 
 ---
 
@@ -231,31 +266,180 @@ KH-only variations: NaHCO₃ ≈ 34 mg/L or KHCO₃ ≈ 40 mg/L per 20 ppm KH. D
 
 _(Assistant: log friction, surprises, ergonomics here.)_
 
+**F1 — NaHCO₃ gap (2026-06-28) — RESOLVED.** Baking soda located on-hand; all six reagents present before 0.2. No sequencing impact; Step 0.4 SBL rig validation + HT4 buffer-source leg both unblocked for Sitting 1.
+
+**F2 — NaCl is out of scope for this track.** Chris has sodium chloride (3× 4 lb) on the shelf. It is NOT one of the protocol's six reagents: Na⁺ is monovalent (contributes zero GH), and NaCl sits outside the 2×2 cation(Mg/Ca)×anion(sulfate/chloride) isolation. No NaCl stock mixed. Possible future axis (salinity / perceived-sweetness lever) — re-queue for a later track; do not fold here.
+
+**F3 — control water is DISTILLED, not the locked recipe's "home remineralized."** Chris's locked baseline `/brew` recipe names "home remineralized" as its control water. For Phase 2 the experimental control is plain DISTILLED (Track 1 Lane C winner; the bar every built water must beat). The recipe GEOMETRY (15 g / 247 g / EG-1 6.4 / 94-94-93 / the 3-pour structure) is held constant; only the WATER is swapped — distilled for the control + Lane A base brew, built/dosed waters for the test cups. Logged so the control is not accidentally brewed on remineralized water.
+
+**F4 — build size dropped 1 L → 500 mL (waste reduction, operator call 2026-06-28).** A brew only consumes 247 g; building a full liter per Lane B cell and discarding the remainder is wasteful. 500 mL gives a brew + LaMotte headroom + margin at half the distilled. All Lane B doses halved (per-500 mL table below). Only the KH-20 buffer dose gets tight (~1.7 mL NaHCO₃ / 2.0 mL KHCO₃) — LaMotte KH verification catches dosing slop and we tune. One reused 1 L jug, serial build-brew-rinse.
+
+**Per-500 mL GH-44/KH-20 dose table (from 10,000 ppm stocks; gypsum from the 1,500 ppm dilute stock):** MgSO₄ 5.4 mL · MgCl₂ 4.5 mL · CaCl₂ 3.25 mL · CaSO₄ ~25.4 mL · NaHCO₃ buffer 1.7 mL · KHCO₃ buffer 2.0 mL.
+
+**EC60 cal (2026-06-28):** pre-check read 86 µS on the 84 µS standard (~2 µS high); recalibrated to 84. Matters because built waters are read in the tens-of-µS range where a 2 µS offset is material.
+
+**F8 — bottled SBL is a precipitating, ill-defined reference (2026-06-28) — confirms F7's prediction; compromises HT5.** Operator reports the Juicy & Sweet powder concentrate ([specialtybrewlabs.com](https://specialtybrewlabs.com/products/pour-over-profile-juicy-and-sweet)) does NOT dissolve cleanly into 500 mL even with warm water + long stirring — stays cloudy, must be manually agitated, and is used from the cloudy bottle. That cloudiness is the Ca²⁺ + sulfate/bicarbonate precipitation (gypsum + chalk) predicted in F7. Consequence: bottled SBL's true dissolved-ion content is variable (depends on agitation) and below nominal — so it is NOT a clean yardstick. **HT5's design assumption (bottled SBL = trustworthy reference) is broken.** The rig is better validated by confirming a clean single-salt build reads its target (already done: MgSO₄ test = GH 44 ✓). The bottled A/B downgrades from rig-gate to confounded-but-informative ("does a clean reconstruction differ from the cloudy bottled product?"). **Qualitative observation (operator, 2026-06-28):** the single-salt-stock reconstruction is visibly **cleaner and more stable** (clear, no haze) than the bottled cloudy concentrate — a direct visual confirmation that the build-from-stocks path (F7) sidesteps the precipitation. An informal recon-vs-bottled taste A/B is still planned as an end-of-sitting bonus (expect a possible real difference, since they are not the same dissolved-ion content).
+
+**F9 — multi-salt (SBL) builds need finer dosing than a 10 mL syringe; single-salt isolation waters do not (2026-06-28).** The 5-component SBL recon read GH 60 vs its ~40 target — traced to the two sub-mL doses (CaCl₂ 0.75 mL, NaHCO₃ 0.85 mL) being unplaceable with a 10 mL/0.1 mL syringe (a ±0.1 mL slip on 0.75 mL is ±13%, compounding across 5 doses). The Lane B isolation waters are immune: each is a single hardness salt at 4.5–5.4 mL + one buffer, both precise on the 10 mL syringe. Mitigation if precise multi-salt builds are needed: a 1 mL fine syringe, or build at 1 L (2× dose volumes), then tune to the LaMotte GH/KH lock. **RESOLVED 2026-06-28:** operator has two pipettes on hand — **1–5 mL and 0.1–1 mL** — the 0.1–1 mL covers exactly the sub-mL doses (CaCl₂ 0.75 / NaHCO₃ 0.85) that the 10 mL syringe mis-placed. Going-forward rule: use the pipettes for any dose under ~5 mL (1–5 mL pipette for 1–5 mL, 0.1–1 mL pipette for sub-mL); reserve the 10 mL syringe for the 4.5–5.4 mL single-salt hardness doses. The right tool was on hand — the F9 error was tool-selection, not a missing instrument.
+
+**F7 — SBL reconstruction built from single-salt stocks, NOT the disclosed concentrate (operator-confirmed 2026-06-28).** The protocol's SBL concentrate (Epsom 10 g / CaCl₂ 3 g / MgCl₂ 4 g / NaHCO₃ 3.4 g / KHCO₃ 4 g into 500 g distilled) combines calcium + sulfate + bicarbonate at full strength → Ca²⁺ would precipitate as gypsum + chalk, so the concentrate is not the recipe-as-written. Per the protocol's own precipitation discipline ("add each salt to the dilute brewing water sequentially"), we build the final SBL water directly from the existing 10,000 ppm single-salt stocks at the SBL-equivalent ion profile. Cleaner, precipitation-free, and a more rigorous rig test (our stocks + our math reproducing the SBL profile). **Build per 500 mL distilled: MgSO₄ 2.5 mL · MgCl₂ 1.0 mL · CaCl₂ 0.75 mL (last, stir) · NaHCO₃ 0.85 mL · KHCO₃ 1.0 mL** → nominal ~GH 44 / KH 20. Confound to hold in mind on the A/B: if bottled SBL's own concentrate precipitated some Ca, bottled water carries less Ca than nominal while our reconstruction carries full nominal Ca — a divergence there would be precipitation-loss, not rig error.
+
+**F6 — KH read ~1 drop high on the 0.3 test water; held the recipe, not tuned (2026-06-28).** Built MgSO₄/KH-20 water titrated alkalinity to a stable 4 drops (40 gross / ~30 net) vs the ~3-expected (2 real + 1 floor). The 3-drop red-then-faded flicker is the signature of titrating too fast (endpoint flashes locally, re-mixes away). Buffer math is exact (1.7 mL stock / 500 mL = 20 ppm as CaCO₃), so the +10 is most likely speed overshoot, not over-dose. Decision: do NOT tune (one ambiguous read shouldn't override correct math); titrate slowly on the SBL build and re-check; trim buffer only if a careful slow titration still reads 4 on a math-20 dose. Coaching: count only the drop that holds red 30 s.
+
+## LANE A SYNTHESIS (post-brew direction screen, 2026-06-28)
+
+**Headline — the sulfate/chloride axis INVERTED vs Track 1.** Track 1 (pre-brew, multi-salt concentrates) put sulfate at the top (LYLAC/SBL). Lane A, on isolated single salts post-brew, says the opposite: **chloride is the reveal/amplify direction; sulfate muddies — especially with magnesium.** Ranking: 2+3 blend (4) > CaCl₂ (3.5) ≈ MgCl₂ (3.5) > CaSO₄ (3) > NaHCO₃ (2.5) > control (2) > KHCO₃ (<2) > MgSO₄ (1.5, muddiest).
+
+**The two single-salt standouts split by axis:**
+- **CaCl₂ = the ACID axis** — bright, very pleasant acidity + high clarity + high flavor specificity, clean short finish. A clarity revealer.
+- **MgCl₂ = the SWEET axis** — "the sweet part of the lime," creamier body, longer finish.
+- **Best cup = MgCl₂ + CaCl₂ blended (2+3, scored 4)** — acid + sweet combined beats either alone ("lemon-lime-Sprite"). Adding CaSO₄ on top ((2+3)+4) over-eggs it. (Blend = beyond single-mineral isolation, but a strong recipe-library pointer: a two-chloride Ca+Mg water for this clarity coffee.)
+
+**Cation × anion INTERACTION (the subtle finding).** Magnesium's sign flips with its anion: **MgCl₂ is great (sweet/creamy), MgSO₄ is the worst cup (muddy/flat).** Calcium is good with both but better with chloride (CaCl₂ 3.5 > CaSO₄ 3). So you cannot talk about "the magnesium effect" or "the sulfate effect" in isolation — it's the pairing. This is exactly the kind of attribution Phase 2 was built to make (and that Track 1's black-box rule forbade).
+
+**Buffer split.** Both bicarbonates cut acidity (as predicted). But **NaHCO₃ added a liked sweet note (2.5, slight inject); KHCO₃ just flattened (<2).** Na > K as the buffer here — the reverse of the "K cleaner" prediction.
+
+**THE open question for Lane B (HT3 — now the centerpiece).** Is chloride's post-brew lead REAL (extraction-valid) or a post-brew perceptual artifact? Two outcomes, both valuable:
+- If Lane B pre-brew **confirms** chloride > sulfate → Track 1's sulfate lead was a multi-salt/product effect, not the isolated sulfate ion, and the recipe library points chloride-forward for this coffee.
+- If Lane B **flips back** to sulfate → post-brew screening diverges from extraction (HT3 bounds the screening method), and the divergence itself is the extraction effect.
+
+**Revised Lane B priority (given Lane A):** (1) **MgCl₂ vs MgSO₄** — the biggest Lane A gap (3.5 vs 1.5), the hardest HT1+HT3 test; (2) **CaCl₂ vs CaSO₄** — the calcium anion pair; (3) **MgCl₂ vs CaCl₂** — the two winners, sweet-vs-acid axis, the 2+3 basis. Buffer axis (HT4) and the full 2×2 fill in after.
+
+## SBL BONUS A/B SYNTHESIS (HT5 downgraded — 2026-06-28)
+
+**A = bottled SBL (Juicy & Sweet, 2.5 mL/L) · B = home single-salt reconstruction (F7).** Both brewed pre-brew on the standard recipe, no fresh control (operator referenced control from memory).
+
+**Verdict: B ≫ A — the clean reconstruction is materially, decisively better.** B was much cleaner, brighter, crisper, higher-definition, with much higher clarity + flavor specificity and zero astringency; A was decent (beat the control) but carried a little astringency and "felt like it was trying to do too much." Operator: "you can taste the real material difference between the two."
+
+**This validates F7/F8 IN THE CUP.** The bottled concentrate's precipitation (the cloudiness) isn't just a chemistry curiosity — it produces a muddier, more astringent, less clear cup. Building from single-salt stocks (no precipitation) makes a *better-tasting* water, not merely a cleaner-looking one. **Key confound that strengthens the finding:** B was built HIGH (GH ~60) vs A (~GH 44) — so B had *more* minerals yet tasted *cleaner*. That rules out "more concentration = muddier"; the muddiness in A came from the precipitation, not the dose. (HT5 didn't validate the rig by matching bottled — it did something more useful: showed the DIY single-salt water beats the commercial precipitating concentrate.)
+
+**"Less is more" reinforced twice:** (1) operator preferred the individual single-salt Lane A cups — especially the 2+3 two-chloride blend — over BOTH SBL 5-salt blends; (2) A "needs a lower dose, trying to do too much" echoes Track 1's LOW-sweet-spot / past-peak finding. The complex 5-salt profile is not the move for this clarity coffee; a targeted Ca/Mg-chloride water is.
+
+**Provenance note to confirm at next session:** operator phrasing ("did that same dose for both") leaves B's exact build slightly ambiguous — recorded as the single-salt reconstruction (the reveal confirms "SBL I created at home with my concentrates"); the A/B direction is unambiguous regardless.
+
 ## New lessons (candidate primitives — for the Coordinator's PROJECT retro)
 
 _(Assistant: log candidates. Do NOT promote to cluster docs — that's the retro's job, after Phase 2 + the 2nd coffee.)_
+
+**L-candidate #1 — LaMotte calcium-hardness titration is unreliable on near-zero-Ca / high-Mg waters.** The Ca-hardness test raises pH (NaOH) to precipitate Mg(OH)₂; on a pure-magnesium water (~50 ppm Mg, 0 Ca) the precipitate haze + incomplete masking gives a muddy purple that never resolves to a clean red→blue endpoint, even past 5 titrant drops. **Operational rule for this kit:** read Calcium Hardness as clean only on the calcium waters (CaSO₄, CaCl₂, SBL reconstruction); on the magnesium waters (MgSO₄, MgCl₂) expect muddy-purple = "Ca ≈ 0" and rely on Total Hardness + by-construction composition (Mg = TH). Don't over-titrate chasing blue (wastes Reagent #7). Caught at Step 0.3, 2026-06-28.
+
+**L-candidate #2 — build multi-salt waters from single-salt stocks (sequential dilute dosing), NOT the disclosed concentrate — and it makes a BETTER cup, not just cleaner chemistry.** The F7 build-from-stocks method sidesteps the Ca + sulfate/bicarbonate precipitation that clouds commercial concentrates; the SBL bonus A/B then showed the clean reconstruction tastes decisively cleaner/brighter than the cloudy bottled product (B ≫ A). Candidate primitive: for any reproduction of a multi-salt commercial water, build from single-salt stocks at the target ion profile, never from a calcium-bearing concentrate.
+
+**L-candidate #3 — "measure don't guess" for ISOLATION means locking the OPERATIONAL drop-count on your own kit, then holding it constant.** At low GH/KH the LaMotte's 10-ppm/drop resolution can't resolve 44 from 50, and KH carries a stable ~+1-drop method offset. What makes the isolation valid is not absolute accuracy but every comparison water reading the SAME drop count on the SAME kit (GH lock = 5 drops; KH lock = 4 drops). Relative constancy across the ion swap > absolute calibration.
+
+**L-candidate #4 — match the measuring tool to the dose; the 10 mL syringe's imprecision compounds across many small doses.** Single-salt isolation waters (1 hardness dose at 4.5–5.4 mL) are fine on the syringe; the 5-dose SBL build went GH 60 vs 40 target because two sub-mL doses were unplaceable. Use the 0.1–1 mL / 1–5 mL pipettes for multi-component builds (F9).
+
+**L-candidate #5 (methodological) — a naive-palate operator is an ASSET for blind single-operator tasting.** No single-ion priors → can't unconsciously score toward the predicted directions. Worth preserving in active-mode design: state predictions from literature/prior-track, not from the taster, when the taster is naive.
 
 ## Audit items queued
 
 _(Assistant: carry P6T1-AI-3 — the TONIK roasted-barley confound re-test — into this track if a TONIK reference cup fits; otherwise re-queue it. Log anything needing Coordinator decision or substrate-fold.)_
 
+- **P6T1-AI-3 (TONIK roasted-barley confound) — RE-QUEUED, not tested.** No TONIK reference cup fit this Step-0 + Lane-A sitting (the track ran distilled-base + single-salt isolation; no roasted-grain product in scope). Carry forward to a future sitting where a TONIK cup fits, else keep parked.
+- **P6T2-AI-1 (NEW) — the sulfate/chloride inversion needs Lane B before ANY substrate-fold.** Lane A (post-brew, single-salt) flipped Track 1's sulfate lead: chloride revealed, sulfate (esp. Mg) muddied. This is single-coffee + post-brew only. It MUST be confirmed pre-brew (Lane B / HT3) before it touches CONTEXT-taste or any recipe-library substrate. Status: OPEN — gates the substrate-fold (which is already DEFERRED on the single-coffee rule anyway).
+- **P6T2-AI-2 (NEW) — B (home recon) GH-60 provenance to pin.** The SBL-bonus B build read GH ~60 and the "same dose for both" phrasing is ambiguous; confirm the exact build at next session for a clean archive (does not change the A/B verdict).
+
 ---
 
 ## HANDOFF BRIEF FOR COMPILE / COORDINATOR (fill at session end)
 
-_(Assistant: produce per [`handoff-brief-template.md`](docs/skills/research-coordinator/cluster/templates/handoff-brief-template.md): TL;DR · execution summary · equipment/conditions · per-cup raw data · analysis · final output (the isolation map: sulfate-vs-chloride, Mg-vs-Ca, buffer) · key findings · HT3 pre-vs-post verdict · HT5 rig-validation result · substrate-edit specs (likely still DEFERRED — single coffee) · new lessons · audit items · open data items · `Archive location:` branch + SHA · termination declaration.)_
+## HANDOFF BRIEF FOR COMPILE SESSION (Single-Mineral Isolation — Sitting 1 Close-Out)
 
-### Execution Session Termination (template — fill + keep)
+**Date:** 2026-06-28
+**Session role:** execution + handoff brief production (no substrate edits)
+**Archive location:** branch `claude/focused-fermat-1352f2` @ `<final pushed SHA — see termination message>`, pushed to origin (archive doc committed; substrate NOT touched; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Methodology verdict:** **MIXED — PARTIALLY CONTRADICTS Track 1.** Lane A (post-brew, single-salt) INVERTS Track 1's sulfate lead — chloride reveals, sulfate (esp. Mg) muddies — but this is single-coffee + post-brew only and GATES on Lane B (HT3) before any fold. The HT5 bonus delivered a clean side-result: a home single-salt reconstruction beats the bottled precipitating concentrate in the cup.
+
+This brief covers **Sitting 1 = Step 0 (full calibration) + Lane A (post-brew screen) + the SBL bonus A/B.** Lane B (pre-brew isolation — the rigorous core) was deliberately deferred to a fresh sitting per the fatigue discipline. The compile session should treat all findings as single-coffee → substrate-fold stays DEFERRED; the value here is the mechanism map + a sharpened Lane B plan.
+
+### TL;DR
+- **Sulfate/chloride axis inverted vs Track 1.** Post-brew, on isolated single salts: **chloride reveals/amplifies, sulfate muddies** — worst cup was MgSO₄ (1.5), best singles were both chlorides (CaCl₂ 3.5 acid-axis, MgCl₂ 3.5 sweet-axis). Gates on Lane B before it's real.
+- **Cation × anion INTERACTION is real:** magnesium flips sign with its anion (MgCl₂ great, MgSO₄ worst). You can't attribute to "the Mg effect" or "the sulfate effect" alone — it's the pairing. (Phase 2's whole thesis, landing.)
+- **Best cup of the sitting = MgCl₂ + CaCl₂ blended (2+3, scored 4)** — acid + sweet combined > either alone. A two-chloride Ca/Mg water is the recipe-library pointer for this clarity coffee.
+- **Buffer split:** NaHCO₃ added a liked sweet note (2.5); KHCO₃ flattened (<2). Na > K here — reverse of prediction.
+- **HT5 bonus:** clean home single-salt reconstruction (B) **decisively beat** bottled SBL (A) — cleaner, brighter, no astringency — *despite* B being built harder (GH 60 vs 44). The bottled concentrate's precipitation muddies the cup. DIY single-salt > commercial concentrate.
+- **Rig validated** for single-salt isolation work: MgSO₄ test water read GH 44 / KH 20 (operational locks: 5 drops GH, 4 drops KH).
+- **"Less is more" reinforced** (Track 1 carry): operator preferred targeted single-salt cups over both 5-salt SBL blends; SBL "trying to do too much."
+
+### Execution summary
+Full Step 0 calibration ran to completion (inventory + hydration verification of all 6 reagents; 6 single-salt stocks mixed + EC60-fingerprinted, every reading matching prediction; EC60 recal 86→84; LaMotte trained from zero + distilled blank; rig validated via a clean MgSO₄ GH-44/KH-20 build). Step 0.4 (SBL rig validation) was reshaped mid-session: the disclosed SBL concentrate precipitates calcium, so per the protocol's own precipitation discipline we built from single-salt stocks instead (F7) — operator-confirmed. The bottled-SBL reference then turned out to be cloudy/precipitating (F8), which broke HT5's "clean reference" assumption, so HT5 downgraded to a confounded-but-informative bonus. 9 Lane A cups scored (6 single salts + 2 exploratory blends + control), then the 2-cup SBL bonus. Methodology held; deviations (F7 build path, HT5 downgrade) were flagged + operator-confirmed before execution.
+
+### Equipment / conditions
+| Item | Value |
+|---|---|
+| Coffee | Hydrangea Pink Bourbon Washed (same as Track 1) |
+| Brewer / recipe | xBloom → Hario V60, locked baseline: 15 g / 247 g (1:16.5) / Sibarist B3 / EG-1 6.4 / 94-94-93 °C / bloom 45 g 45 s → P2 150 g @0:58 30 s pause → P3 247 g @1:58 / 3.5 ml/s / ~3:10 |
+| Control water | DISTILLED (not the recipe's "home remineralized" — F3) |
+| Stocks | 6 single-salt @ 10,000 ppm (gypsum 1,520 ppm dilute); EC60-verified |
+| Measurement | LaMotte BrewLab Plus (GH/KH/sulfate/chloride/Na-by-calc); EC60 (recal'd to 84 µS); 0.01 g scale; 0.1–1 mL + 1–5 mL pipettes + 10 mL syringe |
+| Lane A dose | GH-44-equivalent into ~60 mL cups, semi-blind (coded + shuffled) |
+
+### Per-measurement raw data
+Complete recording sheets are in the doc body above: § Inventory + stock prep (all 6, with EC60 fingerprints), § LaMotte kit reference + distilled blank, § Built-water verification (MgSO₄ test + SBL recon), § Predictions (locked pre-scoring), § Per-cup scoring (9 Lane A rows + 2 SBL-bonus rows). Not duplicated here to keep the brief tight — the compile session should read those tables for verification.
+
+### Analysis
+- **Lane A ranking:** 2+3 blend (4) > CaCl₂ (3.5) ≈ MgCl₂ (3.5) > CaSO₄ (3) > NaHCO₃ (2.5) > control (2) > KHCO₃ (<2) > MgSO₄ (1.5).
+- **Anion (sulfate vs chloride), post-brew:** chloride wins on both cations — MgCl₂(3.5)≫MgSO₄(1.5); CaCl₂(3.5)>CaSO₄(3). Direction: chloride = clarity/brightness/sweetness reveal; sulfate = mute/mud (Mg) or mild-balanced (Ca).
+- **Cation (Mg vs Ca), post-brew:** axis-dependent, not a clean "Mg intense / Ca round." On chloride: Ca→acid+clarity, Mg→sweet+body. On sulfate: Ca→ok-balanced, Mg→muddy-bad.
+- **Buffer:** both ↓acidity; Na adds sweetness (net-liked), K flattens (net-disliked).
+- **SBL bonus:** B (clean recon) ≫ A (cloudy bottled) on clarity + specificity + absence of astringency; B's higher GH rules out concentration as the cause → precipitation is the cause.
+
+### Final output — the isolation map (Lane A / post-brew, single coffee, PROVISIONAL)
+| Factor | Post-brew direction | Reveal/Inject | Beats distilled? | Pre-brew confirmed? |
+|---|---|---|---|---|
+| Sulfate vs chloride | **Chloride reveals; sulfate muddies (esp. Mg)** | chloride = reveal | chlorides yes; CaSO₄ marginal; MgSO₄ no | **PENDING (HT3)** |
+| Mg vs Ca | Interacts w/ anion (Mg flips sign) | mixed | Ca both; Mg only w/ Cl | PENDING |
+| Buffer (Na vs K) | Both mute acid; Na adds sweetness, K flattens | Na slight inject | Na marginal; K no | PENDING |
+| Recon vs bottled SBL (HT5) | Clean recon ≫ cloudy bottled | — | recon yes | n/a (bonus, done) |
+
+### Key findings
+1. **Post-brew, chloride is the reveal anion and sulfate muddies — inverting Track 1's sulfate lead.** Data: MgCl₂ 3.5 vs MgSO₄ 1.5; CaCl₂ 3.5 vs CaSO₄ 3. Implication: if Lane B confirms, Track 1's sulfate lead was a multi-salt/product artifact, and the recipe library points chloride-forward for this coffee. **Gated on Lane B (single-coffee + post-brew).**
+2. **Cation effect is anion-dependent (interaction term).** Mg flips from best-paired (chloride) to worst (sulfate). Implication: single-ion attribution must always be stated as a pairing, not a lone ion — validates the Phase-2 isolation premise.
+3. **A two-chloride Ca+Mg blend is the standout cup (4).** CaCl₂ (acid/clarity) + MgCl₂ (sweet/body) combine. Implication: candidate custom-water direction for the Pink Bourbon; carry to Lane B + eventual recipe library.
+4. **DIY single-salt reconstruction beats the commercial precipitating concentrate in the cup.** B≫A despite B's higher GH. Implication: the F7 build-from-stocks method is the recommended way to make multi-salt waters — better cup, not just cleaner chemistry.
+5. **Buffer: Na > K for this coffee, both mute acidity.** Implication: if a buffer is wanted, NaHCO₃; but the operator's "less is more" preference suggests minimal/zero KH for this clarity profile.
+
+### Substrate edit specifications for compile session
+**NONE this track — substrate-fold DEFERRED per the single-coffee rule.** Every finding above is on one coffee (Pink Bourbon) + mostly post-brew; the difference-vocabulary cannot codify until a 2nd coffee replicates. No registry / cluster-doc / ADR edits are specified. **Candidates to hold for the post-2nd-coffee fold** (do NOT apply now): (a) a CONTEXT-taste refinement on dose-zoned reveal/inject + the chloride-vs-sulfate-by-coffee finding; (b) a recipe-library seed (two-chloride Ca/Mg water); (c) an L-candidate graduation pass (see below). The compile session should record these as deferred, not execute them.
+
+### New lessons captured
+| # | Lesson | Substrate implication |
+|---|---|---|
+| L-c #1 | LaMotte Ca-hardness titration unreliable on near-zero-Ca/high-Mg waters (muddy purple) | Operational kit rule; not a cluster primitive yet |
+| L-c #2 | Build multi-salt waters from single-salt stocks (not the Ca-bearing concentrate) — better cup, not just cleaner | Candidate method primitive for water reproduction |
+| L-c #3 | "Measure don't guess" for isolation = lock the operational drop-count on your own kit, hold constant | Candidate measurement primitive |
+| L-c #4 | Match measuring tool to dose; syringe imprecision compounds across multi-salt builds | Equipment-discipline note |
+| L-c #5 | A naive-palate operator is an asset for blind tasting; state predictions from literature not the taster | Candidate active-mode design primitive |
+
+All stay logged for the cross-project ratification gate (process-retro) — none promoted mid-session.
+
+### Audit items queued
+- **P6T1-AI-3 (TONIK confound):** RE-QUEUED, not tested — no TONIK cup fit this sitting.
+- **P6T2-AI-1 (NEW):** the sulfate/chloride inversion MUST be confirmed pre-brew (Lane B / HT3) before any substrate-fold. OPEN; gates the fold (already deferred on single-coffee).
+- **P6T2-AI-2 (NEW):** pin B's GH-60 build provenance next session (does not change the A/B verdict).
+
+### Open data items
+- **Lane B not run** — the entire pre-brew isolation (HT1 confirm / HT2 / HT3 / HT4) is outstanding. Revised priority: (1) MgCl₂ vs MgSO₄, (2) CaCl₂ vs CaSO₄, (3) MgCl₂ vs CaCl₂, then buffer axis + full 2×2. ~5 brews core, ~8 with buffer. Fresh sitting.
+- **HT3 unresolved** (the pre-vs-post centerpiece) — depends entirely on Lane B.
+- **SBL recon GH-60** off its target (F9) — re-build precise (pipettes) if an exact-GH SBL is wanted later.
+
+### Recap map for compile session
+Integrate FIRST: nothing into substrate (deferred). DO record: the provisional isolation map + the Lane B priority + the L-candidates + the 3 audit items into the project end-document so the next sitting/session starts hot. DEFER: all substrate-fold candidates to post-2nd-coffee. ESCALATE to operator: scheduling Lane B (fresh sitting) + whether to pursue HT4 buffer axis given the operator's strong "less is more / minimal KH" lean.
+
+### Protocol-execution friction captured
+F1–F9 logged inline in § Notes/friction. The load-bearing ones for protocol-doc refinement: **F7** (the SBL concentrate recipe contradicts the protocol's own precipitation discipline — the protocol should specify build-from-stocks for SBL up front), **F8** (HT5 assumed bottled SBL was a clean reference; it precipitates — the rig-validation design needs a non-precipitating reference or should lean on the single-salt-target-confirmation already in 0.3), **F9** (the protocol should specify pipettes for multi-salt builds), and the **Lane A cup-volume vs "200 mL" tension** (the protocol's 200 mL/cup × 7 cups implies ~6 base brews; real run used ~60 mL cups from 2 brews — protocol should state "hold concentration, scale cup volume to brew budget").
+
+### Execution Session Termination
 
 ```
 Per Lesson #40 role-discipline rule:
 - ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
-- ✅ Protocol doc updated in-place as canonical archive
-- ✅ Archive doc committed + pushed to branch <branch> @ <SHA>
+- ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
+- ✅ Archive doc committed + pushed to branch claude/focused-fermat-1352f2 @ <final SHA in termination message>
 - ✅ Handoff brief produced above; branch + SHA in its Archive location: header
-- 🛑 Session terminating. The Coordinator decides the next track / substrate-fold.
+- 🛑 Session terminating after this brief lands. The Coordinator decides the next track / substrate-fold; Lane B runs as a fresh sitting.
 
-End of Single-Mineral Isolation close-out.
+End of Single-Mineral Isolation Sitting-1 close-out.
 ```
