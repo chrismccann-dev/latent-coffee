@@ -703,7 +703,7 @@ export const BREWERS: readonly BrewerEntry[] = [
     name: "Sworks Bottomless",
     manufacturer: "Sworks",
     category: "Wave Filter Drippers",
-    paperType: "Wave (Kalita 155)",
+    paperType: "Wave / flat (Kalita 155-sized; all except April Brewer paper)",
     doseSize: "10g to 25g",
     bedGeometry: "Flat / shallow",
     bypassProfile: "Low",
@@ -713,7 +713,7 @@ export const BREWERS: readonly BrewerEntry[] = [
     brewArchetype: "Immersion hybrid",
     accessories: "Interchangeable bases",
     owned: true,
-    location: "Office",
+    location: "Home, Office",
     primaryUseCase: "Hybrid manipulation (open + valve control)",
   },
   {

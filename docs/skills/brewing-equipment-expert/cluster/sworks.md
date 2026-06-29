@@ -4,13 +4,13 @@ Self-only canonical sub-taxonomy capturing Chris's SWORKS Bottomless Dripper val
 
 **Authoritative authored content.** [lib/sworks-registry.ts](lib/sworks-registry.ts) is the validation mirror.
 
-**Not a comprehensive registry.** Captures one owned instrument (SWORKS Bottomless Dripper, office). Adding a second valve-modulated brewer would be a deliberate registry extension — the validation surface stays self-only by design, structurally analogous to [grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md) (EG-1 only).
+**Not a comprehensive registry.** Captures one owned instrument (SWORKS Bottomless Dripper, home + office). Adding a second valve-modulated brewer would be a deliberate registry extension — the validation surface stays self-only by design, structurally analogous to [grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md) (EG-1 only).
 
 ## Canonical list
 
 | Dripper | Manufacturer | Owned |
 | --- | --- | --- |
-| **SWORKS Bottomless Dripper** | SWORKS | Yes (office) |
+| **SWORKS Bottomless Dripper** | SWORKS | Yes (home + office) |
 
 ## SWORKS Bottomless Dripper
 
@@ -18,13 +18,15 @@ Self-only canonical sub-taxonomy capturing Chris's SWORKS Bottomless Dripper val
 | --- | --- |
 | Name | SWORKS Bottomless Dripper |
 | Manufacturer | SWORKS |
-| Owned | Yes (office) |
+| Owned | Yes (home + office) |
 | Dial range | 0-7, 1 step |
-| Filter pairing | Kalita 155 / xBloom Premium Paper (office) |
+| Filter pairing | Kalita 155 / xBloom Premium Paper (office); any small flat-bottom paper (Kalita 155-sized) except April Brewer paper (home) |
 | Cone geometry | Yes |
 | Compatible brewers | Standalone (does not stack with other brewers) |
 
-Variable-flow valve dripper. Cone geometry, uses Kalita 155-sized flat or wave filters. Valve dial restricts or opens flow mid-brew; each pour phase can have an independent valve state. Primary office brewer for **Balanced Intensity** and **Full Expression** when contact time management is critical; canonical **Hybrid (Sequential)** brewer when slow/slow/open valve sequences are used (lever transitions = phase boundaries).
+Variable-flow valve dripper. Cone geometry, uses Kalita 155-sized flat or wave filters (office runs xBloom Premium Paper; home takes any small flat-bottom paper except April Brewer paper). Valve dial restricts or opens flow mid-brew; each pour phase can have an independent valve state. Primary office **and home** brewer for **Balanced Intensity** and **Full Expression** when contact time management is critical; canonical **Hybrid (Sequential)** brewer when slow/slow/open valve sequences are used (lever transitions = phase boundaries).
+
+Conceptually the SWORKS is a **finer-grained Switch**: the Hario Switch's lever is binary (immersion closed / percolation open), whereas the SWORKS valve lets you set *how long to hold and how fast to drain each phase individually*. That continuous per-phase control is why paper choice matters less here than on fixed-geometry brewers — you dial the flow you want directly rather than letting the paper set it. At home this makes it an alternative to the Switch for Hybrid staging when per-phase (not on/off) control is the goal; the dial vocabulary and adjustment logic below are location-independent, but the flow-rate calibrations are office-anchored (office tap + xBloom paper at EG-1 6.0) and should be re-confirmed on the first home brews.
 
 ## Valid Dials
 

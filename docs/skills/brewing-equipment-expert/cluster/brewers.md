@@ -454,7 +454,7 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 ### Sworks Bottomless — Owned
 
 - Manufacturer: Sworks
-- Paper type: Wave (Kalita 155)
+- Paper type: Wave / flat (Kalita 155-sized; any small flat-bottom paper except April Brewer paper)
 - Dose size: 10g to 25g
 - Bed geometry: Flat / shallow
 - Bypass profile: Low
@@ -463,7 +463,7 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 - Agitation tolerance: High
 - Brew archetype: Immersion hybrid
 - Accessories: Interchangeable bases
-- Location: Office
+- Location: Home, Office
 - Primary use case: Hybrid manipulation (open + valve control)
 
 ## Trapezoid filter drippers
