@@ -64,7 +64,7 @@ When a WBC recipe is described as a Hybrid sub-form, here's where it lands in La
 
 ## Cross-Cutting Control Patterns (v8.5 doc layer)
 
-These are control axes that show up repeatedly across the 102-recipe corpus *underneath* whatever family/strategy a recipe is officially classified under. Per Chris's review (2026-05-08), they deliberately stay in this doc as a **reference / playbook layer** rather than promoting to canonical Axis 2 modifiers in `lib/extraction-modifiers.ts`. Strategy / modifier set stays at **6 strategies + 4 modifiers**; cross-cutting moves persist via free-text `strategy_notes` on the brew row when relevant. Pull this section during Step 1d when reaching for a calibration-axis move.
+These are control axes that show up repeatedly across the 154-recipe corpus *underneath* whatever family/strategy a recipe is officially classified under. Per Chris's review (2026-05-08), they deliberately stay in this doc as a **reference / playbook layer** rather than promoting to canonical Axis 2 modifiers in `lib/extraction-modifiers.ts`. Strategy / modifier set stays at **6 strategies + 4 modifiers**; cross-cutting moves persist via free-text `strategy_notes` on the brew row when relevant. Pull this section during Step 1d when reaching for a calibration-axis move.
 
 ### Time Distribution Practical Playbook (5 templates)
 
