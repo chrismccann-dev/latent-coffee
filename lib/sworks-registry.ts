@@ -1,6 +1,6 @@
 // Canonical SWORKS Bottomless Dripper valve-dial taxonomy.
 //
-// Single brewer instance today: SWORKS Bottomless Dripper (office). The valve
+// Single brewer instance today: SWORKS Bottomless Dripper (home + office). The valve
 // dial is an integer 0-7 with a wrap-around state past 7. Dials 1-4 are dead
 // zones with a real coffee bed — restriction at those positions doesn't
 // differentiate from Dial 0 due to bed resistance. Useful dial states:
@@ -65,7 +65,7 @@ export const SWORKS_DRIPPERS: SworksEntry[] = [
     displayName: 'SWORKS Bottomless',
     manufacturer: 'SWORKS',
     owned: true,
-    filterPairing: 'Kalita 155 / xBloom Premium Paper',
+    filterPairing: 'Kalita 155 / xBloom Premium Paper (office); any small flat-bottom paper except April Brewer paper (home)',
     geometry: 'cone',
     dialMin: 0,
     dialMax: 7,
