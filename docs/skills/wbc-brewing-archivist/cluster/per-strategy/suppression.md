@@ -21,5 +21,5 @@ To be populated as Latent's Suppression corpus grows (~16 brews today). Initial 
 ## See also
 
 - [wbc-reference.md § Suppression family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
-- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — full 102-recipe archive
+- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — full 154-recipe archive
 - [BREWING.md § Suppression](docs/skills/coordinator/catalog.md#brewing-domain-principles)

@@ -13,7 +13,7 @@ Construct a starting brew recipe AND handle in-thread iteration on tasting notes
 
 - Read brew session intent (coffee + location + dose / brewer-filter pairing / extraction goal)
 - Pull cross-strategy + cross-coffee patterns from Brewing Historian (per-strategy + by-cultivar + by-coffee-family + cross-coffee-insights)
-- Pull WBC-tested strategies from WBC Brewing Archivist (5-axis foundational map + 102-recipe corpus + per-strategy)
+- Pull WBC-tested strategies from WBC Brewing Archivist (5-axis foundational map + 154-recipe corpus + per-strategy)
 - Pull equipment-aware constraints from Brewing Equipment Expert (heavily — equipment selection is half of recipe construction; brewers + filters + grinder-eg1 + sworks clusters)
 - Construct: extraction strategy + modifiers + dose + water + grinder + grind setting + temp + pour structure
 
@@ -32,7 +32,7 @@ Construct a starting brew recipe AND handle in-thread iteration on tasting notes
 
 - Brew session intent (`start-brew.md` prompt; Phase 2 iteration continues in-thread inside the same session — `log-brew.md` deprecated to a redirect stub in Writing-path Sub-sprint 3 / 2026-05-26)
 - [Brewing Historian](docs/skills/brewing-historian/) cluster — per-strategy + by-cultivar + by-coffee-family + cross-coffee-insights + open questions
-- [WBC Brewing Archivist](docs/skills/wbc-brewing-archivist/) cluster — 5-axis foundational map + 8 strategy families + 102-recipe corpus + per-strategy + canonical/wbc-tested-recipes
+- [WBC Brewing Archivist](docs/skills/wbc-brewing-archivist/) cluster — 5-axis foundational map + 9 strategy families + 154-recipe corpus + per-strategy + canonical/wbc-tested-recipes
 - [Brewing Equipment Expert](docs/skills/brewing-equipment-expert/) cluster — brewers / filters / grinder-eg1 / sworks registries + observed quirks
 - Tasting notes (per-iteration audio transcripts; Phase 2 only)
 - (Pre-2026-05-27 the Inputs list included "Learning Assistant track-aware metadata when the brew is part of a research track." That dependency is removed — Research Coordinator + Research Assistant per [ADR-0017](docs/adr/0017-research-assistant-architecture.md) do NOT write track-aware metadata onto constituent brews. If a brew is part of a research track, the cross-link is logged in the project protocol doc + handoff brief, not on the `brews` row.)

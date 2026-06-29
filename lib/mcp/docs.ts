@@ -244,12 +244,12 @@ const DOC_CATALOG: CatalogDoc[] = [
   {
     uri: 'docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md',
     title: 'WBC Brewing Archivist — Reference (Latent mapping)',
-    description: 'Use when looking up WBC competition technique categories — 5 foundational control axes + 8 strategy families mapped onto the Latent 6+4 framework. Lean reference layer + Cross-Cutting Control Patterns playbook (water strength / agitation taper / filter behavior / pre-brew conditioning) + Practical Experiment Queue + Consciously not pursuing appendix. Migrated from docs/brewing/wbc-reference.md in Wave 2 PR 1.',
+    description: 'Use when looking up WBC competition technique categories — 5 foundational control axes + 9 strategy families (incl. Water Chemistry Systems, added in the 2026 drop) mapped onto the Latent 6+4 framework. Lean reference layer + Cross-Cutting Control Patterns playbook (water strength/chemistry / agitation taper / filter behavior / pre-brew conditioning) + Practical Experiment Queue + Consciously not pursuing appendix. Covers 2022-2026. Migrated from docs/brewing/wbc-reference.md in Wave 2 PR 1.',
   },
   {
     uri: 'docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md',
-    title: 'WBC Brewing Archivist — 102-Recipe Archive (2022-2025)',
-    description: 'Use when looking up specific competitor recipes from World Brewers Cup 2022-2025 — 102-recipe archive with subtype definitions and per-recipe detail organized by strategy family. Reference material for the "experiment Chris wouldn\'t think of" goal. Migrated from docs/brewing/wbc-recipes.md in Wave 2 PR 1.',
+    title: 'WBC Brewing Archivist — 154-Recipe Archive (2022-2026)',
+    description: 'Use when looking up specific competitor recipes from World Brewers Cup 2022-2026 — 154-recipe archive (the 2026 drop added 52 routines + the Water Chemistry Systems family) with 65 subtype definitions across 10 families and per-recipe detail organized by strategy family. Reference material for the "experiment Chris wouldn\'t think of" goal. Migrated from docs/brewing/wbc-recipes.md in Wave 2 PR 1.',
   },
   {
     uri: 'docs://skills/wbc-brewing-archivist/cluster/per-strategy/suppression.md',
