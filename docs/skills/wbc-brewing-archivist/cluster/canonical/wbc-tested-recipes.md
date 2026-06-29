@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This file is the canonical registry of which WBC competitor recipes have been **directly tested by Chris on a Latent brew**, vs. which remain reference-only in [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md). Treats the 154-recipe corpus as an aspirational palette and tracks adoption rate.
+This file is the canonical registry of which WBC competitor recipes have been **directly tested by Chris on a Latent brew**, vs. which remain reference-only in [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md). Treats the 154-recipe corpus as an aspirational palette and tracks adoption rate.
 
 ## Schema (to be defined)
 
@@ -21,6 +21,6 @@ Empty. To be populated as the WBC corpus check (BREWING.md Step 1d Named Conside
 
 ## See also
 
-- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — full 102-recipe archive
+- [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) — full 154-recipe archive (per-competitor rows)
 - [wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) — strategy-family / sub-form mapping
 - [BREWING.md § Step 1d WBC corpus check](docs/skills/brewing-assistant/cluster/operational-guide.md)

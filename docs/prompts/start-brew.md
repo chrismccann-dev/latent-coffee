@@ -47,7 +47,7 @@ brewers.md + filters.md + grinder-eg1.md + sworks.md). For WBC competitor
 recipe anchors + cross-cutting control patterns (Step 1d Named Consideration),
 dispatch to the WBC Brewing Archivist
 (docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md +
-docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md). For canonical
+docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md + docs://skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md). For canonical
 lookups, call read_canonical Tool with the axis name per
 docs://skills/coordinator/operator-guide.md § Canonical taxonomy lookups.
 

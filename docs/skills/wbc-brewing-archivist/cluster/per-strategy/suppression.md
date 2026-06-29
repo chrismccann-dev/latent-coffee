@@ -8,7 +8,7 @@ Suppression = coarse grind + low temperature + low agitation + clean papers, dep
 
 ## WBC anchors observed
 
-- **Carlos Medina 2023** — the canonical reference. Pulse-pour with restricted-flow brewer; the WBC competitor's only direct Suppression analog in Latent's corpus. SWORKS Bottomless Dripper is the closest Latent vehicle. See [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) entry for Carlos Medina.
+- **Carlos Medina 2023** — the canonical reference. Pulse-pour with restricted-flow brewer; the WBC competitor's only direct Suppression analog in Latent's corpus. SWORKS Bottomless Dripper is the closest Latent vehicle. See [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) entry for Carlos Medina.
 
 ## Cross-coffee patterns to author
 
@@ -21,5 +21,5 @@ To be populated as Latent's Suppression corpus grows (~16 brews today). Initial 
 ## See also
 
 - [wbc-reference.md § Suppression family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
-- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — full 154-recipe archive
+- [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) — full 154-recipe archive
 - [BREWING.md § Suppression](docs/skills/coordinator/catalog.md#brewing-domain-principles)

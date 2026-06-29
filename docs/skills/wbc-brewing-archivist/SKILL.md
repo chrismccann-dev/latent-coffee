@@ -10,7 +10,8 @@ Author and maintain the WBC (World Brewers Cup) competitor corpus on the brewing
 ## Knowledge cluster contents (Wave 2 PR 1)
 
 - [`cluster/wbc-reference.md`](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) — migrated from `docs/brewing/wbc-reference.md` (5-axis foundational map + 9 strategy families, incl. Water Chemistry Systems added in the 2026 drop). Old path resolves to a redirect stub for back-compat.
-- [`cluster/wbc-recipes.md`](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — migrated from `docs/brewing/wbc-recipes.md` (154-recipe corpus, 2022-2026; 65 subtypes across 10 families). Old path resolves to a redirect stub.
+- [`cluster/wbc-recipes.md`](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — recipe taxonomy: strategy distribution + strategically important findings + 65 subtype definitions across 10 families (2022-2026). Migrated from `docs/brewing/wbc-recipes.md`; old path resolves to a redirect stub.
+- [`cluster/wbc-recipes-by-family.md`](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) — the 154 competitor-by-competitor recipe rows grouped by strategy family (the per-competitor lookup). Split out of wbc-recipes.md 2026-06-29 (Pattern J prune) when the combined doc crossed the 60 KB single-doc cap.
 - [`cluster/per-strategy/<strategy>.md`](docs/skills/wbc-brewing-archivist/cluster/per-strategy/) — 6 per-strategy stub docs (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push / Hybrid). Placeholders today; populate as patterns crystallize.
 - [`cluster/canonical/wbc-tested-recipes.md`](docs/skills/wbc-brewing-archivist/cluster/canonical/wbc-tested-recipes.md) — canonical registry stub tracking which WBC recipes have been directly tested on a Latent brew. Empty today; grows via the Step 1d WBC corpus-check Named Consideration.
 

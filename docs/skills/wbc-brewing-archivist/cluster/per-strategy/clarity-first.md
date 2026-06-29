@@ -8,7 +8,7 @@ Clarity-First = coarse to medium-coarse grind + moderate-to-low temperature + lo
 
 ## WBC anchors observed
 
-- **Wölfl 2024** — Extraction Push setup mechanically, but Clarity-First adjacent when applied to clean washed Gesha. Pull [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) Wölfl entry for the canonical structure.
+- **Wölfl 2024** — Extraction Push setup mechanically, but Clarity-First adjacent when applied to clean washed Gesha. Pull [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) Wölfl entry for the canonical structure.
 - WBC corpus is **heavy on washed Panama Gesha and clean clarity coffees** — they dominate the dataset. This per-strategy doc will grow fastest.
 
 ## Cross-coffee patterns to author
@@ -19,5 +19,5 @@ Clarity-First = coarse to medium-coarse grind + moderate-to-low temperature + lo
 ## See also
 
 - [wbc-reference.md § Clarity-First family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
-- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
+- [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md)
 - [BREWING.md § Clarity-First](docs/skills/coordinator/catalog.md#brewing-domain-principles)

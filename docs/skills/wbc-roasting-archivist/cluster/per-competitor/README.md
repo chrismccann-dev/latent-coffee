@@ -8,7 +8,7 @@
 
 ## Initial state
 
-Empty. The strategy-level + cross-cutting summaries in [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) and the per-recipe data in [../../wbc-brewing-archivist/cluster/wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) cover today's needs. Per-competitor deep dives land here when:
+Empty. The strategy-level + cross-cutting summaries in [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) and the per-recipe data in [../../wbc-brewing-archivist/cluster/wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) cover today's needs. Per-competitor deep dives land here when:
 
 1. A specific competitor's roasting approach earns explicit cross-lot reference (e.g. Wölfl's clean Gesha roast style as a Latent benchmark)
 2. A competitor's full pitch (sourcing + roasting + brewing) deserves a single-page synthesis
@@ -17,4 +17,4 @@ Empty. The strategy-level + cross-cutting summaries in [wbc-roasting.md](docs/sk
 ## See also
 
 - [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) — strategy-level WBC roasting patterns
-- [../../wbc-brewing-archivist/cluster/wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) — 102-recipe brewing archive (the source corpus)
+- [../../wbc-brewing-archivist/cluster/wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) — 154-recipe brewing archive (the source corpus)

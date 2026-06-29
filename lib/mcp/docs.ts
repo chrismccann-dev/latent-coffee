@@ -248,8 +248,13 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md',
-    title: 'WBC Brewing Archivist — 154-Recipe Archive (2022-2026)',
-    description: 'Use when looking up specific competitor recipes from World Brewers Cup 2022-2026 — 154-recipe archive (the 2026 drop added 52 routines + the Water Chemistry Systems family) with 65 subtype definitions across 10 families and per-recipe detail organized by strategy family. Reference material for the "experiment Chris wouldn\'t think of" goal. Migrated from docs/brewing/wbc-recipes.md in Wave 2 PR 1.',
+    title: 'WBC Brewing Archivist — Recipe Taxonomy (2022-2026)',
+    description: 'Use when looking up the WBC strategy taxonomy — strategy distribution across the 154-recipe archive (2022-2026), strategically important findings, and the 65 subtype definitions across 10 families (the 2026 drop added 52 routines + the Water Chemistry Systems family). The competitor-by-competitor recipe ROWS live in the companion wbc-recipes-by-family.md (split out 2026-06-29 when the combined doc crossed the 60 KB single-doc cap). Reference material for the "experiment Chris wouldn\'t think of" goal. Migrated from docs/brewing/wbc-recipes.md in Wave 2 PR 1.',
+  },
+  {
+    uri: 'docs://skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md',
+    title: 'WBC Brewing Archivist — Recipes by Family (per-competitor rows)',
+    description: 'Use when looking up a specific WBC competitor\'s recipe entry or scanning a strategy family\'s roster — the 154 competitor-by-competitor recipe rows (2022-2026) grouped by strategy family, each row giving year / competitor / placement / coffee + producer / brewer / sub-strategy + secondary tag + extraction intent. The strategy distribution, findings, and 65 subtype definitions live in the parent wbc-recipes.md. Split out 2026-06-29 (Pattern J post-tripwire prune) when the combined archive crossed the 60 KB single-doc cap after the 2026 drop added 52 routines.',
   },
   {
     uri: 'docs://skills/wbc-brewing-archivist/cluster/per-strategy/suppression.md',

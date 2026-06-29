@@ -18,5 +18,5 @@ Full Expression = fine grind + high temperature + high agitation, deployed to de
 ## See also
 
 - [wbc-reference.md § Full Expression family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
-- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
+- [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md)
 - [BREWING.md § Full Expression](docs/skills/coordinator/catalog.md#brewing-domain-principles)
