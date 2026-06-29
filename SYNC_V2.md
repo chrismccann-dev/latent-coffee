@@ -86,8 +86,8 @@ Resources are content endpoints claude.ai can list and fetch. Each Resource has 
 | `docs://brewing/roasters.md` | Per-roaster lessons + house-style cards (full, or `#{anchor}` for one card) | Repo file |
 | `docs://brewing/wbc-reference.md` | **[MIGRATED Wave 2 PR 1]** redirect stub; authoritative at `docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md` | Repo file |
 | `docs://brewing/wbc-recipes.md` | **[MIGRATED Wave 2 PR 1]** redirect stub; authoritative at `docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md` | Repo file |
-| `docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md` | WBC 5-axis foundational map + 8 strategy families + Cross-Cutting Control Patterns | Repo file |
-| `docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md` | 102-recipe WBC archive (2022-2025) | Repo file |
+| `docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md` | WBC 5-axis foundational map + 9 strategy families + Cross-Cutting Control Patterns | Repo file |
+| `docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md` | 154-recipe WBC archive (2022-2026) | Repo file |
 | `docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md` | WBC roasting lessons + Roest L200 hypotheses + blending experiments + rest-curve protocol | Repo file |
 | `docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md` | WBC sourcing strategy + sourcing buckets (action axis) + 5-lane portfolio frame + sourcing channels | Repo file |
 | `docs://roasting.md` | `ROASTING.md` text (full, or `#{anchor}` for one section) | Repo file |

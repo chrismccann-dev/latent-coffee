@@ -15,7 +15,7 @@ Content migrated to the composable sub-skills architecture per [ADR-0011](docs/a
 | Canonical taxonomy lookups + Working with the Latent MCP server + How to Use This Document | [docs/skills/coordinator/operator-guide.md](docs/skills/coordinator/operator-guide.md) |
 | Cross-Coffee Insight Layer (By Strategy / By Modifier / By Process / By Variety / Cooling Behavior / Office Brewing / Open Questions) | [docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md) |
 | Per-cultivar + per-coffee-family deep dives | [docs/skills/brewing-historian/cluster/patterns/by-cultivar/](docs/skills/brewing-historian/cluster/patterns/by-cultivar/) + [by-coffee-family/](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/) |
-| WBC Reference (Section 4) + 102-recipe corpus | [docs/skills/wbc-brewing-archivist/cluster/](docs/skills/wbc-brewing-archivist/cluster/) |
+| WBC Reference (Section 4) + 154-recipe corpus (2022-2026) | [docs/skills/wbc-brewing-archivist/cluster/](docs/skills/wbc-brewing-archivist/cluster/) |
 | Roaster Reference (Section 2) | [docs/brewing/roasters.md](docs/brewing/roasters.md) |
 | Cross-domain (roasting + brewing) patterns | [docs/skills/ccil/cluster/coffee/](docs/skills/ccil/cluster/coffee/) |
 

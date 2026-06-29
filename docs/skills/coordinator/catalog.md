@@ -65,7 +65,7 @@ Chris roasts exclusively in counterflow mode on the Roest L200 Ultra. Counterflo
 | [Roasting Historian](docs/skills/roasting-historian/SKILL.md) | roasting | 2 | placeholder | closed-lot events (push_roast_learnings) | per-lot + cross-lot pattern docs | A, D, F |
 | [Brewing Historian](docs/skills/brewing-historian/SKILL.md) | brewing | 2 | placeholder | every push_brew | per-strategy + per-coffee-family rollups | A, D, F |
 | [WBC Roasting Archivist](docs/skills/wbc-roasting-archivist/SKILL.md) | roasting (+ tentatively absorbs Sourcing Knowledge) | 2 | placeholder | annual WBC year drop · sourcing channel events | WBC lessons + competitor profiles + sourcing strategy | B |
-| [WBC Brewing Archivist](docs/skills/wbc-brewing-archivist/SKILL.md) | brewing | 2 | placeholder | annual WBC year drop | strategy reference + 102-recipe corpus index | B |
+| [WBC Brewing Archivist](docs/skills/wbc-brewing-archivist/SKILL.md) | brewing | 2 | placeholder | annual WBC year drop | strategy reference + 154-recipe corpus index (2022-2026) | B |
 | [Brewing Equipment Expert](docs/skills/brewing-equipment-expert/SKILL.md) | brewing | **1** | **full content** | new equipment · flow-rate measurements · observed quirks | equipment recommendations + constraint envelope | A, C |
 | [Peer-Learning Roasting Archivist](docs/skills/peer-learning-roasting-archivist/SKILL.md) | roasting | 3 | placeholder | operator-watch list (low-volume curation) | per-peer profiles + cross-peer synthesis | B, I |
 | [Roest Knowledge](docs/skills/roest-knowledge/SKILL.md) | roasting | 3 | placeholder | API drift events · firmware updates · observed quirks | machine-aware planning constraints + API quirk catalog | A, B, I |
