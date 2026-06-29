@@ -8,7 +8,7 @@ Hybrid = 6th first-class strategy promoted v8.4 (2026-05-06). Combines two strat
 
 ## WBC anchors observed
 
-- **Eline Ferket 2025** — Selective Bloom Hybrid canonical: Hario Switch, bloom-as-strategy. Pull [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) Ferket entry.
+- **Eline Ferket 2025** — Selective Bloom Hybrid canonical: Hario Switch, bloom-as-strategy. Pull [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) Ferket entry.
 - A large share of WBC recipes use Time Distribution as the primary axis (largest under-served axis pre-v8.4); many of those map to Hybrid sub-forms post-promotion.
 
 ## Cross-coffee patterns to author
@@ -19,6 +19,6 @@ Hybrid = 6th first-class strategy promoted v8.4 (2026-05-06). Combines two strat
 ## See also
 
 - [wbc-reference.md § Hybrid family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
-- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
+- [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md)
 - [BREWING.md § Hybrid](docs/skills/coordinator/catalog.md#brewing-domain-principles)
 - [lib/hybrid-subform.ts](lib/hybrid-subform.ts)

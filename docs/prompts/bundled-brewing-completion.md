@@ -210,7 +210,7 @@ Most likely targets (all brewing-side learnings now live in cluster docs):
   - target_doc="skills/brewing-equipment-expert/cluster/operational-reference.md"
     (or brewers.md / filters.md / grinder-eg1.md / sworks.md) for equipment-side updates
   - target_doc="skills/wbc-brewing-archivist/cluster/wbc-reference.md" (or
-    wbc-recipes.md) for WBC reference updates
+    wbc-recipes.md / wbc-recipes-by-family.md) for WBC reference updates
   - target_doc="skills/ccil/cluster/coffee/<cultivar-slug>/across-roasting-and-brewing.md"
     for cross-domain (roasting + brewing) patterns
   - target_doc="roaster/<Canonical Roaster Name>" for roaster card updates

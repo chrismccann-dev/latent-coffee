@@ -18,5 +18,5 @@ Balanced Intensity = the default mid-extraction strategy — moderate grind, mod
 ## See also
 
 - [wbc-reference.md § Balanced Intensity family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
-- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
+- [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md)
 - [BREWING.md § Balanced Intensity](docs/skills/coordinator/catalog.md#brewing-domain-principles)

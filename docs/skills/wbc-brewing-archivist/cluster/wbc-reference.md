@@ -2,7 +2,7 @@
 
 Lean reference layer derived from Chris's "World Brewers Cup Champion - Recipes and Extraction Taxonomy" research. The five-axis foundational framework + nine strategy families below describe how competition brewers think about extraction. Latent's live taxonomy ([BREWING.md](BREWING.md) Section 1, Step 1d) intentionally folds these into a smaller, single-origin-friendly shape (**6 strategies + 4 modifiers** post-v8.5, plus a doc-layer of cross-cutting control patterns surfaced through this reference) — this doc is the lookup table for "what was the WBC competitor doing" → "where does that map in Latent's framework", and the playbook for calibration-axis moves that deliberately don't get promoted to canonical modifiers.
 
-For the comprehensive 154-recipe archive (subtype definitions, per-recipe detail, year-by-year coverage 2022-2026), see **[wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)**.
+For the strategy taxonomy (distribution + findings + 65 subtype definitions, 2022-2026), see **[wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)**; for the 154 competitor-by-competitor recipe rows grouped by strategy family, see **[wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md)** (split out of wbc-recipes.md 2026-06-29 at the 60 KB cap).
 
 ## History
 

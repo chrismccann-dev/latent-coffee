@@ -8,7 +8,7 @@ Extraction Push = fine grind + high temperature + low agitation (Melodrip / Siba
 
 ## WBC anchors observed
 
-- **Wölfl 2024** — canonical: Orea v4 + Sibarist FAST + Melodrip + fine-grind. Pull [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) Wölfl entry.
+- **Wölfl 2024** — canonical: Orea v4 + Sibarist FAST + Melodrip + fine-grind. Pull [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) Wölfl entry.
 - **Giachgia 2023** — same family, different brewer pairing.
 
 ## Cross-coffee patterns to author
@@ -19,5 +19,5 @@ Extraction Push = fine grind + high temperature + low agitation (Melodrip / Siba
 ## See also
 
 - [wbc-reference.md § Extraction Push family](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md)
-- [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md)
+- [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md)
 - [BREWING.md § Extraction Push](docs/skills/coordinator/catalog.md#brewing-domain-principles)

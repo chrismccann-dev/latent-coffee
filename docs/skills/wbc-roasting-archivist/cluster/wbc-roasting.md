@@ -352,7 +352,7 @@ The most direct WBrC lesson for Roest work: **roast design is flavor composition
 
 ## Cross-references
 
-- **Brewing-side WBC docs:** [wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) (lean mapping layer) + [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md) (102-recipe archive).
+- **Brewing-side WBC docs:** [wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md) (lean mapping layer) + [wbc-recipes-by-family.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md) (154 recipe rows).
 - **Sourcing-side companion:** [sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md).
 - **Roasting practice anchors:** [Roest Knowledge cluster § Evaluation Protocol](docs/skills/roest-knowledge/cluster/protocols/evaluation.md), [§ Counterflow Observations](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md), [Roasting Historian § Cross-Coffee Insights](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md), [§ Roast-to-Brew Translation](docs/skills/roasting-historian/cluster/patterns/roast-to-brew-translation.md). All migrated from ROASTING.md across Wave 2 PR 3 + Wave 3 PR 1 (2026-05-26).
 - **Closed-lot archive:** [docs/roasting/archive.md](docs/roasting/archive.md).
