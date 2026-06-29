@@ -112,7 +112,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   {
     uri: 'docs://reference/wbc-materials.md',
     title: 'Latent Glossary — WBC Reference Materials',
-    description: 'Use when validating or looking up Latent\'s WBC Reference Materials meta-language (extracted from CONTEXT-shared.md in the Pattern J pruning sprint 2026-05-25). Covers WBC reference materials / Strategy-zone completeness / Awareness vs adoption / Consciously not pursuing + Full-map workflow accessibility / Foundational control axes / Absorption status / Sourcing priority + naming-clash disambiguation against Reference role / Skill-maintenance lane / Portfolio lanes / Sourcing constraints / Risk-tier sourcing / Sourcing channel / Competition-grade access trajectory / Calibration pair / Cross-cutting control patterns / Experiment status. The actual WBC technique cookbooks + 102-recipe corpus live in docs/skills/wbc-brewing-archivist/cluster/ + docs/skills/wbc-roasting-archivist/cluster/; this doc defines the META-LANGUAGE used across both archivist clusters. On-demand reference doc.',
+    description: 'Use when validating or looking up Latent\'s WBC Reference Materials meta-language (extracted from CONTEXT-shared.md in the Pattern J pruning sprint 2026-05-25). Covers WBC reference materials / Strategy-zone completeness / Awareness vs adoption / Consciously not pursuing + Full-map workflow accessibility / Foundational control axes / Absorption status / Sourcing priority + naming-clash disambiguation against Reference role / Skill-maintenance lane / Portfolio lanes / Sourcing constraints / Risk-tier sourcing / Sourcing channel / Competition-grade access trajectory / Calibration pair / Cross-cutting control patterns / Experiment status. The actual WBC technique cookbooks + 154-recipe corpus live in docs/skills/wbc-brewing-archivist/cluster/ + docs/skills/wbc-roasting-archivist/cluster/; this doc defines the META-LANGUAGE used across both archivist clusters. On-demand reference doc.',
   },
   {
     uri: 'docs://reference/synthesis-pipeline.md',
@@ -129,7 +129,7 @@ const DOC_CATALOG: CatalogDoc[] = [
     uri: 'docs://brewing.md',
     path: 'BREWING.md',
     title: 'Brewing Master Reference',
-    description: '[REDIRECT STUB in Wave 4 PR 4b] BREWING.md is now a ~3KB pointer-only doc enumerating where each former section now lives. Authoritative brewing content lives in the sub-skills clusters: brewing-assistant/cluster/operational-guide.md (BREW PROMPT Steps 1-4), brewing-equipment-expert/cluster/operational-reference.md (Location Constraints + Equipment + Valve + Filter + Examples), brewing-historian/cluster/patterns/ (cross-coffee insights + per-strategy + per-cultivar), wbc-brewing-archivist/cluster/ (WBC reference + 102-recipe corpus), coordinator/catalog.md § brewing-domain-principles (Two-Axis framing). Brew sessions are Claude-Code-native via the `/brew` skill (claude.ai brewing retired 2026-06-18); docs://prompts/start-brew.md is the mobile fallback entry.',
+    description: '[REDIRECT STUB in Wave 4 PR 4b] BREWING.md is now a ~3KB pointer-only doc enumerating where each former section now lives. Authoritative brewing content lives in the sub-skills clusters: brewing-assistant/cluster/operational-guide.md (BREW PROMPT Steps 1-4), brewing-equipment-expert/cluster/operational-reference.md (Location Constraints + Equipment + Valve + Filter + Examples), brewing-historian/cluster/patterns/ (cross-coffee insights + per-strategy + per-cultivar), wbc-brewing-archivist/cluster/ (WBC reference + 154-recipe corpus), coordinator/catalog.md § brewing-domain-principles (Two-Axis framing). Brew sessions are Claude-Code-native via the `/brew` skill (claude.ai brewing retired 2026-06-18); docs://prompts/start-brew.md is the mobile fallback entry.',
   },
   // ----- brewing ---------------------------------------------------------------
   {
@@ -239,7 +239,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   {
     uri: 'docs://skills/wbc-brewing-archivist/SKILL.md',
     title: 'WBC Brewing Archivist — SKILL',
-    description: 'Use when claude.ai needs the WBC brewing-side knowledge cluster — sub-skill scope, cluster contents, inputs/outputs/handoffs. Wave 2 PR 1 (2026-05-26) consolidates the WBC brewing corpus (5-axis foundational map + 8 strategy families + 102-recipe archive 2022-2025) into one knowledge cluster.',
+    description: 'Use when claude.ai needs the WBC brewing-side knowledge cluster — sub-skill scope, cluster contents, inputs/outputs/handoffs. Wave 2 PR 1 (2026-05-26) consolidates the WBC brewing corpus (5-axis foundational map + 9 strategy families + 154-recipe archive 2022-2026) into one knowledge cluster.',
   },
   {
     uri: 'docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md',
@@ -289,7 +289,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   {
     uri: 'docs://skills/wbc-brewing-archivist/cluster/canonical/wbc-tested-recipes.md',
     title: 'WBC Brewing Archivist — Canonical: WBC-Tested Recipes',
-    description: 'Use when tracking which WBC competitor recipes have been directly tested by Chris on a Latent brew (vs. reference-only in the 102-recipe corpus). Placeholder canonical sub-resource — empty today; grows via the Step 1d WBC corpus-check Named Consideration.',
+    description: 'Use when tracking which WBC competitor recipes have been directly tested by Chris on a Latent brew (vs. reference-only in the 154-recipe corpus). Placeholder canonical sub-resource — empty today; grows via the Step 1d WBC corpus-check Named Consideration.',
   },
   // ----- skills / wbc-roasting-archivist ---------------------------------------
   {
