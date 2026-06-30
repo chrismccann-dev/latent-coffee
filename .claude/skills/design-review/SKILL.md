@@ -1,20 +1,17 @@
 ---
 name: design-review
-description: Read-only visual/UX design audit across app surfaces. Screenshots each surface at 390 + 1024, critiques against the project's OWN design system (not generic taste), and writes a durable findings report - cross-surface consistency + per-surface walk + considered-and-left-alone + a decisive lead recommendation - then STOPS at the report. The visual-design sibling of /architecture-review; never edits code. Use when Chris says "design-review", "visual pass", "audit the UI/design of my surfaces", "review my surfaces for design/UX improvements", or "where's the visual inconsistency".
+description: Read-only visual/UX audit across app surfaces — screenshots at 390+1024, critiques against the project's own design system, and emits a findings report (cross-surface consistency + per-surface walk + considered-and-left-alone + decisive lead) then stops, never editing code.
+disable-model-invocation: true
 ---
 
 <what-this-is>
 
-`/design-review` runs one read-only visual/UX audit across the app's surfaces and produces an implementation-ready findings report. It is the **visual-design sibling of `/architecture-review`** - operator-invoked, judgment-heavy - but a **cross-surface sweep by default**: a visual pass's value concentrates in the inconsistencies *between* surfaces (a chip styled three ways, a header count labelled four ways, density that drifts page to page), not within one file. It was *derived from* the first lived run ([docs/audits/design/01-visual-pass-all-surfaces.md](docs/audits/design/01-visual-pass-all-surfaces.md), 2026-06-20) plus its Batch-1 execution, a finding that escalated into a substrate feature, and two doc reconciliations - every rule below (D1-D8) is a lived correction, not a guess.
+`design-review` runs one read-only visual/UX audit across the app's surfaces and produces an implementation-ready findings report. It **follows the [review-skill spine](.claude/skills/review-skill-spine.md)** (READ-ONLY stop-at-report · re-measure the seed · mandatory considered-and-left-alone · decisive lead · compose-don't-duplicate); the D1-D8 rules below are its **visual/UX specialization**, every one a lived correction from the first run ([docs/audits/design/01-visual-pass-all-surfaces.md](docs/audits/design/01-visual-pass-all-surfaces.md), 2026-06-20) + its execution, not theorized. It is the visual-design sibling of `/architecture-review`, but a **cross-surface sweep by default**: a visual pass's value concentrates in the inconsistencies *between* surfaces (a chip styled three ways, a header count labelled four ways), not within one file.
 
-**The two guardrails that define the skill's character (same shape as arch-review's R8/R13):**
-- **D-kill - it protects deliberate choices (D6).** A `Considered-and-left-alone` section is mandatory. On a mature design half the value is the leave-alone calls - they stop the execution session from "fixing" an intentional decision (run 01 left the synthesis-light card, the book-cover proportion, and the cultivars ASCII tree alone, each protected by a named convention).
-- **D-push - it takes a side on the real ones (D8).** The report opens with a decisive "**Do this first:** ..." lead, scopes each finding, states cost of inaction - but never edits (the push is in the recommendation, not the keyboard).
-
-**Hard rules, non-negotiable:**
-1. **READ-ONLY. Stop at the report. Never edit code, styles, or tokens.** The actual changes are a separate, triaged, later execution session.
-2. **Critique against the project's OWN design system, not generic taste (D2).** A finding that fights an intentional convention is a non-finding - it goes in `Considered-and-left-alone`.
-3. **Measure, don't eyeball (D1).** Overflow, counts, font treatments - measure live via `preview_eval`. "Looks off" is a hypothesis; in run 01 a *claimed* defect was false (see D1).
+Two spine invariants take a sharp form here, plus the domain hard rules:
+- **D6 (considered-and-left-alone) - it protects deliberate choices.** On a mature design half the value is the leave-alone calls - they stop the execution session from "fixing" an intentional decision (run 01 left the synthesis-light card, the book-cover proportion, the cultivars ASCII tree alone).
+- **D8 (decisive lead) - it takes a side on the real ones.** Opens with "**Do this first:** ...", scopes each finding, states cost of inaction, never edits.
+- **D2 (domain) - critique against the project's OWN design system, not generic taste.** A finding that fights an intentional convention is a non-finding - it goes in `Considered-and-left-alone`. (And **D1: measure, don't eyeball** - "looks off" is a hypothesis; in run 01 a *claimed* defect was false.)
 
 </what-this-is>
 

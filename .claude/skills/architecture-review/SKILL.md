@@ -1,20 +1,20 @@
 ---
 name: architecture-review
-description: Read-only architecture audit of a named surface (a page family, a lib core, the doc substrate). Like /simplify but repo-wide and judgment-heavy — finds duplication-at-distance, large mixed-concern files, weak type boundaries, shallow/deep mismatches, and doc-substrate rot, then emits a decisive lead recommendation + candidate cards + a considered-and-rejected list + a dependency sequence. Stops at the report; never edits code. Use when Chris says "architecture-review <surface>", "audit the architecture of X", "where's the duplication in Y", or wants a refactor scoped before building it.
+description: Read-only architecture audit of a named surface — emits a refactor-ready report (lead recommendation + candidate cards + considered-and-rejected + dependency sequence) and stops, never editing code.
+disable-model-invocation: true
 ---
 
 <what-this-is>
 
-`/architecture-review <surface>` runs one read-only audit of a named surface (or the whole repo, as in audit 06) and produces a refactor-ready report. It is the **code-side sibling of the doc-pruning mechanism** — operator-invoked, judgment-heavy, repo-wide. It was *derived from* five real Latent audits (the worked-example corpus, [docs/audits/architecture/](docs/audits/architecture/) `01..05`, grown by each subsequent run — `06` is the first post-skill audit), not theorized; every rule below (R1-R13) is a friction-log correction, not a guess.
+`architecture-review <surface>` runs one read-only audit of a named surface (or the whole repo, as in audit 06) and produces a refactor-ready report. It **follows the [review-skill spine](.claude/skills/review-skill-spine.md)** (READ-ONLY stop-at-report · re-measure the seed · mandatory considered-and-rejected · decisive lead · compose-don't-duplicate); the R1-R13 rules below are its **code-structure specialization** — every one a friction-log correction from five real Latent audits ([docs/audits/architecture/](docs/audits/architecture/) `01..05`, grown by each run; `06` is the first post-skill audit), not theorized. It is the code-side sibling of the doc-pruning mechanism.
 
-**The two guardrails that define the skill's character:**
-- **R8 — it kills bad refactor ideas.** On a well-factored surface the leave-alone calls are *half the value* — they stop a future agent from shattering a deep module while "tidying." A `Considered-and-rejected` section is mandatory, not optional.
-- **R13 — it pushes the real ones.** The report is not a neutral menu. For genuine wins it *actively recommends action and states the cost of inaction*. It leads with a decisive "do this now," scopes the work, and hands off the packets — but **never silently executes** (the push is in the recommendation, not the keyboard).
+Two spine invariants take a sharp form here:
+- **R8 (considered-and-rejected) — it kills bad refactor ideas.** On a well-factored surface the leave-alone calls are *half the value* — they stop a future agent from shattering a deep module while "tidying."
+- **R13 (decisive lead) — it pushes the real ones.** For genuine wins it recommends action and states the cost of inaction; it leads with a decisive "do this now" and hands off the packets, but **never silently executes** (the push is in the recommendation, not the keyboard).
 
-**Hard rules, non-negotiable:**
-1. **READ-ONLY. Stop at the report. Never edit code.** The actual refactor is a separate, grilled, later session.
-2. **Re-measure everything (R1).** The surface description / seed counts are a *hypothesis*, never a finding. They were wrong in all five dogfood sessions.
-3. **Delegate detection to the gates, keep the judgment.** `check:hotspots` and `check:doc-links` produce the mechanical lists; the skill does the keep/refactor/leave-alone judgment they can't.
+Two domain hard rules beyond the spine:
+1. **Re-measure everything (R1).** The surface description / seed counts are a *hypothesis*, never a finding — wrong in all five dogfood sessions.
+2. **Delegate detection to the gates, keep the judgment.** `check:hotspots` and `check:doc-links` produce the mechanical lists; the skill does the keep/refactor/leave-alone judgment they can't.
 
 </what-this-is>
 
