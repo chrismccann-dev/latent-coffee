@@ -47,3 +47,7 @@ Within each file this is single-source; **across the family it is duplication** 
 ## Open questions
 
 - Is the shared-preamble snippet worth the indirection for ~3 short blockquotes, or is the cross-skill drift risk low enough to leave as-is? A judgment call for the gated cut pass.
+
+## Applied 2026-06-30
+
+95 -> **84**. The entry-shape template was kept byte-for-byte (IR4 - it is the contract `brew` matches on). The "asymmetry" and "write-path" rationale were deleted, leaving only the runtime-load-bearing prose (purchased-only gate, mobile fallback). IR6 resolved against a shared snippet (see [improvement-log](docs/audits/skills/improvement-log.md)).

@@ -5,10 +5,8 @@ description: >-
   "what to roast next" queue, or add a new green lot to inventory. Use when Chris says
   "re-rank my inventory", "re-rank my green inventory", "what should I roast next",
   "add a green bean to my inventory", "I have a new green bean to add", "log this green
-  lot", or pastes a green-coffee spec sheet to add. Composes the roasting-coordinator
-  inventory-rerank doctrine (ranked-top + banded-tail roast_priority) over
-  list_green_inventory + push_green_bean + patch_green_bean. NOT the full per-lot roast
-  arc — designing V-sets / roasting a lot is the roasting coordinator ("start a new lot").
+  lot", or pastes a green-coffee spec sheet to add. NOT the full per-lot roast arc —
+  designing V-sets / roasting a lot is the roasting coordinator ("start a new lot").
 ---
 
 # Green Inventory (Claude-Code-native inventory entry)
@@ -59,19 +57,12 @@ ready to roast it, that's the [roasting coordinator](docs/skills/roasting-coordi
 3. **Slot it into the ranking** — per [`cluster/inventory-rerank.md`](docs/skills/roasting-coordinator/cluster/inventory-rerank.md) § Intake-time insert: `list_green_inventory` to see the current order, decide the new lot's slot from its `intake_hypothesis` + specs + the green doc, then write only the touched lots via `patch_green_bean`. A lot that joins the ranked front at position `p` shifts `p..K` up by one (touches only the small front); a lot that drops into the `50` or `90` band touches nothing else.
 4. **Confirm** placement ("landed in inventory, ranked #N / Soon / Deferred"), and remind Chris that starting the roast (V1 design) is a separate Coordinator session.
 
-## Write path (MCP-only, like everything else)
+## Out of scope
 
-Regardless of operation, the write path is the Latent MCP server
-([feedback_mcp_only_input.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_only_input.md)):
-`push_green_bean` (add) + `patch_green_bean` (rank / field edits) + `list_green_inventory`
-(read). No manual DB inserts, no in-app forms. `roast_priority` is Coordinator-maintained — it
-is only ever written here, never at `push_green_bean` time.
-
-## Out of scope (don't grow into the roast arc)
-
-- **Roasting a lot** — designing V-sets, pushing recipes, running cuppings, declaring a reference. That is the [roasting coordinator](docs/skills/roasting-coordinator/SKILL.md) ("start a new lot" / "continue the &lt;lot&gt; lot"). This skill stops at "the lot is in inventory and ranked."
-- **The roasted-bean (brewing) side.** A purchased roasted bag goes in [`docs/brewing/freezer-stock.md`](docs/brewing/freezer-stock.md) (a markdown lookup doc, NOT the DB — brewing is resolution-only). The symmetric "what to brew next" soft-ordering is parked.
-- **Re-ranking non-in_inventory lots.** The queue is the in_inventory set only.
+Stops at "the lot is in inventory and ranked." Roasting it (V-sets, recipes, cuppings, declaring a
+reference) is the [roasting coordinator](docs/skills/roasting-coordinator/SKILL.md) ("start a new
+lot"). The queue is the `in_inventory` set only; the roasted-bean side is
+[`freezer-stock`](.claude/skills/freezer-stock/SKILL.md).
 
 ## Cross-references
 

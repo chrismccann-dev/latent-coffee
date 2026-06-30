@@ -44,7 +44,7 @@ Walk the four axes in order. For each finding, name the **glossary failure mode*
 
 4. **Pruning (the sentence-level passes).** Two tests, every section:
    - **No-op test, sentence by sentence:** would deleting this sentence change behavior vs the model's default? If no, cut the whole sentence (do not trim words from it).
-   - **Provenance-to-comment (IR2):** dates, PR#, friction-incident attributions, ADR provenance inline in prose = context load every turn for a fact the agent never acts on. Move to a `<!-- -->` block; the maintainer keeps it, the agent stops paying for it.
+   - **Provenance-delete (IR2, as corrected by IR7):** dates, PR#, friction-incident attributions, ADR provenance inline in prose are read on every load and the agent never acts on them. **Delete them** - git history + [`docs/sprints/shipped.md`](docs/sprints/shipped.md) are their home (the project policy, set 2026-06-30). Do *not* inline-comment them as a "fix": a `<!-- -->` block is still file text the agent reads at invocation, so commenting is a *legibility* move (it marks "not an instruction"), never a size one. **Per-turn vs per-invocation (IR7):** for a model-invoked skill only the `description` loads every turn; the body loads on invocation. The always-loaded saving is the description trim - body cuts only pay back when the skill is invoked.
 
 ## Step 2 - Cross-skill consistency (only when auditing a family member)
 
@@ -52,7 +52,7 @@ The operator-direct skills (`brew`, `green-inventory`, `freezer-stock`, ...) sha
 
 ## Step 3 - The report (then STOP)
 
-Open with the **decisive lead recommendation** ("Do this now: ...") and the **line-budget delta** (`<current> -> ~<projected> lines`). Then:
+Open with the **decisive lead recommendation** ("Do this now: ...") and the **line-budget delta** (`<current> -> ~<projected> lines`). The projected number is the **sum of the cut-list savings only (IR8)** - never a wishful total that implicitly cuts the considered-and-kept. A skill that is mostly load-bearing steps barely shrinks, and that is the correct result (brew's honest floor was 199, not the ~150 the first pass over-projected by counting kept mass as cuttable). Then:
 
 ```
 ### Cut N: <section / sentence>   [CUT | RELOCATE | STRENGTHEN | COLLAPSE]
@@ -77,9 +77,10 @@ The audit **stops at the report. Never edit the target skill.** The cut is a sep
 
 The three bootstrap runs are the worked examples - read the closest one when auditing a similar skill:
 
-- [docs/audits/skills/01-brew.md](docs/audits/skills/01-brew.md) - **rich workflow skill, provenance-heavy.** Source of IR2 (provenance-to-comment) and IR3 (description identity is a no-op). 210 -> ~150 with zero behavior lost.
-- [docs/audits/skills/02-green-inventory.md](docs/audits/skills/02-green-inventory.md) - **multi-operation skill.** Source of IR5 (maintainer-vs-agent test) - "MCP-only write path" and "Out of scope" are mostly maintainer rationale.
-- [docs/audits/skills/03-freezer-stock.md](docs/audits/skills/03-freezer-stock.md) - **short skill with a fixed entry template.** Source of IR4 (the template is legitimate reference - the mandatory leave-alone) and, run alongside 01/02, IR6 (the operator-direct boilerplate triad is family-level duplication).
+- [docs/audits/skills/01-brew.md](docs/audits/skills/01-brew.md) - **rich workflow skill, provenance-heavy.** Source of IR2 (provenance-delete) and IR3 (description identity is a no-op). Applied: 210 -> 199 (the floor: its bulk is load-bearing and kept).
+- [docs/audits/skills/02-green-inventory.md](docs/audits/skills/02-green-inventory.md) - **multi-operation skill.** Source of IR5 (maintainer-vs-agent test) - "MCP-only write path" and "Out of scope" were mostly maintainer rationale. Applied: 81 -> 72.
+- [docs/audits/skills/03-freezer-stock.md](docs/audits/skills/03-freezer-stock.md) - **short skill with a fixed entry template.** Source of IR4 (the template is legitimate reference - the mandatory leave-alone) and, run alongside 01/02, IR6 (the operator-direct boilerplate triad is family-level duplication). Applied: 95 -> 84.
+- The bootstrap *application* (2026-06-30) forced IR7 (comments don't shrink the body; per-turn vs per-invocation load) and IR8 (the budget delta excludes kept mass) - the cuts' premise (relocate-to-comment shrinks the file) was false on execution. The recursion catching its own author's wrong assumption is the loop working.
 
 The improvement log ([docs/audits/skills/improvement-log.md](docs/audits/skills/improvement-log.md)) records every IR-rule with the run that forced it; new rules need a lived finding (anti-lawyer-redline: make the skill better, not bigger).
 
