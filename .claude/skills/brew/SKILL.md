@@ -1,14 +1,10 @@
 ---
 name: brew
 description: >-
-  Run a coffee brew end-to-end in Claude Code, the Claude-Code-native entry for the brewing
-  workflow (the migration of claude.ai's start-brew, iterate, completion flow onto a CC mobile
-  session). Use when Chris says "brew a coffee", "start a brew", "I want to brew", "let's dial in
-  <coffee>", or pastes a coffee URL / OPTIMIZED BREW PACKET to brew. Composes the brewing-assistant
-  operational guide (Coffee Brief, recipe, in-thread iteration, optimized-brew push) over the
-  equipment / historian / WBC knowledge clusters; the only thing it writes to the app is the
-  OPTIMIZED brew via push_brew, intermediate iterations stay in-thread by design (archive-driven).
-  NOT a coordinator/assistant restructure.
+  Run a coffee brew end-to-end in Claude Code. Use when Chris says "brew a coffee", "start a
+  brew", "I want to brew", "let's dial in <coffee>", or pastes a coffee URL / OPTIMIZED BREW
+  PACKET to brew. The only thing it writes to the app is the OPTIMIZED brew via push_brew;
+  intermediate iterations stay in-thread by design (archive-driven).
 ---
 
 # Brew (Claude-Code-native brewing entry)
@@ -38,7 +34,7 @@ reliable way in.
 
 ## Apex inheritance: do not re-author it
 
-The brewing stack is already **apex-aware** (North Star bake-in, PR #450). You inherit the
+The brewing stack is already **apex-aware**. You inherit the
 philosophy; you do not re-state it. Two load-bearing places it lives, reached for free when you
 compose the operational guide:
 
@@ -129,10 +125,9 @@ below.
 ## Running tasting-arc state block (Claude Code compaction discipline)
 
 Brewing Phase-2 iteration is audio-heavy and can span an idle gap (the operator brews, comes back
-hours later). The mobile-probe finding (2026-06-09/10): across a >24h idle gap, compaction
-preserves load-bearing identifiers verbatim but **compresses long tool-result bodies, including
-per-iteration tasting detail, to gist**. The iteration arc is exactly that per-iteration detail,
-so it is the thing at risk.
+hours later). Across a >24h idle gap, compaction preserves load-bearing identifiers verbatim but
+**compresses long tool-result bodies, including per-iteration tasting detail, to gist**. The
+iteration arc is exactly that per-iteration detail, so it is the thing at risk.
 
 **Mitigation: maintain a running tasting-arc state block in the conversation, restated and updated
 every iteration turn** so the arc lives in recent context (which compaction preserves) rather than
@@ -166,21 +161,18 @@ this session can't write the repo file, surface the friction line for Chris to l
 recurring across brews (N=3) graduates into a SKILL.md / operational-guide edit; make the skill
 better, not bigger.
 
-## Out of scope (do not over-build into roasting's shape)
+## Out of scope
 
-Brewing has **none** of roasting's single-session context-bloat problem ([ADR-0024 § Context](docs/adr/0024-lot-coordinator-claude-code-native.md)).
-So this entry deliberately has **no** durable Brief file, **no** Coordinator/Assistant split,
-**no** handoff packets, **no** `lot_status`. One short session, the running-state block, the
-friction log. The whole-arc tasting-capture *schema* question on `brews` is a separate, gated
-brainstorm ([roadmap.md](docs/product/roadmap.md)), not this skill's job.
+One short session: the running-state block + friction log. **No** durable Brief file,
+Coordinator/Assistant split, handoff packets, or `lot_status` - brewing has none of roasting's
+single-session context-bloat problem. The whole-arc tasting-capture *schema* question on `brews`
+is a separate gated brainstorm, not this skill's job.
 
 ## Never code-deploy mid-brew (build-hygiene guardrail)
 
 A brew session **records** a brew; it does not ship app code. If a net-new
 canonical blocks `push_brew`, use the matching `*_override: true` flag — every
-axis now has one, **including `cultivar_override`** (added 2026-06-26 after the
-FanHua / Syrina friction, where a net-new variety forced a mid-brew cultivar-registry
-edit → PR → Vercel deploy and a red build hit prod). Hard rules:
+axis now has one, **including `cultivar_override`**. Hard rules:
 
 - **NEVER** edit `lib/cultivar-registry.ts` / `lib/terroir-registry.ts` (or any
   `lib/*` / migration) and deploy mid-brew to unblock a write. The override flag
@@ -193,12 +185,9 @@ edit → PR → Vercel deploy and a red build hit prod). Hard rules:
   `npx tsc --noEmit` / build** ([CLAUDE.md § build-hygiene](CLAUDE.md)). The
   FanHua detour shipped a failed prod build because this step was skipped.
 
-## MCP-only write path holds
-
-Regardless of client, the write path is `push_brew` via the Latent MCP server
-([feedback_mcp_only_input.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_only_input.md)).
-The migration changes the *orchestration surface*, never the write path. No manual DB inserts, no
-in-app forms.
+The write path is always `push_brew` via the Latent MCP server
+([feedback_mcp_only_input.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_mcp_only_input.md)),
+regardless of client; no manual DB inserts, no in-app forms.
 
 ## Cross-references
 

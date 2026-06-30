@@ -20,19 +20,14 @@ skill.
 
 > **Operator-direct, like [`green-inventory`](.claude/skills/green-inventory/SKILL.md) + [`brew`](.claude/skills/brew/SKILL.md).** Not Master-Coordinator-dispatched, not MCP-registered. Chris triggers it directly.
 
-## The asymmetry (why this is a doc, not the DB)
+## Purchased coffees only
 
-Green inventory is the `green_beans` **table** (tracked from intake). Roasted inventory is a
-**markdown lookup doc** — because brewing is **resolution-only** (the upload-on-resolution
-rule, [feedback_upload_on_resolution.md](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/feedback_upload_on_resolution.md)):
-a brew row only lands in the DB when it's the *optimized* brew. So freezer-stock is a
-pre-brew **convenience cache**, not source of truth. Its whole job: at brew time the
-[`brew`](.claude/skills/brew/SKILL.md) skill matches a purchased coffee by `Roaster — Coffee`
-and pulls the whole-bean Agtron + specs, so Chris isn't asked to re-measure.
+A self-roasted bean is **not** logged here — it's already in the DB as the roasts of its
+`green_beans` lot. If Chris describes something he roasted himself, redirect to the roasting side.
 
-**Purchased coffees only.** A self-roasted bean is NOT logged here — it's already in the DB
-as the output (roasts) of its `green_beans` lot. If Chris is describing something he roasted
-himself, redirect: that's the roasting side, not freezer stock.
+This doc's whole job: at brew time the [`brew`](.claude/skills/brew/SKILL.md) skill matches a
+purchased coffee by `Roaster — Coffee` and pulls the whole-bean Agtron + specs, so Chris isn't
+asked to re-measure.
 
 ## The entry shape (match it exactly)
 
@@ -72,20 +67,14 @@ No count change (the entry already exists).
 
 ## Write path
 
-This is a **doc edit**, not an MCP entity write — freezer-stock is reference substrate, not a
-DB table, so a CC session edits the markdown directly (consistent with how living docs are
-maintained; the MCP-only-input rule governs *entities* — brews / green_beans / roasts — not
-this lookup doc). On a client without repo filesystem write (mobile), format the entry in the
-exact shape and either land it via `propose_doc_changes(uri="docs://brewing/freezer-stock.md", ...)`
-or hand the formatted block to Chris to commit. The brew row still carries the authoritative
-data — a freezer-stock miss is expected and harmless (it's a cache).
+Edit the markdown directly (it's reference substrate, not an MCP entity). On a client without repo
+filesystem write (mobile), format the entry in the exact shape and either land it via
+`propose_doc_changes(uri="docs://brewing/freezer-stock.md", ...)` or hand the block to Chris to
+commit. A freezer-stock miss is harmless — the brew row carries the authoritative data.
 
 ## Out of scope
 
-- **Self-roasted beans** — those live in the DB as their `green_beans` lot's roasts; never logged here.
-- **Brewing the coffee** — that's the [`brew`](.claude/skills/brew/SKILL.md) skill (which *reads* this doc at Step 1).
-- **A "what to brew next" ordering** — the roasted-bean analog of the green roast-queue stack-rank is parked (future).
-- **Backfill** — the doc is complete going forward (pack-time), intentionally not backfilled; a missing older coffee is normal.
+Brewing the coffee is the [`brew`](.claude/skills/brew/SKILL.md) skill (which *reads* this doc at Step 1).
 
 ## Cross-references
 

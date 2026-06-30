@@ -49,4 +49,8 @@ The skill is otherwise a model citizen on steering and composition (see Consider
 
 ## Open questions
 
-- Cut 4's "Out of scope" doubles as the anchor for [ADR-0024 § Context](docs/adr/0024-lot-coordinator-claude-code-native.md)'s no-bloat decision. Confirm the one-line residual + comment preserves enough that a future session does not re-grow it.
+- Cut 4's "Out of scope" doubles as the anchor for [ADR-0024 § Context](docs/adr/0024-lot-coordinator-claude-code-native.md)'s no-bloat decision. Confirm the one-line residual preserves enough that a future session does not re-grow it.
+
+## Applied 2026-06-30
+
+210 -> **199**, not the ~150 projected above. The gap is the lesson ([IR8](docs/audits/skills/improvement-log.md)): the projection counted considered-and-kept mass (the self-roasted gate, the arc, the running-state block) as cuttable. Those stayed. Provenance was **deleted**, not commented ([IR2/IR7](docs/audits/skills/improvement-log.md), provenance policy = git + shipped.md). The real always-loaded win was the description trim.

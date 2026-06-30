@@ -39,3 +39,7 @@ Collapse the "Write path (MCP-only, like everything else)" section into a commen
 ## Open questions
 
 - The "Operator-direct, like the roasting coordinator + brew" blockquote (line 21) recurs across all three operator-direct skills. Flagged for the cross-skill pass (IR6) - do not cut it here in isolation.
+
+## Applied 2026-06-30
+
+81 -> **72**. IR6 resolved: no shared snippet (indirection cost > drift risk on a 2-line blockquote); the blockquote stays inline, identically worded. The "Write path" section was deleted outright (the `roast_priority`-write discipline already lives in Operation B step 2 - it was pure duplication). See [improvement-log § Decisions](docs/audits/skills/improvement-log.md).
