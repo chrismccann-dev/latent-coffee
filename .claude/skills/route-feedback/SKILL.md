@@ -1,24 +1,19 @@
 ---
 name: route-feedback
 description: >-
-  Routes structured workflow feedback from a claude.ai session to its correct home
-  instead of dumping everything into one log. Use this whenever Chris pastes "Feedback
-  for Claude Code" prose, says "process pending workflow feedback", "route this feedback",
-  "here's feedback from the brewing/roasting session", or otherwise hands over a batch of
-  friction items / wins / suggestions from a workflow session. It splits the paste into
-  discrete items, records each in the master feedback log, and points actionable ones into
-  the feedback backlog (deduping recurring items) — auto-filing safe classes, confirming
-  risky ones. This is the intake half of the feedback pipeline; the planning half is the
-  plan-feedback skill.
+  Routes structured workflow feedback from a claude.ai session to its correct home instead of
+  dumping everything into one log. Use this whenever Chris pastes "Feedback for Claude Code"
+  prose, says "process pending workflow feedback", "route this feedback", "here's feedback from
+  the brewing/roasting session", or hands over a batch of friction / wins / suggestions from a
+  workflow session. The intake half of the feedback pipeline; the planning half is plan-feedback.
 ---
 
 # Route Feedback
 
-Chris's workflow runs in claude.ai (brewing + roasting sessions). At the end of those
-sessions, claude.ai emits a "Feedback for Claude Code" block — friction it hit, wins worth
-keeping, schema/prompt/Tool gaps it noticed. Historically that prose all dead-ended in one
-memory file as append-only "Rounds," so real signal rotted: a recurring friction looked the
-same as a one-off, and buildable work was buried next to wins.
+At the end of a claude.ai workflow session (brewing + roasting), it emits a "Feedback for Claude
+Code" block — friction it hit, wins worth keeping, schema/prompt/Tool gaps it noticed. This skill
+takes that prose apart and routes each item to the place that will act on it, so signal compounds
+instead of dead-ending append-only in one log where a recurring friction reads the same as a one-off.
 
 This skill is the **intake + routing** half of the feedback pipeline (see
 [ADR-0020](docs/adr/0020-feedback-handoff-pipeline.md)). Its job is to take the

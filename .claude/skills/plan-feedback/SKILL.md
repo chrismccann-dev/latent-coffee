@@ -1,13 +1,11 @@
 ---
 name: plan-feedback
 description: >-
-  Reviews the accumulated workflow-feedback backlog, clusters related items, prioritizes by
-  recurrence + criticality, and produces a buildable sprint kickoff brief — then hands off to
-  an implementer sub-agent. Use this whenever Chris says "review the feedback backlog", "plan
-  the feedback backlog", "plan the rest of the feedback", "what should we build from the
-  feedback", "drain the feedback queue", or asks what the most common / most recurring
-  workflow friction is and what to do about it. This is the planning half of the feedback
-  pipeline; the intake/routing half is the route-feedback skill.
+  Turns the accumulated workflow-feedback backlog into a decision: what to build next, and the
+  kickoff brief for it. Use whenever Chris says "review the feedback backlog", "plan the feedback
+  backlog", "plan the rest of the feedback", "what should we build from the feedback", "drain the
+  feedback queue", or asks what the most recurring workflow friction is and what to do about it.
+  The planning half of the feedback pipeline; the intake/routing half is route-feedback.
 ---
 
 # Plan Feedback
