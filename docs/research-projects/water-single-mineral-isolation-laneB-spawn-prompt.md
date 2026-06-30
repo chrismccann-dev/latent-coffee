@@ -44,9 +44,11 @@ Sitting 1 results recap (full detail in the protocol doc's handoff brief):
 - HT5 (recon vs bottled SBL) was INVALIDATED — sample B was mis-dosed (a finished WATER treated like a CONCENTRATE, ~400× off, ended ≈distilled). It was NOT a recon-vs-bottled test; it just replicated "distilled wins." Re-queued. Carry NO "DIY beats commercial" claim.
 - Rig validated: a clean MgSO₄ build read GH 44 / KH 20.
 
-### THE centerpiece of this sitting (HT3 + P6T2-AI-1)
+### THE centerpiece of this sitting (HT3 + P6T2-AI-1) — also the WBC-field reconciliation
 
 Does PRE-BREW confirm the post-brew inversion? Build single-ion waters at constant GH and brew with them. If pre-brew also shows chloride > sulfate, the inversion is real (gated only on a future 2nd coffee). If pre-brew DIVERGES from post-brew, that divergence IS the extraction effect — and it's the finding. Either way, substrate-fold stays DEFERRED (single coffee).
+
+**This is now also a reconciliation with the 2026 WBC field** (reference: docs/research-projects/wbc-2026-water-handoff.md). Seven WBC competitors independently converged on "the anion matters as much as the cation" — corroborating Sitting 1's interaction finding. BUT they built waters (pre-brew) and assign **MgSO₄ = florality / acidity / vibrancy** (a prized role), where our *post-brew* screen scored MgSO₄ muddy/worst. Our post-brew also diverged on CaCl₂ (we got acid/clarity; the field gets body). Hypothesis: sulfate's floral/acidity role is **extraction-mediated** — invisible post-brew, recovered pre-brew. So Lane B's MgCl₂-vs-MgSO₄ tests not just "does the inversion hold" but "does pre-brew rehabilitate sulfate's floral role that the field swears by." Pre-state both outcomes.
 
 ### Lane B plan (SUPERSEDES the protocol doc's original Lane B; priority order — trim from the bottom if coffee/palate is short)
 
@@ -58,6 +60,10 @@ Build each water to GH 44, verify on the LaMotte before brewing, read each A/B a
 5. TRIMMED buffer check (operator call): on the best base from #1–4, zero KH vs a low ~10–20 KH NaHCO₃ — just confirm minimal/zero KH is best for this clarity coffee. Skip the full Na-vs-K × KH matrix.
 6. (if coffee + palate allow) complete the 2×2: MgSO₄ vs CaSO₄.
 7. (optional, re-queued) recon-vs-bottled SBL done RIGHT: brew the GH-40 SBL recon WATER directly (it is a WATER — brew it, do NOT re-dose it) against bottled SBL at matched strength.
+
+### Scoring discipline — PER-AXIS directional reads (2026 WBC fold)
+
+Score **florality/aromatics, acidity, sweetness, body, texture as SEPARATE directional reads** each comparison, and **report the per-axis winner** — do NOT collapse to a single overall / reveal-inject verdict. The 2026 WBC field's explicit warning: water moves these dimensions independently, so a single "better/worse" judgment throws away the signal. This directly de-risks the sulfate question: in Sitting 1, MgSO₄ scored "muddy/worst" as one holistic number — but it may WIN florality while losing overall, which is exactly the field's MgSO₄ = florality role. Add an explicit aromatics/florality axis to the recording sheet for every Lane B cup; keep the reveal/inject flag, but it rides alongside the per-axis directions, not instead of them.
 
 ### Friction fixes from Sitting 1 — apply these (they caused real errors)
 
