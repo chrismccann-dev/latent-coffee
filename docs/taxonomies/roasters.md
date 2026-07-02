@@ -26,9 +26,9 @@ External claims in this doc are sourced at authoring time from the CSV; Chris's 
 
 Matches the `ROASTERS` array in [lib/roaster-registry.ts](lib/roaster-registry.ts) exactly. 74 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
 
-### Clarity-First (29)
+### Clarity-First (28)
 
-Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 29 entries.
+Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 28 entries.
 
 - **April Coffee**
 - **Bean & Bean Coffee Roasters**
@@ -40,7 +40,6 @@ Roasters whose default is to protect clarity. Low-agitation, conservative pour s
 - **Finca Coffee (Coffee Libre)**
 - **Goût & Co**
 - **Heart Coffee Roasters**
-- **Helm Coffee** — skeleton (working hypothesis)
 - **Hydrangea Coffee** — CLARITY-FIRST → BALANCED
 - **ILSE Coffee** — CLARITY-FIRST → BALANCED
 - **Koppi Coffee Roasters**
@@ -82,9 +81,9 @@ Roasters who target moderate extraction (20-22% EY) as the home position. Some s
 - **Snite**
 - **The Barn Coffee Roasters** — BALANCED → CLARITY
 
-### Extraction-Forward (19)
+### Extraction-Forward (20)
 
-Roasters who intentionally push extraction. Includes BALANCED → FULL (most), FULL EXPRESSION (Sey, Dak, Flower Child, Big Sur, Luminous), and BALANCED → HIGH (Nomad, Manhattan, Proud Mary — synonymous with FULL EXPRESSION). Default Clarity-First will under-extract. Start at 6.3-6.0, higher temp, more agitation. 19 entries.
+Roasters who intentionally push extraction. Includes BALANCED → FULL (most), FULL EXPRESSION (Sey, Dak, Flower Child, Big Sur, Luminous), and BALANCED → HIGH (Nomad, Manhattan, Proud Mary — synonymous with FULL EXPRESSION). Default Clarity-First will under-extract. Start at 6.3-6.0, higher temp, more agitation. 20 entries.
 
 - **Apollon’s Gold** — BALANCED → FULL
 - **Aviary** — BALANCED → FULL
@@ -94,6 +93,7 @@ Roasters who intentionally push extraction. Includes BALANCED → FULL (most), F
 - **Datura Coffee** — BALANCED → FULL
 - **Flower Child Coffee** — FULL EXPRESSION
 - **H&S Coffee Roasters** — BALANCED → FULL
+- **Helm Coffee** — BALANCED → FULL
 - **Luminous Coffee** — FULL EXPRESSION
 - **MAME Coffee** — BALANCED → FULL
 - **Manhattan Coffee Roasters** — BALANCED → HIGH
@@ -407,14 +407,6 @@ _Portland, Oregon, USA_ · **CLARITY-FIRST** · archive: 2 brews
 - **Calibration role:** US Nordic Baseline
 - **Confidence:** High
 - **Notes:** One of the earliest US adopters of Nordic roasting; more forgiving than Wendelboe; strong baseline for clarity-first brewing in US context
-
-#### Helm Coffee
-_Location unknown_ · **CLARITY-FIRST** (working hypothesis) · archive: 1 brew · **skeleton**
-
-- **Roast style:** Very light (single data point: WB Agtron 83.3, Panama Gesha Natural)
-- **Confidence:** Low
-- **Calibration role:** Skeleton - pending more brews
-- **Notes:** First Helm lot in the archive: Panama El Burro Lot 16 Natural Gesha (Lamastus Family, El Burro Estate / Volcán Barú Highlands; brew 24e05434). Very-light clean roast that under-extracted at Clarity-First (flat, light brown tea, fast finish) and wanted an Extraction Push (grind 6.2 / 97°C kettle-on-base / gentle agitation) - the first Gesha to confirm Extraction Push. The strategy tag is a working hypothesis off the very-light clean-roast profile; the Extraction Push was a brew-side zone correction, not roaster house evidence. Recipe baseline / brewer-filter defaults / house doctrine genuinely unknown. Surfaces via `list_skeleton_entries` until rich-field research lands.
 
 #### Hydrangea Coffee
 _Berkeley, CA, USA_ · **CLARITY-FIRST → BALANCED** · archive: 7 brews
@@ -1401,6 +1393,29 @@ _Laramie, WY, USA_ · **BALANCED → FULL**
 - **Confidence:** Low
 - **Notes:** Lack of official guidance; behaves like a more difficult-to-extract Nordic roast; dialing resembles early Sey-like approach but with less defined system; treat as requiring cautious extraction increase
 
+#### Helm Coffee
+_Indianapolis, IN, USA_ · **BALANCED → FULL** · archive: 1 brew
+
+- **Roast style:** Light (competition-informed, fruit-forward)
+- **Development bias:** Moderate-low development; designed for clarity and aromatic preservation
+- **Rest curve:** 4-6 weeks general sweet spot; some coffees good at 2 weeks, some excel at 8 weeks
+- **Primary driver:** Hybrid brewing (percolation + immersion)
+- **Extraction purpose:** Use controlled percolation/immersion balance to increase sweetness, clarity, and body without harshness
+- **House style:** Hario Switch or April Hybrid; 40% percolation / 60% immersion; medium-coarse grind; staged valve recipe
+- **Brew guide:** [Official (Website)](https://helmcoffeeroasters.com/pages/brew-guide)
+- **Brew guide status:** official
+- **Recipe baseline:** temp=91-97, dose=15, water=250, ratio=1:16.7, time=2:20-3:30, agitation=Medium
+- **Primary brewer:** Hario Switch / April Hybrid
+- **Filter type:** Cone / hybrid valve brewer
+- **Extraction intent:** Balanced→High (21-23%)
+- **Failure mode:** Too little immersion yields thin cups; too much immersion or overly fine grind can make cups heavy, muted, or slow; brewing too early can mute clarity due to off-gassing
+- **Over-extraction tolerance:** Medium-High
+- **Process sensitivity:** Washed/Gesha: balanced clarity; Natural/anaerobic/fruit-forward: benefits from hybrid immersion; Processed lots can handle higher sweetness/body extraction but avoid over-steeping
+- **Brew adjustment method:** Valve timing + grind
+- **Calibration role:** Hybrid Competition Reference
+- **Confidence:** High
+- **Notes:** Official pour-over recipe is inspired by Justin Bull's 2025 World Brewers Cup open-service routine: 15g / 250g / 91-97°C / medium-coarse grind, valve open pour to 100g, at 0:55 close valve and pour to 250g, open at 2:00, total drawdown 2:20-3:30 - framed as 40% percolation / 60% immersion. Helm coffees generally peak ~4-6 weeks post-roast (some good at 2 weeks, some at 8+). Canonical name is **Helm Coffee** (matches the brew); official **Helm Coffee Roasters** + short **Helm** resolve via aliases. Latent lot context (first Helm lot, brew 24e05434 - Panama El Burro Lot 16 Natural Gesha, Lamastus Family, WB Agtron 83.3): very-light clean roast that under-extracted at Clarity-First and confirmed an Extraction Push (grind 6.2 / 97°C / gentle agitation; first Gesha to confirm Extraction Push) - consistent with Helm's Balanced → Full doctrine.
+
 #### Luminous Coffee
 _Las Vegas, NV, USA_ · **FULL EXPRESSION** · archive: 1 brew
 
@@ -1921,7 +1936,7 @@ _Home (Roest sample roaster, 100g batches)_ · **SELF-ROASTED** · archive: 4 br
 
 ## Changelog
 
-- **2026-07-02 (taxonomy queue arbitration):** Promoted **Helm Coffee** as a skeleton entry in the Clarity-First family (Clarity-First 28→29; total 74→75). First evidence: Panama El Burro Lot 16 Natural Gesha (Lamastus Family; brew 24e05434) - a very-light clean roast (WB Agtron 83.3) that under-extracted at Clarity-First and confirmed Extraction Push (first Gesha to do so). Strategy tag CLARITY-FIRST is a working hypothesis off the very-light clean-roast profile; the Extraction Push was a brew-side zone correction, not roaster house evidence. Confidence Low pending more brews. Surfaces via `list_skeleton_entries` until rich-field research lands.
+- **2026-07-02 (taxonomy queue arbitration + same-day enrichment):** Promoted **Helm Coffee** (Indianapolis, IN) from `taxonomy_overrides_queue` (first evidence: Panama El Burro Lot 16 Natural Gesha, Lamastus Family; brew 24e05434) and enriched it to the full rich shape the same day from Chris's roaster data + [official brew guide](https://helmcoffeeroasters.com/pages/brew-guide). Strategy tag resolved from the initial CLARITY-FIRST skeleton hypothesis to **BALANCED → FULL** once the house doctrine landed (hybrid immersion/percolation for sweetness + body; recipe inspired by Justin Bull's 2025 WBC open service), moving the entry Clarity-First → Extraction-Forward (Clarity-First 29→28, Extraction-Forward 19→20; total holds at 75). Canonical name **Helm Coffee** matches the brew; official **Helm Coffee Roasters** + short **Helm** added as aliases. Confidence High. Calibration role: Hybrid Competition Reference.
 - **2026-06-25 (skeleton-review arbitration):** Enriched **Snite** (Setagaya, Tokyo) from Chris's authored CSV - full 29-field rich shape landed and the `skeleton: true` flag removed. Strategy tag resolved from the VARIES placeholder to **BALANCED**, so the entry moved Varies → Balanced (Varies 6→5, Balanced 16→17). Calibration role: Japanese Developed-Light Benchmark. The El Mango SL28 lot lesson (SL-lineage phase-separation, resolved via Hybrid ICS) is preserved in `notes` as operator ground truth. Note: Chris's CSV spelled the roaster "Sniite"; this was a typo (Chris-confirmed 2026-06-25). Canonical is **Snite**, matching the existing brew (73028eb1) + skeleton - no rename needed.
 - **2026-06-18 (taxonomy queue arbitration):** Promoted **Snite** (Tokyo) as a skeleton entry in the Varies family. First evidence: El Mango SL28 Washed (Evin Joel Moreno Reyes, Finca El Mango, Honduras) - first SL28 lot in the brewing archive. Strategy tag is a VARIES placeholder pending more lots; the lot confirmed SL-lineage phase-separation, resolved via a Hybrid (Intensity-Clarity Split) on the April Switch. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-05-20 (taxonomy queue arbitration):** Promoted **Newbery Street Coffee Roasters** (Boston-named, location pending verification) as a skeleton entry in the Balanced family. First evidence: Nawin Doi Chang Washed (first Thailand lot in the Latent archive). 91°C is the only viable evaluation temp on the single tested lot - positioned closer to Glitch (Tokyo low-temp Balanced) than Hydrangea (Berkeley Clarity-First) on the low-temp Balanced spectrum. Confidence Low pending more brews. Surfaces via `list_skeleton_entries` until rich-field research lands.
