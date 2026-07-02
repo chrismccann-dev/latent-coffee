@@ -5,7 +5,7 @@
 **Last adopted:** 2026-04-24
 **Adoption path:** Authored taxonomy (Chris, 2026-04-23 CSV pass + 2026-04-24 enrichment) drawing on roaster-published brew guides, BMR roaster reference cards, and the 55-brew corpus. First taxonomy port without a DB FK column — `brews.roaster` is text-only; canonical enforcement is code-and-validation only, no migration to a `roasters` table.
 
-Canonical roaster reference for the latent-coffee app. **74 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md), sprint 1h structural port.
+Canonical roaster reference for the latent-coffee app. **75 canonical roasters** across **6 families** (5 BMR strategy families + Latent self-roasted). Strategy tags collapse to families via `STRATEGY_TAG_FAMILY` in [lib/roaster-registry.ts](lib/roaster-registry.ts). Part of the [Reference Taxonomies umbrella](docs/features/reference-taxonomies-attribution.md), sprint 1h structural port.
 
 **Composition:** Each roaster is a single canonical name (no nested hierarchy like Region's Country → Macro). The rich shape captures 30 fields per entry: location/country, roast style + development bias + rest curve, strategy tag + family, primary driver / extraction purpose, house style + brew guide status (3-state: official / implied / none — Sub-sprint 4b Bundle B 2026-05-28) + brew guide link, recipe baseline (temp / dose / water / ratio / time / agitation), brewer + filter type, extraction intent + failure mode + tolerance, process sensitivity, brew adjustment method, calibration role, confidence level, and free-text notes. Plus optional `displayName` for tight UI surfaces (brew cards) and `bmrHouseStyle` / `bmrNotes` authored prose preserved verbatim from the prior 21-entry registry where richer than CSV.
 
@@ -26,9 +26,9 @@ External claims in this doc are sourced at authoring time from the CSV; Chris's 
 
 Matches the `ROASTERS` array in [lib/roaster-registry.ts](lib/roaster-registry.ts) exactly. 74 entries grouped by family (5 BMR-derived strategy families + Self-Roasted).
 
-### Clarity-First (28)
+### Clarity-First (29)
 
-Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 28 entries.
+Roasters whose default is to protect clarity. Low-agitation, conservative pour structures, restrained extraction. Calibrate Chris's default 6.8-6.5 grind range without aggressive push. 29 entries.
 
 - **April Coffee**
 - **Bean & Bean Coffee Roasters**
@@ -40,6 +40,7 @@ Roasters whose default is to protect clarity. Low-agitation, conservative pour s
 - **Finca Coffee (Coffee Libre)**
 - **Goût & Co**
 - **Heart Coffee Roasters**
+- **Helm Coffee** — skeleton (working hypothesis)
 - **Hydrangea Coffee** — CLARITY-FIRST → BALANCED
 - **ILSE Coffee** — CLARITY-FIRST → BALANCED
 - **Koppi Coffee Roasters**
@@ -406,6 +407,14 @@ _Portland, Oregon, USA_ · **CLARITY-FIRST** · archive: 2 brews
 - **Calibration role:** US Nordic Baseline
 - **Confidence:** High
 - **Notes:** One of the earliest US adopters of Nordic roasting; more forgiving than Wendelboe; strong baseline for clarity-first brewing in US context
+
+#### Helm Coffee
+_Location unknown_ · **CLARITY-FIRST** (working hypothesis) · archive: 1 brew · **skeleton**
+
+- **Roast style:** Very light (single data point: WB Agtron 83.3, Panama Gesha Natural)
+- **Confidence:** Low
+- **Calibration role:** Skeleton - pending more brews
+- **Notes:** First Helm lot in the archive: Panama El Burro Lot 16 Natural Gesha (Lamastus Family, El Burro Estate / Volcán Barú Highlands; brew 24e05434). Very-light clean roast that under-extracted at Clarity-First (flat, light brown tea, fast finish) and wanted an Extraction Push (grind 6.2 / 97°C kettle-on-base / gentle agitation) - the first Gesha to confirm Extraction Push. The strategy tag is a working hypothesis off the very-light clean-roast profile; the Extraction Push was a brew-side zone correction, not roaster house evidence. Recipe baseline / brewer-filter defaults / house doctrine genuinely unknown. Surfaces via `list_skeleton_entries` until rich-field research lands.
 
 #### Hydrangea Coffee
 _Berkeley, CA, USA_ · **CLARITY-FIRST → BALANCED** · archive: 7 brews
@@ -1912,6 +1921,7 @@ _Home (Roest sample roaster, 100g batches)_ · **SELF-ROASTED** · archive: 4 br
 
 ## Changelog
 
+- **2026-07-02 (taxonomy queue arbitration):** Promoted **Helm Coffee** as a skeleton entry in the Clarity-First family (Clarity-First 28→29; total 74→75). First evidence: Panama El Burro Lot 16 Natural Gesha (Lamastus Family; brew 24e05434) - a very-light clean roast (WB Agtron 83.3) that under-extracted at Clarity-First and confirmed Extraction Push (first Gesha to do so). Strategy tag CLARITY-FIRST is a working hypothesis off the very-light clean-roast profile; the Extraction Push was a brew-side zone correction, not roaster house evidence. Confidence Low pending more brews. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-06-25 (skeleton-review arbitration):** Enriched **Snite** (Setagaya, Tokyo) from Chris's authored CSV - full 29-field rich shape landed and the `skeleton: true` flag removed. Strategy tag resolved from the VARIES placeholder to **BALANCED**, so the entry moved Varies → Balanced (Varies 6→5, Balanced 16→17). Calibration role: Japanese Developed-Light Benchmark. The El Mango SL28 lot lesson (SL-lineage phase-separation, resolved via Hybrid ICS) is preserved in `notes` as operator ground truth. Note: Chris's CSV spelled the roaster "Sniite"; this was a typo (Chris-confirmed 2026-06-25). Canonical is **Snite**, matching the existing brew (73028eb1) + skeleton - no rename needed.
 - **2026-06-18 (taxonomy queue arbitration):** Promoted **Snite** (Tokyo) as a skeleton entry in the Varies family. First evidence: El Mango SL28 Washed (Evin Joel Moreno Reyes, Finca El Mango, Honduras) - first SL28 lot in the brewing archive. Strategy tag is a VARIES placeholder pending more lots; the lot confirmed SL-lineage phase-separation, resolved via a Hybrid (Intensity-Clarity Split) on the April Switch. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-05-20 (taxonomy queue arbitration):** Promoted **Newbery Street Coffee Roasters** (Boston-named, location pending verification) as a skeleton entry in the Balanced family. First evidence: Nawin Doi Chang Washed (first Thailand lot in the Latent archive). 91°C is the only viable evaluation temp on the single tested lot - positioned closer to Glitch (Tokyo low-temp Balanced) than Hydrangea (Berkeley Clarity-First) on the low-temp Balanced spectrum. Confidence Low pending more brews. Surfaces via `list_skeleton_entries` until rich-field research lands.

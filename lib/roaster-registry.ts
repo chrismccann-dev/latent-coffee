@@ -2615,6 +2615,24 @@ export const ROASTERS: RoasterEntry[] = [
     notes:
       'Component operates shops in Visalia, Fresno, and Tulare and sells coffee/subscriptions online; no brew guide found, so treat as a generalist specialty roaster rather than a clarity-first or system roaster.',
   },
+  {
+    // Promoted from taxonomy_overrides_queue d571d592 (2026-07-02 arbiter session)
+    // against brew 24e05434 (Panama El Burro Lot 16, Natural Gesha). SKELETON:
+    // single data point (one very-light clean Panama Gesha Natural, WB Agtron
+    // 83.3). No published house doctrine known yet - strategyTag CLARITY-FIRST is
+    // a working hypothesis off the very-light clean-roast profile (the brew's
+    // Extraction Push was a brew-side zone correction, not roaster evidence).
+    // Surfaces via list_skeleton_entries until rich-field research lands.
+    name: 'Helm Coffee',
+    brewGuideStatus: 'none',
+    strategyTag: 'CLARITY-FIRST',
+    roastStyle: 'Very light (single data point: WB Agtron 83.3 on a Panama Gesha Natural)',
+    confidenceLevel: 'Low',
+    calibrationRole: 'Skeleton - pending more brews',
+    notes:
+      'First Helm lot: Panama El Burro Lot 16 Natural Gesha (Lamastus Family, brew 24e05434) - a very-light clean roast that under-extracted at Clarity-First and wanted an Extraction Push (grind 6.2 / 97°C kettle-on-base / gentle agitation; first Gesha to confirm Extraction Push). One data point; house style / recipe baseline / brewer-filter defaults genuinely unknown, not omitted-pending.',
+    skeleton: true,
+  },
 ]
 
 // Sprint 12 / CR-4 (2026-05-21): typed helper for the list_skeleton_entries
