@@ -2617,21 +2617,49 @@ export const ROASTERS: RoasterEntry[] = [
   },
   {
     // Promoted from taxonomy_overrides_queue d571d592 (2026-07-02 arbiter session)
-    // against brew 24e05434 (Panama El Burro Lot 16, Natural Gesha). SKELETON:
-    // single data point (one very-light clean Panama Gesha Natural, WB Agtron
-    // 83.3). No published house doctrine known yet - strategyTag CLARITY-FIRST is
-    // a working hypothesis off the very-light clean-roast profile (the brew's
-    // Extraction Push was a brew-side zone correction, not roaster evidence).
-    // Surfaces via list_skeleton_entries until rich-field research lands.
+    // against brew 24e05434 (Panama El Burro Lot 16, Natural Gesha); enriched the
+    // same day from Chris's roaster data + official brew guide. Canonical name
+    // 'Helm Coffee' matches brews.roaster (migration-027 rule); the fuller
+    // official 'Helm Coffee Roasters' + short 'Helm' resolve via ROASTER_ALIASES.
+    // The initial CLARITY-FIRST skeleton hypothesis was corrected to BALANCED →
+    // FULL once the house doctrine landed (hybrid immersion/percolation for
+    // sweetness + body), moving the entry Clarity-First → Extraction-Forward.
     name: 'Helm Coffee',
-    brewGuideStatus: 'none',
-    strategyTag: 'CLARITY-FIRST',
-    roastStyle: 'Very light (single data point: WB Agtron 83.3 on a Panama Gesha Natural)',
-    confidenceLevel: 'Low',
-    calibrationRole: 'Skeleton - pending more brews',
+    brewGuideStatus: 'official',
+    displayName: 'Helm',
+    location: 'Indianapolis, IN',
+    country: 'USA',
+    roastStyle: 'Light (competition-informed, fruit-forward)',
+    developmentBias: 'Moderate-low development; designed for clarity and aromatic preservation',
+    restCurve: '4-6 weeks general sweet spot; some coffees good at 2 weeks, some excel at 8 weeks',
+    strategyTag: 'BALANCED → FULL',
+    primaryDriver: 'Hybrid brewing (percolation + immersion)',
+    extractionPurpose:
+      'Use controlled percolation/immersion balance to increase sweetness, clarity, and body without harshness',
+    houseStyle:
+      'Hario Switch or April Hybrid; 40% percolation / 60% immersion; medium-coarse grind; staged valve recipe',
+    brewGuideSource: 'Official',
+    brewGuideLink: 'https://helmcoffeeroasters.com/pages/brew-guide',
+    brewGuideType: 'Website',
+    tempC: '91-97',
+    doseG: '15',
+    waterG: '250',
+    ratio: '1:16.7',
+    typicalBrewTime: '2:20-3:30',
+    agitationLevel: 'Medium',
+    extractionIntent: 'Balanced→High (21-23%)',
+    failureMode:
+      'Too little immersion yields thin cups; too much immersion or overly fine grind can make cups heavy, muted, or slow; brewing too early can mute clarity due to off-gassing',
+    overExtractionTolerance: 'Medium-High',
+    processSensitivity:
+      'Washed/Gesha: balanced clarity; Natural/anaerobic/fruit-forward: benefits from hybrid immersion; Processed lots can handle higher sweetness/body extraction but avoid over-steeping',
+    primaryBrewer: 'Hario Switch / April Hybrid',
+    filterType: 'Cone / hybrid valve brewer',
+    confidenceLevel: 'High',
+    brewAdjustmentMethod: 'Valve timing + grind',
+    calibrationRole: 'Hybrid Competition Reference',
     notes:
-      'First Helm lot: Panama El Burro Lot 16 Natural Gesha (Lamastus Family, brew 24e05434) - a very-light clean roast that under-extracted at Clarity-First and wanted an Extraction Push (grind 6.2 / 97°C kettle-on-base / gentle agitation; first Gesha to confirm Extraction Push). One data point; house style / recipe baseline / brewer-filter defaults genuinely unknown, not omitted-pending.',
-    skeleton: true,
+      "Official pour-over recipe is inspired by Justin Bull's 2025 World Brewers Cup open-service routine: 15g / 250g / 91-97°C / medium-coarse grind, valve open pour to 100g, at 0:55 close valve and pour to 250g, open at 2:00, total drawdown 2:20-3:30 - framed as 40% percolation / 60% immersion, the hybrid ratio used to shift sweetness / clarity / body. Helm coffees generally peak ~4-6 weeks post-roast (some good at 2 weeks, some at 8+). Latent lot context (first Helm lot, brew 24e05434 - Panama El Burro Lot 16 Natural Gesha, Lamastus Family, WB Agtron 83.3): a very-light clean roast that under-extracted at Clarity-First (flat, light brown tea, fast finish) and wanted an Extraction Push (grind 6.2 / 97°C kettle-on-base / gentle agitation; first Gesha to confirm Extraction Push) - that brew-side push toward higher EY squares with Helm's Balanced → Full house doctrine.",
   },
 ]
 
@@ -2697,6 +2725,8 @@ export const ROASTER_ALIASES: Record<string, string> = {
   'Colibri': 'Colibri Coffee Roasters',
   'Flower Child': 'Flower Child Coffee',
   'Heart': 'Heart Coffee Roasters',
+  'Helm Coffee Roasters': 'Helm Coffee',
+  'Helm': 'Helm Coffee',
   'Picolot': 'Picolot (Brian Quan)',
   'Rose': 'Rose Coffee',
   'Substance': 'Substance Café',
