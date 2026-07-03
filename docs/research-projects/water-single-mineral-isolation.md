@@ -601,7 +601,7 @@ Semi-blind codes: **A = MgCl₂ / KH 0** · **B = MgCl₂ / KH ~13**.
 
 **Date:** 2026-07-02
 **Session role:** execution + handoff brief production (no substrate edits; archive-persist commit only). Research Assistant.
-**Archive location:** branch `claude/beautiful-merkle-2e5a59` @ (content SHA recorded in the termination block below; fetch branch HEAD for latest incl. the stamp commit). Archive doc committed + pushed; substrate NOT touched; NOT merged to main.
+**Archive location:** branch `claude/beautiful-merkle-2e5a59` @ `6565a13` (content commit; fetch branch HEAD for latest incl. this stamp commit). Archive doc committed + pushed; substrate NOT touched; NOT merged to main.
 **Methodology verdict:** **Lane B pre-brew REFRAMES the binary inversion into a cleaner mechanism.** The Lane A post-brew "chloride reveals / sulfate muddies" did NOT hold as-stated pre-brew; the real finding is **anion-sets-a-phase + cation-gating** (below). HT3 (pre-vs-post) DIVERGES, and the divergence is the extraction effect - validating the hybrid's whole premise. Two secondary items (HT4 buffer, HT5 SBL) are re-queued to a short 3rd sitting.
 
 ## Scope
@@ -651,3 +651,18 @@ Semi-blind codes: **A = MgCl₂ / KH 0** · **B = MgCl₂ / KH ~13**.
 
 ## Substrate edit specifications
 **NONE. Substrate-fold DEFERRED per the single-coffee rule.** Every finding is on one coffee (Pink Bourbon). Candidates to hold for the post-2nd-coffee fold (do NOT apply now): (a) a CONTEXT-taste refinement on anion->phase + cation-gating + the coffee-dependence of the phase you want; (b) the MgCl₂-forward recipe-library seed for this coffee; (c) an L-candidate graduation pass (L-c #1-11) at the PROJECT retro. The Coordinator/compile session records these as deferred, does not execute them.
+
+### Execution Session Termination (Sitting 2)
+
+```
+Per Lesson #40 role-discipline rule:
+- ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
+- ❌ NO merge to main, NO substrate PR
+- ❌ NO `npx tsc --noEmit` runs
+- ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive")
+- ✅ Archive doc committed @ 6565a13 + pushed to branch claude/beautiful-merkle-2e5a59 (this stamp commit is HEAD; fetch branch HEAD for latest)
+- ✅ Track 2 handoff brief (Sittings 1+2) produced above; branch + SHA in its Archive location: header
+- 🛑 Session pausing after this brief. Tail = #5 buffer retest (HT4) + #7 SBL recon-vs-bottled (HT5), both re-queued to a short fresh 3rd sitting per operator fatigue call. The Coordinator decides substrate-fold (DEFERRED on single-coffee) + schedules the 3rd sitting.
+
+End of Single-Mineral Isolation Sitting-2 (Lane B core) handoff.
+```
