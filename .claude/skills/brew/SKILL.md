@@ -106,7 +106,9 @@ confirmation before producing the recipe**; this is where the apex clarify-side 
 **Step 2: Recipe.** After strategy is confirmed, fetch
 `read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md", anchor="Step 2 — Recipe Output (after strategy is confirmed)")`.
 Author Bloom + Pour Structure in the labeled CUMULATIVE-target shape; water formula goes in the
-Water Recipe field; kettle thermal stance / active ramps go in a `thermal_staging` modifier; gear
+Water Recipe field (at home, source the suggestion from [water.md](docs/skills/brewing-equipment-expert/cluster/water.md)
+per the operational guide's Step 2 home/office branch; office records the source as-is); kettle
+thermal stance / active ramps go in a `thermal_staging` modifier; gear
 beyond brewer+filter (Melodrip / booster / Paragon ball) goes in an `equipment` modifier with
 free-text scope.
 

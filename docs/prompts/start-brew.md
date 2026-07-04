@@ -68,7 +68,9 @@ format), author Bloom + Pour Structure in the labeled, CUMULATIVE-target shape
 defined in that section (one labeled line per pour; trailing `Sworks Valve:` /
 `Switch:` clause on valve/lever brewers) — this keeps the free-text parseable for
 the eventual structured-pour migration. Water formula / source goes in the Water
-Recipe field; kettle thermal stance + active temp ramps go in a `thermal_staging`
+Recipe field (at home, source the suggestion from [water.md](docs/skills/brewing-equipment-expert/cluster/water.md)
+per the operational guide's Step 2 home/office branch; office records the source as-is);
+kettle thermal stance + active temp ramps go in a `thermal_staging`
 modifier; gear beyond brewer+filter (Melodrip / booster / Paragon ball) goes in an
 `equipment` modifier with a free-text `scope`.
 
