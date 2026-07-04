@@ -451,3 +451,320 @@ Per Lesson #40 role-discipline rule:
 
 End of Single-Mineral Isolation Sitting-1 close-out.
 ```
+
+---
+
+# SITTING 2 — LANE B PRE-BREW ISOLATION (2026-07-02)
+
+**Session role:** execution + handoff brief production (no substrate edits; archive-persist commit only). Research Assistant.
+**Plan:** the superseding Lane B plan (spawn prompt) — isolation waters at **GH 44 / KH 0 (buffer-free)**, per-axis directional scoring (2026 WBC fold), one cup per turn, each A/B vs the distilled control.
+**Budget:** ~3 lb Pink Bourbon on hand → non-constraint; full plan #1–7 live (incl. #6 2×2 completion + #7 recon-vs-bottled SBL).
+
+## Step 0 abbreviated (2026-07-02)
+- **Stocks:** all 6 visually clear, no precipitation after 4-day rest → no EC60 re-fingerprint. Good.
+- **Recipe:** baseline holds (15 g / 247 g / Sibarist B3 / EG-1 6.4 / 94-94-93 / bloom 45 g 45 s → P2 150 g @0:58 30 s pause → P3 247 g @1:58 / ~3:10).
+- **Distilled control:** brewed fresh (ended 3:15); lime / tomato-y / brown tea, improves on cooling — consistent with every prior sitting. The bar to beat. Overall = 2.
+- **Rig re-verify + Sitting-2 GH lock:** MgSO₄ water (5.4 mL stock / 500 mL) titrated **5 drops transitional / 6 drops clean-blue**; MgCl₂ water (4.5 mL / 500 mL) read the **same** band. Both math-dosed to GH 43.8 by construction → NOT tuned (tuning down would push under 44). **Sitting-2 GH lock = "5 transitional / 6 clean" on a careful titrate; the correctly-dosed band is 5–6 drops.** A water reading ≤4 clean or ≥7 flags a build error. KH 0 by construction (no titration). Both arms landing the same band = GH constant across the anion swap → clean isolation.
+- **Semi-blind:** coded + shuffled per comparison.
+
+## Predictions — locked 2026-07-02 BEFORE Lane B tasting (Mg pair)
+| Axis | My pre-brew prediction |
+|---|---|
+| Florality/aromatics | **MgSO₄ recovers floral lift** (WBC prized role; extraction-mediation) — THE decisive axis |
+| Acidity | Toss-up; watch if MgSO₄ lifts acidity |
+| Sweetness | MgCl₂ holds the lead |
+| Body/texture | MgCl₂ bodies over MgSO₄ |
+| Most-likely shape | **Per-axis SPLIT** — MgSO₄ wins florality/acidity, MgCl₂ wins sweetness/body |
+
+## Comparison #1 — MgSO₄ vs MgCl₂ @ GH44/KH0 (HT1 + HT3 centerpiece) — semi-blind, control=2
+| Code | Water | Aromatics | Acidity | Sweetness | Body | Texture | Finish/Astr | Overall | Reveal/Inject | Beats distilled? | Notes (prose — the payload) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| ctrl | distilled | base | base | base | base | base | base | **2** | — | — | Lime / tomato-y / brown tea. **Tasted noticeably FLATTER after the mineral cups** (palate recalibration). |
+| A | **MgCl₂** | flat at sniff, but **florals + citrus on the attack** | **↑** | **↑ (lime sweetness)** | **↓ lighter** | = | clean, no astringency | **3.1** | **reveal** | **YES** | "Fresh lime." The **ATTACK / first-phase** agent — emphasizes lime/green-citrus. Lifts everything incl. the tomato/vegetal side BUT transforms it toward green-citrus, not deep tomato. |
+| B | **MgSO₄** | steeped / slightly over-steeped note | = (**more clarity** on acidity, not more) | **↑↑** | **↑ creamier / elongated** | **↑** | — | **3.0** | **reveal (body-side)** | **YES** | Sweet-creamy. The **BODY / second-phase** agent — adds creaminess / body / texture + sweetness. Does **NOT** add florality. |
+
+**Operator coffee-dependence read (2026-07-02):** A (MgCl₂) 3.1 > B (MgSO₄) 3.0 — but "both good, they change different axes." A **wins for THIS coffee** because the Pink Bourbon is a lime/citrus/clarity profile and chloride's attack plays to that strength; **B could win on a different coffee** (one wanting body/sweetness). This is precisely why the fold stays gated on a 2nd coffee — the anion→phase mapping is a physical constant, but *which phase you want* is coffee-dependent. Points straight at the per-coffee water-recipe-library end game.
+| A+B | MgCl₂+MgSO₄ equal parts (exploratory) | — | ↑ (not over the top) | ↑ | creamy but not overdone | present | — | **> ctrl (strong)** | **reveal** ("reveals what's there vs injects") | YES | More structure / complexity / elegance. Control tastes very flat beside it. **Wants a little MORE A (MgCl₂).** A 2nd candidate blend (distinct from Sitting 1's MgCl₂+CaCl₂). Counts against the ~2 exploratory-cup budget. |
+
+**⚠️ Florality-read caveat (operator, 2026-07-02):** the Pink Bourbon "is not a heavily floral coffee — more lime / brown-tea," so the florality axis is under-expressed on this base. The WBC "MgSO₄ = florality" claim may need a genuinely floral coffee to adjudicate. Bounds how hard we can lean on the florality axis here. → audit item.
+
+## Comparison #1 read — HT1 / HT3 / WBC reconciliation (Mg pair)
+**My locked predictions were PARTIALLY WRONG in an informative way — the per-axis SPLIT landed, but the axis ASSIGNMENTS flipped:**
+- Predicted MgSO₄ = florality → **WRONG.** MgCl₂ carried the florality/citrus/acidity (the attack).
+- Predicted MgCl₂ = body → **WRONG.** MgSO₄ is the body/creaminess/texture/sweetness agent.
+- Predicted a per-axis split → **RIGHT.** They ARE complementary, not one-beats-the-other.
+
+**Emerging rule (the real finding): the ANION sets the PHASE.** Chloride → attack / acidity / florality / clarity (light body); sulfate → body / sweetness / creaminess / texture. The cation (here both Mg) rides within. This is cleaner than BOTH prior frames (Track-1 "sulfate leads" and Lane-A "chloride reveals") — both collapsed a per-axis split into one number. The WBC per-axis discipline is what surfaced it.
+
+**HT3 verdict (Mg pair) — pre-brew DIVERGES from post-brew, and the divergence IS the extraction effect.** Post-brew (Lane A) scored MgSO₄ muddy/worst (1.5); pre-brew, MgSO₄ is NOT muddy — it's a pleasant body/sweetness agent that beats distilled. So **the "sulfate muddies" post-brew finding was largely a POST-BREW ARTIFACT** — MgSO₄ must be present DURING extraction to express its body/sweetness contribution; dosed onto a finished brew it only muddies. This validates the hybrid method's whole premise (post-brew screening bounds, doesn't equal, extraction).
+
+**WBC reconciliation (Mg pair):** our pre-brew does NOT put sulfate on florality the way the 2026 field does — it puts **sulfate on BODY, chloride on florality/acidity** (the reverse assignment). The field's convergence on "anion matters as much as cation" is CORROBORATED (the anion clearly sets the phase); the specific "MgSO₄ = florality" role is NOT reproduced on this coffee (bounded by the florality caveat above + single-coffee). Logged as a divergence to hold, not resolve.
+
+**Substrate-fold:** still DEFERRED (single coffee). This is mechanism, per plan.
+
+## Sitting 2 friction
+
+**F11 (2026-07-02) — dilute gypsum stock settles; shake before dosing + GH-match the pair, don't port the drop-lock across cations.** CaSO₄ water first titrated **clean-on-4** (~1 drop under GH 44) while CaCl₂ read **clean-on-5** (on target) — a real GH mismatch that would have confounded the sulfate-vs-chloride read (a "lighter" CaSO₄ could be lower mineral, not the anion). Root cause: the 1,520 ppm dilute gypsum stock had **settled** over the 4-day rest — gypsum is barely soluble and drops out of a dilute stock **without visible cloudiness** (so "stocks look clear" did NOT guarantee the gypsum stock was homogeneous). Fix: re-shake the gypsum stock hard, top the CaSO₄ water +2–3 mL, re-titrate → **both calcium waters now clean-on-5, GH-matched.** Caught pre-brew. Two going-forward rules: (a) **SHAKE the dilute gypsum stock before every dose**; (b) the "5–6 drop band" was set on a **magnesium** water — endpoint sharpness is cation-dependent (L-c #1), so **do NOT port a drop count across cations**; instead require the two waters *within a pair* to match each other. Operational anchor: **true GH 44 flips clean-on-5** (Mg waters read clean-on-6 = the Mg endpoint dragging, F6).
+
+## Predictions — locked 2026-07-02 BEFORE Comparison #2 tasting (Ca pair)
+| Axis | Prediction (from the #1 "anion sets the phase" rule) |
+|---|---|
+| CaCl₂ | the ATTACK — acidity, clarity, citrus/lime (Sitting-1 "acid axis"); lighter body |
+| CaSO₄ | the BODY — sweetness, roundness, creaminess, texture |
+| Cation shift | Ca may read rounder/sweeter than Mg within each phase (HT2) |
+
+## Comparison #2 — CaCl₂ vs CaSO₄ @ GH44/KH0 (calcium anion pair; both GH-matched clean-on-5 post-F11) — semi-blind, control=2
+| Code | Water | Aromatics | Acidity | Sweetness | Body | Texture | Finish | Overall | Reveal/Inject | Beats distilled? | Notes (prose — the payload) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| ctrl | distilled | lime/tomato | base | base | base | base | base | **2** | — | — | Consistent with prior controls; **feels flatter each round** as the palate recalibrates to the mineral cups. |
+| A | **CaSO₄** | ~same as ctrl | **↓ muted** | **↑ deeper (brown-sugar)** | **↑ thicker, integrated (not creamy)** | **↑ thicker** | back-weighted | **2.5** | reveal (body-side) | **YES** | Brown-sugar/deeper sweetness, roundness, an **umami-ish** savory note that "makes you want to taste more." The **BACK / body phase.** "An interesting **component of something**, a little less in and of itself." |
+| B | **CaCl₂** | ~same as ctrl | **↓ less** | ↑ but with an off-note | **↑ richer, oily-film** | **oily film** (like oil sitting on water) | — | **1.5** | inject (unpleasant) | **NO (below ctrl)** | **Lactic / cheesy quality (disliked)** + an oily-water-film mouthfeel. Worst cup of the sitting. No blend attempted ("don't like this B component"). |
+
+## Comparison #2 read — the anion rule QUALIFIED; big HT3 divergence on CaCl₂
+**Predictions half-right again — and the pattern of what broke is the finding.** Predicted CaSO₄ = body → **RIGHT** (brown-sugar sweetness, roundness, thicker body — the back phase). Predicted CaCl₂ = attack/acidity → **WRONG**, and not neutral-wrong: CaCl₂ went **muted + lactic/cheesy + oily**, the worst cup, *below* distilled.
+
+**REVISED rule (supersedes the clean "anion sets the phase" from #1):**
+- **SULFATE = a reliable body/sweetness agent, roughly cation-agnostic** — MgSO₄ (3.0) and CaSO₄ (2.5) both deliver the back/body phase (Mg a touch cleaner; Ca adds a savory-umami "component" quality). Sulfate's phase role is stable across the cation.
+- **CHLORIDE = cation-GATED, not a fixed phase** — Mg+Cl is the bright attack/acidity/florality star (MgCl₂ 3.1, best cup); Ca+Cl turns muted/lactic/oily (CaCl₂ 1.5, worst cup). Same anion, opposite outcome, set by the cation.
+- **Net: this is a cation×anion INTERACTION, not two independent main effects** — exactly Sitting 1's "attribute to the pairing, never a lone ion," now demonstrated on the chloride side. The #1 "anion sets the phase" framing holds for sulfate but breaks for chloride; don't over-generalize it.
+
+**HT2 (Mg vs Ca) — now has strong signal.** On **chloride** the cation is decisive: **Mg ≫ Ca** (3.1 vs 1.5) — Mg+Cl bright, Ca+Cl lactic. On **sulfate** both work, **Mg slightly > Ca** (3.0 vs 2.5). Takeaway for this coffee: **Mg is the safer/better cation, especially with chloride.**
+
+**HT3 (pre vs post) — the biggest divergence yet, on CaCl₂.** Post-brew (Lane A) CaCl₂ was the **bright acid/clarity standout (3.5, "the acid axis")**; pre-brew (Lane B) CaCl₂ is **muted/lactic/oily/unpleasant (1.5)** — opposite direction. Strong extraction effect: **Ca+chloride during extraction produces a lactic/oily quality that post-brew dosing cannot see.** This is a hard caution on the post-brew screen for Ca-chloride specifically — and it directly **undercuts Sitting 1's "two-chloride blend = best cup / candidate custom water" pointer**, which rested on CaCl₂ being the bright acid axis (a post-brew artifact).
+
+**WBC reconciliation (Ca pair):** pre-brew, CaCl₂ moved **body-ward** (richer body + oily film) — closer to the 2026 field's "CaCl₂ = body" read than our own Lane A "CaCl₂ = acid/clarity." So pre-brew reconciles our CaCl₂ *toward* the field direction, but on this clarity coffee that body arrives with an unpleasant lactic/oily edge. Corroborates the field's cation/anion-both-matter thesis; the specific pleasantness is coffee-dependent.
+
+**Recipe-library implication (shifts vs Sitting 1):** the candidate custom water moves **away from** Sitting 1's MgCl₂+CaCl₂ two-chloride blend (CaCl₂ is now a pre-brew liability) **toward MgCl₂ + MgSO₄** — the two best pre-brew singles, both on the good Mg cation, pairing the bright attack (MgCl₂) with the body (MgSO₄). → test head-to-head at #4.
+
+**Comparisons #3 (MgCl₂ vs CaCl₂) + #6 (MgSO₄ vs CaSO₄) are now effectively answered** by #1+#2 (cation-on-chloride: Mg 3.1 ≫ Ca 1.5; cation-on-sulfate: Mg 3.0 ≳ Ca 2.5). Optional fresh cross-flight to confirm; otherwise the sequential reads stand.
+
+**Substrate-fold:** still DEFERRED (single coffee).
+
+## Build note — 300 mL switch (2026-07-02, from Comparison #4 on)
+Operator switched built-water volume **500 mL → 300 mL**: 300 mL = one xBloom brew pool (247 g) + LaMotte headroom, near-zero waste. Doses scale ×0.6 from the per-500 table. GH lock (clean-on-5) is concentration-based → unchanged by build volume.
+
+**F12 (2026-07-02) — blend (a) first-titrated GH~65 on exactly-correct doses; diluted to target.** Blend (a) = MgCl₂ 1.35 + CaCl₂ 0.98 / 300 mL (operator-confirmed exact; math = GH 44) first read **clean-on-7 (~GH 65)**. Blend (b) with the SAME MgCl₂ dose read clean-on-5 (on target) → the overshoot localizes to the sub-mL **CaCl₂ dose on the 0.1–1 mL pipette** (F9 small-dose imprecision) or a fast first titration. Fixed by +140 mL distilled → clean-on-4 (a hair under (b)'s clean-on-5, within kit resolution; the under-dose direction is harmless to the (b)>(a) hypothesis). Reinforces: verify EVERY built water; sub-mL fine-pipette doses are the error-prone step.
+
+## Predictions — locked BEFORE Comparison #4 (blend showdown)
+**(b) MgCl₂+MgSO₄ beats (a) MgCl₂+CaCl₂** — the Mg-blend pairs the two best singles cleanly; the two-chloride blend carries CaCl₂'s lactic liability (only partly masked by MgCl₂). If (a) shines instead, MgCl₂ rescues CaCl₂ in-blend.
+
+## Comparison #4 — candidate-custom-water showdown @ GH44/KH0 — semi-blind, control=2
+Semi-blind codes: **A = MgCl₂+MgSO₄ = blend (b)** · **B = MgCl₂+CaCl₂ = blend (a)**.
+| Code | Blend | Aromatics | Acidity | Sweetness | Body | Texture | Overall | Reveal/Inject | Beats distilled? | Notes (prose — the payload) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| ctrl | distilled | lime / tomato / brown tea | base | base | base | base | **2** | — | — | Benchmark, no change from prior controls. |
+| A | **MgCl₂+MgSO₄** (blend b) | **more lemon / lime** | **↑ sharp, bright** | **↓ (not much)** | slightly ↑ / blended | slightly ↑ | **3** | **reveal** | **YES** | Bright lemon-lime, sharp; **focuses the front / attack, cleans up the back.** "Transforms the cup but still reveals what's there, doesn't interject too much." Even better cool. **WINNER.** (Operator aside: would pair interestingly with a clarity/intensity split brew method.) |
+| B | **MgCl₂+CaCl₂** (blend a) | rounder, body / tea-centric | ↑ | **↑↑ (more than A)** | ↑ more textured | ↑ | **2.5** | **inject** | YES (> ctrl) | More sweet + body, but an **over-steeped TEA quality**; "emphasizing the back," "**interjecting too much**" of a sweet-complex side this coffee doesn't have. **NO lactic/cheese** — MgCl₂ masked CaCl₂'s edge. Liked less *for this coffee.* |
+
+## Comparison #4 read
+- **Prediction CONFIRMED: (b) MgCl₂+MgSO₄ (3.0) > (a) MgCl₂+CaCl₂ (2.5).** The Mg-blend is the better candidate custom water for this coffee.
+- **MgCl₂ RESCUES CaCl₂'s lactic edge in-blend (new finding).** Pure CaCl₂ was lactic/cheese/oily (1.5, #2); in the MgCl₂+CaCl₂ blend that quality is **gone** — replaced by sweet/body/over-steeped-tea. So Sitting 1's two-chloride "best cup" pointer isn't dead — MgCl₂ redeems CaCl₂ — but for THIS clarity coffee the two-chloride blend **over-interjects** a back-sweetness the coffee lacks.
+- **The best BLEND (3.0) does NOT beat the best SINGLE — MgCl₂ solo (3.1) is the pre-brew PEAK.** Adding MgSO₄ body or Ca to MgCl₂ doesn't improve it on this clarity/citrus coffee. "Less is more" reinforced: the bright chloride attack, alone, wins.
+- **Reveal/inject mapping is clean:** A (Mg-blend) reveals what's there; B (two-chloride) injects a back-sweetness the coffee doesn't have.
+- **Full pre-brew ranking (Lane B, single coffee):** **MgCl₂ 3.1** > MgCl₂+MgSO₄ 3.0 ≈ MgSO₄ 3.0 > MgCl₂+CaCl₂ 2.5 ≈ CaSO₄ 2.5 > control 2.0 > CaCl₂ 1.5.
+- **Recipe-library pointer (this coffee, PROVISIONAL, single-coffee):** **MgCl₂-forward, minimal/zero sulfate, avoid Ca.** Coffee-dependence caveat holds — a body-wanting coffee could flip toward MgSO₄ / blends.
+
+**Substrate-fold:** still DEFERRED (single coffee).
+
+## Predictions — locked BEFORE #5 (buffer on MgCl₂ peak base)
+KH ~13 **slightly flattens the lime brightness** (bicarbonate mutes acid; clarity is this coffee's win); watch for a Lane-A-style *liked* sweet lift instead. NaHCO₃ (Na), not K.
+
+## #5 build note (2026-07-02)
+Both MgCl₂ arms = 2.7 mL / 300 mL. Hardness both **clean-on-7** (MgCl₂ endpoint drag on a correct GH-44 dose; matched to each other). Alkalinity: **KH0 arm = 1 drop (floor ✓)**, **KH~15 arm = clean-on-3 (≈KH 15 ✓)**. GH+KH tests depleted ~30–35 mL/arm → both **topped back to 300 mL with distilled equally** (→ ~GH 40 / KH ~13, still matched). F13: the 25 mL alkalinity draw + hardness draw left a 300 mL build too close to the 247 g brew volume — going forward, build ~330–350 mL when a comparison needs a full KH titration, or top back to a matched volume (done here).
+
+## #5 — buffer check @ MgCl₂ base, KH0 vs KH~13 — semi-blind, control=2
+Semi-blind codes: **A = MgCl₂ / KH 0** · **B = MgCl₂ / KH ~13**.
+| Code | Water | Aromatics | Acidity | Sweetness | Body | Texture | Overall | Beats distilled? | Notes (prose — the payload) |
+|---|---|---|---|---|---|---|---|---|---|
+| ctrl | distilled | flat; lime/tomato/brown tea | base | base | base | base | **2** | — | Benchmark, unchanged. |
+| A | **MgCl₂ / KH 0** | **burnt / oversteeped** | **↓ muted** | **↓** | **↑ dominant** (dark brown-tea over-steep) | = | **~2 (≈ ctrl or slightly less)** | ~no | "Burnt/oversteeped; body takes over; generic brown-nutty-tea to the front." **⚠️ burnt = a brew-fault descriptor — see read.** |
+| B | **MgCl₂ / KH ~13** | clean (no burnt note) | **↑** | **↑** | = | = | **3** | **YES** | Lighter, brighter, tasty acidity + citrus; "much preferred." ≈ the original MgCl₂/KH0 peak (3.1). |
+
+## #5 read — SURPRISING as-tasted, but CONFOUNDED → HT4 NOT cleanly answered
+**As tasted:** B (KH~13) > A (KH0) — the *buffered* arm brighter/sweeter, inverting both the locked prediction and the bicarbonate-mutes-acid premise. Operator flagged it as surprising.
+
+**⚠️ DO NOT FOLD THIS. The read is confounded by an apparent brew fault on A:**
+- A = MgCl₂/KH0 is the **same water that was our bright PEAK at 3.1** (#1/#4). It cannot be both the 3.1 citrus peak and a ~2 burnt-flat cup. **"Burnt/oversteeped" is a brew-fault (over-extraction) descriptor, not a property 0-vs-13 ppm KH imparts.** → A's brew most likely over-extracted.
+- B (KH~13) scored **3 ≈ the original MgCl₂/KH0 peak (3.1)** → B is where MgCl₂ *should* land; **A is the anomaly.** Parsimonious reading: A was a bad brew, NOT "KH0 < KH13."
+- Operator's tasting is trustworthy (he correctly *detected* the burnt fault on A); it's the causal attribution to KH that the fault breaks.
+- **Methodological note (candidate primitive):** pre-brew single-water comparisons are exposed to **brew-to-brew variance** — each cup is a separate full brew — unlike Lane A post-brew dosing off one base brew. A surprising *secondary-axis* pre-brew result must **reproduce on a clean re-brew** before folding. (The auto-retest / cross-confirmation primitive, earning its keep.)
+
+**HT4 VERDICT: INCONCLUSIVE this sitting** — confounded by a probable over-extraction on the KH0 arm. The "KH brightens" direction is a **flag to retest**, not a finding. The operator's standing **"less is more / minimal KH"** lean is neither confirmed nor overturned; it stands as the working assumption. Clean retest = rebuild both arms, brew both carefully (watch extraction), re-taste; claim the direction only if it reproduces.
+
+**Cooling cross-check (operator, 2026-07-02) - clinches the confound:** as the two #5 cups cooled further, **A brightened and CONVERGED toward B** (they became "much harder to tell apart"). If KH were genuinely flattening acid, the gap would WIDEN as they opened; instead it closed. That is the signature of a *temperature / over-extraction* artifact on A, not a KH effect. Operator also self-reported back-to-back-brewing fatigue and elected to pause and re-run #5 fresh. HT4 remains INCONCLUSIVE; re-queued to a fresh sitting.
+
+**Substrate-fold:** still DEFERRED (single coffee).
+
+---
+
+# TRACK 2 HANDOFF BRIEF - Sittings 1 + 2 (Lane A + Lane B core)
+
+**Date:** 2026-07-02
+**Session role:** execution + handoff brief production (no substrate edits; archive-persist commit only). Research Assistant.
+**Archive location:** branch `claude/beautiful-merkle-2e5a59` @ `6565a13` (content commit; fetch branch HEAD for latest incl. this stamp commit). Archive doc committed + pushed; substrate NOT touched; NOT merged to main.
+**Methodology verdict:** **Lane B pre-brew REFRAMES the binary inversion into a cleaner mechanism.** The Lane A post-brew "chloride reveals / sulfate muddies" did NOT hold as-stated pre-brew; the real finding is **anion-sets-a-phase + cation-gating** (below). HT3 (pre-vs-post) DIVERGES, and the divergence is the extraction effect - validating the hybrid's whole premise. Two secondary items (HT4 buffer, HT5 SBL) are re-queued to a short 3rd sitting.
+
+## Scope
+- **Sitting 1 (2026-06-28):** Step 0 full calibration + Lane A post-brew single-salt screen + SBL bonus (invalidated by F10). Its close-out brief is above.
+- **Sitting 2 (2026-07-02):** Step 0 abbreviated + **Lane B pre-brew isolations #1-4 (the rigorous core)**: MgSO₄ vs MgCl₂ (#1), CaCl₂ vs CaSO₄ (#2), the candidate-water blend showdown (#4), and the buffer check (#5, inconclusive). #3/#6 answered by #1+#2. **Tail (3rd sitting):** #5 buffer retest + #7 SBL recon-vs-bottled.
+
+## TL;DR - the resolved mechanism (Lane B pre-brew, single coffee, PROVISIONAL)
+- **The ANION sets a PHASE; the CATION gates it.** SULFATE -> body / sweetness / creaminess / texture, roughly **cation-agnostic** (MgSO₄ 3.0, CaSO₄ 2.5). CHLORIDE -> attack / acidity / florality / clarity, but **cation-GATED**: Mg+Cl is the bright star (MgCl₂ **3.1, pre-brew peak**), Ca+Cl turns muted / lactic / oily (CaCl₂ **1.5, worst**). It is an interaction, not two clean main effects - "attribute to the pairing, never the lone ion."
+- **HT3 (pre vs post) DIVERGES = the extraction effect.** MgSO₄: post-brew muddy/worst (1.5) -> pre-brew a pleasant body agent (3.0) - sulfate must be present DURING extraction to express body/sweetness. CaCl₂: post-brew bright acid standout (3.5) -> pre-brew lactic/oily/worst (1.5) - the biggest divergence. Post-brew screening is a **bounded proxy**: it caught the coarse chloride-good / sulfate-muddy *ranking* but inverted the *mechanism* and mis-called specific pairings.
+- **MgCl₂ RESCUES CaCl₂ in-blend.** Pure CaCl₂ lactic/oily (1.5); MgCl₂+CaCl₂ blend has NO lactic note (2.5) - just over-interjects a back-sweetness this clarity coffee lacks. Sitting 1's two-chloride "best cup" pointer survives but is not the top pick here.
+- **Best BLEND (MgCl₂+MgSO₄ 3.0) does NOT beat the best SINGLE (MgCl₂ 3.1).** "Less is more" reinforced: on this clarity/citrus coffee the bright chloride attack, alone, is the peak.
+- **Full pre-brew ranking:** **MgCl₂ 3.1** > MgCl₂+MgSO₄ 3.0 ≈ MgSO₄ 3.0 > MgCl₂+CaCl₂ 2.5 ≈ CaSO₄ 2.5 > control 2.0 > CaCl₂ 1.5.
+
+## HT verdicts
+- **HT1 (sulfate vs chloride):** REFRAMED - not "one reveals," but anion=phase + chloride cation-gating (above). The binary inversion framing is superseded.
+- **HT2 (Mg vs Ca):** **Mg is the safer/better cation** on this coffee - decisive with chloride (MgCl₂ 3.1 ≫ CaCl₂ 1.5), slight edge with sulfate (MgSO₄ 3.0 ≳ CaSO₄ 2.5).
+- **HT3 (pre vs post - the centerpiece):** **DIVERGES; the divergence IS the extraction effect** (above). Validates the hybrid design.
+- **HT4 (buffer):** **INCONCLUSIVE** - confounded by a probable over-extraction on the KH0 arm (burnt/oversteeped; cups converged on cooling). Re-queued. Operator's minimal-KH lean stands as the working assumption.
+- **HT5 (SBL rig / recon-vs-bottled):** **NOT RUN** this sitting; re-queued to the 3rd sitting (#7, done right = brew the recon WATER directly vs bottled SBL at matched strength).
+
+**Did the inversion hold pre-brew?** (the spawn-prompt centerpiece) - **Partially, and reframed.** Pre-brew, sulfate is NOT muddy (rehabilitated to a body agent) and chloride is NOT uniformly the reveal (cation-gated). The practical "chloride-forward for THIS coffee" conclusion SURVIVES (MgCl₂ is the peak), but the mechanism is richer than "chloride reveals" - it is anion->phase + cation-gating.
+
+## WBC-field reconciliation (ref: [wbc-2026-water-handoff.md](docs/research-projects/wbc-2026-water-handoff.md))
+- **CORROBORATED (strongly):** the field's "the anion matters as much as the cation" - our anion clearly sets a phase.
+- **NOT reproduced on this coffee:** the field's specific role labels (MgSO₄ = florality; CaCl₂ = body). We got **sulfate = body, chloride = florality/attack**, and CaCl₂ = lactic (not clean body). Bounded by single-coffee + the Pink Bourbon is not a floral coffee (florality axis under-expressed - operator caveat). Mechanism agrees; the specific role-labels are coffee-dependent. Logged as a divergence to hold, not resolve.
+
+## Recipe-library pointer (this coffee, PROVISIONAL, single-coffee)
+**MgCl₂-forward, GH ~44, minimal/zero sulfate, avoid calcium, minimal KH** (pending the clean #5 retest). Peak cup = straight MgCl₂ @ GH 44. Coffee-dependence caveat: a body-wanting coffee could flip toward MgSO₄ / blends.
+
+## New lessons captured (Sitting 2 - candidate primitives; do NOT promote mid-session)
+| # | Lesson | Note |
+|---|---|---|
+| L-c #7 | **Per-axis directional scoring (WBC fold) surfaces complementary splits a single overall-score collapses.** It is the reason anion->phase was visible at all; Track 1 + Lane A both hid it inside one number. | Candidate active-mode primitive |
+| L-c #8 | **Pre-brew single-water comparisons carry brew-to-brew variance** (each cup is a separate full brew) unlike post-brew dosing off one base brew; a surprising *secondary-axis* pre-brew result must reproduce on a clean re-brew before folding. | The #5 confound; auto-retest primitive earning its keep |
+| L-c #9 | **LaMotte GH drop-count is salt/cation-specific** (Ca ≈ clean-on-5, Mg ≈ clean-on-6/7 for true GH 44) - do NOT port the drop-lock across cations; match the two waters *within a pair* instead. | Refines F11 / L-c #3 |
+| L-c #10 | **Shake dilute low-solubility stocks (gypsum) before every dose** - they settle without visible cloudiness ("looks clear" is not "homogeneous"). | F11 |
+| L-c #11 | **WATER-vs-CONCENTRATE labeling held clean all sitting** (every built liquid tagged WATER, brewed direct) - the F10 fix worked, no repeat. | Confirms L-c #6 |
+
+## Friction (Sitting 2)
+- **F11** - dilute gypsum stock settles; shake before dosing + GH-match the pair (don't port the drop-lock across cations). Caught pre-brew.
+- **F12** - blend (a) first-titrated GH~65 on exactly-correct doses (sub-mL CaCl₂ pipette imprecision / fast first titration); fixed by dilution. Verify EVERY built water.
+- **F13** - a 300 mL build is too tight for a comparison needing a full 25 mL KH titration + hardness draw; build ~330-350 mL when a full alkalinity read is planned, or top back to a matched volume.
+
+## Open tail (3rd sitting - short, fresh palate)
+1. **#5 buffer retest (HT4)** - rebuild MgCl₂/KH0 vs MgCl₂/KH~13, brew BOTH carefully (watch extraction - the confound was a brew fault), re-taste per-axis; claim a direction only if it reproduces. Let cups cool fully before the final read (they converged on cooling this time).
+2. **#7 SBL recon-vs-bottled (HT5)** - build the SBL-equivalent WATER from single-salt stocks (F7 profile), brew it DIRECTLY, A/B vs bottled SBL at matched strength (both finished waters - the F10 discipline). The Sitting-1 attempt was invalidated (B ended ≈distilled).
+
+## Substrate edit specifications
+**NONE. Substrate-fold DEFERRED per the single-coffee rule.** Every finding is on one coffee (Pink Bourbon). Candidates to hold for the post-2nd-coffee fold (do NOT apply now): (a) a CONTEXT-taste refinement on anion->phase + cation-gating + the coffee-dependence of the phase you want; (b) the MgCl₂-forward recipe-library seed for this coffee; (c) an L-candidate graduation pass (L-c #1-11) at the PROJECT retro. The Coordinator/compile session records these as deferred, does not execute them.
+
+### Execution Session Termination (Sitting 2)
+
+```
+Per Lesson #40 role-discipline rule:
+- ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
+- ❌ NO merge to main, NO substrate PR
+- ❌ NO `npx tsc --noEmit` runs
+- ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive")
+- ✅ Archive doc committed @ 6565a13 + pushed to branch claude/beautiful-merkle-2e5a59 (this stamp commit is HEAD; fetch branch HEAD for latest)
+- ✅ Track 2 handoff brief (Sittings 1+2) produced above; branch + SHA in its Archive location: header
+- 🛑 Session pausing after this brief. Tail = #5 buffer retest (HT4) + #7 SBL recon-vs-bottled (HT5), both re-queued to a short fresh 3rd sitting per operator fatigue call. The Coordinator decides substrate-fold (DEFERRED on single-coffee) + schedules the 3rd sitting.
+
+End of Single-Mineral Isolation Sitting-2 (Lane B core) handoff.
+```
+
+---
+
+# SITTING 3 - TAIL: BUFFER RETEST + SBL (2026-07-03)
+
+**Session role:** execution + handoff (no substrate; archive-persist only). Research Assistant. Continued on branch `claude/beautiful-merkle-2e5a59` (Sitting 2 archive lives here, not yet on main - so this branch, not a fresh-off-main one, is the correct base).
+**Scope:** the two re-queued items - **#5 buffer retest (HT4, clean re-brew)** + **#7 SBL recon-vs-bottled (HT5)**.
+**Step 0:** stocks still clear; recipe holds; built **350 mL/arm** (F13 headroom so the 25 mL KH titration doesn't run us short). **Session caveats (operator):** control read slightly more over-steeped today (coffee resting / off-gassing, bag not frozen) + operator had breakfast ~1 hr prior - both neutralized by **matched-temp (~47-50 °C, fully cooled) relative A/B scoring**, not absolute.
+
+## #5 RETEST - buffer check, clean re-brew (HT4) - semi-blind, control=2
+Semi-blind codes: **A = MgCl₂ / KH ~15** · **B = MgCl₂ / KH 0**. Both matched **clean-on-7** hardness (GH 44, MgCl₂ signature); KH0 = 1 drop (floor), KH~15 = clean-on-3. All cups read fully cooled at matched temp.
+| Code | Water | Acidity | Sweetness | Body | Cleanliness | Overall | Notes (prose) |
+|---|---|---|---|---|---|---|---|
+| ctrl | distilled | base | base | base | base | **2** | Lime / tomato / brown tea; a bit more over-steeped today (coffee resting, NOT the water). Improves as it cools. |
+| A | **MgCl₂ / KH ~15** | ↑ slight | ↑ slight | = | = | **2.5** | Slightly punchier than control; lemon-lime sweetness; "hasn't transformed much." |
+| B | **MgCl₂ / KH 0** | **↑↑ (more than A)** | ↑ (= A or a tinge more) | = | **slightly cleaner** | **3** | More acidity, a tinge more sweetness, slightly cleaner than A. |
+
+Direct A/B (back-to-back): **B (KH0) edges A (KH~15)** - a tinge more acidity + sweetness + a cleaner feel. Close, but B wins.
+
+## #5 retest read - HT4 RESOLVED; yesterday's confound CLOSED
+All three locked sub-predictions confirmed:
+1. **KH0 returned BRIGHT (3.0) ≈ the original MgCl₂/KH0 peak (3.1).** → yesterday's burnt/flat KH0 (~2) was a **BREW FAULT**, now reproduced clean. **Confounded loop CLOSED.**
+2. **Arms read CLOSE** (3.0 vs 2.5; operator: "fairly close") - the real KH effect is **subtle**, not yesterday's dramatic gap (which was the fault, not the buffer).
+3. **Direction = KH slightly FLATTENS.** KH0 carries more acidity/clarity; KH~15 slightly less. Bicarbonate mutes acid as predicted; no Lane-A sweet-lift rescue at this level on this coffee.
+
+**HT4 VERDICT (clean):** on this clarity coffee, **minimal/zero KH is slightly better than KH~15; the buffer slightly flattens acidity/clarity.** **CONFIRMS the operator's standing "less is more / minimal KH" lean.** Margin is small (KH~15 is fine, just a hair less bright) - not a cliff. Yesterday's surprising "KH brightens" is retired as the brew-fault artifact it was - **L-c #8 vindicated** (a pre-brew secondary-axis surprise did NOT reproduce on a clean re-brew).
+
+**Bonus - cross-sitting reproducibility:** MgCl₂/KH0 scored **3.1 (#1/#4) then 3.0 (here)** - stable across sittings, validating the dataset's repeatability.
+
+**Substrate-fold:** DEFERRED (single coffee).
+
+## #7 - SBL recon-vs-bottled, done right (HT5) - semi-blind, control=2
+All cups fully cooled (read ~51-52 °C then cooled). **Verified:** recon GH **6 drops** / KH **4 drops** (~44 / 20, on target, stayed **clear**); bottled SBL GH **5 drops** / KH **3 drops** (~40 / 15, **~1 drop low on both = F8 precipitation loss, now MEASURED**; cloudy). NOT GH-matched, by design (each dosed as-used; the strength gap is part of the finding). Codes: **A = SBL recon (stocks)** · **B = bottled SBL**.
+| Code | Water | Delivered GH/KH | Acidity | Sweetness | Body/Texture | Overall | Notes (prose) |
+|---|---|---|---|---|---|---|---|
+| ctrl | distilled | 0 / 0 | base | base | base | **2** | Lime / tomato / dark brown tea. **Mellows + cleans up beautifully cooling - operator PREFERS it over BOTH SBL waters** ("sweeter, cleaner, no alkalinity taste"). |
+| A | **SBL recon** (stocks) | ~44 / 20 (full, clear) | ↑ | ↑ | ↑ "more everything" | **~2 (< ctrl)** | Fruity / juicy / sweet but "**trying to do too much**," no pointed direction; a **soapy / chalky (alkalinity)** note; over-interjected. Coherent but too much for this coffee. |
+| B | **bottled SBL** | ~40 / 15 (precip loss, cloudy) | ~ (flattens) | wants sweet but **flattens fast** | flat "in the wrong places" | **< A (least liked)** | Tastes **off**: sour / flat, same alkalinity note but **less pleasant + sharper**, "**not mixed in the right proportion**," strange aftertaste. |
+
+**Ranking: control (2) > A recon > B bottled.**
+
+## #7 read - HT5 RESOLVED (three nested findings)
+1. **Recon > bottled - the valid "clean build beats commercial" result** Sitting 1 couldn't get (F10 invalidated it). The clean stock-built SBL beat the cloudy bottled SBL, and it **maps to the measured precipitation loss**: bottled delivered ~1 drop less GH+KH (F8, now quantified) AND tasted "**not mixed in the right proportion / flat in the wrong places**." So precipitation doesn't merely *weaken* the bottled product - it **selectively strips Ca + carbonate and unbalances the recipe's ion ratios**; the dilute-sequential stock build preserves them. **Cup-side proof for L-c #2's chemistry (finally supported).**
+2. **Both LOSE to distilled - REAL Track-1 replication** (not the accidental F10 near-distilled). Operator prefers plain distilled over BOTH SBL waters. The 5-salt SBL profile **over-injects** on this clarity coffee - reinforcing "less is more" + the MgCl₂-forward/minimal finding: even a correctly-built full SBL is worse than distilled here.
+3. **The KH20 "soapy/chalky/alkalinity" note cross-confirms HT4.** Operator independently tasted (and searched) the soapy/chalky alkalinity quality in **both** SBL waters - both carry KH 20. A second-angle confirmation that the buffer degrades this clarity coffee (the HT4 minimal-KH finding).
+
+**HT5 VERDICT:** recon > bottled (build method matters cup-side; precipitation *unbalances* the bottled product - measured + tasted); both < distilled (SBL over-injects on this clarity coffee - real Track-1 replication); the KH20 soapy note cross-confirms minimal-KH.
+
+**Substrate-fold:** DEFERRED (single coffee).
+
+---
+
+# TRACK 2 FINAL CLOSE - Lane B complete, all HTs resolved (2026-07-03)
+
+**Session role:** execution + handoff (no substrate; archive-persist only). Research Assistant, Sittings 2+3 on branch `claude/beautiful-merkle-2e5a59`.
+**Status:** **Track 2 Lane B COMPLETE.** All five hypothesis tests resolved; the two Sitting-2 tail items (HT4 buffer, HT5 SBL) closed this sitting. Nothing outstanding except the standing TONIK audit re-queue + the 2nd-coffee gate (both below).
+
+## Final HT verdicts (all five)
+| HT | Verdict |
+|---|---|
+| **HT1** sulfate vs chloride | **REFRAMED** - not "one reveals." The **anion sets a phase, the cation gates it**: sulfate -> body/sweetness (cation-agnostic); chloride -> attack/acidity/florality but **cation-gated** (MgCl₂ bright peak; CaCl₂ lactic). |
+| **HT2** Mg vs Ca | **Mg is the safer/better cation** here - decisive on chloride (MgCl₂ 3.1 ≫ CaCl₂ 1.5), slight edge on sulfate (MgSO₄ 3.0 ≳ CaSO₄ 2.5). |
+| **HT3** pre vs post | **DIVERGES; the divergence IS the extraction effect.** MgSO₄ rehabilitated (post-brew muddy -> pre-brew body); CaCl₂ inverted (post-brew bright -> pre-brew lactic). Post-brew screening is a bounded proxy. Validates the hybrid design. |
+| **HT4** buffer | **Minimal/zero KH slightly beats KH~15** on this clarity coffee; buffer slightly flattens acidity/clarity (small margin). Confirms the operator's minimal-KH lean. The KH20 soapy/chalky note in the SBL cups cross-confirms it. *(Resolved on a clean re-brew after a Sitting-2 brew-fault confound.)* |
+| **HT5** SBL recon vs bottled | **Recon > bottled** (clean stock build beats the cloudy commercial product; precipitation unbalances the bottle - ~1 drop GH/KH loss measured + tasted as "wrong proportion"). **Both < distilled** (SBL over-injects; real Track-1 replication). |
+
+## Final isolation map (Lane B pre-brew, single coffee, PROVISIONAL)
+| Factor | Pre-brew direction | Beats distilled? | vs post-brew (HT3) |
+|---|---|---|---|
+| Sulfate | body / sweetness / creaminess (cation-agnostic) | MgSO₄ yes; CaSO₄ marginal | DIVERGES - rehabilitated from post-brew "muddy" |
+| Chloride | attack / acidity / florality, **cation-gated** | MgCl₂ yes (peak); CaCl₂ no (lactic) | DIVERGES - CaCl₂ inverted from post-brew "bright" |
+| Cation (Mg vs Ca) | Mg safer; decisive on chloride | Mg both anions; Ca sulfate-only | - |
+| Buffer (KH) | slightly flattens acidity/clarity | minimal-KH best | (post-brew Na>K; here KH0 > KH15) |
+| Build method (SBL) | clean stock build > cloudy bottled (ratio integrity) | neither beats distilled | - |
+
+## Final recipe-library pointer (this coffee, PROVISIONAL, single-coffee)
+**MgCl₂-forward, GH ~44, minimal/zero sulfate, avoid calcium, zero/minimal KH.** Peak cup = **straight MgCl₂ @ GH 44 (3.1)**; nothing beat it (best blend 3.0; full SBL and every buffered/Ca/sulfate variant lower). For a body-wanting coffee the phase you want could flip toward sulfate/blends - **coffee-dependence gate holds.**
+
+## Full lesson tally (candidate primitives - graduate at the PROJECT retro, not now)
+L-c #1 (LaMotte Ca-titration muddy on high-Mg waters) · #2 (build multi-salt from stocks - **cup-side "cleaner" half now SUPPORTED by HT5**) · #3 (lock operational drop-count, hold constant) · #4 (match tool to dose) · #5 (naive-palate operator is an asset) · #6 (WATER vs CONCENTRATE labeling - **held clean all of Sittings 2-3**) · #7 (per-axis scoring surfaces splits a single score hides - **the key methodological win; anion->phase was only visible because of it**) · #8 (pre-brew single-water comparisons carry brew-to-brew variance; surprising secondary-axis results must reproduce - **vindicated by the HT4 confound + clean retest**) · #9 (GH drop-count is salt/cation-specific; match within a pair) · #10 (shake dilute low-solubility stocks - gypsum settles invisibly) · #11 (WATER-vs-CONCENTRATE discipline confirmed).
+
+## Audit items
+- **P6T1-AI-3 (TONIK roasted-barley confound):** RE-QUEUED again - no TONIK reference cup fit the buffer/SBL sitting. Carry forward.
+- **P6T2-AI-1 (the anion->phase / cation-gating map):** now pre-brew-CONFIRMED (was OPEN on Lane B). Still single-coffee - **gates the substrate-fold on a 2nd coffee** (fold already DEFERRED). The map is ready to codify the moment a 2nd coffee replicates.
+
+## Substrate edit specifications
+**NONE. Substrate-fold DEFERRED per the single-coffee rule.** Candidates to hold for the post-2nd-coffee fold (do NOT apply now): (a) a CONTEXT-taste refinement on anion->phase + cation-gating + the coffee-dependence of the desired phase; (b) the MgCl₂-forward recipe-library seed for the Pink Bourbon; (c) an L-c #1-11 graduation pass at the PROJECT retro. The Coordinator/compile session records these as deferred.
+
+### Execution Session Termination (Sitting 3 - Track 2 Lane B complete)
+
+```
+Per Lesson #40 role-discipline rule:
+- ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
+- ❌ NO merge to main, NO substrate PR
+- ❌ NO `npx tsc --noEmit` runs
+- ✅ Protocol doc updated in-place as canonical archive (authorized "doc IS the archive")
+- ✅ Archive doc committed @ 6d7a6b1 + pushed to branch claude/beautiful-merkle-2e5a59 (this stamp commit is HEAD; fetch branch HEAD for latest)
+- ✅ Track 2 FINAL close produced above; all 5 HTs resolved; Lane B complete
+- 🛑 Session terminating. The Coordinator decides substrate-fold (DEFERRED on single-coffee) + schedules the 2nd-coffee replication that unlocks codification. TONIK re-test still re-queued.
+
+End of Single-Mineral Isolation - Track 2 Lane B (Sittings 1-3) close.
+```
