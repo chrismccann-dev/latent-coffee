@@ -762,7 +762,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized "doc IS the archive")
-- ✅ Archive doc committed + pushed to branch claude/beautiful-merkle-2e5a59 (SHA stamped below; fetch branch HEAD for latest)
+- ✅ Archive doc committed @ 6d7a6b1 + pushed to branch claude/beautiful-merkle-2e5a59 (this stamp commit is HEAD; fetch branch HEAD for latest)
 - ✅ Track 2 FINAL close produced above; all 5 HTs resolved; Lane B complete
 - 🛑 Session terminating. The Coordinator decides substrate-fold (DEFERRED on single-coffee) + schedules the 2nd-coffee replication that unlocks codification. TONIK re-test still re-queued.
 
