@@ -2,13 +2,13 @@
 
 **Enforcement bar:** Reference / soft. This is a **knowledge doc, not a strict registry** (yet) - no `lib/water-registry.ts` validation mirror, no write-time gate. It codifies the *shape* of water chemistry (the recording schema, the mineral→role mechanism, the build method, the recipe library) so future work has a stable substrate to hang values on.
 **Provenance:** Derived from Research Project #6 (water chemistry), 2026-06 → 2026-07 - [Track 1: concentrate post-brew screen](docs/research-projects/water-concentrate-postbrew-screen.md) + [Track 2: single-mineral isolation, Lane B, all 5 HTs resolved](docs/research-projects/water-single-mineral-isolation.md), corroborated by the [2026 WBC water handoff](docs/research-projects/wbc-2026-water-handoff.md).
-**Last adopted:** 2026-07-04 (RP6 codification Phase A).
+**Last adopted:** 2026-07-04 (RP6 codification Phase A + Phase B `/brew` wiring).
 
 **Not a comprehensive registry / values are single-coffee-provisional.** Two things live in this doc and they carry **different confidence**:
 - **The framework is validated** - the anion→phase mechanism (§ 2), the recording schema (§ 1), the build method (§ 4), and the guardrails (§ 5) are coffee-independent and confirmed pre-brew (Track 2 Lane B, all five hypothesis tests resolved).
 - **The specific directional values + the recipe seed (§ 6) are Pink-Bourbon-only** - one coffee, pending a 2nd-coffee replication. Which *phase you want* is coffee-dependent (a clarity coffee wants the chloride attack; a body-wanting coffee may flip toward sulfate). The structure codifies now; the recipe values verify later. Do not port the § 6 seed to a new coffee without re-tasting.
 
-Wiring water into the `/brew` flow (a per-brew water suggestion) is **Phase B - deferred**, not in this doc. Built water is a **home-context lever** (needs the home gear in § 4); office brews just record `water_recipe` as-is.
+**Consumed by the `/brew` flow (RP6 Phase B, 2026-07-04):** at **home**, `/brew` Step 2 consults this doc (the § 3 chart + the § 6 recipe library) to **suggest a per-brew water recipe** for the coffee + confirmed extraction strategy, framed as an offer (the standing daily comp stays the low-effort default). Office brews just record `water_recipe` as-is. Built water is a **home-context lever** (needs the home gear in § 4). Entry points: [brewing-assistant/cluster/operational-guide.md § Step 2](docs/skills/brewing-assistant/cluster/operational-guide.md) + [.claude/skills/brew/SKILL.md](.claude/skills/brew/SKILL.md).
 
 ---
 

@@ -104,6 +104,11 @@ Once the extraction strategy and any modifiers are confirmed, select the brewer 
 
 **Brewer tiebreaker — when two owned brewers both fit the cup goal:** drill into the secondary register (softening / pulling-together vs preserving sharpness / structural definition) per the rule in [brewing-equipment-expert/cluster/operational-reference.md § Decision rule when two brewers fit the cup goal](docs/skills/brewing-equipment-expert/cluster/operational-reference.md). Rotation-debt is a valid follow-on tiebreaker but should not be the primary call.
 
+**Water Recipe authoring — home suggests, office records (RP6 Phase B, 2026-07-04).** The **Water Recipe** field is filled differently by brewing location (this is what makes the suggestion home-only — the office branch has no adjustments available per [operational-reference.md § Location Constraints](docs/skills/brewing-equipment-expert/cluster/operational-reference.md)):
+
+- **At home** (built water available): consult [water.md](docs/skills/brewing-equipment-expert/cluster/water.md) — the anion→phase chart (§ 3) + the recipe library (§ 6) — and **suggest a water recipe for this coffee + confirmed extraction strategy.** If a recipe-library row matches the coffee, use it; otherwise **derive** a direction from the chart + the coffee's character (clarity / floral → MgCl₂-forward, minimal KH; body-wanting → provisionally sulfate-forward per the coffee-dependence caveat) and propose it, **stamped provisional** (the values are single-coffee-verified so far; the *structure* is solid). Populate **Water Recipe** with the structured suggestion in taxonomy vocabulary (base + GH + KH + cation/anion). Frame it as an **offer, not a mandate** — the standing daily comp (Third Wave ~1:3, or any crushable comp) stays the low-effort default; the built suggestion is for when Chris wants to build deliberately.
+- **At office** (tap only, no adjustments available): **no suggestion** — record the tap/source in **Water Recipe** as-is, exactly as today (e.g. `Palo Alto office tap`).
+
 ### Output Format
 
 | **Field**             | **Value**                                                                                            |

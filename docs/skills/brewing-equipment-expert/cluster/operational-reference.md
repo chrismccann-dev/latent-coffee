@@ -22,7 +22,7 @@ Migrated from BREWING.md § Location Constraints + § Equipment Reference + § V
 | **Field**     | **Details**                                                                                                                                                     |
 |---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Equipment** | Full equipment inventory as listed in the Equipment Reference below.                                                                                            |
-| **Water**     | Distilled + remineralized with Third Wave Water packs (Light Roast packet diluted ~1:3 concentrate-to-distilled, topped up with pure distilled to brew volume). |
+| **Water**     | A deliberate lever when focusing: built per [water.md](docs/skills/brewing-equipment-expert/cluster/water.md)'s anion→phase chart for a per-coffee custom water (the `/brew` Step 2 home suggestion drives this). Low-effort daily default: distilled + remineralized with Third Wave Water packs (Light Roast packet diluted ~1:3 concentrate-to-distilled, topped up with pure distilled to brew volume), or any standing crushable comp. The comp stays available; the built water is for when the brew is a deliberate dial-in. |
 
 ## Equipment Reference
 
