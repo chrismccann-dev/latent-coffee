@@ -86,6 +86,8 @@ Each philosophy is derived *from the apex above*; the lever hierarchy (productio
 >
 > **Latent is the training ground, not a journal.** Apex-aligned coffees (self-roasted or selected purchased) are brewed narrowly toward layered-evolving; off-register purchased is the repertoire-building playground (mellow drip, high/low temp, double bloom, two-kettle staging), banking technique against the WBC corpus. Daily light/floral/tea-like cups are fine but outside what Latent optimizes for.
 
+*Editorial pointer (2026-07-04, non-verbatim):* the water lever's "gated promotion" above has begun - RP6 (water chemistry) resolved its mechanism and shipped codification Phase A. The reveal-not-inject keystone is exactly how water is used (season/reveal a phase the bean carries, don't inject one it lacks); the **water mineral→role mechanism itself (the anion sets a phase / the cation gates it) lives in [water.md](docs/skills/brewing-equipment-expert/cluster/water.md)**, not here - this is a discoverability pointer, not a relocation of the mechanism into the taste canon.
+
 ---
 
 ## Empirical anchors
