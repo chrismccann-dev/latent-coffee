@@ -666,3 +666,105 @@ Per Lesson #40 role-discipline rule:
 
 End of Single-Mineral Isolation Sitting-2 (Lane B core) handoff.
 ```
+
+---
+
+# SITTING 3 - TAIL: BUFFER RETEST + SBL (2026-07-03)
+
+**Session role:** execution + handoff (no substrate; archive-persist only). Research Assistant. Continued on branch `claude/beautiful-merkle-2e5a59` (Sitting 2 archive lives here, not yet on main - so this branch, not a fresh-off-main one, is the correct base).
+**Scope:** the two re-queued items - **#5 buffer retest (HT4, clean re-brew)** + **#7 SBL recon-vs-bottled (HT5)**.
+**Step 0:** stocks still clear; recipe holds; built **350 mL/arm** (F13 headroom so the 25 mL KH titration doesn't run us short). **Session caveats (operator):** control read slightly more over-steeped today (coffee resting / off-gassing, bag not frozen) + operator had breakfast ~1 hr prior - both neutralized by **matched-temp (~47-50 °C, fully cooled) relative A/B scoring**, not absolute.
+
+## #5 RETEST - buffer check, clean re-brew (HT4) - semi-blind, control=2
+Semi-blind codes: **A = MgCl₂ / KH ~15** · **B = MgCl₂ / KH 0**. Both matched **clean-on-7** hardness (GH 44, MgCl₂ signature); KH0 = 1 drop (floor), KH~15 = clean-on-3. All cups read fully cooled at matched temp.
+| Code | Water | Acidity | Sweetness | Body | Cleanliness | Overall | Notes (prose) |
+|---|---|---|---|---|---|---|---|
+| ctrl | distilled | base | base | base | base | **2** | Lime / tomato / brown tea; a bit more over-steeped today (coffee resting, NOT the water). Improves as it cools. |
+| A | **MgCl₂ / KH ~15** | ↑ slight | ↑ slight | = | = | **2.5** | Slightly punchier than control; lemon-lime sweetness; "hasn't transformed much." |
+| B | **MgCl₂ / KH 0** | **↑↑ (more than A)** | ↑ (= A or a tinge more) | = | **slightly cleaner** | **3** | More acidity, a tinge more sweetness, slightly cleaner than A. |
+
+Direct A/B (back-to-back): **B (KH0) edges A (KH~15)** - a tinge more acidity + sweetness + a cleaner feel. Close, but B wins.
+
+## #5 retest read - HT4 RESOLVED; yesterday's confound CLOSED
+All three locked sub-predictions confirmed:
+1. **KH0 returned BRIGHT (3.0) ≈ the original MgCl₂/KH0 peak (3.1).** → yesterday's burnt/flat KH0 (~2) was a **BREW FAULT**, now reproduced clean. **Confounded loop CLOSED.**
+2. **Arms read CLOSE** (3.0 vs 2.5; operator: "fairly close") - the real KH effect is **subtle**, not yesterday's dramatic gap (which was the fault, not the buffer).
+3. **Direction = KH slightly FLATTENS.** KH0 carries more acidity/clarity; KH~15 slightly less. Bicarbonate mutes acid as predicted; no Lane-A sweet-lift rescue at this level on this coffee.
+
+**HT4 VERDICT (clean):** on this clarity coffee, **minimal/zero KH is slightly better than KH~15; the buffer slightly flattens acidity/clarity.** **CONFIRMS the operator's standing "less is more / minimal KH" lean.** Margin is small (KH~15 is fine, just a hair less bright) - not a cliff. Yesterday's surprising "KH brightens" is retired as the brew-fault artifact it was - **L-c #8 vindicated** (a pre-brew secondary-axis surprise did NOT reproduce on a clean re-brew).
+
+**Bonus - cross-sitting reproducibility:** MgCl₂/KH0 scored **3.1 (#1/#4) then 3.0 (here)** - stable across sittings, validating the dataset's repeatability.
+
+**Substrate-fold:** DEFERRED (single coffee).
+
+## #7 - SBL recon-vs-bottled, done right (HT5) - semi-blind, control=2
+All cups fully cooled (read ~51-52 °C then cooled). **Verified:** recon GH **6 drops** / KH **4 drops** (~44 / 20, on target, stayed **clear**); bottled SBL GH **5 drops** / KH **3 drops** (~40 / 15, **~1 drop low on both = F8 precipitation loss, now MEASURED**; cloudy). NOT GH-matched, by design (each dosed as-used; the strength gap is part of the finding). Codes: **A = SBL recon (stocks)** · **B = bottled SBL**.
+| Code | Water | Delivered GH/KH | Acidity | Sweetness | Body/Texture | Overall | Notes (prose) |
+|---|---|---|---|---|---|---|---|
+| ctrl | distilled | 0 / 0 | base | base | base | **2** | Lime / tomato / dark brown tea. **Mellows + cleans up beautifully cooling - operator PREFERS it over BOTH SBL waters** ("sweeter, cleaner, no alkalinity taste"). |
+| A | **SBL recon** (stocks) | ~44 / 20 (full, clear) | ↑ | ↑ | ↑ "more everything" | **~2 (< ctrl)** | Fruity / juicy / sweet but "**trying to do too much**," no pointed direction; a **soapy / chalky (alkalinity)** note; over-interjected. Coherent but too much for this coffee. |
+| B | **bottled SBL** | ~40 / 15 (precip loss, cloudy) | ~ (flattens) | wants sweet but **flattens fast** | flat "in the wrong places" | **< A (least liked)** | Tastes **off**: sour / flat, same alkalinity note but **less pleasant + sharper**, "**not mixed in the right proportion**," strange aftertaste. |
+
+**Ranking: control (2) > A recon > B bottled.**
+
+## #7 read - HT5 RESOLVED (three nested findings)
+1. **Recon > bottled - the valid "clean build beats commercial" result** Sitting 1 couldn't get (F10 invalidated it). The clean stock-built SBL beat the cloudy bottled SBL, and it **maps to the measured precipitation loss**: bottled delivered ~1 drop less GH+KH (F8, now quantified) AND tasted "**not mixed in the right proportion / flat in the wrong places**." So precipitation doesn't merely *weaken* the bottled product - it **selectively strips Ca + carbonate and unbalances the recipe's ion ratios**; the dilute-sequential stock build preserves them. **Cup-side proof for L-c #2's chemistry (finally supported).**
+2. **Both LOSE to distilled - REAL Track-1 replication** (not the accidental F10 near-distilled). Operator prefers plain distilled over BOTH SBL waters. The 5-salt SBL profile **over-injects** on this clarity coffee - reinforcing "less is more" + the MgCl₂-forward/minimal finding: even a correctly-built full SBL is worse than distilled here.
+3. **The KH20 "soapy/chalky/alkalinity" note cross-confirms HT4.** Operator independently tasted (and searched) the soapy/chalky alkalinity quality in **both** SBL waters - both carry KH 20. A second-angle confirmation that the buffer degrades this clarity coffee (the HT4 minimal-KH finding).
+
+**HT5 VERDICT:** recon > bottled (build method matters cup-side; precipitation *unbalances* the bottled product - measured + tasted); both < distilled (SBL over-injects on this clarity coffee - real Track-1 replication); the KH20 soapy note cross-confirms minimal-KH.
+
+**Substrate-fold:** DEFERRED (single coffee).
+
+---
+
+# TRACK 2 FINAL CLOSE - Lane B complete, all HTs resolved (2026-07-03)
+
+**Session role:** execution + handoff (no substrate; archive-persist only). Research Assistant, Sittings 2+3 on branch `claude/beautiful-merkle-2e5a59`.
+**Status:** **Track 2 Lane B COMPLETE.** All five hypothesis tests resolved; the two Sitting-2 tail items (HT4 buffer, HT5 SBL) closed this sitting. Nothing outstanding except the standing TONIK audit re-queue + the 2nd-coffee gate (both below).
+
+## Final HT verdicts (all five)
+| HT | Verdict |
+|---|---|
+| **HT1** sulfate vs chloride | **REFRAMED** - not "one reveals." The **anion sets a phase, the cation gates it**: sulfate -> body/sweetness (cation-agnostic); chloride -> attack/acidity/florality but **cation-gated** (MgCl₂ bright peak; CaCl₂ lactic). |
+| **HT2** Mg vs Ca | **Mg is the safer/better cation** here - decisive on chloride (MgCl₂ 3.1 ≫ CaCl₂ 1.5), slight edge on sulfate (MgSO₄ 3.0 ≳ CaSO₄ 2.5). |
+| **HT3** pre vs post | **DIVERGES; the divergence IS the extraction effect.** MgSO₄ rehabilitated (post-brew muddy -> pre-brew body); CaCl₂ inverted (post-brew bright -> pre-brew lactic). Post-brew screening is a bounded proxy. Validates the hybrid design. |
+| **HT4** buffer | **Minimal/zero KH slightly beats KH~15** on this clarity coffee; buffer slightly flattens acidity/clarity (small margin). Confirms the operator's minimal-KH lean. The KH20 soapy/chalky note in the SBL cups cross-confirms it. *(Resolved on a clean re-brew after a Sitting-2 brew-fault confound.)* |
+| **HT5** SBL recon vs bottled | **Recon > bottled** (clean stock build beats the cloudy commercial product; precipitation unbalances the bottle - ~1 drop GH/KH loss measured + tasted as "wrong proportion"). **Both < distilled** (SBL over-injects; real Track-1 replication). |
+
+## Final isolation map (Lane B pre-brew, single coffee, PROVISIONAL)
+| Factor | Pre-brew direction | Beats distilled? | vs post-brew (HT3) |
+|---|---|---|---|
+| Sulfate | body / sweetness / creaminess (cation-agnostic) | MgSO₄ yes; CaSO₄ marginal | DIVERGES - rehabilitated from post-brew "muddy" |
+| Chloride | attack / acidity / florality, **cation-gated** | MgCl₂ yes (peak); CaCl₂ no (lactic) | DIVERGES - CaCl₂ inverted from post-brew "bright" |
+| Cation (Mg vs Ca) | Mg safer; decisive on chloride | Mg both anions; Ca sulfate-only | - |
+| Buffer (KH) | slightly flattens acidity/clarity | minimal-KH best | (post-brew Na>K; here KH0 > KH15) |
+| Build method (SBL) | clean stock build > cloudy bottled (ratio integrity) | neither beats distilled | - |
+
+## Final recipe-library pointer (this coffee, PROVISIONAL, single-coffee)
+**MgCl₂-forward, GH ~44, minimal/zero sulfate, avoid calcium, zero/minimal KH.** Peak cup = **straight MgCl₂ @ GH 44 (3.1)**; nothing beat it (best blend 3.0; full SBL and every buffered/Ca/sulfate variant lower). For a body-wanting coffee the phase you want could flip toward sulfate/blends - **coffee-dependence gate holds.**
+
+## Full lesson tally (candidate primitives - graduate at the PROJECT retro, not now)
+L-c #1 (LaMotte Ca-titration muddy on high-Mg waters) · #2 (build multi-salt from stocks - **cup-side "cleaner" half now SUPPORTED by HT5**) · #3 (lock operational drop-count, hold constant) · #4 (match tool to dose) · #5 (naive-palate operator is an asset) · #6 (WATER vs CONCENTRATE labeling - **held clean all of Sittings 2-3**) · #7 (per-axis scoring surfaces splits a single score hides - **the key methodological win; anion->phase was only visible because of it**) · #8 (pre-brew single-water comparisons carry brew-to-brew variance; surprising secondary-axis results must reproduce - **vindicated by the HT4 confound + clean retest**) · #9 (GH drop-count is salt/cation-specific; match within a pair) · #10 (shake dilute low-solubility stocks - gypsum settles invisibly) · #11 (WATER-vs-CONCENTRATE discipline confirmed).
+
+## Audit items
+- **P6T1-AI-3 (TONIK roasted-barley confound):** RE-QUEUED again - no TONIK reference cup fit the buffer/SBL sitting. Carry forward.
+- **P6T2-AI-1 (the anion->phase / cation-gating map):** now pre-brew-CONFIRMED (was OPEN on Lane B). Still single-coffee - **gates the substrate-fold on a 2nd coffee** (fold already DEFERRED). The map is ready to codify the moment a 2nd coffee replicates.
+
+## Substrate edit specifications
+**NONE. Substrate-fold DEFERRED per the single-coffee rule.** Candidates to hold for the post-2nd-coffee fold (do NOT apply now): (a) a CONTEXT-taste refinement on anion->phase + cation-gating + the coffee-dependence of the desired phase; (b) the MgCl₂-forward recipe-library seed for the Pink Bourbon; (c) an L-c #1-11 graduation pass at the PROJECT retro. The Coordinator/compile session records these as deferred.
+
+### Execution Session Termination (Sitting 3 - Track 2 Lane B complete)
+
+```
+Per Lesson #40 role-discipline rule:
+- ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
+- ❌ NO merge to main, NO substrate PR
+- ❌ NO `npx tsc --noEmit` runs
+- ✅ Protocol doc updated in-place as canonical archive (authorized "doc IS the archive")
+- ✅ Archive doc committed + pushed to branch claude/beautiful-merkle-2e5a59 (SHA stamped below; fetch branch HEAD for latest)
+- ✅ Track 2 FINAL close produced above; all 5 HTs resolved; Lane B complete
+- 🛑 Session terminating. The Coordinator decides substrate-fold (DEFERRED on single-coffee) + schedules the 2nd-coffee replication that unlocks codification. TONIK re-test still re-queued.
+
+End of Single-Mineral Isolation - Track 2 Lane B (Sittings 1-3) close.
+```
