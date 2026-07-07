@@ -10,6 +10,8 @@
 
 **Consumed by the `/brew` flow (RP6 Phase B, 2026-07-04):** at **home**, `/brew` Step 2 consults this doc (the § 3 chart + the § 6 recipe library) to **suggest a per-brew water recipe** for the coffee + confirmed extraction strategy, framed as an offer (the standing daily comp stays the low-effort default). Office brews just record `water_recipe` as-is. Built water is a **home-context lever** (needs the home gear in § 4). Entry points: [brewing-assistant/cluster/operational-guide.md § Step 2](docs/skills/brewing-assistant/cluster/operational-guide.md) + [.claude/skills/brew/SKILL.md](.claude/skills/brew/SKILL.md).
 
+**Physical inventory:** what water gear / reagents / concentrates are actually on the shelf lives in the sibling [water-inventory.md](docs/skills/brewing-equipment-expert/cluster/water-inventory.md) (maintained on acquisition/depletion) - check it before building or suggesting a recipe so both stay in sync with actual stock.
+
 ---
 
 ## § 1 - Water taxonomy (the recording schema)
