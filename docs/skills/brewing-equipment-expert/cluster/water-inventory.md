@@ -2,13 +2,13 @@
 
 **Enforcement bar:** Reference / soft. A **maintained, living inventory** of the water gear, reagents, and concentrates Chris owns - the physical counterpart to [water.md](docs/skills/brewing-equipment-expert/cluster/water.md) (which is the *knowledge*: taxonomy + chart + build method). `water.md` reasons about what's *possible*; this doc records what's *on the shelf*, so the `/brew` water suggestions and any build stay in sync with actual stock.
 
-**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-05 (§ 2 dry minerals + § 3 liquid stocks corrected against the authoritative `Water Minerals` + `Water Mineral Concentrates` TSVs). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
+**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-05 (all sections verified against Chris's four source TSVs). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
 
 **Two-tier mineral supply (the load-bearing structure for `/brew`):**
 - **Tier 1 = dry bulk minerals (§ 2)** - the purchased salts. Used to *make stock*, not to dose per brew.
 - **Tier 2 = single-mineral liquid stocks (§ 3)** - the 10,000 ppm (gypsum 1,500 ppm) bottles Chris made in the Track 2 session. **Per-brew water building doses from THESE** (drop/mL into distilled to hit a target recipe); refill a stock from its Tier-1 dry salt when it runs low. Each stock's per-1 g-in-1 L contribution (§ 3) is the dosing key.
 
-*(§ 4 commercial concentrates + § 5 gear are still from the earlier RP6 conversation - the Coffee Water Equipment + Water Concentrates TSVs aren't on hand; spot-check those two sections. §§ 1-3 are now exact.)*
+*(All sections verified 2026-07-05 against Chris's four source TSVs: Water Minerals, Water Mineral Concentrates, Coffee Water Equipment, Water Concentrates.)*
 
 ---
 
@@ -33,7 +33,7 @@ Hydration form is load-bearing for the GH/KH math (see [water.md § 4](docs/skil
 | **Potassium chloride** KCl | fine powder | 99% food | 8 oz | Jun 29 | ~524 mg/L K + 476 chloride; no GH/KH | *K-as-finish* future track; strong taste - tiny doses |
 | **Sodium chloride** NaCl | Morton Canning & Pickling | pure food | 12 lb (4 lb ×3) | Jun 27 | ~393 mg/L Na + 607 chloride; no GH/KH | salinity/seasoning - late + low |
 | **Silica** (Eidon Liquid Silica) | liquid concentrate, glass dropper | supplement | 2 oz | Jun 29 | ~12.5 mg silica/drop (30 drops = 375 mg); no GH/KH | *silica-as-texture* future track; already liquid - dose by drops, very low; Ca-silica interaction |
-| **Sodium bicarbonate** NaHCO₃ | household baking soda *(source/grade unconfirmed - add to this sheet)* | food (assumed) | - | - | ~2.71 mg/L Na + 7.19 bicarbonate per… (see § 3 stock) | used to make the NaHCO₃ stock; not separately tracked as a purchased product |
+| **Sodium bicarbonate** NaHCO₃ | Bob's Red Mill Baking Soda | food grade | - | - | ~2.71 mg/L Na + 7.19 bicarbonate (see § 3 stock) | the source for the NaHCO₃ stock |
 
 Storage: airtight, cool, dark; food-safe silica-gel desiccant in the **CaCl₂ + both MgCl₂** jars (the hygroscopic ones). Reagent-grade MgCl₂ ≠ food grade - confirm before drinking.
 
@@ -48,13 +48,13 @@ Made in the Track 2 session, distilled base, 1 g salt in 100 g distilled = **10,
 | **CaCl₂ stock** | CaCl₂·2H₂O, 1 g/100 g | 2026-07-02 | 10,000 | ~2.70 mg/L Ca + 4.77 chloride → **~6.74 ppm GH** | Ca + chloride |
 | **CaSO₄ (gypsum) stock** | CaSO₄·2H₂O, 0.15 g/100 g | 2026-07-03 | 1,500 (dilute) | ~0.35 mg/L Ca + 0.84 sulfate → **~0.87 ppm GH** | Ca + sulfate; **shake - settles invisibly** |
 | **KHCO₃ stock** | KHCO₃, 1 g/100 g | 2026-06-29 | 10,000 | ~3.87 mg/L K + 6.03 bicarbonate → **~4.94 ppm KH** | K buffer / alkalinity |
-| **NaHCO₃ stock** | NaHCO₃, 1 g/100 g | 2026-06-30 | 10,000 | ~2.71 mg/L Na + 7.19 bicarbonate → **~5.89 ppm KH** | Na buffer (source/grade to confirm) |
+| **NaHCO₃ stock** | NaHCO₃, 1 g/100 g | 2026-06-30 | 10,000 | ~2.71 mg/L Na + 7.19 bicarbonate → **~5.89 ppm KH** | Na buffer (from Bob's Red Mill baking soda) |
 
 Not yet stocked: **KCl / NaCl / silica** - future-track reagents (silica is already liquid; make KCl/NaCl stocks from the § 2 dry salts when a track needs them).
 
 ## § 4 - Commercial mineral concentrates
 
-*(From the earlier RP6 conversation - spot-check.)* Blended, black-box (except SBL, which discloses its recipe). Used as finished profiles - see the Track 1 screen for their per-coffee reads.
+Blended, black-box (except SBL, which discloses its recipe). Used as finished profiles - see the Track 1 screen for their per-coffee reads. **Dosing keys:** APAX concentrates (30,000 ppm) ≈ 1 drop 0.065 g ≈ 2 ppm/L (45 drops / 3 g = 90 ppm/L); DAK ≈ 0.0625 mL/drop ≈ 10 ppm/L (both bottles together); SBL 500 mL conc. dosed 2.5 mL/L → GH 44 / KH 20.
 
 | Product | Form | Composition | Notes |
 |---|---|---|---|
@@ -69,8 +69,6 @@ Not yet stocked: **KCl / NaCl / silica** - future-track reagents (silica is alre
 | **Sooper Water** (Lazy Schnauzer) | dry packet → 500 mL conc. | undisclosed proprietary | 12-12.5 g/L; pourover/filter house profile. |
 
 ## § 5 - Measurement + prep gear
-
-*(From the earlier RP6 conversation - spot-check model numbers.)*
 
 | Item | Spec | Use |
 |---|---|---|
@@ -91,5 +89,5 @@ Full gear-chain rationale + the build discipline (precipitation, WATER-vs-CONCEN
 
 ## Update log
 
-- **2026-07-05** - §§ 2-3 corrected against the authoritative `Water Minerals` + `Water Mineral Concentrates` TSVs. Fixes: MgCl₂ is **two 4 oz bottles** (Jun 20 backup + Jun 25) at **reagent grade**; added exact grades / sizes / purchase dates + the 1 g/L contribution factors; **added § 3 = the six single-mineral liquid stocks** (the per-brew dosing tier) with their per-1 g-in-1 L GH/KH keys; flagged NaHCO₃ dry source as unconfirmed. §§ 4-5 (concentrates + gear) still pending their source TSVs.
+- **2026-07-05** - Fully verified against all four source TSVs. §§ 2-3: MgCl₂ is **two 4 oz bottles** (Jun 20 backup + Jun 25) at **reagent grade**; exact grades / sizes / dates + 1 g/L factors; **added § 3 = the six single-mineral liquid stocks** (the per-brew dosing tier) with their per-1 g-in-1 L GH/KH keys. §§ 4-5 (concentrates + gear) confirmed against the Coffee Water Equipment + Water Concentrates TSVs (added concentrate dosing keys). NaHCO₃ source confirmed: **Bob's Red Mill Baking Soda** (food grade). Inventory now fully reconciled.
 - **2026-07-04** - Seeded at RP6 codification close (v1, from conversation).
