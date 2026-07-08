@@ -194,6 +194,16 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Grade:** READY (clear factual drift; the only judgment call is snapshot-refresh vs pointer-reframe)
     - **Source:** FanHua arbiter pass (Precursor Amplification signature promotion)
 
+### From the doc-cap pruning-prep audit + prune cases 010-013 (2026-07-08)
+
+53. **`docs/roasting/archive.md` vs roasting-historian `learnings/` - which is the canonical closed-lot home?** CLAUDE.md bills archive.md as "closed-lot archive, per-lot Key Learnings," but it is missing all 5 lots closed since 2026-05-23 - the roasting-historian `learnings/` capsules have de facto superseded it (the case-011 stub-downs route to `learnings/`, not archive.md). Grill: ratify `learnings/` as canonical and reduce archive.md to a redirect stub, or re-commit to maintaining archive.md (and backfill the 5 missing lots). Surfaced by the [2026-07-08 pruning-prep audit](docs/audits/pruning-prep-2026-07-08.md) out-of-scope observations.
+    - **Grade:** READY (clear factual drift; the only judgment call is stub-vs-backfill)
+    - **Source:** doc-cap pruning-prep audit (2026-07-08)
+
+54. **wbc-roasting-archivist sourcing placeholder re-growth.** `cluster/sourcing/priority-targets.md` + `cluster/sourcing/portfolio-lanes.md` were "PLACEHOLDER pointer" docs that have each re-grown substantive tables duplicating strategy.md § 7 / § 10 + wbc-materials.md (a fourth home for the bucket-meanings table). Case 012 repointed their stale snapshot references but deliberately did not trim them. Grill: trim both back to true pointers, or ratify them as legitimate dual-homes (and if so, name the drift-check discipline).
+    - **Grade:** READY (mechanical dedupe once the canonical-home call is made)
+    - **Source:** doc-cap pruning-prep audit (2026-07-08), § 4 out-of-scope observations
+
 ## Substrate pruning candidates
 
 Lived examples of substrate sections that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred until lived candidates covering all five shapes are worked through operator + Claude Code back-and-forth (case-study-driven generalization per Chris's framing at Item 16c grill). This section accumulates candidates; each becomes a worked example. **Systematization is deferred until all five shapes have a worked example** — full protocol at [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md).
