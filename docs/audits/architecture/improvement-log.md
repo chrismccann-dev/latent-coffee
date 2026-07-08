@@ -38,3 +38,10 @@ Not triggered. SKILL.md was ~20KB pre-cycle, ~23KB post — no `check:doc-sizes`
 ### Next-cycle trigger
 
 After the next 2-3 audit runs; or when any deferred-ledger item above reaches recurrence 3; or immediately if a real post-audit miss surfaces (that class is currently empty — its first member is an automatic cycle trigger, since "what the rubric missed" is the highest-value input this cycle didn't have).
+
+## Inter-cycle deferred suggestions — 2026-07-08 (external source: mattpocock/skills code-review)
+
+Reviewed Matt Pocock's updated code-review skill (Fowler's 12 classic smells, diff-shaped) against the v1 taxonomy. Most rows are already covered in sharper, audit-derived form (Duplicated Code → duplication-at-distance + R5; Shotgun Surgery → verbatim row; Divergent Change → mixed-concern; Speculative Generality → R6 gate + R8; Middle Man → deletion test; Feature Envy / Message Chains / Refused Bequest → OO-inheritance smells with no purchase on this codebase). Two genuinely uncovered items, deferred per the anti-lawyer-redline rule — no audit in 01-07 has fired either:
+
+- **Mysterious Name as a taxonomy row** (naming lens; his fix-heuristic "if no honest name comes, the design's murky" pairs well with the deletion/extraction tests). Graduate if an audit surfaces a naming finding the current rubric had no slot for. (recurrence 1 — external suggestion, zero lived evidence)
+- **Data Clumps / Primitive Obsession named as explicit sub-lenses of the weak-type-boundary row** (same fields/params travelling together wanting a type; primitive standing in for a domain concept). Partially covered today; graduate if an audit finds a clump/primitive case the row's current wording didn't prompt. (recurrence 1 — external suggestion)

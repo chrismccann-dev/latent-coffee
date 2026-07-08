@@ -9,7 +9,9 @@ disable-model-invocation: true
   (disable-model-invocation: true): it carries zero context load until you type its name.
   WHERE LATENT APPLIES IT: the no-op / sediment / sprawl / duplication / relevance cut-test is the
   qualitative lens for the manual post-tripwire pruning exercise — the size tripwire (`check:doc-sizes`)
-  says WHEN to prune; this vocabulary says WHAT to cut and why. See
+  says WHEN to prune; this vocabulary says WHAT to cut and why. The same lens (esp. negation /
+  negative-space / no-op / leading words) applies when rewriting CLAUDE.md and other durable docs,
+  not just skills (Chris, 2026-07-08). See
   docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md § The protocol (step 2) + the ADR-0013
   Amendment. The sibling GLOSSARY.md link below is Matt's portable-skill convention (same shape as
   grill-with-docs); this folder is skip-listed in scripts/check-doc-links.ts for that reason.
@@ -91,3 +93,5 @@ Use these to diagnose issues the user may be having with the skill.
 - **Sediment** — stale layers that settle because adding feels safe and removing feels risky. The default fate of any skill without a pruning discipline.
 - **Sprawl** — a skill simply too long, even when every line is live and unique. Hurts readability and maintainability and wastes tokens. The cure is the ladder: disclose **reference** behind pointers, and split by **branch** or sequence so each path carries only what it needs.
 - **No-op** — a line the model already obeys by default, so you pay load to say nothing. The test: does it change behaviour versus the default? A weak leading word (_be thorough_ when the agent is already thorough-ish) is a no-op; the fix is a stronger word (_relentless_), not a different technique.
+- **Negation** — steering by prohibition: naming what _not_ to do drags the forbidden behaviour into context and makes it more available, not less (don't think of an elephant). Cure: prompt the positive — describe the target behaviour so the banned one is never spoken. Keep a prohibition only as a hard guardrail you cannot phrase positively, and even then pair it with the positive target.
+- **Negative space** — the steering done by what you leave out: every decision a skill declines to make is delegated to the agent's priors, not left neutral. Cure: read a draft for its silences and decide each omission deliberately — fill it, or leave it open as a real **branch**.
