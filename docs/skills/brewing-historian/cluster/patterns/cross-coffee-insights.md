@@ -359,6 +359,7 @@ Things to test across future brews. **Maintenance rule:** when a question resolv
 ### Roast Level
 
 - Does the medium / developed-roast specialty natural → Hybrid Intensity-Clarity Split pattern hold on a non-Untold roaster? One more confirmation graduates Pattern #1 to a `by-roast-level/medium-developed.md` capsule.
+- CCIL promotion gate for the medium-roast over-extraction lever (re-homed from the brewing-assistant operational-guide Roaster roast-level hook, prune case 013): promote to a CCIL entry once **N≥2 more medium-roast specialty naturals where over-extraction-risk-as-roast-character framing LEADS strategy selection at intake** (not just retroactively confirmed at iteration time - trigger tightened at Item 20 / Group 5 grill, 2026-05-24). Full ledger entry with the operator clarification of the intake-led criterion: [ccil/cluster/observing.md § Medium-roast specialty natural over-extraction lever](docs/skills/ccil/cluster/observing.md).
 - What Agtron or visual threshold should trigger roast-level-first routing before process-family routing?
 
 ### Strategy Generalization
