@@ -90,7 +90,8 @@ Resources are content endpoints claude.ai can list and fetch. Each Resource has 
 | `docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md` | WBC recipe taxonomy: strategy distribution + findings + 65 subtype definitions (2022-2026) | Repo file |
 | `docs://skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md` | 154 competitor-by-competitor recipe rows grouped by strategy family | Repo file |
 | `docs://skills/wbc-roasting-archivist/cluster/wbc-roasting.md` | WBC roasting lessons + Roest L200 hypotheses + blending experiments + rest-curve protocol | Repo file |
-| `docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md` | WBC sourcing strategy + sourcing buckets (action axis) + 5-lane portfolio frame + sourcing channels | Repo file |
+| `docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md` | WBC sourcing strategy + sourcing buckets (action axis) + 5-lane portfolio frame + sourcing channels (inventory lane-mapping split to inventory-snapshot.md 2026-07-08) | Repo file |
+| `docs://skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md` | Inventory lane-lens snapshot: active-by-lane mapping + portfolio gap analysis + next-buy posture; live per-lot state via `list_green_inventory` | Repo file |
 | `docs://roasting.md` | `ROASTING.md` text (full, or `#{anchor}` for one section) | Repo file |
 | `docs://taxonomies/{axis}.md` | Authored markdown for one of the 10 canonical taxonomies (full, or `#{anchor}`) | Repo file |
 | `docs://prompts/{name}.md` | Operational prompts (start-brew / bundled-brewing-completion brewing-side — Claude-Code `/brew` substrate post claude.ai-brewing retirement 2026-06-18; start-lot / log-roast / log-cupping / close-lot V-set roasting; one-shot / one-shot-closeout one-shot roasting) | Repo file |

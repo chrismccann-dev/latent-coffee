@@ -11,7 +11,7 @@ Read this doc when:
 - Writing a Lot Knowledge entry and want to anchor the "what would competitors do here?" framing
 - Thinking through whether a sourcing decision opens up a roast experiment that's worth running
 
-For the sourcing-side companion (producers / origins / varieties / processes / Latent inventory mapped to tiers), see **[sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md)**.
+For the sourcing-side companion (producers / origins / varieties / processes), see **[sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md)**; the inventory lane-mapping lives in [sourcing/inventory-snapshot.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md).
 
 ## History
 
@@ -240,7 +240,7 @@ Rough heuristic for whether a lot has the latitude to absorb a 3-batch ladder:
 
 When scoping a 3-batch ladder in claude.ai, **first call `list_roest_inventory` (or check the existing roast records' green-bean linkage)** to confirm there's enough green before committing.
 
-Lot priority for the ladder: high green cost + high cup ceiling + sufficient quantity. As a current snapshot, GESHA CLOUDS has clear latitude; CGLE Sudan Rume Natural needs the inventory check before scoping. See [sourcing/strategy.md § Latent inventory mapped to tiers](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) for the broader portfolio frame.
+Lot priority for the ladder: high green cost + high cup ceiling + sufficient quantity. As a current snapshot, GESHA CLOUDS has clear latitude; CGLE Sudan Rume Natural needs the inventory check before scoping. See [sourcing/inventory-snapshot.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md) for the current lane mapping + [sourcing/strategy.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) for the broader portfolio frame.
 
 ### Multi-process and multi-origin blending — out of scope for now
 

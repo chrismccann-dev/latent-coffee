@@ -18,7 +18,7 @@ The three axes are deliberately distinct: **Fit** (the § 9 filter cascade + § 
 
 ## Latent-adjusted reading
 
-The adjustment is per-decision and re-applied at each buying moment. Today's snapshot in [sourcing/strategy.md § Portfolio gap analysis (Latent-adjusted)](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) uses the Latent-adjusted reading for next-buy recommendations.
+The adjustment is per-decision and re-applied at each buying moment. Today's snapshot in [sourcing/inventory-snapshot.md § Portfolio gap analysis (Latent-adjusted)](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md) uses the Latent-adjusted reading for next-buy recommendations.
 
 ## See also
 
