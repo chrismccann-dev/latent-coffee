@@ -320,7 +320,12 @@ const DOC_CATALOG: CatalogDoc[] = [
   {
     uri: 'docs://skills/wbc-roasting-archivist/cluster/sourcing/strategy.md',
     title: 'WBC Roasting Archivist — Sourcing Strategy',
-    description: 'Use when evaluating a green offer or rebalancing inventory — WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, the sourcing-bucket action axis, 5-lane portfolio frame, sourcing channel classifications, and current Latent inventory mapped to portfolio lanes (snapshot 2026-05-09; Sprint T2 lane formalization 2026-05-18). Migrated from docs/roasting/wbc-sourcing.md in Wave 2 PR 1.',
+    description: 'Use when evaluating a green offer or rebalancing inventory - WBC-derived sourcing strategy across producers / origins / varieties / processes / elevation, the sourcing-bucket action axis, 5-lane portfolio frame, and sourcing channel classifications. No inline inventory snapshot (re-homed 2026-07-08, pruning case 012): live per-lot state via list_green_inventory; lane-lens view at the sibling inventory-snapshot.md. Migrated from docs/roasting/wbc-sourcing.md in Wave 2 PR 1.',
+  },
+  {
+    uri: 'docs://skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md',
+    title: 'WBC Roasting Archivist - Sourcing: Inventory Lane-Lens Snapshot',
+    description: 'Use when checking how the current green inventory maps to the 5 portfolio lanes - the sourcing-lens scoreboard (active-by-lane mapping + portfolio gap analysis + next-buy posture), the only inventory view the DB cannot hold (green_beans has no lane column). Carries the refresh-on-inventory-change mandate. Live per-lot state is list_green_inventory (authoritative roster + rank) + get_bean_pipeline. Split out of sourcing/strategy.md 2026-07-08 (pruning case 012).',
   },
   {
     uri: 'docs://skills/wbc-roasting-archivist/cluster/sourcing/portfolio-lanes.md',

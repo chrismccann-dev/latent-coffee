@@ -16,7 +16,7 @@ The 5 lanes name the **role-shape** a balanced inventory should cover, regardles
 
 ## Operational practice
 
-**Portfolio gap analysis** — runs at each inventory-change moment (new green purchase, lot close-out, archive). Today's worked example lives in [sourcing/strategy.md § Latent inventory mapped to tiers](docs/skills/wbc-roasting-archivist/cluster/sourcing/strategy.md) (2026-05-09 snapshot).
+**Portfolio gap analysis** — runs at each inventory-change moment (new green purchase, lot close-out, archive). Today's worked example lives in [sourcing/inventory-snapshot.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md) (the lane-lens snapshot; the refresh-on-inventory-change mandate lives there).
 
 ## See also
 

@@ -18,11 +18,7 @@ This is **portfolio framing**, not a comprehensive producer registry. The valida
 
 The sourcing tiers in this doc reference producers and varieties from those registries; if a name shows up here that isn't in the canonical registry, that's a cue to consider promotion.
 
-## History
-
-- **2026-05-09:** Initial draft. Authored from Chris's "Sourcing Strategy Ideas for Roasting" synthesis doc plus the underlying WBC corpus. Latent inventory mapped to tiers as a 2026-05-09 snapshot — refresh on inventory change. Two-doc split with [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md) covering the *how to roast* side.
-- **2026-05-18 (Sprint T2):** Three doc edits folding the 2026-05-16 grilling locks into the authored doc — § 10 portfolio formalized 4 → 5 lanes (Value / roast-practice promoted from gap-analysis-only to authored frame; WBC-6); § 11 Sourcing channels added with 6 channel kinds (Generalist retailer / Specialty importer / Competition-grade importer / Direct-from-farm / Auction-sample channel / Direct-from-auction awareness-only; WBC-8); Geisha Village classification corrected inside the new § 11 (direct-from-farm with 1kg-sample-bag sub-pattern, not generalist retailer; WBC-7). Each lock matches the canonical vocabulary already in [docs/reference/wbc-materials.md](docs/reference/wbc-materials.md).
-- **2026-06-19 (Producer sourcing-priority canon pass):** folded the resolved three-axis sourcing model into canon and de-collided the sourcing vocabulary. § 7's "Tier 1/2/3 priority targets" → **Sourcing buckets** (the *action* axis: `pursue` / `watch` / `learning` / `calibration` / `avoid`); the `reference` bucket renamed `calibration`; the § 10 "Reference clarity" lane → "Calibration clarity." § 9 reframed as a prose sanity back-check (never a computed/stored score) behind the real **filter cascade**; § 8 keyed on *structure* (one-dimensional / loud-unidirectional / hot≈cool), not funky / boozy / dessert *descriptors*; § 0 gained the new tells (temperature-swing test, producer-vs-lot, named-exemplar, range-over-depth) + the variety-floor counter-case (Project One Light). The apex itself stays canon at [CONTEXT-taste.md § Sourcing philosophy](CONTEXT-taste.md); the registry-side action axis (the `pursue` roster) lives at [docs/taxonomies/producers.md § Sourcing priority](docs/taxonomies/producers.md).
+*Provenance: authored 2026-05-09 from Chris's "Sourcing Strategy Ideas for Roasting" synthesis + the WBC corpus; 2026-05-18 (Sprint T2) folded the 2026-05-16 grilling locks (5-lane portfolio, § 11 channels); the 2026-06-19 producer sourcing-priority canon pass reframed §§ 7-9 onto sourcing buckets + the filter cascade. Full history: git log + [docs/sprints/shipped.md](docs/sprints/shipped.md).*
 
 ## 0. Sourcing philosophy (North Star-derived)
 
@@ -68,14 +64,14 @@ It also reframes blends. Competitors are not buying greens to make a single cup 
 
 ## Latent's actual current palate vs. the WBC sweet spot
 
-The WBC tier framework below is structured around the dominant competition palate: **clean, floral, tea-like, structured, high-clarity, often Panama Gesha**. That's the WBC center of gravity. It is not, currently, the Latent center of gravity.
+The WBC tier framework below is structured around the dominant competition palate: **clean, floral, tea-like, structured, high-clarity, often Panama Gesha**. That's the WBC center of gravity. It is not the Latent center of gravity - the Latent target is the **apex** (§ 0): layered-evolving, complexity made legible.
 
-Latent's actual current preference (as of 2026-05-09):
+What that means for buying:
 
-- **Lean toward VERY expressive coffees** — controlled naturals, co-ferments, high-process Colombia, red-wine and red-fruit profiles, lots that have something *loud* to say.
-- **Control expression on the brew side via Suppression** — rather than buying coffees that are intrinsically clean and elegant, buy expressive coffees and let the Suppression strategy (and Hybrid sub-forms) shape the cup.
-- **Clean clarity-Gesha is over-indexed in specialty coffee right now** — Latent doesn't need to chase it as a primary buying lane, even though competitors do.
-- **Still important to know how to roast** clean clarity-Gesha — it's a roasting skill that should stay sharp, not a buying preference. A reference clean-Gesha lot every 2-3 buying cycles keeps the lane practiced.
+- **Lean toward high-process, high-complexity, distinctive coffees** - controlled naturals, engineered co-ferments, high-process Colombia, red-wine and red-fruit profiles - judged on the layered-evolving read: distinctive, multilayered, *transforming* across the temperature + structural arcs. The anti-target is one-dimensional whether clean OR funky: a loud fruit-bomb misses exactly as much as a flat clean cup.
+- **Express on the roast, clarify on the brew** (the express-then-clarify couple, [CONTEXT-taste.md § Roasting/Brewing philosophy](CONTEXT-taste.md)) - rather than buying coffees that are intrinsically clean and elegant, buy layered-expressive coffees and let the clarify-side strategies (Suppression and the Hybrid sub-forms) shape the cup downstream.
+- **Clean clarity-Gesha is over-indexed in specialty coffee right now** - Latent doesn't need to chase it as a primary buying lane, even though competitors do.
+- **Still important to know how to roast** clean clarity-Gesha - it's a roasting skill that should stay sharp, not a buying preference (the `calibration` bucket, § 7). A reference clean-Gesha lot every 2-3 buying cycles keeps the lane practiced.
 
 ### How this shifts the Tier 1/2/3 reading
 
@@ -87,13 +83,11 @@ The framework below preserves the WBC tier mapping (Tier 1 = best fit *for clean
 |---|---|---|
 | T1 (clean reference) | Important but not urgent | Roasting-skill upkeep, not buying-priority |
 | T2 (learning hybrids) | Aligned with current focus | Sudan Rume / Mandela / CGLE 17 / Java already core to Latent's recent inventory |
-| T3 (high-risk process) | More aligned than the WBC framing suggests | Latent's "VERY expressive + Suppression" stance means controlled high-process coffees are *closer* to the buying target than the WBC framing implies — provided the green is clean enough not to go boozy / artificial |
+| T3 (high-risk process) | More aligned than the WBC framing suggests | Latent's express-then-clarify stance means controlled high-process coffees are *closer* to the buying target than the WBC framing implies - provided the cup lands layered-evolving, not loud-one-note (§ 8) |
 
 This is why current Latent inventory looks T2/T3-heavy on first read of the framework — that's not portfolio drift, it's Latent's actual preference operating against a framework keyed to a different palate.
 
-> **North Star refinement (2026-06-14).** The "VERY expressive / something *loud* to say" framing above (authored 2026-05-09) is **superseded in target by the apex** (§ 0): the aim is **layered-evolving, complexity made legible** - distinctive, multilayered, *transforming* across the temperature + structural arcs - **not** loud-single-note. The anti-target is **one-dimensional whether clean OR funky**: a loud fruit-bomb misses exactly as much as a flat clean cup. The "control expression on the brew side via Suppression" instinct is still right, now stated precisely as the **express-then-clarify couple** (develop fully for expression on the roast; clarify/suppress downstream on the brew - [CONTEXT-taste.md § Roasting/Brewing philosophy](CONTEXT-taste.md)). Read "VERY expressive" below as "*high-process, high-complexity, distinctive*," not "loud" - the §§ 1-11 substrate still applies; only the target word sharpens.
-
-The portfolio gap analysis in § Latent inventory mapped to tiers below uses the **Latent-adjusted** priority, not the raw WBC tiering, when calling out missing lanes.
+The portfolio gap analysis in [inventory-snapshot.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md) uses the **Latent-adjusted** priority, not the raw WBC tiering, when calling out missing lanes.
 
 ## 1. Producer signals
 
@@ -111,7 +105,7 @@ The same producers and farm networks repeat across the dataset. That repetition 
 | **El Diviso, Colombia** | Ombligon, Gesha, thermoshock, experimental processing. Strong for intense fruit and body components. |
 | **Wilton Benitez / Granja Paraíso, Colombia** | Thermal shock, yeast-assisted, engineered process coffees. High aromatic intensity, but sourcing risk if the cup goes process-forward. |
 | **Mount Totumas, Panama** | Important 2025 signal: natural Gesha used by George Peng (1st place 2025, triple roast). Watch for clean natural Panama Gesha. |
-| **El Paraíso / Diego Bermúdez, Cauca, Colombia** | Thermal shock + anti-maceration + vacuum fermentation + zeolite drying. High-process, high-intensity. Latent currently has the El Paraíso Red Plum Castillo (2026-05-06 purchase) — a relatively cleaner expression of the network. |
+| **El Paraíso / Diego Bermúdez, Cauca, Colombia** | Thermal shock + anti-maceration + vacuum fermentation + zeolite drying. High-process, high-intensity. Latent's Red Plum Castillo lot (closed 2026-06-22) was a relatively cleaner expression of the network. |
 | **Forest Coffee / Milton Monroy, Tolima, Colombia** | Newer to the corpus. Latent has GESHA CLOUDS (2026-04-09 purchase) — natural Gesha in the same lane as Janson / Mikava but at a more accessible price point. |
 
 ## 2. Origin signals
@@ -148,7 +142,7 @@ These show up as distinctive role players:
 - **Honduras washed Gesha** — florals / citrus at potentially better value (Monserrath Morazan 2024)
 - **Brazil Laurina / Yellow Catuaí / Daterra** — sweetness and structure components (Rubens Vuolo 2024, Thiago Sabino 2025)
 - **Venezuela Gesha / Monte Claro** — emerging novelty lane (Andreina Guerrero 2024, Manuel Pinnola 2025)
-- **Ecuador Sidra / Typica Mejorado** — high-potential acidity / floral lane (Martin Guayasamin 2025); Latent has a 100g Gilberto Ramiro Mejia Typica Mejorado Washed sample in inventory.
+- **Ecuador Sidra / Typica Mejorado** — high-potential acidity / floral lane (Martin Guayasamin 2025)
 
 ## 3. Variety signals
 
@@ -179,15 +173,15 @@ Laurina appears in blends with Gesha or Bourbon. Used for: sweetness, soft acidi
 
 | Variety | Why it matters |
 |---|---|
-| **Sudan Rume** | Complex, high acidity, floral / tropical potential, but roast-sensitive. Latent has both natural and hybrid washed CGLE Sudan Rume in inventory. |
+| **Sudan Rume** | Complex, high acidity, floral / tropical potential, but roast-sensitive. Latent has roasted both natural and hybrid washed CGLE Sudan Rume. |
 | **Sidra** | Big aromatics, sweetness, acidity, often process-responsive |
 | **Chiroso** | Floral, red fruit, candy-like, elegant if clean |
 | **Mandela** | Hybrid complexity, tropical fruit, structured mouthfeel. Latent closed CGLE Mandela XO (sprint 2.5). |
 | **Java** | Floral and sweet, but needs careful development. Latent closed Guatemala El Socorro Java. |
 | **Ombligon** | Fruit intensity, body, experimental-process compatibility |
-| **Typica Mejorado** | Ecuadorian floral / stone-fruit potential, good Gesha-adjacent lane. Latent has a 100g sample in inventory. |
+| **Typica Mejorado** | Ecuadorian floral / stone-fruit potential, good Gesha-adjacent lane. |
 | **Pink Bourbon** | High fruit and acidity, often experimental in Colombia |
-| **Wush Wush** | Less common in WBC corpus; Gesha-adjacent Ethiopian landrace. Latent has a Brazilian DRD Wush Wush in inventory — outside the typical WBC buying lane but high-information. |
+| **Wush Wush** | Less common in WBC corpus; Gesha-adjacent Ethiopian landrace - outside the typical WBC buying lane but high-information. |
 
 ## 4. Process signals
 
@@ -232,7 +226,7 @@ Buy selectively, not as default.
 | Extended natural with heavy fermentation | Drying, savory, or overripe risk |
 | Eugenioides-heavy blends | Sweet but potentially low acidity / lower clarity |
 
-For Chris's palate, the sweet spot is **clean CM, cold-fermented natural, white honey, washed mossto, and hybrid washed**, not the heaviest anaerobic naturals. The Costa Rica Higuito Anaerobic Dry Process currently in inventory sits at the edge of Lane C — its tasting notes (wine, honey mead, burnt sugar, Lemoncello, Port wine) are exactly the boozy / dessert-leaning profile Chris is most likely to push back on at the cup.
+For Chris's palate, the sweet spot is **clean CM, cold-fermented natural, white honey, washed mossto, and hybrid washed**, not the heaviest anaerobic naturals.
 
 ## 5. Elevation and density signals
 
@@ -253,7 +247,7 @@ Rough filter:
 | 2100m+ | High acidity, high density, roast-sensitive |
 | <1500m | Needs exceptional variety / process to fit Chris's style |
 
-Not a hard rule, but a useful first-pass filter. The Wush Wush DRD currently in inventory is at 1130m — well below this comfort zone — and the El Paraíso Red Plum Castillo is at 1960m, right in the prime zone. Density on the El Paraíso (802 g/L) also sits firmly in the high-density bucket where the FC-temp architectural-constraint hypothesis from ROASTING.md § Cross-Coffee Insight Layer matters most.
+Not a hard rule, but a useful first-pass filter. Worked contrast from Latent lots: the Wush Wush DRD at 1130m sat well below this comfort zone; the El Paraíso Red Plum Castillo at 1960m sat right in the prime zone - and its 802 g/L density sits firmly in the high-density bucket where the FC-temp architectural-constraint hypothesis ([roasting-historian CCIL](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md)) matters most.
 
 ## 6. Blends as a sourcing theme
 
@@ -290,14 +284,7 @@ This section is the **action half** of the three-axis sourcing spine - **Fit** (
 | **`calibration`** | Keep a known clean skill sharp against a fixed clean benchmark - **washed Panama Gesha is the yardstick**. (Renamed from `reference` in the 2026-06-19 pass.) |
 | **`avoid`** | Deprioritize flag - **empty of named producers today** (you don't canonically index a one-dimensional producer as a target). |
 
-**The `pursue` roster (13, geography-agnostic, process-first).** Panama leads on lived-evidence *density*, not as a gate; portability is now *stocked*, not aspirational (China / Ecuador / Colombia all represented):
-
-- **Panama (7):** Altieri Family · Lamastus Family · Mama Cata Estate (Garrido) · Jannette & Kai Janson · Jamison Savage (Finca Deborah) · Ricardo & Victoria Koyner (Kotowa) · Graciano Cruz (HiU / Los Lajones - the named "more like the HiU Los Lajones" benchmark).
-- **Colombia (3):** Wilton Benitez (with risk controls) · Rigoberto & Luis Eduardo Herrera (CGLE) · Paul & Kevin Doyle (Mikava / Santuario).
-- **Ecuador (2):** Pepe Jijón (Finca Soledad) · Juan Peña (Hacienda La Papaya - Enrique Merino / Lugmapata the close alternate).
-- **China (1):** Olina Cai (Project One Light - the variety-floor counter-case + non-Panama portability proof).
-
-**`watch`** - Daterra (precision-at-scale / blend-component, don't pursue on spec) · Nguisse Nare (Ethiopian anaerobic-natural boozy-risk until evidence) · Carmen Cecilia Montoya Patiño + William Ferney Ortiz Ruiz (the Chiroso-Colombia field). **`learning`** - Diego Bermúdez (El Paraíso) · Inmaculada · the China / Thailand experimental field (Po Zha, Nawin Yaesorkoo). **`calibration`** - Hacienda La Esmeralda (the textbook clean yardstick Chris *skipped* on Forward as over-indexed) · Gesha Village.
+**The rosters** (13 `pursue` + `watch` / `learning` / `calibration`; `avoid` empty) live in the canonical registry home: [docs/taxonomies/producers.md § Sourcing priority](docs/taxonomies/producers.md). Deliberately not duplicated here - the two copies had already drifted.
 
 ## 8. What to avoid overbuying (the structural anti-target)
 
@@ -307,7 +294,7 @@ The cutoff is **structural, not a flavor vocabulary.** Boozy / funky / winey / c
 - **Process novelty with no cup payoff** - sold on the method, not on a layered-evolving result; inject-engineering that doesn't land legible.
 - **Low-elevation experimental** unless the producer / process evidence is exceptional.
 - **Big-body Eugenioides / Liberica-dominant blends** - a body tool, not a default style.
-- **Too much overlap with inventory already held** - the dedup-vs-inventory gate (the backlog is overfull; see § Best next sourcing moves).
+- **Too much overlap with inventory already held** - the dedup-vs-inventory gate (the backlog is overfull; see [inventory-snapshot.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md)).
 
 ## 9. The filter cascade + the scorecard back-check
 
@@ -348,7 +335,7 @@ Build the green inventory around five lanes:
 
 The shift the WBC data supports: **buy coffees with clear experimental jobs**, not "buy the most interesting coffee."
 
-The **Value / roast-practice lane** was formalized 2026-05-18 (Sprint T2 / WBC-6) — the gap analysis below had been treating it as load-bearing since the 2026-05-09 snapshot, but the authored frame above lagged at 4 lanes. The 5th lane carries cheap experiment substrate (sub-$30/kg, washed Bourbon / Caturra / value-tier blends) for running 3-batch dev ladders + rest-curve experiments + green-curve calibration without burning expensive lots on basic-skill iterations. Eats fast at 100g/batch — the Roest L200 100g-per-batch capacity (see Sourcing constraints in docs/reference/wbc-materials.md) means even a 5-pound value lot supports ~22 practice roasts, which the iteration cadence consumes quickly enough to matter.
+The **Value / roast-practice lane** was formalized 2026-05-18 (Sprint T2 / WBC-6) — the gap analysis (now in [inventory-snapshot.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md)) had been treating it as load-bearing since the 2026-05-09 snapshot, but the authored frame above lagged at 4 lanes. The 5th lane carries cheap experiment substrate (sub-$30/kg, washed Bourbon / Caturra / value-tier blends) for running 3-batch dev ladders + rest-curve experiments + green-curve calibration without burning expensive lots on basic-skill iterations. Eats fast at 100g/batch — the Roest L200 100g-per-batch capacity (see Sourcing constraints in docs/reference/wbc-materials.md) means even a 5-pound value lot supports ~22 practice roasts, which the iteration cadence consumes quickly enough to matter.
 
 ## 11. Sourcing channels
 
@@ -390,73 +377,15 @@ Most current inventory came in via:
 
 The Competition-grade-access-trajectory (docs/reference/wbc-materials.md § Competition-grade access trajectory) names the multi-year shift in this mix — from generalist + specialty importer dominant today toward direct-from-farm + competition-grade importer + direct-from-auction dominant at championship-mode horizon.
 
-## Latent inventory mapped to tiers (snapshot refreshed 2026-06-18)
+## Current inventory (pointer)
 
-This section is the operational scoreboard - fold the abstract framework above against actual current Latent inventory. **Refresh on inventory change** (new green purchase, lot close-out, archived lot). The taxonomies + the roasting-historian cluster (active-lots / learnings) + `list_green_inventory` are the live-data sources; this is a sourcing-lens summary.
+Live per-lot inventory state is the DB, not this doc: **`list_green_inventory`** is the authoritative in_inventory roster + roast-queue rank (`get_bean_pipeline` for a single lot's full arc). The sourcing-lens view - active lots mapped to the § 10 lanes + the portfolio gap analysis + best next sourcing moves - lives in the sibling **[inventory-snapshot.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md)**, which carries the refresh-on-inventory-change mandate (this framework doc stays slow and never needs a per-purchase edit).
 
-> **2026-06-18 inventory refresh (full turnover + Forward Panama set):** the inventory has turned over almost completely since the 2026-06-04 snapshot. The old 6-lot active set (Mount Elgon, El Paraíso Red Plum, Bukure, Wush Wush DRD, Gesha Clouds, Sudan Rume Hybrid Washed) rotated out, and a large new intake landed via the Inventory -> Claude Code project (Phases 1/B/2 shipped 2026-06-17): **38 lots now in_inventory**. The live working set + authoritative per-lot roast-queue rank live in `list_green_inventory` (read it for the current order); the lane mapping below is the sourcing-lens summary. Net effect on sourcing: **most of the named next-buy gaps are now filled** (Sidra, Chiroso, Pacamara, Pink Bourbon, Laurina, value-practice), and the inventory is **overfull** - the next-buy posture flips from "fill gaps" to "roast down the backlog; buy only genuine standouts."
-
-### Active inventory by lane (as of 2026-06-18, 38 lots)
-
-The center of gravity has shifted to **high-end Panama Gesha** - the apex direction ([CONTEXT-taste.md](CONTEXT-taste.md)) and the Oct-2026 Panama push materializing early. Grouped by the five-lane model (§ 10); `list_green_inventory` holds the authoritative per-lot rank.
-
-**Calibration clarity + Fruit-tea expression (high-end Gesha / distinctive variety - the apex lane):**
-- La Palma y El Tucan Sidra Natural B-068 (Colombia, Sidra) - roast-queue #1; first Sidra, fills the named variety gap.
-- Finca Deborah Geisha Natural 'Interstellar' (Panama, Jamison Savage) - #3.
-- Janson Pacamara Natural Hacienda 491 (Panama) - #4.
-- Caminos del Inka Anaerobic Washed Geisha (Peru) - soon band; anaerobic-washed = cleaner than AN.
-- **5 Forward Coffee Panama lots (purchased 2026-06-18, single 1kg range-finders, in transit, queue 90 until they ship):** HiU Los Lajones Geisha Natural Bambu 8B (the named "more like the HiU Los Lajones" benchmark, Forward 93, aroma scored 10/10); Lamastus El Burro Geisha Natural #16 (apex-roster master producer, $160 value workhorse); Black Moon Chiroso Natural #75 (Hunter Tedman / Black Moon Farm - fills the named Chiroso gap); Iris Estate Geisha 'Nirvana' (nitrogen-macerated, red-wine cool turn); Finca Deborah Geisha Hybrid 'Elipse' (natural nitrogen + washed finish, 2024 WBC 1st place). HiU Los Lajones producer is net-new, queued for taxonomy review.
-
-**Process learning (engineered naturals / anaerobics):**
-- Fazenda Um Pink Bourbon Dark Room Natural (Brazil) - roast-queue #2; El-Paraíso-style controlled drying.
-- El Paraíso Ginger Castillo K-01 (Colombia, washed + thermal shock + ginger co-ferment) - soon; **Lane C anti-target watch** (co-ferment).
-- Daterra Yellow Aramosa Anaerobic Natural, Carmo SL28 Anaerobic Natural, Carmo Pacamara Anaerobic Natural (Brazil) - soon band; production-scale anaerobic-natural studies.
-- Daterra Laurina Natural (Brazil) - soon; sweetness / structure component.
-
-**Roast-learning study sets (deliberate segmentation experiments):**
-- **Uganda Mountain Harvest (9 x 100g):** Rwenzori variety segmentation (Geisha / RAB C15 / Batian) + station/process segmentation (Washed Dry-Ferment, Sironko pure-natural / NAF / NAF+PK1-yeast, Kajere Washed+PK1 / Washed-Anaerobic). A matched-set variety + process study; off the WBC map but high-information.
-- **Vietnam Liberica body study (3 lots):** 96B Liberica Anaerobic (5kg baseline), QT Liberica/Excelsa Anaerobic Natural (100g), Que Liberica Honey (5kg, deferred behind the 96B baseline). Off-portfolio body / variety exploration.
-
-**Value / roast-practice:**
-- PNG Mong Hagen WHP Natural (789), Marcelo Assis Bioma Peaberry Natural (788), Bioma Natural blend (782), Salomon Estela El Pino Marshell Natural (Peru, 796) - sub-premium naturals for cheap dev-ladder / rest-curve practice.
-
-**Deep-frozen preservation (out of active queue, priority 90):**
-- CoE / Taza-Dorada samples held for preservation: El Salvador La Bendicion Pacamara Honey, Ethiopia Tamru 74158 Natural, Peru Campo Verde Geisha+Bourbon Washed, Ecuador Aurum Geisha Natural, Ecuador Cofradia Sidra Bourbon CM, Ecuador Cruz Loma Typica Mejorado Honey. (Mexico CoE'25 Don Gustavo Washed sits in the active soon band, not the freeze set.)
-
-### Recently closed (2025-2026)
-
-| Bean | Tier | Lane | Sourcing retrospective |
-|---|---|---|---|
-| **CGLE Mandela XO** (Trujillo, Valle del Cauca) | T2 | Roast-learning hybrids | Direct match for "CGLE Mandela / CGLE 17" T2 priority. Closed sprint 2.5; reference roast in [docs/roasting/archive.md](docs/roasting/archive.md). |
-| **Gesha Village 1931 Oma / Surma / Oma** (Bench Maji, Ethiopia, 2000m) | T1 | Calibration clarity | Ethiopian washed Gesha at 2000m. Three closed lots from this estate cover the calibration-clarity Ethiopia lane historically. |
-| **Guatemala El Socorro Java** (Acatenango, 1650m) | T2 | Roast-learning hybrids | Java variety = T2 "Gesha alternative." Useful learning coffee on a low-acid heritage lineage. |
-| **Guatemala Aurelio del Cerro** (Huehuetenango, 1700m, Bourbon + Caturra) | Off-tier | Value | Off-portfolio — value-tier washed Bourbon / Caturra blend. Good roast-practice green at low risk. |
-| **CGLE Sudan Rume Natural** (1710m, Las Margaritas) | T2 | Roast-learning hybrids | **Resolved 2026-05-23**, reference roast #187 (V5A). Cross-process companion to the Hybrid Washed — the fruit layer needed washed-level energy (do NOT default to "natural = less heat" on Sudan Rume). Deep dive: [roasting-historian learnings/cgle-srume-natural-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md). |
-| **Costa Rica Higuito Anaerobic Dry Process** (Bourbon, 1650m) | T3 | Process learning (high-risk) | **Resolved 2026-05-23**, reference roast v3b (#185). The T3 "heavy anaerobic with liqueur descriptors" learning lot — confirmed the xbloom gate misranks close candidates on anaerobic-natural lots (real pourover is the required arbiter). Deep dive: [roasting-historian learnings/cos-hig-bor-2026.md](docs/skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md). |
-
-### Portfolio gap analysis (Latent-adjusted, 2026-06-18)
-
-Mapping current inventory against the five-lane portfolio model in § 10, using the Latent-adjusted priority. The headline: **the 2026-05-09 -> 2026-06-04 gaps (Mandela replacement, value coffee, Chiroso, Sidra) are closed.** The inventory's defining feature now is **breadth and overfullness** (38 lots), not coverage holes.
-
-| Lane | Currently in inventory | Gap (Latent-adjusted) |
-|---|---|---|
-| **Calibration clarity** | Heavy: Deborah x2, Janson, Los Lajones, El Burro, Iris, Caminos Gesha, + frozen Geshas | **Over-covered**, not under. Clean *washed* Panama Gesha (roasting-skill upkeep) is the only thin spot, and it is the over-indexed-in-specialty lane - not urgent. |
-| **Fruit-tea expression** | Los Lajones + El Burro natural Geshas, Sidra, Chiroso | Filled and then some. No gap. |
-| **Process learning** | Pink Bourbon DRD, Ginger Castillo, 3x Brazil anaerobic, Iris/Elipse nitrogen, Uganda study set | Deep. No gap; watch the Lane-C co-ferment (Ginger Castillo) at the cup. |
-| **Roast-learning hybrids** | Chiroso, Pacamara x2, Uganda variety-segmentation, Liberica study | Mandela / CGLE 17 / Sudan Rume no longer active, but the slot is well-covered by the Uganda + Pacamara studies. Low-priority. |
-| **Value / roast-practice** | PNG Mong, Bioma x2, El Pino Marshell | Filled. Real capacity for cheap dev-ladders now exists. |
-
-## Best next sourcing moves
-
-The posture has flipped from "fill gaps" to **"stop buying, start roasting."** With 38 lots in_inventory and every named gap filled, the next-buy bar is high:
-
-1. **Roast down the backlog first.** The binding constraint is no longer inventory coverage - it is roast throughput against 38 lots. Most lanes are over-covered.
-2. **Only buy genuine apex standouts** - a lot that clears the temperature-swing / process-signature filter AND is distinctly better than what is already held (the 2026-06-18 Forward Panama set was exactly this test: the named Los Lajones benchmark + the Chiroso gap-fill + the apex-roster El Burro). The single-1kg range-finder posture (breadth over scaled batches) is the current deliberate mode while the apex direction is still being explored.
-3. **Oct-2026 Panama push** still stands as the deliberate origin-trip buy - "more like the HiU Los Lajones," plus the non-Panama portability pull - but as a *targeted* trip, not backlog growth.
-4. **Clean washed Panama Gesha** remains the only thin lane (roasting-skill upkeep), and it is the over-indexed-in-specialty lane - schedule for a future cycle, not urgent.
+**Posture (as of the last snapshot): the inventory is overfull - roast down the backlog; buy only genuine apex standouts.**
 
 ## Cross-references
 
+- **Inventory lane-lens:** [inventory-snapshot.md](docs/skills/wbc-roasting-archivist/cluster/sourcing/inventory-snapshot.md) - active-by-lane mapping + gap analysis + next-buy posture (refresh mandate lives there).
 - **Roasting-side companion:** [wbc-roasting.md](docs/skills/wbc-roasting-archivist/cluster/wbc-roasting.md).
 - **Brewing-side WBC docs:** [wbc-reference.md](docs/skills/wbc-brewing-archivist/cluster/wbc-reference.md), [wbc-recipes.md](docs/skills/wbc-brewing-archivist/cluster/wbc-recipes.md).
 - **Canonical taxonomies:** [docs/taxonomies/producers.md](docs/taxonomies/producers.md), [docs/taxonomies/regions.md](docs/taxonomies/regions.md), [docs/taxonomies/varieties.md](docs/taxonomies/varieties.md), [docs/taxonomies/processes.md](docs/taxonomies/processes.md).
