@@ -87,3 +87,9 @@ A skill simply too long — too many lines in `SKILL.md` — independent of whet
 
 **No-Op**
 An instruction that changes nothing because the model already does it by default — you pay load to say nothing. The test: does it alter behaviour versus the default? A weak **leading word** is a no-op; the fix is a stronger word, not a different technique.
+
+**Negation**
+Steering by prohibition — telling the agent what _not_ to do — which drags the forbidden behaviour into context and makes it _more_ available, not less. "Don't think of an elephant, and the elephant is all there is." The negation is a weak modifier the strongly-activated concept overruns, so the ban half-reads as an instruction to do the thing. Its leading word is the _elephant_: whatever a prohibition names into the frame. Cure: prompt the positive — describe the target behaviour ("write one-line comments") so the banned one is never spoken. A prohibition earns its place only as a hard guardrail on a behaviour you cannot phrase positively; even then, pair it with the positive target so attention lands on what to do.
+
+**Negative Space**
+Blindness to the steering done by what you leave _out_. A skill's silences are not neutral: every decision it declines to make is delegated to the agent's priors, which fill the gap their own way on every run — the opposite of **predictability**. Its leading word is the _void_: the unwritten decisions the agent must fill. Distinct from **Negation** — that is steering by what you say; this is steering by what you don't. Cure: read a draft for its silences and decide each omission deliberately — fill it with the behaviour you want, or leave it open on purpose as a real **branch** the agent is free to choose.
