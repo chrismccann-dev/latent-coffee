@@ -39,10 +39,10 @@ operational-guide (em-dashes preserved). If an anchor fails to resolve, fall
 back to list_doc_sections(uri="docs://skills/brewing-assistant/cluster/operational-guide.md")
 to discover the current heading set rather than re-fetching the whole doc.
 
-For brewing equipment knowledge (brewer / filter / grinder / SWORKS dial
-behavior + Location Constraints + Equipment + Valve + Filter System + Example
-Outputs), dispatch to the Brewing Equipment Expert
-(docs://skills/brewing-equipment-expert/cluster/operational-reference.md +
+For brewing equipment knowledge (Location Constraints + brewer rotation in
+operational-reference.md; per-brewer / per-filter / per-grinder / SWORKS dial
+behavior in the sibling taxonomy docs), dispatch to the Brewing Equipment
+Expert (docs://skills/brewing-equipment-expert/cluster/operational-reference.md +
 brewers.md + filters.md + grinder-eg1.md + sworks.md). For WBC competitor
 recipe anchors + cross-cutting control patterns (Step 1d Named Consideration),
 dispatch to the WBC Brewing Archivist

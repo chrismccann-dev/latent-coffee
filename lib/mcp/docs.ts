@@ -129,7 +129,7 @@ const DOC_CATALOG: CatalogDoc[] = [
     uri: 'docs://brewing.md',
     path: 'BREWING.md',
     title: 'Brewing Master Reference',
-    description: '[REDIRECT STUB in Wave 4 PR 4b] BREWING.md is now a ~3KB pointer-only doc enumerating where each former section now lives. Authoritative brewing content lives in the sub-skills clusters: brewing-assistant/cluster/operational-guide.md (BREW PROMPT Steps 1-4), brewing-equipment-expert/cluster/operational-reference.md (Location Constraints + Equipment + Valve + Filter + Examples), brewing-historian/cluster/patterns/ (cross-coffee insights + per-strategy + per-cultivar), wbc-brewing-archivist/cluster/ (WBC reference + 154-recipe corpus), coordinator/catalog.md § brewing-domain-principles (Two-Axis framing). Brew sessions are Claude-Code-native via the `/brew` skill (claude.ai brewing retired 2026-06-18); docs://prompts/start-brew.md is the mobile fallback entry.',
+    description: '[REDIRECT STUB in Wave 4 PR 4b] BREWING.md is now a ~3KB pointer-only doc enumerating where each former section now lives. Authoritative brewing content lives in the sub-skills clusters: brewing-assistant/cluster/operational-guide.md (BREW PROMPT Steps 1-4), brewing-equipment-expert/cluster/operational-reference.md (Location Constraints + brewer rotation; valve/filter/grinder detail in its sibling sworks.md / filters.md / grinder-eg1.md), brewing-historian/cluster/patterns/ (cross-coffee insights + per-strategy + per-cultivar), wbc-brewing-archivist/cluster/ (WBC reference + 154-recipe corpus), coordinator/catalog.md § brewing-domain-principles (Two-Axis framing). Brew sessions are Claude-Code-native via the `/brew` skill (claude.ai brewing retired 2026-06-18); docs://prompts/start-brew.md is the mobile fallback entry.',
   },
   // ----- brewing ---------------------------------------------------------------
   {
@@ -210,8 +210,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/brewing-equipment-expert/cluster/brewers.md',
-    title: 'Brewing Equipment Expert — Brewers cluster',
-    description: 'Use when validating or looking up a brewer (dripper) — 46 canonical brewers (12 owned by Chris) + 24 aliases. Material axis dropped (model name only); Orea v3/v4 ambiguity defaults to v4. allowOverride pattern. Migrated from docs/taxonomies/brewers.md in Wave 1.',
+    title: 'Brewing Equipment Expert — Brewers cluster (owned)',
+    description: 'Use when validating or looking up a brewer (dripper) for brewing selection — the 13 OWNED brewers, grouped by geometry (cone / wave / round), each with Location + Primary use case. Not-owned candidates (34) live in docs://taxonomies/brewers-not-owned-archive.md. lib/brewer-registry.ts is the full 47-brewer validator + 26 aliases. Material axis dropped (model name only); Orea v3/v4 ambiguity defaults to v4. allowOverride pattern. Split owned/not-owned in pruning case 010 (2026-07-08); migrated from docs/taxonomies/brewers.md in Wave 1.',
   },
   {
     uri: 'docs://skills/brewing-equipment-expert/cluster/filters.md',
@@ -223,6 +223,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     uri: 'docs://taxonomies/filters-not-owned-archive.md',
     title: 'Filter Paper Archive — not-owned candidates (promotion pool)',
     description: 'Promotion pool — the 35 NOT-owned filter papers split out of the filters cluster doc in pruning case 004 (2026-06-03); reconciled 44→35 on 2026-06-04 (Cup-1→Cup-4 size collapse + dup-SKU/pack-size collapses). Do NOT use for live brewing selection; consult only when the operator asks about a not-owned paper or buys one and wants it promoted. Full canonical validation still lives in lib/filter-registry.ts.',
+  },
+  {
+    uri: 'docs://taxonomies/brewers-not-owned-archive.md',
+    title: 'Brewer (Dripper) Archive — not-owned candidates (promotion pool)',
+    description: 'Promotion pool — the 34 NOT-owned brewers split out of the brewers cluster doc in pruning case 010 (2026-07-08, on the case-004 ownership-axis template). Do NOT use for live brewing selection; consult only when the operator asks about a not-owned brewer or buys one and wants it promoted. Full canonical validation still lives in lib/brewer-registry.ts (47 brewers + 26 aliases; all aliases target owned brewers).',
   },
   // ----- skills / brewing-equipment-expert -------------------------------------
   {
@@ -681,8 +686,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   // ----- skills / brewing-equipment-expert -------------------------------------
   {
     uri: 'docs://skills/brewing-equipment-expert/cluster/operational-reference.md',
-    title: 'Brewing Equipment Expert — operational reference (Location Constraints + Equipment + Valve Position + Filter System + Example Outputs + Brewer Rotation Framework)',
-    description: 'Use when constructing a recipe and needing equipment-aware constraints — Location Constraints (Office Downtown Palo Alto + Home water/equipment matrix, incl. the office-tap-amplifies-roast-forward-body finding folded in from the brewing-historian Office Brewing Notes, pruning case 007b) + Equipment Reference (per-brewer cup-tendency table — UFO Ceramic / Orea Glass / Orea v4 / Hario V60 / April Brewer / Kalita Wave 155 / SWORKS Bottomless / Hario Switch / Weber Bird / XBLOOM / Chemex Funnex / Sibarist Brewing System / Oxo Rapid Brewer) + Filter System (per-filter cup-tendency table + Filter Flow Gap B3-to-FAST diagnostic) + Grinder Weber EG-1 (D50 plateau caveat + high-EY roaster physically-unreachable-D50 implication) + Valve Position Reference SWORKS (Dial 0 Closed / Dial 5 Restricted / Dial 6 Half-Open / Dial 7 Open with calibrated flow rates) + Brewer Rotation Framework + Example Outputs (Standard Home recipe + Bottomless Dripper Office recipe). Migrated from BREWING.md § Location Constraints + § Equipment Reference + § Valve Position Reference + § Filter System + § Example Outputs in Wave 4 PR 4b (2026-05-21).',
+    title: 'Brewing Equipment Expert — operational reference (Location Constraints + brewer cup-tendency rotation view + Brewer Rotation Framework)',
+    description: 'Use when constructing a recipe and needing cross-equipment operational constraints — Location Constraints (Office Downtown Palo Alto + Home water/equipment matrix, incl. the office-tap-amplifies-roast-forward-body finding folded in from the brewing-historian Office Brewing Notes, pruning case 007b) + Equipment Reference (per-brewer cup-tendency table + two-brewers-fit decision rule + office-paper and T-92/boiling notes + Filter Flow Gap B3-to-FAST diagnostic + Additional Tools) + Brewer Rotation Framework. Per-equipment detail lives in the sibling cluster docs and this doc points there: valve dials/flow rates/adjustment logic in sworks.md, per-filter specs + measured drawdowns in filters.md, EG-1 D50 taxonomy + structural findings in grinder-eg1.md, per-brewer tech specs in brewers.md. Migrated from BREWING.md in Wave 4 PR 4b (2026-05-21); duplicated valve/filter/grinder/example blocks consolidated to pointers in pruning case 010 (2026-07-08).',
   },
   // ----- skills / roasting-assistant -------------------------------------------
   {
