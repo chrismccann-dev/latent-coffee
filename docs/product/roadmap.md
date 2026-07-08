@@ -91,7 +91,7 @@ Product-side candidates with enough shape to discuss or scope, not active until 
 - **Signature method "what I learned" synthesis variant.** **Trigger:** 2nd brew lands on any signature OR Chris wants the signature pages filled.
 - **Producer research subagent during arbiter** — arbiter spawns a research subagent drafting a `ProducerEntry` per queued producer. **Trigger:** when manual cadence becomes onerous.
 - **Backfill remaining `what_i_learned`** (~19 brews) — bundle with the per-brew directed-prompt rework so Chris isn't writing generic prose.
-- **BREWING.md Cross-Coffee Insight Layer structural pass** — may be partly handled by the Brewing Historian cluster. **Trigger:** the brewing-side cross-coffee surface gets in the way of new-recipe design.
+- **BREWING.md Cross-Coffee Insight Layer structural pass** — may be partly handled by the Brewing Historian cluster. **Narrowed 2026-07-08:** the first full-corpus digest ([docs/skills/ccil/cluster/digests/brewing-corpus-digest-2026-07.md](docs/skills/ccil/cluster/digests/brewing-corpus-digest-2026-07.md)) found no structural gap in the Historian cluster — the capsules + Coffee Brief Read Order already carry the per-anchor rules cleanly; what remains of this entry is purely the original trigger. **Trigger:** the brewing-side cross-coffee surface gets in the way of new-recipe design.
 - **Producer post-resolution disposition capture (close-lot step).** At lot close, the workflow asks Chris a going-forward posture on the producer - **Re-source / Back burner / Retire** (+ a one-line why) - captured and used to drive the `resolved_reference` "Next action" cell on `/producers/[id]` (today an interim doctrine line, "Re-source if a new lot fits the apex; otherwise retire."). Surfaced by design-audit 01 Finding 7: the DECISION strip's Buy-posture and Next-action cells duplicated for 3 of 5 relationship states because `nextAction()` only authored distinct copy for 2; the de-dup shipped, but `resolved_reference`'s next move is genuinely per-producer (proven across GV-OMA / CGLE / El Socorro / Gesha Clouds) and isn't rule-derivable. **Open design question:** producers has no DB table (text-equality aggregation), so the disposition likely rides on `roast_learnings` (written at close-lot, latest-lot-wins in the producer aggregation) - needs a grill. Six-actor change: schema field → `lib/producers.ts` derivation → `push_roast_learnings` (Actor 4) → `close-lot.md` prompt (Actor 2) → UI cell. **Trigger:** next lot reaches the close-lot step (the natural capture moment).
 
 ### Needs Chris's design thinking (parked, not yet scoped)
@@ -134,11 +134,13 @@ Idea-stage — not yet scoped, may never ship in current form.
 
 ### Surfacing what's already queryable
 
-- Time-window compounding ("learned in the last 30/60/90 days").
-- Cross-domain insight digest ("your reference roasts share X").
-- Recipe-drift visualizer per roaster (the "started Balanced, drifted to Suppression" pattern).
-- Cooling-behavior tracking (evaluation-temperature thresholds, today scattered in `temperature_evolution`).
-- Cross-dimensional queries ("all Clarity-First Gesha from the Central Andean Cordillera").
+**Substrate side discharged 2026-07-08** by the first full-corpus digest ([docs/skills/ccil/cluster/digests/brewing-corpus-digest-2026-07.md](docs/skills/ccil/cluster/digests/brewing-corpus-digest-2026-07.md)) — a durable doc now covers the time-window view, the cross-source reference-roast commonalities, per-roaster recipe drift, and the cooling-arc distribution as a point-in-time read. What remains below is the *app-surface* question only, and the digest sharpened each entry's premise:
+
+- Time-window compounding ("learned in the last 30/60/90 days") — digest § 5 is the v1; an app surface earns its keep only if the read wants to be recurring rather than per-doubling.
+- Cross-domain insight digest ("your reference roasts share X") — digest § 3 answers the seed question; re-evaluate after the next 2-3 lots close.
+- Recipe-drift visualizer per roaster — **premise revised by the digest**: the real drifts are temperature (Moonwake), valve structure (Picolot), and strategy-era (Latent), not "Balanced → Suppression"; any viz should plot those axes.
+- Cooling-behavior tracking — **gated on the whole-arc tasting-capture brainstorm** (see Brainstorms): 100/102 arcs are prose, only 17 structured `cooling_curve_target`s; nothing to track until capture is structured.
+- Cross-dimensional queries ("all Clarity-First Gesha from the Central Andean Cordillera") — attempted in the digest and dropped: no insight beyond the by-cultivar capsules at current corpus size.
 
 ### Producers + farms
 
