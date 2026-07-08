@@ -13,6 +13,7 @@ Synthesize across domain Historians + WBC archivists + Latent's per-entity termi
 
 - [`cluster/coffee/sudan-rume/across-roasting-and-brewing.md`](docs/skills/ccil/cluster/coffee/sudan-rume/across-roasting-and-brewing.md) — seed pattern doc demonstrating cross-domain synthesis on Sudan Rume (N=3 across both domains: Latent-roasted CGLE SR Hybrid Washed + Latent-roasted CGLE SR Natural (resolved, ref #187) + externally-roasted CGLE Las Margaritas SR Natural brewing-only)
 - [`cluster/decomposition-log.md`](docs/skills/ccil/cluster/decomposition-log.md) — Pattern F audit trail; logs every CCIL self-decomposition event (per [ADR-0013](docs/adr/0013-self-improvement-primitives.md) bloat tripwires)
+- [`cluster/digests/brewing-corpus-digest-2026-07.md`](docs/skills/ccil/cluster/digests/brewing-corpus-digest-2026-07.md) — first full-corpus brewing digest (2026-07-08; 102 brews + 13 roast_learnings read in one pass): strategy-drift eras, per-roaster drift, reference-roast commonalities, cooling-arc distribution, 60-90-day window vs archive, water lens (feeds RP6), apex ranking. Point-in-time snapshot — refresh when the corpus ~doubles, don't maintain incrementally. `cluster/digests/` is the corpus-digest lane (distinct from `coffee/` per-coffee patterns).
 
 **Target shape (accrues via Pattern A refresh events + future seed pattern ships):**
 

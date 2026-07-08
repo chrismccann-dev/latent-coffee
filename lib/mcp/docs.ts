@@ -660,6 +660,12 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'CCIL — decomposition log (Pattern F audit trail; append-only; logs every self-decomposition event)',
     description: 'CCIL Pattern F audit trail (Wave 4 PR 4a — first entry logs the skeleton + seed pattern ship). Append-only log of every CCIL self-decomposition event: when CCIL split into sub-domain CCILs, what triggered the split (bloat tripwire / dispatch-accuracy degradation / cross-pattern density). Trigger conditions enumerated at top: >120KB total cluster size; >60KB single doc; dispatch-accuracy drift below autonomy graduation threshold; cross-domain pattern density exceeds intra-pattern coherence. Decomposition procedure: move pattern docs to new sub-structure, preserve back-compat redirect stubs, update CCIL SKILL.md cluster contents, register new paths in lib/mcp/docs.ts, run cross-system audit. Historical entries are NOT edited or removed.',
   },
+  {
+    uri: 'docs://skills/ccil/cluster/digests/brewing-corpus-digest-2026-07.md',
+    title: 'CCIL — Brewing corpus digest 2026-07 (first full-corpus read: 102 brews + 13 roast_learnings; strategy-drift eras, per-roaster drift, cooling-arc distribution, water lens, apex ranking)',
+    description:
+      'Point-in-time full read of the brewing corpus (102 brews 2026-01-19→2026-07-02 + all 13 roast_learnings, pulled 2026-07-08). Use when a session needs the whole-corpus view rather than a per-anchor rule: the three strategy eras (single-mode → valve-vocabulary → structural/Hybrid), recipe drift per roaster (Latent/Moonwake/Picolot/Dongzhe/Sey/Hydrangea), what reference roasts + repeat-buys share (narrow windows, Day-7 real-pourover gate, bean-temp end condition, delta polarity, optimized brews landing Hybrid), cooling-arc distribution (~80% cool-peak; warm-peak = underdeveloped-washed / Aroma Capture / very-light-clean), the May-Jul system-level lessons vs the Jan-Apr coffee-level archive, the water lens feeding the RP6 water research (mineral-load × roast-level confirmed; Apax mid-palate lead unisolated), and insights ranked against the CONTEXT-taste layered-evolving apex. Digest, not pattern layer — per-anchor rules stay canonical in the Brewing Historian cluster. Refresh when the corpus ~doubles (~200 brews); do not maintain incrementally.',
+  },
   // ----- skills / coordinator --------------------------------------------------
   {
     uri: 'docs://skills/coordinator/operator-guide.md',
