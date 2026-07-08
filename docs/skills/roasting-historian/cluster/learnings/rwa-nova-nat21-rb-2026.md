@@ -25,7 +25,7 @@
   - V2 SPG (2026-06-04, Balanced Intensity gate that resolved the V2 winner): `a3946b27-…` (194, SPG winner), `d8f814c8-…` (195, SPG declined)  
 - **Brews:**  
   - Optimized brew (`c6b699ae-d6db-4f34-8ebb-c69727572d12`) - dialed 2026-06-06; April Switch Hybrid Intensity-Clarity Split; honeycomb on cooling  
-- **Active-lot doc:** [`active-lots/rwa-nova-nat21-rb-2026.md`](docs/skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md) - soft-retired; H2 sections preserved as historical record + cross-ref anchors
+- **Active-lot doc:** [`active-lots/rwa-nova-nat21-rb-2026.md`](docs/skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md) - redirect stub per the close-out convention (working narrative recoverable via git history)
 
 ## Why Batch 194 won as the lot reference
 

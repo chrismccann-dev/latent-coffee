@@ -13,11 +13,11 @@ The lifecycle dimensions are kept separate: **active vs one-shot vs closed = 3 d
 ## Current roster
 
 - [cgle-srume-natural-2026.md](docs/skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md) — CGLE Sudan Rume Natural — **CLOSED 2026-05-23** (ref roast #187 / V5A); deep dive at [learnings/cgle-srume-natural-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md). Entry is now a redirect stub.
-- [cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md) — CGLE Gesha Clouds (V1+V2 complete, V3 needed)
+- [cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md) — CGLE Gesha Clouds — **CLOSED 2026-06-14** (ref roast V4A / #200); deep dive at [learnings/cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-gesha-clouds-2026.md). Entry is now a redirect stub.
 - [cos-hig-bor-2026.md](docs/skills/roasting-historian/cluster/active-lots/cos-hig-bor-2026.md) — Costa Rica Anaerobic Dry Process Higuito — **CLOSED 2026-05-23** (ref roast v3b / #185); deep dive at [learnings/cos-hig-bor-2026.md](docs/skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md). Entry is now a redirect stub.
-- [bra-fazendaum-wushwush-nat-2026.md](docs/skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md) — Fazenda Um Wush Wush Natural Dark Room Dried (V1 cupped, V2 blocked on reference cup)
-- [rwa-nova-nat21-rb-2026.md](docs/skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md) — Bukure Natural Lot 21 Red Bourbon (V2 pushed to Roest, not yet roasted)
-- [redplum-cas-2026.md](docs/skills/roasting-historian/cluster/active-lots/redplum-cas-2026.md) — El Paraiso Red Plum Castillo (V2 designed and pushed)
+- [bra-fazendaum-wushwush-nat-2026.md](docs/skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md) — Fazenda Um Wush Wush Natural Dark Room Dried (live — mid-V3)
+- [rwa-nova-nat21-rb-2026.md](docs/skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md) — Bukure Natural Lot 21 Red Bourbon — **CLOSED 2026-06-06** (ref roast v2b / #194); deep dive at [learnings/rwa-nova-nat21-rb-2026.md](docs/skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md). Entry is now a redirect stub.
+- [redplum-cas-2026.md](docs/skills/roasting-historian/cluster/active-lots/redplum-cas-2026.md) — El Paraiso Red Plum Castillo — **RESOLVED 2026-06-22** (ref roast v4b / #212); deep dive at [learnings/redplum-cas-2026.md](docs/skills/roasting-historian/cluster/learnings/redplum-cas-2026.md). Entry is now a redirect stub.
 
 ## Related
 

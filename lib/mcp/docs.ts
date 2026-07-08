@@ -713,18 +713,18 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md',
-    title: 'Roasting Historian — active-lots / CGLE Sudan Rume Natural V5 (V5 roasts complete; Day 7 pourover pending; reference candidate Batch 169)',
-    description: 'Active-lot working hypotheses for CGLE Sudan Rume Natural V5 (V5 roasts complete, Day 7 pourover pending). Reference roast candidate Batch 169 (V4C); confirmed brew recipe locked. V5 batches 187/188/189 with key protocol confirmations (242°C minimum viable peak / 207°C end condition not viable / 6:15 optimal total-time ceiling / 240°C hypothesis closed). Cross-referenced in CCIL Sudan Rume seed pattern. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+    title: 'Roasting Historian — active-lots / CGLE Sudan Rume Natural (REDIRECT STUB — closed 2026-05-23, reference Batch 187 V5A)',
+    description: '[REDIRECT STUB per the close-out convention] Lot closed 2026-05-23; reference roast Batch 187 (V5A). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md',
-    title: 'Roasting Historian — active-lots / CGLE Gesha Clouds (V1+V2 complete; gentle-decline refuted; aggressive-direction reframe Medium-confidence)',
-    description: 'Active-lot working hypotheses for CGLE Gesha Clouds (Forest Coffee, Milton Monroy, Tolima). V1 + V2 complete with Day 7 evaluations; V3 needed. Gentle-decline hypothesis REFUTED via V2. Aggressive-direction reframe Medium-confidence. 207°C drop ceiling may be wrong for this coffee. V3 variable: peak inlet sweep 250-254°C with bean-temp end condition at 209°C. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+    title: 'Roasting Historian — active-lots / CGLE Gesha Clouds (REDIRECT STUB — closed 2026-06-14, reference Batch 200 V4A)',
+    description: '[REDIRECT STUB per the close-out convention, case 011] Lot closed 2026-06-14; reference roast Batch 200 (V4A, first clean bean-temp auto-drop on the lot). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/cgle-gesha-clouds-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/cos-hig-bor-2026.md',
-    title: 'Roasting Historian — active-lots / Costa Rica Higuito (V2 winner v2b #165 decisive on real pourover; xbloom misranking confirmed twice; 210°C drop)',
-    description: 'Active-lot working hypotheses for Costa Rica Anaerobic Dry Process Higuito. V2 winner v2b (#165) decisive on real pourover; xbloom_gate produced no clean winner. xbloom inverse-direction misranking now confirmed TWICE on this lot — pattern propagated to cross-coffee-insights.md. 208°C drop ceiling confirmed too tight; v2b at 210°C is the new working drop. V3 hypothesis anchors on v2b. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+    title: 'Roasting Historian — active-lots / Costa Rica Higuito (REDIRECT STUB — closed 2026-05-23, reference Batch 185 v3b)',
+    description: '[REDIRECT STUB per the close-out convention, case 011] Lot closed 2026-05-23; reference roast Batch 185 (v3b). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/cos-hig-bor-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md',
@@ -733,13 +733,13 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md',
-    title: 'Roasting Historian — active-lots / Bukure Natural Lot 21 Red Bourbon (V1 closed 2026-05-11; V2 pushed; V1 "darker than what it says"; shift DOWN 6°C)',
-    description: 'Active-lot working hypotheses for Bukure Natural Lot 21 Red Bourbon (Rwanda Northern Province, Virunga foothills). V1 complete 2026-05-11; V2 designed and pushed to Roest 2026-05-15, not yet roasted. V1 cup signal "darker than what it says" — wants STILL LOWER energy. WB-to-Ground delta surprise (leading v1b widest delta at +6.6). V2 shifts spread DOWN 6°C with bean-temp end condition 207°C. First East African Red Bourbon natural in archive. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+    title: 'Roasting Historian — active-lots / Bukure Natural Lot 21 Red Bourbon (REDIRECT STUB — closed 2026-06-06, reference Batch 194 v2b)',
+    description: '[REDIRECT STUB per the close-out convention, case 011] Lot closed 2026-06-06; reference roast Batch 194 (V2 v2b, 18s-dev-is-the-lever finding). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/redplum-cas-2026.md',
-    title: 'Roasting Historian — active-lots / El Paraiso Red Plum Castillo (V1 closed Day 9 2026-05-17; v1b #181 leading; SR Washed #133 anchor; V2 moisture-aware-shape)',
-    description: 'Active-lot working hypotheses for El Paraiso Red Plum Castillo (Diego Samuel Bermúdez, Cauca). V1 closed at Day 9 pourover 2026-05-17. SR Washed CF-Light #133 anchor transferred cleanly. v1b (245°C peak, #181) leading slot — plum/cherry/raspberry. v1c (250°C, #182) ceiling-collision failure. V2 designed as moisture-aware-shape experiment with narrower peak spread 243/245/247°C. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+    title: 'Roasting Historian — active-lots / El Paraiso Red Plum Castillo (REDIRECT STUB — resolved 2026-06-22, reference Batch 212 v4b)',
+    description: '[REDIRECT STUB per the close-out convention, case 011] Lot resolved 2026-06-22; reference roast Batch 212 (v4b, flattened post-FC inlet slope). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/redplum-cas-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
@@ -785,6 +785,12 @@ const DOC_CATALOG: CatalogDoc[] = [
     listed: false,
     title: 'Roasting Historian — learnings / CGLE Gesha Clouds Forest 2026',
     description: 'Closed-lot learnings deep-dive for CGLE Gesha Clouds - Forest (COL-MIL-GES-2026, closed 2026-06-14, reference roast Batch 200 / V4A). Heavy-anaerobic Gesha natural that wanted markedly more core development than its washed anchor predicted; the resolving lever was the bean-temp end-condition drop target on a fixed 250C-peak curve (set ~3-4C above observed FC), not peak inlet or post-peak decline shape. Anchors: bean-temp-target-above-FC as the primary lever; xbloom gate flatters surface / real-pourover discriminates; dev-time not Agtron as the development proxy on this process family; wide WB-to-Ground delta with light grounds is the non-disqualifying lot signature while wide delta with dark grounds is over-development.',
+  },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/redplum-cas-2026.md',
+    listed: false,
+    title: 'Roasting Historian — learnings / El Paraiso Red Plum Castillo 2026',
+    description: 'Closed-lot learnings for El Paraiso Red Plum Castillo (REDPLUM-CAS-2026, Diego Samuel Bermúdez / Finca El Paraiso, Colombia/Cauca, washed + pulp fermentation; resolved 2026-06-22). Reference roast Batch 212 (v4b); the hollow-mid-palate problem three V-sets could not fix resolved via flattening the post-FC inlet slope (late-phase inlet slope as the body-balance lever for hollow-middle washed lots); WB→Ground Agtron delta POLARITY as the cup-quality diagnostic (sign robust, positive magnitude needs dev-path context); session-position variance quantified via first-batch reference-recipe control (46s FC spread); optimized brew Temperature-Staged Hybrid on April Hybrid with a water-chemistry final lever.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md',

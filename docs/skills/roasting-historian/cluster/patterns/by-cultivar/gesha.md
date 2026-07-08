@@ -2,7 +2,7 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · by-cultivar*
 
-**Corpus (closed + active):** N=3 lots — Gesha Village Oma (closed, pre-counterflow), Gesha Village Surma (closed, pre-counterflow), Gesha Clouds (active counterflow). At the N≥3 threshold for a dedicated file.
+**Corpus (closed + active):** N=3 lots — Gesha Village Oma (closed, pre-counterflow), Gesha Village Surma (closed, pre-counterflow), Gesha Clouds (closed 2026-06-14, counterflow). At the N≥3 threshold for a dedicated file.
 
 **Current rollups in [cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md):**
 
@@ -15,7 +15,7 @@
 
 - [Gesha Village Oma](docs/skills/roasting-historian/cluster/learnings/gv-oma-25-035.md) — pre-counterflow + counterflow incomplete (green exhausted); 48s dev floor confirmed
 - [Gesha Village Surma](docs/skills/roasting-historian/cluster/learnings/gv-surma-25-039.md) — closed, pre-counterflow
-- Gesha Clouds (CGLE-GESHA-CLOUDS-2026) — active V1+V2 done; cupping-table-vs-pourover reversal twice; cluster file lands when lot closes
+- [Gesha Clouds (CGLE-GESHA-CLOUDS-2026)](docs/skills/roasting-historian/cluster/learnings/cgle-gesha-clouds-2026.md) — closed 2026-06-14, reference roast Batch 200 (V4A); bean-temp end-condition target was the resolving lever
 
 **Open questions specific to Gesha:**
 

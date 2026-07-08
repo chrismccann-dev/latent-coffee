@@ -45,6 +45,6 @@ Four V-sets. The lot's defining lesson: this heavy-anaerobic Gesha wanted marked
 
 ## Related
 
-- Active-lot doc (soft-retired): [active-lots/cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md)
+- Active-lot doc (redirect stub): [active-lots/cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/active-lots/cgle-gesha-clouds-2026.md)
 - CCIL Confirmed Patterns: [patterns/cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md)
 - Protocol: [roest-knowledge/cluster/machine/counterflow-observations.md § Drop Temp as the Primary Drop Signal](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md)

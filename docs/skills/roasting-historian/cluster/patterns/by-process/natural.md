@@ -4,7 +4,7 @@
 
 Migrated from ROASTING.md § Naturals - Roasting Framework in Wave 4 PR 4b (2026-05-21). Wave 3 PR 1 Chris-locked this section to ROASTING.md pending Wave 4 cleanup; this is the resolution destination.
 
-**Corpus (active + closed lots):** N≥3 — CGLE Sudan Rume Natural V5 (active), Bukure Natural Lot 21 Red Bourbon (active), Fazenda Um Wush Wush Natural Dark Room Dried (active), prior CGLE Sudan Rume Natural closed lots referenced through cross-coffee-insights.
+**Corpus (active + closed lots):** N≥3 — CGLE Sudan Rume Natural (closed 2026-05-23), Bukure Natural Lot 21 Red Bourbon (closed 2026-06-06), Fazenda Um Wush Wush Natural Dark Room Dried (active), prior CGLE Sudan Rume Natural closed lots referenced through cross-coffee-insights.
 
 ## Starting framework
 
@@ -24,8 +24,8 @@ The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** 
 
 ## Per-lot deep dives
 
-- [CGLE Sudan Rume Natural (active V5)](docs/skills/roasting-historian/cluster/active-lots/cgle-srume-natural-2026.md) — active V5 (V4C confirmed reference roast Batch 169; V5 replicates pending Day 7 pourover)
-- [Bukure Natural Lot 21 Red Bourbon (active V2)](docs/skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md) — active V2 designed at 234/238/242°C peak (shifted DOWN 6°C from V1 spread); first East African Red Bourbon natural in archive
+- [CGLE Sudan Rume Natural (closed 2026-05-23)](docs/skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md) — reference roast Batch 187 (V5A); closed-lot learnings deep dive
+- [Bukure Natural Lot 21 Red Bourbon (closed 2026-06-06)](docs/skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md) — reference roast Batch 194 (v2b); first East African Red Bourbon natural in archive; closed-lot learnings deep dive
 - [Fazenda Um Wush Wush Natural Dark Room Dried (active V1 → V2 blocked)](docs/skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md) — V1 cupped 2026-05-15 with cup-vs-structure inversion; V2 design blocked on Untold paired roasted reference cup
 
 ## Cross-references

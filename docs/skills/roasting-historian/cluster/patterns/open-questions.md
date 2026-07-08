@@ -6,11 +6,7 @@ Things to test on future roast sessions. **Maintenance rule:** when a question r
 
 - Does FC temperature anchor at 204-206°C across all naturals in counterflow regardless of cultivar / density / moisture / drying method? Two lots replicate so far (see [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#fc-temp-architectural-constraint-on-naturals---working-hypothesis)) — need a 3rd natural lot to promote.
 
-- Is COS-HIG-BOR-2026 v1c (251°C peak, silent FC, drop 208°C) cleanly reproducible? V2a at identical inlet produced audible FC and drop 210.9°C. Watch for repeat on V3 / next-lot replication attempts.
-
 - Audible FC threshold on heavy anaerobic naturals: 251-253°C peak unlocks audible FC; 255°C suppresses again to silent (COS-HIG-BOR-2026 V2 only). Validate on next heavy-anaerobic lot before treating as a generalizable window.
-
-- Does Day 7 pourover consistently reverse the cupping-table verdict on heavy anaerobic Gesha? Confirmed once on CGLE-GESHA-CLOUDS-2026 V1 (#162 won at pourover, #163 won at cupping table). Need 1-2 more heavy-anaerobic-Gesha lots before promoting.
 
 - xbloom evaluation gate false-positive lactic on anaerobic naturals: COS-HIG-BOR-2026 V1 #158 read as defective at xbloom but cleanly resolved at Balanced Intensity pourover. Watch for repeat on Mandela XO retro / next anaerobic natural / co-ferment lot before generalizing "for heavy-ferment lots, run optimized brew on top 2 candidates before declaring underdevelopment."
 
