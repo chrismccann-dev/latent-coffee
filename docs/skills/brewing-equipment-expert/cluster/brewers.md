@@ -1,91 +1,22 @@
-# Brewer (Dripper) Taxonomy
+# Brewer (Dripper) Taxonomy — Owned
 
 Authoritative authored content for the brewer canonical registry.
 Mirror file: [lib/brewer-registry.ts](lib/brewer-registry.ts).
 
-Total canonical brewers: **46** (12 owned).
+Total canonical brewers: **47** (13 owned + 34 not-owned).
+
+This is the prose home for the **13 owned** brewers - what the Brewing
+Equipment Expert selects from for live recipe construction. Not-owned
+candidates live in
+[docs/taxonomies/brewers-not-owned-archive.md](docs/taxonomies/brewers-not-owned-archive.md)
+(promotion pool - do not load for live selection; split out in pruning case
+010, 2026-07-08, on the case-004 ownership-axis template).
+`lib/brewer-registry.ts` stays the full canonical validator for **all** 47
+brewers (owned + not-owned), so every `brews.brewer` value still resolves.
 
 Material axis (Glass / Porcelain / Ceramic) intentionally not carried — strips on canonicalize. Orea v3 vs v4 ambiguity defaults to v4.
 
 ## Cone filter drippers
-
-### Brewista Tornado
-
-- Manufacturer: Brewista
-- Paper type: Conical (Cafec Abaca+ or folded V60)
-- Dose size: 10g to 25g
-- Bed geometry: Conical / medium
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Clarity cone
-- Accessories: Drip tray base
-
-### Cafec Deep27
-
-- Manufacturer: Cafec
-- Paper type: Conical (Cafec Abaca+ / V60)
-- Dose size: 10g to 15g
-- Bed geometry: Conical / very deep
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Clarity cone
-- Accessories: None
-
-### Cafec Deep45
-
-- Manufacturer: Cafec
-- Paper type: Conical (Cafec Abaca+)
-- Dose size: 15g to 25g
-- Bed geometry: Conical / deep
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Clarity cone
-- Accessories: None
-
-### Cafec Deep45 Arita Pro
-
-- Manufacturer: Cafec
-- Paper type: Conical (Cafec Abaca+)
-- Dose size: 15g to 25g+
-- Bed geometry: Conical / deep
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Clarity cone
-- Accessories: None
-
-### Cafec Flower
-
-- Manufacturer: Cafec
-- Paper type: Conical (V60 01-02)
-- Dose size: 10g to 25g
-- Bed geometry: Conical / medium
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Clarity cone
-- Accessories: None
-
-### Chemex
-
-- Manufacturer: Chemex
-- Paper type: Square paper folded cone
-- Dose size: 15g to 25g+
-- Bed geometry: Conical / deep
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Paper-limited
-- Agitation tolerance: Low
-- Brew archetype: Clarity cone
-- Accessories: None
 
 ### Chemex Funnex — Owned
 
@@ -102,58 +33,6 @@ Material axis (Glass / Porcelain / Ceramic) intentionally not carried — strips
 - Location: Home
 - Primary use case: I primarily use for small odd dose size (less than 15g)
 
-### Hario Alpha
-
-- Manufacturer: Hario
-- Paper type: Conical (V60 02)
-- Dose size: 10g to 25g
-- Bed geometry: Conical / medium
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Clarity cone
-- Accessories: None
-
-### Hario Flow
-
-- Manufacturer: Hario
-- Paper type: Wave (Kalita 155)
-- Dose size: 15g to 25g
-- Bed geometry: Flat / shallow
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: None
-
-### Hario Mugen
-
-- Manufacturer: Hario
-- Paper type: Conical (V60 02)
-- Dose size: 15g to 25g
-- Bed geometry: Conical / deep
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Low
-- Brew archetype: Clarity cone (low bypass variant)
-- Accessories: None
-
-### Hario Suiren
-
-- Manufacturer: Hario
-- Paper type: Conical (V60 02)
-- Dose size: 15g to 25g
-- Bed geometry: Conical / open
-- Bypass profile: High
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: High
-- Brew archetype: Clarity cone
-- Accessories: Custom rib attachments
-
 ### Hario Switch — Owned
 
 - Manufacturer: Hario
@@ -169,19 +48,6 @@ Material axis (Glass / Porcelain / Ceramic) intentionally not carried — strips
 - Location: Home
 - Primary use case: Full immersion control (valve-driven extraction)
 
-### Hario Switch RAN
-
-- Manufacturer: Hario
-- Paper type: Conical (V60 02)
-- Dose size: 15g to 25g
-- Bed geometry: Conical / deep
-- Bypass profile: Medium
-- Flow control: Valve (immersion hybrid)
-- Restriction source: Valve-controlled
-- Agitation tolerance: High
-- Brew archetype: Immersion hybrid
-- Accessories: Switch base
-
 ### Hario V60 — Owned
 
 - Manufacturer: Hario
@@ -196,84 +62,6 @@ Material axis (Glass / Porcelain / Ceramic) intentionally not carried — strips
 - Accessories: Hario drip assist
 - Location: Home
 - Primary use case: Peak clarity (high-bypass separation)
-
-### Hario V60 NEO
-
-- Manufacturer: Hario
-- Paper type: Conical (01-02)
-- Dose size: 10g to 25g
-- Bed geometry: Conical / medium
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Clarity cone
-- Accessories: Switch base compatibility
-
-### Hario W60
-
-- Manufacturer: Hario
-- Paper type: Conical + mesh hybrid (V60 02)
-- Dose size: 15g to 25g
-- Bed geometry: Hybrid / suspended bed
-- Bypass profile: High
-- Flow control: Hybrid (mesh + paper)
-- Restriction source: Mesh + paper
-- Agitation tolerance: High
-- Brew archetype: Clarity cone (hybrid high bypass)
-- Accessories: None
-
-### Melodrip Colum
-
-- Manufacturer: Melodrip
-- Paper type: Conical (custom trimmed papers)
-- Dose size: 10g to 25g
-- Bed geometry: Conical / shallow
-- Bypass profile: Low
-- Flow control: Two-stage percolation
-- Restriction source: Device-controlled
-- Agitation tolerance: Low
-- Brew archetype: Stability flat (two-stage assist)
-- Accessories: None
-
-### Normcore 2-in-1
-
-- Manufacturer: Normcore
-- Paper type: Conical (V60 01) + Wave (155)
-- Dose size: 10g to 25g
-- Bed geometry: Hybrid / variable
-- Bypass profile: Variable (low–medium)
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Hybrid (variable archetype)
-- Accessories: None
-
-### Orea v4
-
-- Manufacturer: Orea
-- Paper type: Flat (Kalita 155-185) + Apex cone option
-- Dose size: 10g to 25g
-- Bed geometry: Flat / shallow
-- Bypass profile: Low
-- Flow control: Modular (base-dependent)
-- Restriction source: Base-controlled
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat (modular)
-- Accessories: Negotiator / interchangeable bases
-
-### Origami Pinn
-
-- Manufacturer: Origami
-- Paper type: Conical (V60 / 55°)
-- Dose size: 10g to 25g
-- Bed geometry: Conical / shallow
-- Bypass profile: High
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: High
-- Brew archetype: Clarity cone
-- Accessories: Folding template
 
 ### Sibarist Brewing System — Owned
 
@@ -343,45 +131,6 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 - Location: Home
 - Primary use case: Flow-rate control + immersion/percolation switching (finer grinds, higher doses)
 
-### Espro
-
-- Manufacturer: Espro
-- Paper type: Proprietary tall wave
-- Dose size: 15g to 25g
-- Bed geometry: Flat / medium
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Paper-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: None
-
-### Fellow Stagg X/XF
-
-- Manufacturer: Fellow
-- Paper type: Flat (Kalita 155/185)
-- Dose size: 15g to 25g+
-- Bed geometry: Flat / medium
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: Funnel
-
-### Kalita Mino
-
-- Manufacturer: Kalita
-- Paper type: Wave (185)
-- Dose size: 15g to 25g
-- Bed geometry: Flat / medium
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: None
-
 ### Kalita Tsubame — Owned
 
 - Manufacturer: Kalita
@@ -396,32 +145,6 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 - Accessories: None
 - Location: Home, Office
 - Primary use case: Neutral flat baseline (geometry reference)
-
-### Kalita Wave
-
-- Manufacturer: Kalita
-- Paper type: Wave (155-185)
-- Dose size: 10g to 25g
-- Bed geometry: Flat / medium
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: None
-
-### Orea Big Boy
-
-- Manufacturer: Orea
-- Paper type: Flat (custom large)
-- Dose size: 25g+
-- Bed geometry: Flat / shallow
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: Negotiator
 
 ### Orea v1-3 — Owned
 
@@ -438,19 +161,6 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 - Location: Home
 - Primary use case: Clarity-balanced flat (low-bypass stability)
 
-### Origami
-
-- Manufacturer: Origami
-- Paper type: Wave (Kalita 155-185)
-- Dose size: 10g to 25g
-- Bed geometry: Flat / shallow
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: Base
-
 ### Sworks Bottomless — Owned
 
 - Manufacturer: Sworks
@@ -466,126 +176,7 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 - Location: Home, Office
 - Primary use case: Hybrid manipulation (open + valve control)
 
-## Trapezoid filter drippers
-
-### Cafec Oval
-
-- Manufacturer: Cafec
-- Paper type: Trapezoid
-- Dose size: 10g to 25g+
-- Bed geometry: Trapezoid / medium
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: None
-
-### Clever
-
-- Manufacturer: Clever
-- Paper type: Trapezoid / folded cone
-- Dose size: 15g to 25g+
-- Bed geometry: Conical / deep
-- Bypass profile: Low
-- Flow control: Valve (immersion)
-- Restriction source: Valve-controlled
-- Agitation tolerance: High
-- Brew archetype: Immersion hybrid
-- Accessories: None
-
-### Melitta
-
-- Manufacturer: Melitta
-- Paper type: Trapezoid
-- Dose size: 10g to 25g+
-- Bed geometry: Trapezoid / medium
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Low
-- Brew archetype: Stability flat
-- Accessories: None
-
-### OXO
-
-- Manufacturer: OXO
-- Paper type: Trapezoid (Cafec 102)
-- Dose size: 15g to 25g
-- Bed geometry: Trapezoid / medium
-- Bypass profile: Low
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Low
-- Brew archetype: Stability flat
-- Accessories: None
-
-### Palatti Terra
-
-- Manufacturer: Palatti
-- Paper type: Trapezoid (Cafec 102)
-- Dose size: 15g to 25g
-- Bed geometry: Trapezoid / medium
-- Bypass profile: Medium
-- Flow control: Passive percolation
-- Restriction source: Geometry-limited
-- Agitation tolerance: Medium
-- Brew archetype: Stability flat
-- Accessories: Drip stand
-
 ## Round/circle filter drippers
-
-### Aeropress
-
-- Manufacturer: AeroPress
-- Paper type: Disc (64mm)
-- Dose size: 10g to 30g
-- Bed geometry: Cylindrical / immersion
-- Bypass profile: Low
-- Flow control: Pressure / immersion
-- Restriction source: Filter + pressure
-- Agitation tolerance: High
-- Brew archetype: Pressure / vacuum system
-- Accessories: Prismo / Puckpuck
-
-### Next Level LVL-10
-
-- Manufacturer: NextLevel
-- Paper type: Round filter
-- Dose size: 25g+
-- Bed geometry: Flat / deep
-- Bypass profile: None (zero bypass)
-- Flow control: Zero-bypass percolation
-- Restriction source: Paper-limited
-- Agitation tolerance: Low
-- Brew archetype: Zero-bypass push
-- Accessories: Drip assist lid
-
-### Next Level Pulsar
-
-- Manufacturer: NextLevel
-- Paper type: Round filter
-- Dose size: 15g to 25g+
-- Bed geometry: Flat / deep
-- Bypass profile: None (zero bypass)
-- Flow control: Valve (immersion + percolation)
-- Restriction source: Valve-controlled
-- Agitation tolerance: High
-- Brew archetype: Zero-bypass push (hybrid valve)
-- Accessories: Filter discs / drip assist lid
-
-### Orea Z1
-
-- Manufacturer: Orea
-- Paper type: Round (70mm Sibarist)
-- Dose size: 10g to 25g
-- Bed geometry: Flat / shallow
-- Bypass profile: None (zero bypass)
-- Flow control: Immersion hybrid
-- Restriction source: Valve-controlled
-- Agitation tolerance: High
-- Brew archetype: Zero-bypass push
-- Accessories: Immersion base / travel case
 
 ### Oxo Rapid Brewer (ORB) — Owned
 
@@ -631,34 +222,6 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 - Accessories: xBloom Studio (smart base)
 - Location: Home, Office
 - Primary use case: Automated stability baseline (smart-controlled flat extraction)
-
-## Self-filtering drippers
-
-### Fellow Duo
-
-- Manufacturer: Fellow
-- Paper type: None (metal mesh)
-- Dose size: 15g to 25g+
-- Bed geometry: Flat / medium
-- Bypass profile: None
-- Flow control: Valve (immersion)
-- Restriction source: Metal mesh
-- Agitation tolerance: High
-- Brew archetype: Immersion hybrid
-- Accessories: None
-
-### Phin
-
-- Manufacturer: Generic
-- Paper type: None or optional round paper
-- Dose size: 10g to 15g
-- Bed geometry: Cylindrical / deep
-- Bypass profile: None
-- Flow control: Gravity / immersion
-- Restriction source: Metal screen
-- Agitation tolerance: Low
-- Brew archetype: Immersion hybrid
-- Accessories: None
 
 ## Aliases
 

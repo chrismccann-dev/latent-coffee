@@ -132,5 +132,5 @@ Until then the registry is a vocabulary anchor only; brew-side persistence stays
 
 - [lib/sworks-registry.ts](lib/sworks-registry.ts) — validation mirror (TS)
 - [lib/brewer-registry.ts](lib/brewer-registry.ts) — `SWORKS Bottomless Dripper` is the canonical brewer entry; this file extends valve-dial vocabulary
-- [BREWING.md § Valve Position Reference](docs/skills/brewing-equipment-expert/cluster/operational-reference.md) — original prose location, retained as the practical brewing playbook
+- [operational-reference.md](docs/skills/brewing-equipment-expert/cluster/operational-reference.md) — cross-equipment operational reference (location constraints + brewer rotation); its valve section is a pointer back to this doc (consolidated in pruning case 010)
 - [docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md](docs/skills/brewing-equipment-expert/cluster/grinder-eg1.md) — sibling self-only canonical sub-taxonomy (EG-1)

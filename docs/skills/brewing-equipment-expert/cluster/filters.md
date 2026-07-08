@@ -11,7 +11,7 @@ needs a brewer + filter pair for a recipe. It exists to make **owned** equipment
 and its real behavior unambiguous. Not-owned candidates live in
 [docs/taxonomies/filters-not-owned-archive.md](docs/taxonomies/filters-not-owned-archive.md)
 (promotion pool — do not load for live selection). `lib/filter-registry.ts`
-stays the full canonical validator for **all** 67 papers (owned + not-owned), so
+stays the full canonical validator for **all** 58 papers (owned + not-owned), so
 every `brews.filter` value still resolves; this doc is the prose home for the 23
 owned rows.
 
@@ -124,7 +124,7 @@ Measured-drawdown provenance + full research is in the
 - Flow rate (label) / consistency: Slow / Stable
 - Clarity / Body / Sweetness: Low / High / Muted
 - Best archetype: Immersion hybrid (cone assist)
-- Use case: Owned via Cafec Cup 4 4-pack assortment; dark-roast specific
+- Use case: Owned via Cafec Cup 4 4-pack assortment; dark-roast specific. Highest tannin risk of the cone set - use sparingly.
 - Measured drawdown: 68s @ 15g (Project #1, ~CONE B3) — measured near-baseline despite the "Slow" + "Thick" labels; CAFEC label = extraction intent, not flow. Bed: late-forming-crater.
 - Realistic drawdown: 219s (RP5 Track 1, xBloom V60, Pink Bourbon Washed)
 - Link: <https://cafecusa.com/collections/filter-papers/products/copy-of-cafec-cup-4-dark-roast-paper-filter-v60-02-dc4-100w>
@@ -457,7 +457,4 @@ the [archive](docs/taxonomies/filters-not-owned-archive.md)).
 ## Changelog
 
 - 2026-06-20 — **RP5 Track 1 fold** (filter textural-quality, V60 cone). Added a `realisticDrawdownSec` field (+ `realisticDrawdownNote`) to the 10 owned V60-cone papers — the realistic xBloom / Pink Bourbon Washed end-time, distinct from the non-realistic 250g-dump `measuredDrawdownSec`. Added the [flow-mediation knowledge subsection](#texture-is-flow-mediated-rp5-track-1-2026-06-20) (texture is largely flow-mediated, 3 mechanisms; paper is a multi-dimensional texture lever). Added `V60` to both HALO papers' fit (HALO ran in a V60 for all of RP5). RP4 AI-4 resolved: HALO ≡ CONE in the cup, fit story only. PROVISIONAL on a single coffee.
-- 2026-06-04 — **filter reconciliation** (case-004 follow-up). Registry collapsed 67→58 canonical filters (23 owned unchanged; 35 not-owned). Executed the dedups case 004 flagged: 3 pure duplicate-SKU rows (AC4-100W variant / AB-101-100W variant / AB-102-100W Alt SKU), the AC4-40B brown pack-size variant, and the 5 CAFEC Cup-1 papers (Abaca / Abaca+ / T-83 / T-90 / T-92) collapsed into their Cup-4 twins (Chris brews single cups → Cup-1 vs Cup-4 is paper SIZE he treats as identical; T-codes preserved across twins). The owned Abaca+ Cup-4 paper was renamed from the mislabeled "CAFEC Abaca Cup 4 ... (40 pack)" / APC4-40W → **CAFEC Abaca+ Cup 4 Cone Paper Filter** / APC4-100W (its true SKU + line); the 2 legacy "Abaca+ Cup 1" brews were really this paper (migration 077 remap). All collapsed names aliased to survivors. `CAFEC Traditional Cup 1 Filter` (CC1) kept distinct (no Cup-4 twin). 56 aliases total.
-- 2026-06-03 — **pruning case 004** (70.4 KB → owned-only). Added Purpose + agent selection-rules; moved the four `## Measured Drawdown Reference` research blocks + per-entry RP/lesson citation chains out to the [research appendix](#research-measurement-appendix) (full data already in `docs/research-projects/*.md`); pruned the live doc to the **23 owned** papers, grouped by fit geometry (V60 cone / Flat-bottom + wave / Specialty + paired); moved the **44 not-owned** papers to [docs/taxonomies/filters-not-owned-archive.md](docs/taxonomies/filters-not-owned-archive.md); corrected April Paper Filter fit to **April-only**. `lib/filter-registry.ts` unchanged except the April fit fix (still the full 67-entry validator). Pack-size / cup-size / duplicate-SKU registry dedups flagged for a follow-up reconciliation pass (see pruning case 004 handoff).
-- 2026-04-27 — Cafec packaging-name update (migration 034). Owned Cup 4 papers gain T-XX codes printed on packaging: T-92 (light, LC4), T-90 (medium, MC4), T-83 (dark, DC4), plus the "+" on Abaca+ (APC4). (The not-owned Cup 1 T-code variants now live in the archive.)
-- 2026-04-26 — initial registry built from authored CSV (Sprint 1f). Same-name dedupes (5) recorded at build.
+- Earlier history (2026-06-04 filter reconciliation 67→58 · 2026-06-03 pruning case 004 owned-only split · 2026-04-27 Cafec T-code update · 2026-04-26 initial build) lives in git history + [pruning case 004](docs/sprints/pruning-cases/004-filters-md.md) + the [archive changelog](docs/taxonomies/filters-not-owned-archive.md).

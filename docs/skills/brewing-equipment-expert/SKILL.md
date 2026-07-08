@@ -16,7 +16,7 @@ Author and maintain the brewing equipment registry across drippers / filters / g
 
 | Existing asset | Wave 1 migration target | Content |
 |---|---|---|
-| `lib/brewer-registry.ts` | `cluster/brewers.md` (pointer) + `resources/brewer-registry.ts` (symlink/reference) | 46 canonical brewers, 12 owned, 24 aliases |
+| `lib/brewer-registry.ts` | `cluster/brewers.md` (13 owned only) + `docs/taxonomies/brewers-not-owned-archive.md` (34 not-owned) + `resources/brewer-registry.ts` (reference) | 47 canonical brewers (13 owned), 26 aliases. Doc split owned/not-owned in pruning case 010 (2026-07-08); registry stays the full validator |
 | `lib/filter-registry.ts` | `cluster/filters.md` (23 owned only) + `docs/taxonomies/filters-not-owned-archive.md` (35 not-owned) + `resources/filter-registry.ts` (reference) | 58 canonical filters (23 owned), 56 aliases. Reconciled 67→58 (Cup-1→Cup-4 size collapse + dup-SKU/pack-size collapses; APC4→Abaca+ Cup-4 rename) 2026-06-04; doc split owned/not-owned in pruning case 004 (2026-06-03); registry stays the full validator |
 | `lib/grinder-registry.ts` | `cluster/grinder-eg1.md` + `resources/grinder-registry.ts` (symlink/reference) | EG-1 only (single canonical), 51 enumerated settings, 16 with rich content |
 | `lib/sworks-registry.ts` | `cluster/sworks.md` + `resources/sworks-registry.ts` (symlink/reference) | SWORKS Bottomless Dripper, 5 useful dials (0/5/6/7/past-7), dial state vocabulary |
@@ -27,8 +27,8 @@ Author and maintain the brewing equipment registry across drippers / filters / g
 
 **Cross-cluster absorptions:** pruning case 007b (2026-06-04) re-homed the brewing-historian Office Brewing Notes into this cluster — `cluster/sworks.md` gained the **valve restriction-timing principles** (mid-pour Dial 5 starves the bed; small-dose Clarity-First inverts the Mokka principle; valve-transition timing as a temperature co-lever), and `cluster/operational-reference.md` gained the **office-tap-amplifies-roast-forward-body** finding in § Location Constraints. The SWORKS Dial 0-7 calibration table was already present (no duplicate added).
 
-**Future cluster additions (operator TODO; Wave 1 doesn't include):**
-- `cluster/filter-flow-rates.md` — Chris's planned project measuring flow rates across all owned filters (Pattern I — operator-initiated resource integration)
+**Future cluster additions (operator TODO):**
+- ~~`cluster/filter-flow-rates.md`~~ — shipped as the RP1-5 filter research arc (2026-05-23 → 2026-06-20), folded into `cluster/filters.md` (per-entry measured-drawdown lines + research appendix), not a standalone doc
 - Per-machine deep knowledge docs as observed quirks accumulate (e.g. `cluster/xbloom-recipes.md`, `cluster/comandante-burr-wear.md`)
 
 ## Inputs
@@ -71,15 +71,6 @@ None directly held by Brewing Equipment Expert. Brewing Assistant pulls equipmen
 - **Stage 1 → 2 advancement:** N=5 consecutive auto-approvals without operator override (default; equipment-side proposals are low-stakes registry expansions, no special graduation rule needed)
 - **Stage 2 → 3:** override rate < 10% across 3 consecutive quarters
 - **Auto-demote:** override rate ≥ 10% in any quarter → Stage 3 → 2; override rate ≥ 25% → Stage 2 → 1
-
-## Implementation notes for Wave 1 sprint
-
-- **Migration strategy:** existing 8 files stay in place (no DB schema impact). Wave 1 implementation creates `docs/skills/brewing-equipment-expert/cluster/*.md` AS THE NEW SOURCE OF TRUTH; the existing `lib/*-registry.ts` files become *resources* (the validation mirrors stay where they are — they're code, not docs; CLAUDE.md § Canonical registries already documents this 2-file-per-axis discipline).
-- **`docs/taxonomies/{brewers,filters,grinders,sworks}.md` MIGRATE INTO `cluster/`** — content moves; original paths get redirect stubs pointing to new locations.
-- **MCP Resource registration:** every new `docs/skills/brewing-equipment-expert/cluster/*.md` file must be registered in `lib/mcp/docs.ts` `DOC_FILES` AND covered by `outputFileTracingIncludes['/api/mcp/**']` in `next.config.js`. Run `npm run check:mcp-bundle` before shipping.
-- **CLAUDE.md update:** the existing "Brewer + Filter names" / "Grinder taxonomy" / "SWORKS valve flow taxonomy" sections in CLAUDE.md update to reference the new cluster location (don't delete; the lib/*-registry.ts references stay).
-- **Cross-system audit at Wave 1 PR time** (6-actor matrix): Actor 6 (file moves), Actor 4 (MCP Resource registration), Actor 5 (CLAUDE.md updates), Actor 2 (no prompt changes — equipment taxonomy isn't referenced in prompts directly), Actor 3 (claude.ai picks up new Resource catalog on next session start), Actor 1 (operator notices nothing — content unchanged, just relocated).
-- **Forward investment:** flow-rate-across-filters project (Chris's TODO) will land as `cluster/filter-flow-rates.md` via Pattern I when ready. Brewing Equipment Expert is the natural home for it.
 
 ## Related ADRs
 
