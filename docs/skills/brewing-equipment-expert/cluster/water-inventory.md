@@ -2,7 +2,7 @@
 
 **Enforcement bar:** Reference / soft. A **maintained, living inventory** of the water gear, reagents, and concentrates Chris owns - the physical counterpart to [water.md](docs/skills/brewing-equipment-expert/cluster/water.md) (which is the *knowledge*: taxonomy + chart + build method). `water.md` reasons about what's *possible*; this doc records what's *on the shelf*, so the `/brew` water suggestions and any build stay in sync with actual stock.
 
-**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-05 (all sections verified against Chris's four source TSVs). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
+**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-08 (food-grade MgCl₂ ordered; sections verified against Chris's four source TSVs 2026-07-05). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
 
 **Two-tier mineral supply (the load-bearing structure for `/brew`):**
 - **Tier 1 = dry bulk minerals (§ 2)** - the purchased salts. Used to *make stock*, not to dose per brew.
@@ -26,7 +26,8 @@ Hydration form is load-bearing for the GH/KH math (see [water.md § 4](docs/skil
 | Mineral | Product in hand | Grade | Size | Bought | 1 g/L → | Notes |
 |---|---|---|---|---|---|---|
 | **Magnesium sulfate** MgSO₄·7H₂O | Loudwolf-style Epsom, fine crystals | 99.9% USP food | 1 lb (2 bottles) | Jun 25 | ~99 mg/L Mg + 390 sulfate; ~406 ppm GH | dissolves readily |
-| **Magnesium chloride** MgCl₂·6H₂O | flakes | **98%+ reagent (NOT food-grade)** | 4 oz ×2 (Jun 20 backup + Jun 25) | Jun 20/25 | ~120 mg/L Mg + 349 chloride; ~492 ppm GH | **very hygroscopic/deliquescent → desiccant + airtight**; confirm suitability for drinking |
+| **Magnesium chloride** MgCl₂·6H₂O | flakes | **98%+ reagent (NOT food-grade)** | 4 oz ×2 (Jun 20 backup + Jun 25) | Jun 20/25 | ~120 mg/L Mg + 349 chloride; ~492 ppm GH | **very hygroscopic/deliquescent → desiccant + airtight**; NOT for drinking - **food-grade replacement ordered** (next row) |
+| **Magnesium chloride (food grade)** MgCl₂·6H₂O | Alliance Chemical FCC/USP hexahydrate | 99-100.5% FCC/USP food | 2 lb | **ordered Jul 8, in transit** | ~120 mg/L Mg + 349 chloride; ~492 ppm GH | On arrival: make fresh 10,000 ppm stock, EC-fingerprint vs the reagent stock (identity check), retire reagent bottles to non-drinking use. Same desiccant discipline. |
 | **Calcium chloride** CaCl₂·2H₂O | USP crystals/powder | USP | 500 g | Jun 22 | ~273 mg/L Ca + 482 chloride; ~680 ppm GH | hygroscopic → desiccant |
 | **Calcium sulfate (gypsum)** CaSO₄·2H₂O | North Mountain, food-grade | food | 1.5 lb | Jun 22 | ~233 mg/L Ca + 558 sulfate; ~581 ppm GH | **low solubility** - make a dilute stock, verify by EC/GH, don't assume full dissolution |
 | **Potassium bicarbonate** KHCO₃ | Loudwolf-style fine powder | 99% USP food | 1 lb (2 bottles) | Jun 25 | ~391 mg/L K + 610 bicarbonate; ~499 ppm alkalinity | buffer/KH source |
@@ -89,5 +90,6 @@ Full gear-chain rationale + the build discipline (precipitation, WATER-vs-CONCEN
 
 ## Update log
 
+- **2026-07-08** - Food-grade MgCl₂ ordered (Alliance Chemical FCC/USP hexahydrate, 2 lb) per the second-expert review's R5 safety flag ([review](docs/audits/research/rp6-water-second-expert-review-2026-07-08.md)); reagent-grade bottles marked not-for-drinking, retire on arrival.
 - **2026-07-05** - Fully verified against all four source TSVs. §§ 2-3: MgCl₂ is **two 4 oz bottles** (Jun 20 backup + Jun 25) at **reagent grade**; exact grades / sizes / dates + 1 g/L factors; **added § 3 = the six single-mineral liquid stocks** (the per-brew dosing tier) with their per-1 g-in-1 L GH/KH keys. §§ 4-5 (concentrates + gear) confirmed against the Coffee Water Equipment + Water Concentrates TSVs (added concentrate dosing keys). NaHCO₃ source confirmed: **Bob's Red Mill Baking Soda** (food grade). Inventory now fully reconciled.
 - **2026-07-04** - Seeded at RP6 codification close (v1, from conversation).
