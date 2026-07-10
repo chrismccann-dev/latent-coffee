@@ -9,6 +9,7 @@ import {
   SspProseRows,
   SspStructure,
   compactRows,
+  countLabel,
   type MetaPair,
   type StructureRow,
 } from '@/components/Ssp'
@@ -179,7 +180,11 @@ export default async function TerroirDetailPage({ params }: { params: { id: stri
       <DetailBackLink href="/terroirs">Terroirs</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar anchor={terroir.country ?? undefined} kind="Terroir Profile" />
+      <SspTopBar
+        count={brewCount > 0 ? countLabel(brewCount, 'COFFEE') : undefined}
+        anchor={terroir.country ?? undefined}
+        kind="Terroir Profile"
+      />
       <SspNamePlate
         title={macroName}
         meta={meta}

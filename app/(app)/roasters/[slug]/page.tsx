@@ -12,6 +12,7 @@ import {
   SspShead,
   SspProseRows,
   compactRows,
+  countLabel,
   type MetaPair,
 } from '@/components/Ssp'
 import { AdditionalInfo } from '@/components/AdditionalInfo'
@@ -179,7 +180,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
 
       {/* Header */}
       <SspTopBar
-        count={`${brewCount} COFFEE${brewCount === 1 ? '' : 'S'}`}
+        count={countLabel(brewCount, 'COFFEE')}
         anchor={`${family} family`}
         kind="Roaster Profile"
       />
@@ -222,7 +223,7 @@ export default async function RoasterDetailPage({ params }: { params: { slug: st
 
       {recipeRows.length > 0 && (
         <div className="ssp-card">
-          <SspShead>Roasters Reference Brew Recipe</SspShead>
+          <SspShead>Roaster&apos;s Reference Brew Recipe</SspShead>
           <SspProseRows rows={recipeRows} />
         </div>
       )}

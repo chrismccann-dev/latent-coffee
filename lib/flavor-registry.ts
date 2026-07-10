@@ -829,11 +829,17 @@ export type CleanResult<T> = { ok: true; value: T } | { ok: false; error: string
 
 /** Validate + canonicalize a list of flavor chips. Per-chip: canonicalize base
  *  (verbatim fallback for net-new bases), normalize modifiers via
- *  MODIFIER_LOOKUP or BASE_FLAVOR_LOOKUP (Tea-base rule), clamp at 2 mods. */
+ *  MODIFIER_LOOKUP or BASE_FLAVOR_LOOKUP (Tea-base rule), clamp at 2 mods.
+ *  Silently drops chips whose (base, modifiers) duplicate an earlier chip
+ *  post-canonicalization (design-audit 02 Finding 5) — a duplicate renders as
+ *  an apparent double-write on every surface, and canonicalization itself can
+ *  collapse two distinct raw strings into one chip. Modifier-differentiated
+ *  chips on the same base survive. */
 export function cleanFlavors(input: unknown): CleanResult<FlavorChip[]> {
   if (input == null) return { ok: true, value: [] }
   if (!Array.isArray(input)) return { ok: false, error: 'flavors must be an array' }
   const cleaned: FlavorChip[] = []
+  const seen = new Set<string>()
   for (const chip of input) {
     if (!chip || typeof chip !== 'object') {
       return { ok: false, error: 'each flavor chip must be an object' }
@@ -853,6 +859,9 @@ export function cleanFlavors(input: unknown): CleanResult<FlavorChip[]> {
         if (mods.length >= 2) break
       }
     }
+    const key = `${base}|${mods.join('|')}`
+    if (seen.has(key)) continue
+    seen.add(key)
     cleaned.push({ base, modifiers: mods })
   }
   return { ok: true, value: cleaned }

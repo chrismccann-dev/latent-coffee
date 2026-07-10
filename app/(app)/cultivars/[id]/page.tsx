@@ -7,6 +7,7 @@ import {
   SspShead,
   SspProseRows,
   compactRows,
+  countLabel,
   type MetaPair,
   type ProseRow,
 } from '@/components/Ssp'
@@ -101,7 +102,11 @@ export default async function CultivarDetailPage({ params }: { params: { id: str
       <DetailBackLink href="/cultivars">Cultivars</DetailBackLink>
 
       {/* Header */}
-      <SspTopBar anchor={cultivar.species ?? undefined} kind="Cultivar Profile" />
+      <SspTopBar
+        count={brewCount > 0 ? countLabel(brewCount, 'COFFEE') : undefined}
+        anchor={cultivar.species ?? undefined}
+        kind="Cultivar Profile"
+      />
       <SspNamePlate
         title={cultivar.cultivar_name}
         meta={meta}

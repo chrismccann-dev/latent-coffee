@@ -33,10 +33,25 @@ export function Chip({ name, tone }: { name: ReactNode; tone?: AccentTone }) {
  */
 export type StatusTone = 'amber' | 'lavender' | 'teal' | 'resolved' | 'archive' | 'blue'
 
-export function StatusPill({ label, tone }: { label: ReactNode; tone?: StatusTone }) {
+/** Hue override for signals whose palette lives outside the tone classes
+ *  (extraction strategy via getStrategyStyle — design-audit 02 Finding 3). */
+export type StatusHue = { bg: string; border: string; text: string }
+
+export function StatusPill({
+  label,
+  tone,
+  hue,
+}: {
+  label: ReactNode
+  tone?: StatusTone
+  hue?: StatusHue
+}) {
   return (
-    <span className={tone ? `status ${tone}` : 'status'}>
-      <span className="dot" />
+    <span
+      className={tone ? `status ${tone}` : 'status'}
+      style={hue ? { background: hue.bg, borderColor: hue.border, color: hue.text } : undefined}
+    >
+      <span className="dot" style={hue ? { background: hue.border } : undefined} />
       {label}
     </span>
   )
@@ -75,6 +90,11 @@ export function SspTopBar({
   )
 }
 
+/** Pluralized uppercase count for the SspTopBar count slot ("9 COFFEES", "1 ROAST"). */
+export function countLabel(n: number, noun: string): string {
+  return `${n} ${noun}${n === 1 ? '' : 'S'}`
+}
+
 export type MetaPair = { label: string; value: ReactNode }
 
 /**
@@ -104,14 +124,16 @@ export function SspNamePlate({
   const body = (
     <>
       <h1>{title}</h1>
-      <div className="meta">
-        {meta.map((m) => (
-          <div key={m.label}>
-            <b>{m.label}</b>
-            {m.value}
-          </div>
-        ))}
-      </div>
+      {meta.length > 0 && (
+        <div className="meta">
+          {meta.map((m) => (
+            <div key={m.label}>
+              <b>{m.label}</b>
+              {m.value}
+            </div>
+          ))}
+        </div>
+      )}
       {pills && pills.length ? <div className="pills">{pills}</div> : null}
     </>
   )
@@ -152,10 +174,14 @@ export type KVItem = { label: string; value: ReactNode }
  * KVStrip — dark mono key-value strip (3-col → 6-col at container width).
  * The brew-specific Reference Brew Recipe header is the same primitive; import
  * `SspRecipeHead` (alias) when the semantic is recipe-specific.
+ *
+ * `stack` is for prose-length values (design-audit 02 Finding 2): full-width
+ * stacked rows at narrow container widths, 3-col (never 6) from 640px. The
+ * default columns are only for data atoms (15g / 1:15 / 95°C).
  */
-export function SspKVStrip({ items }: { items: KVItem[] }) {
+export function SspKVStrip({ items, stack }: { items: KVItem[]; stack?: boolean }) {
   return (
-    <div className="ssp-rcphead">
+    <div className={stack ? 'ssp-rcphead stack' : 'ssp-rcphead'}>
       {items.map((it) => (
         <div className="c" key={it.label}>
           <b>{it.label}</b>
