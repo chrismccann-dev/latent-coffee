@@ -1,9 +1,10 @@
-// Producer index card (Producers-first-class sprint, 2026-06-19). The richer
-// sibling of the /roasters GrlRow — a sourcing-forward "buy / learn / remember"
-// card: name + farm · tier + relationship badge · geography · system ·
-// process-signature one-liner · known-for + cultivar chips · evidence line ·
-// roaster-signal chips (✓ where brewed) · next-action line. Whole card links to
-// /producers/[slug]. Presentational; rendered inside the client ProducersIndex.
+// Producer index card (Producers-first-class sprint, 2026-06-19; simplified
+// 2026-07-09, design-audit F2+F4 close-out). A terse single-column scan row:
+// name + farm · tier + relationship badge · country swatch + geography ·
+// decision prose clamped to 2 lines · evidence counts. The dossier depth
+// (system, known-for/cultivar chips, roaster signals, NEXT action, full prose)
+// lives on the detail page. Whole card links to /producers/[slug].
+// Presentational; rendered inside the client ProducersIndex.
 
 import Link from 'next/link'
 import { StatusPill } from '@/components/Ssp'
@@ -40,7 +41,7 @@ export function ProducerCard({ p }: { p: ProducerCardData }) {
         </div>
       </div>
 
-      {/* Geography + system */}
+      {/* Geography */}
       <div className="mt-2 font-mono text-xxs text-latent-mid">
         {p.country ? (
           <span className="inline-flex items-center gap-1.5">
@@ -53,54 +54,21 @@ export function ProducerCard({ p }: { p: ProducerCardData }) {
         ) : (
           <span className="text-latent-subtle">Origin unknown</span>
         )}
-        <span className="mx-1.5 text-latent-subtle">·</span>
-        {p.producerSystem ?? 'System unknown'}
       </div>
 
-      {/* Process signature (headline) — falls back to known-for prose when un-authored */}
+      {/* Decision prose, clamped — full text on the detail page */}
       {p.processSignature ? (
-        <p className="font-sans text-sm text-latent-fg mt-2 leading-snug">{p.processSignature}</p>
+        <p className="font-sans text-sm text-latent-fg mt-2 leading-snug line-clamp-2">
+          {p.processSignature}
+        </p>
       ) : p.knownFor.length > 0 ? (
-        <p className="font-sans text-sm text-latent-mid mt-2 leading-snug">
+        <p className="font-sans text-sm text-latent-mid mt-2 leading-snug line-clamp-2">
           Known for {p.knownFor.slice(0, 3).join(', ')}.
         </p>
       ) : null}
 
-      {/* Known-for + cultivar chips */}
-      {(p.knownFor.length > 0 || p.primaryCultivars.length > 0) && (
-        <div className="mt-2.5 flex flex-wrap gap-1.5">
-          {p.knownFor.slice(0, 3).map((k) => (
-            <span key={`kf-${k}`} className="chip clamp2" title={k}>
-              {k}
-            </span>
-          ))}
-          {p.primaryCultivars.slice(0, 3).map((c) => (
-            <span key={`cv-${c}`} className="chip plum">
-              {c}
-            </span>
-          ))}
-        </div>
-      )}
-
       {/* Evidence line */}
       <div className="font-mono text-xxs text-latent-mid mt-3">{evidenceLine(p.evidence)}</div>
-
-      {/* Roaster signal chips — ✓ where actually brewed */}
-      {p.roasterSignals.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {p.roasterSignals.slice(0, 6).map((r) => (
-            <span key={`rs-${r.name}`} className={r.brewed ? 'chip green' : 'chip'}>
-              {r.brewed ? '✓ ' : ''}
-              {r.name}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Next action */}
-      <div className="font-mono text-xxs text-latent-mid mt-3 pt-2.5 border-t border-latent-hairline">
-        <span className="text-latent-subtle tracking-wide">NEXT</span> {p.nextAction}
-      </div>
     </Link>
   )
 }

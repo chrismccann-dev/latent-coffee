@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { FilterTrigger } from '@/components/IndexList'
 import { EXTRACTION_STRATEGIES, getStrategyStyle } from '@/lib/extraction-strategy'
 import { getDisplayName } from '@/lib/roaster-registry'
 
@@ -111,36 +112,6 @@ export function BrewsFilterBar({
         </DimensionRow>
       </div>
     </div>
-  )
-}
-
-interface FilterTriggerProps {
-  label: string
-  activeCount: number
-  open: boolean
-  onClick: () => void
-}
-
-function FilterTrigger({ label, activeCount, open, onClick }: FilterTriggerProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-expanded={open}
-      className={`font-mono text-xxs font-semibold tracking-wide uppercase px-3 py-1.5 rounded border transition-colors flex items-center gap-1.5 ${
-        activeCount > 0
-          ? 'bg-latent-fg text-white border-latent-fg'
-          : 'bg-white text-latent-mid border-latent-border hover:border-latent-fg'
-      }`}
-    >
-      <span>{label}</span>
-      {activeCount > 0 && (
-        <span className="font-mono text-chip bg-white/20 rounded px-1 py-0.5">
-          {activeCount}
-        </span>
-      )}
-      <span aria-hidden>{open ? '▴' : '▾'}</span>
-    </button>
   )
 }
 

@@ -513,8 +513,6 @@ export interface ProducerCardData {
   sourcingPriority: SourcingPriority | null
   evidence: { brews: number; roasters: number; lots: number; learnings: number }
   evidenceDepth: number
-  roasterSignals: RoasterSignal[]
-  nextAction: string
   /** Which tabs this producer belongs to (tabs are views, not a partition). */
   tabs: ProducerTab[]
   // facet fields
@@ -550,8 +548,6 @@ export function toCardData(agg: ProducerAggregate): ProducerCardData {
       learnings: agg.roastLearnings.length,
     },
     evidenceDepth: evidenceDepth(agg),
-    roasterSignals: roasterSignals(agg),
-    nextAction: nextAction(agg),
     tabs: ALL_TABS.filter((t) => matchesTab(agg, t)),
     processTags: e?.processingStyleTags ?? [],
     marketTier: e?.marketTier ?? null,

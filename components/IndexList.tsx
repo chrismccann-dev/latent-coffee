@@ -115,6 +115,45 @@ export function GrlRow(
   )
 }
 
+/**
+ * Mobile FILTERS ▾ disclosure trigger — the chrome-collapse pattern for index
+ * filter stacks below lg (chrome @media exception, grilling-queue 52). Shared
+ * by BrewsFilterBar + ProducersIndex; interactive, so render it only inside a
+ * client component.
+ */
+export function FilterTrigger({
+  label,
+  activeCount,
+  open,
+  onClick,
+}: {
+  label: string
+  activeCount: number
+  open: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-expanded={open}
+      className={`font-mono text-xxs font-semibold tracking-wide uppercase px-3 py-1.5 rounded border transition-colors flex items-center gap-1.5 ${
+        activeCount > 0
+          ? 'bg-latent-fg text-white border-latent-fg'
+          : 'bg-white text-latent-mid border-latent-border hover:border-latent-fg'
+      }`}
+    >
+      <span>{label}</span>
+      {activeCount > 0 && (
+        <span className="font-mono text-chip bg-white/20 rounded px-1 py-0.5">
+          {activeCount}
+        </span>
+      )}
+      <span aria-hidden>{open ? '▴' : '▾'}</span>
+    </button>
+  )
+}
+
 /** /green lifecycle section header (flat list, not the v2 card grid). */
 export function LotStage({
   title,
