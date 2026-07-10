@@ -204,6 +204,12 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Grade:** READY (mechanical dedupe once the canonical-home call is made)
     - **Source:** doc-cap pruning-prep audit (2026-07-08), § 4 out-of-scope observations
 
+### From the design-review skill external-input pass (2026-07-09 - emilkowalski/skills read)
+
+55. **Touch feedback + hover-reveal affordances on mobile-primary surfaces - does the restrained-motion doctrine need a touch clause?** [docs/design-system.md § Surfaces, motion, interaction](docs/design-system.md) locks restrained motion (transition-colors / 0.12s card hover, no springs/spinners) and § Iconography names "→ for hover-revealed affordance" as chrome - but the doctrine is silent on touch. Two concrete gaps: (a) `opacity-0 group-hover:opacity-100` reveals (CoffeesList rows, producers detail) are invisible on the phone, including on the mobile-primary workflow-companion surfaces; (b) no `:active` press feedback exists anywhere, and mid-brew / mid-cupping taps on `/brews/[id]` + `/green/[id]` have no did-the-tap-register signal. Grill: ratify "hover is decorative, never load-bearing" + decide whether a subtle press state (e.g. background wash, consistent with hue-not-lightness + no-shadow rules) joins the doctrine, or explicitly leave touch feedback out as a considered-and-left-alone. External input, not canon - surfaced by reading emilkowalski/skills against the design system, grounded by grep (the affordances exist in code today).
+    - **Grade:** READY (small canon decision; the code evidence is already gathered)
+    - **Source:** design-review skill external-input pass (2026-07-09); candidate finding for design-review run 02 either way
+
 ## Substrate pruning candidates
 
 Lived examples of substrate sections that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred until lived candidates covering all five shapes are worked through operator + Claude Code back-and-forth (case-study-driven generalization per Chris's framing at Item 16c grill). This section accumulates candidates; each becomes a worked example. **Systematization is deferred until all five shapes have a worked example** — full protocol at [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md).
