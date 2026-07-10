@@ -54,6 +54,10 @@ For each surface, after capturing its screenshots:
   - **priority-stack correctness** - primary leads / never collapses, tertiary collapses (the detail-page grammar). Note the surface exceptions (the roaster page inverts the default).
   - **hue-not-lightness** for semantic signals.
   - **the 390 forcing function** - overflow, truncation, chrome eating the first screen.
+  - **frequency-of-use weighting** - scrutiny scales with how often a surface sits in the daily workflow (brews + a mid-lot green page are seen daily; a rarely-visited index tolerates more). A paper-cut on a daily surface outranks a real flaw on a rare one; say which bucket the surface is in when scoring impact.
+  - **touch-interaction states at 390** - a hover-revealed affordance (`group-hover` opacity reveals, hover-only arrows) does not exist on the phone. On mobile-primary / workflow-companion surfaces check each one is decorative, always-visible at 390, or has a touch equivalent. The design system names the hover-reveal glyph but is silent on its touch behavior - if a real gap surfaces, route it as an open question, not a canon violation.
+
+  (The last two dimensions are **external input, not lived corrections** - adopted 2026-07-09 from a read of emilkowalski/skills, filtered against the restrained-motion doctrine. Ratify or kill them at the next run, per the same discipline as the D-rules.)
 - **Hold every surface against every other for consistency drift.** This is where the value concentrates (run 01: 5 of its 8 findings were cross-surface).
 
 ## Step 4 - Classify each finding's layer (D5), BEFORE scoring
@@ -79,7 +83,7 @@ One card per finding:
 - Layer: UI-only (Actor 6) | implies a data/IA change (six-actor trace at execution)   (D5)
 ```
 
-`Proposed change` is **plain English, never code** - this is a scoping report, not a patch.
+`Proposed change` is **plain English, never code** - this is a scoping report, not a patch. Prefer subtraction: propose removing or reducing an element before restyling it - under the restrained-motion / discipline conventions the strongest fix is often deletion.
 
 ## Step 6 - Considered-and-left-alone (D6, mandatory)
 
