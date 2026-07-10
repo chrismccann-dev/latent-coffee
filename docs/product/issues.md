@@ -12,6 +12,12 @@ When an item resolves: move it to [docs/sprints/shipped.md](docs/sprints/shipped
 
 ## Active issues / incomplete substrate
 
+### `patch_brew` jsonb-ish fields are untyped in the Tool schema — schema-strict MCP clients can't send them
+
+**Status:** surfaced 2026-07-09 during design-audit-02 Batch 1 (Finding-5 data fix).
+
+`patch_brew`'s input schema declares `flavors` as `z.array(z.unknown())` and leaves most passthrough fields (`modifiers`, `pours`, `structure_tags`, `key_takeaways`, ...) as bare `{}` in the emitted JSON schema. A schema-strict client (Claude Code's harness) serializes values for untyped properties as strings, so `patch_brew` with a `flavors` array fails client-side validation before the server's coercion layer ever sees it — the Batch-1 flavor dedupe had to fall back to a direct PostgREST PATCH. Fix shape: give the structured fields real JSON-schema types on `patch_brew` (mirror the `push_brew` definitions — `flavorChip`, `modifierEntry`, pours). Note the MCP catalog-cache rule: needs a fresh client session after shipping.
+
 ### `docs/reference/wbc-materials.md` modifier mapping stale (4 → 5; needs a grill, not a rename)
 
 **Status:** substrate-currency miss; surfaced 2026-06-15 apex coordinator bake-in six-actor audit (#3).

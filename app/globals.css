@@ -331,6 +331,19 @@ details[open] > summary .chev { transform: rotate(-135deg); }
   .ssp-rcphead .c:nth-child(3n) { border-right: 1px solid rgba(244,244,241,0.1); }
   .ssp-rcphead .c:last-child { border-right: 0; }
 }
+/* Prose variant (design-audit 02 Finding 2): full-width stacked rows at narrow
+   widths so sentence-length values don't wrap one word per line in ~107px
+   columns; 3-col (never 6) once the container can afford it. */
+.ssp-rcphead.stack { grid-template-columns: 1fr; }
+.ssp-rcphead.stack .c { border-right: 0; border-top: 1px solid rgba(244,244,241,0.1); }
+.ssp-rcphead.stack .c:first-child { border-top: 0; }
+.ssp-rcphead.stack .c span { line-height: 1.5; }
+@container ssppage (min-width: 640px) {
+  .ssp-rcphead.stack { grid-template-columns: repeat(3, 1fr); }
+  .ssp-rcphead.stack .c { border-top: 1px solid rgba(244,244,241,0.1); border-right: 1px solid rgba(244,244,241,0.1); }
+  .ssp-rcphead.stack .c:nth-child(-n+3) { border-top: 0; }
+  .ssp-rcphead.stack .c:nth-child(3n) { border-right: 0; }
+}
 
 /* Timeline — time / label / desc rows (brew-specific) */
 .ssp-tl { background: #fff; border: 1px solid var(--border); border-top: 0; }

@@ -20,6 +20,7 @@ import {
   SspProseRows,
   StatusPill,
   compactRows,
+  countLabel,
   type MetaPair,
 } from '@/components/Ssp'
 import { CoffeesList } from '@/components/CoffeesList'
@@ -183,7 +184,7 @@ export default async function ProducerDetailPage({ params }: { params: { slug: s
 
       {/* 1. Header */}
       <SspTopBar
-        count={brewCount > 0 ? `${brewCount} COFFEE${brewCount === 1 ? '' : 'S'}` : 'INDEXED'}
+        count={brewCount > 0 ? countLabel(brewCount, 'COFFEE') : 'INDEXED'}
         anchor={country ?? entry?.producerSystem ?? 'Producer'}
         kind="Producer Profile"
       />
@@ -198,7 +199,7 @@ export default async function ProducerDetailPage({ params }: { params: { slug: s
       {/* 2. Decision strip */}
       <div className="ssp-card">
         <SspShead>Decision</SspShead>
-        <SspKVStrip items={decision.map((d) => ({ label: d.label, value: d.value }))} />
+        <SspKVStrip items={decision.map((d) => ({ label: d.label, value: d.value }))} stack />
       </div>
 
       {/* 3. Process signature */}

@@ -17,6 +17,7 @@ import {
   type IdentCell,
 } from '@/components/Ssp'
 import { cleanModifiers, splitModifierLabel } from '@/lib/extraction-modifiers'
+import { getStrategyStyle } from '@/lib/extraction-strategy'
 import { composeHybridSubformLabel } from '@/lib/hybrid-subform'
 import { extractDrawdown, parsePourSteps, pourTimelineRows } from '@/lib/pour-structure'
 import { getFilterDisplayName } from '@/lib/filter-registry'
@@ -211,6 +212,11 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
     proseFields.length > 0 ||
     !!brew.classification
 
+  // Strategy renders with status-pill casing/sizing but keeps the strategy hue
+  // (design-audit 02 Finding 3: strategy is a classification signal, not
+  // content vocabulary — it must read as one row with its status siblings).
+  const strategyStyle = getStrategyStyle(brew.extraction_strategy)
+
   // Roaster row dropped (polish-audit Pass 1): the topbar anchor slot already
   // carries the roaster — topbar = identity, hero meta = differentiation.
   const meta = [
@@ -247,8 +253,8 @@ export default async function BrewDetailPage({ params }: { params: { id: string 
           ...(brew.roast_level
             ? [<StatusPill key="roast" label={`Roast · ${brew.roast_level}`} tone="amber" />]
             : []),
-          ...(brew.extraction_strategy
-            ? [<Chip key="strat" name={brew.extraction_strategy} tone="coral" />]
+          ...(brew.extraction_strategy && strategyStyle
+            ? [<StatusPill key="strat" label={brew.extraction_strategy} hue={strategyStyle} />]
             : []),
         ]}
       />

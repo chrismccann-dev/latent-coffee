@@ -26,7 +26,7 @@ import {
   SspShead,
   SspProseRows,
   compactRows,
-  type MetaPair,
+  countLabel,
 } from '@/components/Ssp'
 import { AdditionalInfo } from '@/components/AdditionalInfo'
 import { DetailBackLink } from '@/components/DetailBackLink'
@@ -95,18 +95,19 @@ export default async function BaseHubPage({ params }: { params: { base: string }
       ])
     : []
 
-  const meta: MetaPair[] = [
-    { label: 'Base process', value: base },
-    { label: 'Coffees', value: `${brewList.length}` },
-  ]
-
   return (
     <div className="ssp-page">
       <DetailBackLink href="/processes">Processes</DetailBackLink>
 
-      {/* Header */}
-      <SspTopBar anchor="Base Process" kind="Process Hub" />
-      <SspNamePlate title={base} meta={meta} coverColor={color} edgeColor={color} />
+      {/* Header — the nameplate meta row was dropped (design-audit 02 Finding 4):
+          BASE PROCESS restated the h1 and the topbar anchor; the coffee count
+          lives in the topbar count slot per the Finding-1 count-home canon. */}
+      <SspTopBar
+        count={countLabel(brewList.length, 'COFFEE')}
+        anchor="Base Process"
+        kind="Process Hub"
+      />
+      <SspNamePlate title={base} meta={[]} coverColor={color} edgeColor={color} />
 
       {/* Process Summary */}
       <div className="ssp-card">
