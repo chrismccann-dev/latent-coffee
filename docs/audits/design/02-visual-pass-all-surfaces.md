@@ -110,6 +110,7 @@ The **best new finding** (and the cheapest real defect) is the producer DECISION
 ### Carried forward (deferred, not new): Producers index grammar + filter chrome (audit-01 Findings 2 + 4)   [HIGH impact]
 - Fresh measurements (2026-07-09): 141 producer cards; page height **21,936px at 1024** and **48,473px at 390** (siblings: 2,400-2,900px); the filter apparatus (6 toggle pills + search field + 3 dropdowns) renders fully expanded at 390 with no `FILTERS ▾` collapse, occupying the screen above the first card; the dossier-card density is unchanged since audit 01.
 - Status: deferred at audit-01 triage pending the sourcing-forward intent decision (audit-01 Open Question 1). Not re-argued here - see Lead recommendation: answer the question and execute, or ratify the divergence explicitly so future audits stop flagging it.
+- **CLOSED 2026-07-09 (Producers index reshape sprint).** Intent answered: the index's job is filtered scanning; dossier reading belongs to the detail page. Default view = Priority targets (23 cards, ~4,300px at 1024), terse single-column cards at `max-w-3xl`, facet row behind `FILTERS ▾` below lg, Needs enrichment demoted to a muted end-of-row pill, Indexed pill dropped. Detail page untouched. See [page-ia.md § Producers](docs/architecture/page-ia.md).
 
 ---
 
