@@ -13,7 +13,7 @@
 | # | Decision | Locked answer |
 |---|---|---|
 | 1 | **Transport** | MCP server hosted by app over HTTP (Next.js API route, `@modelcontextprotocol/sdk` TypeScript SDK). Resources for reads, Tools for writes. |
-| 2 | **Authentication** | **Two paths:** (a) Long-lived **bearer token** in env for desktop MCP clients (`Authorization: Bearer <key>`, single-tenant, single api_keys row, rotate manually). (b) **OAuth 2.1 + PKCE** for claude.ai web (Sprint 3.0, 2026-05-03) — discovery endpoints (`/.well-known/oauth-protected-resource` + `/.well-known/oauth-authorization-server`), `/api/mcp/authorize`, `/api/mcp/token`, static client credentials via Vercel env. Single-tenant + single-user shape collapsed OAuth's heaviest costs (consent UI, scopes, identity) to nothing. |
+| 2 | **Authentication** | **Two paths:** (a) Long-lived **bearer token** in env for desktop MCP clients (`Authorization: Bearer <key>`, single-tenant, single api_keys row, rotate manually) — **fallback only since 2026-07-10, no active client**. (b) **OAuth 2.1 + PKCE** for the claude.ai account-level connector — **the sole active path, all Claude surfaces** (Sprint 3.0, 2026-05-03) — discovery endpoints (`/.well-known/oauth-protected-resource` + `/.well-known/oauth-authorization-server`), `/api/mcp/authorize`, `/api/mcp/token`, static client credentials via Vercel env. Single-tenant + single-user shape collapsed OAuth's heaviest costs (consent UI, scopes, identity) to nothing. |
 | 3 | **Direction** | Bidirectional. App serves canonical taxonomies + living docs (`BREWING.md`, `ROASTING.md`, per-roaster lessons, prompts) as MCP Resources; Claude.ai writes brews + roasts + cuppings + experiments + roast_learnings + Roest profiles directly via Tools and queues prose-doc proposals for Claude Code to apply. |
 | 4 | **Doc storage** | Repo files remain the source of truth. App API serves them from build filesystem. Proposed prose changes land in a `doc_proposals` DB table; Claude Code is the arbiter (batched apply across sessions). Vercel auto-deploys propagate canonical edits back to Claude.ai's view of the docs. |
 | 5 | **Write trust** | **Asymmetric.** Direct write for brews / roasts / cuppings / experiments / roast_learnings (taxonomy-validated, registry-picked, FK-enforced). **Propose-then-apply** for `BREWING.md` / `ROASTING.md` / per-roaster lessons / taxonomy markdown (Claude.ai writes citations referencing specific lines; Claude Code arbitrates in batch via `process pending arbitration`). |
@@ -56,7 +56,9 @@ HTTP transport on Next.js API routes under `/api/mcp/*`. Single server instance 
 
 Two auth paths, both resolve to the same `user_id` for RLS scoping.
 
-**Path A — Bearer token (desktop MCP clients):**
+**Client-registration canon (2026-07-10):** ONE connector, registered at the **claude.ai account level** (custom connector → `https://latent-coffee.vercel.app/api/mcp`, Path B OAuth). It serves every Claude surface — desktop app, Claude Code desktop, Claude Code mobile/cloud, claude.ai web. The former desktop-local registration (`claude_desktop_config.json` → `mcp-remote` shim + Path A bearer key) is **deprecated and removed** — it was invisible to mobile/cloud sessions and duplicated the account-level connector. Path A remains supported server-side as a fallback but has no active client.
+
+**Path A — Bearer token (desktop MCP clients — no active client since 2026-07-10, kept as server-side fallback):**
 ```
 GET /api/mcp/list_resources
 Authorization: Bearer <ANTHROPIC_LATENT_SYNC_KEY>
@@ -67,7 +69,7 @@ Authorization: Bearer <ANTHROPIC_LATENT_SYNC_KEY>
 - **Token expiry (security-review-2026-06 #1, migration 081):** `requireApiKey` rejects any row where `expires_at <= now()`. The hand-issued desktop key has `expires_at = NULL` and is therefore non-expiring (rotate manually).
 - Rotation: invalidate row (`revoked_at`), generate new, paste into client config.
 
-**Path B — OAuth 2.1 + PKCE (claude.ai web):**
+**Path B — OAuth 2.1 + PKCE (claude.ai account-level connector — the sole active path, all Claude surfaces):**
 - Discovery endpoints: `/.well-known/oauth-protected-resource` + `/.well-known/oauth-authorization-server`.
 - `/api/mcp/authorize` → 5-minute auth code (stored in `oauth_authorization_codes`, migration 043). **Owner-pinned (security-review-2026-06 #2): only the session matching `OWNER_USER_ID` may complete the flow; fails closed if that env is unset.**
 - `/api/mcp/token` → mints a fresh `api_keys` row with `expires_at = now() + 1y` (security-review-2026-06 #1), returns it as `access_token`. Auth-code consume is an atomic compare-and-swap (`#6`); client-secret compare is constant-time (`#8`).
