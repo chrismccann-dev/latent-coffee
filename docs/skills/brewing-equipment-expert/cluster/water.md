@@ -114,6 +114,8 @@ Per-coffee custom-water recipes. **The end-state is a library**; this is row one
 |---|---|---|---|---|---|---|---|
 | **Hydrangea Pink Bourbon Washed** (clarity / lime / brown-tea) | **MgCl₂-forward** | ~44 | zero / minimal | minimal / zero | **Avoid calcium**; magnesium is the safe cation | **Straight MgCl₂ @ GH 44** - nothing beat it (best blend 3.0; MgCl₂ solo 3.1; every buffer / Ca / sulfate / full-SBL variant scored lower) | **PROVISIONAL - single-coffee** |
 
+**Optional amplifier (single-sitting; verify on other coffees):** +1 drop/L silica (~12 ppm; ceiling <24) lifted the Pink Bourbon's whole cup + finish (§ 3 silica row) - an **optional** add, NOT baked into the peak. Test on other coffees before generalizing.
+
 **Coffee-dependence gate (why this stays provisional):** the Pink Bourbon is a clarity/citrus coffee, so the **chloride attack** plays to its strength. A **body-wanting coffee could flip** toward sulfate or a MgCl₂+MgSO₄ blend - the anion→phase *interaction structure* (§ 2) is corroborated across RP6 + the 2026 WBC field, but the specific role assignments (and *which phase you want*) are set by the coffee until the 2nd-coffee replication. That is exactly what a 2nd-coffee replication (ideally a body-wanting coffee) verifies. Do not generalize this row.
 
 ---
