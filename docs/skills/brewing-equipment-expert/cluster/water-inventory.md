@@ -2,7 +2,7 @@
 
 **Enforcement bar:** Reference / soft. A **maintained, living inventory** of the water gear, reagents, and concentrates Chris owns - the physical counterpart to [water.md](docs/skills/brewing-equipment-expert/cluster/water.md) (which is the *knowledge*: taxonomy + chart + build method). `water.md` reasons about what's *possible*; this doc records what's *on the shelf*, so the `/brew` water suggestions and any build stay in sync with actual stock.
 
-**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-08 (food-grade MgCl₂ ordered; sections verified against Chris's four source TSVs 2026-07-05). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
+**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-12 (modifier-screen fold: NaCl stock added, KCl→K₂CO₃ correction). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
 
 **Two-tier mineral supply (the load-bearing structure for `/brew`):**
 - **Tier 1 = dry bulk minerals (§ 2)** - the purchased salts. Used to *make stock*, not to dose per brew.
@@ -31,7 +31,7 @@ Hydration form is load-bearing for the GH/KH math (see [water.md § 4](docs/skil
 | **Calcium chloride** CaCl₂·2H₂O | USP crystals/powder | USP | 500 g | Jun 22 | ~273 mg/L Ca + 482 chloride; ~680 ppm GH | hygroscopic → desiccant |
 | **Calcium sulfate (gypsum)** CaSO₄·2H₂O | North Mountain, food-grade | food | 1.5 lb | Jun 22 | ~233 mg/L Ca + 558 sulfate; ~581 ppm GH | **low solubility** - make a dilute stock, verify by EC/GH, don't assume full dissolution |
 | **Potassium bicarbonate** KHCO₃ | Loudwolf-style fine powder | 99% USP food | 1 lb (2 bottles) | Jun 25 | ~391 mg/L K + 610 bicarbonate; ~499 ppm alkalinity | buffer/KH source |
-| **Potassium chloride** KCl | fine powder | 99% food | 8 oz | Jun 29 | ~524 mg/L K + 476 chloride; no GH/KH | *K-as-finish* future track; strong taste - tiny doses |
+| **Potassium chloride** KCl — ⚠️ **NOT IN HAND** | ordered item shipped as **K₂CO₃** (potassium carbonate) - wrong item, return requested 2026-07-12 | — | (8 oz K₂CO₃) | Jun 29 | K₂CO₃ is a caustic carbonate buffer, NOT KCl | **Do NOT use as KCl** (different, alkaline chemistry). Real KCl re-source pending - the K-as-finish remnant arm is blocked on it. |
 | **Sodium chloride** NaCl | Morton Canning & Pickling | pure food | 12 lb (4 lb ×3) | Jun 27 | ~393 mg/L Na + 607 chloride; no GH/KH | salinity/seasoning - late + low |
 | **Silica** (Eidon Liquid Silica) | liquid concentrate, glass dropper | supplement | 2 oz | Jun 29 | ~12.5 mg silica/drop (30 drops = 375 mg); no GH/KH | *silica-as-texture* future track; already liquid - dose by drops, very low; Ca-silica interaction |
 | **Sodium bicarbonate** NaHCO₃ | Bob's Red Mill Baking Soda | food grade | - | - | ~2.71 mg/L Na + 7.19 bicarbonate (see § 3 stock) | the source for the NaHCO₃ stock |
@@ -45,13 +45,14 @@ Made in the Track 2 session, distilled base, 1 g salt in 100 g distilled = **10,
 | Stock | Formula basis | Made | ppm | Per 1 g stock in 1 L water | Role |
 |---|---|---|---|---|---|
 | **MgSO₄ stock** | MgSO₄·7H₂O, 1 g/100 g | 2026-06-28 | 10,000 | ~0.98 mg/L Mg + 3.86 sulfate → **~4.0 ppm GH** | Mg + sulfate (body/sweetness phase) |
-| **MgCl₂ stock** | MgCl₂·6H₂O, 1 g/100 g | 2026-07-01 | 10,000 | ~1.18 mg/L Mg + 3.45 chloride → **~4.87 ppm GH** | Mg + chloride (the bright peak) |
+| **MgCl₂ stock** | MgCl₂·6H₂O, 1 g/100 g | 2026-07-01 (+ fresh batch 2026-07-12, EC 9.32 mS ≡ old 9.31) | 10,000 | ~1.18 mg/L Mg + 3.45 chloride → **~4.87 ppm GH** | Mg + chloride (the bright peak) |
 | **CaCl₂ stock** | CaCl₂·2H₂O, 1 g/100 g | 2026-07-02 | 10,000 | ~2.70 mg/L Ca + 4.77 chloride → **~6.74 ppm GH** | Ca + chloride |
 | **CaSO₄ (gypsum) stock** | CaSO₄·2H₂O, 0.15 g/100 g | 2026-07-03 | 1,500 (dilute) | ~0.35 mg/L Ca + 0.84 sulfate → **~0.87 ppm GH** | Ca + sulfate; **shake - settles invisibly** |
 | **KHCO₃ stock** | KHCO₃, 1 g/100 g | 2026-06-29 | 10,000 | ~3.87 mg/L K + 6.03 bicarbonate → **~4.94 ppm KH** | K buffer / alkalinity |
 | **NaHCO₃ stock** | NaHCO₃, 1 g/100 g | 2026-06-30 | 10,000 | ~2.71 mg/L Na + 7.19 bicarbonate → **~5.89 ppm KH** | Na buffer (from Bob's Red Mill baking soda) |
+| **NaCl stock** | NaCl, 1.002 g/100 g | 2026-07-12 | 10,000 (EC 15.65 mS) | ~3.9 mg/L Na + 6.1 mg/L Cl → no GH/KH | salinity/seasoning (coffee-dependent - no workable dose on the Pink Bourbon; see water.md § 3) |
 
-Not yet stocked: **KCl / NaCl / silica** - future-track reagents (silica is already liquid; make KCl/NaCl stocks from the § 2 dry salts when a track needs them).
+Not yet stocked: **KCl** - real KCl not in hand (the ordered item shipped as K₂CO₃; re-source pending). NaCl now stocked (above); silica is already liquid (Eidon, dose by drops).
 
 ## § 4 - Commercial mineral concentrates
 
@@ -90,6 +91,7 @@ Full gear-chain rationale + the build discipline (precipitation, WATER-vs-CONCEN
 
 ## Update log
 
+- **2026-07-12** - Modifier-screen fold: added the **NaCl 10 k stock** (§ 3) + a fresh MgCl₂-batch note; **corrected the § 2 KCl row → the ordered item shipped as K₂CO₃** (caustic carbonate, NOT KCl - do not use; real KCl re-source pending). Silica + NaCl findings folded to `water.md § 3` (silica = low-dose amplifier, not texture; NaCl = no workable dose on the Pink Bourbon). KCl-as-finish arm deferred to a remnant re-run.
 - **2026-07-08** - Food-grade MgCl₂ ordered (Alliance Chemical FCC/USP hexahydrate, 2 lb) per the second-expert review's R5 safety flag ([review](docs/audits/research/rp6-water-second-expert-review-2026-07-08.md)); reagent-grade bottles marked not-for-drinking, retire on arrival.
 - **2026-07-05** - Fully verified against all four source TSVs. §§ 2-3: MgCl₂ is **two 4 oz bottles** (Jun 20 backup + Jun 25) at **reagent grade**; exact grades / sizes / dates + 1 g/L factors; **added § 3 = the six single-mineral liquid stocks** (the per-brew dosing tier) with their per-1 g-in-1 L GH/KH keys. §§ 4-5 (concentrates + gear) confirmed against the Coffee Water Equipment + Water Concentrates TSVs (added concentrate dosing keys). NaHCO₃ source confirmed: **Bob's Red Mill Baking Soda** (food grade). Inventory now fully reconciled.
 - **2026-07-04** - Seeded at RP6 codification close (v1, from conversation).
