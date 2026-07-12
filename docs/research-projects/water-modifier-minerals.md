@@ -130,7 +130,7 @@ _(Assistant: capture inline. Candidate primitives stay logged for the PROJECT re
 
 **Date:** 2026-07-12
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/modifier-minerals-screen-50873b` @ `<SHA — filled at commit>`, pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/modifier-minerals-screen-50873b` @ `1479f17d6d749ca218043236bed77ecb62138607` (archive commit; one follow-up commit records this SHA), pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** **MIXED — both tested hypotheses resolved decisively, but neither in the predicted shape; HM1 not tested (wrong mineral shipped).**
 
 This brief is the canonical consumption artifact for the Coordinator (end-doc + roadmap + fold plan) and the Execution session (substrate-edit specs). It stands alone; raw data is in § Per-cup scoring above.
@@ -247,7 +247,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/modifier-minerals-screen-50873b` @ `<SHA — filled at commit>` (the authorized archive-persist exception)
+- ✅ Archive doc committed + pushed to branch `claude/modifier-minerals-screen-50873b` @ `1479f17d6d749ca218043236bed77ecb62138607` (archive commit; one follow-up commit records this SHA) (the authorized archive-persist exception)
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
