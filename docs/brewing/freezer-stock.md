@@ -34,7 +34,7 @@
 > freezer") but intentionally NOT backfilled - older freezer coffees may be absent. A miss is
 > normal.
 
-**Total coffees:** 103
+**Total coffees:** 104
 
 ---
 
@@ -700,7 +700,7 @@
 ## Hydrangea Coffee Roasters — Pink Bourbon — Washed — Finca Inmaculada (Fellow Farms Project)
 **Country:** Colombia · **Region/Farm:** Valle del Cauca / Finca Inmaculada · **Producer:** The Holguin Family
 **Variety:** Pink Bourbon · **Process:** Washed · **Elevation:** 1500–1700 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 83.2 (Very light color) · **Status:** Frozen (15g doses)
 **URL:** https://hydrangea.coffee/products/pink-bourbon-washed-finca-inmaculada-fellow-farms-project
 **Notes:** Fellow Farms Project. Notes: hibiscus, plum, lime. Sold out / archived at roaster.
 
@@ -714,14 +714,14 @@
 ## Hydrangea Coffee Roasters — Gesha — Washed 507NWS — Finca Nuguo
 **Country:** Panama · **Region/Farm:** Jurutungo, Chiriquí / Finca Nuguo · **Producer:** José "Pocho" Gallardo
 **Variety:** Gesha · **Process:** Washed (507NWS) · **Elevation:** 1800–1950 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 72.9 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://hydrangea.coffee/products/gesha-washed-finca-nuguo
 **Notes:** 507NWS lot. Fermented pulped 48hr at Nuguo, then dried in a controlled room in David (from Feb 21, 22°C). Notes: bergamot, white peach, jasmine. Sold out / archived.
 
 ## Hydrangea Coffee Roasters — Sudan Rume — Natural XO — Finca Las Margaritas (CGLE)
 **Country:** Colombia · **Region/Farm:** Valle del Cauca / Finca Las Margaritas (Café Granja La Esperanza) · **Producer:** Rigoberto & Luis Eduardo Herrera (CGLE)
 **Variety:** Sudan Rume · **Process:** Natural "XO" (extended natural — flotation + Brix-gated, 70hr GrainPro ferment rotated every 5hr) · **Elevation:** 1570–1850 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 67.0 (Medium light color) · **Status:** Frozen (15g doses)
 **URL:** https://hydrangea.coffee/products/sudan-rume-natural-xo-las-margaritas-cafe-granja-la-esperanza
 **Notes:** First Sudan Rume offered in CGLE's XO style. Notes: violet, strawberry, sangria — wine-like structure. Same farm as the plain Natural and Hybrid Washed CGLE Sudan Rume lots. Sold out / archived.
 
@@ -742,8 +742,8 @@
 ## Airworks / Still — Komothai Kanake (Red Earth)
 **Country:** Kenya · **Region/Farm:** Kiambu County / Komothai (Kanake) · **Producer:** —
 **Variety:** SL28, SL34, Ruiru 11, Batian · **Process:** Washed
-**Agtron:** pending · **Status:** Resting (agtron pending)
-**Notes:** ⚠️ No product URL / sparse spec (producer + elevation pending) — enrich when available. "Red Earth" lot, roasted by Still (via Airworks). Roaster notes: blackcurrant, grape, berries, hibiscus, black tea, apricot. Clarity-First likely (traditional Kenyan washed SL blend).
+**Agtron:** 71.6 (Light color) · **Status:** Frozen (15g doses)
+**Notes:** ⚠️ No product URL / sparse spec (producer + elevation pending) — enrich when available. "Red Earth" lot, N.04, roasted by Still (bag: STILL & AIRWORKS; not on stillcoffeeroasters.com). Roasted 24/05/26. Roaster notes: blackcurrant, grape, berries, hibiscus, black tea, apricot. Clarity-First likely (traditional Kenyan washed SL blend).
 
 ## Big Sur Coffee — Ethiopia Washed Faysel Abdosh Single Farm Premium — Guji Shakisso
 **Country:** Ethiopia · **Region/Farm:** Welabo, Oddo Shakisso, Guji / Faysel Abdosh Single Farm · **Producer:** Testi Specialty Coffee (Faysel Abdosh)
@@ -751,3 +751,10 @@
 **Agtron:** pending · **Status:** Resting (agtron pending)
 **URL:** https://bigsurcafe.com/products/25-26-new-season-ethiopia-washed-faysel-abdosh-single-farm-premium-150g
 **Notes:** Harvest Dec 11 2025. Notes: white florals, citrus, bergamot, peach. Testi Single Farm Project (launched 2025) — centerpiece of the Private Collection Auction Series; clean/transparent/elegant. Same producer (Faysel Abdosh / Testi) as the Big Sur Triple Fermentation + Sewda + Gara Agena lots — comparison family. Clarity-First (washed heirloom).
+
+## SEY Coffee × Bay Area Coffee Club — Frank Aroste — Washed Gesha — Peru
+**Country:** Peru · **Region/Farm:** Santa Ana, Cusco · **Producer:** Frank Aroste
+**Variety:** Gesha · **Process:** Washed · **Elevation:** 2100 m
+**Agtron:** 77.5 (Light color) · **Status:** Frozen (15g doses)
+**URL:** https://www.instagram.com/p/DYGUnk6CTqo/
+**Notes:** ⚠️ No web-store page — Bay Area Coffee Club exclusive collab (Instagram only). Very young producer, small extreme-elevation Gesha garden. Harvest Nov 2025. Farm gate $25.26/kg green. Notes: pomelo, jasmine, bergamot, melon. Second Cusco Gesha in inventory (cf. Prodigal Caminos del Inka).
