@@ -92,7 +92,7 @@ Then draft the V1 **experiment frame** - six fields, authored before any roastin
 
 | Field | Content |
 |---|---|
-| `context` | What prompted this V-set. For V1: "First V-set on this lot - exploring response surface broadly." |
+| `context` | What prompted this V-set. For V1: "First V-set on this lot - exploring response surface broadly." **State the anchor confidence explicitly (backlog #10)**: name what the spread is anchored on and how much you trust it - e.g. "anchored on <prior lot>'s `starting_hypothesis` (High - same cultivar + process)" or "no usable carry-forward anchor (Low) - spread widened accordingly." |
 | `primary_question` | What V1 is asking - should be broad on a first V-set ("Where does this coffee's window sit across [variables]?"), not a single-variable narrowing question. |
 | `control_baseline` | If there's a reference peer from another roaster or another similar lot, cite it here. Optional on V1. |
 | `shared_constants` | Charge temp (V4 standard 117°C), hopper pre-load temp (V4 standard 125°C), preheat air (210°C), fan curve, RPM, drum direction. These are held still across V1's slots. |
@@ -112,7 +112,7 @@ Concretely for V1:
 - The point of V1 is to *find the response surface*, not to narrow on it. The cup deltas across V1a / b / c teach which axis is the lever - V2 then narrows on that lever.
 - V2 stays wide-ish when V1's signal was ambiguous (still in search space); only V3+ commits to single-variable narrowing.
 
-Carry-forward learnings from prior similar lots inform V1's central estimate (where to anchor the spread), not its width. A new cultivar + new processing combination = anchor-with-low-confidence, widen the spread.
+Carry-forward learnings from prior similar lots inform V1's central estimate (where to anchor the spread), not its width. A new cultivar + new processing combination = anchor-with-low-confidence, widen the spread. Anchor confidence scales with attribute overlap: same cultivar + same process + similar altitude = High (anchor tight, spend the slots probing around the anchor); one axis overlapping = Medium (anchor the center, keep the spread wide); no prior overlap = Low (the anchor is a guess - widest spread, the frame's `context` says so).
 
 ## STAGE 3 - Write the V1 experiment row + the three recipe rows
 
@@ -135,7 +135,7 @@ Three writes pair up here. **Do all three or the page surface breaks.**
 - `end_condition_target`: °C when `bean_temp`, seconds when `dev_time`, null when `manual`.
 - `charge_temp`, `hopper_load_temp`, `preheat_temperature_c`.
 - Design-time predictions (frozen at recipe creation, NOT updated after seeing actuals): `predicted_fc_temp`, `predicted_fc_time` (mm:ss), `predicted_total_time` (mm:ss), `predicted_maillard_pct`, `predicted_agtron_wb`, `predicted_cup` (1-2 sentences - the cup prediction at design time; post-roast re-prediction lives on `experiments.updated_cup_prediction_*`, not here).
-- Drop rules: `drop_rule_if_fast` ("what to do if end-condition fires before predicted total"), `drop_rule_if_slow` ("what to do if total overruns without hitting end-condition"). Both render in the Drop Rules card.
+- Drop rules: `drop_rule_if_fast` ("what to do if end-condition fires before predicted total"), `drop_rule_if_slow` ("what to do if total overruns without hitting end-condition"). Both render in the Drop Rules card. **REQUIRED per slot (backlog #40) when the experiment varies `end_condition_target`, varies a lever with per-slot pre-FC/stall divergence, or leaves slots at different fast/slow risk** - they are the day-of manual-override runbook; skipping them defeats design-intent-frozen-at-creation. Optional only when every slot shares one end condition and one risk profile.
 
 (c) `push_roast_profile(payload)` × N - same beziers as (b), writes to Roest tablet only. Returns `profile_id` + `share_url`. Pass `enable_share: true`.
 

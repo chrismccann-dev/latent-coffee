@@ -7,7 +7,7 @@ client-agnostic and composed via `read_doc`. The former `log-brew.md` +
 Use when a PURCHASED brew is finished. **HARD GATE — STOP before STEP 1
 if this brew is self-roasted.** Self-roasted brews (`roaster: "Latent"`,
 or brewed from a coffee with a `green_bean_id` in the Latent app) push via
-`close-lot.md` STAGE 4 as part of lot close-out — NOT through this prompt.
+`close-lot.md` STAGE 3 as part of lot close-out — NOT through this prompt.
 A push_brew here on a self-roasted lot creates an orphan brew row that the
 architecture explicitly routes elsewhere. Recovery from accidental push:
 patch_brew to update the row, but prefer not pushing in the first place.
@@ -51,14 +51,14 @@ brew): link regardless of cup quality. (The Optimized Brew Packet emitted by
 NOT stop at the gate - run STEP 1 push_brew as normal (`source:
 "self-roasted"`, `roaster: "Latent"`, `green_bean_id` + `roast_id` of the
 single/reference roast both set), then emit the closing handoff line at the end
-of this prompt so `close-lot.md` STAGE 4 (V-set) / `one-shot-closeout.md` STAGE
+of this prompt so `close-lot.md` STAGE 3 (V-set) / `one-shot-closeout.md` STAGE
 3 (one-shot) LINKS the brew via `green_beans.optimized_brew_id` instead of
 re-pushing it. All OTHER self-roasted brews still STOP at the gate
 above and route to close-lot - the carve-out is narrow and operator-declared
 (one brew, at lot resolution), so it does not reopen the orphan-row hazard the
 gate guards against; this brew is the most-linked row in the system, not an
 orphan. **Invariant: pushed exactly ONCE (here) and linked exactly ONCE
-(close-lot STAGE 4).** This thread pushes the brew row; close-lot only LINKS it
+(close-lot STAGE 3).** This thread pushes the brew row; close-lot only LINKS it
 via `optimized_brew_id` and must NOT re-push. Never push on both sides - that
 creates a duplicate brew row.
 
@@ -213,13 +213,22 @@ Most likely targets (all brewing-side learnings now live in cluster docs):
     wbc-recipes.md / wbc-recipes-by-family.md) for WBC reference updates
   - target_doc="skills/ccil/cluster/coffee/<cultivar-slug>/across-roasting-and-brewing.md"
     for cross-domain (roasting + brewing) patterns
-  - target_doc="roaster/<Canonical Roaster Name>" for roaster card updates
+  - target_doc="roaster/<Canonical Roaster Name>" for roaster card updates.
+    **Net-new roaster cards (backlog #50):** when a canonical roaster has no
+    existing card section in docs://brewing/roasters.md yet, do NOT target the
+    roaster's own (non-existent) section_anchor - preflight returns
+    unresolved-anchor + a closest_match pointing at a DIFFERENT roaster. Instead
+    append after the LAST existing card section (or to the file-level h1 anchor),
+    with proposed_text carrying the full new `## <Roaster>` header + card body.
+    An append op accepts new H2+ headers in its proposed_text - they land as new
+    sections positioned relative to the subsequent section boundaries (backlog
+    #45b); that mechanism is exactly how a net-new card is created.
 
 STEP 3 - closing handoff (optimized/reference-brew carve-out ONLY; skip for
 ordinary purchased brews). If this brew was the optimized/reference brew per the
 carve-out above, after STEP 1 + STEP 2 emit one plain-text line I can paste into
 the roasting thread: `Optimized brew pushed: brew_id=<id from STEP 1> for lot
-<green_bean_id or lot_id>. Paste into close-lot.md STAGE 4 (V-set) or
+<green_bean_id or lot_id>. Paste into close-lot.md STAGE 3 (V-set) or
 one-shot-closeout.md STAGE 3 (one-shot) to set green_beans.optimized_brew_id
 (link, do not re-push).` Setting the FK itself is the close-out prompt's job,
 not this prompt's - this thread only pushes the brew and hands back the id,

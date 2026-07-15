@@ -14,7 +14,7 @@ Cross-domain dispatch chains where a single operator workflow spans multiple sub
 
 **Status:** ACTIVE post Wave 3 PR 3 (Cupping Specialist + Brewing Assistant + Brew Recorder + Close-Lot Specialist all ACTIVE).
 
-Today this still lives in `close-lot.md` STAGE 4 as manual paste-by-brew_id-reference at the prompt surface; under the hood, dispatch flows through the chain below. Prompt subsumption is a future cleanup sprint per scope decision 2.
+Today this still lives in `close-lot.md` STAGE 3 (the link stage - moved ahead of the roast_learnings write 2026-07-15, backlog #42) as manual paste-by-brew_id-reference at the prompt surface; under the hood, dispatch flows through the chain below. Prompt subsumption is a future cleanup sprint per scope decision 2.
 
 ```
 Cupping Specialist (executes Day-7 cupping)

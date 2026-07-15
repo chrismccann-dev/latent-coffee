@@ -162,7 +162,7 @@ Skip slots where these fields already populated.
 
   Skip slots that genuinely weren't roasted in V_n (e.g. only v1a/v1b roasted, c skipped).
 
-Optional: also update `key_insight` / `key_insight_confidence` / `what_changes_going_forward` / `open_questions` / `additional_notes` if the roast-side actuals alone already reveal something insightful (rare at the post-roast stage; usually wait for cupping data). When set, use the `key_insight_confidence` ladder documented in `log-cupping.md` STAGE 3.
+Optional: also update `key_insight` / `key_insight_confidence` / `what_changes_going_forward` / `open_questions` / `additional_notes` if the roast-side actuals alone already reveal something insightful (rare at the post-roast stage; usually wait for cupping data). When set, use the `key_insight_confidence` ladder documented in `log-cupping.md` STAGE 4.4 (canonical home: `CONTEXT-roasting.md -> Key-insight confidence ladder`).
 
 The `winner` field stays NULL until Day 7 cupping resolves it. `log-cupping.md` declares the leading slot for V_n.
 
