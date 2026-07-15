@@ -1,6 +1,6 @@
 # Workflow-Feedback Backlog
 
-*Last updated: 2026-06-20 (Round 25 — filed #57 patch_green_bean required-set + #58 SPG-lifecycle prompt drift, both from the AN10 V1 cupping/SPG dogfood; partial-build note added to the #22 lifecycle entry). Prior 2026-06-15: write-path-hardening sprint SHIPPED - #54 op/operation alias + #56 push_brew FK-inherit + #46 patch_inventory pre-load hint removed; #52 resolved-by-side-effect of the 2026-06-13 schema-compat ship; Round 24 filed #53-#56.)*
+*Last updated: 2026-07-15 (plan-feedback pass — claude.ai surface fully deprecated per Chris: Bucket C escalation + #49 + #51 + the Round-1 #5/#6 intermittents RETIRED; fc_audibility data-patch UNBLOCKED (migration 079 verified applied via `check:migrations`); #57 sub-issue (b) mooted by the 2026-07-10 single-connector canon + root cause pinned to the `numField` `z.preprocess` wrapper. Prior 2026-06-20: Round 25 filed #57 + #58; partial-build note on #22.)*
 
 The **actionable** subset of workflow feedback — the items that need a *build* (prompt
 fix / MCP fix / schema / UI / architecture), not just a route-and-forget filing.
@@ -43,7 +43,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** arch (schema/lifecycle)
 - **Recurrence:** 5+ (Gesha Clouds V3, 2nd SPG lot, Bukure V2; reinforced by the one-shot defer-verdict gap #30 and the deferred-proposals gap below)
 - **Criticality:** high
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md](../sprints/lifecycle-spg-reconciliation-grilling-kickoff.md))
 - **Source:** master log #22 (Round 17), reinforced #30 (Round 18)
 - **Body:** When SPG (Simulated Pourover Gate) / any C-path calibration gate fires mid-V-set, the lot sits in a state distinct from both "winner declared" and "advance to V_(n+1)" — winner null, brew-side confirmation pending. Only encoded in prose today. Candidates: `lifecycle_state` enum (`waiting_for_spg`) on experiments, or a lightweight `gates` table `(green_bean_id, gate_type, status)`. This is the **lifecycle-gate-not-modeled meta-pattern** — the single highest-recurrence theme in the backlog; it spans V-set (SPG) AND one-shot (defer-verdict) paths. Tagged in `issues.md` as a Lot Coordinator + V-Set Assistant sprint concern.
   - **Partial build (2026-06-20, AN10 dogfood):** migration-080's stored `waiting_for_brewing` state is now the de-facto SPG-handoff home (the lot sits there while the brew-side SPG runs) and is wired end-to-end. It's not a `waiting_for_spg`-specific state — it conflates SPG with optimized-brew — but it does give the gate a queryable, rendered home, partially addressing this entry. The remaining gap is the SPG-specific distinction + the winner-sentinel fooling the derivation (see the new prompt entry below). The prompt drift it created is filed separately under prompt/doc-touch.
@@ -52,7 +52,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** arch (workflow/lifecycle)
 - **Recurrence:** 2 (Round 17; echoes an earlier log-roast partial-proposal flag)
 - **Criticality:** high
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md](../sprints/lifecycle-spg-reconciliation-grilling-kickoff.md))
 - **Source:** master log #23 (Round 17)
 - **Body:** `log-cupping.md` STAGE 6's binary skip/propose during a gate defers ALL doc proposals to post-SPG re-entry, including cupping-INDEPENDENT ones that could land now (the V_n status flip, SPG-independent cup findings, a CCIL violation). Consequence: the active-lot doc reads "designed/pushed, not roasted" when it was in fact cupped. Needs a real-time partial-write rule + an explicit "deferred proposals" queue concept. Pairs tightly with the SPG lifecycle-state item.
 
@@ -83,16 +83,12 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Recurrence:** 1 (Round 25 / AN10 SPG handoff, 2026-06-20)
 - **Criticality:** med
 - **Source:** master log #57 (Round 25)
-- **Status:** open
-- **Body:** `patch_green_bean` is a field-level mutation ("only fields you supply are updated") yet the typed `eeaa2042` registration marks SIX fields `required` — `green_bean_id` + `price_per_kg` + `quantity_g` + `elevation_m` + `roast_priority` + `roest_inventory_id` — so a `lot_status`-only change forces collateral writes AND a `roast_priority` null-clobber (the auto-mode classifier correctly blocked it as unconsented data loss). The `latent-coffee` registration of the same tool requires ONLY `green_bean_id` (that was the clean path used to set AN10's `waiting_for_brewing`). Two distinct problems: (a) a patch tool shouldn't require unrelated fields — the 5 over-required fields are almost certainly `.nullable()` without `.optional()` in the zod schema (nullable ≠ optional → published as required); make them `.optional().nullable()` so the required set collapses to `[green_bean_id]`; (b) the two registrations publish divergent `required` arrays. Sibling of #52 (same "MCP schema publication" family — #52 was the type-axis, resolved 2026-06-13 by [schema-compat.ts](lib/mcp/schema-compat.ts); this is the required-axis, which that fix did not touch).
+- **Status:** planned (2026-07-15 — [docs/sprints/mcp-required-axis-fix-kickoff.md](../sprints/mcp-required-axis-fix-kickoff.md))
+- **Body:** `patch_green_bean` is a field-level mutation ("only fields you supply are updated") yet the typed `eeaa2042` registration marks SIX fields `required` — `green_bean_id` + `price_per_kg` + `quantity_g` + `elevation_m` + `roast_priority` + `roest_inventory_id` — so a `lot_status`-only change forces collateral writes AND a `roast_priority` null-clobber (the auto-mode classifier correctly blocked it as unconsented data loss). Sibling of #52 (same "MCP schema publication" family — #52 was the type-axis, resolved 2026-06-13 by [schema-compat.ts](lib/mcp/schema-compat.ts); this is the required-axis, which that fix did not touch).
+  - **Root cause pinned (2026-07-15 plan-feedback pass, code-verified):** the 5 over-required fields are exactly the `numField(...)` fields in [lib/mcp/coerce.ts](lib/mcp/coerce.ts) — the inner schema IS `.optional().nullable()`, but it sits inside a `z.preprocess(...)` wrapper, and the optionality doesn't propagate to the published object-level `required` array. Fix direction: make preprocess-wrapped optional fields publish as optional (wrap-order fix in `numField`/`boolField`, or extend `schema-compat.ts` to strip them from `required`). Affects every Tool using `numField`/`boolField`, not just patch_green_bean — audit the family in the same pass.
+  - **Sub-issue (b) MOOT (2026-07-15):** the "two registrations publish divergent `required` arrays" facet dissolved with the 2026-07-10 connector canon — the desktop-local `latent-coffee` registration is deprecated/removed; the single account-level connector is the only registration. Only facet (a) remains.
 
-### `patch_roast` + `read_doc_section` intermittent execute-after-search failures
-- **Shape:** mcp (infra)
-- **Recurrence:** 2 (patch_roast + read_doc_section, same session; "surfaced in tool_search but errored on execution")
-- **Criticality:** med
-- **Status:** open
-- **Source:** master log Round 1 #5 + #6
-- **Body:** Tool resolves in search, errors on execution, succeeds on retry. Same signature on two tools → likely a deployment/cold-start class, not call-content. Needs Vercel-logs investigation at next pause (request IDs captured in the log).
+> **Retired 2026-07-15 (claude.ai-era stale):** `patch_roast` + `read_doc_section` intermittent execute-after-search failures (master log Round 1 #5 + #6). Observed once on the claude.ai client in Round 1; zero recurrence across 24 subsequent rounds, and the claude.ai surface is now fully deprecated. Re-file only if the signature recurs on a Claude Code session (the server-side cold-start hypothesis would then be back in play).
 
 ### `push_cupping` body-length error (awaiting failure capture)
 - **Shape:** mcp
@@ -136,13 +132,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Source:** master log #38 (Round 21)
 - **Body:** Apply the accept-and-warn/closest_match pattern to `experiment_id` reuse — warn when an experiment_id is reused with a different green_bean_id (catches cross-lot copy-paste). Extends the shipped #28a accept-and-warn work.
 
-### push_brew tool_search ranking boost
-- **Shape:** mcp (tool-discovery ranking)
-- **Recurrence:** 1 (Round 22 Item 1)
-- **Criticality:** low
-- **Status:** open
-- **Source:** master log #49 (Round 22)
-- **Body:** Both `push_brew` (literal) and "INSERT CREATE new brew row primary write path" (descriptive) initially returned the tool with the *wrong parameter set*; two searches with full descriptive phrasing needed to load the correct schema. Pre-warm in bundled-brewing-completion.md prevents an empty-recall loop but the mis-ranking still burns one tool_search. Ask: keyword boost on push_brew when query tokens "new brew row" / "primary write path" are present. Distinct from #46 (wrong-result ranking, not latency). Part of catch-time→hint-time cluster (with #51).
+> **Retired 2026-07-15 (claude.ai surface deprecated):** push_brew tool_search ranking boost (master log #49, Round 22). The mis-ranking was observed on the claude.ai client's tool_search; brewing is now 100% Claude Code (`/brew` skill, retired claude.ai brewing 2026-06-18) and the bundled-brewing-completion pre-warm covers discovery. Re-file if Claude Code's ToolSearch shows the same wrong-parameter-set recall.
 
 ### Net-new per-lot file-registration ticket lives outside the MCP write surface — make it trackable
 - **Shape:** arch (schema/surface) + mcp
@@ -159,14 +149,14 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Recurrence:** 2 (Round 25 / AN10 V1 SPG handoff + SPG return, 2026-06-20/21 — two distinct Path C-2 prompt-vs-schema mismatches in one V-set)
 - **Criticality:** med
 - **Source:** master log #58 (Round 25)
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md](../sprints/lifecycle-spg-reconciliation-grilling-kickoff.md))
 - **Body:** Path C-2's prose has drifted from the current schema in two places; reconcile both in one pass. **(1) lot_status flip:** Path C-2 says "state stays Waiting for next cupping" on an SPG handoff, but migration-080 added a stored `waiting_for_brewing` state now wired end-to-end (green index section + `--tile-brewing` color + "In brewing" label + `green/[id]/page.tsx:200` render branch reusing `WaitingForNextCuppingView` + the `check:lifecycle-consistency` designed exception `stored=waiting_for_brewing` / `derived=waiting_for_next_roast`). Leaving `lot_status` at `waiting_for_next_cupping` actually REDDENS the consistency cron — the `"deferred pending SPG"` winner sentinel pushes derived → `waiting_for_next_roast`, so only `waiting_for_brewing` lands the designed exception. Fix: Path C-2 should flip `lot_status` → `waiting_for_brewing` at the SPG / optimized-brew handoff (re-entry still via log-cupping). Catches the prompt up to a state that now exists — see the partial-build note on #22. **(2) SPG-note field doesn't exist:** Path C-2 says SPG recipe metadata "goes in `additional_notes` … `SPG: brewed alongside <finalist sibling roast_id> at <recipe>`," but the **cuppings table has no `additional_notes` column** (`push_cupping` exposes no such field). On the AN10 SPG return the per-finalist recipe + sibling pairing was routed to the *experiment's* `additional_notes` instead, and `eval_method: 'Simulated Pourover'` already makes the SPG cups queryable. Fix: pick one and update Path C-2 to match — (a) point it at the experiment `additional_notes` and lean on `eval_method` as the grep key, (b) add a `cuppings.additional_notes` column, or (c) name a real cupping prose field (`overall` / `structural_behavior`) for the canonical phrasing. Both facets share one root: Path C-2 prose written independent of the migration-080 + cuppings schema reality.
 
 ### Anchor-confidence framing in new-bean-intake (now `start-lot.md`)
 - **Shape:** prompt
 - **Recurrence:** 1
 - **Criticality:** low
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #10 (Round 2 claude.ai #5)
 - **Body:** Fold anchor-confidence framing into the V1-design template. Note: `new-bean-intake.md` was replaced by `start-lot.md` in the 4-prompt rewrite — retarget on action.
 
@@ -182,7 +172,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** prompt
 - **Recurrence:** 1 (Round 21 S5)
 - **Criticality:** med
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #40 (Round 21)
 - **Body:** log-roast/start-lot STAGE 6 should mark drop_rule_if_fast/slow required per slot when the experiment varies end_condition_target, varies a lever with per-slot pre-FC/stall divergence, or leaves slots at different fast/slow risk. They're the day-of manual-override runbook; skipping defeats design-intent-frozen-at-creation. Pairs with #37 (surface drop rules pre-roast).
 
@@ -190,7 +180,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** prompt (sub-rule)
 - **Recurrence:** 1 (Round 21 S2#5)
 - **Criticality:** low
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #41 (Round 21)
 - **Body:** When a prior session seeded a Low-confidence pending-cup CCIL entry and this session resolves it, prefer REPLACE on the existing entry (bump confidence, drop provisional hedges, add resolution evidence) over creating a new entry. Part of the doc-write-ergonomics cluster.
 
@@ -198,7 +188,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** prompt (workflow ordering)
 - **Recurrence:** 1 (Round 21 S6#3)
 - **Criticality:** med
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #42 (Round 21)
 - **Body:** Brewing dial-in can surface insights (honeycomb) that invalidate roast_learnings carry-forward written seconds earlier; the SPG packet doesn't always predict them. Fix: re-order STAGE 4 (link+read brew) before STAGE 3 (push roast_learnings), OR add a formal STAGE 4.5 patch step.
 
@@ -206,7 +196,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** prompt (clarification)
 - **Recurrence:** 1 (Round 21 S6#4-6)
 - **Criticality:** low
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #43 (Round 21)
 - **Body:** Three ambiguities: (a) when auto-split fires, does it produce one call per (target_doc, section_anchor) globally or still bundle within-target_doc citations; (b) active-lot soft-retire "empty-replace working-hypothesis prose body" = H1 status-block region (H2 preserved) vs each H2 body — operator chose (a), preserve H2 as historical/cross-ref anchors; (c) STAGE 2 should ask the operator to confirm drop attribution when end_condition_type=manual pairs with a drop temp meaningfully under the designed bean_temp trigger (Batch 194 provisional).
 
@@ -214,7 +204,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** prompt
 - **Recurrence:** 1 (Round 21 S2#2, S2#4, S3#3, S3#4, S3#6)
 - **Criticality:** low
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #44 (Round 21)
 - **Body:** Five small prompt additions: Path A affirmative-confirmation line ("✓ N V-sets / ✓ xbloom / ✓ SPG cup-set"); key_insight_confidence ladder worked example (Medium-High requires N≥3 within-lot OR N≥2 cross-lot + falsifier); cooling_arc_pattern per-value example each (esp. flat-vs-hold); "on re-entry from a calibration gate, re-assess the candidate flag"; "control experiment can be a single-variable sweep within an identified lever."
 
@@ -222,7 +212,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** prompt (schema-note + doc)
 - **Recurrence:** 1 (Round 21 S2#1 note-part, S2#6)
 - **Criticality:** low
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #45 (Round 21)
 - **Body:** (a) tighten the cupping schema-note to specify WHERE the SPG free-text note goes ("SPG flag in `overall`, freetext-prefixed"); (b) document in propose_doc_changes notes that an append op accepts new H2+ headers in the text — they land as new sections positioned relative to subsequent section boundaries. Part of the doc-write-ergonomics cluster.
 
@@ -230,7 +220,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** prompt (rule clarification)
 - **Recurrence:** 1 (Round 21 S1#4)
 - **Criticality:** low
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #47 (Round 21)
 - **Body:** Does a single hypothesis replicated across two one-shots (full-energy + 125°C-hopper correction; warm-peak/cool-degrade) earn a CCIL contribution at one-shot close-out, given the "Medium-High or High required" rule + the "single-lot Low shouldn't push to CCIL" rule? Conservative move taken (held in general_takeaway). Judgment territory — needs an explicit rule line.
 
@@ -238,23 +228,17 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** prompt (operational-guide / brewing-completion spec)
 - **Recurrence:** 1 (Round 22 Item 2)
 - **Criticality:** low
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #50 (Round 22)
 - **Body:** Adding a brand-new roaster card (no existing section) wasn't obvious from the operational-guide spec; targeting a non-existent `section_anchor` got an unresolved-anchor + a closest_match pointing at a *different* roaster. Preflight surfaced it fast (working as intended). Ask: spec line — "for net-new roaster cards, append after the last existing card section, or to the file-level h1 anchor." Sibling of #34/#45; part of the doc-write-ergonomics cluster.
 
-### initial brief should fetch live substrate, not project-uploaded snapshot
-- **Shape:** prompt (brief-step guardrail)
-- **Recurrence:** 1 (Round 22 Item 3)
-- **Criticality:** med
-- **Status:** open
-- **Source:** master log #51 (Round 22)
-- **Body:** v1 strategy reasoning referenced the project-uploaded Brewing_v8_4.md snapshot (no Terraform card); live taxonomy roasters.md already had the Terraform Coffee Roasters card. End-of-brew workflow caught it via live-fetch; the *initial* brief did not. Reinforces the standing rule "current_text for replace ops must be fetched live immediately before drafting — never from project-uploaded files." Ask: brief-generation guardrail so the upfront brief fetches live too. Part of catch-time→hint-time cluster (with #49).
+> **Retired 2026-07-15 (claude.ai surface deprecated):** initial brief should fetch live substrate, not project-uploaded snapshot (master log #51, Round 22). "Project-uploaded files" are a claude.ai-project concept; Claude Code sessions read the repo/live docs directly, so the stale-snapshot failure mode has no surface anymore. The standing rule "fetch current_text live immediately before drafting" survives in memory and still applies.
 
 ### close-lot/one-shot-closeout STAGE 5 resume-after-compaction note
 - **Shape:** prompt
 - **Recurrence:** 1 (Round 24 / Item 1)
 - **Criticality:** med
-- **Status:** open
+- **Status:** planned (2026-07-15 — [docs/sprints/roasting-prompt-hygiene-batch-kickoff.md](../sprints/roasting-prompt-hygiene-batch-kickoff.md))
 - **Source:** master log #53 (Round 24)
 - **Body:** A mid-close-out compaction + trigger re-send can naively re-run STAGES 1-4 (re-patch the reference roast, re-push roast_learnings, re-issue Calls 1-2). All idempotent (roast_learnings UPSERT, proposal auto-supersede per (target_doc, section_anchor), patch_* echoes) so re-run is safe but wasteful/noisy. Ask: a one-line "resuming a partially-completed close-out" preamble in close-lot.md / one-shot-closeout.md STAGE 5 — check roast_learnings existence + existing proposal_ids by (target_doc, section_anchor) before re-issuing. The data model already tolerates it; the guidance makes resume explicit. Part of the resume-safety / idempotency-is-implicit cluster (with #55 — the one non-idempotent seam).
 
@@ -280,17 +264,11 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 - **Shape:** schema (data-patch)
 - **Recurrence:** 1 (Round 21 S2#1 + S6#7)
 - **Criticality:** low
-- **Status:** open (actionable — `eval_method='Simulated Pourover'` migration is live, confirmed S3#2)
+- **Status:** planned (2026-07-15 — folded into [docs/sprints/mcp-required-axis-fix-kickoff.md](../sprints/mcp-required-axis-fix-kickoff.md) as the live-verification step: patch_cupping cannot change its own composite-key `eval_method` today, so the tool gains a `cupping_id` key-field path first)
 - **Source:** master log #48 (Round 21)
 - **Body:** Two pre-migration SPG cuppings (`a3946b27-6a9d-405f-b49c-c4920b85c0af` + `d8f814c8-3976-4018-b93f-86c4240873b5`) carry the SPG flag in recipe_variant/overall and should be patched to the canonical `eval_method` field now the migration is live.
 
-### Data-patch: fc_audibility ambiguous → did_not_fire backfill (Batch 193 + Wush Wush V2 206/207/208) (blocked on migration 079)
-- **Shape:** schema (data-patch)
-- **Recurrence:** 2 (Round 21 S2#7 — residual of #35, which itself SHIPPED PR #409; + Wush Wush V2 surfaced 2026-06-15 arbiter session, #445)
-- **Criticality:** low
-- **Status:** open (triggered — blocked until Chris pastes migration 079 into the SQL Editor)
-- **Source:** master log #35 (Round 21); Wush Wush V2 via doc-proposal 774fa01c
-- **Body:** Batch 193 `f4ef106f` needs fc_audibility ambiguous→did_not_fire via patch_roast; blocked until migration 079 lands in PROD, and requires fc_start/fc_temp/dev_time_s NULL on the row first (068 triple-null co-rule). The #35 constraint-drift fix shipped; this is just the data row waiting on the migration paste. **Second instance:** the BRA-FAZENDAUM-WUSHWUSH-NAT-2026 V2 batches 206/207/208 all dropped at bean-temp targets with FC never firing — pushed as `fc_audibility='ambiguous'` and want the same ambiguous→did_not_fire patch under the same migration-079 + 068-co-rule conditions. (Note: the V2 active-lot doc + proposal 774fa01c reference "migration 066" for the enum value, but 066 already landed 2026-05-24 — the live blocker is 079 + the triple-null co-rule, same as Batch 193.)
+> **Shipped 2026-07-15 (plan-feedback pass, no PR — MCP data patches):** fc_audibility ambiguous → did_not_fire on Batch 193 (`f4ef106f`, Bukure RWA-NOVA-NAT21-RB-2026) + Wush Wush V2 batches 206/207/208 (`13cbc569` / `18afda8a` / `58324a4b`). Migration 079 verified applied via `check:migrations` (84/84); all four rows had fc_start/fc_temp/dev_time_s already NULL (068 co-rule satisfied); patched via `patch_roast`, `updated_fields:["fc_audibility"]` echoed on all four — which also live-verified 079's constraint accepts `did_not_fire` (the original #35 rejection).
 
 ---
 
@@ -299,7 +277,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 These were triaged to non-build homes; kept as one-liners so recurrence is visible if they
 resurface (per the route-feedback dedup rule). Full detail in the master log.
 
-- **claude.ai client approval-gating** (master log #14 / #15 / #16 / #21 — Rounds 15/16) → **Bucket C: surface to Anthropic, not Latent substrate.** High recurrence (multi-tool, multi-round: propose_doc_changes aggregate-payload/multi-citation gate; list_doc_sections tool-class gate; AskUserQuestion mobile echo). Strong tool-class-gating hypothesis. Not a Latent build — escalation, not a sprint.
+- **claude.ai client approval-gating** (master log #14 / #15 / #16 / #21 — Rounds 15/16) → ~~Bucket C: surface to Anthropic~~ **RETIRED 2026-07-15: claude.ai surface fully deprecated (Chris), so the escalation is moot — the client these gates lived in is no longer a workflow surface.** The auto-split-per-citation pattern (direction b) that worked around #15 remains the standing close-out shape regardless.
 - **`recipe_variant` canonical promotion** (master log #8 / Round 5) → parked canonical-promotion trigger (promote at 5+ distinct values across 3+ beans). Lives in `project_recipe_variant_canonical.md`.
 - **`parse_cupping_transcript` voice-memo pipeline** (master log #9 / Round 5) → parked product candidate (`project_parse_cupping_transcript.md`); Chris executes manually today.
 - **Brief-framing kitchen-state vs DB-state** (master log Round 1 #4) → standing-rule candidate (route to `memory/feedback_*.md` when confirmed).
