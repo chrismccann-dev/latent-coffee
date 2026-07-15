@@ -1,6 +1,6 @@
 # Workflow-Feedback Backlog
 
-*Last updated: 2026-07-15 (MCP required-axis fix shipped — #57 + the SPG eval_method 2-row data patch flipped to shipped, PR #578. Earlier same day: plan-feedback pass — claude.ai surface fully deprecated per Chris: Bucket C escalation + #49 + #51 + the Round-1 #5/#6 intermittents RETIRED; fc_audibility data-patch UNBLOCKED (migration 079 verified applied via `check:migrations`); #57 sub-issue (b) mooted by the 2026-07-10 single-connector canon + root cause pinned to the `numField` `z.preprocess` wrapper. Prior 2026-06-20: Round 25 filed #57 + #58; partial-build note on #22.)*
+*Last updated: 2026-07-15 (lifecycle-gate reconciliation grill shipped: #22 + #23 + #58 closed per ADR-0025 — SPG-pending composite ratified, winner-dependence partial-write rule, peer-cup gate demoted to advisory; new freezer-stock peer-roast reminder item filed. Earlier same day: MCP required-axis fix shipped — #57 + the SPG eval_method 2-row data patch flipped to shipped, PR #578; and the plan-feedback pass — claude.ai surface fully deprecated per Chris: Bucket C escalation + #49 + #51 + the Round-1 #5/#6 intermittents RETIRED; fc_audibility data-patch UNBLOCKED; #57 sub-issue (b) mooted by the 2026-07-10 single-connector canon.)*
 
 The **actionable** subset of workflow feedback — the items that need a *build* (prompt
 fix / MCP fix / schema / UI / architecture), not just a route-and-forget filing.
@@ -39,22 +39,7 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 
 ## Open — architectural (schema / lifecycle)
 
-### SPG / calibration-gate is not a first-class lifecycle state
-- **Shape:** arch (schema/lifecycle)
-- **Recurrence:** 5+ (Gesha Clouds V3, 2nd SPG lot, Bukure V2; reinforced by the one-shot defer-verdict gap #30 and the deferred-proposals gap below)
-- **Criticality:** high
-- **Status:** planned (2026-07-15 — [docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md](docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md))
-- **Source:** master log #22 (Round 17), reinforced #30 (Round 18)
-- **Body:** When SPG (Simulated Pourover Gate) / any C-path calibration gate fires mid-V-set, the lot sits in a state distinct from both "winner declared" and "advance to V_(n+1)" — winner null, brew-side confirmation pending. Only encoded in prose today. Candidates: `lifecycle_state` enum (`waiting_for_spg`) on experiments, or a lightweight `gates` table `(green_bean_id, gate_type, status)`. This is the **lifecycle-gate-not-modeled meta-pattern** — the single highest-recurrence theme in the backlog; it spans V-set (SPG) AND one-shot (defer-verdict) paths. Tagged in `issues.md` as a Lot Coordinator + V-Set Assistant sprint concern.
-  - **Partial build (2026-06-20, AN10 dogfood):** migration-080's stored `waiting_for_brewing` state is now the de-facto SPG-handoff home (the lot sits there while the brew-side SPG runs) and is wired end-to-end. It's not a `waiting_for_spg`-specific state — it conflates SPG with optimized-brew — but it does give the gate a queryable, rendered home, partially addressing this entry. The remaining gap is the SPG-specific distinction + the winner-sentinel fooling the derivation (see the new prompt entry below). The prompt drift it created is filed separately under prompt/doc-touch.
-
-### Deferred-proposals queue + partial-proposal gap during a calibration gate
-- **Shape:** arch (workflow/lifecycle)
-- **Recurrence:** 2 (Round 17; echoes an earlier log-roast partial-proposal flag)
-- **Criticality:** high
-- **Status:** planned (2026-07-15 — [docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md](docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md))
-- **Source:** master log #23 (Round 17)
-- **Body:** `log-cupping.md` STAGE 6's binary skip/propose during a gate defers ALL doc proposals to post-SPG re-entry, including cupping-INDEPENDENT ones that could land now (the V_n status flip, SPG-independent cup findings, a CCIL violation). Consequence: the active-lot doc reads "designed/pushed, not roasted" when it was in fact cupped. Needs a real-time partial-write rule + an explicit "deferred proposals" queue concept. Pairs tightly with the SPG lifecycle-state item.
+> **Shipped 2026-07-15 (lifecycle-gate reconciliation grill / ADR-0025):** #22 (SPG lifecycle state) resolved as RATIFY-the-composite, no new state — SPG-pending = `lot_status: waiting_for_brewing` + the exact `winner` sentinel `deferred pending SPG`; two canonical sentinel strings (incl. `none - SPG eliminated all finalists` at a no-winner re-entry); the SPG process is not recorded, only the decisive cup-set re-enters. #23 (deferred proposals) resolved as the winner-dependence partial-write rule + `DEFERRED_PROPOSAL:` lines in the experiment's `additional_notes` (no queue table). Peer-cup gate demoted to a non-gating advisory (SPG is the only winner-deferring gate). See [docs/adr/0025-spg-pending-composite-encoding.md](docs/adr/0025-spg-pending-composite-encoding.md) + [docs/sprints/lifecycle-spg-reconciliation-completion.md](docs/sprints/lifecycle-spg-reconciliation-completion.md) + [docs/sprints/shipped.md](docs/sprints/shipped.md). Removed from the open list per the status lifecycle.
 
 > **Shipped 2026-06-04 (#385, Cluster 2):** `cooling_arc_pattern` enum (#27), `cupping_date`/rest_days guard (#31), and `roast_recipe_divergence` view (#26) — see [docs/sprints/shipped.md](docs/sprints/shipped.md). Migration 078. Removed from the open list per the status lifecycle.
 
@@ -138,13 +123,15 @@ what tells `plan-feedback` what keeps biting and is worth a sprint first.
 
 > **Shipped 2026-07-15 (roasting-prompt-hygiene batch — 10 items, one PR):** #10 (anchor-confidence framing → start-lot.md STAGE 2), #40 (drop rules REQUIRED per slot → start-lot STAGE 3(b) + log-cupping STAGE 6(b)), #41 (seed-then-bump CCIL sub-rule → log-cupping STAGE 7), #42 (close-lot STAGE 3↔4 reorder: brew link now BEFORE roast_learnings; cross-refs updated repo-wide), #43a/b/c (auto-split granularity code-verified + soft-retire = h1 status-block region only + STAGE 2 drop-attribution confirm → close-lot.md), #44 (five clarity additions → log-cupping), #45a/b (SPG note homed in `overall` + append-accepts-new-H2 documented), #47 (N=2 cross-one-shot stays below CCIL bar → one-shot-closeout STAGE 5), #50 (net-new roaster-card append spec → bundled-brewing-completion STEP 2), #53 (resume-after-compaction preamble → close-lot + one-shot-closeout STAGE 5). See [docs/sprints/shipped.md](docs/sprints/shipped.md) + [docs/sprints/roasting-prompt-hygiene-batch-completion.md](docs/sprints/roasting-prompt-hygiene-batch-completion.md). Removed from the open list per the status lifecycle.
 
-### log-cupping Path C-2 needs a schema-reconciliation pass (lot_status flip + SPG-note field)
-- **Shape:** prompt (doc reconciliation)
-- **Recurrence:** 2 (Round 25 / AN10 V1 SPG handoff + SPG return, 2026-06-20/21 — two distinct Path C-2 prompt-vs-schema mismatches in one V-set)
-- **Criticality:** med
-- **Source:** master log #58 (Round 25)
-- **Status:** planned (2026-07-15 — [docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md](docs/sprints/lifecycle-spg-reconciliation-grilling-kickoff.md))
-- **Body:** Path C-2's prose has drifted from the current schema in two places; reconcile both in one pass. **(1) lot_status flip:** Path C-2 says "state stays Waiting for next cupping" on an SPG handoff, but migration-080 added a stored `waiting_for_brewing` state now wired end-to-end (green index section + `--tile-brewing` color + "In brewing" label + `green/[id]/page.tsx:200` render branch reusing `WaitingForNextCuppingView` + the `check:lifecycle-consistency` designed exception `stored=waiting_for_brewing` / `derived=waiting_for_next_roast`). Leaving `lot_status` at `waiting_for_next_cupping` actually REDDENS the consistency cron — the `"deferred pending SPG"` winner sentinel pushes derived → `waiting_for_next_roast`, so only `waiting_for_brewing` lands the designed exception. Fix: Path C-2 should flip `lot_status` → `waiting_for_brewing` at the SPG / optimized-brew handoff (re-entry still via log-cupping). Catches the prompt up to a state that now exists — see the partial-build note on #22. **(2) SPG-note field doesn't exist:** Path C-2 says SPG recipe metadata "goes in `additional_notes` … `SPG: brewed alongside <finalist sibling roast_id> at <recipe>`," but the **cuppings table has no `additional_notes` column** (`push_cupping` exposes no such field). On the AN10 SPG return the per-finalist recipe + sibling pairing was routed to the *experiment's* `additional_notes` instead, and `eval_method: 'Simulated Pourover'` already makes the SPG cups queryable. Fix: pick one and update Path C-2 to match — (a) point it at the experiment `additional_notes` and lean on `eval_method` as the grep key, (b) add a `cuppings.additional_notes` column, or (c) name a real cupping prose field (`overall` / `structural_behavior`) for the canonical phrasing. Both facets share one root: Path C-2 prose written independent of the migration-080 + cuppings schema reality.
+> **Shipped 2026-07-15 (lifecycle-gate reconciliation grill / ADR-0025):** #58 both facets closed. Facet 1 (lot_status flip): log-cupping Path C (formerly C-2) now writes the SPG handoff pair — `winner` sentinel at STAGE 4.3 + `patch_green_bean(lot_status: 'waiting_for_brewing')` — landing the `check:lifecycle-consistency` designed exception. Facet 2 (SPG-note field): already resolved by the same-day hygiene batch (#45a, option (c)) — the note lives in the cupping's `overall` prose behind the `SPG:` prefix with `eval_method` as the grep key; the grill ratified that choice. Path C-2/C-1 route labels retired: peer-cup gate demoted to advisory, SPG is the only Path C. See [docs/sprints/lifecycle-spg-reconciliation-completion.md](docs/sprints/lifecycle-spg-reconciliation-completion.md). Removed from the open list per the status lifecycle.
+
+### Freezer-stock peer-roast reminder for active green lots
+- **Shape:** ui (cross-inventory surfacing)
+- **Recurrence:** 1 (lifecycle-gate reconciliation grill, 2026-07-15)
+- **Criticality:** low
+- **Status:** open
+- **Source:** Chris, mid-grill (peer-cup advisory discussion)
+- **Body:** Now that the peer cup is a non-gating advisory (ADR-0025), the useful automation is the *reminder*: when a peer-roasted variant of an ACTIVE green lot (same green, per § Information value ideally compatible roast philosophy) sits in freezer stock (`docs/brewing/freezer-stock.md`), surface "you have a peer-roasted reference for <lot> in the freezer — consider cupping it for calibration." Candidate surfaces: log-cupping route-time advisory line, `/green/[id]` detail, or the green-inventory re-rank pass. Chris: "latent can remind me if I have one of those in my freezer lot."
 
 ### `recipe_variant` lightweight-summary render on `/green/[id]`
 - **Shape:** ui

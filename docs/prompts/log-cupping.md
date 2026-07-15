@@ -172,7 +172,7 @@ UPSERT behavior: `push_cupping` UPSERTs on `(user_id, roast_id, cupping_date, ev
 
 **4.2 Observed outcomes** — patch `observed_outcome_a/b/c/d`. EXTEND existing roast-side observations from `log-roast.md`; do not overwrite. The same field carries both layers.
 
-**4.3 Leading slot** — patch `experiments.winner`, formatted strictly `V<n><letter> (Batch <Roest#>)` (e.g. `V5C (Batch 189)`). Do NOT append verdict prose to `winner` — rationale goes in `key_insight` / `additional_notes` / `what_changes_going_forward`. (Leading slot = winner of this V-set's comparison; distinct from reference candidate and reference roast — see `CONTEXT-roasting.md -> Reference designation terms`.)
+**4.3 Leading slot** — patch `experiments.winner`, formatted strictly `V<n><letter> (Batch <Roest#>)` (e.g. `V5C (Batch 189)`). Do NOT append verdict prose to `winner` — rationale goes in `key_insight` / `additional_notes` / `what_changes_going_forward`. (Leading slot = winner of this V-set's comparison; distinct from reference candidate and reference roast — see `CONTEXT-roasting.md -> Reference designation terms`.) **Exception — SPG deferral:** when STAGE 5 routes to Path C (the Simulated Pourover Gate fires), set `winner` to the exact canonical sentinel `deferred pending SPG` — never a slot id, never a paraphrase. The sentinel is load-bearing: it is half of the SPG-pending composite (`lot_status = waiting_for_brewing` + this sentinel) that the derived-state validator and the "lots awaiting SPG" query read (`CONTEXT-roasting.md -> Simulated Pourover Gate system -> Lifecycle behavior`).
 
 **4.4 V-set insight fields** — patch:
 
@@ -186,7 +186,7 @@ Field split: forward + actionable -> `what_changes_going_forward`; interrogative
 
 `patch_experiment` echoes `updated_fields` + `canonical_values: { key_insight_confidence }` — confirm the enum landed.
 
-**4.5 Reference-candidate flag** — after identifying the leading slot, assess reference quality and patch the leading-slot roast: `patch_roast(roast_id: <leading_slot_roast_id>, is_reference_candidate: true|false)`. This prompt OWNS this flag (it is a cup-quality judgment, set here on cup grounds — not at roast time). `true` when the leading slot is plausibly lot-reference quality; `false` (or leave default) when it is only "best of the set." Do NOT set `roasts.is_reference` — that is `close-lot.md`'s at close-out. Multiple V-sets can each carry a candidate; only one becomes `is_reference` at close-out. **If `winner` is null because a calibration gate fired (Path C-1 / C-2 / SPG):** set no candidate flag — there is no leading slot to assess, so the reference-quality question is moot. Defer it to the post-calibration re-entry, when the gate cup resolves the leading slot. On that re-entry (SPG or peer cup captured), re-assess the candidate flag as part of resolving the deferred leading slot - don't leave it frozen at its pre-gate state (backlog #44).
+**4.5 Reference-candidate flag** — after identifying the leading slot, assess reference quality and patch the leading-slot roast: `patch_roast(roast_id: <leading_slot_roast_id>, is_reference_candidate: true|false)`. This prompt OWNS this flag (it is a cup-quality judgment, set here on cup grounds — not at roast time). `true` when the leading slot is plausibly lot-reference quality; `false` (or leave default) when it is only "best of the set." Do NOT set `roasts.is_reference` — that is `close-lot.md`'s at close-out. Multiple V-sets can each carry a candidate; only one becomes `is_reference` at close-out. **If `winner` carries the `deferred pending SPG` sentinel (Path C — the SPG fired):** set no candidate flag — there is no leading slot to assess, so the reference-quality question is moot. Defer it to the SPG re-entry, when the gate cup resolves the leading slot. On that re-entry, re-assess the candidate flag as part of resolving the deferred leading slot - don't leave it frozen at its pre-gate state (backlog #44).
 
 ---
 
@@ -210,15 +210,13 @@ Continue to STAGE 6. Warranted when: open questions remain that V_(n+1) can answ
 
 **Operator-fixed constants are off the table — even conversationally.** Before floating ANY lever with Chris (here at route time, before the STAGE 6 design read), recall that charge / hopper pre-load / BBP / warm-up / preheat air are operator-discipline constants — never varied across V-sets, beans, or roast types. Do NOT offer one of these as a candidate adjustment in conversation; only recipe-level levers (peak inlet / temperature curve / fan curve / drum speed / drop temp / end condition / dev-time-relative-to-FC) are in scope. Full list + rationale loads in STAGE 6 and `CONTEXT-roasting.md -> Operator-fixed constants` — this callout exists so an invalid lever isn't proposed before that read happens.
 
-### Path C-1 - Pre-V_(n+1) calibration gate (missing peer-roasted reference cup)
+**Peer cup advisory (not a route — demoted from the former Path C-1 gate, 2026-07-15):** when V_n landed in a plausible but uncalibrated zone and a peer-roasted version of the same green is available (or already in freezer stock — canonical case: Fazenda Um), *mention* that cupping it would be a valuable external calibration reference, then route Path B normally. The peer cup NEVER halts V_(n+1) design, never defers `winner`, and never touches `lot_status` — transfer value requires both the same green AND a compatible roast philosophy, which is rarely available, and the peer roast is one roaster's interpretation to calibrate against, not a target to match (`CONTEXT-roasting.md -> Pre-V_n calibration gate` + `-> Information value`). If a peer cup happens, it lands as a normal cupping/brew row alongside the lot's evidence.
 
-Halt V_(n+1) design; state stays **Waiting for next cupping**. Fires when V_n landed in a plausible but uncalibrated zone, Chris lacks a peer-roasted version of the same green, and the seller / a peer roaster has one available (canonical case: Fazenda Um). Distinct from a control experiment (Path B) and from the SPG (needs a NEW brew of already-roasted beans, not an external cup).
+### Path C - Simulated Pourover Gate
 
-Output: report Path C-1 fired + why; list the calibration action ("buy the peer-roasted version, run a Day 7 pourover, paste the transcript into a new `log-cupping.md` session"); state stays Waiting for next cupping; lot re-enters this prompt when the peer cup is captured.
+Halt V_(n+1) design. The leading-slot identity (or the reference-roast call) is provisional pending a simulated-pourover cup on the real pourover setup. Full definition + trigger shapes (proactive: nearing the reference call, xBloom-vs-end-optimized delta too large to commit; reactive: cup-side discrimination missing or a wide WB->Ground delta raises a roast-quality concern): `CONTEXT-roasting.md -> Simulated Pourover Gate system`.
 
-### Path C-2 - Simulated Pourover Gate
-
-Halt V_(n+1) design; state stays **Waiting for next cupping**. The leading-slot identity (or the reference-roast call) is provisional pending a simulated-pourover cup on the real pourover setup. Full definition + trigger shapes (proactive: nearing the reference call, xBloom-vs-end-optimized delta too large to commit; reactive: cup-side discrimination missing or a wide WB->Ground delta raises a roast-quality concern): `CONTEXT-roasting.md -> Simulated Pourover Gate system`.
+**Lifecycle at the handoff (two writes, both required):** (1) STAGE 4.3 has set `winner` to the canonical sentinel `deferred pending SPG`; (2) flip the stored state with `patch_green_bean(green_bean_id, lot_status: 'waiting_for_brewing')` — the ball is in the brewing court and no row write implies the transition, so this explicit patch is what keeps `check:lifecycle-consistency` green (the sentinel pushes the derived state to `waiting_for_next_roast`; `waiting_for_brewing` is the designed exception for exactly this pair).
 
 The SPG **recipe is not designed here** — it is dialed in a dedicated brewing thread running `simulated-pourover.md`. This prompt emits a thin handoff packet and stops. Cup-set logic (V_n winner + secondary contender + optional V_(n-1) winner) decides the finalists.
 
@@ -234,7 +232,12 @@ SIMULATED POUROVER PACKET
 
 The `intent` line is two-part: a **diagnostic** (what's wrong with the current gate read — e.g. "xbloom amplifying dark-tea, masking deeper producer notes") and a **test** (what the SPG should differentiate — e.g. "which roast preserves the bright/berry side under non-dark-leaning extraction"). Do NOT duplicate producer / origin / process in the intent — the brewing side fetches the green via `get_green_bean` for full lot context.
 
-State stays Waiting for next cupping; the lot re-enters this prompt when the SPG cup is captured (on re-entry, STAGE 4's `delta_from_cup` / `winner` may need patching). When the SPG cup returns, push it per finalist with `eval_method: 'Simulated Pourover'` (one row per finalist `roast_id`); the SPG free-text note goes in the cupping's `overall` prose, PREFIXED with the canonical phrasing `SPG: brewed alongside <finalist sibling roast_id> at <SPG recipe>` ahead of the cup verdict (backlog #45a - the cuppings table has NO `additional_notes` column; `eval_method` is the queryable key, the `overall` prefix carries the recipe + sibling pairing). See `CONTEXT-roasting.md -> eval_method: 'Simulated Pourover'`.
+**Re-entry contract (the SPG process is NOT recorded — only the decisive outcome re-enters).** Intermediate SPG iterations (a hard-to-call gate may take an extra brew or two) stay in the SPG brewing thread, archive-driven. The lot re-enters this prompt when Chris returns with the verdict; push only the **decisive cup-set** — the one the verdict was called on — as cupping rows with `eval_method: 'Simulated Pourover'` (one row per finalist `roast_id`), in BOTH outcomes (a negative result is still roast evidence). The SPG free-text note goes in the cupping's `overall` prose, PREFIXED with the canonical phrasing `SPG: brewed alongside <finalist sibling roast_id> at <SPG recipe>` ahead of the cup verdict (backlog #45a - the cuppings table has NO `additional_notes` column; `eval_method` is the queryable key, the `overall` prefix carries the recipe + sibling pairing). See `CONTEXT-roasting.md -> eval_method: 'Simulated Pourover'`. Then resolve per outcome:
+
+- **Clear winner:** patch `winner` from the sentinel to the real slot (`V<n><letter> (Batch <Roest#>)`); re-assess `is_reference_candidate` on the winning roast (STAGE 4.5); patch `delta_from_cup_*` where the SPG read changes them; route Path A (close-out) — `lot_status` advances via `close-lot.md`.
+- **No winner (SPG eliminated all finalists):** patch `winner` to the exact canonical string `none - SPG eliminated all finalists` — the record must show the deferral resolved negative, never leave the sentinel dangling; route Path B (design V_(n+1)) — `lot_status` flips back to `waiting_for_next_roast` when `push_experiment` lands.
+
+On either re-entry, also drain the deferred proposals: read the experiment's `additional_notes` for `DEFERRED_PROPOSAL:` lines and run each through STAGE 7 now that the winner is known (see STAGE 7's partial-write rule).
 
 ---
 
@@ -278,7 +281,13 @@ Post-cupping is the natural moment for cluster-doc updates — cup signal is the
 
 Fetch live anchors via `read_doc` (or `read_doc_section`) BEFORE drafting. Submit ONE multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` (the `'roasting.md'` target is deprecated). Citations: `[{section_anchor, operation, proposed_text, current_text, rationale, target_doc?}]` (the tool's citation field is named `operation`, NOT `op`; `rationale` is also required per citation).
 
-**Skip** and report why when downstream evidence is imminent: SPG fired (leading-slot identity provisional); V_(n+1) is designed to directly test the insight; or `key_insight_confidence` is Low (Low belongs in `additional_notes`, not cluster docs — the CCIL append threshold is Medium minimum). Print `STAGE 7: skipped - <reason>`. Don't fabricate a proposal to fill the stage. AVOID editing close-out artifacts (Recently Closed Lots, Reference Brew Recipes) — those are `close-lot.md`'s.
+**Partial-write rule when the SPG fired (replaces the old blanket skip, 2026-07-15):** classify each candidate proposal by one test — **does its content depend on the leading-slot identity?**
+
+- **Winner-INDEPENDENT → land it now:** the active-lot status flip ("V_n cupped, SPG fired, finalists <ids>, awaiting verdict" — this is the line that keeps the active-lot doc from reading stale), cup findings true regardless of which finalist wins (e.g. observed on all finalists), and CCIL violations (a rule breach at cupping is a fact about the roast, not the verdict).
+- **Winner-DEPENDENT → defer:** key-insight promotion to cluster docs, anything phrased around the leading slot / winner, close-out-adjacent edits. For each deferred item, APPEND one grep-able line to the experiment's `additional_notes` via `patch_experiment`: `DEFERRED_PROPOSAL: <target doc> - <one-line gist>`. The SPG re-entry drains these mechanically (Path C re-entry contract).
+- **Defer on doubt:** a deferred proposal costs one re-entry write; a wrong landed proposal costs an arbiter reversal.
+
+**Skip entirely** and report why when: V_(n+1) is designed to directly test the insight; or `key_insight_confidence` is Low (Low belongs in `additional_notes`, not cluster docs — the CCIL append threshold is Medium minimum). Print `STAGE 7: skipped - <reason>` (or `STAGE 7: partial - <landed n> landed, <deferred n> deferred pending SPG`). Don't fabricate a proposal to fill the stage. AVOID editing close-out artifacts (Recently Closed Lots, Reference Brew Recipes) — those are `close-lot.md`'s.
 
 ---
 
@@ -290,12 +299,12 @@ Print a compact confirmation:
 
 - `green_bean_id`, `lot_id`, `v_set`.
 - STAGE 0: backfill summary, or `skipped - fresh-from-rewrite lot`.
-- **V_n close-out:** per cupped slot — `cupping_id`, `composite_key`, `ground_agtron` + WB->Gnd delta, leading-slot one-liner; the `experiment_pk` + `updated_fields`; `winner` (`V<n><letter> (Batch <Roest#>)`, OR `deferred pending SPG` when a calibration gate fired and the leading slot is unresolved — never a slot id in that case); `key_insight` + `key_insight_confidence`; reference-candidate patch (`roast_id`, `is_reference_candidate`), or `none — winner deferred` when a gate fired.
-- **Route:** Path A / Path B / Path C-1 / Path C-2.
+- **V_n close-out:** per cupped slot — `cupping_id`, `composite_key`, `ground_agtron` + WB->Gnd delta, leading-slot one-liner; the `experiment_pk` + `updated_fields`; `winner` (`V<n><letter> (Batch <Roest#>)`, OR the exact sentinel `deferred pending SPG` when the SPG fired and the leading slot is unresolved — never a slot id in that case); `key_insight` + `key_insight_confidence`; reference-candidate patch (`roast_id`, `is_reference_candidate`), or `none — winner deferred` when the SPG fired.
+- **Route:** Path A / Path B / Path C (Simulated Pourover Gate).
 - **If Path B:** `experiment_pk` (V_(n+1)) + `experiment_id`; per slot `recipe_id` / `batch_slot` / `roest_profile_id` / `roest_share_url` / end condition / design prediction; a Roest tablet name table (`| Slot | Profile name | End condition | Roest URL |`).
-- **If Path C-1 / C-2:** the calibration action + re-entry instruction (and, for C-2, the SIMULATED POUROVER PACKET).
-- STAGE 7: `proposal_id`, or `skipped - <reason>`.
-- Lifecycle state confirmation: Path A -> "Resolved-pending. Next: `close-lot.md`." Path B -> "Waiting for next roast. Next: roast V_(n+1), then `log-roast.md`." Path C -> "Waiting for next cupping. Next: <calibration action>, then re-enter `log-cupping.md`."
+- **If Path C:** the SIMULATED POUROVER PACKET + the re-entry instruction + confirmation the two handoff writes landed (`winner` sentinel + `lot_status: 'waiting_for_brewing'`).
+- STAGE 7: `proposal_id`, `skipped - <reason>`, or `partial - <landed n> landed, <deferred n> deferred pending SPG`.
+- Lifecycle state confirmation: Path A -> "Resolved-pending. Next: `close-lot.md`." Path B -> "Waiting for next roast. Next: roast V_(n+1), then `log-roast.md`." Path C -> "In brewing (`waiting_for_brewing`). Next: SPG in a `simulated-pourover.md` thread, then re-enter `log-cupping.md` with the verdict."
 - Any missing data / assumptions, rest-days-drift flags applied, skipped cuppings, and fields left NULL for weak transcript evidence.
 
 ---

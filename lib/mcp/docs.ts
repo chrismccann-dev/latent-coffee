@@ -634,7 +634,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   // ----- skills / cupping-specialist -------------------------------------------
   {
     uri: 'docs://skills/cupping-specialist/SKILL.md',
-    title: 'Cupping Specialist — SKILL (Workflow Executing; push_cupping + V-set Path A/B/C-1/C-2 routing; absorbs POD-1)',
+    title: 'Cupping Specialist — SKILL (Workflow Executing; push_cupping + V-set Path A/B/C routing; absorbs POD-1)',
     description: 'Cupping Specialist sub-skill (Wave 3 PR 3 shipped 2026-05-26). Workflow Executing tier; substrate-writer wrapping push_cupping + patch_cupping + patch_experiment + patch_roast (is_reference_candidate flag, co-owned with Roast Recorder) + propose_doc_changes. Executes Day-7 xBloom cupping evaluation, writes cup-side experiment closure (delta_from_cup_* / winner / key_insight + key_insight_confidence Low/Medium/Medium-High/High ladder / what_changes_going_forward / open_questions / additional_notes), marks is_reference_candidate on V-set leading slot (Schema sprint S2, decoupled from is_reference), and routes the V-set forward via Path A (close-out via Chain 1) / Path B (Roasting Assistant for V_(n+1)) / Path C-1 (peer-cup calibration halt) / Path C-2 (real-pourover discriminator halt). **POD-1 absorbed at SKILL.md level + bookmarked at cluster/pod-1-routing.md** pending lived-practice trigger conditions; today\'s Path C-1/C-2 substrate kept intact, future simulated-pourover-gate rewrite deferred. Called by Master Coordinator via log-cupping.md; Chain 1 entry (Path A) + Chain 3 mid-stage closer. N=10 Stage 1 → 2 graduation.',
   },
   {

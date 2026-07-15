@@ -576,12 +576,11 @@ Link timing + filed vs courier-carried: set green_beans.peer_reference_brew_id a
 
 ### Pre-V_n calibration gate
 
-Pre-V_n calibration gate: A gate that halts V_(n+1) design (or V1 design pre-V1) until missing calibration data is acquired. Distinct from Pre-V1 risk reduction (a bundle of practices run before committing to V1 on expensive / low-confidence lots) — the calibration gate is the lifecycle hold-point those practices flow through, and it ALSO fires post-V1 in the V_(n+1)-design moment. Two variants in lived practice (log-cupping.md STAGE 4):
+Pre-V_n calibration gate: A gate that halts V_(n+1) design until missing calibration data is acquired. Distinct from Pre-V1 risk reduction (a bundle of practices run before committing to V1 on expensive / low-confidence lots) — the calibration gate is the lifecycle hold-point those practices flow through, and it ALSO fires post-V1 in the V_(n+1)-design moment. **As of 2026-07-15 (lifecycle-gate reconciliation grill), the Simulated Pourover Gate is the ONLY halting variant** — the end-of-V-set decision-support gate run as Chris nears the reference-roast call; the full system is its own section below.
 
-- **C-1 — missing peer-roasted reference cup**. V_n landed in a plausible zone but the lot lacks an external reference cup to calibrate V_(n+1)'s adjustment direction. The calibration step is "buy the peer-roasted version, cup it Day 7 at the xBloom gate, paste the transcript back into a new log-cupping.md session" — the peer cup tells you which direction V_(n+1) needs to move. Canonical case: Fazenda Um. See § Peer-roasted reference brew.
-- **Simulated Pourover Gate** — the end-of-V-set decision-support gate run as Chris nears the reference-roast call. The full system is its own section below.
+**Peer cup advisory (formerly the "C-1 missing peer-roasted reference cup" gate variant — demoted 2026-07-15, no longer a gate):** cupping a peer-roasted version of the same green is a nice-to-have external calibration input, never a hold-point. It never halts V_(n+1) design, never defers the winner, and never touches `lot_status`. Rationale: transfer value requires BOTH the same green lot AND a compatible roast philosophy (see § Information value — the "dark roast overtakes everything" rule; the Untold variants rate Low), which is rarely available, and the peer roast is one roaster's interpretation to calibrate against, not a target to match. When a peer cup does happen it lands as a normal cupping/brew row alongside the lot's evidence. Canonical case: Fazenda Um. See § Peer-roasted reference brew.
 
-Lifecycle state stays Waiting for next cupping through both variants. Distinct from a control experiment (a new V-set replicating the leading slot — routes through Path B, not Path C). *Avoid*: "calibration step" (too generic — pre-V1 risk reduction also runs calibration steps); "blocker" (calibration gates are deliberate design hold-points, not external blockers).
+Distinct from a control experiment (a new V-set replicating the leading slot — routes through Path B, not Path C). *Avoid*: "calibration step" (too generic — pre-V1 risk reduction also runs calibration steps); "blocker" (calibration gates are deliberate design hold-points, not external blockers); "peer cup gate" (the peer cup is advisory, not a gate).
 
 ## Simulated Pourover Gate system
 
@@ -669,11 +668,16 @@ The cuppings-row shape is resolved: SPG cups live in the cuppings structure. The
 
 ### Lifecycle behavior
 
-The lot remains in **Waiting for next cupping** while the Simulated Pourover Gate is pending.
+When the Simulated Pourover Gate fires, `lot_status` flips to **`waiting_for_brewing`** (the migration-080 stored state; set via `patch_green_bean` at the handoff, since no row write implies the transition). The lot re-enters `log-cupping.md` when the SPG verdict returns.
 
-There is no separate lifecycle state today for “waiting for calibration cup” or “waiting for simulated pourover.” The prompt-level gate does the routing while the lifecycle state remains reused.
+**SPG-pending is a two-column composite, deliberately** (ratified 2026-07-15, lifecycle-gate reconciliation grill): `lot_status = 'waiting_for_brewing'` AND `experiments.winner = 'deferred pending SPG'`. There is no SPG-specific lifecycle state and agents should not invent one - `waiting_for_brewing` is the single catch-all brewing-side wait (per ADR-0024 § 6, the Roasting Brief holds WHICH brewing task), and the winner sentinel is what distinguishes SPG-wait from optimized-brew-wait (an optimized-brew handoff carries a real slot id in `winner`).
 
-There is no dedicated lifecycle state for a pending SPG; agents should not invent one.
+**Canonical winner sentinel strings** (exact strings, load-bearing for the composite query and the derived-state validator - do not paraphrase):
+
+* `deferred pending SPG` - set at gate-fire; means the deferral is genuinely open.
+* `none - SPG eliminated all finalists` - patched onto the old experiment at a no-winner re-entry, so the record shows the deferral resolved negative. The lot then advances to the next V-set.
+
+**The SPG process is not recorded; only the decisive outcome re-enters.** Intermediate SPG iterations (a hard-to-call gate may take an extra brew or two) stay in the SPG brewing thread, archive-driven, same as brewing generally. At re-entry, only the decisive cup-set - the one the verdict was called on - is pushed as cupping rows (`eval_method: 'Simulated Pourover'`, one row per finalist), in both the winner and no-winner outcomes (a negative result is still roast evidence). On a winner: `winner` is patched from the sentinel to the real slot and `is_reference_candidate` is re-assessed.
 
 
 ## Schema notes
