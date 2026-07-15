@@ -1,0 +1,11 @@
+# SPG-pending is a two-column composite, not a lifecycle state
+
+When the Simulated Pourover Gate fires mid-V-set, the lot's "awaiting SPG verdict" condition is encoded as the composite `green_beans.lot_status = 'waiting_for_brewing'` + `experiments.winner = 'deferred pending SPG'` (exact canonical string) — deliberately NOT a dedicated `waiting_for_spg` enum value or a `gates` table. Ratified 2026-07-15 (lifecycle-gate reconciliation grill, backlog #22), extending ADR-0024 § 6's single catch-all brewing-side wait: the two states behave identically everywhere (same page shape, same re-entry path), and the winner sentinel already disambiguates SPG-wait from optimized-brew-wait (an optimized-brew handoff carries a real slot id in `winner`), so a dedicated state would fork the machinery for a distinction two columns already give a single-tenant system.
+
+## Consequences
+
+- Two canonical sentinel strings are load-bearing and must not be paraphrased: `deferred pending SPG` (gate open) and `none - SPG eliminated all finalists` (patched at a no-winner re-entry so the deferral never dangles). Canonical home: `CONTEXT-roasting.md -> Simulated Pourover Gate system -> Lifecycle behavior`.
+- The sentinel is truthy, so the derived state computes `waiting_for_next_roast`; `stored waiting_for_brewing / derived waiting_for_next_roast` is `check:lifecycle-consistency`'s designed exception. Leaving `lot_status` at `waiting_for_next_cupping` during an SPG (the pre-2026-07-15 log-cupping prose) reddens the cron — the prompt now flips it at the handoff.
+- The SPG process itself is not recorded (iterations stay in the brewing thread, archive-driven); only the decisive cup-set re-enters as cupping rows.
+- Doc proposals during a gate follow a winner-dependence test (winner-independent land now; winner-dependent defer as `DEFERRED_PROPOSAL:` lines in the experiment's `additional_notes`; defer on doubt) instead of a blanket skip.
+- The former peer-cup calibration gate ("Path C-1") was demoted to a non-gating advisory in the same grill: a peer-roasted reference never halts, defers, or touches `lot_status` — transfer value requires same green AND compatible roast philosophy, so it is one roaster's interpretation to calibrate against, never a hold-point. The SPG is the only winner-deferring gate.
