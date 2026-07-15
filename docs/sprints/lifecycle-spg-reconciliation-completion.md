@@ -32,7 +32,7 @@ All edits are doc/prompt/glossary layer (Actor 2 + Actor 5) plus one MCP Resourc
 - `lib/mcp/docs.ts` — Cupping Specialist Resource title `Path A/B/C-1/C-2` → `Path A/B/C`.
 - `docs/product/feedback-backlog.md` — #22/#23/#58 → shipped blocks; new freezer-stock peer-roast reminder item; header updated. `docs/sprints/shipped.md` — new row.
 
-**PR:** _(URL + merge SHA filled at merge — see the ship message in-session)_
+**PR:** [#582](https://github.com/chrismccann-dev/latent-coffee/pull/582), squash-merged to main as `06894b3` (2026-07-15).
 
 ## 4. Verification (what was actually run)
 
