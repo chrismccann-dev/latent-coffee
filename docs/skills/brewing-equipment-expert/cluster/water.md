@@ -103,6 +103,7 @@ Hydration form is load-bearing - the molar math above assumes the hydrates named
 - **Water seasons, it doesn't fix.** It reveals or amplifies a phase the coffee already carries; it can't add complexity the bean lacks. Injecting an absent phase is the high-variance path toward the anti-target.
 - **Precipitation unbalances a cloudy concentrate.** A cloudy commercial concentrate (Ca + sulfate/bicarbonate precipitating) delivers *less* Ca + carbonate than nominal **and** the wrong ion ratios - it tastes "not mixed in the right proportion," not merely weaker (HT5: bottled SBL measured ~1 drop GH/KH low + tasted off vs a clean stock build). A clean single-salt build > a cloudy bottle.
 - **The failure modes:** over-Mg **over-sharpens** acidity; over-Ca **over-weights** body; **Ca+chloride** turns lactic/oily; **KH flattens** acidity/clarity (and reads soapy/chalky at ~20 on a clarity coffee); over-dosing anything **injects** fast on a clarity coffee (sweet spots are LOW - Track 1 found ~2–3 drops/200 mL, vendor-mid was past peak). Reveal-vs-inject is **dose-dependent**, not a product property.
+- **Water freshness is a real variable - re-boiled / days-old kettle water reads flat.** On Helm Mystic (2026-07-10, brew ac916f61), topping a fresh GH44 build onto leftover days-old kettle water of the *same* mix and re-boiling produced a fully flat cup at correct mineral strength - body + finish collapsed, acidity gone. Minerals held (~GH44, since the leftover was the same blend), so the cause was **water freshness (dissolved gas), not concentration**. Build fresh + heat once; dump leftover kettle water. Diagnostic: a flat cup with a *correct* GH read is a freshness tell, not an under-dose - don't chase it with more mineral.
 
 ---
 
@@ -113,10 +114,13 @@ Per-coffee custom-water recipes. **The end-state is a library**; this is row one
 | Coffee | Water direction | GH | KH | Sulfate | Cation notes | Peak cup | Confidence |
 |---|---|---|---|---|---|---|---|
 | **Hydrangea Pink Bourbon Washed** (clarity / lime / brown-tea) | **MgCl₂-forward** | ~44 | zero / minimal | minimal / zero | **Avoid calcium**; magnesium is the safe cation | **Straight MgCl₂ @ GH 44** - nothing beat it (best blend 3.0; MgCl₂ solo 3.1; every buffer / Ca / sulfate / full-SBL variant scored lower) | **PROVISIONAL - single-coffee** |
+| **Helm Colombia Los Nogales Mystic** (Yellow Bourbon, Anaerobic Washed; clarity/citrus/peach-tea, **body-wanting**) | **MgCl₂ + MgSO₄ blend** | ~44 total | zero | ~half of GH (50/50 cation split) | Magnesium on both axes; **sulfate earns its place here** (unlike the Pink Bourbon) | **Blend @ GH44 > straight MgCl₂ (bright but slightly over-minted/alkaline) > distilled (flat in phase 2)** - velvety, round, more complex; 3-way brewed side-by-side on a fixed recipe (brew ac916f61) | **PROVISIONAL - single-coffee; acidity-pop A/B not isolated** |
 
 **Optional amplifier (single-sitting; verify on other coffees):** +1 drop/L silica (~12 ppm; ceiling <24) lifted the Pink Bourbon's whole cup + finish (§ 3 silica row) - an **optional** add, NOT baked into the peak. Test on other coffees before generalizing.
 
 **Coffee-dependence gate (why this stays provisional):** the Pink Bourbon is a clarity/citrus coffee, so the **chloride attack** plays to its strength. A **body-wanting coffee could flip** toward sulfate or a MgCl₂+MgSO₄ blend - the anion→phase *interaction structure* (§ 2) is corroborated across RP6 + the 2026 WBC field, but the specific role assignments (and *which phase you want*) are set by the coffee until the 2nd-coffee replication. That is exactly what a 2nd-coffee replication (ideally a body-wanting coffee) verifies. Do not generalize this row.
+
+**Row 2 added 2026-07-10 (Helm Mystic, brew ac916f61) - the coffee-dependence gate's predicted flip, confirmed.** Mystic is a body-wanting clarity coffee where the **MgCl₂+MgSO₄ blend beat straight MgCl₂** - the opposite of the Pink Bourbon (where MgCl₂-solo won and distilled beat every build). The §2 anion→phase mechanism holds; *which* phase you want is coffee-set. The two rows now bracket the range: clarity-pure Pink Bourbon → MgCl₂-solo; body-wanting Mystic → blend.
 
 ---
 
