@@ -1608,24 +1608,26 @@ export const CUPPING_PATCH_FIELDS = [
   'cooling_arc_pattern',
 ] as const
 
-// patch_cupping uses the migration-041 composite key for lookup
-// (roast_id, cupping_date, eval_method, recipe_variant) with NULLS NOT
-// DISTINCT semantics so NULL fields match NULL fields. Mirrors persistCupping's
-// composite-key UPSERT lookup. Patching fields that are part of the key is
-// allowed (the lookup matches OLD state, UPDATE writes NEW state).
+// patch_cupping supports two lookup modes (required-axis fix sprint, 2026-07-15):
+//
+//   1. Direct: `cupping_id` — the row's PK (get_bean_pipeline returns cupping
+//      ids). In this mode the composite-key fields (cupping_date / eval_method
+//      / recipe_variant) are ORDINARY PATCHABLE FIELDS — this is the only MCP
+//      path that can change a cupping's own key fields (the composite mode
+//      cannot: the same param is both lookup value and written value, so it can
+//      only write back what it matched).
+//   2. Composite: the migration-041 key (roast_id, cupping_date, eval_method,
+//      recipe_variant) with NULLS NOT DISTINCT semantics so NULL fields match
+//      NULL fields. Mirrors persistCupping's composite-key UPSERT lookup. All
+//      three non-roast_id key fields must be EXPLICITLY supplied (null allowed)
+//      so an omitted field is never silently treated as a null match.
 export interface PatchCuppingPayload extends Partial<Omit<CuppingPayload, 'roast_id'>> {
-  // Composite-key lookup fields (required to identify the row)
-  roast_id: string
-  cupping_date: string | null
-  eval_method: string | null
-  recipe_variant: string | null
-  // Optional patch fields override the composite-key fields above when also
-  // supplied as new values. To CHANGE recipe_variant from null → "xbloom_gate",
-  // pass `recipe_variant: null` (lookup) and `new_recipe_variant: "xbloom_gate"`.
-  // Or accept the simpler shape: lookup by old key, patch overwrites whatever
-  // new fields are present. For now, the patch fields share names — passing
-  // recipe_variant updates the field; lookup uses the SAME values. If you want
-  // to change the key, do it via raw SQL or split into delete+re-push.
+  cupping_id?: string
+  // Composite-key lookup fields (required when cupping_id is absent)
+  roast_id?: string
+  cupping_date?: string | null
+  eval_method?: string | null
+  recipe_variant?: string | null
 }
 
 export async function patchCupping(
@@ -1633,34 +1635,66 @@ export async function patchCupping(
   userId: string,
   payload: PatchCuppingPayload,
 ): Promise<PatchResult<'cupping_id'>> {
-  if (!payload.roast_id?.trim()) {
-    return { ok: false, code: 'validation', errors: ['roast_id is required'] }
+  if (!payload.cupping_id?.trim() && !payload.roast_id?.trim()) {
+    return { ok: false, code: 'validation', errors: ['cupping_id or roast_id is required'] }
   }
   // Cluster 2 (#27): enum guard on cooling_arc_pattern (shared with persistCupping).
   const coolingArcErr = coolingArcPatternError(payload.cooling_arc_pattern)
   if (coolingArcErr) return { ok: false, code: 'validation', errors: [coolingArcErr] }
 
-  // Composite-key lookup with NULLS NOT DISTINCT semantics. Pull rest_days too so
-  // the date guard can validate a rest_days-only patch against the existing date.
-  let lookup = supabase
-    .from('cuppings')
-    .select('id, cupping_date, rest_days')
-    .eq('user_id', userId)
-    .eq('roast_id', payload.roast_id)
-  lookup = payload.cupping_date != null
-    ? lookup.eq('cupping_date', payload.cupping_date)
-    : lookup.is('cupping_date', null)
-  lookup = payload.eval_method != null
-    ? lookup.eq('eval_method', payload.eval_method)
-    : lookup.is('eval_method', null)
-  lookup = payload.recipe_variant != null
-    ? lookup.eq('recipe_variant', payload.recipe_variant)
-    : lookup.is('recipe_variant', null)
-  const { data: existing, error: lookupErr } = await lookup.maybeSingle()
-  if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
-  if (!existing) {
-    const desc = `(roast_id="${payload.roast_id}", cupping_date=${payload.cupping_date ?? 'NULL'}, eval_method=${payload.eval_method ?? 'NULL'}, recipe_variant=${payload.recipe_variant ?? 'NULL'})`
-    return { ok: false, code: 'not_found', message: `cupping ${desc} not found` }
+  let existing: { id: string; cupping_date: string | null; rest_days: number | null; roast_id: string }
+  if (payload.cupping_id?.trim()) {
+    // Direct PK lookup — composite-key fields become ordinary patchable fields.
+    const { data, error: lookupErr } = await supabase
+      .from('cuppings')
+      .select('id, cupping_date, rest_days, roast_id')
+      .eq('user_id', userId)
+      .eq('id', payload.cupping_id)
+      .maybeSingle()
+    if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+    if (!data) {
+      return { ok: false, code: 'not_found', message: `cupping (cupping_id="${payload.cupping_id}") not found` }
+    }
+    existing = data as typeof existing
+  } else {
+    // Composite-key lookup: all three non-roast_id key fields must be
+    // EXPLICITLY supplied (null allowed) — an omitted field must never be
+    // silently treated as a null match under NULLS NOT DISTINCT semantics.
+    const missing = (['cupping_date', 'eval_method', 'recipe_variant'] as const).filter(
+      (k) => payload[k] === undefined,
+    )
+    if (missing.length > 0) {
+      return {
+        ok: false,
+        code: 'validation',
+        errors: [
+          `composite-key lookup requires ${missing.join(', ')} to be explicitly supplied (null is allowed and matches NULL). To look up by row id instead, pass cupping_id.`,
+        ],
+      }
+    }
+    // Composite-key lookup with NULLS NOT DISTINCT semantics. Pull rest_days too so
+    // the date guard can validate a rest_days-only patch against the existing date.
+    let lookup = supabase
+      .from('cuppings')
+      .select('id, cupping_date, rest_days, roast_id')
+      .eq('user_id', userId)
+      .eq('roast_id', payload.roast_id!)
+    lookup = payload.cupping_date != null
+      ? lookup.eq('cupping_date', payload.cupping_date)
+      : lookup.is('cupping_date', null)
+    lookup = payload.eval_method != null
+      ? lookup.eq('eval_method', payload.eval_method)
+      : lookup.is('eval_method', null)
+    lookup = payload.recipe_variant != null
+      ? lookup.eq('recipe_variant', payload.recipe_variant)
+      : lookup.is('recipe_variant', null)
+    const { data, error: lookupErr } = await lookup.maybeSingle()
+    if (lookupErr) return { ok: false, code: 'db_error', message: lookupErr.message }
+    if (!data) {
+      const desc = `(roast_id="${payload.roast_id}", cupping_date=${payload.cupping_date ?? 'NULL'}, eval_method=${payload.eval_method ?? 'NULL'}, recipe_variant=${payload.recipe_variant ?? 'NULL'})`
+      return { ok: false, code: 'not_found', message: `cupping ${desc} not found` }
+    }
+    existing = data as typeof existing
   }
 
   // Cluster 2 (#31): when a patch touches cupping_date or rest_days, re-run the
@@ -1671,7 +1705,7 @@ export async function patchCupping(
       .from('roasts')
       .select('roast_date')
       .eq('user_id', userId)
-      .eq('id', payload.roast_id)
+      .eq('id', existing.roast_id)
       .maybeSingle()
     const effCuppingDate =
       payload.cupping_date !== undefined ? payload.cupping_date : (existing.cupping_date as string | null)

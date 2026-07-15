@@ -70,6 +70,15 @@ function fileMtime(path: string): string {
 //      (the -32602 "received string" class that blocked push_green_bean +
 //      push_roast_recipe in the first Claude-Code-native write session).
 //   3. Canary: push_green_bean.price_per_kg publishes type ["number","null"].
+//   4. Required-axis (backlog #57, 2026-07-15): no zod-optional field may
+//      appear in a published `required` array. The preprocess-wrapped
+//      numField/boolField coercers used to bury `.optional()` INSIDE
+//      z.preprocess, so patch_green_bean published 6 required fields instead
+//      of just green_bean_id (a lot_status-only patch forced collateral
+//      writes + a roast_priority null-clobber). Optionality is detected via
+//      safeParse(undefined) on the zod source — wrapper-agnostic, so any
+//      future wrapping (preprocess/pipe/default) stays gated.
+//      Canary: patch_green_bean.required must be exactly ["green_bean_id"].
 
 // Unwrap zod v4 optional/nullable/default/describe wrappers to the core def type.
 function zodCoreType(schema: unknown): string | undefined {
@@ -114,6 +123,18 @@ async function checkPublishedCatalog(server: ReturnType<typeof buildMcpServer>):
       }
     }
 
+    // 4. Required-axis: a zod-optional field must not publish as required.
+    const published = tool.inputSchema as SchemaNode | undefined
+    const requiredArr = Array.isArray(published?.required) ? (published.required as string[]) : []
+    for (const key of requiredArr) {
+      const src = zodShape[key] as { safeParse?: (v: unknown) => { success: boolean } } | undefined
+      if (src?.safeParse && src.safeParse(undefined).success) {
+        problems.push(
+          `${tool.name}.${key}: zod-optional field published in \`required\` (optionality lost in conversion — check wrapper order, e.g. .optional() inside z.preprocess)`,
+        )
+      }
+    }
+
     // 2. No bare unions anywhere (recursive).
     const walk = (node: unknown, path: string): void => {
       if (Array.isArray(node)) {
@@ -138,6 +159,17 @@ async function checkPublishedCatalog(server: ReturnType<typeof buildMcpServer>):
   if (JSON.stringify(price?.type) !== JSON.stringify(['number', 'null'])) {
     problems.push(
       `canary: push_green_bean.price_per_kg published as ${JSON.stringify(price)} — expected type ["number","null"]`,
+    )
+  }
+
+  // 4. Required-axis canary: patch_green_bean's true identity key is exactly
+  // green_bean_id — every other field is a field-level patch and must be
+  // optional in the published contract.
+  const patchGreenBean = tools.find((t) => t.name === 'patch_green_bean')
+  const pgbRequired = (patchGreenBean?.inputSchema as SchemaNode | undefined)?.required
+  if (JSON.stringify(pgbRequired) !== JSON.stringify(['green_bean_id'])) {
+    problems.push(
+      `canary: patch_green_bean.required published as ${JSON.stringify(pgbRequired)} — expected ["green_bean_id"]`,
     )
   }
 
@@ -180,7 +212,7 @@ async function main(): Promise<void> {
   }
   console.log(`\nTOTAL: ${tools.length} tools registered.`)
   console.log(`lib/mcp/server.ts last modified: ${serverMtime}`)
-  console.log('Published-catalog type coverage passed (no untyped properties, no bare unions; price_per_kg canary OK).')
+  console.log('Published-catalog type coverage passed (no untyped properties, no bare unions, no optional-field-in-required; price_per_kg + patch_green_bean.required canaries OK).')
   process.exit(0)
 }
 

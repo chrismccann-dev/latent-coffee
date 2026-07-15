@@ -7,18 +7,30 @@ import { withToolErrorLogging, echoUpdatedFields, throwToolFail, toolJson } from
 // patch_cupping (Sprint 2.6) — composite-key lookup mirroring the
 // migration-041 NULLS NOT DISTINCT unique constraint on
 // (user_id, roast_id, cupping_date, eval_method, recipe_variant).
+// Required-axis fix sprint (backlog #57 sibling, 2026-07-15): optional
+// cupping_id direct-PK lookup added — the only MCP path that can CHANGE the
+// composite-key fields themselves (composite mode can only write back what it
+// matched). All lookup fields are now schema-optional; the handler enforces
+// "cupping_id OR the full composite key" server-side.
 
 export const patchCuppingInputSchema = {
-  // Composite-key lookup fields (required to identify the row)
-  roast_id: z.string().uuid().describe('FK to roasts.id — part of the composite lookup key.'),
-  cupping_date: z.string().nullable().describe(
-    'YYYY-MM-DD or null. Part of the composite lookup key (NULLS NOT DISTINCT — null matches null).',
+  // Direct lookup (preferred when known)
+  cupping_id: z.string().uuid().optional().describe(
+    'PK of the cupping row (get_bean_pipeline returns cupping ids). When supplied, the composite-key lookup is skipped and cupping_date / eval_method / recipe_variant become ordinary patchable fields — the ONLY path that can change a cupping\'s own key fields.',
   ),
-  eval_method: z.string().nullable().describe(
-    '"Cupping" | "Pourover" | "Espresso" | etc., or null. Part of the composite lookup key.',
+  // Composite-key lookup fields (required to identify the row when cupping_id
+  // is absent; ordinary patch fields when cupping_id is supplied)
+  roast_id: z.string().uuid().optional().describe(
+    'FK to roasts.id — part of the composite lookup key. Required unless cupping_id is supplied.',
   ),
-  recipe_variant: z.string().nullable().describe(
-    'Free-text variant label (e.g. "xbloom_gate", "balanced_intensity_pourover") or null. Part of the composite lookup key (migration 041). NULL matches NULL on the composite key — patching a single-cupping row leaves recipe_variant unset.',
+  cupping_date: z.string().optional().nullable().describe(
+    'YYYY-MM-DD or null. Without cupping_id: part of the composite lookup key (NULLS NOT DISTINCT — null matches null; must be explicitly supplied). With cupping_id: a patchable field.',
+  ),
+  eval_method: z.string().optional().nullable().describe(
+    '"Cupping" | "Pourover" | "Simulated Pourover" | "Espresso" | etc., or null. Without cupping_id: part of the composite lookup key (must be explicitly supplied). With cupping_id: a patchable field.',
+  ),
+  recipe_variant: z.string().optional().nullable().describe(
+    'Free-text variant label (e.g. "xbloom_gate", "balanced_intensity_pourover") or null. Without cupping_id: part of the composite lookup key (migration 041; must be explicitly supplied — NULL matches NULL, so a single-cupping row looks up with recipe_variant: null). With cupping_id: a patchable field.',
   ),
   // Pass-through fields (mirror push_cupping)
   rest_days: z.number().int().optional().nullable(),
@@ -57,7 +69,7 @@ export function registerPatchCuppingTool(server: McpServer, auth: McpAuthContext
     {
       title: 'Patch Cupping',
       description:
-        'Update / save / record / push field-level changes to an existing cupping evaluation by composite key (roast_id + cupping_date + eval_method + recipe_variant — the migration 041 NULLS NOT DISTINCT key). The companion INSERT path of the same domain returns `created:false` without overwriting fields on composite-key conflict, so this Tool closes the prose-typo / numeric-correction path (R29 from the MCP feedback log) for cupping rows that already exist. Use this for fixes to the 10 prose fields (aroma / flavor / acidity / sweetness / body / finish / overall / temperature_behavior / aromatic_behavior / structural_behavior — last two relocated from roast_learnings in Sprint 11 / migration 062 / ADR-0008), the cooling_arc_pattern enum (degrade / hold / improve / flat — Cluster 2 / migration 078), or numeric ground_agtron / rest_days. Patching cupping_date or rest_days re-runs the Cluster 2 date guard (cupping_date ≥ roast_date + 1, rest_days matches the date arithmetic ±1 day) against the parent roast. wb_agtron override is available for the rare post-hoc Agtron re-measurement case (normally auto-snapshot at cupping-insert time). Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. NULL matches NULL on the composite key (NULLS NOT DISTINCT) — single-cupping rows look up cleanly with recipe_variant: null. To find cupping rows: call get_bean_pipeline (returns cuppings[] with the composite-key fields). Returns { cupping_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch. Owned by Cupping Specialist per ADR-0011.',
+        'Update / save / record / push field-level changes to an existing cupping evaluation, looked up either by cupping_id (direct PK — get_bean_pipeline returns cupping ids) or by composite key (roast_id + cupping_date + eval_method + recipe_variant — the migration 041 NULLS NOT DISTINCT key; all three non-roast_id key fields must be explicitly supplied, null allowed). When cupping_id is supplied, the composite-key fields become ordinary patchable fields — this is the ONLY path that can change a cupping\'s own key fields (eval_method / recipe_variant / cupping_date), e.g. reclassifying a Pourover row as Simulated Pourover. The companion INSERT path of the same domain returns `created:false` without overwriting fields on composite-key conflict, so this Tool closes the prose-typo / numeric-correction path (R29 from the MCP feedback log) for cupping rows that already exist. Use this for fixes to the 10 prose fields (aroma / flavor / acidity / sweetness / body / finish / overall / temperature_behavior / aromatic_behavior / structural_behavior — last two relocated from roast_learnings in Sprint 11 / migration 062 / ADR-0008), the cooling_arc_pattern enum (degrade / hold / improve / flat — Cluster 2 / migration 078), or numeric ground_agtron / rest_days. Patching cupping_date or rest_days re-runs the Cluster 2 date guard (cupping_date ≥ roast_date + 1, rest_days matches the date arithmetic ±1 day) against the parent roast. wb_agtron override is available for the rare post-hoc Agtron re-measurement case (normally auto-snapshot at cupping-insert time). Field-level mutation: only fields you EXPLICITLY supply are updated; omitted fields are untouched. NULL matches NULL on the composite key (NULLS NOT DISTINCT) — single-cupping rows look up cleanly with recipe_variant: null. To find cupping rows: call get_bean_pipeline (returns cuppings[] with ids + the composite-key fields). Returns { cupping_id, updated_fields: [...] } — updated_fields echoes which columns landed in the patch. Owned by Cupping Specialist per ADR-0011.',
       inputSchema: patchCuppingInputSchema,
     },
     withToolErrorLogging('patch_cupping', async (input) => {

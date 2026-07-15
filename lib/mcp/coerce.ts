@@ -13,14 +13,29 @@ import * as z from 'zod/v4'
 // roast_priority (an int written by the Claude-Code Roasting Coordinator over
 // the stringifying CC bridge) needed the same treatment.
 
+// IMPORTANT (required-axis fix, backlog #57, 2026-07-15): `.optional()` must sit
+// OUTSIDE the z.preprocess wrap. With `inner.optional().nullable()` INSIDE the
+// preprocess, the field's optionality never propagates to the published object
+// schema — every numField/boolField consumer landed in the tool's `required`
+// array (patch_green_bean published 6 required fields instead of 1). The outer
+// `.optional()` keeps the object-level key optional (absent keys skip the
+// preprocess entirely, which is fine — there is nothing to coerce); `.nullable()`
+// stays inside so explicit nulls pass through the preprocess untouched.
+// scripts/check-mcp-tools.ts gates this axis (optional zod field must not
+// appear in a published `required` array).
+
 export const numField = (inner: z.ZodNumber) =>
-  z.preprocess(
-    (v) => (typeof v === 'string' && v.trim() !== '' ? Number(v) : v),
-    inner.optional().nullable(),
-  )
+  z
+    .preprocess(
+      (v) => (typeof v === 'string' && v.trim() !== '' ? Number(v) : v),
+      inner.nullable(),
+    )
+    .optional()
 
 export const boolField = () =>
-  z.preprocess(
-    (v) => (v === 'true' ? true : v === 'false' ? false : v),
-    z.boolean().optional().nullable(),
-  )
+  z
+    .preprocess(
+      (v) => (v === 'true' ? true : v === 'false' ? false : v),
+      z.boolean().nullable(),
+    )
+    .optional()
