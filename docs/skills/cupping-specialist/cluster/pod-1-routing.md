@@ -81,7 +81,7 @@ Current convention (Cluster A, 2026-06-01): push simulated-pourover cups as `cup
 
 Chris's lived workflow steps 11-12: pick reference roast in roasting project → switch to brewing project for optimized brew dial-in via standard brewing flow → bring results back to roasting project for close-lot.
 
-Today's substrate handles the data routing manually (`close-lot.md` STAGE 4 accepts paste-by-recipe or reference-by-brew_id). What's invisible is the **workflow phase itself**.
+Today's substrate handles the data routing manually (`close-lot.md` STAGE 3 accepts paste-by-recipe or reference-by-brew_id). What's invisible is the **workflow phase itself**.
 
 Candidate optimized-brew lifecycle states between `resolved_pending` and `resolved`:
 
@@ -102,7 +102,7 @@ Whether these warrant first-class substrate (DB-stored vs derived) is open. Life
 
 - [`docs/sprints/pod-1-scoping-draft-2026-05-26.md`](docs/sprints/pod-1-scoping-draft-2026-05-26.md) — the source DRAFT that this cluster doc carries forward
 - [`docs/prompts/log-cupping.md`](docs/prompts/log-cupping.md) STAGE 4 — current Path C-1/C-2 substrate
-- [`docs/prompts/close-lot.md`](docs/prompts/close-lot.md) STAGE 4 — current optimized-brew push
+- [`docs/prompts/close-lot.md`](docs/prompts/close-lot.md) STAGE 3 — current optimized-brew push
 - [`docs/skills/cupping-specialist/SKILL.md`](docs/skills/cupping-specialist/SKILL.md) — Cupping Specialist canonical spec; § Path routing for the four ACTIVE paths
 - [Architecture Wave 3 PR 3 retro](~/.claude/projects/-Users-chrismccann-latent-coffee/memory/) — will land at PR 3 close-out
 - 2026-05-26 audit cluster retro (`memory/project_audit_cluster_2026-05-26.md`) — source of the original draft
