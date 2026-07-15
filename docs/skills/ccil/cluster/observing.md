@@ -9,6 +9,8 @@ Distinct from [docs/grilling-queue.md](docs/grilling-queue.md): grilling-queue h
 > **Arbiter review 2026-06-03:** deferred 6 candidates (no new corroborating data since last surface): Process throughline · Process-scoped vs variety-scoped hypothesis class · Pivot-destination heuristics · Cross-domain tension as a CCIL convention · Temperature primacy → traditional natural aromatic landraces · Wide WB-to-Ground Agtron delta. Updated the Medium-roast specialty natural over-extraction lever candidate below with a second data point (Untold Janson Pacamara) + operator clarification of the intake-led criterion; held short of promotion pending one clean intake-led confirmation.
 >
 > **Arbiter review 2026-06-18:** deferred all 6 candidates again. Operator promotion bar this session: act only on a candidate with more than 3 datapoints. Highest is the Medium-roast specialty natural over-extraction lever at N=2 (both Untold); every other candidate is N=1. No new corroborating data crossing a promotion trigger since 2026-06-03.
+>
+> **Arbiter review 2026-07-15 (non-interactive session, corroboration check only):** deferred all 7 candidates. The one new data point since 2026-06-18 (Helm Mystic, brew ac916f61, 2026-07-10) is very light roast (WB Agtron 87.1) and anaerobic *washed*, so it corroborates neither the Medium-roast specialty natural over-extraction lever (still N=2, both Untold) nor the Temperature primacy → traditional natural aromatic landraces candidate (natural-process-scoped). No promotion trigger crossed; no operator input taken this session.
 
 ### Process throughline
 - **Surfaced:** Item 1, Sprint R Phase 4 Step 4 grill (2026-05-23)
