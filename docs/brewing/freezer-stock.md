@@ -707,7 +707,7 @@
 ## Hydrangea Coffee Roasters — Sudan Rume — Natural — Finca Las Margaritas (CGLE)
 **Country:** Colombia · **Region/Farm:** Valle del Cauca / Finca Las Margaritas (Café Granja La Esperanza) · **Producer:** Rigoberto & Luis Eduardo Herrera (CGLE)
 **Variety:** Sudan Rume · **Process:** Natural · **Elevation:** 1570–1850 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 80.4 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://hydrangea.coffee/products/sudan-rume-natural-cafe-granja-la-esperanza
 **Notes:** Notes: cherry, bergamot flowers, papaya — bright/perfumed, layered fruit, clean finish. CGLE Las Margaritas (rare/high-end varieties). Region normalized to Valle del Cauca — Hydrangea's bag labels this lot "Cauca," but its CGLE siblings (Natural XO, Hybrid Washed) + the Special Guests CGLE entry confirm Valle del Cauca as canonical. Sold out / archived.
 
@@ -728,16 +728,16 @@
 ## Hydrangea Coffee Roasters — Sudan Rume — Hybrid Washed — Finca Las Margaritas (CGLE)
 **Country:** Colombia · **Region/Farm:** Valle del Cauca / Finca Las Margaritas (Café Granja La Esperanza) · **Producer:** Rigoberto & Luis Eduardo Herrera (CGLE)
 **Variety:** Sudan Rume · **Process:** Hybrid Washed (14hr open-tank → 18hr oxygen-free → depulp → 24hr aerobic → washed; mechanical silo dry 3–5 days at 38°C) · **Elevation:** 1570–1850 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 80.9 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://hydrangea.coffee/products/cgle-sudan-rume-hw
 **Notes:** Staged-ferment washed — keeps washed cleanliness with added aromatic depth. Notes: bergamot, blue lilac, mango. Same farm as the plain Natural and Natural XO CGLE Sudan Rume lots. Sold out / archived.
 
 ## Airworks / September Coffee — Abel Salinas Ecuador Mejorado Washed
 **Country:** Ecuador · **Region/Farm:** Saraguro, Loja / Finca Arashi · **Producer:** Abel Salinas
-**Variety:** Typica Mejorado · **Process:** Washed (depulped → 24hr dry ferment → washed → 15-day dry) · **Elevation:** 1900 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
-**URL:** https://september.coffee/en-us/products/abel-salinas-ecuador-2025
-**Notes:** Roaster notes: peach, oolong tea, lemon — soft florals, intense lemonade acidity, juicy citrus, long sweet finish, light body. Abel Salinas = 58yo Cup of Excellence winner, first-gen grower; Finca Arashi (Saraguro), 7ha / ~22,000 trees, mostly Typica Mejorado (also Sidra + H1). Mejorado = Bourbon × Ethiopian Landrace cross. Harvest late 2024 (2nd year / 2nd harvest). Importer: The Coffee Quest. Light roast. Clarity-First likely (clean washed Mejorado). Also sold via Airworks: https://airworkscoffee.com/products/september-abel-selinas-washed-mejorado-2nd-harvest-lojas-ecuador-200g
+**Variety:** Typica Mejorado · **Process:** Washed (depulped at peak ripeness → 24hr dry ferment → washed → ~15-day dry) · **Elevation:** 1900 m
+**Agtron:** 81.7 (Very light color) · **Status:** Frozen (15g doses)
+**URL:** https://september.coffee/en-us/products/abel-salinas-ecuador-washed-mejorado-2026
+**Notes:** 2026 release (harvest late 2025 — September's 3rd consecutive year with Abel). Roaster notes: peach, plum, oolong tea, fresh lemon — light body, clean finish. Abel Salinas = Cup of Excellence winner, first-gen grower; Finca Arashi (Saraguro), 7ha / ~22,000 trees, mostly Typica Mejorado (also Sidra + H1). Mejorado = Bourbon × Ethiopian Landrace cross. Importer: The Coffee Quest ($26.07/kg). Light roast. Clarity-First likely (clean washed Mejorado).
 
 ## Airworks / Still — Komothai Kanake (Red Earth)
 **Country:** Kenya · **Region/Farm:** Kiambu County / Komothai (Kanake) · **Producer:** —
@@ -748,7 +748,7 @@
 ## Big Sur Coffee — Ethiopia Washed Faysel Abdosh Single Farm Premium — Guji Shakisso
 **Country:** Ethiopia · **Region/Farm:** Welabo, Oddo Shakisso, Guji / Faysel Abdosh Single Farm · **Producer:** Testi Specialty Coffee (Faysel Abdosh)
 **Variety:** Ethiopian Heirloom · **Process:** Washed (flotation → depulp → 36hr wet ferment → 21-day slow shade-dry on raised beds under black nets) · **Elevation:** 2100 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** 78.4 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://bigsurcafe.com/products/25-26-new-season-ethiopia-washed-faysel-abdosh-single-farm-premium-150g
 **Notes:** Harvest Dec 11 2025. Notes: white florals, citrus, bergamot, peach. Testi Single Farm Project (launched 2025) — centerpiece of the Private Collection Auction Series; clean/transparent/elegant. Same producer (Faysel Abdosh / Testi) as the Big Sur Triple Fermentation + Sewda + Gara Agena lots — comparison family. Clarity-First (washed heirloom).
 
