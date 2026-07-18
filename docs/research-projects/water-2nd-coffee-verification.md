@@ -182,7 +182,7 @@ _(Assistant: capture inline. Candidate primitives stay logged for the PROJECT re
 
 **Date:** 2026-07-17
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/2nd-coffee-gesha-natural-d432ac` @ `<FINAL-SHA — see final commit, recorded in session close message>`, pushed to origin (sitting-1 interim commit `83dec5d`; the compile session fetches/branches from the branch tip — archive doc committed, substrate NOT, not merged to main)
+**Archive location:** branch `claude/2nd-coffee-gesha-natural-d432ac` @ `d585237` (close-out commit; branch tip may include this SHA-pin commit), pushed to origin (sitting-1 interim commit `83dec5d`; the compile session fetches/branches from the branch tip — archive doc committed, substrate NOT, not merged to main)
 **Methodology verdict:** **MIXED — the MAP's STRUCTURE VALIDATES, its headline flip prediction FAILS, and two Track-2 labels (sulfate→florality, CaCl₂-lactic) are dead or demoted. Net: water.md § 6 CAN de-provisionalize, with re-scoped language.**
 
 This brief is self-contained. Consume top-down: TL;DR → Key findings → Substrate edit specifications. Raw per-cup data + full prose reads live in the Recording Sheet above in this same doc; the raw-data table below is the condensed canonical index into it.
@@ -310,7 +310,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/2nd-coffee-gesha-natural-d432ac` (sitting-1 commit `83dec5d`; final SHA in the session close message — the branch tip is the archive)
+- ✅ Archive doc committed + pushed to branch `claude/2nd-coffee-gesha-natural-d432ac` (sitting-1 `83dec5d` → close-out `d585237`; the branch tip is the archive)
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
