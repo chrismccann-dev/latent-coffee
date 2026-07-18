@@ -33,10 +33,21 @@
 > the [`freezer-stock` skill](.claude/skills/freezer-stock/SKILL.md) - "add a roasted bag to my
 > freezer") but intentionally NOT backfilled - older freezer coffees may be absent. A miss is
 > normal.
+>
+> **"Landed, not frozen" convention (2026-07-17, RP6 audit item P6T3-AI-1):** a just-arrived bag
+> destined for a named use (a research-track protocol doc, a planned brew arc) SHOULD be entered
+> at arrival with **Status:** `Resting` + **Agtron:** `pending`, not deferred to pack-time -
+> otherwise the bag has no inventory surface and a protocol doc naming it can't be verified
+> (Phase 2b's kickoff false-alarmed on exactly this). Bags with no named use may still wait for
+> pack-time as before.
 
-**Total coffees:** 104
+**Total coffees:** 105
 
 ---
+
+## Hydrangea Coffee Roasters — Gesha Natural DRD El Burro Lot 15
+
+**Country:** Panama · **Region/Farm:** Chiriquí, El Burro (Lamastus Family Estates), 1550-1800 m · **Producer:** Lamastus family · **Variety:** Gesha · **Process:** Natural DRD (darkroom-dried ~30 d) · **Elevation:** 1550-1800 m · **Agtron:** pending · **Status:** Resting · **URL:** — · **Notes:** Roasted 2026-06-28. RP6 Phase 2b water-verification coffee (19 brews, ~285 g of 456 g used; water.md § 6 row 3 - primary straight MgCl₂ @ GH 44 / KH 0, variant 4:1 MgCl₂:CaSO₄). Mango/violet/strawberries; markedly better at day-19 rest than day-12. First entry under the "landed, not frozen" convention.
 
 ## Moonwake Coffee Roasters — Sebastian Ramirez El Placer — CM White Honey + Yeast Gesha (Brian Quan Collab)
 **Country:** Colombia · **Region/Farm:** Quindío / El Placer · **Producer:** Sebastian Ramirez

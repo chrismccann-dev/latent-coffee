@@ -59,7 +59,13 @@ The unified set of Step 0 sub-steps that survived across all 4 filter-arc projec
 
 **Why:** First-pull drift is a well-known measurement artifact. Burning it on a calibration shot — explicitly NOT counted in the data — gives every scoring pull a stable operator + equipment baseline.
 
-### 7. Bimodality screen (Project #3 Lesson #29, refined by #31 + #36)
+### 7. Instrument calibration at EVERY sitting start (RP6 Phase 2b Lesson P6T3-N5)
+
+**What:** Any track using a measurement instrument (EC meter, scale, etc.) re-calibrates it against its reference standard at the start of EVERY sitting — not just the first.
+
+**Why:** Instrument cal drifts silently between sessions. RP6 Phase 2b's EC60 drifted **-36% in 2 idle days**; without the sitting-2 re-cal the entire second sitting's water QC would have been silently corrupt. For multi-sitting tracks this is a hard Step-0 line, no exceptions — the calibration-shot logic (§ 6) applied to instruments.
+
+### 8. Bimodality screen (Project #3 Lesson #29, refined by #31 + #36)
 
 **What:** For paper-flow / pour-rate-sensitive measurements: run a no-bed paper-only test before scoring. If the paper produces bimodal drawdown regimes at no-bed (e.g. CONE28-FAST in Funnex showed 31.5s fast / 131s slow bimodal), the protocol must switch to a bimodal protocol or document the regime selection rule.
 
@@ -104,6 +110,8 @@ Three quality-control primitives that fire DURING scoring (not at Step 0) but we
 Procedural primitive that goes with calibration-arc execution: one Claude Code tool call per scoring pull. Don't batch multiple pulls into a single tool call; the per-pull observation + reasoning + audit-item capture is the load-bearing payload, and batching causes detail loss.
 
 Refined from "count-out-loud" pacing in the first protocol drafts (Project #1 v1.0). Tool-call-per-pull is the cleaner formulation.
+
+**Track-shape exception — pre-brew water comparisons use flights-of-3 (RP6 Phase 2b Lessons P6T3-N6/N7, sanctioned 2026-07-17):** for A/B water comparisons on a fixed brew recipe, the standard unit is a **flight of 3 brewed together (fresh in-flight distilled/anchor control + the two test waters), tasted round-robin with direct head-to-heads**, one tool call per FLIGHT. Same-flight temperature parity + direct triangulation beat remembered-control cup-at-a-time reads in practice (the operator deviation outperformed the protocol and was ratified). Corollaries: an in-flight control makes *relative* reads rest-robust even when *absolute* reads drift with bean rest (N7), and a single blind read's MAGNITUDE is an anecdote — reproduce across 2+ flights before recording a magnitude claim (P6T3-N1). Per-pull pacing remains the default for measurement-shaped tracks (drawdown, flow, grind).
 
 ---
 

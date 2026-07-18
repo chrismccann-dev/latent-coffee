@@ -2,7 +2,7 @@
 
 **Enforcement bar:** Reference / soft. A **maintained, living inventory** of the water gear, reagents, and concentrates Chris owns - the physical counterpart to [water.md](docs/skills/brewing-equipment-expert/cluster/water.md) (which is the *knowledge*: taxonomy + chart + build method). `water.md` reasons about what's *possible*; this doc records what's *on the shelf*, so the `/brew` water suggestions and any build stay in sync with actual stock.
 
-**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-12 (modifier-screen fold: NaCl stock added, KCl→K₂CO₃ correction). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
+**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-17 (Phase 2b fold: gypsum stock rebuilt, EC-first verification workflow + fingerprint keys added as § 3a). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
 
 **Two-tier mineral supply (the load-bearing structure for `/brew`):**
 - **Tier 1 = dry bulk minerals (§ 2)** - the purchased salts. Used to *make stock*, not to dose per brew.
@@ -47,12 +47,21 @@ Made in the Track 2 session, distilled base, 1 g salt in 100 g distilled = **10,
 | **MgSO₄ stock** | MgSO₄·7H₂O, 1 g/100 g | 2026-06-28 | 10,000 | ~0.98 mg/L Mg + 3.86 sulfate → **~4.0 ppm GH** | Mg + sulfate (body/sweetness phase) |
 | **MgCl₂ stock** | MgCl₂·6H₂O, 1 g/100 g | 2026-07-01 (+ fresh batch 2026-07-12, EC 9.32 mS ≡ old 9.31) | 10,000 | ~1.18 mg/L Mg + 3.45 chloride → **~4.87 ppm GH** | Mg + chloride (the bright peak) |
 | **CaCl₂ stock** | CaCl₂·2H₂O, 1 g/100 g | 2026-07-02 | 10,000 | ~2.70 mg/L Ca + 4.77 chloride → **~6.74 ppm GH** | Ca + chloride |
-| **CaSO₄ (gypsum) stock** | CaSO₄·2H₂O, 0.15 g/100 g | 2026-07-03 | 1,500 (dilute) | ~0.35 mg/L Ca + 0.84 sulfate → **~0.87 ppm GH** | Ca + sulfate; **shake - settles invisibly** |
+| **CaSO₄ (gypsum) stock** | CaSO₄·2H₂O, 0.75 g/500 g | **rebuilt 2026-07-17** (old bottle 1401 µS vs new 1375 µS - identity ✓, old retired) | 1,500 (dilute) | ~0.35 mg/L Ca + 0.84 sulfate → **~0.87 ppm GH** | Ca + sulfate; **shake - settles invisibly**. ⚠️ **Fastest-exhausting stock**: dilute 1,500 ppm burns ~25-30 g per 500-600 ml GH-44 build (~10× the 10 k stocks) - **rebuild from § 2 dry when below ~100 g** (0.75 g dry / 500 g distilled, magnetic stir 15-20+ min, EC-fingerprint new vs old within a few %) |
 | **KHCO₃ stock** | KHCO₃, 1 g/100 g | 2026-06-29 | 10,000 | ~3.87 mg/L K + 6.03 bicarbonate → **~4.94 ppm KH** | K buffer / alkalinity |
 | **NaHCO₃ stock** | NaHCO₃, 1 g/100 g | 2026-06-30 | 10,000 | ~2.71 mg/L Na + 7.19 bicarbonate → **~5.89 ppm KH** | Na buffer (from Bob's Red Mill baking soda) |
 | **NaCl stock** | NaCl, 1.002 g/100 g | 2026-07-12 | 10,000 (EC 15.65 mS) | ~3.9 mg/L Na + 6.1 mg/L Cl → no GH/KH | salinity/seasoning (coffee-dependent - no workable dose on the Pink Bourbon; see water.md § 3) |
 
 Not yet stocked: **KCl** - real KCl not in hand (first order shipped as K₂CO₃; food-grade KCl re-ordered 2026-07-12, ETA pending, verify label on arrival). NaCl now stocked (above); silica is already liquid (Eidon, dose by drops - no dilution concentrate; drop-dosing at ~1 drop/L is the standing method).
+
+### § 3a - Built-water verification workflow (EC-first, Phase 2b 2026-07-17)
+
+- **EC60 cal vs the 84 µS low-range standard at EVERY sitting start, no exceptions** - the meter drifted -36% silently in 2 idle days (Phase 2b sitting 1); without the cal the whole session's QC is corrupt.
+- **First build of any recipe = LaMotte + EC.** The LaMotte proves the GH; the EC reading becomes the recipe's recorded **fingerprint**.
+- **Rebuilds of a known recipe = EC-only vs fingerprint (±5% band).** LaMotte stays mandatory for **multi-salt builds** and **any KH-bearing water**.
+- **Why it earns its keep:** EC-vs-fingerprint doesn't just detect a bad build, it **diagnoses the mistake** - 3/3 Phase 2b build errors identified to the gram from the readings alone (settled gypsum under-delivery · crossed water amounts · crossed doses); zero reached a brewed cup.
+
+**EC fingerprints @ GH 44 (built waters, distilled base):** MgCl₂ **146-150 µS** · MgSO₄ **151-154** · CaCl₂ **169.6** · CaSO₄ **148-155** (gypsum characteristically reads a few % low - CaSO₄⁰ ion pairing; don't chase EC parity with the chlorides). KH-12 add on MgCl₂ water: LaMotte alkalinity endpoint ~drop 1-2.
 
 ## § 4 - Commercial mineral concentrates
 
@@ -91,6 +100,7 @@ Full gear-chain rationale + the build discipline (precipitation, WATER-vs-CONCEN
 
 ## Update log
 
+- **2026-07-17** - Phase 2b fold: **gypsum stock rebuilt** (0.75 g dry / 500 g distilled; old 1401 µS vs new 1375 - identity ✓, old bottle retired) + rebuild-threshold note (dilute stock exhausts ~10× faster than the 10 k stocks; rebuild below ~100 g). Added **§ 3a EC-first verification workflow** (cal every sitting · first build = LaMotte+EC fingerprint · rebuilds = EC-only ±5% · LaMotte mandatory for multi-salt + KH) + the GH-44 built-water EC fingerprint keys. Source: RP6 Phase 2b (Gesha verification), lessons P6T3-N2/N5, audit item P6T3-AI-2.
 - **2026-07-12** - KCl re-ordered: food-grade KCl (Amazon B00IMCGIRW, different seller than the failed order) ordered after the first shipped K₂CO₃; § 2 row updated to "re-ordered, not yet in hand," verify label on arrival. Silica confirmed drop-dosed neat (no dilution concentrate) per operator preference.
 - **2026-07-12** - Modifier-screen fold: added the **NaCl 10 k stock** (§ 3) + a fresh MgCl₂-batch note; **corrected the § 2 KCl row → the ordered item shipped as K₂CO₃** (caustic carbonate, NOT KCl - do not use; real KCl re-source pending). Silica + NaCl findings folded to `water.md § 3` (silica = low-dose amplifier, not texture; NaCl = no workable dose on the Pink Bourbon). KCl-as-finish arm deferred to a remnant re-run.
 - **2026-07-08** - Food-grade MgCl₂ ordered (Alliance Chemical FCC/USP hexahydrate, 2 lb) per the second-expert review's R5 safety flag ([review](docs/audits/research/rp6-water-second-expert-review-2026-07-08.md)); reagent-grade bottles marked not-for-drinking, retire on arrival.
