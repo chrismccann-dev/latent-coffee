@@ -82,7 +82,7 @@ Example (RP4 spawn, paraphrased):
 <Numbered list of the Assistant's jobs for this track, in execution order. This is the load-bearing section — it's what the Assistant operates against during the session.>
 
 1. Read the protocol doc in full
-2. Run Step 0 sub-steps as enumerated in the protocol (typically: physical-photo inventory + SKU sanity + brewer capacity + alias-map audit + vendor design intent + pre-pull-1 calibration shot + bimodality screen — see `docs/skills/research-coordinator/cluster/calibration-arc.md` for the full primitive set)
+2. Run Step 0 sub-steps as enumerated in the protocol (typically: physical-photo inventory + SKU sanity + brewer capacity + alias-map audit + vendor design intent + pre-pull-1 calibration shot + instrument re-cal at every sitting start + bimodality screen — see `docs/skills/research-coordinator/cluster/calibration-arc.md` for the full primitive set)
 3. Pre-state hypothesis tests in the protocol's "predicted outcomes" column before scoring
 4. Generate randomized pull sequence (or whatever ordering discipline the protocol calls for)
 5. Run scoring pulls one-at-a-time with the operator (tool-call-per-pull pacing)
