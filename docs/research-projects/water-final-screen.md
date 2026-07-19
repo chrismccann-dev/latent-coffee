@@ -83,7 +83,7 @@ Handoff brief per the template, back to the Coordinator thread. Substrate-releva
 
 **Date:** 2026-07-19
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/water-final-screen-spawn-b2dc1a` @ `<SHA-filled-post-commit>`, pushed to origin (the compile session fetches/branches from here - the archive doc is committed; substrate is NOT; not merged to main). See role-discipline.md § Archive persistence.
+**Archive location:** branch `claude/water-final-screen-spawn-b2dc1a` @ `276551e789d147bbebc8a4e8b803dd04ac7889c9 (+ SHA-fill follow-up)`, pushed to origin (the compile session fetches/branches from here - the archive doc is committed; substrate is NOT; not merged to main). See role-discipline.md § Archive persistence.
 **Methodology verdict:** MIXED - HF1 FAILS to generalize (silica is PB-only) · HF2 PARTIALLY CONTRADICTS the PB row (2 ppm NaCl clean-positive on the Gesha, but fragile) · HF4 FAILS (MgSO4 back reads savory, not sweet) · HF3 directional (sulfate axis live, dose wants DOWN) · HF5 RESOLVED (blind: 4:1 blend edges straight, tie-adjacent)
 
 This brief closes the last RP6 experimental track. All 9 design cups fired in one sitting (buffer deliberately unspent, KCl arm untriggered). The compile session should consume § Substrate edit specifications for the water.md / water-inventory folds and hand § New lessons + § Protocol-execution friction to the project retro, which is queued immediately after the fold.
