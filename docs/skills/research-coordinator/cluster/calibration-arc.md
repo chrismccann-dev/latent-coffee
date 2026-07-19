@@ -111,7 +111,25 @@ Procedural primitive that goes with calibration-arc execution: one Claude Code t
 
 Refined from "count-out-loud" pacing in the first protocol drafts (Project #1 v1.0). Tool-call-per-pull is the cleaner formulation.
 
-**Track-shape exception — pre-brew water comparisons use flights-of-3 (RP6 Phase 2b Lessons P6T3-N6/N7, sanctioned 2026-07-17):** for A/B water comparisons on a fixed brew recipe, the standard unit is a **flight of 3 brewed together (fresh in-flight distilled/anchor control + the two test waters), tasted round-robin with direct head-to-heads**, one tool call per FLIGHT. Same-flight temperature parity + direct triangulation beat remembered-control cup-at-a-time reads in practice (the operator deviation outperformed the protocol and was ratified). Corollaries: an in-flight control makes *relative* reads rest-robust even when *absolute* reads drift with bean rest (N7), and a single blind read's MAGNITUDE is an anecdote — reproduce across 2+ flights before recording a magnitude claim (P6T3-N1). Per-pull pacing remains the default for measurement-shaped tracks (drawdown, flow, grind).
+**Track-shape exception — pre-brew water comparisons use flights-of-3 (RP6 Phase 2b Lessons P6T3-N6/N7, sanctioned 2026-07-17):** for A/B water comparisons on a fixed brew recipe, the standard unit is a **flight of 3 brewed together (fresh in-flight distilled/anchor control + the two test waters), tasted round-robin with direct head-to-heads**, one tool call per FLIGHT. Same-flight temperature parity + direct triangulation beat remembered-control cup-at-a-time reads in practice (the operator deviation outperformed the protocol and was ratified). Corollaries: an in-flight control makes *relative* reads rest-robust even when *absolute* reads drift with bean rest (N7), and a single blind read's MAGNITUDE is an anecdote — reproduce across 2+ flights before recording a magnitude claim (P6T3-N1). Per-pull pacing remains the default for measurement-shaped tracks (drawdown, flow, grind). **Rubric-in-every-flight (RP6 retro friction fix, 2026-07-19):** the Assistant re-presents the per-axis scoring rubric inside EVERY flight's tool call — the operator should never need to scroll back to (or screenshot) the protocol's top to remember the axes. Matched serving temps per flight + explicit warm-phase/cooled annotations (P6T4-N6).
+
+---
+
+## Taste-track quality primitives (graduated at the RP6 retro, 2026-07-19, operator-ratified)
+
+Three primitives from the RP6 candidate ledger that each fired in 2+ independent sittings/tracks within the project and were ratified at the retro. (The cross-project gate below normally requires a second PROJECT; the operator ratified these at the RP6 retro on multi-track evidence — a second taste project contradicting any of them reopens it.)
+
+### Blind coding is load-bearing for ordering claims (P6T4-N3 + Phase 2b reveal bias)
+
+Any ordering/preference claim between test conditions needs blind coding + forced PRE-reveal ranking to be substrate-grade. Evidence: Phase 2b's post-reveal "straight > blend" lean was reversed by the final screen's blind flight; the trained operator's descriptor→condition attribution went 1-for-3 in the same sitting. Semi-blind is fine for directional per-axis reads; ordering verdicts require full blind.
+
+### Single-read wins are anecdotes — reproduce before recording (P6T3-N1 + P6T4-N5 + the MgSO₄ non-replication)
+
+A same-day semi-blind win can fail blind re-test; an exploratory single-cup read can fail replication on the SAME coffee. Magnitude and preference claims need 2+ reproductions before they enter a substrate row; until then they carry an explicit **anecdote-until-reproduced** tag.
+
+### When instruments disagree, the built artifact's arithmetic adjudicates (P6T3-N2 + P6T4-N1)
+
+Two instruments disagreeing (scale vs pipette, titration vs conductivity) is resolved by computing what the built artifact SHOULD measure and letting that conviction pick the instrument — and the dosing endpoint should be the derived window itself (EC-endpoint titration), not either instrument's readout. Across RP6 this diagnosed 4/4 build errors to the gram with zero reaching a scored cup.
 
 ---
 
