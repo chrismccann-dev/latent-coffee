@@ -2,7 +2,7 @@
 
 **Enforcement bar:** Reference / soft. A **maintained, living inventory** of the water gear, reagents, and concentrates Chris owns - the physical counterpart to [water.md](docs/skills/brewing-equipment-expert/cluster/water.md) (which is the *knowledge*: taxonomy + chart + build method). `water.md` reasons about what's *possible*; this doc records what's *on the shelf*, so the `/brew` water suggestions and any build stay in sync with actual stock.
 
-**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-18 (food-grade MgCl₂ arrived; stock swap scheduled into the final-screen Step 0). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
+**Maintained by:** Chris, on acquisition/depletion. **Last updated:** 2026-07-19 (final-screen fold: food-grade MgCl₂ swap EXECUTED + reagent retired (R5 closed); § 3a dosing rules added). **Sync discipline:** update this doc when an item is acquired, runs out, or is replaced; keep it the single source of truth for "what water stock exists." A `/water-inventory` update skill (mirroring `/freezer-stock` / `/green-inventory`) is a candidate if manual upkeep gets tedious - not built yet (prototype-first).
 
 **Two-tier mineral supply (the load-bearing structure for `/brew`):**
 - **Tier 1 = dry bulk minerals (§ 2)** - the purchased salts. Used to *make stock*, not to dose per brew.
@@ -26,8 +26,8 @@ Hydration form is load-bearing for the GH/KH math (see [water.md § 4](docs/skil
 | Mineral | Product in hand | Grade | Size | Bought | 1 g/L → | Notes |
 |---|---|---|---|---|---|---|
 | **Magnesium sulfate** MgSO₄·7H₂O | Loudwolf-style Epsom, fine crystals | 99.9% USP food | 1 lb (2 bottles) | Jun 25 | ~99 mg/L Mg + 390 sulfate; ~406 ppm GH | dissolves readily |
-| **Magnesium chloride** MgCl₂·6H₂O | flakes | **98%+ reagent (NOT food-grade)** | 4 oz ×2 (Jun 20 backup + Jun 25) | Jun 20/25 | ~120 mg/L Mg + 349 chloride; ~492 ppm GH | **very hygroscopic/deliquescent → desiccant + airtight**; NOT for drinking - **food-grade replacement ordered** (next row) |
-| **Magnesium chloride (food grade)** MgCl₂·6H₂O | Alliance Chemical FCC/USP hexahydrate | 99-100.5% FCC/USP food | 2 lb | **ARRIVED 2026-07-17** | ~120 mg/L Mg + 349 chloride; ~492 ppm GH | Stock swap scheduled for the RP6 final-screen Step 0 (2026-07-19): make fresh 10,000 ppm stock, EC-fingerprint vs the reagent stock (~9.3 mS identity check), retire reagent bottles to non-drinking use. Same desiccant discipline. |
+| **Magnesium chloride** MgCl₂·6H₂O — **RETIRED from drinking use 2026-07-19** | flakes | **98%+ reagent (NOT food-grade)** | 4 oz ×2 (Jun 20 backup + Jun 25) | Jun 20/25 | ~120 mg/L Mg + 349 chloride; ~492 ppm GH | **Both bottles retired + labeled non-drinking** (final-screen Step 0). Very hygroscopic → keep desiccant + airtight if kept for non-drinking use. |
+| **Magnesium chloride (food grade)** MgCl₂·6H₂O — **THE ACTIVE MgCl₂** | Alliance Chemical FCC/USP hexahydrate | 99-100.5% FCC/USP food | 2 lb | Arrived 2026-07-17 | ~120 mg/L Mg + 349 chloride; ~492 ppm GH | **Swap EXECUTED 2026-07-19** (final-screen Step 0): fresh stock 3 g / 300 g distilled, fingerprint **9.16 mS** vs reagent 9.31/9.32 (-1.6%, identity ✓). Closes the R5 safety flag. Silica desiccant packs added to the dry-salt jar; same desiccant discipline. |
 | **Calcium chloride** CaCl₂·2H₂O | USP crystals/powder | USP | 500 g | Jun 22 | ~273 mg/L Ca + 482 chloride; ~680 ppm GH | hygroscopic → desiccant |
 | **Calcium sulfate (gypsum)** CaSO₄·2H₂O | North Mountain, food-grade | food | 1.5 lb | Jun 22 | ~233 mg/L Ca + 558 sulfate; ~581 ppm GH | **low solubility** - make a dilute stock, verify by EC/GH, don't assume full dissolution |
 | **Potassium bicarbonate** KHCO₃ | Loudwolf-style fine powder | 99% USP food | 1 lb (2 bottles) | Jun 25 | ~391 mg/L K + 610 bicarbonate; ~499 ppm alkalinity | buffer/KH source |
@@ -44,8 +44,8 @@ Made in the Track 2 session, distilled base, 1 g salt in 100 g distilled = **10,
 
 | Stock | Formula basis | Made | ppm | Per 1 g stock in 1 L water | Role |
 |---|---|---|---|---|---|
-| **MgSO₄ stock** | MgSO₄·7H₂O, 1 g/100 g | 2026-06-28 | 10,000 | ~0.98 mg/L Mg + 3.86 sulfate → **~4.0 ppm GH** | Mg + sulfate (body/sweetness phase) |
-| **MgCl₂ stock** | MgCl₂·6H₂O, 1 g/100 g | 2026-07-01 (+ fresh batch 2026-07-12, EC 9.32 mS ≡ old 9.31) | 10,000 | ~1.18 mg/L Mg + 3.45 chloride → **~4.87 ppm GH** | Mg + chloride (the bright peak) |
+| **MgSO₄ stock** | MgSO₄·7H₂O, 1 g/100 g | 2026-06-28 (first EC baseline recorded 2026-07-19: **4.54 mS**, post-shake) | 10,000 | ~0.98 mg/L Mg + 3.86 sulfate → **~4.0 ppm GH** | Mg + sulfate (back-of-cup; coffee-dependent - see water.md § 3) |
+| **MgCl₂ stock** | **FOOD-GRADE** MgCl₂·6H₂O (Alliance FCC/USP), 3 g/300 g | **2026-07-19** (fingerprint **9.16 mS**; replaces the retired reagent-derived batches of 2026-07-01/12 @ 9.31/9.32 mS) | 10,000 | ~1.18 mg/L Mg + 3.45 chloride → **~4.87 ppm GH** | Mg + chloride (the bright peak) - the workhorse stock |
 | **CaCl₂ stock** | CaCl₂·2H₂O, 1 g/100 g | 2026-07-02 | 10,000 | ~2.70 mg/L Ca + 4.77 chloride → **~6.74 ppm GH** | Ca + chloride |
 | **CaSO₄ (gypsum) stock** | CaSO₄·2H₂O, 0.75 g/500 g | **rebuilt 2026-07-17** (old bottle 1401 µS vs new 1375 µS - identity ✓, old retired) | 1,500 (dilute) | ~0.35 mg/L Ca + 0.84 sulfate → **~0.87 ppm GH** | Ca + sulfate; **shake - settles invisibly**. ⚠️ **Fastest-exhausting stock**: dilute 1,500 ppm burns ~25-30 g per 500-600 ml GH-44 build (~10× the 10 k stocks) - **rebuild from § 2 dry when below ~100 g** (0.75 g dry / 500 g distilled, magnetic stir 15-20+ min, EC-fingerprint new vs old within a few %) |
 | **KHCO₃ stock** | KHCO₃, 1 g/100 g | 2026-06-29 | 10,000 | ~3.87 mg/L K + 6.03 bicarbonate → **~4.94 ppm KH** | K buffer / alkalinity |
@@ -61,7 +61,13 @@ Not yet stocked: **KCl** - real KCl not in hand (first order shipped as K₂CO�
 - **Rebuilds of a known recipe = EC-only vs fingerprint (±5% band).** LaMotte stays mandatory for **multi-salt builds** and **any KH-bearing water**.
 - **Why it earns its keep:** EC-vs-fingerprint doesn't just detect a bad build, it **diagnoses the mistake** - 3/3 Phase 2b build errors identified to the gram from the readings alone (settled gypsum under-delivery · crossed water amounts · crossed doses); zero reached a brewed cup.
 
-**EC fingerprints @ GH 44 (built waters, distilled base):** MgCl₂ **146-150 µS** · MgSO₄ **151-154** · CaCl₂ **169.6** · CaSO₄ **148-155** (gypsum characteristically reads a few % low - CaSO₄⁰ ion pairing; don't chase EC parity with the chlorides). KH-12 add on MgCl₂ water: LaMotte alkalinity endpoint ~drop 1-2.
+**EC fingerprints @ GH 44 (built waters, distilled base):** MgCl₂ **146-150 µS** · MgSO₄ **151-154** · CaCl₂ **169.6** · CaSO₄ **148-155** (gypsum characteristically reads a few % low - CaSO₄⁰ ion pairing; don't chase EC parity with the chlorides). KH-12 add on MgCl₂ water: LaMotte alkalinity endpoint ~drop 1-2. Stock-level fingerprints: MgCl₂ 10 k **9.16 mS** (food-grade) · MgSO₄ 10 k **4.54 mS** · NaCl 10 k **15.65 mS** · gypsum 1.5 k **~1350-1400 µS**.
+
+**Dosing rules (final screen, 2026-07-19 - lessons P6T4-N1/N2):**
+- **Concentrate dosing = pipette + EC-endpoint titration.** Dose deliberately shy, then titrate up to the fingerprint window. **Never dose concentrates to a scale readout** - the Acacia Pearl over-reads small/slow-added masses ~33% (convicted by EC arithmetic; bench test pending, P6T4-AI-1). The scale stays trusted for large weighs (dry salts, water loads).
+- **Rest bottles after mixing before reading EC** - hard shaking depresses reads via micro-bubbles (a post-shake read that DROPS is an artifact signature, not a mixing failure). Sample mid-bottle.
+- **Sub-ppm dosing pattern:** make a 1:9 sub-stock (1 ml 10 k stock + 9 g distilled = 1,000 ppm) to bring low-ppm doses (e.g. 2 ppm in 300 g) inside pipette range.
+- **Protocol water budgeting counts the per-brew LOAD** (300 g on the xBloom), not the pour volume (248 ml) - budgeting on pour volume undercounts ~2×.
 
 ## § 4 - Commercial mineral concentrates
 
@@ -100,6 +106,7 @@ Full gear-chain rationale + the build discipline (precipitation, WATER-vs-CONCEN
 
 ## Update log
 
+- **2026-07-19** - Final-screen fold: **food-grade MgCl₂ swap EXECUTED** (fresh stock 9.16 mS, identity ✓, both reagent bottles retired + labeled non-drinking - **R5 safety flag CLOSED**). § 3a additions: pipette + EC-endpoint titration rule (scale over-reads small masses ~33%, P6T4-N1/AI-1 bench test pending) · rest-before-reading rule (micro-bubbles, P6T4-N2) · 1:9 sub-stock pattern for sub-ppm doses · budget-on-load rule · stock-level fingerprint set. MgSO₄ stock first EC baseline (4.54 mS).
 - **2026-07-18** - Food-grade MgCl₂ **arrived 2026-07-17** (Alliance Chemical FCC/USP, 2 lb); stock swap + reagent retirement scheduled into the RP6 final-screen Step 0. KCl re-order confirmed in transit.
 - **2026-07-17** - Phase 2b fold: **gypsum stock rebuilt** (0.75 g dry / 500 g distilled; old 1401 µS vs new 1375 - identity ✓, old bottle retired) + rebuild-threshold note (dilute stock exhausts ~10× faster than the 10 k stocks; rebuild below ~100 g). Added **§ 3a EC-first verification workflow** (cal every sitting · first build = LaMotte+EC fingerprint · rebuilds = EC-only ±5% · LaMotte mandatory for multi-salt + KH) + the GH-44 built-water EC fingerprint keys. Source: RP6 Phase 2b (Gesha verification), lessons P6T3-N2/N5, audit item P6T3-AI-2.
 - **2026-07-12** - KCl re-ordered: food-grade KCl (Amazon B00IMCGIRW, different seller than the failed order) ordered after the first shipped K₂CO₃; § 2 row updated to "re-ordered, not yet in hand," verify label on arrival. Silica confirmed drop-dosed neat (no dilution concentrate) per operator preference.
