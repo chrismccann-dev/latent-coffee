@@ -24,6 +24,11 @@ import {
   type ToolDescriptor,
 } from '@/lib/mcp/discoverability-check'
 import { isSchemaNode, type SchemaNode } from '@/lib/mcp/schema-compat'
+import {
+  annotateUnknownArgs,
+  knownKeysFor,
+  unknownArgKeys,
+} from '@/lib/mcp/unknown-arg-warnings'
 
 function collectToolDescriptors(server: ReturnType<typeof buildMcpServer>): ToolDescriptor[] {
   const internal = server as unknown as {
@@ -176,6 +181,65 @@ async function checkPublishedCatalog(server: ReturnType<typeof buildMcpServer>):
   return problems
 }
 
+// --- Unknown-argument guardrail integrity (brew-session friction, 2026-07-20) ---
+//
+// lib/mcp/unknown-arg-warnings.ts wraps tools/call so a typo'd top-level field
+// (which zod silently strips before the handler) comes back with a warning
+// instead of vanishing. Two gates:
+//   1. Drift canary — the guardrail derives each tool's known keys from the
+//      SDK-private `inputSchema` zod shape (`_zod.def.shape`). If that access
+//      path moves, the guardrail no-ops silently. Assert push_brew still yields
+//      a non-empty known-key set that contains a sentinel field + excludes a
+//      known typo target.
+//   2. Behavior — annotateUnknownArgs must (a) sync the toolJson JSON-mirror
+//      block + structuredContent.warnings, and (b) prepend a ⚠️ text block when
+//      there is no structuredContent mirror.
+function checkUnknownArgGuardrail(server: ReturnType<typeof buildMcpServer>): string[] {
+  const problems: string[] = []
+  const internal = server as unknown as {
+    _registeredTools?: Record<string, Parameters<typeof knownKeysFor>[0]>
+  }
+  const known = knownKeysFor(internal._registeredTools?.['push_brew'])
+  if (!known || known.size === 0) {
+    problems.push(
+      'unknown-arg guardrail: cannot derive push_brew known keys (SDK inputSchema._zod.def.shape moved?) — the guardrail would silently no-op',
+    )
+  } else {
+    if (!known.has('strategy_notes')) {
+      problems.push("unknown-arg guardrail canary: expected 'strategy_notes' in push_brew known keys")
+    }
+    const bogus = unknownArgKeys({ strategy_notes: 'x', extraction_strategy_notes: 'y' }, known)
+    if (JSON.stringify(bogus) !== JSON.stringify(['extraction_strategy_notes'])) {
+      problems.push(
+        `unknown-arg guardrail canary: expected only ['extraction_strategy_notes'] flagged, got ${JSON.stringify(bogus)}`,
+      )
+    }
+  }
+
+  // (2a) toolJson-shaped result: JSON mirror + structuredContent kept in sync.
+  const sc = { brew_id: 'abc', warnings: [] as string[] }
+  const mirrored = {
+    content: [{ type: 'text', text: JSON.stringify(sc) }],
+    structuredContent: sc,
+  }
+  annotateUnknownArgs(mirrored, 'push_brew', ['typo_field'])
+  if (mirrored.structuredContent.warnings.length !== 1) {
+    problems.push('unknown-arg guardrail: structuredContent.warnings not populated on toolJson result')
+  }
+  if (mirrored.content[0].text !== JSON.stringify(mirrored.structuredContent)) {
+    problems.push('unknown-arg guardrail: JSON mirror text block drifted from structuredContent after annotate')
+  }
+
+  // (2b) plain-content result (no structuredContent): a ⚠️ block is prepended.
+  const plain = { content: [{ type: 'text', text: 'ok' }] }
+  annotateUnknownArgs(plain, 'some_tool', ['typo_field'])
+  if (plain.content.length !== 2 || !plain.content[0].text.startsWith('⚠️')) {
+    problems.push('unknown-arg guardrail: expected a prepended ⚠️ text block on a plain-content result')
+  }
+
+  return problems
+}
+
 async function main(): Promise<void> {
   // Stub auth context — descriptions don't touch supabase/userId.
   const stubAuth = {
@@ -205,6 +269,13 @@ async function main(): Promise<void> {
     process.exit(1)
   }
 
+  const guardrailProblems = checkUnknownArgGuardrail(server)
+  if (guardrailProblems.length > 0) {
+    console.error(`Unknown-argument guardrail check FAILED (${guardrailProblems.length} problem(s)):`)
+    for (const p of guardrailProblems) console.error(`  - ${p}`)
+    process.exit(1)
+  }
+
   console.log(`MCP tool discoverability check passed for ${tools.length} tool(s):`)
   const serverMtime = fileMtime(join(process.cwd(), 'lib', 'mcp', 'server.ts'))
   for (const t of tools) {
@@ -213,6 +284,7 @@ async function main(): Promise<void> {
   console.log(`\nTOTAL: ${tools.length} tools registered.`)
   console.log(`lib/mcp/server.ts last modified: ${serverMtime}`)
   console.log('Published-catalog type coverage passed (no untyped properties, no bare unions, no optional-field-in-required; price_per_kg + patch_green_bean.required canaries OK).')
+  console.log('Unknown-argument guardrail passed (known-key derivation + annotate behavior OK).')
   process.exit(0)
 }
 

@@ -43,6 +43,7 @@ import {
   type ToolDescriptor,
 } from '@/lib/mcp/discoverability-check'
 import { installPublishedSchemaCompat } from '@/lib/mcp/schema-compat'
+import { installUnknownArgWarnings } from '@/lib/mcp/unknown-arg-warnings'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 
 function templateVar(variables: Variables, key: string): string {
@@ -106,6 +107,14 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   // fields as strings and trips the server-side zod -32602). Must run AFTER
   // all registerTool calls — it wraps the SDK's tools/list handler.
   installPublishedSchemaCompat(server)
+
+  // Silent-drop guardrail (brew-session friction, 2026-07-20): zod strips
+  // unknown keys before the handler runs, so a typo'd field name (e.g.
+  // `extraction_strategy_notes` for `strategy_notes`) is dropped with a success
+  // response and no warning. This wraps the SDK's tools/call handler to surface
+  // ignored top-level fields in the result's warnings[] + a ⚠️ text block. Must
+  // run AFTER all registerTool calls (needs the populated _registeredTools map).
+  installUnknownArgWarnings(server)
 
   // Discoverability guard (MCP feedback batch 4). Dev-only — fires fast on the
   // first MCP request after a tool description regresses into the "Inserts a
