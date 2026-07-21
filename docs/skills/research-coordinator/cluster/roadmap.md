@@ -38,7 +38,13 @@ Each candidate carries three implicit axes used for sequencing:
 
 ## Now
 
-*Empty - Research Project #6 (water) closed + retro completed 2026-07-19. Per the retro discipline, the next project scopes in when the operator picks from § Next - operator called a deliberate break from water research; no immediate pull queued.*
+### Rapid chilling at drawdown / post-brew (Research Project #7 — pulled from § Next #10, 2026-07-21 talk-through)
+
+**Effort:** small. **Fold-in:** low. **WBC payoff:** medium.
+
+**Scope:** Chill selections (bloom only / pour 1 / pour 2 / whole brew) or whole brew using Paragon (Nucleus Coffee Tools — [link](https://nucleuscoffeetools.com/products/paragon/)) with ice chill bowl. Different temperature gradients. Effect on aromatics. Broader question: coffees taste best at 45-50°C — is rapid-cool-from-hot better than natural drop?
+
+**Slot framing (2026-07-21):** deliberately the *light* brewing-side project — momentum pick, not payoff pick. Tolerates freezer-coffee variety (the question is per-cup chill-vs-natural-drop, not a cross-cup comparison on one coffee), so no same-coffee volume requirement and no Pink Bourbon fatigue tax. The operator's primary energy this cycle goes to **resuming the roasting cadence** (close out the mid-flight lots, AN10 first), which is the explicit build-toward path for § Next #11 (Roast blending) — see the amended trigger note there.
 
 ---
 
@@ -52,7 +58,7 @@ Ordered queue. Order reflects priority + sequencing constraints derived from the
 
 **Scope:** Bloom water-to-coffee ratio, bloom temperature, bloom duration, bloom agitation (swirl / stir / jiggle / none), double-bloom technique, bloom temperature gradients (hot / same-as-main / cold), held-switch bloom. Vary bloom alone, hold everything else constant.
 
-**Sequencing rationale:** Precursor to § Next #6 (Temperature profiling) per operator call — bloom alone is scoped first, temp-trajectory expansion second. Inherits Track 5's xBloom platform validation. Methodology mostly inherited from filter arc + Track 5.
+**Sequencing rationale:** Precursor to § Next #7 (Temperature profiling) per operator call — bloom alone is scoped first, temp-trajectory expansion second. Inherits Track 5's xBloom platform validation. Methodology mostly inherited from filter arc + Track 5. **Passed over at the 2026-07-21 talk-through:** needs same-coffee volume; the only qualifying stock is the leftover RP6 Hydrangea Pink Bourbon and the operator is fatigued on that coffee — don't re-propose the PB as this project's material. Re-eligible when a coffee the operator is excited about lands in quantity.
 
 ### 2. Routine construction & rehearsal as research
 
@@ -68,7 +74,7 @@ Ordered queue. Order reflects priority + sequencing constraints derived from the
 
 **Scope:** Rest-time experiments — 1d / 5-7d / 2w / 3w / 6w. Effect on drawdown time, recipe, end flavor. Test whether "optimal rest time" is a real shaping variable or operator folklore. Materials axis (sealed bag vs single-dose freezer vs open bag) folds into this project — including the prior RP4 AI-1 baseline-drift question (HALO-B3 134s P3 vs 91s RP4, plastic-bag-degassing hypothesis untested at filter-arc close).
 
-**Sequencing rationale:** Roasting-side equipment platform (different from brewing-side projects); scoped to one variable axis. Subsumes the RP4 AI-1 single-session investigation that was previously parked in § Extensions.
+**Sequencing rationale:** Roasting-side equipment platform (different from brewing-side projects); scoped to one variable axis. Subsumes the RP4 AI-1 single-session investigation that was previously parked in § Extensions. **Reframed 2026-07-21 (talk-through, consistent with the WBC-mastery brainstorm's rest-curves demotion):** needs fresh-roast-date coffee in quantity, which only exists once roasting cadence resumes — so this runs as a **concurrent ride-along protocol** on whatever lots are cycling (rest-day tracking bolted onto the roast/cup loop), not as a standalone § Now occupant.
 
 ### 4. Pour kinematics
 
@@ -110,27 +116,23 @@ Ordered queue. Order reflects priority + sequencing constraints derived from the
 
 **Effort:** medium. **Fold-in:** medium (extends existing modifier taxonomy). **WBC payoff:** medium.
 
-**Trigger:** TDS + EY meter purchased (operator flagged "been meaning to get one for a while").
+**Trigger:** TDS + EY meter purchased (operator flagged "been meaning to get one for a while"). **✅ FIRED 2026-07-21 — operator bought the VST LAB Coffee III** (the competition-reference instrument). Entry is now eligible for next-slot framing at any project close; stays queued at operator's call (2026-07-21 talk-through picked rapid chilling + roasting resumption instead).
 
 **Scope:** Separate bloom / body / tail fractions. Understand each fraction's composition vs perception. Recombine portions to understand effects across coffees. Output: fractionalization taxonomy — which coffees reward output selection, which don't.
 
 ### 10. Rapid chilling at drawdown / post-brew
 
-**Effort:** small. **Fold-in:** low. **WBC payoff:** medium.
-
-**Scope:** Chill selections (bloom only / pour 1 / pour 2 / whole brew) or whole brew using Paragon (Nucleus Coffee Tools — [link](https://nucleuscoffeetools.com/products/paragon/)) with ice chill bowl. Different temperature gradients. Effect on aromatics. Broader question: coffees taste best at 45-50°C — is rapid-cool-from-hot better than natural drop?
-
-**Sequencing rationale:** Most constrained scope. Paragon already owned. Small experimental surface — fits as a focused project between larger investments.
+**→ Pulled to § Now as Research Project #7 (2026-07-21 talk-through) — the momentum pick after the RP6 water close.** The remaining § Next entries keep their numbers.
 
 ### 11. Roast blending of a single coffee
 
 **Effort:** large. **Fold-in:** low (builds blending taxonomy shape). **WBC payoff:** huge.
 
-**Trigger:** (a) operator reaches a reference roast they really enjoy AND (b) excess beans available to play with. Nothing in current inventory meets this; chunkier lots in pipeline are candidates as they go through the roasting process.
+**Trigger:** (a) operator reaches a reference roast they really enjoy AND (b) excess beans available to play with. **Amended 2026-07-21 (talk-through):** operator opened a **prototype lane** that doesn't wait for (a) — the in-inventory volume lots (96B Liberica AN 5kg · Que Liberica Honey 5kg · Ginger Castillo 2.5kg) are approved blending material as-is, per operator: "I have them and I wouldn't consume this quality any other way, so I should go for it on these." A first roast-blending arc can therefore fire on the Liberica baseline (96B first, per its own sequencing note) as soon as roasting cadence is back; the full reference-roast trigger still governs the *showcase-grade* arc on an apex lot (Sidra / Los Lajones Bambu / Lamastus El Burro class — buy more of that specific green when one produces a roast the operator loves).
 
 **Scope:** Take one green in volume. Develop deliberately varied roast profiles (Maillard-forward / development-forward / fast / slow / counterflow / drum / regular). Blend at different ratios. Latent's drum-vs-counterflow setup uniquely suited for this. Output: roast palette framework, intersects with § Next #6 (Cross-coffee blending).
 
-**Sequencing rationale:** Floats — runs whenever triggers fire, regardless of queue position. Single-coffee roast blending is the smaller-scope prototype for the larger cross-coffee blending taxonomy; if this project fires before § Next #6, it sharpens the downstream scoping.
+**Sequencing rationale:** Floats — runs whenever triggers fire, regardless of queue position. Single-coffee roast blending is the smaller-scope prototype for the larger cross-coffee blending taxonomy; if this project fires before § Next #6, it sharpens the downstream scoping. **Named destination of the 2026-07-21 roasting resumption:** operator's roasting tapered off during the water arc; finishing the mid-flight lots (AN10 first) + restarting the queue (LPyT Sidra at priority #1) is the explicit build-toward path here — both as the forcing function back onto the Roest and as the route to trigger (a).
 
 ### 12. Sourcing
 
