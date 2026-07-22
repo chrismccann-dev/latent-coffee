@@ -124,6 +124,14 @@ tasting-arc state block** below at every iteration turn.
 brew lands), then `propose_doc_changes` for the coffee learnings. Then run the **close retro**
 below.
 
+**If the Latent connector is unreachable at the completion write** (N=3 recovery recipe,
+graduated 2026-07-22): (a) discover the tools by keyword (`ToolSearch "push brew canonical"`) or
+the connector-UUID prefix — never by `mcp__latent-coffee__*` name, which does not exist on the
+account-level connector; (b) if the connection dropped mid-session, one fresh-session retry
+before concluding the server is down — the deferred-tool catalog does not repopulate in-session;
+(c) if still unreachable, freeze the complete resolved payload in-thread and land it in the next
+session (zero-loss, proven three times).
+
 ## Running tasting-arc state block (Claude Code compaction discipline)
 
 Brewing Phase-2 iteration is audio-heavy and can span an idle gap (the operator brews, comes back
