@@ -126,6 +126,8 @@ Once the extraction strategy and any modifiers are confirmed, select the brewer 
 | **Pour Structure**    | [one labeled line per pour using CUMULATIVE targets — "Pour N: at [m:ss], pour to [cumulative g] over [Ns] in a [pattern] pour", plus — for Bottomless Dripper — a trailing `Sworks Valve:` clause (dial/state + any mid-pour transition). If Aroma Capture / Equipment active, note where the gear (chilling ball / Melodrip) is applied and over which steps. If Strategy = Hybrid, note phase boundaries (lever/valve transitions) and what each phase is doing — e.g. "0:00-1:30 immersion, 1:30-3:00 percolation finish". End with a `Drawdown: [m:ss]` segment or rely on Target Total Time.] |
 | **Target Total Time** |                                                                                                      |
 
+**Pour-structure rendering (parseability, operator feedback 2026-06-22).** For any multi-phase or valve-modulated brew (SWORKS / Switch / Hybrid / staged pours), render the Pour Structure as a **per-row table** — one row per pour with columns `Pour | Start | Cumulative weight (g) | Description | Valve | End` — rather than packing every pour into a single dense prose cell. A one-cell pour string is hard to follow mid-brew (LiuGuang office iteration). The CUMULATIVE-target + trailing valve/lever-clause requirements above are unchanged; the table is just the legible surface for them. A simple 1-2 pour percolation brew can stay inline.
+
 After the recipe table, provide three short sections:
 
 - Why this brewer and filter combination was selected (2-3 sentences referencing the confirmed extraction strategy and brewing location constraints).
