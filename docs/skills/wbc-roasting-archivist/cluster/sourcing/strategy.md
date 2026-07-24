@@ -347,7 +347,7 @@ Six channel kinds, each characterized by volume + access pattern + relationship 
 |---|---|---|---|---|
 | **Generalist retailer** | Open (any size) | Anonymous + non-relational; broad catalog | Rare to find competition-grade content | Sweet Maria's |
 | **Specialty importer** | Typically 1-5lb | Semi-anonymous; small curated catalog | Bridges generalist + competition-grade | Jah Coffee, Showroom Coffee |
-| **Competition-grade importer** | Typically 1-5lb | Relationship-keyed; niche catalog, often single-person-run | Critical channel for competition-grade at single-person scale | Untold Coffee Lab, Forward Coffee (Panama-based) |
+| **Competition-grade importer** | Typically 1-5lb | Relationship-keyed; niche catalog, often single-person-run | Critical channel for competition-grade at single-person scale | Untold Coffee Lab, Forward Coffee (Panama-based), Kumquat Coffee (LA roaster-retailer with a curated direct-traded green micro-lot program; 100g/500g sizes, high markup - sample-set buys, not volume; first buy 2026-07-24: Lost Origin Maya + Arturo Paz + Totumas Ara Amaru, incl. WBC-2025-winning Maya lot family) |
 | **Direct-from-farm** | 1kg sample bags up to multi-kg allocations | Relationship-keyed with the producer directly; the Tier-1-producer-access-paradox's primary unlock | Highest cup ceiling + hobbyist-compatible volume when available | CGLE (WhatsApp post-relationship-building), Forest Coffee (Milton Monroy / GESHA CLOUDS source post-World-of-Coffee), Geisha Village (1kg sample bags via website) |
 | **Auction-sample channel** | 100-120g single batches | Auction-keyed sample sets, farm-direct sample sets sent during sourcing negotiations, rare allocations from limited drops | One-shot competition-grade access at the smallest viable volume | Auction sample sets, World of Coffee allocation samples |
 | **Direct-from-auction** (awareness-only) | Full auction lots (typically 5-50kg+) | Direct purchase of full auction lots, typically through friends or contacts who participate in auctions | Highest-end access path AND incompatible with the 1-5lb window today | Future scope as relationship network grows |
@@ -372,7 +372,7 @@ Most current inventory came in via:
 
 - **Generalist retailer** — Sweet Maria's (historical skill-building lots, value-tier purchases)
 - **Specialty importer** — Jah Coffee, Showroom Coffee (the post-World-of-Coffee 2026 mid-tier mix)
-- **Competition-grade importer** — Untold Coffee Lab, Forward Coffee (the higher-end specialty lots)
+- **Competition-grade importer** — Untold Coffee Lab, Forward Coffee (the higher-end specialty lots), Kumquat Coffee (2026-07-24: Lost Origin Maya yeast natural + Arturo Paz dark-room Honduras + Totumas Ara Amaru CF natural, with peer-roasted reference bags of the first two)
 - **Direct-from-farm** — CGLE (Sudan Rume Hybrid Washed + Sudan Rume Natural, both via WhatsApp post-relationship-building), Forest Coffee (GESHA CLOUDS, Milton Monroy source)
 
 The Competition-grade-access-trajectory (docs/reference/wbc-materials.md § Competition-grade access trajectory) names the multi-year shift in this mix — from generalist + specialty importer dominant today toward direct-from-farm + competition-grade importer + direct-from-auction dominant at championship-mode horizon.

@@ -41,7 +41,7 @@
 > (Phase 2b's kickoff false-alarmed on exactly this). Bags with no named use may still wait for
 > pack-time as before.
 
-**Total coffees:** 105
+**Total coffees:** 107
 
 ---
 
@@ -769,3 +769,17 @@
 **Agtron:** 77.5 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://www.instagram.com/p/DYGUnk6CTqo/
 **Notes:** ⚠️ No web-store page — Bay Area Coffee Club exclusive collab (Instagram only). Very young producer, small extreme-elevation Gesha garden. Harvest Nov 2025. Farm gate $25.26/kg green. Notes: pomelo, jasmine, bergamot, melon. Second Cusco Gesha in inventory (cf. Prodigal Caminos del Inka).
+
+## Kumquat Coffee — Lost Origin Maya 317 Yeast Natural Geisha Tri-Up Lot
+**Country:** Panama · **Region/Farm:** Boquete, Chiriquí · **Producer:** Fran Zeimetz (processed by Lost Origin × Tri-Up)
+**Variety:** Gesha · **Process:** Yeast Inoculation Natural (LOY-011, 8-day sealed tank, 32-day cold-room dry) · **Elevation:** 1550 m
+**Agtron:** pending · **Status:** Resting
+**URL:** https://www.kumquatcoffee.com/product/lost-origin-maya-317-yeast-natural-geisha-tri-up-lot
+**Notes:** Ordered 2026-07-24 (in transit), 20g bag, $35. Roasted 2026-07-08 — already ~16 days rest at order; cup promptly on arrival. Named use: PEER CUP REFERENCE for green lot PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 (1kg, 2 V-sets planned) — taste the intended expression + run the temperature-swing read before V1 design. Same lot family as Martin Wölfl's WBC 2025 win. Notes: quince, grape, orange blossom, mango.
+
+## Kumquat Coffee — Honduras Arturo Paz Dark Room Geisha Natural
+**Country:** Honduras · **Region/Farm:** Santa Bárbara · **Producer:** Arturo Paz
+**Variety:** Gesha · **Process:** Natural (Dark Room Dried) · **Elevation:** 1700 m
+**Agtron:** pending · **Status:** Resting
+**URL:** https://www.kumquatcoffee.com/green
+**Notes:** Ordered 2026-07-24 (in transit). Roasted 2026-07-24 — fresh off the roaster; needs full rest before reading anything from it. Named use: PEER CUP REFERENCE for green lot HND-ARTUROPAZ-GESHA-DRD-NAT-2026 (1kg, non-Panama portability test). Notes: mango, nectarine, blackberry, lemongrass.
