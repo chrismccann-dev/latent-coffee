@@ -746,6 +746,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — active-lots / El Paraiso Red Plum Castillo (REDIRECT STUB — resolved 2026-06-22, reference Batch 212 v4b)',
     description: '[REDIRECT STUB per the close-out convention, case 011] Lot resolved 2026-06-22; reference roast Batch 212 (v4b, flattened post-FC inlet slope). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/redplum-cas-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-deborah-geisha-nat-2026.md',
+    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (V1 designed 2026-07-25; depth arc under the layered-evolving goal; pre-V1 gates open)',
+    description: 'Active-lot Roasting Brief + working hypotheses for Finca Deborah Geisha Natural Interstellar (PAN-DEBORAH-GEISHA-NAT-2026, Jamison Savage, yeast-inoculated 100+ hr natural — heavy-ferment family). The depth-arc lot carrying the layered-evolving apex goal directly. V1 designed 2026-07-25: bean-temp drop-ceiling ladder 206/208/210C on a fixed 246C-peak natural-family curve (narrow single-variable spread per the high-lot-value precedence rule). NOT yet pushed to Roest — two pre-V1 gates open: density measurement + Untold peer-reference calibration cup (peer bag in freezer stock, WB 60.6).',
+  },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
     uri: 'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
