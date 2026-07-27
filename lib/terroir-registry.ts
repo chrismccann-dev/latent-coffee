@@ -91,6 +91,13 @@ export const TERROIRS: readonly TerroirEntry[] = [
   { country: 'Honduras', admin_region: 'Comayagua / La Paz', macro_terroir: 'Central Honduras Highlands' },
   { country: 'Honduras', admin_region: 'Copán / Ocotepeque / Lempira', macro_terroir: 'Western Honduras Highlands' },
   { country: 'Honduras', admin_region: 'El Paraíso', macro_terroir: 'Eastern Honduras Highlands' },
+  // Stood up 2026-07-27 (Chris-ratified, Arturo Paz Dark Room Gesha green lot
+  // 6502d971): Santa Bárbara is NOT cleanly synonymous with the western Copán
+  // belt - under Honduras's six-region trade framework the department splits
+  // across Copán / Opalaca / Montecillos, so admin-only routing is unreliable.
+  // The macro is anchored on the Santa Bárbara Mountain karst massif + Lake
+  // Yojoa environmental system, a distinct ecology from the Copán borderland.
+  { country: 'Honduras', admin_region: 'Santa Bárbara', macro_terroir: 'Santa Bárbara-Yojoa Highlands' },
   { country: 'India', admin_region: 'Andhra Pradesh / Odisha', macro_terroir: 'Araku Eastern Ghats Highlands' },
   { country: 'India', admin_region: 'Karnataka', macro_terroir: 'Karnataka Western Ghats' },
   { country: 'India', admin_region: 'Kerala', macro_terroir: 'Kerala Western Ghats' },
@@ -289,6 +296,7 @@ export const TERROIR_MACROS: readonly string[] = [
   'Rwenzori Grand Nord Highlands',
   'Rwenzori Highlands',
   'Sana’a Western Highlands',
+  'Santa Bárbara-Yojoa Highlands',
   'Santa Clara Highlands',
   'Santa Cruz Andean Foothills',
   'Sidama Highlands',
@@ -342,6 +350,11 @@ export const TERROIR_MACRO_ALIASES: Readonly<Record<string, string>> = {
   'Huehuetenango Highlands': 'Western Dry Highlands',
   'Marcala Highlands': 'Central Honduras Highlands',
   'Pinar del Rio Western Highlands': 'Pinar del Río Western Highlands',
+  'Santa Barbara-Yojoa Highlands': 'Santa Bárbara-Yojoa Highlands',
+  'Santa Bárbara–Yojoa Highlands': 'Santa Bárbara-Yojoa Highlands',
+  'Santa Bárbara Highlands': 'Santa Bárbara-Yojoa Highlands',
+  'Santa Barbara Highlands': 'Santa Bárbara-Yojoa Highlands',
+  'Yojoa Highlands': 'Santa Bárbara-Yojoa Highlands',
   'Sierra Sur Highlands': 'Oaxaca Southern Highlands',
   // 'Southern Andean Cordillera' alias removed in MCP feedback batch 7
   // (2026-05-02). Originally added when Cauca was reclassified from Southern

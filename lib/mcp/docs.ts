@@ -384,6 +384,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     description: 'Use when designing a Hybrid recipe and looking for confirmed per-coffee data points — SWORKS slow/slow/open Sequential template across three yeast-inoculated Geshas (Janson 1010 / Sebastian Ramirez White Honey / Finca La Reserva Anaerobic Honey); 4 other sub-forms (Phase-Mapped / Selective Bloom / Intensity-Clarity Split / Temperature-Staged) empty with candidate-experiment scoping. Migrated from BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Hybrid in Wave 2 PR 2.',
   },
   {
+    uri: 'docs://skills/brewing-historian/cluster/patterns/by-roast-level/medium-developed.md',
+    title: 'Brewing Historian — By Roast Level: Medium/Developed (override capsule)',
+    description: 'Use when a lot reads medium or darker than the light default — the roast-level override capsule (graduated cross-coffee Pattern #1, any-process): developed roast overrides process and cultivar, routes to Hybrid Intensity-Clarity Split on a fast-draining cone switch + fast paper; over-extraction risk is roast character (evaluate cooler, accept a chocolatier register, do not push); Agtron boundary markers (wall <=65, none at 70; cut boundary 48-60) + the thermal-ceiling/density refinement and its discriminator test.',
+  },
+  {
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/gesha.md',
     title: 'Brewing Historian — By Cultivar: Gesha (N=34)',
     description: 'Use when designing a Gesha recipe — pointer / cross-strategy entry index for the largest single-cultivar corpus (N=34). Per-cultivar deep-dive patterns will accrue here beyond the by-variety rollup.',

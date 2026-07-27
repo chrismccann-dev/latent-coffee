@@ -106,6 +106,7 @@ Matches the `TERROIRS` array in [lib/terroir-registry.ts](lib/terroir-registry.t
 **Honduras**
 - Central Honduras Highlands
 - Eastern Honduras Highlands
+- Santa Bárbara-Yojoa Highlands
 - Western Honduras Highlands
 
 **India**
@@ -1731,6 +1732,32 @@ Eastern system with slightly lower elevation and warmer baseline climate
 
 #### Why This Macro Stands Out
 Lower elevation reduces acidity definition compared to western and central regions
+
+---
+
+### Santa Bárbara-Yojoa Highlands
+
+**Country:** Honduras  **Admin Regions it overlaps:** Santa Bárbara
+**Typical Meso Terroirs (reference only; not canonical):** El Dorado, Santa Bárbara Mountain, Las Vegas, San Luis Planes, Lake Yojoa rim
+
+#### Context
+Isolated karst massif (Santa Bárbara Mountain, ~2,777 m) beside Lake Yojoa in northwest Honduras - Honduras's most decorated specialty cluster, with a long Cup of Excellence record and the high-end Gesha / Parainema microlot scene. Stood up 2026-07-27 (Chris-ratified; first lot: Arturo Paz Dark Room Natural Geisha, Finca El Itacayo, El Dorado, ~1,600-1,730 m). Deliberately NOT folded into Western Honduras Highlands: the department splits across Copán / Opalaca / Montecillos in Honduras's six-region trade framework, so admin-only routing is unreliable, and the mountain/lake system is a materially different ecology from the Copán borderland belt.
+
+#### Environmental System
+- **Elevation Band:** 1,300-1,750 m (farms; massif rises to ~2,777 m)
+- **Climate Regime:** lake-moderated humidity; lower dry-forest through moist-forest transitions rising to montane cloud forest
+- **Soil Base:** karst limestone-derived soils (distinct from the volcanic/loam mixes of the western belt)
+- **Farming Model:** smallholder micro-lot
+
+#### What Comes Out of This System
+- **Dominant Varieties:** Parainema, Pacas, Bourbon; Gesha on high-end microlots
+- **Typical Processing:** washed + expressive naturals (incl. Dark Room Dried)
+- **Cup Profile (structural):** bright, complex fruit; florals on top microlots
+- **Acidity Character:** bright citric-malic
+- **Body Character:** silky-medium
+
+#### Why This Macro Stands Out
+Repeatedly isolated at trade level as its own origin rather than an administrative label; the karst massif + lake environmental system earns a macro of its own instead of merging into Western Honduras Highlands on geography alone.
 
 ---
 
@@ -3517,6 +3544,7 @@ Per-claim citations at authoring time; rollup below.
 
 ## Changelog
 
+- **2026-07-27 (arbitration follow-up, Chris-ratified):** Added 4th canonical Honduras macro **Santa Bárbara-Yojoa Highlands** (admin Santa Bárbara) for the Arturo Paz Dark Room Gesha lot (Finca El Itacayo, El Dorado). Anchored on the Santa Bárbara Mountain karst massif + Lake Yojoa system - not folded into Western Honduras Highlands because the department splits across Copán / Opalaca / Montecillos in the six-region framework and the ecology is distinct. Aliases: unaccented + en-dash variants, `Santa Bárbara Highlands`, `Yojoa Highlands`. Macros 121+ -> +1.
 - **2026-04-22 (sprint 1d.1):** Initial adoption. 121 canonical macros across 38 countries (127 country-scoped entries) ported from Chris's research CSV (126 rows) plus one hand-authored extension (Bench Sheko Highlands, Ethiopia South West). 11 DB-row renames / reclassifications applied via migration 023 to align existing terroirs table with the CSV canonical names:
   - Acatenango Volcanic Highlands (GT/Chimaltenango) -> Central Volcanic Highlands
   - Costa Rican Central Volcanic Highlands (CR/Alajuela) -> Central Volcanic Highlands (country prefix dropped; country column carries it)
