@@ -4356,6 +4356,70 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 ---
 
+### Frank Aroste
+
+**Country:** Peru · **Admin:** Cusco · **Macro:** Southern Andean Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Processing Capability:** Washed
+- **Primary Cultivars:** Gesha
+- **Roaster References:** Sey Coffee
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-07-27 from the SEY x Bay Area Coffee Club Frank Aroste Washed Gesha brew (5275ae7b); Santa Ana, Cusco, 2100m - first Peruvian Gesha in the brewing archive.
+
+---
+
+### Christian Jebsen, Kifaru Coffee Estate
+
+**Country:** Tanzania · **Admin:** Arusha / Manyara · **Macro:** Northern Rift Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Kifaru Coffee Estate
+- **Processing Capability:** Washed
+- **Primary Cultivars:** Bourbon
+- **Roaster References:** NO°5
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-07-27 from the NO°5 Classic Crema brew (91b546bb) - first Tanzania producer in the registry; Karatu / Ngorongoro southern slopes ~1,800m (Karatu is in Arusha region, so the canonical Arusha / Manyara -> Northern Rift Highlands pair applies).
+
+---
+
+### Arturo Paz
+
+**Country:** Honduras · **Admin:** Santa Bárbara · **Macro:** (unset - no canonical Honduras macro covers Santa Bárbara)
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Processing Capability:** Natural (Dark Room Dried)
+- **Primary Cultivars:** Gesha
+- **Importers:** Kumquat Coffee
+- **Roaster References:** Latent
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-07-27 from the HND-ARTUROPAZ-GESHA-DRD-NAT-2026 green lot (6502d971; Kumquat Coffee, 1700m, 2026 crop). Macro deliberately unset per the green-lot intake note - resolve Santa Bárbara at a terroir taxonomy pass rather than guessing.
+
+---
+
+### Fran Zeimetz
+
+**Country:** Panama · **Admin:** (unresearched) · **Macro:** (unresearched)
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Processing Capability:** Yeast Inoculation Natural (LOY-011, cold-room dried)
+- **Primary Cultivars:** Gesha
+- **Known For:** 2025 World Brewers Cup winning lot family (Martin Wölfl)
+- **Importers:** Kumquat Coffee
+- **Roaster References:** Latent
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-07-27 from the PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 green lot (c4ae4c30; Kumquat Coffee, 1550m). Lost Origin (Panama City) processing in collaboration with Tri-Up (Taiwan): refrigerated cherry transfer, sealed tank 8 days with LOY-011 yeast, 32-day cold-room dry, then depulped. Farm geography for the Maya Tri-Up lot unresearched.
+
+---
+
 ## Aliases (DB drift + collapses)
 
 Observed `brews.producer` strings (or common typos) → canonical name.
@@ -4475,6 +4539,12 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 | `Yessica and Diego Parra` | `Yessica & Diego Parra` |
 | `Yessica and Diego Parra, El Mirador` | `Yessica & Diego Parra` |
 | `Yusuf` | `Tamiru Tadesse` |
+| `Christian Jebsen` | `Christian Jebsen, Kifaru Coffee Estate` |
+| `Kifaru Coffee Estate` | `Christian Jebsen, Kifaru Coffee Estate` |
+| `Kifaru Estate` | `Christian Jebsen, Kifaru Coffee Estate` |
+| `Fran Zeimetz, Lost Origin` | `Fran Zeimetz` |
+| `Lost Origin` | `Fran Zeimetz` |
+| `Lost Origin Maya` | `Fran Zeimetz` |
 | `Mountain Harvest smallholders — Mount Elgon Ladies (Bukalasi)` | `Mountain Harvest smallholders - Mount Elgon Ladies (Bukalasi)` |
 
 ## Sources
@@ -4486,6 +4556,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 ## Changelog
 
+- 2026-07-27 - Taxonomy queue arbitration: promoted 4 net-new skeleton producers. `Frank Aroste` (Peru / Cusco / Southern Andean Highlands; SEY x BACC Washed Gesha brew 5275ae7b), `Christian Jebsen, Kifaru Coffee Estate` (Tanzania / Arusha-Manyara / Northern Rift Highlands - first Tanzania producer; NO°5 Classic Crema brew 91b546bb), `Arturo Paz` (Honduras / Santa Bárbara, macro deliberately unset pending a terroir pass; Kumquat green lot 6502d971), `Fran Zeimetz` (Panama, Lost Origin Maya Tri-Up yeast-natural lot family - the 2025 WBC-winning family; Kumquat green lot c4ae4c30). All Tier 3 / Signal skeletons pending enrichment; aliases added for the Kifaru farm-name and Lost Origin brand-name forms.
 - 2026-06-19 — Producer sourcing-priority canon pass: folded the resolved three-axis sourcing model into canon. Renamed the `reference` sourcing bucket → `calibration` (zero data migration; no producer carried `reference`). Seeded the full action-axis roster on the registry — `pursue` (13), `watch` (4), `learning` (4), `calibration` (2), `avoid` empty. Promoted net-new `Paul & Kevin Doyle` (Tier 1 / Anchor, Colombia / Risaralda / Western Andean Cordillera, sourcing bucket `pursue`) — the Mikava / Santuario competition micro-estate (carbonic-maceration Gesha); aliased `Mikava` / `Mikava Coffee` / `Mikava / Santuario` / `Santuario` / `Finca Santuario` / `Finca Marsella` → `Paul & Kevin Doyle` (the `Finca`-prefixed aliases also defend against the loose 3-char `Finca <X>` prefix matcher mis-routing to Finca Sophia). HiU / Los Lajones (Graciano Cruz) was already promoted 2026-06-18, so Mikava was the only net-new producer this pass. Total entries 153→155 (count reconciled against the live registry).
 - 2026-06-18 — Taxonomy queue arbitration (Forward Coffee Panama session): promoted net-new `Graciano Cruz` (Tier 1 / Anchor, Panama / Volcán Barú Highlands, sourcing bucket `pursue`) — the Los Lajones Estate owner (HiU Coffee Company) behind the HiU Los Lajones Geisha Natural Bambu 8B green lot; aliased `HiU Los Lajones` / `HiU Coffee` / `Los Lajones` / `Los Lajones Estate` / `Finca Los Lajones` → `Graciano Cruz`. Resolved queue entry a8efff63. Separately added `Black Moon` / `Black Moon Farm` → `Hunter Tedman` aliases (the Black Moon Chiroso lot brand resolves to the canonical Hunter Tedman / Black Moon Farm entry). Both surfaced in the 2026-06-18 Forward sourcing exercise.
 - 2026-04-26 — Sprint 1l: structural port from 49-name flat → 118-entry rich. Migration 031 applies DB drift renames + 6 collapses (Yusuf / Alo Village → Tamiru Tadesse · Local Ninga → Long Miles · Letty + Finca El Paraiso → Diego Bermúdez · Nordic Approach → Mekuria Mergia).

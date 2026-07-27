@@ -4938,6 +4938,145 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     contact: null,
     skeleton: true,
   },
+  {
+    // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
+    // SEY x Bay Area Coffee Club Frank Aroste Washed Gesha brew (5275ae7b) -
+    // Santa Ana, Cusco, 2100m; first Peruvian Gesha in the brewing archive.
+    name: "Frank Aroste",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Signal",
+    producerType: "Individual",
+    farmName: null,
+    country: "Peru",
+    adminRegion: "Cusco",
+    macroTerroir: "Southern Andean Highlands",
+    farmingModel: null,
+    processingCapability: "Washed",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Gesha"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Sey Coffee"],
+    contact: null,
+    skeleton: true,
+  },
+  {
+    // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
+    // NO°5 Classic Crema Tanzania Kifaru Bourbon Washed brew (91b546bb) -
+    // first Tanzania producer in the registry. Karatu sits in Arusha region,
+    // so the canonical Arusha / Manyara -> Northern Rift Highlands pair applies.
+    name: "Christian Jebsen, Kifaru Coffee Estate",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Signal",
+    producerType: "Individual",
+    farmName: "Kifaru Coffee Estate",
+    country: "Tanzania",
+    adminRegion: "Arusha / Manyara",
+    macroTerroir: "Northern Rift Highlands",
+    farmingModel: null,
+    processingCapability: "Washed",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Bourbon"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: [],
+    roasterReferences: ["NO°5"],
+    contact: null,
+    skeleton: true,
+  },
+  {
+    // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
+    // HND-ARTUROPAZ-GESHA-DRD-NAT-2026 green lot (6502d971, Kumquat Coffee).
+    // macroTerroir deliberately null per the green-lot intake note: Santa
+    // Barbara does not map to a canonical Honduras macro (the roster covers
+    // Western Honduras Highlands only) - resolve at a terroir taxonomy pass
+    // rather than guessing.
+    name: "Arturo Paz",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Signal",
+    producerType: "Individual",
+    farmName: null,
+    country: "Honduras",
+    adminRegion: "Santa Bárbara",
+    macroTerroir: null,
+    farmingModel: null,
+    processingCapability: "Natural (Dark Room Dried)",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Gesha"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: ["Kumquat Coffee"],
+    roasterReferences: ["Latent"],
+    contact: null,
+    skeleton: true,
+  },
+  {
+    // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
+    // PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 green lot (c4ae4c30, Kumquat).
+    // Lost Origin (Panama City) processes in collaboration with Tri-Up
+    // (Taiwan); farm geography for the Maya Tri-Up lot unresearched, so
+    // adminRegion/macroTerroir stay null pending enrichment. This is the lot
+    // family Martin Woelfl used to win the 2025 World Brewers Cup.
+    name: "Fran Zeimetz",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Signal",
+    producerType: "Individual",
+    farmName: null,
+    country: "Panama",
+    adminRegion: null,
+    macroTerroir: null,
+    farmingModel: null,
+    processingCapability: "Yeast Inoculation Natural (LOY-011, cold-room dried)",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Gesha"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: ["2025 World Brewers Cup winning lot family (Martin Wolfl)"],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: ["Kumquat Coffee"],
+    roasterReferences: ["Latent"],
+    contact: null,
+    skeleton: true,
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -4965,6 +5104,14 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   // forms → The Nest so the brew aggregates to the canonical producer with no
   // brew patch (added 2026-06-26 FanHua arbiter pass; reshaped same pass).
   "Hachi Project x Terroir Maximus": "The Nest",
+  // Kifaru / Lost Origin variants (2026-07-27 arbiter pass): defend the
+  // farm-name and brand-name forms against the prefix matcher.
+  "Christian Jebsen": "Christian Jebsen, Kifaru Coffee Estate",
+  "Kifaru Coffee Estate": "Christian Jebsen, Kifaru Coffee Estate",
+  "Kifaru Estate": "Christian Jebsen, Kifaru Coffee Estate",
+  "Fran Zeimetz, Lost Origin": "Fran Zeimetz",
+  "Lost Origin": "Fran Zeimetz",
+  "Lost Origin Maya": "Fran Zeimetz",
   "Hachi Project × Terroir Maximus": "The Nest",
   // Finca Sophia (Boot Coffee, Panama) producer-string variants - added
   // 2026-06-19 attribution-fix session. The estate is collectively owned;

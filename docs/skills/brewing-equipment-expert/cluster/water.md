@@ -71,6 +71,15 @@ The "grind chart" analog: given the direction you want, what you build. Levels a
 
 **The governing rule for the chart:** *water seasons, it doesn't fix a coffee that lacks the note.* Reach for a row to **reveal** a phase the bean already carries; injecting a phase the coffee doesn't have is the high-variance path (§ 5). And **less is more** - on the clarity Pink Bourbon, the single best cup was a lone bright chloride, not any multi-salt build.
 
+
+**NaCl second-coffee confirmation + a new use case: bitterness masking on a developed roast (2026-07-27, Untold Finca Deborah Gesha Natural, WB Agtron 60.6; brew c818dfcb).** Independently rediscovered at the bench - the operator added a small pinch of Morton canning/pickling salt (the dry salt, not a stock dose) to the finished carafe on a roast-dominated cup and reported the largest single improvement of a four-brew arc: roast character went from present to "virtually gone," melon and sweetness came forward, cup went from marginal to fully drinkable. This is a **second Gesha confirmation** for the NaCl row and materially raises its confidence above the current "fragile, low-confidence" rating, which was set on a same-day blind ranking where NaCl placed last on a *clean* cup.
+
+**The scope refinement worth recording: NaCl's value is coffee-state-dependent, not just coffee-dependent.** On a clean, well-resolved cup it is a marginal whole-cup amplifier that can rank last. On a cup carrying an unwanted bitter or roast register it is a **primary lever**, because bitterness suppression is a perceptual effect with nothing to reveal-or-inject against. Suggested read: reach for NaCl when a register needs *masking*, not when a phase needs *revealing*.
+
+**Two mechanism notes.** (1) **Post-brew is legitimate for NaCl specifically**, unlike the extraction-side minerals § 5 warns about - the effect is tongue-level bitterness suppression, not an extraction interaction, so it does not need to be present during the brew. That makes it a cheap end-of-cup rescue with no re-brew cost. (2) **Salt doubles as a diagnostic.** When a pinch of salt makes sweetness audible that was not there before, the cup's problem is bitterness MASKING rather than extraction yield - which rules out grind and temperature as levers and points at the roast fraction or the water. On this lot that read arrived three brews before the mechanical fix and correctly reframed the whole diagnosis.
+
+**Open:** the bench dose was an unmeasured dry pinch, not the ~2 ppm build. Whether the built 2 ppm route reproduces the magnitude of the post-brew rescue on a roast-forward cup is untested.
+
 ---
 
 ## § 4 - Build method

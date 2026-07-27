@@ -116,11 +116,12 @@ Roasters who intentionally push extraction. Includes BALANCED → FULL (most), F
 - **Subtext Coffee**
 - **The Picky Chemist**
 
-### Varies (5)
+### Varies (6)
 
-Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 5 entries.
+Roasters whose strategy depends on the specific coffee's process and variety. No fixed center; flexibility without a control-loop framework (vs SYSTEM, which has one). Check Process Signal Table in BMR before brewing. 6 entries.
 
 - **Moonwake Coffee Roasters**
+- **NO°5** — skeleton (commodity/house label; single Tanzania lot)
 - **Scenery Coffee**
 - **Strait Coffee** — BALANCED / VARIES
 - **Switch Coffee** — BALANCED / VARIES
@@ -1819,6 +1820,14 @@ Advanced process lots can shift toward full-expression behavior
 - **Confidence:** High
 - **Notes:** Official guide recommends 90-94°C for light roast, with lower temps for processed coffees and higher temps for washed coffees; house recipe is 60g bloom for 45s then 110g, 180g, 240g; guide also includes more extraction-forward alternate recipes, so the roaster is better treated as process-reactive than fixed-style
 
+#### NO°5
+_Location unresearched_ · **VARIES** (placeholder) · archive: 1 brew
+
+- **Roast style:** Medium (single observed lot)
+- **Notes:** Commodity/house-label roaster. First evidence: Classic Crema (Tanzania, Kifaru Coffee Estate, Karatu / Ngorongoro southern slopes ~1,800m; Bourbon; washed, Raised Bed; MEDIUM roast). Brew 1 (April, 88°C, Suppression) came back roast-walled; resolved via Hybrid Intensity-Clarity Split on the SWORKS Bottomless (92°C, fast open drain, lift-cut ~180g). Treat roast level as the lead signal on this label.
+- **Brew guide status:** none
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-07-27 from brew 91b546bb. Surfaces via `list_skeleton_entries` until rich-field research lands.
+
 #### Scenery Coffee
 _London, UK, UK_ · **VARIES** · archive: 1 brew
 
@@ -1936,6 +1945,7 @@ _Home (Roest sample roaster, 100g batches)_ · **SELF-ROASTED** · archive: 4 br
 
 ## Changelog
 
+- **2026-07-27 (taxonomy queue arbitration):** Promoted **NO°5** (location unresearched, commodity/house label) as a skeleton entry in the Varies family (Varies 5→6). First evidence: Classic Crema, Tanzania Kifaru Bourbon Washed (Christian Jebsen, Kifaru Coffee Estate) - first Tanzania lot in the brewing archive; MEDIUM roast that roast-walled a Suppression brew and resolved via Hybrid Intensity-Clarity Split on the SWORKS Bottomless. VARIES is a placeholder pending more lots. Aliases: `NO5` / `No. 5` / `No.5` / `NO°5 Coffee`. Surfaces via `list_skeleton_entries` until rich-field research lands.
 - **2026-07-02 (taxonomy queue arbitration + same-day enrichment):** Promoted **Helm Coffee** (Indianapolis, IN) from `taxonomy_overrides_queue` (first evidence: Panama El Burro Lot 16 Natural Gesha, Lamastus Family; brew 24e05434) and enriched it to the full rich shape the same day from Chris's roaster data + [official brew guide](https://helmcoffeeroasters.com/pages/brew-guide). Strategy tag resolved from the initial CLARITY-FIRST skeleton hypothesis to **BALANCED → FULL** once the house doctrine landed (hybrid immersion/percolation for sweetness + body; recipe inspired by Justin Bull's 2025 WBC open service), moving the entry Clarity-First → Extraction-Forward (Clarity-First 29→28, Extraction-Forward 19→20; total holds at 75). Canonical name **Helm Coffee** matches the brew; official **Helm Coffee Roasters** + short **Helm** added as aliases. Confidence High. Calibration role: Hybrid Competition Reference.
 - **2026-06-25 (skeleton-review arbitration):** Enriched **Snite** (Setagaya, Tokyo) from Chris's authored CSV - full 29-field rich shape landed and the `skeleton: true` flag removed. Strategy tag resolved from the VARIES placeholder to **BALANCED**, so the entry moved Varies → Balanced (Varies 6→5, Balanced 16→17). Calibration role: Japanese Developed-Light Benchmark. The El Mango SL28 lot lesson (SL-lineage phase-separation, resolved via Hybrid ICS) is preserved in `notes` as operator ground truth. Note: Chris's CSV spelled the roaster "Sniite"; this was a typo (Chris-confirmed 2026-06-25). Canonical is **Snite**, matching the existing brew (73028eb1) + skeleton - no rename needed.
 - **2026-06-18 (taxonomy queue arbitration):** Promoted **Snite** (Tokyo) as a skeleton entry in the Varies family. First evidence: El Mango SL28 Washed (Evin Joel Moreno Reyes, Finca El Mango, Honduras) - first SL28 lot in the brewing archive. Strategy tag is a VARIES placeholder pending more lots; the lot confirmed SL-lineage phase-separation, resolved via a Hybrid (Intensity-Clarity Split) on the April Switch. Surfaces via `list_skeleton_entries` until rich-field research lands.
