@@ -31,8 +31,8 @@ The brief's design fork: (a) fatten `list_recent_brews` with filter params, vs (
 
 ## PR + merge
 
-- PR: (filled at merge — see final session message)
-- Merge SHA on main: (filled at merge)
+- PR: https://github.com/chrismccann-dev/latent-coffee/pull/599 (squash-merged 2026-07-27)
+- Merge SHA on main: `542fbf117e3ea84ee0246f5ae6313b0bd3c1c222`
 
 ## Actual verification results (run 2026-07-27, not "should work")
 
