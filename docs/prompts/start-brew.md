@@ -52,9 +52,14 @@ lookups, call read_canonical Tool with the axis name per
 docs://skills/coordinator/operator-guide.md § Canonical taxonomy lookups.
 
 **Purchased-coffee freezer lookup (Step 1a, before asking for Agtron).** If this is a
-PURCHASED coffee, first consult the freezer-stock table —
-read_doc(uri="docs://brewing/freezer-stock.md") — and match by roaster + coffee name (the
-`##` heading is the key). On a hit, seed the Coffee Brief from the record, most importantly
+PURCHASED coffee, first consult the freezer-stock table. NEVER whole-doc read_doc it — the
+table is past the read cap and truncates, which hard-blocks the lookup. Instead: (1)
+list_doc_sections(uri="docs://brewing/freezer-stock.md") to enumerate the `##` bag headings
+(~8 KB), (2) match by roaster + coffee name, (3)
+read_doc_section(uri="docs://brewing/freezer-stock.md", anchor="<matched heading>") for the
+single bag record. Always enumerate first — anchor matching is case-sensitive exact and the
+heading formats vary (em-dash count/position, inconsistent lot codes), so a constructed-anchor
+guess misses. On a hit, seed the Coffee Brief from the record, most importantly
 the whole-bean Agtron (taken at dose-out) so Chris is NOT asked to re-measure, plus the spec
 URL / process / variety / rest window. On a miss, or a `Resting` row with Agtron `pending`,
 proceed normally — the doc is a convenience cache, not the source of truth. (Self-roasted

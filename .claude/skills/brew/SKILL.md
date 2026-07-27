@@ -91,9 +91,15 @@ do not re-fetch the whole doc). This is the same fetch discipline `start-brew.md
 **Step 1: Coffee Brief.** Fetch
 `read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md", anchor="Step 1 — Coffee Brief (Claude runs this automatically)")`.
 Run 1a-1d. **Purchased-coffee freezer lookup (do this first, in 1a):** before asking Chris for the
-roasted-bean color, consult the freezer-stock table — `read_doc(uri="docs://brewing/freezer-stock.md")`
-(mobile/MCP) or read `docs/brewing/freezer-stock.md` directly — and match by roaster + coffee name
-(the `##` heading is the key). On a HIT, seed the brief from the record: **the whole-bean Agtron is
+roasted-bean color, consult the freezer-stock table. On the MCP path (mobile, or no repo access),
+NEVER whole-doc `read_doc` it — the table is past the read cap and truncates, which hard-blocks the
+lookup. Instead: (1) `list_doc_sections(uri="docs://brewing/freezer-stock.md")` to enumerate the
+`##` bag headings (~8 KB), (2) match by roaster + coffee name, (3)
+`read_doc_section(uri="docs://brewing/freezer-stock.md", anchor="<matched heading>")` for the single
+bag record. Always enumerate first — anchor matching is case-sensitive exact and the heading formats
+vary (em-dash count/position, inconsistent lot codes), so a constructed-anchor guess misses. On
+desktop with repo access, reading/grepping `docs/brewing/freezer-stock.md` directly stays the faster
+path. On a HIT, seed the brief from the record: **the whole-bean Agtron is
 the load-bearing pull — use it, do NOT ask Chris to re-measure** — plus the spec URL, process,
 variety, elevation, and rest window. On a MISS (or a `Resting` row with Agtron `pending`), proceed
 normally. Self-roasted brews skip this — the carve-out pulls the roasted-bean state from the DB
