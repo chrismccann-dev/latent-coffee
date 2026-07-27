@@ -25,6 +25,7 @@ import { registerGetGreenBeanTool } from '@/lib/mcp/get-green-bean'
 import { registerGetBeanPipelineTool } from '@/lib/mcp/get-bean-pipeline'
 import { registerListGreenInventoryTool } from '@/lib/mcp/list-green-inventory'
 import { registerListRecentBrewsTool } from '@/lib/mcp/list-recent-brews'
+import { registerQueryBrewsTool } from '@/lib/mcp/query-brews'
 import { registerGetBrewTool } from '@/lib/mcp/get-brew'
 import { registerPatchBrewTool } from '@/lib/mcp/patch-brew'
 import { registerPatchGreenBeanTool } from '@/lib/mcp/patch-green-bean'
@@ -82,6 +83,9 @@ export function buildMcpServer(auth: McpAuthContext): McpServer {
   // roast-queue working set for the Coordinator's "re-rank my inventory" op.
   registerListGreenInventoryTool(server, auth)
   registerListRecentBrewsTool(server, auth)
+  // query_brews (2026-07-27 N=3 graduation): filtered/projected brew lookups;
+  // list_recent_brews stays the unfiltered recency feed.
+  registerQueryBrewsTool(server, auth)
   registerGetBrewTool(server, auth)
   registerPatchBrewTool(server, auth)
   registerPatchGreenBeanTool(server, auth)
