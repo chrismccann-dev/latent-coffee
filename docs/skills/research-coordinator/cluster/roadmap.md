@@ -102,6 +102,8 @@ Ordered queue. Order reflects priority + sequencing constraints derived from the
 
 **Scope:** Single brew temp → temp trajectory. Starting hot & dropping (kettle off stand), reheating between pours, prewarming, chilling brewer, going cool-to-hot. Multi-kettle work (2 home kettles, 1 office). Underexplored area.
 
+**Operator-flagged sub-question (2026-07-27, Untold Fazenda Um Pink Bourbon brew):** *kettle fill volume changes the off-base decline rate.* A kettle holding ~300g of water off boil declines materially faster than a full kettle. This is not just a new variable to characterize — it is a **reproducibility gap in the existing corpus**: a large share of archived recipes specify "kettle off base" and **none record fill volume**, so those thermal stances may not be reproducible from what is written down, nor comparable across sessions. Two deliverables fall out of it: (a) a decline-rate curve by fill volume per kettle, so "off base" can be stated as an actual trajectory; (b) a decision on whether the brew schema / recipe format should capture fill volume alongside kettle stance. Raises the priority of this entry beyond its "underexplored area" framing, since it bears on data already collected.
+
 **Sequencing rationale:** After § Next #1 (Bloom science) sets the bloom-temp scope. The two projects are sibling thermal axes but Bloom is the precursor + smaller-scoped first cut.
 
 ### 8. Serving vessel
