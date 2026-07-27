@@ -5008,20 +5008,19 @@ export const PRODUCERS: readonly ProducerEntry[] = [
   {
     // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
     // HND-ARTUROPAZ-GESHA-DRD-NAT-2026 green lot (6502d971, Kumquat Coffee).
-    // macroTerroir deliberately null per the green-lot intake note: Santa
-    // Barbara does not map to a canonical Honduras macro (the roster covers
-    // Western Honduras Highlands only) - resolve at a terroir taxonomy pass
-    // rather than guessing.
+    // Terroir resolved 2026-07-27 (same-day follow-up): new canonical macro
+    // Santa Bárbara-Yojoa Highlands stood up (Chris-ratified); farm Finca El
+    // Itacayo, El Dorado, Santa Bárbara, ~1,600-1,730 m.
     name: "Arturo Paz",
     tier: 3,
     producerSystem: null,
     processingSystemTags: [],
     referenceRole: "Signal",
     producerType: "Individual",
-    farmName: null,
+    farmName: "Finca El Itacayo",
     country: "Honduras",
     adminRegion: "Santa Bárbara",
-    macroTerroir: null,
+    macroTerroir: "Santa Bárbara-Yojoa Highlands",
     farmingModel: null,
     processingCapability: "Natural (Dark Room Dried)",
     processingStyleTags: [],

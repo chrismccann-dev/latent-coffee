@@ -28,7 +28,7 @@ The same evidence-threshold lifecycle governs every axis (cultivar, process fami
 
 - **n=1:** keep as a candidate, lot-specific note, or open question. One coffee is a data point, not a pattern.
 - **n=2:** promote to a working cross-coffee pattern if the pattern crosses anchors.
-- **n=3+:** move durable single-axis detail into the proper sibling capsule (`by-cultivar/`, `by-coffee-family/`, `by-strategy/`, future `by-roast-level/`) and keep only a router pointer here. (N≥3 is the threshold the by-cultivar / by-coffee-family capsules were seeded at.)
+- **n=3+:** move durable single-axis detail into the proper sibling capsule (`by-cultivar/`, `by-coffee-family/`, `by-strategy/`, `by-roast-level/`) and keep only a router pointer here. (N≥3 is the threshold the by-cultivar / by-coffee-family capsules were seeded at.)
 
 Resolved questions are **deleted** from `Open Questions`, not struck through. The resolution belongs in the relevant capsule plus commit history. Do not keep the past trail of how a settled insight got there - only the go-forward of what is known.
 
@@ -40,7 +40,7 @@ Resolved questions are **deleted** from `Open Questions`, not struck through. Th
 | Process-family behavior | `by-coffee-family/<process>.md` | Cross-axis exceptions only |
 | Cultivar behavior | `by-cultivar/<cultivar>.md` | Cultivar + process / roast / equipment interactions, and sub-threshold (n<3) cultivars not yet graduated |
 | Extraction strategy evidence | `by-strategy/<strategy>.md` | Strategy-selection routers and compatibility across anchors |
-| Roast-level behavior | **Proposed:** `by-roast-level/<level>.md` (graduate when the override pattern reaches n≥3 with a non-Untold confirmation) | Roast-level overrides that trump process/cultivar |
+| Roast-level behavior | `by-roast-level/<level>.md` (stood up 2026-07-27; seed capsule [medium-developed.md](docs/skills/brewing-historian/cluster/patterns/by-roast-level/medium-developed.md)) | Router pointer only (Pattern #1 stub + Cross-Axis Strategy Router row) |
 | Equipment, office setup, water, filters | Brewing Equipment Expert cluster / filter research / water reference | Only if equipment or water changes cross-coffee strategy routing |
 | Roaster house style | `docs/brewing/roasters.md` | Roaster-style overrides that change strategy choice |
 | Modifiers (Axis 2) | This file (no single-axis capsule; modifiers are inherently cross-strategy) | Full modifier layer |
@@ -99,9 +99,9 @@ Use the process-family files for normal process logic. Keep this file focused on
 - [Yeast-Inoculated Washed](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/yeast-inoculated-washed.md)
 - Sub-threshold (n<3): Washed, White/Light Honey, Honey (medium), Standard Natural, Controlled Natural, Anoxic Natural → [Sub-Threshold Process-Family Candidates](#sub-threshold-process-family-candidates)
 
-### Proposed New Axis: By Roast Level
+### By Roast Level
 
-Roast level deserves its own axis because a materially darker roast can override process, cultivar, and roaster-intent signals. **Not yet stood up:** the override pattern (below) is at n=2 and both confirmations are Untold; the axis graduates to a sibling `by-roast-level/` folder (seeding `medium-developed.md`) once a non-Untold confirmation lands. Until then the pattern lives here as Active Cross-Coffee Pattern #1.
+Roast level has its own axis because a materially darker roast can override process, cultivar, and roaster-intent signals. **Stood up 2026-07-27** (non-Untold confirmation landed + operator ratification of the any-process scope): seed capsule [by-roast-level/medium-developed.md](docs/skills/brewing-historian/cluster/patterns/by-roast-level/medium-developed.md) holds the graduated override pattern (former Active Cross-Coffee Pattern #1) plus the promoted medium-roast over-extraction lever.
 
 ## Cross-Axis Strategy Router
 
@@ -109,7 +109,7 @@ Use this table as the tactical Coffee Brief lookup (the former Process / Variety
 
 | Cross-axis signal | Default risk | Recommended start | Why this lives here | Canonical follow-up |
 |---|---|---|---|---|
-| Medium / developed specialty natural, especially if visibly oily or Agtron ~48 | Process and cultivar defaults over-extract roast solubles | Hybrid → Intensity-Clarity Split | Roast level overrides process and cultivar | Pattern #1 below + [Hybrid](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md) |
+| Medium / developed roast - ANY process (natural or washed), especially at or below ~65 WB Agtron or visibly oily | Process and cultivar defaults over-extract roast solubles | Hybrid → Intensity-Clarity Split on a fast-draining cone switch + fast paper | Roast level overrides process and cultivar (any-process, operator-ratified 2026-07-27) | [by-roast-level/medium-developed.md](docs/skills/brewing-historian/cluster/patterns/by-roast-level/medium-developed.md) + [Hybrid](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md) |
 | Anaerobic natural across origins | Clarity-First under-extracts; Balanced can expose bitter tail | Suppression | Same process behavior confirmed across Colombia, Ethiopia, Panama | Pattern #2 + [Suppression](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md) + [anaerobic-natural](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md) |
 | Cold-room dehydration natural | Suppression-like bitter-tail behavior but often wants slightly more heat than anaerobic natural | Suppression at higher temp band (push +1°C from 92°C to 93°C) | Drying modifier behaves like process modifier, not origin-specific terroir | Pattern #2 + [Suppression](docs/skills/brewing-historian/cluster/patterns/by-strategy/suppression.md) |
 | Clean anaerobic washed + Full-Expression roaster | Balanced default may under-read roaster intent | Follow roaster: Full Expression | Roaster style overrides clean-process default | Pattern #3 + `docs/brewing/roasters.md` + [Full Expression](docs/skills/brewing-historian/cluster/patterns/by-strategy/full-expression.md) |
@@ -126,41 +126,12 @@ Use this table as the tactical Coffee Brief lookup (the former Process / Variety
 
 ### 1. Roast Level Can Override Process and Cultivar
 
-**Status:** Working pattern. Two confirmations, both Untold. Needs one non-Untold confirmation before graduating to a `by-roast-level/medium-developed.md` capsule.
+**Status:** GRADUATED 2026-07-27 to the first by-roast-level capsule - [by-roast-level/medium-developed.md](docs/skills/brewing-historian/cluster/patterns/by-roast-level/medium-developed.md) (n=4 override data points including the non-Untold NO°5 confirmation; scope operator-broadened to ANY process). Router summary only - the data points, operational rule, hardware precondition, over-extraction lever, and the thermal-ceiling/density refinement all live in the capsule.
 
-When a coffee is materially more developed than the light / ultra-light baseline, roast level becomes the first routing signal. Process and cultivar defaults can point in the wrong direction because they assume lighter-roast solubility.
-
-Confirmed shape:
-
-- Clean natural or controlled natural defaults would normally point to Balanced Intensity or Suppression.
-- Medium / dark roast solubles dominate the body.
-- The cup shows fruit on attack but roast / ash / oversteeped black tea through the body.
-- Parameter tweaks inside Balanced or Clarity-First do not solve it.
-- Hybrid Intensity-Clarity Split works better because it separates fruit extraction from roast-register control.
-
-Confirmed data points:
-
-- **Untold Brazil Fazenda Um Wush Wush Natural (WWNAT), brew 25b4465b (2026-05-22)** — a clean controlled natural (Raised Bed) the Controlled Natural row would default to Balanced Intensity. Roasted MEDIUM. On Balanced Intensity (April + April Paper, EG-1 6.4 / 93°C) the developed-roast solubles were amplified into a punishing oversteeped-black-tea wall with prune barely detectable. Resolution was a strategy re-zone to Hybrid (Intensity-Clarity Split) on the Switch (see [by-strategy/hybrid.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md)), NOT a parameter tweak within Balanced.
-- **Untold Panama Janson Pacamara Natural (Hacienda 491, Dark Room Dried natural, Pacamara), brew 24b39678 (2026-05-31)** — whole-bean Agtron 47.9, the darkest roast in the archive, visibly oily. Pacamara density → Balanced and the cold-room-dehydration flag → Suppression, but at Agtron 47.9 the roast governed above both. Brew 1 (Orea + FLAT 2 B3, 88°C / EG-1 6.7) gave guava/molasses attack but a bitter/smoky/ashy oversteeped-tea body; resolved by Hybrid (Switch, EG-1 6.8). See [by-cultivar/pacamara.md](docs/skills/brewing-historian/cluster/patterns/by-cultivar/pacamara.md).
-
-Operational rule:
-
-- If Agtron, visual roast, or first cup says "developed roast is the loudest signal," check roast-level logic before process family or cultivar. The override is catchable at the Agtron read, before brewing - 47.9 on a coffee sold as a fruit-forward natural was the lead diagnostic, and the visual (oily, deep brown) corroborated.
-- If the tasting signal is **fruit on attack + ashy / smoky / black-tea body**, treat it as a Hybrid trigger.
-- Do not chase roast ashiness with finer grind or more agitation.
-- At brief time, roast level should LEAD strategy selection on developed-roast lots rather than sitting as a tasting-posture footnote.
-
-One more medium/dark-roast specialty natural (ideally non-Untold, to rule out a roaster-specific artifact) would complete the pattern and trigger the `by-roast-level/` graduation. Tracked in Open Questions.
-
-- **NO°5 Classic Crema, Tanzania Kifaru Bourbon Washed, brew 91b546bb (2026-07-22)** - FIRST NON-UNTOLD confirmation, on a commodity/house-label MEDIUM roast. Clean washed Bourbon would default nowhere near Hybrid; the roast governed. Brew 1 (April, 88°C, Suppression) came back roast-walled; resolution was the strategy re-zone to Hybrid (Intensity-Clarity Split) on the SWORKS Bottomless (92°C + fast Dial 7 drain + lift-cut at ~180g), not a parameter tweak. Same signal shape: fruit (orange/stone fruit) on attack, dark roast register through body/finish. NOTE for graduation: this rules out the roaster-specific-artifact concern (non-Untold) but is a WASHED, not the 'medium/dark-roast specialty natural' the graduation criterion names - it also broadens the confirmed shape beyond naturals (clean washed now confirmed). Whether this triggers the by-roast-level/ graduation, or the criterion still wants a non-Untold natural, is an arbiter/operator call.
-
-**Refinement (2026-07-27) - roast level routes the STRATEGY but under-predicts the TEMPERATURE CEILING; suspect bean density. Untold Coffee Lab Brazil Fazenda Um Pink Bourbon Dark Room Natural (Sul de Minas, 1000-1260 m; WB Agtron 70.1 medium light; brew_id 91a014fd-635b-46e6-9180-913a069cd50c).** This lot bled roast character across the WHOLE cup at 94°C - not as a back-half tail but as bitterness and roastiness at every station, with the two Hybrid phases failing to integrate. Reverting to 92°C resolved it completely. The problem for this pattern is that Terraform Clara Luz Sidra Natural at **Agtron 62.4 - a materially DARKER roast - took 94°C with zero roast bleed** (see Pattern #7, which explicitly records 'darker-than-typical-for-variety roast does NOT necessarily mean low temperature ceiling'). A lighter roast with a TIGHTER thermal ceiling is backwards on roast level alone.
-
-**Hypothesis (n=1, explicitly unconfirmed): bean density sets the temperature ceiling, and roast level sets the strategy.** Fazenda Um sits at **1000-1260 m**, far below the 1700-2400 m band that anchors nearly every lot in this archive; Clara Luz sits at 1720 m. A softer, less dense bean plausibly gives up its roast-derived compounds sooner at a given temperature regardless of how far the roast was taken. If it holds, the operative rule for this coffee class is not 'Untold roasts dark, go cool' but **'low-elevation Brazil has a low thermal ceiling regardless of how light the roast reads'** - and it would generalize past Brazil to any sub-1400 m lot.
-
-**Named discriminator, ready to run.** Two other Untold Brazilian lots are in freezer stock and both are Carmo de Minas at higher elevation than Fazenda Um: **Carmo Pacamara Anaerobic Natural (WB Agtron 76.5 - LIGHTER than this lot)** and **Carmo SL28 Natural Anaerobic (WB Agtron 59.1 - DARKER)**. Brewing either at 94°C separates the two explanations cleanly: if the higher-elevation lots tolerate 94°C at BOTH Agtron extremes, density is the governing variable and roast level is not; if the 59.1 lot bleeds and the 76.5 lot does not, roast level is sufficient after all and this entry should be retracted. Until one of those runs, treat this as a single-lot observation, not a rule.
-
-**Practical guidance in the meantime:** on any lot below ~1400 m, do not read 'the roast is light' as temperature headroom. Establish the thermal ceiling on its own before spending it - and note that on this lot the Brew 1 read of 'not overly roast character, could be pushed' turned out to be STRUCTURAL headroom (the immersion could go longer) rather than THERMAL headroom (the kettle could not). Those two are easy to conflate and they call for opposite moves.
+- Signal: coffee materially more developed than the light / ultra-light baseline (instrument WB Agtron, visual read, or roaster framing) - roast level LEADS strategy before process family or cultivar.
+- Tasting tell: **fruit on attack + ashy / smoky / oversteeped-black-tea body** = Hybrid (Intensity-Clarity Split) trigger; do not chase with finer grind or agitation.
+- Hardware: developed-roast ICS needs a fast-draining cone switch + fast paper, NOT the April Switch.
+- Boundaries: wall confirmed at <=65.4 WB Agtron, absent at 70.1; late-cut boundary sits between 48 (cut tight) and 60 (do not cut).
 
 ### 2. Temperature Primacy on Anaerobic Naturals and Cold-Room Dehydration Naturals
 
@@ -373,9 +344,6 @@ Things to test across future brews. **Maintenance rule:** when a question resolv
 
 ### Roast Level
 
-- Does the medium / developed-roast specialty natural → Hybrid Intensity-Clarity Split pattern hold on a non-Untold roaster? One more confirmation graduates Pattern #1 to a `by-roast-level/medium-developed.md` capsule.
-- CCIL promotion gate for the medium-roast over-extraction lever (re-homed from the brewing-assistant operational-guide Roaster roast-level hook, prune case 013): promote to a CCIL entry once **N≥2 more medium-roast specialty naturals where over-extraction-risk-as-roast-character framing LEADS strategy selection at intake** (not just retroactively confirmed at iteration time - trigger tightened at Item 20 / Group 5 grill, 2026-05-24). Full ledger entry with the operator clarification of the intake-led criterion: [ccil/cluster/observing.md § Medium-roast specialty natural over-extraction lever](docs/skills/ccil/cluster/observing.md).
-- What Agtron or visual threshold should trigger roast-level-first routing before process-family routing?
 
 ### Strategy Generalization
 
