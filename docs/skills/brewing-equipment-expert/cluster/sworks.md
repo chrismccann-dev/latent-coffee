@@ -115,6 +115,7 @@ The SWORKS valve has produced canonical reference recipes for multiple strategie
 | **Half-open throughout** | 0 (bloom) → 6 (main pours) | Suppression on anaerobic-natural lots (Altieri Family Mima Estate, Basha Bekele) |
 | **Restricted main + late half-open transition** | 0 (bloom) → 5 (Pours 1 to ~190g) → 6 (Pour 2 finish) | Balanced Intensity on yeast-inoculated honey (Project One Blue Iris) — valve-transition timing is a co-lever with temperature |
 | **Restricted main + half-open finish (Hybrid Sequential)** | 0 (bloom) → 5 (Pours 1-2) → 6 (final pour) | Hybrid (Sequential) on heavy co-ferment washed (Moonwake El Eden Tamarind, Sebastián Ramírez El Placer) — valve transition timing IS the phase boundary |
+| **Graduated Taper** (operator-named, confirmed 2026-07-27) | 0 (bloom) → 5 (front-building window, to ~155g) → 6 (ease the mid) → 7 (clean flush) | Hybrid (Sequential) hold-front / ease-mid / flush on light washed Gesha (SEY x BACC Frank Aroste, brew 5275ae7b) - fixes hollow-front / flat-body when fast flat papers drain before the front builds; the Dial-5 front-window length is the front/body balance lever (tune +/-10-15g before touching grind) |
 
 The dial sequences above are canonical at the *vocabulary* level (Dial X = Y state). The pattern names (slow/slow/open, fast/fast/slow, etc.) are descriptive shorthands used in BREWING.md archive, not canonical pattern names — they emerge from operational practice and could be renamed without affecting the dial vocabulary.
 
