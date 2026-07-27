@@ -50,7 +50,7 @@ Live regression ran against the prod DB through `fetchBrewsFiltered` itself (tsx
 
 The whole battery (3-9) was re-run after the `/simplify` refactor and passed identically, including the byte-identical `fetchRecentBrews` output through its new delegate path.
 
-**Catalog-cache caveat (open until Chris's next session):** this build session's MCP catalog predates the deploy, so the Tool could not be called end-to-end through the connector here. Per the standing rule, confirm in a **fresh session** (or explicit ToolSearch) that `query_brews` surfaces, then rerun `query_brews(roaster: "Untold Coffee Lab")` as the end-to-end receipt. The data layer beneath it is verified above.
+**End-to-end receipt (CONFIRMED 2026-07-27, fresh session post-deploy):** Chris ran `query_brews(roaster: "Untold Coffee Lab")` through the live connector in a fresh session — 4 rows latest-first (Deborah Interstellar / Fazenda Um Pink Bourbon / Janson Pacamara / Fazenda Um Wush Wush), roaster canonical-resolution, FK-joined terroir/cultivar rows, and the default projection all clean. The build session's own catalog predated the deploy (the standing catalog-cache rule held as expected), which is why this receipt came from the follow-up session rather than the build session.
 
 ## Deferred / surfaced
 
