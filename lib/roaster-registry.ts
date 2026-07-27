@@ -2575,6 +2575,20 @@ export const ROASTERS: RoasterEntry[] = [
     calibrationRole: 'Competition-Lot Preservation Benchmark',
     notes: 'Roasted coffee is secondary to the green-bean program; use lot/process/cultivar signal first. Stronghold S7X/S9 platform suggests high repeatability and even development. Start clarity-first for washed/high-end Panama-style lots, then push only if sweetness/body is missing. Avoid assuming Dak/Sey-style extreme extraction without cup evidence. Team includes Danilo Lodi, Justin Boudeman (Longboard Specialty Coffee), Francesco Bernasconi, Julio Villasmil, and members of the Salzman family. Roasted inventory vacuum-sealed and frozen at -11°F per third-party listing.',
   },
+  {
+    // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton entry off
+    // the NO°5 Classic Crema Tanzania Kifaru Bourbon Washed brew (91b546bb).
+    // Commodity/house-label roaster; location + program unresearched. VARIES is
+    // a placeholder pending more lots. Surfaces via list_skeleton_entries
+    // until rich-field research lands.
+    name: 'NO°5',
+    strategyTag: 'VARIES',
+    brewGuideStatus: 'none',
+    roastStyle: 'Medium (single observed lot)',
+    notes:
+      'First evidence: Classic Crema (Tanzania, Kifaru Coffee Estate, Karatu / Ngorongoro southern slopes ~1,800m; Bourbon; washed, Raised Bed; MEDIUM roast, commodity/house label). Brew 1 (April, 88°C, Suppression) came back roast-walled; resolved via Hybrid Intensity-Clarity Split on the SWORKS Bottomless (92°C, fast Dial 7 drain, lift-cut ~180g). Treat roast level as the lead signal on this label.',
+    skeleton: true,
+  },
   // ---- Self-Roasted ----
   {
     name: 'Latent',
@@ -2716,6 +2730,10 @@ export const ROASTER_REGISTRY = ROASTER_NAMES
 // Aliases: short-form / structural-drift variants → canonical full name.
 // Used by ROASTER_LOOKUP.findClosest to surface a "did you mean X?" suggestion.
 export const ROASTER_ALIASES: Record<string, string> = {
+  'NO5': 'NO°5',
+  'No. 5': 'NO°5',
+  'No.5': 'NO°5',
+  'NO°5 Coffee': 'NO°5',
   'Newbery Street': 'Newbery Street Coffee Roasters',
   'Moonwake': 'Moonwake Coffee Roasters',
   'Hydrangea': 'Hydrangea Coffee',

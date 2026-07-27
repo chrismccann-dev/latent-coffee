@@ -219,6 +219,8 @@ Measured-drawdown provenance + full research is in the
 - Use case: Balanced flat extraction (moderate flow, neutral profile)
 - Link: <https://www.aprilcoffeeroasters.com/collections/april-brewing-accessories/products/april-paper-filter>
 
+- **NEW smaller-size April paper fits flat-bottom brewers generally (Chris-reported 2026-07-22; PENDING SPEC CONFIRMATION).** Chris acquired a *smaller-size* April paper that, unlike the brewer-specific large-bottom `APRIL-STD` above, DOES fit flat-bottom brewers generally (Orea / Kalita / SWORKS-class small flat-bottom). This is a DISTINCT SKU/size from the large-bottom standard paper - the 'April brewer only' constraint above still holds for `APRIL-STD`. Flagged for spec confirmation (exact SKU / size / measured flow); once confirmed, promote to its own registry entry + `lib/filter-registry.ts` mirror with the correct `fitsBrewers`, rather than editing the verified `APRIL-STD` row.
+
 ### April FAST — `APRIL-FAST`
 
 - Fits: April / April Hybrid Brewer (also Orea per registry; the April×Sibarist FAST collab)

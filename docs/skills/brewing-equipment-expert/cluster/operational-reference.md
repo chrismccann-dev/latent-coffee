@@ -61,6 +61,14 @@ The cup-tendency column above describes each brewer's primary register, but in p
 
 > **Hario Switch Glass - output-selection / tail-cut note.** On the Switch, Output Selection (late_cut) and the Hybrid open-drain phase are the SAME physical action - the full note (why it is the cleanest tail-cut hardware in the kit, fast-cone-paper pairing, cut-tighter-not-later) lives in the Khun Lao Double Honey entry of [brewing-historian hybrid.md](docs/skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md).
 
+
+**Switch-brewer selection for Hybrid / Intensity-Clarity Split is decided by ROAST LEVEL, not by cup-goal tiebreaker (2026-07-27, Untold Finca Deborah Gesha, brew c818dfcb).** The two owned switch brewers are not interchangeable for this strategy, because they differ in a way the cup-tendency framing does not capture: **the April Switch drains materially slower than the V60 / Hario Switch - confirmed bare, with no paper and no coffee.** The ICS open phase is defined as a true fast RINSE, so on a slow-draining flat switch it silently degrades into continued extraction.
+
+- **Developed roast with a heavy register to flush** -> **Hario / V60 Switch + CONE FAST.** The fast cone is what makes the open phase a rinse. Confirmed on all three Untold roast-tail resolutions.
+- **Light roast, nothing to flush** -> **April Switch + April Paper.** Integration and a gentle finish are the point, and a fast cone rinse would starve the back half. All five April Switch data points in the archive are light roasts.
+
+General form: **the April Switch's integration strength is a liability whenever a loud register needs draining rather than blending.** Reach for it to pull a cup together; reach for the cone switch + fast paper to leave something behind. This sits above the softening-vs-sharpness secondary-register tiebreaker above - check roast level and flow requirement first, then tiebreak on register.
+
 ### Filter System
 
 Canonical filter SKUs are in `canonicals://filters` (58 canonicals + 56 aliases). The per-filter spec sheet - fit groups, behavior, cup impact, and **measured loaded-bed drawdown** (the operative number; marketing flow labels mislead, e.g. CAFEC "Fast"/"Slow" = extraction intent, not flow physics) - lives in [filters.md](docs/skills/brewing-equipment-expert/cluster/filters.md). Select there.

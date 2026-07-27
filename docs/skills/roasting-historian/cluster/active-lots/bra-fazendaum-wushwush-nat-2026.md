@@ -3,7 +3,7 @@
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
 **Lot:** BRA-FAZENDAUM-WUSHWUSH-NAT-2026
-**Status:** Active - V2 cupped 2026-06-14 (Day 9, REST_DAYS_DRIFT +2). **Leading slot v2c (Batch 208)** - mandarin emerged for the first time on this lot, V1's dark-tea body absent. **NOT reference quality** per operator (mandarin 'not fully formed,' cup loses acidity cooling, body thin). V3 designed + pushed to Roest 2026-06-16 (profiles 532798/532799/532800). V1 cupped 2026-05-15. Untold paired-roasted reference cupped 2026-05-25. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah ($419/kg, deferred).
+**Status:** Active - **V3 ROASTED 2026-07-25** (batches 220/221/222), lot state **Waiting for next cupping** (Day 7 target 2026-08-01). All three slots FC AUDIBLE at 205.5-205.8°C - fixed-FC finding now 3-for-3 across V-sets. v3c's 210°C trigger never fired (clock-capped 6:00 / 208.4°C); ~208°C is the practical ceiling on this curve. V2 cupped 2026-06-14, leading slot v2c (Batch 208), NOT reference quality. V1 cupped 2026-05-15. Untold paired-roasted reference cupped 2026-05-25. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah ($419/kg, deferred).
 **Cultivar:** Wush Wush
 **Terroir:** Brazil
 **Producer:** Fazenda Um
@@ -79,6 +79,22 @@ Leading slot: **v2c (Batch 208)**, NOT reference quality. Cup hierarchy tracked 
 - **v3c UPPER BRACKET** (recipe 36d4f2fc, Roest 532800): bean-temp auto-drop **210°C**. Tests upper bound of operator tolerance. Allows 50-80s dev past FC. Deal-breaker: pungent V1-style dark-tea returns. Acceptable: light/manageable dark-tea at developed level.
 
 **Success criterion (extended from brew handoff):** at least one slot shows fully-formed mandarin character with body that integrates the dark-tea register rather than letting it dominate, AND survives cool-stage testing without losing acidity edge. The plain Balanced Intensity brew test (V60/Orea ~1:16 ~93°C yields mandarin + prune + cacao without Hario Switch rescue) remains the final-validation gate post-V3 leading slot.
+
+### V3 roast results (2026-07-25) - roast-layer facts, cup pending
+
+All three slots roasted on v2c's parent curve as designed; hopper 125 / charge ~117 held. **First V-set on this lot where all three slots crossed FC audibly** (205.5-205.8°C, 4:40-4:44 - the fixed-FC constraint is now 3-for-3 across V-sets and confirmed on the audible side).
+
+- **v3a (Batch 220, 206°C auto-drop):** FC 4:43/205.7°C, drop 4:47/206.0°C - **only 4s dev (1.4%)**. Agtron WB 78.6 (predicted 78, exact). Weight loss 9.6%. The 206°C ceiling against the fixed ~205°C FC makes this an FC-onset batch, NOT the intended V1A-era development point.
+- **v3b (Batch 221, 208°C auto-drop):** FC 4:44/205.5°C, drop 5:45/207.8°C, 61s dev (17.7%). Agtron WB 68.5 (predicted 74) - landed in V1 color territory. Weight loss 11.7%. Now carries the 'V1-era development with auto-drop discipline' test v3a was designed for.
+- **v3c (Batch 222, 210°C target - NEVER FIRED):** FC 4:40/205.8°C; bean plateaued ~208°C on the declining inlet tail, drop_rule_if_slow fired as written - clock-capped 6:00 / 208.4°C, recorded manual end condition. 80s dev (22.2%), Agtron WB 67.1, weight loss 12.3%.
+
+**Roast-layer findings (cupping-independent):**
+
+1. **Post-FC climb rate ~1°C/30s on this curve** - the +2°C ceiling from v3a to v3b bought +57s of dev, far more than the design's ~30-50s estimate. Ceiling-to-dev mapping is nonlinear against the fixed FC.
+2. **The set came out bimodal, not an even ladder**: 4s / 61s / 80s dev and 78.6 / 68.5 / 67.1 Agtron WB. v3b and v3c are only 0.5°C / 1.6 Agtron apart; the intended middle of the bracket (roughly 72-76 Agtron with ~30s dev) is unsampled. If the cup wants that middle, a V4 slot at ~207°C targets it.
+3. **~208°C is the practical bean-temp ceiling on this curve within a 6:00 clock** - a true 210°C test needs a hotter post-peak tail (hold 232-234°C past 05:00) or a longer clock.
+
+Cup verdict, leading slot, WB->Gnd deltas, and the dark-tea tolerance boundary (open questions 6-7) defer to the Day 7 cupping (target 2026-08-01).
 
 ## Strategic
 
