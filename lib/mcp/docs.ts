@@ -748,8 +748,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-deborah-geisha-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (V1 designed 2026-07-25; depth arc under the layered-evolving goal; pre-V1 gates open)',
-    description: 'Active-lot Roasting Brief + working hypotheses for Finca Deborah Geisha Natural Interstellar (PAN-DEBORAH-GEISHA-NAT-2026, Jamison Savage, yeast-inoculated 100+ hr natural — heavy-ferment family). The depth-arc lot carrying the layered-evolving apex goal directly. V1 designed 2026-07-25: bean-temp drop-ceiling ladder 206/208/210C on a fixed 246C-peak natural-family curve (narrow single-variable spread per the high-lot-value precedence rule). NOT yet pushed to Roest — two pre-V1 gates open: density measurement + Untold peer-reference calibration cup (peer bag in freezer stock, WB 60.6).',
+    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (V1 designed 2026-07-25, revised 2026-07-27 post peer-calibration; density gate open)',
+    description: 'Active-lot Roasting Brief + working hypotheses for Finca Deborah Geisha Natural Interstellar (PAN-DEBORAH-GEISHA-NAT-2026, Jamison Savage, yeast-inoculated 100+ hr natural — heavy-ferment family). The depth-arc lot carrying the layered-evolving apex goal directly. V1: bean-temp drop-ceiling ladder 206/208/209C on a fixed 246C-peak natural-family curve (v1c revised 210→209C after the 2026-07-27 Untold peer-calibration cup contradicted the high-ceiling premise). Peer calibration closed for vocabulary (melon/kiwi/rose anchor; body-from-clarity-not-weight finding); NOT yet pushed to Roest — density measurement is the last open gate.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
