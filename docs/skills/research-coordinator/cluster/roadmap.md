@@ -56,6 +56,8 @@ Each candidate carries three implicit axes used for sequencing:
 
 **Constraint set (the office lab):** water baseline locked (PA tap + 1 TONIK + 1 JAMM per 200 mL finished cup; DAK kettle-only) = controlled variable by default. On-site stash (Apax JAMM / LYLAC / TONIK concentrates + DAK Hydro Drops) permits *constrained* water probes as a deliberate later track if scoped - NOT a revival of the parked water-combination space; the RP6 break stays respected. Coffee supply: office freezer via [freezer-stock.md](docs/brewing/freezer-stock.md), every candidate already carries an archived optimized control brew.
 
+**Track structure (scoped 2026-07-30, operator sign-off):** track = coffee. Track 1 = Moonwake El Oasis 60hr Washed Gesha, tight ratio ladder (rung-0 control re-brew / 1:10 / 1:9 / 1:8 boundary / later-day repeat, 5 vials exactly) on locked Kalita 155 + xBloom + 96°C, grind rule −0.1 EG-1 per ratio point (seed-derived), VST LAB III TDS per rung. Protocol doc: [concentrated-pourover-t1-full-ladder.md](docs/research-projects/concentrated-pourover-t1-full-ladder.md) + paste-ready spawn prompt alongside. Tracks 2+ = abbreviated ladders on contrasting-process freezer coffees (shortlist: Loud Giants / Chombi / Motta / Ngoma Station). Low-pressure AeroPress branch = own track, unlocks after the gravity optimum repeats across 2+ coffees (operator owns no AeroPress; purchase = the unlock's first action). No push_brew during the project — trial records live in the protocol docs; durable representation decided post-project with grilling item 56.
+
 ---
 
 ## Next
