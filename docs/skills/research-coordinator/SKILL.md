@@ -38,6 +38,8 @@ The Coordinator's per-project arc:
 
 Sequential, not concurrent. One project at a time; one track at a time within a project. Heavy single-threaded efforts during free time. Unlike brewing/roasting workflows which can run in parallel across multiple coffees, research locks the operator's full attention for the track's duration. The roadmap structure reflects this: § Now is single-slot, not a queue.
 
+**Office-lane exception (operator-established 2026-07-29):** the single-slot rule governs the home/bench lane, where research competes for the operator's scarce free time. Office brewing time is a separate resource pool (daily brewing at work on freezer coffees with already-optimized recipes, no competing setup) - one office-lane project may run concurrently with the home-lane § Now occupant. The roadmap carries at most one entry per lane; lanes are labeled explicitly. First occupant: the concentrated pour-over project.
+
 ## Inputs
 
 - Operator hypothesis / observation / open question that triggers a research project
