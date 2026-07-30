@@ -46,6 +46,16 @@ Each candidate carries three implicit axes used for sequencing:
 
 **Slot framing (2026-07-21):** deliberately the *light* brewing-side project — momentum pick, not payoff pick. Tolerates freezer-coffee variety (the question is per-cup chill-vs-natural-drop, not a cross-cup comparison on one coffee), so no same-coffee volume requirement and no Pink Bourbon fatigue tax. The operator's primary energy this cycle goes to **resuming the roasting cadence** (close out the mid-flight lots, AN10 first), which is the explicit build-toward path for § Next #11 (Roast blending) — see the amended trigger note there.
 
+### Concentrated pour-over / high-strength filter (Research Project #8 - OFFICE LANE, concurrent; operator-established 2026-07-29)
+
+**Effort:** medium. **Fold-in:** medium (extends the WBC corpus's Extraction Push family + the archived per-coffee optimized recipes as built-in controls). **WBC payoff:** HIGH - candidate signature differentiation element for the operator's own WBC routine.
+
+**Lane note (structural, operator-called 2026-07-29):** first occupant of the new **office lane** - a second concurrent slot carved out of the home-lane single-slot rule (see [SKILL.md § Operational tempo](docs/skills/research-coordinator/SKILL.md) office-lane exception). Office brewing time is free-play time on freezer coffees with already-archived optimized recipes; it has never hosted research before. Runs concurrently with the home-lane § Now occupant (RP7 rapid chilling, not yet started) and does NOT gate on it.
+
+**Scope:** Can a conventional paper-filtered brewer be pushed toward espresso-like concentration and texture by shortening the brew ratio (1:13 -> 1:10, boundary-mapping to 1:8) while preserving filter clarity - "high-strength, high-clarity filter coffee," served undiluted (no bypass), best expression warm-to-cool. Seeded by the 2026-07-29 Picolot Barbie Beans play session (two 1:10 experiments; winner: 90°C / finer grind / earlier final pour - grind-and-contact-driven extraction beat temperature-driven on a temperature-sensitive coffee). Second-stage branch: low-pressure paper-filtered percolation (AeroPress slow-press approximation first; 0.05-0.4 bar). Prior art in the corpus: exactly one routine (Paprik Liu 2026 Round One, "High-Concentration Push" subtype, 1:10 / 1.9 TDS / no-bypass hardware / 200 ppm water) - hardware-and-water driven, unlike this project's conventional-dripper grind-driven build; nobody has finaled or won with the style. Vocabulary/canon placement is grilling-queue item 56, drains independently.
+
+**Constraint set (the office lab):** water baseline locked (PA tap + 1 TONIK + 1 JAMM per 200 mL finished cup; DAK kettle-only) = controlled variable by default. On-site stash (Apax JAMM / LYLAC / TONIK concentrates + DAK Hydro Drops) permits *constrained* water probes as a deliberate later track if scoped - NOT a revival of the parked water-combination space; the RP6 break stays respected. Coffee supply: office freezer via [freezer-stock.md](docs/brewing/freezer-stock.md), every candidate already carries an archived optimized control brew.
+
 ---
 
 ## Next
