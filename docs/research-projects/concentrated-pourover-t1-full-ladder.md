@@ -285,7 +285,7 @@ Per rung, capture:
 
 **Date:** 2026-08-03
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/concentrated-pourover-t1-ladder-962b18` @ `<SHA recorded post-commit below>`, pushed to origin (archive doc committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/concentrated-pourover-t1-ladder-962b18` @ `207ca6a4a04dd69aad073c01bbd357780358dd3b` (content commit; a follow-up SHA-record commit sits at branch tip), pushed to origin (archive doc committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** MIXED — ✅ the ladder methodology VALIDATES (own-style optimum found + boundary mapped in 4 cups on a 5-vial budget); ⚠️ H2's grind coefficient only holds at the first rung; ❌ the repeat was lost to an inventory miss, so the optimum closes unreproduced.
 
 This brief is the canonical close-out for RP8 Track 1. Coordinator: consume § Key findings + § Recap map for the project end-doc + track-2 protocol design; the substrate-edit specs are deliberately thin (this track pre-committed to doc-only records). Compile session: nothing to integrate beyond the specs listed — trial data stays in this doc by design (operator call 2026-07-30, jointly with grilling item 56).
@@ -404,7 +404,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/concentrated-pourover-t1-ladder-962b18` @ `<SHA below>` (the authorized archive-persist exception)
+- ✅ Archive doc committed + pushed to branch `claude/concentrated-pourover-t1-ladder-962b18` @ `207ca6a4a04dd69aad073c01bbd357780358dd3b` (the authorized archive-persist exception)
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
