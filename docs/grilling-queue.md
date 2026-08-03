@@ -216,6 +216,7 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Grade:** BRAINSTORM (N=1 coffee, last dose gone; concept shape before naming)
     - **Source:** Chris work-freezer play session 2026-07-29 + outside-session handoff doc; grounded against archived brew 63aad474 (Barbie Beans Clarity-First reference)
     - **Suggested landing:** CONTEXT-brewing headword(s) for whatever the format is named + a roadmap Brainstorms entry for the experiment series if (c) resolves yes; Exp B push_brew decision executes immediately post-grill either way
+    - **Evidence update:** RP8-T1 closed 2026-08-03: 1:10 beat optimized control on 2nd coffee (El Oasis), boundary at 1:8; brief in `docs/research-projects/concentrated-pourover-t1-full-ladder.md`.
 
 ## Substrate pruning candidates
 
