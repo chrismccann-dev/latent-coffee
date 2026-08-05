@@ -1,6 +1,6 @@
 # Roasting Brief — Bukure Anaerobic Lot 10 (rwa-nova-an10-rb-2026)
 
-**green_bean_id:** `50ae372d-a4ee-465e-9e54-e2dcf9189c22` · **lot_status:** waiting_for_next_roast · **Started:** 2026-06-12 · **Roest inventory:** 9962
+**green_bean_id:** `50ae372d-a4ee-465e-9e54-e2dcf9189c22` · **lot_status:** waiting_for_brewing · **Started:** 2026-06-12 · **Roest inventory:** 9962
 
 First live dogfood of the Roasting Coordinator role ([ADR-0024](docs/adr/0024-lot-coordinator-claude-code-native.md)). Architecture friction is logged in § Open questions as it surfaces.
 
@@ -32,28 +32,31 @@ Evaluation posture (locked at intake): Day 7 xbloom gate as usual, but **escalat
   · route taken: **SPG (Path B) → advance to V2.**
 
 - **V2 — DESIGNED + STAGED** (2026-06-21, fresh Coordinator session). experiment `AN10-DEV-DEPTH-v2` (pk `490fa6a6-e2b3-4bd7-b2e6-e59ee29c1f26`); recipes v2a/v2b/v2c staged (`d5dea306` / `55d9f02c` / `5ee3a933`); Roest profiles **535418 / 535419 / 535420** pushed (named "Bukure AN - v2a/b/c"). Design intent: **push development past 216, honestly, to land the reference (no V3) and find where this anaerobic's overdev signature appears.** The single isolated variable is **bean-temp auto-drop = development depth**, laddered past 216's hand-held 207: **v2a 207 / v2b 209 / v2c 211°C**, all **honest auto-drop, NO manual hold** (fixes 216's confound — 216 conflated 242 peak with a manual hold to 207). Peak **held at 242** (the proven audible-FC threshold from V1). Curve = XO shape with a **sustained post-FC tail** (4:00/5:00/6:00 inlet lifted +2/+6/+9 vs V1c, plus a 7:00 point) so the developed window is reached by **genuine dev-phase energy, not a long low-RoR bake** — this is the "both" answer to lift-drop-ceiling-vs-add-energy (lift the drop ceiling AND sustain dev-phase heat; do NOT add peak energy). v2a = safety floor (honest 216, guarantees V2 isn't empty); v2b = the more-developed reference target; v2c = the deliberate overdev probe into untested territory above V1's clean 207 (AN10's anaerobic is much milder than the Mandela XO league, so it has real roast headroom — the XO ~205-206°C overdev ceiling does NOT transfer; expect *conventional* overdev, not XO spice). Drop rules per the authoring standard (fast: let it auto-drop, don't intervene; slow failsafe 5:45 / 6:15 / 6:45). Sequential run order v2a→v2b→v2c (floor→ceiling — lets v2c be aborted if v2b already shows overdev). **All 4 design forks operator-ratified this session:** (1) variable = drop-temp/dev-depth + lift the post-FC tail, hold peak; (2) ladder 207/209/211; (3) sequential run order; (4) eval posture xbloom-then-likely-SPG.
-  · status: **STAGED — awaiting the V-Set Assistant roast.** lot_status `waiting_for_next_roast` (correct — no change; the handoff happens in this state).
-  · per-slot predictions + the full design live in the recipe rows + experiment `AN10-DEV-DEPTH-v2` — pull `get_bean_pipeline`, not duplicated here.
+  · status: **CLOSED** — roasted 2026-07-25 (batches 217/218/219), xbloom Day 7 (2026-08-01), SPG (2026-08-05).
+  · **leading slot: V2B (Batch 218, drop 209.1 / FC 4:53 @ 207.7 / 17s dev / Agtron 83.9→79.3 → +6.3 delta) — SPG-validated reference-grade.** `is_reference_candidate = true` set; `is_reference` deferred to close-out (its precondition is the optimized brew_id existing).
+  · what it proved: (1) **218 (209) is the reference-grade winner** — SPG "the very clear winner by far," depth carries under a real pourover; it resolves 216's under-built mid-palate (cleaner, more developed finish, more depth). (2) **Overdev ceiling bracketed: 209 clean / 211 conventional overdev** — 219 (211, Agtron 72.1, 82s dev, 11 cracks) cupped "too roasted, too far," and crucially the signature was **conventional** (roast-flat/dark), **NOT XO cinnamon-spice** — the mild-ferment calibration is *confirmed*. (3) **The 216 confound is fixed** — all three honest auto-drops fired (no manual holds, no slow-clock); 217's honest 207 came in *silent* (0 cracks, dropped fast at 4:42 on the lifted tail) and cupped bright-but-hollow (SPG loser, called on first sip), so the manual-hold 216 was not reproducible as-run. (4) **Agtron slope recalibrated to ~3 pts/°C above 207** on this curve family (83.9 / 79.3 / 72.1 across 207/209/211), far steeper than the ~1/°C I designed to — 218/219 landed darker than predicted. (5) **widest WB→Gnd delta won again** (218 +6.3), 4th consecutive on Nova Red Bourbon.
+  · delta resolution + full numbers live in the experiment row `AN10-DEV-DEPTH-v2` (`winner` / `key_insight` [Medium-High] / `what_changes_going_forward` / `delta_from_cup_*` / `delta_from_roast_*` / `updated_cup_prediction_*`) — pull `get_bean_pipeline`, not duplicated here.
+  · route taken: **SPG passed → Route C (reference) → optimized brew on 218.** Optimized-Brew Packet emitted 2026-08-05.
 
 ## Current state + next step
 
-**V2 designed + staged; awaiting roast.** `lot_status` is `waiting_for_next_roast` (correct). The next action is **operator-side**: open a fresh Claude Code session as the **V-Set Assistant** and run V2 (paste the V2 Handoff + operator-prep packet emitted this session). The Assistant reconstructs the full design from the DB — experiment `AN10-DEV-DEPTH-v2`, the 3 recipe rows, and Roest profiles 535418/535419/535420 (load by the "Bukure AN - v2a/b/c" names on the tablet). After the Day-7 xbloom cup (+ likely SPG on the finalist), a **fresh Coordinator session** consumes the V2 Results Packet and routes (declare reference / SPG-first / close-on-best). **No V3** — V2 lands the reference or closes on best-available.
+**V2 closed; SPG resolved; routed to the optimized brew.** `lot_status` is `waiting_for_brewing`. **Reference-grade winner = Batch 218** (209 drop), `is_reference_candidate = true`. The next action is **brewing-side**: run the **optimized brew on 218** (Optimized-Brew Packet emitted 2026-08-05 → claude.ai brewing side). Its `brew_id` lands in the DB, then a **fresh Coordinator session runs close-out** ([close-out.md](docs/skills/roasting-coordinator/cluster/close-out.md)): mark 218 `is_reference` + resolve all three `worth_repeating`, write `roast_learnings` (`best_roast_id` = `8977e12b-f0d9-4029-b6aa-084fed7b413e`), link the optimized `brew_id`, archive Roest 9962, flip `lot_status → resolved`, and scope the substrate-fold. **No V3** — this was the last V-set; 218 is the lot reference.
 
-The V2 Handoff + operator-prep packets (emitted 2026-06-21) are ephemeral couriers; their content lives in the recipe rows + DB and is not reproduced here (per the packet-persistence resolution).
+The V2 Results Packet (folded here 2026-08-05) + the earlier Handoff/prep packets are ephemeral couriers; their durable content lives in the recipe/roast/cupping/experiment rows + this Brief (per the packet-persistence resolution).
 
 ## Open questions / carry-forward
 
-Lot-side (for V2):
+Lot-side (V2 RESOLVED — carry the resolutions into the close-out `roast_learnings`):
 
-1. Where does **AN10's overdev signature** finally appear when pushed past 216? None yet — 216 was clean at the 207 manual-hold — so V2 deliberately hunts for it. Expect *conventional* overdev (flattening, bake, loss of fruit/acidity lift, dark-tea dominance), NOT the XO heavy-ferment spice-dominance — AN10 is a much milder ferment (operator, 2026-06-21).
-2. Does the **under-built / disintegrated mid-palate** resolve with more roast development, or is it partly a brew-extraction issue? Brew-side note from the SPG: an Intensity-Clarity Split pulls more into 216's under-built front.
-3. FC audibility is a **momentum threshold** here (236 none / 239 one pop / 242 audible) — the anaerobic step raised the audible-FC bar vs Lot 21. V2 lives at 242+, so an audible FC is expected; confirm it holds.
-4. **Lingonberry→lime watch:** 216 carries "a touch of lime," 214 most overtly — the bright edge survives the ferment at the developed end; track whether it persists in the reference recipe.
+1. **Overdev signature — RESOLVED.** Appears at **211** (219: Agtron 72.1, "too roasted, too far") and is **conventional** (roast-flat/dark), **not** XO cinnamon-spice; **209 is clean**. AN10's ceiling sits between 209 and 211 — the mild-ferment frame is confirmed, and the XO ~205-206 ceiling correctly did not transfer.
+2. **Under-built mid-palate — RESOLVED (roast side).** More development *did* resolve it: 218 (209) reads cleaner, more developed finish, more depth vs 216. Residual front-palate shaping is the **brew's** job — carry-forward to the optimized brew: front-weighted contact / hold the front longer (the SPG cooling arc showed sweetness ceding to body).
+3. **FC audibility — CONFIRMED as a dev-time (not energy) threshold.** 217 silent (0) / 218 audible (4) / 219 audible (11), tracking ~15/40/80s past FC-onset. Audible FC held at 242+. (Low confidence as a standalone pattern — stays in the experiment `additional_notes` unless replicated.)
+4. **Lingonberry→lime watch — carry to the optimized brew.** Track whether the bright lime edge persists in 218's locked drinking recipe.
 
-CCIL candidates held (not promoted — need V2 corroboration):
+CCIL candidates — **promotion gates now met, staged for the close-out fold** (arbiter proposal `3430b443` covers the first two — run `process pending arbitration`):
 
-- **widest WB→Gnd delta wins** — 3rd consecutive on Nova Red Bourbon (216 +6.9); cleaner at N=4 after V2.
-- **xbloom gate over-amplifies brightness / can invert vs a real pourover on bright anaerobics** — N=1 (214 this lot); watch for a 2nd instance before promoting.
+- **widest WB→Gnd delta wins** — **N=4 consecutive** on Nova Red Bourbon (216 +6.9, 218 +6.3). Ready to promote to a family norm.
+- **xbloom gate misranks bright/less-developed slots on this producer's naturals** — 2 slot-level instances on AN10 (214, 217) + the family's 3rd inversion; **promotion gate met.**
 
 Process notes:
 
@@ -66,9 +69,18 @@ Process notes:
 
 ## Cross-domain handoffs
 
-- SPG: **run at V1** (Day 8, 2026-06-21 — one standing Extraction-Push pourover on finalists 214 + 216) → 216 wins outright, but assessed best-of-set, **not reference-grade** → Path B advance to V2. Cuppings in the DB (`eval_method = Simulated Pourover`). **V2 posture (operator-ratified):** xbloom Day 7 → likely SPG on the finalist(s) before declaring reference (no V3 safety net, and the V1 SPG caught the 214 brightness-inversion); route decided post-cup by the consuming Coordinator session.
-- Optimized brew: not-started
+- SPG: **run at V1** (Day 8, 2026-06-21 — 214 + 216) → 216 best-of-set, not reference-grade → advance to V2. **Run again at V2** (2026-08-05 — 217 + 218): **218 the clear winner by far**, depth carries under a real pourover, reference-grade; 217 the loser (hollow, called on first sip). SPG cup rows `1ff2db6c` (217) + `d69dcafb` (218), `eval_method = Simulated Pourover`. → **SPG passed → Route C.**
+- Optimized brew: **packet emitted 2026-08-05** on Batch 218 (reference roast_id `8977e12b-f0d9-4029-b6aa-084fed7b413e`). Brew-side carry-forward: front-weighted contact (hold the front longer); SPG recipe as the starting point — Balanced Intensity, April Glass + April Paper, 15g/240g (1:16), EG-1 6.4, 93°C off-base. Returns a locked `brew_id` for close-out.
 
-## Close-out (when resolved)
+## Close-out (staged — runs after the optimized brew returns)
 
-—
+Reference roast: **Batch 218** (`8977e12b-f0d9-4029-b6aa-084fed7b413e`, drop 209.1 / Agtron 79.3 / +6.3 delta). Not yet closed — the optimized `brew_id` is the missing precondition ([close-out.md § Preconditions](docs/skills/roasting-coordinator/cluster/close-out.md)).
+
+Close-out checklist for the fresh Coordinator session that consumes the optimized-brew return:
+1. `patch_roast` 218 → `is_reference: true`, `worth_repeating: yes`; resolve `worth_repeating` on the other five roasts (214/215/216/217/219 currently `pending`).
+2. `push_roast_learnings` (`best_roast_id = 8977e12b…`) — fold in: the dev-depth ladder result (209 reference / 211 conventional-overdev ceiling); **short dev + widest WB→Gnd delta = winner** (218: 17s dev, +6.3 — consistent with Lot 21's short-dev lever); the Agtron slope recalibration (~3 pts/°C above 207 on this curve family); the mild-ferment frame (XO overdev ceiling/signature does not transfer); `evaluation_strategy` (SPG Balanced Intensity) vs `optimized_drinking_strategy` (from the locked brew).
+3. Link the optimized `brew_id`; archive Roest 9962 (`patch_inventory is_archived: true`); flip `lot_status → resolved`.
+4. Scope the substrate-fold (do NOT apply — hand to a fresh execution session):
+   - **Arbiter proposal `3430b443`** already staged on cross-coffee-insights.md (2 citations: widest-delta family norm + xbloom-misrank promotion) — run `process pending arbitration`.
+   - New closed-lot learnings doc + Recently-Closed-Lots entry (no active-lot doc was ever created — fine).
+5. Reconcile remaining green (~300g nominal — verify actual against Roest 9962 before archiving).
