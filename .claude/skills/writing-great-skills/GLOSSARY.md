@@ -68,6 +68,12 @@ A compact concept (a _Leitwort_) already living in the model's pretraining that 
 **Single Source of Truth**
 The desired state where each meaning lives in exactly one authoritative place, so changing the skill's behaviour is a one-place edit.
 
+**Environment**
+The lookups the agent can perform for itself — `package.json` scripts, config files, the directory layout, `--help` output. A source of truth in its own right, and one that cannot go stale.
+
+**Cache**
+A document line that restates something the **environment** already answers. Earns its load only when the lookup is expensive; otherwise leave the fact in the environment. Cache the unwritten convention, the reason behind a choice, the gotcha no config confesses.
+
 **Relevance**
 Whether a line still bears on what the skill does — the lens for what to keep. Lost through irrelevance or staleness; distinct from a **no-op**.
 
