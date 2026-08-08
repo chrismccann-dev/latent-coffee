@@ -1,6 +1,6 @@
 # Roasting Brief — Bukure Anaerobic Lot 10 (rwa-nova-an10-rb-2026)
 
-**green_bean_id:** `50ae372d-a4ee-465e-9e54-e2dcf9189c22` · **lot_status:** waiting_for_brewing · **Started:** 2026-06-12 · **Roest inventory:** 9962
+**green_bean_id:** `50ae372d-a4ee-465e-9e54-e2dcf9189c22` · **lot_status:** resolved · **Started:** 2026-06-12 · **Closed:** 2026-08-08 · **Roest inventory:** 9962 (archived)
 
 First live dogfood of the Roasting Coordinator role ([ADR-0024](docs/adr/0024-lot-coordinator-claude-code-native.md)). Architecture friction is logged in § Open questions as it surfaces.
 
@@ -40,7 +40,7 @@ Evaluation posture (locked at intake): Day 7 xbloom gate as usual, but **escalat
 
 ## Current state + next step
 
-**V2 closed; SPG resolved; routed to the optimized brew.** `lot_status` is `waiting_for_brewing`. **Reference-grade winner = Batch 218** (209 drop), `is_reference_candidate = true`. The next action is **brewing-side**: run the **optimized brew on 218** (Optimized-Brew Packet emitted 2026-08-05 → claude.ai brewing side). Its `brew_id` lands in the DB, then a **fresh Coordinator session runs close-out** ([close-out.md](docs/skills/roasting-coordinator/cluster/close-out.md)): mark 218 `is_reference` + resolve all three `worth_repeating`, write `roast_learnings` (`best_roast_id` = `8977e12b-f0d9-4029-b6aa-084fed7b413e`), link the optimized `brew_id`, archive Roest 9962, flip `lot_status → resolved`, and scope the substrate-fold. **No V3** — this was the last V-set; 218 is the lot reference.
+**LOT RESOLVED (2026-08-08).** Full lifecycle done: intake → V1 → V2 → SPG → optimized brew → closed. Reference roast **Batch 218** (`is_reference: true`); optimized brew `146a263f` linked; `roast_learnings` `1e9aaa64` written; Roest 9962 archived; `lot_status = resolved`. Close-out ran in a separate session (the optimized-brew handoff was pasted there); this Coordinator session **verified it against the substrate** — all core writes confirmed. Two close-out completions landed here: (1) the three V1 roasts (214/215/216) were still `worth_repeating: pending` — resolved to `no` (only 218 is `yes`); (2) this Brief brought to `resolved` (close-out.md step 6 was skipped by the close-out session). **Remaining follow-up:** run `process pending arbitration` (3 pending doc proposals — 2 for AN10 + 1 unrelated Laurina).
 
 The V2 Results Packet (folded here 2026-08-05) + the earlier Handoff/prep packets are ephemeral couriers; their durable content lives in the recipe/roast/cupping/experiment rows + this Brief (per the packet-persistence resolution).
 
@@ -72,15 +72,13 @@ Process notes:
 - SPG: **run at V1** (Day 8, 2026-06-21 — 214 + 216) → 216 best-of-set, not reference-grade → advance to V2. **Run again at V2** (2026-08-05 — 217 + 218): **218 the clear winner by far**, depth carries under a real pourover, reference-grade; 217 the loser (hollow, called on first sip). SPG cup rows `1ff2db6c` (217) + `d69dcafb` (218), `eval_method = Simulated Pourover`. → **SPG passed → Route C.**
 - Optimized brew: **packet emitted 2026-08-05** on Batch 218 (reference roast_id `8977e12b-f0d9-4029-b6aa-084fed7b413e`). Brew-side carry-forward: front-weighted contact (hold the front longer); SPG recipe as the starting point — Balanced Intensity, April Glass + April Paper, 15g/240g (1:16), EG-1 6.4, 93°C off-base. Returns a locked `brew_id` for close-out.
 
-## Close-out (staged — runs after the optimized brew returns)
+## Close-out (RESOLVED 2026-08-08)
 
-Reference roast: **Batch 218** (`8977e12b-f0d9-4029-b6aa-084fed7b413e`, drop 209.1 / Agtron 79.3 / +6.3 delta). Not yet closed — the optimized `brew_id` is the missing precondition ([close-out.md § Preconditions](docs/skills/roasting-coordinator/cluster/close-out.md)).
+Ran in a separate session (the optimized-brew handoff was pasted there); **verified against the substrate this session** — all core writes confirmed:
+- **Reference roast: Batch 218** (`8977e12b-f0d9-4029-b6aa-084fed7b413e`) — `is_reference: true`, `worth_repeating: yes`. 217/219 → `no`; **214/215/216 → `no` (completed this verification session — the close-out run left them `pending`).**
+- **`roast_learnings`: `1e9aaa64-6d8a-4dee-b0e6-1dc52992fbdf`** (`best_roast_id` = 218; 834-char `why_this_roast_won`; lever-attribution + carry-forward fields populated with scope tags; `rest_behavior` NULL). Folds in: dev-depth ladder (209 reference / 211 conventional-overdev ceiling), short-dev + widest-delta = winner (218: 17s dev, +6.3), Agtron slope ~3 pts/°C above 207, mild-ferment frame (XO ceiling does not transfer), evaluation vs optimized-drinking strategy.
+- **Optimized brew: `146a263f-1e61-40b0-9ffa-510be34ec1ab`** (`optimized_brew_id`; its `roast_id` = 218; Hybrid — Sworks valve-hybrid: closed immersion to 2:00 @ 93°C, fast drain, late cut ~205/240g, EG-1 6.4, MgCl₂ GH44 + NaCl trace; 4-iteration dial-in, 2026-08-08).
+- **Roest 9962 archived** (`is_archived: true`); **`lot_status = resolved`.**
+- **Closed-lot learnings file registered:** [learnings/rwa-nova-an10-rb-2026.md](docs/skills/roasting-historian/cluster/learnings/rwa-nova-an10-rb-2026.md) ([#614](https://github.com/chrismccann-dev/latent-coffee/pull/614) — net-new files bypass `propose_doc_changes`, registered via an arbiter ticket).
 
-Close-out checklist for the fresh Coordinator session that consumes the optimized-brew return:
-1. `patch_roast` 218 → `is_reference: true`, `worth_repeating: yes`; resolve `worth_repeating` on the other five roasts (214/215/216/217/219 currently `pending`).
-2. `push_roast_learnings` (`best_roast_id = 8977e12b…`) — fold in: the dev-depth ladder result (209 reference / 211 conventional-overdev ceiling); **short dev + widest WB→Gnd delta = winner** (218: 17s dev, +6.3 — consistent with Lot 21's short-dev lever); the Agtron slope recalibration (~3 pts/°C above 207 on this curve family); the mild-ferment frame (XO overdev ceiling/signature does not transfer); `evaluation_strategy` (SPG Balanced Intensity) vs `optimized_drinking_strategy` (from the locked brew).
-3. Link the optimized `brew_id`; archive Roest 9962 (`patch_inventory is_archived: true`); flip `lot_status → resolved`.
-4. Scope the substrate-fold (do NOT apply — hand to a fresh execution session):
-   - **Arbiter proposal `3430b443`** already staged on cross-coffee-insights.md (2 citations: widest-delta family norm + xbloom-misrank promotion) — run `process pending arbitration`.
-   - New closed-lot learnings doc + Recently-Closed-Lots entry (no active-lot doc was ever created — fine).
-5. Reconcile remaining green (~300g nominal — verify actual against Roest 9962 before archiving).
+**Remaining substrate-fold — run `process pending arbitration`:** 3 pending doc proposals — `3430b443` (xbloom-misrank promotion + Nova Red Bourbon widest-delta N=4 norm) + `23ea470d` (FC floor/ceiling: 242 audibility, 209-211 ceiling, mild-ferment framing), both on `roasting-historian/cluster/patterns/cross-coffee-insights.md`; plus the unrelated `17e7f2e3` (Laurina/Picolot, brewing-historian). Remaining-green reconciliation is moot post-archive.
