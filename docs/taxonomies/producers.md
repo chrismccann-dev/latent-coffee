@@ -13,14 +13,14 @@ retired sourcing "Tier 1/2/3 priority targets" (now the § Sourcing priority
 *action bucket*) and from the WBC-corpus tier reading. It is the one remaining
 numbered "tier" axis; keep it scoped to system-importance.
 
-**Coverage** — 155 producers covering Chris's estimated 60-70% of brewed
+**Coverage** — 156 producers covering Chris's estimated 60-70% of brewed
 coffees. Producer data branches unboundedly compared to cultivar/terroir,
 so the registry is intentionally tier-scoped rather than comprehensive.
 Net-new producers are persisted via the canonical-addition path (MCP
 taxonomy queue / a deliberate registry edit); rich content gets backfilled
 when the producer earns it.
 
-**Total entries:** 155 (Tier 1: 59 · Tier 2: 73 · Tier 3: 23)
+**Total entries:** 156 (Tier 1: 59 · Tier 2: 73 · Tier 3: 24)
 
 ---
 
@@ -1944,7 +1944,7 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 ---
 
-### Other Systems (uncategorized)  ·  80 producers
+### Other Systems (uncategorized)  ·  81 producers
 
 ### Asefa & Mulugeta Dukamo
 
@@ -2751,6 +2751,23 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 - **Importers:** Crop to Cup, Delilab
 - **Roaster References:** Moonwake, Wonderstate, Northshore
 - **Contact:** https://www.instagram.com/cafeliquidambarhn
+
+---
+
+### Anabella Meneses
+
+**Country:** Guatemala · **Admin:** Chimaltenango · **Macro:** Central Volcanic Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Reference Role:** Signal
+- **Producer Type:** Family Estate
+- **Farm:** Finca Santa Felisa
+- **Processing Capability:** Natural / Washed
+- **Primary Cultivars:** Laurina (Bourbon Pointu)
+- **Experimental Cultivars:** Gesha
+- **Roaster References:** Picolot
+- **Skeleton:** rich fields pending research. Promoted from taxonomy queue `2af4eef7` (arbitration 2026-08-08) via producer_override on the Picolot #14 "Barbie Beans" Laurina Natural (brew 63aad474) — first Laurina lot in the brewing archive. Meso Acatenango → Central Volcanic Highlands macro.
 
 ---
 
@@ -4429,6 +4446,9 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 | Alias | Canonical |
 |---|---|
+| `Anabella Meneses, Santa Felisa` | `Anabella Meneses` |
+| `Santa Felisa` | `Anabella Meneses` |
+| `Finca Santa Felisa` | `Anabella Meneses` |
 | `Milton Leonardo Monroy` | `Milton Monroy` |
 | `Agnes Mukamushinja & Felix Hitayezu` | `Agnes Mukamushinja & Felix Hitayezu, Nova Washing Station` |
 | `Marcelo Nogueira Assis` | `Marcelo Assis` |
@@ -4557,6 +4577,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 ## Changelog
 
+- 2026-08-08 — Taxonomy queue arbitration: promoted net-new skeleton `Anabella Meneses` (Tier 3 / Signal, Guatemala / Chimaltenango / Central Volcanic Highlands — meso Acatenango; Finca Santa Felisa, Laurina/Bourbon Pointu) via producer_override on the Picolot #14 "Barbie Beans" Laurina Natural brew 63aad474 — first Laurina lot in the archive. Aliases `Anabella Meneses, Santa Felisa` / `Santa Felisa` / `Finca Santa Felisa` → canonical. Resolved queue entry 2af4eef7. Rich fields pending the 2.6 research sweep. Total entries 155→156.
 - 2026-07-27 (follow-up) - Terroir resolution for `Arturo Paz`: new canonical Honduras macro `Santa Bárbara-Yojoa Highlands` stood up (see regions.md changelog); entry gains farm `Finca El Itacayo` + the macro. Skeleton flag stays (rich fields still pending).
 - 2026-07-27 - Taxonomy queue arbitration: promoted 4 net-new skeleton producers. `Frank Aroste` (Peru / Cusco / Southern Andean Highlands; SEY x BACC Washed Gesha brew 5275ae7b), `Christian Jebsen, Kifaru Coffee Estate` (Tanzania / Arusha-Manyara / Northern Rift Highlands - first Tanzania producer; NO°5 Classic Crema brew 91b546bb), `Arturo Paz` (Honduras / Santa Bárbara, macro deliberately unset pending a terroir pass; Kumquat green lot 6502d971), `Fran Zeimetz` (Panama, Lost Origin Maya Tri-Up yeast-natural lot family - the 2025 WBC-winning family; Kumquat green lot c4ae4c30). All Tier 3 / Signal skeletons pending enrichment; aliases added for the Kifaru farm-name and Lost Origin brand-name forms.
 - 2026-06-19 — Producer sourcing-priority canon pass: folded the resolved three-axis sourcing model into canon. Renamed the `reference` sourcing bucket → `calibration` (zero data migration; no producer carried `reference`). Seeded the full action-axis roster on the registry — `pursue` (13), `watch` (4), `learning` (4), `calibration` (2), `avoid` empty. Promoted net-new `Paul & Kevin Doyle` (Tier 1 / Anchor, Colombia / Risaralda / Western Andean Cordillera, sourcing bucket `pursue`) — the Mikava / Santuario competition micro-estate (carbonic-maceration Gesha); aliased `Mikava` / `Mikava Coffee` / `Mikava / Santuario` / `Santuario` / `Finca Santuario` / `Finca Marsella` → `Paul & Kevin Doyle` (the `Finca`-prefixed aliases also defend against the loose 3-char `Finca <X>` prefix matcher mis-routing to Finca Sophia). HiU / Los Lajones (Graciano Cruz) was already promoted 2026-06-18, so Mikava was the only net-new producer this pass. Total entries 153→155 (count reconciled against the live registry).
