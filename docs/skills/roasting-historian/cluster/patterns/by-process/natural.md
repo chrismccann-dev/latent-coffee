@@ -20,7 +20,7 @@ The **FC-Temp Architectural Constraint on Naturals** — a structural pattern su
 
 ## xbloom evaluation gate misranking
 
-The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** on close anaerobic-natural candidates with extracted-but-discordant character — confirmed twice on Costa Rica Anaerobic Dry Process Higuito (v1b lactic note + v2c staying-power). See [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals---working-hypothesis). On naturals with heavy fermentation, run Balanced Intensity real pourover on the top 2 candidates before declaring outcome.
+The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** on close anaerobic-natural candidates with extracted-but-discordant character — confirmed twice on Costa Rica Anaerobic Dry Process Higuito (v1b lactic note + v2c staying-power). See [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals). On naturals with heavy fermentation, run Balanced Intensity real pourover on the top 2 candidates before declaring outcome.
 
 ## Per-lot deep dives
 
