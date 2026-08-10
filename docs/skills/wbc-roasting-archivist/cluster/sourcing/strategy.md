@@ -118,6 +118,45 @@ For Chris's palate, Panama Gesha remains the cleanest sourcing lane for: jasmine
 
 Best bet: **washed, honey, or clean natural Panama Gesha from top farms.**
 
+### Field data: Lamastus Family Estates 2026 auction — blind cupping (2026-08-08)
+
+Chris blind-cupped 16 lots of the [Lamastus Family Estates auction](https://lamastusfamilyestates.auction) at a Hydrangea cupping event ([event lot](https://hydrangea.coffee/products/lamastus-private-auction-cupping-first-light-edition-2026)) — no tasting notes or lot identities visible, raw first impressions. Estates: Elida (E) and El Burro (EB), Barú Volcano, Panama Gesha.
+
+**Table favorites (blind):**
+
+- **Table 1 — [EGW Vuelta Washed](https://lamastusfamilyestates.auction/2026-lots/18-egw-vuelta-washed)**: "Fantastic, lot of complex notes." (Auction copy: verbena, lime, green apple, ethereal body.) Runner-up: [EGN Vuelta Natural](https://lamastusfamilyestates.auction/2026-lots/19-egn-vuelta-natural) — very fruit-forward, improved as it cooled.
+- **Table 2 — [EGN ASD B2D Grand Cuvée Blend AG+VC+AC Natural](https://lamastusfamilyestates.auction/2026-lots/14-egn-asd-grand-couvee-blend-natural)**: "It's a blend but I like it — very fruity, very expressive." Only blended Elida lot in the auction (anaerobic natural, three high micro-terroirs processed together).
+- **Table 3 — [EGN Aguacatillo Natural](https://lamastusfamilyestates.auction/2026-lots/07-egn-aguacatillo-natural)**: "More sweeter fruit, a lot of complexity, holds up well as it cools." 2,075m cold-slow-dried natural — the auction's own "washed-like clarity + natural body" thesis lot, and it landed blind.
+
+**Full per-lot blind notes (Chris, verbatim gist):**
+
+| Lot | Process | Blind impression | Arc |
+|---|---|---|---|
+| [EGN Parque Natural](https://lamastusfamilyestates.auction/2026-lots/01-egn-parque-natural) | Natural CRD | Good but not great | degrade (flattened cooling) |
+| [EGW Vuelta](https://lamastusfamilyestates.auction/2026-lots/18-egw-vuelta-washed) | Washed CRD | Fantastic, complex — T1 favorite | hold |
+| [EGN Vuelta](https://lamastusfamilyestates.auction/2026-lots/19-egn-vuelta-natural) | Natural CRD | Very fruit-forward — T1 runner-up | improve |
+| [EBGN El Burro #17 Grand Cuvée](https://lamastusfamilyestates.auction/2026-lots/05-ebgn-el-burro-natural) | Natural | A bit one-note, less complexity | improve |
+| [EBGW El Burro #16 Grand Cuvée](https://lamastusfamilyestates.auction/2026-lots/04-ebgw-el-burro-washed) | Washed | Not my favorite, a bit flat | flat |
+| [EGN ASD Aguacate Centro](https://lamastusfamilyestates.auction/2026-lots/13-egn-asd-aguacate-centro-natural) | Natural ASD B2D | Mango, apple note, a bit flatter | improve |
+| [EGN Aguacate Centro](https://lamastusfamilyestates.auction/2026-lots/12-egn-aguacate-centro-natural) | Natural DRD | Good but not a favorite | — |
+| [EGW Aguacate](https://lamastusfamilyestates.auction/2026-lots/16-egw-aguacate-washed) | Washed DRD | A bit flat | flat |
+| [EGN ASD Grand Cuvée Blend](https://lamastusfamilyestates.auction/2026-lots/14-egn-asd-grand-couvee-blend-natural) | Natural ASD B2D | Very fruity, very expressive — T2 favorite | — |
+| [EGH Vuelta Centro](https://lamastusfamilyestates.auction/2026-lots/11-egh-vuelta-centro-honey) | Honey CRD | Typical honey profile, a bit flat | flat |
+| [EGW Vuelta Centro](https://lamastusfamilyestates.auction/2026-lots/09-egw-vuelta-centro-washed) | Washed DRD | A bit unbalanced | — |
+| [EGW Loma Arriba](https://lamastusfamilyestates.auction/2026-lots/23-egw-loma-arriba-washed) | Washed CRD | Clean, high acidity, nice finish — "a good washed coffee" | hold |
+| [EGN Aguacate](https://lamastusfamilyestates.auction/2026-lots/17-egn-aguacate-natural) | Natural DRD | Flat hot, improves a lot cooling — fruit + sweet | improve |
+| [EBGN ASD RF2D El Burro #15](https://lamastusfamilyestates.auction/2026-lots/03-ebgn-asd-el-burro-natural) | Natural ASD RF2D | A little flat — tastes like the El Burro from Helm | flat |
+| [EGN Aguacatillo](https://lamastusfamilyestates.auction/2026-lots/07-egn-aguacatillo-natural) | Natural CRD | Sweet fruit, lots of complexity — T3 favorite | improve/hold |
+| [EBGN El Burro #15 DRD](https://lamastusfamilyestates.auction/2026-lots/02-ebgn-el-burro-natural) | Natural DRD | Wine-grape depth hot, fell apart cooling | degrade |
+
+**What this session teaches (sourcing-relevant):**
+
+- **Micro-terroir beat process as the quality axis.** Vuelta and Aguacatillo won across *both* processes; El Burro lots (all three processing styles, including the boldest RF2D) consistently read flat/one-note to Chris. Within a single estate family, sheltered/high Elida micro-terroirs are the buy signal, not the process label.
+- **The naturals-over-washed lean is real but not absolute** — the single favorite of the whole event was a washed lot (Vuelta Washed), and Loma Arriba Washed also landed. When a washed cup carries genuine complexity, it wins even blind against naturals. Consistent with the layered-evolving apex read: complexity beats process category.
+- **Cooling-arc behavior tracked verdicts almost perfectly**: every favorite held or improved cooling; every disappointment was flat or degraded. Blind, unprimed confirmation that the cooling arc is a first-class lot-evaluation axis, not a brewing artifact.
+- **Honey process again read "typical honey profile, a bit flat"** — consistent with honey not being a Latent pursue bucket.
+- **El Burro (estate-level) reads as an avoid/deprioritize signal for Chris's palate** — replicated across four lots here plus the prior Helm Coffee El Burro.
+
 ### Colombia is the experimental engine
 
 Colombia dominates the "designed coffee" side: Mikava, CGLE, El Paraíso, El Diviso, Las Flores, El Placer / Sebastián Ramírez, Granja Paraíso / Wilton Benitez, Inmaculada, Finca Las Flores / Johan Vergara.
@@ -365,6 +404,8 @@ Geisha Village had been informally classified as a **generalist retailer** becau
 ### Direct-from-auction is awareness-only today
 
 The 6th channel is locked as awareness-only — Chris doesn't currently bid on full auction lots, and the typical 5-50kg auction-lot quantities are incompatible with the Sourcing-constraints 1-5lb window (see docs/reference/wbc-materials.md § Sourcing constraints for the layer). Future scope as the producer-relationship network grows and as the long-term Competition-grade-access-trajectory advances (also docs/reference/wbc-materials.md). The reason this channel earns documentation today rather than waiting for first-use: the awareness-floor principle of Strategy-zone completeness applies on the sourcing side too — Chris should never not-know-the-channel-exists, even when it's not currently adopted.
+
+**First hands-on data point (2026-08-08):** Chris blind-cupped 16 lots of the Lamastus Family Estates 2026 auction at a Hydrangea-hosted cupping event — see § Panama field data above for results. This surfaces a useful sub-pattern: **roaster-hosted auction cuppings** let Chris evaluate full auction slates with zero bid commitment, building the palate calibration and producer knowledge the channel needs before it ever graduates past awareness-only. The channel classification stays awareness-only for bidding; the cupping-event on-ramp is now adopted.
 
 ### Channel mix today
 

@@ -813,6 +813,12 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — learnings / Bukure Natural Lot 21 Red Bourbon 2026',
     description: 'Closed-lot learnings for Bukure Natural Lot 21 (Red Bourbon, Rwanda Northern Province / Nova Washing Station; closed 2026-06-06). Reference roast Batch 194 (V2 v2b); the 18s-dev-is-the-cup-winning-lever finding resolved at the Simulated Pourover Gate (structural-completeness inverted under non-dark extraction); two-stage Hybrid (Intensity-Clarity Split) brew architecture for dark-tea-prone naturals; xbloom-misranks-dark-tea-prone-naturals pattern (2-lot, Medium confidence, with Higuito sibling); dark-tea-is-inherent-not-defect reframe; FC-threshold ≠ drinkability-threshold + WB-to-Ground-delta-widest-wins working hypotheses.',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/bra-fazendaum-wushwush-nat-2026.md',
+    listed: false,
+    title: 'Roasting Historian — learnings / Fazenda Um Wush Wush Natural 2026',
+    description: 'Closed-lot learnings deep-dive for Fazenda Um Wush Wush Natural Dark Room Dried (BRA-FAZENDAUM-WUSHWUSH-NAT-2026, closed 2026-08-10, reference roast Batch 220 / V3A FC-onset). Fixed-FC constraint confirmed 3-for-3 across V-sets (~205C regardless of profile shape; peak inlet moves FC time only); resolved via FC-onset anchoring (bean-temp auto-drop 1C above FC, 4s dev); development is color-driven not dev-time-driven; Wush Wush varietal fingerprint (mandarin + prune + cacao-as-fruit, NO Gesha-adjacent florals - the Finca Deborah floral-practice premise did not materialize); WB-to-Ground sign inversion as light-end quirk not kill signal; carry-forward source for the deferred Finca Deborah V1.',
+  },
 ]
 
 // "Use when..." descriptions for the programmatically-registered taxonomy +

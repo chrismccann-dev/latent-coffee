@@ -34,5 +34,5 @@ The varietal/process aromatic signature (honey mead / Port-like dessert wine / b
 ## Related
 
 - [by-process/natural.md](docs/skills/roasting-historian/cluster/patterns/by-process/natural.md) — anaerobic-natural subgroup; this lot is the first self-roasted close-out in the family
-- [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals---working-hypothesis) — pattern co-confirmed (now 3 instances) by this lot
+- [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals) — pattern co-confirmed (now 3 instances) by this lot
 - [brewing-historian by-coffee-family/anaerobic-natural.md](docs/skills/brewing-historian/cluster/patterns/by-coffee-family/anaerobic-natural.md) — brewing-side Suppression family this lot's optimized brew joined as the 4th origin
