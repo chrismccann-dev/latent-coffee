@@ -231,7 +231,7 @@ No push_brew · no vocabulary locking (grilling item 56's) · no water variables
 
 **Date:** 2026-08-10
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/pour-over-track-2-research-a0adb1` @ `<SHA-filled-at-commit>`, pushed to origin (archive doc committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/pour-over-track-2-research-a0adb1` @ `74f8a4764931bff4f336e6f38b3a12d2c51f80d9` (content commit; a header-fill commit follows it on the same branch), pushed to origin (archive doc committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** ✅ VALIDATES — abbreviated-ladder methodology executed clean on 4 vials exactly; the project's reproduction gate is MET.
 
 This brief is the canonical close-out of RP8 Track 2. The Coordinator consumes it to update the RP8 end-document + roadmap and to scope Track 3; the compile session applies § Substrate edit specifications without re-derivation. All raw records live in § SESSION RECORD above.
