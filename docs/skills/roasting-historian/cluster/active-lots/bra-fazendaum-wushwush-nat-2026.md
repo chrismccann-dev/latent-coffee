@@ -3,7 +3,9 @@
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
 **Lot:** BRA-FAZENDAUM-WUSHWUSH-NAT-2026
-**Status:** Active - **V3 ROASTED 2026-07-25** (batches 220/221/222), lot state **Waiting for next cupping** (Day 7 target 2026-08-01). All three slots FC AUDIBLE at 205.5-205.8°C - fixed-FC finding now 3-for-3 across V-sets. v3c's 210°C trigger never fired (clock-capped 6:00 / 208.4°C); ~208°C is the practical ceiling on this curve. V2 cupped 2026-06-14, leading slot v2c (Batch 208), NOT reference quality. V1 cupped 2026-05-15. Untold paired-roasted reference cupped 2026-05-25. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah ($419/kg, deferred).
+**Status:** Closed (2026-08-10). Reference roast **Batch 220 (V3A, FC-onset)** - 206°C auto-drop, 4s dev, WB 78.6 / ground 79.1, first full producer-notes cup (mandarin + prune + cacao-as-fruit), zero roast register. Optimized brew dialed + linked (brew_id 8cad201d). Green exhausted; SPG waived by operator (clear verdict).
+
+**See closed-lot learnings:** [learnings/bra-fazendaum-wushwush-nat-2026.md](../learnings/bra-fazendaum-wushwush-nat-2026.md)
 **Cultivar:** Wush Wush
 **Terroir:** Brazil
 **Producer:** Fazenda Um
