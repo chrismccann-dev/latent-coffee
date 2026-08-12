@@ -36,5 +36,5 @@ Two slot-level gate inversions on this lot (214 in V1, 217 in V2), both over-amp
 The A/B against Lot 21 resolved: the mild anaerobic layer adds cherry-cordial/cola depth over the same base without heavy-ferment behavior - audible FC at sufficient energy, conventional overdev, ceiling 209-211 (a full step above XO's ~205-206; never import heavy-ferment ceilings onto mild anaerobics). Lot 21's low-energy world (238 peak, 203-205 bean-temp trigger) and AN10's high-energy world (242 peak, 209 trigger) are two valid operating points on the same bean family, distinguished by ferment layer and energy budget.
 
 ## Related
-- Sibling lot: [learnings/rwa-nova-nat21-rb-2026.md](rwa-nova-nat21-rb-2026.md)
-- Patterns: [cross-coffee-insights.md](../patterns/cross-coffee-insights.md) (FC Floor & Ceiling, WB-delta norms, xbloom misranking)
+- Sibling lot: [learnings/rwa-nova-nat21-rb-2026.md](docs/skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md)
+- Patterns: [cross-coffee-insights.md](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) (FC Floor & Ceiling, WB-delta norms, xbloom misranking)

@@ -37,12 +37,12 @@ Mandarin emerges ~ground 87-88, completes ~79, drowns under roast register by ~6
 
 ## Cross-lot framing
 
-- [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](../patterns/cross-coffee-insights.md) - 3-for-3 confirmation + FC-onset anchoring pattern (close-out proposal e02cc86d).
-- [cross-coffee-insights.md § WB->Ground Agtron Delta Polarity](../patterns/cross-coffee-insights.md) - second-lot data point, light-end-confined variant contradicting the kill-signal reading (proposal 14bdc13f).
-- [cross-coffee-insights.md § Varietal Aromatic Fingerprints](../patterns/cross-coffee-insights.md) - first Wush Wush entry (proposal e3b610a3).
+- [cross-coffee-insights.md § FC-Temp Architectural Constraint on Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) - 3-for-3 confirmation + FC-onset anchoring pattern (close-out proposal e02cc86d).
+- [cross-coffee-insights.md § WB->Ground Agtron Delta Polarity](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) - second-lot data point, light-end-confined variant contradicting the kill-signal reading (proposal 14bdc13f).
+- [cross-coffee-insights.md § Varietal Aromatic Fingerprints](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md) - first Wush Wush entry (proposal e3b610a3).
 
 ## Related
 
-- Active-lot doc (soft-retired): [active-lots/bra-fazendaum-wushwush-nat-2026.md](../active-lots/bra-fazendaum-wushwush-nat-2026.md)
-- [by-process/natural.md](../patterns/by-process/natural.md) - per-process roll-up
-- [active-lots/pan-deborah-geisha-nat-2026.md](../active-lots/pan-deborah-geisha-nat-2026.md) - the deferred transfer target this lot rehearsed
+- Active-lot doc (soft-retired): [active-lots/bra-fazendaum-wushwush-nat-2026.md](docs/skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md)
+- [by-process/natural.md](docs/skills/roasting-historian/cluster/patterns/by-process/natural.md) - per-process roll-up
+- [active-lots/pan-deborah-geisha-nat-2026.md](docs/skills/roasting-historian/cluster/active-lots/pan-deborah-geisha-nat-2026.md) - the deferred transfer target this lot rehearsed

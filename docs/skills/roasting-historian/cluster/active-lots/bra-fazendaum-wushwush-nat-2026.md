@@ -5,7 +5,7 @@
 **Lot:** BRA-FAZENDAUM-WUSHWUSH-NAT-2026
 **Status:** Closed (2026-08-10). Reference roast **Batch 220 (V3A, FC-onset)** - 206°C auto-drop, 4s dev, WB 78.6 / ground 79.1, first full producer-notes cup (mandarin + prune + cacao-as-fruit), zero roast register. Optimized brew dialed + linked (brew_id 8cad201d). Green exhausted; SPG waived by operator (clear verdict).
 
-**See closed-lot learnings:** [learnings/bra-fazendaum-wushwush-nat-2026.md](../learnings/bra-fazendaum-wushwush-nat-2026.md)
+**See closed-lot learnings:** [learnings/bra-fazendaum-wushwush-nat-2026.md](docs/skills/roasting-historian/cluster/learnings/bra-fazendaum-wushwush-nat-2026.md)
 **Cultivar:** Wush Wush
 **Terroir:** Brazil
 **Producer:** Fazenda Um
