@@ -258,7 +258,7 @@ No push_brew · no vocabulary locking (grilling item 56's) · no water variables
 
 **Date:** 2026-08-18
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/pour-over-track-3-research-7c2c61` @ `<SHA-FILLED-AT-COMMIT>`, pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/pour-over-track-3-research-7c2c61` @ `c279253 (archive body; brief header finalized in follow-up commit on the same branch)`, pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** ✅ VALIDATES — H-valve confirmed (1.57× at constant grind, operator's preferred RP8 concentrate to date); H-AI4′ resolves **grind-driven** (with a caveat); H-repro **reproduced-marginal** (Δ 0.06%); valve-side boundary found and it is NOT a tannin tax.
 
 This brief is the self-contained close-out for RP8 Track 3. The compile session should consume it to (a) update the RP8 project end-document with the style-mechanism statement, (b) decide track 4 (Chombi gravity vs AeroPress branch), and (c) fold the substrate specs below. Raw per-cup records live in the SESSION RECORD above.
@@ -387,7 +387,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/pour-over-track-3-research-7c2c61` @ `<SHA-FILLED-AT-COMMIT>` (the authorized archive-persist exception — see [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md))
+- ✅ Archive doc committed + pushed to branch `claude/pour-over-track-3-research-7c2c61` @ `c279253 (archive body; brief header finalized in follow-up commit on the same branch)` (the authorized archive-persist exception — see [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md))
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
