@@ -86,12 +86,15 @@ When dialing in a SWORKS recipe, valve is the primary lever; grind is secondary.
 
 When to restrict is as load-bearing as how much. These three principles (re-homed from the brewing-historian Office Brewing Notes, pruning case 007b) govern valve *sequencing* across the brew, beyond the per-dial flow rates above.
 
+**Caution — restriction is not monotone with extraction.** Over-restriction fails toward LOWER TDS + a mono-front complexity collapse, not toward tannin (RP8-N11; Loud Giants full Dial-5 ride at 1:10 read 1.64% vs 1.73% for the late-open schedule — [RP8-T3](docs/research-projects/concentrated-pourover-t3-loud-giants-valve.md)).
+
 ### Mid-pour restriction can starve the bed (Picolot Garrido Mokka Natural)
 
 Restricting the valve to Dial 5 during mid-extraction pours (Pours 1-2) can REDUCE fruit and sugar development by starving the bed of fresh water. Extraction depends on the concentration gradient of fresh water meeting saturated grounds, not just contact time. Reserve Dial 5 restriction for the final integration pour. For fast/fast/slow roaster structures (e.g. Picolot): Dial 7 Open → Dial 7 Open → Dial 5 Restricted, not Dial 5 throughout.
 
 - **Exception — heavy co-ferment washed** (e.g. Moonwake El Eden Tamarind) needs Dial 5 through all main pours because the extraction ceiling is much higher; valve timing for those lots is about WHEN to crack open, not whether to restrict.
 - **Diagnostic:** tea-like body with subtle attack + no sweetness = under-extraction from over-restriction of mid-pours. Fix by opening Pours 1-2 and going finer on grind, not by restricting more.
+- **Ratio-conditional (RP8-T3):** At short ratio (1:10, RP8-T3, single coffee) the inversion — restricted mains + late open — was the working shape even on a straight Picolot natural; the fast/fast/slow default is a normal-ratio rule.
 
 ### Small-dose Clarity-First inverts the Mokka principle (Lovely Vuelta)
 
@@ -116,6 +119,7 @@ The SWORKS valve has produced canonical reference recipes for multiple strategie
 | **Restricted main + late half-open transition** | 0 (bloom) → 5 (Pours 1 to ~190g) → 6 (Pour 2 finish) | Balanced Intensity on yeast-inoculated honey (Project One Blue Iris) — valve-transition timing is a co-lever with temperature |
 | **Restricted main + half-open finish (Hybrid Sequential)** | 0 (bloom) → 5 (Pours 1-2) → 6 (final pour) | Hybrid (Sequential) on heavy co-ferment washed (Moonwake El Eden Tamarind, Sebastián Ramírez El Placer) — valve transition timing IS the phase boundary |
 | **Graduated Taper** (operator-named, confirmed 2026-07-27) | 0 (bloom) → 5 (front-building window, to ~155g) → 6 (ease the mid) → 7 (clean flush) | Hybrid (Sequential) hold-front / ease-mid / flush on light washed Gesha (SEY x BACC Frank Aroste, brew 5275ae7b) - fixes hollow-front / flat-body when fast flat papers drain before the front builds; the Dial-5 front-window length is the front/body balance lever (tune +/-10-15g before touching grind) |
+| **Concentrated 1:10 valve schedule** (working title — vocabulary pending [grilling item 56](docs/grilling-queue.md)) | 0 (bloom, hold 40–45 s) → 5 (mains incl. early final pour to 150 g ~1:10–1:15) → 7 (late open ~1:45–2:00) | 1:10 no-bypass concentrate on Picolot Loud Giants (Pacamara natural, Full Expression control) at the control's OWN grind + temp (6.1 / 95°C) — 1.73% TDS, 1.57× control, zero grind spent; reproduced-marginal (Δ 0.06%); the late-open TIME is the lever to pin ([RP8-T3](docs/research-projects/concentrated-pourover-t3-loud-giants-valve.md)) |
 
 The dial sequences above are canonical at the *vocabulary* level (Dial X = Y state). The pattern names (slow/slow/open, fast/fast/slow, etc.) are descriptive shorthands used in BREWING.md archive, not canonical pattern names — they emerge from operational practice and could be renamed without affecting the dial vocabulary.
 
