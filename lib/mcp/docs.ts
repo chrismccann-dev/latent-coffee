@@ -753,8 +753,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-deborah-geisha-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (V1 designed 2026-07-25, revised 2026-07-27 post peer-calibration; density gate open)',
-    description: 'Active-lot Roasting Brief + working hypotheses for Finca Deborah Geisha Natural Interstellar (PAN-DEBORAH-GEISHA-NAT-2026, Jamison Savage, yeast-inoculated 100+ hr natural — heavy-ferment family). The depth-arc lot carrying the layered-evolving apex goal directly. V1: bean-temp drop-ceiling ladder 206/208/209C on a fixed 246C-peak natural-family curve (v1c revised 210→209C after the 2026-07-27 Untold peer-calibration cup contradicted the high-ceiling premise). Peer calibration closed for vocabulary (melon/kiwi/rose anchor; body-from-clarity-not-weight finding); NOT yet pushed to Roest — density measurement is the last open gate.',
+    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (V1 closed 2026-08-18: 228 leading slot, ceiling not found; V2 210.5/212/213.5C pushed to Roest)',
+    description: 'Active-lot Roasting Brief + V1 record + V2 design for Finca Deborah Geisha Natural Interstellar (PAN-DEBORAH-GEISHA-NAT-2026, Jamison Savage, yeast-inoculated 100+ hr natural — heavy-ferment family, density 741). The depth-arc lot carrying the layered-evolving apex goal directly. V1 (206/207.5/209C on a fixed 244C-peak sustained-tail curve) closed 2026-08-18: V1C Batch 228 (209C) leading slot + reference candidate — melon + stone fruit + tea + floral, holds cooling; lot is ferment-behaved (AN10 pattern); FC silent on all slots; WB Agtron under-reads development (use ground); overdev ceiling NOT found. V2 designed 2026-08-18: same curve, drop ladder shifted up to 210.5/212/213.5C with 228 as control, v2c abortable; profiles 571885/571886/571887 pushed to Roest. Real-pourover arbiter mandatory between close candidates.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
