@@ -41,7 +41,7 @@
 > (Phase 2b's kickoff false-alarmed on exactly this). Bags with no named use may still wait for
 > pack-time as before.
 
-**Total coffees:** 107
+**Total coffees:** 113
 
 ---
 
@@ -770,16 +770,58 @@
 **URL:** https://www.instagram.com/p/DYGUnk6CTqo/
 **Notes:** ⚠️ No web-store page — Bay Area Coffee Club exclusive collab (Instagram only). Very young producer, small extreme-elevation Gesha garden. Harvest Nov 2025. Farm gate $25.26/kg green. Notes: pomelo, jasmine, bergamot, melon. Second Cusco Gesha in inventory (cf. Prodigal Caminos del Inka).
 
-## Kumquat Coffee — Lost Origin Maya 317 Yeast Natural Geisha Tri-Up Lot
+## Loquat Coffee — Lost Origin Maya 317 Yeast Natural Geisha Tri-Up Lot
 **Country:** Panama · **Region/Farm:** Boquete, Chiriquí · **Producer:** Fran Zeimetz (processed by Lost Origin × Tri-Up)
 **Variety:** Gesha · **Process:** Yeast Inoculation Natural (LOY-011, 8-day sealed tank, 32-day cold-room dry) · **Elevation:** 1550 m
-**Agtron:** pending · **Status:** Resting
-**URL:** https://www.kumquatcoffee.com/product/lost-origin-maya-317-yeast-natural-geisha-tri-up-lot
-**Notes:** Ordered 2026-07-24 (in transit), 20g bag, $35. Roasted 2026-07-08 — already ~16 days rest at order; cup promptly on arrival. Named use: PEER CUP REFERENCE for green lot PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 (1kg, 2 V-sets planned) — taste the intended expression + run the temperature-swing read before V1 design. Same lot family as Martin Wölfl's WBC 2025 win. Notes: quince, grape, orange blossom, mango.
+**Agtron:** 74.9 (Light color) · **Status:** Frozen (15g doses)
+**URL:** https://www.loquatcoffee.com/product/lost-origin-maya-317-yeast-natural-geisha-tri-up-lot-20g-/KFJV2IYZ2A63G5UJBCCMYPZF
+**Notes:** Roaster renamed Kumquat → Loquat Coffee (entry updated 2026-08-21: dosed + frozen, Agtron 74.9). Ordered 2026-07-24, 20g bag, $35. Roasted 2026-07-08 — already ~16 days rest at order; cup promptly on arrival. Named use: PEER CUP REFERENCE for green lot PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 (1kg, 2 V-sets planned) — taste the intended expression + run the temperature-swing read before V1 design. Same lot family as Martin Wölfl's WBC 2025 win. Notes: quince, grape, orange blossom, mango.
 
-## Kumquat Coffee — Honduras Arturo Paz Dark Room Geisha Natural
+## Loquat Coffee — Honduras Arturo Paz Dark Room Geisha Natural
 **Country:** Honduras · **Region/Farm:** Santa Bárbara · **Producer:** Arturo Paz
 **Variety:** Gesha · **Process:** Natural (Dark Room Dried) · **Elevation:** 1700 m
-**Agtron:** pending · **Status:** Resting
-**URL:** https://www.kumquatcoffee.com/green
-**Notes:** Ordered 2026-07-24 (in transit). Roasted 2026-07-24 — fresh off the roaster; needs full rest before reading anything from it. Named use: PEER CUP REFERENCE for green lot HND-ARTUROPAZ-GESHA-DRD-NAT-2026 (1kg, non-Panama portability test). Notes: mango, nectarine, blackberry, lemongrass.
+**Agtron:** 69.5 (Medium-light color) · **Status:** Frozen (15g doses)
+**URL:** https://www.loquatcoffee.com/product/honduras-arturo-paz-dark-room-geisha-natural/3BKTK7FLQUJ2HXMOAL4HGTBM
+**Notes:** Roaster renamed Kumquat → Loquat Coffee (entry updated 2026-08-21: dosed + frozen, Agtron 69.5). Ordered 2026-07-24. Roasted 2026-07-24 — fresh off the roaster; needs full rest before reading anything from it. Named use: PEER CUP REFERENCE for green lot HND-ARTUROPAZ-GESHA-DRD-NAT-2026 (1kg, non-Panama portability test). Notes: mango, nectarine, blackberry, lemongrass.
+
+## Apollon's Gold — Kianyangi (Kenya Embu Washed)
+**Country:** Kenya · **Region/Farm:** Embu / Kianyangi washing station · **Producer:** Murue Cooperative
+**Variety:** SL28, SL34 · **Process:** Washed · **Elevation:** 1800 m
+**Agtron:** 69.2 (Medium-light color) · **Status:** Frozen (15g doses)
+**URL:** https://shop.apollons-gold.com/products/kibingo-copy
+**Notes:** Omni roast (Apollon's Gold, Tokyo). Roaster notes: orange, blackcurrant, rambutan. Recommended ratio 1:17-18; degas min 30 days, peaks ~45 days. Shop slug says "kibingo-copy" but the page is Kianyangi. Clarity-First likely (washed Kenyan SL).
+
+## Apollon's Gold — La Isla (Costa Rica ETH47 Red Honey)
+**Country:** Costa Rica · **Region/Farm:** West Valley / La Isla · **Producer:** Cafe Ar Bar (Alietta family)
+**Variety:** ETH47 · **Process:** Red honey · **Elevation:** 1390 m
+**Agtron:** 75.5 (Light color) · **Status:** Frozen (15g doses)
+**URL:** https://shop.apollons-gold.com/products/la-isla-1
+**Notes:** Omni roast. Roaster notes: peach, honeysuckle, clementine, melon — "vibrant, mouthwatering" juicy peach + elegant florals. Degas 30-50 days post-roast. ETH47 = Ethiopian-landrace-derived cultivar grown in Costa Rica.
+
+## H&S Coffee Roasters — 2026 Colombia Efren Rodriguez — Washed
+**Country:** Colombia · **Region/Farm:** Gigante, Huila / Finca El Paraiso · **Producer:** Efren Rodriguez (page info block lists "Ernedis Rodriguez" — likely typo)
+**Variety:** Pink Bourbon (page overview) — info block says "Caturra field blend" ⚠️ contradictory · **Process:** Washed · **Elevation:** — (not listed)
+**Agtron:** 89.8 (Very light color) · **Status:** Frozen (15g doses)
+**URL:** https://hscoffeeroasters.com/blogs/coffee-archive/2026-colombia-efren-rodriguez
+**Notes:** Very light (89.8 — lightest in inventory class). Roaster notes: red apple, rhubarb, orange blossom; malic acidity, taffy/jammy sweetness, floral finish. Rest 40+ days recommended. Roaster's reference brew: 22.08% EY / 1.33 TDS. Importer: Coffee Quest. Clarity-First likely; expect high-extraction tolerance at this color.
+
+## Big Sur Coffee — 26 New Season Colombia Huila Washed Pink Bourbon Pure Bloom
+**Country:** Colombia · **Region/Farm:** San Agustín, Huila · **Producer:** San Agustín Crop Management
+**Variety:** Pink Bourbon · **Process:** Washed · **Elevation:** 1740 m
+**Agtron:** 83.6 (Very light color) · **Status:** Frozen (15g doses)
+**URL:** https://bigsurcafe.com/products/26-new-season-colombia-huila-washed-pink-bourbon-pure-bloom-150g
+**Notes:** Harvest Jan 2026, 150g bag, $19. Roaster notes: roselle, honey tangerine, red berries, aged tangerine peel, red bean paste. Second very-light washed Pink Bourbon alongside the H&S Efren Rodriguez — comparison pair (83.6 vs 89.8).
+
+## Loquat Coffee — Esmeralda Pinto 3NC Nano Geisha Natural
+**Country:** Panama · **Region/Farm:** Boquete, Chiriquí / Hacienda La Esmeralda (Pinto 3NC Nano lot) · **Producer:** Peterson Family
+**Variety:** Gesha · **Process:** Cold Room Dried Natural · **Elevation:** 2200 m
+**Agtron:** (not measured — only 20g, insufficient for a reading) · **Status:** Frozen (15g doses)
+**URL:** https://beanhoard.com/roaster/loquat-coffee/esmeralda-pinto-3nc-nano-geisha-natural-20g-last-batch
+**Notes:** 20g last-batch bag, $39, crop 2025. Roaster notes: hawthorn, saffron, blood orange — layered, transparent. Sibling Esmeralda entries at Hydrangea (El Velo Gesha natural / SL34 natural) for Peterson-family comparison. Treat Agtron as unknown at brew time; sibling Loquat naturals read 74.9 / 76.3.
+
+## Loquat Coffee — Esther Kim 2026 WBrC Competition Coffee
+**Country:** Panama · **Region/Farm:** Lost Origin (Digna Nuñez 253) + Los Cenizos (two-lot blend) · **Producer:** Lost Origin / Los Cenizos
+**Variety:** Gesha · **Process:** Yeast Inoculation Natural + Honey (blend) · **Elevation:** 1450 m + 1900 m
+**Agtron:** 76.3 (Light color) · **Status:** Frozen (15g doses)
+**URL:** https://beanhoard.com/roaster/loquat-coffee/esther-kim-2026-wbrc-competition-coffee-20g-last-batch
+**Notes:** 20g last-batch bag, $40, crop 2026, roasted 2026-07-09. Esther Kim's WBrC 2026 (Brussels) competition coffee — placed 10th. Roaster notes: pineapple, strawberry, lemonade, orange blossom. WBC corpus check: pull Esther Kim's 2026 routine/recipe before brewing. Same Lost Origin family as the Maya 317 Tri-Up lot.
