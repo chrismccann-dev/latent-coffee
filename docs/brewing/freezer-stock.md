@@ -799,11 +799,11 @@
 **Notes:** Omni roast. Roaster notes: peach, honeysuckle, clementine, melon — "vibrant, mouthwatering" juicy peach + elegant florals. Degas 30-50 days post-roast. ETH47 = Ethiopian-landrace-derived cultivar grown in Costa Rica.
 
 ## H&S Coffee Roasters — 2026 Colombia Efren Rodriguez — Washed
-**Country:** Colombia · **Region/Farm:** Gigante, Huila / Finca El Paraiso · **Producer:** Efren Rodriguez (page info block lists "Ernedis Rodriguez" — likely typo)
-**Variety:** Pink Bourbon (page overview) — info block says "Caturra field blend" ⚠️ contradictory · **Process:** Washed · **Elevation:** — (not listed)
+**Country:** Colombia · **Region/Farm:** Gigante, Huila / Finca El Paraiso · **Producer:** Efren Rodriguez
+**Variety:** Pink Bourbon · **Process:** Washed · **Elevation:** — (not listed)
 **Agtron:** 89.8 (Very light color) · **Status:** Frozen (15g doses)
 **URL:** https://hscoffeeroasters.com/blogs/coffee-archive/2026-colombia-efren-rodriguez
-**Notes:** Very light (89.8 — lightest in inventory class). Roaster notes: red apple, rhubarb, orange blossom; malic acidity, taffy/jammy sweetness, floral finish. Rest 40+ days recommended. Roaster's reference brew: 22.08% EY / 1.33 TDS. Importer: Coffee Quest. Clarity-First likely; expect high-extraction tolerance at this color.
+**Notes:** Bag label: "EFREN RODRIGUEZ PINK BOURBON WASHED", roasted 2026-06-25 (Laramie WY), 100g — bag is authoritative over the web page, whose info block wrongly says "Ernedis Rodriguez / Caturra field blend". Very light (89.8 — lightest in inventory class). Roaster notes: red apple, rhubarb, orange blossom; malic acidity, taffy/jammy sweetness, floral finish. Rest 40+ days recommended. Roaster's reference brew: 22.08% EY / 1.33 TDS. Importer: Coffee Quest. Clarity-First likely; expect high-extraction tolerance at this color.
 
 ## Big Sur Coffee — 26 New Season Colombia Huila Washed Pink Bourbon Pure Bloom
 **Country:** Colombia · **Region/Farm:** San Agustín, Huila · **Producer:** San Agustín Crop Management
