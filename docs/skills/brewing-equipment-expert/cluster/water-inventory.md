@@ -73,6 +73,8 @@ Not yet stocked: **KCl** - real KCl not in hand (first order shipped as K₂CO�
 
 Blended, black-box (except SBL, which discloses its recipe). Used as finished profiles - see the Track 1 screen for their per-coffee reads. **Dosing keys:** APAX concentrates (30,000 ppm) ≈ 1 drop 0.065 g ≈ 2 ppm/L (45 drops / 3 g = 90 ppm/L); DAK ≈ 0.0625 mL/drop ≈ 10 ppm/L (both bottles together); SBL 500 mL conc. dosed 2.5 mL/L → GH 44 / KH 20.
 
+Finished-cup dosing extends to 1:10 concentrates: 1 TONIK + 1 JAMM per cup won RP8-T4's blind tournament at ~4× practiced per-mL intensity - not ratio-conditional on this evidence (single blind read, hot-dose timing; P8-AI-8 dose-timing untested).
+
 | Product | Form | Composition | Notes |
 |---|---|---|---|
 | **Third Wave Water — Classic Light Roast** | dry sticks (12; ~1.5 g each) | MgSO₄ + calcium citrate + NaCl (~150 ppm at 1 stick/gal) | Chris brews it at **~1/3 dilution** (house TWW). A *finished water*, not a concentrate. |
@@ -80,7 +82,7 @@ Blended, black-box (except SBL, which discloses its recipe). Used as finished pr
 | **APAX TONIK** | liquid 100 mL (30,000 ppm) | MgCl₂/CaCl₂/NaCl/NaHCO₃/KHCO₃ | "vibrant/bright/juicy." (Roasted-barley confound P6T1-AI-3 dropped 2026-07-04.) |
 | **APAX JAMM** | liquid 100 mL (30,000 ppm) | MgCl₂/CaCl₂/KCl/KHCO₃/NaHCO₃ | "rich/sweet/creamy." Track-1 best cup @ ~3 drops/200 mL. |
 | **APAX LYLAC** | liquid 100 mL (30,000 ppm) | MgSO₄/MgCl₂/KCl/KHCO₃/NaHCO₃/NaCl | "elegant/floral/silky." Sulfate-bearing. |
-| **KONFLUX** (APAX for Monogram/Urnex) | liquid 20 mL (30,000 ppm) | CaCl₂/KCl/NaCl/silica/KHCO₃/NaHCO₃ | texture/body; the lone unwelcome inject on the Pink Bourbon (Track 1). |
+| **KONFLUX** (APAX for Monogram/Urnex) | liquid 20 mL (30,000 ppm) | CaCl₂/KCl/NaCl/silica/KHCO₃/NaHCO₃ | texture/body; the lone unwelcome inject on the Pink Bourbon (Track 1). At 1:10 concentration (RP8-T4, Chombi NASD Gesha, 2026-08-24): inverts to texture-completion, no inject through 2 drops/half - coffee-specific per P6T4-N4; dose boundary open (P8-AI-7). |
 | **NÉMO** (Aeropress × APAX) | liquid 20 mL (30,000 ppm) | MgCl₂/CaCl₂/KCl/silica/NaCl/KHCO₃/NaHCO₃ | AeroPress competition profile, "heavy/sweet." |
 | **Specialty Brew Labs — Juicy & Sweet** | dry packet → 500 mL conc. | **disclosed:** Epsom 10 g / CaCl₂ 3 g / MgCl₂ 4 g / NaHCO₃ 3.4 g / KHCO₃ 4 g → GH 44 / KH 20 | The reconstruction-bridge recipe (Track 2 HT5). |
 | **Sooper Water** (Lazy Schnauzer) | dry packet → 500 mL conc. | undisclosed proprietary | 12-12.5 g/L; pourover/filter house profile. |
