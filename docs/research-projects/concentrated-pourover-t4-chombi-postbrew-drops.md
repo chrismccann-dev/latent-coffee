@@ -219,7 +219,7 @@ No kettle-side water (plain tap locked) · no LYLAC (sulfate) · no DAK (kettle-
 
 **Date:** 2026-08-24
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/pour-over-track-4-research-a2c5bb` @ `<SHA-recorded-at-commit>`, pushed to origin (archive doc only; substrate NOT edited; not merged to main). See role-discipline.md § Archive persistence.
+**Archive location:** branch `claude/pour-over-track-4-research-a2c5bb` @ `bbdeba7201f35750e351f8a21f5201bef1858b8e (brief-append commit; SHA back-filled in follow-up commit)`, pushed to origin (archive doc only; substrate NOT edited; not merged to main). See role-discipline.md § Archive persistence.
 **Methodology verdict:** ✅ VALIDATES — split-cup blind pairs delivered clean forced picks on all 3 rounds with zero extra brewing; two hypotheses landed as predicted, one refuted in direction, one produced the track's headline surprise.
 
 This brief is self-contained: the Coordinator can update the RP8 end-doc + roadmap from it, and the compile session can apply § Substrate edit specifications without reading the session conversation. Raw per-cup records live in § SESSION RECORD above.
