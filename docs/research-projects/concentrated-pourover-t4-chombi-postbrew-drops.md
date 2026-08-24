@@ -147,10 +147,188 @@ No kettle-side water (plain tap locked) · no LYLAC (sulfate) · no DAK (kettle-
 
 ## Notes / friction / lessons / audit items (Assistant fills inline)
 
-*(empty at scoping)*
+**Pre-Step-0 clarifications (2026-08-18, operator):**
+- **Dose timing:** treatment half is dosed at pour time (when the halves are poured into the cups), NOT at the cool peak - operator call for mixing + temperature parity. Deliberate deviation from the office-locked "dose at cool peak" practice; H-ref is therefore tested at hot-dose timing. First sip on both halves still at the cool peak (~45-50°C).
+- **Late-open time (Cup D):** operator opens to Dial 7 as the brew is nearly complete; exact time recorded on the day and pinned thereafter (RP8-N9).
+- **Cadence:** all 4 cups planned together starting 2026-08-19 (≤3/office day still applies - date recorded per cup).
+- **Shrunk-path rule if Cup D fails:** keep R1 (H-K) + R3 (H-ref), drop R2 (H-dose).
 
 ---
 
 ## SESSION RECORD
 
 *(Assistant appends per-cup records + handoff brief here at execution)*
+
+### Step 0 record (2026-08-21, recalled)
+- Vials: pre-dosed 15.0 g × 4 at freezing; NOT re-weighed on site (operator practice; RP8-N7 tag).
+- Control brew `4fc7e914` pulled via get_brew; transcribed recipe confirmed exact.
+- Equipment / two identical split cups / coding method / dropper 5-drop tare / VST blank number / tap confirm: PENDING at Cup D brew time - required before R1 (logged as friction: Cup D brewed ahead of Step 0 items 3-6).
+
+### Cup D - dial-in (vial 1) - 2026-08-21 (operator-recalled date, not logged live - RP8-N7)
+- Build: 15 g / 150 g (1:10) · EG-1 6.5 · 92°C · plain tap · Dial 0 bloom 45 g, **hold 40 s** → Dial 5 mains (P1/P2 times + grams NOT reported - RP8-N7 tag) → **late open Dial 7 at 1:40 (PINNED)** · drawdown end ~2:00.
+- TDS: **1.49%** (whole cup). No fresh 1:16 control TDS (pre-declared).
+- Aroma: fruit, sweet, slightly candied.
+- Hot: "almost like fruit juice" - very bright up front, lighter on the end, a little tannin on the tail.
+- Warm: fruit-bright, sweet, fruit-juice; operator feels 40 s bloom may be a touch long - very acidity-front-focused, "good but maybe a tad too much".
+- Cool: tamped down a bit; cherry, blood orange, sweet; a little textural quality from the concentration; no bitterness/tannin. Still very front-forward / fruit-juice. Operator note: could have held Dial 5 throughout instead of opening to 7.
+- Label notes matched: sweet cherry + orange clearly present.
+- **Verdict: COHERENT concentrate → H-valve-2 / P8-AI-5 = valve-driven concentration holds on a second coffee at its own grind + temp. Full 3-round tournament proceeds.**
+- Parked follow-ups (not brewed this track): shorter bloom hold (20-30 s) · Dial 5 throughout / no late open.
+
+### Step 0 completion (2026-08-21, before R1)
+- Dropper 5-drop tare: SKIPPED - office scale not accurate enough at small weights (RP8-N7 missed-read tag). RP6 key (~0.065 g/drop) assumed. Optional home tare = non-blocking follow-up.
+- VST blank: 0.00 (recorded). Split cups: two identical, operator codes written on bottom. Kettle: plain PA tap confirmed.
+- Bloom hold stays pinned at 40 s (operator declined a change).
+
+### R1 (vial 2) - control vs 1 drop KONFLUX - 2026-08-21 (recalled)
+- Build: pinned base (1:10 · 6.5 · 92°C · Dial 0 bloom 40 s → Dial 5 → open Dial 7 at 1:40). P1/P2 clock+grams again not reported (RP8-N7 tag).
+- TDS: **1.60%** (whole cup, pre-split).
+- Liquid yield: **105 g total** out of 150 g in → ~52 g per half. NOTE: 1 drop / ~52 mL ≈ **~4× office per-mL intensity** (caution estimated 65 mL / 3×).
+- Split: equal halves post-swirl; operator codes A = control, B = 1 drop Konflux (dosed at pour time per pre-declared deviation). Assistant blind to mapping until reveal.
+- Blind read (pre-reveal): LEFT - aroma fruit/pungent/sweet; silky character, added creaminess/texture, fruit-forward but balanced. RIGHT - much more acidic-forward, "fruit juice concentrate", no texture. Head-to-head: left has balance + creaminess + silk the right lacks; right "way too acidic juice forward."
+- **Forced pick (pre-reveal): LEFT** - reason: texture + overall balance.
+- Reveal: left = B (**1 drop Konflux**), right = A (control). **Dosed half WON.**
+- Flags: body/texture gain YES · sweetness/balance lift YES · salinity/savory inject NONE · clarity loss NONE reported.
+- **H-K: SUPPORTED (single blind read)** - Konflux reads as texture-completion at concentration, inverting the RP6 PB inject read.
+
+### R2 (vial 3) - 1 drop vs 2 drops KONFLUX - 2026-08-21 (recalled)
+- Build: pinned base (40 s bloom → Dial 5 → Dial 7 at 1:40). P1/P2 clock+grams not reported (RP8-N7 tag).
+- TDS: **1.56%**. Liquid yield: **125 g** (~62 g/half). Per-half grams not individually recorded.
+- Codes: A = 1 drop Konflux, B = 2 drops (both dosed at pour time). Assistant blind until reveal.
+- Blind read (pre-reveal): LEFT - fruit, syrupy, "much more syrupy"; aroma a bit less fruity; hard to separate. RIGHT - aroma floral/sweet; "really nice orange/citrus note, almost like orange jam." Head-to-head: both pretty close; right has a bit more jamminess.
+- **Forced pick (pre-reveal): RIGHT** - reason: jamminess. Explicitly a close call.
+- Reveal: left = A (1 drop), right = B (**2 drops**). **2-drop half won, narrowly.**
+- Flags: NO salinity/savory inject on 2 drops · NO clarity loss · sweetness/jam lift YES.
+- **H-dose: REFUTED in direction (single blind read, close-call)** - 2 drops/half did not cross into inject; boundary sits ABOVE 2 drops on Chombi at concentration (~4-5× office per-mL intensity). Preferred dose unresolved between 1 and 2 (close), 2 carries forward.
+
+### R3 (vial 4) - 2 drops KONFLUX vs 1 TONIK + 1 JAMM (locked office recipe) - 2026-08-24
+- Reference arm run as planned (alternate not invoked).
+- Build: pinned base (40 s bloom → Dial 5 → Dial 7 at 1:40). P1/P2 clock+grams not reported (RP8-N7).
+- TDS: MISSED - meter not on site (RP8-N7 tag). Operator instruction: treat as similar to prior cups (~1.5-1.6%) since identical recipe; NOT imputed as a reading. Liquid yield not recorded.
+- Codes: A = 2 drops Konflux, B = 1 TONIK + 1 JAMM (both at pour time). Assistant blind until reveal.
+- Blind read (pre-reveal): LEFT - aroma less pleasant; flavor "a little off / off balance," "a little more flat." RIGHT - aroma sweeter; sweeter, jammier, better texture, "everything about the right cup feels better."
+- **Forced pick (pre-reveal): RIGHT - "no question," greatly preferred.**
+- Reveal: left = A (2 Konflux), right = B (**TONIK+JAMM**). **Reference arm WON decisively.** Operator: "the opposite of what I thought it would be."
+- Flags: no salinity/savory inject on either; Konflux-2 read as flat/off-balance this cup (vs "orange jam" in R2 - cross-cup inconsistency of the same nominal condition; single-read noise, softens R2's boundary read).
+- **H-ref: SUPPORTED (single blind read, decisive)** - locked office dose survives AND wins at ~4× per-mL practiced intensity; NOT ratio-conditional on Chombi.
+- Tournament chain (each a single blind read): 1K > control → 2K > 1K (close) → **T+J > 2K (decisive)**.
+
+---
+
+## HANDOFF BRIEF FOR COMPILE SESSION (RP8 Track 4 Close-Out)
+
+**Date:** 2026-08-24
+**Session role:** execution + handoff brief production (no substrate edits)
+**Archive location:** branch `claude/pour-over-track-4-research-a2c5bb` @ `<SHA-recorded-at-commit>`, pushed to origin (archive doc only; substrate NOT edited; not merged to main). See role-discipline.md § Archive persistence.
+**Methodology verdict:** ✅ VALIDATES — split-cup blind pairs delivered clean forced picks on all 3 rounds with zero extra brewing; two hypotheses landed as predicted, one refuted in direction, one produced the track's headline surprise.
+
+This brief is self-contained: the Coordinator can update the RP8 end-doc + roadmap from it, and the compile session can apply § Substrate edit specifications without reading the session conversation. Raw per-cup records live in § SESSION RECORD above.
+
+### TL;DR
+
+- **P8-AI-5 CLOSED: valve-driven concentration generalizes to a second coffee.** T3's schedule shape (Dial 0 bloom → Dial 5 → late open) at Chombi's own grind/temp (6.5 / 92°C) produced a coherent 1:10 concentrate first try — full label profile, no tannin tax, TDS 1.49-1.60%.
+- **P8-AI-6 headline: the locked office dose (1 TONIK + 1 JAMM) WON the tournament decisively** — at ~4× its practiced per-mL intensity. It is NOT ratio-conditional on this coffee; it beat the texture-targeted Konflux finalist "no question."
+- **H-K confirmed (single blind read): Konflux inverts at concentration** — 1 drop beat the undosed control on texture/balance, the opposite of its RP6 Pink Bourbon inject read.
+- **H-dose refuted in direction:** 2 drops Konflux did not cross into salinity/inject; it narrowly beat 1 drop (R2), though the same condition read "off/flat" in R3 — dose boundary unresolved, tolerance is high.
+- All orderings are single blind reads, Chombi-specific (P6T4-N4), tournament-path-dependent; dose timing was pour-time (deliberate deviation from cool-peak practice).
+
+### Execution summary
+
+4 cups executed as designed (dial-in + 3 tournament rounds), no shrunk path. Cups D/R1/R2 on 2026-08-21 (operator-recalled date), R3 on 2026-08-24. Blind protocol held on all 3 rounds: operator coded halves, forced pre-reveal pick every round, Assistant recorded identities at reveal only. Deviations: dose timing moved to pour-time (pre-Step-0 operator call, logged); vials not re-weighed (pre-dosed 15.0 g at freezing); dropper tare skipped (office scale resolution); R3 TDS missed (meter off-site); P1/P2 clock+grams unreported all cups; Cup D brewed before Step 0 items 3-6 completed (back-filled before R1).
+
+### Equipment / conditions
+
+| Item | Value |
+|---|---|
+| Coffee | Picolot #20 Comp Edition — Altieri Gesha CHOMBI NASD (4 × 15 g vials, pre-dosed at freezing) |
+| Base recipe (all cups) | 1:10 · 15 g / 150 g · EG-1 6.5 · 92°C · plain PA tap · SWORKS Bottomless + xBloom paper · Dial 0 bloom 45 g **hold 40 s** → Dial 5 mains → **open Dial 7 at 1:40 (pinned)** · kettle on base |
+| Drops | APAX KONFLUX · TONIK · JAMM, dosed in-cup at pour time (deviation: practiced timing is cool peak) |
+| VST | blank 0.00; single whole-cup read pre-split |
+| Split | swirl → equal halves into two identical coded cups; first sip both at cool peak (~45-50°C) |
+
+### Per-cup raw data
+
+| Cup | Date | TDS | Yield | Pair | Blind pick | Reveal |
+|---|---|---|---|---|---|---|
+| D | 08-21 | 1.49% | n/r | — (whole cup) | — | Coherent: fruit-juice bright, cherry/blood orange/sweet, textural cool, no tannin. Front-forward (varietally-correct). Pinned 40 s / 1:40. |
+| R1 | 08-21 | 1.60% | 105 g (~52/half) | control vs 1 Konflux | dosed half — texture, creaminess, balance | Dosed WON; control "way too acidic juice forward" |
+| R2 | 08-21 | 1.56% | 125 g (~62/half) | 1K vs 2K | 2-drop half — jamminess ("orange jam"); CLOSE call | 2K won narrowly |
+| R3 | 08-24 | missed | n/r | 2K vs 1 TONIK+1 JAMM | T+J half — "sweeter, jammier, texture better, everything better; no question" | T+J WON decisively; 2K read "off balance, flat" |
+
+No salinity/savory inject or clarity loss flagged on any dosed half, any round.
+
+### Analysis
+
+Tournament chain (each link a single blind read, path-dependent, not a ranking): **1K > control → 2K > 1K (close) → T+J > 2K (decisive).** Effective per-half volume ~52-62 mL means every dose ran ~3-4× the office per-mL intensity; the reference arm's decisive win at that scale is the strongest tolerance evidence in the track. Konflux's R2-vs-R3 inconsistency (2 drops = "orange jam" then "off/flat" on nominally identical cups) is within single-read noise and softens R2's boundary claim — the safe statement is "no inject up to 2 drops/half," not "2 drops preferred." Cup D's TDS band (1.49-1.60%) matches T3's concentrate range; the dial-in required zero corrections.
+
+### Final output
+
+**On a 1:10 Chombi concentrate, finished-cup drops improve the cup, and the best-tested condition is the operator's standing office dose (1 TONIK + 1 JAMM per cup), which survives and wins at ~4× practiced per-mL intensity. Konflux is cup-completing (not an inject) at 1-2 drops/half on this coffee, but lost the head-to-head.**
+
+### Key findings
+
+1. **Valve-driven concentration is a 2-coffee pattern (P8-AI-5 closed).** Chombi dial-in coherent first try at own grind/temp with Dial 6→5 restriction + pinned late open. Substrate implication: the sworks valve-concentration pattern line can graduate from "one coffee" to "two coffees, cross-process (washed-adjacent T3 lot + NASD Gesha)".
+2. **Locked office dose is not ratio-conditional (H-ref, decisive single read).** 1 TONIK + 1 JAMM improved the concentrate at ~4× per-mL practiced intensity. Implication: office-water memory gains an "extends to 1:10 concentrates" line; no dose reduction needed at concentration on this evidence.
+3. **Konflux inverts from inject to completion at concentration (H-K).** Confirms the operator's changed-condition hypothesis vs RP6 PB. Chombi-specific until a second concentrate coffee confirms (P6T4-N4).
+4. **Konflux dose tolerance is wide; boundary unfound (H-dose refuted in direction).** 2 drops/half (~4-5× office per-mL) produced no salinity/inject; 1-vs-2 preference unresolved (close R2 win, contradicted by R3's flat read).
+5. **H5 held:** grind 6.5 / 92°C unchanged all 4 cups; zero grind or temp spend for the whole track.
+6. **Hot-dose timing caveat:** all doses at pour time, not cool peak — H-ref's "survives" verdict is technically at hot-dose timing; no degradation observed, which incidentally suggests timing is not load-bearing, but that's an un-designed observation.
+
+### Substrate edit specifications for compile session
+
+DO NOT execute these edits in this session — the compile session integrates substrate.
+
+1. **Office-water memory** (`~/.claude/projects/-Users-chrismccann-latent-coffee/memory/project_office_water_apax_dosing.md`): add a line — "Extends to 1:10 concentrates: 1 TONIK + 1 JAMM per cup won RP8-T4's blind tournament on the Chombi concentrate at ~4× practiced per-mL intensity (2026-08-24, single blind read, hot-dose timing). Not ratio-conditional on this evidence." Source: finding 2.
+2. **Water-inventory / water cluster doc** (brewing-equipment-expert cluster, water.md or water-inventory.md § notes — Coordinator decides fold vs defer per protocol § exit condition 5): add an "at 1:10 concentration" note — Konflux reads as texture-completion (not inject) at 1-2 drops/half on Chombi NASD Gesha, inverting its RP6 normal-strength PB read; TONIK+JAMM remains the preferred finished-cup dose at concentration. Coffee-specific tag per P6T4-N4. Source: findings 2-4.
+3. **sworks valve-concentration pattern line** (brewing-equipment-expert cluster, sworks doc — the line added at T3 fold, PR #626): upgrade to two-coffee evidence per finding 1; cite Chombi dial-in (Dial 6→Dial 5, late open 1:40, TDS 1.49%, coherent first try).
+4. **RP8 roadmap/end-doc** (`docs/research-projects/` RP8 roadmap doc): mark T4 CLOSED; P8-AI-5 closed (valve concentration generalizes); P8-AI-6 closed (drops verdict per § Final output); T5 (AeroPress low-pressure) is next; carry open items below.
+5. **Audit/grilling:** grilling item 56 (concentrate vocabulary) gains T4 usage examples but stays open — no vocabulary locking this track (by design).
+
+### New lessons captured
+
+| # | Lesson | Substrate implication |
+|---|---|---|
+| RP8-N11 (candidate) | The split-cup blind pair delivers RP6-grade blind ordering with zero extra brewing; forced pre-reveal pick worked cleanly 3/3 rounds. | Candidate cluster primitive for office-lane comparative tracks; ratify at process retro. |
+| RP8-N12 (candidate) | Record liquid yield at split time — actual per-half volume (52-62 mL vs the 65 mL estimate) materially changes per-mL dose math. | Add "yield at split" to any future split-cup protocol's capture list. |
+| RP8-N13 (candidate) | Same nominal condition can flip reads across cups (Konflux-2: "orange jam" R2, "off/flat" R3) — cross-cup consistency of a condition needs its own check before boundary claims. | Strengthens the anecdote-tag rule; boundary claims want a repeat read. |
+
+### Audit items queued
+
+1. **P8-AI-5 — CLOSED** (valve concentration on second coffee: coherent).
+2. **P8-AI-6 — CLOSED** (drops at concentration: improve the cup; locked office dose wins; not ratio-conditional).
+3. **P8-AI-7 (new, open):** Konflux dose boundary at concentration unfound (no inject through 2 drops/half); is there a ceiling, and does the R2/R3 flip resolve on a repeat read? Low priority; only if a Konflux-forward cup emerges.
+4. **P8-AI-8 (new, open):** dose-timing (pour-time vs cool-peak) untested as a variable — this track's reads are all hot-dose; office practice is cool-peak. Only matters if a future read contradicts practice.
+
+### Open data items
+
+- R3 TDS missed (meter off-site); D/R1/R2 dates operator-recalled, not logged live.
+- P1/P2 pour clock+grams unreported on all 4 cups (RP8-N7 tags throughout).
+- Dropper tare skipped; RP6 key (~0.065 g/drop) assumed unverified on these bottles.
+- Parked (not brewed, per T2 friction 3): shorter bloom hold (20-30 s) · Dial 5 throughout / no late open · sub-1-drop half-strength dilution follow-up.
+
+### Recap map for compile session
+
+Integrate first: edits 1-3 (office-water memory line, water cluster "at 1:10" note, sworks two-coffee upgrade) — they're small and evidence-backed. Then edit 4 (RP8 roadmap: T4 closed, T5 next). Escalate to operator: whether RP8-N11 (split-cup blind primitive) graduates at the process retro, and whether the parked schedule follow-ups (bloom hold / no-late-open) belong in T5's design or a Chombi-specific note. Defer: P8-AI-7/8 (both low-priority opens).
+
+### Protocol-execution friction captured
+
+1. Cup D was brewed before Step 0 items 3-6 were confirmed (operator momentum); items back-filled before R1. Protocol survived, but the walk-through should front-load the four quick confirms as one message next time.
+2. Office scale can't resolve a 5-drop tare — the tare sub-step needs a home pre-check or removal for office tracks.
+3. TDS meter is a carry item across multi-day tracks; R3 lost its read to an off-site meter.
+4. Brew dates drift when cups span days — per-cup date should be captured at brew time, not reconstructed.
+5. Pour-by-pour capture (P1/P2 clock+grams) was never reported despite per-round prompts — office capture trims may as well pre-declare it out, or the rubric should demand it before the TDS number.
+
+---
+
+### Execution Session Termination
+
+Per Lesson #40 role-discipline rule:
+- ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
+- ❌ NO merge to main, NO substrate PR
+- ❌ NO `npx tsc --noEmit` runs
+- ✅ Protocol doc updated in-place as canonical archive
+- ✅ Archive doc committed + pushed to branch `claude/pour-over-track-4-research-a2c5bb` (SHA in Archive location header, recorded at commit)
+- ✅ Handoff brief produced above
+- 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
+
+End of RP8 Track 4 close-out.
