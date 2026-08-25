@@ -41,7 +41,7 @@
 > (Phase 2b's kickoff false-alarmed on exactly this). Bags with no named use may still wait for
 > pack-time as before.
 
-**Total coffees:** 113
+**Total coffees:** 115
 
 ---
 
@@ -825,3 +825,17 @@
 **Agtron:** 76.3 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://beanhoard.com/roaster/loquat-coffee/esther-kim-2026-wbrc-competition-coffee-20g-last-batch
 **Notes:** 20g last-batch bag, $40, crop 2026, roasted 2026-07-09. Esther Kim's WBrC 2026 (Brussels) competition coffee — placed 10th. Roaster notes: pineapple, strawberry, lemonade, orange blossom. WBC corpus check: pull Esther Kim's 2026 routine/recipe before brewing. Same Lost Origin family as the Maya 317 Tri-Up lot.
+
+## Moonwake Coffee Roasters — Deiro Garcia Finca Lord Voldemort — Yeast Inoculated Ombligon — Colombia
+**Country:** Colombia · **Region/Farm:** Pitalito, Huila / Finca Lord Voldemort · **Producer:** Deiro García Botina
+**Variety:** Ombligon · **Process:** Anaerobic Washed (36h oxidation → sealed with watermelon substrate + Saccharomyces cerevisiae yeast, 48h to pH ~3.5) · **Elevation:** 1800 m
+**Agtron:** 77.7 (Light color) · **Status:** Frozen (15g doses)
+**URL:** https://moonwakecoffeeroasters.com/products/deiro-garcia-finca-lord-voldemort-yeast-inoculated-ombligon-colombia
+**Notes:** Repeat purchase — new bag of a previously-inventoried coffee. Rest 2–3 wks (Moonwake). Notes: crown melon, melona bar, cantaloupe. Deiro = former microbiologist, own yeast/fruit cultures; same farm as the Panela Yeast Washed Caturra Chiroso lot.
+
+## Ordinary Coffee Roasters — Gakenke — Washed Bourbon — Burundi
+**Country:** Burundi · **Region/Farm:** Kayanza Province / Gakenke Washing Station (est. 1991) · **Producer:** Gakenke Washing Station (2,667 smallholders)
+**Variety:** Bourbon · **Process:** Washed (same-day depulp, 12–24h ferment, raised-bed dried ~20 days) · **Elevation:** 1650–1950 m
+**Agtron:** 72.7 (Light color) · **Status:** Frozen (15g doses)
+**URL:** https://shop.ordinarycoffeeroasters.com/products/gakenke-burundi-washed-bourbon
+**Notes:** Roaster: Ordinary Coffee Roasters, Frankfurt. Notes: gooseberry acidity, nectarine, lavender aromatics, vanilla sweetness; silky tea-like mouthfeel, crystalline finish.
