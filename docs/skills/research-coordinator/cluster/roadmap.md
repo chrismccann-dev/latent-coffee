@@ -167,6 +167,10 @@ RP6's retro insight (operator, 2026-07-19): per-mineral → flavor-axis mapping 
 
 ## Side quests
 
+### Exploratory drinks lane (operator wishlist, 2026-08-27 — deliberately LOW-RIGOR, outside the research machinery)
+
+Not project-shaped and not competition work: a for-fun / cross-discipline drinks wishlist recorded at the post-RP8 talk-through — espresso tonics + **soup** tonics (possibly novel) + concentrated-AeroPress tonic + Japanese bitters (shiso/yuzu/saruka/umami) + milk-washed/clarified espresso tonic + cold-brew clarification (later) + cortado on complex light roasts. Platform: the home **Meticulous** espresso machine (not yet in equipment substrate — optional errand). Full wishlist + technique reference (external input, unratified) + lane charter + graduation path: [docs/features/exploratory-drinks-lane-2026-08-27.md](docs/features/exploratory-drinks-lane-2026-08-27.md). No protocol docs, no Coordinator/Assistant machinery; a durable finding graduates via normal talk-through, a canon-touching one routes to the grilling queue. Precedent note: RP8 itself was seeded by exactly this kind of off-book play.
+
 ### C-prime — Deepen wbc-roasting-archivist toward wbc-brewing-archivist parity
 
 Ongoing/opportunistic substrate work. wbc-roasting-archivist is currently smaller in scope than wbc-brewing-archivist. Lands as substrate fold whenever operator surfaces new WBC roasting context — not project-shaped, not a discrete arc. **Couples to § Next #12 (Sourcing)** — richer roasting corpus is a trigger condition for sourcing research moving from § Next-queued to § Now-eligible.
