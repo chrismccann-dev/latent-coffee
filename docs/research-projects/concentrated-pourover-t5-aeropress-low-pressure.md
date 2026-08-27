@@ -257,7 +257,7 @@ No push_brew · no vocabulary locking · no water variables or drops (T4 closed 
 
 **Date:** 2026-08-26
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/aeropress-low-pressure-research-e7bad7` @ `<SHA-filled-at-commit>`, pushed to origin (archive doc committed; substrate NOT; not merged to main). See `role-discipline.md` § Archive persistence.
+**Archive location:** branch `claude/aeropress-low-pressure-research-e7bad7` @ `fa977d0cc179aa89c3b7073baf42967545d747cf (archive commit; SHA header finalized in follow-up commit)`, pushed to origin (archive doc committed; substrate NOT; not merged to main). See `role-discipline.md` § Archive persistence.
 **Methodology verdict:** ✅ VALIDATES — H-press and H-boundary-m both confirmed; H-dilution returns a NUANCED verdict that amends the style's no-bypass identity rather than upholding or rejecting it.
 
 This brief is the canonical consumption artifact for the RP8 Coordinator (end-document + retro + item-56 drain) and the compile session (substrate fold). It is self-contained; the Assistant-session conversation is not needed.
@@ -369,7 +369,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/aeropress-low-pressure-research-e7bad7` @ `<SHA-filled-at-commit>` (authorized archive-persist exception)
+- ✅ Archive doc committed + pushed to branch `claude/aeropress-low-pressure-research-e7bad7` @ `fa977d0cc179aa89c3b7073baf42967545d747cf (archive commit; SHA header finalized in follow-up commit)` (authorized archive-persist exception)
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
