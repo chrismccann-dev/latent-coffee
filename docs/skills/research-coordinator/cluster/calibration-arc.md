@@ -75,6 +75,30 @@ The unified set of Step 0 sub-steps that survived across all 4 filter-arc projec
 
 ---
 
+### 9. Per-vial weigh + physical count (RP8, graduated at the 2026-08-27 retro)
+
+**What:** Any track budgeted in frozen single-dose vials physically counts AND weighs every vial at Step 0 before the budget is trusted. Count ≠ dose (bag-excess partials exist — RP8 T1 lost its planned repeat to a 5 g "vial"); count itself is volatile in shared storage (office freezer: coworkers consume stock — RP8 T5's coffee swap). Coffee locks in protocol docs are PRESUMPTIVE until the physical check. The frozen-vial analog of primitive 1's physical-photo cross-check.
+
+### 10. Split-cup blind pair (RP8 T4/T5, graduated at the 2026-08-27 retro)
+
+**What:** For post-brew condition comparisons (dosing, dilution, serving-side treatments): brew once, swirl to homogenize, split into two identical cups by weight, operator codes the halves, treat one, match temperatures, first sip both, **forced pre-reveal pick**, then reveal. Delivers RP6-grade blind ordering with ZERO extra brewing — it doubles conditions per dose, which is decisive under low-inventory budgets. Operator codes are canonical; the Assistant records identities at reveal only. Record liquid yield at split (per-half grams — per-mL dose math hangs on it).
+
+**Caveat (RP8-N15):** pairs with an inherent strength or temperature delta are only partly blindable — temperature parity is fixable by rest; a ≥20% strength delta is organoleptically identifiable and is not. Weight such verdicts accordingly; an operator pick AGAINST their own known identity/prior is the strongest available signal shape.
+
+**When to fire:** condition-comparison tracks where the variable can be applied post-brew. Not applicable when the variable changes the brew itself.
+
+### 11. One bench-free parameter, recorded as a number (RP8 T3/T5, graduated at the 2026-08-27 retro)
+
+**What:** A protocol names AT MOST ONE parameter as "operator's call at the bench" (a valve-open time, a press duration) — and that parameter gets RECORDED as a number at capture, then pinned for subsequent cups. Two free parameters, or a free parameter never pinned, is how a "winner" becomes irreproducible (RP8 T3's repeat went marginal on exactly this). Corollary: designs should only demand what one head can hold per cup — the operator can remember one number, not a live timeline.
+
+---
+
+## Budget-conditional control re-brews (RP8 retro guidance, 2026-08-27)
+
+The pre-pull-1 calibration shot below and the rung-0 control re-brew are methodologically load-bearing AND expensive under single-dose vial budgets (at ≤4 vials, control + repeat leaves two test cups — operator-flagged as the real cost). Standing resolution: the calibration/control function is satisfiable three ways, chosen consciously at scoping and logged — (a) a full control re-brew (default when doses allow or when a fresh comparator is load-bearing); (b) an **in-cup control** via the split-cup pair (primitive 10) when the variable is post-brew; (c) an archived-profile comparison, explicitly tagged cross-mechanism/memory-based, when no same-bench control exists (the RP8-N10 waiver pattern — twice used, with reason, never silently). Instrument analog: **TDS deploys when the design varies concentration/strength, not as standing kit** for same-recipe comparative tracks.
+
+---
+
 ## Pre-pull-1 calibration shot is the most-skipped primitive
 
 Three of the four filter-arc projects had an internal debate about whether the calibration shot was "really necessary" before scoring. Three of the four agreed at protocol time, ran the calibration shot at Step 0, and ratified its value post-hoc.
