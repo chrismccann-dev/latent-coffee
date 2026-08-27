@@ -125,6 +125,8 @@ First action: read `docs/research-projects/<track-slug>.md` in full. Then summar
 
 **Section 9 — First action.** Bounded first move. The summary-back step at the end of section 9 is a deliberate checkpoint — it verifies the Assistant actually read the protocol in full + surfaces ambiguity before any execution begins. If the summary-back step reveals the Assistant missed something, the operator can correct before Step 0 starts.
 
+**When the protocol transcribes a lived operator recipe** (a recipe the operator developed off-book that the protocol formalizes): the transcription is itself a claim to verify — the Assistant walks the timeline numbers back with the operator at the FIRST scored cup before executing them (RP8-N17: a "~2-min press" transcription was really "~2-min total"; caught at cup 1, not at scoping).
+
 ---
 
 ## Template evolution

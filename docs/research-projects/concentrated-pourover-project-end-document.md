@@ -3,7 +3,7 @@
 *Coffee Research · Latent · Project close-out consolidation*
 
 **Project span:** 2026-07-29 (kickoff) → 2026-08-27 (T5 close) · **Office lane, first occupant**
-**Status:** ALL FIVE TRACKS CLOSED · end-document landed · **process retro PENDING** (gates the next office-lane project) · grilling item 56 drain pending (post-retro)
+**Status:** CLOSED — all five tracks closed · **process retro COMPLETED 2026-08-27** (outputs: office-lane charter + calibration-arc primitives 9–11 + template amendments; see roadmap § Closed entry) · grilling item 56 drain is the immediate next action
 **Coordinator:** persistent RP8 Coordinator session (single thread, kickoff → close)
 **Detail archives (the docs ARE the archives — this document consolidates and points, it does not duplicate):**
 [T1 El Oasis full ladder](docs/research-projects/concentrated-pourover-t1-full-ladder.md) · [T2 Motta abbreviated ladder](docs/research-projects/concentrated-pourover-t2-motta-abbreviated-ladder.md) · [T3 Loud Giants SWORKS valve](docs/research-projects/concentrated-pourover-t3-loud-giants-valve.md) · [T4 Chombi post-brew drops](docs/research-projects/concentrated-pourover-t4-chombi-postbrew-drops.md) · [T5 AeroPress low-pressure](docs/research-projects/concentrated-pourover-t5-aeropress-low-pressure.md)
