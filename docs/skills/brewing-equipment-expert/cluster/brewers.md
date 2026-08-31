@@ -178,6 +178,22 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 
 ## Round/circle filter drippers
 
+### Aeropress — Owned
+
+- Manufacturer: AeroPress
+- Model owned: **AeroPress Premium (black)** - the glass-composite/aluminum premium model, not the standard polypropylene
+- Paper type: Disc (63.5mm) - AeroPress Paper Micro-Filter (Standard; owned, see filters.md)
+- Dose size: 10g to 30g
+- Bed geometry: Cylindrical / immersion
+- Bypass profile: Low (sealed chamber; none through the cap)
+- Flow control: Pressure / immersion
+- Restriction source: Filter + pressure
+- Agitation tolerance: High
+- Brew archetype: Pressure / vacuum system
+- Accessories: **Stainless Steel Flow Control Cap (Standard) - owned.** Deliberately EXCLUDED from the Concentrated Pour-Over immersion-press form (the method card locks the plain paper cap + slow press). Prismo / Puckpuck exist as third-party accessories but are not owned.
+- Location: Home
+- Primary use case: Concentrated Pour-Over immersion-press form (inverted, slow press to first sustained hiss) - see the [AeroPress immersion-press method card](docs/skills/brewing-assistant/cluster/aeropress-immersion-press.md)
+
 ### Oxo Rapid Brewer (ORB) — Owned
 
 - Manufacturer: OXO
@@ -274,3 +290,4 @@ Drift variants observed in legacy DB rows. Resolve to canonical via `BREWER_LOOK
 
 - 2026-04-26 — initial registry built from authored CSV (Sprint 1f).
 - 2026-08-31 — Meticulous Espresso Machine added under new § Espresso (home) — first espresso-side entry; outside the pour-over registry by design.
+- 2026-08-31 — Aeropress authored section added (Round/circle filter drippers) + registry ownership backfill: the registry mirror had carried an Aeropress entry since the initial build but the authored doc never covered it. Chris owns the AeroPress Premium (black) + Stainless Steel Flow Control Cap (Standard) + Paper Micro-Filters (Standard 4-pack); cap excluded from the Concentrated Pour-Over immersion-press form per the method card.
