@@ -46,15 +46,19 @@ Each candidate carries three implicit axes used for sequencing:
 
 **Slot framing (2026-07-21):** deliberately the *light* brewing-side project — momentum pick, not payoff pick. Tolerates freezer-coffee variety (the question is per-cup chill-vs-natural-drop, not a cross-cup comparison on one coffee), so no same-coffee volume requirement and no Pink Bourbon fatigue tax. The operator's primary energy this cycle goes to **resuming the roasting cadence** (close out the mid-flight lots, AN10 first), which is the explicit build-toward path for § Next #11 (Roast blending) — see the amended trigger note there.
 
-### Office lane: EMPTY (RP8 closed + retro complete 2026-08-27)
+### Output selection / fractionalization (Research Project #9 - OFFICE LANE, picked 2026-08-27; kickoff pending)
 
-The office lane ([charter](docs/skills/research-coordinator/cluster/office-lane.md), ratified at the RP8 retro) is open for its next occupant. Immediate post-retro action is NOT a research project: the **grilling item 56 drain** (concentrated pour-over vocabulary + identity + representation, five tracks of evidence assembled in the [RP8 end-document](docs/research-projects/concentrated-pourover-project-end-document.md)) runs first as a `/grill-with-docs` session. Next-occupant talk-through follows (operator has new candidate ideas to add — see § Next intake note).
+**Effort:** medium. **Fold-in:** medium (extends the existing `output_selection` modifier + WBC Output Selection family). **WBC payoff:** medium. Trigger fired 2026-07-21 (VST LAB III owned).
+
+Second office-lane occupant, picked at the post-RP8 talk-through (two-option framing: momentum pick; the payoff pick - **AeroPress Championship 2027 prep / "WAC recipe R&D" - is operator-committed as the NEXT office occupant** immediately after this closes). Scope: separate bloom/body/tail fractions, per-fraction TDS + perception, recombination; output = fractionalization taxonomy (which coffees reward output selection). Inherits the [office-lane charter](docs/skills/research-coordinator/cluster/office-lane.md) wholesale. RP8 crossover: "no dilution past optimum" + RP8-N16 yield lessons bear directly; the recombination-vs-bypass distinction is a candidate central question.
+
+**Kickoff brief (paste into a FRESH Coordinator session): [docs/features/output-fractionalization-research-kickoff-2026-08-27.md](docs/features/output-fractionalization-research-kickoff-2026-08-27.md).** Soft gate: run the grilling item 56 drain first (spawn prompt already in the operator's hands).
 
 ---
 
 ## Next
 
-Ordered queue. Order reflects priority + sequencing constraints derived from the three-axis framework. **Intake note (2026-08-27):** operator has new research ideas to add post-RP8 + wants an office-suitability pass over the existing queue — a roadmap talk-through is queued. RP8-seeded candidates to place at that talk-through: **AeroPress Championship routine-development** (competition-entry rung below WBC; builds on RP8's press mechanism + the operator's routine vision) · **water-at-concentration** (P8-AI-7/8 + the retro observation that concentrates tolerate pushed minerals — a deliberate constrained probe, NOT an RP6 revival) · **concentrated format on self-roasted lots** (couples to § Next #11 roast blending / the layered-roast vision). Entries marked **Trigger:** are conditionally gated — they pull into § Now when triggers fire, regardless of queue position. At every project close, Coordinator surfaces trigger-conditional entries and asks operator whether trigger conditions have been met (see § Roadmap update discipline).
+Ordered queue. Order reflects priority + sequencing constraints derived from the three-axis framework. **Intake note RESOLVED at the 2026-08-27 talk-through:** RP9 = output selection/fractionalization (§ Now, office lane); **AeroPress Championship 2027 prep ("WAC recipe R&D") is the operator-committed NEXT office occupant** - it consumes RP8's press mechanism/recipes and the WAC rules+champion corpus; scope at RP9 close. **Water-at-concentration**: re-scoped as a home-side probe or a WAC-prep-internal track (office can't build kettle-side water well - RP6 finding); not queued standalone. **Concentrated format on self-roasted lots**: stays gated on roasting cadence (couples to § Next #11). Exploratory drinks wishlist filed as a § Side quests lane (low-rigor, home). Entries marked **Trigger:** are conditionally gated — they pull into § Now when triggers fire, regardless of queue position. At every project close, Coordinator surfaces trigger-conditional entries and asks operator whether trigger conditions have been met (see § Roadmap update discipline).
 
 ### 1. Bloom science
 
@@ -120,11 +124,7 @@ Ordered queue. Order reflects priority + sequencing constraints derived from the
 
 ### 9. Output selection / fractionalization
 
-**Effort:** medium. **Fold-in:** medium (extends existing modifier taxonomy). **WBC payoff:** medium.
-
-**Trigger:** TDS + EY meter purchased (operator flagged "been meaning to get one for a while"). **✅ FIRED 2026-07-21 — operator bought the VST LAB Coffee III** (the competition-reference instrument). Entry is now eligible for next-slot framing at any project close; stays queued at operator's call (2026-07-21 talk-through picked rapid chilling + roasting resumption instead).
-
-**Scope:** Separate bloom / body / tail fractions. Understand each fraction's composition vs perception. Recombine portions to understand effects across coffees. Output: fractionalization taxonomy — which coffees reward output selection, which don't.
+**→ Pulled to § Now (office lane) as Research Project #9 (2026-08-27 talk-through) - the momentum pick after RP8's close.** The remaining § Next entries keep their numbers.
 
 ### 10. Rapid chilling at drawdown / post-brew
 
