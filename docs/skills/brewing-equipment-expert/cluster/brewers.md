@@ -223,6 +223,17 @@ EXCHANGER – Temperature-control insert for the BREWING CHAMBER. Fill with cold
 - Location: Home, Office
 - Primary use case: Automated stability baseline (smart-controlled flat extraction)
 
+## Espresso (home)
+
+First espresso-side entry in the cluster (2026-08-31). Not part of the pour-over brewer canonical registry / `lib/brewer-registry.ts` mirror — no espresso axis exists, and none is being created; this section is prose equipment reference only.
+
+### Meticulous Espresso Machine — Owned
+
+- Manufacturer: Meticulous ([meticuloushome.com](https://meticuloushome.com/))
+- Type: Profile-controlled espresso machine
+- Location: Home
+- Operator context: Bought primarily for **soup** (espresso-adjacent high-concentration style) rather than classic espresso; current platform for espresso/soup/tonic exploration — see [docs/features/exploratory-drinks-lane-2026-08-27.md](docs/features/exploratory-drinks-lane-2026-08-27.md).
+
 ## Aliases
 
 Drift variants observed in legacy DB rows. Resolve to canonical via `BREWER_LOOKUP.canonicalize()`.
@@ -262,3 +273,4 @@ Drift variants observed in legacy DB rows. Resolve to canonical via `BREWER_LOOK
 ## Changelog
 
 - 2026-04-26 — initial registry built from authored CSV (Sprint 1f).
+- 2026-08-31 — Meticulous Espresso Machine added under new § Espresso (home) — first espresso-side entry; outside the pour-over registry by design.
