@@ -22,6 +22,7 @@ Migrated from BREWING.md in Wave 4 PR 4b (2026-05-21); consolidated to pointers 
 | **Field**     | **Details**                                                                                                                                                     |
 |---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Equipment** | Full equipment inventory as listed in the Equipment Reference below.                                                                                            |
+| **Espresso**  | Meticulous Espresso Machine (profile-controlled; espresso/soup/tonic exploration platform) — entry in [brewers.md § Espresso (home)](docs/skills/brewing-equipment-expert/cluster/brewers.md#espresso-home).                                       |
 | **Water**     | A deliberate lever when focusing: built per [water.md](docs/skills/brewing-equipment-expert/cluster/water.md)'s anion→phase chart for a per-coffee custom water (the `/brew` Step 2 home suggestion drives this). Low-effort daily default: distilled + remineralized with Third Wave Water packs (Light Roast packet diluted ~1:3 concentrate-to-distilled, topped up with pure distilled to brew volume), or any standing crushable comp. The comp stays available; the built water is for when the brew is a deliberate dial-in. |
 
 ## Equipment Reference
