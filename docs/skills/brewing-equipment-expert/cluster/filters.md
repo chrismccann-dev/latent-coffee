@@ -253,6 +253,7 @@ Measured-drawdown provenance + full research is in the
 - Best archetype: Immersion-press disc
 - Use case: Immersion-press concentrate (Concentrated Pour-Over press form - slow press to first sustained hiss; see the AeroPress immersion-press method card)
 - Link: <https://aeropress.com/products/aeropress-microfilters>
+- Owned: yes (Standard 4-pack of 350; Home) - paired with the AeroPress Premium + optional Stainless Steel Flow Control Cap (cap excluded from the immersion-press form)
 - Promoted 2026-08-31 (arbiter pass; item-56 Concentrated Pour-Over ship follow-through - the Aeropress brewer canonical predated it, this paper is its only paired filter)
 
 ### CAFEC Abaca+ Deep 27 Coffee Filter (white) — `AFD27-100W`
