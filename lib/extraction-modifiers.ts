@@ -57,12 +57,20 @@ export type CleanResult<T> = { ok: true; value: T } | { ok: false; error: string
 //     structured scope to. Existing Paragon usage logged under `aroma_capture`
 //     is left as-is (arguably genuine aroma-capture intent); use `equipment`
 //     going forward for flow/agitation gear.
+// Concentrated Pour-Over ship (2026-08-31, item-56 grill): MODIFIER_TYPES grew
+// 5 -> 6 with `concentration` — brewing at a concentrated ratio (~1:10) with
+// no dilution past optimum, per the RP8 Concentrated Pour-Over canon
+// (CONTEXT-brewing headword). Shape: { value, scope? } where value is the
+// enumerated CONCENTRATION_VALUES set (one value today: 'concentrated'; the
+// headword's promotion trigger governs expansion) and scope is free-text
+// carrying the mechanism/form note ("valve form", "immersion-press form").
 export const MODIFIER_TYPES = [
   'output_selection',
   'thermal_staging',
   'aroma_capture',
   'role_based_pulse',
   'equipment',
+  'concentration',
 ] as const
 export type ModifierType = (typeof MODIFIER_TYPES)[number]
 
@@ -74,6 +82,9 @@ const MODIFIER_TYPE_ALIASES: Record<string, ModifierType> = {
 
 export const OUTPUT_SELECTION_FORMS = ['early_cut', 'late_cut', 'both', 'dilution'] as const
 export type OutputSelectionForm = (typeof OUTPUT_SELECTION_FORMS)[number]
+
+export const CONCENTRATION_VALUES = ['concentrated'] as const
+export type ConcentrationValue = (typeof CONCENTRATION_VALUES)[number]
 
 export interface OutputSelectionModifier {
   type: 'output_selection'
@@ -108,12 +119,19 @@ export interface EquipmentModifier {
   scope?: string | null  // free-text usage window e.g. "throughout", "bloom + P1"
 }
 
+export interface ConcentrationModifier {
+  type: 'concentration'
+  value: ConcentrationValue  // 'concentrated' (sole value today)
+  scope?: string | null      // free-text mechanism/form note e.g. "valve form", "immersion-press form"
+}
+
 export type Modifier =
   | OutputSelectionModifier
   | ThermalStagingModifier
   | AromaCaptureModifier
   | RoleBasedPulseModifier
   | EquipmentModifier
+  | ConcentrationModifier
 
 // ---------------------------------------------------------------------------
 // Display
@@ -125,6 +143,7 @@ const TYPE_LABELS: Record<ModifierType, string> = {
   aroma_capture: 'Aroma Capture',
   role_based_pulse: 'Role-Based Pulse',
   equipment: 'Equipment',
+  concentration: 'Concentration',
 }
 
 const FORM_LABELS: Record<OutputSelectionForm, string> = {
@@ -188,6 +207,10 @@ export function composeModifierLabel(m: Modifier): string {
         : m.scope || ''
       return detail ? `${head} — ${detail}` : head
     }
+    case 'concentration': {
+      const form = `(${m.value})`
+      return m.scope ? `${head} ${form} — ${m.scope}` : `${head} ${form}`
+    }
   }
 }
 
@@ -197,6 +220,7 @@ export function composeModifierLabel(m: Modifier): string {
 
 const MODIFIER_TYPE_SET = new Set<string>(MODIFIER_TYPES)
 const OUTPUT_FORM_SET = new Set<string>(OUTPUT_SELECTION_FORMS)
+const CONCENTRATION_VALUE_SET = new Set<string>(CONCENTRATION_VALUES)
 
 /** Normalize a raw type string to its canonical ModifierType, resolving the
  *  legacy `inverted_temperature_staging` -> `thermal_staging` alias. Returns
@@ -314,6 +338,21 @@ export function cleanModifiers(input: unknown): CleanResult<Modifier[]> {
         })
         break
       }
+      case 'concentration': {
+        const value = (raw as { value?: unknown }).value
+        if (typeof value !== 'string' || !CONCENTRATION_VALUE_SET.has(value)) {
+          return {
+            ok: false,
+            error: `modifiers[${i}].value must be one of: ${CONCENTRATION_VALUES.join(', ')}`,
+          }
+        }
+        out.push({
+          type: 'concentration',
+          value: value as ConcentrationValue,
+          scope: nullableStr((raw as { scope?: unknown }).scope),
+        })
+        break
+      }
     }
   }
   return { ok: true, value: out }
@@ -333,5 +372,7 @@ export function emptyModifier(type: ModifierType): Modifier {
       return { type, roles: null }
     case 'equipment':
       return { type, name: null, scope: null }
+    case 'concentration':
+      return { type, value: 'concentrated', scope: null }
   }
 }
