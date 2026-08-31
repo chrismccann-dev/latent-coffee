@@ -243,6 +243,18 @@ Measured-drawdown provenance + full research is in the
 - Use case: Extreme clarity expression (max bypass cone behavior)
 - Link: <https://sibarist.coffee/en-es/products/ufo>
 
+### AeroPress Paper Micro-Filter — `AEROPRESS-MICRO`
+
+- Fits: AeroPress only (63.5mm flat disc, clamped in the filter cap - sealed chamber, no bypass)
+- Shape / size: Flat disc / AeroPress 63.5mm
+- Material / thickness: Paper pulp / Thin
+- Flow rate (label) / consistency: Fast (press-driven) / Stable
+- Clarity / Body / Sweetness: High / Low-medium / Clean
+- Best archetype: Immersion-press disc
+- Use case: Immersion-press concentrate (Concentrated Pour-Over press form - slow press to first sustained hiss; see the AeroPress immersion-press method card)
+- Link: <https://aeropress.com/products/aeropress-microfilters>
+- Promoted 2026-08-31 (arbiter pass; item-56 Concentrated Pour-Over ship follow-through - the Aeropress brewer canonical predated it, this paper is its only paired filter)
+
 ### CAFEC Abaca+ Deep 27 Coffee Filter (white) — `AFD27-100W`
 
 - Fits: Cafec Deep27; Funnex (deep cone)
@@ -394,6 +406,7 @@ clauses; only unambiguous variants live in the runtime alias map. Targets are th
 canonical names in `lib/filter-registry.ts` (some resolve to not-owned papers in
 the [archive](docs/taxonomies/filters-not-owned-archive.md)).
 
+- `AeroPress paper micro-filter` / `AeroPress micro-filter` / `AeroPress paper filter` / `AeroPress filter` → **AeroPress Paper Micro-Filter**
 - `Espro Bloom` → **xBloom Premium Paper Filters**
 - `Espro Bloom (flat bottom)` → **xBloom Premium Paper Filters**
 - `Espro Bloom Flat` → **xBloom Premium Paper Filters**
@@ -458,5 +471,6 @@ the [archive](docs/taxonomies/filters-not-owned-archive.md)).
 
 ## Changelog
 
+- 2026-08-31 — **AeroPress Paper Micro-Filter promoted** (arbiter pass, taxonomy queue entry from the item-56 Concentrated Pour-Over immersion-press brew). New canonical under Specialty + paired-brewer filters + 5 defensive aliases; registry mirror updated.
 - 2026-06-20 — **RP5 Track 1 fold** (filter textural-quality, V60 cone). Added a `realisticDrawdownSec` field (+ `realisticDrawdownNote`) to the 10 owned V60-cone papers — the realistic xBloom / Pink Bourbon Washed end-time, distinct from the non-realistic 250g-dump `measuredDrawdownSec`. Added the [flow-mediation knowledge subsection](#texture-is-flow-mediated-rp5-track-1-2026-06-20) (texture is largely flow-mediated, 3 mechanisms; paper is a multi-dimensional texture lever). Added `V60` to both HALO papers' fit (HALO ran in a V60 for all of RP5). RP4 AI-4 resolved: HALO ≡ CONE in the cup, fit story only. PROVISIONAL on a single coffee.
 - Earlier history (2026-06-04 filter reconciliation 67→58 · 2026-06-03 pruning case 004 owned-only split · 2026-04-27 Cafec T-code update · 2026-04-26 initial build) lives in git history + [pruning case 004](docs/sprints/pruning-cases/004-filters-md.md) + the [archive changelog](docs/taxonomies/filters-not-owned-archive.md).
