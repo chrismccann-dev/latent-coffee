@@ -1688,11 +1688,48 @@ export const FILTERS: readonly FilterEntry[] = [
     bedBehaviorUnderLoad: 'late-forming-crater',
     measurementNote: "Free-seating in Orea v4 (no Negotiator); cupcake walls free-seat cleanly; zero bypass observed. Same drawdown cluster as WAVE B3 (50s vs WAVE B3's 48.5s) — geometry dominates fiber. WAVE B3 fits Orea slightly cleaner than xBloom Premium.",
   },
+  // Promoted 2026-08-31 (taxonomy queue 3ea5ce9b, brew fe1ff455 — item-56
+  // Concentrated Pour-Over immersion-press form). The stock AeroPress paper
+  // disc; the AeroPress brewer entered the brewer registry with item 56 and
+  // this paper is its only paired filter. Pressure-assisted immersion context,
+  // so the percolation-oriented flow fields describe press-through behavior.
+  {
+    name: "AeroPress Paper Micro-Filter",
+    manufacturer: "AeroPress",
+    sku: "AEROPRESS-MICRO",
+    link: "https://aeropress.com/products/aeropress-microfilters",
+    paperShape: "Flat disc",
+    sizeStandard: "AeroPress 63.5mm",
+    fitsBrewers: ["Aeropress"],
+    sealFitType: "Cap-clamped",
+    material: "Paper pulp",
+    thickness: "Thin",
+    crepeStructure: "Low",
+    flowRate: "Fast (press-driven)",
+    flowConsistency: "Stable",
+    bypassInteraction: "None (sealed chamber)",
+    cloggingRisk: "Low",
+    clarity: "High",
+    body: "Low-medium",
+    sweetnessExpression: "Clean",
+    paperTechnology: "Standard",
+    bestArchetype: "Immersion-press disc",
+    compatibleSystems: "AeroPress / AeroPress Premium",
+    owned: true,
+    location: "Home",
+    primaryUseCase:
+      "Immersion-press concentrate (Concentrated Pour-Over press form; slow press to first sustained hiss)",
+  },
 ]
 
 export const FILTER_NAMES: readonly string[] = FILTERS.map((f) => f.name)
 
 export const FILTER_ALIASES: Record<string, string> = {
+  "AeroPress paper micro-filter": "AeroPress Paper Micro-Filter",
+  "AeroPress Micro-Filter": "AeroPress Paper Micro-Filter",
+  "AeroPress micro-filter": "AeroPress Paper Micro-Filter",
+  "AeroPress paper filter": "AeroPress Paper Micro-Filter",
+  "AeroPress filter": "AeroPress Paper Micro-Filter",
   "Espro Bloom": "xBloom Premium Paper Filters",
   "Espro Bloom (flat bottom)": "xBloom Premium Paper Filters",
   "Espro Bloom Flat": "xBloom Premium Paper Filters",
