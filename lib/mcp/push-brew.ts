@@ -67,12 +67,16 @@ const modifierEntry = z.object({
   // 4c (2026-05-28): `inverted_temperature_staging` renamed to `thermal_staging`
   // (legacy name still accepted here + normalized by cleanModifiers). `equipment`
   // added (persistent/timed gear: {name?, scope?}).
+  // Concentrated Pour-Over ship (2026-08-31): `concentration` added as the 6th
+  // canonical type ({value: 'concentrated', scope?} — scope is a free-text
+  // mechanism/form note, e.g. "valve form", "immersion-press form").
   type: z.enum([
     'output_selection',
     'thermal_staging',
     'aroma_capture',
     'role_based_pulse',
     'equipment',
+    'concentration',
     'inverted_temperature_staging', // legacy alias -> thermal_staging
   ]),
   // type-specific subfields (the discriminated union is hand-validated in cleanModifiers)
@@ -85,7 +89,8 @@ const modifierEntry = z.object({
   application: z.string().optional().nullable(),
   roles: z.string().optional().nullable(),
   name: z.string().optional().nullable(),   // equipment gear name
-  scope: z.string().optional().nullable(),  // equipment usage window (free-text)
+  scope: z.string().optional().nullable(),  // equipment usage window / concentration mechanism note (free-text)
+  value: z.enum(['concentrated']).optional(),  // concentration value (required when type='concentration')
 })
 
 // data-model session (migration 074, 2026-05-30 / BS-1): structured pour step.
@@ -254,7 +259,7 @@ export const pushBrewInputSchema = {
     'v8.4 named consideration. Free-text. Default null = normal cooling progression (the answer for most brews). Populated when peak evaluation window IS the strategy (e.g. "40-45°C peak", "evaluate below 50°C"). Surfaces a previously-implicit decision at brief time so iteration starts in the right window rather than discovering it on brew 2. Most relevant on El Paraíso lots, Garrido Mokka/Mokkita, anaerobic naturals, and other coffees where the cup integrates well below 50°C.',
   ),
   modifiers: z.array(modifierEntry).optional().nullable().describe(
-    'Axis 2 - extraction modifiers (Output Selection / Thermal Staging / Aroma Capture / Role-Based Pulse / Equipment). Optional + stackable. v8.4 (2026-05-06): the Immersion modifier was absorbed into the Hybrid strategy — sending modifier.type="immersion" fails validation; use extraction_strategy="Hybrid" with hybrid_subform set instead. v8.5 (2026-05-08): added `role_based_pulse` (per-pour sensory roles on percolation-only brewers — V60 / Orea / Kalita; if the recipe involves immersion, classify under Hybrid (Phase-Mapped) instead) + `dilution` OUTPUT_SELECTION_FORM (post-brew dilution; optional `dilution_g`). 4c (2026-05-28): `inverted_temperature_staging` RENAMED to `thermal_staging` (legacy name still accepted + normalized server-side; now covers BOTH kettle thermal stance — "kettle off after bloom, natural cooling" / "on-base constant" — AND active ramps — "86°C → 92°C across two phases"). Added `equipment` for persistent/timed gear beyond brewer+filter (Melodrip / booster / Paragon ball). Per-type sub-fields: output_selection={form,brew_weight?,cup_yield?,dilution_g?,notes?}, thermal_staging={phases?}, aroma_capture={application?}, role_based_pulse={roles?}, equipment={name?,scope?} (scope is free-text usage window: "throughout" / "bloom + P1" / "bloom + P1, removed at P2"). Persistence equivalence: `[]`, `null`, and omitted are all stored as the empty array (cleanModifiers() normalizes; the column never holds null). Send `[]` to be explicit that modifiers were considered and rejected, or omit when there\'s nothing to say.',
+    'Axis 2 - extraction modifiers (Output Selection / Thermal Staging / Aroma Capture / Role-Based Pulse / Equipment / Concentration). Optional + stackable. v8.4 (2026-05-06): the Immersion modifier was absorbed into the Hybrid strategy — sending modifier.type="immersion" fails validation; use extraction_strategy="Hybrid" with hybrid_subform set instead. v8.5 (2026-05-08): added `role_based_pulse` (per-pour sensory roles on percolation-only brewers — V60 / Orea / Kalita; if the recipe involves immersion, classify under Hybrid (Phase-Mapped) instead) + `dilution` OUTPUT_SELECTION_FORM (post-brew dilution; optional `dilution_g`). 4c (2026-05-28): `inverted_temperature_staging` RENAMED to `thermal_staging` (legacy name still accepted + normalized server-side; now covers BOTH kettle thermal stance — "kettle off after bloom, natural cooling" / "on-base constant" — AND active ramps — "86°C → 92°C across two phases"). Added `equipment` for persistent/timed gear beyond brewer+filter (Melodrip / booster / Paragon ball). Per-type sub-fields: output_selection={form,brew_weight?,cup_yield?,dilution_g?,notes?}, thermal_staging={phases?}, aroma_capture={application?}, role_based_pulse={roles?}, equipment={name?,scope?} (scope is free-text usage window: "throughout" / "bloom + P1" / "bloom + P1, removed at P2"), concentration={value,scope?}. Concentrated Pour-Over ship (2026-08-31): `concentration` added as the 6th canonical type — brewing at a concentrated ratio (~1:10) with no dilution past optimum (RP8 canon). `value` is required and enumerated (sole value today: "concentrated"); `scope` is a free-text mechanism/form note ("valve form" / "immersion-press form"). Persistence equivalence: `[]`, `null`, and omitted are all stored as the empty array (cleanModifiers() normalizes; the column never holds null). Send `[]` to be explicit that modifiers were considered and rejected, or omit when there\'s nothing to say.',
   ),
 
   // Tasting

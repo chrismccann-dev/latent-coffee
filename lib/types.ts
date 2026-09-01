@@ -521,6 +521,9 @@ export interface Brew {
   // "bloom + P1"). Also renamed `inverted_temperature_staging` -> `thermal_staging`
   // (alias-safe: cleanModifiers normalizes the legacy type; it now covers both
   // kettle thermal stance — off-after-bloom natural drop — and active ramps).
+  // Concentrated Pour-Over ship (2026-08-31): MODIFIER_TYPES grew to 6. Added
+  // `concentration` ({value: 'concentrated', scope?} — ~1:10 ratio, no dilution
+  // past optimum, RP8 canon; scope is free-text mechanism/form note).
   modifiers: import('./extraction-modifiers').Modifier[]
   aroma: string | null
   attack: string | null

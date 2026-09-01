@@ -163,6 +163,14 @@ const MODIFIER_TYPE_DESCRIPTIONS: Record<ModifierType, { description: string; su
       scope: 'Free-text usage window, e.g. "throughout", "bloom + P1", "bloom + P1, removed at P2".',
     },
   },
+  concentration: {
+    description:
+      'Brewing at a concentrated ratio (~1:10) with no dilution past optimum — the Concentrated Pour-Over canon (RP8, CONTEXT-brewing headword). Added 2026-08-31 as the 6th canonical type. One value today (concentrated); the headword\'s promotion trigger governs expansion.',
+    subfields: {
+      value: 'Enumerated: "concentrated" (sole value today; required).',
+      scope: 'Free-text mechanism/form note, e.g. "valve form", "immersion-press form".',
+    },
+  },
 }
 
 export type CanonicalAxis =
@@ -217,7 +225,7 @@ export const CANONICAL_AXES: { axis: CanonicalAxis; title: string; description: 
   { axis: 'roast-levels', title: 'Roast Levels', description: '8 Agtron-anchored canonical buckets (Extremely Light → Very Dark, 10-unit ranges) + 22 aliases. Marketing tags (Nordic / Ultra Light / etc.) are aliases-only.' },
   { axis: 'grinders', title: 'Grinders', description: 'Single canonical: EG-1 with 51 valid settings (3.0-8.0 in 0.1 steps); 16 carry rich measured-D50 content. Setting axis is enumerated strict, not free-text.' },
   { axis: 'extraction-strategies', title: 'Extraction Strategies', description: '6 canonical strategies (v8.4, Hybrid promoted 2026-05-06). Five describe extraction intensity (Suppression / Clarity-First / Balanced Intensity / Full Expression / Extraction Push); Hybrid describes extraction structure (phase boundaries with different jobs per phase). Mechanics-vs-intent symmetry holds across the 5 intensity strategies; Hybrid is orthogonal.' },
-  { axis: 'modifiers', title: 'Extraction Modifiers', description: '5 canonical modifier types (output_selection, thermal_staging, aroma_capture, role_based_pulse, equipment). Optional + stackable. v8.4 (2026-05-06): the Immersion modifier was removed and absorbed into the Hybrid strategy via hybrid_subform. 4c (2026-05-28): inverted_temperature_staging renamed to thermal_staging (legacy name still accepted); equipment added for persistent/timed gear.' },
+  { axis: 'modifiers', title: 'Extraction Modifiers', description: '6 canonical modifier types (output_selection, thermal_staging, aroma_capture, role_based_pulse, equipment, concentration). Optional + stackable. v8.4 (2026-05-06): the Immersion modifier was removed and absorbed into the Hybrid strategy via hybrid_subform. 4c (2026-05-28): inverted_temperature_staging renamed to thermal_staging (legacy name still accepted); equipment added for persistent/timed gear. Concentrated Pour-Over ship (2026-08-31): concentration added — ~1:10 ratio, no dilution past optimum (RP8 canon).' },
   { axis: 'hybrid-subforms', title: 'Hybrid Sub-forms', description: '5 canonical sub-forms (v8.4) for the Hybrid extraction strategy: sequential | phase_mapped | selective_bloom | intensity_clarity_split | temperature_staged. Required when extraction_strategy="Hybrid". Sourced from the WBC Hybrid Systems family reduced to single-origin scope.' },
 ]
 
