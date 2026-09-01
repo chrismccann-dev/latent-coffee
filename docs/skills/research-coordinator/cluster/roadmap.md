@@ -46,13 +46,13 @@ Each candidate carries three implicit axes used for sequencing:
 
 **Slot framing (2026-07-21):** deliberately the *light* brewing-side project — momentum pick, not payoff pick. Tolerates freezer-coffee variety (the question is per-cup chill-vs-natural-drop, not a cross-cup comparison on one coffee), so no same-coffee volume requirement and no Pink Bourbon fatigue tax. The operator's primary energy this cycle goes to **resuming the roasting cadence** (close out the mid-flight lots, AN10 first), which is the explicit build-toward path for § Next #11 (Roast blending) — see the amended trigger note there.
 
-### Output selection / fractionalization (Research Project #9 - OFFICE LANE, picked 2026-08-27; kickoff pending)
+### Output selection / fractionalization (Research Project #9 - OFFICE LANE, picked 2026-08-27; SCOPED 2026-09-01, Track 1 pending execution)
 
 **Effort:** medium. **Fold-in:** medium (extends the existing `output_selection` modifier + WBC Output Selection family). **WBC payoff:** medium. Trigger fired 2026-07-21 (VST LAB III owned).
 
 Second office-lane occupant, picked at the post-RP8 talk-through (two-option framing: momentum pick; the payoff pick - **AeroPress Championship 2027 prep / "WAC recipe R&D" - is operator-committed as the NEXT office occupant** immediately after this closes). Scope: separate bloom/body/tail fractions, per-fraction TDS + perception, recombination; output = fractionalization taxonomy (which coffees reward output selection). Inherits the [office-lane charter](docs/skills/research-coordinator/cluster/office-lane.md) wholesale. RP8 crossover: "no dilution past optimum" + RP8-N16 yield lessons bear directly; the recombination-vs-bypass distinction is a candidate central question.
 
-**Kickoff brief (paste into a FRESH Coordinator session): [docs/features/output-fractionalization-research-kickoff-2026-08-27.md](docs/features/output-fractionalization-research-kickoff-2026-08-27.md).** Soft gate: run the grilling item 56 drain first (spawn prompt already in the operator's hands).
+**Kickoff brief:** [docs/features/output-fractionalization-research-kickoff-2026-08-27.md](docs/features/output-fractionalization-research-kickoff-2026-08-27.md) (item-56 soft gate cleared — drained 2026-08-31). **Scoped 2026-09-01:** SWORKS valve-hold is the fractionation instrument (bloom / pour 1 / pour 2 at pour boundaries, recipe untouched); track = coffee, exploratory; operator thesis logged as H1 (concentrated pour-over ≈ front-retention + tail cutoff); recombination-vs-bypass carried as central question; no blind (character reads, RP8-N15 acknowledged); AeroPress/WAC fraction read deferred to project close. **Track 1:** Project One Blue Iris (5 vials, archived SWORKS control `f404e3b0`), 3 sittings + reserve — protocol [output-fractionalization-t1-blue-iris-valve-fractions.md](docs/research-projects/output-fractionalization-t1-blue-iris-valve-fractions.md) + [spawn prompt](docs/research-projects/output-fractionalization-t1-blue-iris-valve-fractions-spawn-prompt.md).
 
 ---
 
