@@ -41,7 +41,21 @@
 > (Phase 2b's kickoff false-alarmed on exactly this). Bags with no named use may still wait for
 > pack-time as before.
 
-**Total coffees:** 115
+> **Location marker (office lane, 2026-09-01):** entries physically at the OFFICE freezer carry an
+> optional `**Location:** Office (<n> vials as of <date>)` field on the Agtron/Status line; no
+> Location field = home freezer (the default). Vial counts are PRESUMPTIVE scoping hints only —
+> the office freezer is shared-space volatile and the physical count + per-vial weigh at Step 0 is
+> the real mitigation ([office-lane.md § Inventory reality](docs/skills/research-coordinator/cluster/office-lane.md)).
+> Update counts opportunistically; never trust them. Office-frozen bags may carry **Agtron:**
+> `pending (frozen unmeasured — no CM-200 at office)` — Frozen but unreadable until vials travel
+> home; treat as unknown at brew time.
+>
+> **Office stock index (presumptive, as of 2026-09-01):**
+> - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha (~15 vials)
+> - Moonwake — Tabaco Pata Juanito Navarro Washed SL9 (~12 vials)
+> - ⏳ RP8 remnants (Project One Blue Iris / Peach / possibly El Oasis) — awaiting operator's written full list; do not treat this index as complete until it lands.
+
+**Total coffees:** 117
 
 ---
 
@@ -832,6 +846,20 @@
 **Agtron:** 77.7 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://moonwakecoffeeroasters.com/products/deiro-garcia-finca-lord-voldemort-yeast-inoculated-ombligon-colombia
 **Notes:** Repeat purchase — new bag of a previously-inventoried coffee. Rest 2–3 wks (Moonwake). Notes: crown melon, melona bar, cantaloupe. Deiro = former microbiologist, own yeast/fruit cultures; same farm as the Panela Yeast Washed Caturra Chiroso lot.
+
+## Moonwake Coffee Roasters — La Dinastia Wilder Lazo — Lemongrass Yellow Honey Gesha — Colombia
+**Country:** Colombia · **Region/Farm:** Huila / La Dinastía · **Producer:** Wilder Lazo
+**Variety:** Geisha · **Process:** Yellow Honey (floated, 36hr in-cherry dry ferment, depulped, dried) · **Elevation:** 1480–1550 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (15 vials as of 2026-09-01)
+**URL:** https://moonwakecoffeeroasters.com/products/la-dinastia-wilder-lazo-lemongrass-yellow-honey-gesha-colombia
+**Notes:** Rest 2–3 wks (Moonwake). Notes: lemongrass, dried apricot, tangerine, jasmine. Lemongrass character came via equipment cross-contamination, not direct fermentation. Same producer as the Robert Asami 300hr Anaerobic Washed Gesha. Net new — no prior brews.
+
+## Moonwake Coffee Roasters — Tabaco Pata Juanito Navarro — Washed SL9 — Peru
+**Country:** Peru · **Region/Farm:** Inkawasi, Cusco / Tabaco Pata · **Producer:** Juanito Navarro
+**Variety:** SL9 · **Process:** Washed · **Elevation:** 2280 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (12 vials as of 2026-09-01)
+**URL:** https://moonwakecoffeeroasters.com/products/tabaco-pata-juanito-navarro-washed-sl9-peru
+**Notes:** Rest 4–6 wks (Moonwake). Notes: hawthorn tanghulu, nectarine, cranberry. Volcanic mineral-rich soil, shade-grown at exceptional altitude. Net new — no prior brews.
 
 ## Ordinary Coffee Roasters — Gakenke — Washed Bourbon — Burundi
 **Country:** Burundi · **Region/Farm:** Kayanza Province / Gakenke Washing Station (est. 1991) · **Producer:** Gakenke Washing Station (2,667 smallholders)
