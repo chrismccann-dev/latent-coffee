@@ -46,7 +46,15 @@ Every entry is a `##` block in this fixed shape — copy a neighbor's formatting
 **Agtron is the load-bearing field** (whole-bean, taken at dose-out):
 - `NN.N (color descriptor)` — measured; authoritative; this is what the brew skill uses.
 - `pending` — paired with **Status:** `Resting` (purchased + resting, not yet dosed → no reading yet).
+- `pending (frozen unmeasured — no CM-200 at office)` — office-frozen bag, dosed without a reading
+  (the CM-200 lives at home); treat as unknown until vials travel home for a reading.
 - `(reading lost — not saved)` — measured but not captured; treat as unknown.
+
+**Location (optional field, office lane 2026-09-01):** entries physically at the OFFICE freezer
+append `**Location:** Office (<n> vials as of <date>)` to the Agtron/Status line; absent =
+home freezer. Counts are presumptive scoping hints (shared freezer, coworkers consume vials) —
+the Step 0 physical count is authoritative. When adding/updating an office bag, also refresh the
+**Office stock index** block in the freezer-stock.md header.
 
 **Status:** `Frozen (15g doses)` = dosed into 15g vials + frozen, Agtron taken · `Resting` =
 purchased, resting out of the freezer, not yet dosed (Agtron `pending`).
