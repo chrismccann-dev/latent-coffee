@@ -45,7 +45,9 @@ Single fixed curve across all six batches (a deliberate narrow-V1 deviation per 
 
 ## The apex scorecard (why this lot mattered)
 
-First lot run directly against the layered-evolving bar. The reference cup layers (melon / spice / dark-chocolate / blossom / stone fruit) and moves - spice dominant hot, receding warm, fruit + florality + sweetness peaking cool - with clarity as the carrier and the roast register integrated as a layer rather than bleeding. Honest verdict: a real depth cup and the closest self-roast yet, with the defining layers cool-station-only and body variety-intrinsic light. Whether it fully meets the PicoLot bar is a brewing-side longitudinal question now, not a roasting one - the roast side of the express-then-clarify couple did its job.
+First lot run directly against the layered-evolving bar. The reference cup layers (melon / spice / dark-chocolate / blossom / stone fruit) and moves - spice dominant hot, receding warm, fruit + florality + sweetness peaking cool - with clarity as the carrier and the roast register integrated as a layer rather than bleeding.
+
+**Operator verdict at close (2026-09-07):** the closest self-roast yet to the apex - a step ahead of the Fazenda Um Pink Bourbon - but NOT at the level of the PicoLot benchmark coffees. The cup's expression sits in a **chocolaty/spice category**, and the operator's read is that this register may be bean-intrinsic (the yeast-ferment expression) rather than roast-derived - the optimized-brew session attributed it roast-side, so the attribution is an open question. The Deborah 'Elipse' sibling (same farm, washed-finish) is the natural attribution test: if the chocolate/spice category persists there at a light roast, it is farm/bean character, not process or roast. The honest-baseline line in CONTEXT-taste.md still stands; this lot moves the high-water mark, not the bar.
 
 ## Cross-lot framing
 
