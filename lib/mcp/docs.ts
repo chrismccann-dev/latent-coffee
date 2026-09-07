@@ -524,6 +524,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — Per-Lot: Rancho Tio Emilio (one-shot calibration)',
     description: 'Per-lot learnings for Rancho Tio Emilio Typica Mejorado Washed (closed 2026-05-11, one-shot calibration). Brew-anchor-transferability lesson (variety signal dominates over anchor-roast brew lineage) + altitude-as-weak-proxy-for-density on one-shots + Typica Mejorado varietal aromatic fingerprint sourced here.',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md',
+    title: 'Roasting Historian — learnings / Finca Deborah Geisha Natural Interstellar (closed 2026-09-07, reference Batch 229 V2A; the depth-arc lot)',
+    description: 'Closed-lot deep-dive for PAN-DEBORAH-GEISHA-NAT-2026 (Jamison Savage yeast-inoculated 100+ hr natural Gesha, density 741, the first lot run directly against the layered-evolving apex goal). Reference Batch 229 (210.5C auto-drop, WB 84.9) via the SPG runoff that inverted the xbloom gate. Carries: the drop-ceiling-as-sole-lever architecture, low-density races-the-probe + steepening color slope, WB-Agtron-under-reads finding, dev-window-gated FC-audibility flip, two-stage overdev signal (chocolate note then melon death at 212C+), ferment-reads-integrated-never-funky, and the Elipse-facing starting hypothesis. Use when designing V1 on engineered-natural Geshas or the Deborah Elipse sibling.',
+  },
   // ----- skills / peer-learning-roasting-archivist -----------------------------
   {
     uri: 'docs://skills/peer-learning-roasting-archivist/SKILL.md',
@@ -758,8 +763,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-deborah-geisha-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (V1 closed 2026-08-18: 228 leading slot, ceiling not found; V2 210.5/212/213.5C pushed to Roest)',
-    description: 'Active-lot Roasting Brief + V1 record + V2 design for Finca Deborah Geisha Natural Interstellar (PAN-DEBORAH-GEISHA-NAT-2026, Jamison Savage, yeast-inoculated 100+ hr natural — heavy-ferment family, density 741). The depth-arc lot carrying the layered-evolving apex goal directly. V1 (206/207.5/209C on a fixed 244C-peak sustained-tail curve) closed 2026-08-18: V1C Batch 228 (209C) leading slot + reference candidate — melon + stone fruit + tea + floral, holds cooling; lot is ferment-behaved (AN10 pattern); FC silent on all slots; WB Agtron under-reads development (use ground); overdev ceiling NOT found. V2 designed 2026-08-18: same curve, drop ladder shifted up to 210.5/212/213.5C with 228 as control, v2c abortable; profiles 571885/571886/571887 pushed to Roest. Real-pourover arbiter mandatory between close candidates.',
+    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (closed stub — closed 2026-09-07, reference Batch 229 V2A via SPG runoff)',
+    description: '[Closed-lot stub per the close-out convention] Lot closed 2026-09-07; reference roast Batch 229 (V2A, 210.5C auto-drop on the 244C sustained-tail curve, first audible FC on the lot) chosen via the SPG runoff that INVERTED the xbloom-gate verdict over 228. Optimized brew 23ebcdd7 (Clarity-First low edge). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md; the stub preserves the V1/V2 design-record H2 anchors for cross-references.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
