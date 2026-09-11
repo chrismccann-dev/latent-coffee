@@ -52,6 +52,13 @@
 >
 > **Office stock index (presumptive, as of 2026-09-01 — operator's written physical list, 15g doses each; optimized brew linked where one exists):**
 > - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — 15 (net new, no brews)
+> - Picolot — S201 Overture: Tower (Elida Estate Torre Gesha Natural DRD) — 12 (added 2026-09-11, net new, no brews)
+> - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 10 (added 2026-09-11, net new, no brews)
+> - MAME — La Palma y El Tucán Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - MAME — Janson Lot 1035 Geisha Anaerobic (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - MAME — Abu Lot 3345 Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - MAME — Auromar Lot 3 Geisha Washed (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - MAME — Mi Finquita Geisha Natural Wine Globe (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - Moonwake — Tabaco Pata Juanito Navarro Washed SL9 — 12 (net new, no brews)
 > - Moonwake — Project One Light Blue Iris (Yeast Anaerobic Honey Catimor) — 6 · [brew](https://www.latentcoffee.com/brews/f404e3b0-3d43-4da0-8e29-38c9ddad4494) — RP9 Track 1 will consume
 > - Hydrangea — Guadalupe Hill Auction Lot Washed Sidra — 5 · [brew](https://www.latentcoffee.com/brews/f466bfe1-35d9-4fde-801e-5d0578d0d483)
@@ -70,7 +77,7 @@
 >
 > Consumed (off the list 2026-09-01): El Oasis + Project One Peach — fully consumed in prior research (RP8). Not every office coffee has a full entry below (the doc is deliberately not backfilled) — the index is the office-complete surface; entries carry the marker where they exist.
 
-**Total coffees:** 117
+**Total coffees:** 124
 
 ---
 
@@ -882,3 +889,52 @@
 **Agtron:** 72.7 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://shop.ordinarycoffeeroasters.com/products/gakenke-burundi-washed-bourbon
 **Notes:** Roaster: Ordinary Coffee Roasters, Frankfurt. Notes: gooseberry acidity, nectarine, lavender aromatics, vanilla sweetness; silky tea-like mouthfeel, crystalline finish.
+
+## MAME — La Palma y El Tucán Geisha Natural (Brian Quan Competition Expression)
+**Country:** Colombia · **Region/Farm:** Cundinamarca / La Palma y El Tucán · **Producer:** Felipe Sardi
+**Variety:** Geisha · **Process:** Natural · **Elevation:** 1400–1800 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: blueberry, strawberry, white tea. $27.00 paid ($30 less MAMEBEANS discount).
+
+## MAME — Janson Lot 1035 Geisha Anaerobic (Brian Quan Competition Expression)
+**Country:** Panama · **Region/Farm:** Los Alpes / Lot 1035 · **Producer:** Kai Janson
+**Variety:** Geisha · **Process:** Anaerobic Natural (4 days) · **Elevation:** 1600–1800 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: raspberry, strawberry, red wine. $40.50 paid ($45 less MAMEBEANS discount).
+
+## MAME — Abu Lot 3345 Geisha Natural (Brian Quan Competition Expression)
+**Country:** Panama · **Region/Farm:** Abu Coffee / Lot 3345 · **Producer:** José Luttrell
+**Variety:** Geisha · **Process:** Natural · **Elevation:** 1550 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: blueberry, strawberry, tropical. $40.50 paid ($45 less MAMEBEANS discount).
+
+## MAME — Auromar Lot 3 Geisha Washed (Brian Quan Competition Expression)
+**Country:** Panama · **Region/Farm:** Finca la Aurora / Lot 3 · **Producer:** Roberto Brenes
+**Variety:** Geisha · **Process:** Washed · **Elevation:** 1570–1770 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: jasmine, mandarin, silky. $45.00 (no discount shown).
+
+## MAME — Mi Finquita Geisha Natural Wine Globe (Brian Quan Competition Expression)
+**Country:** Panama · **Region/Farm:** Los Pozos, Tierras Altas, Chiriquí / Mi Finquita · **Producer:** Ratibor Hartmann
+**Variety:** Geisha · **Process:** Natural Wine Globe · **Elevation:** 1650–1900 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: berries, pineapple, winey. $40.50 paid ($45 less MAMEBEANS discount). Same farm/producer as the Substance Café Mi Finquita Geisha Washed entry.
+
+## Picolot — S201 Overture: Tower — Elida Estate Torre Gesha Natural DRD
+**Country:** Panama · **Region/Farm:** Alto Quiel, Boquete, Chiriquí / Elida Estate (Torre parcel) · **Producer:** Lamastus Family Estates
+**Variety:** Gesha · **Process:** DRD Natural · **Elevation:** 1785–1835 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (12 vials as of 2026-09-11)
+**URL:** https://picolot.shop/products/s201-overture-tower-elida-estate-torre-gesha-natural-drd
+**Notes:** Rest 45–60 days recommended. 94-pt lot, 20 kg. Torre parcel = repeat Best of Panama champion; Elida = Panama's highest coffee farm. Notes: yellow mango, jackfruit over honey, rose apple, jasmine, blue florals. Third Elida lot in inventory (Aguacatillo 2100, Lovely Vuelta).
+
+## Picolot — S203 Agricola Geisha 36-hr CF Ox Natural
+**Country:** Panama · **Region/Farm:** Boquete hills / Agricola Geisha · **Producer:** Manuel Barsallo (farm of Gonzalo & Yrma Palenzuela)
+**Variety:** Geisha · **Process:** Natural (36hr cold oxidation, 29-day dry) · **Elevation:** — (Boquete hills, bajareque mist path)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (10 vials as of 2026-09-11)
+**URL:** https://picolot.shop/products/s203-agricola-geisha-ox-natural
+**Notes:** 2025 Best of Panama award winner (3rd place, second year of production). Harvested at 15 Brix; shade-grown under plantain + avocado. 5 kg green lot. Notes: peach, white grape, kiwi, juicy, cold eucalyptus line.
