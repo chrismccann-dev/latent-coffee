@@ -32,7 +32,7 @@ The reconciled, in-voice sourcing doctrine. Derived from the **Latent apex** (la
 - **Process signature = the hard gate** (engineering-minded method whose output is legible layered complexity).
 - **Exotic-distinctive variety = a distinctiveness floor** (working theory, not a proven rule; heavy process engineering may yet substitute for distinctive genetics on a commodity cultivar - counter-case held open).
 - **High altitude = a strong prior** (every favorite sits 1,350-2,500m; hypothesized slower-maturation -> complexity, untested; actively seeking a low-altitude slow-engineered counterexample).
-- **Geography = density, not a gate.** Panama Chiriquí is where the signature currently clusters *in Chris's experience*, but the signature is portable (Ecuador already proves it). Non-Panama engineered naturals are **actively sought** to run the portability test.
+- **Geography = density, not a gate.** Panama Chiriquí is where the signature currently clusters *in Chris's experience*, but the signature is portable (Ecuador proved it first; the 2026-09-10 Faysel Abdosh Guji blind cupping - § 2 Ethiopia field data - is the strongest portability confirmation yet: Guji engineered-process cups landing at Panama layered-complexity level, with the same process-signature preference emerging blind). Non-Panama engineered naturals remain **actively sought**.
 
 **The producer comes forward, but later.** No current producer relationships, no producer index yet, no lot-scale buying - the tight producer cluster in the favorites was a curation artifact, not a relationship. "Bring the producer forward" (the North Star inversion) is a *narrative + access* lever that becomes first-order **near competition time**; today the roster is **open and process-defined, not name-locked**. Single-producer partnership is explicitly rejected for now.
 
@@ -170,6 +170,42 @@ For Latent, Colombia is the best place to look for **learning coffees**: high-in
 Ethiopia shows up but not as heavily as Panama / Colombia. When it does appear: high elevation, landrace / 74158 / heirloom, washed or anaerobic natural, used for florality and bright fruit.
 
 Ethiopia still matters, but WBC sourcing has shifted toward **controlled, farm-specific, competition-prepared coffees** from Panama and Colombia. Latent has 3 closed-lot Gesha Village 1931 lots (Oma / Surma / Oma) covering this lane historically.
+
+### Field data: Faysel Abdosh Signature 2026 auction (Guji, Ethiopia) — blind cupping (2026-09-10)
+
+Chris blind-cupped all 16 lots of the [Faysel Abdosh Signature 2026 auction](https://fayselabdosh.mcultivo.com/auction/faysel-abdosh-signature-2026?product=3977) at a [Moonwake-hosted cupping event](https://www.eventbrite.com/e/faysel-abdosh-signature-2026-auction-cupping-tickets-1998929022516) — cups identified by number only, impressions recorded before the reveal. Districts across Guji (Uraga, Haru Welabu, Hambela), varieties 74112 / 74158, altitudes 2400-2500m. The slate spanned washed (01-04), naturals/supernaturals (05-08), and an advanced-process flight (09-16: honeys, hydro fermentations, anaerobic, carbonic maceration, bioreactor).
+
+**Blind favorites (in order):**
+
+1. **FAS-13 — Hydro Dual Fermentation, Uraga, 2450m** ("jasmine, fruit florals, a lot of complexity — this is interesting"). 96h submerged anaerobic → partial shade-dry → rehydrate + depulp → 48h secondary ferment → 30-day shade dry. Auction notes: black cherry, passion fruit, winey acidity.
+2. **FAS-09 — White Honey, Haru Welabu, 2400m** ("very citrus-forward — lemon and lime — interesting"). Minimal-mucilage honey, 21-day raised-bed dry, 12-week GrainPro rest. Auction notes: honeysuckle, grapefruit, pear, raisin, rooibos.
+3. **FAS-06 — Natural, Hambela, 2500m, 74158** ("natural, little bit of funkiness, mango — I like this one"). 5 days shade + 35 days dark-room drying. Auction notes: blueberry, pineapple, plum, blackberry.
+
+**Full per-cup blind notes (Chris, verbatim gist):**
+
+| Cup | Process | Blind impression |
+|---|---|---|
+| FAS-01 | Washed | Caramel, traditional coffee, a little citrus |
+| FAS-02 | Washed | Acidic-forward, orange |
+| FAS-03 | Washed | Round, clean, stone fruit — nice for a washed |
+| FAS-04 | Washed | Bright citrus — "probably will be rated high" |
+| FAS-05 | Natural | Round, probably a natural, fruit |
+| FAS-06 | Natural (dark room) | Natural funkiness + mango — favorite #3 |
+| FAS-07 | Supernatural | Similar to 06 but 06 better |
+| FAS-08 | Supernatural | Another natural, less special |
+| FAS-09 | White Honey | Very citrus-forward — favorite #2 |
+| FAS-10-12 | Red/Black/Hydro Honey | (no notes recorded) |
+| FAS-13 | Hydro Dual Fermentation | Jasmine, lots of complexity — favorite #1 |
+| FAS-14 | Anaerobic | Extremely funky, a bit too much |
+| FAS-15 | Carbonic Maceration | Too funky, a bit too fermented |
+| FAS-16 | Bioreactor Anaerobic | Funky but interesting |
+
+**What this session teaches (sourcing-relevant):**
+
+- **The portability test landed — hard.** Every prior favorite-cluster was Panama (plus the Ecuador proof point); this slate was entirely Guji, Ethiopia, and several cups read to Chris as *as good as* the layered-complexity Panama favorites. The layered-evolving signature is origin-portable; geography stays a density read, never a gate.
+- **The process signature is the gravitating force, not region or variety — confirmed blind.** With zero lot information, Chris's #1 was the most heavily engineered lot on the table (dual fermentation), #2 an engineered honey with a 12-week rest protocol, #3 a controlled dark-room natural. The pull is the engineered controlled process signature itself — the same read that emerged blind at Lamastus, now replicated on a different continent.
+- **The anti-target held on the funk ceiling.** The heaviest ferments (FAS-14 anaerobic "a bit too much", FAS-15 CM "too fermented") failed on loudness-without-legibility, while FAS-16 (bioreactor) stayed "funky but interesting" — the structural cutoff (one-dimensional + loud), not a funk vocabulary, did the sorting again.
+- **Guji advanced-process is a live watch lane.** Faysel Abdosh's advanced-process program (hydro fermentations, dark-room, bioreactor) is exactly the systematized engineering-minded producer signature § 0 gates on, at 2400-2500m — an Ethiopia entry for the `watch` bucket if access materializes at hobbyist scale.
 
 ### Bolivia, Guatemala, Costa Rica, Honduras, Brazil, Venezuela, Ecuador
 
