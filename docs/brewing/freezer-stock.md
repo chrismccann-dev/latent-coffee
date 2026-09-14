@@ -303,9 +303,9 @@
 ## Moonwake Coffee Roasters — Project One Light Blue Iris — Yeast Anaerobic Honey Catimor — China
 **Country:** China · **Region/Farm:** Mangshi / DeHong, Yunnan / Project One Light farm · **Producer:** Olina Cai (Project One Light / 单向光计划)
 **Variety:** Catimor · **Process:** Yeast Anaerobic Honey (controlled yeast ferment + honey process, sun-dried 2 wks) · **Elevation:** 1300–1500 m
-**Agtron:** 77.6 (Light color) · **Status:** Frozen (15g doses) · **Location:** Office (6 vials as of 2026-09-01; RP9 Track 1 will consume)
+**Agtron:** 77.6 (Light color) · **Status:** Frozen (15g doses) · **Location:** Office — RP9 Track 1 consumed all 5 research vials (closed 2026-09-14); 0 research vials remain. The 2026-09-01 count was 6, so at most 1 non-research vial may remain — confirm at freezer before planning a brew on this coffee.
 **URL:** https://moonwakecoffeeroasters.com/products/project-one-light-blue-iris-yeast-anaerobic-honey-catimor-china
-**Notes:** POL founded 2021. Rest 4–6 wks (Moonwake standard). Notes: stewed pear, sugarcane, lychee. No archive precedent — first brew open call.
+**Notes:** POL founded 2021. Rest 4–6 wks (Moonwake standard). Notes: stewed pear, sugarcane, lychee. No archive precedent — first brew open call. RP9 T1 validated preparation (2026-09-14, track archive is canonical): 1:10 SWORKS valve concentrated cup (EG-1 5.9, 95°C, bloom 45g Dial 0 45s → Dial 5, pour to 150g at 0:45, natural drain) + 7-10g own-tail splash (valve close, tared 100g follow-pour through spent bed, taste-fit within window) + standard Apax cup-dosing (1 JAMM + 1 TONIK). Signature-method candidate.
 
 ## Moonwake Coffee Roasters — Light Roast — Finca La Piragua — Natural Red Stripe Bourbon — Colombia
 **Country:** Colombia · **Region/Farm:** Acevedo / Palestina, Huila / Finca La Piragua · **Producer:** Alexander Vargas
