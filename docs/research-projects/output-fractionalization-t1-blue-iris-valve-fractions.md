@@ -288,7 +288,7 @@ Goal: turn the cross-brew improvised "1:10 + 7 g tail" cup into a repeatable sin
 
 **Date:** 2026-09-14
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/output-fractionalization-track-1-d88554` @ `4fa1f0f47ca755e0e254bcd61cfb06fc0bc1ecd6`, pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/output-fractionalization-track-1-d88554` @ `d043ae360f30bedacf0cbb34cf18f1ed3f68e8de (archive commit; SHA header corrected in follow-up commit on same branch)`, pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** ✅ VALIDATES — fractionation choreography is artifact-clean (H-artifact PASS), the arithmetic predicts recombinations (H2), and the operator thesis held with a refinement: front-*weighting*, not front-*cutting*, is the preference peak.
 
 This brief closes RP9 Track 1 (Project One Blue Iris, SWORKS valve, 5 vials, sittings 2026-09-01 → 2026-09-14). Consume top-down: TL;DR + Key findings for the taxonomy claims, Substrate edit specifications for the fold, raw data in the sitting logs above (this doc IS the archive; the recording sheets live in the sitting sections).
@@ -397,7 +397,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/output-fractionalization-track-1-d88554` @ `4fa1f0f47ca755e0e254bcd61cfb06fc0bc1ecd6` (the authorized archive-persist exception)
+- ✅ Archive doc committed + pushed to branch `claude/output-fractionalization-track-1-d88554` @ `d043ae360f30bedacf0cbb34cf18f1ed3f68e8de (archive commit; SHA header corrected in follow-up commit on same branch)` (the authorized archive-persist exception)
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
