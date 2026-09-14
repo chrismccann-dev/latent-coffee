@@ -220,6 +220,11 @@ This is distinct from [feedback_mcp_continuous_log.md](~/.claude/projects/-Users
     - **Source:** Chris audio, V2 cup day BRA-FAZENDAUM-PB-DRD-2026 (2026-08-31); logged in the V2 experiment additional_notes
     - **Suggested landing:** CONTEXT-roasting WB->Gnd delta headword amendment + simulated-pourover.md STEP 1 prior + push_cupping ground_agtron description caveat
 
+### From RP9 Track 1 close (2026-09-14 - Blue Iris valve fractions)
+
+58. **Output Selection vocabulary: "down-weight" (front-weighted re-proportion).** RP9 T1 found the preference peak is neither Front-Cut nor full-keep but re-proportioning with trace tail (~5-8% of cup mass). Does the WBC Output Selection family / output_selection modifier vocabulary need a value between cut and keep? Also touches: overlap account between output_selection and the concentration modifier (RP9 T1 H1: 1:10 ≈ front retention, mechanistically). Evidence: [docs/research-projects/output-fractionalization-t1-blue-iris-valve-fractions.md](docs/research-projects/output-fractionalization-t1-blue-iris-valve-fractions.md) § Key findings 3-5. Canonical decision is operator-level - do not pre-resolve.
+    - **Source:** RP9 Track 1 substrate fold (2026-09-14)
+
 ## Substrate pruning candidates
 
 Lived examples of substrate sections that may warrant pruning (section-level removal / extraction to separate file / consolidation / archival). Pattern J — Substrate pruning ([ADR-0013](docs/adr/0013-self-improvement-primitives.md)) was light-touch-shipped 2026-05-24 with the mechanism deliberately deferred until lived candidates covering all five shapes are worked through operator + Claude Code back-and-forth (case-study-driven generalization per Chris's framing at Item 16c grill). This section accumulates candidates; each becomes a worked example. **Systematization is deferred until all five shapes have a worked example** — full protocol at [docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md](docs/features/doc-pruning-mechanism-brainstorm-2026-06-03.md).
