@@ -3,7 +3,10 @@
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
 **Lot:** PAN-DEBORAH-GEISHA-NAT-2026
-**Status:** Active - **Waiting for next roast (V2).** V1 roasted 2026-08-11 + cupped Day 7 2026-08-18: **V1C / Batch 228 (209°C) leading slot + reference candidate**; the lot is FERMENT-BEHAVED (AN10 pattern) and the overdev ceiling was NOT found. V2 designed 2026-08-18 - same curve, drop ladder shifted up to 210.5 / 212 / 213.5°C, 228 as control; profiles PUSHED TO ROEST (571885/571886/571887). Green remaining after V2: 400g. Roast-queue #1 under the layered-evolving depth goal.
+**Status:** Closed (2026-09-07)
+**See closed-lot learnings:** [learnings/pan-deborah-geisha-nat-2026.md](docs/skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md)
+
+Reference roast: Batch 229 (V2 v2a) - 244°C-peak sustained-tail curve, bean_temp auto-drop 210.5°C / 5:00, FC audible 4:52 / 209.4°C (first audible on the lot), WB Agtron 84.9, WL 11.8%. Chosen via SPG runoff 2026-09-07, which INVERTED the xbloom-gate verdict over V1's 228 (more sweetness + acidity; 228's chocolate/roast note read more developed despite lighter WB). Optimized brew `23ebcdd7`: Clarity-First low edge (Orea, EG-1 6.6, 1:16, 91°C, Melodrip) - melon + spiced dark chocolate + cardamom + peach, blossom/stone fruit cool-station-only, optimized on Brew 1. V2 xbloom-gate record (2026-09-01): 229 best-of-set, 230 wrong direction, 231 = ceiling (melon dead, Untold-like anti-target). The H2 sections below are preserved as historical / cross-reference anchors from the active arc.
 **Cultivar:** Gesha (Green Tip per Untold bag)
 **Terroir:** Panama - Volcán Barú Highlands (Chiriquí)
 **Producer:** Jamison Savage, Finca Deborah (tier-2 / master-producer tier)

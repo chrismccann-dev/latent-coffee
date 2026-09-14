@@ -41,7 +41,43 @@
 > (Phase 2b's kickoff false-alarmed on exactly this). Bags with no named use may still wait for
 > pack-time as before.
 
-**Total coffees:** 115
+> **Location marker (office lane, 2026-09-01):** entries physically at the OFFICE freezer carry an
+> optional `**Location:** Office (<n> vials as of <date>)` field on the Agtron/Status line; no
+> Location field = home freezer (the default). Vial counts are PRESUMPTIVE scoping hints only —
+> the office freezer is shared-space volatile and the physical count + per-vial weigh at Step 0 is
+> the real mitigation ([office-lane.md § Inventory reality](docs/skills/research-coordinator/cluster/office-lane.md)).
+> Update counts opportunistically; never trust them. Office-frozen bags may carry **Agtron:**
+> `pending (frozen unmeasured — no CM-200 at office)` — Frozen but unreadable until vials travel
+> home; treat as unknown at brew time.
+>
+> **Office stock index (presumptive, as of 2026-09-01 — operator's written physical list, 15g doses each; optimized brew linked where one exists):**
+> - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — 15 (net new, no brews)
+> - Picolot — S201 Overture: Tower (Elida Estate Torre Gesha Natural DRD) — 12 (added 2026-09-11, net new, no brews)
+> - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 10 (added 2026-09-11, net new, no brews)
+> - MAME — La Palma y El Tucán Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - MAME — Janson Lot 1035 Geisha Anaerobic (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - MAME — Abu Lot 3345 Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - MAME — Auromar Lot 3 Geisha Washed (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - MAME — Mi Finquita Geisha Natural Wine Globe (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
+> - Moonwake — Tabaco Pata Juanito Navarro Washed SL9 — 12 (net new, no brews)
+> - Moonwake — Project One Light Blue Iris (Yeast Anaerobic Honey Catimor) — 6 · [brew](https://www.latentcoffee.com/brews/f404e3b0-3d43-4da0-8e29-38c9ddad4494) — RP9 Track 1 will consume
+> - Hydrangea — Guadalupe Hill Auction Lot Washed Sidra — 5 · [brew](https://www.latentcoffee.com/brews/f466bfe1-35d9-4fde-801e-5d0578d0d483)
+> - Moonwake — Ngoma Station J.M.V. Usekanabagoyi Washed (Rwanda) — 4 · [brew](https://www.latentcoffee.com/brews/80512a64-70fe-49d6-afbf-fe55d1940a50)
+> - Moonwake — Zarza Bella Vista Advanced Natural Gesha — 3 · [brew](https://www.latentcoffee.com/brews/e560bc72-088e-4179-a782-41f9e5c1d1d1)
+> - Moonwake — El Pilón Ilde Burbano Anaerobic Washed Pink Bourbon — 3 · [brew](https://www.latentcoffee.com/brews/8cc88312-3bee-453f-8965-e98d957f8c5e)
+> - Moonwake — El Placer Sebastian Ramirez CM White Honey + Yeast Gesha — 3 · [brew](https://www.latentcoffee.com/brews/99ce6fa9-3681-41de-9307-98a0b7a0fee4)
+> - Picolot — Lovely Vuelta (Simba's Comp Edition, Elida Washed DRD Gesha) — 3 · [brew](https://www.latentcoffee.com/brews/b3bef612-e486-4a69-92dc-a4683da77b07)
+> - Picolot — The Forbidden: Garrido Mokkita Cold Room (#21) — 3 · [brew](https://www.latentcoffee.com/brews/7ad09c9b-35c3-4635-88eb-248bb38b42bc)
+> - Picolot — Blue Butterfly: Kotowa Silvia Marina Geisha Natural (#27) — 3 · no optimized brew on record (operator couldn't locate one; none found in DB either — first brew open call)
+> - Colibri — Finca La Reserva Gesha (Anaerobic Honey) — 3 · [brew](https://www.latentcoffee.com/brews/0b708859-a9af-4b57-a13a-5ea6c3afabf4)
+> - Picolot — Emerald PL#015: Garrido Mokka Natural — 2 · [brew](https://www.latentcoffee.com/brews/ffc37dab-dce5-4246-bd82-d8d517a1f31a)
+> - Moonwake — Blooms Abel Dominguez Washed Catuai — 2 · [brew](https://www.latentcoffee.com/brews/fd2f0a72-83e9-4d6f-ad9c-4aca75287a98)
+> - Coffee with Dongze — Enzyflow Honey 映雪 YinXue (Hachi × Yunnan × Terroir Maximus) — 1 · [brew](https://www.latentcoffee.com/brews/2729194b-14be-4c70-bd22-50716fd98ad0)
+> - TM Coffee — Brazil Anaerobic Natural Gesha (Daterra) — 1 · [brew](https://www.latentcoffee.com/brews/9abeb327-6eef-42bf-980d-8a243e9ceb26)
+>
+> Consumed (off the list 2026-09-01): El Oasis + Project One Peach — fully consumed in prior research (RP8). Not every office coffee has a full entry below (the doc is deliberately not backfilled) — the index is the office-complete surface; entries carry the marker where they exist.
+
+**Total coffees:** 124
 
 ---
 
@@ -52,7 +88,7 @@
 ## Moonwake Coffee Roasters — Sebastian Ramirez El Placer — CM White Honey + Yeast Gesha (Brian Quan Collab)
 **Country:** Colombia · **Region/Farm:** Quindío / El Placer · **Producer:** Sebastian Ramirez
 **Variety:** Gesha · **Process:** CM White Honey + Yeast Inoculated · **Elevation:** 1800 m
-**Agtron:** 85.1 (Very light color) · **Status:** Frozen (15g doses)
+**Agtron:** 85.1 (Very light color) · **Status:** Frozen (15g doses) · **Location:** Office (3 vials as of 2026-09-01)
 **URL:** https://moonwakecoffeeroasters.com/products/sebastian-ramirez-el-placer-cm-white-honey-yeast-gesha-colombia-brian-quan-collab
 **Notes:** Collab with Picolot & Newbery St. Roast rest: 4–6 wks.
 
@@ -267,7 +303,7 @@
 ## Moonwake Coffee Roasters — Project One Light Blue Iris — Yeast Anaerobic Honey Catimor — China
 **Country:** China · **Region/Farm:** Mangshi / DeHong, Yunnan / Project One Light farm · **Producer:** Olina Cai (Project One Light / 单向光计划)
 **Variety:** Catimor · **Process:** Yeast Anaerobic Honey (controlled yeast ferment + honey process, sun-dried 2 wks) · **Elevation:** 1300–1500 m
-**Agtron:** 77.6 (Light color) · **Status:** Frozen (15g doses)
+**Agtron:** 77.6 (Light color) · **Status:** Frozen (15g doses) · **Location:** Office (6 vials as of 2026-09-01; RP9 Track 1 will consume)
 **URL:** https://moonwakecoffeeroasters.com/products/project-one-light-blue-iris-yeast-anaerobic-honey-catimor-china
 **Notes:** POL founded 2021. Rest 4–6 wks (Moonwake standard). Notes: stewed pear, sugarcane, lychee. No archive precedent — first brew open call.
 
@@ -369,14 +405,14 @@
 ## Moonwake Coffee Roasters — Ilde Burbano El Pilon — Anaerobic Washed Pink Bourbon — Colombia
 **Country:** Colombia · **Region/Farm:** Palestina, Huila / El Pilon · **Producer:** Ilde Burbano
 **Variety:** Pink Bourbon · **Process:** Anaerobic Washed (depulped, 24hr anaerobic, double washed, 10–25 day dry) · **Elevation:** 1740 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (3 vials as of 2026-09-01)
 **URL:** https://moonwakecoffeeroasters.com/products/ilde-burbano-el-pilon-anaerobic-washed-pink-bourbon-colombia
 **Notes:** Rest 4–6 wks. Notes: green grape, blackberry, bergamot.
 
 ## Moonwake Coffee Roasters — Jhonatan Gasca Zarza Bella Vista — Advanced Natural Gesha — Colombia
 **Country:** Colombia · **Region/Farm:** Bruselas, Huila / Zarza Bella Vista · **Producer:** Jhonatan & Johan Gasca
 **Variety:** Gesha · **Process:** Advanced Natural (24hr enzymatic basket + 48hr anaerobic + 60°C thermal shock + 10–15 day dry) · **Elevation:** 1800 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (3 vials as of 2026-09-01)
 **URL:** https://moonwakecoffeeroasters.com/products/jhonatan-gasca-zarza-bella-vista-advanced-natural-gesha-colombia
 **Notes:** Rest 3–4 wks. Notes: concord grape, champagne, dole whip. Zarza thermal shock pattern.
 
@@ -390,14 +426,14 @@
 ## Picolot — Picolot #21: Simba's Competition Coffee — Garrido Mokkita Cold Room
 **Country:** Panama · **Region/Farm:** Boquete / Garrido Specialty Coffee (Finca Cantera / Volcancito / Margarita / Los Rosales) · **Producer:** Garrido family (mother & daughters)
 **Variety:** Mokkita · **Process:** DRD Natural (floated → 3-day African beds → dark drying room) · **Elevation:** 1400 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (3 vials as of 2026-09-01)
 **URL:** https://picolot.shop/products/simbas-competition-coffee-garrido-mokkita-bop
 **Notes:** Rest 6+ wks (roasted 3/7, needs 6+ wks). 2026 US National Brewer's Cup coffee. Notes: hibiscus/raisin hot → nectarine/cardamom warm → fruit tart/hibiscus cold.
 
 ## Picolot — Picolot #27: Blue Butterfly — Kotowa Silvia Marina Geisha Natural 124 6-NT
 **Country:** Panama · **Region/Farm:** El Salto / Kotowa (Silvia Marina farm) · **Producer:** Silvia Marina (Kotowa)
 **Variety:** Geisha · **Process:** Natural (15-day thick-layer African bed → static dryer 45°C / 2 days) · **Elevation:** 1900 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (3 vials as of 2026-09-01)
 **URL:** https://picolot.shop/products/picolot-kotowa-silvia-marina-geisha-natural
 **Notes:** Rest 4+ wks. Notes: blueberry, yellow fruits, tropical, pine/spearmint, emerald acidity. Kotowa provenance.
 
@@ -690,7 +726,7 @@
 ## Coffee with Dongze — Hachi x Yunnan x Terroir Maximus (Brian Quan) — Enzyflow Honey 映雪 YinXue — China
 **Country:** China · **Region/Farm:** The Nest (云顶筑巢庄园), Yunnan · **Producer:** Hachi Project x Terroir Maximus
 **Variety:** Syrina (赛琳娜) · **Process:** Enzyflow Honey (映雪 YinXue) · **Elevation:** 1450–1600 m
-**Agtron:** pending · **Status:** Resting (agtron pending)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office; sibling LiuGuang read 86.9) · **Status:** Frozen (15g doses) · **Location:** Office (1 vial as of 2026-09-01)
 **URL:** https://coffee-with-dongze.myshopify.com/products/hachi-x-yunnan-x-terroir-maximus-x-brian-quan-%E7%B9%81%E8%8A%B1-x-%E6%B5%81%E5%85%89-x-%E6%98%A0%E9%9B%AA
 **Notes:** Brian Quan collab. One of 3 process variants (50g each). Notes: white flowers, citric, aloe, rock sugar, elegant, very clean. Front-loaded controlled enzyme stage before natural-style drying.
 
@@ -833,9 +869,72 @@
 **URL:** https://moonwakecoffeeroasters.com/products/deiro-garcia-finca-lord-voldemort-yeast-inoculated-ombligon-colombia
 **Notes:** Repeat purchase — new bag of a previously-inventoried coffee. Rest 2–3 wks (Moonwake). Notes: crown melon, melona bar, cantaloupe. Deiro = former microbiologist, own yeast/fruit cultures; same farm as the Panela Yeast Washed Caturra Chiroso lot.
 
+## Moonwake Coffee Roasters — La Dinastia Wilder Lazo — Lemongrass Yellow Honey Gesha — Colombia
+**Country:** Colombia · **Region/Farm:** Huila / La Dinastía · **Producer:** Wilder Lazo
+**Variety:** Geisha · **Process:** Yellow Honey (floated, 36hr in-cherry dry ferment, depulped, dried) · **Elevation:** 1480–1550 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (15 vials as of 2026-09-01)
+**URL:** https://moonwakecoffeeroasters.com/products/la-dinastia-wilder-lazo-lemongrass-yellow-honey-gesha-colombia
+**Notes:** Rest 2–3 wks (Moonwake). Notes: lemongrass, dried apricot, tangerine, jasmine. Lemongrass character came via equipment cross-contamination, not direct fermentation. Same producer as the Robert Asami 300hr Anaerobic Washed Gesha. Net new — no prior brews.
+
+## Moonwake Coffee Roasters — Tabaco Pata Juanito Navarro — Washed SL9 — Peru
+**Country:** Peru · **Region/Farm:** Inkawasi, Cusco / Tabaco Pata · **Producer:** Juanito Navarro
+**Variety:** SL9 · **Process:** Washed · **Elevation:** 2280 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (12 vials as of 2026-09-01)
+**URL:** https://moonwakecoffeeroasters.com/products/tabaco-pata-juanito-navarro-washed-sl9-peru
+**Notes:** Rest 4–6 wks (Moonwake). Notes: hawthorn tanghulu, nectarine, cranberry. Volcanic mineral-rich soil, shade-grown at exceptional altitude. Net new — no prior brews.
+
 ## Ordinary Coffee Roasters — Gakenke — Washed Bourbon — Burundi
 **Country:** Burundi · **Region/Farm:** Kayanza Province / Gakenke Washing Station (est. 1991) · **Producer:** Gakenke Washing Station (2,667 smallholders)
 **Variety:** Bourbon · **Process:** Washed (same-day depulp, 12–24h ferment, raised-bed dried ~20 days) · **Elevation:** 1650–1950 m
 **Agtron:** 72.7 (Light color) · **Status:** Frozen (15g doses)
 **URL:** https://shop.ordinarycoffeeroasters.com/products/gakenke-burundi-washed-bourbon
 **Notes:** Roaster: Ordinary Coffee Roasters, Frankfurt. Notes: gooseberry acidity, nectarine, lavender aromatics, vanilla sweetness; silky tea-like mouthfeel, crystalline finish.
+
+## MAME — La Palma y El Tucán Geisha Natural (Brian Quan Competition Expression)
+**Country:** Colombia · **Region/Farm:** Cundinamarca / La Palma y El Tucán · **Producer:** Felipe Sardi
+**Variety:** Geisha · **Process:** Natural · **Elevation:** 1400–1800 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: blueberry, strawberry, white tea. $27.00 paid ($30 less MAMEBEANS discount).
+
+## MAME — Janson Lot 1035 Geisha Anaerobic (Brian Quan Competition Expression)
+**Country:** Panama · **Region/Farm:** Los Alpes / Lot 1035 · **Producer:** Kai Janson
+**Variety:** Geisha · **Process:** Anaerobic Natural (4 days) · **Elevation:** 1600–1800 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: raspberry, strawberry, red wine. $40.50 paid ($45 less MAMEBEANS discount).
+
+## MAME — Abu Lot 3345 Geisha Natural (Brian Quan Competition Expression)
+**Country:** Panama · **Region/Farm:** Abu Coffee / Lot 3345 · **Producer:** José Luttrell
+**Variety:** Geisha · **Process:** Natural · **Elevation:** 1550 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: blueberry, strawberry, tropical. $40.50 paid ($45 less MAMEBEANS discount).
+
+## MAME — Auromar Lot 3 Geisha Washed (Brian Quan Competition Expression)
+**Country:** Panama · **Region/Farm:** Finca la Aurora / Lot 3 · **Producer:** Roberto Brenes
+**Variety:** Geisha · **Process:** Washed · **Elevation:** 1570–1770 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: jasmine, mandarin, silky. $45.00 (no discount shown).
+
+## MAME — Mi Finquita Geisha Natural Wine Globe (Brian Quan Competition Expression)
+**Country:** Panama · **Region/Farm:** Los Pozos, Tierras Altas, Chiriquí / Mi Finquita · **Producer:** Ratibor Hartmann
+**Variety:** Geisha · **Process:** Natural Wine Globe · **Elevation:** 1650–1900 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (4 vials as of 2026-09-11)
+**URL:** — (no product page; MAME Competition Expressions, "Roasted for MAME Partners")
+**Notes:** MAME × Brian Quan competition series, co-produced with Picolot. Roasted 14.8.2026 for filter. 60g bag → 4×15g vials. Notes: berries, pineapple, winey. $40.50 paid ($45 less MAMEBEANS discount). Same farm/producer as the Substance Café Mi Finquita Geisha Washed entry.
+
+## Picolot — S201 Overture: Tower — Elida Estate Torre Gesha Natural DRD
+**Country:** Panama · **Region/Farm:** Alto Quiel, Boquete, Chiriquí / Elida Estate (Torre parcel) · **Producer:** Lamastus Family Estates
+**Variety:** Gesha · **Process:** DRD Natural · **Elevation:** 1785–1835 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (12 vials as of 2026-09-11)
+**URL:** https://picolot.shop/products/s201-overture-tower-elida-estate-torre-gesha-natural-drd
+**Notes:** Rest 45–60 days recommended. 94-pt lot, 20 kg. Torre parcel = repeat Best of Panama champion; Elida = Panama's highest coffee farm. Notes: yellow mango, jackfruit over honey, rose apple, jasmine, blue florals. Third Elida lot in inventory (Aguacatillo 2100, Lovely Vuelta).
+
+## Picolot — S203 Agricola Geisha 36-hr CF Ox Natural
+**Country:** Panama · **Region/Farm:** Boquete hills / Agricola Geisha · **Producer:** Manuel Barsallo (farm of Gonzalo & Yrma Palenzuela)
+**Variety:** Geisha · **Process:** Natural (36hr cold oxidation, 29-day dry) · **Elevation:** — (Boquete hills, bajareque mist path)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (10 vials as of 2026-09-11)
+**URL:** https://picolot.shop/products/s203-agricola-geisha-ox-natural
+**Notes:** 2025 Best of Panama award winner (3rd place, second year of production). Harvested at 15 Brix; shade-grown under plantain + avocado. 5 kg green lot. Notes: peach, white grape, kiwi, juicy, cold eucalyptus line.
