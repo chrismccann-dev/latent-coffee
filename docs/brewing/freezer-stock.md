@@ -77,7 +77,7 @@
 >
 > Consumed (off the list 2026-09-01): El Oasis + Project One Peach — fully consumed in prior research (RP8). Not every office coffee has a full entry below (the doc is deliberately not backfilled) — the index is the office-complete surface; entries carry the marker where they exist.
 
-**Total coffees:** 124
+**Total coffees:** 128
 
 ---
 
@@ -938,3 +938,31 @@
 **Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (10 vials as of 2026-09-11)
 **URL:** https://picolot.shop/products/s203-agricola-geisha-ox-natural
 **Notes:** 2025 Best of Panama award winner (3rd place, second year of production). Harvested at 15 Brix; shade-grown under plantain + avocado. 5 kg green lot. Notes: peach, white grape, kiwi, juicy, cold eucalyptus line.
+
+## Regalia — Fermentation Project: Mechanically Demucilaged
+**Country:** Guatemala · **Region/Farm:** Antigua Valley / Finca San Miguel Urias · **Producer:** Hector and Lilian Leal
+**Variety:** ~85% Caturra, ~15% H1, <1% Bourbon · **Process:** Mechanically Demucilaged (no fermentation — control) · **Elevation:** 1460–1540 m
+**Agtron:** pending · **Status:** Resting
+**URL:** https://regaliacoffee.com/products/pre-sale-james-hoffmann-fermentation-project-x-regalia
+**Notes:** James Hoffmann × Lucia Solis Fermentation Project (thefermentationproject.com) × Regalia. 100g bag, roasted 2026-09-01; global tasting event 2026-10-03. Control of the 4-process set — same lot as the Wild / Lactobacillus / Yeast entries; profile reflects only genetics + growing practices. Matching green version in green inventory (Sweet Maria's set).
+
+## Regalia — Fermentation Project: Wild Fermentation
+**Country:** Guatemala · **Region/Farm:** Antigua Valley / Finca San Miguel Urias · **Producer:** Hector and Lilian Leal
+**Variety:** ~85% Caturra, ~15% H1, <1% Bourbon · **Process:** Wild Fermentation (48h submerged, local wild microbes) · **Elevation:** 1460–1540 m
+**Agtron:** pending · **Status:** Resting
+**URL:** https://regaliacoffee.com/products/pre-sale-james-hoffmann-fermentation-project-x-regalia
+**Notes:** James Hoffmann × Lucia Solis Fermentation Project × Regalia. 100g bag, roasted 2026-09-01; global tasting 2026-10-03. Traditional method of the 4-process set — mucilage removed by local microbe population. Same lot as the other 3 entries. Matching green version in green inventory (Sweet Maria's set).
+
+## Regalia — Fermentation Project: Lactobacillus Inoculated
+**Country:** Guatemala · **Region/Farm:** Antigua Valley / Finca San Miguel Urias · **Producer:** Hector and Lilian Leal
+**Variety:** ~85% Caturra, ~15% H1, <1% Bourbon · **Process:** Lactobacillus Inoculated Fermentation (48h submerged) · **Elevation:** 1460–1540 m
+**Agtron:** pending · **Status:** Resting
+**URL:** https://regaliacoffee.com/products/pre-sale-james-hoffmann-fermentation-project-x-regalia
+**Notes:** James Hoffmann × Lucia Solis Fermentation Project × Regalia. 100g bag, roasted 2026-09-01; global tasting 2026-10-03. Bacteria arm of the 4-process set — enhanced organic-acid production; expect brightness + complexity vs the control. Same lot as the other 3 entries. Matching green version in green inventory (Sweet Maria's set).
+
+## Regalia — Fermentation Project: Yeast Inoculated
+**Country:** Guatemala · **Region/Farm:** Antigua Valley / Finca San Miguel Urias · **Producer:** Hector and Lilian Leal
+**Variety:** ~85% Caturra, ~15% H1, <1% Bourbon · **Process:** Yeast Inoculated Fermentation (48h submerged, saccharomyces) · **Elevation:** 1460–1540 m
+**Agtron:** pending · **Status:** Resting
+**URL:** https://regaliacoffee.com/products/pre-sale-james-hoffmann-fermentation-project-x-regalia
+**Notes:** James Hoffmann × Lucia Solis Fermentation Project × Regalia. 100g bag, roasted 2026-09-01; global tasting 2026-10-03. Yeast arm of the 4-process set — enhanced flavor-precursor production; expect body + complexity vs the control. Same lot as the other 3 entries. Matching green version in green inventory (Sweet Maria's set).
