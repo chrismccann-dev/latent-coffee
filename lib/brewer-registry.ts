@@ -63,10 +63,14 @@ export interface BrewerEntry {
 
 export const BREWERS: readonly BrewerEntry[] = [
   {
+    // Ownership backfilled 2026-08-31 (arbiter follow-up, item-56 Concentrated
+    // Pour-Over ship): Chris owns the AeroPress Premium (black) + Stainless
+    // Steel Flow Control Cap (Standard). The flow-control cap is deliberately
+    // excluded from the Concentrated Pour-Over immersion-press form.
     name: "Aeropress",
     manufacturer: "AeroPress",
     category: "Round/circle filter drippers",
-    paperType: "Disc (64mm)",
+    paperType: "Disc (63.5mm)",
     doseSize: "10g to 30g",
     bedGeometry: "Cylindrical / immersion",
     bypassProfile: "Low",
@@ -74,7 +78,12 @@ export const BREWERS: readonly BrewerEntry[] = [
     restrictionSource: "Filter + pressure",
     agitationTolerance: "High",
     brewArchetype: "Pressure / vacuum system",
-    accessories: "Prismo / Puckpuck",
+    accessories:
+      "Stainless Steel Flow Control Cap (owned; excluded from the immersion-press form). Prismo / Puckpuck not owned.",
+    owned: true,
+    location: "Home",
+    primaryUseCase:
+      "Concentrated Pour-Over immersion-press form (AeroPress Premium, inverted, slow press to first sustained hiss)",
   },
   {
     // Standard April Brewer (passive flat percolation). The April HYBRID Brewer
