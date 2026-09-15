@@ -59,7 +59,7 @@
 > - MAME — Abu Lot 3345 Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - MAME — Auromar Lot 3 Geisha Washed (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - MAME — Mi Finquita Geisha Natural Wine Globe (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
-> - Moonwake — Tabaco Pata Juanito Navarro Washed SL9 — 12 (net new, no brews)
+> - Moonwake — Tabaco Pata Juanito Navarro Washed SL9 — 11 · [brew](https://www.latentcoffee.com/brews/10c46241-00d0-40fb-8c7e-54fb32e4f97e) — RP9 Track 2 control
 > - Moonwake — Project One Light Blue Iris (Yeast Anaerobic Honey Catimor) — 6 · [brew](https://www.latentcoffee.com/brews/f404e3b0-3d43-4da0-8e29-38c9ddad4494) — RP9 Track 1 will consume
 > - Hydrangea — Guadalupe Hill Auction Lot Washed Sidra — 5 · [brew](https://www.latentcoffee.com/brews/f466bfe1-35d9-4fde-801e-5d0578d0d483)
 > - Moonwake — Ngoma Station J.M.V. Usekanabagoyi Washed (Rwanda) — 4 · [brew](https://www.latentcoffee.com/brews/80512a64-70fe-49d6-afbf-fe55d1940a50)
@@ -881,7 +881,7 @@
 **Variety:** SL9 · **Process:** Washed · **Elevation:** 2280 m
 **Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (12 vials as of 2026-09-01)
 **URL:** https://moonwakecoffeeroasters.com/products/tabaco-pata-juanito-navarro-washed-sl9-peru
-**Notes:** Rest 4–6 wks (Moonwake). Notes: hawthorn tanghulu, nectarine, cranberry. Volcanic mineral-rich soil, shade-grown at exceptional altitude. Net new — no prior brews.
+**Notes:** Rest 4–6 wks (Moonwake). Notes: hawthorn tanghulu, nectarine, cranberry. Volcanic mineral-rich soil, shade-grown at exceptional altitude. Optimized brew locked 2026-09-14 in ONE cup (Graduated Taper on SWORKS valve, [brew 10c46241](https://www.latentcoffee.com/brews/10c46241-00d0-40fb-8c7e-54fb32e4f97e)) — RP9 Track 2 fractionation control; remaining vials reserved for the research track. 11 vials as of 2026-09-14.
 
 ## Ordinary Coffee Roasters — Gakenke — Washed Bourbon — Burundi
 **Country:** Burundi · **Region/Farm:** Kayanza Province / Gakenke Washing Station (est. 1991) · **Producer:** Gakenke Washing Station (2,667 smallholders)
