@@ -51,6 +51,7 @@
 > home; treat as unknown at brew time.
 >
 > **Office stock index (presumptive, as of 2026-09-01 — operator's written physical list, 15g doses each; optimized brew linked where one exists):**
+> - Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi — 15 (added 2026-09-21, net new, no brews)
 > - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — 15 (net new, no brews)
 > - Picolot — S201 Overture: Tower (Elida Estate Torre Gesha Natural DRD) — 12 (added 2026-09-11, net new, no brews)
 > - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 10 (added 2026-09-11, net new, no brews)
@@ -77,7 +78,7 @@
 >
 > Consumed (off the list 2026-09-01): El Oasis + Project One Peach — fully consumed in prior research (RP8). Not every office coffee has a full entry below (the doc is deliberately not backfilled) — the index is the office-complete surface; entries carry the marker where they exist.
 
-**Total coffees:** 128
+**Total coffees:** 137
 
 ---
 
@@ -966,3 +967,66 @@
 **Agtron:** pending · **Status:** Resting
 **URL:** https://regaliacoffee.com/products/pre-sale-james-hoffmann-fermentation-project-x-regalia
 **Notes:** James Hoffmann × Lucia Solis Fermentation Project × Regalia. 100g bag, roasted 2026-09-01; global tasting 2026-10-03. Yeast arm of the 4-process set — enhanced flavor-precursor production; expect body + complexity vs the control. Same lot as the other 3 entries. Matching green version in green inventory (Sweet Maria's set).
+
+## Archers — Panama Adaura Coffee Catuai Natural
+**Country:** Panama · **Region/Farm:** El Salto, Boquete / Finca Lorayne · **Producer:** Marcus Jovanny Duran (Adaura Coffee)
+**Variety:** Catuai · **Process:** Natural · **Elevation:** 1630–1700 m
+**Agtron:** 73.3 (light) · **Status:** Frozen (15g doses)
+**URL:** https://archerscoffee.com/products/panama-adaura-coffee-catuai-natural
+**Notes:** Roaster notes: blueberry, dark plum, mango, red grapes. Farm leader Edwin Rosas; Adaura took Best of Panama 2024 1st (Geisha Washed) + 7th (Geisha Natural). Roaster scales: fermentation 3/5, sweetness 5/5, acidity 2/5, roast 2/5.
+
+## One Half — Malaysia MY Liberica Lot 004 JH Natural (Filter)
+**Country:** Malaysia · **Region/Farm:** Kulai, Johor · **Producer:** Jason Liew
+**Variety:** Liberica · **Process:** JH Natural · **Elevation:** 26–30 m
+**Agtron:** 83.3 (very light) · **Status:** Frozen (15g doses)
+**URL:** https://www.onehalfcoffee.com/products/malaysia-my-liberica-lot-004-jh-natural-filter
+**Notes:** Roaster notes: root beer, tropical fruit punch, raspberry candy, rambutan, longan, sarsi. Lowland Malaysian Liberica — rare species datapoint. 100g bag.
+
+## CoE Farm Directory — El Limo Honduras 2026 (Exotic #8)
+**Country:** Honduras · **Region/Farm:** Santa Barbara / El Limo · **Producer:** Alma Aydee Pineda Alvarado
+**Variety:** Geisha · **Process:** Washed · **Elevation:** not listed
+**Agtron:** 62.9 (medium light) · **Status:** Frozen (15g doses)
+**URL:** https://farmdirectory.cupofexcellence.org/listing/8-el-limo-honduras-2026-honduras-exotic/
+**Notes:** CoE 2026 Honduras Exotic rank 8, 87.82. Descriptors: melon, chocolate, mandarin orange, brown sugar, delicate, clean; black tea, bergamot, citrus, caramel, stone fruit.
+
+## CoE Farm Directory — La Bandera Costa Rica 2026 (#5)
+**Country:** Costa Rica · **Region/Farm:** Los Santos / Finca La Bandera · **Producer:** Diego Hidalgo Umana
+**Variety:** Geisha · **Process:** Washed · **Elevation:** 1900 m
+**Agtron:** 64.2 (medium light) · **Status:** Frozen (15g doses)
+**URL:** https://farmdirectory.cupofexcellence.org/listing/5-la-bandera-rica-2026-wet/
+**Notes:** CoE 2026 Costa Rica rank 5, 88.89. Descriptors: silky creamy body; lemon, mandarin, orange, floral, black tea; sweet juicy acidity.
+
+## CoE Farm Directory — Rosma Guatemala 2026 (Exotic Washed #9)
+**Country:** Guatemala · **Region/Farm:** San Pedro Necta, Huehuetenango / Finca Rosma · **Producer:** Angel Alejandro Morales de la Pena
+**Variety:** Geisha · **Process:** Washed · **Elevation:** 1494–1829 m
+**Agtron:** 61.8 (medium light) · **Status:** Frozen (15g doses)
+**URL:** https://farmdirectory.cupofexcellence.org/listing/9-rosma-guatemala-2026-exotic-washed/
+**Notes:** CoE 2026 Guatemala Exotic Washed rank 9, 87.71. Ecological wet mill; heritage Bourbon plantings alongside newer cultivars.
+
+## CoE Farm Directory — Finca El Izote Mexico 2026 (#1)
+**Country:** Mexico · **Region/Farm:** San Pablo Coapan, Naolinco, Veracruz / Finca El Izote · **Producer:** Kathia de Jesus Loeza Merino
+**Variety:** Geisha · **Process:** Honey · **Elevation:** 1350 m
+**Agtron:** 52.1 (medium) · **Status:** Frozen (15g doses)
+**URL:** https://farmdirectory.cupofexcellence.org/listing/1-finca-el-izote-mexico-2026-dry/
+**Notes:** CoE 2026 Mexico 1st place, 91.03. Descriptors: intense jasmine florals, crisp bergamot, succulent peach, vibrant acidity, prolonged honeyed sweetness. Darkest of the CoE set at 52.1.
+
+## CoE Farm Directory — Cooperativa Solidaridad Nicaragua 2026 (#11)
+**Country:** Nicaragua · **Region/Farm:** Matagalpa / Cooperativa Solidaridad · **Producer:** Jose Ramon Jarquin
+**Variety:** Maracaturra · **Process:** Washed · **Elevation:** 1350 m
+**Agtron:** 64.6 (medium light) · **Status:** Frozen (15g doses)
+**URL:** https://farmdirectory.cupofexcellence.org/listing/11-cooperativa-solidaridad-nicaragua-2026-wet/
+**Notes:** CoE 2026 Nicaragua rank 11, 87.00. Operator says Maracaturra; CoE listing page says Maragogype — operator value kept, verify at brew time. Producer placed 2nd in category in 2025.
+
+## CoE Farm Directory — Finca Mileydi El Salvador 2026 (#7)
+**Country:** El Salvador · **Region/Farm:** Metapan, Santa Ana / Finca Mileydi · **Producer:** Norelvia Elias
+**Variety:** Bourbon 70% / Typica 30% · **Process:** Semi-Washed · **Elevation:** 1350 m
+**Agtron:** 58.5 (medium) · **Status:** Frozen (15g doses)
+**URL:** https://farmdirectory.cupofexcellence.org/listing/7-mileydi-el-salvador-2026-wet/
+**Notes:** CoE 2026 El Salvador rank 7, 88.35. Operator says Bourbon 70% / Typica 30%; CoE listing page says Pacamara — operator value kept, verify at brew time. Farm has CoE recognition in 2021 + 2023.
+
+## Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi
+**Country:** Colombia · **Region/Farm:** Acevedo, Huila / Finca Anaya · **Producer:** Sergio Aranda Gomez
+**Variety:** Tabi · **Process:** Cinnamon + Sugarcane Inoculated Anaerobic · **Elevation:** 1600 m
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (15 vials as of 2026-09-21)
+**URL:** https://moonwakecoffeeroasters.com/products/finca-anaya-sergio-aranda-gomez-cinnamon-sugarcane-tabi-colombia
+**Notes:** Roaster notes: coconut flakes, pineapple cake, strawberry milkshake. Process: 24h oxidation → 48h yeast/cinnamon/sugarcane pre-ferment → 72h anaerobic → thermal shock → 12-day drying. Roaster recommends 2-3 week rest.
