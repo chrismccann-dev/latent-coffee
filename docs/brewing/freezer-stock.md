@@ -984,10 +984,10 @@
 
 ## CoE Farm Directory — El Limo Honduras 2026 (Exotic #8)
 **Country:** Honduras · **Region/Farm:** Santa Barbara / El Limo · **Producer:** Alma Aydee Pineda Alvarado
-**Variety:** Geisha · **Process:** Washed · **Elevation:** not listed
+**Variety:** Geisha · **Process:** Washed · **Elevation:** not listed (~1400–1700 m estimate — Santa Barbara Geisha zone)
 **Agtron:** 62.9 (medium light) · **Status:** Frozen (15g doses)
 **URL:** https://farmdirectory.cupofexcellence.org/listing/8-el-limo-honduras-2026-honduras-exotic/
-**Notes:** CoE 2026 Honduras Exotic rank 8, 87.82. Descriptors: melon, chocolate, mandarin orange, brown sugar, delicate, clean; black tea, bergamot, citrus, caramel, stone fruit.
+**Notes:** CoE 2026 Honduras Exotic rank 8, 87.82. Elevation not in the listing; the estimate is regional, not farm-confirmed. Descriptors: melon, chocolate, mandarin orange, brown sugar, delicate, clean; black tea, bergamot, citrus, caramel, stone fruit.
 
 ## CoE Farm Directory — La Bandera Costa Rica 2026 (#5)
 **Country:** Costa Rica · **Region/Farm:** Los Santos / Finca La Bandera · **Producer:** Diego Hidalgo Umana
@@ -1015,7 +1015,7 @@
 **Variety:** Maracaturra · **Process:** Washed · **Elevation:** 1350 m
 **Agtron:** 64.6 (medium light) · **Status:** Frozen (15g doses)
 **URL:** https://farmdirectory.cupofexcellence.org/listing/11-cooperativa-solidaridad-nicaragua-2026-wet/
-**Notes:** CoE 2026 Nicaragua rank 11, 87.00. Operator says Maracaturra; CoE listing page says Maragogype — operator value kept, verify at brew time. Producer placed 2nd in category in 2025.
+**Notes:** CoE 2026 Nicaragua rank 11, 87.00. Maracaturra CONFIRMED (bag label + ACE nicaragua-2026 winners list both say Maracaturra; the farm-directory page's Maragogype is the outlier). Bag names Jose Ramon Jarquin; ACE winners list names Byron Antonio Sanchez as the farmer for the rank-11 lot — co-op lot, both kept on record. Producer placed 2nd in category in 2025.
 
 ## CoE Farm Directory — Finca Mileydi El Salvador 2026 (#7)
 **Country:** El Salvador · **Region/Farm:** Metapan, Santa Ana / Finca Mileydi · **Producer:** Norelvia Elias
