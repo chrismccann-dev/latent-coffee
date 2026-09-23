@@ -242,7 +242,7 @@ Operator-designed upgrade: **two fresh brews, head-to-head** — vial A brewed a
 
 **Date:** 2026-09-23
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/output-fractionalization-research-d6c46a` @ `<SHA-filled-at-commit>`, pushed to origin (archive doc committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/output-fractionalization-research-d6c46a` @ `0d4d0a37`, pushed to origin (archive doc committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** ✅ VALIDATES — method artifact-clean on a second coffee; H3-t2 resolved with a NOVEL taxonomy axis (tax fraction is per-coffee).
 
 This brief is the standalone consumption artifact for the RP9 Coordinator and the compile session. All raw data lives in the sitting records above in this doc; the brief distills verdicts, substrate edit specs, lessons, and audit items. Consume without the Assistant-session conversation.
@@ -371,7 +371,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/output-fractionalization-research-d6c46a` @ `<SHA-filled-at-commit>` (the authorized archive-persist exception)
+- ✅ Archive doc committed + pushed to branch `claude/output-fractionalization-research-d6c46a` @ `0d4d0a37` (the authorized archive-persist exception)
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
