@@ -1,7 +1,7 @@
 # Output Fractionalization — Track 3: La Dinastia Lemongrass Honey Gesha, the curation-workflow validation
 
 *Research Project #9 (RP9) — Output Selection / Fractionalization · OFFICE LANE*
-**Status:** DRAFT — pending operator audio sign-off at scoping
+**Status:** ACTIVE — operator sign-off 2026-09-24 at spawn (session branch `claude/output-fractionalization-curation-8d67ff`)
 **Coordinator:** persistent RP9 Coordinator session
 **Protocol authored:** 2026-09-24
 
@@ -133,6 +133,100 @@ Track closes when: the probe convicts a tax fraction (or explicitly convicts NON
 
 ---
 
+## Step 0 log (2026-09-24, session open)
+
+| # | Sub-step | Result |
+|---|---|---|
+| 1 | Physical count + weigh | **14 vials confirmed** on hand (presumptive lock → CONFIRMED). 5 allocated to this track, 9 stay in reserve. Per-vial weigh: sitting-1 vial recorded at the sitting-1 row (nominal 15 g). |
+| 2 | VST re-zero + blank | Blank **0.00** (sitting 1 open). |
+| 3 | Sealed tax predictions | Both logged below, BEFORE the first pour. Locked; no revision after the probe. |
+| 4 | Transcription-verify (RP8-N17) | Operator re-stated the lived recipe (pasted card): 15 g / 240 g / 1:16 · EG-1 6.3 · PA tap + Apax (1 JAMM + 1 TONIK per ~200 mL) · 0:00 bloom 45 g Dial 0 hold ~30 s (≤25-30 s closed) · 0:30 pour 1 to 150 g cum Dial 5 · 1:30 pour 2 to 240 g cum Dial 5, then Dial 6 to dry bed, no flush · target 3:00-3:30. **Matches the protocol card — zero drift on pours/valve/boundaries.** ONE as-lived caveat captured: **the kettle stayed ON (on-base) the whole brew**, so the "~60-90 s off-base wait" describes the stance, not what happened; effective pour temperature ran closer to boil than ~95°C. Logged as-lived; the fraction brews replicate the kettle-on stance so the probe matches the control. |
+| 5 | Cup logistics | Three fraction cups + sample vials + combo cups; kettle available at sitting 2 (hot water is an ingredient). Lengthened-build water convention: kettle-off-boil straight into the keepers, read warm-to-cool, no thermometer (operator OK'd). |
+| 6 | Hypothesis outcomes pre-stated | See block below. |
+
+**Operator decisions at Step 0 (ergonomic, operator-owned):** sighted straight fractions at sitting 1 (bloom ~20-25 g vs ~90-105 g pours makes volume an unavoidable tell; blind shuffle reserved for sittings 2 + 3). Spawn = scoping sign-off.
+
+### Sealed tax predictions (logged before the first pour — LOCKED)
+
+**Operator (written at dial-in, transcribed verbatim from his Step 0 reply):**
+> "I think the bloom will be pretty pungent for this one but i think a more front loaded version of this one would be better to push the fruit characteristic a bit more. Either all bloom + P1 or potentially bloom + p1 + a splash of p2. p2 is probably going to be more grassy and thin"
+
+→ Operator's call: **tax = F-P2** (grassy, thin). Keeper profile = front-loaded fruit: F-B + F-P1, optionally + trace F-P2. Bloom flagged pungent but NOT called the tax.
+
+**Assistant (Claude, this session):**
+→ Call: **tax = F-P2.** Reasoning: the archived control's three tax-shaped notes (hot "slight drying", warm "herbal-forward, sweetness recessed", cool "lemongrass as a bite on the tea finish") are all late-extraction signatures — drying + tea + grassy are what a Dial-6-to-dry-bed drawdown pulls from a honey-process bed. The bloom on a lemongrass co-ferment should carry the infusion aromatics + honey sweetness (keeper, not tax), which is the Blue Iris shape (honey co-ferment → tail tax), not the Tabaco Pata shape (clean washed → bloom tax). Secondary lean: if P2 is NOT the tax, the bloom is (pungent acidity/astringency), and P1 is the keeper either way.
+
+**Independence caveat (friction, logged honestly):** the Assistant's prediction was written AFTER reading the operator's, because both arrived in the same reply. Same fraction named by both, so H-predict cannot separate "two independent calls" from "one call echoed." Next time: Assistant states its prediction in the read-back message BEFORE asking the operator for his. See friction 1 below.
+
+### Pre-stated hypothesis outcomes
+
+- **H-workflow:** PASS predicted — a front-loaded curated single-brew (stop or restrict at the 150 g boundary, then lengthen or trace-splash) beats the full control blind at sitting 3.
+- **H-predict:** PASS predicted (both calls = F-P2). If the probe convicts F-B instead, the co-ferment bloom pungency was the tax and both ex-ante calls were anchored on the archive's tail language — log as the primitive working.
+- **H-curate:** LENGTHENED wins predicted (F-B + F-P1 + hot water to a target ~0.15-0.25 below the keepers' natural strength). Risk: the operator's own keeper language is "push the fruit" (an emphasize intent), so a concentrated F-B+F-P1 build is the live competitor.
+- **H2-t3:** gradient monotonic (F-B > F-P1 > F-P2 TDS); recombination + concentrated build measured 0.05-0.14 below predicted; lengthened build within the same band using keeper solids ÷ (keeper mass + water).
+
+---
+
+## Sitting 1 — the probe (brew date: 2026-09-24, same day as the archived control)
+
+Order at the bench (deviation from the card, operator-requested + Assistant-accepted): straight fractions FIRST (sighted, cool-weighted), full recombination AFTER from the remainders, all TDS batched at the end. Justification: control brewed the same morning, so same-day memory covers the reference-cup role; recombination kept for the H2-t3 arithmetic point + artifact flag. Blank 0.00. Kettle-on stance replicated. Vial weight **15.0 g**. Total brew time ~3:00 (not clocked precisely: valve-close + cup-swap + tare at each boundary makes fraction-brew time non-comparable to the single brew; operator judgement call, logged as friction 5).
+
+| Fraction | Out (g) | TDS | Solids (g, TDS×mass/100) | Taste (warm → cool) |
+|---|---|---|---|---|
+| **F-B** (bloom 45 g in) | 24.1 | **1.81** | 0.436 | Punchy, acidic, sour-grassy. **The lemongrass lives here.** "Good flavoring agent, on its own quite punchy." Cool: same, lemongrass/grassy up a notch. |
+| **F-P1** (to 150 g cum) | 90.5 | **1.37** | 1.240 | Nutty, darker tea. Little sweetness hot. Cool: some perceived sweetness, **majority of the body**, but **a drying edge persists**. |
+| **F-P2** (to 240 g + dry bed) | 87.2 | **0.65** | 0.567 | Delicate tea. Cool: **much smoother, higher perceived sweetness, no drying note.** Operator: "this coffee wants to be more back-weighted." |
+| **Recombination** (all remainders, stirred) | (n/a, post-tasting remainders) | **1.14** | — | Lemongrass tea, grassy, a little sweetness. Reads slightly LESS sweet than the morning control — see Apax confound below. |
+
+Total out 201.8 g of 240 g in (retention ~38 g, normal). **Gradient monotonic** (1.81 > 1.37 > 0.65): H2-t3 gradient leg CONFIRMED.
+
+**Recombination arithmetic:** predicted ratio-true TDS = 2.243 g solids ÷ 201.8 g = **1.11**. Measured **1.14**, i.e. **+0.03 ABOVE predicted** — outside (and opposite in sign to) the 0.05-0.14 downward band. Caveat: the recombined cup was built from post-tasting remainders, not the full fractions, so the proportions are unknown; the operator likely drank unequal shares. Weak evidence; logged for P9-AI-1, not chased. Full-fraction builds at sitting 2 are the clean test.
+
+**Co-ferment infusion layer — LOCALIZED.** The lemongrass sits in the bloom, and barely elsewhere (P1 reads nutty/tea, P2 reads tea/sweet). Taxonomy-grade observation: on this yellow-honey co-ferment the infusion layer is a front-fraction phenomenon. Recorded per the protocol's opportunistic-observation clause.
+
+**Operator's live curation lean (pre-conviction, pre-reveal):** back-weighted — keep P2 as the base, add the bloom for punch ("taking the back and putting in the bloom"); P1 is where the drying edge lives.
+
+### Probe verdict (operator, 2026-09-24)
+
+- **Tax fraction: F-B (bloom).** Not "delete it": it is the most VOLATILE fraction — carries most of the lemongrass sourness. Usable as a flavoring agent, minimal or not at all.
+- **Keeper profile:** back-weighted. P2 as the base (cleanliness, smoothness, sweetness), with the bloom's punch layered in at trace. P1 is body-plus-drying-edge: keep some for layering, not all.
+- **Curation intent named by the operator:** "cleanliness of P2 but the punch of the bloom."
+
+### Sealed-prediction reveal — H-predict scorecard
+
+| Predictor | Sealed call | Probe verdict | Result |
+|---|---|---|---|
+| Operator (dial-in) | tax = F-P2 (grassy, thin) | tax = F-B | **WRONG** |
+| Assistant | tax = F-P2 (drawdown signatures) | tax = F-B | **WRONG** |
+
+**H-predict: FAIL (0 of 2).** Both calls anchored on the archive's tail language (drying / tea / grassy) and both were falsified blind-to-outcome: P2 turned out to be the SMOOTHEST, sweetest fraction, and the grassy-sour punch the archive attributed to the finish lives in the bloom. Third coffee, third time the sealed-lean was wrong or partial (T2 Assistant lean falsified; T3 both falsified). Standing read for the end-document: **at n=3 the tax fraction is NOT predictable from process/roast/archive notes; the probe is mandatory, not optional.** That is the primitive working, not a failure. Note also: the operator's keeper INTENT ("front-loaded, push the fruit") inverted to "back-weighted" after the probe — the probe picks the shape (RP9-N6) on the intent axis too, not just the fraction axis.
+
+**Interpretive note for the taxonomy (surface at retro, don't resolve here):** the operator's two proposed builds cut P1 (fully or partly) while keeping bloom at trace-to-full. So the "tax" on this coffee is arguably two-dimensional — the bloom is the *volatility* tax (sourness), P1 is the *texture* tax (drying edge). The Step 1 single-fraction conviction is bloom; the menu below tests both readings. Feeds grilling item 58 (down-weight vocabulary).
+
+**Confound flagged by the operator:** the control cup carried the Apax cup-dose (1 JAMM + 1 TONIK per ~200 mL); the fractions did not, because the dose cannot be split across three cups. Straight fractions therefore read with slightly less fruit-sweetness than the control. Decision: the curated builds at sittings 2 and 3 get the standard cup-dose AFTER assembly, so the winner is compared like-for-like with the control. Logged as friction 3.
+
+---
+
+## Sitting 2 — the curation menu (PRE-REGISTERED 2026-09-24 at sitting-1 close, operator-confirmed — FROZEN)
+
+Built from ONE vial (operator declined the reserve; small builds accepted). All builds UNDOSED (Apax cannot scale to 40-70 g cups; dosing resumes at the full-size lived pair, sitting 3). Blank number at open. Fraction quantities below assume sitting-1 weights/TDS; **recompute at the bench from that day's fraction reads before pouring**, preserving the ratios. Blind position-shuffle (RP9-N9), warm-to-cool reads, preference order. Winner = the curated build.
+
+| Build (content-named) | Spec (from sitting-1 reads) | Predicted TDS | Intent slot |
+|---|---|---|---|
+| **P2 + bloom** | 30 g P2 + 8 g bloom (38 g) | 0.89 | concentrated (keepers at natural strength); operator build A, ratio-true; tests "P1 is the tax" |
+| **P2 + P1 + trace bloom** | 30 g P2 + 30 g P1 + 5 g bloom (65 g) | 1.07 | concentrated; operator build B (layered); tests "bloom is the tax, down-weighted" |
+| **Lengthened P2 + P1 + trace bloom** | 27 g P2 + 27 g P1 + 4.5 g bloom + **15 g off-boil kettle water** (73.5 g) | **0.85 target** (natural 1.07 − 0.22) | lengthened (mandated); same keepers as B, smoothed |
+
+Predicted-vs-measured offset expectation: 0.05-0.14 below (RP9-N3). Lengthened-build arithmetic: solids ÷ (keeper mass + water). Down-weighted-tax third slot is folded into build B (trace bloom) rather than a fourth cup.
+
+*Recording sheet rows appended at the bench.*
+
+---
+
 ## Notes / friction / lessons / audit items (Assistant: append inline during execution)
 
-*(empty at authoring)*
+1. **Friction — sealed-prediction ordering.** Both predictions landed in one operator reply, so the Assistant's was written with the operator's visible. Protocol fix for the primitive writeup: the Assistant pre-states its tax call in the read-back message (before Step 0 answers come back), then collects the operator's. Cheap, and it makes H-predict two independent data points instead of one.
+2. **Transcription-verify caught an as-lived stance drift** (kettle on-base the whole brew vs the "off-base wait" on the card). Not a pour drift, but a temperature one; RP8-N17 earned its keep even on a day-old converged recipe.
+3. **Friction — cup-dosed water can't be fractionated.** Apax JAMM+TONIK is dosed per finished cup, so a fraction brew that follows the control recipe drops the mineral dose the control had. Sitting 1 straight fractions ran undosed; every build from sitting 2 on gets the standard dose post-assembly. Workflow-writeup rule: **dose the assembled cup, never the fractions.**
+4. **Order swap accepted (fractions before recombination).** Cost: the recombination was made from remainders, so its TDS lost its arithmetic cleanliness (+0.03 vs predicted, sign opposite the standing offset). When the control was brewed the same day, this is an acceptable trade; when it was not, keep the card order.
+5. **Fraction-brew time is not comparable to the single brew** (valve-close + cup-swap + tare at each boundary adds untimed seconds). Log fraction-brew time as approximate only; the lived-pair brew at sitting 3 is where total time matters.
