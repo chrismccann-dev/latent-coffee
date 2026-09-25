@@ -219,7 +219,47 @@ Built from ONE vial (operator declined the reserve; small builds accepted). All 
 
 Predicted-vs-measured offset expectation: 0.05-0.14 below (RP9-N3). Lengthened-build arithmetic: solids ÷ (keeper mass + water). Down-weighted-tax third slot is folded into build B (trace bloom) rather than a fourth cup.
 
-*Recording sheet rows appended at the bench.*
+### Sitting 2 bench (brew date 2026-09-25)
+
+Blank **0.00** · vial **15.0 g** · fraction brew per sitting-1 recipe, kettle-on, undosed.
+
+| Fraction | Out (g) | TDS | Solids (g) | vs sitting 1 |
+|---|---|---|---|---|
+| F-B | 22.4 | 1.63 | 0.365 | −1.7 g / −0.18 |
+| F-P1 | 96.3 | 1.45 | 1.396 | +5.8 g / +0.08 |
+| F-P2 | 84.3 | 0.73 | 0.615 | −2.9 g / +0.08 |
+
+Total out 203.0 g; ratio-true full-cup TDS would be 1.17. Gradient monotonic again. Day-to-day fraction drift is small but real (bloom −0.18): supports the "recompute at the bench" rule.
+
+**Builds recomputed (ratios preserved, P2 shares trimmed to fit 84.3 g):**
+
+| Build | Spec (today) | Solids (g) | Predicted TDS |
+|---|---|---|---|
+| **P2 + bloom** | 29 g P2 + 8 g bloom (37 g) | 34.2/100 | **0.92** |
+| **P2 + P1 + trace bloom** | 29 g P2 + 29 g P1 + 5 g bloom (63 g) | 71.4/100 | **1.13** |
+| **Lengthened P2 + P1 + trace bloom** | 26 g P2 + 26 g P1 + 4.5 g bloom + **14 g off-boil water** (70.5 g) | 64.0/100 | natural 1.13 → **target 0.91** |
+
+Lengthened arithmetic: 0.640 g ÷ (56.5 g + 14 g) = 0.91. Specs + predictions written BEFORE assembly (protocol gate honored). Leftover: ~9 g bloom, ~41 g P1.
+
+### Sitting 2 reads (blind position-shuffle, operator solo; cups had cooled during assembly so reads are warm-to-cool compressed)
+
+| Position | Build (revealed after) | Pred TDS | Meas TDS | Offset | Taste |
+|---|---|---|---|---|---|
+| Left | Lengthened P2 + P1 + trace bloom | 0.91 | **0.83** | −0.08 | Nutty, tea-forward, little sweetness; a touch more sweetness on the rinsed re-sip, still "nutty category." |
+| Middle | P2 + P1 + trace bloom | 1.13 | **0.99** | −0.14 | More sweetness, a little more pungent. Head-to-head vs right: "more things going on, more complexity." |
+| Right | P2 + bloom | 0.92 | **0.83** | −0.09 | Much lighter, daintier; head-to-head: "a little more thin." |
+
+**Preference order: 1st = P2 + P1 + trace bloom (middle).** Middle beat left directly and beat right head-to-head; left vs right was not head-to-headed (2nd/3rd unordered).
+
+**Winner = the curated build: P2 + P1 + trace bloom** (29 g P2 + 29 g P1 + 5 g bloom → the layered, concentrated-intent build).
+
+**H-curate: FAIL.** Predicted a lengthened winner; the lengthened build did not win (and read the flattest of the three: nutty/tea, sweetness recessed). On this coffee, water smoothed the sweetness away rather than the drying edge. The complexity/sweetness came from keeping P1 in.
+
+**H2-t3 (arithmetic): CONFIRMED.** All three offsets inside 0.05-0.14 (−0.08 / −0.14 / −0.09); the lengthened build's solids ÷ (keepers + water) formula held (0.91 → 0.83).
+
+**Matched-TDS side-by-side landed (RP9-N4):** the lengthened build and P2 + bloom both measured 0.83 yet read completely differently (nutty/tea vs light/dainty). Composition, not strength, drove the read. Strong evidence for the taxonomy that "how long" and "which fractions" are separate levers.
+
+**Translation note (surfaced to the operator before sitting 3):** the winning build is close to ratio-true. Bloom share of keepers = 5/58 = 8.6% vs 12.4% in the full cup; P1:P2 = 1:1 vs 1.14:1 in the full cup. So the winner is "full cup with the bloom down-weighted by about a third, P1 and P2 kept whole." A faithful lived translation splashes back ~15 g of the ~22 g bloom; the operator's stated intent ("minimal or not at all") points to a ~5 g trace splash instead. Decision logged below.
 
 ---
 
@@ -230,3 +270,5 @@ Predicted-vs-measured offset expectation: 0.05-0.14 below (RP9-N3). Lengthened-b
 3. **Friction — cup-dosed water can't be fractionated.** Apax JAMM+TONIK is dosed per finished cup, so a fraction brew that follows the control recipe drops the mineral dose the control had. Sitting 1 straight fractions ran undosed; every build from sitting 2 on gets the standard dose post-assembly. Workflow-writeup rule: **dose the assembled cup, never the fractions.**
 4. **Order swap accepted (fractions before recombination).** Cost: the recombination was made from remainders, so its TDS lost its arithmetic cleanliness (+0.03 vs predicted, sign opposite the standing offset). When the control was brewed the same day, this is an acceptable trade; when it was not, keep the card order.
 5. **Fraction-brew time is not comparable to the single brew** (valve-close + cup-swap + tare at each boundary adds untimed seconds). Log fraction-brew time as approximate only; the lived-pair brew at sitting 3 is where total time matters.
+6. **Small-cup assembly time compresses the temperature ladder.** Three 40-70 g builds assembled serially had cooled before the first sip; reads were effectively warm-to-cool only (as T2 friction 4 predicted). Acceptable on a cool-weighted coffee; on a hot-weighted one, assemble the biggest build last.
+7. **Palate reset.** Operator sipped the first cup before rinsing (had just arrived at the office); the re-sip after rinsing read sweeter. Rinse before the first cup of any blind read.
