@@ -261,6 +261,18 @@ Lengthened arithmetic: 0.640 g ÷ (56.5 g + 14 g) = 0.91. Specs + predictions wr
 
 **Translation note (surfaced to the operator before sitting 3):** the winning build is close to ratio-true. Bloom share of keepers = 5/58 = 8.6% vs 12.4% in the full cup; P1:P2 = 1:1 vs 1.14:1 in the full cup. So the winner is "full cup with the bloom down-weighted by about a third, P1 and P2 kept whole." A faithful lived translation splashes back ~15 g of the ~22 g bloom; the operator's stated intent ("minimal or not at all") points to a ~5 g trace splash instead. Decision logged below.
 
+
+**Operator decisions at sitting-2 close (2026-09-25):** trace translation (5 g bloom splash-back, NOT the proportion-faithful 15 g) — operator intent "bloom minimal" wins over ratio fidelity; TDS read on BOTH cups at sitting 3; Apax 1 JAMM + 1 TONIK in both cups regardless of the ~185 g vs 240 g volume gap. Operator observation on Apax: "the JAMM and TONIK were adding a lot more sweetness and character to the cup than I realized — without it they all feel darker-tea-centric." Logged for the office-lane charter + RP6 water memory (dosed water is part of this coffee's signature, not a neutral carrier).
+
+## Sitting 3 — the lived pair (PRE-REGISTERED 2026-09-25 — FROZEN)
+
+2 vials. Blank number at open, both vials weighed. Both cups dosed 1 JAMM + 1 TONIK post-brew. TDS read on both cups (translation check on the curated cup). Blind 2-cup pair, operator solo position-shuffle, cool-weighted verdict. **H-workflow verdict.**
+
+**Cup A — Control (full lived recipe, 240 g):** 15 g / EG-1 6.3 / kettle-on off-boil / bloom 45 g Dial 0 ~30 s → pour 1 to 150 g cum Dial 5 → pour 2 to 240 g cum Dial 5 → Dial 6 to dry bed, no flush. Single serving cup throughout.
+
+**Cup B — Curated (bloom-cut with trace splash-back, "La Dinastia curated"):** 15 g / EG-1 6.3 / kettle-on off-boil. Bloom 45 g Dial 0 ~30 s **into a side cup**. Close valve, swap to the serving cup, tare. Pour 1 to 105 g on the tared scale, Dial 5 (= 150 g cum in). Pour 2 to 90 g, Dial 5, then Dial 6 to dry bed, no flush (= 240 g cum in), all into the serving cup. **Splash 5 g of the bloom from the side cup into the serving cup**; discard the rest (~17 g). Predicted TDS (from sitting-2 fraction reads): (1.396 + 0.615 + 0.082) ÷ 185.6 = **1.13**; expect measured ~1.00-1.08. Control predicted ratio-true ~1.17.
+
+*Reads appended at the bench.*
 ---
 
 ## Notes / friction / lessons / audit items (Assistant: append inline during execution)
