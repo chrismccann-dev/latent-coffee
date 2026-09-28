@@ -272,7 +272,23 @@ Lengthened arithmetic: 0.640 g ÷ (56.5 g + 14 g) = 0.91. Specs + predictions wr
 
 **Cup B — Curated (bloom-cut with trace splash-back, "La Dinastia curated"):** 15 g / EG-1 6.3 / kettle-on off-boil. Bloom 45 g Dial 0 ~30 s **into a side cup**. Close valve, swap to the serving cup, tare. Pour 1 to 105 g on the tared scale, Dial 5 (= 150 g cum in). Pour 2 to 90 g, Dial 5, then Dial 6 to dry bed, no flush (= 240 g cum in), all into the serving cup. **Splash 5 g of the bloom from the side cup into the serving cup**; discard the rest (~17 g). Predicted TDS (from sitting-2 fraction reads): (1.396 + 0.615 + 0.082) ÷ 185.6 = **1.13**; expect measured ~1.00-1.08. Control predicted ratio-true ~1.17.
 
-*Reads appended at the bench.*
+### Sitting 3 reads (brew date 2026-09-28; operator solo blind pair; both cups dosed; kettle-on stance; grind 6.3 re-confirmed at the bench)
+
+| Position | Cup (revealed after) | Pred TDS | Meas TDS | Taste (hot → cooler) |
+|---|---|---|---|---|
+| Left | **Curated** (bloom-cut + 5 g splash) | 1.13 | **0.92** | Hot: bright, brown-tea. Cooler: darker, caramelly tea, some complexity. Head-to-head: "nutty tea, a little underneath." |
+| Right | **Control** (full cup) | ~1.17 | **0.70** (anomalous, see below) | Hot: a little lighter. Cooler: **lemongrass present, which the left lacks** — "adding complexity rather than just tea." Head-to-head: "a lot more going on." |
+
+**Preference: RIGHT = the FULL CUP.** Operator's blind guess mid-read was that the lemongrass cup was the one "where the bloom is added in" — correct mechanism, wrong cup: the lemongrass cup was the control, because the curated cup had cut ~78% of the bloom and the bloom is where the lemongrass lives (sitting 1).
+
+**H-workflow: FAIL as run.** The 3-step workflow, run cold, did NOT land a blind-preferred cup vs the full brew on this coffee. Operator's own close: "fractionalization and taking the best fraction only works in certain circumstances but not always — especially not worth the extra effort."
+
+**Two flags on the read, logged honestly:**
+
+1. **Control TDS 0.70 is anomalous.** A 15 g / 240 g brew that read 1.14 as a remainder-recombination and predicts ~1.17 ratio-true came in at 0.70 — a −0.47 miss, far outside any offset band, while the curated cup's −0.21 is merely wide. Candidate causes: vial drawn after dosing/dilution, vial mix-up between cups, a channelled/fast brew (total time was not reported), or a read error. The operator DID perceive the control as "lighter," which is consistent with a genuinely weak brew. Not chased (office-lane charter: single read per sample). Consequence: the blind pair compared a curated cup at 0.92 against a full cup at 0.70, so the verdict carries a strength confound — and the weaker cup still won on complexity. P9-AI-1 evidence.
+2. **The trace translation overshot the winning proportion.** Sitting 2's winner carried bloom at 8.6% of keepers; the full cup carries 12.4%; the lived curated cup carried ~2.7%. The Assistant recommended trace over the proportion-faithful 15 g splash, reasoning that a faithful version would be a blind coin-flip. The lived pair then lost precisely on the lemongrass that the deeper cut removed. **The faithful translation was never tested.** Accountability: this was the Assistant's recommendation, operator-confirmed; it is the one place the track deviated from "the winning build IS the recipe."
+
+**Taxonomy read for La Dinastia (provisional, pending the operator's close decision):** *does not reward selection at the bloom-cut depth tested.* Tax fraction convicted straight = bloom (volatile lemongrass sourness), but at full-cup dilution that same fraction is the coffee's signature layer — the "tax" is a flavoring agent, exactly as the operator said at the probe. Cutting it removes the thing the cup is about. Winner = the full cup. The infusion-layer localization (lemongrass = bloom) is the durable finding.
 ---
 
 ## Notes / friction / lessons / audit items (Assistant: append inline during execution)
@@ -284,3 +300,6 @@ Lengthened arithmetic: 0.640 g ÷ (56.5 g + 14 g) = 0.91. Specs + predictions wr
 5. **Fraction-brew time is not comparable to the single brew** (valve-close + cup-swap + tare at each boundary adds untimed seconds). Log fraction-brew time as approximate only; the lived-pair brew at sitting 3 is where total time matters.
 6. **Small-cup assembly time compresses the temperature ladder.** Three 40-70 g builds assembled serially had cooled before the first sip; reads were effectively warm-to-cool only (as T2 friction 4 predicted). Acceptable on a cool-weighted coffee; on a hot-weighted one, assemble the biggest build last.
 7. **Palate reset.** Operator sipped the first cup before rinsing (had just arrived at the office); the re-sip after rinsing read sweeter. Rinse before the first cup of any blind read.
+8. **"Tax" convicted on a straight fraction is not the same as "tax" at cup dilution.** The bloom read as sour/punchy at 1.8 TDS straight and as the complexity layer at ~2-3% of a 0.7-1.1 cup. The probe finds the most VOLATILE fraction; whether it is a tax or a signature depends on its share of the final cup. Workflow-writeup rule: convict the fraction, then test the CUT DEPTH (down-weight by a third before cutting to trace).
+9. **Translate the winning build proportion-faithfully first.** Deviating toward the operator's stated intent at translation time (trace) skipped the build that actually won sitting 2. The lived pair should replicate the winner's proportions; sharpening the cut is a second iteration, not the translation.
+10. **Control total time was not clocked** despite the request; the 0.70 read has no brew-time corroboration. Ask for the timer BEFORE the first sip next time, not after.
