@@ -289,6 +289,23 @@ Lengthened arithmetic: 0.640 g ÷ (56.5 g + 14 g) = 0.91. Specs + predictions wr
 2. **The trace translation overshot the winning proportion.** Sitting 2's winner carried bloom at 8.6% of keepers; the full cup carries 12.4%; the lived curated cup carried ~2.7%. The Assistant recommended trace over the proportion-faithful 15 g splash, reasoning that a faithful version would be a blind coin-flip. The lived pair then lost precisely on the lemongrass that the deeper cut removed. **The faithful translation was never tested.** Accountability: this was the Assistant's recommendation, operator-confirmed; it is the one place the track deviated from "the winning build IS the recipe."
 
 **Taxonomy read for La Dinastia (provisional, pending the operator's close decision):** *does not reward selection at the bloom-cut depth tested.* Tax fraction convicted straight = bloom (volatile lemongrass sourness), but at full-cup dilution that same fraction is the coffee's signature layer — the "tax" is a flavoring agent, exactly as the operator said at the probe. Cutting it removes the thing the cup is about. Winner = the full cup. The infusion-layer localization (lemongrass = bloom) is the durable finding.
+
+**Operator resolution on the flags (2026-09-28):** the control's vial was probably drawn AFTER the Apax dose went in → **0.70 read STRUCK** (procedure slip, not a coffee finding; the anomaly does not feed P9-AI-1). Control total time not recalled, "felt pretty normal." **Close decision: option 2 — one extension pair on 2 reserve vials, on a different day, to test the proportion-faithful translation and to confirm the sitting-3 verdict.** Budget extension explicitly authorized by the operator (5 → 7 vials of 14; 7 remain).
+
+## Sitting 4 — extension pair: the faithful translation (PRE-REGISTERED 2026-09-28 — FROZEN)
+
+2 vials. Blank number at open, both vials weighed. **Draw BOTH sample vials BEFORE dosing** (sitting-3 lesson). Clock total time on BOTH brews and report it with the weights. Then dose both cups 1 JAMM + 1 TONIK. Blind 2-cup pair, operator solo shuffle, cool-weighted verdict.
+
+**Cup A — Control (full lived recipe):** unchanged from sitting 3.
+
+**Cup B — Curated-faithful ("bloom down-weighted by a third"):** 15 g / EG-1 6.3 / kettle-on off-boil. Bloom 45 g Dial 0 ~30 s **into a side cup**. Close, swap to the serving cup, tare. Pour 1 to 105 g Dial 5. Pour 2 to 90 g Dial 5, then Dial 6 to dry bed, no flush. **Splash back 15 g of the bloom** from the side cup (weigh it in); discard the remaining ~7 g. Bloom share of keepers ≈ 15/181 = 8.3% (sitting-2 winner was 8.6%). Predicted TDS (sitting-2 fraction reads): (1.396 + 0.615 + 15×1.63/100 = 0.245) ÷ 195.6 = **1.15**; control ratio-true ~1.17. Expect both measured ~1.03-1.12.
+
+**Reading of outcomes, pre-stated:**
+- Faithful curated preferred blind → H-workflow flips to PASS at one iteration (the workflow needed its cut-depth loop; sitting 3's loss was a translation error, not a workflow failure). Taxonomy: rewards selection, tax = bloom down-weighted ~1/3, keep P1 + P2 whole.
+- Control preferred again, or a coin-flip → H-workflow FAIL confirmed at two depths. Taxonomy: does not reward selection; full cup wins; lemongrass = bloom.
+- Either way, both control TDS reads (pre-dose this time) replace the struck 0.70.
+
+*Reads appended at the bench.*
 ---
 
 ## Notes / friction / lessons / audit items (Assistant: append inline during execution)
