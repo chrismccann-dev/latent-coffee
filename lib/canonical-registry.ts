@@ -26,6 +26,12 @@ export interface CanonicalLookup {
   // 3-char prefix. Returns the registry's title-case form so DB writes
   // never drift in case. Null when unresolvable.
   canonicalize: (input: string | null | undefined) => string | null
+  // Strict resolution: case-insensitive canonical -> explicit alias ONLY. No
+  // substring, no 3-char prefix. Used on the `*_override: true` write paths
+  // (push_brew / patch_brew via lib/brew-import.ts) so a legitimately net-new
+  // name is persisted verbatim instead of being captured by the loose matcher
+  // ("Wilder Lazo" -> "Wilton Benitez", 2026-10-01). Null when no exact hit.
+  canonicalizeExact: (input: string | null | undefined) => string | null
 }
 
 export function makeCanonicalLookup(
@@ -79,7 +85,7 @@ export function makeCanonicalLookup(
     return isCanonical(trimmed) || findClosest(trimmed) !== null
   }
 
-  function canonicalize(input: string | null | undefined): string | null {
+  function canonicalizeExact(input: string | null | undefined): string | null {
     if (!input) return null
     const trimmed = input.trim()
     if (!trimmed) return null
@@ -91,8 +97,16 @@ export function makeCanonicalLookup(
     }
 
     // Alias match → return alias target (already canonical form).
-    const alias = lowerAliases.get(lower)
-    if (alias) return alias
+    return lowerAliases.get(lower) ?? null
+  }
+
+  function canonicalize(input: string | null | undefined): string | null {
+    const exact = canonicalizeExact(input)
+    if (exact) return exact
+    if (!input) return null
+    const trimmed = input.trim()
+    if (!trimmed) return null
+    const lower = trimmed.toLowerCase()
 
     // Substring (either direction).
     for (let i = 0; i < registry.length; i++) {
@@ -113,7 +127,7 @@ export function makeCanonicalLookup(
     return best
   }
 
-  return { list: registry, isCanonical, findClosest, isResolvable, canonicalize }
+  return { list: registry, isCanonical, findClosest, isResolvable, canonicalize, canonicalizeExact }
 }
 
 // Save-gate validity for an overridable canonical input. True when the value

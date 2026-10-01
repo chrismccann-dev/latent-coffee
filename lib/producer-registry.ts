@@ -119,7 +119,7 @@ export interface ProducerEntry {
 
 
 // ---------------------------------------------------------------------------
-// 154-entry registry (originally 85 CSV #1 + 33 CSV #3 + Mama Cata + Miguel
+// 162-entry registry (originally 85 CSV #1 + 33 CSV #3 + Mama Cata + Miguel
 // Estela skeleton + Ruarai Factory (Ruthaka FCS, 2026-05-30 data-audit); the
 // balance accrued via taxonomy-queue arbitrations, + Finca Sophia (2026-06-19
 // producer-attribution fix). Lead count last reconciled 2026-06-19 against the
@@ -2461,6 +2461,46 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     },
     processSignature: "Colombia processing-lab benchmark: thermal shock, double anaerobic, yeast, and carbonic methods for high-intensity engineered tropical/floral profiles.",
     processSignatureConfidence: "hand-authored",
+  },
+  {
+    // Promoted 2026-10-01 as a skeleton off the Moonwake "La Dinastia - Wilder
+    // Lazo - Lemongrass Yellow Honey Gesha" brew (23b48be7). This write is the
+    // producer-side reproduction of the override-vs-prefix bug: with
+    // producer_override: true the loose 3-char matcher still captured
+    // "Wilder Lazo" -> "Wilton Benitez" (fixed same day in
+    // lib/brew-import.ts / lib/canonical-registry.ts canonicalizeExact).
+    // Finca La Dinastía (Huila); Moonwake carries both a yellow honey and an
+    // anaerobic washed Gesha from the farm. The lemongrass note on the honey
+    // lot was equipment cross-contamination per Moonwake, not a co-ferment.
+    // Farm-name aliases added so bare "La Dinastía" writes resolve here.
+    name: "Wilder Lazo",
+    tier: 3,
+    producerSystem: "Colombia Processing Labs",
+    processingSystemTags: ["Anaerobic Fermentation System"],
+    referenceRole: "Signal",
+    producerType: "Individual",
+    farmName: "Finca La Dinastía",
+    country: "Colombia",
+    adminRegion: "Huila",
+    macroTerroir: "Huila Highlands",
+    farmingModel: "Smallholder",
+    processingCapability: "Honey / Anaerobic Washed",
+    processingStyleTags: ["Yellow Honey", "Anaerobic Washed"],
+    dryingMethod: null,
+    primaryCultivars: ["Gesha"],
+    secondaryCultivars: [],
+    experimentalCultivars: [],
+    knownFor: ["Yellow Honey Gesha", "Anaerobic Washed Gesha"],
+    typicalFlavorProfile: ["Floral + High Tone", "Stone Fruit + Clean"],
+    acidityStyle: null,
+    bodyStyle: "Tea-like",
+    consistencyRating: null,
+    marketTier: "High-End",
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Moonwake"],
+    contact: null,
+    skeleton: true,
   },
   {
     // New canonical producer — authored 2026-06-19 (producer sourcing-priority
@@ -5178,6 +5218,16 @@ export function listSkeletonProducers(): ProducerEntry[] {
 }
 
 export const PRODUCER_ALIASES: Record<string, string> = {
+  // Wilder Lazo / Finca La Dinastía (2026-10-01): farm-name + "Person, Farm"
+  // forms resolve to the canonical person so a bare farm write never falls
+  // through to the loose matcher.
+  "La Dinastía": "Wilder Lazo",
+  "La Dinastia": "Wilder Lazo",
+  "Finca La Dinastía": "Wilder Lazo",
+  "Finca La Dinastia": "Wilder Lazo",
+  "Wilder Lazo, La Dinastía": "Wilder Lazo",
+  "Wilder Lazo, La Dinastia": "Wilder Lazo",
+  "Wilder Lazo, Finca La Dinastía": "Wilder Lazo",
   // The Nest (云顶筑巢庄园) — the real producer is the farm; "Hachi Project x
   // Terroir Maximus" is the marketed processing-collab string the FanHua brew was
   // recorded under (producer_override text). Alias both the ASCII and unicode-"×"

@@ -356,7 +356,12 @@ function validateCanonicalText(
 ): CanonicalTextResult {
   const trimmed = typeof raw === 'string' ? raw.trim() : ''
   if (!trimmed) return { ok: true, canonicalName: null, resolved: false, needsQueue: false }
-  const canonical = lookup.canonicalize(trimmed)
+  // Override semantics (2026-10-01 fix): when the caller asserts the value is a
+  // net-new entry, only an EXACT canonical / explicit-alias hit may rewrite it.
+  // The loose substring / 3-char-prefix fallback is what silently captured
+  // "Wilder Lazo" -> "Wilton Benitez" despite producer_override: true. Without
+  // the override the loose matcher still applies (bag-name drift is the norm).
+  const canonical = opts.allowOverride ? lookup.canonicalizeExact(trimmed) : lookup.canonicalize(trimmed)
   if (canonical) return { ok: true, canonicalName: canonical, resolved: true, needsQueue: false }
   if (opts.allowOverride) {
     return { ok: true, canonicalName: trimmed, resolved: false, needsQueue: true }
@@ -1263,12 +1268,16 @@ function canonicalizeOverridablePatch(
     errors.push(`${field} must be a string`)
     return
   }
-  const canonical = lookup.canonicalize(v)
+  // Same override semantics as validateCanonicalText (push path): with the
+  // override flag set, only an exact canonical / explicit alias may rewrite
+  // the value; otherwise the raw trimmed value is persisted verbatim.
+  const overridden = body[overrideKey] === true
+  const canonical = overridden ? lookup.canonicalizeExact(v) : lookup.canonicalize(v)
   if (canonical) {
     patch[field] = canonical
     return
   }
-  if (body[overrideKey] === true) {
+  if (overridden) {
     patch[field] = v.trim()
     return
   }
