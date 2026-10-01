@@ -13,14 +13,14 @@ retired sourcing "Tier 1/2/3 priority targets" (now the § Sourcing priority
 *action bucket*) and from the WBC-corpus tier reading. It is the one remaining
 numbered "tier" axis; keep it scoped to system-importance.
 
-**Coverage** — 156 producers covering Chris's estimated 60-70% of brewed
+**Coverage** — 162 producers covering Chris's estimated 60-70% of brewed
 coffees. Producer data branches unboundedly compared to cultivar/terroir,
 so the registry is intentionally tier-scoped rather than comprehensive.
 Net-new producers are persisted via the canonical-addition path (MCP
 taxonomy queue / a deliberate registry edit); rich content gets backfilled
 when the producer earns it.
 
-**Total entries:** 156 (Tier 1: 59 · Tier 2: 73 · Tier 3: 24)
+**Total entries:** 162 (Tier 1: 59 · Tier 2: 74 · Tier 3: 29)
 
 ---
 
@@ -60,7 +60,7 @@ target. Authored lazily — only the active sourcing roster carries it. Current 
 
 ## By Producer System
 
-### Colombia Processing Labs  ·  15 producers
+### Colombia Processing Labs  ·  16 producers
 
 ### Deiro Garcia
 
@@ -499,6 +499,29 @@ target. Authored lazily — only the active sourcing roster carries it. Current 
 - **Importers:** Condesa
 - **Roaster References:** Sey, Onyx, Portola
 - **Contact:** https://www.instagram.com/campohermoso_coffeefarms/
+
+---
+
+### Wilder Lazo
+
+**Country:** Colombia · **Admin:** Huila · **Macro:** Huila Highlands
+
+- **Tier:** 3
+- **Producer System:** Colombia Processing Labs
+- **Processing System Tags:** Anaerobic Fermentation System
+- **Reference Role:** Signal
+- **Producer Type:** Individual
+- **Farm:** Finca La Dinastía
+- **Farming Model:** Smallholder
+- **Processing Capability:** Honey / Anaerobic Washed
+- **Processing Style Tags:** Yellow Honey, Anaerobic Washed
+- **Primary Cultivars:** Gesha
+- **Known For:** Yellow Honey Gesha, Anaerobic Washed Gesha
+- **Typical Flavor Profile:** Floral + High Tone, Stone Fruit + Clean
+- **Body Style:** Tea-like
+- **Market Tier:** High-End
+- **Roaster References:** Moonwake
+- **Skeleton:** rich fields pending research. Promoted 2026-10-01 off the Moonwake La Dinastia Lemongrass Yellow Honey Gesha brew (`23b48be7`, the RP9 Track 3 fractionation control); Moonwake also carries an anaerobic washed Gesha from the farm. The lemongrass accent on the honey lot was equipment cross-contamination per Moonwake, not a co-ferment. Aliases: La Dinastía / La Dinastia / Finca La Dinastía / Finca La Dinastia / Wilder Lazo, La Dinastía. This producer is the reproduction case for the override-vs-prefix write bug fixed the same day (`producer_override: true` was ignored and the loose 3-char matcher captured "Wilder Lazo" -> "Wilton Benitez").
 
 ---
 
@@ -4648,6 +4671,8 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 ## Changelog
 
+- 2026-10-01 — Override-vs-prefix fix + promotion: `push_brew` / `patch_brew` (and the green-bean / roast producer path, same helper) now honor `*_override: true` strictly - only an exact canonical or explicit alias rewrites the value; the substring / 3-char-prefix fallback no longer applies under override (`canonicalizeExact` in `lib/canonical-registry.ts`). Trigger: brew `23b48be7` kept resolving "Wilder Lazo" → "Wilton Benitez" through two patch calls, one with the override. Promoted net-new skeleton `Wilder Lazo` (Tier 3 / Signal, Colombia / Huila / Huila Highlands; Finca La Dinastía; Moonwake yellow honey + anaerobic washed Gesha) with farm-name aliases, re-pointed brew `23b48be7`. The same attractor had landed `Juan Peña` on brew `10c46241` (Tabaco Pata - Juanito Navarro, Peru); re-pointed to raw `Juanito Navarro` via override + queued for arbiter promotion. Header counts reconciled against the live array (161 → 162; T1 59 · T2 74 · T3 29 - the header had been stale at 156 since 2026-08-08). Regression gate: `npm run check:canonical-override`.
+- 2026-10-01 — Registry-sync fix: `Anabella Meneses` had an md entry (promoted 2026-08-08) but no `lib/producer-registry.ts` twin or `PRODUCER_ALIASES` rows, so non-override writes fell through to the loose 3-char prefix matcher. Added the skeleton ProducerEntry + the three aliases (`Anabella Meneses, Santa Felisa` / `Santa Felisa` / `Finca Santa Felisa`) to the ts mirror; brew 63aad474 (stored as the alias form via producer_override) re-pointed to the canonical name. Entry count unchanged (md already counted it).
 - 2026-10-01 — Skeleton review: enriched `Frank Aroste` (SEY 2026 La Esperanza page), `Ilde Burbano, El Pilón` (Moonwake page + operator research), `Arturo Paz` (The Coffee Quest + SEY 2025 pages + operator research; tier 3 → 2) - skeleton flags removed, process signatures hand-authored. 17 producer skeletons + NO°5 (roaster) deferred to a later pass.
 - 2026-10-01 — Taxonomy queue arbitration (producer axis): promoted net-new skeleton `Hector and Lilian Leal` (Tier 3 / Experimental, Guatemala / Sacatepéquez-Chimaltenango / Central Volcanic Highlands; Finca San Miguel Urias, Antigua; the Hoffmann × Lucia Solis Fermentation Project 4-process set) via producer_override on green lot 50a91b9d - resolved queue `6a90c7e0`. Aliased `Hachi` / `Hachi Project` → `The Nest` (queue `3d7e4f24`; the three gifted Hachi 八 2026 green lots re-pointed to the canonical producer) and **enriched `The Nest`** (skeleton flag removed) off those three lots; terroir reconciled onto the single canonical Yunnan Southern Highlands row (queue `92d8b621`). Total entries 160→161.
 - 2026-08-08 — Taxonomy queue arbitration: promoted net-new skeleton `Anabella Meneses` (Tier 3 / Signal, Guatemala / Chimaltenango / Central Volcanic Highlands — meso Acatenango; Finca Santa Felisa, Laurina/Bourbon Pointu) via producer_override on the Picolot #14 "Barbie Beans" Laurina Natural brew 63aad474 — first Laurina lot in the archive. Aliases `Anabella Meneses, Santa Felisa` / `Santa Felisa` / `Finca Santa Felisa` → canonical. Resolved queue entry 2af4eef7. Rich fields pending the 2.6 research sweep. Total entries 155→156.

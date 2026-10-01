@@ -4,6 +4,12 @@ import { patchBrew, PATCH_BREW_EDITABLE_FIELDS } from '@/lib/brew-import'
 import type { McpAuthContext } from '@/lib/mcp/auth'
 import { withToolErrorLogging, throwToolFail, toolJson } from '@/lib/mcp/tool-wrapper'
 
+// Shared override semantics (2026-10-01 fix): with the flag set, only an EXACT
+// canonical / explicit-alias match rewrites the value - the substring / 3-char
+// prefix fuzzy matcher is skipped so a net-new name persists verbatim.
+const OVERRIDE_NOTE =
+  'Set true for a legitimately net-new value. Under override only an exact canonical / explicit-alias match rewrites it (no substring / prefix fuzzy match); otherwise the raw trimmed value persists verbatim. Promote it afterwards via propose_canonical_addition / a registry edit.'
+
 // patch_brew (Sprint 2.6) — field-level mutation Tool. Mirrors push_brew's
 // surface but every field is optional except `brew_id`. Re-uses the shared
 // `patchBrew()` helper in lib/brew-import.ts (also used by the
@@ -18,9 +24,9 @@ export const patchBrewInputSchema = {
   // ---- Editable fields (all optional, mirror push_brew) ----
   coffee_name: z.string().optional().nullable(),
   roaster: z.string().optional().nullable(),
-  roaster_override: z.boolean().optional(),
+  roaster_override: z.boolean().optional().describe(OVERRIDE_NOTE),
   producer: z.string().optional().nullable(),
-  producer_override: z.boolean().optional(),
+  producer_override: z.boolean().optional().describe(OVERRIDE_NOTE),
   variety: z.string().optional().nullable(),
   process: z.string().optional().nullable(),
   base_process: z.enum(['Washed', 'Honey', 'Natural', 'Wet-hulled']).optional().nullable(),
@@ -36,11 +42,11 @@ export const patchBrewInputSchema = {
   signature_method: z.string().optional().nullable(),
   roast_level: z.string().optional().nullable(),
   brewer: z.string().optional().nullable(),
-  brewer_override: z.boolean().optional(),
+  brewer_override: z.boolean().optional().describe(OVERRIDE_NOTE),
   filter: z.string().optional().nullable(),
-  filter_override: z.boolean().optional(),
+  filter_override: z.boolean().optional().describe(OVERRIDE_NOTE),
   grinder: z.string().optional().nullable(),
-  grinder_override: z.boolean().optional(),
+  grinder_override: z.boolean().optional().describe(OVERRIDE_NOTE),
   grind: z.string().optional().nullable(),
   grind_setting: z.string().optional().nullable(),
   dose_g: z.number().optional().nullable(),

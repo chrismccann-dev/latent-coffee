@@ -142,13 +142,13 @@ export const pushBrewInputSchema = {
     'When in doubt, use the roaster name as it appears on the bag - alias resolution will canonicalize it ("Hydrangea Coffee Roasters" -> "Hydrangea Coffee"). For genuinely net-new roasters not in the registry, set `roaster_override: true` to persist verbatim. Inspect the canonical list via `read_canonical(axis="roasters")` or `docs://taxonomies/roasters.md`.',
   ),
   roaster_override: z.boolean().optional().describe(
-    'Set true to bypass canonical-roaster validation for legitimately net-new roasters. Persists verbatim; the registry will need a deliberate edit before the next brew from this roaster matches canonical.',
+    'Set true to bypass canonical-roaster validation for legitimately net-new roasters. Under override only an EXACT canonical / explicit-alias match rewrites the value (no substring / prefix fuzzy match); otherwise it persists verbatim and queues for arbiter review. The registry will need a deliberate edit before the next brew from this roaster matches canonical.',
   ),
   producer: z.string().optional().nullable().describe(
     'Producer / farm. Convention: "Person, Farm" or canonical farm name. Resolves via PRODUCER_LOOKUP (~120 canonicals + alias map; tier-scoped, ~60-70% coverage). Inspect via `read_canonical(axis="producers")` or `docs://taxonomies/producers.md`. For net-new, set `producer_override: true`.',
   ),
   producer_override: z.boolean().optional().describe(
-    'Set true to bypass canonical-producer validation for legitimately net-new producers. Persists verbatim. NOTE: there is currently no async research routine — promoting an overridden producer to canonical requires a deliberate edit to docs/taxonomies/producers.md + lib/producer-registry.ts. Until that edit lands, every brew with this producer name will need `producer_override: true` again.',
+    'Set true to bypass canonical-producer validation for legitimately net-new producers. Under override only an EXACT canonical / explicit-alias match rewrites the value (no substring / prefix fuzzy match - the fuzzy matcher once captured "Wilder Lazo" -> "Wilton Benitez"); otherwise it persists verbatim and queues for arbiter review. NOTE: there is currently no async research routine — promoting an overridden producer to canonical requires a deliberate edit to docs/taxonomies/producers.md + lib/producer-registry.ts. Until that edit lands, every brew with this producer name will need `producer_override: true` again.',
   ),
 
   // Origin (FK targets)
