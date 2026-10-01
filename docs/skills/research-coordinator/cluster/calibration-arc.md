@@ -93,6 +93,24 @@ The unified set of Step 0 sub-steps that survived across all 4 filter-arc projec
 
 ---
 
+### 12. Matched-TDS taste-offs (RP9, graduated at the 2026-10-01 retro)
+
+**What:** when two conditions land at (or can be built to) the same measured TDS, taste them head-to-head — any perceived difference is character, not strength. The cleanest character-vs-strength instrument available; it settled verdict-bearing questions in all three RP9 tracks. Situational (fires when strengths happen to match or can be matched cheaply), but when the situation arises, exploit it explicitly rather than letting the coincidence pass unused.
+
+### 13. Probe before designing (RP9, graduated at the 2026-10-01 retro)
+
+**What:** any build-something-from-parts track (fractions, blends, recombinations) starts with a probe sitting: taste the parts straight, capture per-part tasting notes, and design the builds FROM the probe — never from the prior coffee's winning shape. RP9 ground truth: the operator's expected "tax" was wrong on every coffee probed (H-predict 0/3), and track 1's winning proportion finished last on track 2, blind.
+
+### 14. Lived-brew blind replicate as the closing move (RP9, graduated at the 2026-10-01 retro)
+
+**What:** a taste verdict reached on bench-assembled cups closes by brewing the winner as ONE real brew next to the real control, picked blind. Bench builds prove the direction; the lived pair proves the recipe. Executability caveat (operator-flagged): large volume deltas and multi-fraction assembly can defeat temperature equalization — run it when it can be run honestly; tag the verdict when it can't.
+
+### 15. Solo blind-shuffle (RP9, graduated at the 2026-10-01 retro — UPGRADES the RP8-N15 stance)
+
+**What:** the operator can blind themselves solo: code the cups, position-shuffle, re-cup to kill volume tells, forced pick before reveal. RP9 ran this at office-lane budgets repeatedly and the sighted lean inverted blind twice in one track. RP8-N15's "pairs are only partly blindable" caveat survives for inherent strength/temperature tells, but "blind is impractical at the office" does not — default to blind for every preference-ordering read, waive with reason when the tells make it dishonest.
+
+---
+
 ## Budget-conditional control re-brews (RP8 retro guidance, 2026-08-27)
 
 The pre-pull-1 calibration shot below and the rung-0 control re-brew are methodologically load-bearing AND expensive under single-dose vial budgets (at ≤4 vials, control + repeat leaves two test cups — operator-flagged as the real cost). Standing resolution: the calibration/control function is satisfiable three ways, chosen consciously at scoping and logged — (a) a full control re-brew (default when doses allow or when a fresh comparator is load-bearing); (b) an **in-cup control** via the split-cup pair (primitive 10) when the variable is post-brew; (c) an archived-profile comparison, explicitly tagged cross-mechanism/memory-based, when no same-bench control exists (the RP8-N10 waiver pattern — twice used, with reason, never silently). Instrument analog: **TDS deploys when the design varies concentration/strength, not as standing kit** for same-recipe comparative tracks.

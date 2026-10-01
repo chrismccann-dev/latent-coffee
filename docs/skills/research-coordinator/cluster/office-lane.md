@@ -40,6 +40,17 @@ Operator-stated at the retro: an office experiment is brewed *while making offic
 - Vials are nominally 15 g but bag-excess partials exist (operator marks them with taped gram counts "less perfectly" at the office than at home) — weigh, don't trust the label.
 - **Low-inventory budget rule (retro friction, operator-flagged):** control re-brews + repeats are methodologically right but expensive at ≤4 vials ("I only really get to do two tests"). Standing guidance: (a) the **split-cup blind pair** (calibration-arc § split-cup) is the first lever — it doubles conditions per vial; (b) the rung-0 control re-brew is **budget-conditional**: waivable with explicit reason when an in-cup control exists (split designs) or when the comparison is cross-mechanism vs an archived profile (RP8-N10 waiver pattern, used twice with logged rationale); (c) the later-day repeat of a winner stays protected when it gates a project-level claim, and is otherwise droppable-with-anecdote-tag. The trade is made consciously at scoping, never silently at the bench.
 
+## Tasting-bench conventions (graduated at the RP9 retro, 2026-10-01)
+
+- **Rinse the palate before the first cup** of any scored read (a pre-rinse sip re-read sweeter after rinsing — RP9 T3).
+- **Set up the blind shuffle BEFORE the first sip** — a sighted first pass contaminates the pair; the sighted lean inverted blind twice in one track.
+- **Minerals dose the ASSEMBLED cup only, never fractions/parts — and the TDS sample vial is drawn BEFORE dosing** (RP9-N12; one read struck to a post-dose vial). Cup-dosed water (Apax) cannot be split across part-cups; parts run undosed, builds get the standard dose post-assembly.
+- **Small tasting cups cool fast** — a multi-cup bench lineup is warm-to-cool only; assemble the biggest build last on a hot-weighted coffee (RP9-N16). Operator-flagged as the trickiest standing constraint.
+
+## Net-new coffee entering a research track (RP9 retro ratification, 2026-10-01)
+
+A net-new inventory coffee picked up for research gets a normal `/brew` dial-in FIRST, outside the research project — the archived optimized brew is the track's control (candidacy requirement). Ran twice in RP9 (Tabaco Pata, La Dinastia), both converged in one cup with the recipe deliberately locked un-optimized-further to preserve vials. Dial-in prompts flag: record the recipe AS LIVED (dials, per-pour weights, kettle stance — the P9-AI-4/T3 drift lesson) and state pour boundaries in strategy_notes.
+
 ## Related primitives
 
 - [`calibration-arc.md`](docs/skills/research-coordinator/cluster/calibration-arc.md) — Step 0 primitives incl. the split-cup blind pair + per-vial weigh
