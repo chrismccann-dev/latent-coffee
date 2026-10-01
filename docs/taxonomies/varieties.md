@@ -13,13 +13,13 @@ External claims in this doc are cited at authoring time and rolled up in the `##
 
 ## Canonical list
 
-Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exactly. 63 entries.
+Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exactly. 64 entries.
 
 **Arabica — Ethiopian Landrace Families**
 - JARC selection lineage: 74110, 74112, 74148, 74158, 74165
 - JARC blend lineage: 74158/74110/74112 blend, Ethiopian Landrace Blend (74110/74112)
 - Gesha lineage: Gesha
-- Ethiopian landrace-derived selection (non-JARC): Chiroso, Dega, Ethiopian landrace population, Java, Kurume, Ombligón, Papayo, Pink Bourbon, Rosado, SL9, Sudan Rume, Wolisho, Wush Wush, Yemenia
+- Ethiopian landrace-derived selection (non-JARC): Chiroso, Dega, Ethiopian landrace population, Illubabor Forest, Java, Kurume, Ombligón, Papayo, Pink Bourbon, Rosado, SL9, Sudan Rume, Wolisho, Wush Wush, Yemenia
 - SL Bourbon lineage: SL28, SL34
 
 **Arabica — Typica Family**
@@ -434,6 +434,34 @@ only (display layer in `lib/brew-cover-title.ts`).
 - **Common Pitfalls:** Over-fermentation amplification in experimental processing; roast flattening; underdevelopment in very light roasts.
 
 **Notes:** Population-level label — individual trees may belong to many distinct landrace genotypes within a single lot. This is the canonical catch-all when a lot is marketed as "heirloom" without a named selection.
+
+---
+
+### Illubabor Forest
+
+**Species:** Arabica  **Genetic Family:** Ethiopian Landrace Families  **Lineage:** Ethiopian landrace-derived selection (non-JARC)
+
+#### Genetics
+- **Genetic Background:** Gesha Village Coffee Estate's named selection from the Illubabor coffee forest (south-western Ethiopia), collected on a 1974 expedition and propagated as a disease- and pest-resistant, high-yielding line. One of the estate's three principal plantings alongside Gori Gesha and Gesha 1931 (both of which collapse to `Gesha` here); grown only at Gesha Village.
+- **Market names normalized here:** Illubabor Heirloom, Illubabor Forest Heirloom, Illubabor.
+
+#### Agronomy
+- **Typical Origins:** Ethiopia (Gesha Village, West Omo / Bench Maji, 1,900-2,100 masl).
+- **Altitude Sensitivity:** 1,900-2,100 masl at the source estate.
+- **Limiting Factors:** Single-estate selection; limited to Gesha Village's own lots.
+- **Market Context:** Specialty premium / auction (Pride of Gesha).
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Washed, natural, and the estate's experimental mossto-anaerobic honey / darkroom-dried lots.
+- **Typical Flavor Notes:** Bright, high-acidity; bergamot, black cherry, elderflower, jasmine, dried black currant on the GVA.30 lot's producer notes.
+- **Acidity Style:** High; bright.
+- **Body Style:** Medium-light.
+- **Aromatics:** Floral + stone fruit.
+- **Terroir Transparency:** High (single-estate, forest-shade grown).
+- **Extraction Sensitivity:** Unknown (one lot in archive, not yet roasted).
+- **Brewing Tendencies:** High-clarity filter expected; confirm on the GVA.30 one-shot.
+
+**Notes:** Promoted 2026-10-01 (taxonomy queue `4b629d91`) off the Gesha Village GVA.30 Gaylee Mossto-Anaerobic Honey DRD green lot (`caf6c03e`). Kept as a named selection rather than folded into `Ethiopian landrace population` because the estate markets and manages it as a distinct line.
 
 ---
 
@@ -2474,3 +2502,4 @@ Per-claim citations at authoring time; rollup below.
 ## Changelog
 
 - **2026-04-22:** Initial adoption. 63 canonical cultivars ported from Chris's 72-row CSV research, reconciled with DB snapshot (26 rows), 10 collapses applied (Gesha 7→1 sub-selections; Aruzi = Bourbon Aruzi merged; Ethiopian landrace population dedup; Marsellesa lineage disambiguated; Mokkita dedup). Non-Arabica species scaffolded (Eugenioides, Liberica / Excelsa, Robusta). Mokka classified as Bourbon (classic) — resolves SYNC V1 step (d) pre-req. Icatu reclassified from Timor Hybrid-derived to Multi-parent hybrid lineage (direct Arabica × Robusta introgression, not Timor). Garnica reclassification to Modern Hybrids / Timor Hybrid-derived confirmed (migration 017 retained). Laurina moved from Bourbon (classic) to Bourbon mutation lineage. New lineages adopted: Typica, SL Bourbon, Maragogype × Gesha, Eugenioides, Liberica, Excelsa, Robusta. Alias map extended to 48 structural mappings.
+- **2026-10-01:** Taxonomy queue arbitration: promoted net-new `Illubabor Forest` (Ethiopian Landrace Families / Ethiopian landrace-derived selection (non-JARC)) from the Gesha Village GVA.30 green lot (queue `4b629d91`); aliases Illubabor Heirloom / Illubabor Forest Heirloom / Illubabor. Rejected queue `c3c6f61a` "CGLE" - a Café Granja La Esperanza house label on the Perisama honey lot (`3d962a1b`), not a cultivar; the lot's cultivar stays unresolved pending a farm answer. Total entries 63→64.
