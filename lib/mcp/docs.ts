@@ -466,8 +466,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/patterns/open-questions.md',
-    title: 'Roasting Historian — Open Questions (12 research questions)',
-    description: 'Use when planning a V1 design where a relevant Open Question is in scope — 12 research questions tracked for future roast sessions. Includes FC-Temp anchoring on naturals (3rd lot pending), audible FC threshold on heavy anaerobic naturals, Day 7 cupping-table-vs-pourover reversal on heavy-anaerobic Gesha, altitude-as-density proxy on one-shot calibrations, bean-temp end condition validation. Resolved questions are deleted, not strikethrough.',
+    title: 'Roasting Historian — Open Questions (7 research questions)',
+    description: 'Use when planning a V1 design where a relevant Open Question is in scope — 7 research questions tracked for future roast sessions. Includes FC-Temp anchoring on naturals (3rd lot pending), audible FC threshold on heavy anaerobic naturals, dev-time-vs-peak-inlet Agtron ordering, washed-Gesha 48s dev floor, altitude-as-density proxy on one-shot calibrations, Gesha Clouds green-aging divergence. Resolved questions are deleted, not strikethrough.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/patterns/general.md',
@@ -748,8 +748,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Fazenda Um Wush Wush Natural (V1 cupped 2026-05-15; V2 BLOCKED on Untold paired reference; cup-vs-structure inversion)',
-    description: 'Active-lot working hypotheses for Fazenda Um Wush Wush Natural Dark Room Dried. V1 cupped 2026-05-15 (Day 11); V2 design BLOCKED on Untold paired roasted reference cup. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah. Cup-vs-structure inversion observed; producer notes (mandarin/prune/cacao) absent. FC-Temp Architectural Constraint on Naturals reproduced. Three V2 hypothesis paths enumerated. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+    title: 'Roasting Historian — active-lots / Fazenda Um Wush Wush Natural (REDIRECT STUB — closed 2026-08-10, reference Batch 220 V3A)',
+    description: '[REDIRECT STUB per the close-out convention, case 014] Lot closed 2026-08-10; reference roast Batch 220 (V3A, FC-onset - bean-temp auto-drop 1°C above the lot\'s fixed ~205°C FC, 4s dev, first full producer-notes cup). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/bra-fazendaum-wushwush-nat-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md',
@@ -763,8 +763,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-deborah-geisha-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (closed stub — closed 2026-09-07, reference Batch 229 V2A via SPG runoff)',
-    description: '[Closed-lot stub per the close-out convention] Lot closed 2026-09-07; reference roast Batch 229 (V2A, 210.5C auto-drop on the 244C sustained-tail curve, first audible FC on the lot) chosen via the SPG runoff that INVERTED the xbloom-gate verdict over 228. Optimized brew 23ebcdd7 (Clarity-First low edge). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md; the stub preserves the V1/V2 design-record H2 anchors for cross-references.',
+    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (REDIRECT STUB — closed 2026-09-07, reference Batch 229 V2A via SPG runoff)',
+    description: '[REDIRECT STUB per the close-out convention, case 014] Lot closed 2026-09-07; reference roast Batch 229 (V2A, 210.5C auto-drop on the 244C sustained-tail curve, first audible FC on the lot) chosen via the SPG runoff that INVERTED the xbloom-gate verdict over 228. Optimized brew 23ebcdd7 (Clarity-First low edge). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
