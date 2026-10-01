@@ -2746,17 +2746,26 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     roasterReferences: ["Moonwake", "Every Coffee"],
     contact: null,
   },
-  // The Nest (云顶筑巢庄园) — Tier-3 Yunnan experimental-processing estate,
-  // promoted from the taxonomy queue (6dc2b8ee) at the FanHua arbiter pass
-  // 2026-06-26, then reshaped per Chris: the real producer is the FARM (The Nest),
-  // not the marketed collab string. "Hachi Project" (Diego Bermúdez × Allan
-  // Hartmann) is the processing partner / project that works across many farms on
-  // special lots — captured as the exporter/project here, not the producer.
-  // Released via the Coffee with Dongze (Dongzhe) / Brian Quan collaboration. The
-  // marketed "Hachi Project x Terroir Maximus" string (+ its unicode-"×" variant)
-  // is aliased → The Nest so the FanHua brew aggregates here with no brew patch.
-  // Skeleton — backfill rich content on the next lot. The proprietary process is
-  // canonical in lib/process-registry.ts SIGNATURE_METHODS (Precursor Amplification).
+  // The Nest (云顶筑巢庄园, marketed "The Nest Manor") — Tier-3 Yunnan
+  // experimental-processing estate in Shuangjiang county, Lincang, promoted from
+  // the taxonomy queue (6dc2b8ee) at the FanHua arbiter pass 2026-06-26 and
+  // reshaped per Chris: the real producer is the FARM, not the marketed collab
+  // string. "Hachi Project" (Diego Bermúdez × Allan Hartmann) is the processing
+  // partner that works across many farms on special lots — captured as the
+  // exporter/project, not the producer; "Terroir Maximus" is the Yunnan-side
+  // processing partner; released via Coffee with Dongze (Dongzhe) / Brian Quan.
+  // Enriched 2026-10-01 (skeleton review) off the three gifted Hachi 八 2026
+  // "Kyō (極)" bags (HACHI-FANHUA-35-1 / HACHI-LIUGUANG-39-1 / HACHI-YINGXUE-40):
+  // the lot family carries three named proprietary processes on one Syrina green
+  // (Precursor Amplification Natural / Cascade Fermentation / Enzyflow Honey);
+  // the estate also lists a Hybrid Geisha planting (~1,600 m) and Syrina at
+  // ~1,650 m on the Dongze shop. Both archived brews (FanHua 9ca79dbf, YinXue
+  // 2729194b) read a roast-development ceiling on the Dongzhe roast, not a green
+  // ceiling, so flavor/consistency stay thin until Latent roasts the lots.
+  // Terroir reconciled 2026-10-01: all five rows now sit on the single canonical
+  // Yunnan Southern Highlands terroir (Lincang is southwestern Yunnan).
+  // Aliases: "Hachi" (the bare project name used on the gifted-bag green lots),
+  // "Hachi Project x Terroir Maximus" (+ unicode-"×" variant) → The Nest.
   // NOTE: "The Nest" is the only "the"-prefix canonical, so the loose 3-char-prefix
   // matcher will resolve any unaliased "The <X>" producer write here — add a
   // defensive alias if a colliding "The <X>" producer ever enters the corpus.
@@ -2764,31 +2773,32 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     name: "The Nest",
     tier: 3,
     producerSystem: "China Experimental Processing",
-    processingSystemTags: ["Yunnan Catimor Transformation System"],
+    processingSystemTags: ["Yunnan Catimor Transformation System", "Multi-Stage Fermentation System"],
     referenceRole: "Experimental",
     producerType: "Estate",
-    farmName: "The Nest (云顶筑巢庄园)",
+    farmName: "The Nest (云顶筑巢庄园 / The Nest Manor)",
     country: "China",
     adminRegion: "Yunnan",
     macroTerroir: "Yunnan Southern Highlands",
-    farmingModel: "Processing Initiative",
-    processingCapability: "Natural",
-    processingStyleTags: ["Precursor Amplification"],
+    farmingModel: "Estate / Experimental Processing Partner Site",
+    processingCapability: "Natural / Honey / Multi-Stage Fermentation",
+    processingStyleTags: ["Precursor Amplification", "Cascade Fermentation", "Enzyflow", "Enzyme-Assisted", "Yeast Inoculated"],
     dryingMethod: null,
     primaryCultivars: ["Syrina"],
     secondaryCultivars: [],
-    experimentalCultivars: [],
-    knownFor: ["Precursor Amplification", "Experimental Processing"],
-    typicalFlavorProfile: [],
-    acidityStyle: null,
-    bodyStyle: null,
+    experimentalCultivars: ["Gesha"],
+    knownFor: ["Precursor Amplification", "Cascade Fermentation", "Enzyflow Honey", "Hachi Project collaboration", "Terroir Maximus processing", "Yunnan experimental lots"],
+    typicalFlavorProfile: ["Tropical + Dried Fruit (FanHua)", "Floral + Green Tea (YinXue)"],
+    acidityStyle: "Malic-soft (process-led)",
+    bodyStyle: "Light / Tea-like",
     consistencyRating: null,
     marketTier: "High-End / Competition",
-    exporters: ["Hachi Project"],
+    exporters: ["Hachi Project", "Terroir Maximus"],
     importers: [],
-    roasterReferences: ["Dongzhe"],
+    roasterReferences: ["Dongzhe", "Latent"],
     contact: "https://coffee-with-dongze.myshopify.com",
-    skeleton: true,
+    processSignature: "Yunnan experimental estate running the Hachi Project's three named multi-stage ferments (Precursor Amplification natural, Cascade Fermentation, Enzyflow honey) on a single Syrina green - process-led, variety-neutral lots.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     name: "Aimé Dusabe Gahizi",
@@ -4939,6 +4949,44 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     skeleton: true,
   },
   {
+    // Promoted 2026-10-01 (taxonomy queue 6a90c7e0) as a skeleton off the
+    // SM-FERMPROJ-MD-2026 green lot (50a91b9d) - the James Hoffmann × Lucia Solis
+    // Fermentation Project control (Sweet Maria's 4-process set; paired
+    // Regalia-roasted bags in freezer stock). Finca San Miguel Urias, Antigua
+    // Valley, 1,460-1,540 m; ~85% Caturra / ~15% H1 / <1% Bourbon. The set
+    // isolates fermentation as the only variable (mechanically demucilaged
+    // control / wild / lactobacillus / yeast), so this producer is the archive's
+    // cleanest fermentation-lever reference once the four arms are roasted.
+    name: "Hector and Lilian Leal",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: ["Controlled Fermentation System"],
+    referenceRole: "Experimental",
+    producerType: "Family Estate",
+    farmName: "Finca San Miguel Urias",
+    country: "Guatemala",
+    adminRegion: "Sacatepéquez / Chimaltenango",
+    macroTerroir: "Central Volcanic Highlands",
+    farmingModel: null,
+    processingCapability: "Washed / Mechanically Demucilaged / Inoculated Ferments (Fermentation Project)",
+    processingStyleTags: ["Mechanically Demucilaged (control)", "Wild Fermentation", "Lactobacillus Inoculated", "Yeast Inoculated"],
+    dryingMethod: null,
+    primaryCultivars: ["Caturra"],
+    secondaryCultivars: ["H1"],
+    experimentalCultivars: [],
+    knownFor: ["Fermentation Project (Hoffmann × Lucia Solis) 4-process set"],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: "Specialty / Micro-lot",
+    exporters: [],
+    importers: ["Sweet Maria's"],
+    roasterReferences: ["Regalia", "Latent"],
+    contact: "https://thefermentationproject.com",
+    skeleton: true,
+  },
+  {
     // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
     // SEY x Bay Area Coffee Club Frank Aroste Washed Gesha brew (5275ae7b) -
     // Santa Ana, Cusco, 2100m; first Peruvian Gesha in the brewing archive.
@@ -5112,6 +5160,10 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Lost Origin": "Fran Zeimetz",
   "Lost Origin Maya": "Fran Zeimetz",
   "Hachi Project × Terroir Maximus": "The Nest",
+  // Bare project name as written on the gifted Hachi 八 2026 bags (2026-10-01
+  // arbiter pass, queue 3d7e4f24): the producer is still the farm.
+  "Hachi": "The Nest",
+  "Hachi Project": "The Nest",
   // Finca Sophia (Boot Coffee, Panama) producer-string variants - added
   // 2026-06-19 attribution-fix session. The estate is collectively owned;
   // Willem Boot (owner) / Kelly Hartmann (on-farm) per docs/brewing/freezer-stock.md.
