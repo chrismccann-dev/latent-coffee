@@ -125,6 +125,10 @@ First action: read `docs/research-projects/<track-slug>.md` in full. Then summar
 
 **Section 9 — First action.** Bounded first move. The summary-back step at the end of section 9 is a deliberate checkpoint — it verifies the Assistant actually read the protocol in full + surfaces ambiguity before any execution begins. If the summary-back step reveals the Assistant missed something, the operator can correct before Step 0 starts.
 
+**Sitting-recap rule (RP9 retro, 2026-10-01 — operator-requested).** Office-lane tracks span multi-day gaps; the operator returns cold. At EVERY sitting open, the Assistant restates in one message: the full lived recipe (per-pour weights, dials, temps), where the track stands (sittings done / remaining, current verdict state), and what this sitting does. Never "brew the control again" by reference — always the full restatement. Bake the rule into section 7's sitting steps.
+
+**Sealed-prediction primitive (RP9, optional — use where the track tests predictiveness).** When a track pre-states an operator expectation to be tested against bench reality: the Assistant states its OWN call first (in the read-back message, before Step 0 answers return), THEN collects the operator's — both logged before the first pour, neither revised after (RP9-N10: both landing in one reply cost the track an independent data point). Not a default for every track; the Coordinator opts in at protocol authoring.
+
 **When the protocol transcribes a lived operator recipe** (a recipe the operator developed off-book that the protocol formalizes): the transcription is itself a claim to verify — the Assistant walks the timeline numbers back with the operator at the FIRST scored cup before executing them (RP8-N17: a "~2-min press" transcription was really "~2-min total"; caught at cup 1, not at scoping).
 
 ---
