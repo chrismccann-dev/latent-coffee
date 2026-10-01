@@ -4919,34 +4919,47 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     skeleton: true,
   },
   {
+    // Promoted 2026-06-18 (taxonomy queue arbitration) as a skeleton off the
+    // Moonwake El Pilón Anaerobic Washed Pink Bourbon brew (8cc88312).
+    // Enriched 2026-10-01 (skeleton review) from the Moonwake product page +
+    // operator research: El Pilón is a 50-year family farm in Palestina, Huila
+    // (1,740 m); the archived lot was depulped, 24 h anaerobic, double-washed,
+    // 10-25 day dry. Operator-supplied (unverified): regenerative polyculture
+    // with ~35% native forest preserve, on-site micro-mill with anaerobic tanks
+    // + parabolic beds, additional lots (El Limón) and cultivars (Caturra /
+    // Pacamara / Gesha), further references Golden Fleece + Sigma Coffee;
+    // exporter unnamed (boutique private export partners). Brewing: the archive's
+    // explicit layered-evolving apex sighting on a clean anaerobic washed
+    // (one-brew landing, Clarity-First upper edge).
     name: "Ilde Burbano, El Pilón",
     tier: 3,
     producerSystem: null,
-    processingSystemTags: [],
+    processingSystemTags: ["Anaerobic Fermentation System"],
     referenceRole: "Signal",
-    producerType: "Individual",
+    producerType: "Family Estate",
     farmName: "Finca El Pilón",
     country: "Colombia",
     adminRegion: "Huila",
     macroTerroir: "Huila Highlands",
-    farmingModel: null,
-    processingCapability: "Anaerobic Washed",
-    processingStyleTags: [],
-    dryingMethod: null,
+    farmingModel: "Regenerative Smallholder (50-year family farm)",
+    processingCapability: "Anaerobic Washed / Washed",
+    processingStyleTags: ["Anaerobic (24h)", "Double Washed", "Extended Fermentation", "Parabolic Solar Drying"],
+    dryingMethod: "Parabolic Beds",
     primaryCultivars: ["Pink Bourbon"],
-    secondaryCultivars: [],
-    experimentalCultivars: [],
-    knownFor: [],
-    typicalFlavorProfile: [],
-    acidityStyle: null,
-    bodyStyle: null,
+    secondaryCultivars: ["Caturra"],
+    experimentalCultivars: ["Pacamara", "Gesha"],
+    knownFor: ["Clean, bright anaerobic washed Pink Bourbon (green grape / blackberry / bergamot)"],
+    typicalFlavorProfile: ["Green Fruit + Floral", "Red Fruit + Bright"],
+    acidityStyle: "Malic / Juicy",
+    bodyStyle: "Juicy / Medium",
     consistencyRating: null,
-    marketTier: null,
+    marketTier: "Specialty / Micro-lot",
     exporters: [],
     importers: [],
-    roasterReferences: ["Moonwake Coffee Roasters"],
+    roasterReferences: ["Moonwake Coffee Roasters", "Golden Fleece Coffee"],
     contact: null,
-    skeleton: true,
+    processSignature: "Palestina (Huila) family farm whose short 24 h anaerobic + double-wash keeps Pink Bourbon crisp and transparent - clean anaerobic washed, not a heavy-ferment profile.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     // Promoted 2026-10-01 (taxonomy queue 6a90c7e0) as a skeleton off the
@@ -4988,36 +5001,45 @@ export const PRODUCERS: readonly ProducerEntry[] = [
   },
   {
     // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
-    // SEY x Bay Area Coffee Club Frank Aroste Washed Gesha brew (5275ae7b) -
-    // Santa Ana, Cusco, 2100m; first Peruvian Gesha in the brewing archive.
+    // SEY x Bay Area Coffee Club Frank Aroste Washed Gesha brew (5275ae7b).
+    // Enriched 2026-10-01 (skeleton review) from the SEY 2026 La Esperanza
+    // product page + operator research: very young producer, a "very small
+    // garden" of Gesha at 2,100 m in Santa Ana, Cusco, only ~7 years planting;
+    // floated, depulped on harvest day, 32 h dry ferment, washed, raised beds;
+    // harvest Nov 2025; farm gate $25.26/kg (FOB $31.92 / DDP $35.18). Exporter
+    // + farm size not public. Two lots in freezer stock (SEY La Esperanza 2026 +
+    // the Instagram-only BACC collab, WB Agtron 77.5). Brewing: the Graduated
+    // Taper valve pattern was first named on this lot (brewing-equipment-expert
+    // sworks.md), so it is the archive's light-washed high-altitude Peru reference.
     name: "Frank Aroste",
     tier: 3,
     producerSystem: null,
-    processingSystemTags: [],
+    processingSystemTags: ["Traditional Washed System"],
     referenceRole: "Signal",
     producerType: "Individual",
-    farmName: null,
+    farmName: "La Esperanza",
     country: "Peru",
     adminRegion: "Cusco",
     macroTerroir: "Southern Andean Highlands",
-    farmingModel: null,
+    farmingModel: "Smallholder Micro-lot (extreme-elevation garden)",
     processingCapability: "Washed",
-    processingStyleTags: [],
-    dryingMethod: null,
+    processingStyleTags: ["Dry Fermentation (32h)", "Raised Bed"],
+    dryingMethod: "Raised Bed",
     primaryCultivars: ["Gesha"],
     secondaryCultivars: [],
     experimentalCultivars: [],
-    knownFor: [],
-    typicalFlavorProfile: [],
-    acidityStyle: null,
-    bodyStyle: null,
+    knownFor: ["Extreme-elevation (2,100 m) Cusco Gesha", "Premium farm-gate micro-lots"],
+    typicalFlavorProfile: ["Floral + High Tone (pomelo, jasmine, bergamot, melon)"],
+    acidityStyle: "Citric / Floral",
+    bodyStyle: "Light / Tea-like",
     consistencyRating: null,
-    marketTier: null,
+    marketTier: "High-End / Competition",
     exporters: [],
     importers: [],
     roasterReferences: ["Sey Coffee"],
     contact: null,
-    skeleton: true,
+    processSignature: "Extreme-elevation (2,100 m) Cusco washed Gesha from a very small young garden: 32 h dry ferment, raised-bed dried - clean floral / citrus high-tone profile.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
@@ -5056,37 +5078,48 @@ export const PRODUCERS: readonly ProducerEntry[] = [
   {
     // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the
     // HND-ARTUROPAZ-GESHA-DRD-NAT-2026 green lot (6502d971, Kumquat Coffee).
-    // Terroir resolved 2026-07-27 (same-day follow-up): new canonical macro
-    // Santa Bárbara-Yojoa Highlands stood up (Chris-ratified); farm Finca El
-    // Itacayo, El Dorado, Santa Bárbara, ~1,600-1,730 m.
+    // Terroir resolved 2026-07-27: new canonical macro Santa Bárbara-Yojoa
+    // Highlands (Chris-ratified); farm Finca El Itacayo, El Dorado, Santa
+    // Bárbara, ~1,600-1,730 m. Enriched 2026-10-01 (skeleton review) from The
+    // Coffee Quest + SEY 2025 product pages + operator research: Ángel Arturo
+    // Paz Ramírez, 3rd-generation producer, head of quality control at Beneficio
+    // San Vicente (the Paz family dry mill / exporter); El Itacayo is 3 ha at
+    // 1,600-1,730 m, Pacas 70% / Gesha 30%, bought 2018, first crop 2021; also
+    // Finca La Colmena (Red Catuai, 2007) and a new private wet mill at El Guaco
+    // (operator-supplied; further plots El Tango / La Tigra / Escondido
+    // unverified). Washed house style: afternoon depulp, 16-24 h dry ferment,
+    // 4 wash cycles, 15-16 day patio or raised-bed dry. Multi-time Cup of
+    // Excellence Honduras finalist (recent #7 / #9). The Latent lot is a Dark
+    // Room Dried natural - outside his washed house style, treat as experimental.
     name: "Arturo Paz",
-    tier: 3,
+    tier: 2,
     producerSystem: null,
-    processingSystemTags: [],
+    processingSystemTags: ["Precision Washed System"],
     referenceRole: "Signal",
     producerType: "Individual",
-    farmName: "Finca El Itacayo",
+    farmName: "Finca El Itacayo (+ Finca La Colmena, El Guaco)",
     country: "Honduras",
     adminRegion: "Santa Bárbara",
     macroTerroir: "Santa Bárbara-Yojoa Highlands",
-    farmingModel: null,
-    processingCapability: "Natural (Dark Room Dried)",
-    processingStyleTags: [],
-    dryingMethod: null,
-    primaryCultivars: ["Gesha"],
-    secondaryCultivars: [],
-    experimentalCultivars: [],
-    knownFor: [],
-    typicalFlavorProfile: [],
-    acidityStyle: null,
-    bodyStyle: null,
-    consistencyRating: null,
-    marketTier: null,
-    exporters: [],
-    importers: ["Kumquat Coffee"],
-    roasterReferences: ["Latent"],
-    contact: null,
-    skeleton: true,
+    farmingModel: "Smallholder Eco-Farming (shade, strict day-lot separation)",
+    processingCapability: "Washed / Natural (Dark Room Dried)",
+    processingStyleTags: ["Clean Washed", "Dry Fermentation (16-24h)", "Dark Room Dried"],
+    dryingMethod: "Patio + Raised Bed (15-16 days)",
+    primaryCultivars: ["Pacas", "Gesha"],
+    secondaryCultivars: ["Red Catuai"],
+    experimentalCultivars: ["Pacamara", "Bourbon", "Maragogype", "SL28"],
+    knownFor: ["Multi-time Cup of Excellence Honduras finalist", "Santa Bárbara lot-separation pioneer", "San Vicente head of quality control"],
+    typicalFlavorProfile: ["Floral + Stone Fruit (jasmine, peach, white tea)", "Tropical + Dried Fruit (mango, nectarine, blackberry on the DRD natural)"],
+    acidityStyle: "Citric / Floral",
+    bodyStyle: "Juicy / Medium",
+    consistencyRating: "High",
+    marketTier: "High-End / Competition",
+    exporters: ["San Vicente"],
+    importers: ["Kumquat Coffee", "The Coffee Quest"],
+    roasterReferences: ["Latent", "Sey Coffee", "Black & White", "Verve", "Three Marks"],
+    contact: "https://www.instagram.com/angelarturocafe",
+    processSignature: "Santa Bárbara CoE-caliber washed specialist (San Vicente QC head): clean 16-24 h dry ferment, long patio dry; the Latent Dark Room Dried Gesha natural is an off-house-style experiment.",
+    processSignatureConfidence: "hand-authored",
   },
   {
     // Promoted 2026-07-27 (taxonomy queue arbitration) as a skeleton off the

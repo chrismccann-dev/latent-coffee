@@ -4368,13 +4368,26 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 - **Tier:** 3
 - **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Anaerobic Fermentation System
 - **Reference Role:** Signal
-- **Producer Type:** Individual
-- **Farm:** Finca El Pilón
-- **Processing Capability:** Anaerobic Washed
+- **Producer Type:** Family Estate
+- **Farm:** Finca El Pilón (Palestina, Huila, 1,740 m)
+- **Farming Model:** Regenerative Smallholder (50-year family farm)
+- **Processing Capability:** Anaerobic Washed / Washed
+- **Processing Style Tags:** Anaerobic (24h), Double Washed, Extended Fermentation, Parabolic Solar Drying
+- **Drying Method:** Parabolic Beds
 - **Primary Cultivars:** Pink Bourbon
-- **Roaster References:** Moonwake Coffee Roasters
-- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-06-18 from the Moonwake Ilde Burbano El Pilón Anaerobic Washed Pink Bourbon brew (8cc88312); meso Palestina.
+- **Secondary Cultivars:** Caturra
+- **Experimental Cultivars:** Pacamara, Gesha
+- **Known For:** Clean, bright anaerobic washed Pink Bourbon (green grape / blackberry / bergamot)
+- **Typical Flavor Profile:** Green Fruit + Floral, Red Fruit + Bright
+- **Acidity Style:** Malic / Juicy
+- **Body Style:** Juicy / Medium
+- **Market Tier:** Specialty / Micro-lot
+- **Roaster References:** Moonwake Coffee Roasters, Golden Fleece Coffee
+- **Process Signature:** Palestina (Huila) family farm whose short 24 h anaerobic + double-wash keeps Pink Bourbon crisp and transparent - clean anaerobic washed, not a heavy-ferment profile. _(hand-authored)_
+
+*Promoted via taxonomy-queue arbitration 2026-06-18 from the Moonwake El Pilón Anaerobic Washed Pink Bourbon brew (`8cc88312`). **Enriched 2026-10-01** (skeleton review) from the Moonwake page (50-year family legacy; depulped, 24 h anaerobic, washed twice, 10-25 day dry) + operator research. Operator-supplied and not independently corroborated: regenerative polyculture with ~35% native forest preserve, on-site micro-mill with anaerobic tanks + parabolic beds, additional lots (El Limón), the secondary / experimental cultivars, and the Golden Fleece / Sigma Coffee references; exporter unnamed (boutique private partners; relatives pool with Osito / Monkaaba). Brewing: the archive's explicit layered-evolving apex sighting on a clean anaerobic washed (one-brew landing, Clarity-First upper edge).*
 
 ---
 
@@ -4407,12 +4420,24 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 - **Tier:** 3
 - **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Traditional Washed System
 - **Reference Role:** Signal
 - **Producer Type:** Individual
+- **Farm:** La Esperanza (Santa Ana, Cusco, 2,100 m - "a very small garden")
+- **Farming Model:** Smallholder Micro-lot (extreme-elevation garden)
 - **Processing Capability:** Washed
+- **Processing Style Tags:** Dry Fermentation (32h), Raised Bed
+- **Drying Method:** Raised Bed
 - **Primary Cultivars:** Gesha
+- **Known For:** Extreme-elevation (2,100 m) Cusco Gesha, Premium farm-gate micro-lots
+- **Typical Flavor Profile:** Floral + High Tone (pomelo, jasmine, bergamot, melon)
+- **Acidity Style:** Citric / Floral
+- **Body Style:** Light / Tea-like
+- **Market Tier:** High-End / Competition
 - **Roaster References:** Sey Coffee
-- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-07-27 from the SEY x Bay Area Coffee Club Frank Aroste Washed Gesha brew (5275ae7b); Santa Ana, Cusco, 2100m - first Peruvian Gesha in the brewing archive.
+- **Process Signature:** Extreme-elevation (2,100 m) Cusco washed Gesha from a very small young garden: 32 h dry ferment, raised-bed dried - clean floral / citrus high-tone profile. _(hand-authored)_
+
+*Promoted via taxonomy-queue arbitration 2026-07-27 from the SEY x Bay Area Coffee Club Washed Gesha brew (`5275ae7b`). **Enriched 2026-10-01** (skeleton review) from the SEY 2026 La Esperanza page + operator research: very young producer, only ~7 years planting; floated, depulped on harvest day, 32 h dry ferment, washed, raised beds; harvest Nov 2025; farm gate $25.26/kg (FOB $31.92 / DDP $35.18). Exporter and farm size not public. Two lots in freezer stock. Brewing: the Graduated Taper SWORKS pattern was first named on this lot - the archive's light-washed high-altitude Peru reference.*
 
 ---
 
@@ -4436,16 +4461,32 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 **Country:** Honduras · **Admin:** Santa Bárbara · **Macro:** Santa Bárbara-Yojoa Highlands
 
-- **Tier:** 3
+- **Tier:** 2
 - **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Precision Washed System
 - **Reference Role:** Signal
 - **Producer Type:** Individual
-- **Farm:** Finca El Itacayo
-- **Processing Capability:** Natural (Dark Room Dried)
-- **Primary Cultivars:** Gesha
-- **Importers:** Kumquat Coffee
-- **Roaster References:** Latent
-- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-07-27 from the HND-ARTUROPAZ-GESHA-DRD-NAT-2026 green lot (6502d971; Kumquat Coffee, 1700m, 2026 crop). Terroir resolved same day: new canonical macro Santa Bárbara-Yojoa Highlands (Chris-ratified); farm Finca El Itacayo, El Dorado, Santa Bárbara Mountain, ~1,600-1,730 m.
+- **Farm:** Finca El Itacayo (El Dorado, 3 ha, 1,600-1,730 m; + Finca La Colmena, El Guaco)
+- **Farming Model:** Smallholder Eco-Farming (shade, strict day-lot separation)
+- **Processing Capability:** Washed / Natural (Dark Room Dried)
+- **Processing Style Tags:** Clean Washed, Dry Fermentation (16-24h), Dark Room Dried
+- **Drying Method:** Patio + Raised Bed (15-16 days)
+- **Primary Cultivars:** Pacas (70% of El Itacayo), Gesha (30%)
+- **Secondary Cultivars:** Red Catuai (La Colmena)
+- **Experimental Cultivars:** Pacamara, Bourbon, Maragogype, SL28
+- **Known For:** Multi-time Cup of Excellence Honduras finalist, Santa Bárbara lot-separation pioneer, San Vicente head of quality control
+- **Typical Flavor Profile:** Floral + Stone Fruit (jasmine, peach, white tea), Tropical + Dried Fruit (mango, nectarine, blackberry on the DRD natural)
+- **Acidity Style:** Citric / Floral
+- **Body Style:** Juicy / Medium
+- **Consistency Rating:** High
+- **Market Tier:** High-End / Competition
+- **Exporters:** San Vicente
+- **Importers:** Kumquat Coffee, The Coffee Quest
+- **Roaster References:** Latent, Sey Coffee, Black & White, Verve, Three Marks
+- **Contact:** https://www.instagram.com/angelarturocafe
+- **Process Signature:** Santa Bárbara CoE-caliber washed specialist (San Vicente QC head): clean 16-24 h dry ferment, long patio dry; the Latent Dark Room Dried Gesha natural is an off-house-style experiment. _(hand-authored)_
+
+*Promoted via taxonomy-queue arbitration 2026-07-27 from the `HND-ARTUROPAZ-GESHA-DRD-NAT-2026` green lot (`6502d971`; Kumquat Coffee, 1 kg, 2026 crop); terroir resolved same day (new canonical macro Santa Bárbara-Yojoa Highlands, Chris-ratified). **Enriched 2026-10-01** (skeleton review) from The Coffee Quest + SEY 2025 El Itacayo pages + operator research: Ángel Arturo Paz Ramírez, 3rd-generation producer who grew up at Beneficio San Vicente and heads its quality control; El Itacayo bought 2018, first crop 2021; Finca La Colmena (Red Catuai) since 2007; house style afternoon depulp, 16-24 h dry ferment, four wash cycles, 15-16 day patio / raised-bed dry; CoE placements since 2011 (recent #7 / #9). Operator-supplied and not independently corroborated: the private wet mill at El Guaco, further plots (El Tango / La Tigra / Escondido), Verve / Messenger / Prodigal / Kaffa references. Tier raised 3 → 2 on the CoE record + exporter-QC role. The Latent lot is a Dark Room Dried natural - outside his washed house style; peer cup reference bag (Loquat, Agtron 69.5) in freezer stock.*
 
 ---
 
@@ -4607,6 +4648,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 ## Changelog
 
+- 2026-10-01 — Skeleton review: enriched `Frank Aroste` (SEY 2026 La Esperanza page), `Ilde Burbano, El Pilón` (Moonwake page + operator research), `Arturo Paz` (The Coffee Quest + SEY 2025 pages + operator research; tier 3 → 2) - skeleton flags removed, process signatures hand-authored. 17 producer skeletons + NO°5 (roaster) deferred to a later pass.
 - 2026-10-01 — Taxonomy queue arbitration (producer axis): promoted net-new skeleton `Hector and Lilian Leal` (Tier 3 / Experimental, Guatemala / Sacatepéquez-Chimaltenango / Central Volcanic Highlands; Finca San Miguel Urias, Antigua; the Hoffmann × Lucia Solis Fermentation Project 4-process set) via producer_override on green lot 50a91b9d - resolved queue `6a90c7e0`. Aliased `Hachi` / `Hachi Project` → `The Nest` (queue `3d7e4f24`; the three gifted Hachi 八 2026 green lots re-pointed to the canonical producer) and **enriched `The Nest`** (skeleton flag removed) off those three lots; terroir reconciled onto the single canonical Yunnan Southern Highlands row (queue `92d8b621`). Total entries 160→161.
 - 2026-08-08 — Taxonomy queue arbitration: promoted net-new skeleton `Anabella Meneses` (Tier 3 / Signal, Guatemala / Chimaltenango / Central Volcanic Highlands — meso Acatenango; Finca Santa Felisa, Laurina/Bourbon Pointu) via producer_override on the Picolot #14 "Barbie Beans" Laurina Natural brew 63aad474 — first Laurina lot in the archive. Aliases `Anabella Meneses, Santa Felisa` / `Santa Felisa` / `Finca Santa Felisa` → canonical. Resolved queue entry 2af4eef7. Rich fields pending the 2.6 research sweep. Total entries 155→156.
 - 2026-07-27 (follow-up) - Terroir resolution for `Arturo Paz`: new canonical Honduras macro `Santa Bárbara-Yojoa Highlands` stood up (see regions.md changelog); entry gains farm `Finca El Itacayo` + the macro. Skeleton flag stays (rich fields still pending).
