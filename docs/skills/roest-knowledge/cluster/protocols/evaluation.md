@@ -43,7 +43,7 @@ See [cluster/machine/counterflow-observations.md § WB-to-Ground Agtron Delta as
 - Procedure: Balanced Intensity real pourover on the finalist pair before declaring any outcome — winner selection, reference call, or an underdevelopment/defect diagnosis (the gate has produced extraction-artifact false defects, e.g. the COS-HIG-BOR v1b lactic note; treat apparent gate defects between close candidates as unconfirmed until the SPG).
 - Scope note: the xbloom gate remains the standard for non-trigger lots and remains the archive's comparison-consistency descriptor record on all lots; the SPG arbiter is a ranking step, not a replacement for the Day 7 xbloom session. Expected cost: one to two extra 2-cup manual sessions per lot.
 
-Source: [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals) + the dark-tea-ceiling descriptor-axis extension and Nova widest-delta-wins entries in the same doc.
+Source: [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Engineered-Process Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-engineered-process-naturals) + the dark-tea-ceiling descriptor-axis extension and Nova widest-delta-wins entries in the same doc.
 
 ---
 

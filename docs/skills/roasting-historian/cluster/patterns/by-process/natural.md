@@ -4,7 +4,7 @@
 
 Migrated from ROASTING.md § Naturals - Roasting Framework in Wave 4 PR 4b (2026-05-21). Wave 3 PR 1 Chris-locked this section to ROASTING.md pending Wave 4 cleanup; this is the resolution destination.
 
-**Corpus (active + closed lots):** N≥3 — CGLE Sudan Rume Natural (closed 2026-05-23), Bukure Natural Lot 21 Red Bourbon (closed 2026-06-06), Fazenda Um Wush Wush Natural Dark Room Dried (active), prior CGLE Sudan Rume Natural closed lots referenced through cross-coffee-insights.
+**Corpus (active + closed lots):** N≥3 — CGLE Sudan Rume Natural (closed 2026-05-23), Bukure Natural Lot 21 Red Bourbon (closed 2026-06-06), Fazenda Um Wush Wush Natural Dark Room Dried (closed 2026-08-10), Finca Deborah Geisha Natural 'Interstellar' (closed 2026-09-07).
 
 ## Starting framework
 
@@ -20,13 +20,14 @@ The **FC-Temp Architectural Constraint on Naturals** — a structural pattern su
 
 ## xbloom evaluation gate misranking
 
-The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** on close anaerobic-natural candidates with extracted-but-discordant character — confirmed twice on Costa Rica Anaerobic Dry Process Higuito (v1b lactic note + v2c staying-power). See [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Anaerobic Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-anaerobic-naturals). On naturals with heavy fermentation, run Balanced Intensity real pourover on the top 2 candidates before declaring outcome.
+The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** on close anaerobic-natural candidates with extracted-but-discordant character — confirmed twice on Costa Rica Anaerobic Dry Process Higuito (v1b lactic note + v2c staying-power). See [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Engineered-Process Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-engineered-process-naturals). On naturals with heavy fermentation, run Balanced Intensity real pourover on the top 2 candidates before declaring outcome.
 
 ## Per-lot deep dives
 
 - [CGLE Sudan Rume Natural (closed 2026-05-23)](docs/skills/roasting-historian/cluster/learnings/cgle-srume-natural-2026.md) — reference roast Batch 187 (V5A); closed-lot learnings deep dive
 - [Bukure Natural Lot 21 Red Bourbon (closed 2026-06-06)](docs/skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md) — reference roast Batch 194 (v2b); first East African Red Bourbon natural in archive; closed-lot learnings deep dive
-- [Fazenda Um Wush Wush Natural Dark Room Dried (active V1 → V2 blocked)](docs/skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md) — V1 cupped 2026-05-15 with cup-vs-structure inversion; V2 design blocked on Untold paired roasted reference cup
+- [Fazenda Um Wush Wush Natural Dark Room Dried (closed 2026-08-10)](docs/skills/roasting-historian/cluster/learnings/bra-fazendaum-wushwush-nat-2026.md) — reference roast Batch 220 (V3A, FC-onset); fixed ~205°C FC 3-for-3, resolved by bean-temp auto-drop 1°C above FC
+- [Finca Deborah Geisha Natural 'Interstellar' (closed 2026-09-07)](docs/skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md) — reference roast Batch 229 (V2A); yeast-inoculated natural Gesha, SPG runoff inverted the xbloom-gate reference call
 
 ## Cross-references
 
