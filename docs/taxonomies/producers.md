@@ -1645,21 +1645,26 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 - **Tier:** 3
 - **Producer System:** China Experimental Processing
-- **Processing System Tags:** Yunnan Catimor Transformation System
+- **Processing System Tags:** Yunnan Catimor Transformation System, Multi-Stage Fermentation System
 - **Reference Role:** Experimental
 - **Producer Type:** Estate
-- **Farm:** The Nest (云顶筑巢庄园)
-- **Farming Model:** Processing Initiative
-- **Processing Capability:** Natural
-- **Processing Style Tags:** Precursor Amplification
+- **Farm:** The Nest (云顶筑巢庄园 / The Nest Manor), Shuangjiang county, Lincang
+- **Farming Model:** Estate / Experimental Processing Partner Site
+- **Processing Capability:** Natural / Honey / Multi-Stage Fermentation
+- **Processing Style Tags:** Precursor Amplification, Cascade Fermentation, Enzyflow, Enzyme-Assisted, Yeast Inoculated
 - **Primary Cultivars:** Syrina
-- **Known For:** Precursor Amplification, Experimental Processing
+- **Experimental Cultivars:** Gesha (Hybrid Geisha planting ~1,600 m per the Dongze shop)
+- **Known For:** Precursor Amplification, Cascade Fermentation, Enzyflow Honey, Hachi Project collaboration, Terroir Maximus processing, Yunnan experimental lots
+- **Typical Flavor Profile:** Tropical + Dried Fruit (FanHua), Floral + Green Tea (YinXue)
+- **Acidity Style:** Malic-soft (process-led)
+- **Body Style:** Light / Tea-like
 - **Market Tier:** High-End / Competition
-- **Exporter / Processing Partner:** Hachi Project
-- **Roaster References:** Dongzhe
+- **Exporters / Processing Partners:** Hachi Project, Terroir Maximus
+- **Roaster References:** Dongzhe, Latent
 - **Contact:** https://coffee-with-dongze.myshopify.com
+- **Process Signature:** Yunnan experimental estate running the Hachi Project's three named multi-stage ferments (Precursor Amplification natural, Cascade Fermentation, Enzyflow honey) on a single Syrina green - process-led, variety-neutral lots. _(hand-authored)_
 
-*Skeleton (promoted from taxonomy queue `6dc2b8ee`, 2026-06-26; reshaped same pass). The real producer is the farm — The Nest. "Hachi Project" (Diego Bermúdez × Allan Hartmann) is the processing partner / project that works across many farms on special lots, captured as the exporter here rather than the producer; the release is the Coffee with Dongze (Dongzhe) / Brian Quan collaboration. The marketed "Hachi Project x Terroir Maximus" string (+ its unicode-"×" variant) is aliased → The Nest so the FanHua brew aggregates here. Only geography + the Precursor Amplification signature are known — backfill rich content on the next lot. The proprietary process is canonical as a signature method (see [processes.md § Signature methods](processes.md)). First The Nest / Hachi-processed lot in the archive.*
+*Promoted from taxonomy queue `6dc2b8ee` (2026-06-26) and reshaped the same pass: the real producer is the farm; "Hachi Project" (Diego Bermúdez × Allan Hartmann) is the processing partner that works across many farms on special lots, and "Terroir Maximus" is the Yunnan-side partner; the release is the Coffee with Dongze (Dongzhe) / Brian Quan collaboration. **Enriched 2026-10-01** (skeleton review) off the three gifted Hachi 八 2026 "Kyō (極)" green bags (`HACHI-FANHUA-35-1-2026` / `HACHI-LIUGUANG-39-1-2026` / `HACHI-YINGXUE-40-2026`): one Syrina green carrying three proprietary processes. Both archived Dongzhe brews (FanHua `9ca79dbf`, YinXue `2729194b`) read a roast-development ceiling, not a green ceiling, so flavor / consistency fields stay provisional until Latent roasts the lots. Terroir reconciled 2026-10-01: the estate had been split across auto-created "Yunnan Southern Highlands", auto-created "Yunnan Central Highlands", and a bare "Yunnan" row; all five rows now sit on the canonical Yunnan Southern Highlands terroir (Lincang is southwestern Yunnan). Aliases "Hachi" / "Hachi Project" / "Hachi Project x Terroir Maximus" (+ unicode "×") → The Nest. The three proprietary processes are canonical as signature methods (see [processes.md § Signature methods](processes.md)).*
 
 ---
 
@@ -4373,6 +4378,29 @@ _Added 2026-06-19 (producer-attribution-fix session). Boot Coffee's extreme-alti
 
 ---
 
+### Hector and Lilian Leal
+
+**Country:** Guatemala · **Admin:** Sacatepéquez / Chimaltenango · **Macro:** Central Volcanic Highlands
+
+- **Tier:** 3
+- **Producer System:** none (renders under Other Systems)
+- **Processing System Tags:** Controlled Fermentation System
+- **Reference Role:** Experimental
+- **Producer Type:** Family Estate
+- **Farm:** Finca San Miguel Urias (Antigua Valley, 1,460-1,540 m)
+- **Processing Capability:** Washed / Mechanically Demucilaged / Inoculated Ferments (Fermentation Project)
+- **Processing Style Tags:** Mechanically Demucilaged (control), Wild Fermentation, Lactobacillus Inoculated, Yeast Inoculated
+- **Primary Cultivars:** Caturra (~85%)
+- **Secondary Cultivars:** H1 (~15%)
+- **Known For:** Fermentation Project (James Hoffmann × Lucia Solis) 4-process set
+- **Market Tier:** Specialty / Micro-lot
+- **Importers:** Sweet Maria's
+- **Roaster References:** Regalia, Latent
+- **Contact:** https://thefermentationproject.com
+- **Skeleton:** rich fields pending research. Promoted via taxonomy-queue arbitration 2026-10-01 (queue `6a90c7e0`) from the `SM-FERMPROJ-MD-2026` control green lot (`50a91b9d`); siblings `SM-FERMPROJ-WILD/LACTO/YEAST-2026` + the four paired Regalia-roasted bags in freezer stock. Same lot, only fermentation varies - the archive's cleanest fermentation-lever reference once roasted. Global tasting event 2026-10-03.
+
+---
+
 ### Frank Aroste
 
 **Country:** Peru · **Admin:** Cusco · **Macro:** Southern Andean Highlands
@@ -4446,6 +4474,8 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 | Alias | Canonical |
 |---|---|
+| `Hachi` | `The Nest` |
+| `Hachi Project` | `The Nest` |
 | `Anabella Meneses, Santa Felisa` | `Anabella Meneses` |
 | `Santa Felisa` | `Anabella Meneses` |
 | `Finca Santa Felisa` | `Anabella Meneses` |
@@ -4577,6 +4607,7 @@ via `PRODUCER_LOOKUP.canonicalize()` automatically.
 
 ## Changelog
 
+- 2026-10-01 — Taxonomy queue arbitration (producer axis): promoted net-new skeleton `Hector and Lilian Leal` (Tier 3 / Experimental, Guatemala / Sacatepéquez-Chimaltenango / Central Volcanic Highlands; Finca San Miguel Urias, Antigua; the Hoffmann × Lucia Solis Fermentation Project 4-process set) via producer_override on green lot 50a91b9d - resolved queue `6a90c7e0`. Aliased `Hachi` / `Hachi Project` → `The Nest` (queue `3d7e4f24`; the three gifted Hachi 八 2026 green lots re-pointed to the canonical producer) and **enriched `The Nest`** (skeleton flag removed) off those three lots; terroir reconciled onto the single canonical Yunnan Southern Highlands row (queue `92d8b621`). Total entries 160→161.
 - 2026-08-08 — Taxonomy queue arbitration: promoted net-new skeleton `Anabella Meneses` (Tier 3 / Signal, Guatemala / Chimaltenango / Central Volcanic Highlands — meso Acatenango; Finca Santa Felisa, Laurina/Bourbon Pointu) via producer_override on the Picolot #14 "Barbie Beans" Laurina Natural brew 63aad474 — first Laurina lot in the archive. Aliases `Anabella Meneses, Santa Felisa` / `Santa Felisa` / `Finca Santa Felisa` → canonical. Resolved queue entry 2af4eef7. Rich fields pending the 2.6 research sweep. Total entries 155→156.
 - 2026-07-27 (follow-up) - Terroir resolution for `Arturo Paz`: new canonical Honduras macro `Santa Bárbara-Yojoa Highlands` stood up (see regions.md changelog); entry gains farm `Finca El Itacayo` + the macro. Skeleton flag stays (rich fields still pending).
 - 2026-07-27 - Taxonomy queue arbitration: promoted 4 net-new skeleton producers. `Frank Aroste` (Peru / Cusco / Southern Andean Highlands; SEY x BACC Washed Gesha brew 5275ae7b), `Christian Jebsen, Kifaru Coffee Estate` (Tanzania / Arusha-Manyara / Northern Rift Highlands - first Tanzania producer; NO°5 Classic Crema brew 91b546bb), `Arturo Paz` (Honduras / Santa Bárbara, macro deliberately unset pending a terroir pass; Kumquat green lot 6502d971), `Fran Zeimetz` (Panama, Lost Origin Maya Tri-Up yeast-natural lot family - the 2025 WBC-winning family; Kumquat green lot c4ae4c30). All Tier 3 / Signal skeletons pending enrichment; aliases added for the Kifaru farm-name and Lost Origin brand-name forms.
