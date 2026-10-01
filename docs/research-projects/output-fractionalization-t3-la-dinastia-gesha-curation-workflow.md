@@ -326,7 +326,7 @@ Lengthened arithmetic: 0.640 g ÷ (56.5 g + 14 g) = 0.91. Specs + predictions wr
 
 **Date:** 2026-10-01
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/output-fractionalization-curation-8d67ff` @ `<SHA — see termination block, filled at final commit>`, pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/output-fractionalization-curation-8d67ff` @ `a460130e (brief commit; the SHA-fill commit that follows is the final tip)`, pushed to origin (the compile session fetches/branches from here — the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** ❌ **H-workflow FAILS on this coffee (two cut depths, blind); H-predict FAILS (0/2); H-curate FAILS (lengthened lost); H2-t3 CONFIRMS.** The 3-step curation workflow ran cleanly end-to-end and produced a correct, legitimate taxonomy entry — "does not reward selection" — which is the exit condition the protocol named. The workflow is validated as a *classifier*; it is NOT validated as a cup-improver on a middle-case coffee.
 
 This brief closes the expected final track of RP9. Consume it for: the La Dinastia taxonomy entry, the H-predict scorecard, the coffee-#4 workflow writeup (§ Final output), and the project-close/retro flags. All bench detail is in the doc body above; the brief is the structured cut.
@@ -501,7 +501,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/output-fractionalization-curation-8d67ff` @ `<SHA filled below>` (the authorized archive-persist exception — see [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md))
+- ✅ Archive doc committed + pushed to branch `claude/output-fractionalization-curation-8d67ff` @ `a460130e` (the authorized archive-persist exception — see [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md))
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
