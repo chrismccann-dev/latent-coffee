@@ -70,6 +70,12 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   { name: 'Chiroso', species: 'Arabica', family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)' },
   { name: 'Dega', species: 'Arabica', family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)' },
   { name: 'Ethiopian landrace population', species: 'Arabica', family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)' },
+  // Illubabor Forest - Gesha Village Coffee Estate's named selection from the 1974
+  // Illubabor coffee-forest expedition (disease-resistant, high-yield, bright /
+  // high-acidity cup); distinct from their Gori Gesha + Gesha 1931 lines, which
+  // collapse to Gesha. Promoted 2026-10-01 (taxonomy queue 4b629d91) off the
+  // GVA.30 Gaylee Mossto-Anaerobic Honey DRD green lot (caf6c03e).
+  { name: 'Illubabor Forest', species: 'Arabica', family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)' },
   { name: 'Java', species: 'Arabica', family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)' },
   { name: 'Kurume', species: 'Arabica', family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)' },
   { name: 'Ombligón', species: 'Arabica', family: 'Ethiopian Landrace Families', lineage: 'Ethiopian landrace-derived selection (non-JARC)' },
@@ -238,6 +244,10 @@ export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
 
   // Wush Wush
   Wushwush: 'Wush Wush',
+  // Illubabor Forest - Gesha Village marketing variants.
+  'Illubabor Heirloom': 'Illubabor Forest',
+  'Illubabor Forest Heirloom': 'Illubabor Forest',
+  'Illubabor': 'Illubabor Forest',
 
   // SL14 — hyphenated trade-name variant
   'SL-14': 'SL14',
