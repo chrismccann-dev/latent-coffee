@@ -1,6 +1,6 @@
 # Latent Coffee Research — Product Issues Queue
 
-*Last updated: 2026-06-03 (split out of PRODUCT.md)*
+*Last updated: 2026-10-01*
 
 Product bugs, missing states, and incomplete substrate — kept out of [PRODUCT.md](PRODUCT.md) and the [roadmap](docs/product/roadmap.md) so neither bloats. Distinct from the roadmap's *Longer-Term Items* (which are "this works but is thin"); items here are "this exists but is broken / stub-state" or "this should exist but doesn't yet."
 
@@ -11,6 +11,12 @@ When an item resolves: move it to [docs/sprints/shipped.md](docs/sprints/shipped
 ---
 
 ## Active issues / incomplete substrate
+
+### Orphaned auto-created terroir rows after the Yunnan / The Nest reconciliation (no typed delete path)
+
+**Status:** surfaced 2026-10-01 arbitration (taxonomy queue `92d8b621`).
+
+The Nest estate had been split across three terroir rows. All five referring rows (brews `9ca79dbf` + `2729194b`, green lots `0ff455ba` / `a4ae1c35` / `6047be7e`) were re-pointed via `patch_brew` / `patch_green_bean` onto `f4d7b881` (Yunnan Southern Highlands, meso "Shuangjiang / Lincang — The Nest Estate"). The two losers - `4d83d6ba` (auto-created "Yunnan Central Highlands", meso "The Nest") and `1889fff8` (auto-created bare "Yunnan") - now have zero referrers but no MCP Tool can delete a terroir row, so they linger and may render as empty entries on `/terroirs`. Fix options: (a) a one-off migration `DELETE FROM terroirs WHERE id IN (...) AND NOT EXISTS (referrers)`, or (b) a typed `merge_terroir` / orphan-sweep Tool if this recurs (second reconciliation = graduate). Same shape applies to the auto-created cultivar row for "CGLE" (`ad8fb66c`, rejected as a cultivar 2026-10-01) once the Perisama lot's real cultivar is known.
 
 ### `patch_brew` jsonb-ish fields are untyped in the Tool schema — schema-strict MCP clients can't send them
 
