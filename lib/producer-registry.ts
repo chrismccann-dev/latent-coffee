@@ -5197,6 +5197,42 @@ export const PRODUCERS: readonly ProducerEntry[] = [
     contact: null,
     skeleton: true,
   },
+  {
+    // Promoted 2026-08-08 (taxonomy queue 2af4eef7) as a skeleton off the
+    // Picolot #14 "Barbie Beans" Laurina Natural brew (63aad474) - first Laurina
+    // lot in the brewing archive. Finca Santa Felisa, meso Acatenango -> Central
+    // Volcanic Highlands macro. Registry mirror added 2026-10-01: the md entry
+    // shipped without a ts twin, so non-override writes of "Anabella Meneses"
+    // fell through to the loose 3-char prefix matcher (check:registry-sync).
+    name: "Anabella Meneses",
+    tier: 3,
+    producerSystem: null,
+    processingSystemTags: [],
+    referenceRole: "Signal",
+    producerType: "Family Estate",
+    farmName: "Finca Santa Felisa",
+    country: "Guatemala",
+    adminRegion: "Chimaltenango",
+    macroTerroir: "Central Volcanic Highlands",
+    farmingModel: null,
+    processingCapability: "Natural / Washed",
+    processingStyleTags: [],
+    dryingMethod: null,
+    primaryCultivars: ["Laurina"],
+    secondaryCultivars: [],
+    experimentalCultivars: ["Gesha"],
+    knownFor: [],
+    typicalFlavorProfile: [],
+    acidityStyle: null,
+    bodyStyle: null,
+    consistencyRating: null,
+    marketTier: null,
+    exporters: [],
+    importers: [],
+    roasterReferences: ["Picolot"],
+    contact: null,
+    skeleton: true,
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -5439,6 +5475,12 @@ export const PRODUCER_ALIASES: Record<string, string> = {
   "Rumudamo Washing Station": "Rumu Damo Washing Station",
   "Rumudamo Washing Station (Daye Bensa)": "Rumu Damo Washing Station",
   "Rumu Damo Washing Station (Daye Bensa)": "Rumu Damo Washing Station",
+  // Anabella Meneses (Finca Santa Felisa) - comma-joined bag form as written on
+  // the Picolot Barbie Beans brew, plus the bare / Finca-prefixed farm names
+  // (the Finca form also defends against the 3-char "Fin" prefix matcher).
+  "Anabella Meneses, Santa Felisa": "Anabella Meneses",
+  "Santa Felisa": "Anabella Meneses",
+  "Finca Santa Felisa": "Anabella Meneses",
 }
 
 // ---------------------------------------------------------------------------
