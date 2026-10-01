@@ -1,0 +1,34 @@
+name: canonical-override-check
+
+# Regression gate for the override-vs-prefix write bug (2026-10-01). Runs
+# `npm run check:canonical-override`, which asserts against the real lib code
+# that push_brew / patch_brew honor `<field>_override: true` strictly: only an
+# exact canonical / explicit alias rewrites the value; the substring / 3-char
+# prefix fuzzy matcher never does. Pure in-process check - no DB, no secrets.
+#
+# Triggers on PRs touching the lookup factory, the brew write paths, any
+# registry mirror (a new canonical can become a prefix attractor), or the
+# script itself.
+
+on:
+  pull_request:
+    paths:
+      - 'lib/canonical-registry.ts'
+      - 'lib/brew-import.ts'
+      - 'lib/*-registry.ts'
+      - 'scripts/check-canonical-override.ts'
+      - 'package.json'
+  workflow_dispatch:
+
+jobs:
+  check-canonical-override:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm install --no-audit --no-fund --prefer-offline
+      - name: Run check:canonical-override
+        run: npm run check:canonical-override
