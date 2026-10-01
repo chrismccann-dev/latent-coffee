@@ -13,7 +13,7 @@ External claims in this doc are cited at authoring time and rolled up in the `##
 
 ## Canonical list
 
-Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exactly. 64 entries.
+Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exactly. 65 entries.
 
 **Arabica — Ethiopian Landrace Families**
 - JARC selection lineage: 74110, 74112, 74148, 74158, 74165
@@ -32,6 +32,7 @@ Matches `CULTIVARS` in [lib/cultivar-registry.ts](lib/cultivar-registry.ts) exac
 **Arabica — Typica × Bourbon Crosses**
 - Maragogype × Caturra lineage: Maracaturra
 - Maragogype × Gesha lineage: Maragesha
+- Gesha × Caturra lineage: CGLE-17
 - Mundo Novo × Caturra lineage: Catuaí
 - Pacas × Maragogype lineage: Pacamara
 - Typica × Bourbon cross lineage: Catucaí, Mejorado, Mundo Novo, Sidra
@@ -1545,6 +1546,34 @@ only (display layer in `lib/brew-cover-title.ts`).
 
 ---
 
+### CGLE-17
+
+**Species:** Arabica  **Genetic Family:** Typica × Bourbon Crosses  **Lineage:** Gesha × Caturra lineage
+
+#### Genetics
+- **Genetic Background:** Café Granja La Esperanza's own Gesha × Caturra selection. Initial selections and crossings 2011, first trees planted 2014; in 2017 the final selection was crossed back with Gesha from Cerro Azul and planted at Potosí. Aim: keep Caturra's disease resistance and yield while taking Gesha's aromatic character. Filed beside Maragesha as the registry's other Gesha-parent cross.
+- **Market names normalized here:** CGLE, CGLE 17, CGLE17, CGLE Hybrid 17, CGLE-17 Hybrid, CGLE 17 Hybrid.
+
+#### Agronomy
+- **Typical Origins:** Colombia (CGLE farms: Potosí ~1,800 m, Las Margaritas 1,570-1,850 m, Valle del Cauca).
+- **Altitude Sensitivity:** 1,500-1,900 masl.
+- **Limiting Factors:** Proprietary genetics; extremely limited production.
+- **Market Context:** Competition / auction (Metamorphosis).
+
+#### Reference Content — Brewing & Cup Profile
+- **Common Processing Methods:** Washed, honey.
+- **Typical Flavor Notes:** Delicate florals "distinct from the character of Geisha; heavier, almost spicy"; white flowers over herbal / spice; deep sweetness; citrus + black tea finish (washed). Honey Perisama lot: peach, intense mango, caramelized banana, coriander seed, elderflower, lychee, lemon zest.
+- **Acidity Style:** Medium-bright; citric.
+- **Body Style:** Medium; fuller than Gesha.
+- **Aromatics:** High; floral + spice rather than pure Gesha jasmine.
+- **Terroir Transparency:** Medium-high.
+- **Extraction Sensitivity:** Unknown (one lot in archive, not yet roasted).
+- **Brewing Tendencies:** High-clarity filter expected; confirm on the Perisama one-shot.
+
+**Notes:** Promoted 2026-10-01 off the `CGLE-PERISAMA-CGLE-HONEY-2026` green lot (`3d962a1b`). The Metamorphosis auction page lists the variety as bare "CGLE"; the farm's only variety carrying that label is CGLE-17, so the taxonomy-queue row `c3c6f61a` ("CGLE", rejected earlier the same day as a farm label) is superseded by this promotion with `CGLE` as an alias.
+
+---
+
 ### Catucaí
 
 **Species:** Arabica  **Genetic Family:** Typica × Bourbon Crosses  **Lineage:** Typica × Bourbon cross lineage
@@ -2503,3 +2532,4 @@ Per-claim citations at authoring time; rollup below.
 
 - **2026-04-22:** Initial adoption. 63 canonical cultivars ported from Chris's 72-row CSV research, reconciled with DB snapshot (26 rows), 10 collapses applied (Gesha 7→1 sub-selections; Aruzi = Bourbon Aruzi merged; Ethiopian landrace population dedup; Marsellesa lineage disambiguated; Mokkita dedup). Non-Arabica species scaffolded (Eugenioides, Liberica / Excelsa, Robusta). Mokka classified as Bourbon (classic) — resolves SYNC V1 step (d) pre-req. Icatu reclassified from Timor Hybrid-derived to Multi-parent hybrid lineage (direct Arabica × Robusta introgression, not Timor). Garnica reclassification to Modern Hybrids / Timor Hybrid-derived confirmed (migration 017 retained). Laurina moved from Bourbon (classic) to Bourbon mutation lineage. New lineages adopted: Typica, SL Bourbon, Maragogype × Gesha, Eugenioides, Liberica, Excelsa, Robusta. Alias map extended to 48 structural mappings.
 - **2026-10-01:** Taxonomy queue arbitration: promoted net-new `Illubabor Forest` (Ethiopian Landrace Families / Ethiopian landrace-derived selection (non-JARC)) from the Gesha Village GVA.30 green lot (queue `4b629d91`); aliases Illubabor Heirloom / Illubabor Forest Heirloom / Illubabor. Rejected queue `c3c6f61a` "CGLE" - a Café Granja La Esperanza house label on the Perisama honey lot (`3d962a1b`), not a cultivar; the lot's cultivar stays unresolved pending a farm answer. Total entries 63→64.
+- **2026-10-01 (follow-up):** Promoted net-new `CGLE-17` (Typica × Bourbon Crosses / new `Gesha × Caturra lineage`, beside Maragesha) - Café Granja La Esperanza's Gesha × Caturra house hybrid. Supersedes the same-day rejection of queue `c3c6f61a` "CGLE": the bare label on the Metamorphosis auction maps to CGLE-17, so `CGLE` (+ CGLE 17 / CGLE17 / CGLE Hybrid 17 variants) now aliases to it. DB row `ad8fb66c` renamed in place by migration 085 (operator-run). Total entries 64→65.

@@ -116,6 +116,12 @@ export const CULTIVARS: readonly CultivarEntry[] = [
   // Typica × Bourbon Crosses
   { name: 'Maracaturra', species: 'Arabica', family: 'Typica × Bourbon Crosses', lineage: 'Maragogype × Caturra lineage' },
   { name: 'Maragesha', species: 'Arabica', family: 'Typica × Bourbon Crosses', lineage: 'Maragogype × Gesha lineage' },
+  // CGLE-17 - Café Granja La Esperanza's own Gesha × Caturra selection (2011
+  // selections, 2014 first planting, 2017 backcross to Cerro Azul Gesha at
+  // Potosí; also grown at Las Margaritas). Filed beside Maragesha, the other
+  // Gesha-parent cross. Promoted 2026-10-01 off the CGLE-PERISAMA-CGLE-HONEY-2026
+  // green lot (3d962a1b) - the auction listed the variety as bare "CGLE".
+  { name: 'CGLE-17', species: 'Arabica', family: 'Typica × Bourbon Crosses', lineage: 'Gesha × Caturra lineage' },
   { name: 'Catuaí', species: 'Arabica', family: 'Typica × Bourbon Crosses', lineage: 'Mundo Novo × Caturra lineage' },
   { name: 'Pacamara', species: 'Arabica', family: 'Typica × Bourbon Crosses', lineage: 'Pacas × Maragogype lineage' },
   { name: 'Catucaí', species: 'Arabica', family: 'Typica × Bourbon Crosses', lineage: 'Typica × Bourbon cross lineage' },
@@ -244,6 +250,14 @@ export const CULTIVAR_ALIASES: Readonly<Record<string, string>> = {
 
   // Wush Wush
   Wushwush: 'Wush Wush',
+  // CGLE-17 - the farm's own hybrid; bare "CGLE" is how the Metamorphosis
+  // auction lists it (farm label standing in for the variety).
+  'CGLE': 'CGLE-17',
+  'CGLE 17': 'CGLE-17',
+  'CGLE17': 'CGLE-17',
+  'CGLE Hybrid 17': 'CGLE-17',
+  'CGLE-17 Hybrid': 'CGLE-17',
+  'CGLE 17 Hybrid': 'CGLE-17',
   // Illubabor Forest - Gesha Village marketing variants.
   'Illubabor Heirloom': 'Illubabor Forest',
   'Illubabor Forest Heirloom': 'Illubabor Forest',
