@@ -350,7 +350,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/brewing-historian/cluster/patterns/cross-coffee-insights.md',
-    title: 'Brewing Historian — Cross-Coffee Insights (By Modifier / Process / Variety / Cooling / Office / Open Questions)',
+    title: 'Brewing Historian — Cross-Coffee Insights (CCIL: Cross-Axis Router / Active Cross-Coffee Patterns / Sub-Threshold Candidates / Modifier Layer / Open Questions / End-of-Coffee Workflow)',
     description: 'Use when looking up CROSS-ANCHOR brewing learnings — patterns that cross ≥2 anchors and have no single-axis home. Contents: Ownership Boundary table (what lives here vs in a capsule) + Coffee Brief Read Order + Cross-Axis Strategy Router (tactical lookup, the former Process/Variety Signal Table; each row points to the canonical single-axis file); Active Cross-Coffee Patterns (roast-level overrides process/cultivar; temperature primacy on anaerobic/cold-room naturals; roaster house style overrides clean-process default; vehicle integration for aromatic-landrace/SL-lineage; cooling-arc diagnostic; office-tap water amplifies roast-forward body); Modifier Layer (Axis 2 — Output Selection / Inverted Temp Staging / Aroma Capture + compatibility matrix); Sub-Threshold Cultivar Candidates (n<3: Pink Bourbon, Rosado, Mokka, Mokkita, Catimor, Catuai, Red Bourbon); Sub-Threshold Process-Family Candidates (n<3: Washed, White/Light Honey, Honey-medium, Standard Natural, Controlled Natural, Anoxic, Heavy Co-ferment — thin notes + routers to their cultivar/roaster/strategy homes); Open Questions queue; End-of-Coffee Workflow. Single-axis detail lives in by-cultivar / by-coffee-family / by-strategy capsules. Re-architected pruning case 007a (2026-06-04); the Pending Relocation block was drained in case 007b — By-Process detail folded into the by-coffee-family capsules, Office Brewing Notes into the Brewing Equipment Expert cluster (sworks.md valve principles + operational-reference.md office water), per-coffee cooling notes into their cultivar/roaster capsules.',
   },
   {
@@ -397,6 +397,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/74158.md',
     title: 'Brewing Historian — By Cultivar: 74158 (N=5)',
     description: 'Use when designing a recipe for cultivar 74158 (Ethiopian landrace) — pointer to the Ethiopian Landraces (74110/74112/74158) cross-rollup and the Hydrangea Basha Bekele Kokose Suppression entry. N=5.',
+  },
+  {
+    uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/pink-bourbon.md',
+    title: 'Brewing Historian — By Cultivar: Pink Bourbon (N=4)',
+    description: 'Use when designing a Pink Bourbon recipe — transparency-driven variety with Balanced Intensity as the ceiling, plus the two process overrides (anoxic natural → Temperature-Staged Hybrid; DRD natural at WB 70.1 → ICS recovery shape, no roast wall) and the El Pilón clean-anaerobic-washed Clarity-First read. Rosado sibling stays sub-threshold in the CCIL. N=4. Graduated 2026-10-02 (case 016).',
   },
   {
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md',
