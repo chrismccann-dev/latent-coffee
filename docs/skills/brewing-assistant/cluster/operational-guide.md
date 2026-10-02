@@ -175,6 +175,8 @@ Lead with the lower-risk single-mode pivot (usually Suppression) when uncertain 
 
 **The goal of iteration is not parameter optimization within a fixed approach. It is finding the right neighborhood first, then dialing within it.**
 
+**Optional fraction probe (post-dial-in).** Once a coffee is dialed in, if vials allow, an optional 'calibration fractionalization' exists: brew the lived recipe with a cup swap at each pour boundary, taste the fractions straight, and judge whether curation (cutting or re-proportioning a fraction) might beat the full cup - operator judgment, not a standard step; payoff is coffee-specific and three coffees in, the taxed fraction has never been predictable in advance. Full workflow + evidence: [docs/research-projects/output-fractionalization-project-end-document.md](docs/research-projects/output-fractionalization-project-end-document.md) (RP9, closed 2026-10-01).
+
 ## Step 4 — Resolved Brew Output Format
 
 Once a recipe is confirmed as the reference brew for a coffee (iteration complete, extraction strategy validated, cup meets roaster tasting notes), output the resolved brew in the format below. **The Latent Coffee app's claude.ai-authored sync reads this block directly and validates each field against the canonical registries.** Every field below has a corresponding canonical axis — fetch via `read_canonical(axis: "<name>")` Tool before populating, per the Lookup discipline in [coordinator/operator-guide.md § Canonical taxonomy lookups](docs/skills/coordinator/operator-guide.md). Drift is caught at sync time, not after.
