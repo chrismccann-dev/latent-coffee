@@ -202,6 +202,15 @@ Most likely targets (all brewing-side learnings now live in cluster docs):
   - target_doc="skills/brewing-historian/cluster/patterns/by-strategy/<strategy>.md"
     for new "Coffees That Confirmed X" data points (clarity-first / suppression /
     balanced-intensity / full-expression / extraction-push / hybrid)
+    **Hybrid is ledger-shaped (pruning case 016):** a Hybrid confirmation is ONE
+    citation, operation=append, section_anchor="Confirmation ledger", whose
+    proposed_text is a single table row in the ledger's column order -
+    `| date | lot | sub-form | vehicle · paper · key params | trigger shape · one-line lesson | brew_id |`.
+    No narrative, recipe or cup notes (they are on the brew row from STEP 1).
+    Add a second citation against the sub-form's section (Sequential /
+    Intensity-Clarity Split / Temperature-Staged) ONLY if the brew teaches a rule
+    that block does not already state - read the block first; a repeat
+    confirmation is the ledger row and nothing else.
   - target_doc="skills/brewing-historian/cluster/patterns/by-cultivar/<cultivar>.md"
     or by-coffee-family/<family>.md for per-cluster deep-dive patterns
   - target_doc="skills/brewing-assistant/cluster/operational-guide.md" for

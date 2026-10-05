@@ -381,7 +381,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   {
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-strategy/hybrid.md',
     title: 'Brewing Historian — By Strategy: Hybrid',
-    description: 'Use when designing a Hybrid recipe and looking for confirmed per-coffee data points — SWORKS slow/slow/open Sequential template across three yeast-inoculated Geshas (Janson 1010 / Sebastian Ramirez White Honey / Finca La Reserva Anaerobic Honey); 4 other sub-forms (Phase-Mapped / Selective Bloom / Intensity-Clarity Split / Temperature-Staged) empty with candidate-experiment scoping. Migrated from BREWING.md § Cross-Coffee Insight Layer > Coffees That Confirmed Hybrid in Wave 2 PR 2.',
+    description: 'Use when designing a Hybrid recipe - rules stated once per sub-form (Sequential incl. Graduated Taper / Intensity-Clarity Split / Temperature-Staged: triggers, vehicle + paper routing, cut sizing, parameter levers), the still-open candidates (Phase-Mapped, Selective Bloom, standalone Temperature-Staged trigger), and a Confirmation ledger (one row per confirmed brew with brew_id; recipes + cup notes live on the brew row). Append convention: a new confirmation adds one ledger row, plus a rule bullet only when the sub-form block does not already say it (pruning case 016).',
   },
   {
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-roast-level/medium-developed.md',
@@ -400,8 +400,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/pink-bourbon.md',
-    title: 'Brewing Historian — By Cultivar: Pink Bourbon (N=4)',
-    description: 'Use when designing a Pink Bourbon recipe — transparency-driven variety with Balanced Intensity as the ceiling, plus the two process overrides (anoxic natural → Temperature-Staged Hybrid; DRD natural at WB 70.1 → ICS recovery shape, no roast wall) and the El Pilón clean-anaerobic-washed Clarity-First read. Rosado sibling stays sub-threshold in the CCIL. N=4. Graduated 2026-10-02 (case 016).',
+    title: 'Brewing Historian — By Cultivar: Pink Bourbon (N=5)',
+    description: 'Use when designing a Pink Bourbon recipe — transparency-driven variety with Balanced Intensity as the ceiling, plus the two process overrides (anoxic natural → Temperature-Staged Hybrid; DRD natural at WB 70.1 → ICS recovery shape, no roast wall; the same lot Latent-roasted → Sequential at 90°C) and the El Pilón clean-anaerobic-washed Clarity-First read. Rosado sibling stays sub-threshold in the CCIL. N=5. Graduated 2026-10-02 (case 016).',
   },
   {
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md',
