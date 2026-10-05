@@ -350,7 +350,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/brewing-historian/cluster/patterns/cross-coffee-insights.md',
-    title: 'Brewing Historian — Cross-Coffee Insights (By Modifier / Process / Variety / Cooling / Office / Open Questions)',
+    title: 'Brewing Historian — Cross-Coffee Insights (CCIL: Cross-Axis Router / Active Cross-Coffee Patterns / Sub-Threshold Candidates / Modifier Layer / Open Questions / End-of-Coffee Workflow)',
     description: 'Use when looking up CROSS-ANCHOR brewing learnings — patterns that cross ≥2 anchors and have no single-axis home. Contents: Ownership Boundary table (what lives here vs in a capsule) + Coffee Brief Read Order + Cross-Axis Strategy Router (tactical lookup, the former Process/Variety Signal Table; each row points to the canonical single-axis file); Active Cross-Coffee Patterns (roast-level overrides process/cultivar; temperature primacy on anaerobic/cold-room naturals; roaster house style overrides clean-process default; vehicle integration for aromatic-landrace/SL-lineage; cooling-arc diagnostic; office-tap water amplifies roast-forward body); Modifier Layer (Axis 2 — Output Selection / Inverted Temp Staging / Aroma Capture + compatibility matrix); Sub-Threshold Cultivar Candidates (n<3: Pink Bourbon, Rosado, Mokka, Mokkita, Catimor, Catuai, Red Bourbon); Sub-Threshold Process-Family Candidates (n<3: Washed, White/Light Honey, Honey-medium, Standard Natural, Controlled Natural, Anoxic, Heavy Co-ferment — thin notes + routers to their cultivar/roaster/strategy homes); Open Questions queue; End-of-Coffee Workflow. Single-axis detail lives in by-cultivar / by-coffee-family / by-strategy capsules. Re-architected pruning case 007a (2026-06-04); the Pending Relocation block was drained in case 007b — By-Process detail folded into the by-coffee-family capsules, Office Brewing Notes into the Brewing Equipment Expert cluster (sworks.md valve principles + operational-reference.md office water), per-coffee cooling notes into their cultivar/roaster capsules.',
   },
   {
@@ -397,6 +397,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/74158.md',
     title: 'Brewing Historian — By Cultivar: 74158 (N=5)',
     description: 'Use when designing a recipe for cultivar 74158 (Ethiopian landrace) — pointer to the Ethiopian Landraces (74110/74112/74158) cross-rollup and the Hydrangea Basha Bekele Kokose Suppression entry. N=5.',
+  },
+  {
+    uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/pink-bourbon.md',
+    title: 'Brewing Historian — By Cultivar: Pink Bourbon (N=4)',
+    description: 'Use when designing a Pink Bourbon recipe — transparency-driven variety with Balanced Intensity as the ceiling, plus the two process overrides (anoxic natural → Temperature-Staged Hybrid; DRD natural at WB 70.1 → ICS recovery shape, no roast wall) and the El Pilón clean-anaerobic-washed Clarity-First read. Rosado sibling stays sub-threshold in the CCIL. N=4. Graduated 2026-10-02 (case 016).',
   },
   {
     uri: 'docs://skills/brewing-historian/cluster/patterns/by-cultivar/sidra.md',
@@ -466,8 +471,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/patterns/open-questions.md',
-    title: 'Roasting Historian — Open Questions (12 research questions)',
-    description: 'Use when planning a V1 design where a relevant Open Question is in scope — 12 research questions tracked for future roast sessions. Includes FC-Temp anchoring on naturals (3rd lot pending), audible FC threshold on heavy anaerobic naturals, Day 7 cupping-table-vs-pourover reversal on heavy-anaerobic Gesha, altitude-as-density proxy on one-shot calibrations, bean-temp end condition validation. Resolved questions are deleted, not strikethrough.',
+    title: 'Roasting Historian — Open Questions (7 research questions)',
+    description: 'Use when planning a V1 design where a relevant Open Question is in scope — 7 research questions tracked for future roast sessions. Includes FC-Temp anchoring on naturals (3rd lot pending), audible FC threshold on heavy anaerobic naturals, dev-time-vs-peak-inlet Agtron ordering, washed-Gesha 48s dev floor, altitude-as-density proxy on one-shot calibrations, Gesha Clouds green-aging divergence. Resolved questions are deleted, not strikethrough.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/patterns/general.md',
@@ -748,8 +753,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/bra-fazendaum-wushwush-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Fazenda Um Wush Wush Natural (V1 cupped 2026-05-15; V2 BLOCKED on Untold paired reference; cup-vs-structure inversion)',
-    description: 'Active-lot working hypotheses for Fazenda Um Wush Wush Natural Dark Room Dried. V1 cupped 2026-05-15 (Day 11); V2 design BLOCKED on Untold paired roasted reference cup. Strategic role: Gesha-natural floral practice lot before committing V1 on Finca Deborah. Cup-vs-structure inversion observed; producer notes (mandarin/prune/cacao) absent. FC-Temp Architectural Constraint on Naturals reproduced. Three V2 hypothesis paths enumerated. Migrated from ROASTING.md § Active Lots in Wave 4 PR 4b (2026-05-21).',
+    title: 'Roasting Historian — active-lots / Fazenda Um Wush Wush Natural (REDIRECT STUB — closed 2026-08-10, reference Batch 220 V3A)',
+    description: '[REDIRECT STUB per the close-out convention, case 014] Lot closed 2026-08-10; reference roast Batch 220 (V3A, FC-onset - bean-temp auto-drop 1°C above the lot\'s fixed ~205°C FC, 4s dev, first full producer-notes cup). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/bra-fazendaum-wushwush-nat-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/rwa-nova-nat21-rb-2026.md',
@@ -763,8 +768,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-deborah-geisha-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (closed stub — closed 2026-09-07, reference Batch 229 V2A via SPG runoff)',
-    description: '[Closed-lot stub per the close-out convention] Lot closed 2026-09-07; reference roast Batch 229 (V2A, 210.5C auto-drop on the 244C sustained-tail curve, first audible FC on the lot) chosen via the SPG runoff that INVERTED the xbloom-gate verdict over 228. Optimized brew 23ebcdd7 (Clarity-First low edge). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md; the stub preserves the V1/V2 design-record H2 anchors for cross-references.',
+    title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (REDIRECT STUB — closed 2026-09-07, reference Batch 229 V2A via SPG runoff)',
+    description: '[REDIRECT STUB per the close-out convention, case 014] Lot closed 2026-09-07; reference roast Batch 229 (V2A, 210.5C auto-drop on the 244C sustained-tail curve, first audible FC on the lot) chosen via the SPG runoff that INVERTED the xbloom-gate verdict over 228. Optimized brew 23ebcdd7 (Clarity-First low edge). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
