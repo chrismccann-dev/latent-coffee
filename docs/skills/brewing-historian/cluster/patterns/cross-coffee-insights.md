@@ -386,7 +386,7 @@ After each coffee is finished, run this checklist before starting the next coffe
 
 ### 2. Route the Update (narrowest correct home)
 
-- Strategy evidence → `by-strategy/<strategy>.md`
+- Strategy evidence → `by-strategy/<strategy>.md` (Hybrid: one Confirmation-ledger row; a rule bullet only if the sub-form block does not already say it)
 - Process-family evidence → `by-coffee-family/<process>.md`
 - Cultivar evidence → `by-cultivar/<cultivar>.md` (or a Sub-Threshold Candidate entry here if n<3)
 - Roast-level evidence → `by-roast-level/<level>.md` (axis stood up 2026-07-27; seed capsule medium-developed.md)
@@ -402,7 +402,7 @@ Update this file only if the coffee teaches one of: a cross-anchor strategy-sele
 
 ### 4. Use `propose_doc_changes`
 
-After the brew is archived, the Brewing Historian proposes doc changes rather than scattering edits directly. The proposal should include: source brew ID; one-sentence learning; target file(s); exact section anchor(s); whether the learning is n=1 candidate / n=2 working pattern / n=3+ durable rule; proposed edit text; and any deletions from this file caused by moving single-axis knowledge elsewhere.
+After the brew is archived, the Brewing Historian proposes doc changes rather than scattering edits directly. The proposal should include: source brew ID; one-sentence learning; target file(s); exact section anchor(s); whether the learning is n=1 candidate / n=2 working pattern / n=3+ durable rule; proposed edit text; and any deletions from this file caused by moving single-axis knowledge elsewhere. For `by-strategy/hybrid.md` the proposed edit text is a ledger row, not a narrative (see that file's How to append note).
 
 ### 5. Update the Brew App
 
