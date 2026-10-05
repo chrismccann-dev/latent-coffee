@@ -51,16 +51,16 @@
 > home; treat as unknown at brew time.
 >
 > **Office stock index (presumptive, as of 2026-09-01 — operator's written physical list, 15g doses each; optimized brew linked where one exists):**
-> - Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi — 15 (added 2026-09-21, net new, no brews)
-> - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — ~7 (optimized brew locked 2026-09-24, [brew 23b48be7](https://www.latentcoffee.com/brews/23b48be7-064b-4e47-9440-029e105b0cb3); RP9 Track 3 control)
+> - Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi — 12+, as of 2026-10-05 (operator physical count) (added 2026-09-21 at 15, net new, no brews)
+> - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — 8, as of 2026-10-05 (operator physical count) (optimized brew locked 2026-09-24, [brew 23b48be7](https://www.latentcoffee.com/brews/23b48be7-064b-4e47-9440-029e105b0cb3); RP9 Track 3 control)
 > - Picolot — S201 Overture: Tower (Elida Estate Torre Gesha Natural DRD) — 12 (added 2026-09-11, net new, no brews)
-> - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 10 (added 2026-09-11, net new, no brews)
+> - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 10, as of 2026-10-05 (operator physical count) (added 2026-09-11, net new, no brews)
 > - MAME — La Palma y El Tucán Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - MAME — Janson Lot 1035 Geisha Anaerobic (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - MAME — Abu Lot 3345 Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - MAME — Auromar Lot 3 Geisha Washed (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - MAME — Mi Finquita Geisha Natural Wine Globe (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
-> - Moonwake — Tabaco Pata Juanito Navarro Washed SL9 — ~9 · [brew](https://www.latentcoffee.com/brews/10c46241-00d0-40fb-8c7e-54fb32e4f97e) — RP9 Track 2 control
+> - Moonwake — Tabaco Pata Juanito Navarro Washed SL9 — 1, as of 2026-10-05 (operator physical count) · [brew](https://www.latentcoffee.com/brews/10c46241-00d0-40fb-8c7e-54fb32e4f97e) — RP9 Track 2 control
 > - Moonwake — Project One Light Blue Iris (Yeast Anaerobic Honey Catimor) — 6 · [brew](https://www.latentcoffee.com/brews/f404e3b0-3d43-4da0-8e29-38c9ddad4494) — RP9 Track 1 will consume
 > - Hydrangea — Guadalupe Hill Auction Lot Washed Sidra — 5 · [brew](https://www.latentcoffee.com/brews/f466bfe1-35d9-4fde-801e-5d0578d0d483)
 > - Moonwake — Ngoma Station J.M.V. Usekanabagoyi Washed (Rwanda) — 4 · [brew](https://www.latentcoffee.com/brews/80512a64-70fe-49d6-afbf-fe55d1940a50)
@@ -873,14 +873,14 @@
 ## Moonwake Coffee Roasters — La Dinastia Wilder Lazo — Lemongrass Yellow Honey Gesha — Colombia
 **Country:** Colombia · **Region/Farm:** Huila / La Dinastía · **Producer:** Wilder Lazo
 **Variety:** Geisha · **Process:** Yellow Honey (floated, 36hr in-cherry dry ferment, depulped, dried) · **Elevation:** 1480–1550 m
-**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (~7 vials as of 2026-10-01)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (8 vials as of 2026-10-05 (operator physical count))
 **URL:** https://moonwakecoffeeroasters.com/products/la-dinastia-wilder-lazo-lemongrass-yellow-honey-gesha-colombia
 **Notes:** Rest 2–3 wks (Moonwake). Notes: lemongrass, dried apricot, tangerine, jasmine. Lemongrass character came via equipment cross-contamination, not direct fermentation. Same producer as the Robert Asami 300hr Anaerobic Washed Gesha. Optimized brew locked 2026-09-24 in ONE cup (Balanced Intensity lower edge, SWORKS Restricted-main + Dial 6 finish, EG-1 6.3 / ~95°C, [brew 23b48be7](https://www.latentcoffee.com/brews/23b48be7-064b-4e47-9440-029e105b0cb3)) — RP9 Track 3 fractionation control; remaining vials reserved for the research track. Lived recipe: 45g bloom Dial 0 ~30s -> P1 to 150g Dial 5 -> P2 to 240g Dial 5, Dial 6 at 240g in, to dry bed (no flush). Cup: dried apricot, jasmine, honey, green tea with a lemongrass bite; peaks cool. RP9 T3 verdict (2026-10-01, blind ×2 incl. matched TDS): full cup wins - does NOT reward fraction selection. The bloom carries the lemongrass signature; don't cut it. Apax 1+1 cup-dose is load-bearing for sweetness on this coffee.
 
 ## Moonwake Coffee Roasters — Tabaco Pata Juanito Navarro — Washed SL9 — Peru
 **Country:** Peru · **Region/Farm:** Inkawasi, Cusco / Tabaco Pata · **Producer:** Juanito Navarro
 **Variety:** SL9 · **Process:** Washed · **Elevation:** 2280 m
-**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (~9 vials as of 2026-09-23)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (1 vial as of 2026-10-05 (operator physical count))
 **URL:** https://moonwakecoffeeroasters.com/products/tabaco-pata-juanito-navarro-washed-sl9-peru
 **Notes:** Rest 4–6 wks (Moonwake). Notes: hawthorn tanghulu, nectarine, cranberry. Volcanic mineral-rich soil, shade-grown at exceptional altitude. Optimized brew locked 2026-09-14 in ONE cup (Graduated Taper on SWORKS valve, [brew 10c46241](https://www.latentcoffee.com/brews/10c46241-00d0-40fb-8c7e-54fb32e4f97e)) — RP9 Track 2 fractionation control; remaining vials reserved for the research track. 11 vials as of 2026-09-14; physical count at RP9 T2 Step 0 found 15, not 11 (shared-freezer drift, P9-AI-3); track consumed 6 -> ~9 vials as of 2026-09-23. RP9 T2 verdict (2026-09-23, blind ×2): bloom-cut preferred - discard the bloom fraction (~10% of cup mass; swap cup at the ~0:30 bloom drain), keep pours 1+2 in full. Full cup reads pungent/astringent by comparison; bloom-cut reads clear, crisp, elegant. Lived recipe: 45g bloom Dial 0 drain ~0:30 -> P1 to 150g Dial 5 -> P2 to 240g Dial 5, Dial 6 at 240g in, to dry bed (no flush).
 
@@ -936,7 +936,7 @@
 ## Picolot — S203 Agricola Geisha 36-hr CF Ox Natural
 **Country:** Panama · **Region/Farm:** Boquete hills / Agricola Geisha · **Producer:** Manuel Barsallo (farm of Gonzalo & Yrma Palenzuela)
 **Variety:** Geisha · **Process:** Natural (36hr cold oxidation, 29-day dry) · **Elevation:** — (Boquete hills, bajareque mist path)
-**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (10 vials as of 2026-09-11)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (10 vials as of 2026-10-05 (operator physical count))
 **URL:** https://picolot.shop/products/s203-agricola-geisha-ox-natural
 **Notes:** 2025 Best of Panama award winner (3rd place, second year of production). Harvested at 15 Brix; shade-grown under plantain + avocado. 5 kg green lot. Notes: peach, white grape, kiwi, juicy, cold eucalyptus line.
 
@@ -1027,6 +1027,6 @@
 ## Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi
 **Country:** Colombia · **Region/Farm:** Acevedo, Huila / Finca Anaya · **Producer:** Sergio Aranda Gomez
 **Variety:** Tabi · **Process:** Cinnamon + Sugarcane Inoculated Anaerobic · **Elevation:** 1600 m
-**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (15 vials as of 2026-09-21)
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (12+ vials as of 2026-10-05 (operator physical count))
 **URL:** https://moonwakecoffeeroasters.com/products/finca-anaya-sergio-aranda-gomez-cinnamon-sugarcane-tabi-colombia
 **Notes:** Roaster notes: coconut flakes, pineapple cake, strawberry milkshake. Process: 24h oxidation → 48h yeast/cinnamon/sugarcane pre-ferment → 72h anaerobic → thermal shock → 12-day drying. Roaster recommends 2-3 week rest.
