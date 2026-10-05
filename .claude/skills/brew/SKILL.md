@@ -74,7 +74,8 @@ self-roasted detection block for the full signal list. The short version:
 4. **Self-roasted optimized-brew carve-out**, the ONE self-roasted brew that completes HERE.
    Signal: an `OPTIMIZED BREW PACKET` block, or the operator declares "this is the optimized /
    reference brew for <lot>". Handle per [`start-brew.md`](docs/prompts/start-brew.md)'s
-   self-roasted entry: pull the lot via `get_green_bean` + `get_bean_pipeline` (the roasted-bean
+   self-roasted entry: pull the lot via `get_green_bean` + `get_bean_pipeline` with the packet's
+   `roast_id` (never the unscoped pipeline - it overflows the tool-result cap; the roasted-bean
    state IS the "coffee"), seed Step 1d from the packet's starting brewing direction, iterate
    normally, and at completion run `push_brew` (`source: "self-roasted"`, `roaster: "Latent"`,
    `green_bean_id` + the packet's `roast_id` both set); it does NOT stop at the gate. Then emit the

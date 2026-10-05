@@ -41,6 +41,11 @@ export type ByBeanPayload = {
   // this timestamp (green_bean stays full; roast_learnings is null when
   // unchanged-or-absent). Absent on a full fetch.
   since_applied?: string
+  // Carve-out graduation (2026-10-05): echoed back when the caller passed
+  // `roast_id` — roasts / cuppings / brews / roast_recipes are then scoped to
+  // that one roast and experiments is always [] (green_bean + roast_learnings
+  // stay full). Absent on a full fetch.
+  roast_id_applied?: string
 }
 
 export async function fetchByBean(
@@ -54,6 +59,12 @@ export async function fetchByBean(
   // lived staleness failure (severity handoff 2026-06-06). green_bean always
   // returns full (it's the anchor and carries lot_status).
   since?: string,
+  // Carve-out graduation (2026-10-05, friction N=4): scope the child arrays
+  // to ONE roast. A resolved V-set lot's full pipeline is 67-118K chars and
+  // blows the tool-result cap; the self-roasted optimized-brew carve-out only
+  // needs green_bean + the packet's named roast + its cuppings +
+  // roast_learnings. Throws when the roast isn't on this lot.
+  roast_id?: string,
 ): Promise<ByBeanPayload | null> {
   const { data: bean, error: beanErr } = await supabase
     .from('green_beans')
@@ -71,6 +82,7 @@ export async function fetchByBean(
     .eq('user_id', userId)
     .eq('green_bean_id', green_bean_id)
     .order('roast_date', { ascending: true })
+  if (roast_id) roastsQuery = roastsQuery.eq('id', roast_id)
   if (since) roastsQuery = roastsQuery.gte('updated_at', since)
   const { data: roasts, error: roastsErr } = await roastsQuery
   if (roastsErr) throw new Error(`roasts fetch failed: ${roastsErr.message}`)
@@ -80,14 +92,26 @@ export async function fetchByBean(
   // must be ALL the lot's roast ids, not the since-filtered ones — a new
   // cupping usually lands on a roast that hasn't changed since the last pull.
   let cuppingKeyIds = roastRows.map((r) => (r as { id: string }).id)
-  if (since) {
-    const { data: allRoastIds, error: allIdsErr } = await supabase
+  // Scoped fetch: the same lookup doubles as the roast-belongs-to-lot check
+  // (the since-filtered roasts query above can legitimately return zero rows).
+  let scopedRecipeId: string | null = null
+  if (since || roast_id) {
+    let allIdsQuery = supabase
       .from('roasts')
-      .select('id')
+      .select('id, recipe_id')
       .eq('user_id', userId)
       .eq('green_bean_id', green_bean_id)
+    if (roast_id) allIdsQuery = allIdsQuery.eq('id', roast_id)
+    const { data: allRoastIds, error: allIdsErr } = await allIdsQuery
     if (allIdsErr) throw new Error(`roast id fetch failed: ${allIdsErr.message}`)
-    cuppingKeyIds = (allRoastIds ?? []).map((r) => (r as { id: string }).id)
+    const idRows = (allRoastIds ?? []) as { id: string; recipe_id: string | null }[]
+    if (roast_id && !idRows.length) {
+      throw new Error(
+        `Roast ${roast_id} not found on green bean ${green_bean_id}. Omit roast_id for the full pipeline to list this lot's roasts.`,
+      )
+    }
+    cuppingKeyIds = idRows.map((r) => r.id)
+    if (roast_id) scopedRecipeId = idRows[0].recipe_id
   }
   let cuppingRows: Record<string, unknown>[] = []
   if (cuppingKeyIds.length) {
@@ -103,15 +127,21 @@ export async function fetchByBean(
     cuppingRows = cuppings ?? []
   }
 
-  let experimentsQuery = supabase
-    .from('experiments')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('green_bean_id', green_bean_id)
-    .order('experiment_id', { ascending: true })
-  if (since) experimentsQuery = experimentsQuery.gte('updated_at', since)
-  const { data: experiments, error: expErr } = await experimentsQuery
-  if (expErr) throw new Error(`experiments fetch failed: ${expErr.message}`)
+  // Experiments are V-set frames, not per-roast rows — a roast-scoped fetch
+  // skips them entirely (they are the bulk of a resolved lot's payload).
+  let experiments: Record<string, unknown>[] = []
+  if (!roast_id) {
+    let experimentsQuery = supabase
+      .from('experiments')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('green_bean_id', green_bean_id)
+      .order('experiment_id', { ascending: true })
+    if (since) experimentsQuery = experimentsQuery.gte('updated_at', since)
+    const { data, error: expErr } = await experimentsQuery
+    if (expErr) throw new Error(`experiments fetch failed: ${expErr.message}`)
+    experiments = data ?? []
+  }
 
   const { data: lessons, error: lessonsErr } = await supabase
     .from('roast_learnings')
@@ -139,6 +169,7 @@ export async function fetchByBean(
     .eq('user_id', userId)
     .eq('green_bean_id', green_bean_id)
     .order('created_at', { ascending: false })
+  if (roast_id) brewsQuery = brewsQuery.eq('roast_id', roast_id)
   if (since) brewsQuery = brewsQuery.gte('updated_at', since)
   const { data: brews, error: brewsErr } = await brewsQuery
   if (brewsErr) throw new Error(`brews fetch failed: ${brewsErr.message}`)
@@ -146,24 +177,32 @@ export async function fetchByBean(
   // Sub Pages 6.1 (2026-05-13): pull design-intent rows for the bean. Ordered
   // by created_at desc so the most-recent V-set lands first — matches how a
   // mid-iteration caller asks "what's the latest recipe I designed?".
-  let recipesQuery = supabase
-    .from('roast_recipes')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('green_bean_id', green_bean_id)
-    .order('created_at', { ascending: false })
-  if (since) recipesQuery = recipesQuery.gte('updated_at', since)
-  const { data: recipes, error: recipesErr } = await recipesQuery
-  if (recipesErr) throw new Error(`roast_recipes fetch failed: ${recipesErr.message}`)
+  // Roast-scoped fetch: only the recipe the roast links via recipe_id (none
+  // when the roast has no recipe).
+  let recipes: Record<string, unknown>[] = []
+  if (!roast_id || scopedRecipeId) {
+    let recipesQuery = supabase
+      .from('roast_recipes')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('green_bean_id', green_bean_id)
+      .order('created_at', { ascending: false })
+    if (scopedRecipeId) recipesQuery = recipesQuery.eq('id', scopedRecipeId)
+    if (since) recipesQuery = recipesQuery.gte('updated_at', since)
+    const { data, error: recipesErr } = await recipesQuery
+    if (recipesErr) throw new Error(`roast_recipes fetch failed: ${recipesErr.message}`)
+    recipes = data ?? []
+  }
 
   return {
     green_bean: bean,
     roasts: roastRows,
     cuppings: cuppingRows,
-    experiments: experiments ?? [],
+    experiments,
     roast_learnings: lessonsOut,
     brews: (brews ?? []) as BrewSummary[],
-    roast_recipes: recipes ?? [],
+    roast_recipes: recipes,
     ...(since ? { since_applied: since } : {}),
+    ...(roast_id ? { roast_id_applied: roast_id } : {}),
   }
 }
