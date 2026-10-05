@@ -100,7 +100,7 @@ Per-fraction TDS × weight gives solids; recombination/curation TDS is predictab
 | P9-AI-4 | T2 control row transcription drift (aspirational dial sequence) | CLOSED — corrected via patch_brew at T2 fold; RP8-N17 reaffirmed |
 | P9-AI-5 | T3 control row `23b48be7` producer field "Wilton Benitez" → Wilder Lazo (+ optional kettle-on-base annotation) | **QUEUED — T3 fold session** (patch_brew) |
 | P9-AI-6 | Taxonomy needs "fraction carries" alongside "tax fraction" | CLOSED — field added to the taxonomy table above |
-| P9-AI-7 | Co-ferment infusion layer localizes in the bloom (n=1) — generalize? | OPEN — opportunistic on any future co-ferment fraction brew; not project-gating |
+| P9-AI-7 | Co-ferment infusion layer localizes in the bloom (n=1) — generalize? | OPEN — opportunistic on any future co-ferment fraction brew; not project-gating. **External-evidence append (2026-10-04, operator-surfaced video):** mechanism candidate — fermentation-derived glutamate front-loads into the earliest liquid (2020 Frontiers in Microbiology processing paper; UC Davis early-extraction work; Carlos Escobar's WBC front-cut as field practice). Refined predictor hypothesis: heavy **whole-cherry anaerobic naturals** may be the one coffee class where the tax fraction IS callable ex ante (umami/salty bloom) — note RP9's H-predict 0/3 ran entirely on coffees OUTSIDE that class (yeast honey / washed / co-ferment honey). Test: one fraction probe on a genuinely funky anaerobic natural; theory predicts the bloom tastes brothy. Routed to RP10 (T1 corpus + T3 dilution types) as unratified external input. |
 
 ## What folded outward (sharp-substrate-fold ledger)
 
