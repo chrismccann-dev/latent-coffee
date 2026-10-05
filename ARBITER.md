@@ -104,6 +104,7 @@ For multi-citation proposals, ask Chris citation-by-citation, then roll up the p
 ### 6. Apply Chris's decision
 
 - **apply:** use the `Edit` tool on the resolved file. For `append` operations, find the end of the section's body (first line of next header at equal-or-higher level, minus 1) and insert before that line. For `replace`, swap `current_text` for `proposed_text` (require exact match; bail if the file has drifted). For `prepend`, insert at the start of the section body.
+  - **`by-strategy/hybrid.md` is ledger-shaped (pruning case 016).** If an `append` targeting it arrives as a narrative paragraph rather than a Confirmation-ledger row, do not apply it verbatim and do not bounce it: rewrite it to one ledger row (plus a rule bullet in the sub-form block only for content that block does not already state), show Chris the rewritten text next to the original at the Step 5 prompt, and apply the rewrite on his `apply`. Note the rewrite in the resolution notes.
 - **reject:** no file edit; record as a rejected citation.
 - **edit:** Chris dictates an alternative text; apply that instead and note the divergence.
 
