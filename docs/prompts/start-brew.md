@@ -86,8 +86,10 @@ brew crossing from the roasting project (emitted by `one-shot.md` STAGE 4 for on
 lots, or the V-set reference-roast kickoff). Handle it as follows:
 - Pull the lot from the shared DB instead of fetching a URL: `get_green_bean({green_bean_id})`
   for identity (origin / variety / producer / process / producer_tasting_notes) +
-  `get_bean_pipeline({green_bean_id})` for the single roast row + the Day-7 cupping. The
-  packet's `roast_id` is the batch this brew is dialed for.
+  `get_bean_pipeline({green_bean_id, roast_id})` with the packet's `roast_id` (the batch this
+  brew is dialed for) - returns just that roast row, its cuppings, its recipe and
+  `roast_learnings`. Always pass `roast_id`: the unscoped pipeline on a resolved V-set lot is
+  67-118K chars and overflows the tool-result cap (hard block on mobile).
 - Build the Step 1 Coffee Brief from that roast + cupping (the roasted-bean state IS the
   "coffee"): the producer tasting notes are the target anchor, the cupping prose is what
   the roast actually delivered, and the WB / ground Agtron + dev signals are the
