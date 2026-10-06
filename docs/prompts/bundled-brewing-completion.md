@@ -214,8 +214,10 @@ Most likely targets (all brewing-side learnings now live in cluster docs):
   - target_doc="skills/brewing-historian/cluster/patterns/by-cultivar/<cultivar>.md"
     or by-coffee-family/<family>.md for per-cluster deep-dive patterns
   - target_doc="skills/brewing-assistant/cluster/operational-guide.md" for
-    the BREW PROMPT operational guidance (Step 1-4 Coffee Brief / Recipe
-    Output / Iteration Loop / Resolved Brew Output Format)
+    the BREW PROMPT operational guidance (Step 1-4: house-style Coffee Brief /
+    chassis + adjustment rows / iterate-by-row loop / Resolved Brew Output
+    Format). A recurring off-table adjustment row is a grilling-queue item,
+    not a direct table edit.
   - target_doc="skills/brewing-equipment-expert/cluster/operational-reference.md"
     (or brewers.md / filters.md / grinder-eg1.md / sworks.md) for equipment-side updates
   - target_doc="skills/wbc-brewing-archivist/cluster/wbc-reference.md" (or

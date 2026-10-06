@@ -107,7 +107,7 @@ The per-dial-state taxonomy (Dial 0 / 5 / 6 / 7 / past-7), calibrated flow rates
 
 ## Practical Brewer Rotation Framework
 
-*Rotate by cup structure goal. Do not default to the same brewer repeatedly. Note: office brewers are limited to April, Kalita Wave 155, and SWORKS Bottomless Dripper.*
+*Applies only once a brew has left the SWORKS default on one of the four rotation triggers ([CONTEXT-brewing.md § Brewer rotation discipline](CONTEXT-brewing.md)); then rotate by cup structure goal. Note: office brewers are limited to April, Kalita Wave 155, and SWORKS Bottomless Dripper.*
 
 | **Desired Cup**                | **Home Brewers**            | **Office Brewers**                                    | **Notes**                                                   |
 |--------------------------------|-----------------------------|-------------------------------------------------------|-------------------------------------------------------------|

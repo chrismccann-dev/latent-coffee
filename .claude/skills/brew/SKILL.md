@@ -9,45 +9,29 @@ description: >-
 
 # Brew (Claude-Code-native brewing entry)
 
-This is the brewing workflow's **Claude-Code-native entry surface**, the migration of the
-claude.ai brewing project onto a Claude Code (mobile) session ([roadmap.md Active queue #4](docs/product/roadmap.md);
-[ADR-0024](docs/adr/0024-lot-coordinator-claude-code-native.md) carries the domain-boundary
-reasoning). It is **not** a new architecture. A brew is one short single session: Coffee Brief,
-starting recipe, in-thread iteration, push the optimized brew. You are **reusing** the existing
-stack as-is, just from a new client:
+The brewing workflow's operator-direct entry surface. A brew is one short session: Coffee Brief,
+starting recipe, in-thread iteration, push the optimized brew. This file does **not** restate the
+operational guide; it composes it via `read_doc_section` (the same calls
+[`docs/prompts/start-brew.md`](docs/prompts/start-brew.md), the mobile fallback entry, makes). The
+stack you are reusing:
 
-- [`brewing-assistant`](docs/skills/brewing-assistant/SKILL.md), Steps 1-4 design framework (the substantive how-to lives in [`cluster/operational-guide.md`](docs/skills/brewing-assistant/cluster/operational-guide.md))
+- [`brewing-assistant`](docs/skills/brewing-assistant/SKILL.md), Steps 1-4 (the substantive how-to lives in [`cluster/operational-guide.md`](docs/skills/brewing-assistant/cluster/operational-guide.md))
 - [`brew-recorder`](docs/skills/brew-recorder/SKILL.md), the `push_brew` executor
 - the three knowledge clusters: [brewing-equipment-expert](docs/skills/brewing-equipment-expert/SKILL.md) · [brewing-historian](docs/skills/brewing-historian/SKILL.md) · [wbc-brewing-archivist](docs/skills/wbc-brewing-archivist/SKILL.md)
 
-This skill is the orchestration spine the claude.ai project instructions used to be. It does
-**not** restate the operational guide; it composes it via `read_doc`, the same calls
-[`docs/prompts/start-brew.md`](docs/prompts/start-brew.md) makes (mobile CC reads docs over MCP,
-not the filesystem). The substantive design logic stays in the cluster; this file is just the
-reliable way in.
-
-> **Operator-direct, like the roasting coordinator** ([ADR-0017](docs/adr/0017-research-assistant-architecture.md) Exception 1).
-> Not Master-Coordinator-dispatched, not MCP-registered. The operator triggers it directly
-> ("brew a coffee"). If a fresh mobile session does NOT surface this skill, the identical entry
-> is the operator one-liner in [`docs/prompts/start-brew.md`](docs/prompts/start-brew.md); that
-> prompt is the fallback surface and reaches the same operational guide.
+> Not Master-Coordinator-dispatched, not MCP-registered ([ADR-0017](docs/adr/0017-research-assistant-architecture.md) Exception 1).
+> If a fresh mobile session does NOT surface this skill, the identical entry is the operator
+> one-liner in `start-brew.md`; it reaches the same operational guide.
 
 ## Apex inheritance: do not re-author it
 
-The brewing stack is already **apex-aware**. You inherit the
-philosophy; you do not re-state it. Two load-bearing places it lives, reached for free when you
-compose the operational guide:
+The brewing stack is already **apex-aware**. You inherit the philosophy; you do not re-state it.
+Two load-bearing places it lives, reached for free when you compose the operational guide:
 
-- **Latent house style default (2026-10-06).** Every pourover starts from the house style
-  (SWORKS + xBloom Premium · 1:16, 15 g · 6.5 · 94°C on base · 45 g Dial 0 / 45 s → 150 g Dial 5
-  → 240 g Dial 5, Dial 6 at the end), labelled Hybrid (Sequential). Step 1 names the delta or
-  the adjustment row, Step 2 emits the chassis with the row applied; do not design from zero.
-  Leave the SWORKS only on the four rotation triggers. ([CONTEXT-brewing.md headword](CONTEXT-brewing.md),
-  [operational-guide.md § Step 2](docs/skills/brewing-assistant/cluster/operational-guide.md))
-- **Step 1d clarify-side default.** For **apex coffees** (self-roasted, or apex-selected
-  purchased) the brew is the *clarify* stage of the express-then-clarify couple, so strategy
-  defaults clarify-side (Suppression / Clarity-First / Hybrid). Apex default, not a global
-  override. ([operational-guide.md § Step 1d](docs/skills/brewing-assistant/cluster/operational-guide.md))
+- **Step 1c clarify-side default.** For **apex coffees** (self-roasted, or apex-selected
+  purchased) the brew is the *clarify* stage of the express-then-clarify couple, so any delta
+  defaults clarify-side (Suppression / Clarity-First / the house style itself). Apex default, not
+  a global override. ([operational-guide.md § Step 1](docs/skills/brewing-assistant/cluster/operational-guide.md))
 - **Step 3 whole-arc station discipline.** Judge the *shape* of the cup's evolution across
   aroma, hot ~59-60, warm ~54-55, cool ≤50; never iterate off a single temperature. The apex is a
   **layered-evolving** cup; the keystone is **reveal the latent, don't inject the absent**.
@@ -82,56 +66,46 @@ self-roasted detection block for the full signal list. The short version:
    reference brew for <lot>". Handle per [`start-brew.md`](docs/prompts/start-brew.md)'s
    self-roasted entry: pull the lot via `get_green_bean` + `get_bean_pipeline` with the packet's
    `roast_id` (never the unscoped pipeline - it overflows the tool-result cap; the roasted-bean
-   state IS the "coffee"), seed Step 1d from the packet's starting brewing direction (the default is the Latent house
-   style + the roast-level row; a self-roasted brew that leaves the house style states why in one
-   line of `strategy_notes`), iterate
-   normally, and at completion run `push_brew` (`source: "self-roasted"`, `roaster: "Latent"`,
-   `green_bean_id` + the packet's `roast_id` both set); it does NOT stop at the gate. Then emit the
-   closing handoff line so the roasting close-out prompt LINKS the `brew_id` via
-   `green_beans.optimized_brew_id` (link, never re-push). Invariant: pushed exactly once (here),
-   linked exactly once (close-out).
+   state IS the "coffee"), seed Step 1d from the packet's starting brewing direction (the default
+   is the Latent house style + the roast-level row; a self-roasted brew that leaves the house
+   style states why in one line of `strategy_notes`), iterate normally, and at completion run
+   `push_brew` (`source: "self-roasted"`, `roaster: "Latent"`, `green_bean_id` + the packet's
+   `roast_id` both set); it does NOT stop at the gate. Then emit the closing handoff line so the
+   roasting close-out prompt LINKS the `brew_id` via `green_beans.optimized_brew_id` (link, never
+   re-push). Invariant: pushed exactly once (here), linked exactly once (close-out).
 
 ## The arc
 
+**Every pourover starts from the Latent house style** ([CONTEXT-brewing.md headword](CONTEXT-brewing.md),
+[ADR-0026](docs/adr/0026-latent-house-style-chassis.md)): SWORKS + xBloom Premium · 1:16, 15 g ·
+6.5 · 94°C on base · 45 g Dial 0 / 45 s → 150 g Dial 5 → 240 g Dial 5, Dial 6 at the end; labelled
+Hybrid (Sequential). Do not design from zero; leave the SWORKS only on the four rotation triggers.
+
 Fetch each operational-guide section at the point you need it via `read_doc_section` (anchors are
 the verbatim h2 headings, em-dashes preserved; on a miss, `list_doc_sections` to rediscover,
-do not re-fetch the whole doc). This is the same fetch discipline `start-brew.md` documents.
+do not re-fetch the whole doc).
 
 **Step 1: Coffee Brief.** Fetch
 `read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md", anchor="Step 1 — Coffee Brief (Claude runs this automatically)")`.
-Run 1a-1d. **Purchased-coffee freezer lookup (do this first, in 1a):** before asking Chris for the
-roasted-bean color, consult the freezer-stock table. On the MCP path (mobile, or no repo access),
-NEVER whole-doc `read_doc` it — the table is past the read cap and truncates, which hard-blocks the
-lookup. Instead: (1) `list_doc_sections(uri="docs://brewing/freezer-stock.md")` to enumerate the
-`##` bag headings (~8 KB), (2) match by roaster + coffee name, (3)
-`read_doc_section(uri="docs://brewing/freezer-stock.md", anchor="<matched heading>")` for the single
-bag record. Always enumerate first — anchor matching is case-sensitive exact and the heading formats
-vary (em-dash count/position, inconsistent lot codes), so a constructed-anchor guess misses. On
-desktop with repo access, reading/grepping `docs/brewing/freezer-stock.md` directly stays the faster
-path. On a HIT, seed the brief from the record: **the whole-bean Agtron is
-the load-bearing pull — use it, do NOT ask Chris to re-measure** — plus the spec URL, process,
-variety, elevation, and rest window. On a MISS (or a `Resting` row with Agtron `pending`), proceed
-normally. Self-roasted brews skip this — the carve-out pulls the roasted-bean state from the DB
-(`get_green_bean` + `get_bean_pipeline`) instead. For equipment knowledge dispatch to the Brewing Equipment Expert cluster; for WBC
-recipe anchors + cross-cutting control patterns dispatch to the WBC Brewing Archivist; for
-per-cultivar / per-coffee-family / per-strategy priors dispatch to the Brewing Historian; for
-canonical lookups call `read_canonical(axis: "<name>")`. **Pause at Step 1d for strategy + modifier
-confirmation before producing the recipe**; this is where the apex clarify-side default applies.
+Open with identity + roast level (purchased: the freezer-stock lookup the section specifies,
+whole-bean Agtron is the load-bearing pull; self-roasted: the carve-out's DB pull), the archive
+lookup, the brief summary + apex gate, then **name the delta or adjustment row** (or "house style,
+no row") plus the modifier check. **Pause for confirmation of the one-sentence brief** before
+producing the recipe. Done when Chris has confirmed "house style + <row / delta>, labelled
+<strategy>, modifiers <list / none>".
 
-**Step 2: Recipe.** After strategy is confirmed, fetch
+**Step 2: Recipe.** Fetch
 `read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md", anchor="Step 2 — Recipe Output (after strategy is confirmed)")`.
-Author Bloom + Pour Structure in the labeled CUMULATIVE-target shape; water formula goes in the
-Water Recipe field (at home, source the suggestion from [water.md](docs/skills/brewing-equipment-expert/cluster/water.md)
-per the operational guide's Step 2 home/office branch; office records the source as-is); kettle
-thermal stance / active ramps go in a `thermal_staging` modifier; gear
-beyond brewer+filter (Melodrip / booster / Paragon ball) goes in an `equipment` modifier with
-free-text scope.
+Emit the chassis with the confirmed row or delta applied, in the Output Format (Bloom + Pour
+Structure in the labeled CUMULATIVE-target shape, trailing `Sworks Valve:` clause), followed by the
+why-this-row / what-to-watch / house-style notes.
 
-**Step 3: Iterate (Phase 2).** When the operator returns with tasting notes, fetch
+**Step 3: Iterate by row (Phase 2).** When the operator returns with tasting notes, fetch
 `read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md", anchor="Step 3 — Iteration Loop (Phase 2 — in-thread iteration)")`,
-not before. Honor the whole-arc station discipline + the scale-dependent adjustment-width rule
-(Brew 1 wide-variance, Brew 2-3 single-variable, Brew 3+ probe). Maintain the **running
-tasting-arc state block** below at every iteration turn.
+not before. The first sip names the next row (valve before grind, temperature first on a
+roast-level row); pivot to another strategy only once the rows are exhausted. Each iteration
+names the row or the single variable it applies, and the **running tasting-arc state block**
+below carries it on the `Next change` line.
 
 **Completion.** When the operator declares the optimized brew, hand to
 [`bundled-brewing-completion.md`](docs/prompts/bundled-brewing-completion.md): it fetches Step 4
@@ -139,13 +113,13 @@ tasting-arc state block** below at every iteration turn.
 brew lands), then `propose_doc_changes` for the coffee learnings. Then run the **close retro**
 below.
 
-**If the Latent connector is unreachable at the completion write** (N=3 recovery recipe,
-graduated 2026-07-22): (a) discover the tools by keyword (`ToolSearch "push brew canonical"`) or
-the connector-UUID prefix — never by `mcp__latent-coffee__*` name, which does not exist on the
-account-level connector; (b) if the connection dropped mid-session, one fresh-session retry
-before concluding the server is down — the deferred-tool catalog does not repopulate in-session;
-(c) if still unreachable, freeze the complete resolved payload in-thread and land it in the next
-session (zero-loss, proven three times).
+**If the Latent connector is unreachable at the completion write** (N=3 recovery recipe): (a)
+discover the tools by keyword (`ToolSearch "push brew canonical"`) or the connector-UUID prefix —
+never by `mcp__latent-coffee__*` name, which does not exist on the account-level connector; (b)
+if the connection dropped mid-session, one fresh-session retry before concluding the server is
+down — the deferred-tool catalog does not repopulate in-session; (c) if still unreachable, freeze
+the complete resolved payload in-thread and land it in the next session (zero-loss, proven three
+times).
 
 ## Running tasting-arc state block (Claude Code compaction discipline)
 
@@ -160,10 +134,10 @@ only in old tool-result bodies (which it compresses). Keep it compact:
 
 ```
 ARC STATE: <coffee>
-Recipe now: <strategy> · <brewer>/<filter> · <dose>g · <ratio> · <grind> · <temp> · <key pour/valve moves>
+Recipe now: house style + <row / delta> · <strategy> · <brewer>/<filter> · <dose>g · <grind> · <temp> · <key valve moves>
 Brew 1: aroma … / hot ~59 … / warm ~54 … / cool ≤50 … → signal: <directional read>
 Brew 2: … → signal: …
-Leading direction: <what's working> · Next change: <single variable + why>
+Leading direction: <what's working> · Next change: <row or single variable + why>
 Open: <unresolved / strategy-pivot watch>
 ```
 
@@ -217,8 +191,9 @@ regardless of client; no manual DB inserts, no in-app forms.
 ## Cross-references
 
 - [docs/brewing/freezer-stock.md](docs/brewing/freezer-stock.md), the roasted-bean freezer inventory — brew-time lookup for purchased coffees (whole-bean Agtron + URL + specs), so Chris isn't asked to re-measure
-- [docs/prompts/start-brew.md](docs/prompts/start-brew.md), the CC `/brew` fallback entry surface + self-roasted carve-out substrate (claude.ai brewing retired 2026-06-18; same operational guide)
+- [docs/prompts/start-brew.md](docs/prompts/start-brew.md), the mobile fallback entry surface + self-roasted carve-out substrate (same operational guide)
 - [docs/prompts/bundled-brewing-completion.md](docs/prompts/bundled-brewing-completion.md), the shared completion engine this skill hands off to (push_brew, then propose_doc_changes)
 - [docs/skills/brewing-assistant/cluster/operational-guide.md](docs/skills/brewing-assistant/cluster/operational-guide.md), the substantive Steps 1-4 how-to (composed via read_doc)
 - [docs/skills/brewing-assistant/cluster/process-friction-log.md](docs/skills/brewing-assistant/cluster/process-friction-log.md), the close-retro friction log
 - [CONTEXT-taste.md § Brewing philosophy](CONTEXT-taste.md), apex canon
+- [CONTEXT-brewing.md](CONTEXT-brewing.md) § Latent house style + § Brewer rotation discipline, the chassis + the four rotation triggers
