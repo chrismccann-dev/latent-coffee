@@ -54,7 +54,7 @@
 > - Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi — 12+, as of 2026-10-05 (operator physical count) (added 2026-09-21 at 15, net new, no brews)
 > - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — 8, as of 2026-10-05 (operator physical count) (optimized brew locked 2026-09-24, [brew 23b48be7](https://www.latentcoffee.com/brews/23b48be7-064b-4e47-9440-029e105b0cb3); RP9 Track 3 control)
 > - Picolot — S201 Overture: Tower (Elida Estate Torre Gesha Natural DRD) — 12 (added 2026-09-11, net new, no brews)
-> - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 10, as of 2026-10-05 (operator physical count) (added 2026-09-11, net new, no brews)
+> - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 8, as of 2026-10-06 (2 vials used in the dial-in) · [brew](https://www.latentcoffee.com/brews/87689687-90d8-41cd-8f82-7f802e1075f0) · reserved as RP10 research control
 > - MAME — La Palma y El Tucán Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - MAME — Janson Lot 1035 Geisha Anaerobic (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
 > - MAME — Abu Lot 3345 Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
@@ -936,7 +936,8 @@
 ## Picolot — S203 Agricola Geisha 36-hr CF Ox Natural
 **Country:** Panama · **Region/Farm:** Boquete hills / Agricola Geisha · **Producer:** Manuel Barsallo (farm of Gonzalo & Yrma Palenzuela)
 **Variety:** Geisha · **Process:** Natural (36hr cold oxidation, 29-day dry) · **Elevation:** — (Boquete hills, bajareque mist path)
-**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (10 vials as of 2026-10-05 (operator physical count))
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (8 vials as of 2026-10-06; 2 used in the dial-in, remainder reserved for the RP10 research track)
+**Brew:** [87689687](https://www.latentcoffee.com/brews/87689687-90d8-41cd-8f82-7f802e1075f0) — Latent house style with Dial 6 from 150 g, 6.5 / 93°C / 45 s bloom, locked at 2 cups as the RP10 Track 3 control
 **URL:** https://picolot.shop/products/s203-agricola-geisha-ox-natural
 **Notes:** 2025 Best of Panama award winner (3rd place, second year of production). Harvested at 15 Brix; shade-grown under plantain + avocado. 5 kg green lot. Notes: peach, white grape, kiwi, juicy, cold eucalyptus line.
 
