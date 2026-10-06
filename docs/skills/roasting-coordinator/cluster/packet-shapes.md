@@ -45,13 +45,14 @@ SIMULATED POUROVER — <lot-slug>
 - finalist batches: <batch numbers>
 - intent: <what the runoff should decide — reference-grade? which finalist?>
 ```
-Do NOT include cupping notes, roast data, or recipe design. (The SPG *execution* — one recipe, both finalists, side-by-side, reference-grade reasoning — is a brewing exercise that lives claude.ai-side; the verdict comes back as `cuppings` rows + a thin verdict.)
+Do NOT include cupping notes, roast data, or recipe design. (The SPG *execution* — the Latent house style + roast-level row, both finalists, side-by-side, reference-grade reasoning — is a brewing exercise run from `simulated-pourover.md`; the verdict comes back as `cuppings` rows + a thin verdict.)
 
 **Optimized-Brew Packet** (after reference declared):
 ```
 OPTIMIZED BREW — <lot-slug>
 - green_bean_id: <uuid> · reference roast_id: <uuid>
 - goal: preserve the reference roast's strengths; lock the drinking recipe; decide intrinsic-vs-brew-driven defects
+- starting brewing direction: Latent house style + <roast-level row | no row> (the default, nearly always; a deviation only on Chris's own read, with its reason)
 - constraints: no new roast design unless brew optimization fails; push nothing until locked
 ```
 Returns a locked `brew_id` (linked to the lot) + a thin return packet the Coordinator consumes at close.
