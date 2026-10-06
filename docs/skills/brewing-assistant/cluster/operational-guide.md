@@ -59,7 +59,7 @@ When neither WB nor ground Agtron is available, fall back to the roaster's state
 
 **1d. Proposed extraction strategy and modifiers**
 
-Based on the above, propose one of the six extraction strategies below and explain why. Then, separately, assess whether any modifiers (Output Selection, Thermal Staging, Aroma Capture, Role-Based Pulse) are warranted for this specific coffee. Most coffees will not warrant any. If a modifier is proposed, justify it explicitly. Then pause and ask for confirmation before proceeding to the recipe.
+**Default (2026-10-06): the [Latent house style](CONTEXT-brewing.md) - Hybrid (Sequential) on the SWORKS - unless a signal from 1a-1c names a delta** (a strong roaster signal such as Sey → Extraction Push row; an anaerobic natural → Suppression delta; a roast-forward bag → dark-roast row). The signal arbitration below still runs; its job is now to name the delta or the adjustment row, not to design from zero. Record the strategy and modifier labels on every brew as before. Based on the above, propose one of the six extraction strategies below and explain why. Then, separately, assess whether any modifiers (Output Selection, Thermal Staging, Aroma Capture, Role-Based Pulse) are warranted for this specific coffee. Most coffees will not warrant any. If a modifier is proposed, justify it explicitly. Then pause and ask for confirmation before proceeding to the recipe.
 
 ### Axis 1 — Extraction Strategy (single canonical choice per brew)
 
@@ -96,6 +96,19 @@ Based on the above, propose one of the six extraction strategies below and expla
 **If any modifier is proposed,** output a 1-2 sentence rationale explaining what the modifier is meant to solve for this specific coffee and what the risk is if the modifier is wrong (e.g. early cut too aggressive → weak cup; inverted staging → under-extracted finish). Wait for confirmation on both strategy and modifier(s) before proceeding to Step 2.
 
 ## Step 2 — Recipe Output (after strategy is confirmed)
+
+**Start from the Latent house style, then ask "which adjustment row applies?"** (ratified 2026-10-06, [CONTEXT-brewing.md headword](CONTEXT-brewing.md) + [ADR-0026](docs/adr/0026-latent-house-style-chassis.md)). The default recipe is: SWORKS Bottomless Dripper + xBloom Premium paper · ratio 1:16 invariant, dose 15 g (18 g only in the WAC lane) · EG-1 6.5 · 94°C kettle on base · bloom 45 g at Dial 0 for 45 s, then Dial 5 · Pour 1 immediately to 150 g at Dial 5 · Pour 2 at ~1:30 to 240 g at Dial 5, Dial 6 at the end of the pour · ~3:00, valve dictates · water: home distilled + MgCl2 concentrate, office PA tap + 1 TONIK + 1 JAMM. Then apply at most the row(s) the bag or the first cup calls for:
+
+| Signal (bag or first sip) | Row |
+|---|---|
+| Dark / developed roast | Temperature first: 88-90°C, kettle off base. Still off → shorter bloom, Dial 6 for the mains, often a late cut |
+| Very light / dense roast | Temperature first: 96-100°C. Still off → Dial 5 throughout, longer hold; grind 5.0-5.6 only as a last resort |
+| Roasty or bitter tail | Late cut at 180-205 g in cup (Output Selection modifier) |
+| Body climbing over the attack | Graduated Taper: Dial 6 at ~155 g mid-Pour 2, Dial 7 flush |
+| Wants more intensity | Stop at 150 g = Concentrated Pour-Over (`concentration` modifier); per-coffee taste call, Pour 2 into a reserve cup for bypass |
+| Stall | Open the valve earlier. Never coarsen |
+
+The intensity strategies are deltas on the same chassis (Suppression = Dial 6 held, no closed front, no open finish · Extraction Push = 5.6 grind, 96°C held, long restricted contact · Clarity-First = Dial 6 throughout, no closed phase · Full Expression: no observed delta yet). Brewer rotation fires only on the four triggers in the [Brewer rotation discipline](CONTEXT-brewing.md) entry; otherwise the brewer is the SWORKS and the location rules below only decide water. A self-roasted brew that leaves the house style states why in one line of `strategy_notes`.
 
 Once the extraction strategy and any modifiers are confirmed, select the brewer and filter based on the brewing location (see [brewing-equipment-expert/cluster/operational-reference.md § Location Constraints](docs/skills/brewing-equipment-expert/cluster/operational-reference.md)), then output a full recipe using the format below.
 

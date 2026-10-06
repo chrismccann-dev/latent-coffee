@@ -38,6 +38,12 @@ The brewing stack is already **apex-aware**. You inherit the
 philosophy; you do not re-state it. Two load-bearing places it lives, reached for free when you
 compose the operational guide:
 
+- **Latent house style default (2026-10-06).** Every pourover starts from the house style
+  (SWORKS + xBloom Premium · 1:16, 15 g · 6.5 · 94°C on base · 45 g Dial 0 / 45 s → 150 g Dial 5
+  → 240 g Dial 5, Dial 6 at the end), labelled Hybrid (Sequential). Step 1 names the delta or
+  the adjustment row, Step 2 emits the chassis with the row applied; do not design from zero.
+  Leave the SWORKS only on the four rotation triggers. ([CONTEXT-brewing.md headword](CONTEXT-brewing.md),
+  [operational-guide.md § Step 2](docs/skills/brewing-assistant/cluster/operational-guide.md))
 - **Step 1d clarify-side default.** For **apex coffees** (self-roasted, or apex-selected
   purchased) the brew is the *clarify* stage of the express-then-clarify couple, so strategy
   defaults clarify-side (Suppression / Clarity-First / Hybrid). Apex default, not a global
@@ -76,7 +82,9 @@ self-roasted detection block for the full signal list. The short version:
    reference brew for <lot>". Handle per [`start-brew.md`](docs/prompts/start-brew.md)'s
    self-roasted entry: pull the lot via `get_green_bean` + `get_bean_pipeline` with the packet's
    `roast_id` (never the unscoped pipeline - it overflows the tool-result cap; the roasted-bean
-   state IS the "coffee"), seed Step 1d from the packet's starting brewing direction, iterate
+   state IS the "coffee"), seed Step 1d from the packet's starting brewing direction (the default is the Latent house
+   style + the roast-level row; a self-roasted brew that leaves the house style states why in one
+   line of `strategy_notes`), iterate
    normally, and at completion run `push_brew` (`source: "self-roasted"`, `roaster: "Latent"`,
    `green_bean_id` + the packet's `roast_id` both set); it does NOT stop at the gate. Then emit the
    closing handoff line so the roasting close-out prompt LINKS the `brew_id` via

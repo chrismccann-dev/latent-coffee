@@ -639,7 +639,7 @@ Avoid: “calibration step” when the specific SPG event is meant, “halt-and-
 
 ### SPG standing recipe
 
-The SPG standing recipe is the one bean-specific pourover recipe produced by the brewing thread for the Simulated Pourover Gate.
+The SPG standing recipe is the one bean-specific pourover recipe produced by the brewing thread for the Simulated Pourover Gate. **Since 2026-10-06 it starts from the [Latent house style](CONTEXT-brewing.md)** (the SWORKS chassis + whichever roast-level adjustment row the finalists call for); bean-specific tuning beyond that is the exception, not the design. Roasts are evaluated against the house style, not the reverse - the roaster controls roast level and fits the coffee into the style.
 It is:
 
 * Bean-lot-specific - each lot gets its own SPG recipe.
@@ -650,7 +650,7 @@ It is:
 The freeze scope is the runoff itself. The recipe is frozen across the candidates in one gate so roast differences are not confounded by brew differences. It is not intended to be persisted across V-sets or treated as a stable cross-lot reference.
 This accepted limitation matters: the SPG standing recipe does not create a strict cross-V-set attribution trace. Its content is not the load-bearing artifact. The decision comparison is the load-bearing artifact.
 Only the eventual optimized brew persists as the final brewing endpoint.
-Avoid: treating the SPG standing recipe as the optimized brew, persisting it as the final recipe, iterating it candidate-by-candidate, or reusing it as a universal SPG recipe across lots.
+Avoid: treating the SPG standing recipe as the optimized brew, persisting it as the final recipe, iterating it candidate-by-candidate, or treating the lot-specific tuning as a cross-lot reference (the house-style chassis is the cross-lot constant; the per-lot row choice is not).
 
 ### `eval_method: 'Simulated Pourover'`
 

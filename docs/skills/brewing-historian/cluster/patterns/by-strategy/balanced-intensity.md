@@ -4,6 +4,8 @@
 
 **Strategy definition:** see [BREWING.md § Axis 1 - Extraction Strategy](docs/skills/coordinator/catalog.md#brewing-domain-principles) for the canonical Balanced Intensity definition (mechanics: 6.5-6.3 grind, moderate agitation, 1:15-1:16, 93-95°C, often controlled flow via xBloom Premium Paper or SWORKS Restricted valve through main pours; sits between Clarity-First's gentleness and Full Expression's force).
 
+> **2026-10-06 relabel note (house-style grill, [ADR-0026](docs/adr/0026-latent-house-style-chassis.md)):** seven SWORKS brews below that ran a valve phase boundary (restricted mains → opened end) were relabelled **Hybrid (Sequential)** in the DB, completing the v8.4 rule: La Dinastia (23b48be7) · Zarza Bella Vista (e560bc72) · Mokkita Cold Room (7ad09c9b) · Blue Iris (f404e3b0) · Janson 1010 (64606db8) · El Placer White Honey (99ce6fa9, whose v8.4 reclass note below had never reached the DB) · Alo Gemechu (265fdff8). Their temp / grind / valve-timing learnings stay here verbatim - the label changed, the lever wisdom did not. Balanced Intensity on a valve brewer now means a constant-valve brew; the restricted→open shape is the [Latent house style](CONTEXT-brewing.md).
+
 Migrated from [BREWING.md § Cross-Coffee Insight Layer > Coffees That Needed Balanced Intensity](docs/skills/brewing-historian/cluster/patterns/cross-coffee-insights.md) in Wave 2 PR 2 (2026-05-26) per [ADR-0011](docs/adr/0011-composable-sub-skills-architecture.md).
 
 ---
