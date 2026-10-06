@@ -937,7 +937,7 @@
 **Country:** Panama · **Region/Farm:** Boquete hills / Agricola Geisha · **Producer:** Manuel Barsallo (farm of Gonzalo & Yrma Palenzuela)
 **Variety:** Geisha · **Process:** Natural (36hr cold oxidation, 29-day dry) · **Elevation:** — (Boquete hills, bajareque mist path)
 **Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (8 vials as of 2026-10-06; 2 used in the dial-in, remainder reserved for the RP10 research track)
-**Brew:** [87689687](https://www.latentcoffee.com/brews/87689687-90d8-41cd-8f82-7f802e1075f0) — Latent house style with Dial 6 from 150 g, 6.5 / 93°C / 45 s bloom, locked at 2 cups as the RP10 Track 3 control
+**Brew:** [87689687](https://www.latentcoffee.com/brews/87689687-90d8-41cd-8f82-7f802e1075f0) — Latent house style exactly (0 → 5 → 5 → 6 at end), 6.5 / 93°C / 45 s bloom, locked at 2 cups as the RP10 Track 3 control
 **URL:** https://picolot.shop/products/s203-agricola-geisha-ox-natural
 **Notes:** 2025 Best of Panama award winner (3rd place, second year of production). Harvested at 15 Brix; shade-grown under plantain + avocado. 5 kg green lot. Notes: peach, white grape, kiwi, juicy, cold eucalyptus line.
 
