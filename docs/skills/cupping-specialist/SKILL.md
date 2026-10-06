@@ -38,7 +38,7 @@ When the operator signals Path A on a V-set lot, push back if any of these pre-c
 
 1. **Multiple V-set iterations.** At least V2 or V3 should be done. Path A on V1 is suspect; the operator hasn't yet explored the lot's lever space.
 2. **Full Day 7 xBloom cupping.** `recipe_variant: xbloom_gate` must be on the candidate batch — the canonical mechanically-consistent reference-cup gate.
-3. **Simulated Pourover Gate cup-set.** V_n winner + secondary contender + V_(n-1) winner brewed on the real pourover setup (real water, real brewer, real filter) with a non-optimized recipe that's close to the eventual end-state recipe. See [`cluster/pod-1-routing.md`](docs/skills/cupping-specialist/cluster/pod-1-routing.md) § Cup-set convention.
+3. **Simulated Pourover Gate cup-set.** V_n winner + secondary contender + V_(n-1) winner brewed on the real pourover setup with the Latent house style + the roast-level row (the SPG standing recipe since 2026-10-06, [CONTEXT-roasting.md § SPG standing recipe](CONTEXT-roasting.md)) - the same recipe the optimized brew will be. See [`cluster/pod-1-routing.md`](docs/skills/cupping-specialist/cluster/pod-1-routing.md) § Cup-set convention.
 
 **Standard push-back language** when SPG hasn't been done:
 
