@@ -22,8 +22,13 @@ block, and keep the response tight (`feedback_audio_dictation`).
 
 ---
 
-New coffee. For the Coffee Brief + starting-recipe construction, fetch the
-two stage-keyed sections of the BREW PROMPT operational guide via:
+New coffee. **Every pourover starts from the Latent house style** (CONTEXT-brewing.md
+headword; ADR-0026): SWORKS + xBloom Premium · 1:16, 15 g · 6.5 · 94°C on base · 45 g Dial 0 /
+45 s → 150 g Dial 5 → 240 g Dial 5, Dial 6 at the end; labelled Hybrid (Sequential). Step 1 names
+the delta or adjustment row, Step 2 emits the chassis with it applied, Step 3 iterates by row.
+Do not design from zero; leave the SWORKS only on the four rotation triggers.
+
+Fetch the two stage-keyed sections of the operational guide via:
 read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md",
 anchor="Step 1 — Coffee Brief (Claude runs this automatically)") and
 read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.md",
@@ -33,51 +38,28 @@ read_doc_section(uri="docs://skills/brewing-assistant/cluster/operational-guide.
 anchor="Step 3 — Iteration Loop (Phase 2 — in-thread iteration)") at that point —
 not before. The Step 4 Resolved Brew Output Format lives in
 `bundled-brewing-completion.md`'s session start and does NOT need to be
-pre-loaded here; that prompt pulls it when the resolved brew gets composed at
-log time. The anchor strings above are the verbatim h2 headings in the
-operational-guide (em-dashes preserved). If an anchor fails to resolve, fall
+pre-loaded here. The anchor strings above are the verbatim h2 headings in the
+operational guide (em-dashes preserved). If an anchor fails to resolve, fall
 back to list_doc_sections(uri="docs://skills/brewing-assistant/cluster/operational-guide.md")
 to discover the current heading set rather than re-fetching the whole doc.
 
-For brewing equipment knowledge (Location Constraints + brewer rotation in
-operational-reference.md; per-brewer / per-filter / per-grinder / SWORKS dial
-behavior in the sibling taxonomy docs), dispatch to the Brewing Equipment
-Expert (docs://skills/brewing-equipment-expert/cluster/operational-reference.md +
-brewers.md + filters.md + grinder-eg1.md + sworks.md). For WBC competitor
-recipe anchors + cross-cutting control patterns (Step 1d Named Consideration),
-dispatch to the WBC Brewing Archivist
-(docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md +
-docs://skills/wbc-brewing-archivist/cluster/wbc-recipes.md + docs://skills/wbc-brewing-archivist/cluster/wbc-recipes-by-family.md). For canonical
-lookups, call read_canonical Tool with the axis name per
+Step 1 specifies its own lookups (purchased: the freezer-stock section lookup, whole-bean Agtron
+is the load-bearing pull, never whole-doc read_doc the table; archive: query_brews + the
+brewing-historian pattern docs + the roaster card). For brewing equipment knowledge once a
+rotation trigger has moved the brew off the SWORKS, dispatch to the Brewing Equipment Expert
+(docs://skills/brewing-equipment-expert/cluster/operational-reference.md + brewers.md +
+filters.md + grinder-eg1.md + sworks.md). For WBC competitor recipe anchors + cross-cutting
+control patterns (Step 1d Named Consideration), dispatch to the WBC Brewing Archivist
+(docs://skills/wbc-brewing-archivist/cluster/wbc-reference.md + wbc-recipes.md +
+wbc-recipes-by-family.md). For canonical lookups, call read_canonical with the axis name per
 docs://skills/coordinator/operator-guide.md § Canonical taxonomy lookups.
 
-**Purchased-coffee freezer lookup (Step 1a, before asking for Agtron).** If this is a
-PURCHASED coffee, first consult the freezer-stock table. NEVER whole-doc read_doc it — the
-table is past the read cap and truncates, which hard-blocks the lookup. Instead: (1)
-list_doc_sections(uri="docs://brewing/freezer-stock.md") to enumerate the `##` bag headings
-(~8 KB), (2) match by roaster + coffee name, (3)
-read_doc_section(uri="docs://brewing/freezer-stock.md", anchor="<matched heading>") for the
-single bag record. Always enumerate first — anchor matching is case-sensitive exact and the
-heading formats vary (em-dash count/position, inconsistent lot codes), so a constructed-anchor
-guess misses. On a hit, seed the Coffee Brief from the record, most importantly
-the whole-bean Agtron (taken at dose-out) so Chris is NOT asked to re-measure, plus the spec
-URL / process / variety / rest window. On a miss, or a `Resting` row with Agtron `pending`,
-proceed normally — the doc is a convenience cache, not the source of truth. (Self-roasted
-brews skip this — the optimized-brew entry below pulls the roasted-bean state from the DB
-instead.)
-
-Run
-Step 1 Coffee Brief; pause at Step 1d for strategy + modifier confirmation
-before producing the recipe. When you output the recipe (Step 2 Recipe Output
-format), author Bloom + Pour Structure in the labeled, CUMULATIVE-target shape
-defined in that section (one labeled line per pour; trailing `Sworks Valve:` /
-`Switch:` clause on valve/lever brewers) — this keeps the free-text parseable for
-the eventual structured-pour migration. Water formula / source goes in the Water
-Recipe field (at home, source the suggestion from [water.md](docs/skills/brewing-equipment-expert/cluster/water.md)
-per the operational guide's Step 2 home/office branch; office records the source as-is);
-kettle thermal stance + active temp ramps go in a `thermal_staging`
-modifier; gear beyond brewer+filter (Melodrip / booster / Paragon ball) goes in an
-`equipment` modifier with a free-text `scope`.
+Run Step 1; pause at Step 1d for confirmation of the one-sentence brief ("house style +
+<row / delta>, labelled <strategy>, modifiers <list / none>") before producing the recipe. Output
+the recipe in the Step 2 Output Format: Bloom + Pour Structure in the labeled, CUMULATIVE-target
+shape (one labeled line per pour; trailing `Sworks Valve:` / `Switch:` clause on valve/lever
+brewers), water source in the Water Recipe field, kettle stance / ramps in a `thermal_staging`
+modifier, gear beyond brewer+filter in an `equipment` modifier with a free-text `scope`.
 
 **Self-roasted optimized-brew entry (no Coffee URL — an OPTIMIZED BREW PACKET instead).**
 When the input is an `OPTIMIZED BREW PACKET` block (or the operator declares "this is
@@ -94,10 +76,12 @@ lots, or the V-set reference-roast kickoff). Handle it as follows:
   "coffee"): the producer tasting notes are the target anchor, the cupping prose is what
   the roast actually delivered, and the WB / ground Agtron + dev signals are the
   roasted-bean characteristic. There is no roaster brew guide.
-- Seed the Step 1d strategy + modifier confirmation from the packet's `starting brewing
-  direction` (the operator's read off the cupping table — e.g. "intensity-clarity split,
-  push hard upfront"). It governs over any stale design-time hypothesis on the recipe row;
-  confirm it with the operator before producing the recipe, same as any other brief.
+- Seed the Step 1d confirmation from the packet's `starting brewing direction` (the
+  operator's read off the cupping table). The default is the Latent house style + the
+  roast-level row; a direction that leaves the house style (e.g. "intensity-clarity split,
+  push hard upfront") governs over any stale design-time hypothesis on the recipe row and is
+  recorded in one line of `strategy_notes`. Confirm it with the operator before producing the
+  recipe, same as any other brief.
 - Carry the optimized-brew declaration to completion: at `bundled-brewing-completion.md`
   this brew is the self-roasted **carve-out** (it does NOT stop at the self-roasted gate) —
   it runs `push_brew` (`source: "self-roasted"`, `roaster: "Latent"`, `green_bean_id` +

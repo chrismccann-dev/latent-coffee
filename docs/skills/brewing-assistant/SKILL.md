@@ -11,16 +11,16 @@ Construct a starting brew recipe AND handle in-thread iteration on tasting notes
 
 **Phase 1 — Initial recipe construction:**
 
-- Read brew session intent (coffee + location + dose / brewer-filter pairing / extraction goal)
+- Start from the Latent house style ([CONTEXT-brewing.md](CONTEXT-brewing.md), [ADR-0026](docs/adr/0026-latent-house-style-chassis.md)): identity + roast level + archive lookup + apex gate, then name the delta or adjustment row
 - Pull cross-strategy + cross-coffee patterns from Brewing Historian (per-strategy + by-cultivar + by-coffee-family + cross-coffee-insights)
-- Pull WBC-tested strategies from WBC Brewing Archivist (5-axis foundational map + 154-recipe corpus + per-strategy)
-- Pull equipment-aware constraints from Brewing Equipment Expert (heavily — equipment selection is half of recipe construction; brewers + filters + grinder-eg1 + sworks clusters)
-- Construct: extraction strategy + modifiers + dose + water + grinder + grind setting + temp + pour structure
+- Pull WBC-tested strategies from WBC Brewing Archivist only when reaching for a non-default move
+- Pull equipment constraints from Brewing Equipment Expert only once a rotation trigger has moved the brew off the SWORKS
+- Emit the chassis with the row applied: extraction strategy label + modifiers + dose + water + grinder + grind setting + temp + pour structure
 
 **Phase 2 — In-thread iteration (the iteration-helper sub-prompt):**
 
 - Read operator's audio tasting notes (per `feedback_audio_dictation.md` — long multi-fact turns, extract every implicit term)
-- Refine recipe for next iteration based on what was tasted
+- Refine by adjustment row (valve before grind); pivot strategy only once the rows are exhausted
 - Maintain context: "what arc of changes have we been working through this session?"
 - Repeat until operator declares the optimized brew
 

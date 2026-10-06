@@ -410,4 +410,4 @@ Push the best brew via `push_brew` with a complete `What I Learned` entry: speci
 
 ### 6. Check for Default-Brewer Drift
 
-Before the next coffee, ask whether the same brewer is being reused by habit. The default-brewer trap and the default-strategy trap have the same shape.
+Retired as a per-coffee question (house-style grill, [ADR-0026](docs/adr/0026-latent-house-style-chassis.md)): the SWORKS + Latent house style is the stated default, and a validated chassis is not a habit to correct. The default-brewer trap still applies once a brew has left the default on one of the four rotation triggers ([CONTEXT-brewing.md § Brewer rotation discipline](CONTEXT-brewing.md)).
