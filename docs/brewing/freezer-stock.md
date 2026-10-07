@@ -51,7 +51,7 @@
 > home; treat as unknown at brew time.
 >
 > **Office stock index (presumptive, as of 2026-09-01 — operator's written physical list, 15g doses each; optimized brew linked where one exists):**
-> - Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi — 12+, as of 2026-10-05 (operator physical count) (added 2026-09-21 at 15, net new, no brews)
+> - Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi — 11+, as of 2026-10-07 (1 vial used in the office brew) · [brew](https://www.latentcoffee.com/brews/bc003865-eb58-4d88-a356-47cf16276e06)
 > - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — 8, as of 2026-10-05 (operator physical count) (optimized brew locked 2026-09-24, [brew 23b48be7](https://www.latentcoffee.com/brews/23b48be7-064b-4e47-9440-029e105b0cb3); RP9 Track 3 control)
 > - Picolot — S201 Overture: Tower (Elida Estate Torre Gesha Natural DRD) — 12 (added 2026-09-11, net new, no brews)
 > - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 8, as of 2026-10-06 (2 vials used in the dial-in) · [brew](https://www.latentcoffee.com/brews/87689687-90d8-41cd-8f82-7f802e1075f0) · reserved as RP10 research control
@@ -1028,6 +1028,7 @@
 ## Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi
 **Country:** Colombia · **Region/Farm:** Acevedo, Huila / Finca Anaya · **Producer:** Sergio Aranda Gomez
 **Variety:** Tabi · **Process:** Cinnamon + Sugarcane Inoculated Anaerobic · **Elevation:** 1600 m
-**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (12+ vials as of 2026-10-05 (operator physical count))
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (11+ vials as of 2026-10-07)
 **URL:** https://moonwakecoffeeroasters.com/products/finca-anaya-sergio-aranda-gomez-cinnamon-sugarcane-tabi-colombia
+**Brew:** [bc003865](https://www.latentcoffee.com/brews/bc003865-eb58-4d88-a356-47cf16276e06) — Latent house style (0 → 5 → 5 → 6 at end), 6.5 / 93°C / 45 s bloom, split pour; the 1:10 concentrate read too coconut-forward and perfumy, the reconstructed full 240 g cup is the keeper. Recorded as-is after one cup; next pass shortens the bloom steep slightly.
 **Notes:** Roaster notes: coconut flakes, pineapple cake, strawberry milkshake. Process: 24h oxidation → 48h yeast/cinnamon/sugarcane pre-ferment → 72h anaerobic → thermal shock → 12-day drying. Roaster recommends 2-3 week rest.
