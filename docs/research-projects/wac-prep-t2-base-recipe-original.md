@@ -198,3 +198,70 @@ No push_brew · no clock enforcement · no water building or drops · no sieve �
 ## SESSION RECORD
 
 *(Assistant fills from Step 0 onward)*
+
+### Session open - 2026-10-14
+
+**Gate:** operator confirms the AeroPress Original is physically at the office. Track opens.
+
+**Read-back ambiguities, resolved before Step 0:**
+1. Retention = water in minus liquid yield (held in puck + filter). Protocol cites 15-41 g at 15 g; method card says 30-41 g. Operator: measure it on brew 1. Assistant predictions use the method-card range scaled (~40-55 g at 20 g).
+2. Blind-pair judge-time read is recorded as **judge-time (post-parity)** - it follows the parity rest + shuffle, not first sip at assembly. Solo sittings keep the true at-assembly read. Operator confirmed.
+3. Dilution water = same 89°C kettle. Operator confirmed.
+4. Sitting 2 draws two TDS reads (concentrate, diluted cup) - treated as two samples under the single-read charter rule. Operator confirmed.
+5. Original on the bench - confirmed.
+
+**Assistant sealed prediction on H-arch (logged before operator's):** Arm A preferred at the cool read; expect a warm/cool split with B winning or tying at judge-time (post-parity). Secondary predictions: A yield ~145-160 g (H-legal marginal); B concentrate ~60-70 g at ~1.9-2.2% TDS; B diluted to A-strength lands ~110-130 g, under the 150 g floor.
+
+### Step 0
+1. **Brewer check:** polypropylene Original, original cap, standard paper micro-filters. ✅
+2. **Physical count:** 8 vials La Dinastia, operator states 15 g each = 120 g nominal → 6 brews. Assistant asked for an actual scale reading on at least one vial before accepting (zero-slack budget). *(pending)*
+3. **VST blank number (session open 2026-10-14):** 0.00 ✅
+4. **Equipment:** EG-1 7.0 · kettle 89°C · scale · timer · wide press vessel · two identical tasting cups · cup-coding means. ✅
+5. **Water:** plain PA tap, nothing added, whole track; no Apax in any cup incl. habit dose. ✅
+6. **Method lock, transcription-verified:** 20 g · EG-1 7.0 · 89°C · Original inverted · paper micro-filter · one continuous pour · 2 stirs (N-S, E-W, saturation only) · steep to 1:00 · cap + flip ~10 s · slow press to first sustained hiss ~50-55 s · ~2:00 total. Operator: "method is good for me at 20 g, I don't expect all that much difference." ✅
+7. **Filter rinse - PINNED: DRY** (operator has been running dry; held for all brews). ✅
+2. *(closed)* Vial gross 45.5 g incl. glass; operator pre-doses each vial to 15.0 g coffee on a scale at fill time. Accepted as 15 g × 8 = 120 g → **6 brews**. Each dose build (full vial + 5 g from a second) is read on the scale at brew time, which re-verifies.
+8. **Sealed predictions on H-arch:** Assistant = **Arm A** at cool (split possible, B at judge-time). Operator = **Arm A**. Both logged 2026-10-14, neither revised.
+9. **Pre-stated predicted outcomes (operator):** H-legal - fits inverted and clears 150 g. H-transfer - character carries over. H-coherent-B - not separately stated; "all transfer over" read as expecting coherent. Assistant's are in § Session open.
+
+**Step 0 COMPLETE 2026-10-14.**
+
+---
+
+### Sitting 1 - Arm A solo (2026-10-14)
+Blank number at open: 0.00 (Step 0 read, same session).
+
+**Brew 1 - Arm A** · 2026-10-14 · dose 20 g (vial 1 + 5 g from vial 2; scale reading 20.0 g) · chamber 200 g · 2 stirs · steep 1:00 · flip+press 1:00→2:00 (press ≈50 s after ~10 s flip) · elapsed ~2:00 · dry filter
+- Fit: 200 g fit inverted, "pretty much at the top" - no spill at the flip.
+- **Liquid yield at press stop: 154.6 g** → retention 45.4 g. **H-legal: CLEARS the 150 g floor undiluted** (4.6 g margin).
+- **TDS 1.43%** (blank 0.00). Well above the RP8 1.13-1.20% band at 1:10 on the Premium/15 g.
+- Judge-time read (at assembly, hot): aroma fruity, sweet, a little lemongrass. Sip: fruity, sweet, "a little pungent"; operator: "maybe needs a little bit of dilution." No dilution applied (scored brew, undiluted arm).
+- Operator note: this coffee tastes better as it cools, not only hot.
+- Cool read (B, ~45°C by feel): "much brighter, sharper, sweeter" - lemongrass still there, an apricot-like sweetness, green-tea undertone on the finish. Operator: "I greatly prefer the B1 comparatively to the A1." SIGHTED, same-day, different pours - observation, not the H-arch verdict.
+- Astringency/dryness line: not mentioned (none reported). Sweetness line: present, apricot-like. Lemongrass line: intact.
+
+**Brew 1 - Arm A, late cool read (much cooler, after a long sit, taken alongside B's cool read):** mellowed a little; still a little astringency; "feels a little incomplete", more body-centric; not much sweetness. "About the same as before."
+
+**Sitting 2 complete.** Day total 2 cups. Sitting 3 (2 cups) deferred to the next office day per the ≤3 cups/day charter.
+
+**State after sittings 1-2:** 2 of 6 brews · 80 g on the shelf (vial 3 has 10 g left; vials 4-8 full) · H-legal PASS (A 154.6 g) · H-transfer weak (A 1.43%, astringent, not sweet) · H-coherent-B provisional YES (B diluted coherent, sweeter) · B under floor at matched strength (114.5 g) · H-arch open pending blind pairs; sighted lean is B, against both sealed predictions (A).
+- Cool read (~45°C by feel): lemongrass, a little herbal, "almost green tea-like." Operator did not get this herbal/green-tea note on the concentrated pour-over or other brews of this coffee; suspects the bigger puck. Again: "feels like this could use some dilution." (Archived control profile does list "green tea with a lemongrass bite", so the note is on-signature; the Apax sweetness is absent by design.)
+- Astringency/dryness line: a little astringency (captured late, after the cool read, before sitting 2). Sweetness line: not very sweet.
+- H-transfer, provisional after brew 1: character does NOT cleanly reproduce - 1.43% vs the RP8 1.13-1.20% band, reads pungent/herbal and "wants dilution" at both stages. Memory-based, cross-brewer, cross-coffee, no Apax - tagged.
+- Sitting 1 complete. Operator elects to run sitting 2 same day (2 cups today, within charter).
+
+---
+
+### Sitting 2 - Arm B solo (2026-10-14, same office day as sitting 1)
+Blank number at open: *pending re-zero*
+
+**Brew 2 - Arm B** · 2026-10-14 · dose 20 g (vial 2 remainder 10 g + vial 3; scale reading *pending*) · chamber 110 g · 2 stirs · steep 1:00 · flip+press 1:00→1:55 · elapsed ~1:55 · dry filter · blank *pending*
+- **Concentrate TDS 1.78%** (vial drawn before dilution). Below the Assistant's 1.9-2.2% guess.
+- Straight spoon of concentrate: "quite sharp, pretty lemongrass." Not described as sour or thin.
+- **Concentrate weight at press stop: 92.1 g** → retention 17.9 g (vs 45.4 g on Arm A - retention is NOT constant across the two water charges).
+- Dilution target: 92.1 × 1.78 ÷ 1.43 = **114.6 g final** → add **22.5 g** 89°C kettle water on the scale.
+- **Pre-planned decision point fires:** matched-strength final weight 114.6 g is UNDER the 150 g floor - constraint finding on the champion shape at this strength (Assistant predicted 110-130 g). No extra water added.
+- Dilution poured: 22.7 g (target 22.5). **Final beverage weight 114.5 g** (under the 150 g floor). **Final TDS 1.47%** vs A's 1.43% → residual gap +0.04 (matched-TDS landed; tighter than RP9's 0.05-0.21 band).
+- Judge-time read (at assembly, hot): "still that lemongrass note, but sweeter" - lemongrass, green tea, a little jasmine, a little apricot. Operator (SIGHTED, different pour from A, not a blind pick): "definitely my preferred one, even while hot"; expects it to improve cool. Plain PA tap, nothing added.
+- H-coherent-B, provisional: concentrate at 1:5.5 is coherent once diluted to A-strength - no sourness/thinness reported; sweeter than A at judge-time.
+- Cool read: *pending*
