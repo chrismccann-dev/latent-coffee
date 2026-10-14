@@ -265,3 +265,8 @@ Blank number at open: *pending re-zero*
 - Judge-time read (at assembly, hot): "still that lemongrass note, but sweeter" - lemongrass, green tea, a little jasmine, a little apricot. Operator (SIGHTED, different pour from A, not a blind pick): "definitely my preferred one, even while hot"; expects it to improve cool. Plain PA tap, nothing added.
 - H-coherent-B, provisional: concentrate at 1:5.5 is coherent once diluted to A-strength - no sourness/thinness reported; sweeter than A at judge-time.
 - Cool read: *pending*
+
+**Sitting 4 rule, logged BEFORE sitting 3 brews (operator decision 2026-10-14):** operator does not want to spend 40 g re-running an A-vs-B pair whose answer is already clear. Agreed conditional, consistent with the protocol's curtailment decision point:
+- Sitting 3 = same arm at BOTH judge-time (post-parity) and cool picks AND operator calls the margin decisive → track curtails after sitting 3; H-arch verdict tagged **anecdote-until-reproduced**; remaining 40 g carries to the Coordinator / Track 3.
+- Sitting 3 = split picks, near-call, or against the sighted lean (B) → sitting 4 runs as the full protected replicate.
+Assistant pushed back on skipping the blind pair entirely (sighted leans inverted twice in RP9) and on any B-variant brew in this track (out of scope; "B at champion timing" + dilution variants are Coordinator/Track 3 work). Operator accepted: sitting 3 runs as designed on the next office day.
