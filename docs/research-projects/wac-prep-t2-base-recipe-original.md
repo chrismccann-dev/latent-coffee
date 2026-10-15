@@ -270,3 +270,26 @@ Blank number at open: *pending re-zero*
 - Sitting 3 = same arm at BOTH judge-time (post-parity) and cool picks AND operator calls the margin decisive → track curtails after sitting 3; H-arch verdict tagged **anecdote-until-reproduced**; remaining 40 g carries to the Coordinator / Track 3.
 - Sitting 3 = split picks, near-call, or against the sighted lean (B) → sitting 4 runs as the full protected replicate.
 Assistant pushed back on skipping the blind pair entirely (sighted leans inverted twice in RP9) and on any B-variant brew in this track (out of scope; "B at champion timing" + dilution variants are Coordinator/Track 3 work). Operator accepted: sitting 3 runs as designed on the next office day.
+
+---
+
+### Sitting 3 - Blind pair (2026-10-15)
+Blank number at open: *pending*
+
+**Brew 3 - Arm A** · 2026-10-15 · dose 20 g (vial 3 remainder + vial 4; reading *pending*) · chamber 200 g · timing *pending* · dry filter
+- **Yield 169.4 g** → retention 30.6 g (vs 45.4 g on brew 1). **TDS 1.33%** (vs 1.43% brew 1). Press-to-hiss yield slack at 20 g: ~15 g between days, ~0.10 TDS.
+
+**Brew 4 - Arm B** · 2026-10-15 · dose 20 g (vial 4 remainder + vial 5; reading *pending*) · chamber 110 g · timing *pending* · dry filter
+- **Concentrate 83.0 g** → retention 27.0 g. **TDS 2.07%** (vs 1.78% brew 2).
+- Dilution target: 83 × 2.07 ÷ 1.33 = **129.2 g final** → add **46.2 g** 89°C water. Under the 150 g floor again at matched strength.
+- Dilution 1 poured → **final 127.0 g**. First TDS read 1.78 (sample hot, rejected); re-read 1.62 (still hot/unstable). Cooled-vial re-reads (auto-retest, both vials ~2 min to ambient): **A 1.41** (brew 3 re-read; press-stop read was 1.33) · **B 1.57**. Gap 0.16 → not matched.
+- Dilution 2: 127 × 1.57 ÷ 1.41 = **141.4 g final** → +14.4 g 89°C water. Final B by arithmetic ≈1.41%, not re-read. Residual gap: arithmetic 0.00, instrument uncertainty ~±0.1 given the read scatter.
+- **Friction (RP10-T2):** VST reads on hot samples scattered 1.78 → 1.62 → 1.57 on the same cup, and A moved 1.33 → 1.41 cooled. Hot-sample reads are unreliable; the matched-TDS primitive needs a cooled vial as the canonical read. A's press-stop 1.33 superseded by the cooled 1.41 for the match.
+- Doses confirmed 20.0 g each (operator first said 18 g, corrected). Blank 0.00. Both brews ~2:00 total, method followed exactly. B final weight 141.4 g - under the 150 g floor.
+- Portions: equal pours into two identical cups (weights not reported). Cups coded Left / Right by position after an eyes-closed shuffle; mapping hidden.
+- **Judge-time (post-parity) pick: NOT CAPTURED** - the TDS re-read loop ran long enough that both cups were already at the cooler end when tasting began (RP8-N7 flag).
+- **Blind COOL pick: LEFT.** Left: sweet, a little sour, acidity, punchy, "not as smooth." Right: bright, "more characteristic," rounder feel. Back to back, twice: left is punchy/bright/strong acidity up front; right "a little flatter, meh." Operator: "less obviously clear than the other day which one is that much better, but left." Pick = left.
+- **Reveal: Left = B, Right = A.** Blind cool pick = **Arm B**, consistent with the sitting-2 sighted lean, against both sealed predictions (A).
+- Post-reveal comments (SIGHTED, remainder of both brews poured in): B punchier, brighter, cleaner, more clarity, lemongrass present at "the right amount." A more muddled, less crisp, a little more body, "less clear, one note." Operator's mechanism read: diluting B "keeps the sharpness and stretches it out," A "pulls across a lot more of the body" - parallels his concentrated pour-over idea on a punchier press and a bigger dose.
+- **Sitting 3 complete.** Verdict state: single-stage blind pick for B at cool, margin narrower than sighted. Judge-time stage uncaptured.
+- **Friction (RP10-T2):** cooled-vial TDS reads + two dilution passes consumed the hot window. For any future pair: draw both vials into a cold-water bath immediately, read once cooled, and portion/shuffle in parallel so the judge-time read survives.
