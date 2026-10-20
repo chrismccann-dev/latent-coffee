@@ -326,7 +326,7 @@ Blank number at open: *pending*
 
 **Date:** 2026-10-20
 **Session role:** execution + handoff brief production (no substrate edits)
-**Archive location:** branch `claude/wac-prep-t2-base-recipe-cf1d5a` @ `ARCHIVE_SHA`, pushed to origin (the compile session fetches/branches from here - the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Archive location:** branch `claude/wac-prep-t2-base-recipe-cf1d5a` @ `6c6297e0`, pushed to origin (the compile session fetches/branches from here - the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
 **Methodology verdict:** ❌ CONTRADICTS both sealed predictions - the champion concentrate-and-bypass shape (Arm B) beat the operator's full-volume press (Arm A) blind, reproduced across two sittings. ✅ VALIDATES H-legal (undiluted 1:10 clears 150 g on the Original). ❌ H-transfer fails (RP8 press character did not carry).
 
 This brief closes RP10 Track 2. The Coordinator consumes it to pick the base architecture for Tracks 3-7 and to scope Track 3 (dilution types). The compile session consumes § Substrate edit specifications. Everything here is derivable from § SESSION RECORD above; the brief is the structured read.
@@ -470,7 +470,7 @@ Per Lesson #40 role-discipline rule:
 - ❌ NO merge to main, NO substrate PR
 - ❌ NO `npx tsc --noEmit` runs
 - ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
-- ✅ Archive doc committed + pushed to branch `claude/wac-prep-t2-base-recipe-cf1d5a` @ `ARCHIVE_SHA` (the authorized archive-persist exception - see [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md))
+- ✅ Archive doc committed + pushed to branch `claude/wac-prep-t2-base-recipe-cf1d5a` @ `6c6297e0` (the authorized archive-persist exception - see [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md))
 - ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
 - 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
 
