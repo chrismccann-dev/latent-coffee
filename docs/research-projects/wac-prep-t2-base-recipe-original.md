@@ -1,7 +1,7 @@
 # AeroPress Championship 2027 Prep - Track 2: Base Recipe on the Original (full-volume press vs champion concentrate-and-bypass)
 
 *Research Project #10 (RP10) - AeroPress Championship 2027 Prep · OFFICE LANE, third occupant*
-**Status:** SCOPED - arms, dose, coffee, water operator-signed 2026-10-04 to 10-06; sitting design Coordinator-drafted
+**Status:** CLOSED 2026-10-20 - 6/6 brews, 4/4 sittings; H-arch reproduced (Arm B); handoff brief at bottom
 **Coordinator:** persistent RP10 Coordinator session (kickoff 2026-10-02)
 **Protocol authored:** 2026-10-06
 **Gate:** does not start until the operator's AeroPress **Original** is physically at the office. Nothing scored runs on the Premium.
@@ -191,7 +191,7 @@ No push_brew · no clock enforcement · no water building or drops · no sieve �
 
 ## Notes / friction / lessons / audit items (Assistant fills inline)
 
-*(empty at scoping)*
+Captured inline in § SESSION RECORD per sitting; consolidated in the handoff brief (§ New lessons captured · § Audit items queued · § Protocol-execution friction captured).
 
 ---
 
@@ -296,3 +296,182 @@ Blank number at open: *pending*
 - Portion weights: not weighed; operator estimate ~30 g per cup, both about equal (flagged).
 
 **Sitting 4 plan, pre-declared 2026-10-15 (operator + Assistant):** runs on the next office day as the protected replicate. **Method change, logged before brewing:** B is diluted BY WEIGHT, no TDS reads before tasting, to preserve the judge-time read that sitting 3 lost to the read loop. Basis from sittings 1-3: A dissolved solids ≈ 2.2-2.4 g/brew (154.6×1.43, 169.4×1.41), B concentrate ≈ 1.65-1.72 g (92.1×1.78, 83×2.07) → B final weight ≈ 0.73 × A yield. Both vials drawn at portioning into a cold-water bath and read AFTER the cool pick, so the residual gap is still recorded (expected ±~0.1). Pair tagged "strength-matched by arithmetic, verified post hoc."
+
+---
+
+### Sitting 4 - Lived replicate (2026-10-20)
+Blank number at open: *pending*
+
+**Brew 5 - Arm A** · 2026-10-20 · dose 20 g (vial 5 remainder + vial 6; reading *pending*) · chamber 200 g · ~2:00 total · dry filter · blank *pending*
+- **Yield 175.1 g** → retention 24.9 g. **TDS 1.35%** (press-stop read). Solids ≈2.36 g, in line with brews 1 and 3.
+
+**Brew 6 - Arm B** · 2026-10-20 · dose 20 g (vial 6 remainder + vial 7; reading *pending*) · chamber 110 g · ~2:00 total · dry filter
+- **Concentrate 74.3 g** → retention 35.7 g. **TDS 2.00%** (press-stop read). Solids ≈1.49 g - lower than brews 2/4 (1.64-1.72).
+- Operator took press-stop reads despite the pre-declared weight-only plan; used them. Dilution: 74.3 × 2.00 ÷ 1.35 = **110.1 g final** → +35.8 g 89°C water. Weight-only rule (0.73 × 175.1 = 127.8 g) would have landed ~0.18 weak - the read rescued the match. Lesson: weight-only dilution is not safe at this concentrate variance.
+- Final B 110.1 g - under the 150 g floor (third time).
+- Blank 0.00. Doses 20.0 g both. Portions: equal by eye, not weighed (flagged, second pair in a row).
+- Cups coded Left / Right by position after an eyes-closed shuffle; mapping hidden.
+- **Judge-time (post-parity, "as hot as it can be") picks:** Left - a little lemongrass, a little acidity, "a little more dull." Right - acidity, brightness, "much brighter," very flavorful, a lot of character. **Pick = RIGHT.**
+- **Cool picks:** Left - bright lemongrass, a little tart, a little acidity. Right - "so much character," tart like a tart candy, bright, sweeter, much more flavorful and expressive. **Pick = RIGHT.** Operator guessed right = B before the reveal.
+- **Reveal: Left = A, Right = B.** Blind pick = **Arm B at BOTH stages.**
+- Post-reveal comments (SIGHTED): A duller, flatter; B "so much more expressive." Operator's mechanism read: B "pulled out more of the front part of the extraction, like the bloom and the first pour"; A "is getting all that body and stuff in."
+- Post-hoc cooled-vial TDS (A / B): **unrecorded** - vials discarded before reading (flagged). Sitting-4 match rests on the press-stop reads + arithmetic.
+- **Sitting 4 complete. H-arch REPRODUCED: Arm B preferred blind in sitting 3 (cool) and sitting 4 (judge-time AND cool). No warm/cool split observed. Both sealed predictions (A) scored WRONG.**
+
+**TRACK CLOSED 2026-10-20.** Exit conditions met: sittings 1-4 complete · H-legal / H-transfer / H-coherent-B / H-arch each carry a verdict · both sealed predictions scored · handoff brief below.
+
+---
+
+## HANDOFF BRIEF FOR COMPILE SESSION (RP10 Track 2 - Base Recipe on the Original Close-Out)
+
+**Date:** 2026-10-20
+**Session role:** execution + handoff brief production (no substrate edits)
+**Archive location:** branch `claude/wac-prep-t2-base-recipe-cf1d5a` @ `ARCHIVE_SHA`, pushed to origin (the compile session fetches/branches from here - the archive doc is committed; substrate is NOT; not merged to main). See [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md).
+**Methodology verdict:** ❌ CONTRADICTS both sealed predictions - the champion concentrate-and-bypass shape (Arm B) beat the operator's full-volume press (Arm A) blind, reproduced across two sittings. ✅ VALIDATES H-legal (undiluted 1:10 clears 150 g on the Original). ❌ H-transfer fails (RP8 press character did not carry).
+
+This brief closes RP10 Track 2. The Coordinator consumes it to pick the base architecture for Tracks 3-7 and to scope Track 3 (dilution types). The compile session consumes § Substrate edit specifications. Everything here is derivable from § SESSION RECORD above; the brief is the structured read.
+
+### TL;DR
+
+- **Arm B (1:5.5 concentrate, bypassed to A's strength) is the base architecture.** Preferred blind 3 of 3 picks across 2 sittings (sitting 3 cool; sitting 4 judge-time AND cool). No warm/cool split. Both sealed predictions (A) wrong.
+- **H-legal PASSES:** 20 g / 200 g fits the Original inverted (at the brim) and yielded 154.6 / 169.4 / 175.1 g undiluted - every brew over the 150 g floor.
+- **B at matched strength is ILLEGAL on yield:** 114.5 / 141.4 / 110.1 g final. A 20 g / 110 g concentrate carries ~1.5-1.7 g of dissolved solids; stretched to the 150 g floor that is **~1.0-1.15% TDS**, which is RP8's optimum band. Track 3 starts there.
+- **The Original at 20 g pulls harder than the Premium at 15 g:** A read 1.33-1.43% vs RP8's 1.13-1.20% at the same 1:10, and the operator called it pungent / astringent / "wants dilution" on every A read. H-transfer fails; the arch verdict is partly "A ran above its optimum strength."
+- Total elapsed per brew ~2:00 (brew only); dilution adds under a minute. The 5:00 clock is not a constraint on this architecture before grind time is counted.
+- Hot-sample VST reads are unreliable (1.78 → 1.62 → 1.57 on one cup); the cooled vial is the canonical read, and the read loop cost sitting 3 its judge-time pick.
+
+### Execution summary
+
+6 brews over 3 office days (2026-10-14, 10-15, 10-20), all 120 g of La Dinastia spent, 0 g left. Step 0 ran to completion. Sittings 1-2 ran same-day (2 cups). Sitting 3's judge-time pick was lost to a TDS re-read loop; the blind pick was taken at cool. Sitting 4 was pre-declared as weight-only dilution but the operator took press-stop reads anyway, which rescued the match (weight-only would have missed by ~0.18). Sitting-4 post-hoc vials were discarded unread. No clock enforcement, no Apax, no grind/temp/steep moves, no push_brew, no substrate edits.
+
+### Equipment / conditions
+
+| Item | Value |
+|---|---|
+| Brewer | AeroPress **Original** (polypropylene), original cap, standard paper micro-filter, **dry** (no rinse), inverted |
+| Grinder | EG-1 @ 7.0 (both arms, all brews) |
+| Water | Plain Palo Alto tap, 89°C, nothing added; same for dilution |
+| Coffee | Moonwake La Dinastia (Wilder Lazo) Lemongrass Yellow Honey Gesha, Colombia - 8 × 15 g vials, pre-dosed |
+| Dose | 20.0 g every brew (vial + 5 g from next) |
+| TDS | VST LAB III, blank 0.00 at every open |
+| Reads | Judge-time at assembly (solo) / post-parity (pairs) + cool (~45°C by feel) |
+
+### Per-brew raw data
+
+| # | Sit | Arm | Date | Water | Press / total | Yield or conc. g | Retention g | TDS % | Dilution → final g | Final TDS | Reads / pick |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 1 | A | 10-14 | 200 | 1:00→2:00 / ~2:00 | 154.6 | 45.4 | 1.43 | none | 1.43 | JT: fruity, sweet, lemongrass, pungent, "wants dilution." Cool: lemongrass, herbal, green-tea; a little astringency; not very sweet; "incomplete, body-centric" |
+| 2 | 2 | B | 10-14 | 110 | 1:00→1:55 / ~1:55 | 92.1 | 17.9 | 1.78 | +22.7 → 114.5 | 1.47 (gap +0.04) | JT: lemongrass, sweeter, green tea, jasmine, apricot. Cool: brighter, sharper, sweeter, apricot, green-tea finish. Sighted preference B "by far" |
+| 3 | 3 | A | 10-15 | 200 | ~2:00 | 169.4 | 30.6 | 1.33 hot / **1.41** cooled | none | 1.41 | Blind pair, see 4 |
+| 4 | 3 | B | 10-15 | 110 | ~2:00 | 83.0 | 27.0 | 2.07 | +44.0 → 127.0 (read 1.78/1.62 hot, **1.57** cooled) then +14.4 → **141.4** | ≈1.41 by arithmetic | **JT: not captured.** Blind cool pick = **B** ("punchy, bright, strong acidity" vs A "flatter, meh"); margin narrower than sighted |
+| 5 | 4 | A | 10-20 | 200 | ~2:00 | 175.1 | 24.9 | 1.35 | none | 1.35 | Blind pair, see 6 |
+| 6 | 4 | B | 10-20 | 110 | ~2:00 | 74.3 | 35.7 | 2.00 | +35.8 → **110.1** | ≈1.35 by arithmetic; post-hoc vials unread | Blind **JT pick = B** ("much brighter, a lot of character" vs A "dull"); blind **cool pick = B** ("tart candy, sweeter, expressive" vs A "flatter") |
+
+Portion weights in both pairs: equal by eye, not weighed (flagged). All brews 2 stirs, steep to 1:00, flip ~10 s, press to first sustained hiss.
+
+### Analysis
+
+- **A yield:** 154.6 / 169.4 / 175.1 g (median 169.4, min 154.6). Retention 45.4 → 30.6 → 24.9 g, drifting down across days (press feel settling on the new body?). All over 150 g. Press-to-hiss yield slack at 20 g ≈ 20 g across days, ≈0.1 TDS.
+- **A strength:** 1.43 / 1.41 / 1.35%, median 1.41. Dissolved solids ≈2.2-2.4 g per brew. RP8 Premium/15 g band was 1.13-1.20% at the same ratio and method: the Original at 20 g sits ~0.2 above.
+- **B concentrate:** 92.1 / 83.0 / 74.3 g at 1.78 / 2.07 / 2.00%. Solids 1.64 / 1.72 / 1.49 g. Retention 17.9 / 27.0 / 35.7 g - NOT constant and not predictable from A's retention the same day.
+- **Matched-strength finals:** 114.5 / 141.4 / 110.1 g. Floor shortfall 35.5 / 8.6 / 39.9 g. To reach 150 g, B's solids give 1.0-1.15% TDS.
+- **Residual gaps:** sitting 2 +0.04 (instrumented). Sitting 3 ≈0 by arithmetic on cooled reads after a second dilution. Sitting 4 ≈0 by arithmetic on press-stop reads, unverified.
+- **Blind picks:** 3/3 for B (S3 cool; S4 JT; S4 cool). Sighted leans (S2 both stages, S3 and S4 post-reveal) all B. No warm/cool split anywhere.
+- **Elapsed:** ~2:00 brew for both arms; B's dilution <1 min. Grind time not measured.
+
+### Final output
+
+**Base architecture: Arm B, concentrate-and-bypass on the Original.** Lived recipe at 20 g:
+
+20 g · EG-1 7.0 · 89°C plain water · Original inverted · dry paper micro-filter · **110 g** in one continuous pour · 2 stirs (N-S, E-W, saturation only) · steep to 1:00 · cap + flip ~10 s · very slow press to first sustained hiss (~50 s) · ~2:00 total → concentrate **74-92 g at 1.8-2.1%** · bypass with 89°C water on the scale to the target weight.
+
+As brewed on this track (matched to A at ~1.35-1.47%): final 110-141 g, **under the 150 g floor**. The competition-legal form is the same concentrate bypassed to **≥150 g, landing ~1.0-1.15% TDS** - untasted on this track, Track 3's first cup.
+
+Arm A as the legal-form fallback: 20 g / 200 g undiluted → 155-175 g at 1.35-1.43%, legal, but read astringent and dull against B every time.
+
+### Key findings
+
+1. **The champion shape wins blind, reproduced.** B picked 3/3 blind across two sittings, including the only captured judge-time pair pick. Substrate: RP10 builds Tracks 3-7 on the concentrate-and-bypass architecture, not the RP8 full-volume press.
+2. **H-legal passes:** undiluted 1:10 at 20 g clears 150 g on the Original (min 154.6 g). Fit is at the brim inverted - no spill at the flip in 3/3. Substrate: the operator's own style is competition-legal as brewed; it is simply not the preferred one.
+3. **B cannot reach 150 g at A's strength.** 1.5-1.7 g solids per 20 g / 110 g concentrate caps the legal cup at ~1.0-1.15%. Substrate: Track 3 (dilution types) must start at the floor-legal strength, not at matched-to-A; "concentrate held at 1:5.5" + "bypass to ≥150 g" fixes the final strength window.
+4. **H-transfer fails; the Original at 20 g runs ~0.2 TDS hotter than the Premium at 15 g.** 1.33-1.43% vs 1.13-1.20%. A read pungent/astringent/"wants dilution" at every stage. Substrate: the method card's yield/TDS band is Premium/15 g-specific; add the Original/20 g band. Confounded (brewer + dose + coffee + no Apax) - tag, don't over-claim.
+5. **The arch verdict is partly a strength verdict.** A was tasted undiluted at 1.35-1.43%, above the RP8 optimum, and the operator said so each time. "A bypassed to ~1.15%" (the method card's bypass-to-optimum form, which won RP8 T5) was never tasted here. Substrate: a named follow-up for the Coordinator - A-diluted vs B-diluted at equal strength and equal 150 g would separate architecture from strength. Not a failure of this track's design (the protocol fixed A as undiluted by definition), but it bounds the claim.
+6. **Operator mechanism read, consistent across 3 sightings:** B "keeps the sharpness and stretches it out" / "pulls the front of the extraction"; A "pulls across the body" / "muddled, one note." Matches the concentrated pour-over thesis on a press body. Substrate: grilling-queue evidence for the Coordinator, nothing resolved here.
+7. **Retention is not a constant.** A 25-45 g, B 18-36 g, no day-to-day correlation between arms. Substrate: weight-only dilution is unsafe (would have missed 0.18 in sitting 4); a TDS read on the concentrate stays mandatory.
+8. **No judge-time vs cool split.** The one captured pair JT pick agreed with cool. Substrate: Track 4 (serving temperature) gets no split signal from here; the operator's "this coffee peaks cool" note still holds for B.
+9. **Clock:** ~2:00 brew + <1 min dilution. Substrate: Track 7 starts from "the architecture fits the clock with ~2 min to spare before grind."
+
+### Substrate edit specifications for compile session
+
+DO NOT execute these edits in this session - the compile session integrates substrate.
+
+**Cluster doc edits**
+1. `docs/skills/brewing-assistant/cluster/aeropress-immersion-press.md` § Method - add a row/note: *"AeroPress Original, 20 g / 200 g (RP10 T2, 2026-10): yield 155-175 g, retention 25-45 g, TDS 1.33-1.43% - ~0.2 above the Premium/15 g band at the same ratio; reads astringent undiluted on a honey Gesha."* Source: findings 2, 4. Rationale: the card's yield/TDS band is currently Premium-only and will mislead 20 g scaling.
+2. Same card § Serving forms - add the Track 2 data point under bypass-to-optimum: *"RP10 T2: 1:5.5 concentrate (20 g / 110 g → 74-92 g at 1.8-2.1%) bypassed to ~1.4% beat the 1:10 direct form blind 3/3; bypassed to the 150 g floor it lands ~1.0-1.15%."* Source: findings 1, 3.
+3. `docs/skills/research-coordinator/cluster/office-lane.md` (or `calibration-arc.md` matched-TDS primitive 12, Coordinator's call which) - add: *"VST reads on hot samples scatter (RP10 T2: 1.78 → 1.62 → 1.57 on one cup). Draw vials into a cold-water bath; the cooled read is canonical. Reads needed only for dilution precede tasting; verification reads may follow the cool pick."* Source: TL;DR bullet 6, friction 1.
+4. Same primitive - add to the blind-pair stop checklist: *"weigh each portion; equal volume is a primitive, not an estimate."* Source: friction 2.
+5. `docs/skills/wbc-roasting-archivist/cluster/...` - **none.** No roasting substrate touched.
+
+**ADR work** - none. Architecture choice is a project decision, recorded in the RP10 end-document, not an ADR.
+
+**Audit item resolutions** - see § Audit items queued; AI-1 is a one-line fix in the protocol-doc lineage, not substrate.
+
+**Project docs (Coordinator)** - RP10 end-document / roadmap office-lane entry: Track 2 CLOSED, architecture = concentrate-and-bypass; Track 3 scope per § Recap map. Memory `project_rp10_wac_2027_prep.md` refresh is the Coordinator's.
+
+### New lessons captured
+
+| # | Lesson | Substrate implication |
+|---|---|---|
+| RP10-T2-N1 | Hot-sample VST reads are unreliable and the re-read loop eats the hot window; a cooled vial is the canonical read, and only dilution-driving reads must precede tasting | Edit spec 3 |
+| RP10-T2-N2 | Puck retention is not constant across water charges or days (A 25-45 g, B 18-36 g); weight-only dilution from prior-day solids misses by up to ~0.2 | Edit spec 3; keep concentrate TDS mandatory |
+| RP10-T2-N3 | At 20 g the press-to-hiss yield slack is ~20 g across days (≈0.1 TDS), double RP8's ±9 g at 15 g | Method card note (spec 1) |
+| RP10-T2-N4 | A sighted lean survived the blind here (unlike RP9 twice); the blind was still what made it count | None; calibration-arc primitive 15 stands |
+| RP10-T2-N5 | Under matched strength the 1:5.5 champion shape at 20 g cannot clear 150 g; the floor, not taste, sets the final strength (~1.0-1.15%) | Track 3 scope |
+| RP10-T2-N6 | "Hold A undiluted" as the arm definition means an arch verdict is also a strength verdict when the new body runs hotter; equal-strength-equal-volume is the cleaner next comparison | Coordinator follow-up (finding 5) |
+| RP10-T2-N7 | Portion weights were never recorded in either pair; "equal by eye" is a flag, not data | Edit spec 4 |
+
+Numbers provisional; Coordinator canonicalizes.
+
+### Audit items queued
+
+| # | Item | Status |
+|---|---|---|
+| RP10-T2-AI-1 | Protocol doc cites RP8 retention "15-41 g at 15 g"; the method card says 30-41 g. Reconcile at source (RP8 T5 doc) | open - minor |
+| RP10-T2-AI-2 | Is the RP8 "bypass-to-optimum beats direct" result and this track's B-beats-A the same finding on two bodies? If so the method card's two "co-equal" serving forms are not co-equal at 20 g | open - Coordinator / grilling queue |
+| RP10-T2-AI-3 | Grilling-queue item 58: operator's mechanism language ("keeps the sharpness and stretches it out") logged as evidence; nothing resolved | noted |
+
+### Open data items
+
+- Sitting 3 judge-time pick uncaptured; sitting 4 post-hoc TDS vials discarded unread (residual gap for pair 2 is arithmetic only).
+- B at the 150 g floor (~1.0-1.15%) was never tasted - the legal cup is untested.
+- A bypassed to optimum (~1.15%) vs B at the same strength and volume - never tasted (finding 5).
+- Grind time per brew not measured (Track 7 needs it).
+- Single coffee, honey co-fermented Gesha, off the compulsory-coffee profile, no Apax. All verdicts are single-coffee.
+
+### Recap map for compile session
+
+Integrate first: edit specs 1-2 (method card bands for the Original/20 g and the Track 2 bypass data point). Then spec 3-4 (cooled-vial rule + portion weigh). Defer: AI-2 to the grilling queue. Escalate to the operator: whether Track 3 opens with "B bypassed to 150 g" alone, or with the equal-strength A-vs-B pair from finding 5 as its first cup. Coordinator: close Track 2 in the RP10 end-doc, update roadmap office-lane line, refresh the RP10 memory file; no coffee left - Track 3 needs a new lot.
+
+### Protocol-execution friction captured
+
+1. TDS read loop (hot vials, two dilution passes) consumed sitting 3's hot window - the judge-time pick was lost. Fix in spec 3.
+2. Portion weights not captured in either pair; the stop-2 checklist asked, the operator didn't have them. Make the weigh a step, not a question.
+3. Operator first reported 18 g doses for sitting 3, corrected to 20 g. One confirming "scale said 20.0?" at dose build would have avoided it.
+4. Sitting 3's reveal happened before the "cool" stage was explicitly called; the operator's clarification that the pick was already at cool resolved it, but the sequence should name the stage out loud before each pick.
+5. Pre-declared weight-only dilution for sitting 4 was superseded in the moment by press-stop reads; the deviation was the right call and is logged, but a pre-declared plan should carry its own "if the reads are quick, take them" clause.
+6. Vial arithmetic (full vial + 5 g from the next) worked cleanly; 8 vials → exactly 6 doses, zero waste.
+
+---
+
+### Execution Session Termination
+
+Per Lesson #40 role-discipline rule:
+- ❌ NO substrate edits (registry / cluster docs / ADR / MCP)
+- ❌ NO merge to main, NO substrate PR
+- ❌ NO `npx tsc --noEmit` runs
+- ✅ Protocol doc updated in-place as canonical archive (authorized per "doc IS the archive" framing)
+- ✅ Archive doc committed + pushed to branch `claude/wac-prep-t2-base-recipe-cf1d5a` @ `ARCHIVE_SHA` (the authorized archive-persist exception - see [`role-discipline.md` § Archive persistence](docs/skills/research-coordinator/cluster/role-discipline.md))
+- ✅ Handoff brief produced above; branch + SHA in the `Archive location:` header for the compile session
+- 🛑 Session terminating after this brief lands. The compile session integrates substrate per the design pattern.
+
+End of RP10 Track 2 (Base Recipe on the Original) close-out.
