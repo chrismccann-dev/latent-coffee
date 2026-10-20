@@ -95,7 +95,7 @@ The unified set of Step 0 sub-steps that survived across all 4 filter-arc projec
 
 ### 12. Matched-TDS taste-offs (RP9, graduated at the 2026-10-01 retro)
 
-**What:** when two conditions land at (or can be built to) the same measured TDS, taste them head-to-head — any perceived difference is character, not strength. The cleanest character-vs-strength instrument available; it settled verdict-bearing questions in all three RP9 tracks. Situational (fires when strengths happen to match or can be matched cheaply), but when the situation arises, exploit it explicitly rather than letting the coincidence pass unused.
+**What:** when two conditions land at (or can be built to) the same measured TDS, taste them head-to-head — any perceived difference is character, not strength. The cleanest character-vs-strength instrument available; it settled verdict-bearing questions in all three RP9 tracks. Situational (fires when strengths happen to match or can be matched cheaply), but when the situation arises, exploit it explicitly rather than letting the coincidence pass unused. Cooled-vial rule (graduated 2026-10-20; fired RP9 P9-AI-2 then RP10 T2): VST reads on hot samples scatter (1.78 -> 1.62 -> 1.57 on one cup). Draw vials into a cold-water bath; the cooled read is canonical. Only dilution-driving reads precede tasting; verification reads may follow the cool pick. Weigh each tasting portion; equal volume is a primitive, not an estimate.
 
 ### 13. Probe before designing (RP9, graduated at the 2026-10-01 retro)
 

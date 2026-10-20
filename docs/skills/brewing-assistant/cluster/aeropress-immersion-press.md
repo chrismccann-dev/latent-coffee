@@ -20,11 +20,12 @@ The immersion-press form of the **Concentrated Pour-Over** style (CONTEXT-brewin
 | Total | **~2:00-2:05** |
 | Yield | ~115-124 g (bed retention ~30-41 g) |
 | TDS | 1.13-1.20% at 1:10 |
+| Note | AeroPress Original, 20 g / 200 g (RP10 T2, 2026-10): yield 155-175 g, retention 25-45 g, TDS 1.33-1.43%, about 0.2 above the Premium/15 g band at the same ratio; read astringent undiluted on a honey Gesha. Press-to-hiss yield slack at 20 g is ~20 g across days (~0.1 TDS). |
 
 ## Serving forms (co-equal)
 
 1. **Direct:** 1:10 undiluted — round, layered, punchier.
-2. **Bypass-to-optimum:** 1:9 concentrate (15 g / 135 g) + ~20% bypass water to ~1:10-strength — trades a little punch for openness/sparkle/brightness; operator preference in direct comparison (RP8 T5 buffer cup, against-known-identity pick).
+2. **Bypass-to-optimum:** 1:9 concentrate (15 g / 135 g) + ~20% bypass water to ~1:10-strength — trades a little punch for openness/sparkle/brightness; operator preference in direct comparison (RP8 T5 buffer cup, against-known-identity pick). RP10 T2: a 1:5.5 concentrate (20 g / 110 g -> 74-92 g at 1.8-2.1%) bypassed to ~1.4% beat the 1:10 direct form blind 3/3 on the Original; bypassed to the 150 g competition floor it lands ~1.0-1.15%. The two forms are not co-equal at 20 g on the Original; see RP10-T2-AI-2.
 
 The style's identity is **"no dilution past optimum"**, not "no bypass": bypass is a strength-targeting tool from a stronger concentrate (bypass-to-optimum won; bypass-past-optimum read thin and lost).
 

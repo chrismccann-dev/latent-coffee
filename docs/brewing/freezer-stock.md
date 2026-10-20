@@ -52,7 +52,7 @@
 >
 > **Office stock index (presumptive, as of 2026-09-01 — operator's written physical list, 15g doses each; optimized brew linked where one exists):**
 > - Moonwake — Finca Anaya Sergio Aranda Gomez Cinnamon Sugarcane Tabi — 11+, as of 2026-10-07 (1 vial used in the office brew) · [brew](https://www.latentcoffee.com/brews/bc003865-eb58-4d88-a356-47cf16276e06)
-> - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — 8, as of 2026-10-05 (operator physical count) (optimized brew locked 2026-09-24, [brew 23b48be7](https://www.latentcoffee.com/brews/23b48be7-064b-4e47-9440-029e105b0cb3); RP9 Track 3 control)
+> - Moonwake — La Dinastia Wilder Lazo Lemongrass Yellow Honey Gesha — 0, as of 2026-10-20 (RP10 T2 consumed all 8) (optimized brew locked 2026-09-24, [brew 23b48be7](https://www.latentcoffee.com/brews/23b48be7-064b-4e47-9440-029e105b0cb3); RP9 Track 3 control)
 > - Picolot — S201 Overture: Tower (Elida Estate Torre Gesha Natural DRD) — 12 (added 2026-09-11, net new, no brews)
 > - Picolot — S203 Agricola Geisha 36-hr CF Ox Natural — 8, as of 2026-10-06 (2 vials used in the dial-in) · [brew](https://www.latentcoffee.com/brews/87689687-90d8-41cd-8f82-7f802e1075f0) · reserved as RP10 research control
 > - MAME — La Palma y El Tucán Geisha Natural (Brian Quan Comp Expression) — 4 (added 2026-09-11, net new, no brews)
@@ -873,7 +873,7 @@
 ## Moonwake Coffee Roasters — La Dinastia Wilder Lazo — Lemongrass Yellow Honey Gesha — Colombia
 **Country:** Colombia · **Region/Farm:** Huila / La Dinastía · **Producer:** Wilder Lazo
 **Variety:** Geisha · **Process:** Yellow Honey (floated, 36hr in-cherry dry ferment, depulped, dried) · **Elevation:** 1480–1550 m
-**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (8 vials as of 2026-10-05 (operator physical count))
+**Agtron:** pending (frozen unmeasured — no CM-200 at office) · **Status:** Frozen (15g doses) · **Location:** Office (0 vials as of 2026-10-20 (RP10 T2 consumed all 8))
 **URL:** https://moonwakecoffeeroasters.com/products/la-dinastia-wilder-lazo-lemongrass-yellow-honey-gesha-colombia
 **Notes:** Rest 2–3 wks (Moonwake). Notes: lemongrass, dried apricot, tangerine, jasmine. Lemongrass character came via equipment cross-contamination, not direct fermentation. Same producer as the Robert Asami 300hr Anaerobic Washed Gesha. Optimized brew locked 2026-09-24 in ONE cup (Balanced Intensity lower edge, SWORKS Restricted-main + Dial 6 finish, EG-1 6.3 / ~95°C, [brew 23b48be7](https://www.latentcoffee.com/brews/23b48be7-064b-4e47-9440-029e105b0cb3)) — RP9 Track 3 fractionation control; remaining vials reserved for the research track. Lived recipe: 45g bloom Dial 0 ~30s -> P1 to 150g Dial 5 -> P2 to 240g Dial 5, Dial 6 at 240g in, to dry bed (no flush). Cup: dried apricot, jasmine, honey, green tea with a lemongrass bite; peaks cool. RP9 T3 verdict (2026-10-01, blind ×2 incl. matched TDS): full cup wins - does NOT reward fraction selection. The bloom carries the lemongrass signature; don't cut it. Apax 1+1 cup-dose is load-bearing for sweetness on this coffee.
 
