@@ -197,3 +197,57 @@ No push_brew · no clock enforcement · no concentrate changes (ratio, grind, te
 ## SESSION RECORD
 
 *(Assistant fills from Step 0 onward)*
+
+### Step 0 - opened 2026-11-02
+
+**Session branch:** `claude/wac-prep-t3-dilution-types-3740d6` (worktree `pattern-j-pruning-85bcd4`).
+
+**Pre-Step-0 ambiguities - defaults taken (operator chose "Start Step 0" over answering first; each is a flag, overridable at the sitting it fires):**
+1. Sitting 5 second-pass liquid: draw ONE cooled vial on the second-pass liquid and fold its TDS into the half-split arithmetic (new sample, so inside the single-read-per-sample charter).
+2. Half-split uses the concentrate weight AFTER the TDS vial draw, not the press-stop weight.
+3. If sitting 2 splits judge-time vs cool, the judge-time pick carries into sitting 3 (protocol decision point), stated as partially blind.
+4. Doses are built vial + remainder cascade (vial + 5 g from next); remainder tracked per sitting on the sheet.
+5. Hot-bypass half is sipped at assembly with no parity rest, per protocol; discomfort noted, not fixed.
+
+**Sealed H-temp prediction (Assistant, logged before operator's):** room-temperature bypass wins at judge-time (hot bypass lands the cup ~80°C, past this coffee's ~54°C peak); cool picks near coin-flip. Secondary: H-staged weak win for two-step; H-floor coherent but lighter than expected.
+
+**Step 0.1 - vial count:** operator reports **10 vials × 15 g = 150 g** (scoping presumed 8 × 120 g). 7 doses at 20 g, 10 g spare → all 6 sittings run with ONE full dose of slack. Budget rule not triggered. *Flag: per-vial scale weights requested; operator stated "15 g each" - confirm scale-read, not label-read (AI below).*
+**Step 0.2 - VST:** re-zeroed; blank = **0.00** on plain PA tap.
+**Step 0.3 - equipment:** all confirmed (Original + cap + dry paper filters, EG-1 7.0, kettle 89°C, room-temp vessel filled, cold bath, scale, timer, 2 cups + 2 half-cups, L/R coding).
+**Step 0.4 - water:** plain tap only, no Apax.
+**Step 0.5 - transcription-verify:** operator asked for the recipe to be re-stated rather than recounting from memory; recipe re-issued verbatim from the LOCKED block, confirmation pending.
+**Step 0.7 - operator sealed prediction:** operator's first answer addressed H-tail ("I'll prefer the AeroPress dilution a bit more than pure bypass water, not 100%") - logged as operator H-tail lean. H-temp (hot vs room) prediction re-requested.
+**Step 0.7 (cont.) - operator sealed H-temp prediction:** CONDITIONAL. Under the protocol's judge-time definition (first sip at assembly): **room-temperature bypass wins**. If the judge drinks 3-5 min after service (competition scheduling reality): **hot bypass wins**, because it retains heat into the drinking window. Scored against the protocol definition → operator = ROOM (matches Assistant). The delay scenario is logged as an audit item for Track 4 (serving temperature).
+**Step 0.6 - formula walk:** done with made-up numbers (84 g pressed, 3 g vial, 40.5 g halves, 1.90% → T* 1.10% ⇒ ~29.5 g water/half, ~70 g cups). Operator did not explicitly confirm; re-walked live at sitting 2.
+**Step 0.8 - pre-stated outcomes:** Assistant: H-floor coherent but lighter than expected · H-staged weak two-step win · H-tail near-indistinguishable at matched T*. Operator: H-tail lean = second pass; H-floor / H-staged not stated (asked again at sitting 1 open).
+**Step 0.5 - recipe confirmation:** still pending - taken live at sitting 1 brew (operator to confirm each step as poured).
+**Step 0 CLOSED 2026-11-02** with two carried flags: vials scale-weighed (unconfirmed) · recipe confirmation (live at brew 1).
+
+**Audit items (running):**
+- T3-AI-1: per-vial scale weights not confirmed (operator stated "15 g each"). Confirm before sitting 2 or note label-read.
+- T3-AI-2: judge-time definition. Operator's prediction splits on service-to-sip delay (0 vs 3-5 min). RP10 "judge-time = first sip at assembly" may under-model competition reality; candidate variable for Track 4.
+
+---
+
+### Sitting 1 - The legal cup - 2026-11-02
+
+**Recap (sitting-recap rule):** Concentrate: 20 g · EG-1 7.0 · 89°C PA tap · Original inverted · dry paper · 110 g one pour · 2 saturation stirs · steep to 1:00 · cap+flip ~10 s · slow press to first sustained hiss ~50 s · ~2:00. T*: NOT YET SET - this sitting sets it. Formula: water_half = (conc_g/2) × (TDS_conc/T* − 1). State: 0 brews done, 150 g on hand (7 doses), no verdicts, sealed H-temp = room (both). This sitting: ONE cup, no split - whole concentrate bypassed with 89°C water to exactly 150 g; TDS of that cup = T*. Two reads. Time the grind.
+
+**Brew 1 record:** sitting 1 · brew 1 · 2026-11-02 · dose 20 g (vial + 5 g; remainder not reported) · grind time: NOT REPORTED (flag) · press 1:00 → 2:05 = **65 s** · total elapsed **2:05** · concentrate **85.2 g** (press-stop; post-vial-draw weight not reported) · concentrate TDS **2.01%** (cooled, blank 0.00) · bypass 89°C to **150.06 g** (≈ 64.9 g water, single step) · cup TDS **1.26%** = **T\* (measured)**.
+**Arithmetic check:** 85.2 × 2.01 / 150.06 = **1.14%** expected; measured 1.26%. Residual +0.12. Not chased; see T3-AI-3.
+**Reads (operator added a WARM stage between judge-time and cool):**
+- Aroma: sweet, bright, tea-like on the darker-tannin side.
+- Judge-time (hot, at assembly): pretty hot; flavor a little muddled; some sweetness up front, not the brightest.
+- Warm: juicier, brighter; apricot / kiwi / maybe peach; more sweetness and brightness; finish a little flat - "maybe too much bypass." Operator's preferred stage.
+- Cool: peach, honeyed grape; flattening out; "a little more on the flatter side." Liked less than warm.
+- Sweetness line: present up front at all stages, peaks warm. Herbal line: tea-tannin in aroma; eucalyptus not named. Astringency: not named. Flags: finish flat at warm + cool; operator twice suspects over-dilution.
+- Unprompted: operator would like some second-pass (spent-bed) water in the cup (H-tail lean, again).
+**H-floor verdict:** PASS - coherent, not thin, not hollow. STOP rule does NOT fire. Headline nuance: the floor-legal cup is liked WARM and goes flat as it cools; the "too much bypass" read is the operator's palate saying the floor sits below his preferred strength.
+
+**Audit items added:**
+- T3-AI-3: measured T* (1.26%) vs arithmetic T* (1.14%) differ by +0.12. Two candidate causes: cup vial drawn warm (cooled-vial rule applies to the diluted cup too), or VST scatter. Decision: **T\* = 1.26% (measured, per protocol)**; sitting 2 post-hoc reads will show which way the gap runs. If sitting 2 cups also read ~+0.1 over arithmetic, T* is consistent and stands; if they match arithmetic, revisit.
+- T3-AI-4: grind time not captured on brew 1 (Track 7 input). Capture on brew 2.
+**Brew 1 follow-ups:** grind not timed. Operator grinds through a **CremaLoop Slow Feeder Pro** (single-bean feed) on the EG-1 - grind time is materially longer than a hopper dump; this is a Track 7 (clock) input in its own right (T3-AI-5). 85.2 g = press-stop concentrate weight, before the vial draw. Dose built to 20.0 g on the scale; vial remainder inferred 10 g, not weighed. Cup vial for the 1.26% read was cooled in the bath but "maybe warmer than I thought" - supports the warm-read cause in T3-AI-3; sitting 2 verifies.
+- T3-AI-5: CremaLoop Slow Feeder Pro single-bean feeding on the EG-1. Grind time at 20 g must be timed on brew 2 and treated as a Track 7 line item; a 5:00 clock may not tolerate the feeder.
+
+**Sitting 1 CLOSED 2026-11-02.** Sitting 2 scheduled for the next office day. Coffee remaining: 130 g (6 doses + 10 g).
