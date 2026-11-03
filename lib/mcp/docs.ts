@@ -771,6 +771,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — active-lots / Finca Deborah Geisha Natural Interstellar (REDIRECT STUB — closed 2026-09-07, reference Batch 229 V2A via SPG runoff)',
     description: '[REDIRECT STUB per the close-out convention, case 014] Lot closed 2026-09-07; reference roast Batch 229 (V2A, 210.5C auto-drop on the 244C sustained-tail curve, first audible FC on the lot) chosen via the SPG runoff that INVERTED the xbloom-gate verdict over 228. Optimized brew 23ebcdd7 (Clarity-First low edge). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-lostorigin-maya-triup-yeast-nat-2026.md',
+    title: 'Roasting Historian — active-lots / Lost Origin Maya Tri-Up Yeast Natural Geisha (ACTIVE — V1 designed 2026-11-02, waiting for next roast)',
+    description: 'Use when working the Lost Origin Maya Tri-Up yeast natural Geisha lot (Panama, Fran Zeimetz; LOY-011 yeast natural cold-room dried; 833 g/L / 11.6%; the Martin Wölfl 2025 WBC winning lot family) — working hypothesis (Deborah family anchor, density caveat: trigger/color numbers do not transfer from 741 g/L) + V1 design (fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C) + peer-reference status (Maya 317 companion bag, cupping pending).',
+  },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
     uri: 'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
