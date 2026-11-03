@@ -5,7 +5,7 @@
 **Status:** Active - V1 designed 2026-11-02, waiting for next roast
 **Cultivar:** Geisha · **Terroir:** Honduras / Santa Bárbara-Yojoa Highlands / Finca El Itacayo, El Dorado, ~1,600-1,730m · **Process:** Natural, Dark Room Dried
 **Green spec:** density 802 g/L (high), moisture 9.5% (low). 1000g from Kumquat ($143/kg). Producer notes: Mango, Nectarine, Blackberry, Lemongrass.
-**Peer reference:** companion roasted bag (roasted 2026-07-24) in hand, not yet cupped - notes due before the Day-7 gate.
+**Peer reference:** companion roasted bag (roasted 2026-07-24) MISPLACED as of 2026-11-03 - proceeding without a peer cup; producer notes + Deborah/Wush Wush fingerprints are the vocabulary priors. Cup it before the Day-7 gate if it turns up.
 
 ## Working hypothesis (V1)
 
