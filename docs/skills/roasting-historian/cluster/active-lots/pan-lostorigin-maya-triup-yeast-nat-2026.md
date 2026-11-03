@@ -1,0 +1,16 @@
+# PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 - Lost Origin Maya Tri-Up Yeast Natural Geisha
+
+*Coffee Research · Latent · Roasting Historian cluster · active-lots*
+
+**Status:** Active - V1 designed 2026-11-02, waiting for next roast.
+**Green:** Panama, Fran Zeimetz; yeast-inoculation natural (LOY-011, sealed tank 8 days, cold-room dried 32 days, depulped after drying); 1550m; density 833 g/L (HIGH); moisture 11.6% (HIGH); 1000g at $720/kg (competition-grade one-time reference buy via Kumquat). The lot family Martin Wölfl used to win the 2025 World Brewers Cup. Producer notes: Quince, Grape, Orange Blossom, Mango.
+**Substrate:** green_bean_id `c4ae4c30-9b1e-47fc-b326-99bfb7fe7617` · Roest inventory 12273 · V1 experiment `1b443360-0ec7-4c98-a077-fba0af6f934b` (`PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026-V1`).
+**Peer reference:** Lost Origin Maya 317 roasted companion bag (roasted 2026-07-08) - cupping pending at V1 design time; vocabulary calibration only per the Deborah/Untold precedent. `peer_reference_brew_id` deferred until the peer brew is logged.
+
+## Working hypothesis
+
+Anchor is PAN-DEBORAH-GEISHA-NAT-2026 (closed 2026-09-07): same cultivar + yeast-inoculated natural + Panama, Medium-High confidence. The family rule carries - single fixed curve, bean-temp drop ladder as the entire development lever, SPG real-pourover arbiter mandatory before any reference call (engineered-process natural; 7-instance xbloom misranking pattern). The load-bearing divergence is density: 833 vs Deborah's 741 g/L, so per the low-density close-out caution, Deborah's trigger numbers (209-210.5°C zone) and color model do NOT transfer - V1 re-anchors this lot's own bracket. Expect FC temp anchored ~204-206°C (naturals FC-temp constraint; the dense bean should not race the probe) and a steep color-per-degree slope above the FC zone. Ferment expected to read as integrated depth, never sitting-on-top funk (Deborah precedent on the same process family).
+
+## V1 design (2026-11-02)
+
+Fixed curve all slots: 200 → 236 (1:15) → 243 (2:30) → **246 peak** (3:15) → sustained tail 243/239/235/232 (4:00-7:00). Peak is Deborah's pre-gate 246 (no density reduction at 833 g/L); drying points held high for 11.6% moisture. Fan SR-Natural 80/68/63/70/73; RPM 65; charge 117 / hopper 125 / preheat 210. Drop ladder: **v1a 206 / v1b 208 / v1c 210°C bean_temp auto-drop** - brackets the FC-onset light end (Wush Wush family solution; v1a deliberately under the Geisha 48s dev floor) through the ferment-behaved deep end (AN10/Deborah family solution). v1b predicted leader (~55-65s dev, WBC natural-Gesha role zone; Wölfl's winning yeast-natural ran ~12% dev). Watch for the Deborah stage-1 overdev tell on v1c: milk-chocolate/spice where sweetness belongs, visible only under real pourover, not at the xbloom gate.
