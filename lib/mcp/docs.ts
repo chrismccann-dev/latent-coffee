@@ -772,6 +772,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     description: '[REDIRECT STUB per the close-out convention, case 014] Lot closed 2026-09-07; reference roast Batch 229 (V2A, 210.5C auto-drop on the 244C sustained-tail curve, first audible FC on the lot) chosen via the SPG runoff that INVERTED the xbloom-gate verdict over 228. Optimized brew 23ebcdd7 (Clarity-First low edge). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md. The stub carries the status + one-line reference-roast/brew summary for the lifecycle audit trail.',
   },
   {
+    uri: 'docs://skills/roasting-historian/cluster/active-lots/hnd-arturopaz-gesha-drd-nat-2026.md',
+    title: 'Roasting Historian — active-lots / Arturo Paz Dark Room Natural Geisha (ACTIVE — V1 designed 2026-11-02, waiting for next roast)',
+    description: 'Use when working the Arturo Paz DRD Natural Geisha lot (Honduras / Santa Bárbara-Yojoa Highlands, 802 g/L / 9.5%) — V1 working hypothesis (Wush Wush DRD fixed-FC anchor, bean-temp drop ladder 206/207/208 on a fixed 242°C-peak sustained-tail curve), family fork (FC-onset vs development-behaved), gate discipline (lemongrass under-extraction + SPG arbiter required), and V1 substrate IDs.',
+  },
+  {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-lostorigin-maya-triup-yeast-nat-2026.md',
     title: 'Roasting Historian — active-lots / Lost Origin Maya Tri-Up Yeast Natural Geisha (ACTIVE — V1 designed 2026-11-02, waiting for next roast)',
     description: 'Use when working the Lost Origin Maya Tri-Up yeast natural Geisha lot (Panama, Fran Zeimetz; LOY-011 yeast natural cold-room dried; 833 g/L / 11.6%; the Martin Wölfl 2025 WBC winning lot family) — working hypothesis (Deborah family anchor, density caveat: trigger/color numbers do not transfer from 741 g/L) + V1 design (fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C) + peer-reference status (Maya 317 companion bag, cupping pending).',
