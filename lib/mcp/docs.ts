@@ -781,6 +781,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — active-lots / Lost Origin Maya Tri-Up Yeast Natural Geisha (ACTIVE — V1 roasted 2026-11-04, waiting for next cupping)',
     description: 'Use when working the Lost Origin Maya Tri-Up yeast natural Geisha lot (Panama, Fran Zeimetz; LOY-011 yeast natural cold-room dried; 833 g/L / 11.6%; the Martin Wölfl 2025 WBC winning lot family) — working hypothesis (Deborah family anchor, density caveat: trigger/color numbers do not transfer from 741 g/L) + V1 design (fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C) + V1 actuals (batches 235/236/237, FC ~4:24/~204°C, WB 81.7/78.6/69.2, steep color slope above 208°C) + peer-reference read (Maya 317, brew 49da10c7, WB 74.9 - ladder brackets the peer color).',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-blackmoon-chiroso-nat-2026.md',
+    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (ACTIVE — V1 designed 2026-11-05, waiting for next roast)',
+    description: 'Use when working the Black Moon Chiroso Natural lot (Panama / Alto Quiel, Boquete / Hunter Tedman dark-drying anchor producer; first Chiroso in archive; 802 g/L / 11.1%) — working hypothesis (dark-fruit natural, hot->cool turn; Medium-Low anchor on the natural FC-temp constraint + SR Natural energy finding) + V1 range-finder design (coupled gentle-to-pushed sweep: peaks 245/248/251°C with bean_temp drops 205.5/206.5/208°C, Roest profiles 628175-77) + the FC-onset vs more-development family fork v1c decides + V1 substrate IDs.',
+  },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
     uri: 'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
