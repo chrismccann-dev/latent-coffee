@@ -273,3 +273,45 @@ No push_brew · no clock enforcement · no concentrate changes (ratio, grind, te
 **Sitting 2 verdict (H-temp): SPLIT.** Judge-time (at assembly) = ROOM. Cool (~3-5 min) = HOT. The hypothesis said "splits at judge-time, converges cool"; the lived result is a stage REVERSAL, not convergence. Operator's synthesis, verbatim in substance: *the bypass temperature choice is a function of service-to-sip delay - cooler bypass if judged immediately, hotter bypass if the judge takes a few minutes.* This is the track's headline so far and it hands Track 4 (serving temperature) its opening question.
 **Carry-forward per pre-planned decision point:** the competition-relevant winner is the **judge-time pick = ROOM**, stated as such; sitting 3's single-step arm runs at room temperature.
 **Sitting 2 CLOSED 2026-11-04.** Coffee remaining: 110 g (5 doses + 10 g).
+
+---
+
+### Sitting 3 - Staging (single-step room vs two-step hot→room) - 2026-11-05
+
+**Recap (sitting-recap rule):** Concentrate: 20 g · EG-1 7.0 (CremaLoop feed) · 89°C PA tap · Original inverted · dry paper · 110 g one pour · 2 saturation stirs · steep to 1:00 · cap+flip ~10 s · slow press to first sustained hiss · ~2:00 (operator: press ~1:00 → ~2:00 every brew). **T\* = 1.26%** (sitting-1 measured; confirmed by sitting-2 post-hoc mean 1.28%). Formula: water_half = (conc_g / 2) × (TDS_conc / 1.26 − 1). State: 2 brews done, 110 g on hand (5 doses + 10 g). H-floor PASS. H-temp SPLIT (room judge-time, hot cool; operator reframes as service-delay). Sealed H-temp scored: both ROOM ✔. This sitting: ONE brew, halves WEIGHED. Half A (single-step): all water at ROOM temperature, one addition. Half B (two-step): 2/3 of the water at **89°C first**, then the remaining 1/3 at ROOM temperature; order fixed hot-then-cool. Same final weight. **Shuffle blind before the first sip** (cups finish near the same temperature). Judge-time pick at assembly, note hotter cup; cool pick; reveal; cooled post-hoc vial each cup.
+**Operator pre-brew decisions (ergonomic, logged as conscious drops):** blank 0.00 · dose 20.0 g scale-built, vial remainders not tracked (T3-AI-1 closed as "scale-built dose, per-vial weights waived") · **grind time waived for the track** (T3-AI-4/5 → open data item for Track 7: time a 20 g grind through the CremaLoop feeder once, outside a sitting) · press ~1:00 → ~2:00 standing, not re-timed.
+**Sitting 3 PARKED before brewing (operator-called deviation, 2026-11-05 - Coordinator to ratify).** Operator's reasoning, in substance: every bypass-temperature arm is conditional on service-to-sip delay, which no published rule fixes; he will observe it live in Mexico City (2026-12-06; T1 checklist item "time from press to judges' first sip"). As designed, sitting 3 re-confounds staging with first-sip temperature. Assistant concurred (low yield) and offered: skip to sitting 5 / run as written / stop. **Operator chose: skip to sitting 5.** H-staged → NOT RUN (delay-conditional, parked). Sitting 4 (protected replicate) will protect whichever of sittings 2 / 5 carries the larger margin. No dose consumed.
+- T3-AI-8: service-to-sip delay is the hidden variable under H-temp and H-staged. Close it from the Mexico City observation before any further bypass-temperature arm runs (Track 4 input).
+
+---
+
+### Sitting 5 (run as brew 3) - Own-tail, exploratory - **legality OPEN** - 2026-11-05
+
+**Recap (sitting-recap rule):** Concentrate unchanged: 20 g · EG-1 7.0 (CremaLoop) · 89°C PA tap · Original inverted · dry paper · 110 g one pour · 2 saturation stirs · steep 1:00 · cap+flip · slow press to first hiss · ~2:00. **T\* = 1.26%.** Formula: water_half = (conc_g / 2) × (TDS_conc / 1.26 − 1). State: 2 brews done, 110 g on hand (5 doses + 10 g). H-floor PASS · H-temp SPLIT by stage (room judge-time / hot cool) · H-staged parked. Operator H-tail lean: second pass preferred. Assistant: near-indistinguishable.
+**Design (temperature-matched, operator-confirmed):** both halves receive the SAME grams of 89°C water and the SAME grams of room water, so first-sip temperature matches and the only difference is whether the hot portion passed through the spent bed. Legality OPEN on every line below.
+- Half A (plain): **~18 g of 89°C kettle water** + room water to the computed total.
+- Half B (own-tail): **~18 g of 89°C water poured into the spent chamber on the same filter, pressed through, collected and weighed** (second-pass liquid) + room water to the computed total. Second-pass liquid gets its own cooled vial read; its solids are folded into Half B's water arithmetic (Step 0 default 1).
+- Weigh halves. Shuffle blind (cups match in temperature - no tell). Judge-time pick, cool pick, reveal, cooled post-hoc vial each cup.
+**Decision point carried:** second pass yields too little or stalls → record, no third pass.
+**Brew 3 pre-pour:** blank 0.00 · dose 20.0 g · concentrate **87.1 g** at **2.31%** (cooled) - highest concentrate of the track so far (2.01 / 2.11 / 2.31). Split 43.55 g per half. Water per half = 43.55 × (2.31/1.26 − 1) = **36.3 g**. Half A = 18.0 g at 89°C + 18.3 g room. Half B = second-pass liquid + room to match, pending second-pass weight + TDS.
+**Brew 3 reads (sitting 5, legality OPEN on every line):**
+- Halves WEIGHED: A **42.4 g**, B **42.9 g** (first weighed split of the track).
+- Water: A + **18.1 g** straight 89°C bypass. B + **18.0 g** of 89°C water pressed through the spent bed (second-pass liquid; its own weight and vial read NOT taken - operator poured the pass directly into the half). **The room-water step (≈18.3 g per half, to reach 36.3 g total and T\*) was NOT poured on either half.** Cups finished ≈ 60.5 g / 60.9 g at ≈ 1.65-1.74%, well above T\* and below the 150 g floor. **PROTOCOL DEVIATION - the pair is a valid A/B on the own-tail question, but at ~1.7% strength, not at the legal strength.** Temperature matched (both halves got ~18 g of hot water only); no tell.
+- Blind: shuffled, L/R coded ✔. Stages: cups had cooled before tasting began, so operator ran one extended warm→cool read with repeated L-vs-R passes instead of judge-time + cool picks (RP8-N7: stage structure compromised, tagged).
+- Left: aroma fruity, sweet. Sip: bright, some weight; later passes - brighter, more acidity, lighter on the palate, "a little on the hollow side," "feels like you added water to thin it out." Operator guessed: straight water.
+- Right: aroma "a little flat." Sip: "wow, very different" - fruity, juicy, rounder, sweeter, more complex, fuller; "acidity chopped off a little." Operator guessed: spent bed.
+- Head-to-head, repeated 3×: "very different flavor textures, very noticeable," hard to pick. **Pick = RIGHT**, on fruit roundness / fullness / complexity; operator explicitly prefers LEFT's acidity.
+- Reveal: Left = straight water · Right = second pass. Both guesses correct.
+- Post-hoc TDS (before any mixing): Left **1.65%**, Right **1.74%**. Arithmetic: Left expected 42.4 × 2.31 / 60.5 = 1.62 ✔. Right expected 1.63 if the pass added nothing → measured 1.74 means the pass added ≈ 0.067 g solids, i.e. the 18 g second-pass liquid ran ≈ **0.37% TDS**. Small in grams, large in cup character.
+- Off-protocol on-the-fly test (operator-flagged "disregard"): a splash of Left into Right → "the full expression of the acidity plus the sweetness all in one cup." Logged as a lead, not data: a PARTIAL tail (fraction of the hot portion through the bed) may be the shape.
+
+**Sitting 5 verdict (H-tail, at ~1.7%, NOT at T\*): second pass PREFERRED, material difference, operator-described as texture/roundness vs brightness/acidity.** Operator's H-tail lean ✔; Assistant's "near-indistinguishable" ✘. The 0.37% second-pass liquid is not "water" - it is a tail fraction, which is exactly why its legality is open.
+**Margin comparison for sitting 4 (protected replicate):** sitting 2 = stage-split, no clean margin; sitting 5 = "very different, very noticeable" but strength-confounded. **Sitting 4 → replicate sitting 5 AT T\*** (room-water step poured on both halves, second-pass liquid weighed + read). That is both the protocol's replicate rule and the fix for the deviation.
+
+**Audit items added:**
+- T3-AI-9: own-tail verdict obtained at ~1.7%, not T*. The replicate must land at T* before the finding is stated for the legal cup. If the preference holds at 1.26%, it is a Track-3 result; if it collapses, the tail only matters at concentrate-adjacent strength.
+- T3-AI-10: second-pass liquid composition. Derived 0.37% from the cup delta; measure it directly on brew 4 (weigh + cooled vial) so the arithmetic can hold T* on the tail half.
+- T3-AI-11 (lead, not data): partial-tail blend (part of the hot portion through the bed, part straight) as a possible sitting-6 buffer arm. Operator-originated, on the fly.
+- T3-AI-12: multi-step water plans fail at the bench when relayed as prose. Brews 3's room-water step was dropped on both halves. Future water plans should be issued as a 2-row table (half × step × grams × temp) and read back before pouring (friction item too).
+
+**Sitting 5 CLOSED 2026-11-05 (as brew 3).** Coffee remaining: 90 g (4 doses + 10 g).
