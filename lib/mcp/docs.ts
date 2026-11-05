@@ -781,6 +781,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — active-lots / Lost Origin Maya Tri-Up Yeast Natural Geisha (ACTIVE — V1 roasted 2026-11-04, waiting for next cupping)',
     description: 'Use when working the Lost Origin Maya Tri-Up yeast natural Geisha lot (Panama, Fran Zeimetz; LOY-011 yeast natural cold-room dried; 833 g/L / 11.6%; the Martin Wölfl 2025 WBC winning lot family) — working hypothesis (Deborah family anchor, density caveat: trigger/color numbers do not transfer from 741 g/L) + V1 design (fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C) + V1 actuals (batches 235/236/237, FC ~4:24/~204°C, WB 81.7/78.6/69.2, steep color slope above 208°C) + peer-reference read (Maya 317, brew 49da10c7, WB 74.9 - ladder brackets the peer color).',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-loslajones-bambu-gesha-nat-2026.md',
+    title: 'Roasting Historian — active-lots / HiU Los Lajones Geisha Natural Bambu 8B (ACTIVE — V1 designed 2026-11-05, waiting for next roast)',
+    description: 'Use when working the HiU Los Lajones Geisha Natural Bambu 8B lot (Panama / Volcancito Boquete, 800 g/L / 11.2%; the apex benchmark natural Gesha of the Forward set, Forward 93, $400/kg 1kg calibration lot) — working hypothesis (layered-evolving apex target: candy/honey/panela hot -> citrus/stonefruit/tropical/raspadura cool) + V1 design (Maya-identical fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C bracketing the FC-onset vs extended-development family solutions, predictions recalibrated to Maya V1 actuals) + evaluation discipline (Day-7 gate + SPG arbiter before any reference call) and V1 substrate IDs.',
+  },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
     uri: 'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
