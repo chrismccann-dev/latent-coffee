@@ -30,7 +30,7 @@ Roast-layer facts (cupping-independent):
 - **WB color plateau in the 206-207 drop zone**: v1a and v1b are indistinguishable (83.7 / 83.6) despite +1°C and +16s dev; separation only appeared at the 209.3 manual hold (72.7). The knee is somewhere in 207-209.3 - V2's ladder, if the cup asks for it, works that gap.
 - **The whole set ran fast** vs predictions (4:38 / 4:46 / 5:19 vs 4:52 / 5:20 / 5:50). Dense + dry does not slow this lot on this curve.
 - v1c drop-timing override was Chris's on-the-spot call (drop-timing only, consistent with the standing intervention surface); design intent 208 preserved on the recipe row.
-- fc_audibility pending operator confirmation for all three batches.
+- FC audible on all three batches (operator-confirmed 2026-11-04) - no DRD-natural audibility suppression on this lot, unlike the heavy-ferment family.
 
 ## V1 substrate
 
