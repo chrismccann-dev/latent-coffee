@@ -786,6 +786,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — active-lots / HiU Los Lajones Geisha Natural Bambu 8B (ACTIVE — V1 designed 2026-11-05, waiting for next roast)',
     description: 'Use when working the HiU Los Lajones Geisha Natural Bambu 8B lot (Panama / Volcancito Boquete, 800 g/L / 11.2%; the apex benchmark natural Gesha of the Forward set, Forward 93, $400/kg 1kg calibration lot) — working hypothesis (layered-evolving apex target: candy/honey/panela hot -> citrus/stonefruit/tropical/raspadura cool) + V1 design (Maya-identical fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C bracketing the FC-onset vs extended-development family solutions, predictions recalibrated to Maya V1 actuals) + evaluation discipline (Day-7 gate + SPG arbiter before any reference call) and V1 substrate IDs.',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-blackmoon-chiroso-nat-2026.md',
+    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (ACTIVE — V1 designed 2026-11-05, waiting for next roast)',
+    description: 'Use when working the Black Moon Chiroso Natural lot (Panama / Alto Quiel, Boquete / Hunter Tedman dark-drying anchor producer; first Chiroso in archive; 802 g/L / 11.1%) — working hypothesis (dark-fruit natural, hot->cool turn; Medium-Low anchor on the natural FC-temp constraint + SR Natural energy finding) + V1 range-finder design (coupled gentle-to-pushed sweep: peaks 245/248/251°C with bean_temp drops 205.5/206.5/208°C, Roest profiles 628175-77) + the FC-onset vs more-development family fork v1c decides + V1 substrate IDs.',
+  },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
     uri: 'docs://skills/roest-knowledge/cluster/protocols/between-batch-protocol.md',
