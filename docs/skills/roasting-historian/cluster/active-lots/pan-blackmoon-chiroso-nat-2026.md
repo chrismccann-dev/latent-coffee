@@ -34,7 +34,7 @@ Shared: standard 7-timestamp inlet template (curves scale proportionally: 200 ->
 
 | Slot | Batch | Executed | FC | Drop | Dev | WB / WL |
 |---|---|---|---|---|---|---|
-| v1a | 241 | v1a profile, honest auto-drop | unmarked (cracks audible session-wide) | 205.5°C @ 4:40 | n/a | 93.5 / 10.8% |
+| v1a | 241 | v1a profile, honest auto-drop | NO crack (0 cracks; FC occurrence ambiguous) | 205.5°C @ 4:40 | n/a | 93.5 / 10.8% |
 | v1b slot | 242 | **v1a profile re-run by mistake**, manual hold | 4:23 / 202.8°C audible | 207.0°C @ 5:07 | 44s | 85.5 / 11.7% |
 | v1c | 243 | v1c profile, manual hold past 208 | 4:23 / 207.4°C audible | 211.1°C @ 4:55 | 32s | 83.4 / 12.3% |
 
@@ -42,6 +42,7 @@ Cupping-independent V1 findings:
 
 - **Lot runs fast**: all slots dropped 35-55s ahead of the family-derived model despite 11.1% moisture - the high-moisture-delays-FC prior did not hold here. V2 timing model should anchor on FC ~4:23 at these energies.
 - **FC-temp anchor counterexample (Low-Medium confidence, marking-lag caveat)**: FC marked 202.8°C on the 245°C curve vs 207.4°C on the 251°C curve at the identical 4:23 mark time - first natural in the archive where FC TEMP moved with peak energy. Watch on V2 before touching the cross-coffee constraint.
+- **Audibility was slot-gated**: 241 produced NO crack (0 cracks, FC occurrence ambiguous) while 242/243 cracked audibly on more energy/deeper drops - echoes the Deborah dev-window-gated-audibility pattern.
 - **Colors very light for drop temp**: 211.1°C drop -> WB 83.4; 207.0°C -> 85.5. The playable ceiling may sit above the family's 205-208°C cluster.
 - **Designed v1b (248°C peak, profile 628176) never executed** - still on the tablet if V2 wants the higher-energy curve. Batch 242's accidental 245-peak + 207-drop + 44s-dev middle may be the real window center.
 - Operator holds on 242/243 recorded as end_condition manual; recipes preserve designed bean_temp targets (intent-vs-execution divergence is deliberate).
