@@ -788,7 +788,7 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-blackmoon-chiroso-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (ACTIVE — V1 designed 2026-11-05, waiting for next roast)',
+    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (ACTIVE — V1 roasted 2026-11-05, waiting for next cupping)',
     description: 'Use when working the Black Moon Chiroso Natural lot (Panama / Alto Quiel, Boquete / Hunter Tedman dark-drying anchor producer; first Chiroso in archive; 802 g/L / 11.1%) — working hypothesis (dark-fruit natural, hot->cool turn; Medium-Low anchor on the natural FC-temp constraint + SR Natural energy finding) + V1 range-finder design (coupled gentle-to-pushed sweep: peaks 245/248/251°C with bean_temp drops 205.5/206.5/208°C, Roest profiles 628175-77) + the FC-onset vs more-development family fork v1c decides + V1 substrate IDs.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
