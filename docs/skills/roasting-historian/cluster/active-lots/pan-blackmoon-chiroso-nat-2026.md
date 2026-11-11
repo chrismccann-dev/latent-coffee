@@ -2,9 +2,11 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
-**Status:** Waiting for next cupping (V1 roasted 2026-11-05, batches 241/242/243; Day 7 cupping target 2026-11-12)
-**Green:** Panama / Alto Quiel, Boquete, Chiriquí / Hunter Tedman (Black Moon Farm) / Chiroso / Natural, 2025 harvest, Forward Coffee lot P250271 (Forward score 92). 1kg single range-finder unit. Density 802 g/L (high), moisture 11.1% (high). First Chiroso in the archive - fills the named variety gap.
-**Producer context:** Hunter Tedman is a Tier-1 canonical anchor producer, dark-drying pioneer (Multi-stage Dark Drying, Anaerobic Slow Dry System); Chiroso is listed as his experimental cultivar. Expect Wush-Wush-DRD-style fruit-layer / dark-dry thermal insulation beyond what the green specs capture.
+**Status:** Closed (2026-11-11) - reference roast Batch 242 (V1B: 245°C peak / 207.0°C manual hold / 44s dev / WB 85.5), cup hit the producer card with a layered-evolving arc; single-V-set close by operator call (SPG waived, wide margin). ~700g green remaining for production roasts.
+
+**See closed-lot learnings:** [learnings/pan-blackmoon-chiroso-nat-2026.md](docs/skills/roasting-historian/cluster/learnings/pan-blackmoon-chiroso-nat-2026.md)
+
+The sections below are preserved as historical / cross-reference anchors.
 
 ## Substrate IDs
 
