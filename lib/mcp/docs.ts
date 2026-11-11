@@ -773,13 +773,23 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/hnd-arturopaz-gesha-drd-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Arturo Paz Dark Room Natural Geisha (ACTIVE — V1 designed 2026-11-02, waiting for next roast)',
-    description: 'Use when working the Arturo Paz DRD Natural Geisha lot (Honduras / Santa Bárbara-Yojoa Highlands, 802 g/L / 9.5%) — V1 working hypothesis (Wush Wush DRD fixed-FC anchor, bean-temp drop ladder 206/207/208 on a fixed 242°C-peak sustained-tail curve), family fork (FC-onset vs development-behaved), gate discipline (lemongrass under-extraction + SPG arbiter required), and V1 substrate IDs.',
+    title: 'Roasting Historian — active-lots / Arturo Paz Dark Room Natural Geisha (ACTIVE — V1 won by Batch 239 (reference candidate), V2 designed, waiting for next roast)',
+    description: 'Use when working the Arturo Paz DRD Natural Geisha lot (Honduras / Santa Bárbara-Yojoa Highlands, 802 g/L / 9.5%) — V1 verdict (V1B/239 closest-to-apex winner at WB 83.6; dev time is the lever, WB nearly blind to it; mango lives on the developed side, 209.3/WB 72.7 is roast-forward), V2 design (bean-temp ladder 207.5/208/208.5 on the fixed 242°C-peak curve), roast actuals, gate discipline, and substrate IDs.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-lostorigin-maya-triup-yeast-nat-2026.md',
     title: 'Roasting Historian — active-lots / Lost Origin Maya Tri-Up Yeast Natural Geisha (ACTIVE — V1 cupped 2026-11-11, SPG fired, waiting for brewing)',
     description: 'Use when working the Lost Origin Maya Tri-Up yeast natural Geisha lot (Panama, Fran Zeimetz; LOY-011 yeast natural cold-room dried; 833 g/L / 11.6%; the Martin Wölfl 2025 WBC winning lot family) — working hypothesis (Deborah family anchor, density caveat: trigger/color numbers do not transfer from 741 g/L) + V1 design (fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C) + V1 actuals (batches 235/236/237, FC ~4:24/~204°C, WB 81.7/78.6/69.2, steep color slope above 208°C) + peer-reference read (Maya 317, brew 49da10c7, WB 74.9 - ladder brackets the peer color).',
+  },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-loslajones-bambu-gesha-nat-2026.md',
+    title: 'Roasting Historian — active-lots / HiU Los Lajones Geisha Natural Bambu 8B (ACTIVE — V1 designed 2026-11-05, waiting for next roast)',
+    description: 'Use when working the HiU Los Lajones Geisha Natural Bambu 8B lot (Panama / Volcancito Boquete, 800 g/L / 11.2%; the apex benchmark natural Gesha of the Forward set, Forward 93, $400/kg 1kg calibration lot) — working hypothesis (layered-evolving apex target: candy/honey/panela hot -> citrus/stonefruit/tropical/raspadura cool) + V1 design (Maya-identical fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C bracketing the FC-onset vs extended-development family solutions, predictions recalibrated to Maya V1 actuals) + evaluation discipline (Day-7 gate + SPG arbiter before any reference call) and V1 substrate IDs.',
+  },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-blackmoon-chiroso-nat-2026.md',
+    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (ACTIVE — V1 roasted 2026-11-05, waiting for next cupping)',
+    description: 'Use when working the Black Moon Chiroso Natural lot (Panama / Alto Quiel, Boquete / Hunter Tedman dark-drying anchor producer; first Chiroso in archive; 802 g/L / 11.1%) — working hypothesis (dark-fruit natural, hot->cool turn; Medium-Low anchor on the natural FC-temp constraint + SR Natural energy finding) + V1 range-finder design (coupled gentle-to-pushed sweep: peaks 245/248/251°C with bean_temp drops 205.5/206.5/208°C, Roest profiles 628175-77) + the FC-onset vs more-development family fork v1c decides + V1 substrate IDs.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {
