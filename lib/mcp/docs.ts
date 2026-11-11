@@ -773,8 +773,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/hnd-arturopaz-gesha-drd-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Arturo Paz Dark Room Natural Geisha (ACTIVE — V1 roasted 2026-11-04, waiting for next cupping)',
-    description: 'Use when working the Arturo Paz DRD Natural Geisha lot (Honduras / Santa Bárbara-Yojoa Highlands, 802 g/L / 9.5%) — V1 roast actuals (batches 238/239/240: WB 83.7/83.6/72.7, a/b color plateau, loose FC 204.3-207.1°C, v1c manual hold to 209.3), working hypothesis + family fork (FC-onset vs development-behaved), gate discipline (lemongrass under-extraction + SPG arbiter required), and V1 substrate IDs.',
+    title: 'Roasting Historian — active-lots / Arturo Paz Dark Room Natural Geisha (ACTIVE — V1 won by Batch 239 (reference candidate), V2 designed, waiting for next roast)',
+    description: 'Use when working the Arturo Paz DRD Natural Geisha lot (Honduras / Santa Bárbara-Yojoa Highlands, 802 g/L / 9.5%) — V1 verdict (V1B/239 closest-to-apex winner at WB 83.6; dev time is the lever, WB nearly blind to it; mango lives on the developed side, 209.3/WB 72.7 is roast-forward), V2 design (bean-temp ladder 207.5/208/208.5 on the fixed 242°C-peak curve), roast actuals, gate discipline, and substrate IDs.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-lostorigin-maya-triup-yeast-nat-2026.md',

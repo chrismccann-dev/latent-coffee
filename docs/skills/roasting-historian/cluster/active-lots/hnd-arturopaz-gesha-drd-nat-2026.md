@@ -2,7 +2,7 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
-**Status:** Active - V1 roasted 2026-11-04 (batches 238/239/240), waiting for next cupping (Day 7 target 2026-11-11)
+**Status:** Active - V1 cupped 2026-11-11, winner V1B (Batch 239, reference candidate); V2 designed, waiting for next roast
 **Cultivar:** Geisha · **Terroir:** Honduras / Santa Bárbara-Yojoa Highlands / Finca El Itacayo, El Dorado, ~1,600-1,730m · **Process:** Natural, Dark Room Dried
 **Green spec:** density 802 g/L (high), moisture 9.5% (low). 1000g from Kumquat ($143/kg). Producer notes: Mango, Nectarine, Blackberry, Lemongrass.
 **Peer reference:** companion roasted bag (roasted 2026-07-24) MISPLACED as of 2026-11-03 - proceeding without a peer cup; producer notes + Deborah/Wush Wush fingerprints are the vocabulary priors. Cup it before the Day-7 gate if it turns up.
@@ -31,6 +31,23 @@ Roast-layer facts (cupping-independent):
 - **The whole set ran fast** vs predictions (4:38 / 4:46 / 5:19 vs 4:52 / 5:20 / 5:50). Dense + dry does not slow this lot on this curve.
 - v1c drop-timing override was Chris's on-the-spot call (drop-timing only, consistent with the standing intervention surface); design intent 208 preserved on the recipe row.
 - FC audible on all three batches (operator-confirmed 2026-11-04) - no DRD-natural audibility suppression on this lot, unlike the heavy-ferment family.
+
+## V1 cup verdict (Day 7, 2026-11-11)
+
+**V1B (Batch 239) won at every temperature station** - sweet, bright, nectarine + blackberry over a tea base, herbal lemongrass integrated, improving with complexity as it cools. Chris: "probably closest to the Apex Cup I've ever gotten so far"; flagged `is_reference_candidate`. v1a (238): clean FC-onset floor - bright, tea-like, white nectarine/peach/grape, NO sour underdev marker, but hollow and missing kick. v1c (240): overdone - bitter/overcooked-fruit hot, improves a lot cold, and is the ONLY slot where the **mango** signature shows.
+
+What V1 resolved (Medium confidence):
+
+- **Development time is the active lever and WB is nearly blind to it in the playable zone**: 206→207 (5s→21s dev) moved the cup from hollow to closest-to-apex at identical WB (83.7/83.6); 209.3 (31s, WB 72.7) overshot into roast-forward.
+- **Family fork resolved with a twist**: development-behaved, but at a far lighter/narrower window than the Deborah/AN10 solutions - and more development did not win outright (239 beat 240).
+- **Producer-note map**: nectarine + blackberry live on the light side; mango lives on the developed side; lemongrass reads as integrated herbalness (the predicted under-extraction trap did not fire at the gate).
+- **Measurement protocol change**: interim-cup ground Agtron RETIRED (15g of grounds is too little for a reliable reading) - whole-bean Agtron is the gate-cupping color signal on this and future lots.
+
+## V2 design (2026-11-11, waiting for next roast)
+
+Chris's call: push development slightly above 239, below 240. Single-variable control-style sweep - identical V1 curve, bean_temp ladder **207.5 / 208 / 208.5** (0.5°C steps, lower third of the 207-209.3 gap). Control baseline is V1B. Primary question: does a touch more dev integrate mango/deeper sweetness without the 240 roast edge - where is the knee? Win condition: beat a cup Chris already loves; drop rules say trust the auto-drop (no v1c-style hold - 240 already mapped the far side; slow-side manual caps 5:45 / 5:45 / 6:00).
+
+Experiment `HND-ARTUROPAZ-GESHA-DRD-NAT-2026-V2` (`87397313-6759-4560-94ad-62144f54acfc`); recipes `876380a7` (v2a, 207.5) / `aff73a4a` (v2b, 208, predicted leader) / `7aea98ef` (v2c, 208.5, knee probe); Roest profiles 633491 / 633492 / 633493 ("Paz Gesha - v2a/b/c"); cuppings `55da1dbd` (238) / `be7f832d` (239) / `99324d19` (240).
 
 ## V1 substrate
 
