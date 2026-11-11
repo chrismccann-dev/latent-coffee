@@ -534,6 +534,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — learnings / Finca Deborah Geisha Natural Interstellar (closed 2026-09-07, reference Batch 229 V2A; the depth-arc lot)',
     description: 'Closed-lot deep-dive for PAN-DEBORAH-GEISHA-NAT-2026 (Jamison Savage yeast-inoculated 100+ hr natural Gesha, density 741, the first lot run directly against the layered-evolving apex goal). Reference Batch 229 (210.5C auto-drop, WB 84.9) via the SPG runoff that inverted the xbloom gate. Carries: the drop-ceiling-as-sole-lever architecture, low-density races-the-probe + steepening color slope, WB-Agtron-under-reads finding, dev-window-gated FC-audibility flip, two-stage overdev signal (chocolate note then melon death at 212C+), ferment-reads-integrated-never-funky, and the Elipse-facing starting hypothesis. Use when designing V1 on engineered-natural Geshas or the Deborah Elipse sibling.',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/pan-blackmoon-chiroso-nat-2026.md',
+    title: 'Roasting Historian — learnings / Black Moon Chiroso Natural #75 (closed 2026-11-11, reference Batch 242 V1B; first Chiroso, single-V-set close)',
+    description: 'Closed-lot deep-dive for PAN-BLACKMOON-CHIROSO-NAT-2026 (Hunter Tedman dark-fruit natural, 802 g/L / 11.1%, first Chiroso in archive). Reference Batch 242 (245C peak / 207.0C hold / 44s dev / WB 85.5) hit the producer card with a layered-evolving arc; siblings marked both walls (205.5C hollow bypass-water underdev; 211C bitter-dry overdev at deceptively light WB 83.4). Carries: drop-ceiling-disciplined family resolution, FC-temp-moved-with-peak counterexample, high-moisture-ran-fast prior failure, Boquete light-color corroboration, dev-window-gated audibility, and the 207C-auto-drop starting hypothesis for the next Chiroso / high-density dark-fruit natural.',
+  },
   // ----- skills / peer-learning-roasting-archivist -----------------------------
   {
     uri: 'docs://skills/peer-learning-roasting-archivist/SKILL.md',
@@ -788,8 +793,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-blackmoon-chiroso-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (ACTIVE — V1 roasted 2026-11-05, waiting for next cupping)',
-    description: 'Use when working the Black Moon Chiroso Natural lot (Panama / Alto Quiel, Boquete / Hunter Tedman dark-drying anchor producer; first Chiroso in archive; 802 g/L / 11.1%) — working hypothesis (dark-fruit natural, hot->cool turn; Medium-Low anchor on the natural FC-temp constraint + SR Natural energy finding) + V1 range-finder design (coupled gentle-to-pushed sweep: peaks 245/248/251°C with bean_temp drops 205.5/206.5/208°C, Roest profiles 628175-77) + the FC-onset vs more-development family fork v1c decides + V1 substrate IDs.',
+    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (REDIRECT STUB — closed 2026-11-11, reference Batch 242 V1B)',
+    description: '[REDIRECT STUB per the close-out convention] Lot closed 2026-11-11; reference roast Batch 242 (V1B, 245C peak / 207.0C manual hold / 44s dev / WB 85.5) - producer-card cup with layered-evolving arc; single-V-set close by operator call, SPG waived. Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-blackmoon-chiroso-nat-2026.md. The stub carries the status + one-line reference-roast summary for the lifecycle audit trail.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {

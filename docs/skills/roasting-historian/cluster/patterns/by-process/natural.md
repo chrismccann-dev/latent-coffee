@@ -4,7 +4,7 @@
 
 Migrated from ROASTING.md § Naturals - Roasting Framework in Wave 4 PR 4b (2026-05-21). Wave 3 PR 1 Chris-locked this section to ROASTING.md pending Wave 4 cleanup; this is the resolution destination.
 
-**Corpus (active + closed lots):** N≥3 — CGLE Sudan Rume Natural (closed 2026-05-23), Bukure Natural Lot 21 Red Bourbon (closed 2026-06-06), Fazenda Um Wush Wush Natural Dark Room Dried (closed 2026-08-10), Finca Deborah Geisha Natural 'Interstellar' (closed 2026-09-07).
+**Corpus (active + closed lots):** N≥3 — CGLE Sudan Rume Natural (closed 2026-05-23), Bukure Natural Lot 21 Red Bourbon (closed 2026-06-06), Fazenda Um Wush Wush Natural Dark Room Dried (closed 2026-08-10), Finca Deborah Geisha Natural 'Interstellar' (closed 2026-09-07), Black Moon Chiroso Natural #75 (closed 2026-11-11).
 
 ## Starting framework
 
@@ -28,6 +28,7 @@ The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** 
 - [Bukure Natural Lot 21 Red Bourbon (closed 2026-06-06)](docs/skills/roasting-historian/cluster/learnings/rwa-nova-nat21-rb-2026.md) — reference roast Batch 194 (v2b); first East African Red Bourbon natural in archive; closed-lot learnings deep dive
 - [Fazenda Um Wush Wush Natural Dark Room Dried (closed 2026-08-10)](docs/skills/roasting-historian/cluster/learnings/bra-fazendaum-wushwush-nat-2026.md) — reference roast Batch 220 (V3A, FC-onset); fixed ~205°C FC 3-for-3, resolved by bean-temp auto-drop 1°C above FC
 - [Finca Deborah Geisha Natural 'Interstellar' (closed 2026-09-07)](docs/skills/roasting-historian/cluster/learnings/pan-deborah-geisha-nat-2026.md) — reference roast Batch 229 (V2A); yeast-inoculated natural Gesha, SPG runoff inverted the xbloom-gate reference call
+- [Black Moon Chiroso Natural #75 (closed 2026-11-11)](docs/skills/roasting-historian/cluster/learnings/pan-blackmoon-chiroso-nat-2026.md) — reference roast Batch 242 (V1B); first Chiroso; single-V-set close, drop-ceiling-disciplined; FC temp moved with peak energy (anchor counterexample); 11.1% moisture ran FAST
 
 ## Cross-references
 
