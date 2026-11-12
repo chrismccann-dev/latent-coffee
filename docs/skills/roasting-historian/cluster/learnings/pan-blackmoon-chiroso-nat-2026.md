@@ -9,7 +9,7 @@
 **Process:** Natural, 2025 harvest (Forward Coffee lot P250271, Forward 92, $250/kg)
 **Green:** density 802 g/L (high), moisture 11.1% (high). ~700g remaining at close (Roest inventory 12338 archived at 700g) - production roasts of the reference recipe to follow.
 **Reference roast:** Batch 242 · 245°C-peak standard template curve · manual hold to 207.0°C / 5:07 · FC audible 4:23 / 202.8°C · 44s dev · WB Agtron 85.5 / WL 11.7% · Roest profile "BM Chiroso - v1a" (628175)
-**Optimized brew:** not yet dialed at close - link `green_beans.optimized_brew_id` after the first real brew session on 242.
+**Optimized brew:** brew_id `f51feac5` - Latent house style (SWORKS + xBloom Premium, 15g / 240g 1:16, EG-1 6.5, Hybrid Sequential, Dial 0->5->6) at 92C (one-line deviation from the 94C canon; if muted/thin, the lever is temp UP). Linked on green_beans.optimized_brew_id.
 
 ## Substrate pointers
 
