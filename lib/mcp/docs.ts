@@ -534,6 +534,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — learnings / Finca Deborah Geisha Natural Interstellar (closed 2026-09-07, reference Batch 229 V2A; the depth-arc lot)',
     description: 'Closed-lot deep-dive for PAN-DEBORAH-GEISHA-NAT-2026 (Jamison Savage yeast-inoculated 100+ hr natural Gesha, density 741, the first lot run directly against the layered-evolving apex goal). Reference Batch 229 (210.5C auto-drop, WB 84.9) via the SPG runoff that inverted the xbloom gate. Carries: the drop-ceiling-as-sole-lever architecture, low-density races-the-probe + steepening color slope, WB-Agtron-under-reads finding, dev-window-gated FC-audibility flip, two-stage overdev signal (chocolate note then melon death at 212C+), ferment-reads-integrated-never-funky, and the Elipse-facing starting hypothesis. Use when designing V1 on engineered-natural Geshas or the Deborah Elipse sibling.',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/pan-lostorigin-maya-triup-yeast-nat-2026.md',
+    title: 'Roasting Historian — learnings / Lost Origin Maya Tri-Up Yeast Natural Geisha (closed 2026-11-13, reference Batch 236 V1B; the one-V-set lot)',
+    description: 'Closed-lot deep-dive for PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 (Fran Zeimetz LOY-011 yeast natural Gesha, density 833, the Wölfl 2025 WBC lot family; fastest intake-to-reference arc, one V-set). Reference Batch 236 (208C auto-drop, WB 78.6, dev 46s) - gate winner CONFIRMED at the SPG, first non-inversion in the family. Carries: the high-density re-anchor of the Deborah architecture (FC early + audible, steep late color slope, 1C ladder steps above the apex), scaffolding-threshold dev-floor read (16s dev defect-free but hollow), lot-level overdev tell (sharp roast bitterness, not choc/spice), peer-darker hypothesis rejected (optimum ~78-79 WB, lighter than peer 74.9), ground-Agtron-skipped small-batch measurement note, and the next-dense-yeast-nat-Gesha starting hypothesis (ladder 207/208/209). ~700g remain for repeat roasts.',
+  },
   // ----- skills / peer-learning-roasting-archivist -----------------------------
   {
     uri: 'docs://skills/peer-learning-roasting-archivist/SKILL.md',
@@ -778,8 +783,8 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-lostorigin-maya-triup-yeast-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Lost Origin Maya Tri-Up Yeast Natural Geisha (ACTIVE — V1 cupped 2026-11-11, SPG fired, waiting for brewing)',
-    description: 'Use when working the Lost Origin Maya Tri-Up yeast natural Geisha lot (Panama, Fran Zeimetz; LOY-011 yeast natural cold-room dried; 833 g/L / 11.6%; the Martin Wölfl 2025 WBC winning lot family) — working hypothesis (Deborah family anchor, density caveat: trigger/color numbers do not transfer from 741 g/L) + V1 design (fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C) + V1 actuals (batches 235/236/237, FC ~4:24/~204°C, WB 81.7/78.6/69.2, steep color slope above 208°C) + peer-reference read (Maya 317, brew 49da10c7, WB 74.9 - ladder brackets the peer color).',
+    title: 'Roasting Historian — active-lots / Lost Origin Maya Tri-Up Yeast Natural Geisha (CLOSED 2026-11-13 — reference Batch 236 V1B)',
+    description: '[REDIRECT STUB per the close-out convention] Lot closed 2026-11-13; reference roast Batch 236 (V1B, 208C auto-drop on the 246C sustained-tail curve, WB 78.6) - gate winner confirmed at the SPG, no inversion, resolved in one V-set. Optimized brew bbf2c256 (house style unchanged = the SPG standing recipe). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-lostorigin-maya-triup-yeast-nat-2026.md. The stub carries the status + V1 design/actuals/cupping records for the lifecycle audit trail.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-loslajones-bambu-gesha-nat-2026.md',
