@@ -539,6 +539,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     title: 'Roasting Historian — learnings / Lost Origin Maya Tri-Up Yeast Natural Geisha (closed 2026-11-13, reference Batch 236 V1B; the one-V-set lot)',
     description: 'Closed-lot deep-dive for PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 (Fran Zeimetz LOY-011 yeast natural Gesha, density 833, the Wölfl 2025 WBC lot family; fastest intake-to-reference arc, one V-set). Reference Batch 236 (208C auto-drop, WB 78.6, dev 46s) - gate winner CONFIRMED at the SPG, first non-inversion in the family. Carries: the high-density re-anchor of the Deborah architecture (FC early + audible, steep late color slope, 1C ladder steps above the apex), scaffolding-threshold dev-floor read (16s dev defect-free but hollow), lot-level overdev tell (sharp roast bitterness, not choc/spice), peer-darker hypothesis rejected (optimum ~78-79 WB, lighter than peer 74.9), ground-Agtron-skipped small-batch measurement note, and the next-dense-yeast-nat-Gesha starting hypothesis (ladder 207/208/209). ~700g remain for repeat roasts.',
   },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/pan-blackmoon-chiroso-nat-2026.md',
+    title: 'Roasting Historian — learnings / Black Moon Chiroso Natural #75 (closed 2026-11-11, reference Batch 242 V1B; first Chiroso, single-V-set close)',
+    description: 'Closed-lot deep-dive for PAN-BLACKMOON-CHIROSO-NAT-2026 (Hunter Tedman dark-fruit natural, 802 g/L / 11.1%, first Chiroso in archive). Reference Batch 242 (245C peak / 207.0C hold / 44s dev / WB 85.5) hit the producer card with a layered-evolving arc; siblings marked both walls (205.5C hollow bypass-water underdev; 211C bitter-dry overdev at deceptively light WB 83.4). Carries: drop-ceiling-disciplined family resolution, FC-temp-moved-with-peak counterexample, high-moisture-ran-fast prior failure, Boquete light-color corroboration, dev-window-gated audibility, and the 207C-auto-drop starting hypothesis for the next Chiroso / high-density dark-fruit natural.',
+  },
   // ----- skills / peer-learning-roasting-archivist -----------------------------
   {
     uri: 'docs://skills/peer-learning-roasting-archivist/SKILL.md',
@@ -788,13 +793,18 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-loslajones-bambu-gesha-nat-2026.md',
-    title: 'Roasting Historian — active-lots / HiU Los Lajones Geisha Natural Bambu 8B (ACTIVE — V1 designed 2026-11-05, waiting for next roast)',
-    description: 'Use when working the HiU Los Lajones Geisha Natural Bambu 8B lot (Panama / Volcancito Boquete, 800 g/L / 11.2%; the apex benchmark natural Gesha of the Forward set, Forward 93, $400/kg 1kg calibration lot) — working hypothesis (layered-evolving apex target: candy/honey/panela hot -> citrus/stonefruit/tropical/raspadura cool) + V1 design (Maya-identical fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C bracketing the FC-onset vs extended-development family solutions, predictions recalibrated to Maya V1 actuals) + evaluation discipline (Day-7 gate + SPG arbiter before any reference call) and V1 substrate IDs.',
+    title: 'Roasting Historian — active-lots / HiU Los Lajones Geisha Natural Bambu 8B (REDIRECT STUB — closed 2026-11-13, reference Batch 245 V1B, one V-set)',
+    description: '[REDIRECT STUB per the close-out convention] Lot closed 2026-11-13; reference roast Batch 245 (V1B, bean_temp 210.0C auto-drop on the Maya-identical 246C sustained-tail curve, FC audible 4:20/205.0, WB 80.6) resolved in ONE V-set — as-run ladder 208/210/212 after a +2C mid-session trigger bump; operator overruled the SPG deferral on a clear gate read. Optimized brew e80613a4 (Latent house style, one delta: 92C water). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-loslajones-bambu-gesha-nat-2026.md.',
+  },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/pan-loslajones-bambu-gesha-nat-2026.md',
+    title: 'Roasting Historian — learnings / HiU Los Lajones Geisha Natural Bambu 8B (closed 2026-11-13, reference Batch 245 V1B — the one-V-set apex benchmark)',
+    description: 'Use when designing a roast for a similar lot (Panama natural Gesha / high-density expressive natural) or tracing this lot\'s evidence — the Forward-93 apex benchmark, closed in ONE V-set: reference Batch 245 (246C Maya-identical curve, bean_temp 210, FC audible 4:20/205, 32s dev, WB 80.6), cup-side underdev/overdev signals (lactic off-balance at 208/WB 86 vs roast-on-cooling at 212/WB 74.9), the same-curve cross-lot transfer limit vs the Maya sibling (~16s/C post-FC climb, ~6-7 WB lighter at equal trigger), Gesha 48s dev-floor counter-evidence at 32s dev, and the starting hypothesis for the next similar lot (ladder centered 210, target WB ~80, house style at 92C).',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-blackmoon-chiroso-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (ACTIVE — V1 roasted 2026-11-05, waiting for next cupping)',
-    description: 'Use when working the Black Moon Chiroso Natural lot (Panama / Alto Quiel, Boquete / Hunter Tedman dark-drying anchor producer; first Chiroso in archive; 802 g/L / 11.1%) — working hypothesis (dark-fruit natural, hot->cool turn; Medium-Low anchor on the natural FC-temp constraint + SR Natural energy finding) + V1 range-finder design (coupled gentle-to-pushed sweep: peaks 245/248/251°C with bean_temp drops 205.5/206.5/208°C, Roest profiles 628175-77) + the FC-onset vs more-development family fork v1c decides + V1 substrate IDs.',
+    title: 'Roasting Historian — active-lots / Black Moon Chiroso Natural #75 (REDIRECT STUB — closed 2026-11-11, reference Batch 242 V1B)',
+    description: '[REDIRECT STUB per the close-out convention] Lot closed 2026-11-11; reference roast Batch 242 (V1B, 245C peak / 207.0C manual hold / 44s dev / WB 85.5) - producer-card cup with layered-evolving arc; single-V-set close by operator call, SPG waived. Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-blackmoon-chiroso-nat-2026.md. The stub carries the status + one-line reference-roast summary for the lifecycle audit trail.',
   },
   // ----- skills / roest-knowledge ----------------------------------------------
   {

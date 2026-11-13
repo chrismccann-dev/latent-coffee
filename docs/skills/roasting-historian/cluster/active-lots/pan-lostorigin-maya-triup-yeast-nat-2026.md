@@ -2,10 +2,15 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
+<<<<<<< HEAD
 **Status:** Closed (2026-11-13). Reference roast: **Batch 236** (v1b, 208°C / WB 78.6), confirmed at the SPG with no inversion; optimized brew = the SPG house-style cup (brew `bbf2c256`). Resolved in one V-set.
 
 **See closed-lot learnings:** [learnings/pan-lostorigin-maya-triup-yeast-nat-2026.md](docs/skills/roasting-historian/cluster/learnings/pan-lostorigin-maya-triup-yeast-nat-2026.md)
 
+=======
+**Status:** Active - V1 cupped 2026-11-11, **SPG fired** (`winner` sentinel set, `lot_status: waiting_for_brewing`). Finalists: batch 236 (v1b, primary) + 235 (v1a, secondary); 237 knocked out. Awaiting SPG verdict from a `simulated-pourover.md` brewing thread.
+**Green:** Panama, Fran Zeimetz; yeast-inoculation natural (LOY-011, sealed tank 8 days, cold-room dried 32 days, depulped after drying); 1550m; density 833 g/L (HIGH); moisture 11.6% (HIGH); 1000g at $720/kg (competition-grade one-time reference buy via Kumquat). The lot family Martin Wölfl used to win the 2025 World Brewers Cup. Producer notes: Quince, Grape, Orange Blossom, Mango.
+>>>>>>> origin/main
 **Substrate:** green_bean_id `c4ae4c30-9b1e-47fc-b326-99bfb7fe7617` · Roest inventory 12273 · V1 experiment `1b443360-0ec7-4c98-a077-fba0af6f934b` (`PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026-V1`).
 **Peer reference:** Lost Origin Maya 317 (Loquat's roast, WB Agtron 74.9 Light, roasted 2026-07-08) - CUPPED 2026-11-02, brew `49da10c7` (`peer_reference_brew_id` set). Verdict: the apex shape is real in this coffee - genuinely layered-evolving, cool-peak transformation mode. Expression target: berry-loud aroma → floral hot → grape/tropical warm → mango + deep sweetness cool; miss signal = losing the cool-window transformation. Two roast-side signals: yeast process faintly audible (not dominant); roast character audible even hot at 74.9 WB - working hypothesis that the peer developed slightly darker deliberately to smooth the process note, making the V1 drop ladder double as the develop-vs-process-audibility probe.
 
