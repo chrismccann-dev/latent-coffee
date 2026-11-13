@@ -2,9 +2,11 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
-**Status:** Waiting for next roast (V1 designed 2026-11-05)
-**Green:** Panama / Alto Quiel, Boquete, Chiriquí / Hunter Tedman (Black Moon Farm) / Chiroso / Natural, 2025 harvest, Forward Coffee lot P250271 (Forward score 92). 1kg single range-finder unit. Density 802 g/L (high), moisture 11.1% (high). First Chiroso in the archive - fills the named variety gap.
-**Producer context:** Hunter Tedman is a Tier-1 canonical anchor producer, dark-drying pioneer (Multi-stage Dark Drying, Anaerobic Slow Dry System); Chiroso is listed as his experimental cultivar. Expect Wush-Wush-DRD-style fruit-layer / dark-dry thermal insulation beyond what the green specs capture.
+**Status:** Closed (2026-11-11) - reference roast Batch 242 (V1B: 245°C peak / 207.0°C manual hold / 44s dev / WB 85.5), cup hit the producer card with a layered-evolving arc; single-V-set close by operator call (SPG waived, wide margin). ~700g green remaining for production roasts.
+
+**See closed-lot learnings:** [learnings/pan-blackmoon-chiroso-nat-2026.md](docs/skills/roasting-historian/cluster/learnings/pan-blackmoon-chiroso-nat-2026.md)
+
+The sections below are preserved as historical / cross-reference anchors.
 
 ## Substrate IDs
 
@@ -29,6 +31,23 @@ Coupled gentle-to-pushed sweep bracketing the development space - peak inlet AND
 Shared: standard 7-timestamp inlet template (curves scale proportionally: 200 -> peak-19 -> peak-6 -> peak -> peak-4 -> peak-14 -> peak-20), charge 117 / hopper 125 / preheat 210, fan 80/69/65/71/74 (high-moisture-biased natural floor), RPM 65, 100g batches. Drying support raised at 01:15 / 02:30 for the 11.1% moisture (drying support, NOT more development - Dongzhe peer confirmation).
 
 **The fork V1 decides:** is this lot FC-onset-behaved (Wush Wush family) or more-development-behaved (AN10/Deborah ferment family)? v1c's cup is the discriminator - maple/syrup deepening = development-behaved; dark tea / flat attack = ceiling is lower, V2 ladders down.
+
+## V1 actuals (2026-11-05, batches 241/242/243)
+
+| Slot | Batch | Executed | FC | Drop | Dev | WB / WL |
+|---|---|---|---|---|---|---|
+| v1a | 241 | v1a profile, honest auto-drop | NO crack (0 cracks; FC occurrence ambiguous) | 205.5°C @ 4:40 | n/a | 93.5 / 10.8% |
+| v1b slot | 242 | **v1a profile re-run by mistake**, manual hold | 4:23 / 202.8°C audible | 207.0°C @ 5:07 | 44s | 85.5 / 11.7% |
+| v1c | 243 | v1c profile, manual hold past 208 | 4:23 / 207.4°C audible | 211.1°C @ 4:55 | 32s | 83.4 / 12.3% |
+
+Cupping-independent V1 findings:
+
+- **Lot runs fast**: all slots dropped 35-55s ahead of the family-derived model despite 11.1% moisture - the high-moisture-delays-FC prior did not hold here. V2 timing model should anchor on FC ~4:23 at these energies.
+- **FC-temp anchor counterexample (Low-Medium confidence, marking-lag caveat)**: FC marked 202.8°C on the 245°C curve vs 207.4°C on the 251°C curve at the identical 4:23 mark time - first natural in the archive where FC TEMP moved with peak energy. Watch on V2 before touching the cross-coffee constraint.
+- **Audibility was slot-gated**: 241 produced NO crack (0 cracks, FC occurrence ambiguous) while 242/243 cracked audibly on more energy/deeper drops - echoes the Deborah dev-window-gated-audibility pattern.
+- **Colors very light for drop temp**: 211.1°C drop -> WB 83.4; 207.0°C -> 85.5. The playable ceiling may sit above the family's 205-208°C cluster.
+- **Designed v1b (248°C peak, profile 628176) never executed** - still on the tablet if V2 wants the higher-energy curve. Batch 242's accidental 245-peak + 207-drop + 44s-dev middle may be the real window center.
+- Operator holds on 242/243 recorded as end_condition manual; recipes preserve designed bean_temp targets (intent-vs-execution divergence is deliberate).
 
 ## Carry-forward being tested
 

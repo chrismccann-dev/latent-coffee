@@ -2,7 +2,7 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
-**Status:** Active - V1 roasted 2026-11-04 (batches 235/236/237), waiting for next cupping. Day 7 cupping target 2026-11-11.
+**Status:** Active - V1 cupped 2026-11-11, **SPG fired** (`winner` sentinel set, `lot_status: waiting_for_brewing`). Finalists: batch 236 (v1b, primary) + 235 (v1a, secondary); 237 knocked out. Awaiting SPG verdict from a `simulated-pourover.md` brewing thread.
 **Green:** Panama, Fran Zeimetz; yeast-inoculation natural (LOY-011, sealed tank 8 days, cold-room dried 32 days, depulped after drying); 1550m; density 833 g/L (HIGH); moisture 11.6% (HIGH); 1000g at $720/kg (competition-grade one-time reference buy via Kumquat). The lot family Martin Wölfl used to win the 2025 World Brewers Cup. Producer notes: Quince, Grape, Orange Blossom, Mango.
 **Substrate:** green_bean_id `c4ae4c30-9b1e-47fc-b326-99bfb7fe7617` · Roest inventory 12273 · V1 experiment `1b443360-0ec7-4c98-a077-fba0af6f934b` (`PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026-V1`).
 **Peer reference:** Lost Origin Maya 317 (Loquat's roast, WB Agtron 74.9 Light, roasted 2026-07-08) - CUPPED 2026-11-02, brew `49da10c7` (`peer_reference_brew_id` set). Verdict: the apex shape is real in this coffee - genuinely layered-evolving, cool-peak transformation mode. Expression target: berry-loud aroma → floral hot → grape/tropical warm → mango + deep sweetness cool; miss signal = losing the cool-window transformation. Two roast-side signals: yeast process faintly audible (not dominant); roast character audible even hot at 74.9 WB - working hypothesis that the peer developed slightly darker deliberately to smooth the process note, making the V1 drop ladder double as the develop-vs-process-audibility probe.
@@ -22,3 +22,13 @@ All three auto-dropped clean on their bean_temp triggers; recorded inlet tracked
 - **v1a** (batch 235): FC 4:25 / 204.2, drop 4:41 / 206.1, dev 16s (5.7%), **WB 81.7**, loss 10.8%. Early FC made the FC-onset probe even shallower than designed - a true at-FC snapshot.
 - **v1b** (batch 236): FC 4:24 / 203.6, drop 5:10 / 208.0, dev 46s (14.8%), **WB 78.6**, loss 12.4%. Cleanest execution; still the predicted leader, slightly brighter than designed (dev under the 55-65s window).
 - **v1c** (batch 237): FC mark 4:51 / 206.5 treated as ~25s late (identical curve to a/b; low RoR at FC-30s) - true dev read as ~70s. Drop 5:37 / 210.0, **WB 69.2**, loss 13.6%. Landed darker than the peer's 74.9 WB, so the ladder now brackets the peer color (v1b lighter / v1c darker) - the develop-vs-process probe is fully bracketed.
+
+## V1 Day 7 cupping read (2026-11-11, xbloom gate)
+
+**236 (v1b) favorite by far** - loud orange blossom / grape / mango, closest to the layered-evolving target, quality holds across the full cooling arc, yeast process only faintly audible in dry aroma. **237 knocked out** - sharp roasty bitterness persisting through the cool; on this lot the overdev tell is roast bitterness, NOT Deborah's milk-chocolate/spice. **235 interesting-but-thin** - at 16s dev the cup is bright/juicy/sweet with no grassy/raw defect (this dense lot tolerates extreme underdevelopment), settling to light tea when fully cooled.
+
+Family priors updated: the peer-darker hypothesis is REJECTED - 69.2 WB (darker than the peer's 74.9) just adds roast character, so this lot's optimum sits lighter at ~78-79 WB. Dev ladder read (Medium confidence, pending SPG): 16s drinkable / 46s apex / ~70s roasty.
+
+**Measurement note (standing for this lot's small batches):** ground Agtron is skipped by design - 100g batches leave ~15g cupping samples, too small for an accurate ground reading. Rely on whole-bean Agtron only; no WB->Gnd delta on this lot.
+
+**Route:** no V2 (no improvement lever identified for 236 - it needs neither more nor less development on the gate read). Reference call deferred to the SPG per the standing engineered-process-natural rule. If 236 holds under real pourover, route straight to close-out with batch 236 as reference.
