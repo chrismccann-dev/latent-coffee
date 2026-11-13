@@ -6,7 +6,7 @@ The Lot Coordinator workflow has **three session roles, no overlap.** The split 
 
 | Session role | Owns | Does NOT do |
 |---|---|---|
-| **Coordinator** (Brief-persistent, session-transient) | Brief authoring + state; every V-set *design* (`roast_recipes` + `experiments.predicted_cup`); route decisions; SPG decision + verdict consumption; reference declaration; close-out writes; scoping the substrate-fold | Run a roast; pull Roest logs; write `roasts`/`cuppings`; apply the substrate-fold doc edits |
+| **Coordinator** (Brief-persistent, session-transient) | Brief authoring + state; every V-set *design* (`roast_recipes` + `experiments.predicted_cup`); route decisions; gate verdict consumption + tie-break call; reference declaration; close-out writes; scoping the substrate-fold | Run a roast; pull Roest logs; write `roasts`/`cuppings`; apply the substrate-fold doc edits |
 | **V-Set Assistant** (ephemeral, one per V-set) | The full V_n cycle — roast execution, `pull_roest_log`, `roasts` writes, the **durable post-roast cup re-prediction**, `cuppings` writes, cup-side `experiment` patch, the Results Packet | Design V_(n+1); decide close-vs-iterate; touch the Brief; propose doc changes |
 | **Substrate-fold Execution** (fresh session at close) | Apply the Coordinator's scoped substrate-fold plan via `propose_doc_changes` (cluster-doc / CONTEXT / registry edits the `roast_learnings` imply) | Re-interpret the plan; design follow-up V-sets; run a cycle |
 

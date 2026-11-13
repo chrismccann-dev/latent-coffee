@@ -13,7 +13,7 @@ Your job in a V-Set Assistant session is **execute one V-set cycle + emit a Resu
 
 **DO NOT:**
 - Design V_(n+1) (the next V-set) — that is the Coordinator's job
-- Decide route (next-V / SPG / reference) — recommend it as *input*, don't decide it
+- Decide route (next-V / reference / tie-break rebrew) — recommend it as *input*, don't decide it
 - Touch the Roasting Brief (`docs/lots/<lot>.md`)
 - Run `propose_doc_changes` / edit cluster docs / edit CONTEXT / edit ADRs
 - `git commit` / `git push` / `gh pr create`

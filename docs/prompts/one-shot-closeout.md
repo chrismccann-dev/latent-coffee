@@ -43,7 +43,7 @@ I'll tell you which verdict came out of `one-shot.md` STAGE 4:
 - **Outcome A** = reference-quality cup. Single batch is the lot's reference roast AND the cup is what the lot's voice should sound like.
 - **Outcome B** = "Closed without reference" (Rancho Tio shape). Single batch is still the lot's reference roast structurally (it's the only batch — by definition the resolved-view's reference roast), but the cup is okay rather than reference quality. Salvage is the optimized brew.
 
-**If STAGE 4 deferred the call** (`additional_notes` on the experiment is prefixed `PROVISIONAL VERDICT: real-pourover pending` — the one-shot analog of the V-set Simulated Pourover Gate): LOCK the final Outcome A/B HERE, now that the optimized/real-pourover brew has been dialed in. Read the brew-side result and confirm with Chris which outcome holds, then proceed with that locked verdict through the remaining stages (it drives `worth_repeating` in STAGE 2 and `why_this_roast_won` in STAGE 4). Clear the `PROVISIONAL VERDICT` prefix from the experiment's `additional_notes` via `patch_experiment` once locked.
+**If STAGE 4 deferred the call** (`additional_notes` on the experiment is prefixed `PROVISIONAL VERDICT: real-pourover pending` — the one-shot deferral): LOCK the final Outcome A/B HERE, now that the optimized/real-pourover brew has been dialed in. Read the brew-side result and confirm with Chris which outcome holds, then proceed with that locked verdict through the remaining stages (it drives `worth_repeating` in STAGE 2 and `why_this_roast_won` in STAGE 4). Clear the `PROVISIONAL VERDICT` prefix from the experiment's `additional_notes` via `patch_experiment` once locked.
 
 ## STAGE 2 - Mark the reference roast (unconditionally for one-shots)
 

@@ -36,7 +36,7 @@ Where the lot is right now + what the Coordinator's next action is. The single m
 Unresolved threads; what a future session needs to remember that isn't in the DB. (Lot knowledge only — friction about the WORKFLOW itself goes to [process-friction-log.md](docs/skills/roasting-coordinator/cluster/process-friction-log.md), appended at the same natural breaks.)
 
 ## Cross-domain handoffs
-- SPG: <not-run | packet-emitted <date> | verdict: …>
+- Tie-break rebrew: <not-needed | deferred <date>, finalists … | verdict: …>
 - Optimized brew: <not-started | packet-emitted | brew_id: …>
 
 ## Close-out (when resolved)

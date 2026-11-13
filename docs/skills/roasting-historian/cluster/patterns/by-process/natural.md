@@ -20,6 +20,8 @@ The **FC-Temp Architectural Constraint on Naturals** — a structural pattern su
 
 ## xbloom evaluation gate misranking
 
+*Historical since 2026-11-13: the Day-7 gate is now the Latent house style on every slot ([ADR-0027](docs/adr/0027-house-style-gate.md)); this section explains why, and how to read pre-rewrite `xbloom_gate` cuppings.*
+
 The **xbloom Brian Quan evaluation gate produces inverse-direction misranking** on close anaerobic-natural candidates with extracted-but-discordant character — confirmed twice on Costa Rica Anaerobic Dry Process Higuito (v1b lactic note + v2c staying-power). See [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Engineered-Process Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-engineered-process-naturals). On naturals with heavy fermentation, run Balanced Intensity real pourover on the top 2 candidates before declaring outcome.
 
 ## Per-lot deep dives
