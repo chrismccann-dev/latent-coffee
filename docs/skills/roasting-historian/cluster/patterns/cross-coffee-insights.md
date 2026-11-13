@@ -177,7 +177,7 @@ _Single-lot extension hypotheses (Low confidence - cupping-table reversal, xbloo
 
 **Protocol:** on engineered-process naturals (anaerobic / heavy-ferment / yeast-inoculated / dark-room-dried), run a Balanced Intensity real-pourover arbiter (SPG) on the top 2 xbloom candidates BEFORE declaring an outcome, and before ANY reference call. xbloom-only rankings between close candidates are invalid.
 
-Evidence ledger (7 instances, 5 lots; per-batch detail in each learnings capsule):
+Evidence ledger (8 instances, 6 lots; per-batch detail in each learnings capsule):
 
 | Lot | V-set | Level | Direction | Date |
 |---|---|---|---|---|
@@ -188,6 +188,7 @@ Evidence ledger (7 instances, 5 lots; per-batch detail in each learnings capsule
 | RWA-NOVA-AN10-RB-2026 | V2 | slot | reversal, same direction (217 vs 218) | 2026-08-05 |
 | BRA-FAZENDAUM-PB-DRD-2026 | V1 | slot | reversal, DEEPER slot over-weighted (224 vs 225); first non-anaerobic lot | 2026-08-20 |
 | PAN-DEBORAH-GEISHA-NAT-2026 | V1→V2 | **reference call** | reversal (228 gate winner → 229 SPG winner; 228's roast note invisible at the gate). Caveat: 27 vs 14 rest-days asymmetry | 2026-09-07 |
+| PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026 | V1 | **reference call** | confirmation (236 gate winner held at the SPG; 235's gate thinness resolved as hollowness, same ranking). First reference-call-level confirmation in the family - the arbiter stays cheap insurance, not overhead | 2026-11-13 |
 
 Descriptor-axis extension (dark-tea-prone naturals, Medium): see [§ xbloom dark-tea ceiling](#xbloom-dark-tea-ceiling-on-dark-tea-prone-naturals---descriptor-family-axis-cos-hig-bor-2026-v1--rwa-nova-nat21-rb-2026-v2-observed-2026-0506) below.
 
@@ -240,3 +241,7 @@ On REDPLUM-CAS-2026 (washed + pulp ferment, 14 cuppings across four V-sets) the 
 ### Late-phase inlet slope as the body-balance lever for hollow-middle washed lots (REDPLUM-CAS-2026, resolved 2026-06-22)
 
 Four V-sets of bright-attack / hollow-middle on a washed pulp-ferment Castillo; peak inlet, front-half shape and drop ceiling all failed, and **flattening the post-FC inlet slope** (lower the 04:00 point, raise the 06:00 floor, hold peak + BEAN_TEMP 207°C) built the missing body without darkening. Two cautions: the lever is entangled with a later FC (lowering 04:00 pulls pre-FC energy - move a LATER point to isolate it), and it is robust across dev path (64s and 35s dev hit the same cup). **Confidence: single-lot, Low.** Promotion criterion: design the flatter post-FC slope from the outset on the next hollow-middle-prone washed lot and confirm. Full arc + the session-position control note: [learnings/redplum-cas-2026.md § Carry-forward](docs/skills/roasting-historian/cluster/learnings/redplum-cas-2026.md).
+
+### Dev ladder read on high-density yeast-natural Gesha: scaffolding threshold, not defect threshold (PAN-LOSTORIGIN-MAYA-TRIUP-YEAST-NAT-2026, resolved 2026-11-13)
+
+On a 833 g/L yeast-inoculated natural Gesha (fixed 246°C-peak curve, bean_temp drop ladder 206/208/210°C), the ladder resolved in one V-set: 16s dev produced a defect-free but hollow cup (bright/juicy/sweet, NO grassy/raw even far under the Geisha 48s floor), 46s dev at WB 78.6 hit the layered-evolving apex and became the reference, ~70s dev at WB 69.2 tipped into sharp roasty bitterness. Two carry-forwards: (1) on dense (≥800 g/L) Gesha, read the dev floor as a SCAFFOLDING threshold (body + aftertaste present under the fruit) rather than a defect threshold - the kill signal is hollowness under real pourover, which the xbloom gate can mask as light-tea elegance; (2) the overdev tell diverged from the Deborah family sibling (sharp roast bitterness, not milk-chocolate/spice), so the tell is lot-level, not family-level. Also rejected: matching a peer roaster's darker development (74.9 WB) to smooth process audibility - darker only added roast character; the yeast note was already near-silent at 78.6. **Confidence: Medium (single lot, clean three-point bracket + SPG confirmation).** Promotion criterion: the next high-density engineered-process natural Gesha confirming the lighter-than-peer optimum + scaffolding-threshold read. Detail: [learnings/pan-lostorigin-maya-triup-yeast-nat-2026.md](docs/skills/roasting-historian/cluster/learnings/pan-lostorigin-maya-triup-yeast-nat-2026.md).
