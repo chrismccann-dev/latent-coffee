@@ -103,6 +103,8 @@ Plus optional `failure_boundary` - what "broken" looks like across all three slo
 
 ### V1 width rule - multi-variable exploratory, NOT narrow
 
+**Seen-before lots skip this rule (2026-11-13, [ADR-0027](docs/adr/0027-house-style-gate.md)).** If the lot passes the seen-before test in `cross-coffee-insights.md § First-V-set default on seen-before lots` (closed process-family + cultivar-family anchor, density and moisture inside that family's closed span), V1 is the anchor's reference curve verbatim with v1a / v1b / v1c varying ONLY the bean_temp auto-drop (2°C steps centred on the anchor's reference trigger), and the aim is to land the reference on V1. State in the frame's `context` which anchor and why the lot counts as seen-before. Everything below applies to **novel** lots - new variety or process family, or density / moisture outside the family's closed anchors.
+
 V1 (and often V2) are **wide-variance, multi-variable exploratory** V-sets. The "1-2 variables, narrow spread" rule applies from V3 onward, not at V1.
 
 Concretely for V1:

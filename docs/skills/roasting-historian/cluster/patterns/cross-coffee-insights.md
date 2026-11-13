@@ -20,7 +20,7 @@
 - **Producer notes including "lemongrass" / "jasmine" / "bergamot" predict that the standard evaluation recipe will under-extract**; plan a pushed brew session (91-92°C, 1:14) and evaluate at the cool stage. Do not conclude the roast failed if the cup is muted at 94°C / 1:17. Evidence: confirmed on Sudan Rume Washed; carries to delicate aromatic coffees broadly. Detail: [§ Green Spec → Starting Hypothesis](#green-spec--starting-hypothesis).
 - **On heavy-anaerobic naturals, reach target core development via the bean-temp end-condition target (drop point) on a fixed curve, not via peak inlet or post-peak decline shape - and set the bean-temp target ~3-4°C above the observed FC temp so a clean auto-drop extends the post-FC window rather than firing right behind FC.** Confidence: High (CGLE-GESHA-CLOUDS-2026, resolved across four V-sets at close-out 2026-06-14). The lot wanted markedly MORE core development than its washed anchor predicted; peak-inlet sweeps (V1/V3) and post-peak decline (V2) were the wrong/non-levers, and the resolution came from raising the bean-temp auto-drop target from 209°C (fired too early, forced manual holds) to 211°C (clean auto-drop, dev ~34s) on a fixed 250°C-peak curve. Corollary (also High): on this lot the xbloom gate systematically FLATTERED the surface and mis-ranked vs real pourover (V3's 191 was an xbloom finalist but collapsed to body-centric dark-tea at the Simulated Pourover Gate) - confirm the leading slot at a real-pourover gate (SPG or optimized-brew dial-in) before the reference call. This corroborates the xbloom-dark-tea-ceiling pattern seen on COS-HIG-BOR-2026 and RWA-NOVA-NAT21-RB-2026. Detail: closed-lot learnings [learnings/cgle-gesha-clouds-2026.md](docs/skills/roasting-historian/cluster/learnings/cgle-gesha-clouds-2026.md).
 
-- **The xbloom evaluation gate misranks close candidates on anaerobic-natural / heavy-ferment lots; run a Balanced Intensity real-pourover arbiter on the top 2 before declaring an outcome.** The gate is not biased one way: COS-HIG-BOR produced two reversals + one confirmation (non-deterministic between close candidates); RWA-NOVA-AN10 produced two reversals that both over-amplified the brighter/less-developed slot (producer-consistent brightness bias). Evidence: 7 instances across 4 lots - 5 slot-level (COS-HIG-BOR + RWA-NOVA-AN10), a sixth extending scope beyond anaerobic to engineered-process naturals generally (BRA-FAZENDAUM-PB-DRD dark-room-dried, 2026-08-20), and the first inversion at the final REFERENCE-CALL level (PAN-DEBORAH-GEISHA-NAT yeast-inoculated natural Gesha, 2026-09-07); promoted 2026-08-08. Detail: [§ xbloom Evaluation Gate Misranking on Engineered-Process Naturals](#xbloom-evaluation-gate-misranking-on-engineered-process-naturals).
+- **The xbloom evaluation gate misranks close candidates on anaerobic-natural / heavy-ferment lots** (historical since 2026-11-13: the gate itself is now the house style on every slot, [ADR-0027](docs/adr/0027-house-style-gate.md), which removes the misranking at the source; the pattern remains the reason, and the caution for reading pre-2026-11-13 `xbloom_gate` cuppings). Original rule: run a Balanced Intensity real-pourover arbiter on the top 2 before declaring an outcome. The gate is not biased one way: COS-HIG-BOR produced two reversals + one confirmation (non-deterministic between close candidates); RWA-NOVA-AN10 produced two reversals that both over-amplified the brighter/less-developed slot (producer-consistent brightness bias). Evidence: 7 instances across 4 lots - 5 slot-level (COS-HIG-BOR + RWA-NOVA-AN10), a sixth extending scope beyond anaerobic to engineered-process naturals generally (BRA-FAZENDAUM-PB-DRD dark-room-dried, 2026-08-20), and the first inversion at the final REFERENCE-CALL level (PAN-DEBORAH-GEISHA-NAT yeast-inoculated natural Gesha, 2026-09-07); promoted 2026-08-08. Detail: [§ xbloom Evaluation Gate Misranking on Engineered-Process Naturals](#xbloom-evaluation-gate-misranking-on-engineered-process-naturals).
 
 > Patterns at Medium / Medium-High confidence are tracked in the detail sections below + in [§ FC-Temp Architectural Constraint on Naturals](#fc-temp-architectural-constraint-on-naturals---working-hypothesis). Single-lot Low-confidence working hypotheses live in [§ Working Hypotheses (Single-Lot, Low Confidence)](#working-hypotheses-single-lot-low-confidence) at the bottom of CCIL and in [open-questions.md](docs/skills/roasting-historian/cluster/patterns/open-questions.md); they do not route into Confirmed Patterns until the corroboration threshold is met.
 
@@ -84,7 +84,7 @@ Confirmed across multiple lots and sessions: first roast of a session consistent
 
 ## Green Spec → Starting Hypothesis
 
-Translates density, moisture, processing method, and variety into directional cues for V1 design. Use this as a starting hypothesis only - every new coffee should still test energy direction through a three-batch V1 before committing to a profile.
+Translates density, moisture, processing method, and variety into directional cues for V1 design. Use this as a starting hypothesis only - every new coffee should still test energy direction through a three-batch V1 before committing to a profile. On a **seen-before lot** the three batches are a drop ladder on the family's fixed curve (§ First-V-set default below); the tables then matter mainly for novel lots and for choosing the anchor.
 
 **Two distinct arbitration mechanisms operate in the same V1 design pass** ([CONTEXT-roasting.md § Signal precedence](CONTEXT-roasting.md) + [§ Multi-factor weighting](CONTEXT-roasting.md)):
 
@@ -92,6 +92,37 @@ Translates density, moisture, processing method, and variety into directional cu
 - The **precedence table** governs categorical / discrete decisions (which anchor profile, which end condition mechanism, which direction the energy adjustment runs) where one signal wins outright over the others.
 
 When a precedence rule fires, it overrides the additive-table guidance on that specific decision — read the precedence table first, then walk the additive table for everything precedence didn't already decide.
+
+### First-V-set default on seen-before lots - fixed-curve drop ladder
+
+**Working default (Medium confidence, 3 lots, adopted 2026-11-13 by operator call; [ADR-0027](docs/adr/0027-house-style-gate.md)).** When the lot is seen-before, V1 is not a wide multi-variable exploration. It is one fixed curve and a three-slot ladder on the drop, designed to land the reference on V1.
+
+**Seen-before test (all three):** (1) the process family has a closed lot in the archive; (2) so does the cultivar family, or the nearest closed anchor shares process + terroir; (3) measured density and moisture sit inside the span of that family's closed lots, or within roughly 30 g/L and 0.5 moisture points of one. The numbers in (3) are a working threshold, unratified until lived. Fail any one and the lot is **novel**: design V1 wide per the tables below and `start-lot.md § V1 width rule`.
+
+**The design:**
+
+- **Inputs:** lot info + measured density + moisture. Those pick the family anchor and the ladder centre - they do not pick the trigger.
+- **Curve:** the nearest closed anchor's reference curve, verbatim (inlet points, fan, RPM, operator-fixed constants). No per-slot curve changes.
+- **Ladder:** v1a / v1b / v1c differ only in the bean_temp auto-drop. Centre v1b on the anchor's reference trigger, 2°C steps (1°C where the anchor's learnings document a steep color-per-degree slope, e.g. Maya above 208°C). The outer slots are meant to fail - they are the walls that make the middle a bracketed winner.
+- **Runtime:** the operator shifts all three triggers at the machine if the lot runs fast or slow, per the recipe's `drop_rule_if_fast` / `drop_rule_if_slow` (Los Lajones: +2°C on all three mid-session recovered the designed color range almost exactly).
+- **Read:** the Day-7 house-style gate on all three slots. Bracketed winner → reference, and the winning cup is usually the optimized brew.
+- **V2 only when needed:** winner at the ladder's edge (extend that direction, same curve), no slot at the apex, or a novel lot.
+
+**Evidence (all Panama Chiriquí naturals, 800-833 g/L, 11.1-11.6% moisture, closed 2026-11-11 to 2026-11-13):**
+
+| Lot | Curve | Reference drop | FC | Dev | WB | Walls |
+|---|---|---|---|---|---|---|
+| Black Moon Chiroso (802 / 11.1%) | 245°C peak, standard tail | 207.0°C | 4:23 / 202.8°C | 44s | 85.5 | 205.5 hollow / 211.1 burnt edge |
+| Maya yeast-natural Gesha (833 / 11.6%) | 246°C peak, sustained tail | 208.0°C | 4:24 / 203.6°C | 46s | 78.6 | 206 hollow / 210 roasty |
+| Los Lajones natural Gesha (800 / 11.2%) | 246°C peak, sustained tail | 210.0°C | 4:20 / 205.0°C | 32s | 80.6 | 208 incoherent / 212 roast on cooling |
+
+**What transfers and what does not.** Architecture transfers: peak within 1°C, identical fan / RPM / charge, FC inside a 4-second band (4:20-4:24), about 5:00 total. The landing point does not: reference drops span 3°C (wider than any one lot's roughly ±1°C window), WB spans 78.6-85.5, dev spans 32-46s. Near-identical density and moisture did not give the same trigger (Chiroso vs Los Lajones: 3°C and 5 WB points apart, cultivar and curve tail both different). So density and moisture place the ladder; the ladder finds the trigger. Do not design to a WB or dev-time target carried from another lot.
+
+**Timing model correction:** all three ran fast against the family-derived model (Chiroso dropped 35-55s early, Maya FC 25-30s early, Los Lajones needed the +2°C bump), and the "moisture >= 11% delays FC" expectation did not hold on any of them. On this family anchor FC at ~4:20-4:25.
+
+**Limits:** three lots, one terroir, one process family, one density band. Deborah at 741 g/L re-anchored every trigger and color number, which is why density is in the seen-before test. Each closed lot that lands or misses on V1 is a data point for this section.
+
+---
 
 ### Additive table — continuous adjustments
 
@@ -175,7 +206,7 @@ _Single-lot extension hypotheses (Low confidence - cupping-table reversal, xbloo
 
 **Confirmed Pattern (High confidence) - promoted 2026-08-08 at the second anaerobic-natural lot; scope widened 2026-08-20 beyond anaerobic to engineered-process naturals generally; first reference-call-level inversion 2026-09-07.** The xbloom gate (1:17.5 / 94°C) misranks between *close* candidates on ferment-forward / engineered-process naturals and cannot be trusted as the sole gate. It is not biased one way: COS-HIG-BOR produced two reversals and one confirmation; AN10's two reversals both over-amplified the brighter / less-developed slot (a producer-consistent brightness bias); the Pink Bourbon DRD inversion over-weighted the DEEPER slot. The operative rule is "xbloom is non-deterministic between close candidates", not "xbloom inverts".
 
-**Protocol:** on engineered-process naturals (anaerobic / heavy-ferment / yeast-inoculated / dark-room-dried), run a Balanced Intensity real-pourover arbiter (SPG) on the top 2 xbloom candidates BEFORE declaring an outcome, and before ANY reference call. xbloom-only rankings between close candidates are invalid.
+**Protocol (superseded 2026-11-13, [ADR-0027](docs/adr/0027-house-style-gate.md)):** the Day-7 gate is now the Latent house style on every slot, so there is no xbloom ranking left to arbitrate; a top-two rebrew is the tie-break on close reads. The pre-rewrite rule, kept for reading the ledger below: on engineered-process naturals (anaerobic / heavy-ferment / yeast-inoculated / dark-room-dried), run a real-pourover arbiter (SPG) on the top 2 xbloom candidates BEFORE declaring an outcome, and before ANY reference call; xbloom-only rankings between close candidates are invalid.
 
 Evidence ledger (8 instances, 6 lots; per-batch detail in each learnings capsule):
 

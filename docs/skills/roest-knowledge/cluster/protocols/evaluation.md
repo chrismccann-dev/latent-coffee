@@ -1,6 +1,6 @@
 # Evaluation Protocol
 
-> **Simplified from prior version:** Day 4 cupping was consistently misleading across multiple lots and multiple experiment sets. The pourover gate is the only signal that matters.
+> **Rewritten 2026-11-13 ([ADR-0027](docs/adr/0027-house-style-gate.md)):** the Day 7 gate is now the Latent house style on the SWORKS, brewed on every slot of the V-set. The xBloom gate and the separate Simulated Pourover Gate step are both retired - one session picks the leading slot, confirms the reference call, and usually produces the optimized brew.
 
 Migrated from ROASTING.md § Evaluation Protocol in Wave 3 PR 1 (2026-05-26).
 
@@ -8,42 +8,37 @@ Migrated from ROASTING.md § Evaluation Protocol in Wave 3 PR 1 (2026-05-26).
 
 ## Current Protocol
 
-**Day 7 pourover — this is the only evaluation window.** The xbloom recipe is the default gate; on anaerobic-natural / heavy-ferment lots (and, precautionarily, dark-tea-prone naturals) it serves as defect screen + coarse triage only — a real-pourover arbiter (SPG) is required before declaring an outcome between close candidates. See the SPG arbiter step below.
+**Day 7 house-style gate - this is the only evaluation window.**
 
-- Brew method: xbloom (Brian Quan recipe) — consistent across all evaluation sessions
-- Dose: 15g per batch
-- Up to 3 batches per session (preferred maximum); 4 is possible but not ideal
-- Evaluate as full cup sips — no spoon-only tasting. The full cup consistently reveals different character than the spoon and is closer to the real-world experience
+- Brew method: the [Latent house style](CONTEXT-brewing.md), verbatim, on every slot of the V-set (recipe card: [`simulated-pourover.md`](docs/prompts/simulated-pourover.md)). SWORKS Bottomless Dripper + xBloom Premium paper · 15 g / 240 g (1:16) · EG-1 6.5 · **94°C for every slot** · Hybrid (Sequential), Dial 0 bloom -> Dial 5 -> Dial 6 at the end.
+- One recipe, frozen across the slots, brewed back to back in one session. The only variable across the cups is the roast - hold grind, temperature, ratio, valve sequence and pour cadence identical. No roast-level row at the gate: a roast note at 94°C is itself a development signal (Los Lajones Batch 245), so do not tune it away before the read.
+- Up to 3 slots per session (preferred maximum); 4 is possible but not ideal.
+- Evaluate as full cup sips across the whole cooling arc (hot -> warm -> cool). Do not call the verdict from the hot window - the layered-evolving read lives in the arc.
+- The gate runs in the roasting thread. There is no packet, no brewing-thread handoff and no lifecycle flip: the lot stays in Waiting for next cupping until the gate cups are logged.
 
-**Ground Agtron measurement — required at every evaluation session:**
+**What the gate decides, in one session:**
 
-- Grind 15g from each batch before brewing
-- Record WB Agtron (already measured post-roast) and Ground Agtron
-- Calculate WB-to-Ground delta — this is a primary internal development signal
-- Target delta ≤3 points for well-developed counterflow roasts
-- Delta above 5 points: surface development is running ahead of core — profile needs more early energy
-- Delta near zero or slightly negative: even development confirmed (this is the target)
+1. **Leading slot** of the V-set.
+2. **Reference call**, when the leading slot is bracketed - a lighter sibling reads underdeveloped and a deeper sibling reads overdeveloped. A bracketed winner on V1 is the expected outcome on a seen-before lot, not a suspect one (see [cross-coffee-insights.md § First-V-set default](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#first-v-set-default-on-seen-before-lots---fixed-curve-drop-ladder)). A winner at the edge of the ladder is not bracketed: extend the ladder that direction in V_(n+1).
+3. **Optimized brew**, when the winning cup needs nothing - the gate cup of the reference roast IS the optimized brew, recorded as-is. If it wants a trim, apply one house-style adjustment (typically 94 -> 92°C when a slight roast note shows at the top of the band) on the winner only and brew once more.
+
+**Tie-break rebrew - only when the read is close:**
+
+- If the top two slots cannot be separated in the gate session, rebrew those two alone, same recipe, and call it there. This replaces the standing SPG step; it is the exception, not a stage every lot passes through.
+- If the rebrew cannot happen the same day and the leading slot is genuinely open, use the deferral encoding in [CONTEXT-roasting.md § House-style gate](CONTEXT-roasting.md) (`winner = 'deferred pending SPG'` + `lot_status = 'waiting_for_brewing'`).
+- Structural favorite still gets a seat: when the gate favorite and the roast-side structural favorite diverge (WB->Gnd delta polarity per family norms, e.g. widest-delta-wins on Nova Red Bourbon), both go into the rebrew.
+
+**Manual-brew consistency is the cost of this gate.** The xBloom was machine-repeatable; three hand brews are not. Freeze the recipe, brew in one sitting, keep pour cadence the same, and when a cup tastes like a brew fault (channelled, stalled drawdown) rebrew that slot rather than reading it.
+
+**Ground Agtron measurement:**
+
+- Grind and read a sample from each batch when the batch is large enough; record WB Agtron (already measured post-roast) and Ground Agtron and the WB-to-Ground delta - a primary internal development signal.
+- Target delta <=3 points for well-developed counterflow roasts. Delta above 5 points: surface development is running ahead of core - profile needs more early energy. Delta near zero or slightly negative: even development confirmed (this is the target).
+- **100 g-batch V-sets: skipped by design.** After three 15 g gate brews the remaining sample is too small for an accurate ground reading; WB is the color of record on those lots (Maya, Los Lajones, Black Moon Chiroso).
 
 See [cluster/machine/counterflow-observations.md § WB-to-Ground Agtron Delta as Development Signal](docs/skills/roest-knowledge/cluster/machine/counterflow-observations.md#wb-to-ground-agtron-delta-as-development-signal) for the per-lot-family directional interpretation (magnitude is the operational reading; sign flips between washed and heavy-ferment families).
 
-**Optimized brew session — one additional session after a winner is identified:**
-
-- Once the Day 7 evaluation identifies a winning batch, run one dedicated optimized brew session using UFO Ceramic + Sibarist Fast Cone
-- This session establishes the reference brew recipe for the lot — it is for expression maximization, not evaluation
-- The xbloom evaluation recipe and the optimized recipe are different tools for different purposes — do not conflate them
-
-**SPG real-pourover arbiter — required on trigger-family lots (Confirmed Pattern, promoted 2026-08-08; adopted into protocol 2026-08-08):**
-
-- Trigger (mandatory): anaerobic-natural / heavy-ferment lots — the xbloom gate misranks close candidates on these lots (5 slot-level instances across COS-HIG-BOR-2026 + RWA-NOVA-AN10-RB-2026; High confidence). Precautionary triggers (Medium confidence, pending third lot): dark-tea-prone naturals (descriptor-axis extension) and Nova Washing Station Red Bourbon lots (producer-family brightness bias — the gate over-amplified the brighter/less-developed slot in both AN10 instances).
-- On trigger-family lots, the xbloom session outputs FINALISTS only — do not record a provisional winner from the gate, and do not let gate rankings alone steer the next V-set's design direction.
-- Finalist pair: gate favorite + structural favorite when they diverge — include the slot indicated by family-appropriate roast-side structural signals (WB→Gnd delta polarity per family norms, e.g. widest-delta-wins on Nova Red Bourbon), not automatically the gate's top 2. Motivating case: AN10 Batch 218 (structural favorite, confirmed reference-grade) vs 217 (gate co-favorite, collapsed at SPG).
-- Cadence — the arbiter is required at forks, skippable otherwise:
-  - Required: (a) before any reference-roast or lot-outcome declaration — always, no exceptions; (b) whenever the next V-set's design direction depends on which finalist actually won (bigger profile corrections).
-  - Skippable: mid-lot sets where the gate is decisive by a wide margin, or where the next V-set brackets both candidates' directions regardless of the winner.
-- Procedure: the Latent house style (SWORKS chassis + the roast-level row, per `simulated-pourover.md`; the pre-2026-10-06 runs used a Balanced Intensity real pourover) on the finalist pair before declaring any outcome — winner selection, reference call, or an underdevelopment/defect diagnosis (the gate has produced extraction-artifact false defects, e.g. the COS-HIG-BOR v1b lactic note; treat apparent gate defects between close candidates as unconfirmed until the SPG).
-- Scope note: the xbloom gate remains the standard for non-trigger lots and remains the archive's comparison-consistency descriptor record on all lots; the SPG arbiter is a ranking step, not a replacement for the Day 7 xbloom session. Expected cost: one to two extra 2-cup manual sessions per lot.
-
-Source: [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Engineered-Process Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-engineered-process-naturals) + the dark-tea-ceiling descriptor-axis extension and Nova widest-delta-wins entries in the same doc.
+**Why the xBloom gate and the standing SPG were retired:** the xBloom recipe misranked close candidates against real pourover on engineered-process naturals (8 instances across 6 lots, including a flipped reference call on Deborah), which is why the SPG arbiter existed. Brewing the candidates in the recipe they will actually be drunk in removes the cause instead of arbitrating it afterwards. On the three lots closed 2026-11-11 to 2026-11-13 the SPG was waived, skipped and merely confirmatory, and all three optimized brews were the house style with at most a 2°C trim. History: [cross-coffee-insights.md § xbloom Evaluation Gate Misranking on Engineered-Process Naturals](docs/skills/roasting-historian/cluster/patterns/cross-coffee-insights.md#xbloom-evaluation-gate-misranking-on-engineered-process-naturals). Cuppings logged before 2026-11-13 with `recipe_variant: "xbloom_gate"` are xBloom reads and do not compare directly with house-style gate reads.
 
 ---
 
