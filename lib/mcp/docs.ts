@@ -788,8 +788,13 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-loslajones-bambu-gesha-nat-2026.md',
-    title: 'Roasting Historian — active-lots / HiU Los Lajones Geisha Natural Bambu 8B (ACTIVE — V1 designed 2026-11-05, waiting for next roast)',
-    description: 'Use when working the HiU Los Lajones Geisha Natural Bambu 8B lot (Panama / Volcancito Boquete, 800 g/L / 11.2%; the apex benchmark natural Gesha of the Forward set, Forward 93, $400/kg 1kg calibration lot) — working hypothesis (layered-evolving apex target: candy/honey/panela hot -> citrus/stonefruit/tropical/raspadura cool) + V1 design (Maya-identical fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C bracketing the FC-onset vs extended-development family solutions, predictions recalibrated to Maya V1 actuals) + evaluation discipline (Day-7 gate + SPG arbiter before any reference call) and V1 substrate IDs.',
+    title: 'Roasting Historian — active-lots / HiU Los Lajones Geisha Natural Bambu 8B (REDIRECT STUB — closed 2026-11-13, reference Batch 245 V1B, one V-set)',
+    description: '[REDIRECT STUB per the close-out convention] Lot closed 2026-11-13; reference roast Batch 245 (V1B, bean_temp 210.0C auto-drop on the Maya-identical 246C sustained-tail curve, FC audible 4:20/205.0, WB 80.6) resolved in ONE V-set — as-run ladder 208/210/212 after a +2C mid-session trigger bump; operator overruled the SPG deferral on a clear gate read. Optimized brew e80613a4 (Latent house style, one delta: 92C water). Authoritative content lives at docs://skills/roasting-historian/cluster/learnings/pan-loslajones-bambu-gesha-nat-2026.md.',
+  },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/pan-loslajones-bambu-gesha-nat-2026.md',
+    title: 'Roasting Historian — learnings / HiU Los Lajones Geisha Natural Bambu 8B (closed 2026-11-13, reference Batch 245 V1B — the one-V-set apex benchmark)',
+    description: 'Use when designing a roast for a similar lot (Panama natural Gesha / high-density expressive natural) or tracing this lot\'s evidence — the Forward-93 apex benchmark, closed in ONE V-set: reference Batch 245 (246C Maya-identical curve, bean_temp 210, FC audible 4:20/205, 32s dev, WB 80.6), cup-side underdev/overdev signals (lactic off-balance at 208/WB 86 vs roast-on-cooling at 212/WB 74.9), the same-curve cross-lot transfer limit vs the Maya sibling (~16s/C post-FC climb, ~6-7 WB lighter at equal trigger), Gesha 48s dev-floor counter-evidence at 32s dev, and the starting hypothesis for the next similar lot (ladder centered 210, target WB ~80, house style at 92C).',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-blackmoon-chiroso-nat-2026.md',
