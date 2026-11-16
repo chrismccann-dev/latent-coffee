@@ -1,6 +1,6 @@
 # Roasting Brief - 96B Liberica Anaerobic (vtn-96b-liberica-an-2026)
 
-**green_bean_id:** `e3811972-bfaf-4b71-91cb-9a2feb8fd73a` · **lot_status:** waiting_for_next_roast · **Started:** 2026-11-15 · **Roest inventory:** 12498
+**green_bean_id:** `e3811972-bfaf-4b71-91cb-9a2feb8fd73a` · **lot_status:** waiting_for_next_cupping · **Started:** 2026-11-15 · **Roest inventory:** 12498
 
 First Liberica in the archive. Species-level exploratory lot with a generous budget (5000 g, about 50 batches at 100 g).
 
@@ -30,11 +30,14 @@ First Liberica in the archive. Species-level exploratory lot with a generous bud
   · design intent: **wide development-depth map.** One fixed inlet curve on the heavy-ferment family shape (early energy held gentle for low moisture + very small beans; tail sustained so the deep slot keeps momentum), three slots that differ only in the bean_temp auto-drop, 4°C apart - double the seen-before step because the anchor is a guess. BEAN_TEMP end condition because FC is expected silent-to-subtle.
   · slot roles: v1a = light wall at the expected FC zone; v1b = centre, the fruit window if one exists; v1c = deep wall and the smoke test. No slot is expected to be the reference. All predictions Low confidence.
   · gate: Day-7 Latent house style on all three slots.
-  · status: designed, waiting for roast.
+  · status: **roasted 2026-11-15 (batches 254 / 255 / 256), resting for the Day-7 gate (2026-11-22).** Roast rows, deltas and post-roast cup re-predictions are on the experiment row.
+  · roast-side read: the whole set landed **lighter than designed** - this bean stays light for its bean-temp trigger (the small-bean racing-probe effect flagged at intake). The ladder mapped under / light / moderate, not under / middle / over, so **the over-development wall is not yet found.** FC was audible; one clean mark puts onset early on this curve (v1b). v1a dropped at onset. v1c never reached its trigger - the curve stalls just short of it - and was stopped manually late, with a long low-RoR finish (baked risk, not smoky risk) and an unreliable FC mark. Colour readings are suspect on these very small beans (operator observation; v1a and v1b read almost identical); **weight loss is the development ruler for this lot** until colour is sorted.
 
 ## Current state + next step
 
-V1 is staged and the lot is waiting for roast. **Next action: Chris roasts V1 in a V-Set Assistant session** (Handoff Packet emitted 2026-11-15), cups at Day 7 on the house-style gate, and pastes the Results Packet into a fresh Coordinator session, which resolves the deltas and routes.
+V1 is roasted and resting. **Next action: Day-7 house-style gate on all three slots (2026-11-22)**, then the cupping is recorded and the Coordinator routes. The roast logging ran in the Coordinator thread at the operator's request (logs were pasted there) rather than in a separate V-Set Assistant session.
+
+Input for V2 (not a decision until the cups are read): the map needs extending deeper to find the over wall and the smoke answer, which means a curve with more late energy - the V1 tail cannot carry this bean past its stall point. If v1c leads, V2 centres at or beyond it.
 
 Forks considered at V1 design and closed by the operator: single-axis drop ladder over a peak-inlet diagonal; ladder placed at 204 / 208 / 212; three slots, not four.
 
