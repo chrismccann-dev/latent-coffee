@@ -23,7 +23,7 @@ Use this document as a lookup graph, not as a front-to-back read.
 - Designing V_n+1 after cupping: read **V-set close synthesis** -> **V-set design and forward planning** -> **Roast diagnostics and failure signals**.
 - Logging a roast: read **Core ontology** -> **Roast-session operating protocol** -> **Roast diagnostics and failure signals**.
 - Logging a cupping: read **Cupping and cup-character interpretation** -> **V-set close synthesis** -> **Reference designation terms**.
-- Deciding whether to close a lot: read **Reference designation terms** -> **Simulated Pourover Gate system** -> **Lot-close synthesis**.
+- Deciding whether to close a lot: read **Reference designation terms** -> **House-style gate** -> **Lot-close synthesis**.
 - Closing a lot: read **Lot-close synthesis** -> **Cross-domain roasting ↔ brewing handoffs** -> **Schema notes** only when implementation detail is needed.
 - Working on one-shot lots: read **One-Shot Lot** -> **Tolerance-anchored design** -> **One-shot emission + link** -> **Closed without reference**.
 - Touching schema, prompt stages, migrations, or UI: read **Schema notes** and the relevant workflow file before editing glossary prose.
@@ -35,13 +35,13 @@ Most mistakes come from confusing these pairs:
 - **Recipe** vs **Roest profile**: design-intent aggregate vs machine-side JSON artifact.
 - **Anchor profile** vs **Reference roast**: upstream V1 starting framework vs lot-close winner.
 - **Leading slot** vs **Reference candidate** vs **Reference roast**: V-set winner vs plausible mid-flight quality flag vs final lot-level designation.
-- **Reference cup** vs **Optimized brew**: standardized xBloom gate cup vs daily-consumption brew endpoint.
+- **Reference cup** vs **Optimized brew**: the reference roast's house-style gate cup vs the recorded daily-consumption brew (usually the same recipe, often the same cup).
 - **Variable** vs **Lever** vs **Non-factor**: design-time moved parameter vs lot-close promoted effect vs tested no-effect.
 - **Thermal reset** vs **BBP**: session-start warm-up to 140°C vs between-roast cooldown to 120°C.
 - **Hopper-load** vs **Charge**: load at 125°C into hopper vs charge at 117°C into drum.
 - **FC floor** vs **Drop ceiling** vs **Dev headroom**: lower FC bound vs upper drop bound vs usable FC-to-drop temperature room.
 - **Rest behavior** vs **Rest-days drift**: lot-level evolution pattern vs comparison confound between cups of different ages.
-- **Simulated Pourover Packet** vs **Simulated Pourover Gate** vs **SPG standing recipe**: trigger vs decision event vs frozen bean-specific recipe.
+- **House-style gate** vs **Tie-break rebrew** vs **Optimized brew**: Day 7 read of every slot vs top-two rebrew on a close call vs the recorded consumption recipe.
 
 ### Search strategy for agents
 
@@ -72,7 +72,7 @@ This index exists for searchability. Each row points agents to the right local c
 | Maillard % | Roast diagnostics | FC audibility, did_not_fire |
 | WB→Gnd delta | Roast diagnostics | development, Agtron |
 | rest-days drift | Cupping interpretation | rest behavior, SPG |
-| Simulated Pourover | Simulated Pourover Gate system | packet, gate, standing recipe, eval_method |
+| House-style gate / Simulated Pourover / SPG | House-style gate | bracketed winner, tie-break rebrew, eval_method |
 | peer-roasted reference | Cross-domain handoffs | peer roaster, information value |
 | backfilled recipe | Schema notes | was_backfilled, backfill_notes |
 
@@ -144,11 +144,11 @@ Timing convention: the flag is set exclusively in log-cupping.md STAGE 3 after t
 
 ### Reference Cup
 
-Reference cup: The xBloom pour-over cupping of the reference roast at day-7 of rest — one standardized, mechanically-repeatable evaluation that defines what this coffee tastes like at peak roasted-bean state. Replaces an earlier 2-stage protocol (cupping-bowl day-4 + xBloom day-7); the bowl methodology was deprecated because too many coffees that tasted great on the bowl table "fell apart" at the xBloom step and couldn't hold up during the optimized brew — i.e. the bowl signal had too much brewing-tolerance noise mixed in. xBloom's mechanically-consistent recipe specifically isolates cup-side signals from brewing variance, which is what makes the underdev/overdev signal attribution possible. *Avoid*: "cupping bowl cupping" (deprecated), "tasting", "best cup", "final cup"
+Reference cup: The house-style gate cup of the reference roast at day-7 of rest - the [Latent house style](CONTEXT-brewing.md) on the SWORKS at 94°C, the same frozen recipe every slot of every V-set is read in. Since 2026-11-13 ([ADR-0027](docs/adr/0027-house-style-gate.md)); before that it was the xBloom gate cup, and before that a cupping-bowl day-4 + xBloom day-7 pair (the bowl was deprecated because coffees that tasted great on the table fell apart under pourover). The recipe is frozen across slots so underdev/overdev attribution reads as roast, not brew technique; the cost is hand-brew variance the xBloom did not have. When the winning gate cup needs no adjustment, the reference cup and the optimized brew are the same cup. *Avoid*: "cupping bowl cupping" (deprecated), "xBloom gate" for post-2026-11-13 cuppings, "tasting", "best cup", "final cup"
 
 ### Optimized Brew
 
-Optimized brew: The pour-over recipe Chris dials in for daily consumption of the reference roast — real dripper, real filter, real water, finalized brewing variables. Produced by handing the reference roast into the brewing-side workflow (same flow used for purchased roasted beans — same Coffee Brief, same iteration loop, same Step 4 resolved-brew artifact). **Since 2026-10-06 it is the [Latent house style](CONTEXT-brewing.md) with the roast-level row applied, by default and nearly always** ([ADR-0026](docs/adr/0026-latent-house-style-chassis.md)): the roasting side conforms to the standard brewing recipe, not the reverse; a rare deviation states its reason in one line of `strategy_notes`, and a recurring need to deviate is a roast-side signal, not a brewing one. The consumption-condition endpoint of the full self-roasted pipeline; all post-hoc attribution traces backward from here, since this — not the reference cup — is what the lot actually tastes like when drunk normally. The self-roasted variant of reference brew — same workflow shape, distinct name because the word "optimized" emphasizes that this recipe pushes the bean past the constrained xBloom reference cup that was used to designate the reference roast in the first place. *Avoid*: "optimized recipe" (recipe is one component, not the whole), "final brew", "best brew", bare "reference brew" when context is specifically self-roasted (use "optimized brew" to keep the calibration-vs-consumption distinction crisp).
+Optimized brew: The pour-over recipe Chris dials in for daily consumption of the reference roast — real dripper, real filter, real water, finalized brewing variables. Produced by handing the reference roast into the brewing-side workflow (same flow used for purchased roasted beans — same Coffee Brief, same iteration loop, same Step 4 resolved-brew artifact). **Since 2026-10-06 it is the [Latent house style](CONTEXT-brewing.md) with the roast-level row applied, by default and nearly always** ([ADR-0026](docs/adr/0026-latent-house-style-chassis.md)): the roasting side conforms to the standard brewing recipe, not the reverse; a rare deviation states its reason in one line of `strategy_notes`, and a recurring need to deviate is a roast-side signal, not a brewing one. The consumption-condition endpoint of the full self-roasted pipeline; all post-hoc attribution traces backward from here, since this — not the reference cup — is what the lot actually tastes like when drunk normally. The self-roasted variant of reference brew — same workflow shape, distinct name because the word "optimized" emphasizes that this is the recorded consumption recipe, where the reference cup is the frozen read used to designate the reference roast (historically a constrained xBloom cup; since 2026-11-13 the same house style, so the two usually coincide). *Avoid*: "optimized recipe" (recipe is one component, not the whole), "final brew", "best brew", bare "reference brew" when context is specifically self-roasted (use "optimized brew" to keep the calibration-vs-consumption distinction crisp).
 
 Link: the lot's optimized brew is attached via the explicit FK green_beans.optimized_brew_id → brews(id) (mirrors migration 069's peer FK), set at close-lot.md STAGE 3 (V-set) / one-shot-closeout.md STAGE 3 (one-shot) from the brew_id carried in the optimized-brew handoff brief (ask-if-missing). This replaces the legacy pickOptimizedBrew roast_id = best_roast_id heuristic, which survives only as a fallback for lots closed before the column existed. Named optimized_brew_id not reference_brew_id to avoid colliding with reference roast / reference cup / reference brew. See `ADR-0019`.
 
@@ -428,7 +428,7 @@ Rest behavior: How a roasted lot evolves across post-roast rest days (Day 4 / 7 
 Rest-days drift: A discrepancy in cuppings.rest_days between cuppings being compared, captured as a prose-only convention via the REST_DAYS_DRIFT: prefix in cuppings.additional_notes. Distinct from Rest behavior (which is the lot-aggregate evolution pattern across rest days) — drift is the *cross-cupping comparison* problem ("V5A at Day 9 was compared against 169 at Day 17 — +10 days drift"), not the per-lot rest-evolution pattern. Two structural sources:
 
 1. Within-V-set scheduling drift (~1-2 days, managed): Chris can't do 3-5 cuppings in a single day (each takes ~30+ min, done before work), so the assistant spaces them out — e.g. 3 same-day roasts get cupped at Day 6 / Day 7 / Day 8 to fit the calendar while staying inside the Day 6-10 acceptance window. This drift is managed scheduling, treated as noise when material. The existing log-cupping.md STAGE 3 convention flags this case ("cupped Day <N>, off the Day 7 gate by <delta>").
-2. Cross-V-set comparison drift (7+ days, structural): in a Simulated Pourover Gate / candidate-runoff cup-set, V_n's candidate is brewed alongside V_(n-1)'s candidate. The V_(n-1) candidate has typically been resting 7+ extra days (the roasting cycle is long). Chris's mitigation: pick the closest-to-the-date candidate from V_(n-1) when possible; accept the comparison unfairness when not, and denote it explicitly. *No structured experiments yet exist on rest-days effects across this magnitude*, so the comparison interpretation must hold the drift as a confounding variable. The Sudan Rume V5A (Day 9) vs 169 (Day 17) case is the canonical lived instance.
+2. Cross-V-set comparison drift (7+ days, structural): in a cross-V-set tie-break rebrew / candidate-runoff cup-set, V_n's candidate is brewed alongside V_(n-1)'s candidate. The V_(n-1) candidate has typically been resting 7+ extra days (the roasting cycle is long). Chris's mitigation: pick the closest-to-the-date candidate from V_(n-1) when possible; accept the comparison unfairness when not, and denote it explicitly. *No structured experiments yet exist on rest-days effects across this magnitude*, so the comparison interpretation must hold the drift as a confounding variable. The Sudan Rume V5A (Day 9) vs 169 (Day 17) case is the canonical lived instance.
 
 Schema scoping decision: prose-only is the right shape. cuppings.rest_days already captures the absolute age per cupping; drift is a relational concept (delta between two cuppings) derivable at query time, not a per-row property. A per-row rest_drift_flag or rest_drift_days field would duplicate derivable data with implicit comparison reference; the prose prefix in additional_notes catches the at-comparison-moment hedge where it matters operationally. If cross-lot drift analysis becomes a real workflow, build a query-time SQL view, not a per-row field.
 
@@ -446,11 +446,11 @@ Waiting for next roast: A green-bean lot whose latest V-set has been designed an
 
 ### Waiting for next cupping
 
-Waiting for next cupping: A green-bean lot whose latest V-set has been fully roasted but not yet xBloom-cupped at day-7 of rest. Roast data is back in the app; the next move is physical: Chris does the day-7 cupping (which then triggers claude.ai to design V_{n+1} and the lot bounces back to "Waiting for next roast"). Day-7 is the target; actual days-post-roast varies with calendar affordances and gets recorded per cupping. *Avoid*: "ready to cup", "cupping pending"
+Waiting for next cupping: A green-bean lot whose latest V-set has been fully roasted but not yet cupped at the day-7 house-style gate. Roast data is back in the app; the next move is physical: Chris does the day-7 cupping (which then triggers claude.ai to design V_{n+1} and the lot bounces back to "Waiting for next roast"). Day-7 is the target; actual days-post-roast varies with calendar affordances and gets recorded per cupping. *Avoid*: "ready to cup", "cupping pending"
 
 ### Resolved
 
-Resolved: A green-bean lot whose lifecycle is closed: a reference roast has been declared after a winning xBloom cupping, the reference roast has been handed off to the brewing-side workflow and an optimized brew has been dialed in, and all learnings have been rolled up. No further V-sets planned. Replaces the active sage-tile rendering with the green-tile + "Resolved" badge.
+Resolved: A green-bean lot whose lifecycle is closed: a reference roast has been declared after a winning house-style gate cupping, the reference roast has been handed off to the brewing-side workflow and an optimized brew has been dialed in, and all learnings have been rolled up. No further V-sets planned. Replaces the active sage-tile rendering with the green-tile + "Resolved" badge.
 
 ### Unresolved
 
@@ -520,7 +520,7 @@ The Resolved-pending → Resolved transition compresses three discrete sub-event
 
 ### Cross-domain workflow-transition gate
 
-Cross-domain workflow-transition gate: declaring roasts.is_reference = true is the load-bearing gate that transitions a lot from the roasting-side workflow to the brewing-side workflow — the operator hands the reference roast into the brewing-side iteration loop to dial in the optimized brew (see entry Optimized brew below). The declaration is intentionally definite, not ambiguous: an is_reference_candidate = true flag set during V-set iteration is a hedged mid-flight judgment ("could be one / good candidate"); is_reference = true is the commit ("yes, this is the lot reference, moving on"). The asymmetric downstream consequence — cross-domain transition begins as soon as the flag flips — makes the call-it-correctly discipline load-bearing. The Cupping Specialist sub-skill owns the pre-declaration push-back duty (see docs/skills/cupping-specialist/SKILL.md § Pre-declaration discipline (Path A push-back duty)) — when the operator signals Path A on a V-set lot that hasn't yet run a Simulated Pourover Gate comparison, the Cupping Specialist's job is to push back with the standard language and only confirm Path A after the operator has completed the comparison and still wants the designation. One-shot lots are exempt from the SPG condition (single roast by structural design, one cup read, no V-set lineage) — for one-shots, one-shot-closeout.md STAGE 2 sets is_reference = true directly without the push-back gate. *Avoid*: "best roast", "winning batch", "final roast", "optimal roast", "leading slot" (V-set-scoped, see separate entry)
+Cross-domain workflow-transition gate: declaring roasts.is_reference = true is the load-bearing gate that transitions a lot from the roasting-side workflow to the brewing-side workflow — the operator hands the reference roast into the brewing-side iteration loop to dial in the optimized brew (see entry Optimized brew below). The declaration is intentionally definite, not ambiguous: an is_reference_candidate = true flag set during V-set iteration is a hedged mid-flight judgment ("could be one / good candidate"); is_reference = true is the commit ("yes, this is the lot reference, moving on"). The asymmetric downstream consequence — cross-domain transition begins as soon as the flag flips — makes the call-it-correctly discipline load-bearing. The Cupping Specialist sub-skill owns the pre-declaration push-back duty (see docs/skills/cupping-specialist/SKILL.md § Pre-declaration discipline (Path A push-back duty)) — when the operator signals Path A on a V-set lot whose leading slot is not a bracketed winner at the house-style gate (or whose close call skipped the tie-break rebrew), the Cupping Specialist's job is to push back and only confirm Path A after that evidence exists and the operator still wants the designation. One-shot lots are exempt from the SPG condition (single roast by structural design, one cup read, no V-set lineage) — for one-shots, one-shot-closeout.md STAGE 2 sets is_reference = true directly without the push-back gate. *Avoid*: "best roast", "winning batch", "final roast", "optimal roast", "leading slot" (V-set-scoped, see separate entry)
 
 ### One-shot emission + link
 
@@ -528,7 +528,7 @@ One-shot emission + link: a one-shot ALWAYS goes to brewing (one roast, one cup,
 
 ### xBloom
 
-xBloom: A physical automated pour-over machine that runs one mechanically-consistent recipe every time (same temperature, pour pattern, agitation, ratio). Used as the gate for reference-cup evaluation — every reference roast gets exactly one xBloom pour-over at day-7 of rest, and that result *is* the reference cup. Not the consumption-condition cup (that's the optimized brew), but a standardized cross-lot anchor that's repeatable. *Avoid*: "automated pour over" (xBloom is a specific machine), "pour over machine"
+xBloom: A physical automated pour-over machine that runs one mechanically-consistent recipe every time. The Day 7 gate vehicle until 2026-11-13, when the house-style gate replaced it ([ADR-0027](docs/adr/0027-house-style-gate.md)); cuppings with `recipe_variant: 'xbloom_gate'` are its reads and do not compare directly with house-style gate reads. Not to be confused with xBloom Premium paper, the filter the house style still uses. *Avoid*: "automated pour over" (xBloom is a specific machine), "pour over machine"
 
 ### Peer Roaster
 
@@ -545,7 +545,7 @@ Peer-roasted reference brew: A brew row in brews representing the roasted varian
 
 Schema: nullable FK green_beans.peer_reference_brew_id → brews(id) (migration 069), 1:1 in current practice, typically backfilled via patch_green_bean AFTER the peer brew row lands; column history in [docs/architecture/data-model.md](docs/architecture/data-model.md). No app UI surface — the peer-roasted lessons live in the Peer-Learning Roasting Archivist cluster; the FK is the find-fast pointer.
 
-Relationship to other concepts: distinct from Reference roast (Chris's own designated winning roast — see § Reference roast), from Reference cup (the xBloom Day-7 gate cup of Chris's reference roast — see § Reference cup), and from a Control experiment V-set (Chris's own confirming roast) — the peer-roasted reference is external calibration input, not internal lot output.
+Relationship to other concepts: distinct from Reference roast (Chris's own designated winning roast — see § Reference roast), from Reference cup (the house-style gate cup of Chris's reference roast — see § Reference cup), and from a Control experiment V-set (Chris's own confirming roast) — the peer-roasted reference is external calibration input, not internal lot output.
 
 *Avoid*: "peer brew" (too generic — Chris drinks many peer brews that aren't calibration anchors for his own lots); "external reference roast" ("reference roast" is a Latent-specific term for Chris's designated lot winner — see § Reference roast); collapsing peer-roasted reference + control experiment (control experiment is Chris's own roast).
 
@@ -582,102 +582,51 @@ Pre-V_n calibration gate: A gate that halts V_(n+1) design until missing calibra
 
 Distinct from a control experiment (a new V-set replicating the leading slot — routes through Path B, not Path C). *Avoid*: "calibration step" (too generic — pre-V1 risk reduction also runs calibration steps); "blocker" (calibration gates are deliberate design hold-points, not external blockers); "peer cup gate" (the peer cup is advisory, not a gate).
 
-## Simulated Pourover Gate system
+## House-style gate
 
-The Simulated Pourover Gate system is the late-stage decision-support workflow used when the roast-side search is close to a reference-roast decision, but the xBloom gate alone is not trusted enough to commit.
-It sits between the standardized xBloom evaluation and the full optimized-brew workflow:
-cupping bowl → xBloom generic-frozen → Simulated Pourover Gate bean-frozen → optimized brew
-The system exists because the xBloom Day 7 gate is consistent and useful for cross-slot comparison, but the xBloom-to-end-optimized-pourover delta can be large. The Simulated Pourover Gate gives finalists a closer approximation of the eventual consumption-condition cup without paying the time cost of fully optimizing every finalist.
-The system has four distinct parts:
+*(Formerly the Simulated Pourover Gate system. Rewritten 2026-11-13, [ADR-0027](docs/adr/0027-house-style-gate.md).)*
 
-1. Simulated Pourover Packet - the outbound trigger from roasting to brewing.
-2. Simulated Pourover Gate - the decision event across finalists.
-3. SPG standing recipe - the frozen, bean-specific recipe used across the finalists.
-4. eval_method: 'Simulated Pourover' - the canonical cupping-row storage value.
+House-style gate: The Day 7 evaluation of a V-set - every slot brewed in the [Latent house style](CONTEXT-brewing.md) on the SWORKS, one frozen recipe at 94°C, cupped side by side across the full cooling arc. It is the only gate. It picks the leading slot, supports the reference call, and usually produces the optimized brew, because the gate recipe and the optimized brew are the same recipe. It runs in the roasting thread: no packet, no brewing-thread handoff, no lifecycle flip.
 
-These share the same name stem but are not interchangeable.
+It absorbed two earlier steps. The **xBloom gate** (a generic machine recipe, retired) misranked close candidates against real pourover; the **Simulated Pourover Gate** (a finalists-only real-pourover runoff, retired as a standing step) existed to arbitrate that. Brewing every slot in the consumption recipe removes the cause.
 
-### Simulated Pourover Packet
+Evaluation ladder, as it now stands: cupping bowl *(retired)* → xBloom gate *(retired)* → house-style gate → optimized brew (the winning gate cup, or that cup plus one adjustment).
 
-The Simulated Pourover Packet is the thin outbound trigger emitted by the roasting thread when a Simulated Pourover Gate is needed.
-It crosses from roasting to brewing and contains only the minimum handoff context needed to run the gate:
+Bracketed winner: a leading slot with a lighter sibling that reads underdeveloped and a deeper sibling that reads overdeveloped. A bracketed winner is reference-grade evidence on its own, including on V1. A winner at the edge of the ladder is not bracketed - the next V-set extends the ladder that direction.
 
-* green_bean_id
-* finalist roast batches
-* one-line intent for the comparison
+Tie-break rebrew: when the top two slots cannot be separated in the gate session, those two alone are rebrewed in the same recipe and the call is made there. The exception, not a stage. This is distinct from a control experiment (a new V-set replicating a leading slot with slight roast adjustments).
 
-The packet does not define the recipe. It tells the brewing-side workflow which candidates need to be compared and why.
-The dedicated brewing thread then produces the SPG standing recipe and runs the gate cup-set.
-Avoid: treating the packet as the gate itself, putting full recipe design inside the roasting thread, or storing the packet as if it were the final brew artifact.
+Aliases that refer to the retired runoff and should not become separate concepts: "Simulated Pourover Gate", "SPG", "SPG standing recipe" (= the house style), "Simulated Pourover Packet" (retired - nothing crosses to a brewing thread), "candidate run-off pourover", "runoff competition". Historical records keep those names.
 
-### Simulated Pourover Gate
-
-The Simulated Pourover Gate is the decision event: Chris runs the same simulated-pourover recipe across 2-3 roast finalists to choose the reference roast.
-Typical finalist set:
-
-* V_n leading slot
-* V_n secondary contender
-* V_(n-1) leading slot as a control baseline
-
-The goal is not to optimize brewing. The goal is to isolate roast quality under a more realistic pourover condition than xBloom while keeping brew technique constant across candidates.
-The gate is most useful when:
-
-* roasting-side optimization is reaching diminishing returns
-* xBloom has identified a plausible leading slot, but not a definitive reference
-* prior V-sets showed xBloom gate vs real-pourover inversions
-* the current leading-slot identity is provisional
-* a roast-quality concern needs a closer-to-consumption read before committing
-
-Outcome: pick the reference roast, then move only the chosen roast into the full optimized-brew workflow.
-This is distinct from a control experiment. A control experiment is a new V-set that replicates a leading slot with slight roast adjustments. The Simulated Pourover Gate is a cupping / brewing comparison across already-roasted finalists.
-Aliases that refer to the same event but should not become separate concepts:
-
-* “candidate run-off pourover”
-* “runoff competition”
-
-Avoid: “calibration step” when the specific SPG event is meant, “halt-and-report,” “blocker,” or creating a separate candidate-runoff workflow concept.
-
-### SPG standing recipe
-
-The SPG standing recipe is the one bean-specific pourover recipe produced by the brewing thread for the Simulated Pourover Gate. **Since 2026-10-06 it starts from the [Latent house style](CONTEXT-brewing.md)** (the SWORKS chassis + whichever roast-level adjustment row the finalists call for); bean-specific tuning beyond that is the exception, not the design. Roasts are evaluated against the house style, not the reverse - the roaster controls roast level and fits the coffee into the style.
-It is:
-
-* Bean-lot-specific - each lot gets its own SPG recipe.
-* Frozen across candidates - the same recipe is used for every finalist in the runoff.
-* Non-optimized - it is closer to the final consumption condition than xBloom, but it is not the final optimized brew.
-* Ephemeral - it is not recorded as the final recipe artifact.
-
-The freeze scope is the runoff itself. The recipe is frozen across the candidates in one gate so roast differences are not confounded by brew differences. It is not intended to be persisted across V-sets or treated as a stable cross-lot reference.
-This accepted limitation matters: the SPG standing recipe does not create a strict cross-V-set attribution trace. Its content is not the load-bearing artifact. The decision comparison is the load-bearing artifact.
-Only the eventual optimized brew persists as the final brewing endpoint.
-Avoid: treating the SPG standing recipe as the optimized brew, persisting it as the final recipe, iterating it candidate-by-candidate, or treating the lot-specific tuning as a cross-lot reference (the house-style chassis is the cross-lot constant; the per-lot row choice is not).
+Avoid: "xBloom gate" for a post-2026-11-13 cupping; tuning the gate recipe per lot or per slot (a roast-level row belongs on the winner only, after the read); treating the tie-break rebrew as a required stage.
 
 ### `eval_method: 'Simulated Pourover'`
 
-SPG cups are recorded as normal cupping rows with:
+House-style gate cups are recorded as normal cupping rows with:
 eval_method: 'Simulated Pourover'
-This string is canonical. The value stores today because cuppings.eval_method accepts free text. Future schema work may formalize or validate the value, but it should not rename it.
-This value disambiguates SPG cups from optimized-brew cups:
-SPG cup:
-eval_method: 'Simulated Pourover'
+recipe_variant: 'house_style_gate'   (a tie-break rebrew: 'house_style_tiebreak')
+The eval_method string is canonical and is not renamed: it stores today as free text, the app's reference-cup card matches on it, and pre-rewrite SPG rows (same recipe since 2026-10-06) stay comparable. It disambiguates gate cups from legacy rows:
+
+Legacy xBloom gate cup:
+eval_method: 'Pourover'
+recipe_variant: 'xbloom_gate'
 
 Optimized-brew cup:
 eval_method: 'Pourover'
 recipe_variant: 'real_pourover'
-The cuppings-row shape is resolved: SPG cups live in the cuppings structure. They do not need a separate wrapper table or separate candidate-runoff object.
 
 ### Lifecycle behavior
 
-When the Simulated Pourover Gate fires, `lot_status` flips to **`waiting_for_brewing`** (the migration-080 stored state; set via `patch_green_bean` at the handoff, since no row write implies the transition). The lot re-enters `log-cupping.md` when the SPG verdict returns.
+The house-style gate does not change `lot_status`: the lot sits in Waiting for next cupping until the gate cups are logged, then routes to close-out or to V_(n+1).
 
-**SPG-pending is a two-column composite, deliberately** (ratified 2026-07-15, lifecycle-gate reconciliation grill): `lot_status = 'waiting_for_brewing'` AND `experiments.winner = 'deferred pending SPG'`. There is no SPG-specific lifecycle state and agents should not invent one - `waiting_for_brewing` is the single catch-all brewing-side wait (per ADR-0024 § 6, the Roasting Brief holds WHICH brewing task), and the winner sentinel is what distinguishes SPG-wait from optimized-brew-wait (an optimized-brew handoff carries a real slot id in `winner`).
+**Deferred tie-break (the one surviving use of the ADR-0025 composite).** Only when a tie-break rebrew has to wait for another day and the leading slot is genuinely open: `lot_status = 'waiting_for_brewing'` AND `experiments.winner = 'deferred pending SPG'`. There is no gate-specific lifecycle state and agents should not invent one - `waiting_for_brewing` is the single catch-all brewing-side wait (per ADR-0024 § 6), and the winner sentinel is what distinguishes it from an optimized-brew wait (which carries a real slot id in `winner`).
 
-**Canonical winner sentinel strings** (exact strings, load-bearing for the composite query and the derived-state validator - do not paraphrase):
+**Canonical winner sentinel strings** (exact strings, load-bearing for the composite query and the derived-state validator - do not paraphrase or rename):
 
-* `deferred pending SPG` - set at gate-fire; means the deferral is genuinely open.
-* `none - SPG eliminated all finalists` - patched onto the old experiment at a no-winner re-entry, so the record shows the deferral resolved negative. The lot then advances to the next V-set.
+* `deferred pending SPG` - set when the tie-break is deferred; means the deferral is genuinely open.
+* `none - SPG eliminated all finalists` - patched onto the experiment when the rebrew eliminates both finalists, so the record shows the deferral resolved negative. The lot then advances to the next V-set.
 
-**The SPG process is not recorded; only the decisive outcome re-enters.** Intermediate SPG iterations (a hard-to-call gate may take an extra brew or two) stay in the SPG brewing thread, archive-driven, same as brewing generally. At re-entry, only the decisive cup-set - the one the verdict was called on - is pushed as cupping rows (`eval_method: 'Simulated Pourover'`, one row per finalist), in both the winner and no-winner outcomes (a negative result is still roast evidence). On a winner: `winner` is patched from the sentinel to the real slot and `is_reference_candidate` is re-assessed.
+Only the decisive cup-set is recorded: the gate session's rows always, and the tie-break rows when one was run (one row per slot, winner and no-winner outcomes alike - a negative result is still roast evidence). On a winner after a deferral, `winner` is patched from the sentinel to the real slot and `is_reference_candidate` is re-assessed.
 
 
 ## Schema notes

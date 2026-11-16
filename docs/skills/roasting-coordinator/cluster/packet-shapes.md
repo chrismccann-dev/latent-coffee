@@ -28,7 +28,7 @@ V-SET RESULTS — <lot-slug> V<n>
 - cup vs roast-actual re-prediction: <did the actual roast predict the cup>
 - cup vs producer notes: <on-track / off-track against the anchor>
 - next-step hypothesis: <INPUT-NOT-CANON — what I'd try next>
-- route recommendation: <INPUT — next-V | SPG | reference; Coordinator decides>
+- route recommendation: <INPUT — next-V | reference | tie-break rebrew; Coordinator decides>
 - process friction (optional): <anything about the WORKFLOW that chafed this cycle — packet too thin/fat, reconstruct gap, role boundary, protocol ambiguity. The Assistant cannot edit docs; this line is its channel. The Coordinator transcribes it to roasting-coordinator/cluster/process-friction-log.md>
 ```
 
@@ -38,14 +38,7 @@ The next-step hypothesis + route recommendation are **input**; the Coordinator o
 
 These cross the surface boundary (Claude Code → claude.ai). Still thin — the brewing side reads the bean + pipeline itself.
 
-**Simulated Pourover Packet** (route to SPG; flip `lot_status → waiting_for_brewing`):
-```
-SIMULATED POUROVER — <lot-slug>
-- green_bean_id: <uuid>
-- finalist batches: <batch numbers>
-- intent: <what the runoff should decide — reference-grade? which finalist?>
-```
-Do NOT include cupping notes, roast data, or recipe design. (The SPG *execution* — the Latent house style + roast-level row, both finalists, side-by-side, reference-grade reasoning — is a brewing exercise run from `simulated-pourover.md`; the verdict comes back as `cuppings` rows + a thin verdict.)
+**Simulated Pourover Packet - retired 2026-11-13** ([ADR-0027](docs/adr/0027-house-style-gate.md)). The Day-7 gate is the house style on every slot, run in the lot's own thread, so nothing crosses to a brewing thread before the reference call. A deferred tie-break rebrew needs no packet either: the Brief records the two finalists and what the rebrew should separate.
 
 **Optimized-Brew Packet** (after reference declared):
 ```

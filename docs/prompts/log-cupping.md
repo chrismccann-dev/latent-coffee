@@ -4,7 +4,7 @@
 
 This prompt runs when Chris starts the cupping portion of a V-set roast cycle.
 
-Chris has already roasted a V-set, usually three slots such as V2a / V2b / V2c. The roasts have rested around the Day 7 gate. Chris then cups the slots side-by-side, usually on the xBloom gate recipe, while looking at the Latent app's **Taste For** section. He records an audio note that references the batch numbers written on the bags. This prompt receives that transcript and turns it into structured Latent records, then decides and sets up the next step.
+Chris has already roasted a V-set, usually three slots such as V2a / V2b / V2c. The roasts have rested around the Day 7 gate. Chris then cups the slots side-by-side, in the Latent house style on the SWORKS (the house-style gate - recipe card in `simulated-pourover.md`), while looking at the Latent app's **Taste For** section. He records an audio note that references the batch numbers written on the bags. This prompt receives that transcript and turns it into structured Latent records, then decides and sets up the next step.
 
 This file owns the **cupping procedure**:
 
@@ -31,7 +31,7 @@ State transition after this prompt:
 
 - **Waiting for next roast** when the result routes to another V-set (V_(n+1) designed inline).
 - **Resolved-pending** when the lot should move to `close-lot.md`.
-- **Waiting for next cupping** when a calibration cup or Simulated Pourover Gate is needed before designing the next V-set.
+- **Waiting for next cupping** when a calibration cup or a same-thread tie-break rebrew is needed before designing the next V-set.
 
 ## Required context pointers
 
@@ -43,7 +43,7 @@ State transition after this prompt:
 - **Reference designation terms** (+ **Reference candidate**, **Reference Cup**, **Leading Slot**)
 - **Rest-days drift**
 - **Pre-V_n calibration gate**
-- **Simulated Pourover Gate system** (+ **Simulated Pourover Packet**, **SPG standing recipe**, **`eval_method: 'Simulated Pourover'`**)
+- **House-style gate** (+ **Bracketed winner**, **Tie-break rebrew**, **`eval_method: 'Simulated Pourover'`**)
 - **Adjustment** (+ **Operator-fixed constants**, **Control experiment**, **Acceptable roast window**)
 - **Schema notes -> Backfilled recipe**
 
@@ -52,13 +52,13 @@ High-risk pairs to keep straight (full definitions in `CONTEXT-roasting.md -> Hi
 - leading slot vs reference candidate vs reference roast
 - reference cup vs optimized brew
 - variable vs lever vs non-factor
-- Simulated Pourover Packet vs Simulated Pourover Gate vs SPG standing recipe
+- House-style gate vs Tie-break rebrew vs Optimized brew
 - rest behavior vs rest-days drift
 - recipe vs Roest profile
 
 ## Inputs Chris typically provides
 
-All or some of: `lot_id` or `green_bean_id`; the V-set being cupped (e.g. `V3`); batch numbers for the slots (e.g. `187 / 188 / 189`); cupping date; roast date or stated rest days; the cupping transcript; whether the session was the standard xBloom gate, a real pourover, a Simulated Pourover Gate, or a peer-roasted reference cup; an optional explicit candidate / route preference.
+All or some of: `lot_id` or `green_bean_id`; the V-set being cupped (e.g. `V3`); batch numbers for the slots (e.g. `187 / 188 / 189`); cupping date; roast date or stated rest days; the cupping transcript; whether the session was the standard house-style gate, a tie-break rebrew, a legacy xBloom read, or a peer-roasted reference cup; an optional explicit candidate / route preference.
 
 If batch numbers are present, use them to map notes back to slots. Do not rely on slot order alone when batch numbers are available.
 
@@ -147,8 +147,8 @@ Required mapping per slot:
 - `roast_id`: from STAGE 1 (NEVER the batch number).
 - `cupping_date`: `YYYY-MM-DD`.
 - `rest_days`: integer from roast date to cupping date.
-- `eval_method`: `"Pourover"` for the standard Day 7 xBloom gate; `"Cupping"` for the legacy bowl defect-screen; `"Simulated Pourover"` for an SPG cup.
-- `recipe_variant`: `"xbloom_gate"` when this is the standardized gate and a later real-pourover/SPG comparison is plausible; `"real_pourover"` for an optimized daily-consumption cup; a clear SPG label only to disambiguate variants (keep `eval_method: "Simulated Pourover"`); leave NULL only when a second same-day/same-method variant is unlikely. The composite key is NULLS NOT DISTINCT, so two unlabeled cuppings collapse into one row.
+- `eval_method`: `"Simulated Pourover"` for the standard Day 7 house-style gate and for a tie-break rebrew; `"Pourover"` for a legacy xBloom read or an optimized daily-consumption cup; `"Cupping"` for the legacy bowl defect-screen.
+- `recipe_variant`: `"house_style_gate"` for the standard gate; `"house_style_tiebreak"` for a top-two rebrew; `"real_pourover"` for an optimized daily-consumption cup; `"xbloom_gate"` only for a legacy xBloom read. Always label the gate row - a tie-break the same day shares `eval_method`. The composite key is NULLS NOT DISTINCT, so two unlabeled cuppings collapse into one row.
 - The ten prose fields: `aroma`, `flavor`, `acidity`, `sweetness`, `body`, `finish`, `overall`, `temperature_behavior`, `aromatic_behavior`, `structural_behavior`. (Definitions: `CONTEXT-roasting.md -> Cupping and cup-character interpretation`.) The transcript usually carries temperature-evolution + aromatic-presentation + structural observations — route those to `temperature_behavior` / `aromatic_behavior` / `structural_behavior`, NOT into `body` / `finish` / `overall`. `sweetness` is a distinct axis from `acidity` / `body` — don't fold it in.
 - `cooling_arc_pattern`: canonical 4-value enum for the SHAPE of the cooling arc, set ALONGSIDE the `temperature_behavior` prose (not instead of it). Pick `degrade` (cools worse — loses balance / turns bitter / flattens), `hold` (good and steady, no meaningful change), `improve` (opens up / gains sweetness / integrates better as it cools), or `flat` (low-amplitude, muted, little movement either way — distinct from `hold`). Per-value examples (backlog #44): `degrade` - "balanced hot, drying tannin takes over below ~50°C"; `hold` - "the honeyed core reads the same at 70°C and 40°C" (a GOOD cup staying good); `improve` - "florals closed hot, sweetness opens and integrates near 45°C"; `flat` - "muted at every temperature, little to gain or lose". The flat-vs-hold discriminator: `hold` requires quality that persists; `flat` is low amplitude - a flat cup is not a held cup. This is the queryable mirror of the prose so cross-lot "which lots cooling-arc degrade vs hold" works without regex. Leave NULL when the transcript doesn't speak to the cooling arc. A non-canonical value is rejected.
 - `ground_agtron` when Chris provides it. `wb_agtron` is auto-snapshot from the joined roast; `wb_to_ground_delta` is generated — report it in confirmation when available.
@@ -158,7 +158,7 @@ Rest-days drift (apply the row-level prose flag only; interpretation lives in `C
 - Day 7 target; Day 6-10 acceptable.
 - Hard server guard (Cluster 2 / migration 078): `push_cupping` / `patch_cupping` REJECT a `cupping_date` that is not at least 1 day after the roast's `roast_date`, a negative `rest_days`, or a `rest_days` that disagrees with `cupping_date − roast_date` by more than 1 day. This catches voice-to-text date slips (a bare "March 31" dictated with no day-of-week landing a negative rest). If a push is rejected for this, re-confirm the cupping_date with Chris rather than guessing — don't work around it by zeroing `rest_days`.
 - If `rest_days` is outside 6-10, or stated rest days don't match the dates, prefix `additional_notes`: `REST_DAYS_DRIFT: cupped Day <N>, off the Day 7 gate by <delta>`.
-- For cross-V-set SPG / runoff comparisons where an older candidate is structurally disadvantaged, also prefix the older row's `additional_notes`: `REST_DAYS_DRIFT_COMPARISON: SPG / candidate-runoff vs V_n at Day <N>, +<delta> days older`.
+- For cross-V-set tie-break / runoff comparisons where an older candidate is structurally disadvantaged, also prefix the older row's `additional_notes`: `REST_DAYS_DRIFT_COMPARISON: tie-break / candidate-runoff vs V_n at Day <N>, +<delta> days older`.
 
 UPSERT behavior: `push_cupping` UPSERTs on `(user_id, roast_id, cupping_date, eval_method, recipe_variant)`. Re-pushing is safe (`created: false`, fields NOT overwritten); use `patch_cupping` for corrections. Capture `cupping_id` + echoed `composite_key` per slot.
 
@@ -194,13 +194,13 @@ Field split: forward + actionable -> `what_changes_going_forward`; interrogative
 
 **Writes:** nothing (routing only).
 
-Choose exactly one path. (Conceptual definitions for all paths: `CONTEXT-roasting.md -> Pre-V_n calibration gate` and `-> Simulated Pourover Gate system`.)
+Choose exactly one path. (Conceptual definitions for all paths: `CONTEXT-roasting.md -> Pre-V_n calibration gate` and `-> House-style gate`.)
 
 ### Path A - Ready for close-out
 
-Route to `close-lot.md` (skip STAGES 6-7). Signals: the leading slot is a plausible lot-level reference roast; producer-notes ballpark + Chris's expectations are satisfied; diminishing returns (open questions don't point at a better region of the response surface); the leading slot held up at the Simulated Pourover Gate; often (not required) a control experiment already confirmed it.
+Route to `close-lot.md` (skip STAGES 6-7). Signals: the leading slot is a plausible lot-level reference roast; producer-notes ballpark + Chris's expectations are satisfied; diminishing returns (open questions don't point at a better region of the response surface); the leading slot is a **bracketed winner** at the house-style gate (a lighter sibling reads underdeveloped, a deeper sibling reads overdeveloped); often (not required) a control experiment already confirmed it. **Path A on V1 is the expected outcome on a seen-before lot** (fixed family curve + drop ladder - `cross-coffee-insights.md § First-V-set default`), not a suspect one.
 
-**Pre-declaration discipline (push-back duty).** Declaring `roasts.is_reference = true` is the load-bearing cross-domain workflow-transition gate (`CONTEXT-roasting.md -> Cross-domain workflow-transition gate`). Before confirming Path A, push back if any precondition is missing: (1) multiple V-set iterations done (Path A on V1 is suspect); (2) full Day 7 xBloom cupping done; (3) Simulated Pourover Gate cup-set done. When confirming Path A, print the preconditions as an affirmative check-line - e.g. `✓ 3 V-sets iterated / ✓ Day 7 xBloom cupping / ✓ SPG cup-set` - not just an absence of objections (backlog #44). If SPG hasn't run, push back: *"If you really want to declare this a reference roast, I suggest we do a simulated pourover recipe first,"* and re-route to the SPG path below. **One-shot exemption:** this push-back does NOT apply to one-shot lots.
+**Pre-declaration discipline (push-back duty).** Declaring `roasts.is_reference = true` is the load-bearing cross-domain workflow-transition gate (`CONTEXT-roasting.md -> Cross-domain workflow-transition gate`). Before confirming Path A, push back if any precondition is missing: (1) the gate ran as the house style on every slot, frozen recipe, read across the full cooling arc; (2) the leading slot is bracketed - if it sits at the edge of the ladder, the window is not yet found and V_(n+1) extends the ladder that direction (Path B); (3) the read was decisive, or a tie-break rebrew of the top two separated them; (4) on a novel lot (new variety or process family, or density / moisture outside the family's closed anchors) a single V-set is thinner evidence - say so, and let Chris make the call. When confirming Path A, print the preconditions as an affirmative check-line - e.g. `✓ house-style gate, 3 slots / ✓ bracketed (244 under, 246 over) / ✓ decisive` - not just an absence of objections (backlog #44). **One-shot exemption:** this push-back does NOT apply to one-shot lots.
 
 If routing to close-out (post-push-back-cleared): halt and tell Chris to run `close-lot.md`. Report STAGES 6-7 as "skipped - routing to close-out".
 
@@ -212,30 +212,18 @@ Continue to STAGE 6. Warranted when: open questions remain that V_(n+1) can answ
 
 **Peer cup advisory (not a route — demoted from the former Path C-1 gate, 2026-07-15):** when V_n landed in a plausible but uncalibrated zone and a peer-roasted version of the same green is available (or already in freezer stock — canonical case: Fazenda Um), *mention* that cupping it would be a valuable external calibration reference, then route Path B normally. The peer cup NEVER halts V_(n+1) design, never defers `winner`, and never touches `lot_status` — transfer value requires both the same green AND a compatible roast philosophy, which is rarely available, and the peer roast is one roaster's interpretation to calibrate against, not a target to match (`CONTEXT-roasting.md -> Pre-V_n calibration gate` + `-> Information value`). If a peer cup happens, it lands as a normal cupping/brew row alongside the lot's evidence.
 
-### Path C - Simulated Pourover Gate
+### Path C - Deferred tie-break rebrew
 
-Halt V_(n+1) design. The leading-slot identity (or the reference-roast call) is provisional pending a simulated-pourover cup on the real pourover setup. Full definition + trigger shapes (proactive: nearing the reference call, xBloom-vs-end-optimized delta too large to commit; reactive: cup-side discrimination missing or a wide WB->Ground delta raises a roast-quality concern): `CONTEXT-roasting.md -> Simulated Pourover Gate system`.
+The exception path. The gate read was close, the top two could not be separated, and the rebrew cannot happen in this session. (A rebrew done the same day is just more cupping rows - `recipe_variant: "house_style_tiebreak"` - and routes Path A or B directly; no Path C.) Definition: `CONTEXT-roasting.md -> House-style gate`.
 
-**Lifecycle at the handoff (two writes, both required):** (1) STAGE 4.3 has set `winner` to the canonical sentinel `deferred pending SPG`; (2) flip the stored state with `patch_green_bean(green_bean_id, lot_status: 'waiting_for_brewing')` — the ball is in the brewing court and no row write implies the transition, so this explicit patch is what keeps `check:lifecycle-consistency` green (the sentinel pushes the derived state to `waiting_for_next_roast`; `waiting_for_brewing` is the designed exception for exactly this pair).
+Halt V_(n+1) design. **Lifecycle at the deferral (two writes, both required):** (1) STAGE 4.3 has set `winner` to the canonical sentinel `deferred pending SPG`; (2) flip the stored state with `patch_green_bean(green_bean_id, lot_status: 'waiting_for_brewing')` - no row write implies the transition, so this explicit patch is what keeps `check:lifecycle-consistency` green (the sentinel pushes the derived state to `waiting_for_next_roast`; `waiting_for_brewing` is the designed exception for exactly this pair). The sentinel strings are historical names and are not renamed.
 
-The SPG **recipe is not designed here** — it is dialed in a dedicated brewing thread running `simulated-pourover.md`. This prompt emits a thin handoff packet and stops. Cup-set logic (V_n winner + secondary contender + optional V_(n-1) winner) decides the finalists.
+Nothing is handed to a brewing thread and no packet is emitted: the recipe is the house style, already known. Name the two finalists (gate favorite + the roast-side structural favorite when they diverge; a V_(n-1) leading slot may join as a control baseline) and the one-line thing the rebrew should separate, then stop.
 
-Emit the **SIMULATED POUROVER PACKET** for the operator to paste into a fresh `simulated-pourover.md` thread — exactly these lines, no cupping notes / roast data / recipe (the brewing side derives the recipe from the green + lot history):
+**Re-entry contract.** The lot re-enters this prompt when Chris returns with the verdict; push the rebrew cup-set as cupping rows (STAGE 3: `eval_method: "Simulated Pourover"`, `recipe_variant: "house_style_tiebreak"`, one row per finalist) in both outcomes below (a negative result is still roast evidence). Then, before routing, drain the deferred-proposal markers (STAGE 7 partial-write rule): grep the experiment's `additional_notes` for `DEFERRED_PROPOSAL:` lines and draft each as a `propose_doc_changes` item now that the winner is known. Then:
 
-```text
-SIMULATED POUROVER PACKET
-- green_bean_id: <the lot's green_bean_id>
-- lot: <name / lot_id>
-- finalist batches: <finalists, e.g. 191, 192>
-- intent: <diagnostic — what's wrong with the current gate read> + <test — what the SPG should differentiate>
-```
-
-The `intent` line is two-part: a **diagnostic** (what's wrong with the current gate read — e.g. "xbloom amplifying dark-tea, masking deeper producer notes") and a **test** (what the SPG should differentiate — e.g. "which roast preserves the bright/berry side under non-dark-leaning extraction"). Do NOT duplicate producer / origin / process in the intent — the brewing side fetches the green via `get_green_bean` for full lot context.
-
-**Re-entry contract (the SPG process is NOT recorded — only the decisive outcome re-enters).** Intermediate SPG iterations (a hard-to-call gate may take an extra brew or two) stay in the SPG brewing thread, archive-driven. The lot re-enters this prompt when Chris returns with the verdict; push only the **decisive cup-set** — the one the verdict was called on — as cupping rows with `eval_method: 'Simulated Pourover'` (one row per finalist `roast_id`), in BOTH outcomes (a negative result is still roast evidence). The SPG free-text note goes in the cupping's `overall` prose, PREFIXED with the canonical phrasing `SPG: brewed alongside <finalist sibling roast_id> at <SPG recipe>` ahead of the cup verdict (backlog #45a - the cuppings table has NO `additional_notes` column; `eval_method` is the queryable key, the `overall` prefix carries the recipe + sibling pairing). See `CONTEXT-roasting.md -> eval_method: 'Simulated Pourover'`. Then resolve per outcome:
-
-- **Clear winner:** patch `winner` from the sentinel to the real slot (`V<n><letter> (Batch <Roest#>)`); re-assess `is_reference_candidate` on the winning roast (STAGE 4.5); patch `delta_from_cup_*` where the SPG read changes them; route Path A (close-out) — `lot_status` advances via `close-lot.md`.
-- **No winner (SPG eliminated all finalists):** patch `winner` to the exact canonical string `none - SPG eliminated all finalists` — the record must show the deferral resolved negative, never leave the sentinel dangling; route Path B (design V_(n+1)) — `lot_status` flips back to `waiting_for_next_roast` when `push_experiment` lands.
+- **Clear winner:** patch `winner` from the sentinel to the real slot (`V<n><letter> (Batch <Roest#>)`); re-assess `is_reference_candidate` on the winning roast (STAGE 4.5); patch `delta_from_cup_*` where the rebrew read changes them; route Path A (close-out) — `lot_status` advances via `close-lot.md`.
+- **No winner (the rebrew eliminated both finalists):** patch `winner` to the exact canonical string `none - SPG eliminated all finalists` — the record must show the deferral resolved negative, never leave the sentinel dangling; route Path B (design V_(n+1)) — `lot_status` flips back to `waiting_for_next_roast` when `push_experiment` lands.
 
 On either re-entry, also drain the deferred proposals: read the experiment's `additional_notes` for `DEFERRED_PROPOSAL:` lines and run each through STAGE 7 now that the winner is known (see STAGE 7's partial-write rule).
 
@@ -281,10 +269,10 @@ Post-cupping is the natural moment for cluster-doc updates — cup signal is the
 
 Fetch live anchors via `read_doc` (or `read_doc_section`) BEFORE drafting. Submit ONE multi-citation `propose_doc_changes` call with per-citation `target_doc: "skills/<cluster-path>.md"` (the `'roasting.md'` target is deprecated). Citations: `[{section_anchor, operation, proposed_text, current_text, rationale, target_doc?}]` (the tool's citation field is named `operation`, NOT `op`; `rationale` is also required per citation).
 
-**Partial-write rule when the SPG fired (replaces the old blanket skip, 2026-07-15):** classify each candidate proposal by one test — **does its content depend on the leading-slot identity?**
+**Partial-write rule when a tie-break is deferred (Path C; replaces the old blanket skip, 2026-07-15):** classify each candidate proposal by one test — **does its content depend on the leading-slot identity?**
 
-- **Winner-INDEPENDENT → land it now:** the active-lot status flip ("V_n cupped, SPG fired, finalists <ids>, awaiting verdict" — this is the line that keeps the active-lot doc from reading stale), cup findings true regardless of which finalist wins (e.g. observed on all finalists), and CCIL violations (a rule breach at cupping is a fact about the roast, not the verdict).
-- **Winner-DEPENDENT → defer:** key-insight promotion to cluster docs, anything phrased around the leading slot / winner, close-out-adjacent edits. For each deferred item, APPEND one grep-able line to the experiment's `additional_notes` via `patch_experiment`: `DEFERRED_PROPOSAL: <target doc> - <one-line gist>`. The SPG re-entry drains these mechanically (Path C re-entry contract).
+- **Winner-INDEPENDENT → land it now:** the active-lot status flip ("V_n cupped, tie-break deferred, finalists <ids>, awaiting verdict" — this is the line that keeps the active-lot doc from reading stale), cup findings true regardless of which finalist wins (e.g. observed on all finalists), and CCIL violations (a rule breach at cupping is a fact about the roast, not the verdict).
+- **Winner-DEPENDENT → defer:** key-insight promotion to cluster docs, anything phrased around the leading slot / winner, close-out-adjacent edits. For each deferred item, APPEND one grep-able line to the experiment's `additional_notes` via `patch_experiment`: `DEFERRED_PROPOSAL: <target doc> - <one-line gist>`. The Path C re-entry drains these mechanically (Path C re-entry contract).
 - **Defer on doubt:** a deferred proposal costs one re-entry write; a wrong landed proposal costs an arbiter reversal.
 
 **Skip entirely** and report why when: V_(n+1) is designed to directly test the insight; or `key_insight_confidence` is Low (Low belongs in `additional_notes`, not cluster docs — the CCIL append threshold is Medium minimum). Print `STAGE 7: skipped - <reason>` (or `STAGE 7: partial - <landed n> landed, <deferred n> deferred pending SPG`). Don't fabricate a proposal to fill the stage. AVOID editing close-out artifacts (Recently Closed Lots, Reference Brew Recipes) — those are `close-lot.md`'s.
@@ -299,12 +287,12 @@ Print a compact confirmation:
 
 - `green_bean_id`, `lot_id`, `v_set`.
 - STAGE 0: backfill summary, or `skipped - fresh-from-rewrite lot`.
-- **V_n close-out:** per cupped slot — `cupping_id`, `composite_key`, `ground_agtron` + WB->Gnd delta, leading-slot one-liner; the `experiment_pk` + `updated_fields`; `winner` (`V<n><letter> (Batch <Roest#>)`, OR the exact sentinel `deferred pending SPG` when the SPG fired and the leading slot is unresolved — never a slot id in that case); `key_insight` + `key_insight_confidence`; reference-candidate patch (`roast_id`, `is_reference_candidate`), or `none — winner deferred` when the SPG fired.
-- **Route:** Path A / Path B / Path C (Simulated Pourover Gate).
+- **V_n close-out:** per cupped slot — `cupping_id`, `composite_key`, `ground_agtron` + WB->Gnd delta, leading-slot one-liner; the `experiment_pk` + `updated_fields`; `winner` (`V<n><letter> (Batch <Roest#>)`, OR the exact sentinel `deferred pending SPG` when a tie-break is deferred and the leading slot is unresolved — never a slot id in that case); `key_insight` + `key_insight_confidence`; reference-candidate patch (`roast_id`, `is_reference_candidate`), or `none — winner deferred` when the SPG fired.
+- **Route:** Path A / Path B / Path C (deferred tie-break rebrew).
 - **If Path B:** `experiment_pk` (V_(n+1)) + `experiment_id`; per slot `recipe_id` / `batch_slot` / `roest_profile_id` / `roest_share_url` / end condition / design prediction; a Roest tablet name table (`| Slot | Profile name | End condition | Roest URL |`).
-- **If Path C:** the SIMULATED POUROVER PACKET + the re-entry instruction + confirmation the two handoff writes landed (`winner` sentinel + `lot_status: 'waiting_for_brewing'`).
+- **If Path C:** the two finalists + what the rebrew should separate + the re-entry instruction + confirmation the two deferral writes landed (`winner` sentinel + `lot_status: 'waiting_for_brewing'`).
 - STAGE 7: `proposal_id`, `skipped - <reason>`, or `partial - <landed n> landed, <deferred n> deferred pending SPG`.
-- Lifecycle state confirmation: Path A -> "Resolved-pending. Next: `close-lot.md`." Path B -> "Waiting for next roast. Next: roast V_(n+1), then `log-roast.md`." Path C -> "In brewing (`waiting_for_brewing`). Next: SPG in a `simulated-pourover.md` thread, then re-enter `log-cupping.md` with the verdict."
+- Lifecycle state confirmation: Path A -> "Resolved-pending. Next: `close-lot.md`." Path B -> "Waiting for next roast. Next: roast V_(n+1), then `log-roast.md`." Path C -> "Tie-break pending (`waiting_for_brewing`). Next: rebrew the two finalists in the house style, then re-enter `log-cupping.md` with the verdict."
 - Any missing data / assumptions, rest-days-drift flags applied, skipped cuppings, and fields left NULL for weak transcript evidence.
 
 ---

@@ -13,7 +13,7 @@ in_inventory → waiting_for_next_roast ⇄ waiting_for_next_cupping → waiting
 ```
 
 - Reuse the existing state names (`waiting_for_next_roast` / `waiting_for_next_cupping`) so consumers don't churn. (ADR-0024 abbreviated them for brevity; the column uses the existing full names.)
-- **One catch-all `waiting_for_brewing`** — do NOT split SPG-wait vs optimized-brew-wait. The Brief holds *which* brewing task; the DB shows the coarse "ball is in the brewing court" signal.
+- **One catch-all `waiting_for_brewing`** — do NOT split tie-break-wait (formerly SPG-wait) vs optimized-brew-wait. The Brief holds *which* brewing task; the DB shows the coarse "ball is in the brewing court" signal.
 - One-shot variants map onto the same set (an N=1 lot).
 
 ## The guardrails (recover derived's can't-drift virtue)

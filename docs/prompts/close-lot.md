@@ -107,7 +107,7 @@ The optimized brew is the daily-consumption recipe Chris dialed in for the refer
 
 For field-level edits to a brew already pushed, prefer `patch_brew`.
 
-The optimized brew lights up the resolved-view's "Reference Cup" + "Optimized Brew" sub-cards. The reference cup (xBloom gate at day-7) is sourced from the matching `cuppings` row on the reference roast (pushed previously via `log-cupping.md` with `recipe_variant: "xbloom_gate"`); the optimized brew is THIS push.
+The optimized brew lights up the resolved-view's "Reference Cup" + "Optimized Brew" sub-cards. The reference cup (the day-7 house-style gate cup) is sourced from the matching `cuppings` row on the reference roast (pushed previously via `log-cupping.md` with `eval_method: "Simulated Pourover"`, `recipe_variant: "house_style_gate"`; `"xbloom_gate"` on lots cupped before 2026-11-13); the optimized brew is THIS push - usually that same cup, recorded as a brew.
 
 ## STAGE 4 - Write the per-lot roast learnings row
 
