@@ -1,0 +1,63 @@
+# Roasting Brief - 96B Liberica Anaerobic (vtn-96b-liberica-an-2026)
+
+**green_bean_id:** `e3811972-bfaf-4b71-91cb-9a2feb8fd73a` · **lot_status:** in_inventory (flips to waiting_for_next_roast when V1 is staged) · **Started:** 2026-11-15 · **Roest inventory:** 12498
+
+First Liberica in the archive. Species-level exploratory lot with a generous budget (5000 g, about 50 batches at 100 g).
+
+## Anchor
+
+- Liberica / 120 hr anaerobic fermentation, two-phase drying, 4-week post-drying rest / 96B Coffee Company (Hana & Thai) via Chloe Ca Phe / Vietnam, Huong Phung, Quang Tri, 600 masl. Terroir and cultivar rows are both `auto_created` provenance.
+- Density 817 g/L / moisture 10.2% (measured 2026-11-15, written to the row).
+- Producer tasting notes (the verify-on-track anchor): **herbal, dry fruit, black licorice, low acidity.** Chloe recommends pour-over or espresso.
+- Operator green read (2026-11-15): beans are **very small** (surprising against the 817 g/L reading, and against the usual large-bean picture of Liberica - worth a second look at whether this is an Excelsa-type selection; unverified), **brownish rather than green**, with a clear **process smell** and black licorice already audible on the green.
+- Operator prior cup: has had this roaster's Liberica as a cortado - tasty and unique. No filter-roast reference cup of this lot. One other Liberica datapoint sits in freezer stock (One Half Malaysia Liberica Lot 004 JH Natural), not yet cupped as a reference.
+- Closest prior lot: **none that transfers.** Seen-before test fails on every leg (no closed Liberica, no closed lot from this terroir). Anchor confidence **Low**. The heavy-ferment family (Mandela XO Batch 139, then Bukure AN10) is used as a **mechanical anchor only**: curve shape, shaped fan, bean_temp end condition, silent-FC handling. Its trigger numbers, color model, ceiling and overdevelopment signature are NOT assumed to transfer.
+
+## Strategic arc
+
+**What the lot is for (operator, 2026-11-15):** a species baseline - learn how Liberica roasts and cups on this machine - with the aim of ending at a roast Chris actually drinks. Target expression: **more jackfruit, less smoky.** The roaster's own version worked in a milk drink, which may mean their roast leans developed; whether the filter-apex version sits lighter is an open question this lot answers.
+
+**Apex framing.** The layered-evolving apex still governs the reference call, but on a species with low-medium terroir transparency and a heavy ferment the realistic first question is simpler: *is there a development depth where the fruit (jackfruit / dry fruit) leads and the smoky / woody / licorice-bitter side recedes?* Smoky is treated as ambiguous until V1 reads it - it may be roast-injected (overdevelopment) or inherent to species and process. The ladder separates the two: if smoke rises with drop depth it is roast; if it sits in every slot it is the bean.
+
+**Forward design.**
+- V1 maps development depth wide on one fixed curve. No slot is expected to be the reference.
+- V2 narrows on whichever side of the ladder leads (1-2°C steps), or changes the curve if V1's roast logs show the energy was wrong (FC timing far off the model, stalls, racing).
+- With this budget the lot can afford V3+ and side probes (a deliberately developed "cortado" roast; larger batches once a reference exists). It also feeds two downstream things: the deferred Que Liberica Honey lot (blocked on this baseline) and the blending prototype lane, where Liberica is a body component.
+
+## V-set log (the plan-state)
+
+- **V1 - PROPOSED 2026-11-15, awaiting operator ratification. Not yet staged** (no experiment row, no recipe rows, no Roest profiles). Once staged, the numbers below live in the DB and this block shrinks to intent + pointers.
+  · design intent: **wide development-depth map.** One fixed inlet curve, three slots that differ only in the bean_temp auto-drop, 4°C apart (double the seen-before 2°C step, because the anchor is a guess).
+  · curve (all slots): inlet 195 → 228 (1:15) → 237 (2:30) → **242 peak** (3:15) → 239 (4:00) → 234 (5:00) → 229 (6:00) → 226 (7:00). Heavy-ferment family shape; early points held gentle for the low moisture and the very small beans (both push toward a fast, racing roast); tail sustained rather than standard so the deep slot still has momentum to reach its trigger.
+  · fan 80 → 68 (1:45) → 63 (2:30) → 70 (4:15) → 73 (5:30) (heavy-ferment curve); RPM 65 flat; preheat 210; hopper load 125; 100 g.
+  · drop ladder: **v1a 204°C / v1b 208°C / v1c 212°C**, BEAN_TEMP auto-drop (FC expected silent-to-subtle on a 120 hr anaerobic, so no dev-time end condition).
+  · drop rules: fast = let it auto-drop, do not intervene (all slots). Slow = drop at 5:15 (a) / 5:45 (b) / 6:30 (c).
+  · predictions (Low confidence, the point of V1 is to replace them): FC around 4:25-4:45 near 203-205°C if it is audible at all. v1a = at-or-just-past FC onset, lightest, likely herbal / raw-ferment forward and thin, the under wall. v1b = the fruit window if there is one - jackfruit / dry fruit over licorice, syrupy body. v1c = the developed end, heavy body, smoky / woody / licorice-bitter, the over wall and probably closest to the roaster's cortado style.
+  · gate: Day-7 Latent house style on all three slots.
+  · status: proposed.
+
+## Current state + next step
+
+Intake is done: readings recorded, Roest inventory 12498 created and linked, pre-roast read captured. **Next action: Chris ratifies or amends the proposed V1** (open forks below). On ratification the Coordinator writes the experiment row + three recipe rows, pushes three Roest profiles, emits the V-set Handoff Packet + operator prep packet, and `lot_status` moves to waiting_for_next_roast.
+
+Open forks on V1:
+1. **Single-axis drop ladder (proposed) vs a diagonal** that also varies peak inlet across slots. The ladder gives a clean depth read and the three roast logs still show whether the energy was right; the diagonal covers more surface but confounds energy with depth.
+2. **Ladder placement** 204 / 208 / 212. Shift down 2°C if the worry is smoke; shift up if the cortado memory says this bean wants development.
+3. **Three slots or four.** Budget allows a fourth (for example 216, or a 200 pre-FC probe).
+
+## Open questions / carry-forward
+
+- Is smoky roast-injected or inherent? (V1 ladder answers.)
+- Does FC fire audibly at all? If not, the bean_temp ladder is the only development ruler and dev-time numbers are not available.
+- The very small bean size against 817 g/L: do the beans race the probe (reading light for a given trigger, as the low-density Deborah lot did) or read true? V1 color-per-degree slope answers.
+- Bean identity: small beans are unusual for Liberica. Ask Chloe / 96B if it becomes relevant to the taxonomy row.
+- Brief location: recent lots keep their working doc in `roasting-historian/cluster/active-lots/`; this lot follows the Coordinator skill and lives here. Reconcile at close-out if the learnings fold needs an active-lots stub.
+
+## Cross-domain handoffs
+
+- Tie-break rebrew: not-needed
+- Optimized brew: not-started
+
+## Close-out (when resolved)
+
+Not yet.
