@@ -2,7 +2,7 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
-**Status:** Active - V1 cupped 2026-11-11, winner V1B (Batch 239, reference candidate); V2 designed, waiting for next roast
+**Status:** Active - V2 roasted 2026-11-15 (batches 247/248/250), waiting for next cupping (Day 7 target 2026-11-22)
 **Cultivar:** Geisha · **Terroir:** Honduras / Santa Bárbara-Yojoa Highlands / Finca El Itacayo, El Dorado, ~1,600-1,730m · **Process:** Natural, Dark Room Dried
 **Green spec:** density 802 g/L (high), moisture 9.5% (low). 1000g from Kumquat ($143/kg). Producer notes: Mango, Nectarine, Blackberry, Lemongrass.
 **Peer reference:** companion roasted bag (roasted 2026-07-24) MISPLACED as of 2026-11-03 - proceeding without a peer cup; producer notes + Deborah/Wush Wush fingerprints are the vocabulary priors. Cup it before the Day-7 gate if it turns up.
@@ -48,6 +48,23 @@ What V1 resolved (Medium confidence):
 Chris's call: push development slightly above 239, below 240. Single-variable control-style sweep - identical V1 curve, bean_temp ladder **207.5 / 208 / 208.5** (0.5°C steps, lower third of the 207-209.3 gap). Control baseline is V1B. Primary question: does a touch more dev integrate mango/deeper sweetness without the 240 roast edge - where is the knee? Win condition: beat a cup Chris already loves; drop rules say trust the auto-drop (no v1c-style hold - 240 already mapped the far side; slow-side manual caps 5:45 / 5:45 / 6:00).
 
 Experiment `HND-ARTUROPAZ-GESHA-DRD-NAT-2026-V2` (`87397313-6759-4560-94ad-62144f54acfc`); recipes `876380a7` (v2a, 207.5) / `aff73a4a` (v2b, 208, predicted leader) / `7aea98ef` (v2c, 208.5, knee probe); Roest profiles 633491 / 633492 / 633493 ("Paz Gesha - v2a/b/c"); cuppings `55da1dbd` (238) / `be7f832d` (239) / `99324d19` (240).
+
+## V2 roast actuals (2026-11-15)
+
+| Slot | Batch | FC | Drop | Dev | WB Agtron | WL% | End condition |
+|---|---|---|---|---|---|---|---|
+| v2a | 247 | 4:40 / 206.9°C | 4:46 / 207.52°C | 6s | 81.9 | 10.0 | bean_temp 207.5 (auto) |
+| v2b | 248 | 4:03 / 200.4°C | 5:01 / 208.01°C | 58s | 78.4 | 10.4 | bean_temp 208 (auto) |
+| v2c | 250 | 4:24 / 204.0°C | 5:10 / 208.55°C | 46s | 77.3 | 10.9 | bean_temp 208.5 (auto) |
+
+Roast-layer facts (cupping-independent):
+
+- **FC variance is now the lot's defining roast-layer property**: 200.4-206.9°C across five identical-curve batches. The drop-temp ladder no longer maps monotonically onto dev time (6 / 58 / 46s across 207.5 / 208 / 208.5) - if V3 needs a precise dev target, a dev-time end condition is the candidate mechanism.
+- **v2a executed as an FC-onset roast** (FC 6s before trigger) - an accidental ~238 replicate at +2 WB color, not the designed "239 plus a little".
+- **v2b/v2c decoupled dev time from color** (58s @ 78.4 vs 46s @ 77.3) - the cup pair can attribute Batch 240's roast-forward failure to color vs dev time.
+- All three auto-drops honest and dead on target; WL ceiling untouched (max 10.9% vs 240's 11.3% failure point).
+
+Roasts: v2a batch 247 `f426db1c` (log 4275734) / v2b batch 248 `ded5d291` (log 4275744) / v2c batch 250 `6be85a2b` (log 4275765).
 
 ## V1 substrate
 
