@@ -31,7 +31,8 @@ First Liberica in the archive. Species-level exploratory lot with a generous bud
   · slot roles: v1a = light wall at the expected FC zone; v1b = centre, the fruit window if one exists; v1c = deep wall and the smoke test. No slot is expected to be the reference. All predictions Low confidence.
   · gate: Day-7 Latent house style on all three slots.
   · status: **roasted 2026-11-15 (batches 254 / 255 / 256), resting for the Day-7 gate (2026-11-22).** Roast rows, deltas and post-roast cup re-predictions are on the experiment row.
-  · roast-side read: the whole set landed **lighter than designed** - this bean stays light for its bean-temp trigger (the small-bean racing-probe effect flagged at intake). The ladder mapped under / light / moderate, not under / middle / over, so **the over-development wall is not yet found.** FC was audible; one clean mark puts onset early on this curve (v1b). v1a dropped at onset. v1c never reached its trigger - the curve stalls just short of it - and was stopped manually late, with a long low-RoR finish (baked risk, not smoky risk) and an unreliable FC mark. Colour readings are suspect on these very small beans (operator observation; v1a and v1b read almost identical); **weight loss is the development ruler for this lot** until colour is sorted.
+  · roast-side read: the whole set landed **lighter than designed** - this bean stays light for its bean-temp trigger (the small-bean racing-probe effect flagged at intake). The ladder mapped under / light / moderate, not under / middle / over, so **the over-development wall is not yet found.** v1c never reached its trigger - the curve stalls just short of it - and was stopped manually late, with a long low-RoR finish (baked risk, not smoky risk).
+  · **measurement finding (operator, 2026-11-15): both of the usual rulers are unreliable on this lot.** Cracks are few and quiet - hard to hear, and the machine's detection struggled too (v1a none heard, v1b one logged mark, v1c a single crack around six minutes) - so FC time, FC temp and dev time are all soft. Colour is inconsistent because the beans are so small (v1a and v1b read almost identical). **Design and read this lot on end temperature, weight loss and total time**; treat crack and colour numbers in the DB as soft.
 
 ## Current state + next step
 
@@ -44,7 +45,7 @@ Forks considered at V1 design and closed by the operator: single-axis drop ladde
 ## Open questions / carry-forward
 
 - Is smoky roast-injected or inherent? (V1 ladder answers.)
-- Does FC fire audibly at all? If not, the bean_temp ladder is the only development ruler and dev-time numbers are not available.
+- FC audibility: answered at V1 - cracks are few and quiet, not a usable ruler. Every future slot on this lot uses a bean_temp end condition with a clock-time slow rule; never a dev-time end condition.
 - The very small bean size against 817 g/L: do the beans race the probe (reading light for a given trigger, as the low-density Deborah lot did) or read true? V1 color-per-degree slope answers.
 - Bean identity: small beans are unusual for Liberica. Ask Chloe / 96B if it becomes relevant to the taxonomy row.
 - Brief location: recent lots keep their working doc in `roasting-historian/cluster/active-lots/`; this lot follows the Coordinator skill and lives here. Reconcile at close-out if the learnings fold needs an active-lots stub.
