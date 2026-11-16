@@ -1,6 +1,6 @@
 # Roasting Brief - Lamastus El Burro Geisha Natural Lot #16 (pan-lamastus-elburro-gesha-nat-2026)
 
-**green_bean_id:** `0d1440c2-33e5-4d7f-bb7f-198d6bae538f` · **lot_status:** in_inventory (V1 proposed, not yet written) · **Started:** 2026-11-15 · **Roest inventory:** 12500
+**green_bean_id:** `0d1440c2-33e5-4d7f-bb7f-198d6bae538f` · **lot_status:** waiting_for_next_roast · **Started:** 2026-11-15 · **Roest inventory:** 12500
 
 ## Anchor
 
@@ -24,14 +24,13 @@ The open risk specific to this lot is drying: the Deborah curve's gentler early 
 
 ## V-set log (the plan-state)
 
-- **V1** - status: **proposed to Chris 2026-11-15, awaiting his pick; nothing written to the DB or Roest yet.**
-  - Recommended: Deborah reference curve verbatim, three-slot bean-temp drop ladder in 2°C steps centred on the trigger both the Deborah close-out calibration and the Los Lajones reference point at. Outer slots are walls meant to fail.
-  - Alternative offered: keep the light and centre rungs, and spend the third slot on the hotter Maya / Los Lajones curve at the centre trigger - a drying-energy hedge for the moisture, at the cost of the deep wall.
-  - Deviation to record whichever way it goes: the lot is novel by the letter of the seen-before test, and the recommendation is still the narrow fixed-curve ladder, on the grounds that the density-matched anchor exists and moisture has not moved timing on any closed lot.
+- **V1** - design intent: Deborah reference curve verbatim, three-slot bean-temp drop ladder in 2°C steps centred on the trigger both the Deborah close-out calibration and the Los Lajones reference point at; the outer slots are walls meant to fail. · status: **designed 2026-11-15, staged, awaiting roast** · experiment `PAN-LAMASTUS-ELBURRO-GESHA-NAT-2026-V1` (`6788b723-d054-4315-a798-1d8346d80e94`); recipe rows v1a/b/c and Roest profiles "El Burro - v1a/b/c" are in the DB.
+  - Operator call (Chris, 2026-11-15): the lot is novel by the letter of the seen-before test, and he chose the narrow fixed-curve ladder anyway over a curve-hedge alternative (third slot on the hotter Maya / Los Lajones curve at the centre trigger). Grounds: a density-matched anchor exists, and moisture has not moved timing on any closed lot. Cost accepted: V1 does not isolate the drying question.
+  - Route reading: bracketed winner at the centre -> declare reference. Winner at an edge -> extend the ladder that way, same curve. All three incoherent / lactic -> the curve under-dried; V2 changes early energy, not the trigger.
 
 ## Current state + next step
 
-Intake done: readings + elevation on the row, Roest inventory mirror created and linked. **Next:** on Chris's pick, pull the Deborah reference recipe (Roest profile "Deborah - v2a") for the exact curve points, then `push_experiment` (V1 frame) + three `push_roast_recipe` rows with drop rules + three `push_roast_profile` pushes, and emit the V-set Handoff Packet + operator prep packet. `lot_status` advances on the experiment write.
+Intake done and V1 staged. The V-set Handoff Packet + operator prep packet were emitted to Chris on 2026-11-15. **Next:** Chris roasts V1 in a V-Set Assistant session; a fresh Coordinator session consumes the Results Packet, resolves the three-point deltas, and routes.
 
 ## Open questions / carry-forward
 
