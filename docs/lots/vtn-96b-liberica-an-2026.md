@@ -1,6 +1,6 @@
 # Roasting Brief - 96B Liberica Anaerobic (vtn-96b-liberica-an-2026)
 
-**green_bean_id:** `e3811972-bfaf-4b71-91cb-9a2feb8fd73a` · **lot_status:** in_inventory (flips to waiting_for_next_roast when V1 is staged) · **Started:** 2026-11-15 · **Roest inventory:** 12498
+**green_bean_id:** `e3811972-bfaf-4b71-91cb-9a2feb8fd73a` · **lot_status:** waiting_for_next_roast · **Started:** 2026-11-15 · **Roest inventory:** 12498
 
 First Liberica in the archive. Species-level exploratory lot with a generous budget (5000 g, about 50 batches at 100 g).
 
@@ -26,24 +26,17 @@ First Liberica in the archive. Species-level exploratory lot with a generous bud
 
 ## V-set log (the plan-state)
 
-- **V1 - PROPOSED 2026-11-15, awaiting operator ratification. Not yet staged** (no experiment row, no recipe rows, no Roest profiles). Once staged, the numbers below live in the DB and this block shrinks to intent + pointers.
-  · design intent: **wide development-depth map.** One fixed inlet curve, three slots that differ only in the bean_temp auto-drop, 4°C apart (double the seen-before 2°C step, because the anchor is a guess).
-  · curve (all slots): inlet 195 → 228 (1:15) → 237 (2:30) → **242 peak** (3:15) → 239 (4:00) → 234 (5:00) → 229 (6:00) → 226 (7:00). Heavy-ferment family shape; early points held gentle for the low moisture and the very small beans (both push toward a fast, racing roast); tail sustained rather than standard so the deep slot still has momentum to reach its trigger.
-  · fan 80 → 68 (1:45) → 63 (2:30) → 70 (4:15) → 73 (5:30) (heavy-ferment curve); RPM 65 flat; preheat 210; hopper load 125; 100 g.
-  · drop ladder: **v1a 204°C / v1b 208°C / v1c 212°C**, BEAN_TEMP auto-drop (FC expected silent-to-subtle on a 120 hr anaerobic, so no dev-time end condition).
-  · drop rules: fast = let it auto-drop, do not intervene (all slots). Slow = drop at 5:15 (a) / 5:45 (b) / 6:30 (c).
-  · predictions (Low confidence, the point of V1 is to replace them): FC around 4:25-4:45 near 203-205°C if it is audible at all. v1a = at-or-just-past FC onset, lightest, likely herbal / raw-ferment forward and thin, the under wall. v1b = the fruit window if there is one - jackfruit / dry fruit over licorice, syrupy body. v1c = the developed end, heavy body, smoky / woody / licorice-bitter, the over wall and probably closest to the roaster's cortado style.
+- **V1 - STAGED 2026-11-15** (operator ratified as proposed). Experiment `VTN-96B-LIBERICA-AN-2026-V1` (pk `0ebc151c-1a2e-45ec-bd89-5a027828a90a`); recipes v1a / v1b / v1c (`facf8d0b` / `0ab6b929` / `a566fb94`); Roest profiles **635792 / 635793 / 635794** ("Liberica 96B - v1a/b/c"). All numbers live in those rows.
+  · design intent: **wide development-depth map.** One fixed inlet curve on the heavy-ferment family shape (early energy held gentle for low moisture + very small beans; tail sustained so the deep slot keeps momentum), three slots that differ only in the bean_temp auto-drop, 4°C apart - double the seen-before step because the anchor is a guess. BEAN_TEMP end condition because FC is expected silent-to-subtle.
+  · slot roles: v1a = light wall at the expected FC zone; v1b = centre, the fruit window if one exists; v1c = deep wall and the smoke test. No slot is expected to be the reference. All predictions Low confidence.
   · gate: Day-7 Latent house style on all three slots.
-  · status: proposed.
+  · status: designed, waiting for roast.
 
 ## Current state + next step
 
-Intake is done: readings recorded, Roest inventory 12498 created and linked, pre-roast read captured. **Next action: Chris ratifies or amends the proposed V1** (open forks below). On ratification the Coordinator writes the experiment row + three recipe rows, pushes three Roest profiles, emits the V-set Handoff Packet + operator prep packet, and `lot_status` moves to waiting_for_next_roast.
+V1 is staged and the lot is waiting for roast. **Next action: Chris roasts V1 in a V-Set Assistant session** (Handoff Packet emitted 2026-11-15), cups at Day 7 on the house-style gate, and pastes the Results Packet into a fresh Coordinator session, which resolves the deltas and routes.
 
-Open forks on V1:
-1. **Single-axis drop ladder (proposed) vs a diagonal** that also varies peak inlet across slots. The ladder gives a clean depth read and the three roast logs still show whether the energy was right; the diagonal covers more surface but confounds energy with depth.
-2. **Ladder placement** 204 / 208 / 212. Shift down 2°C if the worry is smoke; shift up if the cortado memory says this bean wants development.
-3. **Three slots or four.** Budget allows a fourth (for example 216, or a 200 pre-FC probe).
+Forks considered at V1 design and closed by the operator: single-axis drop ladder over a peak-inlet diagonal; ladder placed at 204 / 208 / 212; three slots, not four.
 
 ## Open questions / carry-forward
 
