@@ -2,7 +2,7 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
-**Status:** Active - V2 roasted 2026-11-15 (batches 247/248/250), waiting for next cupping (Day 7 target 2026-11-22)
+**Status:** Active - V2 cupped 2026-11-23 on the real-pourover gate, winner V2B (Batch 248, reference candidate); route decision pending (close-out with 248 vs 239-vs-248 runoff vs V3)
 **Cultivar:** Geisha · **Terroir:** Honduras / Santa Bárbara-Yojoa Highlands / Finca El Itacayo, El Dorado, ~1,600-1,730m · **Process:** Natural, Dark Room Dried
 **Green spec:** density 802 g/L (high), moisture 9.5% (low). 1000g from Kumquat ($143/kg). Producer notes: Mango, Nectarine, Blackberry, Lemongrass.
 **Peer reference:** companion roasted bag (roasted 2026-07-24) MISPLACED as of 2026-11-03 - proceeding without a peer cup; producer notes + Deborah/Wush Wush fingerprints are the vocabulary priors. Cup it before the Day-7 gate if it turns up.
@@ -65,6 +65,22 @@ Roast-layer facts (cupping-independent):
 - All three auto-drops honest and dead on target; WL ceiling untouched (max 10.9% vs 240's 11.3% failure point).
 
 Roasts: v2a batch 247 `f426db1c` (log 4275734) / v2b batch 248 `ded5d291` (log 4275744) / v2c batch 250 `6be85a2b` (log 4275765).
+
+## V2 cup verdict (Day 8, 2026-11-23, real-pourover gate)
+
+**Gate change (standing, this lot onward): the xbloom gate is retired - V-set verdicts go straight to the real-pourover quasi-optimized recipe** (SWorks, 93°C, 15g, 45g bloom 30s / 150g total @ 0:45 / 240g total @ 1:30). The V2 verdict is therefore a consumption-condition verdict - the SPG-as-arbiter concern is satisfied by construction.
+
+**V2B (Batch 248) won by far** - "much more integrated, much more cleaner, much more put together, much more harmonious" in the cool head-to-head vs 250; liked hot, warm (peak: "so sweet, so juicy, so fruity", very clean finish), and cool (mango/tropical + berry + stone fruit + tea blended, peach-tea finish). **The full producer-note set including mango finally showed, integrated, in a bright cup.** Flagged `is_reference_candidate` (alongside 239). 247: muted/less-integrated FC-onset cup (238's twin at +2 WB - confirms FC-onset character tracks dev time, not color). 250: bitter-edge-forward hot, improves a lot cool, always behind 248.
+
+What V2 resolved (Medium confidence):
+
+- **The attribution the b/c decoupling was built for**: dev time gives integration + sweetness; drop temp past ~208.5 / WB below ~77.5 brings the bitter roast edge - independent of dev time (250 showed the edge at LESS dev than 248). Batch 240's failure was color-driven.
+- **Mango needs dev TIME, not darkness** (sharpens the V1 read): present and integrated at 58s / WB 78.4; absent at 6-21s; bitter-shadowed at 46s / WB 77.3.
+- Dev-time lever now has two within-lot replications (239>238, 248>247) + the color falsifier (250).
+
+**Open route question:** 239 (V1 winner, judged on xbloom) and 248 (V2 winner, judged on real pourover) were never head-to-head. Close-out with 248, runoff 239-vs-248 if 239 beans remain, or V3 encoding 58s dev via a dev-time end condition (FC noise makes a bean_temp trigger an unreliable way to reproduce 58s).
+
+Cuppings: `9f77a031` (247) / `66c08060` (248) / `89404d29` (250).
 
 ## V1 substrate
 
