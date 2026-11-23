@@ -38,18 +38,19 @@ First Liberica in the archive. Species-level exploratory lot with a generous bud
   · what it proved: (1) **development is the enemy of fruit on this bean.** The least-roasted slot won - herbal liqueur, jackfruit with a slight durian edge, light licorice, a little boozy - and each step deeper traded fruit for licorice, over-steeped black tea, medicinal, then smoke and low-quality bitterness. (2) **Smoke is roast-injected**, present only at the deepest slot - the intake question is answered. (3) **The over wall is found and sits far lighter than any Arabica lot in the archive**; the middle slot is already past it. **The under wall is not found** - the lightest slot showed no raw or grassy defect. (4) The producer's description (herbal, licorice, low acidity) matches the middle slot best, which the operator does not like; the cup he wants is lighter than the producer's framing. (5) A herbal / medicinal thread runs through all three - inherent or reducible is open.
   · delta resolution: design -> roast-actual: a and b ran on plan, c stalled short of its trigger. roast-actual -> cup: **the post-roast re-predictions were wrong on every slot** (expected a raw, b bright, c the leader; got the reverse order). They were built on Arabica weight-loss intuition, which does not transfer. design -> cup: the original design order (c = smoky over wall) was right at the deep end and wrong about where the fruit window sits - it is at or below the light wall.
   · route taken: **A - design V2**, winner at the edge of the ladder.
-- **V2 - PROPOSED 2026-11-23, awaiting operator ratification. Not staged.** Operator direction: bracket around 254 and/or change roast speed (squeeze or lengthen the whole curve) at the 254 end point; nothing goes deeper than 254.
+- **V2 - STAGED 2026-11-23** (operator ratified as proposed). Experiment `VTN-96B-LIBERICA-AN-2026-V2` (pk `eadf701c-b224-4d2c-a97a-92e79709f841`); recipes v2a-d (`61596335` / `f25e3582` / `9c6cd05b` / `bc932f78`); Roest profiles **641151 / 641152 / 641153 / 641154** ("Liberica 96B - v2a/b/c/d"). Numbers live in those rows. Operator direction: bracket around 254 and/or change roast speed (squeeze or lengthen the whole curve) at the 254 end point; nothing goes deeper than 254.
   · design intent: **two questions, four slots, nothing past 204°C.** (a) the under wall: a lighter drop on the V1 curve. (b) roast speed to the same end point: the whole inlet curve shifted up and down around a re-roasted 254 control.
   · v2a - V1 curve, drop 200°C (lighter probe). v2b - V1 curve, drop 204°C (254 replicate, the control). v2c - whole curve +6°C (peak 248), drop 204°C (fast). v2d - whole curve -6°C (peak 236), drop 204°C (slow).
   · fan, RPM, preheat, hopper load, batch size as V1. BEAN_TEMP end condition on all four with clock-time slow rules.
   · read: end temperature, weight loss and total time; crack and colour are soft on this lot.
-  · status: proposed.
+  · no cup ranking is predicted - V1's predictions were wrong on every slot. The set is only readable if the control cups like 254.
+  · status: designed, waiting for roast.
 
 ## Current state + next step
 
-V1 is closed; 254 leads but is not a reference. **Next action: Chris ratifies or amends the proposed V2**, then the Coordinator stages it (experiment row, recipe rows, Roest profiles) and hands over. Roast and cupping logging for V1 ran in the Coordinator thread at the operator's request.
+V2 is staged and the lot is waiting for roast. **Next action: Chris roasts v2a-d**, pastes the four Roest log links, cups at Day 7 on the house style (four slots - one more than the preferred gate maximum, accepted for the control), and the Coordinator routes. Roast and cupping logging on this lot has run in the Coordinator thread at the operator's request.
 
-Open forks on V2: four slots with a re-roasted control (proposed) vs three slots using leftover 254 as the control (saves a gate brew, adds a rest-age confound); speed by shifting the whole curve up/down 6°C (proposed) vs stretching the timestamps; lighter probe at 200 vs 202.
+Forks closed by the operator at V2 design: four slots with a re-roasted control; speed via a whole-curve shift of 6°C either way; lighter probe at 200°C.
 
 ## Open questions / carry-forward
 
