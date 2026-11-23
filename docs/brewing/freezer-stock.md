@@ -75,10 +75,11 @@
 > - Moonwake — Blooms Abel Dominguez Washed Catuai — 2 · [brew](https://www.latentcoffee.com/brews/fd2f0a72-83e9-4d6f-ad9c-4aca75287a98)
 > - Coffee with Dongze — Enzyflow Honey 映雪 YinXue (Hachi × Yunnan × Terroir Maximus) — 1 · [brew](https://www.latentcoffee.com/brews/2729194b-14be-4c70-bd22-50716fd98ad0)
 > - TM Coffee — Brazil Anaerobic Natural Gesha (Daterra) — 1 · [brew](https://www.latentcoffee.com/brews/9abeb327-6eef-42bf-980d-8a243e9ceb26)
+> - Moonwake — La Laja James Fernández Mosto Thermal Shock Natural Pink Bourbon — 2 × 227 g bags (454 g, ~30 doses), resting until 2026-12-08 (roasted 2026-11-10) / not yet dosed (added 2026-11-16, net new, no brews)
 >
 > Consumed (off the list 2026-09-01): El Oasis + Project One Peach — fully consumed in prior research (RP8). Not every office coffee has a full entry below (the doc is deliberately not backfilled) — the index is the office-complete surface; entries carry the marker where they exist.
 
-**Total coffees:** 137
+**Total coffees:** 138
 
 ---
 
@@ -1032,3 +1033,10 @@
 **URL:** https://moonwakecoffeeroasters.com/products/finca-anaya-sergio-aranda-gomez-cinnamon-sugarcane-tabi-colombia
 **Brew:** [bc003865](https://www.latentcoffee.com/brews/bc003865-eb58-4d88-a356-47cf16276e06) — Latent house style (0 → 5 → 5 → 6 at end), 6.5 / 93°C / 45 s bloom, split pour; the 1:10 concentrate read too coconut-forward and perfumy, the reconstructed full 240 g cup is the keeper. Recorded as-is after one cup; next pass shortens the bloom steep slightly.
 **Notes:** Roaster notes: coconut flakes, pineapple cake, strawberry milkshake. Process: 24h oxidation → 48h yeast/cinnamon/sugarcane pre-ferment → 72h anaerobic → thermal shock → 12-day drying. Roaster recommends 2-3 week rest.
+
+## Moonwake — La Laja James Fernández Mosto Thermal Shock Natural Pink Bourbon
+**Country:** Colombia · **Region/Farm:** Cauca / La Laja · **Producer:** James Fernández
+**Variety:** Pink Bourbon · **Process:** Mosto Thermal Shock Natural · **Elevation:** 1750 m
+**Agtron:** pending · **Status:** Resting · **Location:** Office (2 × 227 g bags = 454 g, ~30 doses, not yet dosed as of 2026-11-16)
+**URL:** https://moonwakecoffeeroasters.com/products/la-laja-james-fernandez-mosto-thermal-shock-natural-pink-bourbon-colombia
+**Notes:** Light roast. Roaster notes: black cherry ice cream, pineapple, ume. Process: vinegar disinfection → 24h aerobic → float + hand sort → 120h with mosto inoculum → wort removed, 60h re-inoculation with fresh mucilage + brown sugar → thermal shock (50°C water 30 min, cold water 15 min) → 6-day solar drying. Roasted 2026-11-10. Roaster recommends 3-4 week rest; operator resting until 2026-12-08 (4 weeks). Two bags bought for the office.

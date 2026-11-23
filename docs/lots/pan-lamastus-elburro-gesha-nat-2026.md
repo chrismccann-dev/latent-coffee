@@ -1,6 +1,6 @@
 # Roasting Brief - Lamastus El Burro Geisha Natural Lot #16 (pan-lamastus-elburro-gesha-nat-2026)
 
-**green_bean_id:** `0d1440c2-33e5-4d7f-bb7f-198d6bae538f` · **lot_status:** waiting_for_next_roast · **Started:** 2026-11-15 · **Roest inventory:** 12500
+**green_bean_id:** `0d1440c2-33e5-4d7f-bb7f-198d6bae538f` · **lot_status:** waiting_for_next_cupping · **Started:** 2026-11-15 · **Roest inventory:** 12500
 
 ## Anchor
 
@@ -24,19 +24,21 @@ The open risk specific to this lot is drying: the Deborah curve's gentler early 
 
 ## V-set log (the plan-state)
 
-- **V1** - design intent: Deborah reference curve verbatim, three-slot bean-temp drop ladder in 2°C steps centred on the trigger both the Deborah close-out calibration and the Los Lajones reference point at; the outer slots are walls meant to fail. · status: **designed 2026-11-15, staged, awaiting roast** · experiment `PAN-LAMASTUS-ELBURRO-GESHA-NAT-2026-V1` (`6788b723-d054-4315-a798-1d8346d80e94`); recipe rows v1a/b/c and Roest profiles "El Burro - v1a/b/c" are in the DB.
+- **V1** - design intent: Deborah reference curve verbatim, three-slot bean-temp drop ladder in 2°C steps centred on the trigger both the Deborah close-out calibration and the Los Lajones reference point at; the outer slots are walls meant to fail. · status: **roasted 2026-11-15 (Batches 251 / 252 / 253), resting; Day-7 house-style gate due 2026-11-22** · experiment `PAN-LAMASTUS-ELBURRO-GESHA-NAT-2026-V1` (`6788b723-d054-4315-a798-1d8346d80e94`); recipe rows v1a/b/c and Roest profiles "El Burro - v1a/b/c" are in the DB.
   - Operator call (Chris, 2026-11-15): the lot is novel by the letter of the seen-before test, and he chose the narrow fixed-curve ladder anyway over a curve-hedge alternative (third slot on the hotter Maya / Los Lajones curve at the centre trigger). Grounds: a density-matched anchor exists, and moisture has not moved timing on any closed lot. Cost accepted: V1 does not isolate the drying question.
+  - Roast-actual read (design -> roast): all three dropped honestly, FC audible on all three. Two surprises against the Deborah-derived model. First, the lot did **not** race the probe - every slot ran slower than predicted, with FC arriving just under the light rung's trigger, so the light rung got essentially no development. Second, Chris manually dropped the deep rung short of its trigger, on a real-time read that it was drifting too dark, so the realised ladder is compressed and shifted light. Whole-bean colour landed on prediction on every slot. The deep rung's FC mark is early against its two siblings on the identical curve; treat its logged dev as overstated.
+  - Consequence for the gate: the light rung is a firm wall; the centre and deep rungs are **co-candidates**; there may be no deep wall. Re-predictions and taste-for notes are on the experiment row.
+  - Chris's call: V1 runs in this Coordinator thread rather than a separate V-Set Assistant session (hoping for a one-V-set lot).
   - Route reading: bracketed winner at the centre -> declare reference. Winner at an edge -> extend the ladder that way, same curve. All three incoherent / lactic -> the curve under-dried; V2 changes early energy, not the trigger.
 
 ## Current state + next step
 
-Intake done and V1 staged. The V-set Handoff Packet + operator prep packet were emitted to Chris on 2026-11-15. **Next:** Chris roasts V1 in a V-Set Assistant session; a fresh Coordinator session consumes the Results Packet, resolves the three-point deltas, and routes.
+V1 roasted 2026-11-15 and recorded (roasts, roast deltas, post-roast cup re-predictions all in the DB). **Next:** Day-7 house-style gate on all three slots, 2026-11-22; record cuppings, resolve the cup deltas, route. If the deep rung wins, it is an edge winner with no wall beyond it - the route rule says extend deep on the same curve, unless the cup shows the first hint of roast character itself (then it is its own wall).
 
 ## Open questions / carry-forward
 
 - Does high moisture at low density want more early (drying) energy than the Deborah curve gives? Untested anywhere in the archive.
-- Will FC be audible? Deborah's was silent on light drops and only audible on the deeper rungs; do not read a silent FC on the light rung as a problem.
-- Expect the lot to run fast and read light on whole-bean colour (Deborah precedent). If it runs fast at the machine, shift all three triggers together (Los Lajones precedent) rather than holding.
+- Answered by V1's roasts: FC is audible on this lot even at the light rung, and the lot does not race the probe - the Deborah low-density timing model did not transfer. Colour-per-degree did.
 - Do not design to a whole-bean colour or dev-time number carried from another lot.
 - Workflow note for the lot-close retro (not yet in the process-friction log, to avoid colliding with the parallel 96B thread): the seen-before test does not say what to do when density is within reach of one closed lot and moisture of another.
 
