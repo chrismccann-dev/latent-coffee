@@ -773,8 +773,13 @@ const DOC_CATALOG: CatalogDoc[] = [
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/hnd-arturopaz-gesha-drd-nat-2026.md',
-    title: 'Roasting Historian — active-lots / Arturo Paz Dark Room Natural Geisha (ACTIVE — V2 won by Batch 248 (reference candidate) on the real-pourover gate; route decision pending)',
-    description: 'Use when working the Arturo Paz DRD Natural Geisha lot (Honduras / Santa Bárbara-Yojoa Highlands, 802 g/L / 9.5%) — V1 verdict (V1B/239 closest-to-apex winner at WB 83.6; dev time is the lever, WB nearly blind to it; mango lives on the developed side, 209.3/WB 72.7 is roast-forward), V2 design (bean-temp ladder 207.5/208/208.5 on the fixed 242°C-peak curve), roast actuals, gate discipline, and substrate IDs.',
+    title: 'Roasting Historian — active-lots / Arturo Paz Dark Room Natural Geisha (CLOSED 2026-11-23 — stub; see learnings file)',
+    description: 'Closed-lot stub for the Arturo Paz DRD Natural Geisha lot (reference roast Batch 248 / V2B) — points to learnings/hnd-arturopaz-gesha-drd-nat-2026.md; V-set designs + roast actuals preserved as historical anchors.',
+  },
+  {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/hnd-arturopaz-gesha-drd-nat-2026.md',
+    title: 'Roasting Historian — learnings / Arturo Paz Dark Room Natural Geisha (CLOSED 2026-11-23, reference Batch 248)',
+    description: 'Use when designing roasts for dense natural/DRD lots, natural Geshas, or Honduras/Santa Bárbara coffees — closed-lot learnings: reference Batch 248 (58s dev / 208.0 drop / WB 78.4, full producer-note set on the house-style gate), loose-FC boundary case (200.4-206.9°C) breaking bean-temp-trigger dev control, WB-blind-to-dev-time finding, color-vs-dev-time failure attribution (bitter edge is color-driven), underdev/overdev signals, and the dev-time-ladder starting hypothesis.',
   },
   {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-lostorigin-maya-triup-yeast-nat-2026.md',

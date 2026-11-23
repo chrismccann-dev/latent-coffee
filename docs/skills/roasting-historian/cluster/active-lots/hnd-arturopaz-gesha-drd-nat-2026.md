@@ -2,7 +2,9 @@
 
 *Coffee Research · Latent · Roasting Historian cluster · active-lots*
 
-**Status:** Active - V2 cupped 2026-11-23 on the real-pourover gate, winner V2B (Batch 248, reference candidate); route decision pending (close-out with 248 vs 239-vs-248 runoff vs V3)
+**Status:** Closed (2026-11-23) - reference roast Batch 248 (V2B), optimized brew `7bc5f39b`
+
+**See closed-lot learnings:** [learnings/hnd-arturopaz-gesha-drd-nat-2026.md](docs/skills/roasting-historian/cluster/learnings/hnd-arturopaz-gesha-drd-nat-2026.md) - the H2 sections below are preserved as historical / cross-reference anchors.
 **Cultivar:** Geisha · **Terroir:** Honduras / Santa Bárbara-Yojoa Highlands / Finca El Itacayo, El Dorado, ~1,600-1,730m · **Process:** Natural, Dark Room Dried
 **Green spec:** density 802 g/L (high), moisture 9.5% (low). 1000g from Kumquat ($143/kg). Producer notes: Mango, Nectarine, Blackberry, Lemongrass.
 **Peer reference:** companion roasted bag (roasted 2026-07-24) MISPLACED as of 2026-11-03 - proceeding without a peer cup; producer notes + Deborah/Wush Wush fingerprints are the vocabulary priors. Cup it before the Day-7 gate if it turns up.
