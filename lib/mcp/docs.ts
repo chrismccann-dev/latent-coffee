@@ -782,6 +782,11 @@ const DOC_CATALOG: CatalogDoc[] = [
     description: 'Use when designing roasts for dense natural/DRD lots, natural Geshas, or Honduras/Santa Bárbara coffees — closed-lot learnings: reference Batch 248 (58s dev / 208.0 drop / WB 78.4, full producer-note set on the house-style gate), loose-FC boundary case (200.4-206.9°C) breaking bean-temp-trigger dev control, WB-blind-to-dev-time finding, color-vs-dev-time failure attribution (bitter edge is color-driven), underdev/overdev signals, and the dev-time-ladder starting hypothesis.',
   },
   {
+    uri: 'docs://skills/roasting-historian/cluster/learnings/pan-lamastus-elburro-gesha-nat-2026.md',
+    title: 'Roasting Historian — learnings / Lamastus El Burro Geisha Natural Lot #16 (CLOSED 2026-11-23, reference Batch 251 V1A, one V-set)',
+    description: 'Use when designing roasts for low-density natural Geshas or Panama Chiriquí naturals — closed-lot learnings: reference Batch 251 (first-crack-onset drop 208.0C on the Deborah 244C-peak curve, FC audible 4:56 / 207.9, WB 91.9), lightest reference in the family and NOT bracketed on the light side; 726 g/L / 11.6% (lowest density in the archive) ran slower than the Deborah low-density model; milk chocolate + lost integration as the overdevelopment marker; optimized brew 874696c5 (Latent house style, one delta: 93C water).',
+  },
+  {
     uri: 'docs://skills/roasting-historian/cluster/active-lots/pan-lostorigin-maya-triup-yeast-nat-2026.md',
     title: 'Roasting Historian — active-lots / Lost Origin Maya Tri-Up Yeast Natural Geisha (ACTIVE — V1 roasted 2026-11-04, waiting for next cupping)',
     description: 'Use when working the Lost Origin Maya Tri-Up yeast natural Geisha lot (Panama, Fran Zeimetz; LOY-011 yeast natural cold-room dried; 833 g/L / 11.6%; the Martin Wölfl 2025 WBC winning lot family) — working hypothesis (Deborah family anchor, density caveat: trigger/color numbers do not transfer from 741 g/L) + V1 design (fixed 246°C-peak sustained-tail curve, bean_temp drop ladder 206/208/210°C) + V1 actuals (batches 235/236/237, FC ~4:24/~204°C, WB 81.7/78.6/69.2, steep color slope above 208°C) + peer-reference read (Maya 317, brew 49da10c7, WB 74.9 - ladder brackets the peer color).',
