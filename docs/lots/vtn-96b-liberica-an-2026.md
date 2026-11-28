@@ -1,6 +1,6 @@
 # Roasting Brief - 96B Liberica Anaerobic (vtn-96b-liberica-an-2026)
 
-**green_bean_id:** `e3811972-bfaf-4b71-91cb-9a2feb8fd73a` · **lot_status:** waiting_for_next_roast · **Started:** 2026-11-15 · **Roest inventory:** 12498
+**green_bean_id:** `e3811972-bfaf-4b71-91cb-9a2feb8fd73a` · **lot_status:** waiting_for_next_cupping · **Started:** 2026-11-15 · **Roest inventory:** 12498
 
 First Liberica in the archive. Species-level exploratory lot with a generous budget (5000 g, about 50 batches at 100 g).
 
@@ -44,11 +44,14 @@ First Liberica in the archive. Species-level exploratory lot with a generous bud
   · fan, RPM, preheat, hopper load, batch size as V1. BEAN_TEMP end condition on all four with clock-time slow rules.
   · read: end temperature, weight loss and total time; crack and colour are soft on this lot.
   · no cup ranking is predicted - V1's predictions were wrong on every slot. The set is only readable if the control cups like 254.
-  · status: designed, waiting for roast.
+  · status: **roasted 2026-11-27** (batches 257 / 258 / 259 / 260 = v2a / b / c / d), waiting for the Day-7 cup (2026-12-04). Roast rows and per-slot deltas are on the experiment row.
+  · roast-side read: all four ended on their bean-temp trigger; the slow slot did not stall. **The control replicated 254 on the clock exactly**, with about half a point more weight loss - that is the noise floor for this set. **Roast speed moved weight loss at a fixed end temperature**: fast lost nearly a point less than the control, slow half a point more, and colour followed loss in order across all four. So end temperature alone does not fix development on this bean - **weight loss is the better single ruler.**
+  · caveats: the slow slot (260) is not a clean speed-only comparison - the operator reports dropping it a bit late (the log end sits on the trigger, so the lateness is not visible there), it was charged about 5°C cooler, and its loss sits close to Batch 255, which cupped past the over wall. The fast slot (259) lands at almost the same loss as the 200°C probe (257) - those two are the interesting pair: same loss, different route.
+  · no cup ranking predicted. Table questions per slot are on the experiment row (`taste_for_*`).
 
 ## Current state + next step
 
-V2 is staged and the lot is waiting for roast. **Next action: Chris roasts v2a-d**, pastes the four Roest log links, cups at Day 7 on the house style (four slots - one more than the preferred gate maximum, accepted for the control), and the Coordinator routes. Roast and cupping logging on this lot has run in the Coordinator thread at the operator's request.
+V2 is roasted and resting. **Next action: Chris cups all four at Day 7 (2026-12-04)** on the house style, tasting the control (258) first against his memory of 254, then dictates here; the Coordinator records the cuppings and routes. Roast and cupping logging on this lot has run in the Coordinator thread at the operator's request.
 
 Forks closed by the operator at V2 design: four slots with a re-roasted control; speed via a whole-curve shift of 6°C either way; lighter probe at 200°C.
 
@@ -56,6 +59,7 @@ Forks closed by the operator at V2 design: four slots with a re-roasted control;
 
 - Smoky: answered at V1 - roast-injected, only at the deepest slot.
 - Where is the under wall? Is the herbal / medicinal thread inherent or reducible? Does roast speed change the fruit / herbal / boozy balance at a fixed end point? (V2.)
+- Is weight loss the real development ruler here (same loss by two routes: 257 light-and-normal vs 259 hot-and-fast)? V2 cup answers.
 - Arabica weight-loss and development intuition does not transfer to this bean; around 9% loss is the working zone. Do not re-predict cups from it.
 - FC audibility: answered at V1 - cracks are few and quiet, not a usable ruler. Every future slot on this lot uses a bean_temp end condition with a clock-time slow rule; never a dev-time end condition.
 - The very small bean size against 817 g/L: do the beans race the probe (reading light for a given trigger, as the low-density Deborah lot did) or read true? V1 color-per-degree slope answers.
